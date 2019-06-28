@@ -37,6 +37,8 @@ class TestChordSymbol : public QObject, public MTest {
       MasterScore* test_pre(const char* p);
       void test_post(MasterScore* score, const char* p);
 
+      void selectAllChordSymbols(MasterScore* score);
+
    private slots:
       void initTestCase();
       void testExtend();
@@ -46,6 +48,7 @@ class TestChordSymbol : public QObject, public MTest {
       void testNoSystem();
       void testTranspose();
       void testTransposePart();
+      void testRealizeChordSymbols();
       };
 
 //---------------------------------------------------------
@@ -76,6 +79,21 @@ void TestChordSymbol::test_post(MasterScore* score, const char* p)
       QString p2 = DIR + p + "-ref.mscx";
       QVERIFY(saveCompareScore(score, p1, p2));
       delete score;
+      }
+
+void TestChordSymbol::selectAllChordSymbols(MasterScore* score)
+      {
+      //find a chord symbol
+      Segment* seg = score->firstSegment(SegmentType::ChordRest);
+      Element* e = 0;
+      while (seg) {
+            e = seg->findAnnotation(ElementType::HARMONY,
+                                              0, score->ntracks());
+            if (e)
+                  break;
+            seg = seg->next1();
+            }
+      score->selectSimilar(e, false);
       }
 
 void TestChordSymbol::testExtend()
@@ -192,6 +210,21 @@ void TestChordSymbol::testTransposePart()
       score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
       score->endCmd();
       test_post(score, "transpose-part");
+      }
+
+void TestChordSymbol::testRealizeChordSymbols()
+      {
+      MasterScore* score = test_pre("realize-chord-symbols");
+      selectAllChordSymbols(score);
+      QList<Harmony*> hlist;
+      for (Element* e : score->selection().elements()) {
+            if (e->isHarmony())
+                  hlist << toHarmony(e);
+            }
+      score->startCmd();
+      score->cmdRealizeChordSymbols(hlist);
+      score->endCmd();
+      test_post(score, "realize-chord-symbols");
       }
 
 QTEST_MAIN(TestChordSymbol)
