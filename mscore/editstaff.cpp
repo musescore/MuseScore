@@ -73,8 +73,8 @@ EditStaff::EditStaff(Staff* s, const Fraction& /*tick*/, QWidget* parent)
       connect(nextButton,           SIGNAL(clicked()),            SLOT(gotoNextStaff()));
       connect(previousButton,       SIGNAL(clicked()),            SLOT(gotoPreviousStaff()));
 
-      nextButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
-      previousButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+      nextButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+      previousButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
       
       addAction(getAction("help"));  // why is this needed?
       }
