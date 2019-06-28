@@ -3542,9 +3542,9 @@ static bool doConvert(Score *cs, const QString& fn)
                         Score* nscore = new Score(e->oscore());
                         e->setPartScore(nscore);
                         nscore->style().set(Sid::createMultiMeasureRests, true);
-                        Excerpt::createExcerpt(e);
                         cs->startCmd();
                         cs->undo(new AddExcerpt(e));
+                        Excerpt::createExcerpt(e);
                         cs->endCmd();
                         }
                   }
@@ -3566,9 +3566,9 @@ static bool doConvert(Score *cs, const QString& fn)
                         nscore->setExcerpt(e);
                         // nscore->setName(e->title()); // needed before AddExcerpt
                         nscore->style().set(Sid::createMultiMeasureRests, true);
-                        Excerpt::createExcerpt(e);
                         cs->startCmd();
                         cs->undo(new AddExcerpt(e));
+                        Excerpt::createExcerpt(e);
                         cs->endCmd();
                         }
                   }
@@ -7798,9 +7798,9 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
                   Score* nscore = new Score(e->oscore());
                   e->setPartScore(nscore);
                   nscore->style().set(Sid::createMultiMeasureRests, true);
-                  Excerpt::createExcerpt(e);
                   auto excerptCmdFake = new AddExcerpt(e);
                   excerptCmdFake->redo(nullptr);
+                  Excerpt::createExcerpt(e);
             }
       }
 
