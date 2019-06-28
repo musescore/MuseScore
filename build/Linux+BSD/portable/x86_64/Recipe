@@ -24,7 +24,6 @@ apt-get -y install \
   libdrm-dev \
   libgl1-mesa-dev \
   libopenal1 \
-  gstreamer0.10-plugins-base \
   software-properties-common
 
 # get newer compiler
