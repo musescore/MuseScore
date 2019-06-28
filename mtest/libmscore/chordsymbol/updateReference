@@ -7,5 +7,5 @@ cp ../../../build.debug/mtest/libmscore/chordsymbol/extend-test.mscx   extend-re
 cp ../../../build.debug/mtest/libmscore/chordsymbol/no-system-test.mscx   no-system-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/transpose-part-test.mscx   transpose-part-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/transpose-test.mscx   transpose-ref.mscx
-
+cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-chord-symbols.mscx realize-chord-symbols-ref.mscx
 
