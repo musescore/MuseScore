@@ -22,6 +22,11 @@ namespace Ms {
 //---------------------------------------------------------
 //   PaletteBox
 //---------------------------------------------------------
+PaletteTree::PaletteTree(QWidget* parent) 
+   : QTreeWidget(parent) 
+      {
+      
+      }
 
 PaletteBox::PaletteBox(QWidget* parent)
    : QDockWidget(tr("Palettes"), parent)
@@ -78,7 +83,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       vl->addLayout(hl);
       vl->addWidget(tree);
 
-      tree = new QTreeWidget(this);
+      tree = new PaletteTree(this);
       tree->setHeaderLabel("Palette");
       vl->addWidget(tree);
 
@@ -96,6 +101,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       retranslate();
       }
 
+ 
 //---------------------------------------------------------
 //   retranslate
 //---------------------------------------------------------
@@ -432,10 +438,7 @@ bool PaletteBox::read(XmlReader& e)
                   QTreeWidgetItem* paletteElementsItem = new QTreeWidgetItem(paletteItem);
                   tree->setItemWidget(paletteElementsItem, 0, paletteList);
                   paletteList->read(e);
-                  paletteItem->setExpanded(true);
-                  paletteItem->setExpanded(false);
-                  //paletteList->QAbstractScrollArea::setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-
+                  paletteList->QAbstractScrollArea::setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
                   //p->read(e);
                   //addPalette(p);
                   //connect(p, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
@@ -609,6 +612,8 @@ bool PaletteBox::eventFilter(QObject* obj, QEvent *event)
             }
       return QDockWidget::eventFilter(obj, event);
       }
+
+//void PaletteTree::resizeEvent()
 
 }
 

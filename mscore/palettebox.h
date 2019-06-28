@@ -14,6 +14,8 @@
 #define __PALETTE_BOX_H__
 
 #include "paletteBoxButton.h"
+#include <QTreeWidget>
+
 
 namespace Ms {
 
@@ -24,6 +26,15 @@ class Palette;
 //---------------------------------------------------------
 //   PaletteBox
 //---------------------------------------------------------
+class PaletteTree : public QTreeWidget {
+      Q_OBJECT
+
+      protected:
+         virtual void resizeEvent(QResizeEvent *event) override;
+      public:
+         PaletteTree(QWidget* parent);
+   }; 
+
 
 class PaletteBox : public QDockWidget {
       Q_OBJECT
@@ -32,7 +43,7 @@ class PaletteBox : public QDockWidget {
       Palette* newPalette(const QString& name, int slot);
       QComboBox* workspaceList;
       QLineEdit* _searchBox;
-      QTreeWidget* tree = nullptr;
+      PaletteTree* tree = nullptr;
       const int paletteStretch = 1000;
       QAction* singlePaletteAction;
       QToolButton* addWorkspaceButton;
