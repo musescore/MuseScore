@@ -5807,26 +5807,7 @@ void MuseScore::realizeChordSymbols()
 
       if (dialog.exec()) {    //realize the chord symbols onto the track
             cs->startCmd();
-            for (Harmony* h : hlist) {
-                  RealizedHarmony r = h->realizedHarmony();
-                  Segment* seg = toSegment(h->parent());
-                  Fraction duration = h->ticksTilNext();
-
-                  Chord* chord = new Chord(cs);
-                  chord->setTrack(h->track()); //set track so notes have a track to sit on
-                  //create chord from notes
-                  QMapIterator<int, int> i(r.notes());
-                  while (i.hasNext()) {
-                        i.next();
-                        Note* note = new Note(cs);
-                        note->setPitch(i.key());
-                        note->setTpc(i.value());
-                        chord->add(note);
-                        }
-
-                  cs->setChord(seg, h->track(), chord, duration);
-                  delete chord;
-                  }
+            cs->cmdRealizeChordSymbols(hlist);
             cs->endCmd();
             }
       }

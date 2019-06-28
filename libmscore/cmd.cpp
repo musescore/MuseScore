@@ -3104,79 +3104,27 @@ void Score::cmdSlashRhythm()
 ///   FIXME - PHV: deprecated
 //---------------------------------------------------------
 
-void Score::cmdRealizeChordSymbols()
+void Score::cmdRealizeChordSymbols(QList<Harmony*> hlist)
       {
-      if (!selection().isList()) {
-            QErrorMessage err;
-            err.showMessage("Invalid Selection. Cannot Realize Chord");
-            err.exec();
-            return;
-            }
-      QList<Harmony*> hlist;
-      for (Element* e : selection().elements()) {
-            if (e->isHarmony())
-                  hlist << toHarmony(e);
-            }
+      for (Harmony* h : hlist) {
+            RealizedHarmony r = h->realizedHarmony();
+            Segment* seg = toSegment(h->parent());
+            Fraction duration = h->ticksTilNext();
 
-      QMessageBox msgBox;
-      if (!hlist.empty()) {
-            msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Yes);
-            msgBox.setDefaultButton(QMessageBox::Yes);
-            msgBox.setText("Realize Chord Symbols?");
-
-            QString s = "Chords to be realized: ";
-            QString d;
-
-            for (Harmony* h : hlist) {
-                  s += h->harmonyName() + " ";
-                  QString intervals;
-                  for (int interval : h->getDescription()->intervals())
-                        intervals += QString::number(interval) + " ";
-                  QString line = QString("(ID: %1) Chord: %2  Intervals: %3  Notes: %4\n")
-                                    .arg(h->id())
-                                    .arg(h->harmonyName())
-                                    .arg(intervals)
-                                    .arg(h->getDescription()->noteNames(h->rootTpc()));
-                  d += line;
+            Chord* chord = new Chord(this);
+            chord->setTrack(h->track()); //set track so notes have a track to sit on
+            //create chord from notes
+            QMapIterator<int, int> i(r.notes());
+            while (i.hasNext()) {
+                  i.next();
+                  Note* note = new Note(this);
+                  note->setPitch(i.key());
+                  note->setTpc(i.value());
+                  chord->add(note);
                   }
 
-            msgBox.setInformativeText(s);
-            msgBox.setDetailedText(d);
-            }
-      else {
-            msgBox.setText("No Chord Selected. Cannot Realize Chord");
-            }
-
-      //TODO - PHV: Separate this out, we have this here for now
-      //just to do some elementary experimentation, it will be
-      //important to abstract this away a bit so that it's cleaner
-      //and more extensible
-      if (msgBox.exec() == QMessageBox::Yes) {
-            for (Harmony* h : hlist) {
-                  RealizedHarmony r = h->realizedHarmony();
-                  Segment* seg = toSegment(h->parent());
-                  ChordRest* cr = toChordRest(seg->element(h->track()));
-                  Fraction duration = h->ticksTilNext();
-
-                  Chord* chord = new Chord(this);
-                  //set chord attributes based on current chordrest
-                  chord->setTuplet(cr->tuplet());
-                  chord->setTrack(cr->track());
-                  chord->setDurationType(cr->durationType());
-                  chord->setTicks(cr->durationTypeTicks());
-                  //create chord from notes
-                  QMapIterator<int, int> i(r.notes());
-                  while (i.hasNext()) {
-                        i.next();
-                        Note* note = new Note(this);
-                        note->setPitch(i.key());
-                        note->setTpc(i.value());
-                        chord->add(note);
-                        }
-
-                  setChord(seg, h->track(), chord, duration);
-                  delete chord;
-                  }
+            setChord(seg, h->track(), chord, duration);
+            delete chord;
             }
       }
 
@@ -4084,7 +4032,6 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "grace32after",               [](Score* cs, EditData&){ cs->cmdAddGrace(NoteType::GRACE32_AFTER, MScore::division / 8); }},
             { "explode",                    [](Score* cs, EditData&){ cs->cmdExplode();                                               }},
             { "implode",                    [](Score* cs, EditData&){ cs->cmdImplode();                                               }},
-            { "realize-chord-symbols",      [](Score* cs, EditData&){ cs->cmdRealizeChordSymbols();                                   }},
             { "slash-fill",                 [](Score* cs, EditData&){ cs->cmdSlashFill();                                             }},
             { "slash-rhythm",               [](Score* cs, EditData&){ cs->cmdSlashRhythm();                                           }},
             { "resequence-rehearsal-marks", [](Score* cs, EditData&){ cs->cmdResequenceRehearsalMarks();                              }},
