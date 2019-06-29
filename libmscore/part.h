@@ -53,7 +53,7 @@ class Part final : public ScoreElement {
 
       static const int DEFAULT_COLOR = 0x3399ff;
       int _color;                   ///User specified color for helping to label parts
-
+      bool _expanded;               // Used by the mixer
    public:
       Part(Score* = 0);
       void initFromInstrTemplate(const InstrumentTemplate*);
@@ -118,6 +118,8 @@ class Part final : public ScoreElement {
       void setPartName(const QString& s)       { _partName = s; }
       int color() const { return _color; }
       void setColor(int value) { _color = value; }
+      bool isExpanded() const { return _expanded; }
+      void setExpanded(bool expanded) { _expanded = expanded; }
 
       QVariant getProperty(Pid) const override;
       bool setProperty(Pid, const QVariant&) override;
