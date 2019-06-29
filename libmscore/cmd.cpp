@@ -3079,7 +3079,6 @@ void Score::cmdSlashRhythm()
 ///   Realize selected chord symbols into notes on the staff.
 ///   Currently just pops up a dialog to list TPCs,
 ///   Intervals, and pitches.
-///   FIXME - PHV: deprecated
 //---------------------------------------------------------
 
 void Score::cmdRealizeChordSymbols(QList<Harmony*> hlist)
@@ -3088,6 +3087,7 @@ void Score::cmdRealizeChordSymbols(QList<Harmony*> hlist)
             RealizedHarmony r = h->realizedHarmony();
             Segment* seg = toSegment(h->parent());
             Fraction duration = h->ticksTilNext();
+            Fraction tick = seg->tick();
 
             Chord* chord = new Chord(this);
             chord->setTrack(h->track()); //set track so notes have a track to sit on
@@ -3096,9 +3096,11 @@ void Score::cmdRealizeChordSymbols(QList<Harmony*> hlist)
             while (i.hasNext()) {
                   i.next();
                   Note* note = new Note(this);
-                  note->setPitch(i.key());
-                  note->setTpc(i.value());
-                  chord->add(note);
+                  NoteVal nval;
+                  nval.pitch = i.key();
+                  nval.tpc1 = i.value();
+                  chord->add(note); //add note first to set track and such
+                  note->setNval(nval, tick);
                   }
 
             setChord(seg, h->track(), chord, duration);

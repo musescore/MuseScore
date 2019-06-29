@@ -31,7 +31,7 @@ namespace Ms {
 RealizedHarmony::RealizedHarmony(Harmony* h) : _harmony(h),
       _notes(QMap<int, int>()), _voicing(Voicing::AUTO), _rhythm(Rhythm::AUTO), _dirty(1)
       {
-      //TODO - PHV
+      //TODO - PHV: should we be doing something on creation of a realized harmony?
       }
 
 //---------------------------------------------------

@@ -34,7 +34,6 @@ class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase {
       void toggleChordTable();
    public:
       RealizeHarmonyDialog(QWidget* parent = 0);
-      void setChordLabel(QString s) { chordLabel->setText(s); } //TODO - PHV: we might not need this eventually
       void setChordList(QList<Harmony*>);
       };
 
