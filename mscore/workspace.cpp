@@ -694,6 +694,8 @@ void Workspace::read(XmlReader& e)
                   saveMenuBar = true;
                   QMenuBar* mb = mscore->menuBar();
                   mb->clear();
+                  for (QObject* o : mb->children())
+                        delete o;
                   menuToStringList.clear();
                   while (e.readNextStartElement()) {
                         if (e.hasAttribute("name")) { // is a menu
@@ -792,6 +794,8 @@ void Workspace::readGlobalMenuBar()
                         if (e.name() == "MenuBar") {
                               QMenuBar* mb = mscore->menuBar();
                               mb->clear();
+                              for (QObject* o : mb->children())
+                                    delete o;
                               menuToStringList.clear();
                               while (e.readNextStartElement()) {
                                     if (e.hasAttribute("name")) { // is a menu

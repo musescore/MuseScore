@@ -350,6 +350,23 @@ void MuseScore::loadPlugins()
       }
 
 //---------------------------------------------------------
+//   addPluginMenuEntries
+//---------------------------------------------------------
+
+void MuseScore::addPluginMenuEntries()
+      {
+      for (int i = 0; i < pluginManager->pluginCount(); ++i) {
+            PluginDescription* d = pluginManager->getPluginDescription(i);
+            if (d->load) {
+                  QAction* a = d->shortcut.action();
+                  disconnect(a, SIGNAL(triggered()), pluginMapper, SLOT(map()));
+                  createMenuEntry(d);
+                  connect(a, SIGNAL(triggered()), pluginMapper, SLOT(map()));
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   unloadPlugins
 //---------------------------------------------------------
 
