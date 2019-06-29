@@ -50,9 +50,9 @@ function set_bundle_display_options() {
             update without registering applications
             delay 5 -- sync
             close
-        end timeout
         end tell
         delay 5 -- sync
+        end timeout
     end tell
 EOF
 
