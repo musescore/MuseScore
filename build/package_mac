@@ -26,6 +26,7 @@ COMPRESSEDDMGNAME=${VOLNAME}.dmg
 
 function set_bundle_display_options() {
 	osascript <<-EOF
+    delay 5 -- try to avoid the lock on the file
     tell application "Finder"
         set f to POSIX file ("${1}" as string) as alias
     end tell
