@@ -480,42 +480,34 @@
       <property name="spacing">
        <number>6</number>
       </property>
-      <item row="0" column="2">
-       <layout class="QHBoxLayout" name="volumeSliderLayout">
+      <item row="2" column="0">
+       <layout class="QHBoxLayout" name="metronomeTagLayout">
         <property name="topMargin">
          <number>0</number>
         </property>
         <item>
-         <widget class="Awl::VolSlider" name="volumeSlider" native="true">
+         <widget class="QLabel" name="metronomeTag">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>64</height>
-           </size>
-          </property>
           <property name="maximumSize">
            <size>
-            <width>128</width>
-            <height>512</height>
+            <width>16777215</width>
+            <height>36</height>
            </size>
           </property>
-          <property name="focusPolicy">
-           <enum>Qt::TabFocus</enum>
+          <property name="text">
+           <string>Metronome
+volume</string>
           </property>
-          <property name="toolTip">
-           <string>Master volume</string>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
           </property>
-          <property name="accessibleName">
-           <string>Master volume</string>
-          </property>
-          <property name="accessibleDescription">
-           <string>Use up and down arrows to change value</string>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -576,6 +568,150 @@
           </property>
           <property name="autoFillBackground">
            <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="1">
+       <layout class="QHBoxLayout" name="tempoPercentLayout">
+        <item>
+         <widget class="QDoubleSpinBox" name="relTempoBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>64</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Relative tempo (as percentage)</string>
+          </property>
+          <property name="accessibleName">
+           <string>Relative tempo (as percentage)</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string notr="true">%</string>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="minimum">
+           <double>10.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>300.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>5.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>100.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="2">
+       <layout class="QHBoxLayout" name="volumeTextLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QDoubleSpinBox" name="volSpinBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>64</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Master volume (decibel)</string>
+          </property>
+          <property name="accessibleName">
+           <string>Master volume (decibel)</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="suffix">
+           <string extracomment="decibel">dB</string>
+          </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="2">
+       <layout class="QHBoxLayout" name="volumeSliderLayout">
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="Awl::VolSlider" name="volumeSlider" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>64</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>512</height>
+           </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
+          <property name="toolTip">
+           <string>Master volume</string>
+          </property>
+          <property name="accessibleName">
+           <string>Master volume</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use up and down arrows to change value</string>
           </property>
          </widget>
         </item>
@@ -650,92 +786,6 @@
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
-       <layout class="QHBoxLayout" name="metronomeTagLayout">
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="metronomeTag">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>36</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Metronome
-volume</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::PlainText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="1">
-       <layout class="QHBoxLayout" name="tempoPercentLayout">
-        <item>
-         <widget class="QDoubleSpinBox" name="relTempoBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>64</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Relative tempo (as percentage)</string>
-          </property>
-          <property name="accessibleName">
-           <string>Relative tempo (as percentage)</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::NoButtons</enum>
-          </property>
-          <property name="prefix">
-           <string/>
-          </property>
-          <property name="suffix">
-           <string notr="true">%</string>
-          </property>
-          <property name="decimals">
-           <number>0</number>
-          </property>
-          <property name="minimum">
-           <double>10.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>300.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>5.000000000000000</double>
-          </property>
-          <property name="value">
-           <double>100.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item row="2" column="1">
        <layout class="QHBoxLayout" name="tempoLabelLayout">
         <item>
@@ -776,56 +826,6 @@ volume</string>
           </property>
           <property name="textInteractionFlags">
            <set>Qt::NoTextInteraction</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="2">
-       <layout class="QHBoxLayout" name="volumeTextLayout">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QDoubleSpinBox" name="volSpinBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>64</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Master volume (decibel)</string>
-          </property>
-          <property name="accessibleName">
-           <string>Master volume (decibel)</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::NoButtons</enum>
-          </property>
-          <property name="suffix">
-           <string extracomment="decibel">dB</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
           </property>
          </widget>
         </item>
@@ -926,51 +926,6 @@ volume</string>
         </item>
        </layout>
       </item>
-      <item row="1" column="3">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Test</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="QLabel" name="volumeTag_2">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>36</height>
-         </size>
-        </property>
-        <property name="mouseTracking">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string extracomment="short text for volume slider">Log Slider</string>
-        </property>
-        <property name="textFormat">
-         <enum>Qt::PlainText</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="Ms::MixerVolumeSlider" name="logSlider">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
    </layout>
@@ -986,11 +941,6 @@ volume</string>
    <class>Awl::VolSlider</class>
    <extends>Awl::Slider</extends>
    <header>awl/volslider.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Ms::MixerVolumeSlider</class>
-   <extends>QSlider</extends>
-   <header>mixertrackchannel.h</header>
   </customwidget>
  </customwidgets>
  <resources>

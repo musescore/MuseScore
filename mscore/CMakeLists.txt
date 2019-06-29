@@ -75,7 +75,8 @@ endif (SCRIPT_INTERFACE)
 
 QT5_WRAP_UI (ui_headers
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
-      measuresdialog.ui pagesettings.ui mixer.ui mixertrackchannel.ui mixertrackpart.ui mixerdetails.ui parteditbase.ui
+      measuresdialog.ui pagesettings.ui
+      mixer.ui mixertrackchannel.ui mixermasterchannel.ui mixertrackpart.ui mixerdetails.ui parteditbase.ui
       playpanel.ui prefsdialog.ui measureproperties.ui
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
       editstaff.ui timesigproperties.ui
@@ -312,6 +313,7 @@ add_executable ( ${ExecutableName}
       ${resource_file}
       ${INCS}
 
+      gainslider.h gainslider.cpp
       abstractdialog.h accessibletoolbutton.h albummanager.h
       alsa.h alsamidi.h analyse.h articulationprop.h bb.h
       bendcanvas.h bendproperties.h breaksdialog.h capella.h

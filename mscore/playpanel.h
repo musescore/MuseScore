@@ -55,7 +55,6 @@ class PlayPanel : public QDockWidget, private Ui::PlayPanelBase {
 
    private slots:
       void volumeChanged(double,int);
-      void volumeChanged(double);
       void metronomeGainChanged(double val, int);
       void relTempoChanged(double,int);
       void relTempoChanged();

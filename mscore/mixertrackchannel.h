@@ -21,6 +21,7 @@
 #define __MIXERTRACKCHANNEL_H__
 
 #include "ui_mixertrackchannel.h"
+#include "ui_mixermasterchannel.h"
 #include "mixertrackgroup.h"
 #include "mixertrack.h"
 #include "mixertrackitem.h"
@@ -76,7 +77,7 @@ public:
 
 
 // Class for the "master volume" control - borrows the UI from MixerTrackChannel
-class MixerMasterChannel : public QWidget, public Ui::MixerTrackChannel
+class MixerMasterChannel : public QWidget, public Ui::MixerMasterChannel
       {
       Q_OBJECT
 
@@ -91,30 +92,6 @@ class MixerMasterChannel : public QWidget, public Ui::MixerTrackChannel
       public:
       explicit MixerMasterChannel();
       void volumeChanged(float);
-      };
-
-
-class MixerVolumeSlider : public QSlider
-      {
-      Q_OBJECT
-      double _positionValue;
-      double _minValue;
-      double _maxValue;
-
-      void setMinLogValue(double min);
-      void setMaxLogValue(double max);
-      void setLogRange(double min, double max) { setMinLogValue(min); setMaxLogValue(max); };
-
-   public:
-      MixerVolumeSlider(QWidget* parent);
-
-      double doubleValue() const;
-      void setDoubleValue(double);
-
-      void sliderChange(QAbstractSlider::SliderChange change) override;
-
-      signals:
-      void doubleValueChanged(double);
       };
 
 }
