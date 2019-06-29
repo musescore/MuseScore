@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>265</width>
-    <height>279</height>
+    <width>391</width>
+    <height>496</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>265</width>
-    <height>279</height>
+    <width>321</width>
+    <height>325</height>
    </size>
   </property>
   <property name="floating">
@@ -480,22 +480,114 @@
       <property name="spacing">
        <number>6</number>
       </property>
-      <item row="1" column="2">
-       <layout class="QHBoxLayout" name="volumeTextLayout">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
+      <item row="0" column="2">
+       <layout class="QHBoxLayout" name="volumeSliderLayout">
         <property name="topMargin">
          <number>0</number>
         </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
+        <item>
+         <widget class="Awl::VolSlider" name="volumeSlider" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>64</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>512</height>
+           </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
+          <property name="toolTip">
+           <string>Master volume</string>
+          </property>
+          <property name="accessibleName">
+           <string>Master volume</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use up and down arrows to change value</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <layout class="QHBoxLayout" name="metroSliderLayout">
+        <property name="topMargin">
          <number>0</number>
         </property>
         <item>
-         <widget class="QDoubleSpinBox" name="volSpinBox">
+         <spacer name="metroSliderSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="Awl::VolSlider" name="mgainSlider" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>64</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>512</height>
+           </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
+          <property name="toolTip">
+           <string>Metronome volume</string>
+          </property>
+          <property name="accessibleName">
+           <string>Metronome volume</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use up and down arrows to change value</string>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <layout class="QHBoxLayout" name="metonomeButtonsLayout">
+        <property name="spacing">
+         <number>-1</number>
+        </property>
+        <item>
+         <widget class="QToolButton" name="countInButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -504,38 +596,39 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>64</width>
+            <width>16777215</width>
             <height>16777215</height>
            </size>
           </property>
-          <property name="toolTip">
-           <string>Master volume (decibel)</string>
+          <property name="text">
+           <string notr="true"/>
           </property>
-          <property name="accessibleName">
-           <string>Master volume (decibel)</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::NoButtons</enum>
-          </property>
-          <property name="suffix">
-           <string extracomment="decibel">dB</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
+          <property name="icon">
+           <iconset resource="musescore.qrc">
+            <normaloff>:/data/icons/media-playback-countin.svg</normaloff>:/data/icons/media-playback-countin.svg</iconset>
           </property>
          </widget>
         </item>
-       </layout>
-      </item>
-      <item row="2" column="1">
-       <layout class="QHBoxLayout" name="tempoLabelLayout">
         <item>
-         <widget class="QLabel" name="tempoLabel">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>10</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QToolButton" name="metronomeButton">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -543,33 +636,15 @@
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>36</height>
+            <height>16777215</height>
            </size>
           </property>
-          <property name="toolTip">
-           <string>Actual tempo in quarter notes per minute</string>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="lineWidth">
-           <number>2</number>
-          </property>
-          <property name="midLineWidth">
-           <number>2</number>
-          </property>
           <property name="text">
-           <string notr="true">Tempo
-120 BPM</string>
+           <string notr="true"/>
           </property>
-          <property name="textFormat">
-           <enum>Qt::PlainText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="textInteractionFlags">
-           <set>Qt::NoTextInteraction</set>
+          <property name="icon">
+           <iconset resource="musescore.qrc">
+            <normaloff>:/data/icons/media-playback-metronome.svg</normaloff>:/data/icons/media-playback-metronome.svg</iconset>
           </property>
          </widget>
         </item>
@@ -661,15 +736,12 @@ volume</string>
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
-       <layout class="QHBoxLayout" name="metonomeButtonsLayout">
-        <property name="spacing">
-         <number>-1</number>
-        </property>
+      <item row="2" column="1">
+       <layout class="QHBoxLayout" name="tempoLabelLayout">
         <item>
-         <widget class="QToolButton" name="countInButton">
+         <widget class="QLabel" name="tempoLabel">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -677,114 +749,119 @@ volume</string>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>16777215</height>
+            <height>36</height>
            </size>
+          </property>
+          <property name="toolTip">
+           <string>Actual tempo in quarter notes per minute</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="lineWidth">
+           <number>2</number>
+          </property>
+          <property name="midLineWidth">
+           <number>2</number>
           </property>
           <property name="text">
-           <string notr="true"/>
+           <string notr="true">Tempo
+120 BPM</string>
           </property>
-          <property name="icon">
-           <iconset resource="musescore.qrc">
-            <normaloff>:/data/icons/media-playback-countin.svg</normaloff>:/data/icons/media-playback-countin.svg</iconset>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
           </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>10</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QToolButton" name="metronomeButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string notr="true"/>
-          </property>
-          <property name="icon">
-           <iconset resource="musescore.qrc">
-            <normaloff>:/data/icons/media-playback-metronome.svg</normaloff>:/data/icons/media-playback-metronome.svg</iconset>
+          <property name="textInteractionFlags">
+           <set>Qt::NoTextInteraction</set>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="0" column="0">
-       <layout class="QHBoxLayout" name="metroSliderLayout">
+      <item row="1" column="2">
+       <layout class="QHBoxLayout" name="volumeTextLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
         <property name="topMargin">
          <number>0</number>
         </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item>
-         <spacer name="metroSliderSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="Awl::VolSlider" name="mgainSlider" native="true">
+         <widget class="QDoubleSpinBox" name="volSpinBox">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="minimumSize">
+          <property name="maximumSize">
            <size>
-            <width>0</width>
-            <height>64</height>
+            <width>64</width>
+            <height>16777215</height>
            </size>
+          </property>
+          <property name="toolTip">
+           <string>Master volume (decibel)</string>
+          </property>
+          <property name="accessibleName">
+           <string>Master volume (decibel)</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="suffix">
+           <string extracomment="decibel">dB</string>
+          </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="2">
+       <layout class="QHBoxLayout" name="volumeTagLayout">
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="volumeTag">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
           <property name="maximumSize">
            <size>
-            <width>128</width>
-            <height>512</height>
+            <width>16777215</width>
+            <height>36</height>
            </size>
           </property>
-          <property name="focusPolicy">
-           <enum>Qt::TabFocus</enum>
+          <property name="mouseTracking">
+           <bool>true</bool>
           </property>
-          <property name="toolTip">
-           <string>Metronome volume</string>
+          <property name="text">
+           <string extracomment="short text for volume slider">Master
+volume</string>
           </property>
-          <property name="accessibleName">
-           <string>Metronome volume</string>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
           </property>
-          <property name="accessibleDescription">
-           <string>Use up and down arrows to change value</string>
-          </property>
-          <property name="autoFillBackground">
-           <bool>false</bool>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -849,82 +926,50 @@ volume</string>
         </item>
        </layout>
       </item>
-      <item row="0" column="2">
-       <layout class="QHBoxLayout" name="volumeSliderLayout">
-        <property name="topMargin">
-         <number>0</number>
+      <item row="1" column="3">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Test</string>
         </property>
-        <item>
-         <widget class="Awl::VolSlider" name="volumeSlider" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>64</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>128</width>
-            <height>512</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::TabFocus</enum>
-          </property>
-          <property name="toolTip">
-           <string>Master volume</string>
-          </property>
-          <property name="accessibleName">
-           <string>Master volume</string>
-          </property>
-          <property name="accessibleDescription">
-           <string>Use up and down arrows to change value</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
       </item>
-      <item row="2" column="2">
-       <layout class="QHBoxLayout" name="volumeTagLayout">
-        <property name="topMargin">
-         <number>0</number>
+      <item row="2" column="3">
+       <widget class="QLabel" name="volumeTag_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <item>
-         <widget class="QLabel" name="volumeTag">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>36</height>
-           </size>
-          </property>
-          <property name="mouseTracking">
-           <bool>true</bool>
-          </property>
-          <property name="text">
-           <string extracomment="short text for volume slider">Master
-volume</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::PlainText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>36</height>
+         </size>
+        </property>
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string extracomment="short text for volume slider">Log Slider</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::PlainText</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="Ms::MixerVolumeSlider" name="logSlider">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -941,6 +986,11 @@ volume</string>
    <class>Awl::VolSlider</class>
    <extends>Awl::Slider</extends>
    <header>awl/volslider.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Ms::MixerVolumeSlider</class>
+   <extends>QSlider</extends>
+   <header>mixertrackchannel.h</header>
   </customwidget>
  </customwidgets>
  <resources>

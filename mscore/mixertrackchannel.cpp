@@ -170,7 +170,7 @@ void MixerMasterChannel::setupSlotsAndSignals()
       connect(volumeSlider, SIGNAL(valueChanged(int)), SLOT(masterVolumeSliderMoved(int)));
       }
 
-#define MIXER_MASTER_VOLUME_STEPS 500 // maximum number of discrete steps for master volume control
+#define MIXER_MASTER_VOLUME_STEPS 100 // maximum number of discrete steps for master volume control
 
 void MixerMasterChannel::setupAdditionalUi()
       {
@@ -208,10 +208,9 @@ void MixerMasterChannel::updateUiControls()
       
 void MixerMasterChannel::volumeChanged(float synthGain)
       {
+      qDebug()<<"MixerMasterChannel: synthGain = "<<synthGain<<"  NO OP - not syncing slider just now";
       const QSignalBlocker blockSignals(volumeSlider); // block during this method
-      float sliderPosition = synthGain * MIXER_MASTER_VOLUME_STEPS / 10.0;
-      qDebug()<<"Not implemented yet: synthGain = "<<synthGain<<" current calculation"<<sliderPosition<<" in a range 0 to "<<MIXER_MASTER_VOLUME_STEPS;
-      volumeSlider->setValue(int(sliderPosition));
+      //volumeSlider->setValue(int(sliderPosition));
       }
 
 
@@ -236,5 +235,68 @@ void MixerMasterChannel::masterVolumeSliderMoved(int value)
       volumeSlider->setToolTip(tr("Volume: %1 dB").arg(QString::number(decibels)));
       synti->setGain(newGain);
       }
+
+#define MIXER_VOLUME_SLIDER_STEPS 80
+MixerVolumeSlider::MixerVolumeSlider(QWidget* parent) : QSlider(parent)
+      {
+      setMinimum(-60);
+      setMaximum(20);
+      setLogRange(0.0f, 10.0f);
+      }
+
+void MixerVolumeSlider::setMinLogValue(double val)
+      {
+      if (val == 0.0f)
+            _minValue = -100;
+      else
+            _minValue = fast_log10(val) * 20.0f;
+      }
+
+void MixerVolumeSlider::setMaxLogValue(double val)
+      {
+      _maxValue = fast_log10(val) * 20.0f;
+      }
+
+void MixerVolumeSlider::setDoubleValue(double newValue)
+{
+      double positionValue;
+
+      if (newValue == 0.0f)
+            positionValue = _minValue;
+      else {
+            positionValue = fast_log10(newValue) * 20.0f;
+            if (positionValue < _minValue)
+                  positionValue = _minValue;
+            }
+
+      // update the position. This is for the case when the
+      // method invoked as a SLOT rather than by sliderChange()
+      if (value() != int(positionValue))
+            QSlider::setValue(int(positionValue));
+
+      emit doubleValueChanged(newValue);
+      qDebug()<<"MixerVolumeSlider:setDoubleValue( double "<<newValue<<"). positionValue = "<<positionValue<<"  int value() = "<<value();
+}
+
+double MixerVolumeSlider::doubleValue() const
+{
+      return pow(10.0, _positionValue*0.05f);
+}
+
+      
+void MixerVolumeSlider::sliderChange(QAbstractSlider::SliderChange change)
+      {
+      if (change == QAbstractSlider::SliderValueChange)  {
+
+            double newPositionValue = double(value());
+            double newDoubleValue = pow(10.0, newPositionValue*0.05f);
+            qDebug()<<"MixerVolumeSlider:sliderChange newPositionValue = "<<newPositionValue<<" (the int value = "<<value()<<")";
+            setDoubleValue(newDoubleValue);
+            }
+      QSlider::sliderChange(change);
+      }
+
+
+
 
 }

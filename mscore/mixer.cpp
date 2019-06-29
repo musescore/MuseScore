@@ -403,7 +403,7 @@ void Mixer::on_partOnlyCheckBox_toggled(bool checked)
 void Mixer::synthGainChanged(float)
       {
       float decibels = qBound(minDecibels, log10f(synti->gain()), 0.0f);
-      qDebug()<<"Mixer::synthGainChanged(). Some maths required for sensible slider operation (synti->gain = "<<synti->gain()<<" decibels = "<<decibels<<" (?)";
+      //qDebug()<<"Mixer::synthGainChanged(). Some maths required for sensible slider operation (synti->gain = "<<synti->gain()<<" decibels = "<<decibels<<" (?)";
       //TODO: maths required for sensible slider operation
       masterChannelWidget->volumeChanged(synti->gain());
       }

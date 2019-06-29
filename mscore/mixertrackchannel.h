@@ -25,6 +25,8 @@
 #include "mixertrack.h"
 #include "mixertrackitem.h"
 #include "libmscore/instrument.h"
+#include "awl/fastlog.h"    // for the log volume slider
+
 
 // obq-note
 // This class has been re-purposed for the new mixer design.
@@ -90,7 +92,30 @@ class MixerMasterChannel : public QWidget, public Ui::MixerTrackChannel
       explicit MixerMasterChannel();
       void volumeChanged(float);
       };
+
+
+class MixerVolumeSlider : public QSlider
+      {
+      Q_OBJECT
+      double _positionValue;
+      double _minValue;
+      double _maxValue;
+
+      void setMinLogValue(double min);
+      void setMaxLogValue(double max);
+      void setLogRange(double min, double max) { setMinLogValue(min); setMaxLogValue(max); };
+
+   public:
+      MixerVolumeSlider(QWidget* parent);
+
+      double doubleValue() const;
+      void setDoubleValue(double);
+
+      void sliderChange(QAbstractSlider::SliderChange change) override;
+
+      signals:
+      void doubleValueChanged(double);
+      };
+
 }
-
-
 #endif // __MIXERTRACKCHANNEL_H__

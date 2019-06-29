@@ -68,6 +68,10 @@ PlayPanel::PlayPanel(QWidget* parent)
       mgainSlider->setDclickValue1(seq->metronomeGain() - 10.75f);
       mgainSlider->setDclickValue2(seq->metronomeGain() - 10.75f);
 
+
+      connect(logSlider, SIGNAL(doubleValueChanged(double)), SLOT(volumeChanged(double)));
+
+
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(mgainSlider,  SIGNAL(valueChanged(double,int)), SLOT(metronomeGainChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
@@ -75,7 +79,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(tempoSlider,  SIGNAL(sliderPressed(int)),       SLOT(tempoSliderPressed(int)));
       connect(tempoSlider,  SIGNAL(sliderReleased(int)),      SLOT(tempoSliderReleased(int)));
       connect(relTempoBox,  SIGNAL(valueChanged(double)),     SLOT(relTempoChanged()));
-      connect(volSpinBox,  SIGNAL(valueChanged(double)),     SLOT(volSpinBoxEdited()));
+      connect(volSpinBox,   SIGNAL(valueChanged(double)),     SLOT(volSpinBoxEdited()));
       connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));                
       }
 
@@ -252,11 +256,19 @@ void PlayPanel::setGain(float val)  // respond to gainChanged() SIGNAL from Mast
 //   volumeChanged
 //---------------------------------------------------------
 
-void PlayPanel::volumeChanged(double val, int)
+void PlayPanel::volumeChanged(double value, int)
       {
-            qDebug()<<"PlayPanel volume changed";
-      emit gainChange(val);
-      vol = val;
+      qDebug()<<"PlayPanel OLD SLIDER volume changed: newValue = "<<value;
+      emit gainChange(value);
+      vol = value;
+      volLabel();
+      }
+
+void PlayPanel::volumeChanged(double value)
+      {
+      qDebug()<<"PlayPanel NEW SLIDER volume changed: newValue = "<<value;;
+      emit gainChange(value);
+      vol = value;
       volLabel();
       }
 
