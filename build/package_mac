@@ -27,7 +27,7 @@ COMPRESSEDDMGNAME=${VOLNAME}.dmg
 function set_bundle_display_options() {
 	osascript <<-EOF
     tell application "Finder"
-        with timeout of 600 seconds
+        with timeout of 300 seconds
         set f to POSIX file ("${1}" as string) as alias
         tell folder f
             open
@@ -190,7 +190,11 @@ cp  ${BACKGROUND} ${VOLUME}/Pictures/background.tiff
 echo "symlink application"
 # nssymlink applicatio
 ln -s /Applications/ ${VOLUME}/Applications
+now=$(date +"%T")
+echo "set bundle display options start: $now"
 set_bundle_display_options ${VOLUME}
+now=$(date +"%T")
+echo "set bundle display options end: $now"
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
 
 #codesign
