@@ -22,6 +22,9 @@
 #include "libmscore/notedot.h"
 #include "libmscore/segment.h"
 #include "libmscore/accidental.h"
+#include "libmscore/musescoreCore.h"
+#include "libmscore/score.h"
+#include "libmscore/undo.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -365,7 +368,13 @@ class Note : public Element {
 //       Q_PROPERTY(Ms::Tie*                       tieFor            READ tieFor)
       /// The NoteType of the note.
       /// \since MuseScore 3.2.1
-      Q_PROPERTY(Ms::NoteType                      noteType          READ noteType)
+      Q_PROPERTY(Ms::NoteType                     noteType          READ noteType)
+      /// Set NoteEvent onTimeOffset value.
+      /// \since MuseScore 3.2.4
+      Q_PROPERTY(int                              onTimeOffset      READ onTimeOffset       WRITE setOnTimeOffset)
+      /// Set NoteEvent offTimeOffset value.
+      /// \since MuseScore 3.2.4
+      Q_PROPERTY(int                              offTimeOffset     READ offTimeOffset      WRITE setOffTimeOffset)
 
       /** MIDI pitch of this note */
       API_PROPERTY_T( int, pitch,                   PITCH                     )
@@ -410,7 +419,13 @@ class Note : public Element {
 
       Ms::AccidentalType accidentalType() { return note()->accidentalType(); }
       void setAccidentalType(Ms::AccidentalType t) { note()->setAccidentalType(t); }
+
       Ms::NoteType noteType() { return note()->noteType(); }
+
+      int onTimeOffset() const { return note()->getOnTimeOffset(); }
+      void setOnTimeOffset(int v);
+      int offTimeOffset() const { return note()->getOffTimeOffset(); }
+      void setOffTimeOffset(int v);
       /// \endcond
       };
 

@@ -69,6 +69,55 @@ void Note::setTpc(int val)
             set(Pid::TPC2, val);
       }
 
+
+//---------------------------------------------------------
+//   Note::setOnTimeOffset
+//---------------------------------------------------------
+
+void Note::setOnTimeOffset(int v)
+      {
+      //Ms::Score* score = Ms::MuseScoreCore::mscoreCore->currentScore();
+      Ms::Score* score = note()->score();
+      if (!score) {
+            qWarning("PluginAPI::Note::setOnTimeOffset: A score is required.");
+            return;
+            }
+      NoteEvent* event = note()->noteEvent(0);
+      if (v < 0 || v > 2*NoteEvent::NOTE_LENGTH || v >= event->offtime()) {
+            qWarning("PluginAPI::Note::setOnTimeOffset: Invalid value.");
+            return;
+            }
+      if (!event || event->ontime() == v)
+            return;                             // Value hasn't changed so no need for undo
+      NoteEvent ne = *event;                    // Make copy of NoteEvent value
+      ne.setOntime(v);                          // Set new ontTime value
+      score->undo(new ChangeNoteEvent(note(), event, ne));
+      }
+
+//---------------------------------------------------------
+//   Note::setOffTimeOffset
+//---------------------------------------------------------
+
+void Note::setOffTimeOffset(int v) 
+      { 
+      //Ms::Score* score = Ms::MuseScoreCore::mscoreCore->currentScore();
+      Ms::Score* score = note()->score();
+      if (!score) {
+            qWarning("PluginAPI::Note::setOffTimeOffset: A score is required.");
+            return;
+            }
+      NoteEvent* event = note()->noteEvent(0);
+      if (v < 0 || v > 2*NoteEvent::NOTE_LENGTH || v <= event->ontime()) {
+            qWarning("PluginAPI::Note::setOffTimeOffset: Invalid value.");
+            return;
+            }
+      if (!event || event->offtime() == v)
+            return;                             // Value hasn't changed so no need for undo
+      NoteEvent ne = *event;                    // Make copy of NoteEvent value
+      ne.setLen(v - ne.ontime());               // Set new length value
+      score->undo(new ChangeNoteEvent(note(), event, ne));
+      }
+
 //---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond

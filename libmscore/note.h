@@ -428,7 +428,9 @@ class Note final : public Element {
       void setVeloOffset(int v)             { _veloOffset = v;           }
 
       void setOnTimeOffset(int v);
+      int getOnTimeOffset() const           { return _playEvents[0].ontime(); }
       void setOffTimeOffset(int v);
+      int getOffTimeOffset() const          { return _playEvents[0].offtime(); }
 
       int customizeVelocity(int velo) const;
       NoteDot* dot(int n)                         { return _dots[n];          }
