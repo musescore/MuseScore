@@ -278,6 +278,26 @@ void Mixer::updateVolumeMode()
 
 void Mixer::updateUiOptions()
       {
+
+      // track colors and what is shown in the details list
+      mixerDetails->updateUiOptions();
+
+      // track colors in the main mixer
+      for (int topLevelIndex = 0; topLevelIndex < mixerTreeWidget->topLevelItemCount(); topLevelIndex++) {
+            QTreeWidgetItem* topLevelItem = mixerTreeWidget->topLevelItem(topLevelIndex);
+            MixerTrackChannel* itemWidget = static_cast<MixerTrackChannel*>(mixerTreeWidget->itemWidget(topLevelItem, 1));
+            itemWidget->updateUiControls();
+
+            for (int childIndex = 0; childIndex < topLevelItem->childCount(); childIndex++) {
+                  QTreeWidgetItem* childItem = topLevelItem->child(childIndex);
+                  MixerTrackChannel* itemWidget = static_cast<MixerTrackChannel*>(mixerTreeWidget->itemWidget(childItem, 1));
+                  itemWidget->updateUiControls();
+                  }
+            }
+
+      // layout of master volume (is affected by presence or absence or track color
+      masterChannelWidget->updateUiControls();
+
       mixerDetails->setVisible(options->showingDetails());
 
       QIcon showDetailsIcon;
@@ -314,30 +334,11 @@ void Mixer::updateUiOptions()
             gridLayout->addWidget(partOnlyCheckBox, showMasterVol ? 2 : 1, 0, 1, 1);
             gridLayout->addWidget(showDetailsButton, showMasterVol ? 2 : 1, 1, 1, 1);
             gridLayout->addWidget(mixerDetails, showMasterVol ? 3 : 2, 0, 1 , 2, Qt::AlignTop);
+
+            gridLayout->setRowStretch(0,10);
             }
 
       showDetailsButton->setIcon(showDetailsIcon);
-
-
-      // track colors and what is shown in the details list
-      mixerDetails->updateUiOptions();
-
-      // track colors in the main mixer
-      for (int topLevelIndex = 0; topLevelIndex < mixerTreeWidget->topLevelItemCount(); topLevelIndex++) {
-            QTreeWidgetItem* topLevelItem = mixerTreeWidget->topLevelItem(topLevelIndex);
-            MixerTrackChannel* itemWidget = static_cast<MixerTrackChannel*>(mixerTreeWidget->itemWidget(topLevelItem, 1));
-            itemWidget->updateUiControls();
-
-            for (int childIndex = 0; childIndex < topLevelItem->childCount(); childIndex++) {
-                  QTreeWidgetItem* childItem = topLevelItem->child(childIndex);
-                  MixerTrackChannel* itemWidget = static_cast<MixerTrackChannel*>(mixerTreeWidget->itemWidget(childItem, 1));
-                  itemWidget->updateUiControls();
-                  }
-            }
-
-      // layout of master volume (is affected by presence or absence or track color
-      masterChannelWidget->updateUiControls();
-
       }
 
 void Mixer::contextMenuEvent(QContextMenuEvent *event)
@@ -414,9 +415,6 @@ void Mixer::on_partOnlyCheckBox_toggled(bool checked)
 
 void Mixer::synthGainChanged(float)
       {
-      float decibels = qBound(minDecibels, log10f(synti->gain()), 0.0f);
-      //qDebug()<<"Mixer::synthGainChanged(). Some maths required for sensible slider operation (synti->gain = "<<synti->gain()<<" decibels = "<<decibels<<" (?)";
-      //TODO: maths required for sensible slider operation
       masterChannelWidget->volumeChanged(synti->gain());
       }
 

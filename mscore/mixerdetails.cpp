@@ -73,8 +73,7 @@ void MixerDetails::updateUiOptions()
       {
       MixerOptions* options = Mixer::getOptions();
       bool showTrackColors = options->showTrackColors();
-      trackColorLabel->setVisible(showTrackColors);
-      labelTrackColor->setVisible(showTrackColors);
+      colorLabelHolder->setVisible(showTrackColors);
 
       bool showMidiOptions = options->showMidiOptions();
       reverbSlider->setVisible(showMidiOptions);
