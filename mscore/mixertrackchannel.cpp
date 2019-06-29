@@ -160,6 +160,14 @@ void MixerTrackChannel::stripMuteToggled(bool val)
 MixerMasterChannel::MixerMasterChannel()
       {
       setupUi(this);
+      volumeSlider->setMinimum(-60); // in case .ui file gets stuffed up
+      volumeSlider->setMaximum(20);  // in case .ui file gets stuffed up
+
+      playButton->setDefaultAction(getAction("play"));
+      loopButton->setDefaultAction(getAction("loop"));
+
+      volumeSlider->setDoubleValue(synti->gain());
+
       setupAdditionalUi();
       setupSlotsAndSignals();
       }
@@ -170,35 +178,15 @@ void MixerMasterChannel::setupSlotsAndSignals()
       connect(volumeSlider, SIGNAL(valueChanged(int)), SLOT(masterVolumeSliderMoved(int)));
       }
 
-#define MIXER_MASTER_VOLUME_STEPS 100 // maximum number of discrete steps for master volume control
 
 void MixerMasterChannel::setupAdditionalUi()
       {
-      volumeSlider->setMinimum(-60); // in case .ui file gets stuffed up
-      volumeSlider->setMaximum(20);  // in case .ui file gets stuffed up
-      muteButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
-      soloButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
-
-      QIcon playIcon;
-      playIcon.addFile(QString::fromUtf8(":/data/icons/media-playback-start.svg"), QSize(), QIcon::Normal, QIcon::Off);
-
-      QIcon loopIcon;
-      loopIcon.addFile(QString::fromUtf8(":/data/icons/media-playback-loop.svg"), QSize(), QIcon::Normal, QIcon::Off);
-
-      soloButton->setDefaultAction(getAction("play"));
-      muteButton->setDefaultAction(getAction("loop"));
-
-      soloButton->setText("");
-      muteButton->setText("");
-
-      soloButton->setIcon(playIcon);
-      muteButton->setIcon(loopIcon);
-
-      // the label is retained but made transparent to preserve alignment with
-      // the track widgets
+      // the label is retained but made transparent to preserve
+      // alignment with the track channel sliders
       QString transparentColorLabelStyle = "QToolButton { background: none;}";
       colorLabel->setStyleSheet(transparentColorLabelStyle);
       }
+
 
 void MixerMasterChannel::updateUiControls()
       {
@@ -208,7 +196,6 @@ void MixerMasterChannel::updateUiControls()
       
 void MixerMasterChannel::volumeChanged(float synthGain)
       {
-      qDebug()<<"MixerMasterChannel: synthGain = "<<synthGain;
       const QSignalBlocker blockSignals(volumeSlider); // block during this method
       volumeSlider->setDoubleValue(synthGain);
       }
@@ -221,19 +208,13 @@ void MixerMasterChannel::masterVolumeSliderMoved(int value)
       if (newGain == synti->gain())
             return;
 
+      synti->setGain(newGain);
+
       //TODO:- magic numbers (needs to be made unmagical)
       float n = 20.0;         // from playpanel.h
       float mute = 0.0;       // from playpanel.h
-
-      float decibels;
-
-            if (newGain == mute)
-                  decibels = -80.0;
-            else
-                  decibels = ((n * std::log10(newGain)) - n);
-
-      volumeSlider->setToolTip(tr("Volume: %1 dB").arg(QString::number(decibels)));
-      synti->setGain(newGain);
+      float decibels = (newGain == mute) ? -80.0 : ((n * std::log10(newGain)) - n);
+      volumeSlider->setToolTip(tr("Volume: %1 dB").arg(QString::number(decibels, 'f', 1)));
       }
 
 }

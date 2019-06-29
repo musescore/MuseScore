@@ -89,8 +89,11 @@ Mixer::Mixer(QWidget* parent)
 
       gridLayout = new QGridLayout(dockWidgetContents);
       mixerDetails = new MixerDetails(this);
-
       contextMenu = new MixerContextMenu(this);
+
+      qDebug()<<"option showingDetails() = "<<options->showingDetails();
+
+      showDetails(options->showingDetails());
 
       keyboardFilter = new MixerKeyboardControlFilter(this);
       this->installEventFilter(keyboardFilter);
@@ -340,21 +343,28 @@ void Mixer::contextMenuEvent(QContextMenuEvent *event)
       contextMenu->contextMenuEvent(event);
       }
 
+      
 void Mixer::showDetailsClicked()
       {
-      options->setShowingDetails(!mixerDetails->isVisible());
+      bool visible = !mixerDetails->isVisible();
+      options->setShowingDetails(visible);
+      showDetails(visible);
+      }
+
       
+void Mixer::showDetails(bool visible)
+      {
       QSize currentTreeWidgetSize = mixerTreeWidget->size();
       QSize minTreeWidgetSize = mixerTreeWidget->minimumSize();   // respect settings from QT Creator / QT Designer
       QSize maxTreeWidgetSize = mixerTreeWidget->maximumSize();   // respect settings from QT Creator / QT Designer
 
-      if (!isFloating() && !mixerDetails->isVisible()) {
+      if (!isFloating() && visible) {
             // Special case - make the mixerTreeView as narrow as possible before showing the
             // detailsView. Without this step, mixerTreeView will be as fully wide as the dock
             // and when the detailsView is added it will get even wider. (And if the user toggles QT
             // will keep making the dock / mainWindow wider and wider, which is highly undesirable.)
             mixerTreeWidget->setMaximumSize(minTreeWidgetSize);
-            mixerDetails->setVisible(!mixerDetails->isVisible());
+            mixerDetails->setVisible(visible);
             dockWidgetContents->adjustSize();
             mixerTreeWidget->setMaximumSize(maxTreeWidgetSize);
             return;
@@ -365,7 +375,7 @@ void Mixer::showDetailsClicked()
       // appropriate.
       mixerTreeWidget->setMinimumSize(currentTreeWidgetSize);
       mixerTreeWidget->setMaximumSize(currentTreeWidgetSize);
-      mixerDetails->setVisible(!mixerDetails->isVisible());
+      mixerDetails->setVisible(visible);
       mixerTreeWidget->adjustSize();
       dockWidgetContents->adjustSize();
       this->adjustSize(); // All three adjustSize() calls (appear) to be required
@@ -712,7 +722,7 @@ MixerOptions::MixerOptions()
 
 void MixerOptions::readSettings() {
 
-      QSettings settings;
+      QSettings settings("MuseScore","Mixer");
       settings.beginGroup("MixerOptions");
       _showTrackColors = settings.value("showTrackColors", true).toBool();
       _detailsOnTheSide = settings.value("detailsOnTheSide", false).toBool();
@@ -745,13 +755,15 @@ void MixerOptions::readSettings() {
       }
 
 void MixerOptions::writeSettings() {
-      QSettings settings;
+      QSettings settings("MuseScore","Mixer");
       settings.beginGroup("MixerOptions");
       settings.setValue("showTrackColors", _showTrackColors);
       settings.setValue("detailsOnTheSide", _detailsOnTheSide);
       settings.setValue("showMidiOptions", _showMidiOptions);
       settings.setValue("showingDetails", _showingDetails);
       settings.setValue("showMasterVolume", _showMasterVolume);
+
+      qDebug()<<"write settings _showingDetails = "<<_showingDetails;
 
       // hack because C++ documentation is horrible and I want it done
       // fix up later

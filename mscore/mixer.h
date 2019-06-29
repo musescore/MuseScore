@@ -109,6 +109,7 @@ class Mixer : public QDockWidget, public Ui::Mixer
       void setupSlotsAndSignals();
       void setupAdditionalUi();
       void disableMixer();                            // gray out everything when no score or part is open
+      void showDetails(bool);
 
       void setPlaybackScore(Score*);
 
