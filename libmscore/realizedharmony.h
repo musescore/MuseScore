@@ -68,9 +68,6 @@ class RealizedHarmony {
       const QList<int> pitches() const { return _notes.keys(); }
       const QList<int> tpcs() const { return _notes.values(); }
 
-      //TODO - PHV: consider what to do here, we might want to keep bass and root
-      //also consider if we should update or do any checks for if we call notes
-      //without updating first
       const QMap<int, int>& notes() const;
 
       void update(int rootTpc, int bassTpc, int transposeOffset = 0); //updates the notes map

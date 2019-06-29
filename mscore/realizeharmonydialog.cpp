@@ -72,7 +72,7 @@ void RealizeHarmonyDialog::setChordList(QList<Harmony*> hlist)
             chordTable->setItem(i, 2, new QTableWidgetItem(intervals));
             chordTable->setItem(i, 3, new QTableWidgetItem(h->getDescription()->noteNames(h->rootTpc())));
             }
-      setChordLabel(s);
+      chordLabel->setText(s);
 
       //set table uneditable again
       chordTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
