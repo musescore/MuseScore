@@ -115,7 +115,7 @@ class Mixer : public QDockWidget, public Ui::Mixer
 
    private slots:
       void on_partOnlyCheckBox_toggled(bool checked);
-      
+      void itemCollapsedOrExpanded(QTreeWidgetItem*);
 
    public slots:
       void updateTracks();

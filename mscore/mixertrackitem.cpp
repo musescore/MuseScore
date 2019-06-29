@@ -410,7 +410,7 @@ QList<Channel*> MixerTrackItem::playbackChannels(Part* part)
 
 MixerTreeWidgetItem::MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* treeWidget)
       {
-      mixerTrackItem = new MixerTrackItem(part, score);
+      _mixerTrackItem = new MixerTrackItem(part, score);
       setText(0, part->partName());
       setToolTip(0, part->partName());
 
@@ -437,7 +437,7 @@ MixerTreeWidgetItem::MixerTreeWidgetItem(Channel* channel, Instrument* instrumen
       {
       setText(0, channel->name());
       setToolTip(0, QString("%1 - %2").arg(part->partName()).arg(channel->name()));
-      mixerTrackItem = new MixerTrackItem(MixerTrackItem::TrackType::CHANNEL, part, instrument, channel);
+      _mixerTrackItem = new MixerTrackItem(MixerTrackItem::TrackType::CHANNEL, part, instrument, channel);
       }
       
 }

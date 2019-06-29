@@ -49,7 +49,6 @@ private:
 
       Channel* playbackChannel(const Channel* channel);
 
-      bool isPart();
       QList<Channel*> secondaryPlaybackChannels();
       QList<Channel*> playbackChannels(Part* part);
 
@@ -62,6 +61,7 @@ public:
       Channel* channel() { return _channel; }
       MidiMapping *midiMap();
       int color();
+      bool isPart();
 
       void setColor(int valueRgb);
       void setVolume(char value);
@@ -93,10 +93,12 @@ public:
 
 class MixerTreeWidgetItem : public QTreeWidgetItem
       {
+      MixerTrackItem* _mixerTrackItem;
+
    public:
       MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* parent);
       MixerTreeWidgetItem(Channel* channel, Instrument* instrument, Part* part);
-      MixerTrackItem* mixerTrackItem;
+      MixerTrackItem* mixerTrackItem() { return _mixerTrackItem; }
       };
 
 }

@@ -117,6 +117,8 @@ void Mixer::setupSlotsAndSignals()
       connect(showDetailsButton,SIGNAL(clicked()),SLOT(showDetailsClicked()));
 
       connect(mixerTreeWidget->header(), SIGNAL(geometriesChanged()), this, SLOT(adjustHeaderWidths()));
+      connect(mixerTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(itemCollapsedOrExpanded(QTreeWidgetItem*)));
+      connect(mixerTreeWidget, SIGNAL(itemCollapsed(QTreeWidgetItem*)), this, SLOT(itemCollapsedOrExpanded(QTreeWidgetItem*)));
       }
 
 void Mixer::setupAdditionalUi()
@@ -596,7 +598,7 @@ void Mixer::changeEvent(QEvent *event)
 //   updateTracks
 //---------------------------------------------------------
 void Mixer::updateTracks()
-{
+      {
       qDebug()<<"Mixer::updateTracks()";
       const QSignalBlocker blockTreeWidgetSignals(mixerTreeWidget);  // block during this method
 
@@ -613,9 +615,11 @@ void Mixer::updateTracks()
             MixerTreeWidgetItem* item = new MixerTreeWidgetItem(part, _score, mixerTreeWidget);
             mixerTreeWidget->addTopLevelItem(item);
             mixerTreeWidget->setItemWidget(item, 1, new MixerTrackChannel(item));
-            }
 
-      // TODO: need re-implement remembering expansion state and fix unwanted display bug
+            qDebug()<<"Part: "<<part->partName()<<" is expanded: "<<part->isExpanded();
+            // TODO: test re-implementing remembering expansion state
+            item->setExpanded(part->isExpanded());
+            }
 
       if (savedSelectionTopLevelIndex == -1 && mixerTreeWidget->topLevelItemCount() > 0) {
             mixerTreeWidget->setCurrentItem(mixerTreeWidget->itemAt(0,0));
@@ -623,6 +627,15 @@ void Mixer::updateTracks()
             }
       }
 
+void Mixer::itemCollapsedOrExpanded(QTreeWidgetItem* item) {
+      qDebug()<<"item "<<item->text(0)<<" is expanded = "<<item->isExpanded();
+
+      MixerTreeWidgetItem* mixerTreeWidgetItem = static_cast<MixerTreeWidgetItem*>(item);
+      MixerTrackItem* mixerTrackItem = mixerTreeWidgetItem->mixerTrackItem();
+      if (mixerTrackItem && mixerTrackItem->isPart()) {
+            mixerTrackItem->part()->setExpanded(item->isExpanded());
+      }
+}
 
 void Mixer::disableMixer()
       {
@@ -705,7 +718,7 @@ void Mixer::currentMixerTreeItemChanged()
             }
 
       MixerTreeWidgetItem* item = static_cast<MixerTreeWidgetItem*>(mixerTreeWidget->currentItem());
-      mixerDetails->updateDetails(item->mixerTrackItem);
+      mixerDetails->updateDetails(item->mixerTrackItem());
       }
 
 //MARK:- support classes

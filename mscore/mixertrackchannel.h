@@ -55,7 +55,7 @@ class MixerTrackChannel : public QWidget, public Ui::MixerTrackChannel, public C
       void setupAdditionalUi();
       void setupSlotsAndSignals();
       void update();
-      MixerTrackItem* mixerTrackItem() {return treeWidgetItem->mixerTrackItem; };
+      MixerTrackItem* mixerTrackItem() { return treeWidgetItem->mixerTrackItem(); };
       
 public slots:
       void stripMuteToggled(bool);
