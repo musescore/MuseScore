@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export QT_SHORT_VERSION=5.12
-export QT_LONG_VERSION=5.12.1
+export QT_SHORT_VERSION=5.9
+export QT_LONG_VERSION=5.9.8
 export QT_INSTALLER_ROOT=qt-opensource-mac-x64-clang-${QT_LONG_VERSION}
 export QT_INSTALLER_FILENAME=${QT_INSTALLER_ROOT}.dmg
 
@@ -33,7 +33,7 @@ EOF
 if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
 then
   export NIGHTLY_BUILD=TRUE
-  #exit 0 #deliberately disable macOS <10.12 nightly builds
+  exit 0 #deliberately disable macOS <10.12 nightly builds
 fi
 
 export MSCORE_RELEASE_CHANNEL=$(grep '^[[:blank:]]*set *( *MSCORE_RELEASE_CHANNEL' CMakeLists.txt | awk -F \" '{print $2}')
