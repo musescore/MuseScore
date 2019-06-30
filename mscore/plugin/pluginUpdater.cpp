@@ -310,9 +310,9 @@ static std::vector<PluginPackageLink> getAttachments(const QString& html_raw, vo
 static std::vector<PluginPackageLink> getGitHubLinks(const QString& html_raw, void(*localHint)(QRegularExpressionMatch&, PluginPackageLink&, const QString&))
       {
       std::vector<PluginPackageLink> github_urls;
-      QRegularExpression github_repo_patt("<a href=\"(https?://github.com/([\\w\\-]+)/([\\w\\-]+))\".*?>(?<text>.*?)</a>");
-      QRegularExpression github_archive_link("<a href=\"(https?://github.com/([\\w\\-]+)/([\\w\\-]+)/archive/(.+?))\".*?>(?<text>.*?)</a>"); // downloadable link
-      QRegularExpression github_directory_patt("<a href=\"(https?://github.com/([\\w\\-]+)/([\\w\\-]+)/(tree|blob)/([\\w\\-]+).*?)\".*?>(?<text>.*?)</a>"); // with branch info
+      static const QRegularExpression github_repo_patt("<a href=\"(https?://github.com/([\\w\\-]+)/([\\w\\-]+))\".*?>(?<text>.*?)</a>");
+      static const QRegularExpression github_archive_link("<a href=\"(https?://github.com/([\\w\\-]+)/([\\w\\-]+)/(archive|zipball|tarball)/(.+?))\".*?>(?<text>.*?)</a>"); // downloadable link
+      static const QRegularExpression github_directory_patt("<a href=\"(https?://github.com/([\\w\\-]+)/([\\w\\-]+)/(tree|blob)/([\\w\\-]+).*?)\".*?>(?<text>.*?)</a>"); // with branch info
       auto it = github_archive_link.globalMatch(html_raw);
       while (it.hasNext()) {
             QRegularExpressionMatch match = it.next();
