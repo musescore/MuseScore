@@ -14233,7 +14233,7 @@ a échoué : %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="145"/>
         <location filename="../../mscore/propertymenu.cpp" line="152"/>
-        <location filename="../../mscore/scoreview.cpp" line="404"/>
+        <location filename="../../mscore/scoreview.cpp" line="406"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
@@ -14271,7 +14271,7 @@ a échoué : %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="236"/>
         <location filename="../../mscore/propertymenu.cpp" line="254"/>
         <location filename="../../mscore/propertymenu.cpp" line="283"/>
-        <location filename="../../mscore/scoreview.cpp" line="391"/>
+        <location filename="../../mscore/scoreview.cpp" line="393"/>
         <source>Staff/Part Properties…</source>
         <translation>Propriétés de la portée / partie…</translation>
     </message>
@@ -14298,21 +14298,21 @@ a échoué : %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="235"/>
         <location filename="../../mscore/propertymenu.cpp" line="253"/>
-        <location filename="../../mscore/scoreview.cpp" line="383"/>
+        <location filename="../../mscore/scoreview.cpp" line="385"/>
         <source>Staff</source>
         <translation>Portée</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="241"/>
         <location filename="../../mscore/propertymenu.cpp" line="259"/>
-        <location filename="../../mscore/scoreview.cpp" line="397"/>
+        <location filename="../../mscore/scoreview.cpp" line="399"/>
         <source>Measure</source>
         <translation>Mesure</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="242"/>
         <location filename="../../mscore/propertymenu.cpp" line="260"/>
-        <location filename="../../mscore/scoreview.cpp" line="416"/>
+        <location filename="../../mscore/scoreview.cpp" line="418"/>
         <source>Measure Properties…</source>
         <translation>Propriétés de la mesure…</translation>
     </message>
@@ -14367,39 +14367,39 @@ a échoué : %2</translation>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="384"/>
+        <location filename="../../mscore/scoreview.cpp" line="386"/>
         <source>Edit Drumset…</source>
         <translation>Éditer le set de batterie…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="388"/>
+        <location filename="../../mscore/scoreview.cpp" line="390"/>
         <source>Piano Roll Editor…</source>
         <translation>Éditeur Piano Roll…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="393"/>
+        <location filename="../../mscore/scoreview.cpp" line="395"/>
         <source>Split Staff…</source>
         <translation>Scinder la portée…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="411"/>
+        <location filename="../../mscore/scoreview.cpp" line="413"/>
         <source>Remove Selected Measures</source>
         <translation>Supprimer les mesures sélectionnées</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1605"/>
+        <location filename="../../mscore/scoreview.cpp" line="1607"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>Veuillez sélectionner le n-olet / trémolo complet et réessayez</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2255"/>
+        <location filename="../../mscore/scoreview.cpp" line="2257"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>Aucune mesure sélectionnée : 
 Veuillez sélectionner un ensemble de mesures et réessayer</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4107"/>
+        <location filename="../../mscore/scoreview.cpp" line="4109"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -14408,7 +14408,7 @@ veuillez utiliser la fenêtre de dialogue des
 instruments pour d&apos;abord créer quelques portées</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4189"/>
+        <location filename="../../mscore/scoreview.cpp" line="4191"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Aucune mesure sélectionnée :

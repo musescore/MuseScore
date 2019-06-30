@@ -1679,137 +1679,137 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="596"/>
         <source>Octave(s) +</source>
-        <translation>oktáv(y) +</translation>
+        <translation>oktáv(a) +</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="613"/>
         <source>0 - Perfect Unison</source>
-        <translation>0 – čistou primu</translation>
+        <translation>0 – čistá prima</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="618"/>
         <source>1 - Augmented Unison</source>
-        <translation>1 – zvětšenou primu</translation>
+        <translation>1 – zvětšená prima</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="623"/>
         <source>0 - Diminished Second</source>
-        <translation>0 – zmenšenou sekundu</translation>
+        <translation>0 – zmenšená sekunda</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="628"/>
         <source>1 - Minor Second</source>
-        <translation>1 – malou sekundu</translation>
+        <translation>1 – malá sekunda</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="633"/>
         <source>2 - Major Second</source>
-        <translation>2 – velkou sekundu</translation>
+        <translation>2 – velká sekunda</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="638"/>
         <source>3 - Augmented Second</source>
-        <translation>3 – zvětšenou sekundu</translation>
+        <translation>3 – zvětšená sekunda</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="643"/>
         <source>2 - Diminished Third</source>
-        <translation>2 – zmenšenou tercii</translation>
+        <translation>2 – zmenšená tercie</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="648"/>
         <source>3 - Minor Third</source>
-        <translation>3 – malou tercii</translation>
+        <translation>3 – malá tercie</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="653"/>
         <source>4 - Major Third</source>
-        <translation>4 – velkou tercii</translation>
+        <translation>4 – velká tercie</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="658"/>
         <source>5 - Augmented Third</source>
-        <translation>5 – zvětšenou tercii</translation>
+        <translation>5 – zvětšená tercie</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="663"/>
         <source>4 - Diminished Fourth</source>
-        <translation>4 – zmenšenou kvartu</translation>
+        <translation>4 – zmenšená kvarta</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="668"/>
         <source>5 - Perfect Fourth</source>
-        <translation>5 – čistou kvartu</translation>
+        <translation>5 – čistá kvarta</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="673"/>
         <source>6 - Augmented Fourth</source>
-        <translation>6 – zvětšenou kvartu</translation>
+        <translation>6 – zvětšená kvarta</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="678"/>
         <source>6 - Diminished Fifth</source>
-        <translation>6 – zmenšenou kvintu</translation>
+        <translation>6 – zmenšená kvinta</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="683"/>
         <source>7 - Perfect Fifth</source>
-        <translation>7 – čistou kvintu</translation>
+        <translation>7 – čistá kvinta</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="688"/>
         <source>8 - Augmented Fifth</source>
-        <translation>8 – zvětšenou kvintu</translation>
+        <translation>8 – zvětšená kvinta</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="693"/>
         <source>7 - Diminished Sixth</source>
-        <translation>7 – zmenšenou sextu</translation>
+        <translation>7 – zmenšená sexta</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="698"/>
         <source>8 - Minor Sixth</source>
-        <translation>8 – malou sextu</translation>
+        <translation>8 – malá sexta</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="703"/>
         <source>9 - Major Sixth</source>
-        <translation>9 – velkou sextu</translation>
+        <translation>9 – velká sexta</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="708"/>
         <source>10 - Augmented Sixth</source>
-        <translation>10 – zvětšenou sextu</translation>
+        <translation>10 – zvětšená sexta</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="713"/>
         <source>9 - Diminished Seventh</source>
-        <translation>9 – zmenšenou septimu</translation>
+        <translation>9 – zmenšená septima</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="718"/>
         <source>10 - Minor Seventh</source>
-        <translation>10 – malou septimu</translation>
+        <translation>10 – malá septima</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="723"/>
         <source>11 - Major Seventh</source>
-        <translation>11 – velkou septimu</translation>
+        <translation>11 – velká septima</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="728"/>
         <source>12 - Augmented Seventh</source>
-        <translation>12 – zvětšenou septimu</translation>
+        <translation>12 – zvětšená septima</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="733"/>
         <source>11 - Diminished Octave</source>
-        <translation>11 – zmenšenou oktávu</translation>
+        <translation>11 – zmenšená oktáva</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="738"/>
         <source>12 - Perfect Octave</source>
-        <translation>12 – čistou oktávu</translation>
+        <translation>12 – čistá oktáva</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="746"/>
@@ -3475,7 +3475,7 @@ předznamenání</translation>
     <message>
         <location filename="../../mscore/editstyle.ui" line="486"/>
         <source>Hide empty staves within systems</source>
-        <translation>Skrývat prázdné notové osnovy</translation>
+        <translation>Skrýt prázdné notové osnovy</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="633"/>
@@ -6221,7 +6221,7 @@ a taktovým označením:</translation>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="256"/>
         <source>Staff</source>
-        <translation>Osnova</translation>
+        <translation>Notová osnova</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="261"/>
@@ -7767,7 +7767,7 @@ a taktovým označením:</translation>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="193"/>
         <source>Mirror head</source>
-        <translation>Převrátit hlavičku</translation>
+        <translation>Převrácení hlavičky</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="342"/>
@@ -7832,7 +7832,7 @@ a taktovým označením:</translation>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="215"/>
         <source>Mirror head:</source>
-        <translation>Převrátit hlavičku:</translation>
+        <translation>Převrácení hlavičky:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="202"/>
@@ -11095,7 +11095,7 @@ Zjednodušené shrnutí je dostupné:
     <message>
         <location filename="../../mscore/drumroll.cpp" line="196"/>
         <source>&lt;%1&gt; Staff: %2</source>
-        <translation>&lt;%1&gt; Notová osnova: %2</translation>
+        <translation>&lt;%1&gt; osnova: %2</translation>
     </message>
 </context>
 <context>
@@ -13470,7 +13470,7 @@ internetové spojení</translation>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="357"/>
         <source>&lt;%1&gt; Staff: %2</source>
-        <translation>&lt;%1&gt; Notová osnova: %2</translation>
+        <translation>&lt;%1&gt; osnova: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="366"/>
@@ -14242,7 +14242,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="145"/>
         <location filename="../../mscore/propertymenu.cpp" line="152"/>
-        <location filename="../../mscore/scoreview.cpp" line="404"/>
+        <location filename="../../mscore/scoreview.cpp" line="406"/>
         <source>Add</source>
         <translation>Přidat</translation>
     </message>
@@ -14280,7 +14280,7 @@ se nezdařilo: %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="236"/>
         <location filename="../../mscore/propertymenu.cpp" line="254"/>
         <location filename="../../mscore/propertymenu.cpp" line="283"/>
-        <location filename="../../mscore/scoreview.cpp" line="391"/>
+        <location filename="../../mscore/scoreview.cpp" line="393"/>
         <source>Staff/Part Properties…</source>
         <translation>Vlastnosti notové osnovy/partu…</translation>
     </message>
@@ -14307,21 +14307,21 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="235"/>
         <location filename="../../mscore/propertymenu.cpp" line="253"/>
-        <location filename="../../mscore/scoreview.cpp" line="383"/>
+        <location filename="../../mscore/scoreview.cpp" line="385"/>
         <source>Staff</source>
         <translation>Notová osnova</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="241"/>
         <location filename="../../mscore/propertymenu.cpp" line="259"/>
-        <location filename="../../mscore/scoreview.cpp" line="397"/>
+        <location filename="../../mscore/scoreview.cpp" line="399"/>
         <source>Measure</source>
         <translation>Takt</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="242"/>
         <location filename="../../mscore/propertymenu.cpp" line="260"/>
-        <location filename="../../mscore/scoreview.cpp" line="416"/>
+        <location filename="../../mscore/scoreview.cpp" line="418"/>
         <source>Measure Properties…</source>
         <translation>Vlastnosti taktu…</translation>
     </message>
@@ -14376,39 +14376,39 @@ se nezdařilo: %2</translation>
         <translation>Nápověda</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="384"/>
+        <location filename="../../mscore/scoreview.cpp" line="386"/>
         <source>Edit Drumset…</source>
         <translation>Upravit bicí soupravu…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="388"/>
+        <location filename="../../mscore/scoreview.cpp" line="390"/>
         <source>Piano Roll Editor…</source>
         <translation>MIDI editor…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="393"/>
+        <location filename="../../mscore/scoreview.cpp" line="395"/>
         <source>Split Staff…</source>
         <translation>Rozdělit notovou osnovu…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="411"/>
+        <location filename="../../mscore/scoreview.cpp" line="413"/>
         <source>Remove Selected Measures</source>
         <translation>Odstranit vybrané takty</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1605"/>
+        <location filename="../../mscore/scoreview.cpp" line="1607"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>Vyberte prosím celou nepravidelnou rytmickou skupinu nebo tremolo a zkuste příkaz ještě jednou</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2255"/>
+        <location filename="../../mscore/scoreview.cpp" line="2257"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>Nejsou vybrány žádné takty:
 Vyberte prosím takty, které chcete sloučit, a zkuste to ještě jednou</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4107"/>
+        <location filename="../../mscore/scoreview.cpp" line="4109"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -14417,7 +14417,7 @@ k vytvoření notové osnovy vyberte prosím hudební nástroj
 v dialogu nástrojů, a poté vložte alespoň jeden takt.</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4189"/>
+        <location filename="../../mscore/scoreview.cpp" line="4191"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Není vybrán žádný takt:
@@ -19094,7 +19094,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="57"/>
         <source>Start new section with measure number one</source>
-        <translation>Začít nový hudební oddíl taktem s číslem jedna</translation>
+        <translation>Začít nový oddíl taktem s číslem jedna</translation>
     </message>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="25"/>
@@ -19104,7 +19104,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="77"/>
         <source>Start new section with long instrument names</source>
-        <translation>Začít nový hudební oddíl s dlouhými názvy nástrojů</translation>
+        <translation>Začít nový oddíl s dlouhými názvy nástrojů</translation>
     </message>
 </context>
 <context>
@@ -20175,32 +20175,32 @@ Poznámka: Ctrl+Shift+1 je jedna kombinace kláves</translation>
     <message>
         <location filename="../../libmscore/style.cpp" line="2002"/>
         <source>User-1</source>
-        <translation>Uživatel 1</translation>
+        <translation>Vlastní 1</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2003"/>
         <source>User-2</source>
-        <translation>Uživatel 2</translation>
+        <translation>Vlastní 2</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2004"/>
         <source>User-3</source>
-        <translation>Uživatel 3</translation>
+        <translation>Vlastní 3</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2005"/>
         <source>User-4</source>
-        <translation>Uživatel 4</translation>
+        <translation>Vlastní 4</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2006"/>
         <source>User-5</source>
-        <translation>Uživatel 5</translation>
+        <translation>Vlastní 5</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2008"/>
         <source>User-6</source>
-        <translation>Uživatel 6</translation>
+        <translation>Vlastní 6</translation>
     </message>
 </context>
 <context>
@@ -21940,12 +21940,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="755"/>
         <source>Regroup Rhythms</source>
-        <translation>Obnovit výchozí vlastnosti trámců</translation>
+        <translation>Přetrámcovat rytmické skupiny</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="756"/>
         <source>Regroup rhythms</source>
-        <translation>Obnovit výchozí vlastnosti trámců</translation>
+        <translation>Přetrámcovat rytmické skupiny</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="757"/>
@@ -23435,17 +23435,17 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="735"/>
         <source>Reset Beams</source>
-        <translation>Obnovit výchozí členění trámců</translation>
+        <translation>Obnovit výchozí nastavení trámců</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="736"/>
         <source>Reset beams</source>
-        <translation>Obnovit výchozí členění trámců</translation>
+        <translation>Obnovit výchozí nastavení trámců</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="737"/>
         <source>Reset beams of selected measures</source>
-        <translation>Obnovit výchozí členění trámců ve vybraných taktech</translation>
+        <translation>Obnovit výchozí nastavení trámců ve vybraných taktech</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="745"/>
@@ -24314,12 +24314,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2540"/>
         <source>Mirror Notehead</source>
-        <translation>Převrátit notovou hlavičku</translation>
+        <translation>Převrácení notové hlavičky</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2541"/>
         <source>Mirror notehead</source>
-        <translation>Převrátit notovou hlavičku</translation>
+        <translation>Převrácení notové hlavičky</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2560"/>
@@ -24489,22 +24489,22 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2736"/>
         <source>Enable Snap to Horizontal Grid</source>
-        <translation>Povolit zapadnutí do vodorovné mřížky</translation>
+        <translation>Zapnout krokování ve vodorovném směru</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2737"/>
         <source>Enable snap to horizontal grid</source>
-        <translation>Povolit zapadnutí do vodorovné mřížky</translation>
+        <translation>Zapnout krokování ve vodorovném směru</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2747"/>
         <source>Enable Snap to Vertical Grid</source>
-        <translation>Povolit zapadnutí do svislé mřížky</translation>
+        <translation>Zapnout krokování ve svislém směru</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2748"/>
         <source>Enable snap to vertical grid</source>
-        <translation>Povolit zapadnutí do svislé mřížky</translation>
+        <translation>Zapnout krokování ve svislém směru</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2758"/>
@@ -27702,8 +27702,9 @@ Vyberte prosím notu nebo legato a zkuste to ještě jednou</translation>
         <source>No staff selected:
 Please select one or more staves and retry
 </source>
-        <translation>Není vybrána žádná nota ani notová osnova:
-Vyberte prosím jednu nebo více notových osnov a zkuste to ještě jednou</translation>
+        <translation>Není vybrána žádná notová osnova:
+Vyberte prosím jednu nebo více notových osnov a zkuste to ještě jednou
+</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="135"/>
@@ -28614,12 +28615,12 @@ Takt není prázdný</translation>
     <message>
         <location filename="../../mscore/editstafftype.cpp" line="29"/>
         <source>PERCUSSION STAFF</source>
-        <translation>Notová osnova bicích nástrojů</translation>
+        <translation>Notová osnova pro bicí nástroje</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.cpp" line="30"/>
         <source>TABLATURE STAFF</source>
-        <translation>Tabulaturová notová osnova</translation>
+        <translation>Osnova pro tabulaturu</translation>
     </message>
 </context>
 <context>

@@ -165,7 +165,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
         <source>Articulation Properties</source>
-        <translation>Egenskaber for artikulation</translation>
+        <translation>Artikulationsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="24"/>
@@ -246,7 +246,7 @@
     <message>
         <location filename="../../mscore/bend.ui" line="14"/>
         <source>Bend Properties</source>
-        <translation>Egenskaber for bend</translation>
+        <translation>Bendegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/bend.ui" line="23"/>
@@ -742,7 +742,7 @@
     <message>
         <location filename="../../mscore/editinstrument.ui" line="20"/>
         <source>Instrument Properties</source>
-        <translation>Egenskaber for instrument</translation>
+        <translation>Instrumentegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="26"/>
@@ -1594,7 +1594,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="318"/>
         <source>Part Properties</source>
-        <translation>Egenskaber for stemme</translation>
+        <translation>Stemmeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="334"/>
@@ -1624,7 +1624,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="26"/>
         <source>Staff/Part Properties</source>
-        <translation>Egenskaber for nodesystem/stemme</translation>
+        <translation>Nodesystems-/stemmeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="52"/>
@@ -1850,12 +1850,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="44"/>
         <source>Staff Properties</source>
-        <translation>Egenskaber for nodesystem</translation>
+        <translation>Nodesystemsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="138"/>
         <source>Advanced Style Properties…</source>
-        <translation>Egenskaber for avanceret layout...</translation>
+        <translation>&apos;Avanceret layout&apos; egenskaber...</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="79"/>
@@ -4882,7 +4882,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/fretdprops.ui" line="14"/>
         <source>Fretboard Diagram Properties</source>
-        <translation>Egenskaber for becifringsdiagram</translation>
+        <translation>Becifringsdiagramsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/fretdprops.ui" line="31"/>
@@ -4979,7 +4979,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="14"/>
         <source>Accidental Inspector</source>
-        <translation>Egenskaber for fortegn</translation>
+        <translation>Fortegnsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="57"/>
@@ -5017,7 +5017,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="14"/>
         <source>Ambitus Inspector</source>
-        <translation>Egenskaber for ambitus</translation>
+        <translation>Ambitusegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="57"/>
@@ -5460,7 +5460,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="14"/>
         <source>Arpeggio Inspector</source>
-        <translation>Egenskaber for akkordbrydning</translation>
+        <translation>Akkordbrydningsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="57"/>
@@ -5498,7 +5498,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="14"/>
         <source>Articulation Inspector</source>
-        <translation>Egenskaber for artikulation</translation>
+        <translation>Artikulationsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="57"/>
@@ -5631,7 +5631,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="14"/>
         <source>Barline Inspector</source>
-        <translation>Egenskaber for taktstreg</translation>
+        <translation>Taktstregsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="57"/>
@@ -5734,7 +5734,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="14"/>
         <source>Beam Inspector</source>
-        <translation>Egenskaber for bjælke</translation>
+        <translation>Bjælkeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="57"/>
@@ -5847,7 +5847,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="17"/>
         <source>Bend Inspector</source>
-        <translation>Egenskaber for bend</translation>
+        <translation>Bendegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="60"/>
@@ -5935,7 +5935,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bracket.ui" line="14"/>
         <source>Bracket Inspector</source>
-        <translation>Egenskaber for klamme</translation>
+        <translation>Klammeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bracket.ui" line="57"/>
@@ -5963,7 +5963,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_break.ui" line="14"/>
         <source>Layout Break Inspector</source>
-        <translation>Egenskaber for layoutskift</translation>
+        <translation>Layoutskiftegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_break.ui" line="54"/>
@@ -5976,7 +5976,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="14"/>
         <source>Breath/Caesura Inspector</source>
-        <translation>Egenskaber for vejrtrækning/cæsur</translation>
+        <translation>Vejrtræknings-/cæsuregenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="57"/>
@@ -6010,7 +6010,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="14"/>
         <source>Chord Inspector</source>
-        <translation>Egenskaber for akkord</translation>
+        <translation>Akkordegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="57"/>
@@ -6088,7 +6088,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="14"/>
         <source>Clef Inspector</source>
-        <translation>Egenskaber for nøgle</translation>
+        <translation>Nøgleegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="60"/>
@@ -6111,7 +6111,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="14"/>
         <source>Dynamic Inspector</source>
-        <translation>Egenskaber for dynamik</translation>
+        <translation>Dynamikegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="57"/>
@@ -6239,7 +6239,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="14"/>
         <source>Element Inspector</source>
-        <translation>Egenskaber for element</translation>
+        <translation>Elementegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="63"/>
@@ -6327,7 +6327,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_empty.ui" line="6"/>
         <source>«Empty» Inspector</source>
-        <translation>Egenskaber for «tom»</translation>
+        <translation>«Tom» egenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_empty.ui" line="33"/>
@@ -6340,7 +6340,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="14"/>
         <source>Fermata Inspector</source>
-        <translation>Egenskaber for fermat</translation>
+        <translation>Fermategenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="57"/>
@@ -6403,7 +6403,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fingering.ui" line="14"/>
         <source>Fingering Inspector</source>
-        <translation>Egenskaber for fingersætning</translation>
+        <translation>Fingersætningsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fingering.ui" line="57"/>
@@ -6431,7 +6431,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_frametext.ui" line="6"/>
         <source>Frame Text Inspector</source>
-        <translation>Egenskaber for rammetekst</translation>
+        <translation>Rammetekstegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_frametext.ui" line="49"/>
@@ -6454,7 +6454,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="14"/>
         <source>Fretboard Diagram Inspector</source>
-        <translation>Egenskaber for becifringsdiagram</translation>
+        <translation>Becifringsdiagramsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="66"/>
@@ -6622,7 +6622,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="14"/>
         <source>Glissando Inspector</source>
-        <translation>Egenskaber for glissando</translation>
+        <translation>Glissandoegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="57"/>
@@ -6780,7 +6780,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_group_element.ui" line="6"/>
         <source>Element Group Inspector</source>
-        <translation>Egenskaber for elementgruppe</translation>
+        <translation>Elementgruppeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_group_element.ui" line="49"/>
@@ -6823,7 +6823,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="14"/>
         <source>Horizontal Frame Inspector</source>
-        <translation>Egenskaber for vandret ramme</translation>
+        <translation>&apos;Vandret ramme&apos; egenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="60"/>
@@ -6894,7 +6894,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="14"/>
         <source>Hairpin Inspector</source>
-        <translation>Egenskaber for kile</translation>
+        <translation>Kileegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="60"/>
@@ -7073,7 +7073,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_harmony.ui" line="14"/>
         <source>Chord Symbol Inspector</source>
-        <translation>Egenskaber for becifring</translation>
+        <translation>Becifringsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_harmony.ui" line="57"/>
@@ -7126,7 +7126,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="14"/>
         <source>Image Inspector</source>
-        <translation>Egenskaber for billede</translation>
+        <translation>Billedeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="57"/>
@@ -7189,7 +7189,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_iname.ui" line="14"/>
         <source>Instrument Name Inspector</source>
-        <translation>Egenskaber for instrumentnavn</translation>
+        <translation>Instrumentnavnsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_iname.ui" line="57"/>
@@ -7217,7 +7217,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_instrchange.ui" line="14"/>
         <source>Change Instrument Inspector</source>
-        <translation>Egenskaber for instrumentskift</translation>
+        <translation>Instrumentskiftegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_instrchange.ui" line="57"/>
@@ -7245,7 +7245,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="14"/>
         <source>Jump Inspector</source>
-        <translation>Egenskaber for hop</translation>
+        <translation>Hopegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="57"/>
@@ -7298,7 +7298,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="14"/>
         <source>Key Signature Inspector</source>
-        <translation>Egenskaber for toneart</translation>
+        <translation>Toneartsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="57"/>
@@ -7321,7 +7321,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="6"/>
         <source>Lasso Inspector</source>
-        <translation>Egenskaber for lasso</translation>
+        <translation>Lassoegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="49"/>
@@ -7354,7 +7354,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="14"/>
         <source>Let Ring Inspector</source>
-        <translation>Egenskaber for &apos;Lad ringe&apos;</translation>
+        <translation>&apos;Lad ringe&apos; egenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="57"/>
@@ -7392,7 +7392,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="14"/>
         <source>Line Inspector</source>
-        <translation>Egenskaber for linje</translation>
+        <translation>Linjeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="60"/>
@@ -7536,7 +7536,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="14"/>
         <source>Lyrics Inspector</source>
-        <translation>Egenskaber for sangtekst</translation>
+        <translation>Sangtekstegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="57"/>
@@ -7594,7 +7594,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="6"/>
         <source>Marker Inspector</source>
-        <translation>Egenskaber for markør</translation>
+        <translation>Markøregenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="49"/>
@@ -7667,7 +7667,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="14"/>
         <source>Note Inspector</source>
-        <translation>Egenskaber for node</translation>
+        <translation>Nodeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="57"/>
@@ -7880,7 +7880,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_notedot.ui" line="14"/>
         <source>Note Dot Inspector</source>
-        <translation>Egenskaber for nodepunktering</translation>
+        <translation>Nodepunkteringsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_notedot.ui" line="57"/>
@@ -7923,7 +7923,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="14"/>
         <source>Ottava Inspector</source>
-        <translation>Egenskaber for oktav</translation>
+        <translation>Oktavegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="57"/>
@@ -8011,7 +8011,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_palmmute.ui" line="14"/>
         <source>Palm Mute Inspector</source>
-        <translation>Egenskaber for hånddæmpning</translation>
+        <translation>Hånddæmpningsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_palmmute.ui" line="57"/>
@@ -8049,7 +8049,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_pedal.ui" line="14"/>
         <source>Pedal Inspector</source>
-        <translation>Egenskaber for pedal</translation>
+        <translation>Pedalegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_pedal.ui" line="57"/>
@@ -8087,7 +8087,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_rest.ui" line="14"/>
         <source>Rest Inspector</source>
-        <translation>Egenskaber for pause</translation>
+        <translation>Pauseegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_rest.ui" line="60"/>
@@ -8110,7 +8110,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="14"/>
         <source>Segment Inspector</source>
-        <translation>Egenskaber for afsnit</translation>
+        <translation>Afsnitsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="57"/>
@@ -8159,7 +8159,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="14"/>
         <source>Slur/Tie Inspector</source>
-        <translation>Egenskaber for legato/bindebue</translation>
+        <translation>Legato-/bindebueegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="92"/>
@@ -8222,7 +8222,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_spacer.ui" line="6"/>
         <source>Spacer Inspector</source>
-        <translation>Egenskaber for afstandsstykke</translation>
+        <translation>Afstandsstykkeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_spacer.ui" line="49"/>
@@ -8251,7 +8251,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftext.ui" line="14"/>
         <source>Staff/System Text Inspector</source>
-        <translation>Egenskaber for nodesystem/systemtekst</translation>
+        <translation>Nodesystems-/Systemtekstegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftext.ui" line="60"/>
@@ -8294,7 +8294,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="14"/>
         <source>Staff Type Change Inspector</source>
-        <translation>Egenskaber for nodesystemtypeskift</translation>
+        <translation>Nodesystemtypeskiftsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="60"/>
@@ -8473,7 +8473,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="14"/>
         <source>Stem Inspector</source>
-        <translation>Egenskaber for nodehals</translation>
+        <translation>Nodehalsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="54"/>
@@ -8522,7 +8522,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="14"/>
         <source>Text Frame Inspector</source>
-        <translation>Egenskaber for tekstramme</translation>
+        <translation>Tekstrammeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="57"/>
@@ -8655,7 +8655,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="14"/>
         <source>Tempo Text Inspector</source>
-        <translation>Egenskaber for tempotekst</translation>
+        <translation>Tempotekstegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="57"/>
@@ -8713,7 +8713,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="14"/>
         <source>Text Inspector</source>
-        <translation>Egenskaber for tekst</translation>
+        <translation>Tekstegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="75"/>
@@ -8880,7 +8880,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="14"/>
         <source>Text Line Inspector</source>
-        <translation>Egenskaber for tekstlinje</translation>
+        <translation>Tekstlinjeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="57"/>
@@ -8918,7 +8918,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="14"/>
         <source>Text Line Core Inspector</source>
-        <translation>Egenskaber for tekstlinjekerne</translation>
+        <translation>Tekstlinjekerneegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1161"/>
@@ -9146,7 +9146,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="14"/>
         <source>Time Signature Inspector</source>
-        <translation>Egenskaber for taktart</translation>
+        <translation>Taktartsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="60"/>
@@ -9184,7 +9184,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="14"/>
         <source>Tremolo Inspector</source>
-        <translation>Egenskaber for Tremolo</translation>
+        <translation>Tremoloegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="57"/>
@@ -9222,7 +9222,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolobar.ui" line="14"/>
         <source>Tremolo Bar Inspector</source>
-        <translation>Egenskaber for tremolo</translation>
+        <translation>Tremoloegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolobar.ui" line="60"/>
@@ -9285,7 +9285,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="14"/>
         <source>Trill Inspector</source>
-        <translation>Egenskaber for trille</translation>
+        <translation>Trilleegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="57"/>
@@ -9393,7 +9393,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="14"/>
         <source>Tuplet Inspector</source>
-        <translation>Egenskaber for tuplet</translation>
+        <translation>Tupletegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="57"/>
@@ -9560,7 +9560,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="14"/>
         <source>Vertical Frame Inspector</source>
-        <translation>Egenskaber for lodret ramme</translation>
+        <translation>&apos;Lodret ramme&apos; egenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="60"/>
@@ -9689,7 +9689,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="14"/>
         <source>Vibrato Inspector</source>
-        <translation>Egenskaber for vibrato</translation>
+        <translation>Vibratoegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="57"/>
@@ -9768,7 +9768,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="6"/>
         <source>Volta Inspector</source>
-        <translation>Egenskaber for volte</translation>
+        <translation>Volteegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="49"/>
@@ -10418,7 +10418,7 @@ tuplet vil krydse takt</translation>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="17"/>
         <source>Measure Properties</source>
-        <translation>Egenskaber for takt</translation>
+        <translation>Taktegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="27"/>
@@ -10658,7 +10658,7 @@ tuplet vil krydse takt</translation>
     <message>
         <location filename="../../mscore/metaedit.ui" line="14"/>
         <source>Score Properties</source>
-        <translation>Egenskaber for nodeark</translation>
+        <translation>Nodearksegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.ui" line="35"/>
@@ -11298,7 +11298,7 @@ slog fejl: %1</translation>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="463"/>
         <source>(in File &gt; Score Properties…):</source>
-        <translation>(i Fil &gt; Egenskaber for nodeark…):</translation>
+        <translation>(i Fil &gt;  Nodearksegenskaber…):</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="568"/>
@@ -11768,7 +11768,7 @@ slog fejl: %2</translation>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="119"/>
         <source>Measure Properties for Measure %1</source>
-        <translation>Egenskaber for takt - takt %1</translation>
+        <translation>Taktegenskaber - takt %1</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="152"/>
@@ -13252,7 +13252,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="49"/>
         <source>Palette Properties…</source>
-        <translation>Egenskaber for palet…</translation>
+        <translation>Paletegenskaber…</translation>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="50"/>
@@ -14217,22 +14217,22 @@ slog fejl: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="128"/>
         <source>Articulation Properties…</source>
-        <translation>Egenskaber for artikulation…</translation>
+        <translation>Artikulationsegenskaber…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="138"/>
         <source>Bend Properties…</source>
-        <translation>Egenskaber for bend...</translation>
+        <translation>Bendegenskaber...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="142"/>
         <source>Tremolo Bar Properties…</source>
-        <translation>Egenskaber for tremolo...</translation>
+        <translation>Tremoloegenskaber...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="145"/>
         <location filename="../../mscore/propertymenu.cpp" line="152"/>
-        <location filename="../../mscore/scoreview.cpp" line="404"/>
+        <location filename="../../mscore/scoreview.cpp" line="406"/>
         <source>Add</source>
         <translation>Tilføj</translation>
     </message>
@@ -14249,7 +14249,7 @@ slog fejl: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="181"/>
         <source>Time Signature Properties…</source>
-        <translation>Egenskaber for taktart...</translation>
+        <translation>Taktartsegenskaber...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="190"/>
@@ -14264,20 +14264,20 @@ slog fejl: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="201"/>
         <source>System Text Properties…</source>
-        <translation>Egenskaber for nodesystemtekst…</translation>
+        <translation>Nodesystemtekstegenskaber…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="236"/>
         <location filename="../../mscore/propertymenu.cpp" line="254"/>
         <location filename="../../mscore/propertymenu.cpp" line="283"/>
-        <location filename="../../mscore/scoreview.cpp" line="391"/>
+        <location filename="../../mscore/scoreview.cpp" line="393"/>
         <source>Staff/Part Properties…</source>
-        <translation>Egenskaber for nodesystem/stemme...</translation>
+        <translation>Nodesystem-/stemmeegenskaber...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="197"/>
         <source>Staff Text Properties…</source>
-        <translation>Egenskaber for nodesystemtekst…</translation>
+        <translation>Nodesystemtekstegenskaber…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="221"/>
@@ -14292,28 +14292,28 @@ slog fejl: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="227"/>
         <source>Change Instrument Properties…</source>
-        <translation>Egenskaber for instrumentskift...</translation>
+        <translation>Instrumentskiftegenskaber...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="235"/>
         <location filename="../../mscore/propertymenu.cpp" line="253"/>
-        <location filename="../../mscore/scoreview.cpp" line="383"/>
+        <location filename="../../mscore/scoreview.cpp" line="385"/>
         <source>Staff</source>
         <translation>Nodesystem</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="241"/>
         <location filename="../../mscore/propertymenu.cpp" line="259"/>
-        <location filename="../../mscore/scoreview.cpp" line="397"/>
+        <location filename="../../mscore/scoreview.cpp" line="399"/>
         <source>Measure</source>
         <translation>Takt</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="242"/>
         <location filename="../../mscore/propertymenu.cpp" line="260"/>
-        <location filename="../../mscore/scoreview.cpp" line="416"/>
+        <location filename="../../mscore/scoreview.cpp" line="418"/>
         <source>Measure Properties…</source>
-        <translation>Egenskaber for takt…</translation>
+        <translation>Taktegenskaber…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="270"/>
@@ -14328,7 +14328,7 @@ slog fejl: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="275"/>
         <source>Section Break Properties…</source>
-        <translation>Egenskaber for afsnitsskifte...</translation>
+        <translation>Afsnitsskifteegenskaber...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="278"/>
@@ -14366,39 +14366,39 @@ slog fejl: %2</translation>
         <translation>Hjælp</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="384"/>
+        <location filename="../../mscore/scoreview.cpp" line="386"/>
         <source>Edit Drumset…</source>
         <translation>Redigér trommesæt…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="388"/>
+        <location filename="../../mscore/scoreview.cpp" line="390"/>
         <source>Piano Roll Editor…</source>
         <translation>Klaverrulleredigering</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="393"/>
+        <location filename="../../mscore/scoreview.cpp" line="395"/>
         <source>Split Staff…</source>
         <translation>Del nodesystem…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="411"/>
+        <location filename="../../mscore/scoreview.cpp" line="413"/>
         <source>Remove Selected Measures</source>
         <translation>Fjern valgte takter</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1605"/>
+        <location filename="../../mscore/scoreview.cpp" line="1607"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>Vælg hele tupletten/tremolo og prøv kommandoen igen</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2255"/>
+        <location filename="../../mscore/scoreview.cpp" line="2257"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>Ingen takter valgt:
 Vælg en serie af takter som skal slås sammen og prøv igen</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4107"/>
+        <location filename="../../mscore/scoreview.cpp" line="4109"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -14406,7 +14406,7 @@ first create some staves</source>
 Vælg nogle instrumenter først for at oprette nodesystemer</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4189"/>
+        <location filename="../../mscore/scoreview.cpp" line="4191"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Ingen takt valgt:
@@ -14491,12 +14491,12 @@ Vælg en takt og prøv igen</translation>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="58"/>
         <source>System Text Properties</source>
-        <translation>Egenskaber for nodesystemtekst</translation>
+        <translation>Nodesystemtekstegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="65"/>
         <source>Staff Text Properties</source>
-        <translation>Egenskaber for nodesystemtekst</translation>
+        <translation>Nodesystemtekstegenskaber</translation>
     </message>
 </context>
 <context>
@@ -15257,7 +15257,7 @@ prøv med et andet navn: </translation>
     <message>
         <location filename="../../mscore/note_groups.ui" line="179"/>
         <source>Beam Properties</source>
-        <translation>Egenskaber for bjælke</translation>
+        <translation>Bjælkeegenskaber</translation>
     </message>
 </context>
 <context>
@@ -15494,7 +15494,7 @@ prøv med et andet navn: </translation>
         <location filename="../../mscore/menus.cpp" line="117"/>
         <location filename="../../mscore/noteGroups.cpp" line="89"/>
         <source>Beam Properties</source>
-        <translation>Egenskaber for bjælker</translation>
+        <translation>Bjælkeegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="144"/>
@@ -15771,12 +15771,12 @@ mislykkedes:</translation>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="14"/>
         <source>Cell Properties</source>
-        <translation>Egenskaber for celle</translation>
+        <translation>Celleegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="20"/>
         <source>Palette Cell Properties</source>
-        <translation>Egenskaber for cellens palet</translation>
+        <translation>Cellepaletegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="26"/>
@@ -15820,7 +15820,7 @@ mislykkedes:</translation>
     <message>
         <location filename="../../mscore/palette.ui" line="14"/>
         <source>Palette Properties</source>
-        <translation>Egenskaber for palet</translation>
+        <translation>Paletegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/palette.ui" line="22"/>
@@ -19072,7 +19072,7 @@ Vil du overskrive?</translation>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="14"/>
         <source>Section Break Properties</source>
-        <translation>Egenskaber for afsnitsskifte</translation>
+        <translation>Afsnitsskifteegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="38"/>
@@ -20276,7 +20276,7 @@ Bemærk: Ctrl+Skift+1 udgør én kombination</translation>
         <location filename="../../mscore/timesigproperties.ui" line="14"/>
         <location filename="../../mscore/timesigproperties.ui" line="34"/>
         <source>Time Signature Properties</source>
-        <translation>Egenskaber for taktart</translation>
+        <translation>Taktartsegenskaber</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigproperties.ui" line="49"/>
@@ -24136,7 +24136,7 @@ slog fejl:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2337"/>
         <source>Score Properties…</source>
-        <translation>Egenskaber for nodeark...</translation>
+        <translation>Nodearksegenskaber...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2338"/>

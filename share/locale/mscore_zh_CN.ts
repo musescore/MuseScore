@@ -210,7 +210,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="74"/>
         <source>Chord Automatic</source>
-        <translation>自动和声</translation>
+        <translation>自动</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="79"/>
@@ -1814,12 +1814,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="746"/>
         <source>Up</source>
-        <translation>上</translation>
+        <translation>正</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="753"/>
         <source>Down</source>
-        <translation>下</translation>
+        <translation>倒</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="793"/>
@@ -2292,7 +2292,7 @@
     <message>
         <location filename="../../mscore/editstyle.ui" line="429"/>
         <source>Minimum number of empty measures:</source>
-        <translation>最小空白小节数：</translation>
+        <translation>最小空小节数：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="458"/>
@@ -2555,7 +2555,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1825"/>
         <source>Use odd/even page header</source>
-        <translation>奇偶页页面不同</translation>
+        <translation>奇偶页使用不同的标题</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1742"/>
@@ -2625,7 +2625,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2061"/>
         <source>Interval:</source>
-        <translation>间距</translation>
+        <translation>间距：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="86"/>
@@ -2636,7 +2636,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2215"/>
         <source>Brace thickness:</source>
-        <translation>括号粗细：</translation>
+        <translation>花括号粗细：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2241"/>
@@ -4325,7 +4325,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="1658"/>
         <location filename="../../mscore/editstyle.ui" line="1828"/>
         <source>Different odd/even pages</source>
-        <translation>不同奇/偶页面</translation>
+        <translation>奇偶页各异</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2126"/>
@@ -5523,27 +5523,27 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="92"/>
         <source>Above Staff</source>
-        <translation>上谱表</translation>
+        <translation>谱表之上</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="97"/>
         <source>Below Staff</source>
-        <translation>下谱表</translation>
+        <translation>谱表之下</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="102"/>
         <source>Chord Automatic</source>
-        <translation>自动和声</translation>
+        <translation>自动</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="107"/>
         <source>Above Chord</source>
-        <translation>上音符组</translation>
+        <translation>音符组之上</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="112"/>
         <source>Below Chord</source>
-        <translation>下音符组</translation>
+        <translation>音符组之下</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="126"/>
@@ -5573,17 +5573,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="200"/>
         <source>Up</source>
-        <translation>上</translation>
+        <translation>正</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="205"/>
         <source>Down</source>
-        <translation>下</translation>
+        <translation>倒</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="244"/>
         <source>Reset &apos;Time stretch&apos; value</source>
-        <translation>重设节拍拉伸</translation>
+        <translation>重设时长</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="277"/>
@@ -5759,12 +5759,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="204"/>
         <source>Up</source>
-        <translation>上</translation>
+        <translation>正</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="209"/>
         <source>Down</source>
-        <translation>下</translation>
+        <translation>倒</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="220"/>
@@ -5976,12 +5976,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="14"/>
         <source>Breath/Caesura Inspector</source>
-        <translation>呼吸/停顿检视器</translation>
+        <translation>换气/停顿检视器</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="57"/>
         <source>Breath/Caesura</source>
-        <translation>呼吸/停顿</translation>
+        <translation>换气/停顿</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="91"/>
@@ -6035,12 +6035,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="97"/>
         <source>Up</source>
-        <translation>上</translation>
+        <translation>正</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="102"/>
         <source>Down</source>
-        <translation>下</translation>
+        <translation>倒</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="135"/>
@@ -6355,7 +6355,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="117"/>
         <source>Reset &apos;Time stretch&apos; value</source>
-        <translation>重设节拍拉伸</translation>
+        <translation>重设时长</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="137"/>
@@ -6622,12 +6622,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="14"/>
         <source>Glissando Inspector</source>
-        <translation>滑音检视器</translation>
+        <translation>刮奏检视器</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="57"/>
         <source>Glissando</source>
-        <translation>滑音</translation>
+        <translation>刮奏</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="216"/>
@@ -6662,7 +6662,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="121"/>
         <source>Reset &apos;Play&apos; value</source>
-        <translation>重置播放音量</translation>
+        <translation>重置“播放”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="170"/>
@@ -6697,7 +6697,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="336"/>
         <source>Reset &apos;Text&apos; value</source>
-        <translation>重置文字值</translation>
+        <translation>重置“文字”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="362"/>
@@ -6752,7 +6752,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="138"/>
         <source>Straight</source>
-        <translation>正常</translation>
+        <translation>平直式</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="143"/>
@@ -6805,7 +6805,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_group_element.ui" line="107"/>
         <source>Set Invisible</source>
-        <translation>设为不可见</translation>
+        <translation>设为隐藏</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_group_element.ui" line="117"/>
@@ -7285,12 +7285,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="142"/>
         <source>Play repeats</source>
-        <translation>重复演奏</translation>
+        <translation>重复记号播放开关</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="155"/>
         <source>Reset &apos;Play repeats&apos; value</source>
-        <translation>重置播放反复</translation>
+        <translation>重置重复记号播放开关状态</translation>
     </message>
 </context>
 <context>
@@ -7432,7 +7432,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="203"/>
         <source>Dash gap width:</source>
-        <translation>虚线间隔宽度：</translation>
+        <translation>虚线间距：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="216"/>
@@ -7458,7 +7458,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="264"/>
         <source>Dash gap width</source>
-        <translation>虚线间隔宽度</translation>
+        <translation>虚线间距</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="286"/>
@@ -8199,12 +8199,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="156"/>
         <source>Up</source>
-        <translation>上</translation>
+        <translation>正</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="161"/>
         <source>Down</source>
-        <translation>下</translation>
+        <translation>倒</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="175"/>
@@ -8222,12 +8222,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_spacer.ui" line="6"/>
         <source>Spacer Inspector</source>
-        <translation>分隔符检视器</translation>
+        <translation>定位符检视器</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_spacer.ui" line="49"/>
         <source>Spacer</source>
-        <translation>分隔符</translation>
+        <translation>定位符</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_spacer.ui" line="74"/>
@@ -9542,12 +9542,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="123"/>
         <source>Up</source>
-        <translation>上</translation>
+        <translation>正</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="128"/>
         <source>Down</source>
-        <translation>下</translation>
+        <translation>倒</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="235"/>
@@ -9830,7 +9830,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwizard.ui" line="160"/>
         <source>Up</source>
-        <translation>上</translation>
+        <translation>正</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwizard.ui" line="180"/>
@@ -9927,12 +9927,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="202"/>
         <source>Up</source>
-        <translation>上</translation>
+        <translation>正</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="225"/>
         <source>Down</source>
-        <translation>下</translation>
+        <translation>倒</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="258"/>
@@ -9997,7 +9997,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/keyedit.ui" line="125"/>
         <source>Add time signature to master palette</source>
-        <translation>将拍号添加到主面板</translation>
+        <translation>将拍号添加到符号总面板</translation>
     </message>
     <message>
         <location filename="../../mscore/keyedit.ui" line="128"/>
@@ -10388,7 +10388,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="14"/>
         <source>Master Palette</source>
-        <translation>主面板</translation>
+        <translation>符号总面板</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="195"/>
@@ -11061,7 +11061,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/drumroll.cpp" line="97"/>
         <source>Cursor:</source>
-        <translation>光标：</translation>
+        <translation>光标位置：</translation>
     </message>
     <message>
         <location filename="../../mscore/drumroll.cpp" line="104"/>
@@ -11154,7 +11154,7 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="47"/>
         <source>Apply to all Parts</source>
-        <translation>应用到全部分谱</translation>
+        <translation>应用到所有分谱</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="374"/>
@@ -12351,7 +12351,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/file.cpp" line="1864"/>
         <source>Score_and_Parts</source>
-        <translation>总谱和分谱</translation>
+        <translation>总谱与分谱</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1884"/>
@@ -12455,17 +12455,17 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="441"/>
         <source>Staff spacer down</source>
-        <translation>谱表行距缩小</translation>
+        <translation>上基准定位符</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="447"/>
         <source>Staff spacer up</source>
-        <translation>谱表行距扩大</translation>
+        <translation>下基准定位符</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="453"/>
         <source>Staff spacer fixed down</source>
-        <translation>谱表行距固定缩小</translation>
+        <translation>吸附式上基准定位符</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="475"/>
@@ -12495,7 +12495,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="830"/>
         <source>Glissando</source>
-        <translation>滑音</translation>
+        <translation>刮奏</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1247"/>
@@ -13394,7 +13394,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="109"/>
         <source>Cursor:</source>
-        <translation>光标：</translation>
+        <translation>光标位置：</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="120"/>
@@ -13409,7 +13409,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="127"/>
         <source>Tuplet:</source>
-        <translation>连音：</translation>
+        <translation>连音类型：</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="129"/>
@@ -14230,7 +14230,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="145"/>
         <location filename="../../mscore/propertymenu.cpp" line="152"/>
-        <location filename="../../mscore/scoreview.cpp" line="404"/>
+        <location filename="../../mscore/scoreview.cpp" line="406"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
@@ -14268,7 +14268,7 @@ failed: %2</source>
         <location filename="../../mscore/propertymenu.cpp" line="236"/>
         <location filename="../../mscore/propertymenu.cpp" line="254"/>
         <location filename="../../mscore/propertymenu.cpp" line="283"/>
-        <location filename="../../mscore/scoreview.cpp" line="391"/>
+        <location filename="../../mscore/scoreview.cpp" line="393"/>
         <source>Staff/Part Properties…</source>
         <translation>谱表/分谱属性…</translation>
     </message>
@@ -14295,21 +14295,21 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="235"/>
         <location filename="../../mscore/propertymenu.cpp" line="253"/>
-        <location filename="../../mscore/scoreview.cpp" line="383"/>
+        <location filename="../../mscore/scoreview.cpp" line="385"/>
         <source>Staff</source>
         <translation>谱表</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="241"/>
         <location filename="../../mscore/propertymenu.cpp" line="259"/>
-        <location filename="../../mscore/scoreview.cpp" line="397"/>
+        <location filename="../../mscore/scoreview.cpp" line="399"/>
         <source>Measure</source>
         <translation>小节</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="242"/>
         <location filename="../../mscore/propertymenu.cpp" line="260"/>
-        <location filename="../../mscore/scoreview.cpp" line="416"/>
+        <location filename="../../mscore/scoreview.cpp" line="418"/>
         <source>Measure Properties…</source>
         <translation>小节属性…</translation>
     </message>
@@ -14364,38 +14364,38 @@ failed: %2</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="384"/>
+        <location filename="../../mscore/scoreview.cpp" line="386"/>
         <source>Edit Drumset…</source>
         <translation>编辑鼓谱…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="388"/>
+        <location filename="../../mscore/scoreview.cpp" line="390"/>
         <source>Piano Roll Editor…</source>
         <translation>钢琴卷帘编辑器...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="393"/>
+        <location filename="../../mscore/scoreview.cpp" line="395"/>
         <source>Split Staff…</source>
         <translation>谱表分割…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="411"/>
+        <location filename="../../mscore/scoreview.cpp" line="413"/>
         <source>Remove Selected Measures</source>
         <translation>移除所选小节</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1605"/>
+        <location filename="../../mscore/scoreview.cpp" line="1607"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>请选中完整的连音/震音组，然后重试命令</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2255"/>
+        <location filename="../../mscore/scoreview.cpp" line="2257"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>还没有选取小节: 请选取需要合并的小节范围, 然后重试</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4107"/>
+        <location filename="../../mscore/scoreview.cpp" line="4109"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -14404,7 +14404,7 @@ first create some staves</source>
 建立一些谱表</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4189"/>
+        <location filename="../../mscore/scoreview.cpp" line="4191"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>没有选取任何小节：
@@ -15413,7 +15413,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="266"/>
         <source>Apply to all Parts</source>
-        <translation>应用到全部分谱</translation>
+        <translation>应用到所有分谱</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="273"/>
@@ -15514,7 +15514,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="262"/>
         <source>Accidentals</source>
-        <translation>临时升降号</translation>
+        <translation>临时记号</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="313"/>
@@ -15549,7 +15549,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="408"/>
         <source>Breaks &amp;&amp; Spacers</source>
-        <translation>换行符与占位符</translation>
+        <translation>换行符与定位符</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="466"/>
@@ -15589,12 +15589,12 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="776"/>
         <source>Bracket</source>
-        <translation>连谱号</translation>
+        <translation>直括号</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="777"/>
         <source>Brace</source>
-        <translation>大括号</translation>
+        <translation>花括号</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="778"/>
@@ -15604,7 +15604,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="797"/>
         <source>Breaths &amp;&amp; Pauses</source>
-        <translation>呼吸与停顿</translation>
+        <translation>换气与停顿</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="881"/>
@@ -15710,7 +15710,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="818"/>
         <source>Arpeggios &amp;&amp; Glissandi</source>
-        <translation>琶音与滑音</translation>
+        <translation>琶音与刮奏</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1143"/>
@@ -20107,7 +20107,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../libmscore/style.cpp" line="1986"/>
         <source>Glissando</source>
-        <translation>滑音</translation>
+        <translation>刮奏</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="1988"/>
@@ -20261,7 +20261,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/timedialog.ui" line="273"/>
         <source>Add time signature to master palette</source>
-        <translation>将拍号添加到主面板</translation>
+        <translation>将拍号添加到符号总面板</translation>
     </message>
     <message>
         <location filename="../../mscore/timedialog.ui" line="276"/>
@@ -20467,7 +20467,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="227"/>
         <source>Duration:</source>
-        <translation>时长：</translation>
+        <translation>时值：</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="234"/>
@@ -20509,7 +20509,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="367"/>
         <source>Number of measures</source>
-        <translation>小节数</translation>
+        <translation>乐曲中小节的数量</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="370"/>
@@ -23030,7 +23030,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2174"/>
         <source>Toggle &apos;Play Repeats&apos;</source>
-        <translation>重复播放切换开关</translation>
+        <translation>重复记号播放开关</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2184"/>
@@ -23045,7 +23045,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2186"/>
         <source>Pan score automatically</source>
-        <translation>自动追踪播放光标</translation>
+        <translation>自动追踪光标</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2319"/>
@@ -23140,7 +23140,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2688"/>
         <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
-        <translation>更改异名同音的音符（改变以音乐会音高为准的音名和移调调式）</translation>
+        <translation>更改异名同音的音符（改变以标准音高为准的音名和移调调式）</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2694"/>
@@ -23230,12 +23230,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3419"/>
         <source>Add Brackets to Accidental</source>
-        <translation>给临时记号加括号</translation>
+        <translation>向临时记号加括号</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3420"/>
         <source>Add brackets to accidental</source>
-        <translation>给临时记号加括号</translation>
+        <translation>向临时记号加括号</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3429"/>
@@ -23995,12 +23995,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2173"/>
         <source>Play Repeats</source>
-        <translation>重复演奏</translation>
+        <translation>重复记号播放开关</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2175"/>
         <source>Play repeats</source>
-        <translation>重复演奏</translation>
+        <translation>重复记号播放开关</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2195"/>
@@ -24701,12 +24701,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2974"/>
         <source>Master Palette…</source>
-        <translation>主面板…</translation>
+        <translation>符号总面板…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2975"/>
         <source>Show master palette</source>
-        <translation>显示主面板</translation>
+        <translation>显示符号总面板</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2984"/>
@@ -27202,7 +27202,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="55"/>
         <source>Breath</source>
-        <translation>呼吸</translation>
+        <translation>换气</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="56"/>
@@ -27422,7 +27422,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="91"/>
         <source>Glissando Segment</source>
-        <translation>滑音段</translation>
+        <translation>刮奏段</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="92"/>
@@ -27432,7 +27432,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="93"/>
         <source>Spacer</source>
-        <translation>分隔器</translation>
+        <translation>定位符</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="94"/>
@@ -27557,7 +27557,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="117"/>
         <source>Glissando</source>
-        <translation>滑音</translation>
+        <translation>刮奏</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="31"/>
@@ -28555,7 +28555,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="47"/>
         <source>Glissandi</source>
-        <translation>滑音</translation>
+        <translation>刮奏</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="48"/>
@@ -28565,7 +28565,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="49"/>
         <source>Breath Marks</source>
-        <translation>呼吸记号</translation>
+        <translation>换气记号</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="50"/>
@@ -29459,22 +29459,22 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3339"/>
         <source>Breath mark (comma)</source>
-        <translation>呼吸记号（逗号）</translation>
+        <translation>换气记号（逗号）</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3340"/>
         <source>Breath mark (Salzedo)</source>
-        <translation>呼吸记号（Salzedo式）</translation>
+        <translation>换气记号（Salzedo式）</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3341"/>
         <source>Breath mark (tick-like)</source>
-        <translation>呼吸记号（钩状）</translation>
+        <translation>换气记号（钩状）</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3342"/>
         <source>Breath mark (upbow-like)</source>
-        <translation>呼吸记号（全弓奏）</translation>
+        <translation>换气记号（全弓奏）</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3353"/>
@@ -29619,7 +29619,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4576"/>
         <source>Slide</source>
-        <translation>滑音</translation>
+        <translation>滑奏</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4600"/>

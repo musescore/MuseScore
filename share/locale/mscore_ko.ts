@@ -46,12 +46,12 @@
     <message>
         <location filename="../../aeolus/aeolus_gui.ui" line="63"/>
         <source>Delay</source>
-        <translation>지연</translation>
+        <translation>딜레이</translation>
     </message>
     <message>
         <location filename="../../aeolus/aeolus_gui.ui" line="70"/>
         <source>Time</source>
-        <translation>Time</translation>
+        <translation>시간</translation>
     </message>
     <message>
         <location filename="../../aeolus/aeolus_gui.ui" line="77"/>
@@ -81,7 +81,7 @@
     <message>
         <location filename="../../aeolus/aeolus_gui.ui" line="361"/>
         <source>Position</source>
-        <translation>Position</translation>
+        <translation>위치</translation>
     </message>
 </context>
 <context>
@@ -423,7 +423,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="403"/>
         <source>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and peak is better for heavier, fast compression and percussion.</source>
-        <translation>RMS와 피크 엔벨롭 팔로워 간의 균형. RMS는 대체로 섬세한 음악 컴프레션에 좋고 피크는 헤비하고 빠른 컴프레션 및 타악기에 좋다.</translation>
+        <translation>RMS와 피크 엔벨롭 팔로워 간의 균형. RMS는 대체로 섬세한 음악 컴프레션에, 피크는 헤비하고 빠른 컴프레션 및 타악기에 적합하다.</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="432"/>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="20"/>
         <source>Unfortunately MuseScore has crashed. Would you like to send a report to make it possible for us to fix the problem?</source>
-        <translation>안타깝게도 뮤즈코어가 실행에 실패했습니다. 리포트를 보내 문제 해결에 도움을 주시겠습니까?</translation>
+        <translation>안타깝게도 뮤즈스코어가 실행에 실패했습니다. 리포트를 보내 문제 해결에 도움을 주시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="30"/>
@@ -14190,7 +14190,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="145"/>
         <location filename="../../mscore/propertymenu.cpp" line="152"/>
-        <location filename="../../mscore/scoreview.cpp" line="404"/>
+        <location filename="../../mscore/scoreview.cpp" line="406"/>
         <source>Add</source>
         <translation>추가</translation>
     </message>
@@ -14228,7 +14228,7 @@ failed: %2</source>
         <location filename="../../mscore/propertymenu.cpp" line="236"/>
         <location filename="../../mscore/propertymenu.cpp" line="254"/>
         <location filename="../../mscore/propertymenu.cpp" line="283"/>
-        <location filename="../../mscore/scoreview.cpp" line="391"/>
+        <location filename="../../mscore/scoreview.cpp" line="393"/>
         <source>Staff/Part Properties…</source>
         <translation>보표/파트 속성...</translation>
     </message>
@@ -14255,21 +14255,21 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="235"/>
         <location filename="../../mscore/propertymenu.cpp" line="253"/>
-        <location filename="../../mscore/scoreview.cpp" line="383"/>
+        <location filename="../../mscore/scoreview.cpp" line="385"/>
         <source>Staff</source>
         <translation>보표</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="241"/>
         <location filename="../../mscore/propertymenu.cpp" line="259"/>
-        <location filename="../../mscore/scoreview.cpp" line="397"/>
+        <location filename="../../mscore/scoreview.cpp" line="399"/>
         <source>Measure</source>
         <translation>마디</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="242"/>
         <location filename="../../mscore/propertymenu.cpp" line="260"/>
-        <location filename="../../mscore/scoreview.cpp" line="416"/>
+        <location filename="../../mscore/scoreview.cpp" line="418"/>
         <source>Measure Properties…</source>
         <translation>마디 속성…</translation>
     </message>
@@ -14324,39 +14324,39 @@ failed: %2</source>
         <translation>도움말</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="384"/>
+        <location filename="../../mscore/scoreview.cpp" line="386"/>
         <source>Edit Drumset…</source>
         <translation>드럼셋 편집…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="388"/>
+        <location filename="../../mscore/scoreview.cpp" line="390"/>
         <source>Piano Roll Editor…</source>
         <translation>피아노 롤 편집기…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="393"/>
+        <location filename="../../mscore/scoreview.cpp" line="395"/>
         <source>Split Staff…</source>
         <translation>보표 나누기</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="411"/>
+        <location filename="../../mscore/scoreview.cpp" line="413"/>
         <source>Remove Selected Measures</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1605"/>
+        <location filename="../../mscore/scoreview.cpp" line="1607"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>온전한 잇단음표/트레몰로를 선택하고 명령을 다시 내리십시오</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2255"/>
+        <location filename="../../mscore/scoreview.cpp" line="2257"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>아무 마디도 선택되지 않았슴:
 먼저 합칠 마디의 범위를 선택하고 다시 해보세요</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4107"/>
+        <location filename="../../mscore/scoreview.cpp" line="4109"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -14365,7 +14365,7 @@ first create some staves</source>
 악기 다이아로그를 사용하시기 바랍니다</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4189"/>
+        <location filename="../../mscore/scoreview.cpp" line="4191"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>아무 마디도 선택되지 않았슴:
@@ -15528,7 +15528,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="566"/>
         <source>Articulations</source>
-        <translation>꾸밈음 </translation>
+        <translation>아티큘레이션</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="651"/>

@@ -1674,7 +1674,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="579"/>
         <source>Transpose written pitches to sound:</source>
-        <translation type="unfinished"/>
+        <translation>Transzpozíció hangzó magassághoz képest:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="596"/>
@@ -3204,7 +3204,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9539"/>
         <source>Barré line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Barrévonal vastagsága:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9616"/>
@@ -3717,7 +3717,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3447"/>
         <source>System header with time signature distance:</source>
-        <translation type="unfinished"/>
+        <translation>Sorcsoportkezdet-ütemmutató távolság:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3476"/>
@@ -4038,7 +4038,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5963"/>
         <source>Reset &apos;Default position&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Pozíció&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5940"/>
@@ -4308,12 +4308,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="669"/>
         <source>Min. vertical distance:</source>
-        <translation type="unfinished"/>
+        <translation>Min. függőleges távolság:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="704"/>
         <source>Reset &apos;Min. vertical distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Min. függőleges távolság&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1648"/>
@@ -4330,12 +4330,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2126"/>
         <source>System Brackets</source>
-        <translation type="unfinished"/>
+        <translation>Klammerek</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2186"/>
         <source>Bracket distance:</source>
-        <translation type="unfinished"/>
+        <translation>Klammer távolsága:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2251"/>
@@ -4475,22 +4475,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9536"/>
         <source>Barré line thickness</source>
-        <translation type="unfinished"/>
+        <translation>Barrévonal vastagsága</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9549"/>
         <source>String spacing:</source>
-        <translation type="unfinished"/>
+        <translation>Húrok távolsága:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9556"/>
         <source>Fret number position:</source>
-        <translation type="unfinished"/>
+        <translation>Érintő jelölés helyzete:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9573"/>
         <source>Relative dot size:</source>
-        <translation type="unfinished"/>
+        <translation>Pont relatív mérete:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9626"/>
@@ -4505,7 +4505,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9661"/>
         <source>Relative dot size</source>
-        <translation type="unfinished"/>
+        <translation>Pont relatív mérete</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9687"/>
@@ -4515,17 +4515,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9722"/>
         <source>Fret spacing:</source>
-        <translation type="unfinished"/>
+        <translation>Érintők távolsága:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9729"/>
         <source>String spacing</source>
-        <translation type="unfinished"/>
+        <translation>Húrok távolsága</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9751"/>
         <source>Fret spacing</source>
-        <translation type="unfinished"/>
+        <translation>Érintők távolsága</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9799"/>
@@ -4620,12 +4620,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10095"/>
         <source>Reset &apos;Text margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Margó&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10129"/>
         <source>Reset &apos;Border radius&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Sarok sugara&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9967"/>
@@ -4635,7 +4635,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9815"/>
         <source>Reset &apos;Size changes with staff space setting&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Kottasor méretéhez igazítás&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7190"/>
@@ -4727,7 +4727,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="157"/>
         <source>Generate</source>
-        <translation type="unfinished"/>
+        <translation>Létrehozás</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="184"/>
@@ -5485,7 +5485,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="121"/>
         <source>Reset &apos;Stretch&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Nyújtás&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="134"/>
@@ -5666,7 +5666,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="101"/>
         <source>Reset &apos;Span to next staff&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Meghosszabbítás a következő sorig&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="114"/>
@@ -5799,12 +5799,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="298"/>
         <source>Reset &apos;Force horizontal&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Mindenképpen vízszintes&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="311"/>
         <source>Reset &apos;Custom position&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Egyéni elhelyezés&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="92"/>
@@ -5955,7 +5955,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bracket.ui" line="111"/>
         <source>Reset &apos;Column&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Oszlop&apos; alaphelyzetbe</translation>
     </message>
 </context>
 <context>
@@ -6156,7 +6156,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="88"/>
         <source>Reset &apos;Change speed&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Sebesség változtatása&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="108"/>
@@ -6264,7 +6264,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="227"/>
         <source>Reset &apos;Color&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Szín&apos; értékek alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="240"/>
@@ -6284,12 +6284,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="292"/>
         <source>Reset &apos;Automatic placement&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Automatikus elhelyezés&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="324"/>
         <source>Reset &apos;Minimum distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Minimális távolság&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="253"/>
@@ -6474,7 +6474,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="146"/>
         <source>Reset &apos;Fret number&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Érintő jelölés&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="153"/>
@@ -6484,7 +6484,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="176"/>
         <source>Reset &apos;Frets&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Érintők&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="183"/>
@@ -6509,7 +6509,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="250"/>
         <source>Reset &apos;Strings&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Húrok&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="257"/>
@@ -6529,32 +6529,32 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="313"/>
         <source>Use square symbol</source>
-        <translation type="unfinished"/>
+        <translation>Négyzet szimbólum használata</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="338"/>
         <source>Use cross symbol</source>
-        <translation type="unfinished"/>
+        <translation>Kereszt szimbólum használata</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="363"/>
         <source>Use triangle symbol</source>
-        <translation type="unfinished"/>
+        <translation>Háromszög szimbólum használata</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="388"/>
         <source>Use black dot symbol</source>
-        <translation type="unfinished"/>
+        <translation>Fekete pont szimbólum használata</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="413"/>
         <source>Add a barre (Shift)</source>
-        <translation type="unfinished"/>
+        <translation>Barré hozzáadása (Shift)</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="416"/>
         <source>Add a barre</source>
-        <translation type="unfinished"/>
+        <translation>Barré hozzáadása</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="419"/>
@@ -6574,17 +6574,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="466"/>
         <source>Add multiple dots per string (Ctrl)</source>
-        <translation type="unfinished"/>
+        <translation>Húronként több pont hozzáadása (Ctrl)</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="469"/>
         <source>Add multiple dots per string</source>
-        <translation type="unfinished"/>
+        <translation>Húronként több pont</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="472"/>
         <source>Multiple dots</source>
-        <translation type="unfinished"/>
+        <translation>Több pont</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="200"/>
@@ -6667,7 +6667,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="170"/>
         <source>Reset &apos;Play style&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Lejátszás stílusa&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="183"/>
@@ -6810,12 +6810,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_group_element.ui" line="117"/>
         <source>Enable Autoplace</source>
-        <translation type="unfinished"/>
+        <translation>Automatikus elhelyezés bekapcsolása</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_group_element.ui" line="127"/>
         <source>Disable Autoplace</source>
-        <translation type="unfinished"/>
+        <translation>Automatikus elhelyezés kikapcsolása</translation>
     </message>
 </context>
 <context>
@@ -6886,7 +6886,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="235"/>
         <source>Reset &apos;Create system headers&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Sorcsoportkezdet létrehozása&apos; alaphelyzetbe</translation>
     </message>
 </context>
 <context>
@@ -6904,7 +6904,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="91"/>
         <source>Reset &apos;Use single note dynamics&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Hangon belüli dinamika használata&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="104"/>
@@ -6924,7 +6924,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="148"/>
         <source>Reset &apos;Dynamics method&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Dinamika fajta&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="212"/>
@@ -7166,7 +7166,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="151"/>
         <source>Reset &apos;Size&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Méret&apos; értékek alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="164"/>
@@ -7209,7 +7209,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_iname.ui" line="117"/>
         <source>Reset &apos;Layout position&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Elhelyezés&apos; alaphelyzetbe</translation>
     </message>
 </context>
 <context>
@@ -7473,7 +7473,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="312"/>
         <source>Reset &apos;Color&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Szín&apos; értékek alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="325"/>
@@ -7488,12 +7488,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="351"/>
         <source>Reset &apos;Dash line length&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Szaggatott vonalhossz&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="364"/>
         <source>Reset &apos;Dash gap width&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Szaggatott vonalköz&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="156"/>
@@ -7576,7 +7576,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="179"/>
         <source>Reset &apos;Verse&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Versszak&apos; érték alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="192"/>
@@ -8304,17 +8304,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="110"/>
         <source>Reset &apos;Show ledger lines&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Pótvonalak megjelenítése&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="130"/>
         <source>Reset &apos;Notehead scheme&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Kottafej séma&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="179"/>
         <source>Reset &apos;Generate key signatures&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Előjegyzések létrehozása&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="202"/>
@@ -8329,17 +8329,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="246"/>
         <source>Reset &apos;Show barlines&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Ütemvonalak megjelenítése&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="285"/>
         <source>Reset &apos;Step offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Lépésenkénti eltolás&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="298"/>
         <source>Reset &apos;Slash style&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Ferde vonalas stílus&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="312"/>
@@ -8385,7 +8385,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="328"/>
         <source>Reset &apos;Lines&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Vonalak&apos; érték alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="335"/>
@@ -8405,22 +8405,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="419"/>
         <source>Reset &apos;Offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Eltolás&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="446"/>
         <source>Reset &apos;Generate clefs&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Kulcsok létrehozása&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="466"/>
         <source>Reset &apos;Generate time signatures&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Ütemmutatók létrehozása&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="479"/>
         <source>Reset &apos;Line distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Vonalak távolsága&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="486"/>
@@ -8498,7 +8498,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="130"/>
         <source>Length change</source>
-        <translation type="unfinished"/>
+        <translation>Hosszváltozás</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="152"/>
@@ -8508,7 +8508,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="165"/>
         <source>Reset &apos;Length change&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Hosszváltozás&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="88"/>
@@ -8779,7 +8779,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="328"/>
         <source>Reset &apos;Corner radius&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Sarok sugara&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="335"/>
@@ -8789,12 +8789,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="351"/>
         <source>Reset &apos;Thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Vastagság&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="364"/>
         <source>Reset &apos;Highlight color&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Kiemelési szín&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="377"/>
@@ -8829,7 +8829,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="505"/>
         <source>Reset &apos;Alignment&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Igazítás&apos; értékek alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="524"/>
@@ -8839,7 +8839,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="537"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Kottasor méretéhez igazítás&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="163"/>
@@ -8956,7 +8956,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="57"/>
         <source>Text Line Details</source>
-        <translation type="unfinished"/>
+        <translation>Szövegsor részletei</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="88"/>
@@ -8972,12 +8972,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1041"/>
         <source>Reset &apos;End hook&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Záró kampó&apos; érték alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1054"/>
         <source>Reset &apos;Begin hook&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Kezdő kampó&apos; alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1108"/>
@@ -9093,7 +9093,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="494"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="841"/>
         <source>Reset &apos;Alignment&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Igazítás&apos; értékek alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="352"/>
@@ -9171,7 +9171,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="137"/>
         <source>Reset &apos;Scale&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Nagyítás&apos; értékek alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="88"/>
@@ -9184,7 +9184,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="14"/>
         <source>Tremolo Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Tremolo vizsgáló</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="57"/>
@@ -9194,7 +9194,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="82"/>
         <source>Tremolo range</source>
-        <translation type="unfinished"/>
+        <translation>Tremolo tartomány</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="86"/>
@@ -9204,7 +9204,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="91"/>
         <source>Stem center</source>
-        <translation type="unfinished"/>
+        <translation>Kottaszár közepe</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="99"/>
@@ -9214,7 +9214,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="118"/>
         <source>Reset &apos;Tremolo range&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Tremolo tartomány&apos; alaphelyzetbe</translation>
     </message>
 </context>
 <context>
@@ -12983,7 +12983,7 @@ Helyreállítsa a munkamenetet?</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="6129"/>
         <source>MuseScore may not be able to load this style file: %1</source>
-        <translation type="unfinished"/>
+        <translation>Lehetséges, hogy ezt a stílusfájlt nem lehet betölteni: %1 </translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="6404"/>
@@ -13473,7 +13473,8 @@ internetkapcsolat szükséges.</translation>
         <location filename="../../mscore/playpanel.cpp" line="224"/>
         <source>Tempo
 %1 BPM</source>
-        <translation type="unfinished"/>
+        <translation>Tempó
+%1 BPM</translation>
     </message>
 </context>
 <context>
@@ -14138,7 +14139,7 @@ nem sikerült: %2</translation>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="328"/>
         <source>Copy with Link to Score</source>
-        <translation type="unfinished"/>
+        <translation>Másolás a kottára mutató hivatkozással</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="333"/>
@@ -14229,7 +14230,7 @@ nem sikerült: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="145"/>
         <location filename="../../mscore/propertymenu.cpp" line="152"/>
-        <location filename="../../mscore/scoreview.cpp" line="404"/>
+        <location filename="../../mscore/scoreview.cpp" line="406"/>
         <source>Add</source>
         <translation>Hozzáadás</translation>
     </message>
@@ -14267,7 +14268,7 @@ nem sikerült: %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="236"/>
         <location filename="../../mscore/propertymenu.cpp" line="254"/>
         <location filename="../../mscore/propertymenu.cpp" line="283"/>
-        <location filename="../../mscore/scoreview.cpp" line="391"/>
+        <location filename="../../mscore/scoreview.cpp" line="393"/>
         <source>Staff/Part Properties…</source>
         <translation>Kottasor/Szólam tulajdonságai</translation>
     </message>
@@ -14294,21 +14295,21 @@ nem sikerült: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="235"/>
         <location filename="../../mscore/propertymenu.cpp" line="253"/>
-        <location filename="../../mscore/scoreview.cpp" line="383"/>
+        <location filename="../../mscore/scoreview.cpp" line="385"/>
         <source>Staff</source>
         <translation>Kottasor</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="241"/>
         <location filename="../../mscore/propertymenu.cpp" line="259"/>
-        <location filename="../../mscore/scoreview.cpp" line="397"/>
+        <location filename="../../mscore/scoreview.cpp" line="399"/>
         <source>Measure</source>
         <translation>Ütem</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="242"/>
         <location filename="../../mscore/propertymenu.cpp" line="260"/>
-        <location filename="../../mscore/scoreview.cpp" line="416"/>
+        <location filename="../../mscore/scoreview.cpp" line="418"/>
         <source>Measure Properties…</source>
         <translation>Ütem tulajdonságai…</translation>
     </message>
@@ -14363,39 +14364,39 @@ nem sikerült: %2</translation>
         <translation>Súgó</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="384"/>
+        <location filename="../../mscore/scoreview.cpp" line="386"/>
         <source>Edit Drumset…</source>
         <translation>Dobkészlet szerkesztése…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="388"/>
+        <location filename="../../mscore/scoreview.cpp" line="390"/>
         <source>Piano Roll Editor…</source>
         <translation>Zongorahenger szerkesztő…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="393"/>
+        <location filename="../../mscore/scoreview.cpp" line="395"/>
         <source>Split Staff…</source>
         <translation>Kottasor szétválasztása…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="411"/>
+        <location filename="../../mscore/scoreview.cpp" line="413"/>
         <source>Remove Selected Measures</source>
         <translation>Kijelölt ütemek eltávolítása</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1605"/>
+        <location filename="../../mscore/scoreview.cpp" line="1607"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>Válassza ki a teljes n-olát/tremolót és próbálja újra a műveletet</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2255"/>
+        <location filename="../../mscore/scoreview.cpp" line="2257"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>Nincsenek kiválasztva ütemek:
 Jelöld ki az egyesítendő ütemeket és próbáld újra</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4107"/>
+        <location filename="../../mscore/scoreview.cpp" line="4109"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -14404,7 +14405,7 @@ használd a Hangszerek ablakot
 kottasorok létrehozásához</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4189"/>
+        <location filename="../../mscore/scoreview.cpp" line="4191"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Nincs kijelölve ütem:
@@ -14817,13 +14818,13 @@ Szeretné most megtekinteni ezeket az útmutatókat?</translation>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="80"/>
         <source>(not changeable)</source>
-        <translation type="unfinished"/>
+        <translation>(nem változtatható)</translation>
     </message>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="128"/>
         <location filename="../../mscore/toolbarEditor.cpp" line="156"/>
         <source>Separator</source>
-        <translation type="unfinished"/>
+        <translation>Elválasztó</translation>
     </message>
 </context>
 <context>
@@ -16071,7 +16072,7 @@ paletta-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/playpanel.ui" line="190"/>
         <source>Time: </source>
-        <translation type="unfinished"/>
+        <translation>Idő:</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="360"/>
@@ -20157,7 +20158,7 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../libmscore/style.cpp" line="2000"/>
         <source>Sticking</source>
-        <translation type="unfinished"/>
+        <translation>Tapadás</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2002"/>
@@ -23054,7 +23055,7 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2320"/>
         <source>Switch between concert/sounding pitch and transposing/written pitch</source>
-        <translation type="unfinished"/>
+        <translation>Váltás hangzó és írott magasság között</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2349"/>
@@ -23234,7 +23235,7 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3420"/>
         <source>Add brackets to accidental</source>
-        <translation type="unfinished"/>
+        <translation>Módosítójel szögletes zárójelbe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3429"/>
@@ -23321,7 +23322,7 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="221"/>
         <source>Paste half duration</source>
-        <translation type="unfinished"/>
+        <translation>Felezett hosszúság beillesztése</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="230"/>
@@ -23331,7 +23332,7 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="231"/>
         <source>Paste double duration</source>
-        <translation type="unfinished"/>
+        <translation>Kétszeres hosszúság beillesztése</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="240"/>
@@ -23351,7 +23352,7 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="280"/>
         <source>Enter notes in step-time</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyek bevitele egyenként</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="312"/>
@@ -23914,12 +23915,12 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2082"/>
         <source>Sticking</source>
-        <translation type="unfinished"/>
+        <translation>Tapadás</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2083"/>
         <source>Add sticking</source>
-        <translation type="unfinished"/>
+        <translation>Tapadás hozzáadása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2089"/>
@@ -25322,17 +25323,17 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3644"/>
         <source>Toggle &apos;Automatic Placement&apos; for selected elements</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Automatikus elhelyezés&apos; ki/be a kijelölt elemeken</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3650"/>
         <source>Toggle Automatic Placement Globally</source>
-        <translation type="unfinished"/>
+        <translation>Automatikus elhelyezés ki/be minden elemre</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3651"/>
         <source>Toggle &apos;Automatic Placement&apos; globally</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Automatikus elhelyezés&apos; ki/be minden elemre</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3660"/>
@@ -26475,32 +26476,32 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../libmscore/clef.cpp" line="38"/>
         <source>Treble clef 15ma bassa</source>
-        <translation type="unfinished"/>
+        <translation>Violinkulcs 15ma bassa</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="39"/>
         <source>Treble clef 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>Violinkulcs 8va bassa</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="40"/>
         <source>Treble clef 8va alta</source>
-        <translation type="unfinished"/>
+        <translation>Violinkulcs 8va alta</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="41"/>
         <source>Treble clef 15ma alta</source>
-        <translation type="unfinished"/>
+        <translation>Violinkulcs 15ma alta</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="42"/>
         <source>Double treble clef 8va bassa on 2nd line</source>
-        <translation type="unfinished"/>
+        <translation>Dupla violinkulcs 8va bassa a 2. vonalon</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="43"/>
         <source>Treble clef optional 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>Violinkulcs opcionáls 8va bassa</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="44"/>
@@ -26535,27 +26536,27 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../libmscore/clef.cpp" line="50"/>
         <source>C clef, H shape (19th century)</source>
-        <translation type="unfinished"/>
+        <translation>C kulcs, H alakú (19. század)</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="51"/>
         <source>Alto clef (French, 18th century)</source>
-        <translation type="unfinished"/>
+        <translation>Altkulcs (francia, 18. század)</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="52"/>
         <source>Tenor clef (French, 18th century)</source>
-        <translation type="unfinished"/>
+        <translation>Tenorkulcs (francia, 18. század)</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="53"/>
         <source>Alto clef (French, 20th century)</source>
-        <translation type="unfinished"/>
+        <translation>Altkulcs (francia, 20. század)</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="54"/>
         <source>Tenor clef (French, 20th century)</source>
-        <translation type="unfinished"/>
+        <translation>Tenorkulcs (francia, 20. század)</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="55"/>
@@ -26565,22 +26566,22 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../libmscore/clef.cpp" line="56"/>
         <source>Bass clef 15ma bassa</source>
-        <translation type="unfinished"/>
+        <translation>Basszuskulcs 15ma bassa</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="57"/>
         <source>Bass clef 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>Basszuskulcs 8va bassa</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="58"/>
         <source>Bass clef 8va alta</source>
-        <translation type="unfinished"/>
+        <translation>Basszuskulcs 8va alta</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="59"/>
         <source>Bass clef 15ma alta</source>
-        <translation type="unfinished"/>
+        <translation>Basszuskulcs 15ma alta</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="60"/>
@@ -26595,12 +26596,12 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../libmscore/clef.cpp" line="62"/>
         <source>F clef (French, 18th century)</source>
-        <translation type="unfinished"/>
+        <translation>F kulcs (francia, 18. század)</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="63"/>
         <source>F clef (19th century)</source>
-        <translation type="unfinished"/>
+        <translation>F kulcs (19. század)</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="64"/>
@@ -26610,7 +26611,7 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../libmscore/clef.cpp" line="65"/>
         <source>Percussion 2</source>
-        <translation type="unfinished"/>
+        <translation>Ütősök 2</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="66"/>
@@ -26620,17 +26621,17 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../libmscore/clef.cpp" line="67"/>
         <source>Tablature 4 lines</source>
-        <translation type="unfinished"/>
+        <translation>Tabulatúra, 4 sor</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="68"/>
         <source>Tablature Serif</source>
-        <translation type="unfinished"/>
+        <translation>Tabulatúra serif</translation>
     </message>
     <message>
         <location filename="../../libmscore/clef.cpp" line="69"/>
         <source>Tablature Serif 4 lines</source>
-        <translation type="unfinished"/>
+        <translation>Tabulatúra serif, 4 sor</translation>
     </message>
 </context>
 <context>
@@ -27441,7 +27442,7 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="135"/>
         <source>Sticking</source>
-        <translation type="unfinished"/>
+        <translation>Tapadás</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="47"/>
@@ -27682,7 +27683,8 @@ Válassz ki egy hangjegyet vagy szünetet és próbáld újra</translation>
         <location filename="../../libmscore/mscore.cpp" line="133"/>
         <source>No note or slur selected:
 Please select a note or slur and retry</source>
-        <translation type="unfinished"/>
+        <translation>Nincs kiválasztva hangjegy vagy kötőív:
+Jelölj ki és próbáld újra</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="134"/>
@@ -27697,17 +27699,18 @@ Válassz ki egy vagy több kottasort és próbáld újra
         <location filename="../../libmscore/mscore.cpp" line="135"/>
         <source>No note or figured bass selected:
 Please select a note or figured bass and retry</source>
-        <translation type="unfinished"/>
+        <translation>Nincs kiválasztva számozott basszus:
+Jelölj ki ki és próbáld újra</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="137"/>
         <source>Cannot insert chord/rest in tuplet</source>
-        <translation type="unfinished"/>
+        <translation>Ritmusosztásba nem lehet akkordot/szünetet beilleszteni</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="138"/>
         <source>Cannot split tuplet</source>
-        <translation type="unfinished"/>
+        <translation>A ritmusosztást nem lehet felbontani</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="139"/>
@@ -27756,7 +27759,7 @@ A hangjegycsoportot nem lehet szétválasztani</translation>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="148"/>
         <source>Destination is not a chord or rest</source>
-        <translation type="unfinished"/>
+        <translation>A cél nem akkord vagy szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="149"/>
@@ -28927,37 +28930,37 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2992"/>
         <source>Double flat equal tempered semitone</source>
-        <translation type="unfinished"/>
+        <translation>Egyenletesen temperált félhang értékű kettősbé</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2993"/>
         <source>Double flat lowered by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>Kettősbé leszállítva egy szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2994"/>
         <source>Double flat raised by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>Kettősbé felemelve egy szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2996"/>
         <source>Double flat lowered by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kettősbé leszállítva három szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2997"/>
         <source>Double flat raised by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kettősbé felemelve három szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2999"/>
         <source>Double flat lowered by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kettősbé leszállítva két szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3000"/>
         <source>Double flat raised by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kettősbé felemelve két szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3001"/>
@@ -28967,37 +28970,37 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3003"/>
         <source>Double sharp equal tempered semitone</source>
-        <translation type="unfinished"/>
+        <translation>Egyenletesen temperált félhang értékű kettőskereszt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3004"/>
         <source>Double sharp lowered by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>Kettőskereszt leszállítva egy szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3005"/>
         <source>Double sharp raised by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>Kettőskereszt felemelve egy szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3006"/>
         <source>Double sharp lowered by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kettőskereszt leszállítva három szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3007"/>
         <source>Double sharp raised by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kettőskereszt felemelve három szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3008"/>
         <source>Double sharp lowered by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kettőskereszt leszállítva két szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3009"/>
         <source>Double sharp raised by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kettőskereszt felemelve két szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3018"/>
@@ -29017,37 +29020,37 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3022"/>
         <source>Flat equal tempered semitone</source>
-        <translation type="unfinished"/>
+        <translation>Egyenletesen temperált félhang értékű bé</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3024"/>
         <source>Flat lowered by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>Bé leszállítva egy szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3025"/>
         <source>Flat raised by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>Bé felemelve egy szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3029"/>
         <source>Flat lowered by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Bé leszállítva három szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3030"/>
         <source>Flat raised by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Bé felemelve három szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3032"/>
         <source>Flat lowered by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Bé leszállítva két szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3033"/>
         <source>Flat raised by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Bé felemelve két szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3046"/>
@@ -29062,22 +29065,22 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3051"/>
         <source>Lower by one septimal comma</source>
-        <translation type="unfinished"/>
+        <translation>Leszállítás egy szeptimális kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3052"/>
         <source>Lower by one tridecimal quartertone</source>
-        <translation type="unfinished"/>
+        <translation>Leszállítás egy tridecimális negyedhanggal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3053"/>
         <source>Lower by one undecimal quartertone</source>
-        <translation type="unfinished"/>
+        <translation>Leszállítás undecimális negyedhanggal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3054"/>
         <source>Lower by two septimal commas</source>
-        <translation type="unfinished"/>
+        <translation>Leszállítás két szeptimális kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3058"/>
@@ -29087,7 +29090,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3060"/>
         <source>Natural equal tempered semitone</source>
-        <translation type="unfinished"/>
+        <translation>Egyenletesen temperált félhang értékű feloldójel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3061"/>
@@ -29097,12 +29100,12 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3063"/>
         <source>Natural lowered by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>Feloldójel leszállítva egy szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3064"/>
         <source>Natural raised by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>Feloldójel felemelve egy szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3067"/>
@@ -29112,32 +29115,32 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3068"/>
         <source>Natural lowered by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Feloldójel leszállítva három szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3069"/>
         <source>Natural raised by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Feloldójel felemelve három szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3070"/>
         <source>Natural lowered by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Feloldójel leszállítva két szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3071"/>
         <source>Natural raised by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Feloldójel felemelve két szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3082"/>
         <source>Lower by one equal tempered quarter-tone</source>
-        <translation type="unfinished"/>
+        <translation>Leszállítás egy egyenletesen temperált negyedhanggal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3083"/>
         <source>Raise by one equal tempered quarter tone</source>
-        <translation type="unfinished"/>
+        <translation>Felemelés egy egyenletesen temperált negyedhanggal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3086"/>
@@ -29164,22 +29167,22 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3099"/>
         <source>Raise by one septimal comma</source>
-        <translation type="unfinished"/>
+        <translation>Felemelés egy szeptimális kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3100"/>
         <source>Raise by one tridecimal quartertone</source>
-        <translation type="unfinished"/>
+        <translation>Felemelés egy tridecimális negyedhanggal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3101"/>
         <source>Raise by one undecimal quartertone</source>
-        <translation type="unfinished"/>
+        <translation>Felemelés egy undecimális negyedhanggal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3102"/>
         <source>Raise by two septimal commas</source>
-        <translation type="unfinished"/>
+        <translation>Felemelés két szeptimális kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3108"/>
@@ -29189,17 +29192,17 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3110"/>
         <source>Sharp equal tempered semitone</source>
-        <translation type="unfinished"/>
+        <translation>Egyenletesen temperált félhang értékű kereszt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3112"/>
         <source>Sharp lowered by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>Kereszt leszállítva egy szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3113"/>
         <source>Sharp raised by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>Kereszt felemelve egy szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3119"/>
@@ -29209,22 +29212,22 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3120"/>
         <source>Sharp lowered by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kereszt leszállítva három szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3121"/>
         <source>Sharp raised by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kereszt felemelve három szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3122"/>
         <source>Sharp lowered by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kereszt leszállítva két szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3123"/>
         <source>Sharp raised by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>Kereszt felemelve két szintonikus kommával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3130"/>
@@ -29611,7 +29614,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4574"/>
         <source>Mordent with upper prefix</source>
-        <translation type="unfinished"/>
+        <translation>Mordent felső előkével</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4576"/>

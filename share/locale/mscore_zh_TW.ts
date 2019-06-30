@@ -99,7 +99,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="32"/>
         <source>Remove current score</source>
-        <translation>移除當前樂譜</translation>
+        <translation>移除目前樂譜</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="35"/>
@@ -109,12 +109,12 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="64"/>
         <source>Move current score up in list</source>
-        <translation>將當前樂譜從清單中上移</translation>
+        <translation>將目前樂譜從清單中上移</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="97"/>
         <source>Move current score down in list</source>
-        <translation>將當前樂譜從清單中下移</translation>
+        <translation>將目前樂譜從清單中下移</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="111"/>
@@ -321,7 +321,7 @@
         <location filename="../../mscore/breaksdialog.ui" line="79"/>
         <location filename="../../mscore/breaksdialog.ui" line="82"/>
         <source>Remove current system breaks</source>
-        <translation>移除當前組合譜表分行符號</translation>
+        <translation>移除目前組合譜表分行符號</translation>
     </message>
 </context>
 <context>
@@ -11251,7 +11251,7 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="445"/>
         <source>Current date</source>
-        <translation>當前日期</translation>
+        <translation>目前日期</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="447"/>
@@ -11291,7 +11291,7 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="461"/>
         <source>Available metadata tags and their current values</source>
-        <translation>可用元數據標籤及其當前數值</translation>
+        <translation>可用元數據標籤及其目前數值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="463"/>
@@ -11954,7 +11954,7 @@ Patch: %5</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="5697"/>
         <source>Command %1 not valid in current state</source>
-        <translation>指令 %1 在當前狀態無效</translation>
+        <translation>指令 %1 在目前狀態無效</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="6798"/>
@@ -12855,7 +12855,7 @@ Please select a measure and try again</source>
         <location filename="../../mscore/musescore.cpp" line="1976"/>
         <location filename="../../mscore/musescore.cpp" line="1984"/>
         <source>Feedback</source>
-        <translation>反饋</translation>
+        <translation>意見回饋</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2085"/>
@@ -14218,7 +14218,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="145"/>
         <location filename="../../mscore/propertymenu.cpp" line="152"/>
-        <location filename="../../mscore/scoreview.cpp" line="404"/>
+        <location filename="../../mscore/scoreview.cpp" line="406"/>
         <source>Add</source>
         <translation>新增</translation>
     </message>
@@ -14256,7 +14256,7 @@ failed: %2</source>
         <location filename="../../mscore/propertymenu.cpp" line="236"/>
         <location filename="../../mscore/propertymenu.cpp" line="254"/>
         <location filename="../../mscore/propertymenu.cpp" line="283"/>
-        <location filename="../../mscore/scoreview.cpp" line="391"/>
+        <location filename="../../mscore/scoreview.cpp" line="393"/>
         <source>Staff/Part Properties…</source>
         <translation type="unfinished"/>
     </message>
@@ -14283,21 +14283,21 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="235"/>
         <location filename="../../mscore/propertymenu.cpp" line="253"/>
-        <location filename="../../mscore/scoreview.cpp" line="383"/>
+        <location filename="../../mscore/scoreview.cpp" line="385"/>
         <source>Staff</source>
         <translation>譜表</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="241"/>
         <location filename="../../mscore/propertymenu.cpp" line="259"/>
-        <location filename="../../mscore/scoreview.cpp" line="397"/>
+        <location filename="../../mscore/scoreview.cpp" line="399"/>
         <source>Measure</source>
         <translation>小節</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="242"/>
         <location filename="../../mscore/propertymenu.cpp" line="260"/>
-        <location filename="../../mscore/scoreview.cpp" line="416"/>
+        <location filename="../../mscore/scoreview.cpp" line="418"/>
         <source>Measure Properties…</source>
         <translation>小節屬性…</translation>
     </message>
@@ -14352,39 +14352,39 @@ failed: %2</source>
         <translation>說明</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="384"/>
+        <location filename="../../mscore/scoreview.cpp" line="386"/>
         <source>Edit Drumset…</source>
         <translation>編輯鼓組…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="388"/>
+        <location filename="../../mscore/scoreview.cpp" line="390"/>
         <source>Piano Roll Editor…</source>
         <translation>鋼琴卷譜編輯器…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="393"/>
+        <location filename="../../mscore/scoreview.cpp" line="395"/>
         <source>Split Staff…</source>
         <translation>分割譜表…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="411"/>
+        <location filename="../../mscore/scoreview.cpp" line="413"/>
         <source>Remove Selected Measures</source>
         <translation>移除已選取的小節</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1605"/>
+        <location filename="../../mscore/scoreview.cpp" line="1607"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>請選取整個連音或顫音，然後重試。</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2255"/>
+        <location filename="../../mscore/scoreview.cpp" line="2257"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>未選取任何小節：
 請選取一定範圍的小節，然後再試一次。</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4107"/>
+        <location filename="../../mscore/scoreview.cpp" line="4109"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -14393,7 +14393,7 @@ first create some staves</source>
 以建立一些譜表。</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4189"/>
+        <location filename="../../mscore/scoreview.cpp" line="4191"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>未選取任何小節：
@@ -14926,7 +14926,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="89"/>
         <source>Render the score with the current synth settings. %1More info%2.</source>
-        <translation>使用當前合成器設定以對樂譜進行彩現。%1 更多資訊 %2。</translation>
+        <translation>使用目前合成器設定以演示樂譜。%1 更多資訊 %2。</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="132"/>
@@ -16206,7 +16206,7 @@ volume</source>
     <message>
         <location filename="../../mscore/plugin/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
-        <translation>重新載入當前外掛模組</translation>
+        <translation>重新載入目前外掛模組</translation>
     </message>
 </context>
 <context>
@@ -19161,7 +19161,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectinstr.ui" line="28"/>
         <source>Current instrument:</source>
-        <translation>現有樂器：</translation>
+        <translation>目前樂器：</translation>
     </message>
     <message>
         <location filename="../../mscore/selectinstr.ui" line="60"/>
@@ -21305,7 +21305,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="142"/>
         <source>Close current score</source>
-        <translation>關閉當前樂譜</translation>
+        <translation>關閉目前樂譜</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="148"/>
@@ -22097,12 +22097,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="935"/>
         <source>Apply Current Palette Element</source>
-        <translation>套用當前面板內的元件</translation>
+        <translation>套用目前面板內的元件</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="936"/>
         <source>Apply current palette element</source>
-        <translation>套用當前面板內的元件</translation>
+        <translation>套用目前面板內的元件</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="946"/>
@@ -23723,12 +23723,12 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="1942"/>
         <location filename="../../mscore/shortcut.cpp" line="3670"/>
         <source>Feedback</source>
-        <translation>反饋</translation>
+        <translation>意見回饋</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1943"/>
         <source>Toggle &apos;Feedback&apos; toolbar</source>
-        <translation>切換至「反饋」工具列</translation>
+        <translation>切換至「意見回饋」工具列</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1949"/>
@@ -25336,7 +25336,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3671"/>
         <source>Leave feedback</source>
-        <translation>提供反饋</translation>
+        <translation>提供意見回饋</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3459"/>

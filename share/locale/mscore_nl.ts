@@ -14233,7 +14233,7 @@ mislukt: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="145"/>
         <location filename="../../mscore/propertymenu.cpp" line="152"/>
-        <location filename="../../mscore/scoreview.cpp" line="404"/>
+        <location filename="../../mscore/scoreview.cpp" line="406"/>
         <source>Add</source>
         <translation>Voeg toe</translation>
     </message>
@@ -14271,7 +14271,7 @@ mislukt: %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="236"/>
         <location filename="../../mscore/propertymenu.cpp" line="254"/>
         <location filename="../../mscore/propertymenu.cpp" line="283"/>
-        <location filename="../../mscore/scoreview.cpp" line="391"/>
+        <location filename="../../mscore/scoreview.cpp" line="393"/>
         <source>Staff/Part Properties…</source>
         <translation>Notenbalk/partij-eigenschappen…</translation>
     </message>
@@ -14298,21 +14298,21 @@ mislukt: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="235"/>
         <location filename="../../mscore/propertymenu.cpp" line="253"/>
-        <location filename="../../mscore/scoreview.cpp" line="383"/>
+        <location filename="../../mscore/scoreview.cpp" line="385"/>
         <source>Staff</source>
         <translation>Notenbalk</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="241"/>
         <location filename="../../mscore/propertymenu.cpp" line="259"/>
-        <location filename="../../mscore/scoreview.cpp" line="397"/>
+        <location filename="../../mscore/scoreview.cpp" line="399"/>
         <source>Measure</source>
         <translation>Maat</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="242"/>
         <location filename="../../mscore/propertymenu.cpp" line="260"/>
-        <location filename="../../mscore/scoreview.cpp" line="416"/>
+        <location filename="../../mscore/scoreview.cpp" line="418"/>
         <source>Measure Properties…</source>
         <translation>Maat-eigenschappen</translation>
     </message>
@@ -14367,39 +14367,39 @@ mislukt: %2</translation>
         <translation>Hulp</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="384"/>
+        <location filename="../../mscore/scoreview.cpp" line="386"/>
         <source>Edit Drumset…</source>
         <translation>Bewerk drumset…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="388"/>
+        <location filename="../../mscore/scoreview.cpp" line="390"/>
         <source>Piano Roll Editor…</source>
         <translation>Pianorol bewerker…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="393"/>
+        <location filename="../../mscore/scoreview.cpp" line="395"/>
         <source>Split Staff…</source>
         <translation>Splits notenbalk…</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="411"/>
+        <location filename="../../mscore/scoreview.cpp" line="413"/>
         <source>Remove Selected Measures</source>
         <translation>Verwijder geselecteerde maten</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1605"/>
+        <location filename="../../mscore/scoreview.cpp" line="1607"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>Selecteer de volledige antimetrische figuur/tremolo en probeer de opdracht dan opnieuw</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2255"/>
+        <location filename="../../mscore/scoreview.cpp" line="2257"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>Geen maten geselecteerd:
 selecteer een bereik van maten om samen te voegen en probeer het dan opnieuw</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4107"/>
+        <location filename="../../mscore/scoreview.cpp" line="4109"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -14408,7 +14408,7 @@ gebruik het instrumentendialoogvenster om
 eerst een aantal notenbalken te creëren</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4189"/>
+        <location filename="../../mscore/scoreview.cpp" line="4191"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Geen maat geselecteerd:
@@ -24192,12 +24192,12 @@ mislukt:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2420"/>
         <source>Show Unprintable</source>
-        <translation>Laat niet-afdrukbare zien</translation>
+        <translation>Laat niet-afdrukbare objecten zien</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2421"/>
         <source>Show unprintable</source>
-        <translation>Geef niet-afdrukbare weer</translation>
+        <translation>Laat niet-afdrukbare objecten zien</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2431"/>
@@ -28024,7 +28024,7 @@ De maat is niet leeg</translation>
     <message>
         <location filename="../../mscore/magbox.cpp" line="53"/>
         <source>Whole Page</source>
-        <translation>Hele Pagina</translation>
+        <translation>Hele pagina</translation>
     </message>
     <message>
         <location filename="../../mscore/magbox.cpp" line="54"/>
