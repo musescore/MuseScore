@@ -64,7 +64,7 @@ struct PluginPackageDescription {
       };
 
 enum PluginStatus {
-      NOT_INSTALLED, INSTALL_FAILED,
+      NOT_INSTALLED, INSTALL_FAILED, INSTALL_FAILED_INVALID,
       ANALYZING, ANALYZE_FAILED,
       DOWNLOADING, DOWNLOAD_FAILED,
       UPDATED, UPDATE_AVAILABLE
@@ -93,7 +93,7 @@ public:
 public slots:
       bool analyzePluginPage(QString page_url); // replace ResourceManager::analyzePluginPage
       QString download(const QString& page_url, bool update = false); // replace Resource::downloadPluginPackage
-      bool install(QString& download_pkg);
+      bool install(QString& download_pkg, PluginStatus* result = nullptr);
       void downloadInstall(QPushButton* install);
       void updateInstall(QPushButton* install); // called in ResourceManager::updatePlugin()
       void checkUpdate(QPushButton* install);

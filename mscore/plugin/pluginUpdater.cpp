@@ -552,6 +552,7 @@ void ResourceManager::uninstallPluginPackage()
 static const std::map<PluginStatus, PluginButtonStatus> buttonStatuses = {
       {NOT_INSTALLED,{QObject::tr("Install"),true,false}},
       {INSTALL_FAILED,{QObject::tr("Install failed. Try again"),true,false}},
+      {INSTALL_FAILED_INVALID,{QObject::tr("Install failed. Invalid plugin."),false,false}},
       {ANALYZING,{QObject::tr("Analyzing"),false,false}},
       {ANALYZE_FAILED,{QObject::tr("Analyze failed. Try again"),true,false}},
       {DOWNLOADING,{QObject::tr("Downloading"),false,false}},
@@ -864,7 +865,8 @@ void PluginWorker::updateInstall(QPushButton* button)
             }
       button->setText(tr("Downloading..."));
       QString localPath = download(page_url, true);
-      if (install(localPath)) {
+      PluginStatus res;
+      if (install(localPath, &res)) {
             // add the new description item to the map
             PluginPackageDescription* p_update = desc.update;
             desc = *desc.update;
@@ -872,12 +874,12 @@ void PluginWorker::updateInstall(QPushButton* button)
             delete p_update;
             r->commitPlugin(page_url, desc);
             emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::UPDATED);
-            }
+      }
       else
-            emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::INSTALL_FAILED);
+            emit pluginStatusChanged(button->property("row").toInt(), res);
       }
 
-bool PluginWorker::install(QString& download_pkg)
+bool PluginWorker::install(QString& download_pkg, PluginStatus* result/*= nullptr*/)
       {
       QFileInfo f_pkg(download_pkg);
       QString suffix = f_pkg.suffix().toLower();
@@ -893,10 +895,20 @@ bool PluginWorker::install(QString& download_pkg)
             // root folder in plugin dir for them.
             // If zip contains a single directory, don't use that directory's name
             bool has_no_dir = true;
+            bool has_qml = false;
             std::set<QString> dirs;
             for (MQZipReader::FileInfo fi : allFiles) {
                   QString dir_root = fi.filePath.split('/').first();
                   dirs.insert(dir_root);
+                  if (fi.isFile && QFileInfo(fi.filePath).suffix() == "qml")
+                        has_qml = true;
+                  }
+            if (!has_qml) {
+                  // invalid plugin
+                  if (result)
+                        *result = INSTALL_FAILED_INVALID;
+                  QFile::remove(download_pkg);
+                  return false;
                   }
             if (dirs.size() == 1)
                   if (allFiles.size() > 1) // the element in dirs must be a dir then
@@ -962,14 +974,14 @@ void PluginWorker::downloadInstall(QPushButton* button)
             }
       button->setText(tr("Downloading…"));
       QString localPath = download(page_url);
-
-      if (install(localPath)) {
+      PluginStatus result;
+      if (install(localPath, &result)) {
             // add the new description item to the map
             r->commitPlugin(page_url, desc);
             emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::UPDATED);
             }
       else
-            emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::INSTALL_FAILED);
+            emit pluginStatusChanged(button->property("row").toInt(), result);
       }
 
 }
