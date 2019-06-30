@@ -2272,10 +2272,9 @@ qreal Element::rebaseOffset(bool nox)
 //    returns true if shape needs to be rebased
 //---------------------------------------------------------
 
-bool Element::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool fix)
+bool Element::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool above, bool fix)
       {
       bool rc = false;
-      bool above = isSpannerSegment() ? toSpannerSegment(this)->spanner()->placeAbove() : placeAbove();
       PropertyFlags pf = propertyFlags(Pid::MIN_DISTANCE);
       if (pf == PropertyFlags::STYLED)
             pf = PropertyFlags::UNSTYLED;
@@ -2369,7 +2368,7 @@ void Element::autoplaceSegmentElement(bool above, bool add)
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
                         bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
-                        if (rebaseMinDistance(minDistance, yd, sp, rebase, inStaff))
+                        if (rebaseMinDistance(minDistance, yd, sp, rebase, above, inStaff))
                               r.translate(0.0, rebase);
                         }
                   rypos() += yd;
@@ -2400,16 +2399,17 @@ void Element::autoplaceMeasureElement(bool above, bool add)
             qreal minDistance = _minDistance.val() * sp;
 
             SysStaff* ss = m->system()->staff(si);
-            QRectF r = bbox().translated(m->pos() + pos());
+            // shape rather than bbox is good for tuplets especially
+            Shape sh = shape().translated(m->pos() + pos());
 
             SkylineLine sk(!above);
             qreal d;
             if (above) {
-                  sk.add(r.x(), r.bottom(), r.width());
+                  sk.add(sh);
                   d = sk.minDistance(ss->skyline().north());
                   }
             else {
-                  sk.add(r.x(), r.top(), r.width());
+                  sk.add(sh);
                   d = ss->skyline().south().minDistance(sk);
                   }
             if (d > -minDistance) {
@@ -2419,15 +2419,15 @@ void Element::autoplaceMeasureElement(bool above, bool add)
                   if (offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
-                        if (rebaseMinDistance(minDistance, yd, sp, rebase, inStaff))
-                              r.translate(0.0, rebase);
+                        bool inStaff = above ? sh.bottom() + rebase > 0.0 : sh.top() + rebase < staff()->height();
+                        if (rebaseMinDistance(minDistance, yd, sp, rebase, above, inStaff))
+                              sh.translateY(rebase);
                         }
                   rypos() += yd;
-                  r.translate(QPointF(0.0, yd));
+                  sh.translateY(yd);
                   }
             if (add && addToSkyline())
-                  ss->skyline().add(r);
+                  ss->skyline().add(sh);
             }
       setOffsetChanged(false);
       }

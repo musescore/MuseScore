@@ -1156,7 +1156,7 @@ static const StyleType styleTypes[] {
       { Sid::vibratoMinDistance,            "vibratoMinDistance",            Spatium(1.0)  },
       { Sid::voltaMinDistance,              "voltaMinDistance",              Spatium(1.0)  },
       { Sid::figuredBassMinDistance,        "figuredBassMinDistance",        Spatium(0.5)  },
-      { Sid::tupletMinDistance,             "tupletMinDistance",             Spatium(1.0)  },
+      { Sid::tupletMinDistance,             "tupletMinDistance",             Spatium(0.5)  },
 
       { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
 
