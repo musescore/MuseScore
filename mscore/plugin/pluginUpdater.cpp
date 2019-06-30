@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "musescore.h"
+#include "preferences.h"
 #include "resourceManager.h"
 #include "downloadUtils.h"
 #include "plugin/pluginUpdater.h"
@@ -501,6 +502,19 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
       }
 
 //---------------------------------------------------------
+//   updatePlugin
+//---------------------------------------------------------
+void ResourceManager::updatePlugin()
+      {
+      QPushButton* button = static_cast<QPushButton*>(sender());
+      PluginPackageDescription& desc = pluginDescriptionMap[button->property("page_url").toString()];
+      button->setEnabled(false);
+      button->setText(tr("Pending…"));
+      PluginWorker* worker = new PluginWorker(desc, this);
+      QtConcurrent::run(&workerThreadPool, worker, &PluginWorker::updateInstall, button);
+      }
+
+//---------------------------------------------------------
 //   downloadInstallPlugin
 //---------------------------------------------------------
 
@@ -714,6 +728,8 @@ void PluginWorker::checkUpdate(QPushButton* install)
       install->setEnabled(false);
       install->setText("Checking for update…");
       bool should_update = analyzePluginPage("https://musescore.org" + page_url);
+      // very hack here. should be improved.
+      *desc_tmp = desc;
       desc = desc_backup;
       if (should_update) {
             desc.update = desc_tmp;
@@ -819,35 +835,53 @@ bool PluginWorker::analyzePluginPage(QString full_url)
             return false;
       }
 
-QString PluginWorker::download(const QString& page_url)
+QString PluginWorker::download(const QString& page_url, bool update/* = false*/)
       {
+      PluginPackageDescription* src = update ? desc.update : &desc;
       DownloadUtils package(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy);
-      package.setTarget(desc.direct_link);
-      // TODO: try to get extension name from direct_link, and add it to localPath
-      QString localPath = dataPath + "/plugins/" + filenameBaseFromPageURL(page_url);
-      if (desc.source == GITHUB || desc.source == GITHUB_RELEASE)
+      package.setTarget(src->direct_link);
+      QString localPath = QFileInfo(preferences.getString(PREF_APP_PATHS_MYPLUGINS), filenameBaseFromPageURL(page_url)).absoluteFilePath();
+      if (src->source == GITHUB || src->source == GITHUB_RELEASE)
             localPath += ".zip";
-      else if (desc.source == ATTACHMENT)
-            localPath += "." + QFileInfo(desc.direct_link).suffix();
-      QDir().mkpath(dataPath + "/plugins");
+      else if (src->source == ATTACHMENT)
+            localPath += "." + QFileInfo(src->direct_link).suffix();
       package.setLocalFile(localPath);
       package.download();
+      QDir().mkpath(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
       package.saveFile();
       // update the timestamp again
-      desc.last_modified = package.getHeader(QNetworkRequest::LastModifiedHeader).toDateTime();
+      src->last_modified = package.getHeader(QNetworkRequest::LastModifiedHeader).toDateTime();
       return localPath;
       }
 
-void PluginWorker::updateInstall()
+void PluginWorker::updateInstall(QPushButton* button)
       {
-
+      const QString& page_url = button->property("page_url").toString();
+      Q_ASSERT(desc.update != nullptr);
+      if (desc.update->source == UNKNOWN) {
+            button->setText(tr("Unknown plugin source."));
+            return;
+            }
+      button->setText(tr("Downloading..."));
+      QString localPath = download(page_url, true);
+      if (install(localPath)) {
+            // add the new description item to the map
+            PluginPackageDescription* p_update = desc.update;
+            desc = *desc.update;
+            desc.update = nullptr;
+            delete p_update;
+            r->commitPlugin(page_url, desc);
+            emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::UPDATED);
+            }
+      else
+            emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::INSTALL_FAILED);
       }
 
 bool PluginWorker::install(QString& download_pkg)
       {
       QFileInfo f_pkg(download_pkg);
       QString suffix = f_pkg.suffix().toLower();
-      QString destination_prefix = dataPath + "/plugins" + "/" + f_pkg.completeBaseName();
+      QString destination_prefix = QFileInfo(preferences.getString(PREF_APP_PATHS_MYPLUGINS), f_pkg.completeBaseName()).absoluteFilePath();
       QDir().mkdir(destination_prefix);
       desc.dir = destination_prefix;
       if (suffix == "zip") {
@@ -933,12 +967,9 @@ void PluginWorker::downloadInstall(QPushButton* button)
             // add the new description item to the map
             r->commitPlugin(page_url, desc);
             emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::UPDATED);
-            
-      }
-      else {
+            }
+      else
             emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::INSTALL_FAILED);
-            return;
-      }
       }
 
 }

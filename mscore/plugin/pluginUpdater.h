@@ -92,10 +92,10 @@ public:
       PluginWorker(PluginPackageDescription& desc, ResourceManager* r);
 public slots:
       bool analyzePluginPage(QString page_url); // replace ResourceManager::analyzePluginPage
-      QString download(const QString& page_url); // replace Resource::downloadPluginPackage
+      QString download(const QString& page_url, bool update = false); // replace Resource::downloadPluginPackage
       bool install(QString& download_pkg);
       void downloadInstall(QPushButton* install);
-      void updateInstall(); // called in ResourceManager::updatePlugin()
+      void updateInstall(QPushButton* install); // called in ResourceManager::updatePlugin()
       void checkUpdate(QPushButton* install);
       void timeconsume();
 

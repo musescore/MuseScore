@@ -75,6 +75,7 @@ private slots:
     void scanPluginUpdate();
     void downloadExtension();
     void downloadInstallPlugin();
+    void updatePlugin();
     void uninstallPluginPackage();
     void uninstallExtension();
     void refreshPluginButton(int row, PluginStatus status);
