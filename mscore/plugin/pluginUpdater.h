@@ -112,6 +112,5 @@ private:
 
 } // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::PluginStatus);
 
 #endif

@@ -32,7 +32,7 @@ ResourceManager::ResourceManager(QWidget *parent) :
       
 #ifndef NDEBUG
       QPushButton* check_update = new QPushButton();
-      check_update->setText("Check for Update");
+      check_update->setText(tr("Check for Update"));
       bottom_layout->addWidget(check_update);
       connect(check_update, SIGNAL(clicked()), this, SLOT(scanPluginUpdate()));
 #endif // !NDEBUG
@@ -44,6 +44,7 @@ ResourceManager::ResourceManager(QWidget *parent) :
       displayLanguages();
       displayPluginRepo();
       displayPlugins();
+
       QObject::connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(filterPluginList()));
       QObject::connect(categories, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ResourceManager::filterPluginList);
       languagesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);

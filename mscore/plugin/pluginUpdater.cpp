@@ -19,7 +19,7 @@
 
 namespace Ms {
 
-static int PluginStatus_id = qRegisterMetaType<PluginStatus>();
+static int PluginStatus_id = qRegisterMetaType<PluginStatus>("PluginStatus");
 
 static inline std::tuple<bool, bool, bool> compatFromString(const QString& raw) {
       return std::make_tuple(raw.contains("1.x"), raw.contains("2.x"), raw.contains("3.x"));
@@ -195,10 +195,10 @@ void ResourceManager::displayPluginRepo()
             uninstall_button->setProperty("row", row);
             uninstall_button->setEnabled(false);
             connect(uninstall_button, SIGNAL(clicked()), this, SLOT(uninstallPluginPackage()));
-
             pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col++), install_button);
             pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col), uninstall_button);
-            refreshPluginButton(row);
+            bool installed = pluginDescriptionMap.contains(page_url);
+            refreshPluginButton(row, installed ? PluginStatus::UPDATED : PluginStatus::NOT_INSTALLED);
             }
       categories->insertItems(0, all_categories);
       }
@@ -418,7 +418,7 @@ void ResourceManager::scanPluginUpdate()
             // if installed
             if (pluginDescriptionMap.contains(page_url)) {
                   install->setEnabled(false);
-                  install->setText("Pending��");
+                  install->setText(tr("Pending…"));
                   PluginWorker* worker = new PluginWorker(pluginDescriptionMap[page_url], this);
                   QtConcurrent::run(&workerThreadPool, worker, &PluginWorker::checkUpdate, install);
                   }
@@ -508,7 +508,7 @@ void ResourceManager::downloadInstallPlugin()
       {
       QPushButton* button = static_cast<QPushButton*>(sender());
       button->setEnabled(false);
-      button->setText("Pending...");
+      button->setText(tr("Pending…"));
       PluginWorker* worker = new PluginWorker(this);
       QtConcurrent::run(&workerThreadPool, worker, &PluginWorker::downloadInstall, button);
       }
@@ -526,24 +526,24 @@ void ResourceManager::uninstallPluginPackage()
       // then remove the folder
       QDir d(desc.dir);
       if (!d.removeRecursively()) {
-            button->setText("Failed, try again");
+            button->setText(tr("Failed, try again"));
             return;
             }
       pluginDescriptionMap.remove(url);
-      refreshPluginButton(button->property("row").toInt());
+      refreshPluginButton(button->property("row").toInt(), PluginStatus::NOT_INSTALLED);
       writePluginPackages();
       displayPlugins();
       }
 
 static const std::map<PluginStatus, PluginButtonStatus> buttonStatuses = {
-      {NOT_INSTALLED,{"Uninstall",true,false}},
-      {INSTALL_FAILED,{"Fail to install. Try again",true,false}},
-      {ANALYZING,{"Analyzing",false,false}},
-      {ANALYZE_FAILED,{"Analyze failed. Try again",true,false}},
-      {DOWNLOADING,{"Downloading",false,false}},
-      {DOWNLOAD_FAILED,{"Download failed. Try again",true,false}},
-      {UPDATED,{"Updated",false,true}},
-      {UPDATE_AVAILABLE,{"Update",true,true}}
+      {NOT_INSTALLED,{QObject::tr("Install"),true,false}},
+      {INSTALL_FAILED,{QObject::tr("Install failed. Try again"),true,false}},
+      {ANALYZING,{QObject::tr("Analyzing"),false,false}},
+      {ANALYZE_FAILED,{QObject::tr("Analyze failed. Try again"),true,false}},
+      {DOWNLOADING,{QObject::tr("Downloading"),false,false}},
+      {DOWNLOAD_FAILED,{QObject::tr("Download failed. Try again"),true,false}},
+      {UPDATED,{QObject::tr("Updated"),false,true}},
+      {UPDATE_AVAILABLE,{QObject::tr("Update"),true,true}}
       };
 
 void ResourceManager::refreshPluginButton(int row, bool updated/* = true*/)
@@ -698,7 +698,7 @@ bool ResourceManager::readPluginPackages()
 
 PluginWorker::PluginWorker(ResourceManager* r) : r(r)
       {
-      QObject::connect(this, SIGNAL(pluginStatusChanged(int, PluginStatus)), r, SLOT(refreshPluginButton(int,PluginStatus)));
+      QObject::connect(this, SIGNAL(pluginStatusChanged(int, PluginStatus)), r, SLOT(refreshPluginButton(int, PluginStatus)));
       }
 
 PluginWorker::PluginWorker(PluginPackageDescription& desc, ResourceManager* r) : desc(desc), r(r)
@@ -712,7 +712,7 @@ void PluginWorker::checkUpdate(QPushButton* install)
       PluginPackageDescription* desc_tmp = new PluginPackageDescription(desc);
       PluginPackageDescription desc_backup = desc;
       install->setEnabled(false);
-      install->setText("Checking for update...");
+      install->setText("Checking for update…");
       bool should_update = analyzePluginPage("https://musescore.org" + page_url);
       desc = desc_backup;
       if (should_update) {
@@ -917,16 +917,16 @@ bool PluginWorker::install(QString& download_pkg)
 void PluginWorker::downloadInstall(QPushButton* button)
       {
       button->setEnabled(false);
-      button->setText(tr("Analyzing..."));
+      button->setText(tr("Analyzing…"));
       QString page_url = button->property("page_url").toString();
       desc.package_name = button->property("name").toString();
       analyzePluginPage("https://musescore.org" + page_url);
       if (desc.source == UNKNOWN) {
-            button->setText("Unknown plugin source.");
+            button->setText(tr("Unknown plugin source."));
             button->setEnabled(true);
             return;
             }
-      button->setText(tr("Downloading..."));
+      button->setText(tr("Downloading…"));
       QString localPath = download(page_url);
 
       if (install(localPath)) {
