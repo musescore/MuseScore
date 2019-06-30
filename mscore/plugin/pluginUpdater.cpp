@@ -606,6 +606,12 @@ void ResourceManager::refreshPluginButton(int row, PluginStatus status)
       uninstall->setEnabled(button_stat.uninstall_enable);
       }
 
+void ResourceManager::commitPlugin(const QString & url, PluginPackageDescription & desc)
+{
+      pluginDescriptionMap[url] = desc;
+      writePluginPackages();
+      displayPlugins();
+}
 
 //---------------------------------------------------------
 //   writePluginPackages
