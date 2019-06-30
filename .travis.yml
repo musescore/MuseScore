@@ -78,7 +78,7 @@ matrix:
 
     - env: "JOB=MacOSX"
       os: osx
-      osx_image: xcode10.2
+      osx_image: xcode9.4
       before_install:
         - source build/travis/job_macos/before_install.sh
       install:
