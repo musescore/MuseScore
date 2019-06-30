@@ -653,7 +653,7 @@ void Articulation::doAutoplace()
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
                         //bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
-                        if (rebaseMinDistance(md, yd, sp, rebase, true))
+                        if (rebaseMinDistance(md, yd, sp, rebase, above, true))
                               r.translate(0.0, rebase);
                         }
                   rypos() += yd;
