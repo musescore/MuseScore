@@ -363,26 +363,24 @@ void TourHandler::positionMessage(QList<QWidget*> widgets, QMessageBox* mbox)
       QPoint displayPoint(0, 0);
       if (topBottom) {
             bool displayAbove = (widgetsBox.center().y() > midY);
-            if (displayAbove) {
-                  int mBoxHeight = mbox->size().height() + 15; // hack
-                  int y = widgetsBox.top();
-                  displayPoint.setY(y - mBoxHeight);
-                  }
+            int mBoxHeight = mbox->frameGeometry().height();
+            int y = widgetsBox.top();
+            if (displayAbove)
+                  displayPoint.setY(y - mBoxHeight - 1);
             else
-                  displayPoint.setY(widgetsBox.bottom());
+                  displayPoint.setY(y + mBoxHeight + 1);
 
             int x = (int) (widgetsBox.width() - mbox->size().width()) / 2 + widgetsBox.left();
             displayPoint.setX(x);
             }
       else {
             bool displayLeft = (widgetsBox.center().x() > midX);
-            if (displayLeft) {
-                  int mBoxWidth = mbox->size().width();
-                  int x = widgetsBox.left();
-                  displayPoint.setX(x - mBoxWidth);
-                  }
+            int mBoxWidth = mbox->frameGeometry().width();
+            int x = widgetsBox.left();
+            if (displayLeft)
+                  displayPoint.setX(x - mBoxWidth - 1);
             else
-                  displayPoint.setX(widgetsBox.right());
+                  displayPoint.setX(x + mBoxWidth + 1);
 
             int y = (widgetsBox.height() - mbox->size().height()) / 2 + widgetsBox.top();
             displayPoint.setY(y);
