@@ -23,10 +23,15 @@
 
 namespace Ms {
 
-enum class MixerVolumeMode : int { Override = 1, Ratio, PrimaryInstrument, };
+enum class MixerVolumeMode : int { Override = 1, Ratio, PrimaryInstrument };
+
 
 class MixerOptions
 {
+   public:
+      enum class MixerSecondarySlider : int { Pan = 1, Reverb, Chorus };
+
+   private:
 
       bool _showTrackColors;
       bool _detailsOnTheSide;
@@ -34,8 +39,10 @@ class MixerOptions
       bool _showingDetails;
       bool _showMasterVolume;
       MixerVolumeMode _mode;
+      MixerSecondarySlider _secondarySlider;
 
-public:
+
+   public:
       MixerOptions();
       bool showTrackColors() { return _showTrackColors; };
       bool showDetailsOnTheSide() { return _detailsOnTheSide; };
@@ -43,15 +50,19 @@ public:
       bool showingDetails() { return _showingDetails; };
       bool showMasterVolume() { return _showMasterVolume; };
       MixerVolumeMode mode() { return _mode; };
+      MixerSecondarySlider secondarySlider() { return _secondarySlider; };
 
       void setTrackColors(bool show) { _showTrackColors = show; writeSettings(); };
       void setDetailsOnTheSide(bool show) { _detailsOnTheSide = show; writeSettings(); };
       void setMidiOptions(bool show) { _showMidiOptions = show; writeSettings(); };
       void setShowingDetails(bool show) { _showingDetails = show; writeSettings(); }
-      void setMode(MixerVolumeMode mode) { _mode = mode; writeSettings(); };
       void setShowMasterVolume(bool show) { _showMasterVolume = show; writeSettings(); };
+      void setMode(MixerVolumeMode mode) { _mode = mode; writeSettings(); };
+      void setSecondarySlider(MixerSecondarySlider secondary) { _secondarySlider = secondary; }
       void readSettings();
       void writeSettings();
+
+      bool secondaryModeOn;
 
 };
 

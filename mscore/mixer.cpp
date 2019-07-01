@@ -84,8 +84,55 @@ Mixer::Mixer(QWidget* parent)
       updateTracks();
       updateUiOptions();
       retranslate(true);
+
+      shiftKeyMonitorTimer = new QTimer(this);
+      connect(shiftKeyMonitorTimer, SIGNAL(timeout()), this, SLOT(shiftKeyMonitor()));
+      shiftKeyMonitorTimer->start(100);
       }
 
+      void Mixer::shiftKeyMonitor() {
+
+            bool focus = hasFocus();
+
+            if (!focus) {
+                  for (QWidget* child : findChildren<QWidget*>()) {
+                        if (child->hasFocus()) {
+                              focus = true;
+                              break;
+                        }
+                  }
+            }
+
+
+            if (!focus) {
+                  if (options->secondaryModeOn) {
+                        qDebug()<<"Exiting secondary mode because we don't have the focus.";
+                        options->secondaryModeOn = false;
+                        mixerTreeWidget->setHeaderLabels({tr("Instrument"), tr("Volume")});
+                        return;
+                  }
+                  else {
+                        return;
+                  }
+            }
+
+
+            if (QApplication::queryKeyboardModifiers() & Qt::KeyboardModifier::ShiftModifier) {
+                  if (options->secondaryModeOn)
+                        return;
+
+                  qDebug()<<"Entering secondary mode";
+                  options->secondaryModeOn = true;
+                  mixerTreeWidget->setHeaderLabels({tr("Instrument"), tr("Pan")});
+                  return;
+            }
+
+            if (options->secondaryModeOn) {
+                  options->secondaryModeOn = false;
+                  qDebug()<<"Exiting secondary mode";
+                  mixerTreeWidget->setHeaderLabels({tr("Instrument"), tr("Volume")});
+            }
+      }
 
 void Mixer::setupSlotsAndSignals()
       {
@@ -418,6 +465,8 @@ bool Mixer::eventFilter(QObject* object, QEvent* event)
                   }
             }
 
+
+
       return QWidget::eventFilter(object, event);
       }
 
@@ -432,7 +481,7 @@ bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
             }
       
       QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-      
+
       if (keyEvent->key() == Qt::Key_Period && keyEvent->modifiers() == Qt::NoModifier) {
             qDebug()<<"Volume up keyboard command";
             if (selectedMixerTrackItem && int(selectedMixerTrackItem->getVolume()) < 128) {

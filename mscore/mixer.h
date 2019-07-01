@@ -57,6 +57,7 @@ class Mixer : public QDockWidget, public Ui::Mixer
       QSet<Part*> expandedParts;                      //TOD: expandedParts - from old mixer code - re-implement
       int savedSelectionTopLevelIndex;
       int savedSelectionChildIndex;
+      QTimer* shiftKeyMonitorTimer;
 
       MixerKeyboardControlFilter* keyboardFilter;     // process key presses for the mixer AND the details panel
       virtual void closeEvent(QCloseEvent*) override;
@@ -75,6 +76,8 @@ class Mixer : public QDockWidget, public Ui::Mixer
    private slots:
       void on_partOnlyCheckBox_toggled(bool checked);
       void itemCollapsedOrExpanded(QTreeWidgetItem*);
+      void shiftKeyMonitor();
+
 
    public slots:
       void updateTracks();

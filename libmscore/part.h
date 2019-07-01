@@ -53,7 +53,7 @@ class Part final : public ScoreElement {
 
       static const int DEFAULT_COLOR = 0x3399ff;
       int _color;                   ///User specified color for helping to label parts
-      bool _expanded;               // Used by the mixer
+      bool _expanded = false;       // Used by the mixer
    public:
       Part(Score* = 0);
       void initFromInstrTemplate(const InstrumentTemplate*);

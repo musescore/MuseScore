@@ -56,7 +56,7 @@ namespace Ms {
             }
 
             _mode = convertEnum;
-
+            _secondarySlider = static_cast<MixerSecondarySlider>(settings.value("secondarySlider", 1).toInt());
       }
 
       void MixerOptions::writeSettings() {
@@ -84,6 +84,7 @@ namespace Ms {
             }
 
             settings.setValue("sliderMode", convertEnum);
+            settings.setValue("secondarySlider", static_cast<int>(_secondarySlider));
             settings.endGroup();
       }
 

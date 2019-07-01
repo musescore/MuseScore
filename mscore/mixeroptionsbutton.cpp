@@ -132,7 +132,7 @@ namespace Ms {
 
       void MixerOptionsButton::createMenuActionsAndGroupings()
       {
-            showDetailsToTheSide = new QAction(tr("Show More… to the Side"));
+            showDetailsToTheSide = new QAction(tr("Show Details to the Side"));
             showDetailsToTheSide->setCheckable(true);
 
             showTrackColors = new QAction(tr("Show Track Colors"));
