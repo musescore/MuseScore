@@ -123,7 +123,21 @@ Mixer::Mixer(QWidget* parent)
 
                   qDebug()<<"Entering secondary mode";
                   options->secondaryModeOn = true;
-                  mixerTreeWidget->setHeaderLabels({tr("Instrument"), tr("Pan")});
+
+                  QString secondary;
+
+                  switch (options->secondarySlider()) {
+                        case MixerOptions::MixerSecondarySlider::Pan:
+                              secondary = tr("Pan");
+                              break;
+                        case MixerOptions::MixerSecondarySlider::Reverb:
+                              secondary = tr("Reverb");
+                              break;
+                        case MixerOptions::MixerSecondarySlider::Chorus:
+                             secondary = tr("Chorus");
+                  }
+
+                  mixerTreeWidget->setHeaderLabels({tr("Instrument"), secondary});
                   return;
             }
 

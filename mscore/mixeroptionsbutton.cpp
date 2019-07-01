@@ -69,8 +69,16 @@ namespace Ms {
             overallVolumeRatioMode->setChecked(options->mode() == MixerVolumeMode::Ratio);
             overallVolumeFirstMode->setChecked(options->mode() == MixerVolumeMode::PrimaryInstrument);
 
-            //TODO::setup the secondary slider modes
+            bool choosingPan = options->secondarySlider() == MixerOptions::MixerSecondarySlider::Pan;
+            bool choosingRev = options->secondarySlider() == MixerOptions::MixerSecondarySlider::Reverb;
 
+            qDebug()<<"choosing pan is: "<<choosingPan;
+            qDebug()<<"choosing reverb is: "<<choosingRev;
+
+
+            makePanSecondarySlider->setChecked(options->secondarySlider() == MixerOptions::MixerSecondarySlider::Pan);
+            makeReverbSecondarySlider->setChecked(options->secondarySlider() == MixerOptions::MixerSecondarySlider::Reverb);
+            makeChorusSecondarySlider->setChecked(options->secondarySlider() == MixerOptions::MixerSecondarySlider::Chorus);
       }
 
       void MixerOptionsButton::adjustOptionsInLineWithMenu()
@@ -103,8 +111,24 @@ namespace Ms {
             }
             options->setMode(mode);
 
-            //TODO::setup the secondary slider modes
-
+            MixerOptions::MixerSecondarySlider secondarySlider;
+            if (makePanSecondarySlider->isChecked()) {
+                  secondarySlider = MixerOptions::MixerSecondarySlider::Pan;
+            }
+            else if (makeReverbSecondarySlider->isChecked()) {
+                  secondarySlider = MixerOptions::MixerSecondarySlider::Reverb;
+            }
+            else if (makeChorusSecondarySlider->isChecked()) {
+                  secondarySlider = MixerOptions::MixerSecondarySlider::Chorus;
+            }
+            else {
+                  // something's gone awry - let's just fix it up
+                  makePanSecondarySlider->setChecked(true);
+                  makeReverbSecondarySlider->setChecked(false);
+                  makeChorusSecondarySlider->setChecked(false);
+                  secondarySlider = MixerOptions::MixerSecondarySlider::Pan;;
+            }
+            options->setSecondarySlider(secondarySlider);
       }
 
 
