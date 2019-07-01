@@ -433,15 +433,11 @@ bool PaletteBox::read(XmlReader& e)
                   p->setName(name);
                   QTreeWidgetItem* paletteItem = new QTreeWidgetItem(tree);
                   paletteItem->setText(0,name);
-                  qDebug() << "PaletteBox read: "<< name;
                   PaletteList* paletteList = new PaletteList(tree);
                   QTreeWidgetItem* paletteElementsItem = new QTreeWidgetItem(paletteItem);
                   tree->setItemWidget(paletteElementsItem, 0, paletteList);
                   paletteList->read(e);
                   paletteList->QAbstractScrollArea::setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-                  //p->read(e);
-                  //addPalette(p);
-                  //connect(p, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   }
             else
                   e.unknown();
@@ -613,7 +609,28 @@ bool PaletteBox::eventFilter(QObject* obj, QEvent *event)
       return QDockWidget::eventFilter(obj, event);
       }
 
-//void PaletteTree::resizeEvent()
-
+void PaletteTree::resizeEvent(QResizeEvent* event)
+      {
+      QTreeWidget::resizeEvent(event);
+      int numPalettes = topLevelItemCount();
+      for (int i = 0; i < numPalettes; i++) {
+            QTreeWidgetItem* paletteItem = topLevelItem(i);
+            qDebug()<<paletteItem->childCount();
+            QTreeWidgetItem* paletteChild = paletteItem->child(0);
+            if (paletteChild && !paletteChild->isHidden()) {
+                  paletteChild->setHidden(true);
+                  paletteChild->setHidden(false);
+            }
+            /* //The below code fixes the issue but crashes after changing the width of the palette
+            if (paletteItem->isExpanded()) {
+                  paletteItem->setExpanded(false); // hide all children
+                  paletteItem->setExpanded(true); // show (and redraw) all children
+            }else{
+                  paletteItem->setExpanded(true);
+                  paletteItem->setExpanded(false);
+                  }  
+            */
+            //qDebug()<<"This is the "<<i<<"th PaletteItem";
+            }
+      }
 }
-
