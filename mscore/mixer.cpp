@@ -18,7 +18,6 @@
 //=============================================================================
 
 #include "musescore.h"
-//#include "parteditbase.h"
 
 #include "libmscore/excerpt.h"
 #include "libmscore/score.h"
@@ -29,16 +28,14 @@
 #include "synthcontrol.h"
 #include "synthesizer/msynthesizer.h"
 #include "preferences.h"
-#include <QtGlobal>
-#include <qmessagebox.h>
-#include <accessibletoolbutton.h>
-#include "mixerdetails.h"
-#include "mixertrack.h"
-#include "mixertrackchannel.h"
-#include "mixertrackpart.h"
-#include "mixertrackitem.h"
-#include "awl/fastlog.h"
 
+#include <accessibletoolbutton.h>
+
+#include "mixerdetails.h"
+#include "mixertrackchannel.h"
+#include "mixertrackitem.h"
+#include "mixeroptions.h"
+#include "mixeroptionsbutton.h"
 
 namespace Ms {
 
@@ -52,22 +49,6 @@ namespace Ms {
       __x->setChecked(__y); \
       __x->blockSignals(false);
 
-
-double volumeToUserRange(char v) { return v * 100.0 / 128.0; }
-double panToUserRange(char v) { return (v / 128.0) * 360.0; }
-double chorusToUserRange(char v) { return v * 100.0 / 128.0; }
-double reverbToUserRange(char v) { return v * 100.0 / 128.0; }
-
-const float minDecibels = -3;
-
-//0 to 100
-char userRangeToVolume(double v) { return (char)qBound(0, (int)(v / 100.0 * 128.0), 127); }
-//-180 to 180
-char userRangeToPan(double v) { return (char)qBound(0, (int)((v / 360.0) * 128.0), 127); }
-//0 to 100
-char userRangeToChorus(double v) { return (char)qBound(0, (int)(v / 100.0 * 128.0), 127); }
-//0 to 100
-char userRangeToReverb(double v) { return (char)qBound(0, (int)(v / 100.0 * 128.0), 127); }
 
 // initialise the static
 MixerOptions* Mixer::options = new MixerOptions(); // will read from settings
@@ -89,9 +70,6 @@ Mixer::Mixer(QWidget* parent)
 
       gridLayout = new QGridLayout(dockWidgetContents);
       mixerDetails = new MixerDetails(this);
-      contextMenu = new MixerContextMenu(this);
-
-      qDebug()<<"option showingDetails() = "<<options->showingDetails();
 
       showDetails(options->showingDetails());
 
@@ -100,13 +78,12 @@ Mixer::Mixer(QWidget* parent)
       mixerTreeWidget->installEventFilter(keyboardFilter);
 
       savedSelectionTopLevelIndex = -1;   // no saved selection (bit of a magic number :( )
-      showDetailsButton->setChecked(options->showingDetails());
 
       enablePlay = new EnablePlayForWidget(this);
-      retranslate(true);
       setupSlotsAndSignals();
       updateTracks();
       updateUiOptions();
+      retranslate(true);
       }
 
 
@@ -114,7 +91,6 @@ void Mixer::setupSlotsAndSignals()
       {
       connect(mixerTreeWidget,SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),SLOT(currentMixerTreeItemChanged()));
       connect(synti,SIGNAL(gainChanged(float)),SLOT(synthGainChanged(float)));
-      connect(showDetailsButton,SIGNAL(clicked()),SLOT(showDetailsClicked()));
 
       connect(mixerTreeWidget->header(), SIGNAL(geometriesChanged()), this, SLOT(adjustHeaderWidths()));
       connect(mixerTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(itemCollapsedOrExpanded(QTreeWidgetItem*)));
@@ -146,6 +122,8 @@ void Mixer::setupAdditionalUi()
 
       mixerTreeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
       adjustHeaderWidths();
+
+      showDetailsButton->setTarget(this);
       }
 
 
@@ -177,13 +155,15 @@ void Mixer::adjustHeaderWidths()
 
 void Mixer::retranslate(bool firstTime)
       {
-      setWindowTitle(tr("Mixer"));  //TODO: translate instrument / channel names
-      //      if (!firstTime) {
-      //            for (int i = 0; i < trackAreaLayout->count(); i++) {
-      //                  PartEdit* p = getPartAtIndex(i);
-      //                  if (p) p->retranslateUi(p);
-      //                  }
-      //            }
+      setWindowTitle(tr("Mixer"));
+      if (firstTime)
+            return;
+
+      retranslateUi(this);
+      mixerDetails->retranslateUi(mixerDetails);
+      //TODO: retranslate section headers
+      //TODO: retranslate the "slider options" button (if it's still called that)
+      //TODO: retranslate instrument names (but do they have translations)
       }
 
 //MARK:- main interface
@@ -237,45 +217,6 @@ void Mixer::setPlaybackScore(Score* score)
 
 
 
-//MARK:- user actions (including context menu)
-void Mixer::showDetailsBelow()
-      {
-      qDebug()<<"showDetailsBelow toggle -  menu item triggered.";
-      options->setDetailsOnTheSide(contextMenu->detailToSide->isChecked());
-      updateUiOptions();
-      }
-
-void Mixer::showMidiOptions()
-      {
-      qDebug()<<"Show/Hide Midi toggle - menu action triggered.";
-      options->setMidiOptions(contextMenu->showMidiOptions->isChecked());
-      updateUiOptions();
-      }
-
-void Mixer::showTrackColors()
-      {
-      options->setTrackColors(contextMenu->showTrackColors->isChecked());
-      updateUiOptions();
-      }
-
-void Mixer::showMasterVolume()
-      {
-      options->setShowMasterVolume(contextMenu->showMasterVolume->isChecked());
-      updateUiOptions();
-      }
-
-void Mixer::updateVolumeMode()
-      {
-      if (contextMenu->overallVolumeOverrideMode->isChecked())
-            options->setMode(MixerVolumeMode::Override);
-
-      if (contextMenu->overallVolumeRatioMode->isChecked())
-            options->setMode(MixerVolumeMode::Ratio);
-
-      if (contextMenu->overallVolumeFirstMode->isChecked())
-            options->setMode(MixerVolumeMode::PrimaryInstrument);
-      }
-
 void Mixer::updateUiOptions()
       {
 
@@ -298,63 +239,49 @@ void Mixer::updateUiOptions()
       // layout of master volume (is affected by presence or absence or track color
       masterChannelWidget->updateUiControls();
 
-      mixerDetails->setVisible(options->showingDetails());
+      showDetails(options->showingDetails());
 
-      QIcon showDetailsIcon;
       bool showMasterVol = options->showMasterVolume();
 
       if (options->showDetailsOnTheSide()) {
             // show TO THE SIDE case
-            showDetailsIcon.addFile(QString::fromUtf8(":/data/icons/go-next.svg"), QSize(), QIcon::Normal, QIcon::Off);
 
             // addWidget(row, column, rowSpan, columnSpan, [Qt::Alignment])
-            gridLayout->addWidget(mixerTreeWidget, 0, 0, 1, 2);
+            gridLayout->addWidget(partOnlyCheckBox, 0, 1, 1, 1, Qt::AlignRight);
+            gridLayout->addWidget(showDetailsButton, 0, 0, 1, 1);
+            gridLayout->addWidget(mixerTreeWidget, 1, 0, 1, 2);
             if (showMasterVol) {
-                  gridLayout->addWidget(masterVolumeTreeWidget, 1, 0, 1, 2);
+                  gridLayout->addWidget(masterVolumeTreeWidget, 2, 0, 1, 2);
                   masterVolumeTreeWidget->setVisible(true);
                   }
             else {
                   masterVolumeTreeWidget->setVisible(false);
                   }
-            gridLayout->addWidget(partOnlyCheckBox, showMasterVol ? 2 : 1, 0, 1, 1);
-            gridLayout->addWidget(showDetailsButton, showMasterVol ? 2 : 1, 1, 1, 1);
-            gridLayout->addWidget(mixerDetails, 0, 3, showMasterVol ? 3 : 2, 1, Qt::AlignTop);
+
+            gridLayout->addWidget(mixerDetails, 0, 2, showMasterVol ? 3 : 2, 1, Qt::AlignTop);
             }
       else {
             // show BELOW case
-            showDetailsIcon.addFile(QString::fromUtf8(":/data/icons/arrow_down.svg"), QSize(), QIcon::Normal, QIcon::Off);
-            gridLayout->addWidget(mixerTreeWidget, 0, 0, 1, 2);
+
+            // addWidget(row, column, rowSpan, columnSpan, [Qt::Alignment])
+            gridLayout->addWidget(partOnlyCheckBox, 0, 1, 1, 1, Qt::AlignRight);
+            gridLayout->addWidget(showDetailsButton, 0, 0, 1, 1);
+            gridLayout->addWidget(mixerTreeWidget, 1, 0, 1, 2);
             if (showMasterVol) {
-                  gridLayout->addWidget(masterVolumeTreeWidget, 1, 0, 1, 2);
+                  gridLayout->addWidget(masterVolumeTreeWidget, 2, 0, 1, 2);
                   masterVolumeTreeWidget->setVisible(true);
                   }
             else {
                   masterVolumeTreeWidget->setVisible(false);
                   }
-            gridLayout->addWidget(partOnlyCheckBox, showMasterVol ? 2 : 1, 0, 1, 1);
-            gridLayout->addWidget(showDetailsButton, showMasterVol ? 2 : 1, 1, 1, 1);
+
             gridLayout->addWidget(mixerDetails, showMasterVol ? 3 : 2, 0, 1 , 2, Qt::AlignTop);
 
-            gridLayout->setRowStretch(0,10);
+            gridLayout->setRowStretch(1,10);
             }
-
-      showDetailsButton->setIcon(showDetailsIcon);
       }
 
-void Mixer::contextMenuEvent(QContextMenuEvent *event)
-      {
-      contextMenu->contextMenuEvent(event);
-      }
 
-      
-void Mixer::showDetailsClicked()
-      {
-      bool visible = !mixerDetails->isVisible();
-      options->setShowingDetails(visible);
-      showDetails(visible);
-      }
-
-      
 void Mixer::showDetails(bool visible)
       {
       QSize currentTreeWidgetSize = mixerTreeWidget->size();
@@ -726,138 +653,5 @@ MixerKeyboardControlFilter::MixerKeyboardControlFilter(Mixer* mixer) : mixer(mix
       }
 
 
-MixerOptions::MixerOptions()
-      {
-      readSettings();
-      }
 
-void MixerOptions::readSettings() {
-
-      QSettings settings("MuseScore","Mixer");
-      settings.beginGroup("MixerOptions");
-      _showTrackColors = settings.value("showTrackColors", true).toBool();
-      _detailsOnTheSide = settings.value("detailsOnTheSide", false).toBool();
-      _showMidiOptions = settings.value("showMidiOptions", true).toBool();
-      _showingDetails = settings.value("showingDetails", true).toBool();
-      _showMasterVolume = settings.value("showMasterVolume", true).toBool();
-      int rawMode = settings.value("sliderMode", 1).toInt();
-      settings.endGroup();
-
-      // hack because C++ documentation is horrible and I want it done
-      // fix up later
-      MixerVolumeMode convertEnum;
-
-      switch (rawMode) {
-            case 1:
-                  convertEnum = MixerVolumeMode::Override;
-                  break;
-            case 2:
-                  convertEnum = MixerVolumeMode::Ratio;
-                  break;
-            case 3:
-                  convertEnum = MixerVolumeMode::PrimaryInstrument;
-                  break;
-            default:
-                  convertEnum = MixerVolumeMode::Override;
-            }
-
-      _mode = convertEnum;
-
-      }
-
-void MixerOptions::writeSettings() {
-      QSettings settings("MuseScore","Mixer");
-      settings.beginGroup("MixerOptions");
-      settings.setValue("showTrackColors", _showTrackColors);
-      settings.setValue("detailsOnTheSide", _detailsOnTheSide);
-      settings.setValue("showMidiOptions", _showMidiOptions);
-      settings.setValue("showingDetails", _showingDetails);
-      settings.setValue("showMasterVolume", _showMasterVolume);
-
-      qDebug()<<"write settings _showingDetails = "<<_showingDetails;
-
-      // hack because C++ documentation is horrible and I want it done
-      // fix up later
-      int convertEnum = 0;
-      switch (_mode) {
-            case MixerVolumeMode::Override:
-                  convertEnum = 1;
-                  break;
-            case MixerVolumeMode::Ratio:
-                  convertEnum = 2;
-                  break;
-            case MixerVolumeMode::PrimaryInstrument:
-                  convertEnum = 3;
-                  break;
-            }
-
-      settings.setValue("sliderMode", convertEnum);
-      settings.endGroup();
-      }
-
-MixerContextMenu::MixerContextMenu(Mixer* mixer) : mixer(mixer)
-      {
-      MixerOptions* options = Mixer::getOptions();
-
-      detailToSide = new QAction(tr("Show Details to the Side"));
-      detailToSide->setCheckable(true);
-      detailToSide->setChecked(options->showDetailsOnTheSide());
-      showMidiOptions = new QAction(tr("Show Midi Options"));
-      showMidiOptions->setCheckable(true);
-      showMidiOptions->setChecked(options->showMidiOptions());
-      panSliderInMixer = new QAction(tr("Show Pan Slider in Mixer (not impl yet)"));
-
-      overallVolumeOverrideMode = new QAction(tr("Overall volume: override"));
-      overallVolumeRatioMode = new QAction(tr("Overall volume: relative"));
-      overallVolumeFirstMode = new QAction(tr("Overall volume: primary only"));
-
-      overallVolumeOverrideMode->setCheckable(true);
-      overallVolumeRatioMode->setCheckable(true);
-      overallVolumeFirstMode->setCheckable(true);
-
-      overallVolumeOverrideMode->setChecked(options->mode() == MixerVolumeMode::Override);
-      overallVolumeRatioMode->setChecked(options->mode() == MixerVolumeMode::Ratio);
-      overallVolumeFirstMode->setChecked(options->mode() == MixerVolumeMode::PrimaryInstrument);
-
-      modeGroup = new QActionGroup(mixer);
-
-      modeGroup->addAction(overallVolumeOverrideMode);
-      modeGroup->addAction(overallVolumeRatioMode);
-      modeGroup->addAction(overallVolumeFirstMode);
-
-      showTrackColors = new QAction(tr("Show Track Colors"));
-      showTrackColors->setCheckable(true);
-      showMasterVolume = new QAction(tr("Show Master Volume"));
-      showMasterVolume->setCheckable(true);
-      showMasterVolume->setChecked(options->showMasterVolume());
-
-      detailToSide->setStatusTip(tr("Detailed options shown below the mixer"));
-      connect(detailToSide, SIGNAL(changed()), mixer, SLOT(showDetailsBelow()));
-      connect(showTrackColors, SIGNAL(changed()), mixer, SLOT(showTrackColors()));
-      connect(showMidiOptions, SIGNAL(changed()), mixer, SLOT(showMidiOptions()));
-      connect(showMasterVolume, SIGNAL(changed()), mixer, SLOT(showMasterVolume()));
-
-      connect(overallVolumeOverrideMode, SIGNAL(changed()), mixer, SLOT(updateVolumeMode()));
-      connect(overallVolumeRatioMode, SIGNAL(changed()), mixer, SLOT(updateVolumeMode()));
-      connect(overallVolumeFirstMode, SIGNAL(changed()), mixer, SLOT(updateVolumeMode()));
-      }
-
-void MixerContextMenu::contextMenuEvent(QContextMenuEvent *event)
-      {
-      QMenu menu(mixer);
-      menu.addSection(tr("Customize"));
-      menu.addAction(detailToSide);
-      menu.addSeparator();
-      menu.addAction(showMidiOptions);
-      menu.addAction(showTrackColors);
-      menu.addAction(showMasterVolume);
-      menu.addSection(tr("Secondary Slider"));
-      menu.addAction(panSliderInMixer);
-      menu.addSection(tr("Slider Behavior"));
-      menu.addAction(overallVolumeFirstMode);
-      menu.addAction(overallVolumeOverrideMode);
-      menu.addAction(overallVolumeRatioMode);
-      menu.exec(event->globalPos());
-      }
-
-}
+} // namespace Ms

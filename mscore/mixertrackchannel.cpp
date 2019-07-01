@@ -23,13 +23,16 @@
 
 #include "libmscore/score.h"
 #include "libmscore/part.h"
-#include "mixer.h"
-#include "mixertrackitem.h"
+
 #include "seq.h"
 #include "libmscore/undo.h"
 #include "synthcontrol.h"
 #include "synthesizer/msynthesizer.h"
 #include "preferences.h"
+
+#include "mixer.h"
+#include "mixertrackitem.h"
+#include "mixeroptions.h"
 
 namespace Ms {
 

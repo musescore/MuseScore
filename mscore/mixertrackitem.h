@@ -20,11 +20,9 @@
 #ifndef __MIXERTRACKITEM_H__
 #define __MIXERTRACKITEM_H__
 
-#include "libmscore/instrument.h"
-#include <memory>
-
 namespace Ms {
 
+class Score;
 class Part;
 class Instrument;
 class Channel;

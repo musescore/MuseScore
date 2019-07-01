@@ -121,8 +121,8 @@ bool Part::readProperties(XmlReader& e)
             _partName = e.readElementText();
       else if (tag == "show")
             _show = e.readInt();
-      else if (tag == "expanded")
-            _expanded = e.readBool();
+      /* else if (tag == "expanded")
+            _expanded = e.readBool(); */
       else
             return false;
       return true;
@@ -156,7 +156,7 @@ void Part::write(XmlWriter& xml) const
       xml.tag("trackName", _partName);
       if (_color != DEFAULT_COLOR)
             xml.tag("color", _color);
-      xml.tag("expanded", _expanded);
+      // xml.tag("expanded", _expanded);
       instrument()->write(xml, this);
       xml.etag();
       }

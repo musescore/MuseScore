@@ -76,7 +76,7 @@ endif (SCRIPT_INTERFACE)
 QT5_WRAP_UI (ui_headers
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
       measuresdialog.ui pagesettings.ui
-      mixer.ui mixertrackchannel.ui mixermasterchannel.ui mixertrackpart.ui mixerdetails.ui parteditbase.ui
+      mixer.ui mixertrackchannel.ui mixermasterchannel.ui mixerdetails.ui parteditbase.ui
       playpanel.ui prefsdialog.ui measureproperties.ui
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
       editstaff.ui timesigproperties.ui
@@ -313,7 +313,7 @@ add_executable ( ${ExecutableName}
       ${resource_file}
       ${INCS}
 
-      gainslider.h gainslider.cpp
+      gainslider.h gainslider.cpp mixeroptionsbutton.h mixeroptionsbutton.cpp
       abstractdialog.h accessibletoolbutton.h albummanager.h
       alsa.h alsamidi.h analyse.h articulationprop.h bb.h
       bendcanvas.h bendproperties.h breaksdialog.h capella.h
@@ -330,7 +330,7 @@ add_executable ( ${ExecutableName}
       logindialog.h network/loginmanager.h network/loginmanager_p.h
       magbox.h masterpalette.h
       measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h
-      mixer.h mixertrack.h mixertrackchannel.h mixertrackgroup.h mixertrackitem.h mixertrackpart.h mixerdetails.h musedata.h
+      mixer.h mixertrackchannel.h mixertrackitem.h mixerdetails.h musedata.h
       musescore.h musicxml.h musicxmlfonthandler.h musicxmlsupport.h navigator.h newwizard.h noteGroups.h
       omrpanel.h ove.h pa.h pagesettings.h palette.h palettebox.h paletteBoxButton.h partedit.h parteditbase.h
       pathlistdialog.h piano.h pianolevels.h pianolevelschooser.h  pianolevelsfilter.h
@@ -356,7 +356,7 @@ add_executable ( ${ExecutableName}
       debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
       timeline.cpp
-      mixer.cpp mixertrackchannel.cpp mixertrackitem.cpp mixertrackpart.cpp mixerdetails.cpp
+      mixer.cpp mixertrackchannel.cpp mixertrackitem.cpp mixerdetails.cpp
       parteditbase.cpp playpanel.cpp selectionwindow.cpp
       preferences.cpp measureproperties.cpp
       seq.cpp textpalette.cpp

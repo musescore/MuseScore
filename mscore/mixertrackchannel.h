@@ -22,8 +22,6 @@
 
 #include "ui_mixertrackchannel.h"
 #include "ui_mixermasterchannel.h"
-#include "mixertrackgroup.h"
-#include "mixertrack.h"
 #include "mixertrackitem.h"
 #include "libmscore/instrument.h"
 #include "awl/fastlog.h"    // for the log volume slider

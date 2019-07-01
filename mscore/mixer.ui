@@ -35,8 +35,8 @@
    <widget class="QCheckBox" name="partOnlyCheckBox">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>320</y>
+      <x>0</x>
+      <y>260</y>
       <width>108</width>
       <height>20</height>
      </rect>
@@ -45,29 +45,40 @@
      <string>Play part only</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="showDetailsButton">
+   <widget class="Ms::MixerOptionsButton" name="showDetailsButton">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>320</y>
-      <width>20</width>
-      <height>20</height>
+      <x>210</x>
+      <y>260</y>
+      <width>81</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
     </property>
     <property name="minimumSize">
      <size>
-      <width>20</width>
-      <height>20</height>
+      <width>0</width>
+      <height>0</height>
      </size>
     </property>
     <property name="maximumSize">
      <size>
-      <width>20</width>
-      <height>20</height>
+      <width>16777215</width>
+      <height>16777215</height>
      </size>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
     <property name="toolTip">
-     <string>Show details</string>
+     <string>Show / hide extra mixer controls</string>
     </property>
     <property name="whatsThis">
      <string>Show details</string>
@@ -76,17 +87,19 @@
      <string>Show details</string>
     </property>
     <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="musescore.qrc">
-      <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
+     <string>Details</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
     </property>
     <property name="checked">
      <bool>true</bool>
+    </property>
+    <property name="popupMode">
+     <enum>QToolButton::MenuButtonPopup</enum>
+    </property>
+    <property name="toolButtonStyle">
+     <enum>Qt::ToolButtonTextOnly</enum>
     </property>
    </widget>
    <widget class="QTreeWidget" name="mixerTreeWidget">
@@ -206,6 +219,13 @@
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::MixerOptionsButton</class>
+   <extends>QToolButton</extends>
+   <header>mixeroptionsbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>mixerTreeWidget</tabstop>
   <tabstop>partOnlyCheckBox</tabstop>
