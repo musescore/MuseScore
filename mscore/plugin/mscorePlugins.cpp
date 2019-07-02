@@ -250,6 +250,18 @@ void MuseScore::createMenuEntry(PluginDescription* plugin)
             }
       }
 
+//---------------------------------------------------------
+//   addPluginMenuEntries
+//---------------------------------------------------------
+
+void MuseScore::addPluginMenuEntries()
+      {
+      for (int i = 0; i < pluginManager->pluginCount(); ++i) {
+            PluginDescription* d = pluginManager->getPluginDescription(i);
+            if (d->load)
+                  createMenuEntry(d);
+            }
+      }
 
 void MuseScore::removeMenuEntry(PluginDescription* plugin)
       {
