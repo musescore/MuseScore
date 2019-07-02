@@ -34,7 +34,7 @@ class MixerOptionsButton : public QToolButton
       QAction* showMidiOptions;
       QAction* showTrackColors;
       QAction* showMasterVolume;
-      QAction* showSecondSlider;
+      QAction* secondaryModeLock;
 
       QAction* overallVolumeOverrideMode;
       QAction* overallVolumeRatioMode;

@@ -84,6 +84,15 @@ void MixerTrackChannel::updateUiControls()
       {
       bool showTrackColors = Mixer::getOptions()->showTrackColors();
       colorLabel->setVisible(showTrackColors);
+
+      if (Mixer::getOptions()->secondaryModeOn()) {
+            volumeSlider->setStyleSheet("QSlider::groove:horizontal { background: red; position: absolute; top: 8px; bottom: 8px;} QSlider::handle:horizontal { width: 8px; background: gray; border: 1px solid; border-color: darkgray; margin: -3px 0px;} QSlider::add-page:horizontal { background: lightgray; } QSlider::sub-page:horizontal { background: red; }");
+      }
+      else {
+            volumeSlider->setStyleSheet("");
+      }
+
+      update();
       }
 
 void MixerTrackChannel::update()
@@ -92,8 +101,40 @@ void MixerTrackChannel::update()
       const QSignalBlocker blockMuteSignals(muteButton);
       const QSignalBlocker blockSoloSignals(soloButton);
 
-      volumeSlider->setValue(mixerTrackItem()->getVolume());
-      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(mixerTrackItem()->getVolume())));
+      MixerOptions* options = Mixer::getOptions();
+
+      int value;
+      int tooltipValue;
+      QString tooltip;
+
+      if (options->secondaryModeOn()) {
+            switch (options->secondarySlider()) {
+                  case MixerOptions::MixerSecondarySlider::Pan:
+                        value = mixerTrackItem()->getPan();
+                        tooltipValue = value - 63;
+                        tooltip = tr("Pan: %1");
+                        break;
+                  case MixerOptions::MixerSecondarySlider::Reverb:
+                        value = mixerTrackItem()->getReverb();
+                        tooltipValue = value;
+                        tooltip = tr("Reverb: %1");
+                        break;
+                  case MixerOptions::MixerSecondarySlider::Chorus:
+                        value = mixerTrackItem()->getChorus();
+                        tooltipValue = value;
+                        tooltip = tr("Chorus: %1");
+                        break;
+                  }
+            }
+      else {
+            value = mixerTrackItem()->getVolume();
+            tooltipValue = value;
+            tooltip = tr("Volume: %1");
+            }
+
+
+      volumeSlider->setValue(value);
+      volumeSlider->setToolTip(tooltip.arg(QString::number(tooltipValue)));
       
       muteButton->setChecked(mixerTrackItem()->getMute());
       soloButton->setChecked(mixerTrackItem()->getSolo());
@@ -108,7 +149,7 @@ void MixerTrackChannel::update()
             colorLabel->setStyleSheet(QString("QLabel{background: %1;padding-top: 2px; padding-bottom: 2px; border-radius: 3px;}").arg(channelColor.name()));
 
       //TODO: this tooltip might want to go over the instrument name instead (or both?)
-      QString tooltip = tr("Part Name: %1\n"
+      QString summaryTooltip = tr("Part Name: %1\n"
                            "Instrument: %2\n"
                            "Channel: %3\n"
                            "Bank: %4\n"
@@ -120,7 +161,7 @@ void MixerTrackChannel::update()
                        QString::number(channel->bank()),
                        QString::number(channel->program()),
                        midiPatch ? midiPatch->name : tr("~no patch~"));
-      setToolTip(tooltip);
+      setToolTip(summaryTooltip);
       }
 
 
@@ -132,9 +173,29 @@ void MixerTrackChannel::propertyChanged(Channel::Prop property)
 
 void MixerTrackChannel::stripVolumeSliderMoved(int value)
       {
+      takeSelection();
+      MixerOptions* options = Mixer::getOptions();
+
+      if (options->secondaryModeOn()) {
+            switch (options->secondarySlider()) {
+                  case MixerOptions::MixerSecondarySlider::Pan:
+                        mixerTrackItem()->setPan(value);
+                        volumeSlider->setToolTip(tr("Pan: %1").arg(QString::number(value)));
+                        break;
+                  case MixerOptions::MixerSecondarySlider::Reverb:
+                        mixerTrackItem()->setReverb(value);
+                        volumeSlider->setToolTip(tr("Reverb: %1").arg(QString::number(value)));
+                        break;
+                  case MixerOptions::MixerSecondarySlider::Chorus:
+                        mixerTrackItem()->setChorus(value);
+                        volumeSlider->setToolTip(tr("Chorus: %1").arg(QString::number(value)));
+                        break;
+            }
+            return;
+      }
+
       mixerTrackItem()->setVolume(value);
       volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(value)));
-      takeSelection();
       }
 
 

@@ -20,9 +20,20 @@
 #include "mixeroptions.h"
 
 namespace Ms {
-      MixerOptions::MixerOptions()
+MixerOptions::MixerOptions()
       {
-            readSettings();
+      readSettings();
+      }
+
+bool MixerOptions::secondaryModeOn()
+      {
+      return _secondaryModeLock ? !_secondaryMode : _secondaryMode;
+      }
+
+
+void MixerOptions::setSecondaryModeOn(bool on)
+      {
+      _secondaryMode = on;
       }
 
       void MixerOptions::readSettings() {

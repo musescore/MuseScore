@@ -74,9 +74,13 @@ public:
       void setSolo(bool value);
 
       char getVolume();
+      char getChorus();
+      char getReverb();
+
       bool getMute();
       bool getSolo();
       char getPan();
+
       };
 
 

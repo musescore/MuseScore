@@ -111,6 +111,16 @@ char MixerTrackItem::getVolume()
       return channel()->volume();
       }
 
+char MixerTrackItem::getChorus()
+{
+      return channel()->chorus();
+}
+
+char MixerTrackItem::getReverb()
+{
+      return channel()->reverb();
+}
+
 char MixerTrackItem::getPan()
       {
       return channel()->pan();
@@ -287,6 +297,7 @@ void MixerTrackItem::setSolo(bool value)
                   }
             }
       }
+
 
 //MARK:- helper methods
 

@@ -90,63 +90,8 @@ Mixer::Mixer(QWidget* parent)
       shiftKeyMonitorTimer->start(100);
       }
 
-      void Mixer::shiftKeyMonitor() {
-
-            bool focus = hasFocus();
-
-            if (!focus) {
-                  for (QWidget* child : findChildren<QWidget*>()) {
-                        if (child->hasFocus()) {
-                              focus = true;
-                              break;
-                        }
-                  }
-            }
 
 
-            if (!focus) {
-                  if (options->secondaryModeOn) {
-                        qDebug()<<"Exiting secondary mode because we don't have the focus.";
-                        options->secondaryModeOn = false;
-                        mixerTreeWidget->setHeaderLabels({tr("Instrument"), tr("Volume")});
-                        return;
-                  }
-                  else {
-                        return;
-                  }
-            }
-
-
-            if (QApplication::queryKeyboardModifiers() & Qt::KeyboardModifier::ShiftModifier) {
-                  if (options->secondaryModeOn)
-                        return;
-
-                  qDebug()<<"Entering secondary mode";
-                  options->secondaryModeOn = true;
-
-                  QString secondary;
-
-                  switch (options->secondarySlider()) {
-                        case MixerOptions::MixerSecondarySlider::Pan:
-                              secondary = tr("Pan");
-                              break;
-                        case MixerOptions::MixerSecondarySlider::Reverb:
-                              secondary = tr("Reverb");
-                              break;
-                        case MixerOptions::MixerSecondarySlider::Chorus:
-                             secondary = tr("Chorus");
-                  }
-
-                  mixerTreeWidget->setHeaderLabels({tr("Instrument"), secondary});
-                  return;
-            }
-
-            if (options->secondaryModeOn) {
-                  options->secondaryModeOn = false;
-                  qDebug()<<"Exiting secondary mode";
-                  mixerTreeWidget->setHeaderLabels({tr("Instrument"), tr("Volume")});
-            }
-      }
 
 void Mixer::setupSlotsAndSignals()
       {
@@ -158,6 +103,7 @@ void Mixer::setupSlotsAndSignals()
       connect(mixerTreeWidget, SIGNAL(itemCollapsed(QTreeWidgetItem*)), this, SLOT(itemCollapsedOrExpanded(QTreeWidgetItem*)));
       }
 
+
 void Mixer::setupAdditionalUi()
       {
       //setup the master channel widget (volume control and Play and Loop button)
@@ -165,7 +111,7 @@ void Mixer::setupAdditionalUi()
       masterChannelWidget = new MixerMasterChannel();
       masterVolumeTreeWidget->clear();
       QTreeWidgetItem* masterVolumeItem = new QTreeWidgetItem(masterVolumeTreeWidget);
-      masterVolumeItem->setText(0, "Master");
+      masterVolumeItem->setText(0, tr("Master"));
       masterVolumeTreeWidget->addTopLevelItem(masterVolumeItem);
       masterVolumeTreeWidget->setItemWidget(masterVolumeItem, 1, masterChannelWidget);
 
@@ -222,10 +168,11 @@ void Mixer::retranslate(bool firstTime)
 
       retranslateUi(this);
       mixerDetails->retranslateUi(mixerDetails);
-      //TODO: retranslate section headers
+      updateMixerTreeHeaders();
       //TODO: retranslate the "slider options" button (if it's still called that)
       //TODO: retranslate instrument names (but do they have translations)
       }
+
 
 //MARK:- main interface
 
@@ -268,7 +215,6 @@ void Mixer::setScore(Score* score)
 
 void Mixer::setPlaybackScore(Score* score)
       {
-      qDebug()<<"Mixer::setPlayBackScore";
       if (_score != score) {
             _score = score;
             //mixerDetails->setTrack(0);
@@ -277,14 +223,9 @@ void Mixer::setPlaybackScore(Score* score)
       }
 
 
-
-void Mixer::updateUiOptions()
+void Mixer::updateTreeSlidersAppearance()
       {
-
-      // track colors and what is shown in the details list
-      mixerDetails->updateUiOptions();
-
-      // track colors in the main mixer
+      // secondary slider style and track colors in the main mixer
       for (int topLevelIndex = 0; topLevelIndex < mixerTreeWidget->topLevelItemCount(); topLevelIndex++) {
             QTreeWidgetItem* topLevelItem = mixerTreeWidget->topLevelItem(topLevelIndex);
             MixerTrackChannel* itemWidget = static_cast<MixerTrackChannel*>(mixerTreeWidget->itemWidget(topLevelItem, 1));
@@ -294,53 +235,10 @@ void Mixer::updateUiOptions()
                   QTreeWidgetItem* childItem = topLevelItem->child(childIndex);
                   MixerTrackChannel* itemWidget = static_cast<MixerTrackChannel*>(mixerTreeWidget->itemWidget(childItem, 1));
                   itemWidget->updateUiControls();
-                  }
-            }
-
-      // layout of master volume (is affected by presence or absence or track color
-      masterChannelWidget->updateUiControls();
-
-      showDetails(options->showingDetails());
-
-      bool showMasterVol = options->showMasterVolume();
-
-      if (options->showDetailsOnTheSide()) {
-            // show TO THE SIDE case
-
-            // addWidget(row, column, rowSpan, columnSpan, [Qt::Alignment])
-            gridLayout->addWidget(partOnlyCheckBox, 0, 1, 1, 1, Qt::AlignRight);
-            gridLayout->addWidget(showDetailsButton, 0, 0, 1, 1);
-            gridLayout->addWidget(mixerTreeWidget, 1, 0, 1, 2);
-            if (showMasterVol) {
-                  gridLayout->addWidget(masterVolumeTreeWidget, 2, 0, 1, 2);
-                  masterVolumeTreeWidget->setVisible(true);
-                  }
-            else {
-                  masterVolumeTreeWidget->setVisible(false);
-                  }
-
-            gridLayout->addWidget(mixerDetails, 0, 2, showMasterVol ? 3 : 2, 1, Qt::AlignTop);
-            }
-      else {
-            // show BELOW case
-
-            // addWidget(row, column, rowSpan, columnSpan, [Qt::Alignment])
-            gridLayout->addWidget(partOnlyCheckBox, 0, 1, 1, 1, Qt::AlignRight);
-            gridLayout->addWidget(showDetailsButton, 0, 0, 1, 1);
-            gridLayout->addWidget(mixerTreeWidget, 1, 0, 1, 2);
-            if (showMasterVol) {
-                  gridLayout->addWidget(masterVolumeTreeWidget, 2, 0, 1, 2);
-                  masterVolumeTreeWidget->setVisible(true);
-                  }
-            else {
-                  masterVolumeTreeWidget->setVisible(false);
-                  }
-
-            gridLayout->addWidget(mixerDetails, showMasterVol ? 3 : 2, 0, 1 , 2, Qt::AlignTop);
-
-            gridLayout->setRowStretch(1,10);
             }
       }
+      }
+
 
 
 void Mixer::showDetails(bool visible)
@@ -374,6 +272,15 @@ void Mixer::showDetails(bool visible)
       mixerTreeWidget->setMaximumSize(maxTreeWidgetSize);
       }
 
+
+void Mixer::enterSecondarySliderMode(bool enter)
+      {
+      options->setSecondaryModeOn(enter);
+      updateMixerTreeHeaders();
+      updateTreeSlidersAppearance();
+      }
+
+
 //---------------------------------------------------------
 //   on_partOnlyCheckBox_toggled
 //---------------------------------------------------------
@@ -394,6 +301,87 @@ void Mixer::on_partOnlyCheckBox_toggled(bool checked)
                   seq->stopNotes(ch->channel());
             }
       }
+
+//MARK:- update ui
+
+void Mixer::updateUiOptions()
+{
+      // track colors and what is shown in the details list
+      updateTreeSlidersAppearance();
+      mixerDetails->updateUiOptions();
+
+      // layout of master volume (is affected by presence or absence or track color
+      masterChannelWidget->updateUiControls();
+
+      showDetails(options->showingDetails());
+
+      bool showMasterVol = options->showMasterVolume();
+
+      if (options->showDetailsOnTheSide()) {
+            // show TO THE SIDE case
+
+            // addWidget(row, column, rowSpan, columnSpan, [Qt::Alignment])
+            gridLayout->addWidget(partOnlyCheckBox, 0, 1, 1, 1, Qt::AlignRight);
+            gridLayout->addWidget(showDetailsButton, 0, 0, 1, 1);
+            gridLayout->addWidget(mixerTreeWidget, 1, 0, 1, 2);
+            if (showMasterVol) {
+                  gridLayout->addWidget(masterVolumeTreeWidget, 2, 0, 1, 2);
+                  masterVolumeTreeWidget->setVisible(true);
+            }
+            else {
+                  masterVolumeTreeWidget->setVisible(false);
+            }
+
+            gridLayout->addWidget(mixerDetails, 0, 2, showMasterVol ? 3 : 2, 1, Qt::AlignTop);
+      }
+      else {
+            // show BELOW case
+
+            // addWidget(row, column, rowSpan, columnSpan, [Qt::Alignment])
+            gridLayout->addWidget(partOnlyCheckBox, 0, 1, 1, 1, Qt::AlignRight);
+            gridLayout->addWidget(showDetailsButton, 0, 0, 1, 1);
+            gridLayout->addWidget(mixerTreeWidget, 1, 0, 1, 2);
+            if (showMasterVol) {
+                  gridLayout->addWidget(masterVolumeTreeWidget, 2, 0, 1, 2);
+                  masterVolumeTreeWidget->setVisible(true);
+            }
+            else {
+                  masterVolumeTreeWidget->setVisible(false);
+            }
+
+            gridLayout->addWidget(mixerDetails, showMasterVol ? 3 : 2, 0, 1 , 2, Qt::AlignTop);
+
+            gridLayout->setRowStretch(1,10);
+      }
+
+      // cover case where the LOCK has changed (but there's no change in SHIFT key)
+      enterSecondarySliderMode(options->secondaryModeOn());
+}
+
+
+void Mixer::updateMixerTreeHeaders() {
+
+      if (!options->secondaryModeOn()) {
+            mixerTreeWidget->setHeaderLabels({tr("Instrument"), tr("Volume")});
+            return;
+      }
+
+      QString secondary;
+
+      switch (options->secondarySlider()) {
+            case MixerOptions::MixerSecondarySlider::Pan:
+                  secondary = tr("Pan");
+                  break;
+            case MixerOptions::MixerSecondarySlider::Reverb:
+                  secondary = tr("Reverb");
+                  break;
+            case MixerOptions::MixerSecondarySlider::Chorus:
+                  secondary = tr("Chorus");
+      }
+
+      mixerTreeWidget->setHeaderLabels({tr("Instrument"), secondary});
+}
+
 
 
 //MARK:- listen to changes from elsewhere
@@ -421,9 +409,14 @@ void Mixer::masterVolumeChanged(double decibels)
 //   midiPrefsChanged
 //---------------------------------------------------------
 
+// sent from Preferences dialogue - not clear it did anything in
+// previous version of mixer. With this design, might be better
+// to remove the preference as it's handled within the mixer. Or,
+// perhaps to honour it but also disable the show/hide on the
+// dropdown menu - that seems a bit daft though.
+//
 void Mixer::midiPrefsChanged(bool)
       {
-      qDebug()<<"Mixer::midiPrefsChanged";
       updateTracks();
       }
 
@@ -473,7 +466,7 @@ bool Mixer::eventFilter(QObject* object, QEvent* event)
       if (object == mixerDetails->panSlider) {
             if (event->type() == QEvent::MouseButtonDblClick) {
                   QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-                  qDebug() << "Ate Double click on pan slider" << keyEvent->key();
+                  qDebug() << "Double click on pan slider" << keyEvent->key();
                   mixerDetails->resetPanToCentre();
                   return true;
                   }
@@ -513,18 +506,14 @@ bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
             }
       
       if (keyEvent->key() == Qt::Key_Less && keyEvent->modifiers() == Qt::ShiftModifier) {
-            qDebug()<<"Pan left keyboard command";
-            if (selectedMixerTrackItem && int(selectedMixerTrackItem->getPan()) < 128) {
-                  selectedMixerTrackItem->setPan(selectedMixerTrackItem->getPan() + 1);
-                  }
+            qDebug()<<"Secondary slider DOWN keyboard command";
+            mixer->nudgeSecondarySliderUp(false);
             return true;
             }
       
       if (keyEvent->key() == Qt::Key_Greater && keyEvent->modifiers() == Qt::ShiftModifier) {
-            qDebug()<<"Pan right keyboard command";
-            if (selectedMixerTrackItem && int(selectedMixerTrackItem->getPan()) >0) {
-                  selectedMixerTrackItem->setPan(selectedMixerTrackItem->getPan() - 1);
-                  }
+            qDebug()<<"Secondary slider UP keyboard command";
+            mixer->nudgeSecondarySliderUp(true);
             return true;
             }
       
@@ -546,6 +535,57 @@ bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
       
       return QObject::eventFilter(obj, event);
       }
+
+void Mixer::nudgeSecondarySliderUp(bool up) {
+
+      MixerTreeWidgetItem* treeItem = static_cast<MixerTreeWidgetItem*>(mixerTreeWidget->currentItem());
+      if (!treeItem)  // defensive
+            return;
+
+      MixerTrackItem* trackItem = treeItem->mixerTrackItem();
+
+      if (!trackItem)   // defensive
+            return;
+
+      int currentValue;
+
+      switch (options->secondarySlider()) {
+            case MixerOptions::MixerSecondarySlider::Pan:
+                  currentValue = trackItem->getPan();
+                  break;
+            case MixerOptions::MixerSecondarySlider::Reverb:
+                  currentValue = trackItem->getReverb();
+                  break;
+            case MixerOptions::MixerSecondarySlider::Chorus:
+                  currentValue = trackItem->getChorus();
+                  break;
+      }
+
+      int newValue = currentValue + (up ? 1 : -1);
+
+     if (currentValue > 127)
+           newValue = 127;
+
+      if (currentValue < 0)
+            newValue = 0;
+
+
+      switch (options->secondarySlider()) {
+            case MixerOptions::MixerSecondarySlider::Pan:
+                  trackItem->setPan(newValue);
+                  break;
+            case MixerOptions::MixerSecondarySlider::Reverb:
+                  trackItem->setReverb(newValue);
+                  break;
+            case MixerOptions::MixerSecondarySlider::Chorus:
+                  trackItem->setChorus(newValue);
+                  break;
+      }
+
+
+
+      }
+
 //---------------------------------------------------------
 //   keyPressEvent
 //---------------------------------------------------------
@@ -558,6 +598,50 @@ void Mixer::keyPressEvent(QKeyEvent* ev) {
       QWidget::keyPressEvent(ev);
       }
 
+
+void Mixer::shiftKeyMonitor() {
+
+      // check if we are any children have the focus
+      bool focus = hasFocus();
+      if (!focus) {
+            QWidget* focusWidget = QApplication::focusWidget();
+            focus = focusWidget ? this->isAncestorOf(focusWidget): false;
+
+            // but now check if what's got the focus is some kind of text
+            // box, i.e. a spinbox or a lineedit box
+
+            if (dynamic_cast<QLineEdit*>(focusWidget))
+                  focus = false;
+
+            if (dynamic_cast<QSpinBox*>(focusWidget))
+                  focus = false;
+
+            if (dynamic_cast<QDoubleSpinBox*>(focusWidget))
+                  focus = false;
+
+      }
+
+      // if not focus but secondary mode is on, turn it off
+      if (!focus) {
+            if (options->secondaryModeOn())
+                  enterSecondarySliderMode(false);
+            return;
+      }
+
+      // if shift key is down enter secondary mode (if not in it already)
+      // BUT swap this logic if secondaryModeLock() is true
+      bool shiftedModeActive = options->secondaryModeLock() ? !options->secondaryModeOn() : options->secondaryModeOn();
+
+      if (QApplication::queryKeyboardModifiers() & Qt::KeyboardModifier::ShiftModifier) {
+            if (!shiftedModeActive)
+                  enterSecondarySliderMode(true);
+            return;
+      }
+
+      if (shiftedModeActive)
+            enterSecondarySliderMode(false);
+}
+
 //---------------------------------------------------------
 //   changeEvent
 //---------------------------------------------------------
@@ -568,16 +652,6 @@ void Mixer::changeEvent(QEvent *event)
       if (event->type() == QEvent::LanguageChange)
             retranslate();
       }
-
-//---------------------------------------------------------
-//   partEdit
-//---------------------------------------------------------
-//
-//PartEdit* Mixer::getPartAtIndex(int)
-//      {
-//      return 0;
-//      }
-
 
 
 //MARK:- manage the mixer tree
@@ -603,9 +677,6 @@ void Mixer::updateTracks()
             MixerTreeWidgetItem* item = new MixerTreeWidgetItem(part, _score, mixerTreeWidget);
             mixerTreeWidget->addTopLevelItem(item);
             mixerTreeWidget->setItemWidget(item, 1, new MixerTrackChannel(item));
-
-            qDebug()<<"Part: "<<part->partName()<<" is expanded: "<<part->isExpanded();
-            // TODO: test re-implementing remembering expansion state
             item->setExpanded(part->isExpanded());
             }
 
@@ -616,7 +687,6 @@ void Mixer::updateTracks()
       }
 
 void Mixer::itemCollapsedOrExpanded(QTreeWidgetItem* item) {
-      qDebug()<<"item "<<item->text(0)<<" is expanded = "<<item->isExpanded();
 
       MixerTreeWidgetItem* mixerTreeWidgetItem = static_cast<MixerTreeWidgetItem*>(item);
       MixerTrackItem* mixerTrackItem = mixerTreeWidgetItem->mixerTrackItem();

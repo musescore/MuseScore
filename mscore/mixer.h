@@ -54,24 +54,26 @@ class Mixer : public QDockWidget, public Ui::Mixer
 
       EnablePlayForWidget* enablePlay;
 
-      QSet<Part*> expandedParts;                      //TOD: expandedParts - from old mixer code - re-implement
       int savedSelectionTopLevelIndex;
       int savedSelectionChildIndex;
-      QTimer* shiftKeyMonitorTimer;
 
+      void setupSlotsAndSignals();
+      void setupAdditionalUi();
+      void disableMixer();                            // gray out everything when no score or part is open
+      void showDetails(bool);
+      void setPlaybackScore(Score*);
+
+      void enterSecondarySliderMode(bool enter);
+      void updateMixerTreeHeaders();
+      void updateTreeSlidersAppearance();
+
+      QTimer* shiftKeyMonitorTimer;
       MixerKeyboardControlFilter* keyboardFilter;     // process key presses for the mixer AND the details panel
       virtual void closeEvent(QCloseEvent*) override;
       virtual void showEvent(QShowEvent*) override;
       virtual void hideEvent(QHideEvent*) override;
       virtual bool eventFilter(QObject*, QEvent*) override;
       virtual void keyPressEvent(QKeyEvent*) override;
-
-      void setupSlotsAndSignals();
-      void setupAdditionalUi();
-      void disableMixer();                            // gray out everything when no score or part is open
-      void showDetails(bool);
-
-      void setPlaybackScore(Score*);
 
    private slots:
       void on_partOnlyCheckBox_toggled(bool checked);
@@ -103,6 +105,8 @@ class Mixer : public QDockWidget, public Ui::Mixer
 
       MixerDetails* mixerDetails;                                 // TODO: mixerDetails - does it NEED to be public?
       void updateUiOptions();
+      void nudgeSecondarySliderUp(bool up);
+
       static MixerOptions* getOptions() { return options; };
             
       };

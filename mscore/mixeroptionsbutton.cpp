@@ -52,6 +52,7 @@ namespace Ms {
             connect(overallVolumeOverrideMode, SIGNAL(toggled(bool)), this, SLOT(optionChangeRequest(bool)));
             connect(overallVolumeRatioMode, SIGNAL(toggled(bool)), this, SLOT(optionChangeRequest(bool)));
             connect(overallVolumeFirstMode, SIGNAL(toggled(bool)), this, SLOT(optionChangeRequest(bool)));
+            connect(secondaryModeLock, SIGNAL(toggled(bool)), this, SLOT(optionChangeRequest(bool)));
       }
 
       void MixerOptionsButton::adjustMenuActionsInLineWithOptions()
@@ -69,16 +70,11 @@ namespace Ms {
             overallVolumeRatioMode->setChecked(options->mode() == MixerVolumeMode::Ratio);
             overallVolumeFirstMode->setChecked(options->mode() == MixerVolumeMode::PrimaryInstrument);
 
-            bool choosingPan = options->secondarySlider() == MixerOptions::MixerSecondarySlider::Pan;
-            bool choosingRev = options->secondarySlider() == MixerOptions::MixerSecondarySlider::Reverb;
-
-            qDebug()<<"choosing pan is: "<<choosingPan;
-            qDebug()<<"choosing reverb is: "<<choosingRev;
-
-
             makePanSecondarySlider->setChecked(options->secondarySlider() == MixerOptions::MixerSecondarySlider::Pan);
             makeReverbSecondarySlider->setChecked(options->secondarySlider() == MixerOptions::MixerSecondarySlider::Reverb);
             makeChorusSecondarySlider->setChecked(options->secondarySlider() == MixerOptions::MixerSecondarySlider::Chorus);
+
+            secondaryModeLock->setChecked(options->secondaryModeLock());
       }
 
       void MixerOptionsButton::adjustOptionsInLineWithMenu()
@@ -129,6 +125,8 @@ namespace Ms {
                   secondarySlider = MixerOptions::MixerSecondarySlider::Pan;;
             }
             options->setSecondarySlider(secondarySlider);
+
+            options->setSecondaryModeLock(secondaryModeLock->isChecked());
       }
 
 
@@ -143,10 +141,10 @@ namespace Ms {
             menu->addAction(showMidiOptions);
             menu->addAction(showTrackColors);
             menu->addAction(showMasterVolume);
-            menu->addAction(showSecondSlider);
 
-            menu->addSection(tr("Secondary Slider"));
+            menu->addSection(tr("Secondary Slider (on Shift)"));
             menu->addActions({makePanSecondarySlider, makeReverbSecondarySlider, makeChorusSecondarySlider});
+            menu->addAction(secondaryModeLock);
 
             menu->addSection(tr("Slider Behavior"));
             menu->addAction(overallVolumeFirstMode);
@@ -168,8 +166,8 @@ namespace Ms {
             showMidiOptions = new QAction(tr("Show Midi Options (in More…)"));
             showMidiOptions->setCheckable(true);
 
-            showSecondSlider = new QAction(tr("Show Second Slider in Mixer (not impl yet)"));
-            showSecondSlider->setCheckable(true);
+            secondaryModeLock = new QAction(tr("Secondary Slider Lock"));
+            secondaryModeLock->setCheckable(true);
 
             overallVolumeOverrideMode = new QAction(tr("Override"));
             overallVolumeRatioMode = new QAction(tr("Relative"));

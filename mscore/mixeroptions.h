@@ -40,7 +40,8 @@ class MixerOptions
       bool _showMasterVolume;
       MixerVolumeMode _mode;
       MixerSecondarySlider _secondarySlider;
-
+      bool _secondaryMode = false;
+      bool _secondaryModeLock = false;
 
    public:
       MixerOptions();
@@ -49,6 +50,7 @@ class MixerOptions
       bool showMidiOptions() { return _showMidiOptions; };
       bool showingDetails() { return _showingDetails; };
       bool showMasterVolume() { return _showMasterVolume; };
+      bool secondaryModeLock() {return _secondaryModeLock; };
       MixerVolumeMode mode() { return _mode; };
       MixerSecondarySlider secondarySlider() { return _secondarySlider; };
 
@@ -59,11 +61,12 @@ class MixerOptions
       void setShowMasterVolume(bool show) { _showMasterVolume = show; writeSettings(); };
       void setMode(MixerVolumeMode mode) { _mode = mode; writeSettings(); };
       void setSecondarySlider(MixerSecondarySlider secondary) { _secondarySlider = secondary; }
+      void setSecondaryModeLock(bool lock) { qDebug()<<"setting lock: "<<lock; _secondaryModeLock = lock; };
       void readSettings();
       void writeSettings();
 
-      bool secondaryModeOn;
-
+      bool secondaryModeOn();
+      void setSecondaryModeOn(bool on);
 };
 
 

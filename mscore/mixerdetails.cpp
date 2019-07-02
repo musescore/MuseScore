@@ -43,7 +43,6 @@ MixerDetails::MixerDetails(Mixer *mixer) :
       setupUi(this);
 
       mutePerVoiceGrid = new QGridLayout();
-      mutePerVoiceHolder->setLayout(mutePerVoiceGrid);
       mutePerVoiceGrid->setContentsMargins(0, 0, 0, 0);
       mutePerVoiceGrid->setSpacing(7);
 
@@ -265,8 +264,6 @@ void MixerDetails::updatePan()
 
 void MixerDetails::updateMutePerVoice()
       {
-      qDebug()<<"MixerDetails::updateMutePerVoice - could I do some caching? checking for change?";
-
       for (QWidget* voiceButton : voiceButtons) {
             mutePerVoiceGridLayout->removeWidget(voiceButton);
             voiceButton->deleteLater();
@@ -311,17 +308,15 @@ void MixerDetails::updateMidiChannelAndPort()
 
 void MixerDetails::updateReverb()
       {
-      Channel* channel = selectedMixerTrackItem->channel();
-      reverbSlider->setValue((int)channel->reverb());
-      reverbSpinBox->setValue(channel->reverb());
+      reverbSlider->setValue(selectedMixerTrackItem->getReverb());
+      reverbSpinBox->setValue(selectedMixerTrackItem->getReverb());
       }
 
 
 void MixerDetails::updateChorus()
       {
-      Channel* channel = selectedMixerTrackItem->channel();
-      reverbSlider->setValue((int)channel->reverb());
-      reverbSpinBox->setValue(channel->reverb());
+      chorusSlider->setValue(selectedMixerTrackItem->getChorus());
+      chorusSpinBox->setValue(selectedMixerTrackItem->getChorus());
       }
 
 
@@ -330,7 +325,6 @@ void MixerDetails::updateChorus()
 // partNameEdited - process editing complete on part name
 void MixerDetails::partNameEdited()
       {
-      qDebug()<<"MixerDetails::partNameEdited";
       if (!selectedMixerTrackItem)
             return;
 
@@ -367,7 +361,7 @@ void MixerDetails::patchComboEdited(int comboIndex)
 
       const MidiPatch* patch = (MidiPatch*)patchCombo->itemData(comboIndex, Qt::UserRole).value<void*>();
       if (patch == 0) {
-            qDebug("PartEdit::patchChanged: no patch");
+            qDebug("MixerDetails::patchChanged: no patch");
             return;
             }
 
@@ -396,8 +390,6 @@ void MixerDetails::drumsetCheckboxToggled(bool drumsetSelected)
 
       blockSignals(true);
 
-      qDebug()<<"drumsetCheckBoxToggled to: "<<drumsetSelected;
-
       Part* part = selectedMixerTrackItem->part();
       Channel* channel = selectedMixerTrackItem->channel();
 
@@ -406,9 +398,6 @@ void MixerDetails::drumsetCheckboxToggled(bool drumsetSelected)
             instr = selectedMixerTrackItem->instrument();
       else
             instr = part->instrument(Fraction(0,1));
-
-      qDebug()<<"drumsetCheckBoxToggled - trackType==CHANNEL is "<<(selectedMixerTrackItem->trackType() == MixerTrackItem::TrackType::CHANNEL);
-
 
       if (instr->useDrumset() == drumsetSelected)
             return;
@@ -422,16 +411,10 @@ void MixerDetails::drumsetCheckboxToggled(bool drumsetSelected)
                   }
             }
 
-      qDebug()<<"drumsetCheckBoxToggled - candidate patch is"<<newPatch;
-      if (newPatch) {
+      if (newPatch)
             QString name = newPatch->name;
-            qDebug()<<"drumsetCheckBoxToggled - candidate patch is called: "<<name;
-            }
-
 
       mixer->saveTreeSelection();
-
-      qDebug()<<"drumsetCheckBoxToggled -  saved selection now trying to change patch";
 
       Score* score = part->score();
       if (newPatch) {
@@ -441,8 +424,6 @@ void MixerDetails::drumsetCheckboxToggled(bool drumsetSelected)
             score->setLayoutAll();
             score->endCmd();
             }
-
-      qDebug()<<"drumsetCheckBoxToggled - change patch now trying to restore selection";
 
       mixer->restoreTreeSelection();
       blockSignals(false);
@@ -600,7 +581,6 @@ void MixerDetails::updateTabOrder()
       while (tabOrder.count() > 1) {
             tabOrder.removeFirst();
             QWidget* next = tabOrder.first();
-            // qDebug()<<"Setting tab order. "<<current->objectName()<<" before "<<next->objectName();
             setTabOrder(current, next);
             current = next;
             }
