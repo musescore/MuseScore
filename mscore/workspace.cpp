@@ -693,6 +693,11 @@ void Workspace::read(XmlReader& e)
             else if (tag == "MenuBar") {
                   saveMenuBar = true;
                   QMenuBar* mb = mscore->menuBar();
+                  const QObjectList menus(mb->children()); // need a copy
+                  for (QObject* m : menus) {
+                        if (qobject_cast<QMenu*>(m))
+                              delete m;
+                        }
                   mb->clear();
                   menuToStringList.clear();
                   while (e.readNextStartElement()) {
@@ -791,6 +796,11 @@ void Workspace::readGlobalMenuBar()
                   while (e.readNextStartElement()) {
                         if (e.name() == "MenuBar") {
                               QMenuBar* mb = mscore->menuBar();
+                              const QObjectList menus(mb->children()); // need a copy
+                              for (QObject* m : menus) {
+                                    if (qobject_cast<QMenu*>(m))
+                                          delete m;
+                                    }
                               mb->clear();
                               menuToStringList.clear();
                               while (e.readNextStartElement()) {
