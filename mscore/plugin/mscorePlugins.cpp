@@ -116,9 +116,7 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
 
       QAction* a = plugin->shortcut.action();
       pluginActions.append(a);
-      int pluginIdx = plugins.size() - 1; // plugin is already appended
-      connect(a, SIGNAL(triggered()), pluginMapper, SLOT(map()));
-      pluginMapper->setMapping(a, pluginIdx);
+      connect(a, &QAction::triggered, mscore, [_pluginPath]() { mscore->pluginTriggered(_pluginPath); });
 
       delete obj;
       }
@@ -151,9 +149,7 @@ void MuseScore::unregisterPlugin(PluginDescription* plugin)
       QAction* a = plugin->shortcut.action();
       pluginActions.removeAll(a);
 
-      disconnect(a, SIGNAL(triggered()), pluginMapper, SLOT(map()));
-      pluginMapper->removeMappings(a);
-
+      disconnect(a, 0, mscore, 0);
       }
 
 //---------------------------------------------------------
@@ -163,9 +159,6 @@ void MuseScore::unregisterPlugin(PluginDescription* plugin)
 
 void MuseScore::createMenuEntry(PluginDescription* plugin)
       {
-      if (!pluginMapper)
-            return;
-
       QString menu = plugin->menuPath;
       QStringList ml;
       QString s;
@@ -265,9 +258,6 @@ void MuseScore::addPluginMenuEntries()
 
 void MuseScore::removeMenuEntry(PluginDescription* plugin)
       {
-      if (!pluginMapper)
-            return;
-
       QString menu = plugin->menuPath;
       QStringList ml;
       QString s;
@@ -352,8 +342,6 @@ int MuseScore::pluginIdxFromPath(QString _pluginPath) {
 
 void MuseScore::loadPlugins()
       {
-      pluginMapper = new QSignalMapper(this);
-      connect(pluginMapper, SIGNAL(mapped(int)), SLOT(pluginTriggered(int)));
       for (int i = 0; i < pluginManager->pluginCount(); ++i) {
             PluginDescription* d = pluginManager->getPluginDescription(i);
             if (d->load)
@@ -379,11 +367,6 @@ void MuseScore::unloadPlugins()
 bool MuseScore::loadPlugin(const QString& filename)
       {
       bool result = false;
-
-      if (!pluginMapper) {
-            pluginMapper = new QSignalMapper(this);
-            connect(pluginMapper, SIGNAL(mapped(int)), SLOT(pluginTriggered(int)));
-            }
 
       QDir pluginDir(mscoreGlobalShare + "plugins");
       if (MScore::debugMode)
@@ -412,8 +395,12 @@ bool MuseScore::loadPlugin(const QString& filename)
 
 void MuseScore::pluginTriggered(int idx)
       {
-      QString pp = plugins[idx];
+      if (plugins.size() > idx)
+            pluginTriggered(plugins[idx]);
+      }
 
+void MuseScore::pluginTriggered(QString pp)
+      {
       QQmlEngine* engine = getPluginEngine();
 
       QQmlComponent component(engine);

@@ -363,7 +363,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QTimer* autoSaveTimer;
       QList<QAction*> pluginActions;
-      QSignalMapper* pluginMapper        { 0 };
 
       PianorollEditor* pianorollEditor   { 0 };
       DrumrollEditor* drumrollEditor     { 0 };
@@ -572,6 +571,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void dirtyChanged(Score*);
       void setPos(const Fraction& tick);
       void pluginTriggered(int);
+      void pluginTriggered(QString path);
       void handleMessage(const QString& message);
       void setCurrentScoreView(ScoreView*);
       void setCurrentScoreView(int);
