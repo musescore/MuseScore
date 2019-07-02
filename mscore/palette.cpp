@@ -1195,8 +1195,9 @@ QPixmap Palette::pixmap(int paletteIdx) const
             toIcon(e)->setExtent(w < h ? w : h);
       p.scale(cellMag, cellMag);
 
+      p.translate(-r.topLeft());
       QPointF pos = e->ipos();
-      e->setPos(-r.topLeft());
+      e->setPos(0, 0);
 
       QColor color;
        // show voice colors for notes
