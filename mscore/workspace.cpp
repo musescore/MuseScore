@@ -501,12 +501,18 @@ void Workspace::writeMenuBar(XmlWriter& xml, QMenuBar* mb)
             if (action->isSeparator())
                   xml.tag("action", "");
             else if (action->menu()) {
-                  xml.stag("Menu name=\"" + findStringFromMenu(action->menu()) + "\"");
-                  writeMenu(xml, action->menu());
-                  xml.etag();
+                  const QString menuString = findStringFromMenu(action->menu());
+                  if (!menuString.isEmpty()) {
+                        xml.stag("Menu name=\"" + menuString + "\"");
+                        writeMenu(xml, action->menu());
+                        xml.etag();
+                        }
                   }
-            else
-                  xml.tag("action", findStringFromAction(action));
+            else {
+                  const QString actionString = findStringFromAction(action);
+                  if (!actionString.isEmpty())
+                        xml.tag("action", actionString);
+                  }
 
             }
       xml.etag();
@@ -523,12 +529,17 @@ void Workspace::writeMenu(XmlWriter& xml, QMenu* menu)
             if (action->isSeparator())
                   xml.tag("action", "");
             else if (action->menu()) {
-                  xml.stag("Menu name=\"" + findStringFromMenu(action->menu()) + "\"");
-                  writeMenu(xml, action->menu());
-                  xml.etag();
+                  const QString menuString = findStringFromMenu(action->menu());
+                  if (!menuString.isEmpty()) {
+                        xml.stag("Menu name=\"" + menuString + "\"");
+                        writeMenu(xml, action->menu());
+                        xml.etag();
+                        }
                   }
             else {
-                  xml.tag("action", findStringFromAction(action));
+                  const QString actionString = findStringFromAction(action);
+                  if (!actionString.isEmpty())
+                        xml.tag("action", actionString);
                   }
             }
       }
