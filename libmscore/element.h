@@ -478,7 +478,7 @@ class Element : public ScoreElement {
       void autoplaceMeasureElement(bool add = true) { autoplaceMeasureElement(placeAbove(), add); }
       void autoplaceCalculateOffset(QRectF& r, qreal minDistance);
       qreal rebaseOffset(bool nox = true);
-      bool rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool fix);
+      bool rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool above, bool fix);
 
       qreal styleP(Sid idx) const;
       };

@@ -656,7 +656,7 @@ void Tuplet::layout()
             }
       setbbox(r);
 
-      if (!cross())
+      if (outOfStaff && !cross())
             autoplaceMeasureElement(_isUp, /* add to skyline */ true);
       }
 
@@ -934,8 +934,9 @@ void Tuplet::editDrag(EditData& ed)
       else
             _p2 += ed.delta;
       setGenerated(false);
-      layout();
-      score()->setUpdateAll();
+      //layout();
+      //score()->setUpdateAll();
+      triggerLayout();
       }
 
 //---------------------------------------------------------

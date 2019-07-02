@@ -275,10 +275,11 @@ void HairpinSegment::layout()
             qreal sp = spatium();
             qreal md = minDistance().val() * sp;
 
-            SkylineLine sl(!hairpin()->placeAbove());
+            bool above = spanner()->placeAbove();
+            SkylineLine sl(!above);
             Shape sh = shape();
             sl.add(sh.translated(pos()));
-            if (hairpin()->placeAbove()) {
+            if (above) {
                   d  = system()->topDistance(staffIdx(), sl);
                   if (d > -md)
                         ymax -= d + md;
@@ -300,8 +301,8 @@ void HairpinSegment::layout()
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
                         qreal adj = pos().y() + rebase;
-                        bool inStaff = spanner()->placeAbove() ? sh.bottom() + adj > 0.0 : sh.top() + adj < staff()->height();
-                        rebaseMinDistance(md, yd, sp, rebase, inStaff);
+                        bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < staff()->height();
+                        rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
                         }
                   rypos() += yd;
                   }
