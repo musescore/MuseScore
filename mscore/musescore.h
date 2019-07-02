@@ -654,6 +654,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void setCurrentView(int tabIdx, int idx);
       void loadPlugins();
       void unloadPlugins();
+      void addPluginMenuEntries();
 
       ScoreState state() const { return _sstate; }
       void changeState(ScoreState);
