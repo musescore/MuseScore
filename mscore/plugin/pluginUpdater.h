@@ -14,11 +14,11 @@
 #define __PLUGIN_UPDATER_H__
 
 namespace Ms {
-      struct PluginPackageMeta {
-            QString name;
-            std::tuple<bool, bool, bool> compatibility;
-            QStringList categories;
-            QString page_url;
+struct PluginPackageMeta {
+      QString name;
+      std::tuple<bool, bool, bool> compatibility;
+      QStringList categories;
+      QString page_url;
       };
 
 //---------------------------------------------------------
@@ -97,7 +97,6 @@ public slots:
       void downloadInstall(QPushButton* install);
       void updateInstall(QPushButton* install); // called in ResourceManager::updatePlugin()
       void checkUpdate(QPushButton* install);
-      void timeconsume();
 
 signals:
       void pluginStatusChanged(int idx, PluginStatus status);

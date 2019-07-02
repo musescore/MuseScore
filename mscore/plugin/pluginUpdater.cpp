@@ -24,23 +24,22 @@ static int PluginStatus_id = qRegisterMetaType<PluginStatus>("PluginStatus");
 
 static inline std::tuple<bool, bool, bool> compatFromString(const QString& raw) {
       return std::make_tuple(raw.contains("1.x"), raw.contains("2.x"), raw.contains("3.x"));
-}
+      }
 
 //---------------------------------------------------------
 //   GitHub utility functions
 //---------------------------------------------------------
-static inline QString githubReleaseAPI(const QString &user, const QString &repo) { return "https://api.github.com/repos/" + user + "/" + repo + "/releases"; }
-static inline QString githubCommitAPI(const QString &user, const QString &repo, const QString &ref = "")
-      {
+static inline QString githubReleaseAPI(const QString &user, const QString &repo) {
+      return "https://api.github.com/repos/" + user + "/" + repo + "/releases";
+      }
+static inline QString githubCommitAPI(const QString &user, const QString &repo, const QString &ref = "") {
       return "https://api.github.com/repos/" + user + "/" + repo + "/commits" + (ref.isEmpty() ? "" : ('/' + ref));
       }
-static inline QString githubLatestArchiveURL(const QString &user, const QString &repo, const QString &branch = "master")
-      {
+static inline QString githubLatestArchiveURL(const QString &user, const QString &repo, const QString &branch = "master") {
       //return "https://api.github.com/repos/" + user + "/" + repo + "/zip/" + branch;
       return "https://github.com/" + user + '/' + repo + "/archive/" + branch + ".zip";
       }
-static QString getLatestCommitSha(const QString& user, const QString &repo, const QString &branch = "master")
-      {
+static QString getLatestCommitSha(const QString& user, const QString &repo, const QString &branch = "master") {
       QString api_url = githubCommitAPI(user, repo, branch);
       DownloadUtils json;
       json.setTarget(api_url);
@@ -56,16 +55,14 @@ static QString getLatestCommitSha(const QString& user, const QString &repo, cons
             return latest_commit["sha"].toString();
       else return {};
       }
-static inline bool isCompatibleRelease(const QString& branch)
-      {
+static bool isCompatibleRelease(const QString& branch) {
       if (branch == "master" || branch == "3.x") return true;
       if (branch.contains("2.x") || branch.contains("version2") || branch.contains("musescore2") || branch.contains("musescore 2")) return false;
       if (branch.contains("3.x") || branch.contains("version3") || branch.contains("musescore3") || branch.contains("musescore 3")) return true;
       if (branch.contains("2") && !branch.contains("3")) return false;
       return true;
       }
-static inline int CompatEstimate(QString branch)
-      {
+static int CompatEstimate(QString branch) {
       branch = branch.toLower();
       if (branch.contains("2.x") || branch.contains("2x") || branch.contains("version2") || branch.contains("musescore2") || branch.contains("musescore 2")) return -2;
       if (branch.contains("3.x") || branch.contains("3x") || branch.contains("version3") || branch.contains("musescore3") || branch.contains("musescore 3")) return 2;
@@ -106,19 +103,16 @@ static bool getLatestRelease(const QString& user, const QString& repo, int& rele
             return false;
       }
 
-static inline bool isNotFoundMessage(const QJsonObject& json_obj)
-      {
+static inline bool isNotFoundMessage(const QJsonObject& json_obj) {
       return json_obj["message"].toString() == "Not Found";
       }
-static inline QString filenameBaseFromPageURL(QString page_url)
-      {
+static inline QString filenameBaseFromPageURL(QString page_url) {
       Q_ASSERT(page_url.contains("/project/"));
       if (page_url.contains("/en/project/"))
             return page_url.remove("/en/project/");
       return page_url.remove("/project/");
       }
-static inline QString getExtFromURL(QString& direct_link)
-      {
+static inline QString getExtFromURL(QString& direct_link) {
       QString possible_ext = direct_link.split(".").last();
       // We can assume that most extensions contain only 
       // alphanumeric and plus "_", and other connector punctuation chars
@@ -265,30 +259,28 @@ static std::vector<PluginPackageLink> getAttachments(const QString& html_raw, vo
 #if 0
       // This is the code that fetches the attachment table that appears at the bottom of the page.
       // Now I find it more attracting to search for inline attachment urls instaed.
-      {
-            int start_idx = html_raw.indexOf("<div class=\"field field--name-upload field--type-file field--label-above\">");
-            if (start_idx == -1) {
-                  qDebug("No attachment found.");
-                  return;
+      int start_idx = html_raw.indexOf("<div class=\"field field--name-upload field--type-file field--label-above\">");
+      if (start_idx == -1) {
+            qDebug(tr("No attachment found."));
+            return;
             }
-            QString attachments_raw = html_raw.mid(start_idx, -1);
-            XmlReader xml(attachments_raw);
-            while (!xml.atEnd() && xml.name() != "table") xml.readNextStartElement();
-            while (!xml.atEnd() && xml.name() != "tbody") xml.readNextStartElement();
-            while (!xml.atEnd() && xml.name() != "tr") xml.readNextStartElement();
-            // now we've arrived at the first <tr>
-            while (!xml.atEnd() && xml.name() == "tr") {
-                  for (int i = 0; i < 3; i++) // enter <td>, <span>, <a>
-                        xml.readNextStartElement();
-                  PluginPackageLink link = { {ATTACHMENT},{xml.attributes().value("href").toString()} };
-                  //link.hint = xml.readElementText();
-                  link.score = CompatEstimate(xml.readElementText());
-                  file_urls.push_back(link);
-                  for (int i = 0; i < 3; i++) // exit <a>, <span>, <td>
-                        xml.skipCurrentElement();
+      QString attachments_raw = html_raw.mid(start_idx, -1);
+      XmlReader xml(attachments_raw);
+      while (!xml.atEnd() && xml.name() != "table") xml.readNextStartElement();
+      while (!xml.atEnd() && xml.name() != "tbody") xml.readNextStartElement();
+      while (!xml.atEnd() && xml.name() != "tr") xml.readNextStartElement();
+      // now we've arrived at the first <tr>
+      while (!xml.atEnd() && xml.name() == "tr") {
+            for (int i = 0; i < 3; i++) // enter <td>, <span>, <a>
                   xml.readNextStartElement();
+            PluginPackageLink link = { {ATTACHMENT},{xml.attributes().value("href").toString()} };
+            //link.hint = xml.readElementText();
+            link.score = CompatEstimate(xml.readElementText());
+            file_urls.push_back(link);
+            for (int i = 0; i < 3; i++) // exit <a>, <span>, <td>
+                  xml.skipCurrentElement();
+            xml.readNextStartElement();
             }
-      }
 #endif
       // search for all links from musescore.org
       QRegularExpression musescore_link_patt("<a href=\"(https://musescore.org/sites/musescore.org/files/(\\d+\\-\\d+/)?[\\w\\-\\.]+)\".*?>(?<text>.*?)</a>");
@@ -473,7 +465,7 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
                         if (!new_f.open(QIODevice::WriteOnly)) {
                               qDebug("Cannot write the file.");
                               return false;
-                        }
+                              }
                         new_f.write(zipFile.fileData(fi.filePath));
                         new_f.setPermissions(fi.permissions);
                         new_f.close();
@@ -550,15 +542,15 @@ void ResourceManager::uninstallPluginPackage()
       }
 
 static const std::map<PluginStatus, PluginButtonStatus> buttonStatuses = {
-      {NOT_INSTALLED,{QObject::tr("Install"),true,false}},
-      {INSTALL_FAILED,{QObject::tr("Install failed. Try again"),true,false}},
-      {INSTALL_FAILED_INVALID,{QObject::tr("Install failed. Invalid plugin."),false,false}},
-      {ANALYZING,{QObject::tr("Analyzing"),false,false}},
-      {ANALYZE_FAILED,{QObject::tr("Analyze failed. Try again"),true,false}},
-      {DOWNLOADING,{QObject::tr("Downloading"),false,false}},
-      {DOWNLOAD_FAILED,{QObject::tr("Download failed. Try again"),true,false}},
-      {UPDATED,{QObject::tr("Updated"),false,true}},
-      {UPDATE_AVAILABLE,{QObject::tr("Update"),true,true}}
+      {NOT_INSTALLED, {QObject::tr("Install"), true, false}},
+      {INSTALL_FAILED, {QObject::tr("Install failed. Try again"), true, false}},
+      {INSTALL_FAILED_INVALID, {QObject::tr("Install failed. Invalid plugin."), false, false}},
+      {ANALYZING, {QObject::tr("Analyzing"), false, false}},
+      {ANALYZE_FAILED, {QObject::tr("Analyze failed. Try again"), true, false}},
+      {DOWNLOADING, {QObject::tr("Downloading"), false, false}},
+      {DOWNLOAD_FAILED, {QObject::tr("Download failed. Try again"), true, false}},
+      {UPDATED, {QObject::tr("Updated"), false, true}},
+      {UPDATE_AVAILABLE, {QObject::tr("Update"), true, true}}
       };
 
 void ResourceManager::refreshPluginButton(int row, bool updated/* = true*/)
@@ -607,11 +599,11 @@ void ResourceManager::refreshPluginButton(int row, PluginStatus status)
       }
 
 void ResourceManager::commitPlugin(const QString & url, PluginPackageDescription & desc)
-{
+      {
       pluginDescriptionMap[url] = desc;
       writePluginPackages();
       displayPlugins();
-}
+      }
 
 //---------------------------------------------------------
 //   writePluginPackages
@@ -637,9 +629,8 @@ void ResourceManager::writePluginPackages()
             xml.tag("directLink", v.direct_link);
             xml.tag("path", v.dir);
             xml.stag("qmlPath");
-            for (const QString& path : v.qml_paths) {
+            for (const QString& path : v.qml_paths)
                   xml.tag("qml", path);
-                  }
             xml.etag();
             if (v.source == GITHUB_RELEASE)
                   xml.tag("GitHubReleaseID", v.release_id);
@@ -749,16 +740,6 @@ void PluginWorker::checkUpdate(QPushButton* install)
             }
       }
 
-void PluginWorker::timeconsume()
-      {
-      qDebug("timeconsume start");
-      int member = 0;
-      for (int i = 0; i < 1000000; i++)
-            member = member * 2 + 1;
-      qDebug("timeconsume end");
-      emit finished();
-      }
-
 bool PluginWorker::analyzePluginPage(QString full_url)
       {
       bool new_plugin = desc.source == UNKNOWN;
@@ -775,8 +756,8 @@ bool PluginWorker::analyzePluginPage(QString full_url)
             if (item.score > score) {
                   target = item;
                   score = item.score;
+                  }
             }
-      }
       if (score == -2)
             return false;
       if (target.source == GITHUB || target.source == GITHUB_RELEASE) {
@@ -795,18 +776,19 @@ bool PluginWorker::analyzePluginPage(QString full_url)
                         desc.direct_link = direct_link;
                         desc.source = GITHUB_RELEASE;
                         return true;
-                  }
+                        }
                   else
                         // already up-to-date
                         return false;
-            }
+                  }
             QString branch;
             if (target.source == GITHUB_RELEASE)
                   // for archive links, the URL suffix is the branch name
                   branch = QFileInfo(target.url).completeBaseName();
-            else
+            else {
                   // fetch latest commit sha on master(usually for 3.x), as info for update
                   branch = target.branch.isNull() ? "master" : target.branch;
+                  }
             QString sha = getLatestCommitSha(target.user, target.repo, branch);
             // compare the sha with previous stored sha. If the same, don't update.
             if (desc.source != GITHUB || (!sha.isEmpty() && desc.latest_commit != sha)) {
@@ -816,11 +798,10 @@ bool PluginWorker::analyzePluginPage(QString full_url)
                   desc.direct_link = githubLatestArchiveURL(target.user, target.repo, "master");
                   desc.source = GITHUB;
                   return true;
-            }
+                  }
             else
                   return false;
-      }
-
+            }
       else if (target.source == ATTACHMENT) {
             QDateTime date_time;
             if (desc.source != ATTACHMENT || desc.direct_link != target.url || (date_time = GetLastModified(target.url)) != desc.last_modified) {
@@ -834,10 +815,10 @@ bool PluginWorker::analyzePluginPage(QString full_url)
                               date_time = GetLastModified(target.url);
                   desc.last_modified = date_time;
                   return true;
-            }
+                  }
             else
                   return false;
-      }
+            }
       else
             return false;
       }
@@ -880,7 +861,7 @@ void PluginWorker::updateInstall(QPushButton* button)
             delete p_update;
             r->commitPlugin(page_url, desc);
             emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::UPDATED);
-      }
+            }
       else
             emit pluginStatusChanged(button->property("row").toInt(), res);
       }

@@ -17,6 +17,8 @@
 #include "shortcut.h"
 
 namespace Ms {
+
+
 //---------------------------------------------------------
 //   PluginDescription
 //---------------------------------------------------------
@@ -29,8 +31,6 @@ struct PluginDescription {
       Shortcut shortcut;
       QString menuPath;
       };
-
-
 
 //---------------------------------------------------------
 //   PluginManager

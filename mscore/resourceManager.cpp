@@ -120,7 +120,6 @@ void ResourceManager::selectExtensionsTab()
       }
 
 
-
 //---------------------------------------------------------
 //   displayExtensions
 //---------------------------------------------------------
@@ -319,6 +318,7 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
 
       return verifyFile(local, hash);
       }
+
 
 //---------------------------------------------------------
 //   downloadLanguage
