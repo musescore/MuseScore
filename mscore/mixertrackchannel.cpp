@@ -196,15 +196,12 @@ void MixerTrackChannel::stripVolumeSliderMoved(int value)
 
       int diff = mixerTrackItem()->setVolume(value);
 
-     qDebug()<<"stripVolumeSliderMoved has a diff of:"<<diff;
-
       if (diff != 0) {
             // hit the buffers, so reset the value to within limit 
             int bufferStop = value - diff;
-            qDebug()<<"Attempt to limit slider to value: "<<bufferStop;
-            volumeSlider->blockSignals(true);
-            volumeSlider->setValue(bufferStop - 2);
-            volumeSlider->blockSignals(false);
+            //volumeSlider->blockSignals(true); //TODO: check if actually needed - was debugging
+            volumeSlider->setValue(bufferStop);
+            //volumeSlider->blockSignals(false);
 
             }
       volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(value)));

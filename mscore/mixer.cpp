@@ -489,22 +489,24 @@ bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
       
       QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
+            //TODO: check for secondarySliderLock and behave differently
       if (keyEvent->key() == Qt::Key_Period && keyEvent->modifiers() == Qt::NoModifier) {
             qDebug()<<"Volume up keyboard command";
             if (selectedMixerTrackItem && int(selectedMixerTrackItem->getVolume()) < 128) {
                   bool success = selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() + 1);
                   if (!success)
-                        qDebug()<<"Hit the buffers";
+                        qDebug()<<"Hit the buffers. Could make a noise.";
                   }
             return true;
             }
-      
+
+            //TODO: check for secondarySliderLock and behave differently
       if (keyEvent->key() == Qt::Key_Comma && keyEvent->modifiers() == Qt::NoModifier) {
             qDebug()<<"Volume down keyboard command";
             if (selectedMixerTrackItem && int(selectedMixerTrackItem->getVolume()) >0) {
                   bool success = selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() - 1);
                   if (!success)
-                        qDebug()<<"Hit the buffers";
+                        qDebug()<<"Hit the buffers. Could make a noise.";
                   }
             return true;
             }
@@ -542,6 +544,7 @@ bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
 
 void Mixer::nudgeSecondarySliderUp(bool up) {
 
+      //TODO: check for secondarySliderLock and behave differently
       MixerTreeWidgetItem* treeItem = static_cast<MixerTreeWidgetItem*>(mixerTreeWidget->currentItem());
       if (!treeItem)  // defensive
             return;
@@ -573,21 +576,21 @@ void Mixer::nudgeSecondarySliderUp(bool up) {
       if (currentValue < 0)
             newValue = 0;
 
-bool success;
+int diff;
       switch (options->secondarySlider()) {
             case MixerOptions::MixerSecondarySlider::Pan:
-                  success = trackItem->setPan(newValue);
+                  diff = trackItem->setPan(newValue);
                   break;
             case MixerOptions::MixerSecondarySlider::Reverb:
-                  success = trackItem->setReverb(newValue);
+                  diff = trackItem->setReverb(newValue);
                   break;
             case MixerOptions::MixerSecondarySlider::Chorus:
-                  success = trackItem->setChorus(newValue);
+                  diff = trackItem->setChorus(newValue);
                   break;
       }
 
-      if (!success) {
-            qDebug()<<"Hit the buffers";
+      if (diff != 0) {
+            qDebug()<<"Hit the buffers. Could make a noise.";
             }
 
       }

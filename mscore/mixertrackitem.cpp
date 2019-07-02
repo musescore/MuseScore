@@ -324,7 +324,6 @@ int MixerTrackItem:: adjustValue(int newValue, ChannelReader reader, ChannelWrit
       // update the secondary channels
       for (Channel* channel: secondaryPlaybackChannels()) {
 
-            qDebug()<<"what channels change: "<<channel->name();
             switch (mode) {
                   case MixerVolumeMode::Override:
                         // all secondary channels just get newValue
@@ -348,10 +347,7 @@ int MixerTrackItem:: adjustValue(int newValue, ChannelReader reader, ChannelWrit
       }
 
       if (upperClip || lowerClip) {
-            // don't adjust the main value
-            qDebug()<<"returning a primaryDiff: "<<primaryDiff;
-            qDebug()<<"oldvalue = "<<reader(channel());
-            qDebug()<<"newValue = "<<newValue;
+            // in this case we don't adjust the main value - return slider movement
             return primaryDiff;
       }
       writer(newValue, channel());
