@@ -141,7 +141,7 @@ bool MixerTrackItem::getSolo()
 
 
 
-void MixerTrackItem::setVolume(char value)
+int MixerTrackItem::setVolume(char value)
       {
 
       auto writer = [](int value, Channel* channel){
@@ -151,7 +151,7 @@ void MixerTrackItem::setVolume(char value)
       auto reader = [](Channel* channel) -> int {
             return channel->volume(); };
 
-      adjustValue(value, reader, writer);
+      return adjustValue(value, reader, writer);
       }
 
 
@@ -159,7 +159,7 @@ void MixerTrackItem::setVolume(char value)
 //   setPan
 //---------------------------------------------------------
 
-void MixerTrackItem::setPan(char value)
+int MixerTrackItem::setPan(char value)
       {
       auto writer = [](int value, Channel* channel){
             channel->setPan(value);
@@ -168,14 +168,14 @@ void MixerTrackItem::setPan(char value)
       auto reader = [](Channel* channel) -> int {
             return channel->pan(); };
 
-      adjustValue(value, reader, writer);
+      return adjustValue(value, reader, writer);
       }
 
 //---------------------------------------------------------
 //   setChorus
 //---------------------------------------------------------
 
-void MixerTrackItem::setChorus(char value)
+int MixerTrackItem::setChorus(char value)
       {
       auto writer = [](int value, Channel* channel){
             channel->setChorus(value);
@@ -184,14 +184,14 @@ void MixerTrackItem::setChorus(char value)
       auto reader = [](Channel* channel) -> int {
             return channel->chorus(); };
 
-      adjustValue(value, reader, writer);
+      return adjustValue(value, reader, writer);
       }
 
 //---------------------------------------------------------
 //   setReverb
 //---------------------------------------------------------
 
-void MixerTrackItem::setReverb(char value)
+int MixerTrackItem::setReverb(char value)
       {
       auto writer = [](int value, Channel* channel){
             channel->setReverb(value);
@@ -200,7 +200,7 @@ void MixerTrackItem::setReverb(char value)
       auto reader = [](Channel* channel) -> int {
             return channel->reverb(); };
 
-      adjustValue(value, reader, writer);
+      return adjustValue(value, reader, writer);
       }
 
 
@@ -217,8 +217,8 @@ void MixerTrackItem::setColor(int valueRgb)
             }
 
       // TODO: setColor - does not respect the "overall" policy - maybe it should
-      _part->setColor(valueRgb); //TODO: - not sure this is necessary (or does anything?!)
-      for (Channel* channel: secondaryPlaybackChannels()) {
+      //_part->setColor(valueRgb); //TODO: - not sure this is necessary (or does anything?!)
+      for (Channel* channel: playbackChannels()) {
             channel->setColor(valueRgb);
             }
       }
@@ -236,7 +236,7 @@ void MixerTrackItem::setMute(bool value)
             return;
             }
 
-      for (Channel* channel: secondaryPlaybackChannels()) {
+      for (Channel* channel: playbackChannels()) {
             if (value)
                   seq->stopNotes(channel->channel());
             channel->setMute(value);
@@ -256,7 +256,7 @@ void MixerTrackItem::setSolo(bool value)
             channel()->setSolo(value);
             }
       else {
-            for (Channel* channel: secondaryPlaybackChannels()) {
+            for (Channel* channel: playbackChannels()) {
                   if (value)
                         seq->stopNotes(channel->channel());
                   channel->setSolo(value);
@@ -302,13 +302,13 @@ void MixerTrackItem::setSolo(bool value)
 //MARK:- helper methods
 
 template <class ChannelWriter, class ChannelReader>
-void MixerTrackItem:: adjustValue(int newValue, ChannelReader reader, ChannelWriter writer)
+int MixerTrackItem:: adjustValue(int newValue, ChannelReader reader, ChannelWriter writer)
 {
 
       if (!isPart()) {
             // only one channel, the easy case - just make a direct adjustment
             writer(newValue, _channel);
-            return;
+            return 0;
       }
 
       // multiple channels and the OVERALL value has been changed
@@ -324,6 +324,7 @@ void MixerTrackItem:: adjustValue(int newValue, ChannelReader reader, ChannelWri
       // update the secondary channels
       for (Channel* channel: secondaryPlaybackChannels()) {
 
+            qDebug()<<"what channels change: "<<channel->name();
             switch (mode) {
                   case MixerVolumeMode::Override:
                         // all secondary channels just get newValue
@@ -347,10 +348,14 @@ void MixerTrackItem:: adjustValue(int newValue, ChannelReader reader, ChannelWri
       }
 
       if (upperClip || lowerClip) {
-            //TODO: clipping - scope to explore different behaviors here - but for now NO OP
+            // don't adjust the main value
+            qDebug()<<"returning a primaryDiff: "<<primaryDiff;
+            qDebug()<<"oldvalue = "<<reader(channel());
+            qDebug()<<"newValue = "<<newValue;
+            return primaryDiff;
       }
-
       writer(newValue, channel());
+      return 0;
 }
 
 bool MixerTrackItem::isPart()
@@ -375,8 +380,19 @@ QList<Channel*> MixerTrackItem::secondaryPlaybackChannels() {
       if (!isPart()) {
             return QList<Channel*> {};
       }
-      return playbackChannels(_part);
+
+      QList<Channel*> allChannels = playbackChannels(_part);
+      if (allChannels.isEmpty())
+            return allChannels;
+
+      allChannels.removeFirst();
+      return allChannels;
 }
+
+QList<Channel*> MixerTrackItem::playbackChannels()
+      {
+      return playbackChannels(_part);
+      }
 
 
 QList<Channel*> MixerTrackItem::playbackChannels(Part* part)

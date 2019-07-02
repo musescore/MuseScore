@@ -49,6 +49,7 @@ private:
 
       QList<Channel*> secondaryPlaybackChannels();
       QList<Channel*> playbackChannels(Part* part);
+      QList<Channel*> playbackChannels();
 
 public:
       MixerTrackItem(TrackType trackType, Part* part, Instrument* _instr, Channel* _chan);
@@ -62,13 +63,13 @@ public:
       bool isPart();
 
       void setColor(int valueRgb);
-      void setVolume(char value);
-      void setPan(char value);
-      void setChorus(char value);
-      void setReverb(char value);
+      int setVolume(char value);    // returns adjustment required if buffers hit
+      int setPan(char value);       // returns adjustment required if buffers hit
+      int setChorus(char value);    // returns adjustment required if buffers hit
+      int setReverb(char value);    // returns adjustment required if buffers hit
 
       template <class ChannelWriter, class ChannelReader>
-      void adjustValue(int newValue, ChannelReader reader, ChannelWriter writer);
+      int adjustValue(int newValue, ChannelReader reader, ChannelWriter writer); // returns adjustment required if buffers hit
 
       void setMute(bool value);
       void setSolo(bool value);

@@ -492,7 +492,9 @@ bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
       if (keyEvent->key() == Qt::Key_Period && keyEvent->modifiers() == Qt::NoModifier) {
             qDebug()<<"Volume up keyboard command";
             if (selectedMixerTrackItem && int(selectedMixerTrackItem->getVolume()) < 128) {
-                  selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() + 1);
+                  bool success = selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() + 1);
+                  if (!success)
+                        qDebug()<<"Hit the buffers";
                   }
             return true;
             }
@@ -500,7 +502,9 @@ bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
       if (keyEvent->key() == Qt::Key_Comma && keyEvent->modifiers() == Qt::NoModifier) {
             qDebug()<<"Volume down keyboard command";
             if (selectedMixerTrackItem && int(selectedMixerTrackItem->getVolume()) >0) {
-                  selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() - 1);
+                  bool success = selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() - 1);
+                  if (!success)
+                        qDebug()<<"Hit the buffers";
                   }
             return true;
             }
@@ -569,20 +573,22 @@ void Mixer::nudgeSecondarySliderUp(bool up) {
       if (currentValue < 0)
             newValue = 0;
 
-
+bool success;
       switch (options->secondarySlider()) {
             case MixerOptions::MixerSecondarySlider::Pan:
-                  trackItem->setPan(newValue);
+                  success = trackItem->setPan(newValue);
                   break;
             case MixerOptions::MixerSecondarySlider::Reverb:
-                  trackItem->setReverb(newValue);
+                  success = trackItem->setReverb(newValue);
                   break;
             case MixerOptions::MixerSecondarySlider::Chorus:
-                  trackItem->setChorus(newValue);
+                  success = trackItem->setChorus(newValue);
                   break;
       }
 
-
+      if (!success) {
+            qDebug()<<"Hit the buffers";
+            }
 
       }
 
