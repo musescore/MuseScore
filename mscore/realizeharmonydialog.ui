@@ -92,38 +92,8 @@
          <string>Options</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
-         <property name="spacing">
-          <number>5</number>
-         </property>
-         <property name="topMargin">
-          <number>2</number>
-         </property>
          <item>
-          <widget class="QCheckBox" name="testOption1">
-           <property name="text">
-            <string>Test Option</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="testCombo">
-           <property name="currentIndex">
-            <number>1</number>
-           </property>
-           <item>
-            <property name="text">
-             <string>Single ♯ and ♭ Only</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Use Double ♯ and ♭</string>
-            </property>
-           </item>
-          </widget>
+          <widget class="Ms::VoicingSelect" name="voicingSelect" native="true"/>
          </item>
         </layout>
        </widget>
@@ -234,10 +204,14 @@
    </item>
   </layout>
  </widget>
- <tabstops>
-  <tabstop>testOption1</tabstop>
-  <tabstop>testCombo</tabstop>
- </tabstops>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::VoicingSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/voicingSelect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

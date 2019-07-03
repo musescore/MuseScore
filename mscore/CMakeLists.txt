@@ -208,6 +208,7 @@ QT5_WRAP_UI (ui_headers
       inspector/align_select.ui
       inspector/font_style_select.ui
       inspector/offset_select.ui
+      inspector/voicing_select.ui
       inspector/scale_select.ui
       inspector/size_select.ui
       inspector/inspector_stem.ui
@@ -414,6 +415,7 @@ add_library(mscoreapp STATIC
       inspector/alignSelect.cpp
       inspector/fontStyleSelect.cpp
       inspector/offsetSelect.cpp
+      inspector/voicingSelect.cpp
       inspector/scaleSelect.cpp
       inspector/sizeSelect.cpp
       inspector/inspectorTextBase.cpp
