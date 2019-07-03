@@ -87,6 +87,12 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
       //FIXME - PHV: temp removal to test offset
 
       int rootPitch = tpc2pitch(rootTpc) + transposeOffset;
+      //euclidian mod, we need to treat this new pitch as a pitch between
+      //0 and 11, so that voicing remains consistent across transposition
+      if (rootPitch < 0)
+            rootPitch += PITCH_DELTA_OCTAVE;
+      else
+            rootPitch %= PITCH_DELTA_OCTAVE;
 
       _notes.clear();
       //fix magic values

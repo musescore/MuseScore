@@ -3110,6 +3110,7 @@ void Score::cmdRealizeChordSymbols(QList<Harmony*> hlist)
             Segment* seg = toSegment(h->parent());
             Fraction duration = h->ticksTilNext();
             Fraction tick = seg->tick();
+            bool concertPitch = styleB(Sid::concertPitch);
 
             Chord* chord = new Chord(this);
             chord->setTrack(h->track()); //set track so notes have a track to sit on
@@ -3120,7 +3121,10 @@ void Score::cmdRealizeChordSymbols(QList<Harmony*> hlist)
                   Note* note = new Note(this);
                   NoteVal nval;
                   nval.pitch = i.key();
-                  nval.tpc1 = i.value();
+                  if (concertPitch)
+                        nval.tpc1 = i.value();
+                  else
+                        nval.tpc2 = i.value();
                   chord->add(note); //add note first to set track and such
                   note->setNval(nval, tick);
                   }
