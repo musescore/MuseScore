@@ -62,6 +62,8 @@ public:
       int color();
       bool isPart();
 
+      QString detailedToolTip();
+
       void setColor(int valueRgb);
       int setVolume(char value);    // returns adjustment required if buffers hit
       int setPan(char value);       // returns adjustment required if buffers hit

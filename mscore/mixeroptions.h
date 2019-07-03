@@ -61,7 +61,7 @@ class MixerOptions
       void setShowMasterVolume(bool show) { _showMasterVolume = show; writeSettings(); };
       void setMode(MixerVolumeMode mode) { _mode = mode; writeSettings(); };
       void setSecondarySlider(MixerSecondarySlider secondary) { _secondarySlider = secondary; }
-      void setSecondaryModeLock(bool lock) { qDebug()<<"setting lock: "<<lock; _secondaryModeLock = lock; };
+      void setSecondaryModeLock(bool lock) { _secondaryModeLock = lock; };
       void readSettings();
       void writeSettings();
 

@@ -19,9 +19,13 @@
 
 #include "mixertrackitem.h"
 
+#include "musescore.h"                    // required for access to synti
+#include "synthesizer/msynthesizer.h"     // required for MidiPatch
+#include "seq.h"
+
 #include "libmscore/score.h"
 #include "libmscore/part.h"
-#include "seq.h"
+#include "libmscore/undo.h"
 
 #include "mixer.h"
 #include "mixeroptions.h"
@@ -99,6 +103,27 @@ Channel* MixerTrackItem::playbackChannel(const Channel* channel)
 //---------------------------------------------------------
 //   color
 //---------------------------------------------------------
+
+QString MixerTrackItem::detailedToolTip()
+      {
+
+      MidiPatch* midiPatch = synti->getPatchInfo(_channel->synti(), _channel->bank(), _channel->program());
+
+      return QApplication::tr("Part Name: %1\n"
+                              "Instrument: %2\n"
+                              "Channel: %3\n"
+                              "Bank: %4\n"
+                              "Program: %5\n"
+                              "Patch: %6")
+      .arg(_part->partName(),
+           _instrument->trackName(),
+           qApp->translate("InstrumentsXML", _channel->name().toUtf8().data()),
+           QString::number(_channel->bank()),
+           QString::number(_channel->program()),
+           midiPatch ? midiPatch->name : QApplication::tr("~no patch~"));
+
+      }
+
 
 int MixerTrackItem::color()
       {

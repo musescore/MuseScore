@@ -19,16 +19,9 @@
 
 #include "mixertrackchannel.h"
 
+#include "libmscore/instrument.h"
 #include "musescore.h"
-
-#include "libmscore/score.h"
-#include "libmscore/part.h"
-
-#include "seq.h"
-#include "libmscore/undo.h"
-#include "synthcontrol.h"
-#include "synthesizer/msynthesizer.h"
-#include "preferences.h"
+#include "synthesizer/msynthesizer.h"     // required for MidiPatch
 
 #include "mixer.h"
 #include "mixertrackitem.h"
@@ -139,29 +132,11 @@ void MixerTrackChannel::update()
       muteButton->setChecked(mixerTrackItem()->getMute());
       soloButton->setChecked(mixerTrackItem()->getSolo());
 
-      Channel* channel = mixerTrackItem()->channel();
-      MidiPatch* midiPatch = synti->getPatchInfo(channel->synti(), channel->bank(), channel->program());
-      Part* part = mixerTrackItem()->part();
-      Instrument* instrument = mixerTrackItem()->instrument();
-
-      QColor channelColor = channel->color();
+      QColor channelColor = mixerTrackItem()->color();
       if (colorLabel)
             colorLabel->setStyleSheet(QString("QLabel{background: %1;padding-top: 2px; padding-bottom: 2px; border-radius: 3px;}").arg(channelColor.name()));
 
-      //TODO: this tooltip might want to go over the instrument name instead (or both?)
-      QString summaryTooltip = tr("Part Name: %1\n"
-                           "Instrument: %2\n"
-                           "Channel: %3\n"
-                           "Bank: %4\n"
-                           "Program: %5\n"
-                           "Patch: %6")
-                  .arg(part->partName(),
-                       instrument->trackName(),
-                       qApp->translate("InstrumentsXML", channel->name().toUtf8().data()),
-                       QString::number(channel->bank()),
-                       QString::number(channel->program()),
-                       midiPatch ? midiPatch->name : tr("~no patch~"));
-      setToolTip(summaryTooltip);
+      setToolTip(mixerTrackItem()->detailedToolTip());
       }
 
 
@@ -198,11 +173,8 @@ void MixerTrackChannel::stripVolumeSliderMoved(int value)
 
       if (diff != 0) {
             // hit the buffers, so reset the value to within limit 
-            int bufferStop = value - diff;
-            //volumeSlider->blockSignals(true); //TODO: check if actually needed - was debugging
-            volumeSlider->setValue(bufferStop);
-            //volumeSlider->blockSignals(false);
-
+            value = value - diff;
+            volumeSlider->setValue(value);
             }
       volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(value)));
 

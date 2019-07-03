@@ -24,7 +24,6 @@
 #include "ui_mixermasterchannel.h"
 #include "mixertrackitem.h"
 #include "libmscore/instrument.h"
-#include "awl/fastlog.h"    // for the log volume slider
 
 
 // obq-note
