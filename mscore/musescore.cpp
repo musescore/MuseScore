@@ -2053,6 +2053,7 @@ void MuseScore::updateMenus()
       connect(openRecent,     SIGNAL(triggered(QAction*)), SLOT(selectScore(QAction*)));
       connect(menuWorkspaces, SIGNAL(aboutToShow()),       SLOT(showWorkspaceMenu()));
       setMenuTitles();
+      addPluginMenuEntries();
       }
       
 //---------------------------------------------------------
@@ -6643,6 +6644,7 @@ void MuseScore::showSearchDialog()
 
 #ifndef SCRIPT_INTERFACE
 void MuseScore::pluginTriggered(int) {}
+void MuseScore::pluginTriggered(QString path) {}
 void MuseScore::loadPlugins() {}
 bool MuseScore::loadPlugin(const QString&) { return false;}
 void MuseScore::unloadPlugins() {}
