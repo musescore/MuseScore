@@ -49,6 +49,7 @@ class TestChordSymbol : public QObject, public MTest {
       void testTranspose();
       void testTransposePart();
       void testRealizeChordSymbols();
+      void testRealizeTransposed();
       };
 
 //---------------------------------------------------------
@@ -225,6 +226,29 @@ void TestChordSymbol::testRealizeChordSymbols()
       score->cmdRealizeChordSymbols(hlist);
       score->endCmd();
       test_post(score, "realize-chord-symbols");
+      }
+
+//    Check if the note pitches and tpcs are correct after realizing
+//    chord symbols on transposed instruments.
+void TestChordSymbol::testRealizeTransposed()
+      {
+      MasterScore* score = test_pre("transpose-realize-test");
+      //concert pitch off
+      score->startCmd();
+      score->cmdConcertPitchChanged(false, true);
+      score->endCmd();
+
+      //realize all chord symbols
+      selectAllChordSymbols(score);
+      QList<Harmony*> hlist;
+      for (Element* e : score->selection().elements()) {
+            if (e->isHarmony())
+                  hlist << toHarmony(e);
+            }
+      score->startCmd();
+      score->cmdRealizeChordSymbols(hlist);
+      score->endCmd();
+      test_post(score, "transpose-realize-test");
       }
 
 QTEST_MAIN(TestChordSymbol)
