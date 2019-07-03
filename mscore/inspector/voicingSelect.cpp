@@ -17,26 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __REALIZEHARMONYDIALOG_H__
-#define __REALIZEHARMONYDIALOG_H__
-
-#include "ui_realizeharmonydialog.h"
+#include "voicingSelect.h"
 
 namespace Ms {
 
-class Harmony;
-
-class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase {
-      Q_OBJECT
-
-   private slots:
-      void toggleChordTable();
-   public:
-      RealizeHarmonyDialog(QWidget* parent = 0);
-      void setChordList(QList<Harmony*>);
-      };
-
 }
-
-
-#endif // REALIZEHARMONYDIALOG_H

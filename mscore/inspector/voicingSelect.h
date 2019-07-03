@@ -15,28 +15,28 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//=============================================================================
+//============================================================================
 
-#ifndef __REALIZEHARMONYDIALOG_H__
-#define __REALIZEHARMONYDIALOG_H__
+#ifndef __VOICINGSELECT_H__
+#define __VOICINGSELECT_H__
 
-#include "ui_realizeharmonydialog.h"
+#include "ui_voicing_select.h"
 
 namespace Ms {
 
-class Harmony;
-
-class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase {
+class VoicingSelect : public QWidget, public Ui::VoicingSelect {
       Q_OBJECT
 
-   private slots:
-      void toggleChordTable();
    public:
-      RealizeHarmonyDialog(QWidget* parent = 0);
-      void setChordList(QList<Harmony*>);
+      VoicingSelect(QWidget* parent) : QWidget(parent) { setupUi(this); }
+      virtual ~VoicingSelect() {}
+      int getVoicing() { return voicingBox->currentIndex(); }
+      bool getLiteral() { return literalButton->isChecked(); }
+
+      void setVoicing(int idx) { voicingBox->setCurrentIndex(idx); }
+      void setLiteral(bool literal) { literalButton->setChecked(literal); }
       };
 
 }
 
-
-#endif // REALIZEHARMONYDIALOG_H
+#endif // VOICINGSELECT_H

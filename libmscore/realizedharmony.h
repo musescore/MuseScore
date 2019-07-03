@@ -26,12 +26,19 @@ class Harmony;
 
 //voicing modes to use
 enum class Voicing : char {
-      AUTO, ROOT_ONLY
+      AUTO = 0,
+      ROOT_ONLY,
+      CLOSE,
+      OPEN,
+      DROP_2,
+      SIX_NOTE,
+      FOUR_NOTE,
+      THREE_NOTE
       };
 
 //rhythm mode to use
 enum class Rhythm : char {
-      AUTO
+      AUTO = 0
       };
 
 //-----------------------------------------
@@ -51,6 +58,8 @@ class RealizedHarmony {
 
       //whether or not the current notes QMap is up to date
       bool _dirty;
+
+      bool literal; //use all notes when possible and do not add any notes
 
    public:
       RealizedHarmony() : _harmony(0), _notes(QMap<int, int>()), _voicing(Voicing::AUTO),
