@@ -939,6 +939,7 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                               int staticTick = seg->tick().ticks();
                               changeCCBetween(renderData.tempPlayEvents, staticTick, staticTick, exprVal, exprVal, channel, controller, defaultChangeMethod, tickOffset, staffIdx);
                               }
+                        velocity = velocityStart; // update the velocity value that will be used in note events
                         } // if instr->singleNoteDynamics()
                   else {
                         if (chord != 0) {
