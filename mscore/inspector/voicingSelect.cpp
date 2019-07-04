@@ -21,4 +21,42 @@
 
 namespace Ms {
 
+VoicingSelect::VoicingSelect(QWidget* parent)
+   : QWidget(parent)
+      {
+      setupUi(this);
+
+      //setup changed signals
+      connect(literalButton, SIGNAL(valueChanged(bool)), SLOT(_voicingChanged()));
+      connect(voicingBox, SIGNAL(valueChanged(int)), SLOT(_voicingChanged()));
+      }
+
+void VoicingSelect::_voicingChanged()
+      {
+      emit voicingChanged(literalButton->isChecked(), voicingBox->currentIndex());
+      }
+
+void VoicingSelect::blockVoicingSignals(bool val)
+      {
+      literalButton->blockSignals(val);
+      voicingBox->blockSignals(val);
+      }
+
+void VoicingSelect::setVoicing(int idx)
+      {
+      blockVoicingSignals(true);
+      voicingBox->setCurrentIndex(idx);
+      blockVoicingSignals(false);
+      }
+
+void VoicingSelect::setLiteral(bool literal)
+      {
+      blockVoicingSignals(true);
+      if (literal)
+            literalButton->setChecked(literal);
+      else
+            jazzButton->setChecked(true);
+      blockVoicingSignals(false);
+      }
+
 }

@@ -34,6 +34,9 @@ class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase {
    public:
       RealizeHarmonyDialog(QWidget* parent = 0);
       void setChordList(QList<Harmony*>);
+
+      bool getLiteral() { return voicingSelect->getLiteral(); }
+      int getVoicing() { return voicingSelect->getVoicing(); }
       };
 
 }
