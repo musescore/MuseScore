@@ -61,6 +61,19 @@ void RealizedHarmony::setRhythm(Rhythm r)
       }
 
 //---------------------------------------------------
+//   setLiteral
+///   sets literal/jazz and dirty flag if the passed
+///   bool is different than current
+//---------------------------------------------------
+void RealizedHarmony::setLiteral(bool literal)
+      {
+      if (_literal == literal)
+            return;
+      _literal = literal;
+      _dirty = 1;
+      }
+
+//---------------------------------------------------
 //   notes
 ///   returns the list of notes
 //---------------------------------------------------
@@ -68,6 +81,53 @@ const QMap<int, int>& RealizedHarmony::notes() const
       {
       //TODO - PHV: do something when dirty?
       return _notes;
+      }
+
+//---------------------------------------------------
+//   notes
+///   returns the list of notes
+//---------------------------------------------------
+const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
+                                                bool literal, Voicing voicing, int transposeOffset) const
+      {
+      QMap<int, int> notes;
+      int rootPitch = tpc2pitch(rootTpc) + transposeOffset;
+      //euclidian mod, we need to treat this new pitch as a pitch between
+      //0 and 11, so that voicing remains consistent across transposition
+      if (rootPitch < 0)
+            rootPitch += PITCH_DELTA_OCTAVE;
+      else
+            rootPitch %= PITCH_DELTA_OCTAVE;
+
+      //fix magic values
+      if (bassTpc != Tpc::TPC_INVALID && voicing != Voicing::ROOT_ONLY)
+            notes.insert(tpc2pitch(bassTpc) + transposeOffset
+                        + 4*PITCH_DELTA_OCTAVE, bassTpc);
+      else
+            notes.insert(rootPitch + 4*PITCH_DELTA_OCTAVE, rootTpc);
+
+
+      switch (voicing) {
+            case Voicing::ROOT_ONLY:
+                  break;
+            case Voicing::AUTO:
+                  {
+                  notes.insert(rootPitch + 5*PITCH_DELTA_OCTAVE, rootTpc);
+                  //ensure that notes fall under a specific range
+                  //for now this range is between 5*12 and 6*12
+                  QMap<int, int> intervals = getIntervals(rootTpc);
+                  QMapIterator<int, int> i(intervals);
+                  while (i.hasNext()) {
+                        i.next();
+                        notes.insert((rootPitch + i.key()) % PITCH_DELTA_OCTAVE +
+                                      5*PITCH_DELTA_OCTAVE, i.value());
+                        }
+                  }
+                  break;
+            default:
+                  break;
+            }
+      return notes;
       }
 
 //---------------------------------------------------
@@ -86,44 +146,7 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
       //      return;
       //FIXME - PHV: temp removal to test offset
 
-      int rootPitch = tpc2pitch(rootTpc) + transposeOffset;
-      //euclidian mod, we need to treat this new pitch as a pitch between
-      //0 and 11, so that voicing remains consistent across transposition
-      if (rootPitch < 0)
-            rootPitch += PITCH_DELTA_OCTAVE;
-      else
-            rootPitch %= PITCH_DELTA_OCTAVE;
-
-      _notes.clear();
-      //fix magic values
-      if (_voicing != Voicing::ROOT_ONLY) {
-            if (bassTpc != Tpc::TPC_INVALID)
-                  _notes.insert(tpc2pitch(bassTpc) + transposeOffset
-                                + 4*PITCH_DELTA_OCTAVE, bassTpc);
-            else
-                  _notes.insert(rootPitch + 4*PITCH_DELTA_OCTAVE, rootTpc);
-            }
-
-      switch (_voicing) {
-            case Voicing::ROOT_ONLY:
-                  break;
-            case Voicing::AUTO:
-                  {
-                  _notes.insert(rootPitch + 5*PITCH_DELTA_OCTAVE, rootTpc);
-                  //ensure that notes fall under a specific range
-                  //for now this range is between 5*12 and 6*12
-                  QMap<int, int> intervals = getIntervals(rootTpc);
-                  QMapIterator<int, int> i(intervals);
-                  while (i.hasNext()) {
-                        i.next();
-                        _notes.insert((rootPitch + i.key()) % PITCH_DELTA_OCTAVE +
-                                      5*PITCH_DELTA_OCTAVE, i.value());
-                        }
-                  }
-                  break;
-            default:
-                  break;
-            }
+      _notes = generateNotes(rootTpc, bassTpc, _literal, _voicing, transposeOffset);
       }
 
 //---------------------------------------------------

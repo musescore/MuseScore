@@ -25,7 +25,8 @@ namespace Ms {
 class Harmony;
 
 //voicing modes to use
-enum class Voicing : char {
+enum class Voicing : signed char {
+      INVALID = -1,
       AUTO = 0,
       ROOT_ONLY,
       CLOSE,
@@ -59,7 +60,7 @@ class RealizedHarmony {
       //whether or not the current notes QMap is up to date
       bool _dirty;
 
-      bool literal; //use all notes when possible and do not add any notes
+      bool _literal; //use all notes when possible and do not add any notes
 
    public:
       RealizedHarmony() : _harmony(0), _notes(QMap<int, int>()), _voicing(Voicing::AUTO),
@@ -68,9 +69,11 @@ class RealizedHarmony {
 
       void setVoicing(Voicing);
       void setRhythm(Rhythm);
+      void setLiteral(bool);
 
       Voicing voicing() const { return _voicing; }
       Rhythm rhythm() const { return _rhythm; }
+      bool literal() const { return _literal; }
 
       bool valid() const { return !_dirty && _harmony; }
 
@@ -78,6 +81,8 @@ class RealizedHarmony {
       const QList<int> tpcs() const { return _notes.values(); }
 
       const QMap<int, int>& notes() const;
+      const QMap<int, int> generateNotes(int rootTpc, int bassTpc, bool literal,
+                                                  Voicing voicing, int transposeOffset) const;
 
       void update(int rootTpc, int bassTpc, int transposeOffset = 0); //updates the notes map
 
