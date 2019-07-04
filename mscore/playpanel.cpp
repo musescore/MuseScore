@@ -347,12 +347,12 @@ void PlayPanel::updatePosLabel(int utick)
       // this prevents jitter as width of time grows and shrinks
       // alternative would be to use a monospaced font and a
       // single label
-          
-      char barBuffer[8];
+
+      char barBuffer[12];
       sprintf(barBuffer, "%d", bar+1);// sprintf(barBuffer, "%03d", bar+1);
       measureLabel->setText(QString(barBuffer));
-      
-      char beatBuffer[8];
+
+      char beatBuffer[12];
       sprintf(beatBuffer, "%02d", beat+1);
       beatLabel->setText(QString(beatBuffer));
       }
