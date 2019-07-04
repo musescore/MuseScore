@@ -1977,31 +1977,41 @@ void MuseScore::retranslate()
 
 void MuseScore::setMenuTitles()
       {
-      menuFile->setTitle(tr("&File"));
-      openRecent->setTitle(tr("Open &Recent"));
-      menuEdit->setTitle(tr("&Edit"));
-      menuView->setTitle(tr("&View"));
-      menuToolbars->setTitle(tr("&Toolbars"));
-      menuWorkspaces->setTitle(tr("W&orkspaces"));
-      menuAdd->setTitle(tr("&Add"));
-      menuAddMeasures->setTitle(tr("&Measures"));
-      menuAddFrames->setTitle(tr("&Frames"));
-      menuAddText->setTitle(tr("&Text"));
-      menuAddLines->setTitle(tr("&Lines"));
-      menuAddPitch->setTitle(tr("N&otes"));
-      menuAddInterval->setTitle(tr("&Intervals"));
-      menuTuplet->setTitle(tr("T&uplets"));
-      menuFormat->setTitle(tr("F&ormat"));
-      menuStretch->setTitle(tr("&Stretch"));
-      menuTools->setTitle(tr("&Tools"));
-      menuVoices->setTitle(tr("&Voices"));
-      menuMeasure->setTitle(tr("&Measure"));
-      menuPlugins->setTitle(tr("&Plugins"));
-      menuHelp->setTitle(tr("&Help"));
-      menuTours->setTitle(tr("&Tours"));
+      // The list below is not static, both strings
+      // and menu pointers need refreshing.
+      const std::initializer_list<std::pair<QMenu*, QString>> titles {
+            { menuFile,             tr("&File")             },
+            { openRecent,           tr("Open &Recent")      },
+            { menuEdit,             tr("&Edit")             },
+            { menuView,             tr("&View")             },
+            { menuToolbars,         tr("&Toolbars")         },
+            { menuWorkspaces,       tr("W&orkspaces")       },
+            { menuAdd,              tr("&Add")              },
+            { menuAddMeasures,      tr("&Measures")         },
+            { menuAddFrames,        tr("&Frames")           },
+            { menuAddText,          tr("&Text")             },
+            { menuAddLines,         tr("&Lines")            },
+            { menuAddPitch,         tr("N&otes")            },
+            { menuAddInterval,      tr("&Intervals")        },
+            { menuTuplet,           tr("T&uplets")          },
+            { menuFormat,           tr("F&ormat")           },
+            { menuStretch,          tr("&Stretch")          },
+            { menuTools,            tr("&Tools")            },
+            { menuVoices,           tr("&Voices")           },
+            { menuMeasure,          tr("&Measure")          },
+            { menuPlugins,          tr("&Plugins")          },
 #ifndef NDEBUG
-      menuDebug->setTitle("Debug");  // not translated
+            { menuDebug,            "Debug"                 }, // not translated
 #endif
+            { menuHelp,             tr("&Help")             },
+            { menuTours,            tr("&Tours")            }
+            };
+
+      for (const auto& t : titles) {
+            QMenu* m = t.first;
+            if (m)
+                  m->setTitle(t.second);
+            }
       }
 
 //---------------------------------------------------------
@@ -2010,9 +2020,8 @@ void MuseScore::setMenuTitles()
 
 void MuseScore::updateMenu(QMenu*& menu, QString menu_id, QString name)
       {
-      QMenu* m = Workspace::findMenuFromString(menu_id);
-      if (m) {
-            menu = m;
+      menu = Workspace::findMenuFromString(menu_id);
+      if (menu) {
             if (name != "")
                   menu->setObjectName(name);
             }
