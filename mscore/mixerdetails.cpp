@@ -41,6 +41,7 @@ MixerDetails::MixerDetails(Mixer *mixer) :
       selectedMixerTrackItem(nullptr)
       {
       setupUi(this);
+      panSlider->setPanMode(true);
 
       mutePerVoiceGrid = new QGridLayout();
       mutePerVoiceGrid->setContentsMargins(0, 0, 0, 0);

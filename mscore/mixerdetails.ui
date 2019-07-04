@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>286</width>
-    <height>348</height>
+    <height>370</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -257,7 +257,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Pan:</string>
+      <string>Dan</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -267,7 +267,7 @@
    <item row="5" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QSlider" name="panSlider">
+      <widget class="Ms::MixerSlider" name="panSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -780,6 +780,11 @@
    <extends>QFrame</extends>
    <header>awl/colorlabel.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::MixerSlider</class>
+   <extends>QSlider</extends>
+   <header>mixerslider.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
