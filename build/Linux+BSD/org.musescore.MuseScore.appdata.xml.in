@@ -82,6 +82,21 @@
     <content_attribute id="money-purchasing">mild</content_attribute>
   </content_rating>
   <releases>
+    <release date="2019-06-30" version="3.2.2">
+      <description>
+        <p>This release fixes some issues with plugins.</p>
+      </description>
+    </release>
+    <release date="2019-06-28" version="3.2.1">
+      <description>
+        <p>This release fixes some bugs and crashes, especially wrt. unsaved Sticking and articulations placement.</p>
+      </description>
+    </release>
+    <release date="2019-06-25" version="3.2">
+      <description>
+        <p>This release contains many fixes and new features for drumline users, style corrections, and displays voice colours more consistently, including an overhaul of the Dark theme colours.</p>
+      </description>
+    </release>
     <release date="2019-05-28" version="3.1">
       <description>
         <p>MuseScore 3.1, in addition to hundreds of bug fixes, introduces some new features (including single-note dynamics) and significant improvements related to playback, automatic placement and layout, fretboard diagrams, and performance.</p>
