@@ -66,6 +66,8 @@ getCrossPlatformDependencies() {
   #copyLib libicui18n.so #libicuin53.so.5 # Needed by Ubuntu 12.04
   #copyLib libicuuc.so #libicuuc53.so.5 # Needed by Ubuntu 12.04
 
+  copyLib libmirclient.so.9 #needed by Ubuntu 16.04
+
   copyLib libQt5CLucene.so.5
   copyLib libQt5Core.so.5
   copyLib libQt5Gui.so.5
