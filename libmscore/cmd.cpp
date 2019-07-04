@@ -3103,7 +3103,7 @@ void Score::cmdSlashRhythm()
 ///   Intervals, and pitches.
 //---------------------------------------------------------
 
-void Score::cmdRealizeChordSymbols(QList<Harmony*> hlist)
+void Score::cmdRealizeChordSymbols(QList<Harmony*> hlist, bool literal, Voicing voicing)
       {
       for (Harmony* h : hlist) {
             RealizedHarmony r = h->realizedHarmony();
@@ -3115,7 +3115,20 @@ void Score::cmdRealizeChordSymbols(QList<Harmony*> hlist)
             Chord* chord = new Chord(this);
             chord->setTrack(h->track()); //set track so notes have a track to sit on
             //create chord from notes
-            QMapIterator<int, int> i(r.notes());
+
+            //FIXME - PHV: I know this is inefficient
+            QMap<int, int> notes;
+            if (voicing == Voicing::INVALID)
+                  notes = r.notes();
+            else {
+                  int offset = 0;
+                  Interval interval = h->staff()->part()->instrument(h->tick())->transpose();
+                  if (!concertPitch)
+                        offset = interval.chromatic;
+                  notes = r.generateNotes(h->rootTpc(), h->baseTpc(),
+                        literal, voicing, offset);
+                  }
+            QMapIterator<int, int> i(notes);
             while (i.hasNext()) {
                   i.next();
                   Note* note = new Note(this);

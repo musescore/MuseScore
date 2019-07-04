@@ -5807,7 +5807,8 @@ void MuseScore::realizeChordSymbols()
 
       if (dialog.exec()) {    //realize the chord symbols onto the track
             cs->startCmd();
-            cs->cmdRealizeChordSymbols(hlist);
+            cs->cmdRealizeChordSymbols(hlist, dialog.getLiteral(), dialog.optionsOverride() ?
+                                             Voicing(dialog.getVoicing()) : Voicing::INVALID);
             cs->endCmd();
             }
       }

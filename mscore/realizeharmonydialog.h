@@ -37,6 +37,7 @@ class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase {
 
       bool getLiteral() { return voicingSelect->getLiteral(); }
       int getVoicing() { return voicingSelect->getVoicing(); }
+      bool optionsOverride() { return optionsBox->isChecked(); }
       };
 
 }

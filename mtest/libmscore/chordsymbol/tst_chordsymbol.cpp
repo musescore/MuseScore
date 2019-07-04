@@ -50,6 +50,7 @@ class TestChordSymbol : public QObject, public MTest {
       void testTransposePart();
       void testRealizeChordSymbols();
       void testRealizeTransposed();
+      void testRealizeOverride();
       };
 
 //---------------------------------------------------------
@@ -249,6 +250,23 @@ void TestChordSymbol::testRealizeTransposed()
       score->cmdRealizeChordSymbols(hlist);
       score->endCmd();
       test_post(score, "transpose-realize-test");
+      }
+
+//    Check for correctness when using the override feature for realizing chord symbols
+void TestChordSymbol::testRealizeOverride()
+      {
+      MasterScore* score = test_pre("realize-override");
+      //realize all chord symbols
+      selectAllChordSymbols(score);
+      QList<Harmony*> hlist;
+      for (Element* e : score->selection().elements()) {
+            if (e->isHarmony())
+                  hlist << toHarmony(e);
+            }
+      score->startCmd();
+      score->cmdRealizeChordSymbols(hlist, true, Voicing::ROOT_ONLY);
+      score->endCmd();
+      test_post(score, "realize-override");
       }
 
 QTEST_MAIN(TestChordSymbol)
