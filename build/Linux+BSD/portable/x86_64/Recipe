@@ -24,7 +24,7 @@ apt-get -y install \
   libdrm-dev \
   libgl1-mesa-dev \
   libopenal1 \
-  gstreamer1.0-plugins-base \
+  gstreamer0.10-plugins-base \
   software-properties-common # installs `add-apt-repository`
 
 # get newer compiler
@@ -35,9 +35,8 @@ fi
 
 # MuseScore dependencies (same as on Travis)
 apt-get -y install \
-  g++-7 \
+  g++-4.9 \
   wget \
-  cmake \
   make \
   curl \
   alsa \
@@ -60,7 +59,7 @@ apt-get -y install \
   libxtst-dev
 
 
-update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 40 --slave /usr/bin/g++ g++ /usr/bin/g++-7
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 40 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
 
 # get Qt
 if [ ! -d "qt5" ]; then
@@ -73,6 +72,18 @@ export PATH="${PWD}/qt5/bin:$PATH"
 export QT_PLUGIN_PATH="${PWD}/qt5/plugins"
 export QML2_IMPORT_PATH="${PWD}/qt5/qml"
 export LD_LIBRARY_PATH="${PWD}/qt5/lib:$LD_LIBRARY_PATH"
+
+# install cmake
+if [ ! -d cmake ]; then
+  if [ "$(arch)" = "i686" ]; then
+    CMAKE_URL="http://www.cmake.org/files/v3.10/cmake-3.10.1-Linux-i386.tar.gz"
+  else
+    CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.1-Linux-$(arch).tar.gz"
+  fi
+  mkdir cmake
+  wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C cmake
+fi
+export PATH="${PWD}/cmake/bin:${PATH}"
 
 # build AppImageKit
 if [ ! -d "AppImageKit" ]; then
