@@ -259,7 +259,6 @@ void MixerDetails::updatePan()
       {
       int pan = selectedMixerTrackItem->getPan()-63;
       panSlider->setValue(pan);
-      //panSlider->setToolTip(tr("Pan: %1").arg(QString::number(pan)));
       panSpinBox->setValue(pan);
       }
 
