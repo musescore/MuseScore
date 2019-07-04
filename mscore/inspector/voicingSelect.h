@@ -27,14 +27,21 @@ namespace Ms {
 class VoicingSelect : public QWidget, public Ui::VoicingSelect {
       Q_OBJECT
 
+      void blockVoicingSignals(bool);
+
+   private slots:
+      void _voicingChanged();
+
+   signals:
+      void voicingChanged(bool, int);
+
    public:
-      VoicingSelect(QWidget* parent) : QWidget(parent) { setupUi(this); }
-      virtual ~VoicingSelect() {}
+      VoicingSelect(QWidget* parent);
       int getVoicing() { return voicingBox->currentIndex(); }
       bool getLiteral() { return literalButton->isChecked(); }
 
-      void setVoicing(int idx) { voicingBox->setCurrentIndex(idx); }
-      void setLiteral(bool literal) { literalButton->setChecked(literal); }
+      void setVoicing(int idx);
+      void setLiteral(bool literal);
       };
 
 }
