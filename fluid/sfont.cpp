@@ -831,9 +831,9 @@ unsigned char SFont::READB()
 //   READC
 //---------------------------------------------------------
 
-char SFont::READC()
+signed char SFont::READC()
       {
-      char var;
+      signed char var;
       safe_fread(&var, 1);
       return var;
       }

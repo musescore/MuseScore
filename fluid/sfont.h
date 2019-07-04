@@ -93,7 +93,7 @@ class SFont {
       void FSKIP(int size)    {  return safe_fseek(size); }
       void FSKIPW();
       unsigned char READB();
-      char READC();
+      signed char READC();
       void READSTR(char*);
 
       void safe_fread(void *buf, int count);
