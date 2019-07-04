@@ -340,40 +340,62 @@ int MixerTrackItem:: adjustValue(int newValue, ChannelReader reader, ChannelWrit
       // make adjustments depending on the OVERALL mode
 
       MixerVolumeMode mode = Mixer::getOptions()->mode();
-      int primaryDiff = 0;
-      bool upperClip = false;
-      bool lowerClip = false;
+      bool hitTheBuffers = false;
 
-      primaryDiff = newValue - reader(channel());
-
+      int mainSliderDelta = newValue - reader(channel());
+      int deltaAdjust = 0;
       // update the secondary channels
-      for (Channel* channel: secondaryPlaybackChannels()) {
 
-            switch (mode) {
-                  case MixerVolumeMode::Override:
+      switch (mode) {
+            case MixerVolumeMode::PrimaryInstrument:
+                  // secondary channels are not touched
+                  break;
+                  
+            case MixerVolumeMode::Override:
+                  for (Channel* channel: secondaryPlaybackChannels()) {
                         // all secondary channels just get newValue
                         writer(newValue, channel);
-                        break;
-
-                  case MixerVolumeMode::Ratio: {
-                        // secondary channels get same increase / decrease as primary value
+                        }
+                  break;
+                  
+            case MixerVolumeMode::Ratio:
+                  int lowestValue = 0;
+                  int highestValue = 0;
+                  
+                  // check to see if any channels will go out of bounds
+                  for (Channel* channel: secondaryPlaybackChannels()) {
                         int oldValue = reader(channel);
-                        int relativeValue = oldValue + primaryDiff;
-                        upperClip = relativeValue > 127;
-                        lowerClip = relativeValue < 0;
-                        writer(max(0, min(127, relativeValue)), channel);
-                        break;
+                        int relativeValue = oldValue + mainSliderDelta;
+                        if (relativeValue < lowestValue)
+                              lowestValue = relativeValue;
+                        if (relativeValue > highestValue)
+                              highestValue = relativeValue;
                   }
-
-                  case MixerVolumeMode::PrimaryInstrument:
-                        // secondary channels are not touched
-                        break;
+                  
+                  // if out of bounds, calcualte a delta adjustment to stay within bounds
+                  if (lowestValue < 0) {
+                        hitTheBuffers = true;
+                        deltaAdjust = 0 - lowestValue;
+                  }
+                  else if (highestValue > 127) {
+                        hitTheBuffers = true;
+                        deltaAdjust = 127 - highestValue;
+                  }
+                  
+                  // secondary channels get same increase / decrease as primary value
+                  if (mainSliderDelta + deltaAdjust != 0) {
+                        for (Channel* channel: secondaryPlaybackChannels()) {
+                              int oldValue = reader(channel);
+                              int relativeValue = oldValue + mainSliderDelta + deltaAdjust;
+                              writer(max(0, min(127, relativeValue)), channel);
+                              }
+                  break;
             }
       }
-
-      if (upperClip || lowerClip) {
+      
+      if (hitTheBuffers) {
             // in this case we don't adjust the main value - return slider movement
-            return primaryDiff;
+            return mainSliderDelta;
       }
       writer(newValue, channel());
       return 0;

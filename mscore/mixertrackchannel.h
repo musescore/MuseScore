@@ -21,7 +21,6 @@
 #define __MIXERTRACKCHANNEL_H__
 
 #include "ui_mixertrackchannel.h"
-#include "ui_mixermasterchannel.h"
 #include "mixertrackitem.h"
 #include "libmscore/instrument.h"
 
@@ -70,25 +69,6 @@ protected:
             
 public:
       explicit MixerTrackChannel(MixerTreeWidgetItem*);
-      };
-
-
-// Class for the "master volume" control - borrows the UI from MixerTrackChannel
-class MixerMasterChannel : public QWidget, public Ui::MixerMasterChannel
-      {
-      Q_OBJECT
-
-      void setupAdditionalUi();
-      void setupSlotsAndSignals();
-      void update();
-
-      public slots:
-      void masterVolumeSliderMoved(int);
-      void updateUiControls(); // for showing/hiding color and panning
-
-      public:
-      explicit MixerMasterChannel();
-      void volumeChanged(float);
       };
 
 }
