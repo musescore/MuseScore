@@ -48,7 +48,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QSlider" name="volumeSlider">
+    <widget class="Ms::MixerSlider" name="trackSlider">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -250,6 +250,13 @@ border-radius: 3px;
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::MixerSlider</class>
+   <extends>QSlider</extends>
+   <header>mixerslider.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="musescore.qrc"/>
  </resources>

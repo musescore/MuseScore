@@ -66,9 +66,9 @@ namespace Ms {
             showMasterVolume->setChecked(options->showMasterVolume());
             showTrackColors->setChecked(options->showTrackColors());
 
-            overallVolumeOverrideMode->setChecked(options->mode() == MixerVolumeMode::Override);
-            overallVolumeRatioMode->setChecked(options->mode() == MixerVolumeMode::Ratio);
-            overallVolumeFirstMode->setChecked(options->mode() == MixerVolumeMode::PrimaryInstrument);
+            overallVolumeOverrideMode->setChecked(options->mode() == MixerOptions::MixerVolumeMode::Override);
+            overallVolumeRatioMode->setChecked(options->mode() == MixerOptions::MixerVolumeMode::Ratio);
+            overallVolumeFirstMode->setChecked(options->mode() == MixerOptions::MixerVolumeMode::PrimaryInstrument);
 
             makePanSecondarySlider->setChecked(options->secondarySlider() == MixerOptions::MixerSecondarySlider::Pan);
             makeReverbSecondarySlider->setChecked(options->secondarySlider() == MixerOptions::MixerSecondarySlider::Reverb);
@@ -88,22 +88,22 @@ namespace Ms {
             options->setShowMasterVolume(showMasterVolume->isChecked());
             options->setTrackColors(showTrackColors->isChecked());
 
-            MixerVolumeMode mode;
+            MixerOptions::MixerVolumeMode mode;
             if (overallVolumeOverrideMode->isChecked()) {
-                  mode = MixerVolumeMode::Override;
+                  mode = MixerOptions::MixerVolumeMode::Override;
             }
             else if (overallVolumeRatioMode->isChecked()) {
-                  mode = MixerVolumeMode::Ratio;
+                  mode = MixerOptions::MixerVolumeMode::Ratio;
             }
             else if (overallVolumeFirstMode->isChecked()) {
-                  mode = MixerVolumeMode::PrimaryInstrument;
+                  mode = MixerOptions::MixerVolumeMode::PrimaryInstrument;
             }
             else {
                   // something's gone awry - let's just fix it up
                   overallVolumeOverrideMode->setChecked(true);
                   overallVolumeRatioMode->setChecked(false);
                   overallVolumeFirstMode->setChecked(false);
-                  mode = MixerVolumeMode::Override;
+                  mode = MixerOptions::MixerVolumeMode::Override;
             }
             options->setMode(mode);
 

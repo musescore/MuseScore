@@ -39,13 +39,13 @@ namespace Ms {
 MixerMasterChannel::MixerMasterChannel()
       {
       setupUi(this);
-      volumeSlider->setMinimum(-60); // in case .ui file gets stuffed up
-      volumeSlider->setMaximum(20);  // in case .ui file gets stuffed up
+      trackSlider->setMinimum(-60); // in case .ui file gets stuffed up
+      trackSlider->setMaximum(20);  // in case .ui file gets stuffed up
 
       playButton->setDefaultAction(getAction("play"));
       loopButton->setDefaultAction(getAction("loop"));
 
-      volumeSlider->setDoubleValue(synti->gain());
+      trackSlider->setDoubleValue(synti->gain());
 
       setupAdditionalUi();
       setupSlotsAndSignals();
@@ -54,7 +54,7 @@ MixerMasterChannel::MixerMasterChannel()
 
 void MixerMasterChannel::setupSlotsAndSignals()
       {
-      connect(volumeSlider, SIGNAL(valueChanged(int)), SLOT(masterVolumeSliderMoved(int)));
+      connect(trackSlider, SIGNAL(valueChanged(int)), SLOT(masterVolumeSliderMoved(int)));
       }
 
 
@@ -75,15 +75,15 @@ void MixerMasterChannel::updateUiControls()
       
 void MixerMasterChannel::volumeChanged(float synthGain)
       {
-      const QSignalBlocker blockSignals(volumeSlider); // block during this method
-      volumeSlider->setDoubleValue(synthGain);
+      const QSignalBlocker blockSignals(trackSlider); // block during this method
+      trackSlider->setDoubleValue(synthGain);
       }
 
 
 void MixerMasterChannel::masterVolumeSliderMoved(int value)
       {
-      const QSignalBlocker blockSignals(volumeSlider); // block during this method
-      float newGain = volumeSlider->doubleValue();
+      const QSignalBlocker blockSignals(trackSlider); // block during this method
+      float newGain = trackSlider->doubleValue();
       if (newGain == synti->gain())
             return;
 
@@ -93,7 +93,7 @@ void MixerMasterChannel::masterVolumeSliderMoved(int value)
       float n = 20.0;         // from playpanel.h
       float mute = 0.0;       // from playpanel.h
       float decibels = (newGain == mute) ? -80.0 : ((n * std::log10(newGain)) - n);
-      volumeSlider->setToolTip(tr("Volume: %1 dB").arg(QString::number(decibels, 'f', 1)));
+      trackSlider->setToolTip(tr("Volume: %1 dB").arg(QString::number(decibels, 'f', 1)));
       }
 
 }

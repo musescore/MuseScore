@@ -81,7 +81,6 @@ class MixerDetails : public QWidget, public Ui::MixerDetails, public ChannelList
 
       void resetControls(); // apply default (0 or empty) values for when no track is selected
       void voiceMuteButtonToggled(int staffIndex, int voiceIndex, bool shouldMute);
-      void resetPanToCentre();
       void updateUiOptions();
 
       MixerTrackItem* getSelectedMixerTrackItem() { return selectedMixerTrackItem; };

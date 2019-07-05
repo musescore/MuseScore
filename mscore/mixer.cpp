@@ -170,7 +170,6 @@ void Mixer::retranslate(bool firstTime)
       retranslateUi(this);
       mixerDetails->retranslateUi(mixerDetails);
       updateMixerTreeHeaders();
-      //TODO: retranslate the "slider options" button (if it's still called that)
       //TODO: retranslate instrument names (but do they have translations)
       }
 
@@ -464,17 +463,6 @@ bool Mixer::eventFilter(QObject* object, QEvent* event)
       if (enablePlay->eventFilter(object, event))
             return true;
 
-      if (object == mixerDetails->panSlider) {
-            if (event->type() == QEvent::MouseButtonDblClick) {
-                  QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-                  qDebug() << "Double click on pan slider" << keyEvent->key();
-                  mixerDetails->resetPanToCentre();
-                  return true;
-                  }
-            }
-
-
-
       return QWidget::eventFilter(object, event);
       }
 
@@ -490,42 +478,42 @@ bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
       
       QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
-            //TODO: check for secondarySliderLock and behave differently
-      if (keyEvent->key() == Qt::Key_Period && keyEvent->modifiers() == Qt::NoModifier) {
-            qDebug()<<"Volume up keyboard command";
+      bool modified = keyEvent->modifiers() == Qt::ShiftModifier;
+
+      bool secondaryLock = Mixer::getOptions()->secondaryModeLock();
+      modified = secondaryLock ? !modified : modified;
+
+      Qt::Key primaryDown = !secondaryLock ? Qt::Key_Comma : Qt::Key_Less;
+      Qt::Key primaryUp = !secondaryLock ? Qt::Key_Period : Qt::Key_Greater;
+      Qt::Key secondaryDown = !secondaryLock ? Qt::Key_Less : Qt::Key_Comma;
+      Qt::Key secondaryUp = !secondaryLock ? Qt::Key_Greater : Qt::Key_Period;
+
+
+      if (keyEvent->key() == primaryDown && !modified) {
+            if (selectedMixerTrackItem && int(selectedMixerTrackItem->getVolume()) >0) {
+                  selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() - 1);
+            }
+            return true;
+      }
+            if (keyEvent->key() == primaryUp && !modified) {
             if (selectedMixerTrackItem && int(selectedMixerTrackItem->getVolume()) < 128) {
-                  bool success = selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() + 1);
-                  if (!success)
-                        qDebug()<<"Hit the buffers. Could make a noise.";
+                  selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() + 1);
                   }
             return true;
             }
 
-            //TODO: check for secondarySliderLock and behave differently
-      if (keyEvent->key() == Qt::Key_Comma && keyEvent->modifiers() == Qt::NoModifier) {
-            qDebug()<<"Volume down keyboard command";
-            if (selectedMixerTrackItem && int(selectedMixerTrackItem->getVolume()) >0) {
-                  bool success = selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() - 1);
-                  if (!success)
-                        qDebug()<<"Hit the buffers. Could make a noise.";
-                  }
-            return true;
-            }
       
-      if (keyEvent->key() == Qt::Key_Less && keyEvent->modifiers() == Qt::ShiftModifier) {
-            qDebug()<<"Secondary slider DOWN keyboard command";
+      if (keyEvent->key() == secondaryDown && modified) {
             mixer->nudgeSecondarySliderUp(false);
             return true;
             }
       
-      if (keyEvent->key() == Qt::Key_Greater && keyEvent->modifiers() == Qt::ShiftModifier) {
-            qDebug()<<"Secondary slider UP keyboard command";
+      if (keyEvent->key() == secondaryUp && modified) {
             mixer->nudgeSecondarySliderUp(true);
             return true;
             }
       
       if (keyEvent->key() == Qt::Key_M && keyEvent->modifiers() == Qt::NoModifier) {
-            qDebug()<<"Mute (M) keyboard command";
             if (selectedMixerTrackItem) {
                   selectedMixerTrackItem->setMute(!selectedMixerTrackItem->getMute());
                   }
@@ -533,7 +521,6 @@ bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
             }
       
       if (keyEvent->key() == Qt::Key_S && keyEvent->modifiers() == Qt::NoModifier) {
-            qDebug()<<"Solo (S) keyboard command";
             if (selectedMixerTrackItem) {
                   selectedMixerTrackItem->setSolo(!selectedMixerTrackItem->getSolo());
                   }
@@ -611,7 +598,7 @@ void Mixer::keyPressEvent(QKeyEvent* ev) {
 
 void Mixer::shiftKeyMonitor() {
 
-      // check if we are any children have the focus
+      // check if we or any children have the focus
       bool focus = hasFocus();
       if (!focus) {
             QWidget* focusWidget = QApplication::focusWidget();
@@ -683,10 +670,10 @@ void Mixer::updateTracks()
 
       for (Part* localPart : _score->parts()) {
             Part* part = localPart->masterPart();
-            // When it's created the item will also reate any children and setup their widgets
+            // When it's created the item will also create any children and setup their widgets
             MixerTreeWidgetItem* item = new MixerTreeWidgetItem(part, _score, mixerTreeWidget);
             mixerTreeWidget->addTopLevelItem(item);
-            mixerTreeWidget->setItemWidget(item, 1, new MixerTrackChannel(item));
+            mixerTreeWidget->setItemWidget(item, 1, item->mixerTrackChannel());
             item->setExpanded(part->isExpanded());
             }
 
@@ -694,6 +681,7 @@ void Mixer::updateTracks()
             mixerTreeWidget->setCurrentItem(mixerTreeWidget->itemAt(0,0));
             currentMixerTreeItemChanged();
             }
+
       }
 
 void Mixer::itemCollapsedOrExpanded(QTreeWidgetItem* item) {

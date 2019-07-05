@@ -30,6 +30,10 @@ class MixerSlider : public QSlider
       bool panning = false;         // used for pan-style where filling does not make sense
       bool secondary = false;       // visual indicator when the slider is in its "secondary" mode
 
+      QColor grooveFillColor();
+      QColor grooveOutlineColor();
+      QColor grooveBackgroundColor();
+
 public:
       explicit MixerSlider(QWidget *parent = nullptr);
       ~MixerSlider();
@@ -40,6 +44,8 @@ public:
       bool panMode() { return panning; }
       void setSecondaryMode (bool on);                // will force a repaint
       bool secondaryMode() { return secondary; }
+
+      void adjustPositionIfRequired(int value, int diff);
 
       void mouseDoubleClickEvent(QMouseEvent* mouseEvent);
       };

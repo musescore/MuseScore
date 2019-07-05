@@ -166,7 +166,7 @@ bool MixerTrackItem::getSolo()
 
 
 
-int MixerTrackItem::setVolume(char value)
+int MixerTrackItem::setVolume(int proposedValue)
       {
 
       auto writer = [](int value, Channel* channel){
@@ -176,7 +176,7 @@ int MixerTrackItem::setVolume(char value)
       auto reader = [](Channel* channel) -> int {
             return channel->volume(); };
 
-      return adjustValue(value, reader, writer);
+      return adjustValue(proposedValue, reader, writer);
       }
 
 
@@ -184,7 +184,7 @@ int MixerTrackItem::setVolume(char value)
 //   setPan
 //---------------------------------------------------------
 
-int MixerTrackItem::setPan(char value)
+int MixerTrackItem::setPan(int value)
       {
       auto writer = [](int value, Channel* channel){
             channel->setPan(value);
@@ -200,7 +200,7 @@ int MixerTrackItem::setPan(char value)
 //   setChorus
 //---------------------------------------------------------
 
-int MixerTrackItem::setChorus(char value)
+int MixerTrackItem::setChorus(int value)
       {
       auto writer = [](int value, Channel* channel){
             channel->setChorus(value);
@@ -216,7 +216,7 @@ int MixerTrackItem::setChorus(char value)
 //   setReverb
 //---------------------------------------------------------
 
-int MixerTrackItem::setReverb(char value)
+int MixerTrackItem::setReverb(int value)
       {
       auto writer = [](int value, Channel* channel){
             channel->setReverb(value);
@@ -288,14 +288,9 @@ void MixerTrackItem::setSolo(bool value)
                   }
             }
 
-      // TODO: duplicated code - look at how to eliminate
-      // NOTE: We have here the same iteration that is used for
-      // updateTracks in the mixer. SO definitely still scope for code
-      // reduction. And this method needs to either live somewhere
-      // else, Mixer maybe, or (maybe AND) be a static/class method.
-      // 
 
-      //Go through all channels so that all not being soloed are mute
+      //Go through all channels so that all not being soloed get
+      // the soloMute property set
 
       // First, count the number of solo tracks
       int numSolo = 0;
@@ -327,79 +322,86 @@ void MixerTrackItem::setSolo(bool value)
 //MARK:- helper methods
 
 template <class ChannelWriter, class ChannelReader>
-int MixerTrackItem:: adjustValue(int newValue, ChannelReader reader, ChannelWriter writer)
+int MixerTrackItem:: adjustValue(int proposedValue, ChannelReader reader, ChannelWriter writer)
 {
-
       if (!isPart()) {
             // only one channel, the easy case - just make a direct adjustment
-            writer(newValue, _channel);
-            return 0;
+            writer(proposedValue, _channel);
+            return proposedValue;
       }
 
       // multiple channels and the OVERALL value has been changed
       // make adjustments depending on the OVERALL mode
 
-      MixerVolumeMode mode = Mixer::getOptions()->mode();
-      bool hitTheBuffers = false;
+      MixerOptions::MixerVolumeMode mode = Mixer::getOptions()->mode();
 
-      int mainSliderDelta = newValue - reader(channel());
+      int currentValue = reader(channel());
       int deltaAdjust = 0;
-      // update the secondary channels
 
       switch (mode) {
-            case MixerVolumeMode::PrimaryInstrument:
+            case MixerOptions::MixerVolumeMode::PrimaryInstrument:
                   // secondary channels are not touched
                   break;
                   
-            case MixerVolumeMode::Override:
+            case MixerOptions::MixerVolumeMode::Override:
                   for (Channel* channel: secondaryPlaybackChannels()) {
                         // all secondary channels just get newValue
-                        writer(newValue, channel);
+                        writer(proposedValue, channel);
                         }
                   break;
                   
-            case MixerVolumeMode::Ratio:
-                  int lowestValue = 0;
-                  int highestValue = 0;
-                  
-                  // check to see if any channels will go out of bounds
-                  for (Channel* channel: secondaryPlaybackChannels()) {
-                        int oldValue = reader(channel);
-                        int relativeValue = oldValue + mainSliderDelta;
-                        if (relativeValue < lowestValue)
-                              lowestValue = relativeValue;
-                        if (relativeValue > highestValue)
-                              highestValue = relativeValue;
-                  }
-                  
-                  // if out of bounds, calcualte a delta adjustment to stay within bounds
-                  if (lowestValue < 0) {
-                        hitTheBuffers = true;
-                        deltaAdjust = 0 - lowestValue;
-                  }
-                  else if (highestValue > 127) {
-                        hitTheBuffers = true;
-                        deltaAdjust = 127 - highestValue;
-                  }
-                  
-                  // secondary channels get same increase / decrease as primary value
-                  if (mainSliderDelta + deltaAdjust != 0) {
-                        for (Channel* channel: secondaryPlaybackChannels()) {
-                              int oldValue = reader(channel);
-                              int relativeValue = oldValue + mainSliderDelta + deltaAdjust;
-                              writer(max(0, min(127, relativeValue)), channel);
-                              }
+            case MixerOptions::MixerVolumeMode::Ratio:
+                  deltaAdjust = relativeAdjust(proposedValue - currentValue, reader, writer);
                   break;
             }
-      }
-      
-      if (hitTheBuffers) {
-            // in this case we don't adjust the main value - return slider movement
-            return mainSliderDelta;
-      }
-      writer(newValue, channel());
-      return 0;
+
+      int acceptedValue = proposedValue + deltaAdjust;
+
+      if (acceptedValue != currentValue)
+            writer(acceptedValue, channel());
+
+      return acceptedValue;
 }
+
+
+template <class ChannelWriter, class ChannelReader>
+int MixerTrackItem::relativeAdjust(int mainSliderDelta, ChannelReader reader, ChannelWriter writer)
+      {
+      int lowestValue = 0;
+      int highestValue = 0;
+      int deltaAdjust = 0;
+
+      // check to see if any channels will go out of bounds
+      for (Channel* channel: secondaryPlaybackChannels()) {
+            int oldValue = reader(channel);
+            int relativeValue = oldValue + mainSliderDelta;
+            if (relativeValue < lowestValue)
+                  lowestValue = relativeValue;
+            if (relativeValue > highestValue)
+                  highestValue = relativeValue;
+      }
+
+      // if out of bounds, calcualte a delta adjustment to stay within bounds
+      if (lowestValue < 0) {
+            deltaAdjust = 0 - lowestValue;
+      }
+      else if (highestValue > 127) {
+            deltaAdjust = 127 - highestValue;
+      }
+
+      // secondary channels get same increase / decrease as primary value
+      if (mainSliderDelta + deltaAdjust != 0) {
+            for (Channel* channel: secondaryPlaybackChannels()) {
+                  int oldValue = reader(channel);
+                  int relativeValue = oldValue + mainSliderDelta + deltaAdjust;
+                  writer(max(0, min(127, relativeValue)), channel);
+                  }
+            }
+      return deltaAdjust;
+      }
+
+
+
 
 bool MixerTrackItem::isPart()
       {
@@ -470,6 +472,8 @@ QList<Channel*> MixerTrackItem::playbackChannels(Part* part)
 MixerTreeWidgetItem::MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* treeWidget)
       {
       _mixerTrackItem = new MixerTrackItem(part, score);
+      _mixerTrackChannel = new MixerTrackChannel(this);
+
       setText(0, part->partName());
       setToolTip(0, part->partName());
 
@@ -487,7 +491,7 @@ MixerTreeWidgetItem::MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* 
                   Channel* channel = instrument->playbackChannel(i, score->masterScore());
                   MixerTreeWidgetItem* child = new MixerTreeWidgetItem(channel, instrument, part);
                   addChild(child);
-                  treeWidget->setItemWidget(child, 1, new MixerTrackChannel(child));
+                  treeWidget->setItemWidget(child, 1, child->mixerTrackChannel());
                   }
             }
       }
@@ -497,7 +501,19 @@ MixerTreeWidgetItem::MixerTreeWidgetItem(Channel* channel, Instrument* instrumen
       setText(0, channel->name());
       setToolTip(0, QString("%1 - %2").arg(part->partName()).arg(channel->name()));
       _mixerTrackItem = new MixerTrackItem(MixerTrackItem::TrackType::CHANNEL, part, instrument, channel);
+      _mixerTrackChannel = new MixerTrackChannel(this);
       }
-      
+
+
+MixerTrackChannel* MixerTreeWidgetItem::mixerTrackChannel() {
+
+      return _mixerTrackChannel;
+      }
+
+MixerTreeWidgetItem:: ~MixerTreeWidgetItem()
+      {
+      delete _mixerTrackChannel;
+      delete _mixerTrackItem;
+      }
 }
 

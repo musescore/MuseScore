@@ -51,8 +51,14 @@ private:
       QList<Channel*> playbackChannels(Part* part);
       QList<Channel*> playbackChannels();
 
+      template <class ChannelWriter, class ChannelReader>
+      int adjustValue(int proposedValue, ChannelReader reader, ChannelWriter writer);
+      template <class ChannelWriter, class ChannelReader>
+      int relativeAdjust(int mainSliderDelta, ChannelReader reader, ChannelWriter writer);
+
 public:
       MixerTrackItem(TrackType trackType, Part* part, Instrument* _instr, Channel* _chan);
+
       MixerTrackItem(Part* part, Score* score);
       TrackType trackType() { return _trackType; }
       Part* part() { return _part; }
@@ -65,13 +71,10 @@ public:
       QString detailedToolTip();
 
       void setColor(int valueRgb);
-      int setVolume(char value);    // returns adjustment required if buffers hit
-      int setPan(char value);       // returns adjustment required if buffers hit
-      int setChorus(char value);    // returns adjustment required if buffers hit
-      int setReverb(char value);    // returns adjustment required if buffers hit
-
-      template <class ChannelWriter, class ChannelReader>
-      int adjustValue(int newValue, ChannelReader reader, ChannelWriter writer); // returns adjustment required if buffers hit
+      int setVolume(int value);    // returns the value actually used (which may differ from value passed)
+      int setPan(int value);       // returns the value actually used (which may differ from value passed)
+      int setChorus(int value);    // returns the value actually used (which may differ from value passed)
+      int setReverb(int value);    // returns the value actually used (which may differ from value passed)
 
       void setMute(bool value);
       void setSolo(bool value);
@@ -95,15 +98,21 @@ public:
  - host a MixerTrackItem for processing user changes and updating controls
    when changes are signalled from outwith the mixer
 */
-
+class MixerTrackChannel;
+      
 class MixerTreeWidgetItem : public QTreeWidgetItem
       {
       MixerTrackItem* _mixerTrackItem;
+      MixerTrackChannel* _mixerTrackChannel;
 
    public:
       MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* parent);
       MixerTreeWidgetItem(Channel* channel, Instrument* instrument, Part* part);
-      MixerTrackItem* mixerTrackItem() { return _mixerTrackItem; }
+      MixerTrackItem* mixerTrackItem() { return _mixerTrackItem; };
+      MixerTrackChannel* mixerTrackChannel();
+
+      ~MixerTreeWidgetItem();
+
       };
 
 }

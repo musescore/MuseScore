@@ -154,7 +154,7 @@
    <item row="4" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QSlider" name="volumeSlider">
+      <widget class="Ms::MixerSlider" name="volumeSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -195,7 +195,7 @@
         <enum>QSlider::TicksBelow</enum>
        </property>
        <property name="tickInterval">
-        <number>16</number>
+        <number>8</number>
        </property>
       </widget>
      </item>
@@ -257,7 +257,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Dan</string>
+      <string>Pan</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -305,7 +305,7 @@
         <enum>QSlider::TicksBelow</enum>
        </property>
        <property name="tickInterval">
-        <number>16</number>
+        <number>8</number>
        </property>
       </widget>
      </item>
@@ -516,7 +516,7 @@
    <item row="8" column="1">
     <layout class="QHBoxLayout" name="portAndChannelLayout">
      <item>
-      <widget class="QSlider" name="reverbSlider">
+      <widget class="Ms::MixerSlider" name="reverbSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -549,6 +549,9 @@
        </property>
        <property name="tickPosition">
         <enum>QSlider::TicksBelow</enum>
+       </property>
+       <property name="tickInterval">
+        <number>8</number>
        </property>
       </widget>
      </item>
@@ -614,7 +617,7 @@
    <item row="9" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QSlider" name="chorusSlider">
+      <widget class="Ms::MixerSlider" name="chorusSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -646,7 +649,7 @@
         <enum>QSlider::TicksBelow</enum>
        </property>
        <property name="tickInterval">
-        <number>16</number>
+        <number>8</number>
        </property>
       </widget>
      </item>

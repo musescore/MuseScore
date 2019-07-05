@@ -41,7 +41,7 @@ MixerDetails::MixerDetails(Mixer *mixer) :
       selectedMixerTrackItem(nullptr)
       {
       setupUi(this);
-      panSlider->setPanMode(true);
+      panSlider->setPanMode(true);              // turn off the highlight on the control - it has no meaning for a pan control
 
       mutePerVoiceGrid = new QGridLayout();
       mutePerVoiceGrid->setContentsMargins(0, 0, 0, 0);
@@ -198,6 +198,8 @@ void MixerDetails::updateTrackColor()
       }
 
 
+//TODO: scope to pull some / much of this into the mixerTrackItem class and so leave this
+// class just focusing on the view & control, w/o having to know about the details of the model
 void MixerDetails::updatePatch()
       {
       Channel* channel = selectedMixerTrackItem->channel();
@@ -431,48 +433,111 @@ void MixerDetails::drumsetCheckboxToggled(bool drumsetSelected)
 
 
 // volumeChanged - process signal from volumeSlider
-void MixerDetails::volumeSpinBoxEdited(double value)
+void MixerDetails::volumeSpinBoxEdited(double proposedDoubleValue)
       {
       if (!selectedMixerTrackItem)
             return;
-      selectedMixerTrackItem->setVolume(value);
+
+      int proposedValue = int(proposedDoubleValue);
+      int acceptedValue = selectedMixerTrackItem->setVolume(proposedValue);
+
+      if (acceptedValue != proposedValue)
+            volumeSpinBox->setValue(acceptedValue);
       }
 
 // volumeChanged - process signal from volumeSpinBox
-void MixerDetails::volumeSliderMoved(int value)
+void MixerDetails::volumeSliderMoved(int proposedValue)
       {
       if (!selectedMixerTrackItem)
             return;
-      selectedMixerTrackItem->setVolume(value);
+            
+      int acceptedValue = selectedMixerTrackItem->setVolume(proposedValue);
+
+      if (acceptedValue != proposedValue)
+            volumeSlider->setValue(acceptedValue);
       }
 
 
 // panChanged - process signal from panSlider
-void MixerDetails::panSpinBoxEdited(double value)
+void MixerDetails::panSpinBoxEdited(double proposedDoubleValue)
       {
-      panSliderMoved(int(value));
+      if (!selectedMixerTrackItem)
+                  return;
+
+      int proposedValue = int(proposedDoubleValue);
+      int acceptedValue = selectedMixerTrackItem->setPan(proposedValue);
+
+      if (acceptedValue != proposedValue)
+            panSpinBox->setValue(acceptedValue);
       }
 
 // panChanged - process signal from panSpinBox
-void MixerDetails::panSliderMoved(int value)
+void MixerDetails::panSliderMoved(int proposedValue)
       {
-      // is this required? if mixerDetails is disabled can this ever be called
       if (!selectedMixerTrackItem)
             return;
-      // note: a guaranteed side effect is that propertyChanged() will
-      // be called on this object - I think that's true?!
-      selectedMixerTrackItem->setPan(value + 63);
+
+      int acceptedValue = selectedMixerTrackItem->setPan(proposedValue + 63);
+            
+      if (acceptedValue != proposedValue)
+            panSlider->setValue(acceptedValue - 63);
       }
 
-void MixerDetails::resetPanToCentre()
+
+// reverbChanged - process signal from reverbSlider
+void MixerDetails::reverbSliderMoved(int proposedValue)
       {
-      panSliderMoved(0);
+      if (!selectedMixerTrackItem)
+            return;
+
+      int acceptedValue = selectedMixerTrackItem->setReverb(proposedValue + 63);
+
+      if (acceptedValue != proposedValue)
+            reverbSlider->setValue(acceptedValue);
+      }
+
+
+void MixerDetails::reverbSpinBoxEdited(double proposedDoubleValue)
+      {
+      if (!selectedMixerTrackItem)
+            return;
+
+      int proposedValue = int(proposedDoubleValue);
+      int acceptedValue = selectedMixerTrackItem->setReverb(proposedValue);
+
+      if (acceptedValue != proposedValue)
+            reverbSpinBox->setValue(acceptedValue);
+      }
+
+
+//  chorusChanged - process signal from chorusSlider
+void MixerDetails::chorusSliderMoved(int proposedValue)
+      {
+      if (!selectedMixerTrackItem)
+            return;
+      int acceptedValue = selectedMixerTrackItem->setChorus(proposedValue);
+
+      if (acceptedValue != proposedValue)
+            chorusSlider->setValue(acceptedValue);
+      }
+
+
+void MixerDetails::chorusSpinBoxEdited(double proposedDoubleValue)
+      {
+      if (!selectedMixerTrackItem)
+            return;
+
+      int proposedValue = int(proposedDoubleValue);
+      int acceptedValue = selectedMixerTrackItem->setChorus(proposedValue);
+
+      if (acceptedValue != proposedValue)
+            chorusSpinBox->setValue(acceptedValue);
       }
 
 
 // voiceMuteButtonToggled - process button toggled (received via MixerVoiceMuteButtonHandler object)
 void MixerDetails::voiceMuteButtonToggled(int staffIndex, int voiceIndex, bool shouldMute)
-      {
+{
       Part* part = selectedMixerTrackItem->part();
       Staff* staff = part->staff(staffIndex);
       switch (voiceIndex) {
@@ -488,38 +553,8 @@ void MixerDetails::voiceMuteButtonToggled(int staffIndex, int voiceIndex, bool s
             case 3:
                   staff->undoChangeProperty(Pid::PLAYBACK_VOICE4, !shouldMute);
                   break;
-            }
       }
-
-
-// reverbChanged - process signal from reverbSlider
-void MixerDetails::reverbSliderMoved(int value)
-      {
-      if (!selectedMixerTrackItem)
-            return;
-      selectedMixerTrackItem->setReverb(value);
-      }
-
-
-void MixerDetails::reverbSpinBoxEdited(double value)
-      {
-      reverbSliderMoved(int(value));
-      }
-
-
-//  chorusChanged - process signal from chorusSlider
-void MixerDetails::chorusSliderMoved(int value)
-      {
-      if (!selectedMixerTrackItem)
-            return;
-      selectedMixerTrackItem->setChorus(value);
-      }
-
-
-void MixerDetails::chorusSpinBoxEdited(double value)
-      {
-      chorusSliderMoved(int(value));
-      }
+}
 
 
 // midiChannelChanged - process signal from either portSpinBox

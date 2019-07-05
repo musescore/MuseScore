@@ -37,7 +37,7 @@ class MixerMasterChannel : public QWidget, public Ui::MixerMasterChannel
 
       public slots:
       void masterVolumeSliderMoved(int);
-      void updateUiControls(); // for showing/hiding color and panning
+      void updateUiControls(); // for showing/hiding color
 
       public:
       explicit MixerMasterChannel();

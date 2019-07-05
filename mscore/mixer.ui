@@ -129,6 +129,9 @@
       <height>16777215</height>
      </size>
     </property>
+    <property name="accessibleName">
+     <string>Mixer Track List</string>
+    </property>
     <property name="tabKeyNavigation">
      <bool>true</bool>
     </property>

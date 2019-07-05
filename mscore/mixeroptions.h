@@ -23,13 +23,11 @@
 
 namespace Ms {
 
-enum class MixerVolumeMode : int { Override = 1, Ratio, PrimaryInstrument };
-
-
 class MixerOptions
 {
    public:
       enum class MixerSecondarySlider : int { Pan = 1, Reverb, Chorus };
+      enum class MixerVolumeMode : int { Override = 1, Ratio, PrimaryInstrument };
 
    private:
 

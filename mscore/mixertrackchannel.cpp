@@ -51,12 +51,17 @@ MixerTrackChannel::MixerTrackChannel(MixerTreeWidgetItem* treeWidgetItem) :
       }
 
 
+      MixerTrackChannel::~MixerTrackChannel()
+      {
+      setNotifier(nullptr);   // stop listening to messages from current score/part (may be redundant)
+      }
+
 void MixerTrackChannel::setupSlotsAndSignals()
       {
       connect(muteButton,     SIGNAL(toggled(bool)),        SLOT(stripMuteToggled(bool)));
       connect(soloButton,     SIGNAL(toggled(bool)),        SLOT(stripSoloToggled(bool)));
-      connect(volumeSlider,   SIGNAL(valueChanged(int)),    SLOT(stripVolumeSliderMoved(int)));
-      connect(volumeSlider,   SIGNAL(sliderPressed()),      SLOT(takeSelection()));
+      connect(trackSlider,   SIGNAL(valueChanged(int)),    SLOT(stripVolumeSliderMoved(int)));
+      connect(trackSlider,   SIGNAL(sliderPressed()),      SLOT(takeSelection()));
       }
 
 void MixerTrackChannel::takeSelection()
@@ -77,20 +82,15 @@ void MixerTrackChannel::updateUiControls()
       {
       bool showTrackColors = Mixer::getOptions()->showTrackColors();
       colorLabel->setVisible(showTrackColors);
-
-      if (Mixer::getOptions()->secondaryModeOn()) {
-            volumeSlider->setStyleSheet("QSlider::groove:horizontal { background: red; position: absolute; top: 8px; bottom: 8px;} QSlider::handle:horizontal { width: 8px; background: gray; border: 1px solid; border-color: darkgray; margin: -3px 0px;} QSlider::add-page:horizontal { background: lightgray; } QSlider::sub-page:horizontal { background: red; }");
-      }
-      else {
-            volumeSlider->setStyleSheet("");
-      }
-
+      bool secondaryMode = Mixer::getOptions()->secondaryModeOn();
+      trackSlider->setSecondaryMode(secondaryMode);
+      trackSlider->setPanMode(secondaryMode && Mixer::getOptions()->secondarySlider() == MixerOptions::MixerSecondarySlider::Pan);
       update();
       }
 
 void MixerTrackChannel::update()
       {
-      const QSignalBlocker blockVolumeSignals(volumeSlider);
+      const QSignalBlocker blockVolumeSignals(trackSlider);
       const QSignalBlocker blockMuteSignals(muteButton);
       const QSignalBlocker blockSoloSignals(soloButton);
 
@@ -126,8 +126,8 @@ void MixerTrackChannel::update()
             }
 
 
-      volumeSlider->setValue(value);
-      volumeSlider->setToolTip(tooltip.arg(QString::number(tooltipValue)));
+      trackSlider->setValue(value);
+      trackSlider->setToolTip(tooltip.arg(QString::number(tooltipValue)));
       
       muteButton->setChecked(mixerTrackItem()->getMute());
       soloButton->setChecked(mixerTrackItem()->getSolo());
@@ -146,38 +146,32 @@ void MixerTrackChannel::propertyChanged(Channel::Prop property)
       }
 
 
-void MixerTrackChannel::stripVolumeSliderMoved(int value)
+void MixerTrackChannel::stripVolumeSliderMoved(int proposedValue)
       {
       takeSelection();
       MixerOptions* options = Mixer::getOptions();
 
+      int acceptedValue;
+
       if (options->secondaryModeOn()) {
             switch (options->secondarySlider()) {
                   case MixerOptions::MixerSecondarySlider::Pan:
-                        mixerTrackItem()->setPan(value);
-                        volumeSlider->setToolTip(tr("Pan: %1").arg(QString::number(value)));
+                        acceptedValue = mixerTrackItem()->setPan(proposedValue);
                         break;
                   case MixerOptions::MixerSecondarySlider::Reverb:
-                        mixerTrackItem()->setReverb(value);
-                        volumeSlider->setToolTip(tr("Reverb: %1").arg(QString::number(value)));
+                        acceptedValue = mixerTrackItem()->setReverb(proposedValue);
                         break;
                   case MixerOptions::MixerSecondarySlider::Chorus:
-                        mixerTrackItem()->setChorus(value);
-                        volumeSlider->setToolTip(tr("Chorus: %1").arg(QString::number(value)));
+                        acceptedValue = mixerTrackItem()->setChorus(proposedValue);
                         break;
             }
-            return;
+      }
+      else {
+            acceptedValue = mixerTrackItem()->setVolume(proposedValue);
       }
 
-      int diff = mixerTrackItem()->setVolume(value);
-
-      if (diff != 0) {
-            // hit the buffers, so reset the value to within limit 
-            value = value - diff;
-            volumeSlider->setValue(value);
-            }
-      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(value)));
-
+      if (acceptedValue != proposedValue)
+      trackSlider->setValue(acceptedValue);
       }
 
 

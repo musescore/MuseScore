@@ -45,29 +45,10 @@ void MixerOptions::setSecondaryModeOn(bool on)
             _showMidiOptions = settings.value("showMidiOptions", true).toBool();
             _showingDetails = settings.value("showingDetails", true).toBool();
             _showMasterVolume = settings.value("showMasterVolume", true).toBool();
-            int rawMode = settings.value("sliderMode", 1).toInt();
+            _mode = static_cast<MixerVolumeMode>(settings.value("sliderMode", 1).toInt());
+            _secondarySlider = static_cast<MixerSecondarySlider>(settings.value("secondarySlider", 1).toInt());
             settings.endGroup();
 
-            // hack because C++ documentation is horrible and I want it done
-            // fix up later
-            MixerVolumeMode convertEnum;
-
-            switch (rawMode) {
-                  case 1:
-                        convertEnum = MixerVolumeMode::Override;
-                        break;
-                  case 2:
-                        convertEnum = MixerVolumeMode::Ratio;
-                        break;
-                  case 3:
-                        convertEnum = MixerVolumeMode::PrimaryInstrument;
-                        break;
-                  default:
-                        convertEnum = MixerVolumeMode::Override;
-            }
-
-            _mode = convertEnum;
-            _secondarySlider = static_cast<MixerSecondarySlider>(settings.value("secondarySlider", 1).toInt());
       }
 
       void MixerOptions::writeSettings() {
@@ -78,23 +59,7 @@ void MixerOptions::setSecondaryModeOn(bool on)
             settings.setValue("showMidiOptions", _showMidiOptions);
             settings.setValue("showingDetails", _showingDetails);
             settings.setValue("showMasterVolume", _showMasterVolume);
-
-            // hack because C++ documentation is horrible and I want it done
-            // fix up later
-            int convertEnum = 0;
-            switch (_mode) {
-                  case MixerVolumeMode::Override:
-                        convertEnum = 1;
-                        break;
-                  case MixerVolumeMode::Ratio:
-                        convertEnum = 2;
-                        break;
-                  case MixerVolumeMode::PrimaryInstrument:
-                        convertEnum = 3;
-                        break;
-            }
-
-            settings.setValue("sliderMode", convertEnum);
+            settings.setValue("sliderMode", static_cast<int>(_mode));
             settings.setValue("secondarySlider", static_cast<int>(_secondarySlider));
             settings.endGroup();
       }
