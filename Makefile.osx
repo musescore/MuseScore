@@ -18,8 +18,8 @@
 #=============================================================================
 
 REVISION  = `cat mscore/revision.h`
-VERSION   = "3.2b-${REVISION}"
-#VERSION = 3.1.0
+#VERSION   = "3.2b-${REVISION}"
+VERSION = 3.2.3
 BUILD_NUMBER = ""
 PREFIX=../applebuild
 
