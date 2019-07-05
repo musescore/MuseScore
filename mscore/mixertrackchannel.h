@@ -69,7 +69,7 @@ protected:
             
 public:
       explicit MixerTrackChannel(MixerTreeWidgetItem*);
-      ~MixerTrackChannel();
+
       };
 
 }

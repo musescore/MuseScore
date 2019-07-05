@@ -28,22 +28,9 @@ namespace Ms {
 MixerSlider::MixerSlider(QWidget *parent) :
       QSlider(parent)
       {
-      installEventFilter(this);
       }
 
-MixerSlider::~MixerSlider()
-      {
 
-      }
-
-void MixerSlider::adjustPositionIfRequired(int value, int diff)
-      {
-      if (diff != 0) {
-            // hit the buffers, so reset the value to within limit
-            value = value - diff;
-            setValue(value);
-            }
-      }
 
 void MixerSlider::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
       {

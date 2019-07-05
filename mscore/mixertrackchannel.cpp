@@ -51,10 +51,6 @@ MixerTrackChannel::MixerTrackChannel(MixerTreeWidgetItem* treeWidgetItem) :
       }
 
 
-      MixerTrackChannel::~MixerTrackChannel()
-      {
-      setNotifier(nullptr);   // stop listening to messages from current score/part (may be redundant)
-      }
 
 void MixerTrackChannel::setupSlotsAndSignals()
       {

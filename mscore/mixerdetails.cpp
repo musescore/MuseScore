@@ -211,34 +211,34 @@ void MixerDetails::updatePatch()
       
       //Populate patch combo
       patchCombo->clear();
-      const auto& pl = synti->getPatchInfo();
+      const QList<MidiPatch*>& pl = synti->getPatchInfo();
       int patchIndex = 0;
 
 
       // Order by program number instead of bank, so similar instruments
       // appear next to each other, but ordered primarily by soundfont
-      std::map<int, std::map<int, std::vector<const MidiPatch*>>> orderedPl;
+      std::map<int, std::map<int, std::vector<const MidiPatch*>>> orderedPatchList;
       
-      for (const MidiPatch* p : pl)
-            orderedPl[p->sfid][p->prog].push_back(p);
+      for (const MidiPatch* patch : pl)
+            orderedPatchList[patch->sfid][patch->prog].push_back(patch);
       
       std::vector<QString> usedNames;
-      for (auto const& sf : orderedPl) {
+      for (auto const& sf : orderedPatchList) {
             for (auto const& pn : sf.second) {
-                  for (const MidiPatch* p : pn.second) {
-                        if (p->drum == drum || p->synti != "Fluid") {
-                              QString pName = p->name;
-                              if (std::find(usedNames.begin(), usedNames.end(), p->name) != usedNames.end()) {
-                                    QString addNum = QString(" (%1)").arg(p->sfid);
-                                    pName.append(addNum);
+                  for (const MidiPatch* patch : pn.second) {
+                        if (patch->drum == drum || patch->synti != "Fluid") {
+                              QString patchName = patch->name;
+                              if (std::find(usedNames.begin(), usedNames.end(), patch->name) != usedNames.end()) {
+                                    QString addNum = QString(" (%1)").arg(patch->sfid);
+                                    patchName.append(addNum);
                                     }
                               else
-                                    usedNames.push_back(p->name);
-                              
-                              patchCombo->addItem(pName, QVariant::fromValue<void*>((void*)p));
-                              if (p->synti == channel->synti() &&
-                                  p->bank == channel->bank() &&
-                                  p->prog == channel->program())
+                                    usedNames.push_back(patch->name);
+
+                              patchCombo->addItem(patchName, QVariant::fromValue<void*>((void*)patch));
+                              if (patch->synti == channel->synti() &&
+                                  patch->bank == channel->bank() &&
+                                  patch->prog == channel->program())
                                     patchIndex = patchCombo->count() - 1;
                               }
                         }
@@ -252,9 +252,8 @@ void MixerDetails::updatePatch()
 
 void MixerDetails::updateVolume()
       {
-      Channel* channel = selectedMixerTrackItem->channel();
-      volumeSlider->setValue((int)channel->volume());
-      volumeSpinBox->setValue(channel->volume());
+      volumeSlider->setValue(selectedMixerTrackItem->getVolume());
+      volumeSpinBox->setValue(selectedMixerTrackItem->getVolume());
       }
 
 void MixerDetails::updatePan()

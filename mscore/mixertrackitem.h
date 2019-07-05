@@ -108,12 +108,12 @@ class MixerTreeWidgetItem : public QTreeWidgetItem
    public:
       MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* parent);
       MixerTreeWidgetItem(Channel* channel, Instrument* instrument, Part* part);
-      MixerTrackItem* mixerTrackItem() { return _mixerTrackItem; };
-      MixerTrackChannel* mixerTrackChannel();
-
       ~MixerTreeWidgetItem();
 
+      MixerTrackItem* mixerTrackItem() { return _mixerTrackItem; };
+      MixerTrackChannel* mixerTrackChannel();
       };
+
 
 }
 #endif // __MIXERTRACKITEM_H__

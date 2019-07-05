@@ -506,14 +506,15 @@ MixerTreeWidgetItem::MixerTreeWidgetItem(Channel* channel, Instrument* instrumen
 
 
 MixerTrackChannel* MixerTreeWidgetItem::mixerTrackChannel() {
-
       return _mixerTrackChannel;
       }
 
 MixerTreeWidgetItem:: ~MixerTreeWidgetItem()
       {
-      delete _mixerTrackChannel;
+      _mixerTrackChannel->setNotifier(nullptr);      // ensure it stops listening
       delete _mixerTrackItem;
+      // note: the _MixerTrackChannel is taken care of (owned) after the setItemWidget call
+      // and so does not need to (and must not) be deleted here
       }
 }
 

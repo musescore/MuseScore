@@ -36,7 +36,6 @@ class MixerSlider : public QSlider
 
 public:
       explicit MixerSlider(QWidget *parent = nullptr);
-      ~MixerSlider();
 
       void paintEvent(QPaintEvent *ev);
 
@@ -44,8 +43,6 @@ public:
       bool panMode() { return panning; }
       void setSecondaryMode (bool on);                // will force a repaint
       bool secondaryMode() { return secondary; }
-
-      void adjustPositionIfRequired(int value, int diff);
 
       void mouseDoubleClickEvent(QMouseEvent* mouseEvent);
       };
