@@ -66,7 +66,7 @@ update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 40 --slave /usr/
 # get Qt
 if [ ! -d "qt5" ]; then
   mkdir qt5
-  wget -q -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt5124.zip
+  wget -q -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598.zip
   unzip -qq qt5.zip -d qt5
   rm -f qt5.zip
 fi
