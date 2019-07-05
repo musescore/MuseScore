@@ -163,7 +163,7 @@ For at skifte kan du bruge genvejstasten &quot;M&quot;.</translation>
         <comment>autoplace-tour</comment>
         <translation>Autoplacering vil vælge placering for de fleste elementer ifølge almen praksis for udgivne noder.
  F.eks. ved at flytte tempoangivelser op over andre tekster eller ved at gøre kiler kortere for at undgå dynamikudtryk.
- I mange tilfælde vil det betyde, at der slet ikke er brug for yderligere justering.</translation>
+ I mange tilfælde vil det betyde, at der slet ikke er brug for flere justeringer.</translation>
     </message>
     <message>
         <source>If necessary, you can fine-tune the position of elements by dragging, by using the cursor keys while in Edit mode (double-click),

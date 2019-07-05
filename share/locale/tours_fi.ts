@@ -307,19 +307,27 @@ nuottien ja taukojen läpi.
 
     - Press Shift-Left to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Useimmat elementit viivapaletissa ulottuvat koko alueen yli ensimmäisestä elementistä viimeiseen.
+
+    Muokataksesi sen aluetta, tuplakilkkaa viivaa (mikä automaattisesti valitsee sen päätöskahvan) ja:
+
+    - Paina Vaihto-Oikealle siirtääksesi kahvaa eteenpäin.
+
+    - Press Vaihto-Vasemmalle siirtääksesi kahvaa taaksepäin.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Vaihtoehtoisesti voit lisätä viiva-elementin valitun alueen yli ensin valitsemalla alueen partituurista, minkä jälkeen tuplaklikkaamalla viiva-elementtiä paletissa.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with &quot;Shift&quot; to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Tämä on partituurinäkymä, jossa voit tarkastella ja muokata partituuriasi.
+    Käytä hiiren rullaa tai kosketuslevyä rullataksesi (vaihtonäppäimen kanssa vaakasuunnassa).
+    Jos sinulla on avattuna useita partituureja, voit vaihtaa niiden välillä käyttämällä hyväksi välilehtiä partituurinäkymän yläosassa.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.

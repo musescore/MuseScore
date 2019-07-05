@@ -316,7 +316,13 @@ majd a „Kijelölés” opciók közül választ a megjelenő felugró menüben
 
     - Press Shift-Left to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>A legtöbb zenei elem a &quot;vonalak&quot; palettán az első kijelölt hangtól az utolsó kijelölt hangig tart.
+
+Ha meg szeretnéd változtatni a tartományt, akkor kattints kétszer a vonalra (ami automatikusan kijelöli a vonal végét) és:
+
+-Nyomd le a Shift-JobbraNyíl gombokat, hogy jobbra told a vonal végét.
+
+-Nyomd le a Sift-BalraNyíl gombokat, hogy balra told a vonal végét.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
