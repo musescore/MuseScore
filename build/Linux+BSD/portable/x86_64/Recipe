@@ -25,10 +25,7 @@ apt-get -y install \
   libgl1-mesa-dev \
   libopenal1 \
   gstreamer0.10-plugins-base \
-  libmirclient9 \
-  libmircommon7 \
-  libmircore1 \
-  libmirprotobuf3 \
+  libxrandr2 \
   software-properties-common # installs `add-apt-repository`
 
 # get newer compiler
