@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python
 import fileinput
 import sys
 
@@ -58,4 +58,3 @@ if __name__ == '__main__':
         print "Wrong size of consumerSecret"
         exit()
     processFile(consumerKey, consumerSecret)
-
