@@ -2126,7 +2126,7 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       printer.setOutputFileName(saveName);
       printer.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
       QSizeF size(firstScore->styleD(Sid::pageWidth), firstScore->styleD(Sid::pageHeight));
-      QPageSize ps(QPageSize::id(size, QPageSize::Inch));
+      QPageSize ps(QPageSize::id(size, QPageSize::Inch, QPageSize::FuzzyOrientationMatch));
       printer.setPageSize(ps);
       printer.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
       printer.setFullPage(true);
@@ -2170,7 +2170,7 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
             MScore::pdfPrinting = true;
 
             QSizeF size1(s->styleD(Sid::pageWidth), s->styleD(Sid::pageHeight));
-            QPageSize ps1(QPageSize::id(size1, QPageSize::Inch));
+            QPageSize ps1(QPageSize::id(size1, QPageSize::Inch, QPageSize::FuzzyOrientationMatch));
             printer.setPageSize(ps1);
             printer.setPageOrientation(size1.width() > size1.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
             p.setViewport(QRect(0.0, 0.0, size1.width() * printer.logicalDpiX(),
