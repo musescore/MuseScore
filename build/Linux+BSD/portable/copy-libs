@@ -68,6 +68,8 @@ getCrossPlatformDependencies() {
 
   copyLib libmirclient.so.9 #needed by Ubuntu 16.04
   copyLib libmircommon.so.7 #needed by Qt 5.9.8 on Ubuntu 16.04
+  copyLib libmircore.so.1 #needed by Qt 5.9.8 on Ubuntu 16.04
+  copyLib libmirprotobuf.so.3 #needed by Qt 5.9.8 on Ubuntu 16.04
   
   copyLib libQt5CLucene.so.5
   copyLib libQt5Core.so.5
