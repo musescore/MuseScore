@@ -26,6 +26,7 @@ apt-get -y install \
   libopenal1 \
   gstreamer0.10-plugins-base \
   libmirclient9 \
+  libmircommon7 \
   software-properties-common # installs `add-apt-repository`
 
 # get newer compiler
