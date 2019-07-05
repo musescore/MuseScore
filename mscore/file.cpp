@@ -2124,12 +2124,11 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
 
       QPrinter printer;
       printer.setOutputFileName(saveName);
-      firstScore->setPrinting(true);
-      MScore::pdfPrinting = true;
-      
       printer.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
       QSizeF size(firstScore->styleD(Sid::pageWidth), firstScore->styleD(Sid::pageHeight));
-      printer.setPaperSize(size, QPrinter::Inch);
+      QPageSize ps(QPageSize::id(size, QPageSize::Inch));
+      printer.setPageSize(ps);
+      printer.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
       printer.setFullPage(true);
       printer.setColorMode(QPrinter::Color);
 #if defined(Q_OS_MAC)
@@ -2151,12 +2150,9 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       QPainter p;
       if (!p.begin(&printer))
             return false;
+
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
-      
-      p.setViewport(QRect(0.0, 0.0, size.width() * printer.logicalDpiX(),
-                          size.height() * printer.logicalDpiY()));
-      p.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
 
       double pr = MScore::pixelRatio;
 
