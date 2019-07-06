@@ -80,8 +80,10 @@ void MixerTrackChannel::updateUiControls()
       colorLabel->setVisible(showTrackColors);
       bool secondaryMode = Mixer::getOptions()->secondaryModeOn();
       trackSlider->setSecondaryMode(secondaryMode);
+      trackSlider->blockSignals(true);
       trackSlider->setPanMode(secondaryMode && Mixer::getOptions()->secondarySlider() == MixerOptions::MixerSecondarySlider::Pan);
       update();
+      trackSlider->blockSignals(false);
       }
 
 void MixerTrackChannel::update()
@@ -93,37 +95,32 @@ void MixerTrackChannel::update()
       MixerOptions* options = Mixer::getOptions();
 
       int value;
-      int tooltipValue;
       QString tooltip;
 
       if (options->secondaryModeOn()) {
             switch (options->secondarySlider()) {
                   case MixerOptions::MixerSecondarySlider::Pan:
                         value = mixerTrackItem()->getPan();
-                        tooltipValue = value - 63;
                         tooltip = tr("Pan: %1");
                         break;
                   case MixerOptions::MixerSecondarySlider::Reverb:
                         value = mixerTrackItem()->getReverb();
-                        tooltipValue = value;
                         tooltip = tr("Reverb: %1");
                         break;
                   case MixerOptions::MixerSecondarySlider::Chorus:
                         value = mixerTrackItem()->getChorus();
-                        tooltipValue = value;
                         tooltip = tr("Chorus: %1");
                         break;
                   }
             }
       else {
             value = mixerTrackItem()->getVolume();
-            tooltipValue = value;
             tooltip = tr("Volume: %1");
             }
 
 
       trackSlider->setValue(value);
-      trackSlider->setToolTip(tooltip.arg(QString::number(tooltipValue)));
+      trackSlider->setToolTip(tooltip.arg(QString::number(value)));
       
       muteButton->setChecked(mixerTrackItem()->getMute());
       soloButton->setChecked(mixerTrackItem()->getSolo());

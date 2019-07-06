@@ -469,12 +469,15 @@ bool Mixer::eventFilter(QObject* object, QEvent* event)
 
 bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
       {
-      
-      MixerTrackItem* selectedMixerTrackItem = mixer->mixerDetails->getSelectedMixerTrackItem();
-      
+
       if (event->type() != QEvent::KeyPress) {
             return QObject::eventFilter(obj, event);
-            }
+      }
+
+      MixerTrackItem* selectedMixerTrackItem = mixer->mixerDetails->getSelectedMixerTrackItem();
+
+      if (!selectedMixerTrackItem)
+            return QObject::eventFilter(obj, event);
       
       QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
@@ -490,26 +493,22 @@ bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
 
 
       if (keyEvent->key() == primaryDown && !modified) {
-            if (selectedMixerTrackItem && int(selectedMixerTrackItem->getVolume()) >0) {
-                  selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() - 1);
-            }
+            mixer->nudgeMainSlider(Mixer::NudgeDirection::Down);
             return true;
       }
             if (keyEvent->key() == primaryUp && !modified) {
-            if (selectedMixerTrackItem && int(selectedMixerTrackItem->getVolume()) < 128) {
-                  selectedMixerTrackItem->setVolume(selectedMixerTrackItem->getVolume() + 1);
-                  }
+            mixer->nudgeMainSlider(Mixer::NudgeDirection::Up);
             return true;
             }
 
       
       if (keyEvent->key() == secondaryDown && modified) {
-            mixer->nudgeSecondarySliderUp(false);
+            mixer->nudgeSecondarySlider(Mixer::NudgeDirection::Down);
             return true;
             }
       
       if (keyEvent->key() == secondaryUp && modified) {
-            mixer->nudgeSecondarySliderUp(true);
+            mixer->nudgeSecondarySlider(Mixer::NudgeDirection::Up);
             return true;
             }
       
@@ -530,55 +529,65 @@ bool MixerKeyboardControlFilter::eventFilter(QObject *obj, QEvent *event)
       return QObject::eventFilter(obj, event);
       }
 
-void Mixer::nudgeSecondarySliderUp(bool up) {
+int Mixer::nudge(int currentValue, NudgeDirection direction, int lowerLimit, int upperLimit) {
 
-      //TODO: check for secondarySliderLock and behave differently
-      MixerTreeWidgetItem* treeItem = static_cast<MixerTreeWidgetItem*>(mixerTreeWidget->currentItem());
-      if (!treeItem)  // defensive
-            return;
+            int proposedValue = currentValue + (direction == NudgeDirection::Up ? 1 : -1);
 
-      MixerTrackItem* trackItem = treeItem->mixerTrackItem();
+            if (currentValue > upperLimit)
+                  proposedValue = upperLimit;
 
-      if (!trackItem)   // defensive
-            return;
+            if (currentValue < lowerLimit)
+                  proposedValue = lowerLimit;
 
-      int currentValue;
+            return proposedValue;
+      }
+
+void Mixer::nudgeMainSlider(NudgeDirection direction)
+      {
+      MixerTrackItem* trackItem = mixerDetails->getSelectedMixerTrackItem();
+      int proposedValue = nudge(trackItem->getVolume(), direction, 0, 127);
+      int acceptedValue = trackItem->setVolume(proposedValue);
+
+      if (proposedValue != acceptedValue) {
+            qDebug()<<"Hit the buffers. Make a noise.";
+            QApplication::beep();
+            }
+      }
+
+void Mixer::nudgeSecondarySlider(NudgeDirection direction)
+      {
+      MixerTrackItem* trackItem = mixerDetails->getSelectedMixerTrackItem();
+
+      int proposedValue;
 
       switch (options->secondarySlider()) {
             case MixerOptions::MixerSecondarySlider::Pan:
-                  currentValue = trackItem->getPan();
+                  proposedValue = nudge(trackItem->getPan(), direction, -63, 63);
                   break;
             case MixerOptions::MixerSecondarySlider::Reverb:
-                  currentValue = trackItem->getReverb();
+                  proposedValue = nudge(trackItem->getReverb(), direction, 0, 127);
                   break;
             case MixerOptions::MixerSecondarySlider::Chorus:
-                  currentValue = trackItem->getChorus();
+                  proposedValue = nudge(trackItem->getChorus(), direction, 0, 127);
                   break;
       }
 
-      int newValue = currentValue + (up ? 1 : -1);
-
-     if (currentValue > 127)
-           newValue = 127;
-
-      if (currentValue < 0)
-            newValue = 0;
-
-int diff;
+      int acceptedValue;
       switch (options->secondarySlider()) {
             case MixerOptions::MixerSecondarySlider::Pan:
-                  diff = trackItem->setPan(newValue);
+                  acceptedValue = trackItem->setPan(proposedValue);
                   break;
             case MixerOptions::MixerSecondarySlider::Reverb:
-                  diff = trackItem->setReverb(newValue);
+                  acceptedValue = trackItem->setReverb(proposedValue);
                   break;
             case MixerOptions::MixerSecondarySlider::Chorus:
-                  diff = trackItem->setChorus(newValue);
+                  acceptedValue = trackItem->setChorus(proposedValue);
                   break;
       }
 
-      if (diff != 0) {
-            qDebug()<<"Hit the buffers. Could make a noise.";
+      if (proposedValue != acceptedValue) {
+            qDebug()<<"Hit the buffers. Make a noise.";
+            QApplication::beep();
             }
 
       }

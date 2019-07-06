@@ -39,7 +39,7 @@ public:
 
       void paintEvent(QPaintEvent *ev);
 
-      void setPanMode(bool on) { panning = on; }
+      void setPanMode(bool on);                       // will alter minimum and maximum
       bool panMode() { return panning; }
       void setSecondaryMode (bool on);                // will force a repaint
       bool secondaryMode() { return secondary; }

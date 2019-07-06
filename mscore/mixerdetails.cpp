@@ -258,7 +258,7 @@ void MixerDetails::updateVolume()
 
 void MixerDetails::updatePan()
       {
-      int pan = selectedMixerTrackItem->getPan()-63;
+      int pan = selectedMixerTrackItem->getPan();
       panSlider->setValue(pan);
       panSpinBox->setValue(pan);
       }
@@ -476,10 +476,10 @@ void MixerDetails::panSliderMoved(int proposedValue)
       if (!selectedMixerTrackItem)
             return;
 
-      int acceptedValue = selectedMixerTrackItem->setPan(proposedValue + 63);
+      int acceptedValue = selectedMixerTrackItem->setPan(proposedValue);
             
       if (acceptedValue != proposedValue)
-            panSlider->setValue(acceptedValue - 63);
+            panSlider->setValue(acceptedValue);
       }
 
 

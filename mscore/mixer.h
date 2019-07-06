@@ -45,6 +45,9 @@ class Mixer : public QDockWidget, public Ui::Mixer
       {
       Q_OBJECT
 
+      public:
+            enum class NudgeDirection : int { Up, Down };
+
       Score* _score = nullptr;                        // playback score
       Score* _activeScore = nullptr;                  // may be a _score itself or its excerpt;
       QGridLayout* gridLayout;                        // main layout - used to show/hide & position details panel
@@ -80,7 +83,6 @@ class Mixer : public QDockWidget, public Ui::Mixer
       void itemCollapsedOrExpanded(QTreeWidgetItem*);
       void shiftKeyMonitor();
 
-
    public slots:
       void updateTracks();
       void midiPrefsChanged(bool showMidiControls);
@@ -105,7 +107,9 @@ class Mixer : public QDockWidget, public Ui::Mixer
 
       MixerDetails* mixerDetails;                                 // TODO: mixerDetails - does it NEED to be public?
       void updateUiOptions();
-      void nudgeSecondarySliderUp(bool up);
+      void nudgeSecondarySlider(NudgeDirection direction);
+      void nudgeMainSlider(NudgeDirection direction);
+      int nudge(int currentValue, NudgeDirection direction, int lowerLimit, int upperLimit);
 
       static MixerOptions* getOptions() { return options; };
             

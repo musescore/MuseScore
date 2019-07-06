@@ -28,6 +28,8 @@ namespace Ms {
 MixerSlider::MixerSlider(QWidget *parent) :
       QSlider(parent)
       {
+      
+
       }
 
 
@@ -35,7 +37,7 @@ MixerSlider::MixerSlider(QWidget *parent) :
 void MixerSlider::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
       {
       if (panning) {
-            setValue(0);
+            setSliderPosition(0);
             return;
             }
 
@@ -45,10 +47,15 @@ void MixerSlider::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
 
 void MixerSlider::setSecondaryMode(bool on)
 {
-
       secondary = on;
       repaint();
+}
 
+void MixerSlider::setPanMode(bool on)
+{
+      panning = on;
+      setMinimum(panning ? -63 : 0);
+      setMaximum(panning ? 63 : 127);
 }
 
 

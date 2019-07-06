@@ -148,7 +148,7 @@ char MixerTrackItem::getReverb()
 
 char MixerTrackItem::getPan()
       {
-      return channel()->pan();
+      return channel()->pan() - panAdjustment();
       }
 
 bool MixerTrackItem::getMute()
@@ -183,9 +183,14 @@ int MixerTrackItem::setVolume(int proposedValue)
 //---------------------------------------------------------
 //   setPan
 //---------------------------------------------------------
+const int MixerTrackItem::panAdjustment() {
+      return 63;
+}
 
-int MixerTrackItem::setPan(int value)
+int MixerTrackItem::setPan(int proposedValue)
       {
+      proposedValue = proposedValue + panAdjustment();
+      
       auto writer = [](int value, Channel* channel){
             channel->setPan(value);
             seq->setController(channel->channel(), CTRL_PANPOT, channel->pan()); };
@@ -193,7 +198,7 @@ int MixerTrackItem::setPan(int value)
       auto reader = [](Channel* channel) -> int {
             return channel->pan(); };
 
-      return adjustValue(value, reader, writer);
+      return adjustValue(proposedValue, reader, writer) - panAdjustment();
       }
 
 //---------------------------------------------------------

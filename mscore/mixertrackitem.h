@@ -55,6 +55,7 @@ private:
       int adjustValue(int proposedValue, ChannelReader reader, ChannelWriter writer);
       template <class ChannelWriter, class ChannelReader>
       int relativeAdjust(int mainSliderDelta, ChannelReader reader, ChannelWriter writer);
+      const int panAdjustment();
 
 public:
       MixerTrackItem(TrackType trackType, Part* part, Instrument* _instr, Channel* _chan);
