@@ -184,6 +184,19 @@ Element* PluginAPI::newElement(int elementType)
       }
 
 //---------------------------------------------------------
+//   removeElement
+///   Disposes of an Element and its children.
+///   \param Element type.
+///   \since MuseScore 3.3
+//---------------------------------------------------------
+
+void PluginAPI::removeElement(Ms::PluginAPI::Element* wrapped)
+      {
+      Ms::Score* score = wrapped->element()->score();
+      score->deleteItem(wrapped->element());
+      }
+
+//---------------------------------------------------------
 //   newScore
 //---------------------------------------------------------
 
