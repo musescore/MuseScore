@@ -3360,6 +3360,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   e.unknown();
             }
       e.checkTuplets();
+      m->connectTremolo();
       }
 
 //---------------------------------------------------------
