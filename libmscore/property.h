@@ -238,6 +238,9 @@ enum class Pid {
       FRET_OFFSET,
       FRET_NUM_POS,
 
+      HARMONY_VOICE_LITERAL,
+      HARMONY_VOICING,
+
       SYSTEM_BRACKET,
       GAP,
       AUTOPLACE,

@@ -73,7 +73,8 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             }
       else if (qobject_cast<Awl::ColorLabel*>(w))
             v = static_cast<Awl::ColorLabel*>(w)->color();
-      else if (qobject_cast<QCheckBox*>(w) || qobject_cast<QPushButton*>(w) || qobject_cast<QToolButton*>(w))
+      else if (qobject_cast<QCheckBox*>(w) || qobject_cast<QPushButton*>(w) ||
+               qobject_cast<QToolButton*>(w) || qobject_cast<QRadioButton*>(w))
             v = w->property("checked");
       else if (qobject_cast<QLineEdit*>(w))
             v =  w->property("text");
@@ -223,6 +224,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             static_cast<QCheckBox*>(w)->setChecked(val.toBool());
       else if (qobject_cast<Awl::ColorLabel*>(w))
             static_cast<Awl::ColorLabel*>(w)->setColor(val.value<QColor>());
+      else if (qobject_cast<QRadioButton*>(w))
+            static_cast<QRadioButton*>(w)->setChecked(val.toBool());
       else if (qobject_cast<QPushButton*>(w))
             static_cast<QPushButton*>(w)->setChecked(val.toBool());
       else if (qobject_cast<QToolButton*>(w))
@@ -582,6 +585,8 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                   connect(qobject_cast<QCheckBox*>(w), QOverload<bool>::of(&QCheckBox::toggled), [=] { valueChanged(i); });
             else if (qobject_cast<Awl::ColorLabel*>(w))
                   connect(qobject_cast<Awl::ColorLabel*>(w), QOverload<QColor>::of(&Awl::ColorLabel::colorChanged), [=] { valueChanged(i); });
+            else if (qobject_cast<QRadioButton*>(w))
+                  connect(qobject_cast<QRadioButton*>(w), QOverload<bool>::of(&QRadioButton::toggled), [=] { valueChanged(i); });
             else if (qobject_cast<QPushButton*>(w))
                   connect(qobject_cast<QPushButton*>(w), QOverload<bool>::of(&QPushButton::toggled), [=] { valueChanged(i); });
             else if (qobject_cast<QToolButton*>(w))
