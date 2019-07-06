@@ -25,7 +25,6 @@ apt-get -y install \
   libgl1-mesa-dev \
   libopenal1 \
   gstreamer0.10-plugins-base \
-  libxrandr2 \
   software-properties-common # installs `add-apt-repository`
 
 # get newer compiler
@@ -39,7 +38,6 @@ apt-get -y install \
   g++-4.9 \
   wget \
   make \
-  cmake \
   curl \
   alsa \
   libasound2-dev \
@@ -66,7 +64,7 @@ update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 40 --slave /usr/
 # get Qt
 if [ ! -d "qt5" ]; then
   mkdir qt5
-  wget -q -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598.zip
+  wget -q -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt593.zip
   unzip -qq qt5.zip -d qt5
   rm -f qt5.zip
 fi
@@ -74,6 +72,18 @@ export PATH="${PWD}/qt5/bin:$PATH"
 export QT_PLUGIN_PATH="${PWD}/qt5/plugins"
 export QML2_IMPORT_PATH="${PWD}/qt5/qml"
 export LD_LIBRARY_PATH="${PWD}/qt5/lib:$LD_LIBRARY_PATH"
+
+# install cmake
+if [ ! -d cmake ]; then
+  if [ "$(arch)" = "i686" ]; then
+    CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.1-Linux-i386.tar.gz"
+  else
+    CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.1-Linux-$(arch).tar.gz"
+  fi
+  mkdir cmake
+  wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C cmake
+fi
+export PATH="${PWD}/cmake/bin:${PATH}"
 
 # build AppImageKit
 if [ ! -d "AppImageKit" ]; then

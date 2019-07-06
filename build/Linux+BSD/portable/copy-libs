@@ -65,8 +65,6 @@ getCrossPlatformDependencies() {
   #copyLib libicudata.so #icudt53.dll # Needed by Ubuntu 12.04
   #copyLib libicui18n.so #libicuin53.so.5 # Needed by Ubuntu 12.04
   #copyLib libicuuc.so #libicuuc53.so.5 # Needed by Ubuntu 12.04
-
-  copyLib libXrandr.so.2 #required to link MuseScore code with QWebEngine from Qt 5.9.8
   
   copyLib libQt5CLucene.so.5
   copyLib libQt5Core.so.5
