@@ -247,6 +247,8 @@ enum class Sid {
       romanNumeralPlacement,
       nashvilleNumberPlacement,
       harmonyPlay,
+      harmonyVoiceLiteral,
+      harmonyVoicing,
 
       chordSymbolAPosAbove,
       chordSymbolAPosBelow,

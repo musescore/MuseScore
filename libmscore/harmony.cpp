@@ -146,6 +146,8 @@ const ElementStyle chordSymbolStyle {
       { Sid::harmonyPlacement, Pid::PLACEMENT  },
       { Sid::minHarmonyDistance, Pid::MIN_DISTANCE },
       { Sid::harmonyPlay, Pid::PLAY },
+      { Sid::harmonyVoiceLiteral, Pid::HARMONY_VOICE_LITERAL },
+      { Sid::harmonyVoicing, Pid::HARMONY_VOICING }
       };
 
 //---------------------------------------------------------
@@ -1920,6 +1922,12 @@ QVariant Harmony::getProperty(Pid pid) const
             case Pid::HARMONY_TYPE:
                   return QVariant(int(_harmonyType));
                   break;
+            case Pid::HARMONY_VOICE_LITERAL:
+                  return _realizedHarmony.literal();
+                  break;
+            case Pid::HARMONY_VOICING:
+                  return int(_realizedHarmony.voicing());
+                  break;
             default:
                   return TextBase::getProperty(pid);
             }
@@ -1937,6 +1945,12 @@ bool Harmony::setProperty(Pid pid, const QVariant& v)
                   break;
             case Pid::HARMONY_TYPE:
                   setHarmonyType(HarmonyType(v.toInt()));
+                  break;
+            case Pid::HARMONY_VOICE_LITERAL:
+                  _realizedHarmony.setLiteral(v.toBool());
+                  break;
+            case Pid::HARMONY_VOICING:
+                  _realizedHarmony.setVoicing(Voicing(v.toInt()));
                   break;
             default:
                   if (TextBase::setProperty(pid, v)) {
