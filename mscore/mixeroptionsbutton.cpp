@@ -135,21 +135,21 @@ namespace Ms {
             menu = new QMenu(this);
             setMenu(menu);
 
+            menu->addSection(tr("Top Level Slider Adjustment Style"));
+            menu->addAction(overallVolumeRatioMode);
+            menu->addAction(overallVolumeOverrideMode);
+            menu->addAction(overallVolumeFirstMode);
+
+            menu->addSection(tr("Secondary Control (on Shift)"));
+            menu->addActions({makePanSecondarySlider, makeReverbSecondarySlider, makeChorusSecondarySlider});
+            menu->addAction(secondaryModeLock);
+
             menu->addSection(tr("Appearance"));
             menu->addAction(showDetailsToTheSide);
             menu->addSeparator();
             menu->addAction(showMidiOptions);
             menu->addAction(showTrackColors);
             menu->addAction(showMasterVolume);
-
-            menu->addSection(tr("Secondary Slider (on Shift)"));
-            menu->addActions({makePanSecondarySlider, makeReverbSecondarySlider, makeChorusSecondarySlider});
-            menu->addAction(secondaryModeLock);
-
-            menu->addSection(tr("Slider Behavior"));
-            menu->addAction(overallVolumeFirstMode);
-            menu->addAction(overallVolumeOverrideMode);
-            menu->addAction(overallVolumeRatioMode);
       }
 
       void MixerOptionsButton::createMenuActionsAndGroupings()
@@ -163,15 +163,15 @@ namespace Ms {
             showMasterVolume = new QAction(tr("Show Master Volume"));
             showMasterVolume->setCheckable(true);
 
-            showMidiOptions = new QAction(tr("Show Midi Options (in More…)"));
+            showMidiOptions = new QAction(tr("Show Midi Options (in Details)"));
             showMidiOptions->setCheckable(true);
 
-            secondaryModeLock = new QAction(tr("Secondary Slider Lock"));
+            secondaryModeLock = new QAction(tr("Secondary Control Lock"));
             secondaryModeLock->setCheckable(true);
 
-            overallVolumeOverrideMode = new QAction(tr("Override"));
             overallVolumeRatioMode = new QAction(tr("Relative"));
-            overallVolumeFirstMode = new QAction(tr("Primary only"));
+            overallVolumeOverrideMode = new QAction(tr("Override"));
+            overallVolumeFirstMode = new QAction(tr("First sound only"));
 
             overallVolumeOverrideMode->setCheckable(true);
             overallVolumeRatioMode->setCheckable(true);

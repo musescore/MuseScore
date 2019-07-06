@@ -30,12 +30,6 @@ bool MixerOptions::secondaryModeOn()
       return _secondaryModeLock ? !_secondaryMode : _secondaryMode;
       }
 
-
-void MixerOptions::setSecondaryModeOn(bool on)
-      {
-      _secondaryMode = on;
-      }
-
       void MixerOptions::readSettings() {
 
             QSettings settings("MuseScore","Mixer");
@@ -45,10 +39,9 @@ void MixerOptions::setSecondaryModeOn(bool on)
             _showMidiOptions = settings.value("showMidiOptions", true).toBool();
             _showingDetails = settings.value("showingDetails", true).toBool();
             _showMasterVolume = settings.value("showMasterVolume", true).toBool();
-            _mode = static_cast<MixerVolumeMode>(settings.value("sliderMode", 1).toInt());
-            _secondarySlider = static_cast<MixerSecondarySlider>(settings.value("secondarySlider", 1).toInt());
+            _mode = static_cast<MixerVolumeMode>(settings.value("sliderMode", static_cast<int>(MixerVolumeMode::Ratio)).toInt());
+            _secondarySlider = static_cast<MixerSecondarySlider>(settings.value("secondarySlider", static_cast<int>(MixerSecondarySlider::Pan)).toInt());
             settings.endGroup();
-
       }
 
       void MixerOptions::writeSettings() {

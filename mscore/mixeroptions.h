@@ -27,7 +27,7 @@ class MixerOptions
 {
    public:
       enum class MixerSecondarySlider : int { Pan = 1, Reverb, Chorus };
-      enum class MixerVolumeMode : int { Override = 1, Ratio, PrimaryInstrument };
+      enum class MixerVolumeMode : int { Ratio = 1, Override, PrimaryInstrument };
 
    private:
 
@@ -60,11 +60,11 @@ class MixerOptions
       void setMode(MixerVolumeMode mode) { _mode = mode; writeSettings(); };
       void setSecondarySlider(MixerSecondarySlider secondary) { _secondarySlider = secondary; }
       void setSecondaryModeLock(bool lock) { _secondaryModeLock = lock; };
+      bool secondaryModeOn();
+      void setSecondaryModeOn(bool on) {_secondaryMode = on;};
       void readSettings();
       void writeSettings();
 
-      bool secondaryModeOn();
-      void setSecondaryModeOn(bool on);
 };
 
 
