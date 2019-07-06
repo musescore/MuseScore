@@ -26,6 +26,7 @@
 #include "mixer.h"
 #include "mixertrackitem.h"
 #include "mixeroptions.h"
+#include "awl/colorlabel.h"
 
 namespace Ms {
 
@@ -56,8 +57,10 @@ void MixerTrackChannel::setupSlotsAndSignals()
       {
       connect(muteButton,     SIGNAL(toggled(bool)),        SLOT(stripMuteToggled(bool)));
       connect(soloButton,     SIGNAL(toggled(bool)),        SLOT(stripSoloToggled(bool)));
-      connect(trackSlider,   SIGNAL(valueChanged(int)),    SLOT(stripVolumeSliderMoved(int)));
-      connect(trackSlider,   SIGNAL(sliderPressed()),      SLOT(takeSelection()));
+      connect(trackSlider,    SIGNAL(valueChanged(int)),    SLOT(stripVolumeSliderMoved(int)));
+      connect(trackSlider,    SIGNAL(sliderPressed()),      SLOT(takeSelection()));
+      connect(colorChooser,   SIGNAL(colorChanged(QColor)), SLOT(trackColorEdited(QColor)));
+
       }
 
 void MixerTrackChannel::takeSelection()
@@ -77,7 +80,7 @@ void MixerTrackChannel::setupAdditionalUi()
 void MixerTrackChannel::updateUiControls()
       {
       bool showTrackColors = Mixer::getOptions()->showTrackColors();
-      colorLabel->setVisible(showTrackColors);
+      colorChooser->setVisible(showTrackColors);
       bool secondaryMode = Mixer::getOptions()->secondaryModeOn();
       trackSlider->setSecondaryMode(secondaryMode);
       trackSlider->blockSignals(true);
@@ -125,9 +128,11 @@ void MixerTrackChannel::update()
       muteButton->setChecked(mixerTrackItem()->getMute());
       soloButton->setChecked(mixerTrackItem()->getSolo());
 
-      QColor channelColor = mixerTrackItem()->color();
-      if (colorLabel)
-            colorLabel->setStyleSheet(QString("QLabel{background: %1;padding-top: 2px; padding-bottom: 2px; border-radius: 3px;}").arg(channelColor.name()));
+      int channelColor = mixerTrackItem()->color();
+      QColor tweakedColor = QColor(channelColor | 0xff000000);
+      colorChooser->setColor(tweakedColor);
+      //TODO: is it necesary to set the borders every time? and their color
+      colorChooser->setStyleSheet(QString("QFrame{background: %1;padding-top: 2px; padding-bottom: 2px; border-radius: 3px;}").arg(tweakedColor.name()));
 
       setToolTip(mixerTrackItem()->detailedToolTip());
       }
@@ -180,5 +185,11 @@ void MixerTrackChannel::stripMuteToggled(bool val)
       mixerTrackItem()->setMute(val);
       takeSelection();
       }
+
+void MixerTrackChannel::trackColorEdited(QColor color)
+      {
+      mixerTrackItem()->setColor(color.rgb());
+      }
+
 
 }

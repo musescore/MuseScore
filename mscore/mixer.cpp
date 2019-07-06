@@ -35,6 +35,7 @@
 #include "mixertrackchannel.h"
 #include "mixermasterchannel.h"
 #include "mixertrackitem.h"
+#include "mixertreewidgetitem.h"
 #include "mixeroptions.h"
 #include "mixeroptionsbutton.h"
 
@@ -102,6 +103,8 @@ void Mixer::setupSlotsAndSignals()
       connect(mixerTreeWidget->header(), SIGNAL(geometriesChanged()), this, SLOT(adjustHeaderWidths()));
       connect(mixerTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(itemCollapsedOrExpanded(QTreeWidgetItem*)));
       connect(mixerTreeWidget, SIGNAL(itemCollapsed(QTreeWidgetItem*)), this, SLOT(itemCollapsedOrExpanded(QTreeWidgetItem*)));
+      connect(mixerTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(itemChanged(QTreeWidgetItem*, int)));
+
       }
 
 
@@ -125,6 +128,9 @@ void Mixer::setupAdditionalUi()
       mixerTreeWidget->setAlternatingRowColors(true);
       mixerTreeWidget->setColumnCount(2);
       mixerTreeWidget->setHeaderLabels({tr("Instrument"), tr("Volume")});
+      // make all bar column 0, non-editable
+      mixerTreeWidget->setItemDelegateForColumn(1, new NonEditableItemDelegate (mixerTreeWidget));
+
       mixerTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Fixed);
       mixerTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
 
@@ -421,7 +427,7 @@ void Mixer::midiPrefsChanged(bool)
       }
 
 
-//MARK:- event handling
+//MARK:- window events
 
 void Mixer::closeEvent(QCloseEvent* ev)
       {
@@ -453,6 +459,7 @@ void Mixer::hideEvent(QHideEvent* e)
       getAction("toggle-mixer")->setChecked(false);
       }
 
+//MARK:- keyboard events
 
 //---------------------------------------------------------
 //   eventFilter
@@ -549,7 +556,6 @@ void Mixer::nudgeMainSlider(NudgeDirection direction)
       int acceptedValue = trackItem->setVolume(proposedValue);
 
       if (proposedValue != acceptedValue) {
-            qDebug()<<"Hit the buffers. Make a noise.";
             QApplication::beep();
             }
       }
@@ -586,7 +592,6 @@ void Mixer::nudgeSecondarySlider(NudgeDirection direction)
       }
 
       if (proposedValue != acceptedValue) {
-            qDebug()<<"Hit the buffers. Make a noise.";
             QApplication::beep();
             }
 
@@ -658,6 +663,17 @@ void Mixer::changeEvent(QEvent *event)
       if (event->type() == QEvent::LanguageChange)
             retranslate();
       }
+
+
+//MARK:- tree changes
+
+void Mixer::itemChanged(QTreeWidgetItem* treeWidgetItem, int column)
+{
+      MixerTreeWidgetItem* item = static_cast<MixerTreeWidgetItem*>(treeWidgetItem);
+      saveTreeSelection();
+      item->mixerTrackItem()->setName(item->text(column));
+      restoreTreeSelection();
+}
 
 
 //MARK:- manage the mixer tree

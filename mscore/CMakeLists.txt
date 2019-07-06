@@ -316,6 +316,7 @@ add_executable ( ${ExecutableName}
       gainslider.h gainslider.cpp mixeroptionsbutton.h mixeroptionsbutton.cpp
       mixeroptions.h mixeroptions.cpp mixerslider.h mixerslider.cpp
       mixermasterchannel.h mixermasterchannel.cpp
+      mixertreewidgetitem.h mixertreewidgetitem.cpp
       abstractdialog.h accessibletoolbutton.h albummanager.h
       alsa.h alsamidi.h analyse.h articulationprop.h bb.h
       bendcanvas.h bendproperties.h breaksdialog.h capella.h

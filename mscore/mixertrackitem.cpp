@@ -125,6 +125,33 @@ QString MixerTrackItem::detailedToolTip()
       }
 
 
+QString MixerTrackItem::getName()
+      {
+      return part()->partName();
+      }
+
+QString MixerTrackItem::getChannelName()
+      {
+      if (channel()->name().isEmpty())
+            return "";
+
+      return qApp->translate("InstrumentsXML", channel()->name().toUtf8().data());
+      }
+
+void MixerTrackItem::setName(QString newName)
+{
+      if (part()->partName() == newName) {
+            return;
+      }
+
+      Score* score = part()->score();
+      if (score) {
+            score->startCmd();
+            score->undo(new ChangePart(part(), part()->instrument(), newName));
+            score->endCmd();
+      }
+}
+
 int MixerTrackItem::color()
       {
       return _trackType ==TrackType::PART ? _part->color() : _channel->color();
@@ -246,8 +273,7 @@ void MixerTrackItem::setColor(int valueRgb)
             return;
             }
 
-      // TODO: setColor - does not respect the "overall" policy - maybe it should
-      //_part->setColor(valueRgb); //TODO: - not sure this is necessary (or does anything?!)
+      _part->setColor(valueRgb);
       for (Channel* channel: playbackChannels()) {
             channel->setColor(valueRgb);
             }
@@ -465,61 +491,6 @@ QList<Channel*> MixerTrackItem::playbackChannels(Part* part)
       return channels;
       }
 
-//MARK:- MixerTreeWidgetItem class
 
-// Don't like the way in which I'm passing so many different vars through here. Doesn't
-// feel like good design. At the moment just mirroring the original code though.
-// Don't yet fully undertand the parts / instuments data structure, so just replicating
-// what the old mixer code did. It does feel as if there should be a class that is
-// a comprehensive descriptor and that captures all the gubbins being passed back and
-// forth.
-
-MixerTreeWidgetItem::MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* treeWidget)
-      {
-      _mixerTrackItem = new MixerTrackItem(part, score);
-      _mixerTrackChannel = new MixerTrackChannel(this);
-
-      setText(0, part->partName());
-      setToolTip(0, part->partName());
-
-      // check for secondary channels and add MixerTreeWidgetItem children if required
-      const InstrumentList* partInstrumentList = part->instruments(); //Add per channel tracks
-      
-      // partInstrumentList is of type: map<const int, Instrument*>
-      for (auto partInstrumentListItem = partInstrumentList->begin(); partInstrumentListItem != partInstrumentList->end(); ++partInstrumentListItem) {
-            
-            Instrument* instrument = partInstrumentListItem->second;
-            if (instrument->channel().size() <= 1)
-                  continue;
-            
-            for (int i = 0; i < instrument->channel().size(); ++i) {
-                  Channel* channel = instrument->playbackChannel(i, score->masterScore());
-                  MixerTreeWidgetItem* child = new MixerTreeWidgetItem(channel, instrument, part);
-                  addChild(child);
-                  treeWidget->setItemWidget(child, 1, child->mixerTrackChannel());
-                  }
-            }
-      }
-
-MixerTreeWidgetItem::MixerTreeWidgetItem(Channel* channel, Instrument* instrument, Part* part)
-      {
-      setText(0, channel->name());
-      setToolTip(0, QString("%1 - %2").arg(part->partName()).arg(channel->name()));
-      _mixerTrackItem = new MixerTrackItem(MixerTrackItem::TrackType::CHANNEL, part, instrument, channel);
-      _mixerTrackChannel = new MixerTrackChannel(this);
-      }
-
-
-MixerTrackChannel* MixerTreeWidgetItem::mixerTrackChannel() {
-      return _mixerTrackChannel;
-      }
-
-MixerTreeWidgetItem:: ~MixerTreeWidgetItem()
-      {
-      _mixerTrackChannel->setNotifier(nullptr);      // ensure it stops listening
-      delete _mixerTrackItem;
-      // note: the _MixerTrackChannel is taken care of (owned) after the setItemWidget call
-      // and so does not need to (and must not) be deleted here
-      }
 }
 

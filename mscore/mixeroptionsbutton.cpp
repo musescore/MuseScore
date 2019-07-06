@@ -135,7 +135,7 @@ namespace Ms {
             menu = new QMenu(this);
             setMenu(menu);
 
-            menu->addSection(tr("Top Level Slider Adjustment Style"));
+            menu->addSection(tr("Slider Effect on Sub-Channels"));
             menu->addAction(overallVolumeRatioMode);
             menu->addAction(overallVolumeOverrideMode);
             menu->addAction(overallVolumeFirstMode);
@@ -171,7 +171,7 @@ namespace Ms {
 
             overallVolumeRatioMode = new QAction(tr("Relative"));
             overallVolumeOverrideMode = new QAction(tr("Override"));
-            overallVolumeFirstMode = new QAction(tr("First sound only"));
+            overallVolumeFirstMode = new QAction(tr("First Sub-channel only"));
 
             overallVolumeOverrideMode->setCheckable(true);
             overallVolumeRatioMode->setCheckable(true);

@@ -93,7 +93,8 @@ class Mixer : public QDockWidget, public Ui::Mixer
       void saveTreeSelection();
       void restoreTreeSelection();
       void adjustHeaderWidths();
-            
+      void itemChanged(QTreeWidgetItem* treeWidgetItem, int column);
+
    signals:
       void closed(bool);
 
@@ -110,6 +111,7 @@ class Mixer : public QDockWidget, public Ui::Mixer
       void nudgeSecondarySlider(NudgeDirection direction);
       void nudgeMainSlider(NudgeDirection direction);
       int nudge(int currentValue, NudgeDirection direction, int lowerLimit, int upperLimit);
+
 
       static MixerOptions* getOptions() { return options; };
             

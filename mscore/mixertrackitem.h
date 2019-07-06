@@ -77,6 +77,11 @@ public:
       int setChorus(int value);    // returns the value actually used (which may differ from value passed)
       int setReverb(int value);    // returns the value actually used (which may differ from value passed)
 
+      void setName(QString string);
+      QString getName();
+
+      QString getChannelName();    // no setting - the user can't alter this
+
       void setMute(bool value);
       void setSolo(bool value);
 
@@ -89,32 +94,6 @@ public:
       char getPan();
 
       };
-
-
-/*
- MixerTreeWidgetItem
- 
- subclass of QTreeWidget that:
- - will construct a MixerTreeWidgetItem from a Part (including any children)
- - host a MixerTrackItem for processing user changes and updating controls
-   when changes are signalled from outwith the mixer
-*/
-class MixerTrackChannel;
-      
-class MixerTreeWidgetItem : public QTreeWidgetItem
-      {
-      MixerTrackItem* _mixerTrackItem;
-      MixerTrackChannel* _mixerTrackChannel;
-
-   public:
-      MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* parent);
-      MixerTreeWidgetItem(Channel* channel, Instrument* instrument, Part* part);
-      ~MixerTreeWidgetItem();
-
-      MixerTrackItem* mixerTrackItem() { return _mixerTrackItem; };
-      MixerTrackChannel* mixerTrackChannel();
-      };
-
 
 }
 #endif // __MIXERTRACKITEM_H__

@@ -208,27 +208,30 @@
     </spacer>
    </item>
    <item>
-    <widget class="QLabel" name="colorLabel">
+    <widget class="Awl::ColorLabel" name="colorChooser">
      <property name="minimumSize">
       <size>
-       <width>8</width>
+       <width>12</width>
        <height>16</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>4</width>
+       <width>12</width>
        <height>16</height>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">QLabel{
+      <string notr="true">QFrame{
 background: red;
 border-radius: 3px;
 }</string>
      </property>
-     <property name="text">
-      <string/>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
     </widget>
    </item>
@@ -255,6 +258,12 @@ border-radius: 3px;
    <class>Ms::MixerSlider</class>
    <extends>QSlider</extends>
    <header>mixerslider.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Awl::ColorLabel</class>
+   <extends>QFrame</extends>
+   <header>awl/colorlabel.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

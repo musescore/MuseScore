@@ -22,6 +22,7 @@
 
 #include "ui_mixertrackchannel.h"
 #include "mixertrackitem.h"
+#include "mixertreewidgetitem.h"
 #include "libmscore/instrument.h"
 
 
@@ -37,7 +38,7 @@
 namespace Ms {
 
 class MixerTrackItem;
-
+class MixerTreeWidgetItem;
 //---------------------------------------------------------
 //   MixerTrack
 //---------------------------------------------------------
@@ -57,6 +58,7 @@ public slots:
       void stripMuteToggled(bool);
       void stripSoloToggled(bool);
       void stripVolumeSliderMoved(int);
+      void trackColorEdited(QColor color);
       void takeSelection();
 
       void updateUiControls(); // for showing/hiding color and panning

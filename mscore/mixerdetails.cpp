@@ -55,27 +55,23 @@ MixerDetails::MixerDetails(Mixer *mixer) :
 
 void MixerDetails::setupSlotsAndSignals()
       {
-      connect(partNameLineEdit,     SIGNAL(editingFinished()),    SLOT(partNameEdited()));
-      connect(trackColorLabel,      SIGNAL(colorChanged(QColor)), SLOT(trackColorEdited(QColor)));
       connect(drumkitCheck,         SIGNAL(toggled(bool)),        SLOT(drumsetCheckboxToggled(bool)));
       connect(patchCombo,           SIGNAL(activated(int)),       SLOT(patchComboEdited(int)));
       connect(volumeSlider,         SIGNAL(valueChanged(int)),    SLOT(volumeSliderMoved(int)));
-      connect(volumeSpinBox,        SIGNAL(valueChanged(double)), SLOT(volumeSpinBoxEdited(double)));
+      connect(volumeSpinBox,        SIGNAL(valueChanged(int)),    SLOT(volumeSpinBoxEdited(int)));
       connect(panSlider,            SIGNAL(valueChanged(int)),    SLOT(panSliderMoved(int)));
-      connect(panSpinBox,           SIGNAL(valueChanged(double)), SLOT(panSpinBoxEdited(double)));
+      connect(panSpinBox,           SIGNAL(valueChanged(int)),    SLOT(panSpinBoxEdited(int)));
       connect(portSpinBox,          SIGNAL(valueChanged(int)),    SLOT(midiChannelOrPortEdited(int)));
       connect(channelSpinBox,       SIGNAL(valueChanged(int)),    SLOT(midiChannelOrPortEdited(int)));
       connect(chorusSlider,         SIGNAL(valueChanged(int)),    SLOT(chorusSliderMoved(int)));
-      connect(chorusSpinBox,        SIGNAL(valueChanged(double)), SLOT(chorusSpinBoxEdited(double)));
+      connect(chorusSpinBox,        SIGNAL(valueChanged(int)),    SLOT(chorusSpinBoxEdited(int)));
       connect(reverbSlider,         SIGNAL(valueChanged(int)),    SLOT(reverbSliderMoved(int)));
-      connect(reverbSpinBox,        SIGNAL(valueChanged(double)), SLOT(reverbSpinBoxEdited(double)));
+      connect(reverbSpinBox,        SIGNAL(valueChanged(int)),    SLOT(reverbSpinBoxEdited(int)));
       }
 
 void MixerDetails::updateUiOptions()
       {
       MixerOptions* options = Mixer::getOptions();
-      bool showTrackColors = options->showTrackColors();
-      colorLabelHolder->setVisible(showTrackColors);
 
       bool showMidiOptions = options->showMidiOptions();
       reverbSlider->setVisible(showMidiOptions);
@@ -116,7 +112,6 @@ void MixerDetails::updateDetails(MixerTrackItem* mixerTrackItem)
       blockSignals(true);
 
       updateName();
-      updateTrackColor();
       updatePatch();
       updateMutePerVoice();
       updateVolume();
@@ -158,10 +153,6 @@ void MixerDetails::propertyChanged(Channel::Prop property)
                   updateReverb();
                   break;
                   }
-            case Channel::Prop::COLOR: {
-                  updateTrackColor();
-                  break;
-                  }
             case Channel::Prop::NAME: {
                   updateName();
                   break;
@@ -180,21 +171,7 @@ void MixerDetails::propertyChanged(Channel::Prop property)
 
 void MixerDetails::updateName()
       {
-      Part* part = selectedMixerTrackItem->part();
-      Channel* channel = selectedMixerTrackItem->channel();
-      QString partName = part->partName();
-      if (!channel->name().isEmpty())
-            channelLabel->setText(qApp->translate("InstrumentsXML", channel->name().toUtf8().data()));
-      else
-            channelLabel->setText("");
-      partNameLineEdit->setText(partName);
-      partNameLineEdit->setToolTip(partName);
-      }
-
-
-void MixerDetails::updateTrackColor()
-      {
-      trackColorLabel->setColor(QColor(selectedMixerTrackItem->color() | 0xff000000));
+      channelLabel->setText(selectedMixerTrackItem->getChannelName());
       }
 
 
@@ -323,36 +300,7 @@ void MixerDetails::updateChorus()
 
 //MARK:- Methods to respond to user initiated changes
 
-// partNameEdited - process editing complete on part name
-void MixerDetails::partNameEdited()
-      {
-      if (!selectedMixerTrackItem)
-            return;
 
-      QString text = partNameLineEdit->text();
-      Part* part = selectedMixerTrackItem->part();
-      if (part->partName() == text) {
-            return;
-            }
-
-      mixer->saveTreeSelection();
-      Score* score = part->score();
-      if (score) {
-            score->startCmd();
-            score->undo(new ChangePart(part, part->instrument(), text));
-            score->endCmd();
-            }
-      mixer->restoreTreeSelection();
-      }
-
-// trackColorEdited
-void MixerDetails::trackColorEdited(QColor col)
-      {
-      if (!selectedMixerTrackItem)
-            return;
-
-      selectedMixerTrackItem->setColor(col.rgb());
-      }
 
 //  patchChanged - process signal from patchCombo
 void MixerDetails::patchComboEdited(int comboIndex)
@@ -432,12 +380,11 @@ void MixerDetails::drumsetCheckboxToggled(bool drumsetSelected)
 
 
 // volumeChanged - process signal from volumeSlider
-void MixerDetails::volumeSpinBoxEdited(double proposedDoubleValue)
+void MixerDetails::volumeSpinBoxEdited(int proposedValue)
       {
       if (!selectedMixerTrackItem)
             return;
 
-      int proposedValue = int(proposedDoubleValue);
       int acceptedValue = selectedMixerTrackItem->setVolume(proposedValue);
 
       if (acceptedValue != proposedValue)
@@ -458,12 +405,11 @@ void MixerDetails::volumeSliderMoved(int proposedValue)
 
 
 // panChanged - process signal from panSlider
-void MixerDetails::panSpinBoxEdited(double proposedDoubleValue)
+void MixerDetails::panSpinBoxEdited(int proposedValue)
       {
       if (!selectedMixerTrackItem)
                   return;
 
-      int proposedValue = int(proposedDoubleValue);
       int acceptedValue = selectedMixerTrackItem->setPan(proposedValue);
 
       if (acceptedValue != proposedValue)
@@ -489,19 +435,18 @@ void MixerDetails::reverbSliderMoved(int proposedValue)
       if (!selectedMixerTrackItem)
             return;
 
-      int acceptedValue = selectedMixerTrackItem->setReverb(proposedValue + 63);
+      int acceptedValue = selectedMixerTrackItem->setReverb(proposedValue);
 
       if (acceptedValue != proposedValue)
             reverbSlider->setValue(acceptedValue);
       }
 
 
-void MixerDetails::reverbSpinBoxEdited(double proposedDoubleValue)
+void MixerDetails::reverbSpinBoxEdited(int proposedValue)
       {
       if (!selectedMixerTrackItem)
             return;
 
-      int proposedValue = int(proposedDoubleValue);
       int acceptedValue = selectedMixerTrackItem->setReverb(proposedValue);
 
       if (acceptedValue != proposedValue)
@@ -521,12 +466,11 @@ void MixerDetails::chorusSliderMoved(int proposedValue)
       }
 
 
-void MixerDetails::chorusSpinBoxEdited(double proposedDoubleValue)
+void MixerDetails::chorusSpinBoxEdited(int proposedValue)
       {
       if (!selectedMixerTrackItem)
             return;
 
-      int proposedValue = int(proposedDoubleValue);
       int acceptedValue = selectedMixerTrackItem->setChorus(proposedValue);
 
       if (acceptedValue != proposedValue)
@@ -593,10 +537,7 @@ void MixerDetails::midiChannelOrPortEdited(int)
 void MixerDetails::updateTabOrder()
 
       {
-      QList<QWidget*> tabOrder = {partNameLineEdit};
-
-      if (mixer->getOptions()->showTrackColors())
-            tabOrder.append(trackColorLabel);
+      QList<QWidget*> tabOrder = {};
 
       tabOrder.append({
                             drumkitCheck,
@@ -623,7 +564,6 @@ void MixerDetails::updateTabOrder()
 
 void MixerDetails::resetControls()
       {
-      partNameLineEdit->setText("");
       drumkitCheck->setChecked(false);
       patchCombo->clear();
       channelLabel->setText("");
@@ -637,13 +577,11 @@ void MixerDetails::resetControls()
       chorusSpinBox->setValue(0);
       portSpinBox->setValue(0);
       channelSpinBox->setValue(0);
-      trackColorLabel->setColor(QColor());
       }
 
 
 void MixerDetails::blockSignals(bool block)
       {
-      partNameLineEdit->blockSignals(block);
       volumeSlider->blockSignals(block);
       volumeSpinBox->blockSignals(block);
       panSlider->blockSignals(block);
@@ -654,7 +592,6 @@ void MixerDetails::blockSignals(bool block)
       chorusSpinBox->blockSignals(block);
       portSpinBox->blockSignals(block);
       channelSpinBox->blockSignals(block);
-      trackColorLabel->blockSignals(block);
       }
 }
 

@@ -47,7 +47,6 @@ class MixerDetails : public QWidget, public Ui::MixerDetails, public ChannelList
       QList<QWidget*> voiceButtons; // used for dynamically updating tabOrder
 
       void updateName();
-      void updateTrackColor();
       void updatePatch();
       void updateVolume();
       void updatePan();
@@ -60,19 +59,17 @@ class MixerDetails : public QWidget, public Ui::MixerDetails, public ChannelList
       void updateTabOrder();
             
    public slots:
-      void partNameEdited();
       void drumsetCheckboxToggled(bool);
       void patchComboEdited(int);
       void volumeSliderMoved(int);
-      void volumeSpinBoxEdited(double);
+      void volumeSpinBoxEdited(int);
       void panSliderMoved(int);
-      void panSpinBoxEdited(double);
+      void panSpinBoxEdited(int);
       void midiChannelOrPortEdited(int);
       void reverbSliderMoved(int);
-      void reverbSpinBoxEdited(double);
+      void reverbSpinBoxEdited(int);
       void chorusSliderMoved(int);
-      void chorusSpinBoxEdited(double);
-      void trackColorEdited(QColor);
+      void chorusSpinBoxEdited(int);
 
    public:
       MixerDetails(Mixer *mixer);

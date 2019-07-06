@@ -36,25 +36,6 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="QLabel" name="labelName">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Name:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>mutePerVoiceHolder</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
     <widget class="QLabel" name="labelChannel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -70,7 +51,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="0" column="1">
     <layout class="QHBoxLayout" name="channelLayout">
      <item>
       <widget class="QLabel" name="channelLabel">
@@ -100,7 +81,7 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
+   <item row="1" column="0">
     <widget class="QLabel" name="labelPatch">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -116,7 +97,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="1" column="1">
     <widget class="QComboBox" name="patchCombo">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -135,7 +116,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="2" column="0">
     <widget class="QLabel" name="labelVolume">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -151,7 +132,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="2" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="Ms::MixerSlider" name="volumeSlider">
@@ -216,7 +197,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="volumeSpinBox">
+      <widget class="QSpinBox" name="volumeSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -238,17 +219,11 @@
        <property name="toolTip">
         <string>Volume</string>
        </property>
-       <property name="decimals">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <double>127.000000000000000</double>
-       </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="5" column="0">
+   <item row="3" column="0">
     <widget class="QLabel" name="labelPan">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -264,7 +239,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="3" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="Ms::MixerSlider" name="panSlider">
@@ -326,7 +301,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="panSpinBox">
+      <widget class="QSpinBox" name="panSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -348,20 +323,11 @@
        <property name="toolTip">
         <string>Pan</string>
        </property>
-       <property name="decimals">
-        <number>0</number>
-       </property>
-       <property name="minimum">
-        <double>-63.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>64.000000000000000</double>
-       </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="6" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="labelMute">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -377,7 +343,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item row="4" column="1">
     <widget class="QGroupBox" name="mutePerVoiceHolder">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -420,7 +386,7 @@
      </layout>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="labelMidiPort">
      <property name="text">
       <string>Port:</string>
@@ -430,7 +396,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="5" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <widget class="QSpinBox" name="portSpinBox">
@@ -513,7 +479,17 @@
      </item>
     </layout>
    </item>
-   <item row="8" column="1">
+   <item row="6" column="0">
+    <widget class="QLabel" name="labelReverb">
+     <property name="text">
+      <string>Reverb:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
     <layout class="QHBoxLayout" name="portAndChannelLayout">
      <item>
       <widget class="Ms::MixerSlider" name="reverbSlider">
@@ -572,7 +548,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="reverbSpinBox">
+      <widget class="QSpinBox" name="reverbSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -594,17 +570,11 @@
        <property name="toolTip">
         <string>MIDI OUT reverb</string>
        </property>
-       <property name="decimals">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <double>127.000000000000000</double>
-       </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="9" column="0">
+   <item row="7" column="0">
     <widget class="QLabel" name="labelChorus">
      <property name="text">
       <string>Chorus:</string>
@@ -614,7 +584,7 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="1">
+   <item row="7" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="Ms::MixerSlider" name="chorusSlider">
@@ -670,7 +640,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="chorusSpinBox">
+      <widget class="QSpinBox" name="chorusSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -692,98 +662,13 @@
        <property name="toolTip">
         <string>MIDI OUT chorus</string>
        </property>
-       <property name="decimals">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <double>127.000000000000000</double>
-       </property>
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="0" column="1">
-    <layout class="QHBoxLayout" name="nameAndColorLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QLineEdit" name="partNameLineEdit">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Part name</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QWidget" name="colorLabelHolder" native="true">
-       <layout class="QHBoxLayout" name="horizontalLayout_7">
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="Awl::ColorLabel" name="trackColorLabel">
-          <property name="minimumSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Track color</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="labelReverb">
-     <property name="text">
-      <string>Reverb:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>Awl::ColorLabel</class>
-   <extends>QFrame</extends>
-   <header>awl/colorlabel.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>Ms::MixerSlider</class>
    <extends>QSlider</extends>
