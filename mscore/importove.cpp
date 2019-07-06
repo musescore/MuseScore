@@ -1948,7 +1948,6 @@ void OveToMScore::convertArticulation(
                         pedal_->setTrack(track);
                         Segment* seg = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
                         pedal_->setTick(seg->tick());
-                        score_->addSpanner(pedal_);
                         }
                   break;
                   }
@@ -1956,6 +1955,7 @@ void OveToMScore::convertArticulation(
                   if(pedal_){
                         Segment* seg = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
                         pedal_->setTick2(seg->tick());
+                        score_->addSpanner(pedal_);
                         pedal_ = 0;
                         }
                   break;
