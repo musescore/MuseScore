@@ -28,7 +28,7 @@ InspectorHarmony::InspectorHarmony(QWidget* parent)
             { Pid::SUB_STYLE, 0, h.style,       h.resetStyle      },
             { Pid::PLACEMENT, 0, h.placement,   h.resetPlacement  },
             { Pid::PLAY,      0, h.play,        h.resetPlay  },
-            { Pid::HARMONY_VOICE_LITERAL, 0, h.voicingSelect->literalButton, h.resetVoicing },
+            { Pid::HARMONY_VOICE_LITERAL, 0, h.voicingSelect->interpretBox, h.resetVoicing },
             { Pid::HARMONY_VOICING, 0, h.voicingSelect->voicingBox, h.resetVoicing}
             };
 

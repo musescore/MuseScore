@@ -1118,8 +1118,6 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 
 const RealizedHarmony& Harmony::realizedHarmony()
       {
-      if (!_realizedHarmony.valid())
-            _realizedHarmony = RealizedHarmony(this);
       int offset = 0;
       Staff* st = staff();
       Interval interval = st->part()->instrument(tick())->transpose();
@@ -1923,7 +1921,7 @@ QVariant Harmony::getProperty(Pid pid) const
                   return QVariant(int(_harmonyType));
                   break;
             case Pid::HARMONY_VOICE_LITERAL:
-                  return _realizedHarmony.literal();
+                  return _realizedHarmony.literal(); //TODO - PHV: check init?
                   break;
             case Pid::HARMONY_VOICING:
                   return int(_realizedHarmony.voicing());
