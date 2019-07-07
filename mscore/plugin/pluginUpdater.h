@@ -53,11 +53,13 @@ struct PluginPackageLink {
 struct PluginPackageDescription {
       // contains update info when there's an update. Not serialized to xml for now
       PluginPackageDescription* update = nullptr;
+      bool load = false;
       QString package_name;
       PluginPackageSource source = UNKNOWN;
       QString direct_link;
       QString dir; // path of directory of this package
       std::vector<QString> qml_paths;
+      unsigned int valid_count = 0;
       QString latest_commit; // valid when source set to GITHUB
       int release_id; // valid when source set to GITHUB_RELEASE
       QDateTime last_modified; // valid when source set to ATTACHMENT
@@ -89,7 +91,7 @@ class PluginWorker : public QObject {
       Q_OBJECT
 public:
       PluginWorker(ResourceManager* r);
-      PluginWorker(PluginPackageDescription& desc, ResourceManager* r);
+      PluginWorker(const PluginPackageDescription& desc, ResourceManager* r);
 public slots:
       bool analyzePluginPage(QString page_url); // replace ResourceManager::analyzePluginPage
       QString download(const QString& page_url, bool update = false); // replace Resource::downloadPluginPackage
@@ -101,6 +103,8 @@ public slots:
 signals:
       void pluginStatusChanged(int idx, PluginStatus status);
       void finished();
+      void pluginInstalled(const QString url, PluginPackageDescription* desc);
+      void updateAvailable(const QString url, PluginPackageDescription* desc);
 private:
       PluginPackageDescription desc;
       PluginStatus status;

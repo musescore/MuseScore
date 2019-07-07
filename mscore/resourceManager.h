@@ -17,48 +17,36 @@
 #include "downloadUtils.h"
 #include "plugin/pluginManager.h"
 #include "plugin/pluginUpdater.h"
+#include "plugin/pluginManager.h"
 
 namespace Ms {
 
 class ResourceManager : public QDialog, public Ui::Resource
    {
-    Q_OBJECT
+      Q_OBJECT
 
+    virtual void closeEvent(QCloseEvent *e) override;
     virtual void hideEvent(QHideEvent*);
     QByteArray txt;
     void displayLanguages();
     void displayExtensions();
     void displayPluginRepo();
-    void displayPlugins();
     bool verifyFile(QString path, QString hash);
     bool verifyLanguageFile(QString filename, QString hash);
     void refreshPluginButton(int row, bool updated = true);
-    /*  Analyzes the plugin page at `url` and writes download-related info to `desc`.
-     *  Returns true if an update is needed.
-     */
     /*  Extracts the package(assumed zip format for now), and installs necessary files
         to plugin directory.
         Returns true on success.
      */
     bool installPluginPackage(QString& download_pkg, PluginPackageDescription& desc);
-    /*  Check update for one single plugin.
-    
-     */
-    void writePluginPackages();
-    /*  Reads plugin descriptions from xml. `pluginDescriptionMap` would be flushed.
-        Should only be called at the beginning
-     */
-    bool readPluginPackages();
-    bool isPluginLocal(PluginDescription& desc);
 
 public:
     explicit ResourceManager(QWidget *parent = 0);
     void selectLanguagesTab();
     void selectExtensionsTab();
-    void commitPlugin(const QString& url, PluginPackageDescription& desc);
 
     static inline QString baseAddr() { return "http://extensions.musescore.org/3.5/"; }
-    static inline QString pluginAddr() { return "https://musescore.org/en/plugins"; }
+    static inline QString pluginRepoAddr() { return "https://musescore.org/en/plugins"; }
     static inline QString pluginPageAddr(QString& name) { return "https://musescore.org/project/" + name; }
 
 private:
@@ -66,7 +54,6 @@ private:
     QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
 
     QMap <QString, PluginPackageDescription> pluginDescriptionMap; // plugin page url -> description of installed plugin
-
     QThreadPool workerThreadPool;
 
 private slots:

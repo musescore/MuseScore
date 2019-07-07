@@ -13,7 +13,7 @@
 #ifndef __PLUGIN_MANAGER_H__
 #define __PLUGIN_MANAGER_H__
 
-#include "ui_pluginManager.h"
+#include "plugin/pluginUpdater.h"
 #include "shortcut.h"
 
 namespace Ms {
@@ -36,44 +36,60 @@ struct PluginDescription {
 //   PluginManager
 //---------------------------------------------------------
 
-class PluginManager : public QDialog, public Ui::PluginManager {
+class PluginManager : public QObject {
       Q_OBJECT
 
+      QLineEdit* pluginName;
+      QLineEdit* pluginPath;
+      QLineEdit* pluginVersion;
+      QLineEdit* pluginShortcut;
+      QTextBrowser* pluginDescription;
+      QTreeWidget* pluginTreeWidget;
       QMap<QString, Shortcut*> localShortcuts;
       bool shortcutsChanged;
       QList<PluginDescription> _pluginList;
-
-      void readSettings();
+      QMap <QString, PluginPackageDescription> _pluginPackageList; // plugin page url -> description of installed plugin
+      PluginPackageDescription* getPluginPackage(PluginDescription* desc);
       void loadList(bool forceRefresh);
+      void refreshList();
+      bool uninstallPlugin(PluginDescription* p);
 
-      virtual void closeEvent(QCloseEvent*);
-      virtual void accept();
-
-   private slots:
+private slots:
       void definePluginShortcutClicked();
       void clearPluginShortcutClicked();
-      void pluginListWidgetItemChanged(QListWidgetItem*, QListWidgetItem*);
-      void pluginLoadToggled(QListWidgetItem*);
+      void pluginTreeWidgetItemChanged(QTreeWidgetItem*, QTreeWidgetItem*);
+      void pluginLoadToggled(QTreeWidgetItem*, int);
       void reloadPluginsClicked();
+      void updatePluginPackage(const QString url, PluginPackageDescription* desc);
+      void commitPlugin(const QString url, PluginPackageDescription* desc); // called from plugin worker
 
-   signals:
+signals:
       void closed(bool);
+      
 
-   public:
+public:
+      PluginManager(QLineEdit* pluginName, QLineEdit* pluginPath, QLineEdit* pluginVersion,
+            QLineEdit* pluginShortcut, QTextBrowser* pluginDescription, QTreeWidget* pluginTreeWidget, QWidget* parent = 0);
       PluginManager(QWidget* parent = 0);
-      void writeSettings();
+      virtual void accept();
       void init();
-
+      void setupUI(QLineEdit* pluginName, QLineEdit* pluginPath, QLineEdit* pluginVersion,
+            QLineEdit* pluginShortcut, QTextBrowser* pluginDescription, QTreeWidget* pluginTreeWidget);
       bool readPluginList();
+      bool readPluginPackageList();
       void writePluginList();
-      void updatePluginList(bool forceRefresh=false);
+      void writePluginPackageList();
+      void updatePluginList(bool forceRefresh = false);
 
-      int pluginCount() {return _pluginList.size();}
-      PluginDescription* getPluginDescription(int idx) {return &_pluginList[idx];}
+      const PluginPackageDescription getPackageDescription(QString page_url) const { return _pluginPackageList.value(page_url); }
+      bool isPackageInstalled(QString page_url) const { return _pluginPackageList.contains(page_url); }
+
+      int pluginCount() { return _pluginList.size(); }
+      PluginDescription* getPluginDescription(int idx) { return &_pluginList[idx]; }
+      bool uninstallPluginPackage(const QString& page_url);
       };
 
 extern bool collectPluginMetaInformation(PluginDescription*);
 
 } // namespace Ms
 #endif
-

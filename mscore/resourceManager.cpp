@@ -43,7 +43,12 @@ ResourceManager::ResourceManager(QWidget *parent) :
       displayExtensions();
       displayLanguages();
       displayPluginRepo();
-      displayPlugins();
+      mscore->getPluginManager()->setupUI(pluginName, pluginPath, pluginVersion, pluginShortcut, pluginDescription, pluginTreeWidget);
+      // plugin manager's display
+      mscore->getPluginManager()->init();
+      QObject::connect(definePluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(definePluginShortcutClicked()));
+      QObject::connect(clearPluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(clearPluginShortcutClicked()));
+      QObject::connect(reloadPlugins, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(reloadPluginsClicked()));
 
       QObject::connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(filterPluginList()));
       QObject::connect(categories, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ResourceManager::filterPluginList);
@@ -100,6 +105,13 @@ bool LanguageFileSize::operator<(const QTableWidgetItem& nextItem) const
             return false;
       return getSize() < static_cast<const LanguageFileSize&>(nextItem).getSize();
       }
+//   accept
+//---------------------------------------------------------
+void ResourceManager::closeEvent(QCloseEvent *e)
+      {
+      mscore->getPluginManager()->accept();
+      }
+
 
 //---------------------------------------------------------
 //   selectLanguagesTab

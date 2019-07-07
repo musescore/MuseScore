@@ -26,16 +26,26 @@ static const QByteArray pluginShortcutActionName = "plugin-run";
 //   PluginManager
 //---------------------------------------------------------
 
-PluginManager::PluginManager(QWidget* parent)
-   : QDialog(parent)
+PluginManager::PluginManager(QWidget * parent)
+   : QObject(parent) 
       {
       setObjectName("PluginManager");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
-      connect(clearPluginShortcut, SIGNAL(clicked()), SLOT(clearPluginShortcutClicked()));
-      connect(reloadPlugins, SIGNAL(clicked()), SLOT(reloadPluginsClicked()));
-      readSettings();
+      }
+
+//---------------------------------------------------------
+//   setupUI
+//   Called by resourcemanager to give the resource manager's UI elements
+//---------------------------------------------------------
+
+void PluginManager::setupUI(QLineEdit* pluginName_, QLineEdit* pluginPath_, QLineEdit* pluginVersion_,
+      QLineEdit* pluginShortcut_, QTextBrowser* pluginDescription_, QTreeWidget* pluginTreeWidget_)
+      {
+      pluginName = pluginName_;
+      pluginPath = pluginPath_;
+      pluginVersion = pluginVersion_;
+      pluginShortcut = pluginShortcut_;
+      pluginDescription = pluginDescription_;
+      pluginTreeWidget = pluginTreeWidget_;
       }
 
 //---------------------------------------------------------
@@ -54,11 +64,14 @@ void PluginManager::init()
       foreach(const Shortcut* s, Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       shortcutsChanged = false;
+      // fills _pluginPackageList from xml
+      readPluginPackageList();
+      // TODO: remove and use displayPlugins instead.
       loadList(false);
-      connect(pluginListWidget, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
-      connect(pluginListWidget, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-              SLOT(pluginListWidgetItemChanged(QListWidgetItem*, QListWidgetItem*)));
-}
+      connect(pluginTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), SLOT(pluginLoadToggled(QTreeWidgetItem*, int)));
+      connect(pluginTreeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem*)),
+            SLOT(pluginTreeWidgetItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
+      }
 
 //---------------------------------------------------------
 //   readPluginList
@@ -109,7 +122,69 @@ bool PluginManager::readPluginList()
                   e.unknown();
             }
       return true;
-}
+      }
+
+bool PluginManager::readPluginPackageList()
+      {
+      QFile f(dataPath + "/pluginpackages.xml");
+      if (!f.exists())
+            return false;
+      if (!f.open(QIODevice::ReadOnly)) {
+            qDebug("Cannot open plugin package file <%s>", qPrintable(f.fileName()));
+            return false;
+            }
+      XmlReader e(&f);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "PluginPackage") {
+                              QString page_url;
+                              PluginPackageDescription desc;
+                              while (e.readNextStartElement()) {
+                                    const QStringRef t(e.name());
+                                    if (t == "pageURL")
+                                          page_url = e.readElementText();
+                                    else if (t == "pkgName")
+                                          desc.package_name = e.readElementText();
+                                    else if (t == "source")
+                                          desc.source = (PluginPackageSource)e.readInt();
+                                    else if (t == "directLink")
+                                          desc.direct_link = e.readElementText();
+                                    else if (t == "path")
+                                          desc.dir = e.readElementText();
+                                    else if (t == "qmlPath") {
+                                          while (e.readNextStartElement()) {
+                                                const QStringRef t_(e.name());
+                                                if (t_ == "qml")
+                                                      desc.qml_paths.push_back(e.readElementText());
+                                                else
+                                                      e.unknown();
+                                                }
+                                          }
+                                    else if (t == "GitHubReleaseID")
+                                          desc.release_id = e.readInt();
+                                    else if (t == "GitHubLatestSha")
+                                          desc.latest_commit = e.readElementText();
+                                    else if (t == "LastModified")
+                                          desc.last_modified = QDateTime::fromString(e.readElementText());
+                                    else
+                                          e.unknown();
+                                    }
+                              if (!page_url.isEmpty())
+                                    _pluginPackageList.insert(page_url, desc);
+                              else
+                                    qDebug("Missing plugin page url.");
+                              }
+                        else
+                              e.unknown();
+                        }
+                  }
+            else
+                  e.unknown();
+            }
+      return true;
+      }
 
 //---------------------------------------------------------
 //   writePluginList
@@ -139,7 +214,7 @@ void PluginManager::writePluginList()
             }
       xml.etag();
       f.close();
-}
+      }
 
 //---------------------------------------------------------
 //   updatePluginList
@@ -151,7 +226,7 @@ void PluginManager::writePluginList()
 static void updatePluginList(QList<QString>& pluginPathList, const QString& pluginPath,
    QList<PluginDescription>& pluginList)
       {
-      QDirIterator it(pluginPath, QDir::NoDot|QDir::NoDotDot|QDir::Dirs|QDir::Files,
+      QDirIterator it(pluginPath, QDir::NoDot | QDir::NoDotDot | QDir::Dirs | QDir::Files,
          QDirIterator::Subdirectories);
       while (it.hasNext()) {
             it.next();
@@ -182,6 +257,41 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
       }
 #endif
 
+void PluginManager::writePluginPackageList()
+      {
+      QDir dir;
+      dir.mkpath(dataPath);
+      QFile f(dataPath + "/pluginpackages.xml");
+      if (!f.open(QIODevice::WriteOnly)) {
+            qDebug("cannot create plugin package file <%s>", qPrintable(f.fileName()));
+            return;
+            }
+      XmlWriter xml(0, &f);
+      xml.header();
+      xml.stag("museScore version=\"" MSC_VERSION "\"");
+      for (const QString &pkg : _pluginPackageList.keys()) {
+            auto& v = _pluginPackageList.value(pkg);
+            xml.stag("PluginPackage");
+            xml.tag("pageURL", pkg);
+            xml.tag("pkgName", v.package_name);
+            xml.tag("source", v.source);
+            xml.tag("directLink", v.direct_link);
+            xml.tag("path", v.dir);
+            xml.stag("qmlPath");
+            for (const QString& path : v.qml_paths)
+                  xml.tag("qml", path);
+            xml.etag();
+            if (v.source == GITHUB_RELEASE)
+                  xml.tag("GitHubReleaseID", v.release_id);
+            if (v.source == GITHUB)
+                  xml.tag("GitHubLatestSha", v.latest_commit);
+            if (v.source == ATTACHMENT)
+                  xml.tag("LastModified", v.last_modified.toString());
+            xml.etag();
+            }
+      xml.etag();
+      }
+
 void PluginManager::updatePluginList(bool forceRefresh)
       {
 #ifdef SCRIPT_INTERFACE
@@ -211,6 +321,103 @@ void PluginManager::updatePluginList(bool forceRefresh)
 #endif
       }
 
+void PluginManager::updatePluginPackage(const QString url, PluginPackageDescription* desc)
+      {
+      _pluginPackageList[url] = *desc;
+      delete desc;
+      }
+
+void PluginManager::commitPlugin(const QString url, PluginPackageDescription* desc)
+      {
+      _pluginPackageList[url] = *desc;
+      delete desc;
+      // TODO: maybe a simpler way than `loadList`
+      // do not update _pluginList and let `loadList` do it for now.
+      loadList(false);
+      writePluginPackageList(); // TODO: make write back later
+      }
+
+bool PluginManager::uninstallPluginPackage(const QString& page_url)
+      {
+      if (!_pluginPackageList.contains(page_url))
+            return true;
+      PluginPackageDescription& desc = _pluginPackageList[page_url];
+      // unregister
+      for (QString& qml_path : desc.qml_paths) {
+            for (auto it = _pluginList.begin(); it < _pluginList.end(); it++) {
+                  if (it->path == qml_path) {
+                        mscore->unregisterPlugin(&*it);
+                        it = _pluginList.erase(it);
+                        }
+                  }
+            }
+      mscore->getPluginEngine()->clearComponentCache();
+      // remove the folder
+      QDir d(desc.dir);
+      if (!d.removeRecursively()) {
+            qDebug("Plugin uninstalled incompletely.");
+      }
+      _pluginPackageList.remove(page_url);
+      loadList(false);
+      return true;
+      }
+
+
+PluginPackageDescription * PluginManager::getPluginPackage(PluginDescription * desc)
+      {
+      for (auto& item : _pluginPackageList)
+            for (auto& p : item.qml_paths)
+                  if (p == desc->path)
+                        return &item;
+      return nullptr;
+      }
+
+static constexpr int TypeRole = Qt::UserRole + 1; // a user role used in QTreeWidgetItem's data
+
+void PluginManager::refreshList()
+      {
+      int n = _pluginList.size();
+      pluginTreeWidget->clear();
+      // firstly, add plugin packages
+      std::map<PluginPackageDescription*, QTreeWidgetItem*> tree_map;
+      QTreeWidgetItem* first_item = nullptr;
+      for (auto &page_url : _pluginPackageList.keys()) {
+            PluginPackageDescription& desc = _pluginPackageList[page_url];
+            auto* package_item = new QTreeWidgetItem(pluginTreeWidget);
+            if (!first_item)
+                  first_item = package_item;
+            tree_map[&desc] = package_item;
+            package_item->setData(0, Qt::DisplayRole, desc.package_name);
+            package_item->setData(0, Qt::UserRole, page_url);
+            package_item->setData(0, TypeRole, true);
+            package_item->setFlags(package_item->flags() | Qt::ItemIsEnabled);
+            package_item->setCheckState(0, Qt::Unchecked);
+            }
+      // add other local plugins
+      for (int i = 0; i < n; ++i) {
+            PluginDescription& d = _pluginList[i];
+            PluginPackageDescription* package = getPluginPackage(&d);
+            QTreeWidgetItem* item;
+            if (package) {
+                  QTreeWidgetItem* parent_widget = tree_map[package];
+                  item = new QTreeWidgetItem(parent_widget);
+                  auto plugin_check = d.load ? Qt::Checked : Qt::Unchecked;
+                  if (parent_widget->childCount() == 0)
+                        parent_widget->setCheckState(0, plugin_check);
+                  else if (parent_widget->checkState(0) != Qt::PartiallyChecked)
+                        parent_widget->setCheckState(0, (plugin_check != parent_widget->checkState(0)) ? Qt::PartiallyChecked : plugin_check);
+                  }
+            else
+                  item = new QTreeWidgetItem(pluginTreeWidget);
+            QFileInfo(d.path).completeBaseName();
+            item->setFlags(item->flags() | Qt::ItemIsEnabled);
+            item->setCheckState(0, d.load ? Qt::Checked : Qt::Unchecked);
+            item->setData(0, Qt::UserRole, i);
+            item->setData(0, TypeRole, false);
+            item->setData(0, Qt::DisplayRole, QFileInfo(d.path).completeBaseName());
+            }
+      }
+
 //---------------------------------------------------------
 //   loadList - populate the listbox.
 //---------------------------------------------------------
@@ -230,21 +437,51 @@ void PluginManager::loadList(bool forceRefresh)
             }
       updatePluginList(forceRefresh);
       n = _pluginList.size();
-      pluginListWidget->clear();
+      pluginTreeWidget->clear();
+      // firstly, add plugin packages
+      std::map<PluginPackageDescription*, QTreeWidgetItem*> tree_map;
+      QTreeWidgetItem* first_item = nullptr;
+      for (auto &page_url : _pluginPackageList.keys()) {
+            PluginPackageDescription& desc = _pluginPackageList[page_url];
+            auto* package_item = new QTreeWidgetItem(pluginTreeWidget);
+            if (!first_item)
+                  first_item = package_item;
+            tree_map[&desc] = package_item;
+            package_item->setData(0, Qt::DisplayRole, desc.package_name);
+            package_item->setData(0, Qt::UserRole, page_url);
+            package_item->setData(0, TypeRole, true);
+            package_item->setFlags(package_item->flags() | Qt::ItemIsEnabled);
+            package_item->setCheckState(0, Qt::Unchecked);
+            }
+      // add other local plugins
       for (int i = 0; i < n; ++i) {
             PluginDescription& d = _pluginList[i];
             Shortcut* s = &d.shortcut;
             localShortcuts[s->key()] = new Shortcut(*s);
             if (saveLoaded.contains(d.path)) d.load = true;
-            QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  pluginListWidget);
+            PluginPackageDescription* package = getPluginPackage(&d);
+            QTreeWidgetItem* item;
+            if (package) {
+                  QTreeWidgetItem* parent_widget = tree_map[package];
+                  auto plugin_check = d.load ? Qt::Checked : Qt::Unchecked;
+                  if (parent_widget->childCount() == 0)
+                        parent_widget->setCheckState(0, plugin_check);
+                  else if (parent_widget->checkState(0) != Qt::PartiallyChecked)
+                        parent_widget->setCheckState(0, (plugin_check != parent_widget->checkState(0)) ? Qt::PartiallyChecked : plugin_check);
+                  item = new QTreeWidgetItem(parent_widget);
+                  }
+            else
+                  item = new QTreeWidgetItem(pluginTreeWidget);
+            QFileInfo(d.path).completeBaseName();
             item->setFlags(item->flags() | Qt::ItemIsEnabled);
-            item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
-            item->setData(Qt::UserRole, i);
+            item->setCheckState(0, d.load ? Qt::Checked : Qt::Unchecked);
+            item->setData(0, Qt::UserRole, i);
+            item->setData(0, TypeRole, false);
+            item->setData(0, Qt::DisplayRole, QFileInfo(d.path).completeBaseName());
             }
-
       if (n) {
-            pluginListWidget->setCurrentRow(0);
-            pluginListWidgetItemChanged(pluginListWidget->item(0), 0);
+            pluginTreeWidget->setCurrentItem(first_item);
+            pluginTreeWidgetItemChanged(first_item, 0);
             }
       }
 
@@ -275,52 +512,76 @@ void PluginManager::accept()
             }
 
       writePluginList();
+      writePluginPackageList();
       if (Shortcut::dirty)
             Shortcut::save();
       Shortcut::dirty = false;
 
-      disconnect(pluginListWidget, SIGNAL(itemChanged(QListWidgetItem*)));
-      disconnect(pluginListWidget, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)));
-      QDialog::accept();
+      disconnect(pluginTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)));
+      disconnect(pluginTreeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
       }
 
-//---------------------------------------------------------
-//   closeEvent
-//---------------------------------------------------------
-
-void PluginManager::closeEvent(QCloseEvent* ev)
-      {
-      emit closed(false);
-      QWidget::closeEvent(ev);
-      }
 
 //---------------------------------------------------------
 //   pluginListWidgetItemChanged
 //---------------------------------------------------------
 
-void PluginManager::pluginListWidgetItemChanged(QListWidgetItem* item, QListWidgetItem*)
+void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
       {
       if (!item)
             return;
-      int idx = item->data(Qt::UserRole).toInt();
-      const PluginDescription& d = _pluginList[idx];
-      QFileInfo fi(d.path);
-      pluginName->setText(fi.completeBaseName());
-      pluginPath->setText(fi.absolutePath());
-      pluginVersion->setText(d.version);
-      pluginShortcut->setText(d.shortcut.keysToString());
-      pluginDescription->setText(d.description);
+      if (!item->parent() && item->data(0,TypeRole).toBool()) {
+            // root, i.e., a package
+            // TODO: show package description from the detail page
+            qDebug("plugin package selected.");
+            }
+      else {
+            // leaf, i.e., a qml file
+            qDebug("plugin selected.");
+            if (!item)
+                  return;
+            int idx = item->data(0, Qt::UserRole).toInt();
+            const PluginDescription& d = _pluginList[idx];
+            QFileInfo fi(d.path);
+            pluginName->setText(fi.completeBaseName());
+            pluginPath->setText(fi.absolutePath());
+            pluginVersion->setText(d.version);
+            pluginShortcut->setText(d.shortcut.keysToString());
+            pluginDescription->setText(d.description);
+            }
       }
 
 //---------------------------------------------------------
 //   pluginLoadToggled
 //---------------------------------------------------------
 
-void PluginManager::pluginLoadToggled(QListWidgetItem* item)
+void PluginManager::pluginLoadToggled(QTreeWidgetItem* item, int col)
       {
-      int idx = item->data(Qt::UserRole).toInt();
-      PluginDescription* d = &_pluginList[idx];
-      d->load = (item->checkState() == Qt::Checked);
+      if (!item->parent()) {
+            // root, i.e., a package
+            if (item->checkState(col) == Qt::PartiallyChecked)
+                  return;
+            for (int i = 0; i < item->childCount(); i++) {
+                  QTreeWidgetItem* qml = item->child(i);
+                  int idx = qml->data(col, Qt::UserRole).toInt();
+                  PluginDescription* d = &_pluginList[idx];
+                  d->load = (item->checkState(col) == Qt::Checked);
+                  qml->setCheckState(col, item->checkState(col));
+                  }
+            }
+      else {
+            int idx = item->data(col, Qt::UserRole).toInt();
+            PluginDescription* d = &_pluginList[idx];
+            d->load = (item->checkState(0) == Qt::Checked);
+            QTreeWidgetItem* parent_widget = item->parent();
+            int selected_count = 0;
+            for (int i = 0; i < parent_widget->childCount(); i++) {
+                  if (parent_widget->child(i)->checkState(0) == Qt::Checked)
+                        selected_count++;
+                  }
+            parent_widget->setCheckState(0, selected_count > 0 ? (selected_count < parent_widget->childCount() ? Qt::PartiallyChecked : Qt::Checked) : Qt::Unchecked);
+            }
+            
       }
 
 //---------------------------------------------------------
@@ -329,24 +590,26 @@ void PluginManager::pluginLoadToggled(QListWidgetItem* item)
 
 void PluginManager::definePluginShortcutClicked()
       {
-      QListWidgetItem* item = pluginListWidget->currentItem();
+      QTreeWidgetItem* item = pluginTreeWidget->currentItem();
       if (!item)
             return;
-      int idx = item->data(Qt::UserRole).toInt();
+      if (!item->parent()) {
+            qDebug("Calling on a package node.");
+            return;
+            }
+      int idx = item->data(0, Qt::UserRole).toInt();
       PluginDescription* pd = &_pluginList[idx];
       Shortcut* s = &pd->shortcut;
-      ShortcutCaptureDialog sc(s, localShortcuts, this);
+      ShortcutCaptureDialog sc(s, localShortcuts, (QWidget*)parent());
       int rv = sc.exec();
       if (rv == 0)            // abort
             return;
       if (rv == 2)            // replace
             s->clear();
-
       s->addShortcut(sc.getKey());
       QAction* action = s->action();
       action->setShortcuts(s->keys());
       mscore->addAction(action);
-
       pluginShortcut->setText(s->keysToString());
       }
 
@@ -369,10 +632,14 @@ void PluginManager::reloadPluginsClicked()
 
 void PluginManager::clearPluginShortcutClicked()
       {
-      QListWidgetItem* item = pluginListWidget->currentItem();
+      QTreeWidgetItem* item = pluginTreeWidget->currentItem();
       if (!item)
             return;
-      int idx = item->data(Qt::UserRole).toInt();
+      if (!item->parent()) {
+            qDebug("Calling on a package node.");
+            return;
+            }
+      int idx = item->data(0, Qt::UserRole).toInt();
       PluginDescription* pd = &_pluginList[idx];
       Shortcut* s = &pd->shortcut;
       s->clear();
@@ -384,23 +651,7 @@ void PluginManager::clearPluginShortcutClicked()
       pluginShortcut->setText(s->keysToString());
       }
 
-//---------------------------------------------------------
-//   writeSettings
-//---------------------------------------------------------
 
-void PluginManager::writeSettings()
-      {
-      MuseScore::saveGeometry(this);
-      }
-
-//---------------------------------------------------------
-//   readSettings
-//---------------------------------------------------------
-
-void PluginManager::readSettings()
-      {
-      MuseScore::restoreGeometry(this);
-      }
 
 }
 

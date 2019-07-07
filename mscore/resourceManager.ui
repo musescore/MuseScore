@@ -189,7 +189,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTabWidget" name="tabWidget">
+        <widget class="QTabWidget" name="pluginTab">
          <property name="currentIndex">
           <number>0</number>
          </property>
@@ -234,7 +234,7 @@
               <number>5</number>
              </property>
              <property name="columnCount">
-              <number>5</number>
+              <number>4</number>
              </property>
              <attribute name="verticalHeaderVisible">
               <bool>false</bool>
@@ -247,11 +247,6 @@
              <column>
               <property name="text">
                <string>Plugin Name</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Compatibility</string>
               </property>
              </column>
              <column>
@@ -279,11 +274,6 @@
                <string/>
               </property>
              </item>
-             <item row="0" column="2">
-              <property name="text">
-               <string/>
-              </property>
-             </item>
              <item row="1" column="0">
               <property name="text">
                <string/>
@@ -294,22 +284,12 @@
                <string/>
               </property>
              </item>
-             <item row="1" column="2">
-              <property name="text">
-               <string/>
-              </property>
-             </item>
              <item row="2" column="0">
               <property name="text">
                <string/>
               </property>
              </item>
              <item row="2" column="1">
-              <property name="text">
-               <string/>
-              </property>
-             </item>
-             <item row="2" column="2">
               <property name="text">
                <string/>
               </property>
@@ -359,28 +339,28 @@
            <item row="8" column="2" colspan="9">
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
-              <widget class="QPushButton" name="pushButton_3">
+              <widget class="QPushButton" name="openPath">
                <property name="text">
                 <string>Open Path...</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_4">
+              <widget class="QPushButton" name="reloadPlugins">
                <property name="text">
                 <string>Reload</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton">
+              <widget class="QPushButton" name="definePluginShortcut">
                <property name="text">
                 <string>Define Shortcut</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_2">
+              <widget class="QPushButton" name="clearPluginShortcut">
                <property name="text">
                 <string>Clear Shortcut</string>
                </property>
@@ -444,7 +424,16 @@
             </widget>
            </item>
            <item row="1" column="0" rowspan="9" colspan="2">
-            <widget class="QTreeWidget" name="pluginTreeWidget"/>
+            <widget class="QTreeWidget" name="pluginTreeWidget">
+             <property name="headerHidden">
+              <bool>true</bool>
+             </property>
+             <column>
+              <property name="text">
+               <string notr="true">1</string>
+              </property>
+             </column>
+            </widget>
            </item>
           </layout>
          </widget>

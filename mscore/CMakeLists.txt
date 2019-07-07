@@ -82,7 +82,7 @@ if (SCRIPT_INTERFACE)
             )
 
       set (SCRIPT_UI
-            plugin/pluginCreator.ui plugin/pluginManager.ui
+            plugin/pluginCreator.ui
             )
 endif (SCRIPT_INTERFACE)
 

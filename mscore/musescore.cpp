@@ -5374,8 +5374,11 @@ void MuseScore::showPluginCreator(QAction* a)
 void MuseScore::showPluginManager()
       {
 #ifdef SCRIPT_INTERFACE
-      pluginManager->init();
-      pluginManager->show();
+      // launch resource manager and switch to Installed Plugins tab.
+      ResourceManager r(0);
+      r.tabs->setCurrentIndex(2);
+      r.pluginTab->setCurrentIndex(1);
+      r.exec();
 #endif
       }
 
