@@ -1006,6 +1006,7 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
 
 static void paintPaletteElement(void* data, Element* e)
       {
+      qDebug()<<"The Data is "<<data;
       QPainter* p = static_cast<QPainter*>(data);
       p->save();
       p->translate(e->pos());
@@ -1929,6 +1930,11 @@ void Palette::dropEvent(QDropEvent* event)
       emit changed();
       }
 
+
+//---------------------------------------------------------
+//   Palette List (QListWidget)
+//---------------------------------------------------------
+
 PaletteList::PaletteList(QWidget* parent) : QListWidget(parent)
       {
       setAutoFillBackground(true);
@@ -1957,6 +1963,7 @@ void PaletteList::read(XmlReader& e)
             else if (t == "Cell") {
                   PaletteCellItem* cell = new PaletteCellItem(this);
                   cell->setName(e.attribute("name"));
+                  //cell->setToolTip(e.attribute("name"));
                   if (!cell->read(e)){
                         Element* element = cell->element;
                         delete cell;
@@ -1980,10 +1987,13 @@ void PaletteList::read(XmlReader& e)
             setFixedHeight(yPos);
       }
 
+//---------------------------------------------------------
+//   PaletteCellItem (QListWidgetItem)
+//---------------------------------------------------------
 
 PaletteCellItem::PaletteCellItem(PaletteList* parent) : QListWidgetItem(parent)
       {     
-
+            paletteList = parent;
       }
 
 
@@ -2021,12 +2031,62 @@ bool PaletteCellItem::read(XmlReader& e)
                               else {
                                     return false; // action is not valid, don't add it to the palette.
                                     }
+                        }
+                        else{
+                              QIcon icon(pixmap());
+                              setIcon(icon);
                               }
                         }
                   }
             }
       return true;
       }
+
+QPixmap PaletteCellItem::pixmap() const
+      {
+      qreal _spatium = gscore->spatium();
+      qreal mag  	= PALETTE_SPATIUM /* * extraMag  */ / _spatium;
+      qreal cellMag = /* c->mag * */ mag;
+      Element* e = this->element;
+      e->layout();
+      QRectF r = e->bbox();
+      int w    = lrint(r.width()  * cellMag);
+      int h    = lrint(r.height() * cellMag);
+
+      if (w * h == 0) {
+            qDebug("zero pixmap %d %d %s", w, h, e->name());
+            return QPixmap();
+            }
+
+      QPixmap pm(w, h);
+      pm.fill(Qt::transparent);
+      QPainter p(&pm);
+      p.setRenderHint(QPainter::Antialiasing, true);
+
+      if (e->isIcon())
+            toIcon(e)->setExtent(w < h ? w : h);
+      p.scale(cellMag, cellMag);
+
+      QPointF pos = e->ipos();
+      e->setPos(-r.topLeft());
+
+      QColor color;
+       // show voice colors for notes
+      if (e->isChord()) {
+             Chord* chord = toChord(e);
+             for (Note* n : chord->notes())
+                   n->setSelected(true);
+             color = e->curColor();
+             }
+       else
+             color = QPalette().color(QPalette::Normal, QPalette::Text);
+
+      p.setPen(QPen(color));
+      e->scanElements(&p, paintPaletteElement);
+      e->setPos(pos);
+      return pm;
+      }
+
 
 }
 
