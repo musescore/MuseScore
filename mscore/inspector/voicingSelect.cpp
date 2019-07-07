@@ -27,18 +27,18 @@ VoicingSelect::VoicingSelect(QWidget* parent)
       setupUi(this);
 
       //setup changed signals
-      connect(literalButton, SIGNAL(valueChanged(bool)), SLOT(_voicingChanged()));
+      connect(interpretBox, SIGNAL(valueChanged(int)), SLOT(_voicingChanged()));
       connect(voicingBox, SIGNAL(valueChanged(int)), SLOT(_voicingChanged()));
       }
 
 void VoicingSelect::_voicingChanged()
       {
-      emit voicingChanged(literalButton->isChecked(), voicingBox->currentIndex());
+      emit voicingChanged(interpretBox->currentIndex(), voicingBox->currentIndex());
       }
 
 void VoicingSelect::blockVoicingSignals(bool val)
       {
-      literalButton->blockSignals(val);
+      interpretBox->blockSignals(val);
       voicingBox->blockSignals(val);
       }
 
@@ -49,13 +49,10 @@ void VoicingSelect::setVoicing(int idx)
       blockVoicingSignals(false);
       }
 
-void VoicingSelect::setLiteral(bool literal)
+void VoicingSelect::setLiteral(bool literal) //TODO - PHV: literal is bool for now
       {
       blockVoicingSignals(true);
-      if (literal)
-            literalButton->setChecked(literal);
-      else
-            jazzButton->setChecked(true);
+      interpretBox->setCurrentIndex(literal);
       blockVoicingSignals(false);
       }
 

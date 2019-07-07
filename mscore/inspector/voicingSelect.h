@@ -38,7 +38,7 @@ class VoicingSelect : public QWidget, public Ui::VoicingSelect {
    public:
       VoicingSelect(QWidget* parent);
       int getVoicing() { return voicingBox->currentIndex(); }
-      bool getLiteral() { return literalButton->isChecked(); }
+      bool getLiteral() { return interpretBox->currentIndex(); }
 
       void setVoicing(int idx);
       void setLiteral(bool literal);

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>331</width>
-    <height>112</height>
+    <height>114</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -40,35 +40,20 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widget" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <property name="leftMargin">
-       <number>0</number>
+    <widget class="QComboBox" name="interpretBox">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>Jazz</string>
       </property>
-      <property name="topMargin">
-       <number>0</number>
+     </item>
+     <item>
+      <property name="text">
+       <string>Literal</string>
       </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QRadioButton" name="literalButton">
-        <property name="text">
-         <string>Literal</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="jazzButton">
-        <property name="text">
-         <string>Jazz</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     </item>
     </widget>
    </item>
    <item>
