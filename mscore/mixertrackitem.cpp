@@ -26,6 +26,7 @@
 #include "libmscore/score.h"
 #include "libmscore/part.h"
 #include "libmscore/undo.h"
+#include "preferences.h"
 
 #include "mixer.h"
 #include "mixeroptions.h"
@@ -261,6 +262,34 @@ int MixerTrackItem::setReverb(int value)
       }
 
 
+      int MixerTrackItem::getMidiChannel()
+      {
+      return part()->masterScore()->midiMapping(channel()->channel())->channel() + 1;
+      }
+
+      int MixerTrackItem::getMidiPort()
+      {
+      return part()->masterScore()->midiMapping(channel()->channel())->port() + 1;
+      }
+
+void MixerTrackItem::setMidiChannelAndPort(int midiChannel, int midiPort)
+      {
+      seq->stopNotes(channel()->channel());
+      midiPort = midiPort - 1;
+      midiChannel = midiChannel - 1;
+
+      part()->masterScore()->updateMidiMapping(midiMap()->articulation(), part(), midiPort, midiChannel);
+
+      part()->score()->setInstrumentsChanged(true);
+      part()->score()->setLayoutAll();
+      seq->initInstruments();
+
+      // Update MIDI Out ports
+      int maxPort = max(midiPort, part()->score()->masterScore()->midiPortCount());
+      part()->score()->masterScore()->setMidiPortCount(maxPort);
+      if (seq->driver() && (preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO)))
+            seq->driver()->updateOutPortCount(maxPort + 1);
+}
 
 //---------------------------------------------------------
 //   setColor
@@ -273,6 +302,7 @@ void MixerTrackItem::setColor(int valueRgb)
             return;
             }
 
+      // note: does not attempt to respect the relative / override / first channel mode
       _part->setColor(valueRgb);
       for (Channel* channel: playbackChannels()) {
             channel->setColor(valueRgb);
@@ -349,6 +379,42 @@ void MixerTrackItem::setSolo(bool value)
             }
       }
 
+//MARK:- voice muting
+
+void MixerTrackItem::toggleMutedVoice(int staffIndex, int voiceIndex, bool shouldMute)
+      {
+      Staff* staff = part()->staff(staffIndex);
+      switch (voiceIndex) {
+            case 0:
+                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE1, !shouldMute);
+                  break;
+            case 1:
+                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE2, !shouldMute);
+                  break;
+            case 2:
+                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE3, !shouldMute);
+                  break;
+            case 3:
+                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE4, !shouldMute);
+                  break;
+            }
+      }
+
+QList<QList<bool>> MixerTrackItem::getMutedVoices()
+      {
+      QList<QList<bool>> mutedStaves;
+      for (int staffIndex = 0; staffIndex < (*part()->staves()).length(); ++staffIndex) {
+            Staff* staff = (*part()->staves())[staffIndex];
+            QList<bool> mutedVoices;
+            for (int voice = 0; voice < VOICES; ++voice) {
+                  QString voiceColor = MScore::selectColor[voice].name();
+                  bool checked = !staff->playbackVoice(voice);
+                  mutedVoices.append(checked);
+                  }
+      mutedStaves.append(mutedVoices);
+      }
+      return mutedStaves;
+}
 
 //MARK:- helper methods
 

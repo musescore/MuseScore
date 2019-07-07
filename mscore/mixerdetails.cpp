@@ -41,7 +41,7 @@ MixerDetails::MixerDetails(Mixer *mixer) :
       selectedMixerTrackItem(nullptr)
       {
       setupUi(this);
-      panSlider->setPanMode(true);              // turn off the highlight on the control - it has no meaning for a pan control
+      panSlider->setPanMode(true);              // so fill color begins at centre not at left edge + double click to re-centre
 
       mutePerVoiceGrid = new QGridLayout();
       mutePerVoiceGrid->setContentsMargins(0, 0, 0, 0);
@@ -175,8 +175,7 @@ void MixerDetails::updateName()
       }
 
 
-//TODO: scope to pull some / much of this into the mixerTrackItem class and so leave this
-// class just focusing on the view & control, w/o having to know about the details of the model
+//TODO: pull updatePatch internal details into MixerTrackItem
 void MixerDetails::updatePatch()
       {
       Channel* channel = selectedMixerTrackItem->channel();
@@ -188,6 +187,12 @@ void MixerDetails::updatePatch()
       
       //Populate patch combo
       patchCombo->clear();
+
+      // getPatchInfo() loops through all synthesisers and returns
+      // the patches appends the patchInfo() they return
+
+            
+
       const QList<MidiPatch*>& pl = synti->getPatchInfo();
       int patchIndex = 0;
 
@@ -240,6 +245,25 @@ void MixerDetails::updatePan()
       panSpinBox->setValue(pan);
       }
 
+
+QPushButton* MixerDetails::makeMuteButton(int staff, int voice) {
+
+      QPushButton* muteButton = new QPushButton;
+      muteButton->setStyleSheet(QString("QPushButton{padding: 2px 4px 2px 4px;}QPushButton:checked{background-color:%1; color: white;}")
+                                .arg(MScore::selectColor[voice].name()));
+      muteButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+      muteButton->setMaximumWidth(20);
+      muteButton->setMaximumHeight(20);
+      muteButton->setText(QString("%1").arg(voice + 1));
+      muteButton->setCheckable(true);
+
+      QString helpfulDescription = QString(tr("Mute Voice #%1 on Staff #%2")).arg(voice + 1).arg(staff + 1);
+      muteButton->setObjectName(helpfulDescription);
+      muteButton->setToolTip(helpfulDescription);
+      muteButton->setAccessibleName(helpfulDescription);
+      return muteButton;
+}
+
 void MixerDetails::updateMutePerVoice()
       {
       for (QWidget* voiceButton : voiceButtons) {
@@ -249,40 +273,43 @@ void MixerDetails::updateMutePerVoice()
 
       voiceButtons.clear();
 
-      Part* part = selectedMixerTrackItem->part();
+      QList<QList<bool>> mutedStaves = selectedMixerTrackItem->getMutedVoices();
 
-      for (int staffIndex = 0; staffIndex < (*part->staves()).length(); ++staffIndex) {
-            Staff* staff = (*part->staves())[staffIndex];
-            for (int voice = 0; voice < VOICES; ++voice) {
-                  QPushButton* muteButton = new QPushButton;
-                  muteButton->setStyleSheet(
-                                    QString("QPushButton{padding: 4px 8px 4px 8px;}QPushButton:checked{background-color:%1}")
-                                    .arg(MScore::selectColor[voice].name()));
-                  muteButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-                  muteButton->setMaximumWidth(30);
-                  muteButton->setText(QString("%1").arg(voice + 1));
-                  muteButton->setCheckable(true);
-                  muteButton->setChecked(!staff->playbackVoice(voice));
-                  QString helpfulDescription = QString(tr("Mute Voice #%1 on Staff #%2")).arg(voice + 1).arg(staffIndex + 1);
-                  muteButton->setObjectName(helpfulDescription);
-                  muteButton->setToolTip(helpfulDescription);
-                  muteButton->setAccessibleName(helpfulDescription);
+      for (int staffIndex = 0; staffIndex < mutedStaves.length(); ++staffIndex) {
+            QList<bool> mutedVoices = mutedStaves[staffIndex];
 
-                  mutePerVoiceGridLayout->addWidget(muteButton, staffIndex, voice);
+            if (staffIndex > 0) {
+                  mutePerVoiceGridLayout->setColumnMinimumWidth(4, 10);
+            }
+
+            for (int voice = 0; voice < mutedVoices.length(); ++voice) {
+                  QPushButton* muteButton = makeMuteButton(staffIndex, voice);
+                  muteButton->setChecked(mutedVoices[voice]);
+
+                  int column = !(staffIndex % 2) ? voice : voice + 4 + 1;
+                  mutePerVoiceGridLayout->addWidget(muteButton, staffIndex / 2, column);
+
                   MixerVoiceMuteButtonHandler* handler = new MixerVoiceMuteButtonHandler(this, staffIndex, voice, muteButton);
                   connect(muteButton, SIGNAL(toggled(bool)), handler, SLOT(buttonToggled(bool)));
                   voiceButtons.append(muteButton);
                   }
             }
+            updateTabOrder();
       }
+
+
 
 void MixerDetails::updateMidiChannelAndPort()
       {
-      Part* part = selectedMixerTrackItem->part();
-      Channel* channel = selectedMixerTrackItem->channel();
-      portSpinBox->setValue(part->masterScore()->midiMapping(channel->channel())->port() + 1);
-      channelSpinBox->setValue(part->masterScore()->midiMapping(channel->channel())->channel() + 1);
+      //TODO: midi code moved - needs to be tested
+      portSpinBox->setValue(selectedMixerTrackItem->getMidiPort());
+      channelSpinBox->setValue(selectedMixerTrackItem->getMidiChannel());
+//      Part* part = selectedMixerTrackItem->part();
+//      Channel* channel = selectedMixerTrackItem->channel();
+//      portSpinBox->setValue(part->masterScore()->midiMapping(channel->channel())->port() + 1);
+//      channelSpinBox->setValue(part->masterScore()->midiMapping(channel->channel())->channel() + 1);
       }
+
 
 void MixerDetails::updateReverb()
       {
@@ -303,6 +330,7 @@ void MixerDetails::updateChorus()
 
 
 //  patchChanged - process signal from patchCombo
+      //TODO: pull patchComboEdited details into MixerTrackItem
 void MixerDetails::patchComboEdited(int comboIndex)
       {
       if (!selectedMixerTrackItem)
@@ -480,60 +508,47 @@ void MixerDetails::chorusSpinBoxEdited(int proposedValue)
 
 // voiceMuteButtonToggled - process button toggled (received via MixerVoiceMuteButtonHandler object)
 void MixerDetails::voiceMuteButtonToggled(int staffIndex, int voiceIndex, bool shouldMute)
-{
-      Part* part = selectedMixerTrackItem->part();
-      Staff* staff = part->staff(staffIndex);
-      switch (voiceIndex) {
-            case 0:
-                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE1, !shouldMute);
-                  break;
-            case 1:
-                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE2, !shouldMute);
-                  break;
-            case 2:
-                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE3, !shouldMute);
-                  break;
-            case 3:
-                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE4, !shouldMute);
-                  break;
+      {
+      selectedMixerTrackItem->toggleMutedVoice(staffIndex, voiceIndex, shouldMute);
       }
-}
 
 
 // midiChannelChanged - process signal from either portSpinBox
 // or channelSpinBox, i.e. MIDI port or channel change
 void MixerDetails::midiChannelOrPortEdited(int)
       {
+      //TODO: midi code moved - needs to be tested
       if (!selectedMixerTrackItem)
             return;
 
-      Part* part = selectedMixerTrackItem->part();
-      Channel* channel = selectedMixerTrackItem->channel();
-
-      seq->stopNotes(channel->channel());
-      int p =    portSpinBox->value() - 1;
-      int c = channelSpinBox->value() - 1;
-
-      MidiMapping* midiMap = selectedMixerTrackItem->midiMap();
-      part->masterScore()->updateMidiMapping(midiMap->articulation(), part, p, c);
-
-      part->score()->setInstrumentsChanged(true);
-      part->score()->setLayoutAll();
-      seq->initInstruments();
-
-      // Update MIDI Out ports
-      int maxPort = max(p, part->score()->masterScore()->midiPortCount());
-      part->score()->masterScore()->setMidiPortCount(maxPort);
-      if (seq->driver() && (preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO)))
-            seq->driver()->updateOutPortCount(maxPort + 1);
+//      Part* part = selectedMixerTrackItem->part();
+//      Channel* channel = selectedMixerTrackItem->channel();
+//
+//      seq->stopNotes(channel->channel());
+//      int p =    portSpinBox->value() - 1;
+//      int c = channelSpinBox->value() - 1;
+//
+//      MidiMapping* midiMap = selectedMixerTrackItem->midiMap();
+//      part->masterScore()->updateMidiMapping(midiMap->articulation(), part, p, c);
+//
+//      part->score()->setInstrumentsChanged(true);
+//      part->score()->setLayoutAll();
+//      seq->initInstruments();
+//
+//      // Update MIDI Out ports
+//      int maxPort = max(p, part->score()->masterScore()->midiPortCount());
+//      part->score()->masterScore()->setMidiPortCount(maxPort);
+//      if (seq->driver() && (preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO)))
+//            seq->driver()->updateOutPortCount(maxPort + 1);
       }
+
+
 
 //MARK:- Helper methods
 
-
 // Not 100% sure this is needed. Originally handled voiceMuteButtons separately
 // but that's no longer applicable (they work fine WITHIN a group). Do controls
-// pop out of wigdet order if they are not displayed anyway?!
+// pop out of widget order if they are not displayed anyway?!
 void MixerDetails::updateTabOrder()
 
       {
@@ -543,8 +558,10 @@ void MixerDetails::updateTabOrder()
                             drumkitCheck,
                             patchCombo,
                             volumeSlider, volumeSpinBox,
-                            panSlider, panSpinBox,
-                            mutePerVoiceHolder});
+                            panSlider, panSpinBox
+                            });
+
+      tabOrder.append(voiceButtons);
 
       if (mixer->getOptions()->showMidiOptions())
             tabOrder.append({

@@ -72,7 +72,8 @@ public:
       QString detailedToolTip();
 
       void setColor(int valueRgb);
-      int setVolume(int value);    // returns the value actually used (which may differ from value passed)
+
+            int setVolume(int value);    // returns the value actually used (which may differ from value passed)
       int setPan(int value);       // returns the value actually used (which may differ from value passed)
       int setChorus(int value);    // returns the value actually used (which may differ from value passed)
       int setReverb(int value);    // returns the value actually used (which may differ from value passed)
@@ -93,6 +94,13 @@ public:
       bool getSolo();
       char getPan();
 
+      void setMidiChannelAndPort(int channel, int port);
+      int getMidiChannel();
+      int getMidiPort();
+
+      void toggleMutedVoice(int staffIndex, int voiceIndex, bool shouldMute);
+      QList<QList<bool>> getMutedVoices();
+            
       };
 
 }

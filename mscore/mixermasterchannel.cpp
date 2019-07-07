@@ -60,16 +60,17 @@ void MixerMasterChannel::setupSlotsAndSignals()
 
 void MixerMasterChannel::setupAdditionalUi()
       {
-      // the label is retained but made transparent to preserve
-      // alignment with the track channel sliders
-      QString transparentColorLabelStyle = "QToolButton { background: none;}";
-      colorLabel->setStyleSheet(transparentColorLabelStyle);
+      // the label matches the size of the color swatch but is made
+      // transparent to preserve alignment with the track channel sliders
+      QString transparentColorLabelStyle = "QLabel{background: none;}";
+      colorChooser->setStyleSheet(transparentColorLabelStyle);
       }
 
 
 void MixerMasterChannel::updateUiControls()
       {
-      colorLabel->setVisible(false);
+      bool showTrackColors = Mixer::getOptions()->showTrackColors();
+      colorChooser->setVisible(showTrackColors);
       }
 
       

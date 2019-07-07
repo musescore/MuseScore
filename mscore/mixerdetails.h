@@ -51,6 +51,7 @@ class MixerDetails : public QWidget, public Ui::MixerDetails, public ChannelList
       void updateVolume();
       void updatePan();
       void updateMutePerVoice();
+      QPushButton* makeMuteButton(int staff, int voice);
       void updateMidiChannelAndPort();
       void updateReverb();
       void updateChorus();

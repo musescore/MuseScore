@@ -43,7 +43,10 @@ MixerTreeWidgetItem::MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* 
       setToolTip(0, part->partName());
 
       // make the row editable - but the tree itself will only allow editing in column 0
-      setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled);
+
+      // note: use of QFlag constructor is required to avoid errrors when compiler is strict
+      Qt::ItemFlags itemFlags = QFlag(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+      setFlags(itemFlags);
 
 
       // check for secondary channels and add MixerTreeWidgetItem children if required

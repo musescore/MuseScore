@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>286</width>
-    <height>370</height>
+    <height>290</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,6 +23,12 @@
    </size>
   </property>
   <layout class="QFormLayout" name="formLayout">
+   <property name="formAlignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+   <property name="verticalSpacing">
+    <number>-1</number>
+   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -219,6 +225,9 @@
        <property name="toolTip">
         <string>Volume</string>
        </property>
+       <property name="maximum">
+        <number>127</number>
+       </property>
       </widget>
      </item>
     </layout>
@@ -323,11 +332,17 @@
        <property name="toolTip">
         <string>Pan</string>
        </property>
+       <property name="minimum">
+        <number>-63</number>
+       </property>
+       <property name="maximum">
+        <number>63</number>
+       </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="labelMute">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -339,54 +354,18 @@
       <string>Mute:</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QGroupBox" name="mutePerVoiceHolder">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="5" column="1">
+    <layout class="QGridLayout" name="mutePerVoiceGridLayout">
+     <property name="bottomMargin">
+      <number>12</number>
      </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>50</height>
-      </size>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::TabFocus</enum>
-     </property>
-     <property name="title">
-      <string/>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-     <layout class="QHBoxLayout" name="mutePerVoiceHozLayout">
-      <item>
-       <layout class="QGridLayout" name="mutePerVoiceGridLayout"/>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_6">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
+    </layout>
    </item>
-   <item row="5" column="0">
+   <item row="7" column="0">
     <widget class="QLabel" name="labelMidiPort">
      <property name="text">
       <string>Port:</string>
@@ -396,7 +375,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="7" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <widget class="QSpinBox" name="portSpinBox">
@@ -479,7 +458,7 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="0">
+   <item row="8" column="0">
     <widget class="QLabel" name="labelReverb">
      <property name="text">
       <string>Reverb:</string>
@@ -489,7 +468,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item row="8" column="1">
     <layout class="QHBoxLayout" name="portAndChannelLayout">
      <item>
       <widget class="Ms::MixerSlider" name="reverbSlider">
@@ -570,11 +549,14 @@
        <property name="toolTip">
         <string>MIDI OUT reverb</string>
        </property>
+       <property name="maximum">
+        <number>127</number>
+       </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="7" column="0">
+   <item row="9" column="0">
     <widget class="QLabel" name="labelChorus">
      <property name="text">
       <string>Chorus:</string>
@@ -584,7 +566,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="9" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="Ms::MixerSlider" name="chorusSlider">
@@ -661,6 +643,9 @@
        </property>
        <property name="toolTip">
         <string>MIDI OUT chorus</string>
+       </property>
+       <property name="maximum">
+        <number>127</number>
        </property>
       </widget>
      </item>

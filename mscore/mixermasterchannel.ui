@@ -48,7 +48,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="Ms::GainSlider" name="volumeSlider">
+    <widget class="Ms::GainSlider" name="trackSlider">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -216,16 +216,16 @@
     </spacer>
    </item>
    <item>
-    <widget class="QLabel" name="colorLabel">
+    <widget class="QLabel" name="colorChooser">
      <property name="minimumSize">
       <size>
-       <width>8</width>
+       <width>12</width>
        <height>16</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>4</width>
+       <width>12</width>
        <height>16</height>
       </size>
      </property>
