@@ -2367,7 +2367,11 @@ void Note::editDrag(EditData& ed)
       {
       Chord* ch = chord();
       Segment* seg = ch->segment();
-      if (seg) {
+      // adjust segment on plain drag or Shift+cursor,
+      // adjust note/chord for Ctrl+drag or plain cursor
+      if (seg &&
+          (((ed.buttons & Qt::LeftButton) && !(ed.modifiers & Qt::ControlModifier))
+           || (ed.modifiers & Qt::ShiftModifier))) {
             const Spatium deltaSp = Spatium(ed.delta.x() / spatium());
             seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
             }
