@@ -627,6 +627,7 @@ class Score : public QObject, public ScoreElement {
       void dragPosition(const QPointF&, int* staffIdx, Segment**) const;
 
       void undoAddElement(Element* element);
+      InstrumentChange* prevInstrumentChange(Segment* e, int track);
       void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
       void undoRemoveElement(Element* element);
       void undoChangeSpannerElements(Spanner* spanner, Element* startElement, Element* endElement);
