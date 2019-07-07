@@ -4673,6 +4673,26 @@ void Score::undoAddElement(Element* element)
       }
 
 //---------------------------------------------------------
+//   prevInstrumentChange
+//---------------------------------------------------------
+
+InstrumentChange* Score::prevInstrumentChange(Segment* e, int track)
+      {
+      while (e && e->prev1()) {
+            e = e->prev1();
+            for (int i = track; i < track + VOICES; i++) {
+                  if (e->element(i) && e->element(i)->isChord())
+                        return nullptr;
+                  }
+            Element* ic = e->findAnnotation(ElementType::INSTRUMENT_CHANGE, track, track + VOICES - 1);
+            if (ic)
+                  //return ic;
+                  return toInstrumentChange(ic);
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   undoAddCR
 //---------------------------------------------------------
 
@@ -4813,6 +4833,18 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
                         toRest(newcr)->setGap(false);
 
                   undo(new AddElement(newcr));
+                  if (newcr->isChord()) {
+                        InstrumentChange* ic = prevInstrumentChange(cr->segment(), staff->idx() * VOICES);
+                        if (ic) {
+                              StaffText* staffText = new StaffText(ic->score());;
+                              if (ic->warning()/* && ic->warning()->parent()*/) {
+                                    undoRemoveElement(ic->warning());
+                              }
+                              ic->setWarning(staffText);
+                              staffText->setPlainText(ic->instrument()->trackName());
+                              newcr->undoAddAnnotation(staffText);
+                              }
+                        }
                   }
             }
       }
