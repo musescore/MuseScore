@@ -21,20 +21,14 @@
 #define __MIXERDETAILS_H__
 
 #include "ui_mixerdetails.h"
-#include "libmscore/instrument.h"
+#include "libmscore/instrument.h"   // needed for ChannelListener
 #include "mixertrackitem.h"
 #include "mixer.h"
 
-#include <functional>
-#include <QPushButton>
 
-class Mixer;
 
 namespace Ms {
 
-//---------------------------------------------------------
-//   MixerDetailsVoiceButtonHandler
-//---------------------------------------------------------
 
 class MixerDetails : public QWidget, public Ui::MixerDetails, public ChannelListener
       {
@@ -83,6 +77,7 @@ class MixerDetails : public QWidget, public Ui::MixerDetails, public ChannelList
 
       MixerTrackItem* getSelectedMixerTrackItem() { return selectedMixerTrackItem; };
       };
+
 
 class MixerDetails;
 

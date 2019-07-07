@@ -31,6 +31,7 @@
 #include "mixer.h"
 #include "mixeroptions.h"
 #include "mixertrackchannel.h"
+#include <QComboBox>
 
 /*
  A MixerTrackItem object:
@@ -124,6 +125,142 @@ QString MixerTrackItem::detailedToolTip()
            midiPatch ? midiPatch->name : QApplication::tr("~no patch~"));
 
       }
+
+
+//MARK:- patch
+
+bool  MixerTrackItem::getUseDrumset() {
+
+      //Check if drumkit
+      return midiMap()->part()->instrument()->useDrumset();
+}
+
+bool MixerTrackItem::isCurrentPatch(const MidiPatch* patch)
+      {
+         return patch->synti == channel()->synti() &&
+            patch->bank == channel()->bank() &&
+            patch->prog == channel()->program();
+      }
+
+      QString MixerTrackItem::adjustedPatchName(const MidiPatch* patch, std::vector<QString> usedNames)
+      {
+            QString patchName = patch->name;
+
+            if (std::find(usedNames.begin(), usedNames.end(), patchName) != usedNames.end()) {
+                  QString addNum = QString(" (%1)").arg(patch->sfid);
+                  patchName.append(addNum);
+            }
+            else {
+                  usedNames.push_back(patch->name);
+                  }
+
+            bool verbose = false;
+
+            if (verbose) {
+                  return patchName.append(QString(" %1 %2; Bank: %3; Prog: %4; SF: %5")
+                  .arg(patch->synti)
+                  .arg(patch->drum ? "🥁" : "🎶")
+                  .arg(patch->bank)
+                  .arg(patch->prog)
+                  .arg(patch->sfid));
+            }
+
+            return patchName;
+
+      }
+
+void MixerTrackItem::populatePatchCombo(QComboBox* patchCombo)
+{
+      //Check if drumkit
+       bool drum = getUseDrumset();
+
+      //Populate patch combo
+      patchCombo->clear();
+
+      const QList<MidiPatch*>& pl = synti->getPatchInfo();
+      int patchIndex = 0;
+
+      // Order by program number instead of bank, so similar instruments
+      // appear next to each other, but ordered primarily by soundfont
+      std::map<int, std::map<int, std::vector<const MidiPatch*>>> orderedPatchList;
+
+      for (const MidiPatch* patch : pl)
+            orderedPatchList[patch->sfid][patch->prog].push_back(patch);
+
+      std::vector<QString> usedNames;
+      for (auto const& sf : orderedPatchList) {
+            for (auto const& pn : sf.second) {
+                  for (const MidiPatch* patch : pn.second) {
+                        if (patch->drum == drum || patch->synti != "Fluid") {
+                              QString patchName = adjustedPatchName(patch, usedNames);
+                              patchCombo->addItem(patchName, QVariant::fromValue<void*>((void*)patch));
+                              if (isCurrentPatch(patch))
+                                    patchIndex = patchCombo->count() - 1;
+                        }
+                  }
+            }
+      }
+      patchCombo->setCurrentIndex(patchIndex);
+
+}
+
+
+void MixerTrackItem::changePatch(int itemIndex, QComboBox* patchCombo)
+{
+      const MidiPatch* patch = (MidiPatch*)patchCombo->itemData(itemIndex, Qt::UserRole).value<void*>();
+
+      if (patch == 0) {
+            qDebug("MixerTrackItem::patchChanged: no patch");
+            return;
+      }
+
+      Part* part = midiMap()->part();
+      Channel* channel = midiMap()->articulation();
+
+      Score* score = part->score();
+      if (score) {
+            score->startCmd();
+            score->undo(new ChangePatch(score, channel, patch));
+            score->undo(new SetUserBankController(channel, true));
+            score->setLayoutAll();
+            score->endCmd();
+      }
+}
+
+
+void MixerTrackItem::setUseDrumset(bool useDrumset)
+      {
+      Instrument* instr = isPart() ? part()->instrument(Fraction(0,1)) : instrument();
+
+      if (instr->useDrumset() == useDrumset)
+            return;
+
+      const MidiPatch* newPatch = 0;
+      const QList<MidiPatch*> pl = synti->getPatchInfo();
+      for (const MidiPatch* p : pl) {
+            if (p->drum == useDrumset) {
+                  newPatch = p;
+                  break;
+                  }
+            }
+
+      if (newPatch)
+            QString name = newPatch->name;
+
+
+      Score* score = part()->score();
+      if (newPatch) {
+            score->startCmd();
+            part()->undoChangeProperty(Pid::USE_DRUMSET, useDrumset);
+            score->undo(new ChangePatch(score, channel(), newPatch));
+            score->setLayoutAll();
+            score->endCmd();
+            }
+
+      }
+
+
+//MARK:- part and channel name
 
 
 QString MixerTrackItem::getName()

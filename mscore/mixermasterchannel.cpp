@@ -19,12 +19,10 @@
 
 #include "mixermasterchannel.h"
 
-#include "libmscore/instrument.h"
-#include "musescore.h"
-#include "synthesizer/msynthesizer.h"     // required for MidiPatch
+#include "musescore.h"                    // required for getAction()
+#include "synthesizer/msynthesizer.h"     // required for synti->gain() / setGain()
 
 #include "mixer.h"
-#include "mixertrackitem.h"
 #include "mixeroptions.h"
 
 namespace Ms {

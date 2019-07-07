@@ -18,17 +18,6 @@
 //=============================================================================
 
 #include "mixerdetails.h"
-
-#include "musescore.h"
-
-#include "libmscore/score.h"
-#include "libmscore/part.h"
-#include "seq.h"
-#include "libmscore/undo.h"
-#include "synthcontrol.h"
-#include "synthesizer/msynthesizer.h"
-#include "preferences.h"
-
 #include "mixertrackitem.h"
 #include "mixeroptions.h"
 
@@ -175,61 +164,11 @@ void MixerDetails::updateName()
       }
 
 
-//TODO: pull updatePatch internal details into MixerTrackItem
 void MixerDetails::updatePatch()
       {
-      Channel* channel = selectedMixerTrackItem->channel();
-      MidiMapping* midiMap = selectedMixerTrackItem->midiMap();
-      
-      //Check if drumkit
-      const bool drum = midiMap->part()->instrument()->useDrumset();
-      drumkitCheck->setChecked(drum);
-      
-      //Populate patch combo
-      patchCombo->clear();
-
-      // getPatchInfo() loops through all synthesisers and returns
-      // the patches appends the patchInfo() they return
-
-            
-
-      const QList<MidiPatch*>& pl = synti->getPatchInfo();
-      int patchIndex = 0;
-
-
-      // Order by program number instead of bank, so similar instruments
-      // appear next to each other, but ordered primarily by soundfont
-      std::map<int, std::map<int, std::vector<const MidiPatch*>>> orderedPatchList;
-      
-      for (const MidiPatch* patch : pl)
-            orderedPatchList[patch->sfid][patch->prog].push_back(patch);
-      
-      std::vector<QString> usedNames;
-      for (auto const& sf : orderedPatchList) {
-            for (auto const& pn : sf.second) {
-                  for (const MidiPatch* patch : pn.second) {
-                        if (patch->drum == drum || patch->synti != "Fluid") {
-                              QString patchName = patch->name;
-                              if (std::find(usedNames.begin(), usedNames.end(), patch->name) != usedNames.end()) {
-                                    QString addNum = QString(" (%1)").arg(patch->sfid);
-                                    patchName.append(addNum);
-                                    }
-                              else
-                                    usedNames.push_back(patch->name);
-
-                              patchCombo->addItem(patchName, QVariant::fromValue<void*>((void*)patch));
-                              if (patch->synti == channel->synti() &&
-                                  patch->bank == channel->bank() &&
-                                  patch->prog == channel->program())
-                                    patchIndex = patchCombo->count() - 1;
-                              }
-                        }
-                  }
-            }
-      patchCombo->setCurrentIndex(patchIndex);
+      drumkitCheck->setChecked(selectedMixerTrackItem->getUseDrumset());
+      selectedMixerTrackItem->populatePatchCombo(patchCombo);
       }
-
-
 
 
 void MixerDetails::updateVolume()
@@ -301,7 +240,7 @@ void MixerDetails::updateMutePerVoice()
 
 void MixerDetails::updateMidiChannelAndPort()
       {
-      //TODO: midi code moved - needs to be tested
+      //TODO: midi code moved - needs more testing
       portSpinBox->setValue(selectedMixerTrackItem->getMidiPort());
       channelSpinBox->setValue(selectedMixerTrackItem->getMidiChannel());
 //      Part* part = selectedMixerTrackItem->part();
@@ -327,81 +266,26 @@ void MixerDetails::updateChorus()
 
 //MARK:- Methods to respond to user initiated changes
 
-
-
 //  patchChanged - process signal from patchCombo
-      //TODO: pull patchComboEdited details into MixerTrackItem
 void MixerDetails::patchComboEdited(int comboIndex)
       {
       if (!selectedMixerTrackItem)
             return;
 
-      const MidiPatch* patch = (MidiPatch*)patchCombo->itemData(comboIndex, Qt::UserRole).value<void*>();
-      if (patch == 0) {
-            qDebug("MixerDetails::patchChanged: no patch");
-            return;
-            }
-
-      Part* part = selectedMixerTrackItem->midiMap()->part();
-      Channel* channel = selectedMixerTrackItem->midiMap()->articulation();
-
       mixer->saveTreeSelection();
-
-      Score* score = part->score();
-      if (score) {
-            score->startCmd();
-            score->undo(new ChangePatch(score, channel, patch));
-            score->undo(new SetUserBankController(channel, true));
-            score->setLayoutAll();
-            score->endCmd();
-            }
-
+      selectedMixerTrackItem->changePatch(comboIndex, patchCombo);
       mixer->restoreTreeSelection();
       }
 
 // drumkitToggled - process signal from drumkitCheck
-void MixerDetails::drumsetCheckboxToggled(bool drumsetSelected)
+void MixerDetails::drumsetCheckboxToggled(bool useDrumset)
       {
       if (!selectedMixerTrackItem)
             return;
 
       blockSignals(true);
-
-      Part* part = selectedMixerTrackItem->part();
-      Channel* channel = selectedMixerTrackItem->channel();
-
-      Instrument *instr;
-      if (selectedMixerTrackItem->trackType() == MixerTrackItem::TrackType::CHANNEL)
-            instr = selectedMixerTrackItem->instrument();
-      else
-            instr = part->instrument(Fraction(0,1));
-
-      if (instr->useDrumset() == drumsetSelected)
-            return;
-
-      const MidiPatch* newPatch = 0;
-      const QList<MidiPatch*> pl = synti->getPatchInfo();
-      for (const MidiPatch* p : pl) {
-            if (p->drum == drumsetSelected) {
-                  newPatch = p;
-                  break;
-                  }
-            }
-
-      if (newPatch)
-            QString name = newPatch->name;
-
       mixer->saveTreeSelection();
-
-      Score* score = part->score();
-      if (newPatch) {
-            score->startCmd();
-            part->undoChangeProperty(Pid::USE_DRUMSET, drumsetSelected);
-            score->undo(new ChangePatch(score, channel, newPatch));
-            score->setLayoutAll();
-            score->endCmd();
-            }
-
+      selectedMixerTrackItem->setUseDrumset(useDrumset);
       mixer->restoreTreeSelection();
       blockSignals(false);
       }
@@ -517,7 +401,7 @@ void MixerDetails::voiceMuteButtonToggled(int staffIndex, int voiceIndex, bool s
 // or channelSpinBox, i.e. MIDI port or channel change
 void MixerDetails::midiChannelOrPortEdited(int)
       {
-      //TODO: midi code moved - needs to be tested
+      //TODO: midi code moved - needs more testing
       if (!selectedMixerTrackItem)
             return;
 

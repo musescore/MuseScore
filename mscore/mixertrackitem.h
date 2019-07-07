@@ -28,6 +28,7 @@ class Instrument;
 class Channel;
 class MidiMapping;
 class MixerTrackItem;
+struct MidiPatch;
 
 //---------------------------------------------------------
 //   MixerTrackItem
@@ -57,6 +58,9 @@ private:
       int relativeAdjust(int mainSliderDelta, ChannelReader reader, ChannelWriter writer);
       const int panAdjustment();
 
+      bool isCurrentPatch(const MidiPatch* patch);
+      QString adjustedPatchName(const MidiPatch* patch, std::vector<QString> usedNames);
+
 public:
       MixerTrackItem(TrackType trackType, Part* part, Instrument* _instr, Channel* _chan);
 
@@ -73,7 +77,7 @@ public:
 
       void setColor(int valueRgb);
 
-            int setVolume(int value);    // returns the value actually used (which may differ from value passed)
+      int setVolume(int value);    // returns the value actually used (which may differ from value passed)
       int setPan(int value);       // returns the value actually used (which may differ from value passed)
       int setChorus(int value);    // returns the value actually used (which may differ from value passed)
       int setReverb(int value);    // returns the value actually used (which may differ from value passed)
@@ -100,6 +104,11 @@ public:
 
       void toggleMutedVoice(int staffIndex, int voiceIndex, bool shouldMute);
       QList<QList<bool>> getMutedVoices();
+
+      void populatePatchCombo(QComboBox* patchCombo);
+      void changePatch(int itemIndex, QComboBox* patchCombo);
+      bool getUseDrumset();
+      void setUseDrumset(bool useDrumset);
             
       };
 
