@@ -1929,7 +1929,7 @@ void MuseScore::showError()
       static QErrorMessage* msg = 0;
       if (msg == 0)
             msg = new QErrorMessage(this);
-      msg->showMessage(tr(MScore::errorMessage()), MScore::errorGroup());
+      msg->showMessage(qApp->translate("error", MScore::errorMessage()), MScore::errorGroup());
       MScore::setError(MS_NO_ERROR);
       }
 
