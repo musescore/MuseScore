@@ -29,6 +29,7 @@ extern QString dataPath;
 MasterSynthesizer::MasterSynthesizer()
    : QObject(0)
       {
+      defaultGainAsDecibels = convertGainToDecibels(defaultGain);
       }
 
 //---------------------------------------------------------
@@ -424,6 +425,39 @@ void MasterSynthesizer::setGain(float f)
             _gain = f;
             emit gainChanged(_gain);
             }
+      }
+
+
+//---------------------------------------------------------
+//   setGainAsDecibels
+//---------------------------------------------------------
+
+void MasterSynthesizer::setGainAsDecibels(float decibelValue)
+      {
+      if (decibelValue == minGainAsDecibels)
+            setGain(MUTE);
+      else
+            setGain(pow(10, ((decibelValue + N) / N )));
+      }
+
+//---------------------------------------------------------
+//   convertGainToDecibels
+//---------------------------------------------------------
+
+float MasterSynthesizer::convertGainToDecibels(float gain) const
+      {
+      if (gain == MUTE)
+            return minGainAsDecibels; // return a usable value instead of -∞
+      return ((N * std::log10(gain)) - N);
+      }
+
+//---------------------------------------------------------
+//   gainAsDecibels
+//---------------------------------------------------------
+
+float MasterSynthesizer::gainAsDecibels() const
+      {
+      return convertGainToDecibels(_gain);
       }
 
 //---------------------------------------------------------
