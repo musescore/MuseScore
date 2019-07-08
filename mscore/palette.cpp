@@ -1006,7 +1006,6 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
 
 static void paintPaletteElement(void* data, Element* e)
       {
-      qDebug()<<"The Data is "<<data;
       QPainter* p = static_cast<QPainter*>(data);
       p->save();
       p->translate(e->pos());
@@ -1951,7 +1950,7 @@ void PaletteList::read(XmlReader& e)
             else if (t == "gridHeight")
                   /*vgrid =*/ e.readDouble();
             else if (t == "mag")
-                  /*extraMag =*/ e.readDouble();
+                  extraMag = e.readDouble();
             else if (t == "grid")
                   /*_drawGrid =*/ e.readInt();
             else if (t == "moreElements")
@@ -1963,8 +1962,7 @@ void PaletteList::read(XmlReader& e)
             else if (t == "Cell") {
                   PaletteCellItem* cell = new PaletteCellItem(this);
                   cell->setName(e.attribute("name"));
-                  //cell->setToolTip(e.attribute("name"));
-                  if (!cell->read(e)){
+                  if (!cell->read(e, extraMag)){
                         Element* element = cell->element;
                         delete cell;
                         if(!element)
@@ -1997,20 +1995,20 @@ PaletteCellItem::PaletteCellItem(PaletteList* parent) : QListWidgetItem(parent)
       }
 
 
-bool PaletteCellItem::read(XmlReader& e)
+bool PaletteCellItem::read(XmlReader& e, qreal extraMag)
       {
       while (e.readNextStartElement()) {
             const QStringRef& t1(e.name());
             if (t1 == "staff")
-                  /* cell->drawStaff= */ e.readInt();
+                  drawStaff = e.readInt();
             else if (t1 == "xoffset")
-                  /* cell->xoffset = */ e.readDouble();
+                  xoffset = e.readDouble();
             else if (t1 == "yoffset")
-                  /* cell->yoffset = */ e.readDouble();
+                  yoffset = e.readDouble();
             else if (t1 == "mag")
-                  /* cell->mag = */ e.readDouble();
+                  mag = e.readDouble();
             else if (t1 == "tag")
-                  /* cell->tag = */ e.readElementText();
+                  tag = e.readElementText();
             else {
                   element = Element::name2Element(t1, gscore);
                   if (!element) {
@@ -2033,7 +2031,7 @@ bool PaletteCellItem::read(XmlReader& e)
                                     }
                         }
                         else{
-                              QIcon icon(pixmap());
+                              QIcon icon(pixmap(extraMag));
                               setIcon(icon);
                               }
                         }
@@ -2042,11 +2040,11 @@ bool PaletteCellItem::read(XmlReader& e)
       return true;
       }
 
-QPixmap PaletteCellItem::pixmap() const
+QPixmap PaletteCellItem::pixmap(qreal extraMag) const
       {
       qreal _spatium = gscore->spatium();
-      qreal mag  	= PALETTE_SPATIUM /* * extraMag  */ / _spatium;
-      qreal cellMag = /* c->mag * */ mag;
+      qreal mag  	= PALETTE_SPATIUM * extraMag / _spatium;
+      qreal cellMag = this->mag *  mag;
       Element* e = this->element;
       e->layout();
       QRectF r = e->bbox();
