@@ -29,6 +29,8 @@
 #include "palettebox.h"
 #include "extension.h"
 
+extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+
 namespace Ms {
 
 bool Workspace::workspacesRead = false;
@@ -564,7 +566,9 @@ void Workspace::read()
             return;
             }
       QFileInfo fi(_path);
+      qt_ntfs_permission_lookup++;
       _readOnly = !fi.isWritable();
+      qt_ntfs_permission_lookup--;
 
       MQZipReader f(_path);
       QList<QString> images;
@@ -1003,15 +1007,14 @@ QList<Workspace*>& Workspace::workspaces()
                         
                         if (!p) {
                               p = new Workspace;
-                              p->setPath(s + "/" + entry);
-                              p->setName(name);
-                              
-                              if (translate)
-                                    p->setTranslatableName(name);
-                              
-                              p->setReadOnly(!fi.isWritable());
-                              _workspaces.append(p);
-                              }
+                        p->setPath(s + "/" + entry);
+                        p->setName(name);
+                        if (translate)
+                              p->setTranslatableName(name);
+                        qt_ntfs_permission_lookup++;
+                        p->setReadOnly(!fi.isWritable());
+                        qt_ntfs_permission_lookup--;
+                        _workspaces.append(p);
                         }
                   }
             // hack
