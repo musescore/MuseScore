@@ -620,17 +620,23 @@ void PaletteTree::resizeEvent(QResizeEvent* event)
             if (paletteChild && !paletteChild->isHidden()) {
                   paletteChild->setHidden(true);
                   paletteChild->setHidden(false);
+                  }
             }
-            /* //The below code fixes the issue but crashes after changing the width of the palette
-            if (paletteItem->isExpanded()) {
-                  paletteItem->setExpanded(false); // hide all children
-                  paletteItem->setExpanded(true); // show (and redraw) all children
-            }else{
+      }
+
+void PaletteTree::showEvent(QShowEvent* event)
+      {
+      QTreeWidget::showEvent(event);
+      int numPalettes = topLevelItemCount();
+      for (int i = 0; i < numPalettes; i++) {
+            QTreeWidgetItem* paletteItem = topLevelItem(i);
+            qDebug()<<paletteItem->childCount();
+            QTreeWidgetItem* paletteChild = paletteItem->child(0);
+            if (!paletteItem->isExpanded()) {
+                  paletteItem->setExpanded(true);
                   paletteItem->setExpanded(true);
                   paletteItem->setExpanded(false);
                   }  
-            */
-            //qDebug()<<"This is the "<<i<<"th PaletteItem";
             }
       }
 }

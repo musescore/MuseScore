@@ -31,6 +31,8 @@ class PaletteTree : public QTreeWidget {
 
       protected:
          virtual void resizeEvent(QResizeEvent *event) override;
+         virtual void showEvent(QShowEvent *event) override;
+
       public:
          PaletteTree(QWidget* parent);
    }; 
