@@ -419,7 +419,7 @@ const char* MScore::errorMessage()
             if (e.no == _error)
                   return e.txt;
             }
-      return "unknown error";
+      return QT_TRANSLATE_NOOP("error", "Unknown error");
       }
 
 //---------------------------------------------------------
