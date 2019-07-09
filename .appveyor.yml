@@ -2,7 +2,7 @@
 clone_folder: C:\MuseScore
 
 # set clone depth
-clone_depth: 3                      # clone entire repository history if not defined
+clone_depth: 50                      # clone entire repository history if not defined
 
 image: Visual Studio 2017
 
