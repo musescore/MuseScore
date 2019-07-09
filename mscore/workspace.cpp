@@ -566,9 +566,9 @@ void Workspace::read()
             return;
             }
       QFileInfo fi(_path);
-      qt_ntfs_permission_lookup++;
+      ::qt_ntfs_permission_lookup++;
       _readOnly = !fi.isWritable();
-      qt_ntfs_permission_lookup--;
+      ::qt_ntfs_permission_lookup--;
 
       MQZipReader f(_path);
       QList<QString> images;
@@ -1012,9 +1012,9 @@ QList<Workspace*>& Workspace::workspaces()
                               p->setName(name);
                               if (translate)
                                     p->setTranslatableName(name);
-                              qt_ntfs_permission_lookup++;
+                              ::qt_ntfs_permission_lookup++;
                               p->setReadOnly(!fi.isWritable());
-                              qt_ntfs_permission_lookup--;
+                              ::qt_ntfs_permission_lookup--;
                               _workspaces.append(p);
                               }
                         }
