@@ -314,6 +314,7 @@ add_executable ( ${ExecutableName}
       ${INCS}
 
       gainslider.h gainslider.cpp mixeroptionsbutton.h mixeroptionsbutton.cpp
+      mixertreewidget.h mixertreewidget.cpp
       mixeroptions.h mixeroptions.cpp mixerslider.h mixerslider.cpp
       mixermasterchannel.h mixermasterchannel.cpp
       mixertreewidgetitem.h mixertreewidgetitem.cpp

@@ -102,7 +102,7 @@
      <enum>Qt::ToolButtonTextOnly</enum>
     </property>
    </widget>
-   <widget class="QTreeWidget" name="mixerTreeWidget">
+   <widget class="Ms::MixerTreeWidget" name="mixerTreeWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -227,6 +227,11 @@
    <class>Ms::MixerOptionsButton</class>
    <extends>QToolButton</extends>
    <header>mixeroptionsbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Ms::MixerTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>mixertreewidget.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

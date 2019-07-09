@@ -70,6 +70,7 @@ MixerTreeWidgetItem::MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* 
                   }
             }
       }
+ 
 
 MixerTreeWidgetItem::MixerTreeWidgetItem(Channel* channel, Instrument* instrument, Part* part)
       {

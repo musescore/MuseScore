@@ -96,7 +96,6 @@ MidiMapping *MixerTrackItem::midiMap()
 //---------------------------------------------------------
 //   playbackChannel
 //---------------------------------------------------------
-//TODO: - suspect this can be eliminated - it's only called in ONE place now
 Channel* MixerTrackItem::playbackChannel(const Channel* channel)
       {
       return _part->masterScore()->playbackChannel(channel);
@@ -142,22 +141,22 @@ bool MixerTrackItem::isCurrentPatch(const MidiPatch* patch)
             patch->prog == channel()->program();
       }
 
-      QString MixerTrackItem::adjustedPatchName(const MidiPatch* patch, std::vector<QString> usedNames)
+QString MixerTrackItem::adjustedPatchName(const MidiPatch* patch, std::vector<QString> usedNames)
       {
-            QString patchName = patch->name;
+      QString patchName = patch->name;
 
-            if (std::find(usedNames.begin(), usedNames.end(), patchName) != usedNames.end()) {
-                  QString addNum = QString(" (%1)").arg(patch->sfid);
-                  patchName.append(addNum);
+      if (std::find(usedNames.begin(), usedNames.end(), patchName) != usedNames.end()) {
+            QString addNum = QString(" (%1)").arg(patch->sfid);
+            patchName.append(addNum);
             }
-            else {
-                  usedNames.push_back(patch->name);
-                  }
+      else {
+            usedNames.push_back(patch->name);
+            }
 
             bool verbose = false;
 
-            if (verbose) {
-                  return patchName.append(QString(" %1 %2; Bank: %3; Prog: %4; SF: %5")
+      if (verbose) {
+            return patchName.append(QString(" %1 %2; Bank: %3; Prog: %4; SF: %5")
                   .arg(patch->synti)
                   .arg(patch->drum ? "🥁" : "🎶")
                   .arg(patch->bank)
@@ -165,14 +164,14 @@ bool MixerTrackItem::isCurrentPatch(const MidiPatch* patch)
                   .arg(patch->sfid));
             }
 
-            return patchName;
-
+      return patchName;
       }
+
 
 void MixerTrackItem::populatePatchCombo(QComboBox* patchCombo)
 {
       //Check if drumkit
-       bool drum = getUseDrumset();
+      bool drum = getUseDrumset();
 
       //Populate patch combo
       patchCombo->clear();
@@ -188,20 +187,19 @@ void MixerTrackItem::populatePatchCombo(QComboBox* patchCombo)
             orderedPatchList[patch->sfid][patch->prog].push_back(patch);
 
       std::vector<QString> usedNames;
-      for (auto const& sf : orderedPatchList) {
-            for (auto const& pn : sf.second) {
+      for (auto const& soundfont : orderedPatchList) {
+            for (auto const& pn : soundfont.second) {
                   for (const MidiPatch* patch : pn.second) {
                         if (patch->drum == drum || patch->synti != "Fluid") {
                               QString patchName = adjustedPatchName(patch, usedNames);
                               patchCombo->addItem(patchName, QVariant::fromValue<void*>((void*)patch));
                               if (isCurrentPatch(patch))
                                     patchIndex = patchCombo->count() - 1;
+                              }
                         }
                   }
             }
-      }
       patchCombo->setCurrentIndex(patchIndex);
-
 }
 
 
@@ -236,17 +234,16 @@ void MixerTrackItem::setUseDrumset(bool useDrumset)
             return;
 
       const MidiPatch* newPatch = 0;
-      const QList<MidiPatch*> pl = synti->getPatchInfo();
-      for (const MidiPatch* p : pl) {
-            if (p->drum == useDrumset) {
-                  newPatch = p;
+      const QList<MidiPatch*> patchList = synti->getPatchInfo();
+      for (const MidiPatch* patch : patchList) {
+            if (patch->drum == useDrumset) {
+                  newPatch = patch;
                   break;
                   }
             }
 
       if (newPatch)
             QString name = newPatch->name;
-
 
       Score* score = part()->score();
       if (newPatch) {
@@ -256,13 +253,10 @@ void MixerTrackItem::setUseDrumset(bool useDrumset)
             score->setLayoutAll();
             score->endCmd();
             }
-
       }
 
 
 //MARK:- part and channel name
-
-
 QString MixerTrackItem::getName()
       {
       return part()->partName();
@@ -275,6 +269,7 @@ QString MixerTrackItem::getChannelName()
 
       return qApp->translate("InstrumentsXML", channel()->name().toUtf8().data());
       }
+
 
 void MixerTrackItem::setName(QString newName)
 {
@@ -292,7 +287,7 @@ void MixerTrackItem::setName(QString newName)
 
 int MixerTrackItem::color()
       {
-      return _trackType ==TrackType::PART ? _part->color() : _channel->color();
+      return isPart() ? _part->color() : _channel->color();
       }
 
 
@@ -313,7 +308,7 @@ char MixerTrackItem::getReverb()
 
 char MixerTrackItem::getPan()
       {
-      return channel()->pan() - panAdjustment();
+      return channel()->pan() - panAdjustment;
       }
 
 bool MixerTrackItem::getMute()
@@ -326,14 +321,12 @@ bool MixerTrackItem::getSolo()
       return channel()->solo();
       }
 
+
 // MixerTrackItem settters - when a change is made to underlying channel a propertyChange()
 // will be sent to any registered listeners
 
-
-
-int MixerTrackItem::setVolume(int proposedValue)
+int MixerTrackItem::setVolume(int proposedValue, bool forceOverride)
       {
-
       auto writer = [](int value, Channel* channel){
             channel->setVolume(value);
             seq->setController(channel->channel(), CTRL_VOLUME, channel->volume()); };
@@ -341,20 +334,14 @@ int MixerTrackItem::setVolume(int proposedValue)
       auto reader = [](Channel* channel) -> int {
             return channel->volume(); };
 
-      return adjustValue(proposedValue, reader, writer);
+      return adjustValue(proposedValue, reader, writer, forceOverride);
       }
 
 
-//---------------------------------------------------------
-//   setPan
-//---------------------------------------------------------
-const int MixerTrackItem::panAdjustment() {
-      return 63;
-}
 
-int MixerTrackItem::setPan(int proposedValue)
+int MixerTrackItem::setPan(int proposedValue, bool forceOverride)
       {
-      proposedValue = proposedValue + panAdjustment();
+      proposedValue = proposedValue + panAdjustment;
       
       auto writer = [](int value, Channel* channel){
             channel->setPan(value);
@@ -363,14 +350,11 @@ int MixerTrackItem::setPan(int proposedValue)
       auto reader = [](Channel* channel) -> int {
             return channel->pan(); };
 
-      return adjustValue(proposedValue, reader, writer) - panAdjustment();
+      return adjustValue(proposedValue, reader, writer, forceOverride) - panAdjustment;
       }
 
-//---------------------------------------------------------
-//   setChorus
-//---------------------------------------------------------
 
-int MixerTrackItem::setChorus(int value)
+int MixerTrackItem::setChorus(int value, bool forceOverride)
       {
       auto writer = [](int value, Channel* channel){
             channel->setChorus(value);
@@ -379,14 +363,11 @@ int MixerTrackItem::setChorus(int value)
       auto reader = [](Channel* channel) -> int {
             return channel->chorus(); };
 
-      return adjustValue(value, reader, writer);
+      return adjustValue(value, reader, writer, forceOverride);
       }
 
-//---------------------------------------------------------
-//   setReverb
-//---------------------------------------------------------
 
-int MixerTrackItem::setReverb(int value)
+int MixerTrackItem::setReverb(int value, bool forceOverride)
       {
       auto writer = [](int value, Channel* channel){
             channel->setReverb(value);
@@ -395,19 +376,21 @@ int MixerTrackItem::setReverb(int value)
       auto reader = [](Channel* channel) -> int {
             return channel->reverb(); };
 
-      return adjustValue(value, reader, writer);
+      return adjustValue(value, reader, writer, forceOverride);
       }
 
 
-      int MixerTrackItem::getMidiChannel()
+int MixerTrackItem::getMidiChannel()
       {
       return part()->masterScore()->midiMapping(channel()->channel())->channel() + 1;
       }
 
-      int MixerTrackItem::getMidiPort()
+
+int MixerTrackItem::getMidiPort()
       {
       return part()->masterScore()->midiMapping(channel()->channel())->port() + 1;
       }
+
 
 void MixerTrackItem::setMidiChannelAndPort(int midiChannel, int midiPort)
       {
@@ -428,9 +411,7 @@ void MixerTrackItem::setMidiChannelAndPort(int midiChannel, int midiPort)
             seq->driver()->updateOutPortCount(maxPort + 1);
 }
 
-//---------------------------------------------------------
-//   setColor
-//---------------------------------------------------------
+
 
 void MixerTrackItem::setColor(int valueRgb)
       {
@@ -446,43 +427,38 @@ void MixerTrackItem::setColor(int valueRgb)
             }
       }
 
-//---------------------------------------------------------
-//   setMute
-//---------------------------------------------------------
 
-void MixerTrackItem::setMute(bool value)
+
+void MixerTrackItem::setMute(bool muteOn)
       {
       if (!isPart()) {
-            if (value)
+            if (muteOn)
                   seq->stopNotes(_channel->channel());
-            channel()->setMute(value);
+            channel()->setMute(muteOn);
             return;
             }
 
       for (Channel* channel: playbackChannels()) {
-            if (value)
+            if (muteOn)
                   seq->stopNotes(channel->channel());
-            channel->setMute(value);
+            channel->setMute(muteOn);
             }
       }
 
-//---------------------------------------------------------
-//   setSolo
-//---------------------------------------------------------
 
-void MixerTrackItem::setSolo(bool value)
+
+void MixerTrackItem::setSolo(bool soloOn)
       {
-
       if (!isPart()) {
-            if (value)
+            if (soloOn)
                   seq->stopNotes(_channel->channel());
-            channel()->setSolo(value);
+            channel()->setSolo(soloOn);
             }
       else {
             for (Channel* channel: playbackChannels()) {
-                  if (value)
+                  if (soloOn)
                         seq->stopNotes(channel->channel());
-                  channel->setSolo(value);
+                  channel->setSolo(soloOn);
                   }
             }
 
@@ -500,7 +476,7 @@ void MixerTrackItem::setSolo(bool value)
                   }
             }
 
-      // If there are no solo track, clear soloMute in all cases
+      // If there are no soloed tracks, clear soloMute in all cases
       // else set soloMute for all non-solo tracks
       for (Part* part : _part->score()->parts()) {
             for ( Channel* channel: playbackChannels(part)) {
@@ -516,8 +492,45 @@ void MixerTrackItem::setSolo(bool value)
             }
       }
 
-//MARK:- voice muting
+      
+//MARK:: - reset
+      
+void MixerTrackItem::resetWithVolume(int volume)
+      {
+      setVolume(volume, true);
+      setPan(0, true);
+      setChorus(0, true);
+      setReverb(0, true);
+      setSolo(false);
+      setMute(false);
+      }
 
+
+
+bool  MixerTrackItem::isResetWithVolume(int volume)
+{
+      if (getVolume() != volume)
+            return false;
+
+      if (getPan() != 0)
+            return false;
+
+      if (getChorus() != 0)
+            return false;
+
+      if (getReverb() != 0)
+            return false;
+
+      if (getSolo() != false)
+            return false;
+
+      if (getMute() != false)
+            return false;
+
+      return true;
+}
+
+//MARK:- voice muting
 void MixerTrackItem::toggleMutedVoice(int staffIndex, int voiceIndex, bool shouldMute)
       {
       Staff* staff = part()->staff(staffIndex);
@@ -537,6 +550,7 @@ void MixerTrackItem::toggleMutedVoice(int staffIndex, int voiceIndex, bool shoul
             }
       }
 
+
 QList<QList<bool>> MixerTrackItem::getMutedVoices()
       {
       QList<QList<bool>> mutedStaves;
@@ -544,7 +558,6 @@ QList<QList<bool>> MixerTrackItem::getMutedVoices()
             Staff* staff = (*part()->staves())[staffIndex];
             QList<bool> mutedVoices;
             for (int voice = 0; voice < VOICES; ++voice) {
-                  QString voiceColor = MScore::selectColor[voice].name();
                   bool checked = !staff->playbackVoice(voice);
                   mutedVoices.append(checked);
                   }
@@ -556,13 +569,13 @@ QList<QList<bool>> MixerTrackItem::getMutedVoices()
 //MARK:- helper methods
 
 template <class ChannelWriter, class ChannelReader>
-int MixerTrackItem:: adjustValue(int proposedValue, ChannelReader reader, ChannelWriter writer)
-{
+int MixerTrackItem:: adjustValue(int proposedValue, ChannelReader reader, ChannelWriter writer, bool forceOverride)
+      {
       if (!isPart()) {
             // only one channel, the easy case - just make a direct adjustment
             writer(proposedValue, _channel);
             return proposedValue;
-      }
+            }
 
       // multiple channels and the OVERALL value has been changed
       // make adjustments depending on the OVERALL mode
@@ -572,22 +585,15 @@ int MixerTrackItem:: adjustValue(int proposedValue, ChannelReader reader, Channe
       int currentValue = reader(channel());
       int deltaAdjust = 0;
 
-      switch (mode) {
-            case MixerOptions::MixerVolumeMode::PrimaryInstrument:
-                  // secondary channels are not touched
-                  break;
-                  
-            case MixerOptions::MixerVolumeMode::Override:
-                  for (Channel* channel: secondaryPlaybackChannels()) {
-                        // all secondary channels just get newValue
-                        writer(proposedValue, channel);
-                        }
-                  break;
-                  
-            case MixerOptions::MixerVolumeMode::Ratio:
-                  deltaAdjust = relativeAdjust(proposedValue - currentValue, reader, writer);
-                  break;
+      if (mode == MixerOptions::MixerVolumeMode::Override || forceOverride) {
+            for (Channel* channel: secondaryPlaybackChannels()) {
+                  // all secondary channels just get newValue
+                  writer(proposedValue, channel);
             }
+      }
+      else if (mode == MixerOptions::MixerVolumeMode::Ratio) {
+            deltaAdjust = relativeAdjust(proposedValue - currentValue, reader, writer);
+      }
 
       int acceptedValue = proposedValue + deltaAdjust;
 
@@ -595,7 +601,7 @@ int MixerTrackItem:: adjustValue(int proposedValue, ChannelReader reader, Channe
             writer(acceptedValue, channel());
 
       return acceptedValue;
-}
+      }
 
 
 template <class ChannelWriter, class ChannelReader>
@@ -618,10 +624,10 @@ int MixerTrackItem::relativeAdjust(int mainSliderDelta, ChannelReader reader, Ch
       // if out of bounds, calcualte a delta adjustment to stay within bounds
       if (lowestValue < 0) {
             deltaAdjust = 0 - lowestValue;
-      }
+            }
       else if (highestValue > 127) {
             deltaAdjust = 127 - highestValue;
-      }
+            }
 
       // secondary channels get same increase / decrease as primary value
       if (mainSliderDelta + deltaAdjust != 0) {
@@ -693,7 +699,6 @@ QList<Channel*> MixerTrackItem::playbackChannels(Part* part)
             }
       return channels;
       }
-
 
 }
 

@@ -30,6 +30,8 @@ class GainSlider : public QSlider
       Q_OBJECT
       double _minValue;
       double _maxValue;
+      double _doubleClickValue;
+      bool _doubleClickEnabled;
 
       void setMinLogValue(double min);
       void setMaxLogValue(double max);
@@ -40,8 +42,10 @@ public:
 
       double doubleValue() const;
       void setDoubleValue(double);
+      void setDoubleClickDoubleValue (double);
 
       void sliderChange(QAbstractSlider::SliderChange change) override;
+      void mouseDoubleClickEvent(QMouseEvent* mouseEvent);
 
 signals:
       void doubleValueChanged(double);

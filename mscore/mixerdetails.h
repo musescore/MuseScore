@@ -65,10 +65,10 @@ class MixerDetails : public QWidget, public Ui::MixerDetails, public ChannelList
       void reverbSpinBoxEdited(int);
       void chorusSliderMoved(int);
       void chorusSpinBoxEdited(int);
+      void updateDetails(MixerTrackItem*);
 
    public:
       MixerDetails(Mixer *mixer);
-      void updateDetails(MixerTrackItem*);
       void propertyChanged(Channel::Prop property) override;
 
       void resetControls(); // apply default (0 or empty) values for when no track is selected

@@ -20,7 +20,7 @@
 #include "mixerdetails.h"
 #include "mixertrackitem.h"
 #include "mixeroptions.h"
-
+#include "mixertreewidget.h"
 
 namespace Ms {
 
@@ -44,6 +44,8 @@ MixerDetails::MixerDetails(Mixer *mixer) :
 
 void MixerDetails::setupSlotsAndSignals()
       {
+      connect(mixer->mixerTreeWidget, SIGNAL(selectedTrackChanged(MixerTrackItem*)), SLOT(updateDetails(MixerTrackItem*)));
+
       connect(drumkitCheck,         SIGNAL(toggled(bool)),        SLOT(drumsetCheckboxToggled(bool)));
       connect(patchCombo,           SIGNAL(activated(int)),       SLOT(patchComboEdited(int)));
       connect(volumeSlider,         SIGNAL(valueChanged(int)),    SLOT(volumeSliderMoved(int)));
@@ -272,9 +274,8 @@ void MixerDetails::patchComboEdited(int comboIndex)
       if (!selectedMixerTrackItem)
             return;
 
-      mixer->saveTreeSelection();
+      mixer->mixerTreeWidget->saveTreeSelection();
       selectedMixerTrackItem->changePatch(comboIndex, patchCombo);
-      mixer->restoreTreeSelection();
       }
 
 // drumkitToggled - process signal from drumkitCheck
@@ -284,9 +285,8 @@ void MixerDetails::drumsetCheckboxToggled(bool useDrumset)
             return;
 
       blockSignals(true);
-      mixer->saveTreeSelection();
+      mixer->mixerTreeWidget->saveTreeSelection();
       selectedMixerTrackItem->setUseDrumset(useDrumset);
-      mixer->restoreTreeSelection();
       blockSignals(false);
       }
 

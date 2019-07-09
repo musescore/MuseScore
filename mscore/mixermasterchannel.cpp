@@ -45,6 +45,10 @@ MixerMasterChannel::MixerMasterChannel()
 
       trackSlider->setDoubleValue(synti->gain());
 
+      // maybe should be expressed in terms of the min / max and not the
+      // value that is passed back to synti - all a bit messy.
+      trackSlider->setDoubleClickDoubleValue(0.09);
+
       setupAdditionalUi();
       setupSlotsAndSignals();
       }

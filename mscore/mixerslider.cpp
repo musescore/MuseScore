@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "mixerslider.h"
+#include "mixertrackitem.h"
 #include <QStyleOptionSlider>
 #include <QPainter>
 #include <QStylePainter>
@@ -37,12 +38,11 @@ MixerSlider::MixerSlider(QWidget *parent) :
 void MixerSlider::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
       {
       if (panning) {
-            setSliderPosition(0);
+            setSliderPosition(0);   // centre
             return;
             }
-
-      QSlider::mouseDoubleClickEvent(mouseEvent);
-
+            
+      setSliderPosition(MixerTrackItem::defaultVolume);
 }
 
 void MixerSlider::setSecondaryMode(bool on)
@@ -148,7 +148,7 @@ void MixerSlider::paintEvent(QPaintEvent *ev)
             cursor = cursor + segmentWidth;
             segmentWidth = grooveRect.width() - cursor;
 
-            QRect unfilledRight = QRect(grooveRect.left() + cursor, grooveRect.top(), grooveCentre - handlePosition, grooveRect.height());
+            QRect unfilledRight = QRect(grooveRect.left() + cursor, grooveRect.top(), grooveRect.right() - (grooveRect.left() + cursor), /*grooveCentre - handlePosition, */ grooveRect.height());
 
             QLinearGradient leftGradient = gradientForRect(unfilledLeft, grooveBackgroundColor());
             QLinearGradient centreGradient = gradientForRect(filledCentre, grooveFillColor());

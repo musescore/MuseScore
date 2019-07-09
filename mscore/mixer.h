@@ -62,13 +62,10 @@ class Mixer : public QDockWidget, public Ui::Mixer
 
       void setupSlotsAndSignals();
       void setupAdditionalUi();
-      void disableMixer();                            // gray out everything when no score or part is open
       void showDetails(bool);
       void setPlaybackScore(Score*);
 
       void enterSecondarySliderMode(bool enter);
-      void updateMixerTreeHeaders();
-      void updateTreeSlidersAppearance();
 
       QTimer* shiftKeyMonitorTimer;
       MixerKeyboardControlFilter* keyboardFilter;     // process key presses for the mixer AND the details panel
@@ -79,21 +76,15 @@ class Mixer : public QDockWidget, public Ui::Mixer
       virtual void keyPressEvent(QKeyEvent*) override;
 
    private slots:
-      void on_partOnlyCheckBox_toggled(bool checked);
-      void itemCollapsedOrExpanded(QTreeWidgetItem*);
+      void partOnlyCheckBoxToggled(bool checked);
       void shiftKeyMonitor();
 
    public slots:
       void updateTracks();
       void midiPrefsChanged(bool showMidiControls);
       void masterVolumeChanged(double val);
-      void currentMixerTreeItemChanged();
       void synthGainChanged(float val);
-
-      void saveTreeSelection();
-      void restoreTreeSelection();
-      void adjustHeaderWidths();
-      void itemChanged(QTreeWidgetItem* treeWidgetItem, int column);
+     
 
    signals:
       void closed(bool);

@@ -53,18 +53,22 @@ private:
       QList<Channel*> playbackChannels();
 
       template <class ChannelWriter, class ChannelReader>
-      int adjustValue(int proposedValue, ChannelReader reader, ChannelWriter writer);
+      int adjustValue(int proposedValue, ChannelReader reader, ChannelWriter writer, bool forceOverride);
       template <class ChannelWriter, class ChannelReader>
       int relativeAdjust(int mainSliderDelta, ChannelReader reader, ChannelWriter writer);
-      const int panAdjustment();
 
       bool isCurrentPatch(const MidiPatch* patch);
       QString adjustedPatchName(const MidiPatch* patch, std::vector<QString> usedNames);
 
+
+            
 public:
       MixerTrackItem(TrackType trackType, Part* part, Instrument* _instr, Channel* _chan);
-
       MixerTrackItem(Part* part, Score* score);
+
+      static constexpr int panAdjustment = 63;
+      static constexpr int defaultVolume = 63;
+
       TrackType trackType() { return _trackType; }
       Part* part() { return _part; }
       Instrument* instrument() { return _instrument; }
@@ -77,10 +81,10 @@ public:
 
       void setColor(int valueRgb);
 
-      int setVolume(int value);    // returns the value actually used (which may differ from value passed)
-      int setPan(int value);       // returns the value actually used (which may differ from value passed)
-      int setChorus(int value);    // returns the value actually used (which may differ from value passed)
-      int setReverb(int value);    // returns the value actually used (which may differ from value passed)
+      int setVolume(int value, bool forceOverride = false);    // returns the value actually used (may differ from value passed)
+      int setPan(int value, bool forceOverride = false);       // returns the value actually used (may differ from value passed)
+      int setChorus(int value, bool forceOverride = false);    // returns the value actually used (may differ from value passed)
+      int setReverb(int value, bool forceOverride = false);    // returns the value actually used (may differ from value passed)
 
       void setName(QString string);
       QString getName();
@@ -109,7 +113,9 @@ public:
       void changePatch(int itemIndex, QComboBox* patchCombo);
       bool getUseDrumset();
       void setUseDrumset(bool useDrumset);
-            
+      
+      void resetWithVolume(int volume);
+      bool isResetWithVolume(int volume);
       };
 
 }

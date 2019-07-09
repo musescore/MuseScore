@@ -77,4 +77,18 @@ void GainSlider::sliderChange(QAbstractSlider::SliderChange change)
       QSlider::sliderChange(change);
       }
 
+void GainSlider::setDoubleClickDoubleValue(double value)
+      {
+      _doubleClickEnabled = true;
+      _doubleClickValue = value;
+      }
+
+
+void GainSlider:: mouseDoubleClickEvent(QMouseEvent* mouseEvent)
+      {
+      if (_doubleClickEnabled)
+            setDoubleValue(_doubleClickValue);
+      }
+
+
 }
