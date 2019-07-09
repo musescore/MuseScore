@@ -1007,14 +1007,16 @@ QList<Workspace*>& Workspace::workspaces()
                         
                         if (!p) {
                               p = new Workspace;
-                        p->setPath(s + "/" + entry);
-                        p->setName(name);
-                        if (translate)
-                              p->setTranslatableName(name);
-                        qt_ntfs_permission_lookup++;
-                        p->setReadOnly(!fi.isWritable());
-                        qt_ntfs_permission_lookup--;
-                        _workspaces.append(p);
+
+                              p->setPath(s + "/" + entry);
+                              p->setName(name);
+                              if (translate)
+                                    p->setTranslatableName(name);
+                              qt_ntfs_permission_lookup++;
+                              p->setReadOnly(!fi.isWritable());
+                              qt_ntfs_permission_lookup--;
+                              _workspaces.append(p);
+                              }
                         }
                   }
             // hack
