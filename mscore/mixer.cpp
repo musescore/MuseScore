@@ -72,7 +72,7 @@ char userRangeToReverb(double v) { return (char)qBound(0, (int)(v / 100.0 * 128.
 //---------------------------------------------------------
 
 Mixer::Mixer(QWidget* parent)
-    : QDockWidget("Mixer", parent),
+    : QDockWidget(qApp->translate("Mixer", "Mixer"), parent),
       showDetails(true),
       trackHolder(nullptr)
       {
@@ -221,7 +221,7 @@ void Mixer::on_partOnlyCheckBox_toggled(bool checked)
 
 void Mixer::retranslate(bool firstTime)
       {
-      setWindowTitle(tr("Mixer"));
+      setWindowTitle(qApp->translate("Mixer", "Mixer"));
       if (!firstTime) {
             for (int i = 0; i < trackAreaLayout->count(); i++) {
                   PartEdit* p = getPartAtIndex(i);
