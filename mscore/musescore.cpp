@@ -1686,6 +1686,7 @@ MuseScore::MuseScore()
       //    Menu Plugins
       //---------------------
 
+#ifdef SCRIPT_INTERFACE
       menuPlugins = mb->addMenu("");
       menuPlugins->setObjectName("Plugins");
 
@@ -1696,6 +1697,7 @@ MuseScore::MuseScore()
       menuPlugins->addAction(a);
 
       menuPlugins->addSeparator();
+#endif
 
       //---------------------
       //    Menu Debug
@@ -1844,7 +1846,9 @@ MuseScore::MuseScore()
       Workspace::addMenuAndString(menuTools, "menu-tools");
       Workspace::addMenuAndString(menuVoices, "menu-voices");
       Workspace::addMenuAndString(menuMeasure, "menu-measure");
+#ifdef SCRIPT_INTERFACE
       Workspace::addMenuAndString(menuPlugins, "menu-plugins");
+#endif
       Workspace::addMenuAndString(menuHelp, "menu-help");
       Workspace::addMenuAndString(menuTours, "menu-tours");
 
@@ -1999,7 +2003,9 @@ void MuseScore::setMenuTitles()
             { menuTools,            tr("&Tools")            },
             { menuVoices,           tr("&Voices")           },
             { menuMeasure,          tr("&Measure")          },
+#ifdef SCRIPT_INTERFACE
             { menuPlugins,          tr("&Plugins")          },
+#endif
 #ifndef NDEBUG
             { menuDebug,            "Debug"                 }, // not translated
 #endif
@@ -2052,7 +2058,9 @@ void MuseScore::updateMenus()
       updateMenu(menuTools,       "menu-tools",        "Tools");
       updateMenu(menuVoices,      "menu-voices",       "");
       updateMenu(menuMeasure,     "menu-measure",      "");
+#ifdef SCRIPT_INTERFACE
       updateMenu(menuPlugins,     "menu-plugins",      "Plugins");
+#endif
       updateMenu(menuHelp,        "menu-help",         "Help");
       updateMenu(menuTours,       "menu-tours",        "");
 #ifndef NDEBUG
@@ -2062,7 +2070,9 @@ void MuseScore::updateMenus()
       connect(openRecent,     SIGNAL(triggered(QAction*)), SLOT(selectScore(QAction*)));
       connect(menuWorkspaces, SIGNAL(aboutToShow()),       SLOT(showWorkspaceMenu()));
       setMenuTitles();
+#ifdef SCRIPT_INTERFACE
       addPluginMenuEntries();
+#endif
       }
       
 //---------------------------------------------------------
