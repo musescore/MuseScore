@@ -99,7 +99,7 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
       else
             rootPitch %= PITCH_DELTA_OCTAVE;
 
-      //fix magic values
+      //create root note or bass note in octave below middle C
       if (bassTpc != Tpc::TPC_INVALID && voicing != Voicing::ROOT_ONLY)
             notes.insert(tpc2pitch(bassTpc) + transposeOffset
                         + 4*PITCH_DELTA_OCTAVE, bassTpc);
@@ -155,10 +155,145 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
 ///   a passed root tpc (this allows for us to
 ///   keep pitches, but transpose notes on the score)
 //---------------------------------------------------
-QMap<int, int> RealizedHarmony::getIntervals(int rootTpc) const
+QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
       {
       //TODO - PHV: use ParsedChord rather than HChord
+
       QMap<int, int> ret;
+
+      const ParsedChord* p = _harmony->parsedForm();
+      QString quality = p->quality();
+      QString extension = p->extension();
+      const QStringList& modList = p->modifierList();
+
+      int third = 4; //major
+      int seventh;
+      //TODO - PHV: change this to a different datatype so we can give weights
+      //for how important each tone is. Right now, basically this is literal=true
+
+      //Idea? ^ add 128 * rank to the pitch so that the qmap can
+      //order by rank and then take the key % 128 to find the pitch when
+      //it needs to be used
+
+      //handle chord quality
+      if (quality == "major") {
+            ret.insert(step2pitchInterval(3, 0), tpcInterval(rootTpc, 3, 0));      //maj3
+            ret.insert(step2pitchInterval(5, 0), tpcInterval(rootTpc, 5, 0));      //p5
+            }
+      else if (quality == "minor") {
+            third = 3;
+            ret.insert(step2pitchInterval(3, -1), tpcInterval(rootTpc, 3, -1));     //min3
+            ret.insert(step2pitchInterval(5, 0), tpcInterval(rootTpc, 5, 0));       //p5
+            }
+      else if (quality == "dominant") {
+            ret.insert(step2pitchInterval(3, 0), tpcInterval(rootTpc, 3, 0));      //maj3
+            ret.insert(step2pitchInterval(5, 0), tpcInterval(rootTpc, 5, 0));      //p5
+            ret.insert(step2pitchInterval(7, -1), tpcInterval(rootTpc, 7, -1));    //min7
+            }
+      else if (quality == "augmented") {
+            ret.insert(step2pitchInterval(3, 0), tpcInterval(rootTpc, 3, 0));      //maj3
+            ret.insert(step2pitchInterval(5, +1), tpcInterval(rootTpc, 5, +1));    //p5
+            }
+      else if (quality == "diminished") {
+            third = 3;
+            ret.insert(step2pitchInterval(3, -1), tpcInterval(rootTpc, 3, -1));     //min3
+            ret.insert(step2pitchInterval(5, -1), tpcInterval(rootTpc, 5, -1));     //dim5
+            }
+      else if (quality == "half-diminished") {
+            third = 3;
+            //should we just skip the function call and go directly to pitch since we know?
+            ret.insert(step2pitchInterval(3, -1), tpcInterval(rootTpc, 3, -1));     //min3
+            ret.insert(step2pitchInterval(5, -1), tpcInterval(rootTpc, 5, -1));     //dim5
+            ret.insert(step2pitchInterval(7, -1), tpcInterval(rootTpc, 7, -1));     //min7
+            }
+
+      //handle extension
+      int ext = extension.toInt();
+      switch (ext) {
+            case 13:
+                  ret.insert(9, tpcInterval(rootTpc, 13, 0));     //maj13
+                  // FALLTHROUGH
+            case 11:
+                  ret.insert(5, tpcInterval(rootTpc, 11, 0));     //maj11
+                  // FALLTHROUGH
+            case 9:
+                  ret.insert(2, tpcInterval(rootTpc, 9, 0));     //maj9
+                  // FALLTHROUGH
+            case 7:
+                  if (quality == "major")
+                        ret.insert(seventh = 11, tpcInterval(rootTpc, 7, 0));
+                  else if (quality == "diminished")
+                        ret.insert(seventh = 9, tpcInterval(rootTpc, 7, -2));
+                  else
+                        ret.insert(seventh = 10, tpcInterval(rootTpc, 7, -1));
+                  break;
+            case 6:
+                  ret.insert(9, tpcInterval(rootTpc, 6, 0));     //maj6
+                  break;
+            case 5:
+                  //remove third
+                  ret.remove(third);
+                  break;
+            case 4:
+                  ret.insert(5, tpcInterval(rootTpc, 4, 0));     //p4
+                  break;
+            case 2:
+                  ret.insert(2, tpcInterval(rootTpc, 2, 0));     //maj2
+                  break;
+            case 69:
+                  ret.insert(9, tpcInterval(rootTpc, 6, 0));     //maj6
+                  ret.insert(2, tpcInterval(rootTpc, 9, 0));     //maj6
+                  break;
+            default:
+                  break;
+            }
+
+      //handle modifiers
+      //TODO - PHV: maybe find a better way, or optimize this
+      for (int i = 0; i < modList.size(); ++i) {
+            QString s = modList[i];
+            //find number
+            for (int c = 0; c < s.length(); ++c) {
+                  if (s[c].isDigit()) {
+                        Q_ASSERT(c > 0); //we shouldn't have just a number
+
+                        int alter = 0;
+                        int cutoff = c;
+                        int deg = s.right(s.length() - c).toInt();
+                        //account for if the flat/sharp is stuck to the end of add
+                        if (s[c-1] == '#') {
+                              cutoff -= 1;
+                              alter = +1;
+                              }
+                        else if (s[c-1] == 'b') {
+                              cutoff -= 1;
+                              alter = -1;
+                              }
+                        QString extType = s.left(cutoff);
+                        ret.insert(step2pitchInterval(deg, alter), tpcInterval(rootTpc, deg % 7, alter));
+                        if (extType == "add") {
+                              //do nothing else?
+                              }
+                        else if (extType == "major") {
+                              ret.remove(seventh); //remove seventh
+                              }
+                        else if (extType == "sus") {
+                              ret.remove(third);
+                              }
+                        else if (extType == "no") {
+                              if (deg == 3)
+                                    ret.remove(third);
+                              else if (deg == 7)
+                                    ret.remove(seventh);
+                              else
+                                    ret.remove(step2pitchInterval(deg, 0));
+                              }
+                        }
+                  }
+            }
+
+
+      /* Old method, still keeping this for now until more thoroughly tested
       const HChord chord = _harmony->getDescription()->chord;
 
       static const HChord dimChord(0,3,6,9);
@@ -222,6 +357,7 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc) const
       if (chord.contains(2))
             ret.insert(2, tpcInterval(rootTpc, 2, 0));
 
+            */
       return ret;
       }
 

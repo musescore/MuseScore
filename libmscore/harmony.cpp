@@ -166,6 +166,7 @@ Harmony::Harmony(Score* s)
       _harmonyType = HarmonyType::STANDARD;
       _leftParen  = false;
       _rightParen = false;
+      _realizedHarmony = RealizedHarmony(this);
       initElementStyle(&chordSymbolStyle);
       }
 

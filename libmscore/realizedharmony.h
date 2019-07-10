@@ -88,7 +88,7 @@ class RealizedHarmony {
 
    private:
       //PHV: temp?
-      QMap<int, int> getIntervals(int rootTpc) const;
+      QMap<int, int> getIntervals(int rootTpc, bool literal = true) const;
       };
 }
 

@@ -818,7 +818,7 @@ int tpcInterval(int startTpc, int interval, int alter)
             2, 4, -1, 1, 3, 5
       };
 
-      int result = startTpc + intervals[interval - 2] + alter * TPC_DELTA_SEMITONE;
+      int result = startTpc + intervals[(interval - 2) % 7] + alter * TPC_DELTA_SEMITONE;
       //ensure that we don't have anything more than double sharp or double flat
       //(I know, breaking some convention, but it's the best we can do for now)
       while (result > Tpc::TPC_MAX)
@@ -827,6 +827,21 @@ int tpcInterval(int startTpc, int interval, int alter)
             result += TPC_DELTA_ENHARMONIC;
 
       return result;
+      }
+
+//---------------------------------------------------------
+//   step2pitchInterval
+//    Finds pit
+//---------------------------------------------------------
+
+int step2pitchInterval(int step, int alter)
+      {
+      static const int intervals[7] = {
+//          2  3  4  5  6  7
+            2, 4, 5, 7, 9, 11
+      };
+
+      return intervals[(step - 2) % 7] + alter;
       }
 
 }
