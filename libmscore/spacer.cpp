@@ -128,6 +128,16 @@ void Spacer::startEdit(EditData& ed)
       }
 
 //---------------------------------------------------------
+//   startEditDrag
+//---------------------------------------------------------
+
+void Spacer::startEditDrag(EditData& ed)
+      {
+      ElementEditData* eed = ed.getData(this);
+      eed->pushProperty(Pid::SPACE);
+      }
+
+//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 

@@ -51,6 +51,7 @@ class Spacer final : public Element {
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const { return true; }
       virtual void startEdit(EditData&) override;
+      virtual void startEditDrag(EditData&) override;
       virtual void editDrag(EditData&) override;
       virtual void updateGrips(EditData&) const override;
       virtual void spatiumChanged(qreal, qreal);
