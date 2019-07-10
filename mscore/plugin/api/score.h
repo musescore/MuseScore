@@ -166,6 +166,15 @@ class Score : public Ms::PluginAPI::ScoreElement {
        */
       Q_INVOKABLE void endCmd(bool rollback = false) { score()->endCmd(rollback); }
 
+      /**
+       * Create PlayEvents for all notes based on ornamentation.
+       * You need to call this if you are manipulating PlayEvent's
+       * so that all ornamentations are populated into Note's
+       * PlayEvent lists.
+       * \since 3.3
+       */
+      Q_INVOKABLE void createPlayEvents() { score()->createPlayEvents(); }
+
       /// \cond MS_INTERNAL
       QString mscoreVersion() { return score()->mscoreVersion(); }
       QString mscoreRevision() { return QString::number(score()->mscoreRevision(), /* base */ 16); }

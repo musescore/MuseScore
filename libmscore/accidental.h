@@ -127,7 +127,6 @@ extern AccidentalVal sym2accidentalVal(SymId id);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::AccidentalRole);
-Q_DECLARE_METATYPE(Ms::AccidentalType);
 
 
 #endif

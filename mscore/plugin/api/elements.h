@@ -22,6 +22,10 @@
 #include "libmscore/notedot.h"
 #include "libmscore/segment.h"
 #include "libmscore/accidental.h"
+#include "libmscore/musescoreCore.h"
+#include "libmscore/score.h"
+#include "libmscore/undo.h"
+#include "playevent.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -348,6 +352,11 @@ class Note : public Element {
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  dots              READ dots)
 //       Q_PROPERTY(int                            dotsCount         READ qmlDotsCount)
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  elements          READ elements)
+      /// List of PlayEvents associated with this note.
+      /// Important: You must call Score.createPlayEvents()
+      /// to see meaningful data in the PlayEvent lists.
+      /// \since MuseScore 3.3
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::PlayEvent> playEvents READ playEvents)
 //       Q_PROPERTY(int                            fret              READ fret               WRITE undoSetFret)
 //       Q_PROPERTY(bool                           ghost             READ ghost              WRITE undoSetGhost)
 //       Q_PROPERTY(Ms::NoteHead::Group            headGroup         READ headGroup          WRITE undoSetHeadGroup)
@@ -403,8 +412,9 @@ class Note : public Element {
       int tpc() const { return note()->tpc(); }
       void setTpc(int val);
 
-      QQmlListProperty<Element> dots()     { return wrapContainerProperty<Element>(this, note()->dots()); }
+      QQmlListProperty<Element> dots() { return wrapContainerProperty<Element>(this, note()->dots()); }
       QQmlListProperty<Element> elements() { return wrapContainerProperty<Element>(this, note()->el());   }
+      QQmlListProperty<PlayEvent> playEvents() { return wrapPlayEventsContainerProperty(this, note()->playEvents()); }
 
       Element* accidental() { return wrap<Element>(note()->accidental()); }
 
@@ -412,6 +422,10 @@ class Note : public Element {
       void setAccidentalType(Ms::AccidentalType t) { note()->setAccidentalType(t); }
       Ms::NoteType noteType() { return note()->noteType(); }
       /// \endcond
+
+      /// Creates a PlayEvent object for use in Javascript.
+      /// \since MuseScore 3.3
+      Q_INVOKABLE Ms::PluginAPI::PlayEvent* createPlayEvent() { return playEventWrap(new NoteEvent(), nullptr); }
       };
 
 //---------------------------------------------------------
@@ -431,6 +445,9 @@ class Chord : public Element {
       /// The NoteType of the chord.
       /// \since MuseScore 3.2.1
       Q_PROPERTY(Ms::NoteType                              noteType   READ noteType)
+      /// The PlayEventType of the chord.
+      /// \since MuseScore 3.3
+      Q_PROPERTY(Ms::PlayEventType                    playEventType   READ playEventType WRITE setPlayEventType)
 
    public:
       /// \cond MS_INTERNAL
@@ -448,6 +465,8 @@ class Chord : public Element {
       //QQmlListProperty<Element> beam()         { return wrapContainerProperty<Element>(this, chord()->beam());      }
       //QQmlListProperty<Element> hook()         { return wrapContainerProperty<Element>(this, chord()->hook());      }
       Ms::NoteType noteType()                  { return chord()->noteType(); }
+      Ms::PlayEventType playEventType()        { return chord()->playEventType(); }
+      void setPlayEventType(Ms::PlayEventType v);
       /// \endcond
       };
 
