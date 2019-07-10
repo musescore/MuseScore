@@ -632,7 +632,22 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
                         ic->score()->transpositionChanged(part, oldV, tickStart, tickEnd);
                         }
 			
-                  ic->setPlainText(Instrument::fromTemplate(it).trackName());
+                  if (ic->warning()) {
+                        ic->warning()->setPlainText(it->trackName);
+                        }
+                  else if (InstrumentChange* prevIc = score()->prevInstrumentChange(ic->segment()->prev1(), ic->staff(), true)) {
+                        StaffText* staffText = prevIc->warning();
+                        prevIc->setWarning(nullptr);
+                        staffText->setPlainText(it->trackName);
+                        ic->setWarning(staffText);
+                        }
+                  else {
+                        Chord* nextChord = ic->score()->nextChord(ic->segment(), ic->staff());
+                        if (nextChord) {
+                              ic->setNextChord(nextChord);
+                              }
+                        }
+                  ic->setPlainText(tr("To %1").arg(it->trackName));
                   }
             else
                   qDebug("no template selected?");

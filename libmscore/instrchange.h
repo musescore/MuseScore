@@ -28,7 +28,7 @@ class InstrumentChange final : public TextBase  {
       Instrument* _instrument;  // Staff holds ownership if part of score
       std::vector<KeySig*> _keySigs;
       std::vector<Clef*> _clefs;
-      StaffText* _warning;
+      StaffText* _warning = nullptr;
 
    public:
       InstrumentChange(Score*);
@@ -46,6 +46,8 @@ class InstrumentChange final : public TextBase  {
       void setInstrument(Instrument* i)     { _instrument = i;     }
       void setInstrument(Instrument&& i)    { *_instrument = i;    }
       void setInstrument(const Instrument& i);
+
+      void setNextChord(ChordRest* chord);
 
       std::vector<KeySig*> keySigs() const  { return _keySigs;     }
       void addKeySig(KeySig* keySig)        { _keySigs.push_back(keySig); }

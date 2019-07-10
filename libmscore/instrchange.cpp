@@ -68,6 +68,17 @@ void InstrumentChange::setInstrument(const Instrument& i)
       //_instrument = new Instrument(i);
       }
 
+void InstrumentChange::setNextChord(ChordRest* chord)
+      {
+      StaffText* staffText = new StaffText(score());
+      if (warning()/* && warning)_->parent()*/) {
+            score()->deleteItem(warning());
+            }
+      setWarning(staffText);
+      staffText->setPlainText(instrument()->trackName());
+      chord->undoAddAnnotation(staffText);
+      }
+
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------

@@ -1919,6 +1919,9 @@ void Score::deleteItem(Element* el)
                   for (Clef* clef : ic->clefs())
                         if (clef->parent())
                               score()->deleteItem(clef);
+                  if (ic->warning()) {
+                        score()->deleteItem(ic->warning());
+                        }
                   if (part->instrument(tickStart)->transpose() != oldV) {
                         auto i = part->instruments()->upper_bound(tickStart.ticks());
                         Fraction tickEnd;
@@ -4673,21 +4676,42 @@ void Score::undoAddElement(Element* element)
       }
 
 //---------------------------------------------------------
+//   nextChord
+//---------------------------------------------------------
+
+Chord* Score::nextChord(Segment* seg, Staff* staff)
+      {
+      while (seg) {
+            for (Staff* ostaff : staff->staffList()) {
+                  for (int i = ostaff->idx() * VOICES; i < (ostaff->idx() + 1) * VOICES; i++) {
+                        if (seg->element(i) && seg->element(i)->isChord())
+                              return toChord(seg->element(i));
+                        }
+                  }
+            seg = seg->next1();
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   prevInstrumentChange
 //---------------------------------------------------------
 
-InstrumentChange* Score::prevInstrumentChange(Segment* e, int track)
+InstrumentChange* Score::prevInstrumentChange(Segment* seg, const Staff* staff, bool lookForNotes)
       {
-      while (e && e->prev1()) {
-            e = e->prev1();
-            for (int i = track; i < track + VOICES; i++) {
-                  if (e->element(i) && e->element(i)->isChord())
-                        return nullptr;
+      while (seg) {
+            for (Staff* ostaff : staff->staffList()) {
+                  Element* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, ostaff->idx() * VOICES, (ostaff->idx() + 1) * VOICES - 1);
+                  if (ic)
+                        return toInstrumentChange(ic);
+                  seg = seg->prev1();
+                  if (seg && lookForNotes) {
+                        for (int i = ostaff->idx() * VOICES; i < (ostaff->idx() + 1) * VOICES; i++) {
+                              if (seg->element(i) && seg->element(i)->isChord())
+                                    return nullptr;
+                              }
+                        }
                   }
-            Element* ic = e->findAnnotation(ElementType::INSTRUMENT_CHANGE, track, track + VOICES - 1);
-            if (ic)
-                  //return ic;
-                  return toInstrumentChange(ic);
             }
       return nullptr;
       }
@@ -4834,16 +4858,9 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
 
                   undo(new AddElement(newcr));
                   if (newcr->isChord()) {
-                        InstrumentChange* ic = prevInstrumentChange(cr->segment(), staff->idx() * VOICES);
-                        if (ic) {
-                              StaffText* staffText = new StaffText(ic->score());;
-                              if (ic->warning()/* && ic->warning()->parent()*/) {
-                                    undoRemoveElement(ic->warning());
-                              }
-                              ic->setWarning(staffText);
-                              staffText->setPlainText(ic->instrument()->trackName());
-                              newcr->undoAddAnnotation(staffText);
-                              }
+                        InstrumentChange* ic = prevInstrumentChange(cr->segment(), staff, true);
+                        if (ic)
+                              ic->setNextChord(newcr);
                         }
                   }
             }
