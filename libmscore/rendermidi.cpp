@@ -2305,12 +2305,8 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
                   el.append(nel);
                   }
 
-            if (gc->playEventType() == PlayEventType::InvalidUser)
-                  gc->score()->undo(new ChangeEventList(gc, el));
-            else if (gc->playEventType() == PlayEventType::Auto) {
-                  for (int ii = 0; ii < int(nn); ++ii)
-                        gc->notes()[ii]->setPlayEvents(el[ii]);
-                  }
+            if (gc->playEventType() == PlayEventType::Auto)
+                  gc->setNoteEventLists(el);
             on += graceDuration;
             }
       if (na) {
@@ -2332,12 +2328,8 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
                         el.append(nel);
                         }
 
-                  if (gc->playEventType() == PlayEventType::InvalidUser)
-                        gc->score()->undo(new ChangeEventList(gc, el));
-                  else if (gc->playEventType() == PlayEventType::Auto) {
-                        for (int ii = 0; ii < int(nn); ++ii)
-                              gc->notes()[ii]->setPlayEvents(el[ii]);
-                        }
+                  if (gc->playEventType() == PlayEventType::Auto)
+                        gc->setNoteEventLists(el);
                   on += graceDuration1;
                   }
             }
@@ -2384,15 +2376,9 @@ void Score::createPlayEvents(Chord* chord)
       //    render normal (and articulated) chords
       //
       QList<NoteEventList> el = renderChord(chord, gateTime, ontime, trailtime);
-      if (chord->playEventType() == PlayEventType::InvalidUser) {
-            chord->score()->undo(new ChangeEventList(chord, el));
-            }
-      else if (chord->playEventType() == PlayEventType::Auto) {
-            int n = int(chord->notes().size());
-            for (int i = 0; i < n; ++i)
-                  chord->notes()[i]->setPlayEvents(el[i]);
-            }
-      // don’t change event list if type is PlayEventType::User
+      if (chord->playEventType() == PlayEventType::Auto)
+            chord->setNoteEventLists(el);
+      // don't change event list if type is PlayEventType::User
       }
 
 void Score::createPlayEvents(Measure* start, Measure* end)
