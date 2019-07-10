@@ -129,7 +129,7 @@ Interval calculateInterval(Key key1, Key key2)
       chromatic = chromatic % 12;
       if (chromatic < 0)
             chromatic += 12;
-      return Interval::Interval(chromatic);
+      return Interval(chromatic);
       }
 
 //---------------------------------------------------------
