@@ -86,6 +86,7 @@ extern int pitch2absStepByKey(int pitch, int tpc, Key, int* pAlter);
 extern int absStep2pitchByKey(int step, Key);
 extern int tpc2degree(int tpc, Key key);
 extern int tpcInterval(int startTpc, int interval, int alter);
+extern int step2pitchInterval(int step, int alter);
 
 //---------------------------------------------------------
 //   tpc2alter
