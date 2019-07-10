@@ -203,6 +203,7 @@ void MuseScore::oscTempo(int val)
 void MuseScore::oscTriggerPlugin(QString /*s*/)
       {
 #if 0 // TODO
+#ifdef SCRIPT_INTERFACE
       QStringList args = s.split(",");
       if(args.length() > 0) {
             int idx = pluginIdxFromPath(args.at(0));
@@ -214,6 +215,7 @@ void MuseScore::oscTriggerPlugin(QString /*s*/)
                   pluginTriggered(idx);
                   }
             }
+#endif
 #endif
       }
 

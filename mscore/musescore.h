@@ -358,8 +358,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScriptEngine* se               { 0 };
       QString pluginPath;
 
+#ifdef SCRIPT_INTERFACE
       void createMenuEntry(PluginDescription*);
       void removeMenuEntry(PluginDescription*);
+#endif
 
       QTimer* autoSaveTimer;
       QList<QAction*> pluginActions;
@@ -459,7 +461,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveFile(MasterScore* score);
       void fingeringMenu();
 
+#ifdef SCRIPT_INTERFACE
       int  pluginIdxFromPath(QString pluginPath);
+#endif
       void startDebugger();
       void midiinToggled(bool);
       void undoRedo(bool undo);
@@ -654,7 +658,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void setCurrentView(int tabIdx, int idx);
       void loadPlugins();
       void unloadPlugins();
+#ifdef SCRIPT_INTERFACE
       void addPluginMenuEntries();
+#endif
 
       ScoreState state() const { return _sstate; }
       void changeState(ScoreState);
@@ -824,8 +830,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       TourHandler* tourHandler()       { return _tourHandler; }
 
+#ifdef SCRIPT_INTERFACE
       void registerPlugin(PluginDescription*);
       void unregisterPlugin(PluginDescription*);
+#endif
 
       Q_INVOKABLE void showStartcenter(bool);
       void reDisplayDockWidget(QDockWidget* widget, bool visible);
