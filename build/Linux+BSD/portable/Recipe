@@ -199,9 +199,6 @@ appdir="$(basename "${prefix}")" # directory that will become the AppImage
 linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
-# Final tidy-up before creating the AppImage
-chmod u+x "${appdir}/bin/QtWebEngineProcess"
-
 ##########################################################################
 # TURN APPDIR INTO AN APPIMAGE
 ##########################################################################
