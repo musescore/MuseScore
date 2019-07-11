@@ -186,7 +186,7 @@ void Palette::setMoreElements(bool val)
       _moreElements = val;
       if (val && (cells.isEmpty() || cells.back()->tag != "ShowMore")) {
             PaletteCell* cell = new PaletteCell;
-            cell->name      = "Show More";
+            cell->name      = tr("Show More");
             cell->tag       = "ShowMore";
             cells.append(cell);
             }
@@ -1090,11 +1090,15 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
                   p.setPen(Qt::darkGray);
                   QFont f(p.font());
                   f.setPointSize(12);
-                  p.setFont(f);
-                  if (tag == "ShowMore")
-                        p.drawText(idxRect(idx), Qt::AlignCenter, "???");
-                  else
+                  if (tag == "ShowMore") {
+                        f.setBold(true);
+                        p.setFont(f);
+                        p.drawText(idxRect(idx), Qt::AlignCenter, "…");
+                        }
+                  else {
+                        p.setFont(f);
                         p.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
+                        }
                   }
 
             p.setPen(pen);
