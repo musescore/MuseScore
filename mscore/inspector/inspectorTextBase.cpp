@@ -50,8 +50,8 @@ InspectorTextBase::InspectorTextBase(QWidget* parent)
             pList.push_back(i);
       QComboBox* b = t.frameType;
       b->clear();
-      b->addItem(b->QObject::tr("None"), int(FrameType::NO_FRAME));
-      b->addItem(b->QObject::tr("Square"), int(FrameType::SQUARE));
+      b->addItem(b->QObject::tr("None", "no frame for text"), int(FrameType::NO_FRAME));
+      b->addItem(b->QObject::tr("Rectangle"), int(FrameType::SQUARE));
       b->addItem(b->QObject::tr("Circle"), int(FrameType::CIRCLE));
 
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));

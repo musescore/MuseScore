@@ -24,7 +24,7 @@ namespace Ms {
 void populateHookType(QComboBox* b)
       {
       b->clear();
-      b->addItem(b->QObject::tr("None"), int(HookType::NONE));
+      b->addItem(b->QObject::tr("None", "no hook type"), int(HookType::NONE));
       b->addItem(b->QObject::tr("90\u00b0"), int(HookType::HOOK_90)); // &deg;
       b->addItem(b->QObject::tr("45\u00b0"), int(HookType::HOOK_45)); // &deg;
       b->addItem(b->QObject::tr("90\u00b0 centered"), int(HookType::HOOK_90T)); // &deg;
