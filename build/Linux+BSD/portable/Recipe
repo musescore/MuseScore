@@ -1,0 +1,248 @@
+#!/usr/bin/env bash
+
+# For maximum AppImage compatibility, build on the oldest Linux distribution
+# that still receives security updates from its manufacturer.
+
+set -e # Exit on errors
+set -x # Be verbose
+
+# Go one-up from MuseScore root dir regardless of where script was run from:
+cd "$(dirname "$(readlink -f "${0}")")/../../../.."
+
+##########################################################################
+# GET DEPENDENCIES
+##########################################################################
+
+# DISTRIBUTION PACKAGES
+
+# These are installed by default on Travis CI, but not on Docker
+apt_packages_basic=(
+  # Alphabetical order please!
+  file
+  git
+  pkg-config
+  software-properties-common # installs `add-apt-repository`
+  unzip
+  )
+
+# These are the same as on Travis CI
+apt_packages_standard=(
+  # Alphabetical order please!
+  # cmake # using more recent upstream version from cmake.org
+  curl
+  libasound2-dev # ALSA
+  libfontconfig1-dev
+  libfreetype6-dev
+  libgl1-mesa-dev
+  libjack-dev
+  libmp3lame-dev
+  libnss3-dev
+  libportmidi-dev
+  libpulse-dev
+  libsndfile1-dev
+  make
+  portaudio19-dev
+  wget
+  )
+
+# MuseScore compiles without these but won't run without them
+apt_packages_runtime=(
+  # Alphabetical order please!
+  libegl1-mesa-dev
+  libodbc1
+  libpq-dev
+  libxcomposite-dev
+  libxcursor-dev
+  libxi-dev
+  libxkbcommon-x11-0
+  libxtst-dev
+  )
+
+apt-get update # no package lists in Docker image
+apt-get install -y --no-install-recommends \
+  "${apt_packages_basic[@]}" \
+  "${apt_packages_standard[@]}" \
+  "${apt_packages_runtime[@]}"
+
+# NON-DISTRIBUTION PACKAGES
+# We use these when the default version provided by the distribution is
+# too old or has unwelcome modifications compared to the upstream version.
+
+# Get newer compiler
+gcc_version="4.9"
+if [[ ! -f /etc/apt/sources.list.d/ubuntu-toolchain-r-test-*.list ]]; then
+  add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  apt-get update
+fi
+apt-get install -y --no-install-recommends "g++-${gcc_version}"
+update-alternatives \
+  --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
+  --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
+export CC="/usr/bin/gcc-${gcc_version}"
+export CXX="/usr/bin/g++-${gcc_version}"
+
+# Get newer Qt (only used cached version if it is the same)
+qt_version="5124"
+qt_dir="qt/${qt_version}"
+if [[ ! -d "${qt_dir}" ]]; then
+  mkdir -p "${qt_dir}"
+  qt_url="https://s3.amazonaws.com/utils.musescore.org/qt${qt_version}.zip"
+  wget -q --show-progress -O qt5.zip "${qt_url}"
+  unzip -qq qt5.zip -d "${qt_dir}"
+  rm -f qt5.zip
+fi
+qt_path="${PWD%/}/${qt_dir}"
+export PATH="${qt_path}/bin:${PATH}"
+export LD_LIBRARY_PATH="${qt_path}/lib:${LD_LIBRARY_PATH}"
+export QT_PLUGIN_PATH="${qt_path}/plugins"
+export QML2_IMPORT_PATH="${qt_path}/qml"
+
+# Get newer CMake (only used cached version if it is the same)
+cmake_version="3.10.1"
+cmake_dir="cmake/${cmake_version}"
+if [[ ! -d "${cmake_dir}" ]]; then
+  mkdir -p "${cmake_dir}"
+  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-Linux-x86_64.tar.gz"
+  wget -q --show-progress --no-check-certificate -O - "${cmake_url}" \
+    | tar --strip-components=1 -xz -C "${cmake_dir}"
+fi
+export PATH="${PWD%/}/${cmake_dir}/bin:${PATH}"
+
+# Build MuseScore on Travis but not on Docker Cloud (reduce container size)
+if [[ ! -d "MuseScore" ]]; then
+  # tidy up (reduce size of Docker image)
+  apt-get clean autoclean
+  apt-get autoremove --purge -y
+  rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
+  exit 0
+fi
+
+##########################################################################
+# BUILD MUSESCORE
+##########################################################################
+
+cd MuseScore
+make revision
+make "$@" portable
+cd ..
+
+##########################################################################
+# GET APPIMAGETOOL AND LINUXDEPLOY
+##########################################################################
+
+function extract_appimage()
+{
+  # Extract AppImage so we can run it without having to install FUSE
+  local -r appimage="$1" binary_name="$2"
+  local -r appdir="${appimage%.AppImage}.AppDir"
+  "./${appimage}" --appimage-extract >/dev/null # dest folder "squashfs-root"
+  mv squashfs-root "${appdir}" # rename folder to avoid collisions
+  ln -s "${appdir}/AppRun" "${binary_name}" # symlink for convenience
+  rm -f "${appimage}"
+}
+
+function download_github_release()
+{
+  local -r repo_slug="$1" release_tag="$2" file="$3"
+  wget -q --show-progress \
+    "https://github.com/${repo_slug}/releases/download/${release_tag}/${file}"
+  chmod +x "${file}"
+}
+
+function download_appimage_release()
+{
+  local -r github_repo_slug="$1" binary_name="$2"
+  local -r appimage="${binary_name}-x86_64.AppImage"
+  download_github_release "${github_repo_slug}" continuous "${appimage}"
+  extract_appimage "${appimage}" "${binary_name}"
+}
+
+function download_linuxdeploy_component()
+{
+  download_appimage_release "linuxdeploy/$1" "$1"
+}
+
+# GET LATEST APPIMAGETOOL AND LINUXDEPLOY
+# We didn't do this earlier because we don't want them to get cached in the
+# Docker image. We always want the latest versions with the latest features.
+# We still check for an existing version to avoid re-downloading if the
+# script is run again in the same container (e.g. during local development).
+
+if [[ ! -d "appimagetool" ]]; then
+  mkdir appimagetool
+  cd appimagetool
+  download_appimage_release AppImage/AppImageKit appimagetool
+  cd ..
+fi
+export PATH="${PWD%/}/appimagetool:$PATH"
+appimagetool --version
+
+if [[ ! -d "linuxdeploy" ]]; then
+  mkdir linuxdeploy
+  cd linuxdeploy
+  download_linuxdeploy_component linuxdeploy
+  download_linuxdeploy_component linuxdeploy-plugin-qt
+  cd ..
+fi
+export PATH="${PWD%/}/linuxdeploy:$PATH"
+linuxdeploy --list-plugins
+
+##########################################################################
+# BUNDLE DEPENDENCIES INTO APPDIR
+##########################################################################
+
+cd MuseScore
+prefix="$(cat build.release/PREFIX.txt)" # MuseScore was installed here
+cd "$(dirname "${prefix}")"
+appdir="$(basename "${prefix}")" # directory that will become the AppImage
+
+linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
+linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
+
+# Final tidy-up before creating the AppImage
+chmod u+x "${appdir}/bin/QtWebEngineProcess"
+
+##########################################################################
+# TURN APPDIR INTO AN APPIMAGE
+##########################################################################
+
+appimage="${appdir%.AppDir}.AppImage" # name to use for AppImage file
+
+appimagetool_args=( # array
+  # none
+  )
+
+created_files=(
+  "${appimage}"
+  )
+
+if [[ "${UPDATE_INFORMATION}" ]]; then
+  appimagetool_args+=( # append to array
+    --updateinformation "${UPDATE_INFORMATION}"
+    )
+  created_files+=(
+    "${appimage}.zsync" # this file will contain delta update data
+    )
+else
+  cat >&2 <<EOF
+$0: Automatic updates disabled.
+To enable automatic updates, please set the env. variable UPDATE_INFORMATION
+according to <https://github.com/AppImage/AppImageSpec/blob/master/draft.md>.
+EOF
+fi
+
+# create AppImage
+appimagetool "${appimagetool_args[@]}" "${appdir}" "${appimage}"
+
+# We are running as root in the Docker image so all created files belong to
+# root. Allow non-root users outside the Docker image to access these files.
+chmod a+rwx "${created_files[@]}"
+parent_dir="${PWD}"
+while [[ "$(dirname "${parent_dir}")" != "${parent_dir}" ]]; do
+  [[ "$parent_dir" == "/" ]] && break
+  chmod a+rwx "$parent_dir"
+  parent_dir="$(dirname "$parent_dir")"
+done
+
+ls -lh "${created_files[@]}"
+echo "Recipe has finished!" >&2
