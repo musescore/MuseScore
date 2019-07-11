@@ -434,7 +434,7 @@ void MuseScore::pluginTriggered(QString pp)
             //view->setHeight(p->height());
             view->setResizeMode(QQuickView::SizeRootObjectToView);
             if (p->pluginType() == "dock") {
-                  QDockWidget* dock = new QDockWidget("Plugin", 0);
+                  QDockWidget* dock = new QDockWidget(view->title(), 0);
                   dock->setAttribute(Qt::WA_DeleteOnClose);
                   Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
                   if (p->dockArea() == "left")
