@@ -115,7 +115,7 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                   notes.insert(rootPitch + 5*PITCH_DELTA_OCTAVE, rootTpc);
                   //ensure that notes fall under a specific range
                   //for now this range is between 5*12 and 6*12
-                  QMap<int, int> intervals = getIntervals(rootTpc);
+                  QMap<int, int> intervals = getIntervals(rootTpc, literal);
                   QMapIterator<int, int> i(intervals);
                   while (i.hasNext()) {
                         i.next();
@@ -154,99 +154,35 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
 ///   gets a map from intervals to TPCs based on
 ///   a passed root tpc (this allows for us to
 ///   keep pitches, but transpose notes on the score)
+///
+///   Weighting System:
+///   - Rank 0: 3rd, altered 5th, suspensions (characteristic notes)
+///   - Rank 1: 7th
+///   - Rank 2: 9ths
+///   - Rank 3: 13ths where applicable and (in minor chords) 11ths
+///   - Rank 3: Other alterations and additions
+///   - Rank 4: 5th and (in major/dominant chords) 11th
 //---------------------------------------------------
 QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
       {
-      //TODO - PHV: use ParsedChord rather than HChord
+      //TODO - PHV: clean this up, it's really messy and doesn't always work in all cases
+
+      //RANKING SYSTEM
+      static const int RANK_MULT = 128;
+      static const int RANK_3RD = 0;
+      static const int RANK_7TH = 1;
+      static const int RANK_9TH = 2;
+      static const int RANK_ADD = 3;
+      static const int RANK_OMIT = 4;
 
       QMap<int, int> ret;
 
       const ParsedChord* p = _harmony->parsedForm();
       QString quality = p->quality();
-      QString extension = p->extension();
+      int ext = p->extension().toInt();
       const QStringList& modList = p->modifierList();
 
-      int third = 4; //major
-      int seventh;
-      //TODO - PHV: change this to a different datatype so we can give weights
-      //for how important each tone is. Right now, basically this is literal=true
-
-      //Idea? ^ add 128 * rank to the pitch so that the qmap can
-      //order by rank and then take the key % 128 to find the pitch when
-      //it needs to be used
-
-      //handle chord quality
-      if (quality == "major") {
-            ret.insert(step2pitchInterval(3, 0), tpcInterval(rootTpc, 3, 0));      //maj3
-            ret.insert(step2pitchInterval(5, 0), tpcInterval(rootTpc, 5, 0));      //p5
-            }
-      else if (quality == "minor") {
-            third = 3;
-            ret.insert(step2pitchInterval(3, -1), tpcInterval(rootTpc, 3, -1));     //min3
-            ret.insert(step2pitchInterval(5, 0), tpcInterval(rootTpc, 5, 0));       //p5
-            }
-      else if (quality == "dominant") {
-            ret.insert(step2pitchInterval(3, 0), tpcInterval(rootTpc, 3, 0));      //maj3
-            ret.insert(step2pitchInterval(5, 0), tpcInterval(rootTpc, 5, 0));      //p5
-            ret.insert(step2pitchInterval(7, -1), tpcInterval(rootTpc, 7, -1));    //min7
-            }
-      else if (quality == "augmented") {
-            ret.insert(step2pitchInterval(3, 0), tpcInterval(rootTpc, 3, 0));      //maj3
-            ret.insert(step2pitchInterval(5, +1), tpcInterval(rootTpc, 5, +1));    //p5
-            }
-      else if (quality == "diminished") {
-            third = 3;
-            ret.insert(step2pitchInterval(3, -1), tpcInterval(rootTpc, 3, -1));     //min3
-            ret.insert(step2pitchInterval(5, -1), tpcInterval(rootTpc, 5, -1));     //dim5
-            }
-      else if (quality == "half-diminished") {
-            third = 3;
-            //should we just skip the function call and go directly to pitch since we know?
-            ret.insert(step2pitchInterval(3, -1), tpcInterval(rootTpc, 3, -1));     //min3
-            ret.insert(step2pitchInterval(5, -1), tpcInterval(rootTpc, 5, -1));     //dim5
-            ret.insert(step2pitchInterval(7, -1), tpcInterval(rootTpc, 7, -1));     //min7
-            }
-
-      //handle extension
-      int ext = extension.toInt();
-      switch (ext) {
-            case 13:
-                  ret.insert(9, tpcInterval(rootTpc, 13, 0));     //maj13
-                  // FALLTHROUGH
-            case 11:
-                  ret.insert(5, tpcInterval(rootTpc, 11, 0));     //maj11
-                  // FALLTHROUGH
-            case 9:
-                  ret.insert(2, tpcInterval(rootTpc, 9, 0));     //maj9
-                  // FALLTHROUGH
-            case 7:
-                  if (quality == "major")
-                        ret.insert(seventh = 11, tpcInterval(rootTpc, 7, 0));
-                  else if (quality == "diminished")
-                        ret.insert(seventh = 9, tpcInterval(rootTpc, 7, -2));
-                  else
-                        ret.insert(seventh = 10, tpcInterval(rootTpc, 7, -1));
-                  break;
-            case 6:
-                  ret.insert(9, tpcInterval(rootTpc, 6, 0));     //maj6
-                  break;
-            case 5:
-                  //remove third
-                  ret.remove(third);
-                  break;
-            case 4:
-                  ret.insert(5, tpcInterval(rootTpc, 4, 0));     //p4
-                  break;
-            case 2:
-                  ret.insert(2, tpcInterval(rootTpc, 2, 0));     //maj2
-                  break;
-            case 69:
-                  ret.insert(9, tpcInterval(rootTpc, 6, 0));     //maj6
-                  ret.insert(2, tpcInterval(rootTpc, 9, 0));     //maj6
-                  break;
-            default:
-                  break;
-            }
+      int omit = 0;
 
       //handle modifiers
       //TODO - PHV: maybe find a better way, or optimize this
@@ -270,26 +206,100 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
                               alter = -1;
                               }
                         QString extType = s.left(cutoff);
-                        ret.insert(step2pitchInterval(deg, alter), tpcInterval(rootTpc, deg % 7, alter));
-                        if (extType == "add") {
-                              //do nothing else?
-                              }
-                        else if (extType == "major") {
-                              ret.remove(seventh); //remove seventh
+                        if (extType == "" || extType == "major") { //alteration
+                              if (deg == 9)
+                                    ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, deg % 7, alter));
+                              else
+                                    ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, deg % 7, alter));
+                              omit |= 1 << deg;
                               }
                         else if (extType == "sus") {
-                              ret.remove(third);
+                              ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, deg % 7, alter));
+                              omit |= 1 << 3;
                               }
-                        else if (extType == "no") {
-                              if (deg == 3)
-                                    ret.remove(third);
-                              else if (deg == 7)
-                                    ret.remove(seventh);
-                              else
-                                    ret.remove(step2pitchInterval(deg, 0));
-                              }
+                        else if (extType == "no" || ext == 5)
+                              omit |= 1 << deg;
+                        else if (ext == 5)
+                              omit |= 1 << 3;
                         }
                   }
+            }
+
+      //handle chord quality
+      if (quality == "minor") {
+            if (omit & (1 << 3))
+                  ret.insert(step2pitchInterval(3, -1) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 3, -1));     //min3
+            if (omit & (1 << 5))
+                  ret.insert(step2pitchInterval(5, 0) + RANK_MULT*RANK_OMIT, tpcInterval(rootTpc, 5, 0));       //p5
+            }
+      else if (quality == "augmented") {
+            if (omit & (1 << 3))
+                  ret.insert(step2pitchInterval(3, 0) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 3, 0));      //maj3
+            if (omit & (1 << 5))
+                  ret.insert(step2pitchInterval(5, +1) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 5, +1));    //p5
+            }
+      else if (quality == "diminished" || quality == "half-diminished") {
+            if (omit & (1 << 3))
+                  ret.insert(step2pitchInterval(3, -1) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 3, -1));     //min3
+            if (omit & (1 << 5))
+                  ret.insert(step2pitchInterval(5, -1) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 5, -1));     //dim5
+            }
+      else { //major or dominant
+            if (omit & (1 << 3))
+                  ret.insert(step2pitchInterval(3, 0) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 3, 0));      //maj3
+            if (omit & (1 << 5))
+                  ret.insert(step2pitchInterval(5, 0) + RANK_MULT*RANK_OMIT, tpcInterval(rootTpc, 5, 0));      //p5
+            }
+
+      //handle extension
+      switch (ext) {
+            case 13:
+                  if (!(omit & (1 << 13)))
+                        ret.insert(9 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 13, 0));     //maj13
+                  // FALLTHROUGH
+            case 11:
+                  if (!(omit & (1 << 11))) {
+                        if (quality == "minor")
+                              ret.insert(5 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 11, 0));     //maj11
+                        else if (literal)
+                              ret.insert(5 + RANK_MULT*RANK_OMIT, tpcInterval(rootTpc, 11, 0));     //maj11
+                        }
+                  // FALLTHROUGH
+            case 9:
+                  if (!(omit & (1 << 9)))
+                        ret.insert(2 + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, 9, 0));     //maj9
+                  // FALLTHROUGH
+            case 7:
+                  if (!(omit & (1 << 7))) {
+                        if (quality == "major")
+                              ret.insert(11 + RANK_MULT*RANK_7TH, tpcInterval(rootTpc, 7, 0));
+                        else if (quality == "diminished")
+                              ret.insert(9 + RANK_MULT*RANK_7TH, tpcInterval(rootTpc, 7, -2));
+                        else //dominant or augmented or minor
+                              ret.insert(10 + RANK_MULT*RANK_7TH, tpcInterval(rootTpc, 7, -1));
+                        }
+                  break;
+            case 6:
+                  if (!(omit & (1 << 6)))
+                        ret.insert(9 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 6, 0));     //maj6
+                  break;
+            case 5:
+                  //omitted third already
+                  break;
+            case 4:
+                  if (!(omit & (1 << 4)))
+                        ret.insert(5 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 4, 0));     //p4
+                  break;
+            case 2:
+                  if (!(omit & (1 << 2)))
+                        ret.insert(2 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 2, 0));     //maj2
+                  break;
+            case 69:
+                  ret.insert(9 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 6, 0));     //maj6
+                  ret.insert(2 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 9, 0));     //maj6
+                  break;
+            default:
+                  break;
             }
 
 
