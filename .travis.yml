@@ -66,14 +66,12 @@ matrix:
       addons:
         apt:
           packages:
-          - bsdtar
           - curl
-          - zsync
           - expect
       services:
         - docker
       script:
-        - "if [[ $APPIMAGE_BUILD_ARCHS == *x86_64* ]]; then ./build/travis/job2_AppImage/build.sh --x86_64 --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
+        - "if [[ $APPIMAGE_BUILD_ARCHS == *x86_64* ]]; then TARGET_ARCH=x86_64 ./build/travis/job2_AppImage/build.sh --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
 
     - env: "JOB=MacOSX"
       os: osx
