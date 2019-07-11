@@ -701,7 +701,7 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
-         "add-sforzato",
+         "add-accent",
          QT_TRANSLATE_NOOP("action","Accent"),
          QT_TRANSLATE_NOOP("action","Toggle accent"),
          0,

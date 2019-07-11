@@ -3661,7 +3661,7 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "add-staccato",               [this]{ addArticulation(SymId::articStaccatoAbove);                 }},
             { "add-tenuto",                 [this]{ addArticulation(SymId::articTenutoAbove);                   }},
             { "add-marcato",                [this]{ addArticulation(SymId::articMarcatoAbove);                  }},
-            { "add-sforzato",               [this]{ addArticulation(SymId::articAccentAbove);                   }},
+            { "add-accent",                 [this]{ addArticulation(SymId::articAccentAbove);                   }},
             { "add-trill",                  [this]{ addArticulation(SymId::ornamentTrill);                      }},
             { "add-up-bow",                 [this]{ addArticulation(SymId::stringsUpBow);                       }},
             { "add-down-bow",               [this]{ addArticulation(SymId::stringsDownBow);                     }},
