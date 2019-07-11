@@ -200,6 +200,85 @@ linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
 ##########################################################################
+# BUNDLE REMAINING DEPENDENCIES MANUALLY
+##########################################################################
+
+function find_library()
+{
+  # Print full path to a library or return exit status 1 if not found
+  local library="$1" # take library name as input (e.g. "libfoo.so")
+  # Look for the library in $LD_LIBRARY_PATH
+  local dir IFS=':' # split path into array on this separator
+  for dir in "${LD_LIBRARY_PATH[@]}"; do
+    if [[ -e "${dir}/${library}" ]]; then
+      echo "${dir}/${library}"
+      return # Library found
+    fi
+  done
+  # Not found yet so check system cache
+  ldconfig -p | awk -v lib="${library}" -v arch="x86_64" \
+'
+BEGIN {status=1}
+($1 == lib && index($0, arch)) {print $NF; status=0; exit}
+END {exit status}
+'
+}
+
+function fallback_library()
+{
+  # Copy a library into a special fallback directory inside the AppDir.
+  # Fallback libraries are not loaded at runtime by default, but they can
+  # be loaded if it is found that the application would crash otherwise.
+  local library="$1"
+  local full_path="$(find_library "$1")"
+  local new_path="${appdir}/fallback/${library}"
+  mkdir -p "${new_path}" # directory has the same name as the library
+  cp -L "${full_path}" "${new_path}/${library}"
+  # Use the AppRun script to check at runtime whether the user has a copy of
+  # this library. If not then add our copy's directory to $LD_LIBRARY_PATH.
+}
+
+# UNWANTED FILES
+# linuxdeploy may have added some files or directories that we don't want
+unwanted_files=(
+  "lib/libnss3.so" # see https://github.com/probonopd/linuxdeployqt/issues/35#issuecomment-382994446
+  "lib/libnssutil3.so"
+)
+# Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
+
+# ADDITIONAL LIBRARIES
+# Linuxdeploy may have missed some libraries that we need
+additional_libraries=(
+  # none
+)
+# Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
+
+# FALLBACK LIBRARIES
+# These get bundled in the AppImage, but are only loaded if the user does not
+# already have a version of the library installed on their system. This is
+# helpful in cases where it is necessary to use a system library in order for
+# a particular feature to work properly, but where the program would crash at
+# startup if the library was not found. The fallback library may not provide
+# the full functionality of the system version, but it does avoid the crash.
+fallback_libraries=(
+  "libjack.so.0" # https://github.com/LMMS/lmms/pull/3958
+)
+# Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
+
+for file in "${unwanted_files[@]}"; do
+  rm -rf "${appdir}/${file}"
+done
+
+for lib in "${additional_libraries[@]}"; do
+  full_path="$(find_library "${lib}")"
+  cp -L "${full_path}" "${appdir}/lib/${lib}"
+done
+
+for fb_lib in "${fallback_libraries[@]}"; do
+  fallback_library "${fb_lib}"
+done
+
+##########################################################################
 # TURN APPDIR INTO AN APPIMAGE
 ##########################################################################
 
