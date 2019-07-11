@@ -813,12 +813,13 @@ int tpc2degree(int tpc, Key key)
 
 int tpcInterval(int startTpc, int interval, int alter)
       {
+      Q_ASSERT(interval > 0);
       static const int intervals[7] = {
-//          2  3   4  5  6  7
-            2, 4, -1, 1, 3, 5
+//          1  2  3   4  5  6  7
+            0, 2, 4, -1, 1, 3, 5
       };
 
-      int result = startTpc + intervals[(interval - 2) % 7] + alter * TPC_DELTA_SEMITONE;
+      int result = startTpc + intervals[(interval - 1) % 7] + alter * TPC_DELTA_SEMITONE;
       //ensure that we don't have anything more than double sharp or double flat
       //(I know, breaking some convention, but it's the best we can do for now)
       while (result > Tpc::TPC_MAX)
@@ -836,12 +837,13 @@ int tpcInterval(int startTpc, int interval, int alter)
 
 int step2pitchInterval(int step, int alter)
       {
+      Q_ASSERT(step > 0);
       static const int intervals[7] = {
-//          2  3  4  5  6  7
-            2, 4, 5, 7, 9, 11
+//          1  2  3  4  5  6  7
+            0, 2, 4, 5, 7, 9, 11
       };
 
-      return intervals[(step - 2) % 7] + alter;
+      return intervals[(step - 1) % 7] + alter;
       }
 
 }
