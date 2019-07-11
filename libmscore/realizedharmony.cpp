@@ -119,7 +119,7 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                   QMapIterator<int, int> i(intervals);
                   while (i.hasNext()) {
                         i.next();
-                        notes.insert((rootPitch + i.key()) % PITCH_DELTA_OCTAVE +
+                        notes.insert((rootPitch + (i.key() % 128)) % PITCH_DELTA_OCTAVE +
                                       5*PITCH_DELTA_OCTAVE, i.value());
                         }
                   }
