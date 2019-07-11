@@ -22,15 +22,20 @@ docker_tag="latest" # Docker terminology for master branch
 [ "$branch" == "master" ] || docker_tag="$branch" # other branches use branch name
 
 function rebuild-docker-image() { # $1 is arch (e.g. x86_64)
-  if [ $(git diff --name-only HEAD HEAD~1 | grep "^build/Linux+BSD/portable/$1") ]; then
-    # Need to update image on Docker Hub
+  set +e # allow errors
+  echo "TRAVIS_COMMIT_RANGE: ${TRAVIS_COMMIT_RANGE}" # https://github.com/travis-ci/travis-ci/issues/4596
+  changed_files="$(git diff --name-only ${TRAVIS_COMMIT_RANGE/.../..})" # error on force push
+  (($? == 0)) || changed_files="$(git diff --name-only HEAD~3)" # check recent commits
+  if grep "^build/Linux+BSD/portable" <<<"${changed_files}"; then
+    # Need to update image on Docker Cloud
     set +x # keep env secret
-    echo "Triggering rebuild of $DOCKER_USER/musescore-$1$docker_tag on Docker Hub."
+    echo "Triggering rebuild of $DOCKER_USER/musescore-$1$docker_tag on Docker Cloud."
     data="{\"source_type\": \"Branch\", \"source_name\": \"$branch\"}"
     url="https://registry.hub.docker.com/u/$DOCKER_USER/musescore-$1/trigger/$DOCKER_TRIGGER/"
     curl -H "Content-Type: application/json" --data "$data" -X POST "$url"
     set -x
   fi
+  set -e # disallow errors
 }
 
 if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
@@ -59,13 +64,13 @@ case "$1" in
   --armhf )
     shift
     # build MuseScore inside debian x86-64 multiarch image containing arm cross toolchain and libraries
-    docker run -i -v "${PWD}:/MuseScore" \
+    docker run -itv "${PWD}:/MuseScore" \
       ericfont/musescore:jessie-crosscompile-armhf \
       /bin/bash -c \
       "/MuseScore/build/Linux+BSD/portable/RecipeDebian --build-only armhf $makefile_overrides"
     # then run inside fully emulated arm image for AppImage packing step (which has trouble inside multiarch image)
     docker run -i --privileged multiarch/qemu-user-static:register
-    docker run -i -v "${PWD}:/MuseScore" --privileged \
+    docker run -itv "${PWD}:/MuseScore" --privileged \
       ericfont/musescore:jessie-packaging-armhf \
       /bin/bash -c \
       "/MuseScore/build/Linux+BSD/portable/RecipeDebian --package-only armhf"
@@ -75,16 +80,16 @@ case "$1" in
     shift
     # Build MuseScore AppImage inside 32-bit x86 Docker image
     (set +x; DOCKER_TRIGGER="$DOCKER_TRIGGER_X86_32" rebuild-docker-image x86_32)
-    docker run -i -v "${PWD}:/MuseScore" "$DOCKER_USER/musescore-x86_32:$docker_tag" /bin/bash -c \
-      "/MuseScore/build/Linux+BSD/portable/x86_32/Recipe $makefile_overrides"
+    docker run -itv "${PWD}:/MuseScore" "$DOCKER_USER/musescore-x86_32:$docker_tag" /bin/bash -c \
+      "/MuseScore/build/Linux+BSD/portable/Recipe $makefile_overrides"
     ;;
 
   * )
     [ "$1" == "--x86_64" ] && shift || true
     # Build MuseScore AppImage inside native (64-bit x86) Docker image
     (set +x; DOCKER_TRIGGER="$DOCKER_TRIGGER_X86_64" rebuild-docker-image x86_64)
-    docker run -i -v "${PWD}:/MuseScore" "$DOCKER_USER/musescore-x86_64:$docker_tag" /bin/bash -c \
-      "/MuseScore/build/Linux+BSD/portable/x86_64/Recipe $makefile_overrides"
+    docker run -itv "${PWD}:/MuseScore" "$DOCKER_USER/musescore-x86_64:$docker_tag" /bin/bash -c \
+      "/MuseScore/build/Linux+BSD/portable/Recipe $makefile_overrides"
     ;;
 esac
 
@@ -104,6 +109,10 @@ if [ "${upload}" ]; then
   # Upload AppImage to Bintray
   #./build/travis/job2_AppImage/bintray.sh build.release/MuseScore*.AppImage
   ./build/travis/job2_AppImage/osuosl.sh build.release/MuseScore*.AppImage
+  if [[ -f build.release/MuseScore*.AppImage.zsync ]]; then
+    # upload zsync delta for automatic updates
+    ./build/travis/job2_AppImage/osuosl.sh build.release/MuseScore*.AppImage.zsync
+  fi
 else
   echo "On branch '$branch' so AppImage will not be uploaded." >&2
 fi

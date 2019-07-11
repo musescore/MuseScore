@@ -1,30 +1,17 @@
-#!/bin/bash
-
-# TODO: rewrite this file in a faster, more portable language (e.g. C)
+#!/usr/bin/env bash
 
 # APPDIR and APPIMAGE are environment variables which are set when the user
 # runs the AppImage. They won't be set if you try to run this outside of an
 # AppImage, so here we set them to something sensible instead for testing.
-[  "${APPDIR}"  ] || export APPDIR="$(dirname "$(readlink -f "${0}")")"
-[ "${APPIMAGE}" ] || export APPIMAGE="${APPDIR}/AppRun"
-
-libs="${APPDIR}/lib"
-
-# Workaround for Jack library
-# Based on the solution https://github.com/LMMS/lmms/pull/3958/files
-if ldconfig -p | grep libjack.so.0 > /dev/null 2>&1; then
-   echo "Jack appears to be installed on this system, so we'll use it."
-else
-   echo "Jack does not appear to be installed.  That's OK, we'll use a dummy version instead."
-   export LD_LIBRARY_PATH="${APPDIR}/optional:${LD_LIBRARY_PATH}"
-fi
+[[  "${APPDIR}"  ]] || export APPDIR="$(dirname "$(readlink -f "${0}")")"
+[[ "${APPIMAGE}" ]] || export APPIMAGE="${APPDIR}/AppRun"
 
 # Setting LD_LIBRARY_PATH won't override AppImage libraries, but advanced users
 # can do that with APPIMAGE_LIBRARY_PATH if they really want to.
+libs="${APPDIR}/lib"
 export LD_LIBRARY_PATH="${APPIMAGE_LIBRARY_PATH}:${libs}:${libs}/qt5/lib:${LD_LIBRARY_PATH}"
 
-export QT_STYLE_OVERRIDE="GTK+" # use system font size
-
+# Launch MuseScore or an accompanying script
 case "$1" in
   -h|--help|install|uninstall|remove|man|manual|manpage|check-depends|check-dependencies )
     "${APPDIR}/bin/portable-utils" "$@"
@@ -33,5 +20,3 @@ case "$1" in
     "${APPDIR}/bin/mscore@MSCORE_INSTALL_SUFFIX@" "$@"
     ;;
 esac
-
-exit $?
