@@ -576,7 +576,7 @@
         <item>
          <widget class="QLabel" name="labelTransp">
           <property name="text">
-           <string>Transpose written pitches to sound:</string>
+           <string>Transposition against concert/sounding pitch:</string>
           </property>
           <property name="buddy">
            <cstring>iList</cstring>

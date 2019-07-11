@@ -165,6 +165,9 @@
           <property name="accessibleName">
            <string>Font size</string>
           </property>
+          <property name="suffix">
+           <string>pt</string>
+          </property>
           <property name="minimum">
            <double>1.000000000000000</double>
           </property>

@@ -1047,10 +1047,10 @@
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
             </Instrument>
-            <Instrument id="baritone-oboe">
-                  <longName>Baritone Oboe</longName>
-                  <shortName>Bar. Ob.</shortName>
-                  <description>Baritone Oboe</description>
+            <Instrument id="bass-oboe">
+                  <longName>Bass Oboe</longName>
+                  <shortName>B. Ob.</shortName>
+                  <description>Bass Oboe</description>
                   <musicXMLid>wind.reed.oboe.bass</musicXMLid>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
