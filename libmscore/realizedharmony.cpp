@@ -208,13 +208,13 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
                         QString extType = s.left(cutoff);
                         if (extType == "" || extType == "major") { //alteration
                               if (deg == 9)
-                                    ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, deg % 7, alter));
+                                    ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, deg, alter));
                               else
-                                    ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, deg % 7, alter));
+                                    ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, deg, alter));
                               omit |= 1 << deg;
                               }
                         else if (extType == "sus") {
-                              ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, deg % 7, alter));
+                              ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, deg, alter));
                               omit |= 1 << 3;
                               }
                         else if (extType == "no" || ext == 5)
@@ -227,27 +227,27 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
 
       //handle chord quality
       if (quality == "minor") {
-            if (omit & (1 << 3))
+            if (!(omit & (1 << 3)))
                   ret.insert(step2pitchInterval(3, -1) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 3, -1));     //min3
-            if (omit & (1 << 5))
+            if (!(omit & (1 << 5)))
                   ret.insert(step2pitchInterval(5, 0) + RANK_MULT*RANK_OMIT, tpcInterval(rootTpc, 5, 0));       //p5
             }
       else if (quality == "augmented") {
-            if (omit & (1 << 3))
+            if (!(omit & (1 << 3)))
                   ret.insert(step2pitchInterval(3, 0) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 3, 0));      //maj3
-            if (omit & (1 << 5))
+            if (!(omit & (1 << 5)))
                   ret.insert(step2pitchInterval(5, +1) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 5, +1));    //p5
             }
       else if (quality == "diminished" || quality == "half-diminished") {
-            if (omit & (1 << 3))
+            if (!(omit & (1 << 3)))
                   ret.insert(step2pitchInterval(3, -1) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 3, -1));     //min3
-            if (omit & (1 << 5))
+            if (!(omit & (1 << 5)))
                   ret.insert(step2pitchInterval(5, -1) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 5, -1));     //dim5
             }
       else { //major or dominant
-            if (omit & (1 << 3))
+            if (!(omit & (1 << 3)))
                   ret.insert(step2pitchInterval(3, 0) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 3, 0));      //maj3
-            if (omit & (1 << 5))
+            if (!(omit & (1 << 5)))
                   ret.insert(step2pitchInterval(5, 0) + RANK_MULT*RANK_OMIT, tpcInterval(rootTpc, 5, 0));      //p5
             }
 

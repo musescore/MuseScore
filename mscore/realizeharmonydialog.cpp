@@ -67,8 +67,15 @@ void RealizeHarmonyDialog::setChordList(QList<Harmony*> hlist)
             Harmony* h = hlist.at(i);
             s += h->harmonyName() + " ";
             QString intervals;
-            for (int interval : h->getDescription()->intervals())
-                  intervals += QString::number(interval) + " ";
+            QString noteNames = tpc2name(h->rootTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO);
+            QMap<int, int> map = h->realizedHarmony().getIntervals(h->rootTpc());
+            for (int pitch : map.keys()) {
+                  intervals += QString::number((pitch - tpc2pitch(h->rootTpc())) % 128 % 12) + " ";
+                  }
+            for (int tpc : map.values()) {
+                  noteNames += ", " + tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO);
+                  }
+
             chordTable->setItem(i, 0, new QTableWidgetItem(QString::number(h->id())));
             chordTable->setItem(i, 1, new QTableWidgetItem(h->harmonyName()));
             chordTable->setItem(i, 2, new QTableWidgetItem(intervals));
