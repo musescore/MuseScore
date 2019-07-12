@@ -394,26 +394,6 @@ void SlurSegment::computeBezier(QPointF p6o)
       }
 
 //---------------------------------------------------------
-//   slurDistance
-//---------------------------------------------------------
-
-inline static qreal slurDistance(const Shape& shape, const QPointF& pt, qreal sdist, bool up)
-      {
-      qreal ddy;
-      if (up) {
-            ddy = -shape.bottomDistance(pt) + sdist;
-            if (ddy <= 0.0)   // assume no more collisions
-                  ddy = 0.0;
-            }
-      else {
-            ddy = shape.topDistance(pt) - sdist;
-            if (ddy >= 0.0)
-                  ddy = 0.0;
-            }
-      return ddy;
-      }
-
-//---------------------------------------------------------
 //   layoutSegment
 //---------------------------------------------------------
 

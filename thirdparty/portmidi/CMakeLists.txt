@@ -20,6 +20,7 @@
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNEWBUFFER -DPMNULL")
 
 if (APPLE)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations -Wno-macro-redefined")
   file(GLOB_RECURSE INCS "*.h")
 
   add_library (
