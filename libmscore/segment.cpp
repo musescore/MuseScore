@@ -1491,6 +1491,7 @@ Element* Segment::nextElement(int activeStaff)
             case ElementType::DYNAMIC:
             case ElementType::HARMONY:
             case ElementType::SYMBOL:
+            case ElementType::FERMATA:
             case ElementType::FRET_DIAGRAM:
             case ElementType::TEMPO_TEXT:
             case ElementType::STAFF_TEXT:
@@ -1548,12 +1549,11 @@ Element* Segment::nextElement(int activeStaff)
                         Spanner* sp = s->spanner();
                         p = sp->startElement();
                         }
-                  else if (e->type() == ElementType::ACCIDENTAL ||
-                           e->type() == ElementType::ARTICULATION) {
-                        p = e->parent();
-                        }
                   else {
                         p = e;
+                        Element* pp = p->parent();
+                        if (pp->isNote() || pp->isRest() || (pp->isChord() && !p->isNote()))
+                              p = pp;
                         }
                   Element* el = p;
                   for (; p && p->type() != ElementType::SEGMENT; p = p->parent()) {
@@ -1598,6 +1598,7 @@ Element* Segment::prevElement(int activeStaff)
             case ElementType::DYNAMIC:
             case ElementType::HARMONY:
             case ElementType::SYMBOL:
+            case ElementType::FERMATA:
             case ElementType::FRET_DIAGRAM:
             case ElementType::TEMPO_TEXT:
             case ElementType::STAFF_TEXT:
@@ -1669,9 +1670,10 @@ Element* Segment::prevElement(int activeStaff)
                         el = sp->startElement();
                         seg = sp->startSegment();
                         }
-                  else if (e->type() == ElementType::ACCIDENTAL ||
-                           e->type() == ElementType::ARTICULATION) {
-                        el = e->parent();
+                  else {
+                        Element* ep = e->parent();
+                        if (ep->isNote() || ep->isRest() || (ep->isChord() && !e->isNote()))
+                              el = e->parent();
                         }
 
                  Element* prev = seg->prevElementOfSegment(seg, el, activeStaff);
