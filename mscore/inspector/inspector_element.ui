@@ -301,6 +301,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="suffix">
+         <string>sp</string>
+        </property>
         <property name="minimum">
          <double>-999.990000000000009</double>
         </property>

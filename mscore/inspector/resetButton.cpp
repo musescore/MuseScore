@@ -31,7 +31,7 @@ ResetButton::ResetButton(QWidget* parent)
       reset->setFlat(true);
 
       setStyle = new QPushButton(this);
-      setStyle->setText(tr("S"));
+      setStyle->setText(tr("S", "set as style"));
       setStyle->setToolTip(tr("Set as style"));
       setStyle->setMinimumSize(QSize(24,24));
       setStyle->setMaximumSize(QSize(24,24));

@@ -844,7 +844,7 @@
                       </size>
                      </property>
                      <property name="text">
-                      <string>None</string>
+                      <string comment="neither note symbols nor stems and beams">None</string>
                      </property>
                     </widget>
                    </item>
@@ -1178,7 +1178,7 @@
                       </size>
                      </property>
                      <property name="text">
-                      <string>None</string>
+                      <string comment="neither short nor slashed stem">None</string>
                      </property>
                     </widget>
                    </item>

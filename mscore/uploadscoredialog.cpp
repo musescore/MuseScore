@@ -65,9 +65,7 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
       license->addItem(tr("Creative Commons Attribution Noncommercial Share Alike"), "cc-by-nc-sa");
       license->addItem(tr("Creative Commons Copyright Waiver"), "cc-zero");
 
-      licenseHelp->setText(tr("%1What does this mean?%2")
-                           .arg("<a href=\"http://redirect.musescore.com/help/license\">")
-                           .arg("</a>"));
+      licenseHelp->setText("<a href=\"http://redirect.musescore.com/help/license\">" + tr("What does this mean?") + "</a>");
       QFont font = licenseHelp->font();
       font.setPointSize(8);
       font.setItalic(true);
@@ -248,9 +246,7 @@ void UploadScoreDialog::onGetScoreSuccess(const QString &t, const QString &desc,
       changes->clear();
       updateExistingCb->setChecked(true);
       updateExistingCb->setVisible(true);
-      linkToScore->setText(tr("[%1Link%2]")
-                           .arg("<a href=\"" + url + "\">")
-                           .arg("</a>"));
+      linkToScore->setText("[<a href=\"" + url + "\">" + tr("Link") + "</a>]");
       showOrHideUploadAudio();
       setVisible(true);
       }

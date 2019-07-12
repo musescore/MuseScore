@@ -232,7 +232,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Create system headers' value</string>
+         <string>Reset 'Create system header' value</string>
         </property>
        </widget>
       </item>
