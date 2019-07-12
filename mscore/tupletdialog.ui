@@ -223,7 +223,7 @@
            <item>
             <widget class="QRadioButton" name="noBracket">
              <property name="text">
-              <string comment="no tuplte bracket style">None</string>
+              <string comment="no tuplet bracket style">None</string>
              </property>
             </widget>
            </item>
