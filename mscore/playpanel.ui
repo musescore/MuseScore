@@ -86,7 +86,7 @@
            </size>
           </property>
           <property name="text">
-           <string notr="true" extracomment="placeholder">1212</string>
+           <string notr="true" extracomment="placeholder"> 1212</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -187,7 +187,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Time: </string>
+           <string>Time:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -215,7 +215,7 @@
            </size>
           </property>
           <property name="text">
-           <string notr="true" extracomment="placeholder">55</string>
+           <string notr="true" extracomment="placeholder"> 55</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

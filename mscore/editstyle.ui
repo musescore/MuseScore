@@ -3473,7 +3473,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'System header to time signature distance' value</string>
+                <string>Reset 'System header with time signature distance' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -4946,7 +4946,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>None</string>
+                  <string comment="no tuplet number">None</string>
                  </property>
                 </item>
                </widget>
@@ -4998,7 +4998,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>None</string>
+                  <string comment="no tuplet bracket">None</string>
                  </property>
                 </item>
                </widget>
@@ -5960,7 +5960,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Default position' value</string>
+              <string>Reset 'Position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6032,7 +6032,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Below' value</string>
+              <string>Reset 'Position below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6301,7 +6301,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Above' value</string>
+              <string>Reset 'Position above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7776,7 +7776,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Below' value</string>
+              <string>Reset Autoplace min. distance' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -8798,7 +8798,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Below' value</string>
+              <string>Reset 'Position below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -8828,7 +8828,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Above' value</string>
+              <string>Reset 'Position above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9533,10 +9533,10 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_2">
              <property name="accessibleName">
-              <string>Barré line thickness</string>
+              <string>Barre line thickness</string>
              </property>
              <property name="text">
-              <string>Barré line thickness:</string>
+              <string>Barre line thickness:</string>
              </property>
              <property name="buddy">
               <cstring>barreLineWidth</cstring>
@@ -9812,7 +9812,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Size changes with staff space setting' value</string>
+              <string>Reset 'Follow staff size' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9956,7 +9956,23 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QComboBox" name="textStyleFrameType"/>
+               <widget class="QComboBox" name="textStyleFrameType">
+                <item>
+                 <property name="text">
+                  <string notr="true">None</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string notr="true">Rectangle</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Circle</string>
+                 </property>
+                </item>
+               </widget>
               </item>
               <item row="0" column="2">
                <widget class="QToolButton" name="resetTextStyleFrameType">
@@ -10034,7 +10050,7 @@
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Foreground' value</string>
+                    <string>Reset 'Border' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -10092,7 +10108,7 @@
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Text margin' value</string>
+                    <string>Reset 'Margin' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -10126,7 +10142,7 @@
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Border radius' value</string>
+                    <string>Reset 'Corner radius' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>

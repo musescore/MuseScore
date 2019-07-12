@@ -161,7 +161,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Size in spatium units' value</string>
+         <string>Reset 'Size in staff space units' value</string>
         </property>
        </widget>
       </item>

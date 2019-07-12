@@ -208,7 +208,7 @@
         </item>
         <item>
          <property name="text">
-          <string>None</string>
+          <string comment="no tuplet number style">None</string>
          </property>
         </item>
        </widget>
@@ -262,7 +262,7 @@
         </item>
         <item>
          <property name="text">
-          <string>None</string>
+          <string comment="no tuplet bracket style">None</string>
          </property>
         </item>
        </widget>

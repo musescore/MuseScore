@@ -464,7 +464,7 @@
              <string>Choose score folder</string>
             </property>
             <property name="accessibleDescription">
-             <string>Opens a folder dialog for selecting the score folder</string>
+             <string>Opens a dialog for selecting the score folder</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -484,7 +484,7 @@
              <string>Choose style folder</string>
             </property>
             <property name="accessibleDescription">
-             <string>Opens a folder dialog for selecting the style folder</string>
+             <string>Opens a dialog for selecting the style folder</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -544,7 +544,7 @@
              <string>Choose plugin folder</string>
             </property>
             <property name="accessibleDescription">
-             <string>Opens a folder dialog for selecting the plugin folder</string>
+             <string>Opens a dialog for selecting the plugin folder</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -594,7 +594,7 @@
              <string>Choose template folder</string>
             </property>
             <property name="accessibleDescription">
-             <string>Opens a folder dialog for selecting the template folder</string>
+             <string>Opens a dialog for selecting the template folder</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -614,7 +614,7 @@
              <string>Image folder</string>
             </property>
             <property name="accessibleDescription">
-             <string>Opens a folder dialog for selecting the image folder</string>
+             <string>Opens a dialog for selecting the image folder</string>
             </property>
             <property name="text">
              <string/>
@@ -634,7 +634,7 @@
              <string>Extensions folder</string>
             </property>
             <property name="accessibleDescription">
-             <string>Opens a folder dialog for selecting the extensions folder</string>
+             <string>Opens a dialog for selecting the extensions folder</string>
             </property>
             <property name="text">
              <string notr="true"/>

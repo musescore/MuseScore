@@ -383,12 +383,12 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       tupletNumberType->clear();
       tupletNumberType->addItem(tr("Number"), int(TupletNumberType::SHOW_NUMBER));
       tupletNumberType->addItem(tr("Ratio"), int(TupletNumberType::SHOW_RELATION));
-      tupletNumberType->addItem(tr("None"), int(TupletNumberType::NO_TEXT));
+      tupletNumberType->addItem(tr("None", "no tuplet number type"), int(TupletNumberType::NO_TEXT));
 
       tupletBracketType->clear();
       tupletBracketType->addItem(tr("Automatic"), int(TupletBracketType::AUTO_BRACKET));
       tupletBracketType->addItem(tr("Bracket"), int(TupletBracketType::SHOW_BRACKET));
-      tupletBracketType->addItem(tr("None"), int(TupletBracketType::SHOW_NO_BRACKET));
+      tupletBracketType->addItem(tr("None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
 
       pageList->setCurrentRow(0);
       accidentalsGroup->setVisible(false); // disable, not yet implemented
@@ -564,8 +564,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             }
 
       textStyleFrameType->clear();
-      textStyleFrameType->addItem(tr("None"), int(FrameType::NO_FRAME));
-      textStyleFrameType->addItem(tr("Square"), int(FrameType::SQUARE));
+      textStyleFrameType->addItem(tr("None", "no frame for text"), int(FrameType::NO_FRAME));
+      textStyleFrameType->addItem(tr("Rectangle"), int(FrameType::SQUARE));
       textStyleFrameType->addItem(tr("Circle"), int(FrameType::CIRCLE));
 
       resetTextStyleName->setIcon(*icons[int(Icons::reset_ICON)]);
