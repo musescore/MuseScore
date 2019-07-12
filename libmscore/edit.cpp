@@ -2306,7 +2306,7 @@ void Score::cmdDeleteSelection()
                         else if (e->isSpannerSegment())
                               tick = toSpannerSegment(e)->spanner()->tick();
                         else if (e->parent()
-                           && (e->parent()->isSegment() || e->parent()->isChord()))
+                           && (e->parent()->isSegment() || e->parent()->isChord() || e->parent()->isNote() || e->parent()->isRest()))
                               tick = e->parent()->tick();
                         //else tick < 0
                         track = e->track();
