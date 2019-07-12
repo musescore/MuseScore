@@ -7776,7 +7776,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset Autoplace min. distance' value</string>
+              <string>Reset 'Autoplace min. distance' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
