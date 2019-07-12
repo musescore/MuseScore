@@ -40,7 +40,7 @@ QVector<ScoreFont> ScoreFont::_scoreFonts {
       ScoreFont("MuseJazz",   "MuseJazz",     ":/fonts/musejazz/", "MuseJazz.otf" ),
       };
 
-std::array<uint, size_t(SymId::lastSym)+1> ScoreFont::_mainSymCodeTable { 0 };
+std::array<uint, size_t(SymId::lastSym)+1> ScoreFont::_mainSymCodeTable { {0} };
 
 //---------------------------------------------------------
 //   table of symbol names

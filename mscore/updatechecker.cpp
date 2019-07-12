@@ -27,6 +27,7 @@
 
 namespace Ms {
 
+#if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(MSCORE_UNSTABLE))
 //---------------------------------------------------------
 //   default period
 //---------------------------------------------------------
@@ -42,6 +43,7 @@ static int defaultPeriod()
             }
       return result;
       }
+#endif
 
 UpdateChecker::UpdateChecker(QObject* parent)
       : UpdateCheckerBase(parent)

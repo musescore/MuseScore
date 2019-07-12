@@ -428,9 +428,6 @@ void Score::fixTicks()
       for (Staff* staff : _staves)
             staff->clearTimeSig();
 
-      Fraction sig(fm->ticks());
-      Fraction nomSig(fm->timesig());
-
       if (isMaster()) {
             tempomap()->clear();
             sigmap()->clear();
