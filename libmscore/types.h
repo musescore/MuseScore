@@ -426,6 +426,7 @@ enum class Tid {
 //---------------------------------------------------------
 
 enum class Align : char {
+      ///.\{
       LEFT     = 0,
       RIGHT    = 1,
       HCENTER  = 2,
@@ -436,6 +437,7 @@ enum class Align : char {
       CENTER = Align::HCENTER | Align::VCENTER,
       HMASK  = Align::LEFT    | Align::RIGHT    | Align::HCENTER,
       VMASK  = Align::TOP     | Align::BOTTOM   | Align::VCENTER | Align::BASELINE
+      ///.\}
       };
 
 constexpr Align operator| (Align a1, Align a2) {
@@ -482,6 +484,7 @@ Q_ENUM_NS(GlissandoStyle)
 Q_ENUM_NS(Placement)
 Q_ENUM_NS(SegmentType)
 Q_ENUM_NS(Tid)
+Q_ENUM_NS(Align)
 Q_ENUM_NS(NoteType)
 #endif
 
