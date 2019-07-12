@@ -74,10 +74,10 @@ void InspectorBarLine::setAsStaffDefault()
 
       Score* score = ebl->score();
       score->startCmd();
-      for (Element* e : *inspector->el()) {
-            if (!e || !e->isBarLine())
+      for (Element* el : *inspector->el()) {
+            if (!el || !el->isBarLine())
                   continue;
-            BarLine* bl = toBarLine(e);
+            BarLine* bl = toBarLine(el);
             Staff* staff = bl->staff();
             if (std::find(staffList.begin(), staffList.end(), staff) == staffList.end()) {
                   staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN,      span);

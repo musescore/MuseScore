@@ -1167,7 +1167,7 @@ class MStyle {
       void setCustomChordList(bool t) { _customChordList = t; }
       void checkChordList();
 
-      bool load(QFile* qf, bool ignore = false);
+      bool load(QFile* qf, bool ign = false);
       void load(XmlReader& e);
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);

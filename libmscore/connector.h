@@ -96,7 +96,6 @@ class ConnectorInfo {
 class ConnectorInfoReader final : public ConnectorInfo {
       XmlReader* _reader;
       Element* _connector;
-      Element* _currentElement;
       ScoreElement* _connectorReceiver;
 
       void readEndpointLocation(Location& l);
