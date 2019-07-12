@@ -30,9 +30,9 @@ class Channel;
 class ZInstrument;
 enum class Trigger : char;
 
-static const int MAX_VOICES  = 512;
-static const int MAX_CHANNEL = 256;
-static const int MAX_TRIGGER = 512;
+static const int MAX_VOICES   = 512;
+static const int MAX_CHANNELS = 256;
+static const int MAX_TRIGGER  = 512;
 
 //---------------------------------------------------------
 //   VoiceFifo
@@ -81,7 +81,7 @@ class Zerberus : public Ms::Synthesizer {
       std::atomic<bool> busy;
 
       std::list<ZInstrument*> instruments;
-      Channel* _channel[MAX_CHANNEL];
+      Channel* _channel[MAX_CHANNELS];
 
       int allocatedVoices = 0;
       VoiceFifo freeVoices;
