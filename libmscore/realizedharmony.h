@@ -86,8 +86,6 @@ class RealizedHarmony {
 
       void update(int rootTpc, int bassTpc, int transposeOffset = 0); //updates the notes map
 
-   private:
-      //PHV: temp?
       QMap<int, int> getIntervals(int rootTpc, bool literal = true) const;
       };
 }
