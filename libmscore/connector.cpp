@@ -277,7 +277,7 @@ ConnectorInfo* ConnectorInfo::end()
 //---------------------------------------------------------
 
 ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Element* current, int track)
-   : ConnectorInfo(current, track), _reader(&e), _connector(nullptr), _currentElement(current), _connectorReceiver(current)
+   : ConnectorInfo(current, track), _reader(&e), _connector(nullptr), _connectorReceiver(current)
       {}
 
 //---------------------------------------------------------
@@ -295,7 +295,7 @@ static Location readPositionInfo(const XmlReader& e, int track) {
 //---------------------------------------------------------
 
 ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Score* current, int track)
-   : ConnectorInfo(current, readPositionInfo(e, track)), _reader(&e), _connector(nullptr), _currentElement(nullptr), _connectorReceiver(current)
+   : ConnectorInfo(current, readPositionInfo(e, track)), _reader(&e), _connector(nullptr), _connectorReceiver(current)
       {
       setCurrentUpdated(true);
       }
