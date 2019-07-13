@@ -54,6 +54,9 @@ InstrumentChange::InstrumentChange(const InstrumentChange& is)
    : TextBase(is)
       {
       _instrument = new Instrument(*is._instrument);
+      _keySigs = is._keySigs;
+      _clefs = is._clefs;
+      _warning = is._warning;
       }
 
 InstrumentChange::~InstrumentChange()
@@ -67,6 +70,12 @@ void InstrumentChange::setInstrument(const Instrument& i)
       //delete _instrument;
       //_instrument = new Instrument(i);
       }
+
+//---------------------------------------------------------
+//   setNextChord
+//    sets the position for the instrument change warning
+//    to be placed, and places it there.
+//---------------------------------------------------------
 
 void InstrumentChange::setNextChord(ChordRest* chord)
       {

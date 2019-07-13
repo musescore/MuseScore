@@ -4676,47 +4676,6 @@ void Score::undoAddElement(Element* element)
       }
 
 //---------------------------------------------------------
-//   nextChord
-//---------------------------------------------------------
-
-Chord* Score::nextChord(Segment* seg, Staff* staff)
-      {
-      while (seg) {
-            for (Staff* ostaff : staff->staffList()) {
-                  for (int i = ostaff->idx() * VOICES; i < (ostaff->idx() + 1) * VOICES; i++) {
-                        if (seg->element(i) && seg->element(i)->isChord())
-                              return toChord(seg->element(i));
-                        }
-                  }
-            seg = seg->next1();
-            }
-      return nullptr;
-      }
-
-//---------------------------------------------------------
-//   prevInstrumentChange
-//---------------------------------------------------------
-
-InstrumentChange* Score::prevInstrumentChange(Segment* seg, const Staff* staff, bool lookForNotes)
-      {
-      while (seg) {
-            for (Staff* ostaff : staff->staffList()) {
-                  Element* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, ostaff->idx() * VOICES, (ostaff->idx() + 1) * VOICES - 1);
-                  if (ic)
-                        return toInstrumentChange(ic);
-                  seg = seg->prev1();
-                  if (seg && lookForNotes) {
-                        for (int i = ostaff->idx() * VOICES; i < (ostaff->idx() + 1) * VOICES; i++) {
-                              if (seg->element(i) && seg->element(i)->isChord())
-                                    return nullptr;
-                              }
-                        }
-                  }
-            }
-      return nullptr;
-      }
-
-//---------------------------------------------------------
 //   undoAddCR
 //---------------------------------------------------------
 
@@ -4858,7 +4817,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
 
                   undo(new AddElement(newcr));
                   if (newcr->isChord()) {
-                        InstrumentChange* ic = prevInstrumentChange(cr->segment(), staff, true);
+                        InstrumentChange* ic = prevInstrumentChange(cr->segment(), staff->part(), true);
                         if (ic)
                               ic->setNextChord(newcr);
                         }
