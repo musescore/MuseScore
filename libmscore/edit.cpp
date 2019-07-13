@@ -4420,7 +4420,7 @@ void Score::undoAddElement(Element* element)
                         // make harmony child of fret diagram if possible
                         if (ne->isHarmony()) {
                               for (Element* segel : segment->annotations()) {
-                                    if (segel->isFretDiagram()) {
+                                    if (segel && segel->isFretDiagram() && segel->track() == ntrack) {
                                           ne->setTrack(segel->track());
                                           ne->setParent(segel);
                                           break;
