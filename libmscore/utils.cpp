@@ -1034,5 +1034,48 @@ std::vector<SymId> toTimeSigString(const QString& s)
       return d;
       }
 
+//---------------------------------------------------------
+//   nextChord
+//---------------------------------------------------------
+
+Chord* Score::nextChord(Segment* seg, const Part* part)
+      {
+      while (seg) {
+            for (Staff* staff : *part->staves()) {
+                  for (int i = staff->idx() * VOICES; i < (staff->idx() + 1) * VOICES; i++) {
+                        if (seg->element(i) && seg->element(i)->isChord())
+                              return toChord(seg->element(i));
+                        }
+                  }
+            seg = seg->next1();
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   prevInstrumentChange
+//    find the previous instrument change. setting lookForNotes
+//    to true will return nullptr if a note is found before
+//    an instrument change.
+//---------------------------------------------------------
+
+InstrumentChange* Score::prevInstrumentChange(Segment* seg, const Part* part, bool lookForNotes)
+      {
+      while (seg) {
+            Element* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->staff(0)->idx() * VOICES, part->staff(part->nstaves() - 1)->idx() * VOICES - 1);
+            if (ic)
+                  return toInstrumentChange(ic);
+            seg = seg->prev1();
+            if (seg && lookForNotes) {
+                  for (int i = part->staff(0)->idx() * VOICES; i < part->staff(part->nstaves() - 1)->idx() * VOICES; i++) {
+                        if (seg->element(i) && seg->element(i)->isChord())
+                              return nullptr;
+                        }
+                  }
+            }
+      return nullptr;
+      }
+
+
 }
 

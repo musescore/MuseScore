@@ -635,14 +635,16 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
                   if (ic->warning()) {
                         ic->warning()->setPlainText(it->trackName);
                         }
-                  else if (InstrumentChange* prevIc = score()->prevInstrumentChange(ic->segment()->prev1(), ic->staff(), true)) {
-                        StaffText* staffText = prevIc->warning();
-                        prevIc->setWarning(nullptr);
-                        staffText->setPlainText(it->trackName);
-                        ic->setWarning(staffText);
+                  else if (InstrumentChange* prevIc = score()->prevInstrumentChange(ic->segment()->prev1(), ic->part(), true)) {
+                        if (prevIc->warning()) {
+                              StaffText* staffText = prevIc->warning();
+                              prevIc->setWarning(nullptr);
+                              staffText->setPlainText(it->trackName);
+                              ic->setWarning(staffText);
+                              }
                         }
                   else {
-                        Chord* nextChord = ic->score()->nextChord(ic->segment(), ic->staff());
+                        Chord* nextChord = ic->score()->nextChord(ic->segment(), ic->part());
                         if (nextChord) {
                               ic->setNextChord(nextChord);
                               }
