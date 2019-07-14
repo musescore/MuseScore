@@ -5599,6 +5599,7 @@ void MusicXMLParserNotations::ornaments()
                   _e.readNext();
                   }
             else if (_e.name() == "wavy-line") {
+                  auto wavyLineTypeWasStart = (_wavyLineType == "start");
                   _wavyLineType = _e.attributes().value("type").toString();
                   _wavyLineNo   = _e.attributes().value("number").toString().toInt();
                   if (_wavyLineNo > 0) _wavyLineNo--;
@@ -5607,6 +5608,10 @@ void MusicXMLParserNotations::ornaments()
                   // remember wavy-line stop
                   if (_wavyLineType == "stop") {
                         _wavyLineStop = true;
+                        }
+                  // check for start and stop on same note
+                  if (wavyLineTypeWasStart && _wavyLineType == "stop") {
+                        _wavyLineType = "startstop";
                         }
                   _e.readNext();
                   }
@@ -5631,7 +5636,7 @@ void MusicXMLParserNotations::ornaments()
 
       // note that mscore wavy line already implicitly includes a trillsym
       // so don't add an additional one
-      if (trillMark && _wavyLineType != "start")
+      if (trillMark && _wavyLineType != "start" && _wavyLineType != "startstop")
             _articulationSymbols.push_back(SymId::ornamentTrill);
       }
 
@@ -5905,15 +5910,22 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
             const auto track = cr->track();
             const auto trk = (track / VOICES) * VOICES;       // first track of staff
             Trill*& trill = trills[wavyLineNo];
-            if (wavyLineType == "start") {
+            if (wavyLineType == "start" || wavyLineType == "startstop") {
                   if (trill) {
                         logger->logError(QString("overlapping wavy-line number %1").arg(wavyLineNo+1), xmlreader);
                         }
                   else {
                         trill = new Trill(cr->score());
                         trill->setTrack(trk);
-                        spanners[trill] = QPair<int, int>(tick.ticks(), -1);
-                        // qDebug("wedge trill=%p inserted at first tick %d", trill, tick);
+                        if (wavyLineType == "start") {
+                              spanners[trill] = QPair<int, int>(tick.ticks(), -1);
+                              // qDebug("trill=%p inserted at first tick %d", trill, tick);
+                              }
+                        if (wavyLineType == "startstop") {
+                              spanners[trill] = QPair<int, int>(tick.ticks(), tick.ticks() + ticks.ticks());
+                              trill = nullptr;
+                              // qDebug("trill=%p inserted at first tick %d second tick %d", trill, tick, tick);
+                              }
                         }
                   }
             else if (wavyLineType == "stop") {
@@ -5922,7 +5934,7 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
                         }
                   else {
                         spanners[trill].second = tick.ticks() + ticks.ticks();
-                        // qDebug("wedge trill=%p second tick %d", trill, tick);
+                        // qDebug("trill=%p second tick %d", trill, tick);
                         trill = nullptr;
                         }
                   }

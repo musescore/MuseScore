@@ -173,40 +173,6 @@ Segment* Score::tick2segment(const Fraction& tick, bool first) const
       }
 
 //---------------------------------------------------------
-//   tick2segmentEnd
-//    Find a segment containing a note or rest in track ending at tick
-//    Return the segment or null
-//---------------------------------------------------------
-
-Segment* Score::tick2segmentEnd(int track, const Fraction& tick) const
-      {
-      Measure* m = tick2measure(tick);
-      if (m == 0) {
-            qDebug("tick2segment(): not found tick %d", tick.ticks());
-            return 0;
-            }
-      // loop over all segments
-      for (Segment* segment = m->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
-            ChordRest* cr = toChordRest(segment->element(track));
-            if (!cr)
-                  continue;
-            // TODO LVI: check if following is correct, see exceptions in
-            // ExportMusicXmlchord() and ExportMusicXmlrest()
-            Fraction endTick = cr->tick() + cr->actualTicks();
-            if (endTick < tick)
-                  continue; // not found yet
-            else if (endTick == tick) {
-                  return segment; // found it
-                  }
-            else {
-                  // endTick > tick (beyond the tick we are looking for)
-                  return 0;
-                  }
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   tick2leftSegment
 /// return the segment at this tick position if any or
 /// the first segment *before* this tick position
