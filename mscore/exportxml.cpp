@@ -881,87 +881,30 @@ public:
 // trill handling
 //---------------------------------------------------------
 
-// Find chords to attach trills to. This is necessary because in MuseScore
-// trills are spanners (thus attached to segments), while in MusicXML trills
-// are attached to notes.
-// TBD: must trill end be in the same staff as trill started ?
-// if so, no need to pass in strack and etrack (trill has a track)
-
-static void findTrillAnchors(const Trill* trill, Chord*& startChord, Chord*& stopChord)
-      {
-      const Segment* seg     = trill->startSegment();
-      const Fraction endTick = trill->tick2();
-      const int strack       = trill->track();
-      // try to find chords in the same track:
-      // find a track with suitable chords both for start and stop
-      for (int i = 0; i < VOICES; ++i) {
-            Element* el = seg->element(strack + i);
-            if (!el)
-                  continue;
-            if (el->type() != ElementType::CHORD)
-                  continue;
-            startChord = static_cast<Chord*>(el);
-            Segment* s = trill->score()->tick2segmentEnd(strack + i, endTick);
-            if (!s)
-                  continue;
-            el = s->element(strack + i);
-            if (!el)
-                  continue;
-            if (el->type() != ElementType::CHORD)
-                  continue;
-            stopChord = static_cast<Chord*>(el);
-            return;
-            }
-      // try to find start/stop chords in different tracks
-      for (int i = 0; i < VOICES; ++i) {
-            Element* el = seg->element(strack + i);
-            if (!el)
-                  continue;
-            if (el->type() != ElementType::CHORD)
-                  continue;
-            startChord = static_cast<Chord*>(el);
-            break;      // first chord found is OK
-            }
-      for (int i = 0; i < VOICES; ++i) {
-            Segment* s = trill->score()->tick2segmentEnd(strack + i, endTick);
-            if (!s)
-                  continue;
-            Element* el = s->element(strack + i);
-            if (!el)
-                  continue;
-            if (el->type() != ElementType::CHORD)
-                  continue;
-            stopChord = static_cast<Chord*>(el);
-            break;      // first chord found is OK
-            }
-      }
-
 // find all trills in this measure and this part
 
 static void findTrills(Measure* measure, int strack, int etrack, TrillHash& trillStart, TrillHash& trillStop)
       {
       // loop over all spanners in this measure
-      Fraction stick = measure->tick();
-      Fraction etick = measure->tick() + measure->ticks();
+      auto stick = measure->tick();
+      auto etick = measure->tick() + measure->ticks();
       for (auto it = measure->score()->spanner().lower_bound(stick.ticks()); it != measure->score()->spanner().upper_bound(etick.ticks()); ++it) {
-            Spanner* e = it->second;
-            //qDebug("findTrills 1 trill %p type %d track %d tick %d", e, e->type(), e->track(), e->tick());
-            if (e->type() == ElementType::TRILL && strack <= e->track() && e->track() < etrack
+            auto e = it->second;
+            //qDebug("1 trill %p type %d track %d tick %s", e, e->type(), e->track(), qPrintable(e->tick().print()));
+            if (e->isTrill() && strack <= e->track() && e->track() < etrack
                 && e->tick() >= measure->tick() && e->tick() < (measure->tick() + measure->ticks()))
                   {
-                  //qDebug("findTrills 2 trill %p", e);
+                  //qDebug("2 trill %p", e);
                   // a trill is found starting in this segment, trill end time is known
                   // determine notes to write trill start and stop
-                  const Trill* tr = static_cast<const Trill*>(e);
-                  Chord* startChord = 0;  // chord where trill starts
-                  Chord* stopChord = 0;   // chord where trill stops
 
-                  findTrillAnchors(tr, startChord, stopChord);
-                  //qDebug("findTrills 3 tr %p startChord %p stopChord %p", tr, startChord, stopChord);
+                  const auto tr = toTrill(e);
+                  auto elem1 = tr->startElement();
+                  auto elem2 = tr->endElement();
 
-                  if (startChord && stopChord) {
-                        trillStart.insert(startChord, tr);
-                        trillStop.insert(stopChord, tr);
+                  if (elem1 && elem1->isChord() && elem2 && elem2->isChord()) {
+                        trillStart.insert(toChord(elem1), tr);
+                        trillStop.insert(toChord(elem2), tr);
                         }
                   }
             }
@@ -1816,59 +1759,90 @@ int ExportMusicXml::findTrill(const Trill* tr) const
       }
 
 //---------------------------------------------------------
+//   wavyLineStart
+//---------------------------------------------------------
+
+static void wavyLineStart(const Trill* tr, const int number, Notations& notations, Ornaments& ornaments, XmlWriter& xml)
+      {
+      // mscore only supports wavy-line with trill-mark
+      notations.tag(xml);
+      ornaments.tag(xml);
+      xml.tagE("trill-mark");
+      QString tagName = "wavy-line type=\"start\"";
+      tagName += QString(" number=\"%1\"").arg(number + 1);
+      tagName += color2xml(tr);
+      tagName += addPositioningAttributes(tr, true);
+      xml.tagE(tagName);
+      }
+
+//---------------------------------------------------------
+//   wavyLineStop
+//---------------------------------------------------------
+
+static void wavyLineStop(const Trill* tr, const int number, Notations& notations, Ornaments& ornaments, XmlWriter& xml)
+      {
+      notations.tag(xml);
+      ornaments.tag(xml);
+      QString trillXml = QString("wavy-line type=\"stop\" number=\"%1\"").arg(number + 1);
+      trillXml += addPositioningAttributes(tr, false);
+      xml.tagE(trillXml);
+      }
+
+//---------------------------------------------------------
 //   wavyLineStartStop
 //---------------------------------------------------------
 
 void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornaments& ornaments,
                                        TrillHash& trillStart, TrillHash& trillStop)
       {
-      if (trillStop.contains(chord)) {
-            const Trill* tr = trillStop.value(chord);
-            int n = findTrill(tr);
-            if (n >= 0)
-                  // trill stop after trill start
-                  trills[n] = 0;
-            else {
-                  // trill stop before trill start
-                  n = findTrill(0);
-                  if (n >= 0)
-                        trills[n] = tr;
-                  else
-                        qDebug("too many overlapping trills (chord %p staff %d tick %d)",
-                               chord, chord->staffIdx(), chord->tick().ticks());
-                  }
+      if (trillStart.contains(chord) && trillStop.contains(chord)) {
+            const auto tr = trillStart.value(chord);
+            auto n = findTrill(0);
             if (n >= 0) {
-                  notations.tag(_xml);
-                  ornaments.tag(_xml);
-                  QString trillXml = QString("wavy-line type=\"stop\" number=\"%1\"").arg(n + 1);
-                  trillXml += addPositioningAttributes(tr, false);
-                  _xml.tagE(trillXml);
+                  wavyLineStart(tr, n, notations, ornaments, _xml);
+                  wavyLineStop(tr, n, notations, ornaments, _xml);
                   }
-            trillStop.remove(chord);
+            else
+                  qDebug("too many overlapping trills (chord %p staff %d tick %d)",
+                         chord, chord->staffIdx(), chord->tick().ticks());
             }
-      if (trillStart.contains(chord)) {
-            const Trill* tr = trillStart.value(chord);
-            int n = findTrill(tr);
-            if (n >= 0)
-                  qDebug("wavyLineStartStop error");
-            else {
-                  n = findTrill(0);
-                  if (n >= 0) {
-                        trills[n] = tr;
-                        // mscore only supports wavy-line with trill-mark
-                        notations.tag(_xml);
-                        ornaments.tag(_xml);
-                        _xml.tagE("trill-mark");
-                        QString tagName = "wavy-line type=\"start\"";
-                        tagName += QString(" number=\"%1\"").arg(n + 1);
-                        tagName += color2xml(tr);
-                        tagName += addPositioningAttributes(tr, true);
-                        _xml.tagE(tagName);
+      else {
+            if (trillStop.contains(chord)) {
+                  const auto tr = trillStop.value(chord);
+                  auto n = findTrill(tr);
+                  if (n >= 0)
+                        // trill stop after trill start
+                        trills[n] = 0;
+                  else {
+                        // trill stop before trill start
+                        n = findTrill(0);
+                        if (n >= 0)
+                              trills[n] = tr;
+                        else
+                              qDebug("too many overlapping trills (chord %p staff %d tick %d)",
+                                     chord, chord->staffIdx(), chord->tick().ticks());
                         }
-                  else
-                        qDebug("too many overlapping trills (chord %p staff %d tick %d)",
-                               chord, chord->staffIdx(), chord->tick().ticks());
-                  trillStart.remove(chord);
+                  if (n >= 0) {
+                        wavyLineStop(tr, n, notations, ornaments, _xml);
+                        }
+                  trillStop.remove(chord);
+                  }
+            if (trillStart.contains(chord)) {
+                  const auto tr = trillStart.value(chord);
+                  auto n = findTrill(tr);
+                  if (n >= 0)
+                        qDebug("wavyLineStartStop error");
+                  else {
+                        n = findTrill(0);
+                        if (n >= 0) {
+                              trills[n] = tr;
+                              wavyLineStart(tr, n, notations, ornaments, _xml);
+                              }
+                        else
+                              qDebug("too many overlapping trills (chord %p staff %d tick %d)",
+                                     chord, chord->staffIdx(), chord->tick().ticks());
+                        trillStart.remove(chord);
+                        }
                   }
             }
       }
