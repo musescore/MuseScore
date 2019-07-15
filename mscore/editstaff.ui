@@ -575,8 +575,11 @@
        <layout class="QHBoxLayout" name="hLayout_Transposition">
         <item>
          <widget class="QLabel" name="labelTransp">
+          <property name="toolTip">
+           <string>Interval from written to sounding pitch</string>
+          </property>
           <property name="text">
-           <string>Transposition against concert/sounding pitch:</string>
+           <string>Transposition:</string>
           </property>
           <property name="buddy">
            <cstring>iList</cstring>
@@ -585,6 +588,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="octave">
+          <property name="accessibleName">
+           <string>Octave</string>
+          </property>
           <property name="maximum">
            <number>10</number>
           </property>
@@ -607,6 +613,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="accessibleName">
+           <string>Interval</string>
           </property>
           <item>
            <property name="text">
