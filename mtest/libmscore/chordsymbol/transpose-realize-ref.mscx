@@ -25,7 +25,7 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">GSoC Week 4 Demo</metaTag>
+    <metaTag name="workTitle"></metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -107,7 +107,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>53</pitch>
+              <pitch>41</pitch>
               <tpc>13</tpc>
               <tpc2>15</tpc2>
               </Note>
@@ -144,7 +144,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>58</pitch>
+              <pitch>46</pitch>
               <tpc>12</tpc>
               <tpc2>14</tpc2>
               </Note>
@@ -180,7 +180,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>51</pitch>
+              <pitch>39</pitch>
               <tpc>11</tpc>
               <tpc2>13</tpc2>
               </Note>
@@ -216,7 +216,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>56</pitch>
+              <pitch>44</pitch>
               <tpc>10</tpc>
               <tpc2>12</tpc2>
               </Note>
@@ -252,7 +252,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>49</pitch>
+              <pitch>37</pitch>
               <tpc>9</tpc>
               <tpc2>11</tpc2>
               </Note>
@@ -288,7 +288,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>55</pitch>
+              <pitch>43</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
@@ -331,7 +331,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>48</pitch>
+              <pitch>36</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
               </Note>
@@ -373,7 +373,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>48</pitch>
+              <pitch>36</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
               </Note>
@@ -410,7 +410,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>48</pitch>
+              <pitch>36</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
               </Note>
@@ -446,7 +446,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>53</pitch>
+              <pitch>41</pitch>
               <tpc>13</tpc>
               <tpc2>15</tpc2>
               </Note>
@@ -482,7 +482,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>58</pitch>
+              <pitch>46</pitch>
               <tpc>12</tpc>
               <tpc2>14</tpc2>
               </Note>
@@ -521,7 +521,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>51</pitch>
+              <pitch>39</pitch>
               <tpc>11</tpc>
               <tpc2>13</tpc2>
               </Note>
@@ -560,7 +560,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>56</pitch>
+              <pitch>44</pitch>
               <tpc>10</tpc>
               <tpc2>12</tpc2>
               </Note>
@@ -599,7 +599,7 @@
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
-              <pitch>57</pitch>
+              <pitch>45</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
               </Note>
@@ -637,7 +637,7 @@
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
-              <pitch>50</pitch>
+              <pitch>38</pitch>
               <tpc>16</tpc>
               <tpc2>18</tpc2>
               </Note>
@@ -689,7 +689,7 @@
                     </location>
                   </next>
                 </Spanner>
-              <pitch>55</pitch>
+              <pitch>43</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
@@ -773,7 +773,7 @@
                     </location>
                   </prev>
                 </Spanner>
-              <pitch>55</pitch>
+              <pitch>43</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
@@ -836,7 +836,7 @@
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
-              <pitch>52</pitch>
+              <pitch>40</pitch>
               <tpc>18</tpc>
               <tpc2>20</tpc2>
               </Note>
@@ -895,7 +895,7 @@
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
-              <pitch>57</pitch>
+              <pitch>45</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
               </Note>
@@ -940,7 +940,7 @@
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
-              <pitch>50</pitch>
+              <pitch>38</pitch>
               <tpc>16</tpc>
               <tpc2>18</tpc2>
               </Note>
@@ -994,7 +994,7 @@
                     </location>
                   </next>
                 </Spanner>
-              <pitch>55</pitch>
+              <pitch>43</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
@@ -1078,7 +1078,7 @@
                     </location>
                   </prev>
                 </Spanner>
-              <pitch>55</pitch>
+              <pitch>43</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
@@ -1145,7 +1145,7 @@
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
-              <pitch>54</pitch>
+              <pitch>42</pitch>
               <tpc>8</tpc>
               <tpc2>22</tpc2>
               </Note>
@@ -1193,7 +1193,7 @@
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
-              <pitch>59</pitch>
+              <pitch>47</pitch>
               <tpc>7</tpc>
               <tpc2>21</tpc2>
               </Note>
@@ -1244,7 +1244,7 @@
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
-              <pitch>52</pitch>
+              <pitch>40</pitch>
               <tpc>18</tpc>
               <tpc2>20</tpc2>
               </Note>
@@ -1292,7 +1292,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>48</pitch>
+              <pitch>36</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
               </Note>
@@ -1334,7 +1334,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>53</pitch>
+              <pitch>41</pitch>
               <tpc>13</tpc>
               <tpc2>15</tpc2>
               </Note>
