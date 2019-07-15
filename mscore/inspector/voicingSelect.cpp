@@ -27,8 +27,8 @@ VoicingSelect::VoicingSelect(QWidget* parent)
       setupUi(this);
 
       //setup changed signals
-      connect(interpretBox, SIGNAL(valueChanged(int)), SLOT(_voicingChanged()));
-      connect(voicingBox, SIGNAL(valueChanged(int)), SLOT(_voicingChanged()));
+      connect(interpretBox, SIGNAL(currentIndexChanged(int)), SLOT(_voicingChanged()));
+      connect(voicingBox, SIGNAL(currentIndexChanged(int)), SLOT(_voicingChanged()));
       }
 
 void VoicingSelect::_voicingChanged()

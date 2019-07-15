@@ -48,7 +48,8 @@ class TestChordSymbol : public QObject, public MTest {
       void testNoSystem();
       void testTranspose();
       void testTransposePart();
-      void testRealizeChordSymbols();
+      void testRealizeClose();
+      void testRealizeDrop2();
       void testRealizeTransposed();
       void testRealizeOverride();
       };
@@ -214,26 +215,45 @@ void TestChordSymbol::testTransposePart()
       test_post(score, "transpose-part");
       }
 
-void TestChordSymbol::testRealizeChordSymbols()
+void TestChordSymbol::testRealizeClose()
       {
-      MasterScore* score = test_pre("realize-chord-symbols");
+      MasterScore* score = test_pre("realize");
       selectAllChordSymbols(score);
       QList<Harmony*> hlist;
       for (Element* e : score->selection().elements()) {
-            if (e->isHarmony())
+            if (e->isHarmony()) {
+                  e->setProperty(Pid::HARMONY_VOICING, int(Voicing::CLOSE));
                   hlist << toHarmony(e);
+                  }
             }
       score->startCmd();
       score->cmdRealizeChordSymbols(hlist);
       score->endCmd();
-      test_post(score, "realize-chord-symbols");
+      test_post(score, "realize-close");
+      }
+
+void TestChordSymbol::testRealizeDrop2()
+      {
+      MasterScore* score = test_pre("realize");
+      selectAllChordSymbols(score);
+      QList<Harmony*> hlist;
+      for (Element* e : score->selection().elements()) {
+            if (e->isHarmony()) {
+                  e->setProperty(Pid::HARMONY_VOICING, int(Voicing::DROP_2));
+                  hlist << toHarmony(e);
+                  }
+            }
+      score->startCmd();
+      score->cmdRealizeChordSymbols(hlist);
+      score->endCmd();
+      test_post(score, "realize-drop2");
       }
 
 //    Check if the note pitches and tpcs are correct after realizing
 //    chord symbols on transposed instruments.
 void TestChordSymbol::testRealizeTransposed()
       {
-      MasterScore* score = test_pre("transpose-realize-test");
+      MasterScore* score = test_pre("transpose-realize");
       //concert pitch off
       score->startCmd();
       score->cmdConcertPitchChanged(false, true);
@@ -249,7 +269,7 @@ void TestChordSymbol::testRealizeTransposed()
       score->startCmd();
       score->cmdRealizeChordSymbols(hlist);
       score->endCmd();
-      test_post(score, "transpose-realize-test");
+      test_post(score, "transpose-realize");
       }
 
 //    Check for correctness when using the override feature for realizing chord symbols

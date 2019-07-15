@@ -99,18 +99,21 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
       else
             rootPitch %= PITCH_DELTA_OCTAVE;
 
-      //create root note or bass note in octave below middle C
+      //create root note or bass note in second octave below middle C
       if (bassTpc != Tpc::TPC_INVALID && voicing != Voicing::ROOT_ONLY)
             notes.insert(tpc2pitch(bassTpc) + transposeOffset
-                        + 4*PITCH_DELTA_OCTAVE, bassTpc);
+                        + 3*PITCH_DELTA_OCTAVE, bassTpc);
       else
-            notes.insert(rootPitch + 4*PITCH_DELTA_OCTAVE, rootTpc);
+            notes.insert(rootPitch + 3*PITCH_DELTA_OCTAVE, rootTpc);
 
 
       switch (voicing) {
             case Voicing::ROOT_ONLY:
                   break;
-            case Voicing::AUTO:
+            case Voicing::AUTO: //auto is close voicing for now since it is the most robust
+                  // FALLTHROUGH
+            case Voicing::CLOSE:
+                  //Voices notes in close position in the first octave above middle C
                   {
                   notes.insert(rootPitch + 5*PITCH_DELTA_OCTAVE, rootTpc);
                   //ensure that notes fall under a specific range
@@ -121,6 +124,50 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                         i.next();
                         notes.insert((rootPitch + (i.key() % 128)) % PITCH_DELTA_OCTAVE +
                                       5*PITCH_DELTA_OCTAVE, i.value());
+                        }
+                  }
+                  break;
+            case Voicing::OPEN:
+                  break;
+            case Voicing::DROP_2:
+                  {
+                  //TODO - PHV: maybe make this jazz interpretation only?
+                  //drop the second from the highest note down an octave, will probably need to
+                  //only take the first 4 notes
+
+                  //select 4 notes from list
+                  //FIXME - PHV: bad code below, just works for now for the concept
+                  QMap<int, int> tnotes; //notes list in one octave above C0
+                  tnotes.insert(rootPitch, rootTpc);
+                  QMapIterator<int, int> it(getIntervals(rootTpc, literal));
+                  for (int i = 0; i < 4; ++i) {
+                        if (!it.hasNext())
+                              break;
+                        it.next();
+                        tnotes.insert((rootPitch + it.key() % 128) % PITCH_DELTA_OCTAVE, it.value());
+                        }
+                  QMapIterator<int, int> itr(tnotes);
+                  itr.toBack();
+                  //also crappy nonflexible code here
+
+                  //insert note closest to top note
+                  if (itr.hasPrevious()) {
+                        itr.previous();
+                        notes.insert(itr.key() + 5*PITCH_DELTA_OCTAVE, itr.value());
+                        }
+                  //insert next note an octave below
+                  if (itr.hasPrevious()) {
+                        itr.previous();
+                        notes.insert(itr.key() + 4*PITCH_DELTA_OCTAVE, itr.value());
+                        }
+                  //then rest the same
+                  if (itr.hasPrevious()) {
+                        itr.previous();
+                        notes.insert(itr.key() + 5*PITCH_DELTA_OCTAVE, itr.value());
+                        }
+                  if (itr.hasPrevious()) {
+                        itr.previous();
+                        notes.insert(itr.key() + 5*PITCH_DELTA_OCTAVE, itr.value());
                         }
                   }
                   break;
