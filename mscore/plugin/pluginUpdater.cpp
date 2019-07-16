@@ -123,16 +123,10 @@ static inline QString getExtFromURL(QString& direct_link) {
       }
 
 //---------------------------------------------------------
-//   displayPluginRepo
+//   parsePluginRepo
 //---------------------------------------------------------
-void ResourceManager::displayPluginRepo()
+void ResourceManager::parsePluginRepo(QByteArray html_raw)
       {
-      qDebug() <<"SSL build version:" << QSslSocket::sslLibraryBuildVersionString();
-      // fetch plugin list from web
-      DownloadUtils html(this);
-      html.setTarget(pluginRepoAddr());
-      html.download();
-      QByteArray html_raw = html.returnData();
       QByteArray table_start("<table");
       QByteArray table_end("table>");
       int table_start_idx = html_raw.indexOf(table_start);
@@ -143,9 +137,11 @@ void ResourceManager::displayPluginRepo()
             qDebug("Fail to parse the HTML table from the repo page.");
       QDomElement body = table_xml.elementsByTagName("tbody").item(0).toElement();
       QDomNodeList tr_list = body.elementsByTagName("tr");
+      pluginsTable->clearSpans();
       pluginsTable->setRowCount(tr_list.length());
+      pluginsTable->setItem(0, 0, nullptr);
       QStringList all_categories;
-      for (int row=0; row<tr_list.length();row++) {
+      for (int row = 0; row < tr_list.length(); row++) {
             int col = 0;
             QDomElement tr_node = tr_list.item(row).toElement();
             QDomNodeList td_list = tr_node.elementsByTagName("td");
@@ -196,6 +192,20 @@ void ResourceManager::displayPluginRepo()
             refreshPluginButton(row, installed ? PluginStatus::UPDATED : PluginStatus::NOT_INSTALLED);
             }
       categories->insertItems(0, all_categories);
+      scanPluginUpdate();
+      }
+
+//---------------------------------------------------------
+//   displayPluginRepo
+//---------------------------------------------------------
+void ResourceManager::displayPluginRepo()
+      {
+      // fetch plugin list from web
+      DownloadUtils html(this);
+      html.setTarget(pluginRepoAddr());
+      html.download();
+      QByteArray html_raw = html.returnData();
+      emit pluginRepoAvailable(html_raw);
       }
 
 void ResourceManager::filterPluginList()
@@ -375,7 +385,7 @@ void ResourceManager::scanPluginUpdate()
                   install->setEnabled(false);
                   install->setText(tr("Pending…"));
                   PluginWorker* worker = new PluginWorker(mscore->getPluginManager()->getPackageDescription(page_url), this);
-                  QtConcurrent::run(&workerThreadPool, worker, &PluginWorker::checkUpdate, install);
+                  QtConcurrent::run(worker, &PluginWorker::checkUpdate, install);
                   }
             }
       }
@@ -465,7 +475,7 @@ void ResourceManager::updatePlugin()
       button->setEnabled(false);
       button->setText(tr("Pending…"));
       PluginWorker* worker = new PluginWorker(desc, this);
-      QtConcurrent::run(&workerThreadPool, worker, &PluginWorker::updateInstall, button);
+      QtConcurrent::run(worker, &PluginWorker::updateInstall, button);
       }
 
 //---------------------------------------------------------
@@ -478,7 +488,7 @@ void ResourceManager::downloadInstallPlugin()
       button->setEnabled(false);
       button->setText(tr("Pending…"));
       PluginWorker* worker = new PluginWorker(this);
-      QtConcurrent::run(&workerThreadPool, worker, &PluginWorker::downloadInstall, button);
+      QtConcurrent::run(worker, &PluginWorker::downloadInstall, button);
       }
 
 void ResourceManager::uninstallPluginPackage()
@@ -568,6 +578,7 @@ PluginWorker::PluginWorker(const PluginPackageDescription& desc, ResourceManager
 void PluginWorker::checkUpdate(QPushButton* install)
       {
       const QString& page_url = install->property("page_url").toString();
+      int pluginRow = install->property("row").toInt();
       PluginPackageDescription* desc_tmp = new PluginPackageDescription(desc);
       PluginPackageDescription desc_backup = desc;
       install->setEnabled(false);
@@ -579,12 +590,16 @@ void PluginWorker::checkUpdate(QPushButton* install)
       if (should_update) {
             desc.update = desc_tmp;
             emit updateAvailable(page_url, new PluginPackageDescription(desc));
-            emit pluginStatusChanged(install->property("row").toInt(), PluginStatus::UPDATE_AVAILABLE);
+            emit pluginStatusChanged(pluginRow, PluginStatus::UPDATE_AVAILABLE);
             }
       else {
             delete desc_tmp;
-            emit pluginStatusChanged(install->property("row").toInt(), PluginStatus::UPDATED);
+            emit pluginStatusChanged(pluginRow, PluginStatus::UPDATED);
             }
+      }
+void PluginWorker::detached()
+      {
+      // TODO: set button pointers null
       }
 
 bool PluginWorker::analyzePluginPage(QString full_url)
@@ -692,12 +707,13 @@ QString PluginWorker::download(const QString& page_url, bool update/* = false*/)
 void PluginWorker::updateInstall(QPushButton* button)
       {
       const QString& page_url = button->property("page_url").toString();
+      const int buttonRow = button->property("row").toInt();
       Q_ASSERT(desc.update != nullptr);
       if (desc.update->source == UNKNOWN) {
             button->setText(tr("Unknown plugin source."));
             return;
             }
-      button->setText(tr("Downloading..."));
+      button->setText(tr("Downloading…"));
       QString localPath = download(page_url, true);
       PluginStatus res;
       if (install(localPath, &res)) {
@@ -707,10 +723,10 @@ void PluginWorker::updateInstall(QPushButton* button)
             desc.update = nullptr;
             delete p_update;
             emit pluginInstalled(page_url, new PluginPackageDescription(desc));
-            emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::UPDATED);
+            emit pluginStatusChanged(buttonRow, PluginStatus::UPDATED);
             }
       else
-            emit pluginStatusChanged(button->property("row").toInt(), res);
+            emit pluginStatusChanged(buttonRow, res);
       }
 
 bool PluginWorker::install(QString& download_pkg, PluginStatus* result/*= nullptr*/)
@@ -798,7 +814,8 @@ void PluginWorker::downloadInstall(QPushButton* button)
       {
       button->setEnabled(false);
       button->setText(tr("Analyzing…"));
-      QString page_url = button->property("page_url").toString();
+      const QString page_url = button->property("page_url").toString();
+      const int buttonRow = button->property("row").toInt();
       desc.package_name = button->property("name").toString();
       analyzePluginPage("https://musescore.org" + page_url);
       if (desc.source == UNKNOWN) {
@@ -812,10 +829,10 @@ void PluginWorker::downloadInstall(QPushButton* button)
       if (install(localPath, &result)) {
             // add the new description item to the map
             emit pluginInstalled(page_url, new PluginPackageDescription(desc));
-            emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::UPDATED);
+            emit pluginStatusChanged(buttonRow, PluginStatus::UPDATED);
             }
       else
-            emit pluginStatusChanged(button->property("row").toInt(), result);
+            emit pluginStatusChanged(buttonRow, result);
       }
 
 }

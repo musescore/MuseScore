@@ -53,6 +53,7 @@ class PluginManager : public QObject {
       void loadList(bool forceRefresh);
       void refreshList();
       bool uninstallPlugin(PluginDescription* p);
+      bool uiAttached = false;
 
 private slots:
       void definePluginShortcutClicked();
@@ -75,6 +76,7 @@ public:
       void init();
       void setupUI(QLineEdit* pluginName, QLineEdit* pluginPath, QLineEdit* pluginVersion,
             QLineEdit* pluginShortcut, QTextBrowser* pluginDescription, QTreeWidget* pluginTreeWidget);
+      void disAttachUI();
       bool readPluginList();
       bool readPluginPackageList();
       void writePluginList();

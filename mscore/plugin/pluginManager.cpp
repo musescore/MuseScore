@@ -46,6 +46,16 @@ void PluginManager::setupUI(QLineEdit* pluginName_, QLineEdit* pluginPath_, QLin
       pluginShortcut = pluginShortcut_;
       pluginDescription = pluginDescription_;
       pluginTreeWidget = pluginTreeWidget_;
+      uiAttached = true;
+      }
+
+//---------------------------------------------------------
+//   disAttachUI
+//---------------------------------------------------------
+
+void PluginManager::disAttachUI()
+      {
+      uiAttached = false;
       }
 
 //---------------------------------------------------------
@@ -376,6 +386,7 @@ static constexpr int TypeRole = Qt::UserRole + 1; // a user role used in QTreeWi
 
 void PluginManager::refreshList()
       {
+      if (!uiAttached) return;
       int n = _pluginList.size();
       pluginTreeWidget->clear();
       // firstly, add plugin packages
@@ -424,6 +435,7 @@ void PluginManager::refreshList()
 
 void PluginManager::loadList(bool forceRefresh)
       {
+      if (!uiAttached) return;
       QStringList saveLoaded; // If forcing a refresh, the load flags are lost. Keep a copy and reapply.
       int n = _pluginList.size();
       if (forceRefresh && n > 0) {
@@ -528,6 +540,8 @@ void PluginManager::accept()
 
 void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
       {
+      if (!uiAttached)
+            return;
       if (!item)
             return;
       if (!item->parent() && item->data(0,TypeRole).toBool()) {

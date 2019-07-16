@@ -99,6 +99,7 @@ public slots:
       void downloadInstall(QPushButton* install);
       void updateInstall(QPushButton* install); // called in ResourceManager::updatePlugin()
       void checkUpdate(QPushButton* install);
+      void detached();
 
 signals:
       void pluginStatusChanged(int idx, PluginStatus status);

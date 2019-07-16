@@ -40,11 +40,26 @@ ResourceManager::ResourceManager(QWidget *parent) :
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
       dir.mkpath(dataPath + "/locale");
-      displayExtensions();
-      displayLanguages();
-      displayPluginRepo();
-      mscore->getPluginManager()->setupUI(pluginName, pluginPath, pluginVersion, pluginShortcut, pluginDescription, pluginTreeWidget);
+      // display "loading" in extensionsTable
+      extensionsTable->setRowCount(1);
+      extensionsTable->setSpan(0, 0, 1, extensionsTable->columnCount());
+      extensionsTable->setItem(0, 0, new QTableWidgetItem(tr("Loading…")));
+      QtConcurrent::run(this, &ResourceManager::displayExtensions);
+      connect(this, SIGNAL(extensionMetaAvailable(QByteArray)), this, SLOT(parseExtensions(QByteArray)));
+      // display "loading" in languagesTable
+      languagesTable->setRowCount(1);
+      languagesTable->setSpan(0, 0, 1, languagesTable->columnCount());
+      languagesTable->setItem(0, 0, new QTableWidgetItem(tr("Loading…")));
+      QtConcurrent::run(this, &ResourceManager::displayLanguages);
+      connect(this, SIGNAL(languageMetaAvailable(QByteArray)), this, SLOT(parseLanguages(QByteArray)));
+      // display "loading" in pluginsTable
+      pluginsTable->setRowCount(1);
+      pluginsTable->setSpan(0, 0, 1, pluginsTable->columnCount());
+      pluginsTable->setItem(0, 0, new QTableWidgetItem(tr("Loading…")));
+      QtConcurrent::run(this, &ResourceManager::displayPluginRepo);
+      connect(this, SIGNAL(pluginRepoAvailable(QByteArray)), this, SLOT(parsePluginRepo(QByteArray)));
       // plugin manager's display
+      mscore->getPluginManager()->setupUI(pluginName, pluginPath, pluginVersion, pluginShortcut, pluginDescription, pluginTreeWidget);
       mscore->getPluginManager()->init();
       QObject::connect(definePluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(definePluginShortcutClicked()));
       QObject::connect(clearPluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(clearPluginShortcutClicked()));
@@ -63,7 +78,6 @@ ResourceManager::ResourceManager(QWidget *parent) :
       pluginsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
       pluginsTable->verticalHeader()->hide();
       MuseScore::restoreGeometry(this);
-      scanPluginUpdate();
       }
 
 //---------------------------------------------------------
@@ -110,6 +124,7 @@ bool LanguageFileSize::operator<(const QTableWidgetItem& nextItem) const
 void ResourceManager::closeEvent(QCloseEvent *e)
       {
       mscore->getPluginManager()->accept();
+      mscore->getPluginManager()->disAttachUI();
       }
 
 
@@ -131,18 +146,11 @@ void ResourceManager::selectExtensionsTab()
       tabs->setCurrentIndex(tabs->indexOf(extensions));
       }
 
-
 //---------------------------------------------------------
-//   displayExtensions
+//   parseExtensions
 //---------------------------------------------------------
-
-void ResourceManager::displayExtensions()
+void ResourceManager::parseExtensions(QByteArray json)
       {
-      DownloadUtils js(this);
-      js.setTarget(baseAddr() + "extensions/details.json");
-      js.download();
-      QByteArray json = js.returnData();
-
       // parse the json file
       QJsonParseError err;
       QJsonDocument result = QJsonDocument::fromJson(json, &err);
@@ -152,13 +160,14 @@ void ResourceManager::displayExtensions()
             }
       int rowCount = result.object().keys().size();
       rowCount -= 2; //version and type
+      extensionsTable->clearSpans();
       extensionsTable->setRowCount(rowCount);
 
       int row = 0;
       int col = 0;
       QPushButton* buttonInstall;
       QPushButton* buttonUninstall;
-      extensionsTable->verticalHeader()->show();
+      
 
       QStringList exts = result.object().keys();
       for (QString key : exts) {
@@ -212,18 +221,24 @@ void ResourceManager::displayExtensions()
       }
 
 //---------------------------------------------------------
-//   displayLanguages
+//   displayExtensions
 //---------------------------------------------------------
 
-void ResourceManager::displayLanguages()
+void ResourceManager::displayExtensions()
       {
-      // Download details.json
       DownloadUtils js(this);
-      js.setTarget(baseAddr() + "languages/details.json");
+      js.setTarget(baseAddr() + "extensions/details.json");
       js.download();
       QByteArray json = js.returnData();
-      qDebug() << json;
+      emit extensionMetaAvailable(json);
+      }
 
+//---------------------------------------------------------
+//   parseLanguages
+//---------------------------------------------------------
+
+void ResourceManager::parseLanguages(QByteArray json)
+      {
       // parse the json file
       QJsonParseError err;
       QJsonDocument result = QJsonDocument::fromJson(json, &err);
@@ -233,6 +248,7 @@ void ResourceManager::displayLanguages()
             }
       int rowCount = result.object().keys().size();
       rowCount -= 2; //version and type
+      languagesTable->clearSpans();
       languagesTable->setRowCount(rowCount);
 
       int row = 0;
@@ -245,7 +261,6 @@ void ResourceManager::displayLanguages()
       std::vector<QPushButton*> updateButtons(rowCount);
 #endif
       QPushButton* temp;
-      languagesTable->verticalHeader()->show();
 
       // move current language to first row
       QStringList langs = result.object().keys();
@@ -313,6 +328,21 @@ void ResourceManager::displayLanguages()
                   }
             row++;
             }
+      }
+
+//---------------------------------------------------------
+//   displayLanguages
+//---------------------------------------------------------
+
+void ResourceManager::displayLanguages()
+      {
+      // Download details.json
+      DownloadUtils js(this);
+      js.setTarget(baseAddr() + "languages/details.json");
+      js.download();
+      QByteArray json = js.returnData();
+      qDebug() << json;
+      emit languageMetaAvailable(json);
       }
 
 //---------------------------------------------------------

@@ -53,11 +53,17 @@ private:
     QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
     QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
 
-    QMap <QString, PluginPackageDescription> pluginDescriptionMap; // plugin page url -> description of installed plugin
-    QThreadPool workerThreadPool;
+
+signals:
+    void pluginRepoAvailable(QByteArray repo_html);
+    void languageMetaAvailable(QByteArray json);
+    void extensionMetaAvailable(QByteArray json);
 
 private slots:
     void filterPluginList();
+    void parsePluginRepo(QByteArray repo_page);
+    void parseLanguages(QByteArray json);
+    void parseExtensions(QByteArray json);
     void downloadLanguage();
     void scanPluginUpdate();
     void downloadExtension();
