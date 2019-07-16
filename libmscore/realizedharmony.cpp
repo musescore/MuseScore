@@ -136,38 +136,101 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                   //only take the first 4 notes
 
                   //select 4 notes from list
-                  //FIXME - PHV: bad code below, just works for now for the concept
-                  QMap<int, int> tnotes; //notes list in one octave above C0
-                  tnotes.insert(rootPitch, rootTpc);
-                  QMapIterator<int, int> it(getIntervals(rootTpc, literal));
-                  for (int i = 0; i < 4; ++i) {
-                        if (!it.hasNext())
-                              break;
-                        it.next();
-                        tnotes.insert((rootPitch + it.key() % 128) % PITCH_DELTA_OCTAVE, it.value());
-                        }
-                  QMapIterator<int, int> itr(tnotes);
-                  itr.toBack();
-                  //also crappy nonflexible code here
+                  QMap<int, int> intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 4);
+                  QMapIterator<int, int> i(intervals);
+                  i.toBack();
 
-                  //insert note closest to top note
-                  if (itr.hasPrevious()) {
-                        itr.previous();
-                        notes.insert(itr.key() + 5*PITCH_DELTA_OCTAVE, itr.value());
+                  int counter = 0; //counter to drop the second note
+                  while (i.hasPrevious()) {
+                        i.previous();
+                        if (++counter == 2)
+                              notes.insert(i.key() + 4*PITCH_DELTA_OCTAVE, i.value());
+                        else
+                              notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
                         }
-                  //insert next note an octave below
-                  if (itr.hasPrevious()) {
-                        itr.previous();
-                        notes.insert(itr.key() + 4*PITCH_DELTA_OCTAVE, itr.value());
+                  }
+                  break;
+            case Voicing::THREE_NOTE:
+                  {
+                  //Three note open voicing, maybe remove this
+
+                  QMap<int, int> intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 2);
+                  QMapIterator<int, int> i(intervals);
+
+                  i.next();
+                  notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
+
+                  i.next();
+                  notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
+                  }
+                  break;
+            case Voicing::FOUR_NOTE:
+                  {
+                  //four note open voicing
+                  QMap<int, int> relIntervals = getIntervals(rootTpc, literal);
+                  QMap<int, int> intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 3);
+                  QMapIterator<int, int> i(intervals);
+                  i.toBack();
+
+                  int counter = 0; //how many notes have been added
+                  while (i.hasPrevious()) {
+                        i.previous();
+
+                        if (counter % 2)
+                              notes.insert(i.key() + 4*PITCH_DELTA_OCTAVE, i.value());
+                        else
+                              notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
+                        ++counter;
                         }
-                  //then rest the same
-                  if (itr.hasPrevious()) {
-                        itr.previous();
-                        notes.insert(itr.key() + 5*PITCH_DELTA_OCTAVE, itr.value());
+                  if (counter < 3) {
+                        //TODO - PHV: probably should extract this into its own recursive function
+                        intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 3 - counter, true);
+                        QMapIterator<int, int> i(intervals);
+                        i.toBack();
+                        while (i.hasPrevious()) {
+                              i.previous();
+
+                              if (counter % 2)
+                                    notes.insert(i.key() + 4*PITCH_DELTA_OCTAVE, i.value());
+                              else
+                                    notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
+                              ++counter;
+                              }
                         }
-                  if (itr.hasPrevious()) {
-                        itr.previous();
-                        notes.insert(itr.key() + 5*PITCH_DELTA_OCTAVE, itr.value());
+                  }
+                  break;
+            case Voicing::SIX_NOTE:
+                  //six note voicing
+                  {
+                  QMap<int, int> relIntervals = getIntervals(rootTpc, literal);
+                  QMap<int, int> intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 5);
+                  QMapIterator<int, int> i(intervals);
+                  i.toBack();
+
+                  int counter = 0; //how many notes have been added
+                  while (i.hasPrevious()) {
+                        i.previous();
+
+                        if (counter % 2)
+                              notes.insert(i.key() + 4*PITCH_DELTA_OCTAVE, i.value());
+                        else
+                              notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
+                        ++counter;
+                        }
+                  if (counter < 5) {
+                        //TODO - PHV: probably should extract this into its own recursive function
+                        intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 5 - counter, true); //include root
+                        QMapIterator<int, int> i(intervals);
+                        i.toBack();
+                        while (i.hasPrevious()) {
+                              i.previous();
+
+                              if (counter % 2)
+                                    notes.insert(i.key() + 4*PITCH_DELTA_OCTAVE, i.value());
+                              else
+                                    notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
+                              ++counter;
+                              }
                         }
                   }
                   break;
@@ -415,6 +478,29 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
             ret.insert(2, tpcInterval(rootTpc, 2, 0));
 
             */
+      return ret;
+      }
+
+//---------------------------------------------------
+//   normalizeNoteMap
+///   normalize the note map from intervals to create pitches between 0 and 12
+///   and resolve any weighting system.
+//---------------------------------------------------
+QMap<int, int> RealizedHarmony::normalizeNoteMap(QMap<int, int> intervals, int rootTpc, int rootPitch, int max, bool includeRoot) const
+      {
+      QMap<int, int> ret;
+      QMapIterator<int, int> itr(intervals);
+
+      if (includeRoot) {
+            --max;
+            ret.insert(rootPitch, rootTpc);
+            }
+      for (int i = 0; i < max; ++i) {
+            if (!itr.hasNext())
+                  break;
+            itr.next();
+            ret.insert((itr.key() % 128 + rootPitch) % PITCH_DELTA_OCTAVE, itr.value());
+            }
       return ret;
       }
 

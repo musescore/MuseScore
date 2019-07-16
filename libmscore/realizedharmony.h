@@ -87,6 +87,9 @@ class RealizedHarmony {
       void update(int rootTpc, int bassTpc, int transposeOffset = 0); //updates the notes map
 
       QMap<int, int> getIntervals(int rootTpc, bool literal = true) const;
+
+   private:
+      QMap<int, int> normalizeNoteMap(QMap<int, int> intervals, int rootTpc, int rootPitch, int max = 128, bool includeRoot = false) const;
       };
 }
 
