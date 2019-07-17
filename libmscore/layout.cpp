@@ -2062,7 +2062,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       cs = m->findSegmentR(SegmentType::ChordRest, Fraction(0,1));
       if (cs) {
             for (Element* e : cs->annotations()) {
-                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
+                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChangeWarning()))
                         continue;
 
                   bool found = false;
@@ -2081,7 +2081,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
             }
 
       for (Element* e : s->annotations()) {
-            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
+            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || isInstrumentChangeWarning()))
                   continue;
             bool found = false;
             for (Element* ee : cs->annotations()) {
@@ -2113,7 +2113,7 @@ static bool validMMRestMeasure(Measure* m)
       int n = 0;
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
-                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
+                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChangeWarning()))
                         return false;
                   }
             if (s->isChordRestType()) {
@@ -2199,7 +2199,7 @@ static bool breakMultiMeasureRest(Measure* m)
                         continue;
                   if (e->isRehearsalMark() ||
                       e->isTempoText() ||
-                      ((e->isHarmony() || e->isStaffText() || e->isSystemText()) && (e->systemFlag() || m->score()->staff(e->staffIdx())->show())))
+                      ((e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChangeWarning()) && (e->systemFlag() || m->score()->staff(e->staffIdx())->show())))
                         return true;
                   }
             for (int staffIdx = 0; staffIdx < m->score()->nstaves(); ++staffIdx) {
@@ -3987,7 +3987,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->isStaffText() || e->isSystemText() || e->isInstrumentChange())
+                  if (e->isStaffText() || e->isSystemText() || e->isInstrumentChange() || e->isInstrumentChangeWarning())
                         e->layout();
                   }
             }

@@ -894,6 +894,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           // exclude certain element types
                                           // this should be same list excluded in Score::undoAddElement()
                                           case ElementType::STAFF_TEXT:
+                                          case ElementType::INSTRUMENT_CHANGE_WARNING:
                                           case ElementType::SYSTEM_TEXT:
                                           case ElementType::FRET_DIAGRAM:
                                           case ElementType::HARMONY:
@@ -1101,6 +1102,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& stic
                                           // exclude certain element types
                                           // this should be same list excluded in Score::undoAddElement()
                                           case ElementType::STAFF_TEXT:
+                                          case ElementType::INSTRUMENT_CHANGE_WARNING:
                                           case ElementType::SYSTEM_TEXT:
                                           case ElementType::FRET_DIAGRAM:
                                           case ElementType::HARMONY:

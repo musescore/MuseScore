@@ -1324,14 +1324,26 @@ bool ChordRest::isBefore(const ChordRest* o) const
 //   undoAddAnnotation
 //---------------------------------------------------------
 
-void ChordRest::undoAddAnnotation(Element* a)
+void ChordRest::undoAddAnnotation(Element* a, bool useTopStaff/* = false*/)
       {
       Segment* seg = segment();
       Measure* m = measure();
       if (m && m->isMMRest())
             seg = m->mmRestFirst()->findSegmentR(SegmentType::ChordRest, Fraction(0,1));
 
-      a->setTrack(a->systemFlag() ? 0 : track());
+      if (useTopStaff) {
+            Staff* topStaff;
+            for (int i = 0; i < part()->nstaves(); i++) {
+                  if (part()->staff(i)->show()) {
+                        topStaff = part()->staff(i);
+                        break;
+                        }
+                  }
+            Q_ASSERT(topStaff->show());
+            a->setTrack(topStaff->idx() * VOICES);
+            }
+      else
+            a->setTrack(a->systemFlag() ? 0 : track());
       a->setParent(seg);
       score()->undoAddElement(a);
       }

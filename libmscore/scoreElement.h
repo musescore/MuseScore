@@ -301,6 +301,7 @@ class ScoreElement {
       CONVERT(Ambitus,       AMBITUS)
       CONVERT(Bracket,       BRACKET)
       CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
+      CONVERT(InstrumentChangeWarning, INSTRUMENT_CHANGE_WARNING)
       CONVERT(StaffTypeChange, STAFFTYPE_CHANGE)
       CONVERT(Hairpin,       HAIRPIN)
       CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
@@ -408,7 +409,7 @@ class ScoreElement {
          ;
          }
       bool isStaffTextBase() const {
-            return isStaffText() || isSystemText();
+            return isStaffText() || isSystemText() || isInstrumentChangeWarning();
             }
       };
 

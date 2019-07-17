@@ -1477,6 +1477,7 @@ void Score::cmdFlip()
                || e->isJump()
                || e->isMarker()
                || e->isStaffText()
+               || e->isInstrumentChangeWarning()
                || e->isSticking()
                || e->isFingering()
                || e->isDynamic()
@@ -4322,6 +4323,7 @@ void Score::undoAddElement(Element* element)
          && et != ElementType::BREATH
          && et != ElementType::DYNAMIC
          && et != ElementType::STAFF_TEXT
+         && et != ElementType::INSTRUMENT_CHANGE_WARNING
          && et != ElementType::SYSTEM_TEXT
          && et != ElementType::STICKING
          && et != ElementType::TREMOLO
@@ -4355,6 +4357,7 @@ void Score::undoAddElement(Element* element)
                 || element->isTremoloBar()
                 || element->isDynamic()
                 || element->isStaffText()
+                || element->isInstrumentChangeWarning()
                 || element->isSticking()
                 || element->isFretDiagram()
                 || element->isHarmony()
@@ -4385,6 +4388,7 @@ void Score::undoAddElement(Element* element)
                                     // exclude certain element types except on corresponding staff in part
                                     // this should be same list excluded in cloneStaff()
                                     case ElementType::STAFF_TEXT:
+                                    case ElementType::INSTRUMENT_CHANGE_WARNING:
                                     case ElementType::SYSTEM_TEXT:
                                     case ElementType::FRET_DIAGRAM:
                                     case ElementType::HARMONY:
@@ -4468,6 +4472,7 @@ void Score::undoAddElement(Element* element)
                      || element->isTremoloBar()
                      || element->isDynamic()
                      || element->isStaffText()
+                     || element->isInstrumentChangeWarning()
                      || element->isSticking()
                      || element->isFretDiagram()
                      || element->isFermata()

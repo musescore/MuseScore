@@ -1062,12 +1062,12 @@ Chord* Score::nextChord(Segment* seg, const Part* part)
 InstrumentChange* Score::prevInstrumentChange(Segment* seg, const Part* part, bool lookForNotes)
       {
       while (seg) {
-            Element* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->staff(0)->idx() * VOICES, part->staff(part->nstaves() - 1)->idx() * VOICES - 1);
+            Element* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->staff(0)->idx() * VOICES, (part->staff(part->nstaves() - 1)->idx() + 1) * VOICES - 1);
             if (ic)
                   return toInstrumentChange(ic);
             seg = seg->prev1();
             if (seg && lookForNotes) {
-                  for (int i = part->staff(0)->idx() * VOICES; i < part->staff(part->nstaves() - 1)->idx() * VOICES; i++) {
+                  for (int i = part->staff(0)->idx() * VOICES; i < (part->staff(part->nstaves() - 1)->idx() + 1) * VOICES; i++) {
                         if (seg->element(i) && seg->element(i)->isChord())
                               return nullptr;
                         }

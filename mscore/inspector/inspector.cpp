@@ -320,6 +320,7 @@ void Inspector::update(Score* s)
                               ie = new InspectorLyric(this);
                               break;
                         case ElementType::STAFF_TEXT:
+                        case ElementType::INSTRUMENT_CHANGE_WARNING:
                         case ElementType::SYSTEM_TEXT:
                         case ElementType::REHEARSAL_MARK:
                               ie = new InspectorStaffText(this);

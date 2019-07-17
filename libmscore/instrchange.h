@@ -21,14 +21,29 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   @@ InstrumentChangeWarning
+//---------------------------------------------------------
+
+class InstrumentChangeWarning final : public StaffTextBase {
+      virtual Sid getPropertyStyle(Pid) const override;
+      virtual QVariant propertyDefault(Pid id) const override;
+
+   public:
+      InstrumentChangeWarning(Score* s = 0, Tid = Tid::STAFF);
+      virtual InstrumentChangeWarning* clone() const override { return new InstrumentChangeWarning(*this); }
+      virtual ElementType type() const override { return ElementType::INSTRUMENT_CHANGE_WARNING; }
+      virtual void layout() override;
+};
+
+//---------------------------------------------------------
 //   @@ InstrumentChange
 //---------------------------------------------------------
 
-class InstrumentChange final : public TextBase  {
+class InstrumentChange final : public TextBase {
       Instrument* _instrument;  // Staff holds ownership if part of score
       std::vector<KeySig*> _keySigs;
       std::vector<Clef*> _clefs;
-      StaffText* _warning = nullptr;
+      InstrumentChangeWarning* _warning = nullptr;
 
    public:
       InstrumentChange(Score*);
@@ -55,8 +70,8 @@ class InstrumentChange final : public TextBase  {
       std::vector<Clef*> clefs()            { return _clefs;       }
       void addClef(Clef* clef)              { _clefs.push_back(clef); }
 
-      StaffText* warning() const                 { return _warning; }
-      void setWarning(StaffText* warning)        { _warning = warning; }
+      InstrumentChangeWarning* warning() const { return _warning; }
+      void setWarning(InstrumentChangeWarning* warning) { _warning = warning; }
 
       Segment* segment() const              { return toSegment(parent()); }
 

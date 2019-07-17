@@ -1002,6 +1002,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::MEASURE_NUMBER:    return new MeasureNumber(score);
             case ElementType::INSTRUMENT_NAME:   return new InstrumentName(score);
             case ElementType::STAFF_TEXT:        return new StaffText(score);
+            case ElementType::INSTRUMENT_CHANGE_WARNING: return new InstrumentChangeWarning(score);
             case ElementType::SYSTEM_TEXT:       return new SystemText(score);
             case ElementType::REHEARSAL_MARK:    return new RehearsalMark(score);
             case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(score);
