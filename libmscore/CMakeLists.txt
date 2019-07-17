@@ -64,7 +64,7 @@ add_library (
       drumset.cpp durationtype.cpp dynamic.cpp edit.cpp noteentry.cpp
       element.cpp excerpt.cpp
       fifo.cpp fret.cpp glissando.cpp hairpin.cpp
-      harmony.cpp hook.cpp image.cpp iname.cpp instrchange.cpp
+      harmony.cpp hook.cpp image.cpp iname.cpp instrchange.cpp instrchangewarning.cpp
       instrtemplate.cpp instrument.cpp interval.cpp
       key.cpp keysig.cpp lasso.cpp
       layoutbreak.cpp layout.cpp line.cpp lyrics.cpp measurebase.cpp
