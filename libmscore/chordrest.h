@@ -179,7 +179,7 @@ class ChordRest : public DurationElement {
 
       bool isBefore(const ChordRest*) const;
 
-      void undoAddAnnotation(Element*);
+      void undoAddAnnotation(Element* a, bool useTopStaff = false);
       };
 
 

@@ -79,13 +79,13 @@ void InstrumentChange::setInstrument(const Instrument& i)
 
 void InstrumentChange::setNextChord(ChordRest* chord)
       {
-      StaffText* staffText = new StaffText(score());
+      InstrumentChangeWarning* instrumentChangeWarning = new InstrumentChangeWarning(score());
       if (warning()/* && warning)_->parent()*/) {
             score()->deleteItem(warning());
             }
-      setWarning(staffText);
-      staffText->setPlainText(instrument()->trackName());
-      chord->undoAddAnnotation(staffText);
+      setWarning(instrumentChangeWarning);
+      instrumentChangeWarning->setPlainText(instrument()->trackName());
+      chord->undoAddAnnotation(instrumentChangeWarning, true);
       }
 
 //---------------------------------------------------------

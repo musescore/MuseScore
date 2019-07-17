@@ -78,6 +78,7 @@ enum class ElementType {
       SYSTEM_TEXT,
       REHEARSAL_MARK,
       INSTRUMENT_CHANGE,
+      INSTRUMENT_CHANGE_WARNING,
       STAFFTYPE_CHANGE,
       HARMONY,
       FRET_DIAGRAM,

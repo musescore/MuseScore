@@ -671,6 +671,7 @@ void Debugger::updateElement(Element* el)
                   case ElementType::TEXT:
                   case ElementType::MEASURE_NUMBER:
                   case ElementType::STAFF_TEXT:
+                  case ElementType::INSTRUMENT_CHANGE_WARNING:
                   case ElementType::SYSTEM_TEXT:
                   case ElementType::REHEARSAL_MARK:
                         ew = new TextView;

@@ -498,6 +498,7 @@ void Segment::add(Element* el)
             case ElementType::SYMBOL:
             case ElementType::FRET_DIAGRAM:
             case ElementType::STAFF_TEXT:
+            case ElementType::INSTRUMENT_CHANGE_WARNING:
             case ElementType::SYSTEM_TEXT:
             case ElementType::REHEARSAL_MARK:
             case ElementType::MARKER:
@@ -656,6 +657,7 @@ void Segment::remove(Element* el)
             case ElementType::MARKER:
             case ElementType::REHEARSAL_MARK:
             case ElementType::STAFF_TEXT:
+            case ElementType::INSTRUMENT_CHANGE_WARNING:
             case ElementType::SYSTEM_TEXT:
             case ElementType::SYMBOL:
             case ElementType::TAB_DURATION_SYMBOL:
@@ -1503,6 +1505,7 @@ Element* Segment::nextElement(int activeStaff)
             case ElementType::FRET_DIAGRAM:
             case ElementType::TEMPO_TEXT:
             case ElementType::STAFF_TEXT:
+            case ElementType::INSTRUMENT_CHANGE_WARNING:
             case ElementType::SYSTEM_TEXT:
             case ElementType::REHEARSAL_MARK:
             case ElementType::MARKER:
@@ -1628,6 +1631,7 @@ Element* Segment::prevElement(int activeStaff)
             case ElementType::FRET_DIAGRAM:
             case ElementType::TEMPO_TEXT:
             case ElementType::STAFF_TEXT:
+            case ElementType::INSTRUMENT_CHANGE_WARNING:
             case ElementType::SYSTEM_TEXT:
             case ElementType::REHEARSAL_MARK:
             case ElementType::MARKER:
@@ -1982,6 +1986,7 @@ void Segment::createShape(int staffIdx)
                && !e->isInstrumentChange()
                && !e->isArticulation()
                && !e->isFermata()
+               && !e->isInstrumentChangeWarning()
                && !e->isStaffText()) {
                   // annotations added here are candidates for collision detection
                   // lyrics, ...

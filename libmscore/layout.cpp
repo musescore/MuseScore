@@ -2057,8 +2057,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       if (cs) {
             // clone elements from underlying measure to mmr
             for (Element* e : cs->annotations()) {
-                  // look at elements in underlying measure
-                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
+                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChangeWarning()))
                         continue;
                   // try to find a match in mmr
                   bool found = false;
@@ -2080,7 +2079,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
             // this should not happen since the elements are linked?
             for (Element* e : s->annotations()) {
                   // look at elements in mmr
-                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
+                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChangeWarning()))
                         continue;
                   // try to find a match in underlying measure
                   bool found = false;
@@ -2114,7 +2113,7 @@ static bool validMMRestMeasure(Measure* m)
       int n = 0;
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
-                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
+                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChangeWarning()))
                         return false;
                   }
             if (s->isChordRestType()) {
@@ -2200,7 +2199,7 @@ static bool breakMultiMeasureRest(Measure* m)
                         continue;
                   if (e->isRehearsalMark() ||
                       e->isTempoText() ||
-                      ((e->isHarmony() || e->isStaffText() || e->isSystemText()) && (e->systemFlag() || m->score()->staff(e->staffIdx())->show())))
+                      ((e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChangeWarning()) && (e->systemFlag() || m->score()->staff(e->staffIdx())->show())))
                         return true;
                   }
             for (int staffIdx = 0; staffIdx < m->score()->nstaves(); ++staffIdx) {
@@ -3978,7 +3977,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->isStaffText() || e->isSystemText() || e->isInstrumentChange())
+                  if (e->isStaffText() || e->isSystemText() || e->isInstrumentChange() || e->isInstrumentChangeWarning())
                         e->layout();
                   }
             }

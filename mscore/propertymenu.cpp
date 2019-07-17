@@ -637,10 +637,10 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
                         }
                   else if (InstrumentChange* prevIc = score()->prevInstrumentChange(ic->segment()->prev1(), ic->part(), true)) {
                         if (prevIc->warning()) {
-                              StaffText* staffText = prevIc->warning();
+                              InstrumentChangeWarning* instrumentChangeWarning = prevIc->warning();
                               prevIc->setWarning(nullptr);
-                              staffText->setPlainText(it->trackName);
-                              ic->setWarning(staffText);
+                              instrumentChangeWarning->setPlainText(it->trackName);
+                              ic->setWarning(instrumentChangeWarning);
                               }
                         }
                   else {

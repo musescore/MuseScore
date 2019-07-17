@@ -72,6 +72,7 @@ static const ElementName elementNames[] = {
       { ElementType::SYSTEM_TEXT,          "SystemText",           QT_TRANSLATE_NOOP("elementName", "System Text") },
       { ElementType::REHEARSAL_MARK,       "RehearsalMark",        QT_TRANSLATE_NOOP("elementName", "Rehearsal Mark") },
       { ElementType::INSTRUMENT_CHANGE,    "InstrumentChange",     QT_TRANSLATE_NOOP("elementName", "Instrument Change") },
+      { ElementType::INSTRUMENT_CHANGE_WARNING,"InstrumentChangeWarning", QT_TRANSLATE_NOOP("elementName", "Instrument Change Warning") },
       { ElementType::STAFFTYPE_CHANGE,     "StaffTypeChange",      QT_TRANSLATE_NOOP("elementName", "Staff Type Change") },
       { ElementType::HARMONY,              "Harmony",              QT_TRANSLATE_NOOP("elementName", "Chord Symbol") },
       { ElementType::FRET_DIAGRAM,         "FretDiagram",          QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram") },
@@ -808,6 +809,7 @@ bool ScoreElement::isTextBase() const
          || type() == ElementType::MARKER
          || type() == ElementType::JUMP
          || type() == ElementType::STAFF_TEXT
+         || type() == ElementType::INSTRUMENT_CHANGE_WARNING
          || type() == ElementType::SYSTEM_TEXT
          || type() == ElementType::REHEARSAL_MARK
          || type() == ElementType::INSTRUMENT_CHANGE
