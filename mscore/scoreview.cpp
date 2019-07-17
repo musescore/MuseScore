@@ -2077,6 +2077,16 @@ void ScoreView::cmd(const char* s)
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty() )
                 el = score()->selection().elements().first();
+            if (!el) {
+                  ChordRest* cr = score()->selection().currentCR();
+                  if (cr) {
+                        if (cr->isChord())
+                              el = toChord(cr)->downNote();
+                        else if (cr->isRest())
+                              el = cr;
+                        score()->select(el);
+                        }
+                  }
 
             if (el)
                   cmdGotoElement(score()->nextElement());
@@ -2091,6 +2101,16 @@ void ScoreView::cmd(const char* s)
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty())
                 el = score()->selection().elements().last();
+            if (!el) {
+                  ChordRest* cr = score()->selection().currentCR();
+                  if (cr) {
+                        if (cr->isChord())
+                              el = toChord(cr)->upNote();
+                        else if (cr->isRest())
+                              el = cr;
+                        score()->select(el);
+                        }
+                  }
 
             if (el)
                   cmdGotoElement(score()->prevElement());
