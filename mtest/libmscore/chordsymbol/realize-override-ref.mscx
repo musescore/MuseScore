@@ -99,7 +99,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>57</pitch>
+              <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
@@ -116,7 +116,7 @@
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
-              <pitch>58</pitch>
+              <pitch>46</pitch>
               <tpc>12</tpc>
               </Note>
             </Chord>
@@ -133,7 +133,7 @@
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
-              <pitch>49</pitch>
+              <pitch>37</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
@@ -150,7 +150,7 @@
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
                 </Accidental>
-              <pitch>52</pitch>
+              <pitch>40</pitch>
               <tpc>18</tpc>
               <tpc2>30</tpc2>
               </Note>
@@ -168,7 +168,7 @@
               <Accidental>
                 <subtype>accidentalDoubleFlat</subtype>
                 </Accidental>
-              <pitch>50</pitch>
+              <pitch>38</pitch>
               <tpc>16</tpc>
               <tpc2>4</tpc2>
               </Note>
@@ -183,7 +183,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>53</pitch>
+              <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
@@ -197,7 +197,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>55</pitch>
+              <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>

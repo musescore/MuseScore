@@ -137,6 +137,8 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
 
                   //select 4 notes from list
                   QMap<int, int> intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 4);
+                  if (intervals.size() < 4)
+                        intervals.insert(rootPitch, rootTpc); //double root if we only have a few notes
                   QMapIterator<int, int> i(intervals);
                   i.toBack();
 
