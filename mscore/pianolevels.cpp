@@ -416,7 +416,8 @@ void PianoLevels::adjustLevelLerp(int tick0, int value0, int tick1, int value1, 
             else {
                   int tick = noteStartTick(note, 0);
                   if (tick0 <= tick && tick <= tick1) {
-                        int value = (value1 - value0) * (tick - tick0) / (tick1 - tick0) + value0;
+                        int value = tick0 == tick1 ? value0
+                              : (value1 - value0) * (tick - tick0) / (tick1 - tick0) + value0;
                         filter->setValue(_staff, note, 0, value);
                         hitNote = true;
                         }
