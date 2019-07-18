@@ -1024,7 +1024,6 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::MEASURE_NUMBER:    return new MeasureNumber(score);
             case ElementType::INSTRUMENT_NAME:   return new InstrumentName(score);
             case ElementType::STAFF_TEXT:        return new StaffText(score);
-            case ElementType::INSTRUMENT_CHANGE_WARNING: return new InstrumentChangeWarning(score);
             case ElementType::SYSTEM_TEXT:       return new SystemText(score);
             case ElementType::REHEARSAL_MARK:    return new RehearsalMark(score);
             case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(score);
@@ -1054,14 +1053,14 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::STEM:              return new Stem(score);
             case ElementType::SLUR:              return new Slur(score);
             case ElementType::TIE:               return new Tie(score);
-            case ElementType::FINGERING:          return new Fingering(score);
+            case ElementType::FINGERING:         return new Fingering(score);
             case ElementType::HBOX:              return new HBox(score);
             case ElementType::VBOX:              return new VBox(score);
             case ElementType::TBOX:              return new TBox(score);
             case ElementType::FBOX:              return new FBox(score);
             case ElementType::MEASURE:           return new Measure(score);
             case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(score);
-            case ElementType::OSSIA:               return new Ossia(score);
+            case ElementType::OSSIA:             return new Ossia(score);
             case ElementType::IMAGE:             return new Image(score);
             case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(score);
             case ElementType::AMBITUS:           return new Ambitus(score);
@@ -1105,6 +1104,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::STAFF:
             case ElementType::SCORE:
             case ElementType::BRACKET_ITEM:
+            case ElementType::INSTRUMENT_CHANGE_WARNING:
                   break;
             }
       qDebug("cannot create type %d <%s>", int(type), Element::name(type));

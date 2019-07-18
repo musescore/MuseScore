@@ -640,6 +640,7 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
                               InstrumentChangeWarning* instrumentChangeWarning = prevIc->warning();
                               prevIc->setWarning(nullptr);
                               instrumentChangeWarning->setPlainText(it->trackName);
+                              instrumentChangeWarning->setInstrumentChange(ic);
                               ic->setWarning(instrumentChangeWarning);
                               }
                         }

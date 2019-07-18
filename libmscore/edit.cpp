@@ -1611,7 +1611,18 @@ void Score::deleteItem(Element* el)
                   {
                   Chord* chord = toChord(el);
                   removeChordRest(chord, false);
-
+                  Segment* seg = chord->segment();
+                  
+                  int minVoice = chord->part()->staff(0)->idx() * VOICES;
+                  int maxVoice = (chord->part()->staff(chord->part()->nstaves() - 1)->idx() + 1) * VOICES;
+                  InstrumentChangeWarning* warning = toInstrumentChangeWarning(seg->findAnnotation(ElementType::INSTRUMENT_CHANGE_WARNING, minVoice, maxVoice - 1));
+                  if (warning && seg->hasAnnotationOrElement(ElementType::CHORD, minVoice, maxVoice)) {
+                        Chord* nextChord = score()->nextChord(seg, chord->part());
+                        if (nextChord && warning->instrumentChange())
+                              warning->instrumentChange()->setNextChord(nextChord);
+                        else
+                              score()->deleteItem(warning);
+                        }
                   // replace with rest
                   if (chord->noteType() == NoteType::NORMAL) {
                         Rest* rest = new Rest(this, chord->durationType());
