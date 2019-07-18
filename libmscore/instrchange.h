@@ -20,6 +20,7 @@
 
 namespace Ms {
 
+class InstrumentChange;
 //---------------------------------------------------------
 //   @@ InstrumentChangeWarning
 //---------------------------------------------------------
@@ -27,13 +28,16 @@ namespace Ms {
 class InstrumentChangeWarning final : public StaffTextBase {
       virtual Sid getPropertyStyle(Pid) const override;
       virtual QVariant propertyDefault(Pid id) const override;
+      InstrumentChange* _ic;
 
    public:
-      InstrumentChangeWarning(Score* s = 0, Tid = Tid::STAFF);
+      InstrumentChangeWarning(InstrumentChange* ic, Score* s = 0, Tid = Tid::STAFF);
       virtual InstrumentChangeWarning* clone() const override { return new InstrumentChangeWarning(*this); }
       virtual ElementType type() const override { return ElementType::INSTRUMENT_CHANGE_WARNING; }
       virtual void layout() override;
-};
+      InstrumentChange* instrumentChange() const { return _ic; }
+      void setInstrumentChange(InstrumentChange* ic) { _ic = ic; }
+      };
 
 //---------------------------------------------------------
 //   @@ InstrumentChange

@@ -79,7 +79,7 @@ void InstrumentChange::setInstrument(const Instrument& i)
 
 void InstrumentChange::setNextChord(ChordRest* chord)
       {
-      InstrumentChangeWarning* instrumentChangeWarning = new InstrumentChangeWarning(score());
+      InstrumentChangeWarning* instrumentChangeWarning = new InstrumentChangeWarning(this, score());
       if (warning()/* && warning)_->parent()*/) {
             score()->deleteItem(warning());
             }

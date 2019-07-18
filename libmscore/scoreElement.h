@@ -77,6 +77,7 @@ class StaffLines;
 class Ambitus;
 class Bracket;
 class InstrumentChange;
+class InstrumentChangeWarning;
 class Text;
 class TextBase;
 class Hairpin;
@@ -548,6 +549,7 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(Ambitus)
       CONVERT(Bracket)
       CONVERT(InstrumentChange)
+      CONVERT(InstrumentChangeWarning)
       CONVERT(StaffTypeChange)
       CONVERT(Text)
       CONVERT(MeasureNumber)
