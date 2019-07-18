@@ -2952,7 +2952,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="e-horn">
-                  <longName>E Horn</longName>
+                  <longName>Horn in E</longName>
                   <shortName>E Hn.</shortName>
                   <description>E Horn</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
@@ -2983,8 +2983,8 @@
             </Instrument>
             <Instrument id="d-horn">
                   <longName>Horn in D</longName>
-                  <shortName>Hn.</shortName>
-                  <description>Horn</description>
+                  <shortName>D Hn.</shortName>
+                  <description>D Horn</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3001,10 +3001,12 @@
                   <shortName>C Hn.</shortName>
                   <description>Low C Horn</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
-                  <clef>F</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>34-67</aPitchRange>
                   <pPitchRange>30-72</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
                   <Channel>
                         <program value="60"/> <!--French Horn-->
                   </Channel>
