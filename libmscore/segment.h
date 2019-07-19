@@ -168,6 +168,7 @@ class Segment final : public Element {
       const std::vector<Element*>& annotations() const { return _annotations;        }
       void clearAnnotations();
       void removeAnnotation(Element* e);
+      bool hasElements(int minTrack, int maxTrack) const;
       bool hasAnnotationOrElement(ElementType type, int minTrack, int maxTrack) const;
       Element* findAnnotation(ElementType type, int minTrack, int maxTrack);
       std::vector<Element*> findAnnotations(ElementType type, int minTrack, int maxTrack);

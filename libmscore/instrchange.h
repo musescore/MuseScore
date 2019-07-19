@@ -31,7 +31,7 @@ class InstrumentChangeWarning final : public StaffTextBase {
       InstrumentChange* _ic;
 
    public:
-      InstrumentChangeWarning(InstrumentChange* ic, Score* s = 0, Tid = Tid::STAFF);
+      InstrumentChangeWarning(InstrumentChange* ic, Score* s = 0, Tid = Tid::INSTRUMENT_CHANGE);
       virtual InstrumentChangeWarning* clone() const override { return new InstrumentChangeWarning(*this); }
       virtual ElementType type() const override { return ElementType::INSTRUMENT_CHANGE_WARNING; }
       virtual void layout() override;
@@ -67,6 +67,7 @@ class InstrumentChange final : public TextBase {
       void setInstrument(const Instrument& i);
 
       void setNextChord(ChordRest* chord);
+      void removeWarning();
 
       std::vector<KeySig*> keySigs() const  { return _keySigs;     }
       void addKeySig(KeySig* keySig)        { _keySigs.push_back(keySig); }

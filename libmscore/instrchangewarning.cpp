@@ -24,9 +24,9 @@ namespace Ms {
 //   staffStyle
 //---------------------------------------------------------
 
-static const ElementStyle staffStyle {
-      { Sid::staffTextPlacement, Pid::PLACEMENT },
-      { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
+static const ElementStyle InstrumentChangeWarningStyle {
+      { Sid::instrumentChangePlacement,          Pid::PLACEMENT              },
+      { Sid::instrumentChangeMinDistance,        Pid::MIN_DISTANCE           },
 };
 
 //---------------------------------------------------------
@@ -36,7 +36,7 @@ static const ElementStyle staffStyle {
 InstrumentChangeWarning::InstrumentChangeWarning(InstrumentChange* ic, Score* s, Tid tid)
    : StaffTextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF), _ic(ic)
       {
-      initElementStyle(&staffStyle);
+      initElementStyle(&InstrumentChangeWarningStyle);
       }
 
 //---------------------------------------------------------

@@ -988,6 +988,20 @@ bool Segment::hasElements() const
       }
 
 //---------------------------------------------------------
+//   hasElements
+///  Returns true if the segment has at least one element in the given track range.
+///  Annotations are not considered.
+//---------------------------------------------------------
+
+bool Segment::hasElements(int minTrack, int maxTrack) const
+      {
+      for (int curTrack = minTrack; curTrack <= maxTrack; curTrack++)
+            if (element(curTrack))
+                  return true;
+      return false;
+      }
+
+//---------------------------------------------------------
 //   hasAnnotationOrElement
 ///  return true if an annotation of type type or and element is found in the track range
 //---------------------------------------------------------
