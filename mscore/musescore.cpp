@@ -181,6 +181,7 @@ bool noWebView = false;
 bool exportScoreParts = false;
 bool ignoreWarnings = false;
 bool exportScoreMedia = false;
+bool exportScoreMeta = false;
 bool exportScoreMp3 = false;
 bool exportScorePartsPdf = false;
 
@@ -3716,6 +3717,8 @@ static bool processNonGui(const QStringList& argv)
       {
       if (exportScoreMedia)
             return mscore->exportAllMediaFiles(argv[0]);
+      if (exportScoreMeta)
+            return mscore->exportScoreMetadata(argv[0]);
       else if (exportScoreMp3)
             return mscore->exportMp3AsJSON(argv[0]);
       else if (exportScorePartsPdf)
@@ -7261,6 +7264,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
       parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
       parser.addOption(QCommandLineOption("score-media", "Export all media (excepting mp3) for a given score in a single JSON file and print it to std out"));
+      parser.addOption(QCommandLineOption("score-meta", "Export score metadata to JSON document and print it to stdout"));
       parser.addOption(QCommandLineOption("score-mp3", "Generates mp3 for the given score and export the data to a single JSON file, print it to std out"));
       parser.addOption(QCommandLineOption("score-parts-pdf", "Generates parts data for the given score and export the data to a single JSON file, print it to std out"));
       parser.addOption(QCommandLineOption("raw-diff", "Print a raw diff for the given scores"));
@@ -7405,6 +7409,12 @@ int main(int argc, char* av[])
 
       if (parser.isSet("score-media")) {
             exportScoreMedia = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+
+      if (parser.isSet("score-meta")) {
+            exportScoreMeta = true;
             MScore::noGui = true;
             converterMode = true;
             }

@@ -3378,5 +3378,31 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       return res;
       }
 
+//---------------------------------------------------------
+//   exportScoreMetadata
+//---------------------------------------------------------
+
+bool MuseScore::exportScoreMetadata(const QString& inFilePath, const QString& outFilePath)
+      {
+      std::unique_ptr<MasterScore> score(mscore->readScore(inFilePath));
+      if (!score)
+            return false;
+
+      score->switchToPageMode();
+
+      //// JSON specification ///////////////////////////
+      //jsonForMedia["metadata"] = mdJson;
+      ///////////////////////////////////////////////////
+
+      CustomJsonWriter jsonWriter(outFilePath);
+
+      //export metadata
+      QJsonDocument doc(mscore->saveMetadataJSON(score.get()));
+      jsonWriter.addKey("metadata");
+      jsonWriter.addValue(doc.toJson(QJsonDocument::Compact), true, true);
+
+      return true;
+      }
+
 }
 
