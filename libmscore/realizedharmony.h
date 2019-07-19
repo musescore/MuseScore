@@ -89,7 +89,7 @@ class RealizedHarmony {
       QMap<int, int> getIntervals(int rootTpc, bool literal = true) const;
 
    private:
-      QMap<int, int> normalizeNoteMap(QMap<int, int> intervals, int rootTpc, int rootPitch, int max = 128, bool includeRoot = false) const;
+      QMap<int, int> normalizeNoteMap(const QMap<int, int>& intervals, int rootTpc, int rootPitch, int max = 128, bool enforceMaxAsGoal = false) const;
       };
 }
 

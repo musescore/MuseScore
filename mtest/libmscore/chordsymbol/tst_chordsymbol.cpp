@@ -38,6 +38,7 @@ class TestChordSymbol : public QObject, public MTest {
       void test_post(MasterScore* score, const char* p);
 
       void selectAllChordSymbols(MasterScore* score);
+      void realizeSelectionVoiced(MasterScore* score, Voicing voicing);
 
    private slots:
       void initTestCase();
@@ -50,6 +51,9 @@ class TestChordSymbol : public QObject, public MTest {
       void testTransposePart();
       void testRealizeClose();
       void testRealizeDrop2();
+      void testRealize3Note();
+      void testRealize4Note();
+      void testRealize6Note();
       void testRealizeTransposed();
       void testRealizeOverride();
       };
@@ -84,6 +88,10 @@ void TestChordSymbol::test_post(MasterScore* score, const char* p)
       delete score;
       }
 
+//---------------------------------------------------------
+//   TestChordSymbol
+///   select all chord symbols within the specified score
+//---------------------------------------------------------
 void TestChordSymbol::selectAllChordSymbols(MasterScore* score)
       {
       //find a chord symbol
@@ -97,6 +105,25 @@ void TestChordSymbol::selectAllChordSymbols(MasterScore* score)
             seg = seg->next1();
             }
       score->selectSimilar(e, false);
+      }
+
+//---------------------------------------------------------
+//   realizeSelectionVoiced
+///   realize the current selection of the score using
+///   the specified voicing
+//---------------------------------------------------------
+void TestChordSymbol::realizeSelectionVoiced(MasterScore* score, Voicing voicing)
+      {
+      QList<Harmony*> hlist;
+      for (Element* e : score->selection().elements()) {
+            if (e->isHarmony()) {
+                  e->setProperty(Pid::HARMONY_VOICING, int(voicing));
+                  hlist << toHarmony(e);
+                  }
+            }
+      score->startCmd();
+      score->cmdRealizeChordSymbols(hlist);
+      score->endCmd();
       }
 
 void TestChordSymbol::testExtend()
@@ -215,42 +242,71 @@ void TestChordSymbol::testTransposePart()
       test_post(score, "transpose-part");
       }
 
+//---------------------------------------------------------
+//   testRealizeClose
+///   check close voicing algorithm
+//---------------------------------------------------------
 void TestChordSymbol::testRealizeClose()
       {
       MasterScore* score = test_pre("realize");
       selectAllChordSymbols(score);
-      QList<Harmony*> hlist;
-      for (Element* e : score->selection().elements()) {
-            if (e->isHarmony()) {
-                  e->setProperty(Pid::HARMONY_VOICING, int(Voicing::CLOSE));
-                  hlist << toHarmony(e);
-                  }
-            }
-      score->startCmd();
-      score->cmdRealizeChordSymbols(hlist);
-      score->endCmd();
+      realizeSelectionVoiced(score, Voicing::CLOSE);
       test_post(score, "realize-close");
       }
 
+//---------------------------------------------------------
+//   testRealizeDrop2
+///   check Drop 2 voicing algorithm
+//---------------------------------------------------------
 void TestChordSymbol::testRealizeDrop2()
       {
       MasterScore* score = test_pre("realize");
       selectAllChordSymbols(score);
-      QList<Harmony*> hlist;
-      for (Element* e : score->selection().elements()) {
-            if (e->isHarmony()) {
-                  e->setProperty(Pid::HARMONY_VOICING, int(Voicing::DROP_2));
-                  hlist << toHarmony(e);
-                  }
-            }
-      score->startCmd();
-      score->cmdRealizeChordSymbols(hlist);
-      score->endCmd();
+      realizeSelectionVoiced(score, Voicing::DROP_2);
       test_post(score, "realize-drop2");
       }
 
-//    Check if the note pitches and tpcs are correct after realizing
-//    chord symbols on transposed instruments.
+//---------------------------------------------------------
+//   testRealize3Note
+///   check 3 note voicing algorithm
+//---------------------------------------------------------
+void TestChordSymbol::testRealize3Note()
+      {
+      MasterScore* score = test_pre("realize");
+      selectAllChordSymbols(score);
+      realizeSelectionVoiced(score, Voicing::THREE_NOTE);
+      test_post(score, "realize-3note");
+      }
+
+//---------------------------------------------------------
+//   testRealize4Note
+///   check 4 note voicing algorithm
+//---------------------------------------------------------
+void TestChordSymbol::testRealize4Note()
+      {
+      MasterScore* score = test_pre("realize");
+      selectAllChordSymbols(score);
+      realizeSelectionVoiced(score, Voicing::FOUR_NOTE);
+      test_post(score, "realize-4note");
+      }
+
+//---------------------------------------------------------
+//   testRealize6Note
+///   check 6 note voicing algorithm
+//---------------------------------------------------------
+void TestChordSymbol::testRealize6Note()
+      {
+      MasterScore* score = test_pre("realize");
+      selectAllChordSymbols(score);
+      realizeSelectionVoiced(score, Voicing::SIX_NOTE);
+      test_post(score, "realize-6note");
+      }
+
+//---------------------------------------------------------
+//   testRealizeTransposed
+///   Check if the note pitches and tpcs are correct after realizing
+///   chord symbols on transposed instruments.
+//---------------------------------------------------------
 void TestChordSymbol::testRealizeTransposed()
       {
       MasterScore* score = test_pre("transpose-realize");
@@ -272,7 +328,11 @@ void TestChordSymbol::testRealizeTransposed()
       test_post(score, "transpose-realize");
       }
 
-//    Check for correctness when using the override feature for realizing chord symbols
+//---------------------------------------------------------
+//   testRealizeOverride
+///   Check for correctness when using the override
+///   feature for realizing chord symbols
+//---------------------------------------------------------
 void TestChordSymbol::testRealizeOverride()
       {
       MasterScore* score = test_pre("realize-override");
