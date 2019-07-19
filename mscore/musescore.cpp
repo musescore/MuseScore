@@ -155,6 +155,7 @@ bool ignoreWarnings = false;
 bool experimentalPrintParts = false;
 bool experimentalMediaParts = false;
 bool experimentalScoreMedia = false;
+bool experimentalScoreMeta = false;
 bool experimentalScoreMp3 = false;
 
 QString mscoreGlobalShare;
@@ -3072,6 +3073,30 @@ static bool experimentalMediaScore(const QString& inFilePath)
       return true;
       }
 
+static bool experimentalMetadataScore(const QString& inFilePath)
+      {
+      //// JSON specification ///////////////////////////
+      //jsonForMedia["metadata"] = mdJson;
+      ///////////////////////////////////////////////////
+
+      Score* score = mscore->readScore(inFilePath);
+      if (!score)
+            return false;
+
+      score->switchToPageMode();
+
+      //manually build the json structure, because QJsonObject cannot be bigger than 128Mb
+      const QString jsonPath{"/dev/stdout"};
+      CustomJsonWriter jsonWriter(jsonPath);
+
+      //export metadata
+      QJsonDocument doc(mscore->saveMetadataJSON(score));
+      jsonWriter.addKey("metadata");
+      jsonWriter.addValue(doc.toJson(QJsonDocument::Compact), true, true);
+      delete score;
+      return true;
+      }
+
 static bool processNonGui(const QStringList& argv)
       {
       if (experimentalPrintParts)
@@ -3082,6 +3107,9 @@ static bool processNonGui(const QStringList& argv)
 
       if (experimentalScoreMedia)
             return experimentalMediaScore(argv[0]);
+
+      if (experimentalScoreMeta)
+            return experimentalMetadataScore(argv[0]);
 
       if (experimentalScoreMp3)
             return exportScoreMp3AsJSON(argv[0]);
@@ -6175,6 +6203,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption("parts-pdf", "Experimental export of score and parts as separate files"));
       parser.addOption(QCommandLineOption("parts-media", "Experimental export of media for parts"));
       parser.addOption(QCommandLineOption("score-media", "Experimental exporting media (excepting mp3) of a whole score to JSON"));
+      parser.addOption(QCommandLineOption("score-meta", "Export score metadata to JSON document and print it to stdout"));
       parser.addOption(QCommandLineOption("score-mp3", "Experimental exporting mp3 of whole score to JSON"));
             
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
@@ -6327,6 +6356,12 @@ int main(int argc, char* av[])
 
       if (parser.isSet("score-media")) {
             experimentalScoreMedia = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+
+      if (parser.isSet("score-meta")) {
+            experimentalScoreMeta = true;
             MScore::noGui = true;
             converterMode = true;
             }
