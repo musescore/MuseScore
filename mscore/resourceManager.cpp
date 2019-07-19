@@ -59,7 +59,7 @@ ResourceManager::ResourceManager(QWidget *parent) :
       QtConcurrent::run(this, &ResourceManager::displayPluginRepo);
       connect(this, SIGNAL(pluginRepoAvailable(QByteArray)), this, SLOT(parsePluginRepo(QByteArray)));
       // plugin manager's display
-      mscore->getPluginManager()->setupUI(pluginName, pluginPath, pluginVersion, pluginShortcut, pluginDescription, pluginTreeWidget);
+      mscore->getPluginManager()->setupUI(pluginName, pluginPath, pluginVersion, pluginShortcut, pluginDescription, pluginTreeWidget, label_shortcut, label_version);
       mscore->getPluginManager()->init();
       QObject::connect(definePluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(definePluginShortcutClicked()));
       QObject::connect(clearPluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(clearPluginShortcutClicked()));

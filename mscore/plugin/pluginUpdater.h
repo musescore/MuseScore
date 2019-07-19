@@ -13,6 +13,8 @@
 #ifndef __PLUGIN_UPDATER_H__
 #define __PLUGIN_UPDATER_H__
 
+#include <map>
+
 namespace Ms {
 struct PluginPackageMeta {
       QString name;
@@ -29,7 +31,9 @@ enum PluginPackageSource {
       GITHUB,           // from a Github branch(usually master)
       GITHUB_RELEASE,   // from a Github release
       ATTACHMENT        // from an attachment in corresponding plugin page
-      };
+};
+
+extern std::map<PluginPackageSource, QString> PluginPackageSourceVerboseStr;
 
 //---------------------------------------------------------
 //   PluginPackageLink
@@ -53,6 +57,7 @@ struct PluginPackageLink {
 struct PluginPackageDescription {
       // contains update info when there's an update. Not serialized to xml for now
       PluginPackageDescription* update = nullptr;
+      QString desc_text;
       bool load = false;
       QString package_name;
       PluginPackageSource source = UNKNOWN;

@@ -38,7 +38,8 @@ PluginManager::PluginManager(QWidget * parent)
 //---------------------------------------------------------
 
 void PluginManager::setupUI(QLineEdit* pluginName_, QLineEdit* pluginPath_, QLineEdit* pluginVersion_,
-      QLineEdit* pluginShortcut_, QTextBrowser* pluginDescription_, QTreeWidget* pluginTreeWidget_)
+      QLineEdit* pluginShortcut_, QTextBrowser* pluginDescription_, QTreeWidget* pluginTreeWidget_,
+      QLabel* label_shortcut_, QLabel* label_version_)
       {
       pluginName = pluginName_;
       pluginPath = pluginPath_;
@@ -46,6 +47,8 @@ void PluginManager::setupUI(QLineEdit* pluginName_, QLineEdit* pluginPath_, QLin
       pluginShortcut = pluginShortcut_;
       pluginDescription = pluginDescription_;
       pluginTreeWidget = pluginTreeWidget_;
+      label_shortcut = label_shortcut_;
+      label_version = label_version_;
       uiAttached = true;
       }
 
@@ -382,7 +385,7 @@ PluginPackageDescription * PluginManager::getPluginPackage(PluginDescription * d
       return nullptr;
       }
 
-static constexpr int TypeRole = Qt::UserRole + 1; // a user role used in QTreeWidgetItem's data
+static constexpr int TypeRole = Qt::UserRole + 1; // another user role used in QTreeWidgetItem's data
 
 void PluginManager::refreshList()
       {
@@ -474,6 +477,7 @@ void PluginManager::loadList(bool forceRefresh)
             PluginPackageDescription* package = getPluginPackage(&d);
             QTreeWidgetItem* item;
             if (package) {
+                  // not stand-alone plugin
                   QTreeWidgetItem* parent_widget = tree_map[package];
                   auto plugin_check = d.load ? Qt::Checked : Qt::Unchecked;
                   if (parent_widget->childCount() == 0)
@@ -547,11 +551,20 @@ void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidg
       if (!item->parent() && item->data(0,TypeRole).toBool()) {
             // root, i.e., a package
             // TODO: show package description from the detail page
-            qDebug("plugin package selected.");
+            pluginShortcut->setHidden(true);
+            label_shortcut->setHidden(true);
+            const QString& page_url = item->data(0, Qt::UserRole).toString();
+            const PluginPackageDescription& desc = _pluginPackageList.value(page_url);
+            pluginName->setText(desc.package_name);
+            pluginPath->setText(desc.dir);
+            // show different info
+            label_version->setText(tr("Source:"));
+            //pluginVersion->setText(PluginPackageSourceVerboseStr[desc.source]);
+            pluginVersion->setText(desc.direct_link);
+            pluginDescription->setHtml(desc.desc_text);
             }
       else {
             // leaf, i.e., a qml file
-            qDebug("plugin selected.");
             if (!item)
                   return;
             int idx = item->data(0, Qt::UserRole).toInt();
@@ -559,7 +572,10 @@ void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidg
             QFileInfo fi(d.path);
             pluginName->setText(fi.completeBaseName());
             pluginPath->setText(fi.absolutePath());
+            label_version->setText(tr("Version:"));
             pluginVersion->setText(d.version);
+            pluginShortcut->setHidden(false);
+            label_shortcut->setHidden(false);
             pluginShortcut->setText(d.shortcut.keysToString());
             pluginDescription->setText(d.description);
             }

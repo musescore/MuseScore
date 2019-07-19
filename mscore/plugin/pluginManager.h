@@ -43,6 +43,8 @@ class PluginManager : public QObject {
       QLineEdit* pluginPath;
       QLineEdit* pluginVersion;
       QLineEdit* pluginShortcut;
+      QLabel* label_shortcut;
+      QLabel* label_version;
       QTextBrowser* pluginDescription;
       QTreeWidget* pluginTreeWidget;
       QMap<QString, Shortcut*> localShortcuts;
@@ -69,13 +71,12 @@ signals:
       
 
 public:
-      PluginManager(QLineEdit* pluginName, QLineEdit* pluginPath, QLineEdit* pluginVersion,
-            QLineEdit* pluginShortcut, QTextBrowser* pluginDescription, QTreeWidget* pluginTreeWidget, QWidget* parent = 0);
       PluginManager(QWidget* parent = 0);
       virtual void accept();
       void init();
       void setupUI(QLineEdit* pluginName, QLineEdit* pluginPath, QLineEdit* pluginVersion,
-            QLineEdit* pluginShortcut, QTextBrowser* pluginDescription, QTreeWidget* pluginTreeWidget);
+            QLineEdit* pluginShortcut, QTextBrowser* pluginDescription, QTreeWidget* pluginTreeWidget,
+            QLabel* label_shortcut, QLabel* label_version);
       void disAttachUI();
       bool readPluginList();
       bool readPluginPackageList();

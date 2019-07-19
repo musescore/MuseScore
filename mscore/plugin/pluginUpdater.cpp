@@ -514,6 +514,13 @@ static const std::map<PluginStatus, PluginButtonStatus> buttonStatuses = {
       {UPDATE_AVAILABLE, {QObject::tr("Update"), true, true}}
       };
 
+std::map<PluginPackageSource, QString> PluginPackageSourceVerboseStr{
+      {UNKNOWN, QObject::tr("Unknown")},
+      {GITHUB, QObject::tr("GitHub")},
+      {GITHUB_RELEASE, QObject::tr("GitHub Release")},
+      {ATTACHMENT, QObject::tr("Attachment")}
+};
+
 void ResourceManager::refreshPluginButton(int row, bool updated/* = true*/)
       {
       // TODO: get button, then plugin url, then update status
@@ -602,6 +609,24 @@ void PluginWorker::detached()
       // TODO: set button pointers null
       }
 
+static QString getPackageDescriptionText(const QString& html_raw) {
+      static const QRegularExpression start("<div class=\"field field--name-body field--type-text-with-summary field--label-hidden field__item\">");
+      static const QRegularExpression end("<p><a href=\"/.*?project/issues/[\\w\\-]+\">Issue Tracker</a></p>");
+      auto startMatch = start.match(html_raw);
+      if (!startMatch.hasMatch())
+            return QString();
+      int startIdx = startMatch.capturedEnd(0);
+      auto endMatch = end.match(html_raw);
+      if (!endMatch.hasMatch())
+            return QString();
+      int endIdx = endMatch.capturedStart(0);
+      QString desc = html_raw.mid(startIdx, endIdx - startIdx).trimmed();
+      // remove </div>
+      if (desc.endsWith("</div>"))
+            desc = desc.left(desc.size() - QString("</div>").size());
+      return desc;
+}
+
 bool PluginWorker::analyzePluginPage(QString full_url)
       {
       bool new_plugin = desc.source == UNKNOWN;
@@ -611,6 +636,8 @@ bool PluginWorker::analyzePluginPage(QString full_url)
       page.download();
       QByteArray html_raw = page.returnData();
       std::vector<PluginPackageLink> urls = getLinks(html_raw);
+      QString desc_text = getPackageDescriptionText(QString(html_raw));
+      desc.desc_text = desc_text;
       // choose a link with the highest score
       PluginPackageLink target;
       int score = -2;
