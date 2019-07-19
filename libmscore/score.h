@@ -1096,6 +1096,13 @@ class Score : public QObject, public ScoreElement {
       QString subtitle();
       QString composer();
       QString poet();
+
+      // functions for score metadata export
+      QString rawTitle();
+      QString rawSubtitle();
+      QString rawComposer();
+      QString rawPoet();
+
       int nmeasures();
       bool hasLyrics();
       bool hasHarmonies();

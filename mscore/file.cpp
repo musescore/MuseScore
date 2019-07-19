@@ -3064,17 +3064,16 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
       QJsonObject json;
 
       // title
-      QString title;
-      json.insert("title", score->title());
+      json.insert("title", score->rawTitle());
 
       // subtitle
-      json.insert("subtitle", score->subtitle());
+      json.insert("subtitle", score->rawSubtitle());
 
       // composer
-      json.insert("composer", score->composer());
+      json.insert("composer", score->rawComposer());
 
       // poet
-      json.insert("poet", score->poet());
+      json.insert("poet", score->rawPoet());
 
       json.insert("mscoreVersion", score->mscoreVersion());
       json.insert("fileVersion", score->mscRealVersion());

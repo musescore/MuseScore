@@ -3822,6 +3822,31 @@ QString Score::title()
       }
 
 //---------------------------------------------------------
+//   rawTitle
+///   Score title without any simplification of whitespace
+///   characters
+//---------------------------------------------------------
+
+QString Score::rawTitle()
+      {
+      QString fn;
+      const Text* t = getText(TextStyleType::TITLE);
+      if (t)
+            fn = t->plainText();
+
+      if (fn.isEmpty())
+            fn = metaTag("workTitle");
+
+      if (fn.isEmpty())
+            fn = fileInfo()->completeBaseName();
+
+      if (fn.isEmpty())
+            fn = "Untitled";
+
+      return fn;
+      }
+
+//---------------------------------------------------------
 //   subtitle
 //---------------------------------------------------------
 
@@ -3833,6 +3858,20 @@ QString Score::subtitle()
             fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
 
       return fn.simplified();
+      }
+
+//---------------------------------------------------------
+//   subtitle
+///   Score subtitle without any simplification of
+///   whitespace characters
+//---------------------------------------------------------
+
+QString Score::rawSubtitle()
+      {
+      const Text* t = getText(TextStyleType::SUBTITLE);
+      if (t)
+            return t->plainText();
+      return QString();
       }
 
 //---------------------------------------------------------
@@ -3853,6 +3892,25 @@ QString Score::composer()
       }
 
 //---------------------------------------------------------
+//   rawComposer
+///   Score composer without any simplification of
+///   whitespace characters
+//---------------------------------------------------------
+
+QString Score::rawComposer()
+      {
+      QString fn;
+      const Text* t = getText(TextStyleType::COMPOSER);
+      if (t)
+            fn = t->plainText();
+
+      if (fn.isEmpty())
+            fn = metaTag("composer");
+
+      return fn;
+      }
+
+//---------------------------------------------------------
 //   poet
 //---------------------------------------------------------
 
@@ -3870,6 +3928,28 @@ QString Score::poet()
             fn = "";
 
       return fn.simplified();
+      }
+
+//---------------------------------------------------------
+//   rawPoet
+///   Score poet without any simplification of whitespace
+///   characters
+//---------------------------------------------------------
+
+QString Score::rawPoet()
+      {
+      QString fn;
+      const Text* t = getText(TextStyleType::POET);
+      if (t)
+            fn = t->plainText();
+
+      if (fn.isEmpty())
+            fn = metaTag("lyricist");
+
+      if (fn.isEmpty())
+            fn = "";
+
+      return fn;
       }
 
 //---------------------------------------------------------
