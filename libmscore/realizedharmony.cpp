@@ -137,8 +137,6 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
 
                   //select 4 notes from list
                   QMap<int, int> intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 4);
-                  if (intervals.size() < 4)
-                        intervals.insert(rootPitch, rootTpc); //double root if we only have a few notes
                   QMapIterator<int, int> i(intervals);
                   i.toBack();
 
@@ -154,9 +152,9 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                   break;
             case Voicing::THREE_NOTE:
                   {
-                  //Three note open voicing, maybe remove this
+                  //TODO - PHV: maybe remove this
 
-                  QMap<int, int> intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 2);
+                  QMap<int, int> intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 2, true);
                   QMapIterator<int, int> i(intervals);
 
                   i.next();
@@ -168,9 +166,9 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                   break;
             case Voicing::FOUR_NOTE:
                   {
-                  //four note open voicing
+                  //four note drop 2
                   QMap<int, int> relIntervals = getIntervals(rootTpc, literal);
-                  QMap<int, int> intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 3);
+                  QMap<int, int> intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 3, true);
                   QMapIterator<int, int> i(intervals);
                   i.toBack();
 
@@ -183,21 +181,6 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                         else
                               notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
                         ++counter;
-                        }
-                  if (counter < 3) {
-                        //TODO - PHV: probably should extract this into its own recursive function
-                        intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 3 - counter, true);
-                        QMapIterator<int, int> i(intervals);
-                        i.toBack();
-                        while (i.hasPrevious()) {
-                              i.previous();
-
-                              if (counter % 2)
-                                    notes.insert(i.key() + 4*PITCH_DELTA_OCTAVE, i.value());
-                              else
-                                    notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
-                              ++counter;
-                              }
                         }
                   }
                   break;
@@ -205,7 +188,7 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                   //six note voicing
                   {
                   QMap<int, int> relIntervals = getIntervals(rootTpc, literal);
-                  QMap<int, int> intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 5);
+                  QMap<int, int> intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 5, true);
                   QMapIterator<int, int> i(intervals);
                   i.toBack();
 
@@ -218,21 +201,6 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                         else
                               notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
                         ++counter;
-                        }
-                  if (counter < 5) {
-                        //TODO - PHV: probably should extract this into its own recursive function
-                        intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 5 - counter, true); //include root
-                        QMapIterator<int, int> i(intervals);
-                        i.toBack();
-                        while (i.hasPrevious()) {
-                              i.previous();
-
-                              if (counter % 2)
-                                    notes.insert(i.key() + 4*PITCH_DELTA_OCTAVE, i.value());
-                              else
-                                    notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
-                              ++counter;
-                              }
                         }
                   }
                   break;
@@ -487,22 +455,38 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
 //   normalizeNoteMap
 ///   normalize the note map from intervals to create pitches between 0 and 12
 ///   and resolve any weighting system.
+///
+///   enforceMaxEquals - enforce the max as a goal so that the max is how many notes is inserted
 //---------------------------------------------------
-QMap<int, int> RealizedHarmony::normalizeNoteMap(QMap<int, int> intervals, int rootTpc, int rootPitch, int max, bool includeRoot) const
+QMap<int, int> RealizedHarmony::normalizeNoteMap(const QMap<int, int>& intervals, int rootTpc, int rootPitch, int max, bool enforceMaxAsGoal) const
       {
       QMap<int, int> ret;
       QMapIterator<int, int> itr(intervals);
 
-      if (includeRoot) {
-            --max;
-            ret.insert(rootPitch, rootTpc);
-            }
       for (int i = 0; i < max; ++i) {
             if (!itr.hasNext())
                   break;
             itr.next();
             ret.insert((itr.key() % 128 + rootPitch) % PITCH_DELTA_OCTAVE, itr.value());
             }
+
+      //redo insertions if we must have a specific number of notes with insertMulti
+      if (enforceMaxAsGoal) {
+            while (ret.size() < max) {
+                  ret.insertMulti(rootPitch, rootTpc); //duplicate root
+
+                  int size = max - ret.size();
+                  itr = QMapIterator<int, int>(intervals); //reset iterator
+                  for (int i = 0; i < size; ++i) {
+                        if (!itr.hasNext())
+                              break;
+                        itr.next();
+                        ret.insertMulti((itr.key() % 128 + rootPitch) % PITCH_DELTA_OCTAVE, itr.value());
+                        }
+                  }
+            }
+      else if (ret.size() < max) //insert another root if we have room in general
+            ret.insertMulti(rootPitch, rootTpc);
       return ret;
       }
 
