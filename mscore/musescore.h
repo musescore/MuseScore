@@ -753,6 +753,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       /////The methods are used in the musescore.com backend
       bool exportAllMediaFiles(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
+      bool exportScoreMetadata(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       bool exportMp3AsJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       bool exportPartsPdfsToJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       /////////////////////////////////////////////////
