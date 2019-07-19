@@ -80,12 +80,20 @@ void InstrumentChange::setInstrument(const Instrument& i)
 void InstrumentChange::setNextChord(ChordRest* chord)
       {
       InstrumentChangeWarning* instrumentChangeWarning = new InstrumentChangeWarning(this, score());
-      if (warning()/* && warning)_->parent()*/) {
-            score()->deleteItem(warning());
+      if (_warning/* && warning_->parent()*/) {
+            score()->deleteItem(_warning);
             }
       setWarning(instrumentChangeWarning);
       instrumentChangeWarning->setPlainText(instrument()->trackName());
       chord->undoAddAnnotation(instrumentChangeWarning, true);
+      }
+
+void InstrumentChange::removeWarning()
+      {
+      if (_warning) {
+            score()->deleteItem(_warning);
+            _warning = nullptr;
+            }
       }
 
 //---------------------------------------------------------
