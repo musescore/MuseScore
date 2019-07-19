@@ -38,8 +38,13 @@ void NoteDot::draw(QPainter* p) const
       {
       if (note() && note()->dotsHidden())     // don't draw dot if note is hidden
             return;
-      Fraction tick = note() ? note()->chord()->tick() : rest()->tick();
-      if (!staff()->isTabStaff(tick) || staff()->staffType(tick)->stemThrough()) {
+      Note* n = note();
+      Fraction tick = n ? n->chord()->tick() : rest()->tick();
+      // always draw dot for non-tab
+      // for tab, draw if on a note and stems through staff or on a rest and rests shown
+      if (!staff()->isTabStaff(tick)
+          || (n && staff()->staffType(tick)->stemThrough())
+          || (!n && staff()->staffType(tick)->showRests())) {
             p->setPen(curColor());
             drawSymbol(SymId::augmentationDot, p);
             }
