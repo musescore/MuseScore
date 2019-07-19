@@ -279,6 +279,8 @@ void Harmony::write(XmlWriter& xml) const
       if (!_function.isEmpty())
             xml.tag("function", _function);
       TextBase::writeProperties(xml, false, true);
+      //Pid::PLAY, Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING
+      //written by the above function call
       if (_rightParen)
             xml.tagE("rightParen");
       xml.etag();
@@ -347,6 +349,12 @@ void Harmony::read(XmlReader& e)
             else if (readProperty(tag, e, Pid::POS_ABOVE))
                   ;
             else if (readProperty(tag, e, Pid::HARMONY_TYPE))
+                  ;
+            else if (readProperty(tag, e, Pid::PLAY))
+                  ;
+            else if (readProperty(tag, e, Pid::HARMONY_VOICE_LITERAL))
+                  ;
+            else if (readProperty(tag, e, Pid::HARMONY_VOICING))
                   ;
             else if (!TextBase::readProperties(e))
                   e.unknown();
