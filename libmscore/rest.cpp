@@ -430,8 +430,13 @@ void Rest::checkDots()
             score()->undoAddElement(dot);
             }
       if (n < 0) {
-            for (int i = 0; i < -n; ++i)
+            for (int i = 0; i < -n; ++i) {
+                  if (_dots.empty()) {
+                        qWarning("no dots at all or number mismatch");
+                        return;
+                        }
                   score()->undoRemoveElement(_dots.back());
+                  }
             }
       }
 
