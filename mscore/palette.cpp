@@ -1939,6 +1939,7 @@ PaletteList::PaletteList(QWidget* parent) : QListWidget(parent)
       setAutoFillBackground(true);
       setViewMode(QListView::IconMode);
       setResizeMode(QListView::Adjust);
+      setUniformItemSizes(true);
       }
 
 void PaletteList::read(XmlReader& e)
@@ -1946,9 +1947,9 @@ void PaletteList::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& t(e.name());
             if (t == "gridWidth")
-                  /*hgrid =*/ e.readDouble();
+                  hgrid = e.readDouble();
             else if (t == "gridHeight")
-                  /*vgrid =*/ e.readDouble();
+                  vgrid = e.readDouble();
             else if (t == "mag")
                   extraMag = e.readDouble();
             else if (t == "grid")
@@ -1962,6 +1963,7 @@ void PaletteList::read(XmlReader& e)
             else if (t == "Cell") {
                   PaletteCellItem* cell = new PaletteCellItem(this);
                   cell->setName(e.attribute("name"));
+                  cell->setToolTip(e.attribute("name"));
                   if (!cell->read(e, extraMag)){
                         Element* element = cell->element;
                         delete cell;
@@ -1972,7 +1974,22 @@ void PaletteList::read(XmlReader& e)
             else
                   e.unknown();
             }
+            qDebug()<<"The HGrid is: "<< hgrid;
+            qDebug()<<"The VGrid is: "<< vgrid;
+            setGrid(hgrid,vgrid);
 
+      }
+
+void PaletteList::setGrid(int hh, int vv)
+      {
+      hgrid = hh+20;
+      vgrid = vv+10;
+      QSize s(hgrid, vgrid);
+      setGridSize(s);
+      //setSizeIncrement(s);
+      //setBaseSize(s);
+      //setMinimumSize(s);
+      //updateGeometry();
       }
 
  void PaletteList::resizeEvent(QResizeEvent *event)
@@ -1985,13 +2002,58 @@ void PaletteList::read(XmlReader& e)
             setFixedHeight(yPos);
       }
 
+void PaletteList::keyPressEvent(QKeyEvent *event)
+      {
+      int numItems = count();
+      currIdx = this->currentItem();
+      int pos = row(currIdx);
+      qDebug()<<"The position of the current element is "<< pos;
+      switch(event->key()){
+            case Qt::Key_Down:
+                pos++;
+                if (pos < numItems) {
+                    currIdx = item(pos);
+                    setCurrentItem(currIdx);
+                    return;
+                }
+                break;
+            case Qt::Key_Up:
+                if (pos > 0) {
+                    pos--;
+                    currIdx = item(pos);
+                    setCurrentItem(currIdx);
+                    return;
+                }
+                break;
+            case Qt::Key_Left:
+                if (pos > 0) {
+                    pos--;
+                    currIdx = item(pos);
+                    setCurrentItem(currIdx);
+                    return;
+                }
+                break;
+            case Qt::Key_Right:
+                pos++;
+                if (pos < numItems) {
+                    currIdx = item(pos);
+                    setCurrentItem(currIdx);
+                    return;
+                }
+                break;
+            default:
+                  break;
+            }
+        QAbstractItemView::keyPressEvent(event);
+      }
+
 //---------------------------------------------------------
 //   PaletteCellItem (QListWidgetItem)
 //---------------------------------------------------------
 
 PaletteCellItem::PaletteCellItem(PaletteList* parent) : QListWidgetItem(parent)
       {     
-            paletteList = parent;
+
       }
 
 

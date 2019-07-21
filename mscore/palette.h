@@ -222,19 +222,23 @@ class Palette : public QWidget {
 class PaletteList : public QListWidget {
          Q_OBJECT
 
+         int hgrid;
+         int vgrid;
          qreal extraMag;
+         QListWidgetItem* currIdx;
 
          protected:
             virtual void resizeEvent(QResizeEvent *event) override;
+            virtual void keyPressEvent(QKeyEvent *event) override;
 
          public:
             PaletteList(QWidget* parent); 
             void  read(XmlReader& e);
+            void setGrid(int ,int);
       };
 
 class PaletteCellItem : public  QListWidgetItem {
 
-         PaletteList* paletteList;
          QPixmap pixmap(qreal extraMag) const;
          QString name;           // used for tool tip
          QString tag;
