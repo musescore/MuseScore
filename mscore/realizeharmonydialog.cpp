@@ -35,7 +35,7 @@ RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget *parent)
       chordTable->setVisible(false);
       connect(showButton, SIGNAL(clicked()), SLOT(toggleChordTable()));
 
-      voicingSelect->setLiteral(false); //TODO - PHV: start with jazz first?
+      voicingSelect->setLiteral(true);
 
       //make the chord list uneditable
       chordTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
