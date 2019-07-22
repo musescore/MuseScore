@@ -25,6 +25,7 @@
 #include "instrdialog.h"
 #include "templateBrowser.h"
 #include "extension.h"
+#include "icons.h"
 
 #include "libmscore/instrtemplate.h"
 #include "libmscore/score.h"
@@ -55,6 +56,9 @@ TimesigWizard::TimesigWizard(QWidget* parent)
       connect(tsCutTime,    SIGNAL(toggled(bool)), SLOT(cutTimeToggled(bool)));
       connect(tsFraction,   SIGNAL(toggled(bool)), SLOT(fractionToggled(bool)));
       pickupMeasure->setChecked(false); // checked in the UI file to enable screen reader on pickup duration controls
+
+      tsCommonTime->setIcon(*icons[int(Icons::timesig_common_ICON)]);
+      tsCutTime->setIcon(*icons[int(Icons::timesig_allabreve_ICON)]);
       }
 
 //---------------------------------------------------------
