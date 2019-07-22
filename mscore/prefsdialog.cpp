@@ -149,14 +149,24 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(fgWallpaperSelect,  SIGNAL(clicked()), SLOT(selectFgWallpaper()));
       connect(bgWallpaperSelect,  SIGNAL(clicked()), SLOT(selectBgWallpaper()));
 
+      bgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      fgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+
       connect(myScoresButton, SIGNAL(clicked()), SLOT(selectScoresDirectory()));
       connect(myStylesButton, SIGNAL(clicked()), SLOT(selectStylesDirectory()));
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
-      connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
-       connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
+      connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
+      connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
 
+      myScoresButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myStylesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myTemplatesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myPluginsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      mySoundfontsButton->setIcon(*icons[int(Icons::edit_ICON)]);
+      myImagesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myExtensionsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
@@ -166,6 +176,13 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(instrumentList1Button,  SIGNAL(clicked()), SLOT(selectInstrumentList1()));
       connect(instrumentList2Button,  SIGNAL(clicked()), SLOT(selectInstrumentList2()));
       connect(startWithButton,        SIGNAL(clicked()), SLOT(selectStartWith()));
+
+      defaultStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      partStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      styleFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      instrumentList1Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      instrumentList2Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      startWithButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       connect(shortcutList,   SIGNAL(itemActivated(QTreeWidgetItem*, int)), SLOT(defineShortcutClicked()));
       connect(resetShortcut,  SIGNAL(clicked()), SLOT(resetShortcutClicked()));

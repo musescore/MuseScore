@@ -75,7 +75,11 @@ EditStaff::EditStaff(Staff* s, const Fraction& /*tick*/, QWidget* parent)
 
       nextButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
       previousButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
-      
+      minPitchASelect->setIcon(*icons[int(Icons::edit_ICON)]);
+      maxPitchASelect->setIcon(*icons[int(Icons::edit_ICON)]);
+      minPitchPSelect->setIcon(*icons[int(Icons::edit_ICON)]);
+      maxPitchPSelect->setIcon(*icons[int(Icons::edit_ICON)]);
+
       addAction(getAction("help"));  // why is this needed?
       }
 

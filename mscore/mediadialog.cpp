@@ -47,6 +47,9 @@ MediaDialog::MediaDialog(QWidget* /*parent*/)
       connect(scanFileButton,  SIGNAL(clicked()), SLOT(scanFileButtonPressed()));
       connect(audioFileButton, SIGNAL(clicked()), SLOT(audioFileButtonPressed()));
 
+      scanFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      audioFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+
       MuseScore::restoreGeometry(this);
       }
 

@@ -490,6 +490,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(chordDescriptionFile,&QLineEdit::editingFinished,       [=]() { setChordStyle(true); });
       //chordDescriptionFile->setEnabled(false);
 
+      chordDescriptionFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+
       connect(SwingOff,            SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
       connect(swingEighth,         SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
       connect(swingSixteenth,      SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
