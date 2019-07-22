@@ -127,6 +127,7 @@ class Harmony final : public TextBase {
       void setLeftParen(bool leftParen)        { _leftParen = leftParen; }
       void setRightParen(bool rightParen)      { _rightParen = rightParen; }
 
+      Harmony* findNext() const;
       Fraction ticksTilNext() const;
 
       const ChordDescription* descr() const;

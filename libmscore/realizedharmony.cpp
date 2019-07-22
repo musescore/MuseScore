@@ -19,6 +19,7 @@
 
 #include "realizedharmony.h"
 #include "pitchspelling.h"
+#include "staff.h"
 #include "chordlist.h"
 #include "harmony.h"
 
@@ -131,10 +132,6 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                   break;
             case Voicing::DROP_2:
                   {
-                  //TODO - PHV: maybe make this jazz interpretation only?
-                  //drop the second from the highest note down an octave, will probably need to
-                  //only take the first 4 notes
-
                   //select 4 notes from list
                   QMap<int, int> intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 4);
                   QMapIterator<int, int> i(intervals);
@@ -152,8 +149,6 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                   break;
             case Voicing::THREE_NOTE:
                   {
-                  //TODO - PHV: maybe remove this
-
                   QMap<int, int> intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 2, true);
                   QMapIterator<int, int> i(intervals);
 
@@ -245,8 +240,6 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
 //---------------------------------------------------
 QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
       {
-      //TODO - PHV: clean this up, it's really messy and doesn't always work in all cases
-
       //RANKING SYSTEM
       static const int RANK_MULT = 128;
       static const int RANK_3RD = 0;
@@ -255,6 +248,8 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
       static const int RANK_ADD = 3;
       static const int RANK_OMIT = 4;
 
+      static const int FIFTH = 7 + RANK_MULT*RANK_OMIT;
+
       QMap<int, int> ret;
 
       const ParsedChord* p = _harmony->parsedForm();
@@ -262,13 +257,14 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
       int ext = p->extension().toInt();
       const QStringList& modList = p->modifierList();
 
-      int omit = 0;
+      int omit = 0; //omit flags for which notes to omit (for notes that are altered
+                    //or specified to be omitted as a modification) so that they
+                    //are not later added
+      bool alt5 = false; //altered 5
 
       //handle modifiers
-      //TODO - PHV: maybe find a better way, or optimize this
-      for (int i = 0; i < modList.size(); ++i) {
-            QString s = modList[i];
-            //find number
+      for (QString s : modList) {
+            //find number, split up mods
             for (int c = 0; c < s.length(); ++c) {
                   if (s[c].isDigit()) {
                         Q_ASSERT(c > 0); //we shouldn't have just a number
@@ -291,6 +287,8 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
                                     ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, deg, alter));
                               else
                                     ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, deg, alter));
+                              if (deg == 5)
+                                    alt5 = true;
                               omit |= 1 << deg;
                               }
                         else if (extType == "sus") {
@@ -299,7 +297,7 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
                               }
                         else if (extType == "no" || ext == 5)
                               omit |= 1 << deg;
-                        else if (ext == 5)
+                        else if (ext == 5) //power chord so omit the 3rd
                               omit |= 1 << 3;
                         }
                   }
@@ -323,6 +321,7 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
                   ret.insert(step2pitchInterval(3, -1) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 3, -1));     //min3
             if (!(omit & (1 << 5)))
                   ret.insert(step2pitchInterval(5, -1) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, 5, -1));     //dim5
+            alt5 = true;
             }
       else { //major or dominant
             if (!(omit & (1 << 3)))
@@ -334,8 +333,10 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
       //handle extension
       switch (ext) {
             case 13:
-                  if (!(omit & (1 << 13)))
+                  if (!(omit & (1 << 13))) {
                         ret.insert(9 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 13, 0));     //maj13
+                        omit |= 1 << 13;
+                        }
                   // FALLTHROUGH
             case 11:
                   if (!(omit & (1 << 11))) {
@@ -343,11 +344,14 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
                               ret.insert(5 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 11, 0));     //maj11
                         else if (literal)
                               ret.insert(5 + RANK_MULT*RANK_OMIT, tpcInterval(rootTpc, 11, 0));     //maj11
+                        omit |= 1 << 11;
                         }
                   // FALLTHROUGH
             case 9:
-                  if (!(omit & (1 << 9)))
+                  if (!(omit & (1 << 9))) {
                         ret.insert(2 + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, 9, 0));     //maj9
+                        omit |= 1 << 9;
+                        }
                   // FALLTHROUGH
             case 7:
                   if (!(omit & (1 << 7))) {
@@ -360,8 +364,10 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
                         }
                   break;
             case 6:
-                  if (!(omit & (1 << 6)))
+                  if (!(omit & (1 << 6))) {
                         ret.insert(9 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 6, 0));     //maj6
+                        omit |= 1 << 13; //no need to add/alter 6 chords
+                        }
                   break;
             case 5:
                   //omitted third already
@@ -373,81 +379,50 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
             case 2:
                   if (!(omit & (1 << 2)))
                         ret.insert(2 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 2, 0));     //maj2
+                  omit |= 1 << 9; //make sure we don't add altered 9 when theres a 2
                   break;
             case 69:
                   ret.insert(9 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 6, 0));     //maj6
                   ret.insert(2 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 9, 0));     //maj6
+                  omit = ~0; //no additions/alterations for a 69 chord
                   break;
             default:
                   break;
             }
 
+      Harmony* next = _harmony->findNext();
+      if (!_literal && next) {
+            //jazz interpretation
+            QString qNext = next->parsedForm()->quality();
+            //pitch from current to next harmony normalized to a range between 0 and 12
+            //add PITCH_DELTA_OCTAVE before modulo so that we can ensure arithmetic mod rather than computer mod
+            int keyTpc = int(next->staff()->key(next->tick())) + 14; //tpc of key (ex. F# major would be Tpc::F_S)
+            int keyTpcMinor = keyTpc + 3; //tpc of relative minor of the key signature (ex. F minor would be Tpc::Ab + 3 = Tpc::F)a
+            int pitchBetween = (tpc2pitch(next->rootTpc()) + PITCH_DELTA_OCTAVE - tpc2pitch(rootTpc)) % PITCH_DELTA_OCTAVE;
 
-      /* Old method, still keeping this for now until more thoroughly tested
-      const HChord chord = _harmony->getDescription()->chord;
+            //dont add 9 for chords with altered 5s
+            if (!(omit & (1 << 9)) && !alt5) {
+                  if (quality == "dominant" && pitchBetween == 5 && qNext == "minor"
+                      /*((next->rootTpc() == keyTpc && qNext == "major") || (next->rootTpc() == keyTpcMinor && qNext == "minor"))*/) {
+                        //flat 9 for dominant to a tonic chord a P4 up
+                        //only for minor chords for now
+                        ret.insert(1 + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, 9, -1));
+                        }
+                  else //add major 9
+                        ret.insert(2 + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, 9, 0));
+                  }
 
-      static const HChord dimChord(0,3,6,9);
-
-      //make sure diminished chord has a diminished 7th
-      if (chord == dimChord) {
-            ret.insert(3, tpcInterval(rootTpc, 3, -1));
-            ret.insert(6, tpcInterval(rootTpc, 5, -1));
-            ret.insert(9, tpcInterval(rootTpc, 7, -2));
-            return ret;
+            if (!(omit & (1 << 13)) && !alt5) {
+                  if (quality == "dominant" && pitchBetween == 5 && qNext == "minor") {
+                        //flat 13 for dominant to chord a P4 up
+                        //only for minor chords for now
+                        ret.remove(FIFTH);
+                        ret.insert(8 + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 13, -1));
+                        }
+                  //major 13 considered, but too dependent on melody and voicing of other chord
+                  //no implementation for now
+                  }
             }
-
-      if (chord.contains(3)) {
-            if (!chord.contains(4))
-                  ret.insert(3, tpcInterval(rootTpc, 3, -1)); //minor 3rd
-            else
-                  ret.insert(3, tpcInterval(rootTpc, 2, 1)); //#9
-            }
-      if (chord.contains(4))
-            ret.insert(4, tpcInterval(rootTpc, 3, 0));
-
-      // 7
-      if (chord.contains(11)) {
-            ret.insert(11, tpcInterval(rootTpc, 7, 0)); //maj7
-            }
-      else if (chord.contains(10)) {
-            ret.insert(10, tpcInterval(rootTpc, 7, -1)); //dom7
-            }
-
-      // 4 or 11
-      if (chord.contains(5)) {
-            ret.insert(5, tpcInterval(rootTpc, 4, 0));
-            }
-
-      // 5
-      if (chord.contains(7)) {
-            //natural 5
-            ret.insert(7, tpcInterval(rootTpc, 5, 0));
-            if (chord.contains(6))
-                  ret.insert(6, tpcInterval(rootTpc, 4, 1)); //#11
-            if (chord.contains(8))
-                  ret.insert(8, tpcInterval(rootTpc, 6, -1)); //b13
-            }
-      else {
-            if (chord.contains(6))
-                  ret.insert(6, tpcInterval(rootTpc, 5, -1)); //b5
-            if (chord.contains(8))
-                  ret.insert(8, tpcInterval(rootTpc, 5, 1)); //#5
-            }
-
-      // 6
-      if (chord.contains(9)) {
-            ret.insert(9, tpcInterval(rootTpc, 6, 0));
-            }
-
-      // b9
-      if (chord.contains(1))
-            ret.insert(1, tpcInterval(rootTpc, 2, -1));
-
-      // 9
-      if (chord.contains(2))
-            ret.insert(2, tpcInterval(rootTpc, 2, 0));
-
-            */
       return ret;
       }
 
