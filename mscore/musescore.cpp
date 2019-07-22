@@ -4730,6 +4730,7 @@ AboutBoxDialog::AboutBoxDialog()
       finalString.replace("\n", "<br/>");
       copyrightLabel->setText(QString("<span style=\"font-size:10pt;\">%1</span>").arg(finalString));
       connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
+      copyRevisionButton->setIcon(*icons[int(Icons::copy_ICON)]);
       }
 
 //---------------------------------------------------------

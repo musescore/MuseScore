@@ -64,6 +64,8 @@ ToolbarEditor::ToolbarEditor(QWidget* parent)
       
       up->setIcon(*icons[int(Icons::arrowUp_ICON)]);
       down->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+      add->setIcon(*icons[int(Icons::goPrevious_ICON)]);
+      remove->setIcon(*icons[int(Icons::goNext_ICON)]);
 
       MuseScore::restoreGeometry(this);
       }
