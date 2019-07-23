@@ -156,7 +156,9 @@ bool PluginManager::readPluginPackageList()
                               PluginPackageDescription desc;
                               while (e.readNextStartElement()) {
                                     const QStringRef t(e.name());
-                                    if (t == "pageURL")
+                                    if (t == "description")
+                                          desc.desc_text = e.readElementText();
+                                    else if (t == "pageURL")
                                           page_url = e.readElementText();
                                     else if (t == "pkgName")
                                           desc.package_name = e.readElementText();
@@ -285,6 +287,7 @@ void PluginManager::writePluginPackageList()
       for (const QString &pkg : _pluginPackageList.keys()) {
             auto& v = _pluginPackageList.value(pkg);
             xml.stag("PluginPackage");
+            xml.tag("description", v.desc_text);
             xml.tag("pageURL", pkg);
             xml.tag("pkgName", v.package_name);
             xml.tag("source", v.source);

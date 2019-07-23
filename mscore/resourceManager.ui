@@ -373,6 +373,9 @@
              <property name="placeholderText">
               <string>Description</string>
              </property>
+             <property name="openExternalLinks">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="4" column="9">
