@@ -36,14 +36,29 @@ like full integration with other applications and the desktop environment.
 
 Usage: $(basename "${APPIMAGE}") [options] [scorefile]
 
-Special options for MuseScore Portable AppImage:
+Special arguments, options & environment vars for MuseScore Portable AppImage:
+
+AppImage sole arguments:
   -h, --help                    Displays this help and the normal help (below).
   man, manual, manpage          Displays MuseScore's man page.
   install [-i] [PREFIX]         Installs resources for desktop integration.
   remove, uninstall [PREFIX]    Removes resources from desktop environment.
   check-depends [exes-only]     Displays system information for developers.
 
+AppImage Jack options
+  --dummy-jack, --no-dummy-jack Force use either of dummy or of system's Jack
+                                client library. These options override the
+                                value of APPIMAGE_DUMMY_JACK environment
+                                variable.
+
+AppImage environment variables:
+  APPIMAGE_LIBRARY_PATH         It's value is prepended to LD_LIBRARY_PATH
+  APPIMAGE_DUMMY_JACK           Set to 1 to force use of dummy version of Jack
+                                client library or 0 to use system's. May be
+                                overridden by AppImage Jack options.
+
 Ordinary MuseScore options:
+
 $("${APPDIR}/bin/mscore@MSCORE_INSTALL_SUFFIX@" --help | tail -n +5)
 EOF
 }

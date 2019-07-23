@@ -63,13 +63,14 @@
 is a Free and Open Source WYSIWYG cross-platform multi-lingual
 music composition and notation software, released under the
 GNU General Public Licence (GPLv2).
-@MAN_PORTABLE@.Ss Special options for the AppImage
+@MAN_PORTABLE@.Ss Special arguments, options & environment variables for the AppImage
 @MAN_PORTABLE@This portable version of MuseScore has all of MuseScore's
 @MAN_PORTABLE@usual features, but it runs on a wider range of distributions
 @MAN_PORTABLE@and does not need to be installed.
 @MAN_PORTABLE@There is an option to install it for full integration with
 @MAN_PORTABLE@other applications and the desktop environment, though.
 .Pp
+@MAN_PORTABLE@.Ss AppImage sole arguments
 @MAN_PORTABLE@.Bl -tag -width Ds
 @MAN_PORTABLE@.It Cm man , Cm manual , Cm manpage
 @MAN_PORTABLE@Displays this manual.
@@ -124,6 +125,26 @@ GNU General Public Licence (GPLv2).
 @MAN_PORTABLE@are not available from the system and so must be packaged
 @MAN_PORTABLE@alongside the MuseScore portable version.
 @MAN_PORTABLE@.El
+@MAN_PORTABLE@.Pp
+@MAN_PORTABLE@.Ss AppImage Jack options
+@MAN_PORTABLE@.Bl -tag -width Ds
+@MAN_PORTABLE@.It Fl \-dummy\-jack , Fl \-no\-dummy\-jack
+@MAN_PORTABLE@Force use either of dummy or of system's Jack client library.
+@MAN_PORTABLE@These options override the value of
+@MAN_PORTABLE@.Ev APPIMAGE_DUMMY_JACK
+@MAN_PORTABLE@environment variable.
+@MAN_PORTABLE@.El
+@MAN_PORTABLE@.Pp
+@MAN_PORTABLE@.Ss AppImage environment variables
+@MAN_PORTABLE@.Bl -tag -width Ds
+@MAN_PORTABLE@.It Ev APPIMAGE_LIBRARY_PATH
+@MAN_PORTABLE@It's value is prepended to
+@MAN_PORTABLE@.Ev LD_LIBRARY_PATH.
+@MAN_PORTABLE@.It Ev APPIMAGE_DUMMY_JACK
+@MAN_PORTABLE@Set to 1 to force use of dummy version of Jack client library or
+@MAN_PORTABLE@0 to use system's. May be overridden by AppImage Jack options.
+@MAN_PORTABLE@.El
+@MAN_PORTABLE@.Pp
 @MAN_PORTABLE@.Ss Normal MuseScore options
 Running
 .Nm
@@ -359,6 +380,17 @@ uncompressed MusicXML file
 .Pp
 See below for an example.
 .Sh ENVIRONMENT
+@MAN_PORTABLE@.Ss AppImage environment variables
+@MAN_PORTABLE@.Bl -tag -width Ds
+@MAN_PORTABLE@.It Ev APPIMAGE_LIBRARY_PATH
+@MAN_PORTABLE@It's value is prepended to
+@MAN_PORTABLE@.Ev LD_LIBRARY_PATH.
+@MAN_PORTABLE@.It Ev APPIMAGE_DUMMY_JACK
+@MAN_PORTABLE@Set to 1 to force use of dummy version of Jack client library or
+@MAN_PORTABLE@0 to use system's. May be overridden by AppImage Jack options.
+@MAN_PORTABLE@.El
+@MAN_PORTABLE@.Pp
+@MAN_PORTABLE@.Ss Normal MuseScore environment variables
 .Bl -tag -width Ds
 .It Ev SKIP_LIBJACK
 Set this (the value does not matter) to skip initialisation
