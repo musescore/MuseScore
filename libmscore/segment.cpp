@@ -1573,6 +1573,17 @@ Element* Segment::nextElement(int activeStaff)
                   if (s)
                         return s->spannerSegments().front();
                   Segment* nextSegment =  seg->next1enabled();
+                  if (!nextSegment) {
+                        MeasureBase* mb = measure()->next();
+                        return mb && mb->isBox() ? mb : score()->firstElement();
+                        }
+
+                  // check for frame
+                  MeasureBase* nmb = measure()->next();
+                  Measure* nsm = nextSegment->measure();
+                  if (nsm != measure() && nsm != nmb)
+                        return nmb;
+
                   while (nextSegment) {
                         nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
@@ -1700,8 +1711,16 @@ Element* Segment::prevElement(int activeStaff)
                               }
                         }
                    Segment* prevSeg = seg->prev1enabled();
-                   if (!prevSeg)
-                         return score()->lastElement();
+                   if (!prevSeg) {
+                         MeasureBase* mb = measure()->prev();
+                         return mb && mb->isBox() ? mb : score()->lastElement();
+                         }
+
+                   // check for frame
+                   MeasureBase* pmb = measure()->prev();
+                   Measure* psm = prevSeg->measure();
+                   if (psm != measure() && psm != pmb)
+                         return pmb;
 
                    prev = lastElementOfSegment(prevSeg, activeStaff);
                    while (!prev && prevSeg) {
