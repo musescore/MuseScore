@@ -25,7 +25,6 @@ class ResourceManager : public QDialog, public Ui::Resource
    {
       Q_OBJECT
 
-    virtual void closeEvent(QCloseEvent *e) override;
     virtual void hideEvent(QHideEvent*);
     QByteArray txt;
     void displayLanguages();
@@ -48,6 +47,9 @@ public:
     static inline QString baseAddr() { return "http://extensions.musescore.org/3.5/"; }
     static inline QString pluginRepoAddr() { return "https://musescore.org/en/plugins"; }
     static inline QString pluginPageAddr(QString& name) { return "https://musescore.org/project/" + name; }
+
+public slots:
+    virtual void done(int) override;
 
 private:
     QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename

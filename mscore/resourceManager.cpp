@@ -119,13 +119,6 @@ bool LanguageFileSize::operator<(const QTableWidgetItem& nextItem) const
             return false;
       return getSize() < static_cast<const LanguageFileSize&>(nextItem).getSize();
       }
-//   accept
-//---------------------------------------------------------
-void ResourceManager::closeEvent(QCloseEvent *e)
-      {
-      mscore->getPluginManager()->accept();
-      mscore->getPluginManager()->disAttachUI();
-      }
 
 
 //---------------------------------------------------------
@@ -515,6 +508,16 @@ void ResourceManager::hideEvent(QHideEvent* event)
       MuseScore::saveGeometry(this);
       QWidget::hideEvent(event);
       }
+
+void ResourceManager::done(int status)
+      {
+      qDebug("a donedonedone.");
+      mscore->getPluginManager()->accept();
+      mscore->getPluginManager()->disAttachUI();
+      this->disconnect();
+      QDialog::done(status);
+      }
+
 
 }
 
