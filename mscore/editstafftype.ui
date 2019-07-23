@@ -215,7 +215,7 @@
         <number>0</number>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page">
         <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0">
@@ -1410,6 +1410,7 @@
   <tabstop>genKeysigPitched</tabstop>
   <tabstop>showLedgerLinesPitched</tabstop>
   <tabstop>stemlessPitched</tabstop>
+  <tabstop>noteHeadScheme</tabstop>
   <tabstop>genKeysigPercussion</tabstop>
   <tabstop>showLedgerLinesPercussion</tabstop>
   <tabstop>stemlessPercussion</tabstop>
@@ -1425,6 +1426,7 @@
   <tabstop>linesThroughRadio</tabstop>
   <tabstop>linesBrokenRadio</tabstop>
   <tabstop>showBackTied</tabstop>
+  <tabstop>showTabFingering</tabstop>
   <tabstop>durFontName</tabstop>
   <tabstop>durFontSize</tabstop>
   <tabstop>durY</tabstop>
