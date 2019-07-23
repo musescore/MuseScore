@@ -3197,7 +3197,7 @@ Element* Measure::nextElementStaff(int staff)
             ;
       }
       Segment* seg = toSegment(e);
-      Segment* nextSegment = seg->next();
+      Segment* nextSegment = seg ? seg->next() : first();
       Element* next = seg->firstElementOfSegment(nextSegment, staff);
       if (next)
             return next;
@@ -3215,7 +3215,7 @@ Element* Measure::prevElementStaff(int staff)
       if (prevM) {
             Segment* seg = prevM->last();
             if (seg)
-                  seg->lastElement(staff);
+                  return seg->lastElement(staff);
             }
       return score()->lastElement();
       }
