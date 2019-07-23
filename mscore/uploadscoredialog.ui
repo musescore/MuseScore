@@ -119,6 +119,9 @@
          <property name="sizeAdjustPolicy">
           <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
          </property>
+         <property name="tabChangesFocus">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -321,6 +324,9 @@ p, li { white-space: pre-wrap; }
         <widget class="QPlainTextEdit" name="changes">
          <property name="sizeAdjustPolicy">
           <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+         </property>
+         <property name="tabChangesFocus">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
