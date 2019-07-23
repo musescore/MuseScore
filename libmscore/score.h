@@ -1104,8 +1104,8 @@ class Score : public QObject, public ScoreElement {
       Element* downAlt(Element*);
       Note* downAltCtrl(Note*) const;
 
-      Element* firstElement();
-      Element* lastElement();
+      Element* firstElement(bool frame = true);
+      Element* lastElement(bool frame = true);
 
       int nmeasures() const;
       bool hasLyrics();
