@@ -17,6 +17,8 @@
 #include "score.h"
 #include "part.h"
 #include "util.h"
+#include "selection.h"
+
 #ifndef TESTROOT
 #include "shortcut.h"
 #endif
@@ -332,6 +334,7 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<Measure>();
       qmlRegisterType<Part>();
       qmlRegisterType<Excerpt>();
+      qmlRegisterType<Selection>();
       //qmlRegisterType<Hook>();
       //qmlRegisterType<Stem>();
       //qmlRegisterType<StemSlash>();
