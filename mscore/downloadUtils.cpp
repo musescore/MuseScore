@@ -39,6 +39,12 @@ bool DownloadUtils::saveFile()
       return true;
       }
 
+void DownloadUtils::cancel()
+      {
+      if (reply && !reply->isFinished())
+            reply->abort();
+      }
+
 void DownloadUtils::downloadFinished(QNetworkReply *data)
       {
       sdata = data->readAll();
@@ -60,6 +66,7 @@ void DownloadUtils::download(bool showProgress)
       QObject::connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
       QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
       QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+      QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()));
 
       if (showProgress) {
             progressDialog = new QProgressDialog(static_cast<QWidget*>(parent()));

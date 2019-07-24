@@ -587,6 +587,7 @@ void PluginWorker::fetchExtensions()
       {
       DownloadUtils js;
       js.setTarget(ResourceManager::baseAddr() + "extensions/details.json");
+      QObject::connect(r, &QDialog::finished, &js, &DownloadUtils::cancel);
       js.download();
       QByteArray json = js.returnData();
       emit extensionMetaAvailable(json);
@@ -598,6 +599,7 @@ void PluginWorker::fetchLanguages()
       // Download details.json
       DownloadUtils js;
       js.setTarget(ResourceManager::baseAddr() + "languages/details.json");
+      QObject::connect(r, &QDialog::finished, &js, &DownloadUtils::cancel);
       js.download();
       QByteArray json = js.returnData();
       qDebug() << json;
@@ -610,6 +612,7 @@ void PluginWorker::fetchPluginRepo()
       // fetch plugin list from web
       DownloadUtils html;
       html.setTarget(ResourceManager::pluginRepoAddr());
+      QObject::connect(r, &QDialog::finished, &html, &DownloadUtils::cancel);
       html.download();
       QByteArray html_raw = html.returnData();
       emit pluginRepoAvailable(html_raw);

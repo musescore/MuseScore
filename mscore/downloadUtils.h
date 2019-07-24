@@ -41,6 +41,7 @@ class DownloadUtils : public QObject
       void done();
 
    public slots:
+      void cancel();
       void download(bool showProgress = false);
       void downloadFinished(QNetworkReply* data);
       void downloadProgress(qint64 received, qint64 total);
