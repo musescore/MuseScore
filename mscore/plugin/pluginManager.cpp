@@ -26,8 +26,8 @@ static const QByteArray pluginShortcutActionName = "plugin-run";
 //   PluginManager
 //---------------------------------------------------------
 
-PluginManager::PluginManager(QWidget * parent)
-   : QObject(parent) 
+PluginManager::PluginManager(QWidget* parent)
+   : QObject(parent)
       {
       setObjectName("PluginManager");
       }

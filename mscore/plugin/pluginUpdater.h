@@ -16,12 +16,6 @@
 #include <map>
 
 namespace Ms {
-struct PluginPackageMeta {
-      QString name;
-      std::tuple<bool, bool, bool> compatibility;
-      QStringList categories;
-      QString page_url;
-      };
 
 //---------------------------------------------------------
 //   PluginPackageSource

@@ -40,6 +40,7 @@ ResourceManager::ResourceManager(QWidget *parent) :
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
       dir.mkpath(dataPath + "/locale");
+      workerThreads.setMaxThreadCount(10);
       // display "loading" in extensionsTable
       extensionsTable->setRowCount(1);
       extensionsTable->setSpan(0, 0, 1, extensionsTable->columnCount());
@@ -160,7 +161,7 @@ void ResourceManager::parseExtensions(QByteArray json)
       int col = 0;
       QPushButton* buttonInstall;
       QPushButton* buttonUninstall;
-      
+      //extensionsTable->verticalHeader()->show();
 
       QStringList exts = result.object().keys();
       for (QString key : exts) {
@@ -241,7 +242,7 @@ void ResourceManager::parseLanguages(QByteArray json)
       std::vector<QPushButton*> updateButtons(rowCount);
 #endif
       QPushButton* temp;
-
+      //languagesTable->verticalHeader()->show();
       // move current language to first row
       QStringList langs = result.object().keys();
       QString lang = mscore->getLocaleISOCode();

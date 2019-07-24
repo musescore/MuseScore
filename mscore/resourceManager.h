@@ -23,7 +23,7 @@ namespace Ms {
 
 class ResourceManager : public QDialog, public Ui::Resource
    {
-      Q_OBJECT
+    Q_OBJECT
 
     virtual void hideEvent(QHideEvent*);
     QByteArray txt;

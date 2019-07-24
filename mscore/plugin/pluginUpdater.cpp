@@ -150,7 +150,6 @@ void ResourceManager::parsePluginRepo(QByteArray html_raw)
             Q_ASSERT(td_list.length() == 4);
             QString page_url = td_list.item(0).toElement().firstChildElement("a").attribute("href");
             QString name = td_list.item(0).toElement().text();
-            std::tuple<bool,bool,bool> compat = compatFromString(td_list.item(1).toElement().text());
             QString category_raw = td_list.item(2).toElement().text();
             QStringList category_list = category_raw.split(", ");
             for (QString& c : category_list) {
@@ -173,7 +172,7 @@ void ResourceManager::parsePluginRepo(QByteArray html_raw)
             pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col++), plugin_name); // column 0
             pluginsTable->setItem(row, col++, new QTableWidgetItem(td_list.item(2).toElement().text())); // column 1
             if (page_url.isNull()) {
-                  pluginsTable->setItem(row,col,new QTableWidgetItem("No page URL found."));
+                  pluginsTable->setItem(row,col,new QTableWidgetItem(tr("No page URL found.")));
                   continue;
                   }
 
@@ -334,7 +333,7 @@ static std::vector<PluginPackageLink> getLinks(const QByteArray& html_raw_array)
       for (auto& url : urls)
             begin_idx.insert(url.newline_index);
       // now, get more hints from the line above each link
-      for (int i = 0; i < urls.size(); i++) {
+      for (size_t i = 0; i < urls.size(); i++) {
             auto& link = urls[i];
             if (link.score >= -1) {
                   int last_idx = link.newline_index - 1;
@@ -489,7 +488,7 @@ void ResourceManager::uninstallPluginPackage()
       QPushButton* button = static_cast<QPushButton*>(sender());
       const QString& url = button->property("page_url").toString();
       if (!mscore->getPluginManager()->uninstallPluginPackage(url)) {
-            button->setText("Uninstall failed. Try again");
+            button->setText(tr("Uninstall failed. Try again"));
             return;
             }
       refreshPluginButton(button->property("row").toInt(), PluginStatus::NOT_INSTALLED);
@@ -526,17 +525,17 @@ void ResourceManager::refreshPluginButton(int row, bool updated/* = true*/)
       uninstall->setEnabled(installed);
       if (installed) {
             if (updated) {
-                  install->setText("Updated");
+                  install->setText(tr("Updated"));
                   install->setEnabled(false);
                   }
             else {
-                  install->setText("Update");
+                  install->setText(tr("Update"));
                   install->setEnabled(true);
                   connect(install, SIGNAL(clicked()), this, SLOT(updatePlugin()));
                   }
             }
       else {
-            install->setText("Install");
+            install->setText(tr("Install"));
             install->setEnabled(true);
             connect(install, SIGNAL(clicked()), this, SLOT(downloadInstallPlugin()));
             }
@@ -626,7 +625,7 @@ void PluginWorker::checkUpdate(QPushButton* install)
       PluginPackageDescription* desc_tmp = new PluginPackageDescription(desc);
       PluginPackageDescription desc_backup = desc;
       install->setEnabled(false);
-      install->setText("Checking for update…");
+      install->setText(tr("Checking for update…"));
       bool should_update = analyzePluginPage("https://musescore.org" + page_url);
       // very hack here. should be improved.
       *desc_tmp = desc;

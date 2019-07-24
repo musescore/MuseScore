@@ -57,7 +57,7 @@ class PluginManager : public QObject {
       bool uninstallPlugin(PluginDescription* p);
       bool uiAttached = false;
 
-private slots:
+   private slots:
       void definePluginShortcutClicked();
       void clearPluginShortcutClicked();
       void pluginTreeWidgetItemChanged(QTreeWidgetItem*, QTreeWidgetItem*);
@@ -66,11 +66,11 @@ private slots:
       void updatePluginPackage(const QString url, PluginPackageDescription* desc);
       void commitPlugin(const QString url, PluginPackageDescription* desc); // called from plugin worker
 
-signals:
+   signals:
       void closed(bool);
       
 
-public:
+   public:
       PluginManager(QWidget* parent = 0);
       virtual void accept();
       void init();
