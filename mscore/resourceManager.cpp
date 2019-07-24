@@ -44,20 +44,18 @@ ResourceManager::ResourceManager(QWidget *parent) :
       extensionsTable->setRowCount(1);
       extensionsTable->setSpan(0, 0, 1, extensionsTable->columnCount());
       extensionsTable->setItem(0, 0, new QTableWidgetItem(tr("Loading…")));
-      QtConcurrent::run(this, &ResourceManager::displayExtensions);
-      connect(this, SIGNAL(extensionMetaAvailable(QByteArray)), this, SLOT(parseExtensions(QByteArray)));
+      PluginWorker* worker = new PluginWorker(this);
+      QtConcurrent::run(&workerThreads, worker, &PluginWorker::fetchExtensions);
       // display "loading" in languagesTable
       languagesTable->setRowCount(1);
       languagesTable->setSpan(0, 0, 1, languagesTable->columnCount());
       languagesTable->setItem(0, 0, new QTableWidgetItem(tr("Loading…")));
-      QtConcurrent::run(this, &ResourceManager::displayLanguages);
-      connect(this, SIGNAL(languageMetaAvailable(QByteArray)), this, SLOT(parseLanguages(QByteArray)));
+      QtConcurrent::run(&workerThreads, worker, &PluginWorker::fetchLanguages);
       // display "loading" in pluginsTable
       pluginsTable->setRowCount(1);
       pluginsTable->setSpan(0, 0, 1, pluginsTable->columnCount());
       pluginsTable->setItem(0, 0, new QTableWidgetItem(tr("Loading…")));
-      QtConcurrent::run(this, &ResourceManager::displayPluginRepo);
-      connect(this, SIGNAL(pluginRepoAvailable(QByteArray)), this, SLOT(parsePluginRepo(QByteArray)));
+      QtConcurrent::run(&workerThreads, worker, &PluginWorker::fetchPluginRepo);
       // plugin manager's display
       mscore->getPluginManager()->setupUI(pluginName, pluginPath, pluginVersion, pluginShortcut, pluginDescription, pluginTreeWidget, label_shortcut, label_version);
       mscore->getPluginManager()->init();
@@ -214,19 +212,6 @@ void ResourceManager::parseExtensions(QByteArray json)
       }
 
 //---------------------------------------------------------
-//   displayExtensions
-//---------------------------------------------------------
-
-void ResourceManager::displayExtensions()
-      {
-      DownloadUtils js(this);
-      js.setTarget(baseAddr() + "extensions/details.json");
-      js.download();
-      QByteArray json = js.returnData();
-      emit extensionMetaAvailable(json);
-      }
-
-//---------------------------------------------------------
 //   parseLanguages
 //---------------------------------------------------------
 
@@ -321,21 +306,6 @@ void ResourceManager::parseLanguages(QByteArray json)
                   }
             row++;
             }
-      }
-
-//---------------------------------------------------------
-//   displayLanguages
-//---------------------------------------------------------
-
-void ResourceManager::displayLanguages()
-      {
-      // Download details.json
-      DownloadUtils js(this);
-      js.setTarget(baseAddr() + "languages/details.json");
-      js.download();
-      QByteArray json = js.returnData();
-      qDebug() << json;
-      emit languageMetaAvailable(json);
       }
 
 //---------------------------------------------------------
@@ -511,10 +481,9 @@ void ResourceManager::hideEvent(QHideEvent* event)
 
 void ResourceManager::done(int status)
       {
-      qDebug("a donedonedone.");
+      workerThreads.clear();
       mscore->getPluginManager()->accept();
       mscore->getPluginManager()->disAttachUI();
-      this->disconnect();
       QDialog::done(status);
       }
 

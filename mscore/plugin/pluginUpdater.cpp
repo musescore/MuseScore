@@ -23,6 +23,8 @@ namespace Ms {
 
 static int PluginStatus_id = qRegisterMetaType<PluginStatus>("PluginStatus");
 
+QThreadPool ResourceManager::workerThreads;
+
 static inline std::tuple<bool, bool, bool> compatFromString(const QString& raw) {
       return std::make_tuple(raw.contains("1.x"), raw.contains("2.x"), raw.contains("3.x"));
       }
@@ -198,15 +200,6 @@ void ResourceManager::parsePluginRepo(QByteArray html_raw)
 //---------------------------------------------------------
 //   displayPluginRepo
 //---------------------------------------------------------
-void ResourceManager::displayPluginRepo()
-      {
-      // fetch plugin list from web
-      DownloadUtils html(this);
-      html.setTarget(pluginRepoAddr());
-      html.download();
-      QByteArray html_raw = html.returnData();
-      emit pluginRepoAvailable(html_raw);
-      }
 
 void ResourceManager::filterPluginList()
       {
@@ -343,7 +336,7 @@ static std::vector<PluginPackageLink> getLinks(const QByteArray& html_raw_array)
       // now, get more hints from the line above each link
       for (int i = 0; i < urls.size(); i++) {
             auto& link = urls[i];
-            if (link.score >= 0) {
+            if (link.score >= -1) {
                   int last_idx = link.newline_index - 1;
                   int first_idx = last_idx - 1;
                   while (first_idx > 0 && html_raw[first_idx - 1] != '\n')
@@ -385,7 +378,7 @@ void ResourceManager::scanPluginUpdate()
                   install->setEnabled(false);
                   install->setText(tr("Pending…"));
                   PluginWorker* worker = new PluginWorker(mscore->getPluginManager()->getPackageDescription(page_url), this);
-                  QtConcurrent::run(worker, &PluginWorker::checkUpdate, install);
+                  QtConcurrent::run(&workerThreads, worker, &PluginWorker::checkUpdate, install);
                   }
             }
       }
@@ -475,7 +468,7 @@ void ResourceManager::updatePlugin()
       button->setEnabled(false);
       button->setText(tr("Pending…"));
       PluginWorker* worker = new PluginWorker(desc, this);
-      QtConcurrent::run(worker, &PluginWorker::updateInstall, button);
+      QtConcurrent::run(&workerThreads, worker, &PluginWorker::updateInstall, button);
       }
 
 //---------------------------------------------------------
@@ -488,7 +481,7 @@ void ResourceManager::downloadInstallPlugin()
       button->setEnabled(false);
       button->setText(tr("Pending…"));
       PluginWorker* worker = new PluginWorker(this);
-      QtConcurrent::run(worker, &PluginWorker::downloadInstall, button);
+      QtConcurrent::run(&workerThreads, worker, &PluginWorker::downloadInstall, button);
       }
 
 void ResourceManager::uninstallPluginPackage()
@@ -570,16 +563,54 @@ void ResourceManager::refreshPluginButton(int row, PluginStatus status)
 
 PluginWorker::PluginWorker(ResourceManager* r) : r(r)
       {
+      QObject::connect(this, SIGNAL(extensionMetaAvailable(QByteArray)), r, SLOT(parseExtensions(QByteArray)));
+      QObject::connect(this, SIGNAL(languageMetaAvailable(QByteArray)), r, SLOT(parseLanguages(QByteArray)));
+      QObject::connect(this, SIGNAL(pluginRepoAvailable(QByteArray)), r, SLOT(parsePluginRepo(QByteArray)));
       QObject::connect(this, SIGNAL(pluginStatusChanged(int, PluginStatus)), r, SLOT(refreshPluginButton(int, PluginStatus)));
+      QObject::connect(r, &QDialog::finished, this, &PluginWorker::detached, Qt::DirectConnection);
       QObject::connect(this, SIGNAL(pluginInstalled(const QString, PluginPackageDescription*)), mscore->getPluginManager(), SLOT(commitPlugin(const QString, PluginPackageDescription*)));
       QObject::connect(this, SIGNAL(updateAvailable(const QString, PluginPackageDescription*)), mscore->getPluginManager(), SLOT(updatePluginPackage(const QString, PluginPackageDescription*)));
       }
 
 PluginWorker::PluginWorker(const PluginPackageDescription& desc, ResourceManager* r) : desc(desc), r(r)
       {
+      QObject::connect(this, SIGNAL(extensionMetaAvailable(QByteArray)), r, SLOT(parseExtensions(QByteArray)));
+      QObject::connect(this, SIGNAL(languageMetaAvailable(QByteArray)), r, SLOT(parseLanguages(QByteArray)));
+      QObject::connect(this, SIGNAL(pluginRepoAvailable(QByteArray)), r, SLOT(parsePluginRepo(QByteArray)));
       QObject::connect(this, SIGNAL(pluginStatusChanged(int, PluginStatus)), r, SLOT(refreshPluginButton(int, PluginStatus)));
+      QObject::connect(r, &QDialog::finished, this, &PluginWorker::detached, Qt::DirectConnection);
       QObject::connect(this, SIGNAL(pluginInstalled(const QString, PluginPackageDescription*)), mscore->getPluginManager(), SLOT(commitPlugin(const QString, PluginPackageDescription*)));
       QObject::connect(this, SIGNAL(updateAvailable(const QString, PluginPackageDescription*)), mscore->getPluginManager(), SLOT(updatePluginPackage(const QString, PluginPackageDescription*)));
+      }
+
+void PluginWorker::fetchExtensions()
+      {
+      DownloadUtils js;
+      js.setTarget(ResourceManager::baseAddr() + "extensions/details.json");
+      js.download();
+      QByteArray json = js.returnData();
+      emit extensionMetaAvailable(json);
+      }
+
+void PluginWorker::fetchLanguages()
+      {
+      // Download details.json
+      DownloadUtils js;
+      js.setTarget(ResourceManager::baseAddr() + "languages/details.json");
+      js.download();
+      QByteArray json = js.returnData();
+      qDebug() << json;
+      emit languageMetaAvailable(json);
+      }
+
+void PluginWorker::fetchPluginRepo()
+      {
+      // fetch plugin list from web
+      DownloadUtils html;
+      html.setTarget(ResourceManager::pluginRepoAddr());
+      html.download();
+      QByteArray html_raw = html.returnData();
+      emit pluginRepoAvailable(html_raw);
       }
 
 void PluginWorker::checkUpdate(QPushButton* install)
@@ -604,9 +635,10 @@ void PluginWorker::checkUpdate(QPushButton* install)
             emit pluginStatusChanged(pluginRow, PluginStatus::UPDATED);
             }
       }
+
 void PluginWorker::detached()
       {
-      // TODO: set button pointers null
+      r = nullptr;
       }
 
 static QString getPackageDescriptionText(const QString& html_raw) {
@@ -624,6 +656,8 @@ static QString getPackageDescriptionText(const QString& html_raw) {
       // remove </div>
       if (desc.endsWith("</div>"))
             desc = desc.left(desc.size() - QString("</div>").size());
+      static const QRegularExpression localHref("<a href=\"/(.*?)\")");
+
       return desc;
 }
 
@@ -850,7 +884,8 @@ void PluginWorker::downloadInstall(QPushButton* button)
             button->setEnabled(true);
             return;
             }
-      button->setText(tr("Downloading…"));
+      if(r)
+            button->setText(tr("Downloading…"));
       QString localPath = download(page_url);
       PluginStatus result;
       if (install(localPath, &result)) {

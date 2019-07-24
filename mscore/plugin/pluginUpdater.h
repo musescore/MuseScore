@@ -97,6 +97,9 @@ class PluginWorker : public QObject {
 public:
       PluginWorker(ResourceManager* r);
       PluginWorker(const PluginPackageDescription& desc, ResourceManager* r);
+      void fetchExtensions();
+      void fetchLanguages();
+      void fetchPluginRepo();
 public slots:
       bool analyzePluginPage(QString page_url); // replace ResourceManager::analyzePluginPage
       QString download(const QString& page_url, bool update = false); // replace Resource::downloadPluginPackage
@@ -111,6 +114,9 @@ signals:
       void finished();
       void pluginInstalled(const QString url, PluginPackageDescription* desc);
       void updateAvailable(const QString url, PluginPackageDescription* desc);
+      void pluginRepoAvailable(QByteArray repo_html);
+      void languageMetaAvailable(QByteArray json);
+      void extensionMetaAvailable(QByteArray json);
 private:
       PluginPackageDescription desc;
       PluginStatus status;

@@ -27,9 +27,7 @@ class ResourceManager : public QDialog, public Ui::Resource
 
     virtual void hideEvent(QHideEvent*);
     QByteArray txt;
-    void displayLanguages();
-    void displayExtensions();
-    void displayPluginRepo();
+    static QThreadPool workerThreads;
     bool verifyFile(QString path, QString hash);
     bool verifyLanguageFile(QString filename, QString hash);
     void refreshPluginButton(int row, bool updated = true);
@@ -54,12 +52,6 @@ public slots:
 private:
     QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
     QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
-
-
-signals:
-    void pluginRepoAvailable(QByteArray repo_html);
-    void languageMetaAvailable(QByteArray json);
-    void extensionMetaAvailable(QByteArray json);
 
 private slots:
     void filterPluginList();
