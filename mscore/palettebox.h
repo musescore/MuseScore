@@ -20,6 +20,7 @@ namespace Ms {
 class XmlWriter;
 class XmlReader;
 class Palette;
+class WorkspaceComboBox;
 
 //---------------------------------------------------------
 //   PaletteBox
@@ -30,7 +31,7 @@ class PaletteBox : public QDockWidget {
 
       QVBoxLayout* vbox;
       Palette* newPalette(const QString& name, int slot);
-      QComboBox* workspaceList;
+      WorkspaceComboBox* workspaceList;
       QLineEdit* _searchBox;
       const int paletteStretch = 1000;
       QAction* singlePaletteAction;
@@ -40,8 +41,6 @@ class PaletteBox : public QDockWidget {
    private slots:
       void paletteCmd(PaletteCommand, int);
       void closeAll();
-      void workspaceSelected(int idx);
-      void newWorkspaceClicked();
       void setSinglePalette(bool);
       void filterPalettes(const QString& text);
 
@@ -59,7 +58,6 @@ class PaletteBox : public QDockWidget {
       bool read(XmlReader&);
       void clear();
       QList<Palette*> palettes() const;
-      void updateWorkspaces();
       QLineEdit* searchBox() { return _searchBox; }
       bool noSelection();
       void mousePressEvent(QMouseEvent* ev, Palette* p1);

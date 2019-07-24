@@ -1130,7 +1130,7 @@ void PreferenceDialog::apply()
       Workspace::retranslate();
       preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
       mscore->changeWorkspace(Workspace::currentWorkspace);
-      mscore->getPaletteBox()->updateWorkspaces();
+      emit mscore->workspacesChanged();
       
       emit preferencesChanged();
       preferences.save();
