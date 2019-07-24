@@ -665,8 +665,8 @@ static QString getPackageDescriptionText(const QString& html_raw) {
       // remove </div>
       if (desc.endsWith("</div>"))
             desc = desc.left(desc.size() - QString("</div>").size());
-      static const QRegularExpression localHref("<a href=\"/(.*?)\")");
-
+      static const QRegularExpression localHref("(<a href=\")(/.*?\")");
+      desc.replace(localHref, "\\1https://musescore.org\\2");
       return desc;
 }
 

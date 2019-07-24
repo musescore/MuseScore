@@ -347,8 +347,7 @@ void PluginManager::commitPlugin(const QString url, PluginPackageDescription* de
       {
       _pluginPackageList[url] = *desc;
       delete desc;
-      // TODO: maybe a simpler way than `loadList`
-      // do not update _pluginList and let `loadList` do it for now.
+      // maybe there's a more efficient way than `loadList`
       loadList(false);
       writePluginPackageList(); // TODO: make write back later
       }
