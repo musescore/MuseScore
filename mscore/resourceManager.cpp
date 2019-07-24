@@ -50,11 +50,13 @@ ResourceManager::ResourceManager(QWidget *parent) :
       languagesTable->setRowCount(1);
       languagesTable->setSpan(0, 0, 1, languagesTable->columnCount());
       languagesTable->setItem(0, 0, new QTableWidgetItem(tr("Loading…")));
+      worker = new PluginWorker(this);
       QtConcurrent::run(&workerThreads, worker, &PluginWorker::fetchLanguages);
       // display "loading" in pluginsTable
       pluginsTable->setRowCount(1);
       pluginsTable->setSpan(0, 0, 1, pluginsTable->columnCount());
       pluginsTable->setItem(0, 0, new QTableWidgetItem(tr("Loading…")));
+      worker = new PluginWorker(this);
       QtConcurrent::run(&workerThreads, worker, &PluginWorker::fetchPluginRepo);
       // plugin manager's display
       mscore->getPluginManager()->setupUI(pluginName, pluginPath, pluginVersion, pluginShortcut, pluginDescription, pluginTreeWidget, label_shortcut, label_version);

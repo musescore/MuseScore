@@ -590,6 +590,7 @@ void PluginWorker::fetchExtensions()
       js.download();
       QByteArray json = js.returnData();
       emit extensionMetaAvailable(json);
+      deleteLater();
       }
 
 void PluginWorker::fetchLanguages()
@@ -601,6 +602,7 @@ void PluginWorker::fetchLanguages()
       QByteArray json = js.returnData();
       qDebug() << json;
       emit languageMetaAvailable(json);
+      deleteLater();
       }
 
 void PluginWorker::fetchPluginRepo()
@@ -611,6 +613,7 @@ void PluginWorker::fetchPluginRepo()
       html.download();
       QByteArray html_raw = html.returnData();
       emit pluginRepoAvailable(html_raw);
+      deleteLater();
       }
 
 void PluginWorker::checkUpdate(QPushButton* install)
@@ -634,6 +637,7 @@ void PluginWorker::checkUpdate(QPushButton* install)
             delete desc_tmp;
             emit pluginStatusChanged(pluginRow, PluginStatus::UPDATED);
             }
+      deleteLater();
       }
 
 void PluginWorker::detached()
@@ -788,6 +792,7 @@ void PluginWorker::updateInstall(QPushButton* button)
             }
       else
             emit pluginStatusChanged(buttonRow, res);
+      deleteLater();
       }
 
 bool PluginWorker::install(QString& download_pkg, PluginStatus* result/*= nullptr*/)
@@ -895,6 +900,7 @@ void PluginWorker::downloadInstall(QPushButton* button)
             }
       else
             emit pluginStatusChanged(buttonRow, result);
+      deleteLater();
       }
 
 }
