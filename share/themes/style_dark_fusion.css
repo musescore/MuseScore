@@ -1,5 +1,9 @@
 *:disabled {
- color: gray
+ color: gray;
+}
+
+QMenu::disabled {
+ background-color: palette(base);
 }
 
 QGroupBox {
@@ -26,7 +30,7 @@ QTabBar::close-button:hover {
 
 /* Inspector buttons */
 QPushButton:flat:hover {
- border: 1px solid gray;
+ border: 1px solid dimgray;
  border-radius: 3px;
 }
 QPushButton:flat:hover:checked {
@@ -58,3 +62,14 @@ QToolButton[iconic-text="true"]:disabled:checked { color: $buttonHighlightDisabl
 
 /* Mainly in midi import */
 QTableView { border: none; }
+
+/* dock and main area separator */
+QMainWindow::separator {
+    background: #C8C8C8;
+    width: 1px; /* when vertical */
+    height: 1px; /* when horizontal */
+}
+
+QMainWindow::separator:hover {
+    background: gray;
+}
