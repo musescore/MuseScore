@@ -37,6 +37,8 @@
 #include "selectionwindow.h"
 #include "palette.h"
 #include "palettebox.h"
+#include "palette/palettemodel.h"
+#include "palette/paletteworkspace.h"
 #include "libmscore/part.h"
 #include "libmscore/drumset.h"
 #include "libmscore/instrtemplate.h"
@@ -68,6 +70,7 @@
 #include "pianotools.h"
 #include "mediadialog.h"
 #include "workspace.h"
+#include "workspacecombobox.h"
 #include "selectdialog.h"
 #include "selectnotedialog.h"
 #include "transposedialog.h"
@@ -527,10 +530,8 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
                         }
                   }
 
-            if (workspace != 0) {
+            if (workspace)
                   mscore->changeWorkspace(workspace);
-                  mscore->getPaletteBox()->updateWorkspaces();
-                  }
             }
 
       delete newWizard;
@@ -820,7 +821,7 @@ bool MuseScore::importExtension(QString path)
             auto wsList = workspacesDir.entryInfoList(QStringList("*.workspace"), QDir::Files);
             if (!wsList.isEmpty()) {
                   Workspace::refreshWorkspaces();
-                  paletteBox->updateWorkspaces();
+                  emit workspacesChanged();
                   paletteBox->selectWorkspace(wsList.last().absoluteFilePath());
                   }
             }
@@ -886,7 +887,7 @@ bool MuseScore::uninstallExtension(QString extensionId)
       mscore->updateInstrumentDialog();
       if (refreshWorkspaces) {
             Workspace::refreshWorkspaces();
-            paletteBox->updateWorkspaces();
+            emit workspacesChanged();
             paletteBox->selectWorkspace(-1);
             }
       return true;
@@ -1230,6 +1231,7 @@ MuseScore::MuseScore()
       //    Feedback Tool Bar
       //-------------------------------
 
+      {
       feedbackTools = addToolBar("");
       feedbackTools->setObjectName("feedback-tools");
 	  // Forbid to move or undock the toolbar...
@@ -1243,6 +1245,7 @@ MuseScore::MuseScore()
       AccessibleToolButton* feedbackButton = new AccessibleToolButton(feedbackTools, getAction("leave-feedback"));
       feedbackButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
       feedbackTools->addWidget(feedbackButton);
+      }
 
       addToolBarBreak();
 
@@ -1254,6 +1257,29 @@ MuseScore::MuseScore()
       entryTools->setObjectName("entry-tools");
 
       populateNoteInputMenu();
+
+      //-------------------------------
+      //    Workspaces Tool Bar
+      //-------------------------------
+
+      {
+      workspacesTools = addToolBar("");
+      workspacesTools->setObjectName("workspaces-tools");
+
+      // Add a spacer to align the buttons to the right side.
+      QWidget* spacer = new QWidget(workspacesTools);
+      spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+      workspacesTools->addWidget(spacer);
+
+      WorkspaceComboBox* box = new WorkspaceComboBox(this);
+      workspacesTools->addWidget(box);
+
+      AccessibleToolButton* addWorkspaceButton = new AccessibleToolButton(workspacesTools, getAction("create-new-workspace"));
+      addWorkspaceButton->setMinimumHeight(24);
+      workspacesTools->addWidget(addWorkspaceButton);
+      }
+
+      addToolBarBreak();
 
       //---------------------
       //    Menus
@@ -1460,6 +1486,12 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       a->setChecked(feedbackTools->isVisible());
       connect(feedbackTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
+
+      a = getAction("toggle-workspaces-toolbar");
+      a->setCheckable(true);
+      a->setChecked(workspacesTools->isVisible());
+      connect(workspacesTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
       menuToolbars->addAction(a);
 
       menuToolbars->addSeparator();
@@ -1966,6 +1998,7 @@ void MuseScore::retranslate()
       fotoTools->setWindowTitle(tr("Image Capture"));
       entryTools->setWindowTitle(tr("Note Input"));
       feedbackTools->setWindowTitle(tr("Feedback"));
+      workspacesTools->setWindowTitle(tr("Workspaces"));
 
       viewModeCombo->setAccessibleName(tr("View Mode"));
       viewModeCombo->setItemText(viewModeCombo->findData(int(LayoutMode::PAGE)), tr("Page View"));
@@ -3887,6 +3920,18 @@ bool MuseScoreApplication::event(QEvent* event)
       }
 
 //---------------------------------------------------------
+//   focusScoreView
+//---------------------------------------------------------
+
+void MuseScore::focusScoreView()
+      {
+      if (currentScoreView())
+            currentScoreView()->setFocus();
+      else
+            mscore->setFocus();
+      }
+
+//---------------------------------------------------------
 //   eventFilter
 //---------------------------------------------------------
 
@@ -3919,10 +3964,7 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                               endSearch();
                         if (isActiveWindow()) {
                               obj->event(e);
-                              if(currentScoreView())
-                                    currentScoreView()->setFocus();
-                              else
-                                    mscore->setFocus();
+                              focusScoreView();
                               return true;
                               }
 
@@ -3931,10 +3973,7 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                            inspector()->isAncestorOf(w) ||
                            (selectionWindow && selectionWindow->isAncestorOf(w))) {
                               activateWindow();
-                              if(currentScoreView())
-                                    currentScoreView()->setFocus();
-                              else
-                                    mscore->setFocus();
+                              focusScoreView();
                               return true;
                               }
                         }
@@ -5419,6 +5458,24 @@ void MuseScore::showMediaDialog()
       }
 
 //---------------------------------------------------------
+//   getPaletteWorkspace
+//---------------------------------------------------------
+
+PaletteWorkspace* MuseScore::getPaletteWorkspace()
+      {
+      if (!paletteWorkspace) {
+            PaletteTreeModel* emptyModel = new PaletteTreeModel(new PaletteTree);
+            PaletteTreeModel* masterPaletteModel = new PaletteTreeModel(MuseScore::newMasterPaletteTree());
+
+            paletteWorkspace = new PaletteWorkspace(emptyModel, masterPaletteModel, /* parent */ this);
+            emptyModel->setParent(paletteWorkspace);
+            masterPaletteModel->setParent(paletteWorkspace);
+            }
+
+      return paletteWorkspace;
+      }
+
+//---------------------------------------------------------
 //   getPaletteBox
 //---------------------------------------------------------
 
@@ -5426,9 +5483,11 @@ PaletteBox* MuseScore::getPaletteBox()
       {
       if (paletteBox == 0) {
             paletteBox = new PaletteBox(this);
+#if 0
             QAction* a = getAction("toggle-palette");
             connect(paletteBox, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
             addDockWidget(Qt::LeftDockWidgetArea, paletteBox);
+#endif
             }
       return paletteBox;
       }
@@ -5786,6 +5845,7 @@ void MuseScore::cmd(QAction* a)
             }
       if (cmdn == "toggle-palette") {
             showPalette(a->isChecked());
+#if 0
             PaletteBox* pb = mscore->getPaletteBox();
             QLineEdit* sb = pb->searchBox();
             if (a->isChecked()) {
@@ -5800,6 +5860,7 @@ void MuseScore::cmd(QAction* a)
                   if (lastFocusWidget)
                         lastFocusWidget->setFocus();
                   }
+#endif
             return;
             }
       if (cmdn == "palette-search") {
@@ -6143,6 +6204,12 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             entryTools->setVisible(!entryTools->isVisible());
       else if (cmd == "toggle-feedback")
             feedbackTools->setVisible(!feedbackTools->isVisible());
+      else if (cmd == "toggle-workspaces-toolbar")
+            workspacesTools->setVisible(!workspacesTools->isVisible());
+      else if (cmd == "create-new-workspace") {
+            mscore->createNewWorkspace();
+            emit mscore->workspacesChanged();
+            }
       else if (cmd == "help")
             showContextHelp();
       else if (cmd == "follow")
@@ -7660,11 +7727,8 @@ int main(int argc, char* av[])
                   Workspace::writeGlobalToolBar();
                   Workspace::writeGlobalGUIState();
                   for (auto ws : Workspace::workspaces()) {
-                        if (ws->name().compare(sw->workspace()) == 0) {
+                        if (ws->name().compare(sw->workspace()) == 0)
                               mscore->changeWorkspace(ws, true);
-                              preferences.setPreference(PREF_APP_WORKSPACE, ws->name());
-                              mscore->getPaletteBox()->updateWorkspaces();
-                              }
                         }
                   preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, sw->showTours());
                   delete sw;

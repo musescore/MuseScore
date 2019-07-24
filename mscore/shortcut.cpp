@@ -1957,9 +1957,23 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-workspaces-toolbar",
+         QT_TRANSLATE_NOOP("action","Workspaces"),
+         QT_TRANSLATE_NOOP("action","Toggle 'Workspaces' toolbar"),
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
          "toggle-statusbar",
          QT_TRANSLATE_NOOP("action","Status Bar"),
          QT_TRANSLATE_NOOP("action","Toggle 'Status Bar'")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "create-new-workspace",
+         "+",
+         QT_TRANSLATE_NOOP("action","Add new workspace"),
          },
       {
          MsWidget::MAIN_WINDOW,

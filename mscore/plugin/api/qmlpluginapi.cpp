@@ -22,6 +22,7 @@
 
 #ifndef TESTROOT
 #include "shortcut.h"
+#include "musescore.h"
 #endif
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"

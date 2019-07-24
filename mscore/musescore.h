@@ -106,6 +106,11 @@ class ToolbarEditor;
 class TourHandler;
 class GeneralAutoUpdater;
 
+class PalettePanel;
+class PaletteTree;
+class PaletteWidget;
+class PaletteWorkspace;
+
 struct PluginDescription;
 enum class SelState : char;
 enum class IconType : signed char;
@@ -277,6 +282,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QToolBar* transportTools;
       QToolBar* entryTools;
       QToolBar* feedbackTools;
+      QToolBar* workspacesTools;
       TextTools* _textTools                { 0 };
       PianoTools* _pianoTools              { 0 };
       MediaDialog* _mediaDialog            { 0 };
@@ -345,6 +351,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       NewWizard* newWizard           { 0 };
       HelpBrowser* helpBrowser       { 0 };
       QDockWidget* manualDock        { 0 };
+
+      PaletteWorkspace* paletteWorkspace { nullptr };
+      PaletteWidget* paletteWidget { nullptr };
 
       PaletteBox* paletteBox         { 0 };
       Inspector* _inspector          { 0 };
@@ -505,6 +514,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
    signals:
       void windowSplit(bool);
       void musescoreWindowWasShown();
+      void workspacesChanged();
 
    private slots:
       void cmd(QAction* a, const QString& cmd);
@@ -706,6 +716,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool hRaster() const { return hRasterAction->isChecked(); }
       bool vRaster() const { return vRasterAction->isChecked(); }
 
+      PaletteWorkspace* getPaletteWorkspace();
+      void changeWorkspace(const QString& name);
+
       PaletteBox* getPaletteBox();
       void disableCommands(bool val) { inChordEditor = val; }
 
@@ -815,6 +828,33 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newLinesPalette();
       static Palette* newFretboardDiagramPalette();
 
+      static PalettePanel* newTempoPalettePanel(bool defaultPalette = false);
+      static PalettePanel* newTextPalettePanel(bool defaultPalette = false);
+      static PalettePanel* newTimePalettePanel();
+      static PalettePanel* newRepeatsPalettePanel();
+      static PalettePanel* newBreaksPalettePanel();
+      static PalettePanel* newBeamPalettePanel();
+      static PalettePanel* newDynamicsPalettePanel(bool defaultPalette = false);
+      static PalettePanel* newFramePalettePanel();
+      static PalettePanel* newFingeringPalettePanel();
+      static PalettePanel* newTremoloPalettePanel();
+      static PalettePanel* newNoteHeadsPalettePanel();
+      static PalettePanel* newArticulationsPalettePanel();
+      static PalettePanel* newOrnamentsPalettePanel();
+      static PalettePanel* newAccordionPalettePanel();
+      static PalettePanel* newBracketsPalettePanel();
+      static PalettePanel* newBreathPalettePanel();
+      static PalettePanel* newArpeggioPalettePanel();
+      static PalettePanel* newClefsPalettePanel(bool defaultPalette = false);
+      static PalettePanel* newGraceNotePalettePanel();
+      static PalettePanel* newBagpipeEmbellishmentPalettePanel();
+      static PalettePanel* newKeySigPalettePanel();
+      static PalettePanel* newAccidentalsPalettePanel(bool defaultPalette = false);
+      static PalettePanel* newBarLinePalettePanel();
+      static PalettePanel* newLinesPalettePanel();
+      static PalettePanel* newFretboardDiagramPalettePanel();
+      static PaletteTree* newMasterPaletteTree();
+
       WorkspaceDialog* workspaceDialog() { return _workspaceDialog; }
       void updateIcons();
       void updateMenus();
@@ -887,6 +927,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool importExtension(QString path);
       bool uninstallExtension(QString extensionId);
       Q_INVOKABLE bool isInstalledExtension(QString extensionId);
+
+      void focusScoreView();
 
       ScriptRecorder* getScriptRecorder();
       bool runTestScripts(const QStringList& scripts);

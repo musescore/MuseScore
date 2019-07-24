@@ -58,6 +58,7 @@ WorkspaceDialog::WorkspaceDialog(QWidget* parent)
       setObjectName("WorkspaceDialog");
       setupUi(this);
       retranslateUi(this);
+      setModal(true);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       MuseScore::restoreGeometry(this);
 
@@ -142,8 +143,7 @@ void WorkspaceDialog::accepted()
             Workspace::currentWorkspace->rename(s);
 
       preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
-      PaletteBox* paletteBox = mscore->getPaletteBox();
-      paletteBox->updateWorkspaces();
+      emit mscore->workspacesChanged();
       close();
       }
 
