@@ -114,7 +114,16 @@ public:
             : QQmlListProperty<T>(obj, const_cast<void*>(static_cast<const void*>(&container)), &count, &at) {};
 
       static int count(QQmlListProperty<T>* l)     { return int(static_cast<Container*>(l->data)->size()); }
-      static T* at(QQmlListProperty<T>* l, int i)  { return wrap<T>(static_cast<Container*>(l->data)->at(i), Ownership::SCORE); }
+      static T* at(QQmlListProperty<T>* l, int i)
+            {
+            auto el = static_cast<Container*>(l->data)->at(i);
+            // If a polymorphic wrap() function is available
+            // for the requested type, use it for wrapping.
+            if (std::is_same<T*, decltype(wrap(el, Ownership::SCORE))>::value)
+                  return static_cast<T*>(wrap(el, Ownership::SCORE));
+            // Otherwise, wrap directly to the requested wrapper type.
+            return wrap<T>(el, Ownership::SCORE);
+            }
       /// \endcond
       };
 
