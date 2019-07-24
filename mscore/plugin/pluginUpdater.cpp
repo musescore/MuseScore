@@ -631,6 +631,9 @@ void PluginWorker::checkUpdate(QPushButton* install)
       // very hack here. should be improved.
       *desc_tmp = desc;
       desc = desc_backup;
+      // if the user deletes the plugin when checking for update
+      if (!mscore->getPluginManager()->isPackageInstalled(page_url))
+            return;
       if (should_update) {
             desc.update = desc_tmp;
             emit updateAvailable(page_url, new PluginPackageDescription(desc));
