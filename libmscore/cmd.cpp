@@ -3106,7 +3106,7 @@ void Score::cmdSlashRhythm()
 void Score::cmdRealizeChordSymbols(QList<Harmony*> hlist, bool literal, Voicing voicing)
       {
       for (Harmony* h : hlist) {
-            RealizedHarmony r = h->realizedHarmony(); //TODO - PHV: this may be unnecessarily expensive
+            RealizedHarmony r = h->getRealizedHarmony(); //TODO - PHV: this may be unnecessarily expensive
             Segment* seg = toSegment(h->parent());
             Fraction duration = h->ticksTilNext();
             Fraction tick = seg->tick();

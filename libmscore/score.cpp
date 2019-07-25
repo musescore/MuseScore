@@ -2748,9 +2748,13 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                               // don't transpose all links
                               // just ones resulting from mmrests
                               Harmony* he = toHarmony(se);    // toHarmony() does not work as e is an ScoreElement
-                              if (he->staff() == h->staff())
+                              if (he->staff() == h->staff()) {
                                     undoTransposeHarmony(he, rootTpc, baseTpc);
+                                    he->realizedHarmony().setDirty(true);
+                                    }
                               }
+                        //realized harmony should be invalid after a transpose command
+                        Q_ASSERT(!h->realizedHarmony().valid());
                         }
                   }
             }
