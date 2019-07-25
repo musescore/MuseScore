@@ -20,7 +20,7 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  emmentaler-text-2,gonville-text-2,bravura-text-2,musejazz-text-2, ^
  emmentaler-text-3,gonville-text-3,bravura-text-3,musejazz-text-3, ^
  frametext,ottava, ^
- barline-1, ^
+ barline-1,instrument-1, ^
  slurs-1,slurs-2,slurs-3,slurs-4,hairpins-1,pedal-1,line-1,line-2,line-3,line-4,line-5,line-6,gliss-1,gliss-2, ^
  chord-layout-1,chord-layout-2,chord-layout-3,chord-layout-4,chord-layout-5, ^
  chord-layout-6,chord-layout-7,chord-layout-8,chord-layout-9,chord-layout-10, ^
