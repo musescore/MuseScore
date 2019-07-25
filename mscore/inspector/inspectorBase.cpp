@@ -328,7 +328,7 @@ void InspectorBase::setElement()
 void InspectorBase::checkDifferentValues(const InspectorItem& ii)
       {
       bool valuesAreDifferent = false;
-      QColor c(preferences.isThemeDark() ? Qt::yellow : Qt::darkCyan);
+      QColor c(Ms::preferences.getColor(preferences.isThemeDark() ? PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON : PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON));
 
       if (inspector->el()->size() > 1) {
             Pid id      = ii.t;
