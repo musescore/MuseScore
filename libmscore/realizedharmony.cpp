@@ -45,7 +45,7 @@ void RealizedHarmony::setVoicing(Voicing v)
       if (_voicing == v)
             return;
       _voicing = v;
-      _dirty = 1;
+      cascadeDirty(true);
       }
 
 //---------------------------------------------------
@@ -58,7 +58,7 @@ void RealizedHarmony::setRhythm(Rhythm r)
       if (_rhythm == r)
             return;
       _rhythm = r;
-      _dirty = 1;
+      cascadeDirty(true);
       }
 
 //---------------------------------------------------
@@ -71,7 +71,7 @@ void RealizedHarmony::setLiteral(bool literal)
       if (_literal == literal)
             return;
       _literal = literal;
-      _dirty = 1;
+      cascadeDirty(true);
       }
 
 //---------------------------------------------------
@@ -217,9 +217,13 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
 //---------------------------------------------------
 void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0*/)
       {
-      //if (!_dirty)
-      //      return;
-      //FIXME - PHV: temp removal to test offset
+      //TODO - PHV: consider the design of this
+      //on transposition the dirty flag is set by the harmony, but it's a little
+      //bit risky design since these 3 parameters rely on the dirty bit and are not
+      //otherwise checked by RealizedHarmony. This saves us 3 ints of space, but
+      //has the added risk
+      if (!_dirty)
+            return;
 
       _notes = generateNotes(rootTpc, bassTpc, _literal, _voicing, transposeOffset);
       }
@@ -465,4 +469,22 @@ QMap<int, int> RealizedHarmony::normalizeNoteMap(const QMap<int, int>& intervals
       return ret;
       }
 
+//---------------------------------------------------
+//   cascadeDirty
+///   cascades the dirty flag backwards so that everything is properly set
+///   this is required since voicing algorithms may look ahead
+///
+///   NOTE: FOR NOW ALGORITHMS DO NOT LOOK BACKWARDS AND SO THERE IS NO
+///   REQUIREMENT TO CASCADE FORWARD, IN THE FUTURE IT MAY BECOME IMPORTANT
+///   TO CASCADE FORWARD AS WELL
+//---------------------------------------------------
+void RealizedHarmony::cascadeDirty(bool dirty)
+      {
+      if (dirty && !_dirty) { //only cascade when we want to set our clean realized harmony to dirty
+            Harmony* prev = _harmony->findPrev();
+            if (prev)
+                  prev->realizedHarmony().cascadeDirty(dirty);
+            }
+      _dirty = dirty;
+      }
 }

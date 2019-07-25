@@ -970,6 +970,29 @@ Harmony* Harmony::findNext() const
       }
 
 //---------------------------------------------------------
+//   findPrev
+///   find the previous Harmony in the score
+///
+///   returns 0 if there is none
+//---------------------------------------------------------
+Harmony* Harmony::findPrev() const
+      {
+      Segment* seg = toSegment(parent());
+      Segment* cur = seg->prev1();
+      while (cur) {
+            //find harmony on same track
+            Element* e = cur->findAnnotation(ElementType::HARMONY,
+                                       track(), track());
+            if (e) {
+                  //we have found harmony element
+                  return toHarmony(e);
+                  }
+            cur = cur->prev1();
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   ticksTilNext
 ///   finds ticks until the next chord symbol or end of score
 //---------------------------------------------------------
@@ -1137,7 +1160,7 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
       }
 
 //---------------------------------------------------------
-//   realizedHarmony
+//   getRealizedHarmony
 //    get realized harmony or create one for the current symbol
 //    also updates the realized harmony and accounts for
 //    transposition.
@@ -1146,7 +1169,7 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 //    realized once each
 //---------------------------------------------------------
 
-const RealizedHarmony& Harmony::realizedHarmony()
+const RealizedHarmony& Harmony::getRealizedHarmony()
       {
       int offset = 0;
       Staff* st = staff();
@@ -1154,6 +1177,20 @@ const RealizedHarmony& Harmony::realizedHarmony()
       if (!score()->styleB(Sid::concertPitch))
             offset = interval.chromatic;
       _realizedHarmony.update(_rootTpc, _baseTpc, offset);
+      return _realizedHarmony;
+      }
+
+//---------------------------------------------------------
+//   realizedHarmony
+//    get realized harmony or create one for the current symbol
+//    without updating the realized harmony
+//
+//    TODO - PHV: cache this so that chords only need to be
+//    realized once each, also may be a little dangerous without const
+//---------------------------------------------------------
+
+RealizedHarmony& Harmony::realizedHarmony()
+      {
       return _realizedHarmony;
       }
 

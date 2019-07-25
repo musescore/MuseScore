@@ -70,6 +70,7 @@ class RealizedHarmony {
       void setVoicing(Voicing);
       void setRhythm(Rhythm);
       void setLiteral(bool);
+      void setDirty(bool dirty) { cascadeDirty(dirty); } //set dirty flag and cascade
 
       Voicing voicing() const { return _voicing; }
       Rhythm rhythm() const { return _rhythm; }
@@ -90,6 +91,7 @@ class RealizedHarmony {
 
    private:
       QMap<int, int> normalizeNoteMap(const QMap<int, int>& intervals, int rootTpc, int rootPitch, int max = 128, bool enforceMaxAsGoal = false) const;
+      void cascadeDirty(bool dirty);
       };
 }
 

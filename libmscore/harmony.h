@@ -128,6 +128,7 @@ class Harmony final : public TextBase {
       void setRightParen(bool rightParen)      { _rightParen = rightParen; }
 
       Harmony* findNext() const;
+      Harmony* findPrev() const;
       Fraction ticksTilNext() const;
 
       const ChordDescription* descr() const;
@@ -136,7 +137,8 @@ class Harmony final : public TextBase {
       const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
       const ChordDescription* generateDescription();
 
-      const RealizedHarmony& realizedHarmony();
+      RealizedHarmony& realizedHarmony();
+      const RealizedHarmony& getRealizedHarmony();
 
       void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
          NoteSpellingType& baseSpelling, NoteCaseType& baseCase);
