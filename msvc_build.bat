@@ -40,6 +40,11 @@ IF NOT "%2"=="" (
        SET "ARCH=x86"
        SET GENERATOR_NAME="Visual Studio 15 2017"
        SET BUILD_64=OFF
+       )
+   IF "%2"=="64" (
+       SET "ARCH=x64"
+       SET GENERATOR_NAME="Visual Studio 15 2017 Win64"
+       SET BUILD_64=ON
        ) ELSE (
            echo Invalid second argument
            GOTO :END
