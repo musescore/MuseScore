@@ -328,7 +328,7 @@ void InspectorBase::setElement()
 void InspectorBase::checkDifferentValues(const InspectorItem& ii)
       {
       bool valuesAreDifferent = false;
-      QColor c(preferences.isThemeDark() ? Qt::yellow : Qt::darkCyan);
+      QColor c(Ms::preferences.getColor(preferences.isThemeDark() ? PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON : PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON));
 
       if (inspector->el()->size() > 1) {
             Pid id      = ii.t;
@@ -344,7 +344,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   if (valuesAreDifferent)
                         break;
                   }
-            ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(c.name()) : "");
+            ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1; } QToolTip { color: palette(tooltiptext); }").arg(c.name()) : "");
             }
 
       //deal with reset if only one element, or if values are the same
@@ -355,7 +355,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
 
             switch (styledValue) {
                   case PropertyFlags::STYLED:
-                        ii.w->setStyleSheet(QString("* { color: %1 }").arg(c.name()));
+                        ii.w->setStyleSheet(QString("* { color: %1; } QToolTip { color: palette(tooltiptext); }").arg(c.name()));
                         enableReset = false;
                         break;
                   case PropertyFlags::UNSTYLED:
