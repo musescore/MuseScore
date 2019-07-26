@@ -186,7 +186,7 @@ void Palette::setMoreElements(bool val)
       _moreElements = val;
       if (val && (cells.isEmpty() || cells.back()->tag != "ShowMore")) {
             PaletteCell* cell = new PaletteCell;
-            cell->name      = "Show More";
+            cell->name      = tr("Show More");
             cell->tag       = "ShowMore";
             cells.append(cell);
             }
