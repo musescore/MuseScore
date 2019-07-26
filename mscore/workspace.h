@@ -34,6 +34,7 @@ class XmlWriter;
 class Workspace : public QObject {
       Q_OBJECT
 
+      static const char* fullWorkspaceTranslatableName;
       static const char* advancedWorkspaceTranslatableName;
       static const char* basicWorkspaceTranslatableName;
 

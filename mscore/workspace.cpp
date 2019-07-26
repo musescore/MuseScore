@@ -40,6 +40,7 @@ QList<Workspace*> Workspace::_workspaces {};
 QList<QPair<QAction*, QString>> Workspace::actionToStringList {};
 QList<QPair<QMenu*  , QString>> Workspace::menuToStringList   {};
 
+const char* Workspace::fullWorkspaceTranslatableName{ QT_TRANSLATE_NOOP("Ms::Workspace", "Full") };
 const char* Workspace::advancedWorkspaceTranslatableName{ QT_TRANSLATE_NOOP("Ms::Workspace", "Advanced") };
 const char* Workspace::basicWorkspaceTranslatableName{ QT_TRANSLATE_NOOP("Ms::Workspace", "Basic") };
 
@@ -1018,6 +1019,13 @@ QList<Workspace*>& Workspace::workspaces()
                               }
                         }
                   }
+
+            Workspace* p = new Workspace;
+            p->setName("Full");
+            p->setTranslatableName(fullWorkspaceTranslatableName);
+            p->setReadOnly(true);
+            _workspaces.append(p);
+
             // hack
             for (int i = 0; i < _workspaces.size(); i++) {
                   if (_workspaces[i]->translatableName() == basicWorkspaceTranslatableName) {
