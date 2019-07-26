@@ -3099,13 +3099,15 @@ void Score::cmdSlashRhythm()
 //---------------------------------------------------------
 //   cmdRealizeChordSymbols
 ///   Realize selected chord symbols into notes on the staff.
-///   Currently just pops up a dialog to list TPCs,
-///   Intervals, and pitches.
 //---------------------------------------------------------
 
-void Score::cmdRealizeChordSymbols(QList<Harmony*> hlist, bool literal, Voicing voicing)
+void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing)
       {
-      for (Harmony* h : hlist) {
+      const QList<Element*> elist = selection().elements();
+      for (Element* e : elist) {
+            if (!e->isHarmony())
+                  continue;
+            Harmony* h = toHarmony(e);
             RealizedHarmony r = h->getRealizedHarmony(); //TODO - PHV: this may be unnecessarily expensive
             Segment* seg = toSegment(h->parent());
             Fraction duration = h->ticksTilNext();
