@@ -114,15 +114,12 @@ void TestChordSymbol::selectAllChordSymbols(MasterScore* score)
 //---------------------------------------------------------
 void TestChordSymbol::realizeSelectionVoiced(MasterScore* score, Voicing voicing)
       {
-      QList<Harmony*> hlist;
       for (Element* e : score->selection().elements()) {
-            if (e->isHarmony()) {
+            if (e->isHarmony())
                   e->setProperty(Pid::HARMONY_VOICING, int(voicing));
-                  hlist << toHarmony(e);
-                  }
             }
       score->startCmd();
-      score->cmdRealizeChordSymbols(hlist);
+      score->cmdRealizeChordSymbols();
       score->endCmd();
       }
 
@@ -317,13 +314,8 @@ void TestChordSymbol::testRealizeTransposed()
 
       //realize all chord symbols
       selectAllChordSymbols(score);
-      QList<Harmony*> hlist;
-      for (Element* e : score->selection().elements()) {
-            if (e->isHarmony())
-                  hlist << toHarmony(e);
-            }
       score->startCmd();
-      score->cmdRealizeChordSymbols(hlist);
+      score->cmdRealizeChordSymbols();
       score->endCmd();
       test_post(score, "transpose-realize");
       }
@@ -344,7 +336,7 @@ void TestChordSymbol::testRealizeOverride()
                   hlist << toHarmony(e);
             }
       score->startCmd();
-      score->cmdRealizeChordSymbols(hlist, true, Voicing::ROOT_ONLY);
+      score->cmdRealizeChordSymbols(true, Voicing::ROOT_ONLY);
       score->endCmd();
       test_post(score, "realize-override");
       }
