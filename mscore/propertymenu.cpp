@@ -62,6 +62,8 @@
 #include "libmscore/jump.h"
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
+#include "libmscore/iname.h"
+#include "libmscore/system.h"
 
 namespace Ms {
 
@@ -522,12 +524,21 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
 //            editFretDiagram(static_cast<FretDiagram*>(e));
       else if (cmd == "staff-props") {
             Fraction tick = {-1,1};
-            if (e->isChordRest())
-                  tick = static_cast<ChordRest*>(e)->tick();
-            else if (e->type() == ElementType::NOTE)
-                  tick = static_cast<Note*>(e)->chord()->tick();
-            else if (e->type() == ElementType::MEASURE)
-                  tick = static_cast<Measure*>(e)->tick();
+            if (e->isChordRest()) {
+                  tick = toChordRest(e)->tick();
+                  }
+            else if (e->isNote()) {
+                  tick = toNote(e)->chord()->tick();
+                  }
+            else if (e->isMeasure()) {
+                  tick = toMeasure(e)->tick();
+                  }
+            else if (e->isInstrumentName()) {
+                  System* system = toSystem(toInstrumentName(e)->parent());
+                  Measure* m = system ? system->firstMeasure() : nullptr;
+                  if (m)
+                        tick = m->tick();
+                  }
             EditStaff editStaff(e->staff(), tick, 0);
             connect(&editStaff, SIGNAL(instrumentChanged()), mscore, SLOT(instrumentChanged()));
             editStaff.exec();
