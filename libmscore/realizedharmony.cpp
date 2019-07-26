@@ -32,7 +32,6 @@ namespace Ms {
 RealizedHarmony::RealizedHarmony(Harmony* h) : _harmony(h),
       _notes(QMap<int, int>()), _voicing(Voicing::AUTO), _rhythm(Rhythm::AUTO), _dirty(1)
       {
-      //TODO - PHV: should we be doing something on creation of a realized harmony?
       }
 
 //---------------------------------------------------
@@ -80,7 +79,10 @@ void RealizedHarmony::setLiteral(bool literal)
 //---------------------------------------------------
 const QMap<int, int>& RealizedHarmony::notes() const
       {
-      //TODO - PHV: do something when dirty?
+      Q_ASSERT(!_dirty);
+      //with the way that the code is currently structured, there should be no way to
+      //get to this function with dirty flag set although in the future it may be
+      //better to just update if dirty here
       return _notes;
       }
 
@@ -226,6 +228,7 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
             return;
 
       _notes = generateNotes(rootTpc, bassTpc, _literal, _voicing, transposeOffset);
+      _dirty = false;
       }
 
 //---------------------------------------------------

@@ -1988,7 +1988,7 @@ QVariant Harmony::getProperty(Pid pid) const
                   return QVariant(int(_harmonyType));
                   break;
             case Pid::HARMONY_VOICE_LITERAL:
-                  return _realizedHarmony.literal(); //TODO - PHV: check init?
+                  return _realizedHarmony.literal();
                   break;
             case Pid::HARMONY_VOICING:
                   return int(_realizedHarmony.voicing());
