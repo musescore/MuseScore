@@ -49,7 +49,7 @@ void VoicingSelect::setVoicing(int idx)
       blockVoicingSignals(false);
       }
 
-void VoicingSelect::setLiteral(bool literal) //TODO - PHV: literal is bool for now
+void VoicingSelect::setLiteral(bool literal)
       {
       blockVoicingSignals(true);
       interpretBox->setCurrentIndex(literal);

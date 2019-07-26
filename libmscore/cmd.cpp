@@ -3108,7 +3108,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing)
             if (!e->isHarmony())
                   continue;
             Harmony* h = toHarmony(e);
-            RealizedHarmony r = h->getRealizedHarmony(); //TODO - PHV: this may be unnecessarily expensive
+            RealizedHarmony r = h->getRealizedHarmony();
             Segment* seg = toSegment(h->parent());
             Fraction duration = h->ticksTilNext();
             Fraction tick = seg->tick();
@@ -3116,9 +3116,8 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing)
 
             Chord* chord = new Chord(this);
             chord->setTrack(h->track()); //set track so notes have a track to sit on
-            //create chord from notes
 
-            //FIXME - PHV: I know this is inefficient
+            //create chord from notes
             QMap<int, int> notes;
             if (voicing == Voicing::INVALID)
                   notes = r.notes();

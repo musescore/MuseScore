@@ -65,10 +65,11 @@ void RealizeHarmonyDialog::setChordList(QList<Harmony*> hlist)
       chordTable->setHorizontalHeaderLabels(header);
       for (int i = 0; i < rows; ++i) {
             Harmony* h = hlist.at(i);
+
             s += h->harmonyName() + " ";
             QString intervals;
             QString noteNames = tpc2name(h->rootTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO);
-            QMap<int, int> map = h->getRealizedHarmony().getIntervals(h->rootTpc());
+            QMap<int, int> map = h->getRealizedHarmony().notes();
             for (int pitch : map.keys()) {
                   intervals += QString::number((pitch - tpc2pitch(h->rootTpc())) % 128 % 12) + " ";
                   }
@@ -79,7 +80,7 @@ void RealizeHarmonyDialog::setChordList(QList<Harmony*> hlist)
             chordTable->setItem(i, 0, new QTableWidgetItem(QString::number(h->id())));
             chordTable->setItem(i, 1, new QTableWidgetItem(h->harmonyName()));
             chordTable->setItem(i, 2, new QTableWidgetItem(intervals));
-            chordTable->setItem(i, 3, new QTableWidgetItem(h->getDescription()->noteNames(h->rootTpc())));
+            chordTable->setItem(i, 3, new QTableWidgetItem(noteNames));
             }
       chordLabel->setText(s);
 

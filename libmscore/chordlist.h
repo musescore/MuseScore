@@ -195,9 +195,6 @@ struct ChordDescription {
       ChordDescription(int);
       ChordDescription(const QString&);
       QString quality() const       { return _quality; }
-      QList<int> intervals() const;             //TODO - PHV: deprecated?
-      QList<int> noteTpcs(int rootTpc) const;    //TODO - PHV: deprecated?
-      QString noteNames(int rootTpc) const;     //note names in the chord
       void complete(ParsedChord* pc, const ChordList*);
       void read(XmlReader&);
       void write(XmlWriter&) const;
