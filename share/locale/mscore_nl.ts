@@ -3719,7 +3719,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3427"/>
-        <source>Reset &apos;System header to time signature distance&apos; value</source>
+        <source>Reset &apos;System header with time signature distance&apos; value</source>
         <translation>Herstel &apos;Systeem kop tot maatsoort afstand&apos; waarde</translation>
     </message>
     <message>

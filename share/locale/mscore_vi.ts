@@ -3721,7 +3721,7 @@ cho trang chẵn &amp;&amp; trang lẻ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3427"/>
-        <source>Reset &apos;System header to time signature distance&apos; value</source>
+        <source>Reset &apos;System header with time signature distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>

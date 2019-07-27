@@ -3715,11 +3715,11 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3398"/>
         <source>System header with time signature distance:</source>
-        <translation>System header to time signature distance:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3427"/>
-        <source>Reset &apos;System header to time signature distance&apos; value</source>
+        <source>Reset &apos;System header with time signature distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
