@@ -2162,14 +2162,16 @@ void renderChordArticulation(Chord* chord, QList<NoteEventList> & ell, int & gat
 
 static bool shouldRenderNote(Note* n)
       {
-      int dist = 0;
       while (n->tieBack()) {
             n = n->tieBack()->startNote();
-            ++dist;
-            if (n && n->playEvents().offtime() > (dist * NoteEvent::NOTE_LENGTH)) {
+            if (findFirstTrill(n->chord()))
                   // The previous tied note probably has events for this note too.
                   // That is, we don't need to render this note separately.
                   return false;
+            for (Articulation* a : n->chord()->articulations()) {
+                  if (a->isOrnament()) {
+                        return false;
+                        }
                   }
             }
       return true;
