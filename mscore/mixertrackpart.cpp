@@ -179,7 +179,7 @@ void MixerTrackPart::updateNameLabel()
                                 "Program: %4\n"
                                 "Patch: %5")
                   .arg(part->partName(),
-                       part->longName(),
+                       part->longName().replace("&amp;", "&"),
                        QString::number(chan->bank()),
                        QString::number(chan->program()),
                        mp ? mp->name : tr("~no patch~"));
