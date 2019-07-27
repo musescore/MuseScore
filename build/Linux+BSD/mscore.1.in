@@ -3,7 +3,7 @@
 .\"	mirabilos <m@mirbsd.org>
 .\" Published under the same terms as MuseScore itself.
 .\"-
-.Dd March 20, 2019
+.Dd June 18, 2019
 .Dt @MAN_MSCORE_UPPER@ 1
 .Os MuseScore
 .Sh NAME@Variables_substituted_by_CMAKE_on_installation@
@@ -153,9 +153,8 @@ is also specified
 .It Fl e | Fl \-experimental
 Enable experimental features, such as layers
 .It Fl F | \-factory\-settings
-Use only the standard built-in presets
-.Pq Dq factory settings
-and delete user preferences; compare with the
+Revert all settings, shortcuts, workspaces, extensions,
+translations, etc. to factory defaults; compare with the
 .Fl R
 option
 .It Fl f | \-force
@@ -201,11 +200,9 @@ temporarily be generated automatically.
 .It Fl p | Fl \-plugin Ar name
 Execute the named plugin
 .It Fl R | \-revert\-settings
-Use only the standard built-in presets
-.Pq Dq factory settings
-but do not delete user preferences; compare with the
-.Fl F
-option
+Revert user preferences to factory default but retain shortcuts,
+workspaces, extensions, translations, etc.; compare with
+.Fl F .
 .It Fl r | Fl \-image\-resolution Ar DPI
 Set image resolution for conversion to PNG files.
 .Pp
