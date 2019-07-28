@@ -219,6 +219,7 @@ struct ChordSymbol {
 
 struct ChordFont {
       QString family;
+      QString fontClass;
       qreal mag;
       };
 
@@ -228,6 +229,9 @@ struct ChordFont {
 
 class ChordList : public QMap<int, ChordDescription> {
       QMap<QString, ChordSymbol> symbols;
+      bool _autoAdjust = false;
+      qreal _emag, _eadjust;
+      qreal _mmag, _madjust;
 
    public:
       QList<ChordFont> fonts;
@@ -235,6 +239,10 @@ class ChordList : public QMap<int, ChordDescription> {
       QList<RenderAction> renderListBase;
       QList<ChordToken> chordTokenList;
       static int privateID;
+
+      bool autoAdjust() const                   { return _autoAdjust; }
+      void configureAutoAdjust(qreal emag = 1.0, qreal eadjust = 0.0, qreal mmag = 1.0, qreal madjust = 0.0);
+      qreal position(const QStringList& names, ChordTokenClass ctc) const;
 
       void write(XmlWriter& xml) const;
       void read(XmlReader&);
