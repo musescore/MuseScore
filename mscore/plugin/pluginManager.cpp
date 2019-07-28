@@ -589,6 +589,8 @@ void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidg
 
 void PluginManager::pluginLoadToggled(QTreeWidgetItem* item, int col)
       {
+      //disconnect(pluginTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)));
+      pluginTreeWidget->blockSignals(true);
       if (!item->parent()) {
             // root, i.e., a package
             if (item->checkState(col) == Qt::PartiallyChecked)
@@ -613,7 +615,8 @@ void PluginManager::pluginLoadToggled(QTreeWidgetItem* item, int col)
                   }
             parent_widget->setCheckState(0, selected_count > 0 ? (selected_count < parent_widget->childCount() ? Qt::PartiallyChecked : Qt::Checked) : Qt::Unchecked);
             }
-            
+      //connect(pluginTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), SLOT(pluginLoadToggled(QTreeWidgetItem*, int)));
+      pluginTreeWidget->blockSignals(false);
       }
 
 //---------------------------------------------------------
