@@ -60,7 +60,8 @@ ResourceManager::ResourceManager(QWidget *parent) :
       worker = new PluginWorker(this);
       QtConcurrent::run(&workerThreads, worker, &PluginWorker::fetchPluginRepo);
       // plugin manager's display
-      mscore->getPluginManager()->setupUI(pluginName, pluginPath, pluginVersion, pluginShortcut, pluginDescription, pluginTreeWidget, label_shortcut, label_version);
+      mscore->getPluginManager()->setupUI(pluginName, pluginPath, pluginVersion, pluginShortcut, pluginDescription,
+            pluginTreeWidget, label_shortcut, label_version, definePluginShortcut, clearPluginShortcut);
       mscore->getPluginManager()->init();
       QObject::connect(definePluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(definePluginShortcutClicked()));
       QObject::connect(clearPluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(clearPluginShortcutClicked()));

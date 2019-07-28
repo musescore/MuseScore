@@ -39,7 +39,7 @@ PluginManager::PluginManager(QWidget* parent)
 
 void PluginManager::setupUI(QLineEdit* pluginName_, QLineEdit* pluginPath_, QLineEdit* pluginVersion_,
       QLineEdit* pluginShortcut_, QTextBrowser* pluginDescription_, QTreeWidget* pluginTreeWidget_,
-      QLabel* label_shortcut_, QLabel* label_version_)
+      QLabel* label_shortcut_, QLabel* label_version_, QPushButton* defineShortcut_, QPushButton* clearShortcut_)
       {
       pluginName = pluginName_;
       pluginPath = pluginPath_;
@@ -49,6 +49,8 @@ void PluginManager::setupUI(QLineEdit* pluginName_, QLineEdit* pluginPath_, QLin
       pluginTreeWidget = pluginTreeWidget_;
       label_shortcut = label_shortcut_;
       label_version = label_version_;
+      definePluginShortcut = defineShortcut_;
+      clearPluginShortcut = clearShortcut_;
       uiAttached = true;
       }
 
@@ -552,7 +554,6 @@ void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidg
             return;
       if (!item->parent() && item->data(0,TypeRole).toBool()) {
             // root, i.e., a package
-            // TODO: show package description from the detail page
             pluginShortcut->setHidden(true);
             label_shortcut->setHidden(true);
             const QString& page_url = item->data(0, Qt::UserRole).toString();
@@ -564,6 +565,8 @@ void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidg
             //pluginVersion->setText(PluginPackageSourceVerboseStr[desc.source]);
             pluginVersion->setText(desc.direct_link);
             pluginDescription->setHtml(desc.desc_text);
+            definePluginShortcut->setEnabled(false);
+            clearPluginShortcut->setEnabled(false);
             }
       else {
             // leaf, i.e., a qml file
@@ -580,6 +583,8 @@ void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidg
             label_shortcut->setHidden(false);
             pluginShortcut->setText(d.shortcut.keysToString());
             pluginDescription->setText(d.description);
+            definePluginShortcut->setEnabled(true);
+            clearPluginShortcut->setEnabled(true);
             }
       }
 

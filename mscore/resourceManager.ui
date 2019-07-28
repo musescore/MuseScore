@@ -191,7 +191,7 @@
        <item>
         <widget class="QTabWidget" name="pluginTab">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="plugin_store">
           <property name="sizePolicy">
@@ -339,13 +339,6 @@
            <item row="8" column="2" colspan="9">
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
-              <widget class="QPushButton" name="openPath">
-               <property name="text">
-                <string>Open Path...</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QPushButton" name="reloadPlugins">
                <property name="text">
                 <string>Reload</string>
@@ -386,7 +379,11 @@
             </widget>
            </item>
            <item row="4" column="10">
-            <widget class="QLineEdit" name="pluginShortcut"/>
+            <widget class="QLineEdit" name="pluginShortcut">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
            <item row="2" column="2">
             <widget class="QLabel" name="label_compat">
@@ -410,12 +407,22 @@
             </widget>
            </item>
            <item row="4" column="6">
-            <widget class="QLineEdit" name="pluginVersion"/>
+            <widget class="QLineEdit" name="pluginVersion">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
            <item row="3" column="6" colspan="5">
             <widget class="QLineEdit" name="pluginPath">
              <property name="enabled">
               <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -423,6 +430,9 @@
             <widget class="QLineEdit" name="pluginName">
              <property name="enabled">
               <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
              </property>
             </widget>
            </item>

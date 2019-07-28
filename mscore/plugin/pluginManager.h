@@ -45,6 +45,8 @@ class PluginManager : public QObject {
       QLineEdit* pluginShortcut;
       QLabel* label_shortcut;
       QLabel* label_version;
+      QPushButton* definePluginShortcut;
+      QPushButton* clearPluginShortcut;
       QTextBrowser* pluginDescription;
       QTreeWidget* pluginTreeWidget;
       QMap<QString, Shortcut*> localShortcuts;
@@ -76,7 +78,7 @@ class PluginManager : public QObject {
       void init();
       void setupUI(QLineEdit* pluginName, QLineEdit* pluginPath, QLineEdit* pluginVersion,
             QLineEdit* pluginShortcut, QTextBrowser* pluginDescription, QTreeWidget* pluginTreeWidget,
-            QLabel* label_shortcut, QLabel* label_version);
+            QLabel* label_shortcut, QLabel* label_version, QPushButton* defineShortcut_, QPushButton* clearShortcut_);
       void disAttachUI();
       bool readPluginList();
       bool readPluginPackageList();
