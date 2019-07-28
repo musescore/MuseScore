@@ -44,35 +44,20 @@
       configured text style font family is used.
 -->
 
+<!-- allow style to control mag and position adjustments -->
+  <autoAdjust>1</autoAdjust>
+
   <font family="MuseJazz Text">
 
     <sym code="0xe180" name="ma"/>
     <sym code="0xe181" name="mi"/>
-    <sym code="0xe182" name="s11"/>
-    <sym code="0xe183" name="s13"/>
-    <sym code="0xe184" name="sdim"/>
     <sym code="0xe185" name="sus"/>
     <sym code="0xe186" name="+"/>
     <sym code="0xe187" name="degree"/>
-    <sym code="0xe188" name="sb"/>
-    <sym code="0xe189" name="s#"/>
     <sym code="0xe18a" name="triangle"/>
-    <sym code="0xe18b" name="sadd"/>
-    <sym code="0xe18c" name="sadd11"/>
     <sym code="0xe18d" name="sus4"/>
     <sym code="0xe18e" name="circle"/>
     <sym code="0xe18f" name="oslash"/>
-
-    <sym code="0xe190" name="s0"/>
-    <sym code="0xe191" name="s1"/>
-    <sym code="0xe192" name="s2"/>
-    <sym code="0xe193" name="s3"/>
-    <sym code="0xe194" name="s4"/>
-    <sym code="0xe195" name="s5"/>
-    <sym code="0xe196" name="s6"/>
-    <sym code="0xe197" name="s7"/>
-    <sym code="0xe198" name="s8"/>
-    <sym code="0xe199" name="s9"/>
 
     <sym code="0x266d" name="b"/>
     <sym code="0x266e" name="natural"/>
@@ -92,6 +77,28 @@
 <!-- these enable "b" and "mi" to render as literals when encountered as note names -->
     <sym class="note" name="b"/>
     <sym class="note" name="mi"/>
+
+    </font>
+
+  <font class="modifier" family="MuseJazz Text">
+
+    <sym code="0xe188" name="sb"/>
+    <sym code="0xe189" name="s#"/>
+    <sym code="0xe18b" name="sadd"/>
+    <sym code="0xe18c" name="sadd11"/>
+    <sym code="0xe182" name="s11"/>
+    <sym code="0xe183" name="s13"/>
+    <sym code="0xe184" name="sdim"/>
+    <sym code="0xe190" name="s0"/>
+    <sym code="0xe191" name="s1"/>
+    <sym code="0xe192" name="s2"/>
+    <sym code="0xe193" name="s3"/>
+    <sym code="0xe194" name="s4"/>
+    <sym code="0xe195" name="s5"/>
+    <sym code="0xe196" name="s6"/>
+    <sym code="0xe197" name="s7"/>
+    <sym code="0xe198" name="s8"/>
+    <sym code="0xe199" name="s9"/>
 
     </font>
 
@@ -121,9 +128,8 @@
 
     </font>
 
-  <font family="MuseJazz Text">
+  <font class="extension" family="MuseJazz Text">
     <mag>1.3</mag>
-
     <sym code="0xe190" name="e0"/>
     <sym code="0xe191" name="e1"/>
     <sym code="0xe192" name="e2"/>
@@ -140,7 +146,7 @@
 
     </font>
 
-  <font family="MuseJazz Text">
+  <font class="modifer" family="MuseJazz Text">
     <mag>0.75</mag>
 
     <sym value="(" name="s("/>
@@ -220,6 +226,16 @@
   <token>
     <name>69</name>
     <render>m:1:-2 s6 m:-4:7 s9 m:0:-5</render>
+    </token>
+
+  <token class="extension">
+    <name>6,9</name>
+    <render>s6 m:0:-&mod; s, m:0:&mod; s9</render>
+    </token>
+
+  <token class="extension">
+    <name>6/9</name>
+    <render>m:1:-2 s6 m:-2.5:0 s/ m:-2:7 s9 m:0:-5</render>
     </token>
 
   <token class="quality">
@@ -471,6 +487,8 @@
                   with no id or render tag, and just the single name "ma7"
 -->
 
+<!--
+
   <chord>
     <name>6/9</name>
     <render>m:1:-2 s6 m:-2.5:0 s/ m:-2:7 s9 m:0:-5</render>
@@ -480,5 +498,7 @@
     <name>6,9</name>
     <render>s6 m:0:-&mod; s, m:0:&mod; s9</render>
     </chord>
+
+-->
 
   </museScore>

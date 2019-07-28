@@ -1507,11 +1507,25 @@ void ChangeStyleVal::flip(EditData*)
       QVariant v = score->styleV(idx);
       if (v != value) {
             score->style().set(idx, value);
-            if (idx == Sid::chordDescriptionFile) {
-                  score->style().chordList()->unload();
-                  if (score->styleB(Sid::chordsXmlFile))
-                      score->style().chordList()->read("chords.xml");
-                  score->style().chordList()->read(value.toString());
+            switch (idx) {
+                  case Sid::chordExtensionMag:
+                  case Sid::chordExtensionAdjust:
+                  case Sid::chordModifierMag:
+                  case Sid::chordModifierAdjust:
+                  case Sid::chordDescriptionFile: {
+                        score->style().chordList()->unload();
+                        qreal emag = score->styleD(Sid::chordExtensionMag);
+                        qreal eadjust = score->styleD(Sid::chordExtensionAdjust);
+                        qreal mmag = score->styleD(Sid::chordModifierMag);
+                        qreal madjust = score->styleD(Sid::chordModifierAdjust);
+                        score->style().chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
+                        if (score->styleB(Sid::chordsXmlFile))
+                            score->style().chordList()->read("chords.xml");
+                        score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
+                        }
+                        break;
+                  default:
+                        break;
                   }
             score->styleChanged();
             }
