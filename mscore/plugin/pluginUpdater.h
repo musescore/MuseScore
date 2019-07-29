@@ -31,6 +31,7 @@ extern std::map<PluginPackageSource, QString> PluginPackageSourceVerboseStr;
 
 //---------------------------------------------------------
 //   PluginPackageLink
+//   data structure used to find a plugin's version info.
 //---------------------------------------------------------
 struct PluginPackageLink {
       PluginPackageSource source;
@@ -46,7 +47,8 @@ struct PluginPackageLink {
 
 //---------------------------------------------------------
 //   PluginPackageDescription
-//   Info about how the package was fetched
+//   data structure of an installed plugin.
+//   also used to store update info
 //---------------------------------------------------------
 struct PluginPackageDescription {
       // contains update info when there's an update. Not serialized to xml for now
@@ -64,6 +66,10 @@ struct PluginPackageDescription {
       QDateTime last_modified; // valid when source set to ATTACHMENT
       };
 
+//---------------------------------------------------------
+//   PluginStatus
+//   statuses of plugin buttons in resource manager
+//---------------------------------------------------------
 enum PluginStatus {
       NOT_INSTALLED, INSTALL_FAILED, INSTALL_FAILED_INVALID,
       ANALYZING, ANALYZE_FAILED,

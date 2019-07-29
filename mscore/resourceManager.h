@@ -31,11 +31,6 @@ class ResourceManager : public QDialog, public Ui::Resource
     bool verifyFile(QString path, QString hash);
     bool verifyLanguageFile(QString filename, QString hash);
     void refreshPluginButton(int row, bool updated = true);
-    /*  Extracts the package(assumed zip format for now), and installs necessary files
-        to plugin directory.
-        Returns true on success.
-     */
-    bool installPluginPackage(QString& download_pkg, PluginPackageDescription& desc);
 
 public:
     explicit ResourceManager(QWidget *parent = 0);

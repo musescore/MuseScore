@@ -81,7 +81,6 @@ void PluginManager::init()
       shortcutsChanged = false;
       // fills _pluginPackageList from xml
       readPluginPackageList();
-      // TODO: remove and use displayPlugins instead.
       loadList(false);
       connect(pluginTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), SLOT(pluginLoadToggled(QTreeWidgetItem*, int)));
       connect(pluginTreeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem*)),
@@ -243,7 +242,7 @@ void PluginManager::writePluginList()
 static void updatePluginList(QList<QString>& pluginPathList, const QString& pluginPath,
    QList<PluginDescription>& pluginList)
       {
-      QDirIterator it(pluginPath, QDir::NoDot | QDir::NoDotDot | QDir::Dirs | QDir::Files,
+      QDirIterator it(pluginPath, QDir::NoDot|QDir::NoDotDot|QDir::Dirs|QDir::Files,
          QDirIterator::Subdirectories);
       while (it.hasNext()) {
             it.next();
@@ -351,7 +350,6 @@ void PluginManager::commitPlugin(const QString url, PluginPackageDescription* de
       delete desc;
       // maybe there's a more efficient way than `loadList`
       loadList(false);
-      writePluginPackageList(); // TODO: make write back later
       }
 
 bool PluginManager::uninstallPluginPackage(const QString& page_url)
@@ -368,8 +366,9 @@ bool PluginManager::uninstallPluginPackage(const QString& page_url)
                         }
                   }
             }
-      mscore->getPluginEngine()->clearComponentCache();
       // remove the folder
+      // In Qt 5.11 and earlier, qml cache files(.qmlc) may stay in the plugin folder, which casues
+      // failure to remove the folder
       QDir d(desc.dir);
       if (!d.removeRecursively()) {
             qDebug("Plugin uninstalled incompletely.");
@@ -390,51 +389,6 @@ PluginPackageDescription * PluginManager::getPluginPackage(PluginDescription * d
       }
 
 static constexpr int TypeRole = Qt::UserRole + 1; // another user role used in QTreeWidgetItem's data
-
-void PluginManager::refreshList()
-      {
-      if (!uiAttached) return;
-      int n = _pluginList.size();
-      pluginTreeWidget->clear();
-      // firstly, add plugin packages
-      std::map<PluginPackageDescription*, QTreeWidgetItem*> tree_map;
-      QTreeWidgetItem* first_item = nullptr;
-      for (auto &page_url : _pluginPackageList.keys()) {
-            PluginPackageDescription& desc = _pluginPackageList[page_url];
-            auto* package_item = new QTreeWidgetItem(pluginTreeWidget);
-            if (!first_item)
-                  first_item = package_item;
-            tree_map[&desc] = package_item;
-            package_item->setData(0, Qt::DisplayRole, desc.package_name);
-            package_item->setData(0, Qt::UserRole, page_url);
-            package_item->setData(0, TypeRole, true);
-            package_item->setFlags(package_item->flags() | Qt::ItemIsEnabled);
-            package_item->setCheckState(0, Qt::Unchecked);
-            }
-      // add other local plugins
-      for (int i = 0; i < n; ++i) {
-            PluginDescription& d = _pluginList[i];
-            PluginPackageDescription* package = getPluginPackage(&d);
-            QTreeWidgetItem* item;
-            if (package) {
-                  QTreeWidgetItem* parent_widget = tree_map[package];
-                  item = new QTreeWidgetItem(parent_widget);
-                  auto plugin_check = d.load ? Qt::Checked : Qt::Unchecked;
-                  if (parent_widget->childCount() == 0)
-                        parent_widget->setCheckState(0, plugin_check);
-                  else if (parent_widget->checkState(0) != Qt::PartiallyChecked)
-                        parent_widget->setCheckState(0, (plugin_check != parent_widget->checkState(0)) ? Qt::PartiallyChecked : plugin_check);
-                  }
-            else
-                  item = new QTreeWidgetItem(pluginTreeWidget);
-            QFileInfo(d.path).completeBaseName();
-            item->setFlags(item->flags() | Qt::ItemIsEnabled);
-            item->setCheckState(0, d.load ? Qt::Checked : Qt::Unchecked);
-            item->setData(0, Qt::UserRole, i);
-            item->setData(0, TypeRole, false);
-            item->setData(0, Qt::DisplayRole, QFileInfo(d.path).completeBaseName());
-            }
-      }
 
 //---------------------------------------------------------
 //   loadList - populate the listbox.
@@ -472,7 +426,7 @@ void PluginManager::loadList(bool forceRefresh)
             package_item->setFlags(package_item->flags() | Qt::ItemIsEnabled);
             package_item->setCheckState(0, Qt::Unchecked);
             }
-      // add other local plugins
+      // add packages' qml files and local stand-alone qmls
       for (int i = 0; i < n; ++i) {
             PluginDescription& d = _pluginList[i];
             Shortcut* s = &d.shortcut;
@@ -594,7 +548,6 @@ void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidg
 
 void PluginManager::pluginLoadToggled(QTreeWidgetItem* item, int col)
       {
-      //disconnect(pluginTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)));
       pluginTreeWidget->blockSignals(true);
       if (!item->parent()) {
             // root, i.e., a package
@@ -620,7 +573,6 @@ void PluginManager::pluginLoadToggled(QTreeWidgetItem* item, int col)
                   }
             parent_widget->setCheckState(0, selected_count > 0 ? (selected_count < parent_widget->childCount() ? Qt::PartiallyChecked : Qt::Checked) : Qt::Unchecked);
             }
-      //connect(pluginTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), SLOT(pluginLoadToggled(QTreeWidgetItem*, int)));
       pluginTreeWidget->blockSignals(false);
       }
 
@@ -675,10 +627,8 @@ void PluginManager::clearPluginShortcutClicked()
       QTreeWidgetItem* item = pluginTreeWidget->currentItem();
       if (!item)
             return;
-      if (!item->parent()) {
-            qDebug("Calling on a package node.");
+      if (!item->parent())
             return;
-            }
       int idx = item->data(0, Qt::UserRole).toInt();
       PluginDescription* pd = &_pluginList[idx];
       Shortcut* s = &pd->shortcut;

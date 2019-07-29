@@ -40,6 +40,9 @@ ResourceManager::ResourceManager(QWidget *parent) :
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
       dir.mkpath(dataPath + "/locale");
+      /* Here, a large max thread count is reasonable, even if it exceeds the CPU thread count. 
+         That's because many threads are needed for various jobs, as shown in class PluginWorker, 
+         and a thread doesn't cost much most of the time(it just blocks until the download finishes) */
       workerThreads.setMaxThreadCount(10);
       // display "loading" in extensionsTable
       extensionsTable->setRowCount(1);

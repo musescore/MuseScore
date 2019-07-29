@@ -55,7 +55,6 @@ class PluginManager : public QObject {
       QMap <QString, PluginPackageDescription> _pluginPackageList; // plugin page url -> description of installed plugin
       PluginPackageDescription* getPluginPackage(PluginDescription* desc);
       void loadList(bool forceRefresh);
-      void refreshList();
       bool uninstallPlugin(PluginDescription* p);
       bool uiAttached = false;
 
