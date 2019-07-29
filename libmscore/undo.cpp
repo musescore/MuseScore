@@ -1900,6 +1900,46 @@ void ChangeNoteEvents::flip(EditData*)
       }
 
 //---------------------------------------------------------
+//   ChangeNoteEventList::flip
+//---------------------------------------------------------
+
+void ChangeNoteEventList::flip(EditData*)
+      {
+      note->score()->setPlaylistDirty();
+      // Get copy of current list.
+      NoteEventList nel = note->playEvents();
+      // Replace current copy with new list.
+      note->setPlayEvents(newEvents);
+      // Save copy of replaced list.
+      newEvents = nel;
+      // Get a copy of the current playEventType.
+      PlayEventType petval = note->chord()->playEventType();
+      // Replace current setting with new setting.
+      note->chord()->setPlayEventType(newPetype);
+      // Save copy of old setting.
+      newPetype = petval;
+      }
+
+//---------------------------------------------------------
+//   ChangeNoteEventList::flip
+//---------------------------------------------------------
+
+void ChangeChordPlayEventType::flip(EditData*)
+      {
+      chord->score()->setPlaylistDirty();
+      // Flips data between NoteEventList's.
+      size_t n = chord->notes().size();
+      for (size_t i = 0; i < n; ++i) {
+            Note* note = chord->notes()[i];
+            note->playEvents().swap(events[int(i)]);
+            }
+      // Flips PlayEventType between chord and undo.
+      PlayEventType curPetype = chord->playEventType();
+      chord->setPlayEventType(petype);
+      petype = curPetype;
+      }
+
+//---------------------------------------------------------
 //   ChangeInstrument::flip
 //---------------------------------------------------------
 
@@ -2212,9 +2252,12 @@ void ChangeNoteEvent::flip(EditData*)
       NoteEvent e = *oldEvent;
       *oldEvent   = newEvent;
       newEvent    = e;
-
-      // TODO:
-      note->chord()->setPlayEventType(PlayEventType::User);
+      // Get a copy of the current playEventType.
+      PlayEventType petval = note->chord()->playEventType();
+      // Replace current setting with new setting.
+      note->chord()->setPlayEventType(newPetype);
+      // Save copy of old setting.
+      newPetype = petval;
       }
 
 //---------------------------------------------------------

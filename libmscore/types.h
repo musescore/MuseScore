@@ -148,6 +148,7 @@ enum class ElementType {
 //   AccidentalType
 //---------------------------------------------------------
 // NOTE: keep this in sync with with accList array
+
 enum class AccidentalType : char {
       ///.\{
       NONE,
@@ -469,6 +470,20 @@ constexpr bool operator& (FontStyle a1, FontStyle a2) {
       }
 
 //---------------------------------------------------------
+//   PlayEventType
+/// Determines whether oranaments are automatically generated
+/// when playing a score and whether the PlayEvents are saved
+/// in the score file.
+//---------------------------------------------------------
+
+enum class PlayEventType : char {
+      ///.\{
+      Auto,       ///< Play events for all notes are calculated by MuseScore.
+      User,       ///< Some play events are modified by user. Those events are written into the mscx file.
+      ///.\}
+      };
+
+//---------------------------------------------------------
 //   Tuplets
 //---------------------------------------------------------
 
@@ -477,7 +492,6 @@ enum class TupletBracketType : char { AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKE
 
 #ifdef SCRIPT_INTERFACE
 Q_ENUM_NS(ElementType)
-Q_ENUM_NS(AccidentalType)
 Q_ENUM_NS(Direction)
 Q_ENUM_NS(GlissandoType)
 Q_ENUM_NS(GlissandoStyle)
@@ -486,6 +500,8 @@ Q_ENUM_NS(SegmentType)
 Q_ENUM_NS(Tid)
 Q_ENUM_NS(Align)
 Q_ENUM_NS(NoteType)
+Q_ENUM_NS(PlayEventType)
+Q_ENUM_NS(AccidentalType)
 #endif
 
 //hack: to force the build system to run moc on this file
@@ -502,10 +518,14 @@ extern void fillComboBoxDirection(QComboBox*);
 
 } // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Align)
+Q_DECLARE_METATYPE(Ms::Align);
 
 Q_DECLARE_METATYPE(Ms::Direction);
 
 Q_DECLARE_METATYPE(Ms::NoteType);
+
+Q_DECLARE_METATYPE(Ms::PlayEventType);
+
+Q_DECLARE_METATYPE(Ms::AccidentalType);
 
 #endif

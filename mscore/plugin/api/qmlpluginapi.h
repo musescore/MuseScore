@@ -14,7 +14,6 @@
 #define __QMLPLUGINAPI_H__
 
 #include "config.h"
-
 #include "../qmlplugin.h"
 #include "enums.h"
 #include "libmscore/mscore.h"
@@ -129,6 +128,9 @@ class PluginAPI : public Ms::QmlPlugin {
       /// Contains Ms::NoteType enumeration values
       /// \since MuseScore 3.2.1
       DECLARE_API_ENUM( NoteType,         noteTypeEnum            )
+      /// Contains Ms::PlayEventType enumeration values
+      /// \since MuseScore 3.3
+      DECLARE_API_ENUM( PlayEventType,    playEventTypeEnum       )
       /// Contains Ms::NoteHead::Type enumeration values
       /// \note In MuseScore 2.X this enumeration was available in
       /// NoteHead class (e.g. NoteHead.HEAD_QUARTER).

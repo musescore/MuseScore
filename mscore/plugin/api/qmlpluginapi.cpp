@@ -44,6 +44,7 @@ Enum* PluginAPI::glissandoStyleEnum;
 Enum* PluginAPI::tidEnum;
 Enum* PluginAPI::alignEnum;
 Enum* PluginAPI::noteTypeEnum;
+Enum* PluginAPI::playEventTypeEnum;
 Enum* PluginAPI::noteHeadTypeEnum;
 Enum* PluginAPI::noteHeadGroupEnum;
 Enum* PluginAPI::noteValueTypeEnum;
@@ -73,6 +74,7 @@ void PluginAPI::initEnums() {
       PluginAPI::tidEnum = wrapEnum<Ms::Tid>();
       PluginAPI::alignEnum = wrapEnum<Ms::Align>();
       PluginAPI::noteTypeEnum = wrapEnum<Ms::NoteType>();
+      PluginAPI::playEventTypeEnum = wrapEnum<Ms::PlayEventType>();
       PluginAPI::noteHeadTypeEnum = wrapEnum<Ms::NoteHead::Type>();
       PluginAPI::noteHeadGroupEnum = wrapEnum<Ms::NoteHead::Group>();
       PluginAPI::noteValueTypeEnum = wrapEnum<Ms::Note::ValueType>();
@@ -335,6 +337,7 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<Part>();
       qmlRegisterType<Excerpt>();
       qmlRegisterType<Selection>();
+      qmlRegisterType<PlayEvent>("MuseScore", 3, 0, "PlayEvent");
       //qmlRegisterType<Hook>();
       //qmlRegisterType<Stem>();
       //qmlRegisterType<StemSlash>();
