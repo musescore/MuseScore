@@ -65,9 +65,6 @@
        <property name="focusPolicy">
         <enum>Qt::StrongFocus</enum>
        </property>
-       <property name="accessibleName">
-        <string>Apply</string>
-       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
