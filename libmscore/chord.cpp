@@ -3542,4 +3542,38 @@ void Chord::layoutArticulations3(Slur* slur)
             }
       }
 
+//---------------------------------------------------------
+//   getNoteEventLists
+//    Get contents of all NoteEventLists for all notes in
+//    the chord.
+//---------------------------------------------------------
+
+QList<NoteEventList> Chord::getNoteEventLists()
+      {
+      QList<NoteEventList> ell;
+      if (notes().empty())
+            return ell;
+      for (size_t i = 0; i < notes().size(); ++i) {
+            ell.append(NoteEventList(notes()[i]->playEvents()));
+            }
+      return ell;
+      }
+
+   //---------------------------------------------------------
+   //   setNoteEventLists
+   //    Set contents of all NoteEventLists for all notes in
+   //    the chord.
+   //---------------------------------------------------------
+
+void Chord::setNoteEventLists(QList<NoteEventList>& ell)
+      {
+      if (notes().empty())
+            return;
+      Q_ASSERT(ell.size() == notes().size());
+      for (size_t i = 0; i < ell.size(); i++) {
+            notes()[i]->setPlayEvents(ell[int(i)]);
+            }
+
+      }
+
 }
