@@ -381,8 +381,8 @@ bool MuseScore::loadPlugin(const QString& filename)
                   PluginDescription* p = new PluginDescription;
                   p->path = path;
                   p->load = false;
-                  collectPluginMetaInformation(p);
-                  registerPlugin(p);
+                  if (collectPluginMetaInformation(p))
+                        registerPlugin(p);
                   result = true;
                   }
             }
@@ -478,9 +478,11 @@ void MuseScore::pluginTriggered(QString pp)
 
 //---------------------------------------------------------
 //   collectPluginMetaInformation
+///   returns false if loading a plugin for the given
+///   description has failed
 //---------------------------------------------------------
 
-void collectPluginMetaInformation(PluginDescription* d)
+bool collectPluginMetaInformation(PluginDescription* d)
       {
       qDebug("Collect meta for <%s>", qPrintable(d->path));
 
@@ -491,14 +493,16 @@ void collectPluginMetaInformation(PluginDescription* d)
             foreach(QQmlError e, component.errors()) {
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                   }
-            return;
+            return false;
             }
       QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+      const bool isQmlPlugin = bool(item);
       if (item) {
             d->version      = item->version();
             d->description  = item->description();
             }
       delete obj;
+      return isQmlPlugin;
       }
 }
 
