@@ -264,6 +264,11 @@ bool Score::read(XmlReader& e)
       fixTicks();
       masterScore()->rebuildMidiMapping();
       masterScore()->updateChannel();
+
+      //TODO - PHV: is this a good place to do this?
+      for (Part* p : _parts) {
+            p->updateHarmonyChannels();
+            }
 //      createPlayEvents();
       return true;
       }

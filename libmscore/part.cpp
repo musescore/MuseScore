@@ -539,6 +539,24 @@ int Part::harmonyCount() const
       return count;
       }
 
+void Part::updateHarmonyChannels()
+      {
+      // add harmony channel if this is the first harmony
+      // FIXME - PHV: this is pretty inefficient because of the use of harmonyCount()
+      if (harmonyCount() > 0 && instrument()->channelIdx("harmony") == -1) {
+            Instrument* instr = instrument();
+            Channel* c = new Channel(*instr->channel(0));
+            c->setName("harmony");
+            instr->appendChannel(c);
+            _harmonyChannel = c;
+
+            masterScore()->rebuildMidiMapping();
+            masterScore()->updateChannel();
+            score()->setInstrumentsChanged(true);
+            score()->setLayoutAll(); //do we need this?
+            }
+      }
+
 //---------------------------------------------------------
 //   hasPitchedStaff
 //---------------------------------------------------------
