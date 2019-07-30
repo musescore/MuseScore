@@ -76,6 +76,7 @@ enum class SelState : char {
 
 //---------------------------------------------------------
 //   SelectionFilterType
+//   see also `static const char* labels[]` in selectionwindow.cpp
 //---------------------------------------------------------
 
 enum class SelectionFilterType {

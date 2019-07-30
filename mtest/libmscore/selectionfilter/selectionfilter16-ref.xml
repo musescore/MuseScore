@@ -25,9 +25,6 @@
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
-      <Tremolo>
-        <subtype>c8</subtype>
-        </Tremolo>
       </Chord>
     <Chord>
       <durationType>half</durationType>
