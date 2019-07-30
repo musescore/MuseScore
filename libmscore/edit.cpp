@@ -4581,18 +4581,24 @@ void Score::undoAddElement(Element* element)
                               }
 
                         undo(new AddElement(ne));
-                        // transpose harmony if necessary
-                        if (element->isHarmony() && ne != element) {
-                              Harmony* h = toHarmony(ne);
-                              if (score->styleB(Sid::concertPitch) != element->score()->styleB(Sid::concertPitch)) {
-                                    Part* partDest = h->part();
-                                    Interval interval = partDest->instrument(tick)->transpose();
-                                    if (!interval.isZero()) {
-                                          if (!score->styleB(Sid::concertPitch))
-                                                interval.flip();
-                                          int rootTpc = transposeTpc(h->rootTpc(), interval, true);
-                                          int baseTpc = transposeTpc(h->baseTpc(), interval, true);
-                                          score->undoTransposeHarmony(h, rootTpc, baseTpc);
+                        if (element->isHarmony()) {
+                              //update harmony channels
+                              //TODO - PHV: is this efficient?
+                              element->part()->updateHarmonyChannels();
+
+                              // transpose harmony if necessary
+                              if (ne != element) {
+                                    Harmony* h = toHarmony(ne);
+                                    if (score->styleB(Sid::concertPitch) != element->score()->styleB(Sid::concertPitch)) {
+                                          Part* partDest = h->part();
+                                          Interval interval = partDest->instrument(tick)->transpose();
+                                          if (!interval.isZero()) {
+                                                if (!score->styleB(Sid::concertPitch))
+                                                      interval.flip();
+                                                int rootTpc = transposeTpc(h->rootTpc(), interval, true);
+                                                int baseTpc = transposeTpc(h->baseTpc(), interval, true);
+                                                score->undoTransposeHarmony(h, rootTpc, baseTpc);
+                                                }
                                           }
                                     }
                               }

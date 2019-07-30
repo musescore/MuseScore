@@ -54,6 +54,8 @@ class Part final : public ScoreElement {
       static const int DEFAULT_COLOR = 0x3399ff;
       int _color;                   ///User specified color for helping to label parts
 
+      Channel* _harmonyChannel = 0;      ///channel which harmony is played
+
    public:
       Part(Score* = 0);
       void initFromInstrTemplate(const InstrumentTemplate*);
@@ -127,6 +129,9 @@ class Part final : public ScoreElement {
       bool hasPitchedStaff() const;
       bool hasTabStaff() const;
       bool hasDrumStaff() const;
+
+      void updateHarmonyChannels();
+      const Channel* harmonyChannel() const { return _harmonyChannel; }
 
       const Part* masterPart() const;
       Part* masterPart();

@@ -551,7 +551,16 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       {
       int type = event.type();
       if (type == ME_NOTEON) {
-            if (!event.isMuted()) {
+            bool mute = event.isMuted();
+            if (!mute) {
+                  //maybe we have a harmony channel to account for
+                  //TODO - PHV: check to see if there are non note non harmony things
+                  Staff* staff = cs->playbackScore()->staff(event.getOriginatingStaff());
+                  const Channel* a = staff->part()->harmonyChannel();
+                  if (a) //if there is a harmony channel
+                        mute = a->mute() || a->soloMute();
+                  }
+            if (!mute) {
                   if (event.discard()) { // ignore noteoff but restrike noteon
                         if (event.velo() > 0)
                               putEvent(NPlayEvent(ME_NOTEON, event.channel(), event.pitch(), 0) ,framePos);

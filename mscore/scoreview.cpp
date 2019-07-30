@@ -4165,6 +4165,9 @@ void ScoreView::cmdAddChordName(HarmonyType ht)
       _score->undoAddElement(harmony);
       _score->endCmd();
 
+      //TODO - PHV: consider updating here rather than in undoAddElement()
+      //harmony->part()->updateHarmonyChannels();
+
       _score->select(harmony, SelectType::SINGLE, 0);
       startEditMode(harmony);
       _score->update();

@@ -531,8 +531,12 @@ static int getControllerFromCC(int cc)
 static void renderHarmony(EventMap* events, Measure* m, Harmony* h)
       {
       Staff* staff = m->score()->staff(h->track() / VOICES);
-      Instrument* instr = staff->part()->instrument(h->tick());
-      int channel = instr->channel(0)->channel(); //FIXME - PHV: this is temp
+      Instrument* instr = staff->part()->instrument(); //TODO - PHV: watch out for instr changes
+      int channelIdx = instr->channelIdx("harmony");
+      Q_ASSERT(channelIdx != -1);
+
+      int channel = instr->channel(channelIdx)->channel(); //FIXME - PHV: this is temp
+      events->registerChannel(channel);
       if (!staff->primaryStaff())
             return;
 
