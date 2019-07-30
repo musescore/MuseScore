@@ -26,6 +26,7 @@
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 #include "playevent.h"
+#include "libmscore/types.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -82,6 +83,11 @@ class Element : public Ms::PluginAPI::ScoreElement {
        * \see Element::offset
        */
       Q_PROPERTY(qreal offsetY READ offsetY WRITE setOffsetY)
+      /**
+       * Parent element for this element.
+       * \since 3.3
+       */
+      Q_PROPERTY(Ms::PluginAPI::Element* parent READ parent)
 
       API_PROPERTY( subtype,                 SUBTYPE                   )
       API_PROPERTY_READ_ONLY_T( bool, selected, SELECTED               )
@@ -320,6 +326,8 @@ class Element : public Ms::PluginAPI::ScoreElement {
       void setOffsetX(qreal offX);
       void setOffsetY(qreal offY);
 
+      Ms::PluginAPI::Element* parent() const { return wrap(element()->parent()); }
+
    public:
       /// \cond MS_INTERNAL
       Element(Ms::Element* e = nullptr, Ownership own = Ownership::PLUGIN)
@@ -468,6 +476,13 @@ class Chord : public Element {
       Ms::PlayEventType playEventType()        { return chord()->playEventType(); }
       void setPlayEventType(Ms::PlayEventType v);
       /// \endcond
+
+      /// Add to a chord's elements.
+      /// \since MuseScore 3.3
+      Q_INVOKABLE void add(Ms::PluginAPI::Element* wrapped);
+      /// Remove a chord's element.
+      /// \since MuseScore 3.3
+      Q_INVOKABLE void remove(Ms::PluginAPI::Element* wrapped);
       };
 
 //---------------------------------------------------------
