@@ -85,6 +85,50 @@ void Chord::setPlayEventType(Ms::PlayEventType v)
       }
 
 //---------------------------------------------------------
+//   Chord::add
+//---------------------------------------------------------
+
+void Chord::add(Ms::PluginAPI::Element* wrapped)
+      {
+      Ms::Element* s = wrapped->element();
+      if (s)
+            {
+            // Ensure that the object has the expected ownership
+            if (wrapped->ownership() == Ownership::SCORE) {
+                  qWarning("Chord::add: Cannot add this element. The element is already part of the score.");
+                  return;        // Don't allow operation.
+                  }
+            // Score now owns the object.
+            wrapped->setOwnership(Ownership::SCORE);
+            // Provide parentage for element.
+            s->setParent(chord());
+            // If a note, ensure the element has proper Tpc values. (Will crash otherwise)
+            if (s->isNote()) {
+                  s->setTrack(chord()->track());
+                  toNote(s)->setTpcFromPitch();
+                  }
+            // Create undo op and add the element.
+            chord()->score()->undoAddElement(s);
+            }
+      }
+
+//---------------------------------------------------------
+//   Chord::remove
+//---------------------------------------------------------
+
+void Chord::remove(Ms::PluginAPI::Element* wrapped)
+      {
+      Ms::Element* s = wrapped->element();
+      if (s->parent() != chord())
+            qWarning("PluginAPI::Chord::remove: The element is not a child of this chord. Use removeElement() instead.");
+      else if (chord()->notes().size() <= 1 && s->type() == ElementType::NOTE)
+            qWarning("PluginAPI::Chord::remove: Removal of final note is not allowed.");
+      else if (s)
+            chord()->score()->deleteItem(s); // Create undo op and remove the element.
+      }
+
+
+//---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond
 ///   Wraps Ms::Element choosing the correct wrapper type
