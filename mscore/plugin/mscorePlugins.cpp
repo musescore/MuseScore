@@ -422,11 +422,15 @@ void MuseScore::pluginTriggered(QString pp)
             delete obj;
             return;
             }
-      p->setFilePath(pp.section('/', 0, -2));
 
       if (p->pluginType() == "dock" || p->pluginType() == "dialog") {
             QQuickView* view = new QQuickView(engine, 0);
             view->setSource(QUrl::fromLocalFile(pp));
+            if (QmlPlugin* viewPluginInstance = qobject_cast<QmlPlugin*>(view->rootObject())) {
+                  // a new plugin instance was created by view, use it instead.
+                  delete p;
+                  p = viewPluginInstance;
+                  }
             view->setTitle(p->menuPath().mid(p->menuPath().lastIndexOf(".") + 1));
             view->setColor(QApplication::palette().color(QPalette::Window));
             //p->setParentItem(view->contentItem());
@@ -454,6 +458,8 @@ void MuseScore::pluginTriggered(QString pp)
                   view->show();
                   }
             }
+
+      p->setFilePath(pp.section('/', 0, -2));
 
       // don’t call startCmd for non modal dialog
       if (cs && p->pluginType() != "dock")
