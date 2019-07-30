@@ -4928,7 +4928,11 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                   }
             else if (_e.name() == "function") {
                   // attributes: print-style
-                  skipLogCurrElem();
+                  ha->setRootTpc(Tpc::TPC_INVALID);
+                  ha->setBaseTpc(Tpc::TPC_INVALID);
+                  ha->setHarmonyType(HarmonyType::ROMAN);
+                  QString text = _e.readElementText();
+                  ha->setHarmony(text);
                   }
             else if (_e.name() == "kind") {
                   // attributes: use-symbols  yes-no

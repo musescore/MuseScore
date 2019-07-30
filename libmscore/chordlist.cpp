@@ -1628,7 +1628,7 @@ void ChordList::configureAutoAdjust(qreal emag, qreal eadjust, qreal mmag, qreal
       _madjust = madjust;
 #if 0
       // TODO: regenerate all chord descriptions
-      // current we always reload the entire chordlist
+      // currently we always reload the entire chordlist
       if (_autoAdjust) {
             for (ChordFont cf : fonts) {
                   if (cf.fontClass == "extension")
@@ -1708,6 +1708,10 @@ void ChordList::read(XmlReader& e)
                   ++fontIdx;
                   }
             else if (tag == "autoAdjust") {
+                  QString nmag = e.attribute("mag");
+                  _nmag = nmag.toDouble();
+                  QString nadjust = e.attribute("adjust");
+                  _nadjust = nadjust.toDouble();
                   _autoAdjust = e.readBool();
                   }
             else if (tag == "token") {
@@ -1737,6 +1741,8 @@ void ChordList::read(XmlReader& e)
                   }
             else if (tag == "renderRoot")
                   readRenderList(e.readElementText(), renderListRoot);
+            else if (tag == "renderFunction")
+                  readRenderList(e.readElementText(), renderListFunction);
             else if (tag == "renderBase")
                   readRenderList(e.readElementText(), renderListBase);
             else
@@ -1766,11 +1772,13 @@ void ChordList::write(XmlWriter& xml) const
             ++fontIdx;
             }
       if (_autoAdjust)
-            xml.tag("autoAdjust", true);
+            xml.tagE(QString("autoAdjust mag=\"%1\" adjust=\"%2\"").arg(_nmag).arg(_nadjust));
       foreach (ChordToken t, chordTokenList)
             t.write(xml);
       if (!renderListRoot.empty())
             writeRenderList(xml, &renderListRoot, "renderRoot");
+      if (!renderListFunction.empty())
+            writeRenderList(xml, &renderListRoot, "renderFunction");
       if (!renderListBase.empty())
             writeRenderList(xml, &renderListBase, "renderBase");
       for (const ChordDescription& cd : *this)

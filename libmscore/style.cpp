@@ -271,13 +271,22 @@ static const StyleType styleTypes[] {
       { Sid::harmonyFretDist,          "harmonyFretDist",        Spatium(1.0) },
       { Sid::minHarmonyDistance,       "minHarmonyDistance",     Spatium(0.5) },
       { Sid::maxHarmonyBarDistance,    "maxHarmonyBarDistance",  Spatium(3.0) },
-      { Sid::harmonyPlacement,         "harmonyPlacement",       int(Placement::ABOVE) },
+
+      { Sid::harmonyPlacement,         "harmonyPlacement",           int(Placement::ABOVE) },
+      { Sid::romanNumeralPlacement,    "romanNumeralPlacement",      int(Placement::BELOW) },
+      { Sid::nashvilleNumberPlacement, "nashvilleNumberPlacement",   int(Placement::ABOVE) },
 
       { Sid::chordSymbolAPosAbove,      "chordSymbolPosAbove",       QPointF(.0, -2.5) },
       { Sid::chordSymbolAPosBelow,      "chordSymbolPosBelow",       QPointF(.0, 3.5) },
 
       { Sid::chordSymbolBPosAbove,      "chordSymbolBPosAbove",      QPointF(.0, -5.0) },
       { Sid::chordSymbolBPosBelow,      "chordSymbolBPosBelow",      QPointF(.0, 3.5) },
+
+      { Sid::romanNumeralPosAbove,      "romanNumeralPosAbove",      QPointF(.0, -2.5) },
+      { Sid::romanNumeralPosBelow,      "romanNumeralPosBelow",      QPointF(.0, 3.5) },
+
+      { Sid::nashvilleNumberPosAbove,   "nashvilleNumberPosAbove",   QPointF(.0, -2.5) },
+      { Sid::nashvilleNumberPosBelow,   "nashvilleNumberPosBelow",   QPointF(.0, 3.5) },
 
       { Sid::chordSymbolAFontFace,      "chordSymbolAFontFace",      "FreeSerif" },
       { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      12.0 },
@@ -304,6 +313,32 @@ static const StyleType styleTypes[] {
       { Sid::chordSymbolBFrameRound,    "chordSymbolBFrameRound",    0 },
       { Sid::chordSymbolBFrameFgColor,  "chordSymbolBFrameFgColor",  QColor(0, 0, 0, 255) },
       { Sid::chordSymbolBFrameBgColor,  "chordSymbolBFrameBgColor",  QColor(255, 255, 255, 0) },
+
+      { Sid::romanNumeralFontFace,      "romanNumeralFontFace",      "Campania" },
+      { Sid::romanNumeralFontSize,      "romanNumeralFontSize",      12.0 },
+      { Sid::romanNumeralFontSpatiumDependent, "romanNumeralFontSpatiumDependent", true },
+      { Sid::romanNumeralFontStyle,     "romanNumeralFontStyle",     int(FontStyle::Normal) },
+      { Sid::romanNumeralColor,         "romanNumeralColor",         QColor(0, 0, 0, 255) },
+      { Sid::romanNumeralAlign,         "romanNumeralAlign",         QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { Sid::romanNumeralFrameType,     "romanNumeralFrameType",     int(FrameType::NO_FRAME) },
+      { Sid::romanNumeralFramePadding,  "romanNumeralFramePadding",  0.2 },
+      { Sid::romanNumeralFrameWidth,    "romanNumeralFrameWidth",    0.1 },
+      { Sid::romanNumeralFrameRound,    "romanNumeralFrameRound",    0 },
+      { Sid::romanNumeralFrameFgColor,  "romanNumeralFrameFgColor",  QColor(0, 0, 0, 255) },
+      { Sid::romanNumeralFrameBgColor,  "romanNumeralFrameBgColor",  QColor(255, 255, 255, 0) },
+
+      { Sid::nashvilleNumberFontFace,      "nashvilleNumberFontFace",      "FreeSerif" },
+      { Sid::nashvilleNumberFontSize,      "nashvilleNumberFontSize",      12.0 },
+      { Sid::nashvilleNumberFontSpatiumDependent, "nashvilleNumberFontSpatiumDependent", true },
+      { Sid::nashvilleNumberFontStyle,     "nashvilleNumberFontStyle",     int(FontStyle::Normal) },
+      { Sid::nashvilleNumberColor,         "nashvilleNumberColor",         QColor(0, 0, 0, 255) },
+      { Sid::nashvilleNumberAlign,         "nashvilleNumberAlign",         QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { Sid::nashvilleNumberFrameType,     "nashvilleNumberFrameType",     int(FrameType::NO_FRAME) },
+      { Sid::nashvilleNumberFramePadding,  "nashvilleNumberFramePadding",  0.2 },
+      { Sid::nashvilleNumberFrameWidth,    "nashvilleNumberFrameWidth",    0.1 },
+      { Sid::nashvilleNumberFrameRound,    "nashvilleNumberFrameRound",    0 },
+      { Sid::nashvilleNumberFrameFgColor,  "nashvilleNumberFrameFgColor",  QColor(0, 0, 0, 255) },
+      { Sid::nashvilleNumberFrameBgColor,  "nashvilleNumberFrameBgColor",  QColor(255, 255, 255, 0) },
 
       { Sid::capoPosition,            "capoPosition",            QVariant(0) },
       { Sid::fretNumMag,              "fretNumMag",              QVariant(2.0) },
@@ -1573,6 +1608,38 @@ const TextStyle chordSymbolTextStyleB {{
       { Sid::chordSymbolBFrameBgColor,           Pid::FRAME_BG_COLOR         },
       }};
 
+const TextStyle romanNumeralTextStyle {{
+      { Sid::romanNumeralFontFace,               Pid::FONT_FACE              },
+      { Sid::romanNumeralFontSize,               Pid::FONT_SIZE              },
+      { Sid::romanNumeralFontSpatiumDependent,   Pid::SIZE_SPATIUM_DEPENDENT },
+      { Sid::romanNumeralFontStyle,              Pid::FONT_STYLE             },
+      { Sid::romanNumeralColor,                  Pid::COLOR                  },
+      { Sid::romanNumeralAlign,                  Pid::ALIGN                  },
+      { Sid::romanNumeralPosAbove,               Pid::OFFSET                 },
+      { Sid::romanNumeralFrameType,              Pid::FRAME_TYPE             },
+      { Sid::romanNumeralFramePadding,           Pid::FRAME_PADDING          },
+      { Sid::romanNumeralFrameWidth,             Pid::FRAME_WIDTH            },
+      { Sid::romanNumeralFrameRound,             Pid::FRAME_ROUND            },
+      { Sid::romanNumeralFrameFgColor,           Pid::FRAME_FG_COLOR         },
+      { Sid::romanNumeralFrameBgColor,           Pid::FRAME_BG_COLOR         },
+      }};
+
+const TextStyle nashvilleNumberTextStyle {{
+      { Sid::nashvilleNumberFontFace,               Pid::FONT_FACE              },
+      { Sid::nashvilleNumberFontSize,               Pid::FONT_SIZE              },
+      { Sid::nashvilleNumberFontSpatiumDependent,   Pid::SIZE_SPATIUM_DEPENDENT },
+      { Sid::nashvilleNumberFontStyle,              Pid::FONT_STYLE             },
+      { Sid::nashvilleNumberColor,                  Pid::COLOR                  },
+      { Sid::nashvilleNumberAlign,                  Pid::ALIGN                  },
+      { Sid::nashvilleNumberPosAbove,               Pid::OFFSET                 },
+      { Sid::nashvilleNumberFrameType,              Pid::FRAME_TYPE             },
+      { Sid::nashvilleNumberFramePadding,           Pid::FRAME_PADDING          },
+      { Sid::nashvilleNumberFrameWidth,             Pid::FRAME_WIDTH            },
+      { Sid::nashvilleNumberFrameRound,             Pid::FRAME_ROUND            },
+      { Sid::nashvilleNumberFrameFgColor,           Pid::FRAME_FG_COLOR         },
+      { Sid::nashvilleNumberFrameBgColor,           Pid::FRAME_BG_COLOR         },
+      }};
+
 const TextStyle rehearsalMarkTextStyle {{
       { Sid::rehearsalMarkFontFace,              Pid::FONT_FACE              },
       { Sid::rehearsalMarkFontSize,              Pid::FONT_SIZE              },
@@ -1981,6 +2048,8 @@ static constexpr std::array<TextStyleName, int(Tid::TEXT_STYLES)> textStyles { {
       { QT_TRANSLATE_NOOP("TextStyle", "Staff"),                   &staffTextStyle,             Tid::STAFF },
       { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol"),            &chordSymbolTextStyleA,      Tid::HARMONY_A },
       { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol (Alternate)"),&chordSymbolTextStyleB,      Tid::HARMONY_B },
+      { QT_TRANSLATE_NOOP("TextStyle", "Roman Numeral Analysis"),  &romanNumeralTextStyle,      Tid::HARMONY_ROMAN },
+      { QT_TRANSLATE_NOOP("TextStyle", "Nashville Number"),        &nashvilleNumberTextStyle,   Tid::HARMONY_NASHVILLE },
       { QT_TRANSLATE_NOOP("TextStyle", "Rehearsal Mark"),          &rehearsalMarkTextStyle,     Tid::REHEARSAL_MARK },
 
       { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Left"),        &repeatLeftTextStyle,        Tid::REPEAT_LEFT },
@@ -2096,6 +2165,8 @@ static const std::vector<Tid> _primaryTextStyles = {
       Tid::LYRICS_EVEN,
       Tid::HARMONY_A,
       Tid::HARMONY_B,
+      Tid::HARMONY_ROMAN,
+      Tid::HARMONY_NASHVILLE,
       Tid::STICKING,
       Tid::USER1,
       Tid::USER2,

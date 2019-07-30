@@ -2069,6 +2069,20 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "roman-numeral-text",
+         QT_TRANSLATE_NOOP("action","Roman Numeral Analysis"),
+         QT_TRANSLATE_NOOP("action","Add Roman numeral analysis")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "nashville-number-text",
+         QT_TRANSLATE_NOOP("action","Nashville Number"),
+         QT_TRANSLATE_NOOP("action","Add Nashville number")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "rehearsalmark-text",
          QT_TRANSLATE_NOOP("action","Rehearsal Mark"),
          QT_TRANSLATE_NOOP("action","Add rehearsal mark")
