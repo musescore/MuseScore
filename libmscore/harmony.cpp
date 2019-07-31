@@ -1290,7 +1290,8 @@ void Harmony::render(const QString& s, qreal& x, qreal& y)
       {
       int fontIdx = 0;
       if (!s.isEmpty()) {
-            TextSegment* ts = new TextSegment(s, fontList[fontIdx], x, y);
+            QFont f = _harmonyType != HarmonyType::ROMAN ? fontList[fontIdx] : font();
+            TextSegment* ts = new TextSegment(s, f, x, y);
             textList.append(ts);
             x += ts->width();
             }
