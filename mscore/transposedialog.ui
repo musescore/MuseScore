@@ -490,8 +490,8 @@
   <tabstop>keyList</tabstop>
   <tabstop>upKey</tabstop>
   <tabstop>downKey</tabstop>
-  <tabstop>upInterval</tabstop>
   <tabstop>transposeByInterval</tabstop>
+  <tabstop>upInterval</tabstop>
   <tabstop>intervalList</tabstop>
   <tabstop>downInterval</tabstop>
   <tabstop>transposeKeys</tabstop>

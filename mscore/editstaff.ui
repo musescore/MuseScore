@@ -420,6 +420,9 @@
             <height>40</height>
            </size>
           </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="1" column="1">
@@ -429,6 +432,9 @@
             <width>0</width>
             <height>40</height>
            </size>
+          </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -928,17 +934,18 @@
   <tabstop>spinExtraDistance</tabstop>
   <tabstop>mag</tabstop>
   <tabstop>hideMode</tabstop>
+  <tabstop>showIfEmpty</tabstop>
   <tabstop>showClef</tabstop>
   <tabstop>showTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
   <tabstop>hideSystemBarLine</tabstop>
-  <tabstop>showIfEmpty</tabstop>
   <tabstop>small</tabstop>
   <tabstop>invisible</tabstop>
   <tabstop>color</tabstop>
   <tabstop>cutaway</tabstop>
   <tabstop>changeStaffType</tabstop>
   <tabstop>changeInstrument</tabstop>
+  <tabstop>partName</tabstop>
   <tabstop>longName</tabstop>
   <tabstop>shortName</tabstop>
   <tabstop>minPitchA</tabstop>
@@ -949,11 +956,15 @@
   <tabstop>minPitchPSelect</tabstop>
   <tabstop>maxPitchP</tabstop>
   <tabstop>maxPitchPSelect</tabstop>
+  <tabstop>octave</tabstop>
   <tabstop>iList</tabstop>
   <tabstop>up</tabstop>
   <tabstop>down</tabstop>
   <tabstop>numOfStrings</tabstop>
   <tabstop>editStringData</tabstop>
+  <tabstop>singleNoteDynamics</tabstop>
+  <tabstop>previousButton</tabstop>
+  <tabstop>nextButton</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>
