@@ -81,6 +81,11 @@
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>
+        <Channel name="harmony">
+          <program value="0"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
         </Instrument>
       </Part>
     <Part>
@@ -980,6 +985,9 @@
             <gateTime>100</gateTime>
             </Articulation>
           <Channel>
+            <program value="0"/>
+            </Channel>
+          <Channel name="harmony">
             <program value="0"/>
             </Channel>
           </Instrument>

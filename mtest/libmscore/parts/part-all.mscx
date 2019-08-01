@@ -54,6 +54,12 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        <Channel name="harmony">
+          <midiPort>0</midiPort>
+          <midiChannel>2</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -89,6 +95,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
           </Channel>
         </Instrument>
       </Part>
