@@ -7,7 +7,11 @@ cp ../../../build.debug/mtest/libmscore/chordsymbol/extend-test.mscx   extend-re
 cp ../../../build.debug/mtest/libmscore/chordsymbol/no-system-test.mscx   no-system-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/transpose-part-test.mscx   transpose-part-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/transpose-test.mscx   transpose-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-override-test.mscx realize-override-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/transpose-realize-test.mscx transpose-realize-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-test.mscx realize-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-close-test.mscx realize-close-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-drop2-test.mscx realize-drop2-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-6note-test.mscx realize-6note-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-4note-test.mscx realize-4note-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-3note-test.mscx realize-3note-ref.mscx
 

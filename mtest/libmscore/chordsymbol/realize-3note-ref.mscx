@@ -86,6 +86,9 @@
         <Channel>
           <program value="0"/>
           </Channel>
+        <Channel name="harmony">
+          <program value="0"/>
+          </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
