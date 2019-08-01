@@ -23,10 +23,10 @@ namespace Ms {
 //   @@ InstrumentChange
 //---------------------------------------------------------
 
-class InstrumentChange final : public TextBase  {
+class InstrumentChange final : public TextBase {
+      Q_DECLARE_TR_FUNCTIONS(InstrumentChange)
       Instrument* _instrument;  // Staff holds ownership if part of score
-      std::vector<KeySig*> _keySigs;
-      std::vector<Clef*> _clefs;
+      bool _init = false; // Set if the instrument has been set by the user, as there is no other way to tell.
 
    public:
       InstrumentChange(Score*);
@@ -44,12 +44,13 @@ class InstrumentChange final : public TextBase  {
       void setInstrument(Instrument* i)     { _instrument = i;     }
       void setInstrument(Instrument&& i)    { *_instrument = i;    }
       void setInstrument(const Instrument& i);
+      void setupInstrument(const Instrument* instrument);
 
-      std::vector<KeySig*> keySigs() const  { return _keySigs;     }
-      void addKeySig(KeySig* keySig)        { _keySigs.push_back(keySig); }
+      std::vector<KeySig*> keySigs() const;
+      std::vector<Clef*> clefs() const;
 
-      std::vector<Clef*> clefs()            { return _clefs;       }
-      void addClef(Clef* clef)              { _clefs.push_back(clef); }
+      bool init() const                     { return _init; }
+      void setInit(bool init)               { _init = init; }
 
       Segment* segment() const              { return toSegment(parent()); }
 
