@@ -10242,9 +10242,6 @@
                   <Channel name="pizzicato">
                         <program value="32"/> <!--Acoustic Bass-->
                   </Channel>
-                  <Channel>
-                        <program value="32"/>
-                  </Channel>
                   <Channel name="arco">
                         <program value="43"/> <!--Contrabass-->
                   </Channel>
