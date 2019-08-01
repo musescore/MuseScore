@@ -516,6 +516,7 @@ void Chord::add(Element* e)
                   if (voice() && measure() && note->visible())
                         measure()->setHasVoices(staffIdx(), true);
                   }
+                  score()->setPlaylistDirty();
                   break;
             case ElementType::ARPEGGIO:
                   _arpeggio = toArpeggio(e);
@@ -597,6 +598,7 @@ void Chord::remove(Element* e)
                         qDebug("Chord::remove() note %p not found!", e);
                   if (voice() && measure() && note->visible())
                         measure()->checkMultiVoices(staffIdx());
+                  score()->setPlaylistDirty();
                   }
                   break;
 
