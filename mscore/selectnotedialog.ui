@@ -214,6 +214,11 @@
  </widget>
  <tabstops>
   <tabstop>sameNotehead</tabstop>
+  <tabstop>samePitch</tabstop>
+  <tabstop>sameString</tabstop>
+  <tabstop>sameType</tabstop>
+  <tabstop>sameDuration</tabstop>
+  <tabstop>sameName</tabstop>
   <tabstop>sameStaff</tabstop>
   <tabstop>inSelection</tabstop>
   <tabstop>sameVoice</tabstop>
