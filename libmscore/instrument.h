@@ -281,6 +281,7 @@ class Instrument {
       void updateGateTime(int* gateTime, int channelIdx, const QString& name);
 
       bool operator==(const Instrument&) const;
+      bool operator!=(const Instrument&) const;
 
       void setMinPitchP(int v)                               { _minPitchP = v;     }
       void setMaxPitchP(int v)                               { _maxPitchP = v;     }

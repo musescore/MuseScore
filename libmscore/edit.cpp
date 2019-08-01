@@ -1603,16 +1603,7 @@ void Score::deleteItem(Element* el)
                   removeChordRest(chord, false);
                   Segment* seg = chord->segment();
                   
-                  int minVoice = chord->part()->staff(0)->idx() * VOICES;
-                  int maxVoice = (chord->part()->staff(chord->part()->nstaves() - 1)->idx() + 1) * VOICES - 1;
-                  InstrumentChangeWarning* warning = toInstrumentChangeWarning(seg->findAnnotation(ElementType::INSTRUMENT_CHANGE_WARNING, minVoice, maxVoice));
-                  if (warning && !seg->hasElements(minVoice, maxVoice)) {
-                        Chord* nextChord = score()->nextChord(seg, chord->part());
-                        if (nextChord && warning->instrumentChange())
-                              warning->instrumentChange()->setNextChord(nextChord);
-                        else
-                              warning->instrumentChange()->removeWarning();
-                        }
+                  
                   // replace with rest
                   if (chord->noteType() == NoteType::NORMAL) {
                         Rest* rest = new Rest(this, chord->durationType());
@@ -1925,14 +1916,12 @@ void Score::deleteItem(Element* el)
                   Interval oldV = part->instrument(tickStart)->transpose();
                   undoRemoveElement(el);
                   for (KeySig* keySig : ic->keySigs())
-                        if (keySig->parent())
-                              score()->deleteItem(keySig);
+                        deleteItem(keySig);
                   for (Clef* clef : ic->clefs())
-                        if (clef->parent())
-                              score()->deleteItem(clef);
-                  if (ic->warning()) {
-                        score()->deleteItem(ic->warning());
-                        }
+                        deleteItem(clef);
+                  InstrumentChangeWarning* warning = nextICWarning(ic->part(), ic->segment());
+                  if (warning)
+                        deleteItem(warning);
                   if (part->instrument(tickStart)->transpose() != oldV) {
                         auto i = part->instruments()->upper_bound(tickStart.ticks());
                         Fraction tickEnd;
@@ -2138,10 +2127,11 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, int track1, int
                   const auto annotations = s->annotations(); // make a copy since we alter the list
                   for (Element* annotation : annotations) {
                         // skip if not included in selection (eg, filter)
-                        if (!filter.canSelect(annotation))
+                        // instrument change warnings will be removed correctly when the underlying notes are removed.
+                        if (!filter.canSelect(annotation) || annotation->isInstrumentChangeWarning())
                               continue;
                         if (!annotation->systemFlag() && annotation->track() == track)
-                              undoRemoveElement(annotation);
+                              deleteItem(annotation);
                         }
                   }
             }
@@ -2747,6 +2737,33 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
                   }
             else
                   undoRemoveElement(beam);
+            }
+
+      if (cr->isChord()) {
+            Segment* seg = cr->segment();
+            Part* part = cr->part();
+            moveICWarning(part, seg);
+            }
+      }
+
+//---------------------------------------------------------
+//   moveICWarning
+//---------------------------------------------------------
+
+void Ms::Score::moveICWarning(Ms::Part* part, Ms::Segment* currentSeg)
+      {
+      int minVoice = part->staff(0)->idx() * VOICES;
+      int maxVoice = (part->staff(part->nstaves() - 1)->idx() + 1) * VOICES - 1;
+      InstrumentChangeWarning* warning = toInstrumentChangeWarning(currentSeg->findAnnotation(ElementType::INSTRUMENT_CHANGE_WARNING, minVoice, maxVoice));
+      if (warning && !currentSeg->hasElements(minVoice, maxVoice)) {
+            Chord* nextChord = score()->nextChord(currentSeg, part);
+            InstrumentChange* ic = score()->prevInstrumentChange(currentSeg, part, false);
+            if (ic) {
+                  deleteItem(warning);
+                  if (nextChord) {
+                        ic->setNextChord(nextChord);
+                        }
+                  }
             }
       }
 
@@ -3643,7 +3660,7 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
 //   undoChangeKeySig
 //---------------------------------------------------------
 
-void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent key, InstrumentChange* ic)
+void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent key)
       {
       KeySig* lks = 0;
 
@@ -3685,8 +3702,6 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
                         nks->setParent(s);
                         nks->setTrack(track);
                         nks->setKeySigEvent(nkey);
-                        if (ic)
-                              ic->addKeySig(nks);
                         undo(new AddElement(nks));
                         if (lks)
                               undo(new Link(lks, nks));
@@ -3699,13 +3714,13 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
 
 void Score::updateInstrumentChangeTranspositions(Ms::KeySigEvent& key, Ms::Staff* staff, const Ms::Fraction& tick)
       {
-      if (!key.isForInstrumentChange()) {
+      if (!key.forInstrumentChange()) {
             KeyList* kl = staff->keyList();
             int nextTick = kl->nextKeyTick(tick.ticks());
 
             while (nextTick != -1) {
                   KeySigEvent e = kl->key(nextTick);
-                  if (e.isForInstrumentChange()) {
+                  if (e.forInstrumentChange()) {
                         Measure* m = tick2measure(Fraction::fromTicks(nextTick));
                         Segment* s = m->tick2segment(Fraction::fromTicks(nextTick), SegmentType::KeySig);
                         int track = staff->idx() * VOICES;
@@ -3737,7 +3752,7 @@ void Score::updateInstrumentChangeTranspositions(Ms::KeySigEvent& key, Ms::Staff
 //    create a clef before element e
 //---------------------------------------------------------
 
-void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, InstrumentChange* ic)
+void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool ic)
       {
       bool moveClef = false;
       SegmentType st = SegmentType::Clef;
@@ -3839,8 +3854,9 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, InstrumentCha
                   score->undo(new AddElement(clef));
                   clef->layout();
                   }
-            if (ic)
-                  ic->addClef(clef);
+            if (ic) {
+                  clef->setForInstrumentChange(true);
+                  }
             clef->setSmall(small);
             }
       }

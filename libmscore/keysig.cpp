@@ -391,6 +391,8 @@ void KeySig::write(XmlWriter& xml) const
             }
       if (!_showCourtesy)
             xml.tag("showCourtesySig", _showCourtesy);
+      if (forInstrumentChange())
+            xml.tag("forInstrumentChange", true);
       xml.etag();
       }
 
@@ -455,6 +457,8 @@ void KeySig::read(XmlReader& e)
                   }
             else if (tag == "subtype")
                   subtype = e.readInt();
+            else if (tag == "forInstrumentChange")
+                  setForInstrumentChange(e.readBool());
             else if (!Element::readProperties(e))
                   e.unknown();
             }

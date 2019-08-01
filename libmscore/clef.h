@@ -131,6 +131,7 @@ class Clef final : public Element {
       SymId symId;
       bool _showCourtesy = true;
       bool _small = false;
+      bool _forInstrumentChange = false;
 
       ClefTypeList _clefTypes { ClefType::INVALID };
 
@@ -166,6 +167,9 @@ class Clef final : public Element {
       ClefType clefType() const;
       void setClefType(ClefType i);
       void setClefType(const QString& s);
+
+      void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
+      bool forInstrumentChange() const { return _forInstrumentChange; }
 
       ClefTypeList clefTypeList() const     { return _clefTypes;                  }
       ClefType concertClef() const          { return _clefTypes._concertClef;     }
