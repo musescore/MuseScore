@@ -171,6 +171,13 @@
         </property>
        </widget>
       </item>
+	  <item row="3" column="0" colspan="3">
+       <widget class="QCheckBox" name="showWarning">
+        <property name="text">
+         <string>Show Instrument Change Warning</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

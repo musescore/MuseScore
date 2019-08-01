@@ -564,9 +564,6 @@ Element* ChordRest::drop(EditData& data)
                         Instrument* prevInstr = part()->instrument(tick());
                         if (instr && *instr != *prevInstr) {
                               ic->setupInstrument(instr);
-                              /*Chord* nextChord = score()->nextChord(segment(), part());
-                              if (nextChord)
-                                    ic->setNextChord(nextChord);*/
                               }
                         score()->undoAddElement(ic);
                         return e;

@@ -1931,7 +1931,7 @@ void Score::deleteItem(Element* el)
                         deleteItem(clef);
                   InstrumentChangeWarning* warning = nextICWarning(ic->part(), ic->segment());
                   if (warning)
-                        deleteItem(warning);
+                        undoRemoveElement(warning);
                   if (part->instrument(tickStart)->transpose() != oldV) {
                         auto i = part->instruments()->upper_bound(tickStart.ticks());
                         Fraction tickEnd;
@@ -1986,6 +1986,15 @@ void Score::deleteItem(Element* el)
                               }
                         }
                   // whether m is an mmrest or not, we still need to remove el
+                  undoRemoveElement(el);
+                  }
+                  break;
+
+            case ElementType::INSTRUMENT_CHANGE_WARNING:
+                  {
+                  InstrumentChangeWarning* warning = toInstrumentChangeWarning(el);
+                  InstrumentChange* ic = prevInstrumentChange(warning->segment(), warning->part(), false);
+                  ic->setShowWarning(false);
                   undoRemoveElement(el);
                   }
                   break;
@@ -2815,7 +2824,7 @@ void Ms::Score::moveICWarning(Ms::Part* part, Ms::Segment* currentSeg)
             Chord* nextChord = score()->nextChord(currentSeg, part);
             InstrumentChange* ic = score()->prevInstrumentChange(currentSeg, part, false);
             if (ic) {
-                  deleteItem(warning);
+                  undoRemoveElement(warning);
                   if (nextChord) {
                         ic->setNextChord(nextChord);
                         }

@@ -15,6 +15,8 @@
 #include "inspector.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/score.h"
+#include "libmscore/chord.h"
+#include "libmscore/segment.h"
 #include "scoreview.h"
 
 namespace Ms {
@@ -41,6 +43,7 @@ InspectorInstrumentChange::InspectorInstrumentChange(QWidget* parent)
       populateStyle(ic.style);
       mapSignals(il, ppList);
       connect(ic.selectInstrument, SIGNAL(clicked()), SLOT(selectInstrumentClicked()));
+      connect(ic.showWarning, SIGNAL(stateChanged(int)), SLOT(showWarningChanged(int)));
       }
 
 //---------------------------------------------------------
@@ -55,6 +58,43 @@ void InspectorInstrumentChange::selectInstrumentClicked()
       mscore->currentScoreView()->selectInstrument(i);
       score->setLayoutAll();
       score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   showWarningChanged
+//---------------------------------------------------------
+
+void InspectorInstrumentChange::showWarningChanged(int state)
+      {
+      InstrumentChange* i = toInstrumentChange(inspector->element());
+      Score* score = i->score();
+      score->startCmd();
+      if (state == 0) {
+            i->setShowWarning(false);
+            InstrumentChangeWarning* warning = score->nextICWarning(i->part(), i->segment());
+            if (warning)
+                  score->undoRemoveElement(warning);
+            }
+      else {
+            i->setShowWarning(true);
+            Chord* nextChord = score->nextChord(i->segment(), i->part());
+            if (nextChord)
+                  i->setNextChord(nextChord);
+            }
+      score->setLayoutAll();
+      score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorInstrumentChange::setElement()
+      {
+      InspectorTextBase::setElement();
+      InstrumentChange* i = toInstrumentChange(inspector->element());
+      if (i->showWarning())
+            ic.showWarning->setChecked(true);
       }
 
 } // namespace Ms
