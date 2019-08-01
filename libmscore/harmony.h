@@ -146,6 +146,7 @@ class Harmony final : public TextBase {
       int rootTpc() const                      { return _rootTpc;      }
       void setRootTpc(int val)                 { _rootTpc = val;       }
       void setTextName(const QString& s)       { _textName = s;        }
+      void setFunction(const QString& s)       { _function = s;        }
       QString rootName();
       QString baseName();
       void addDegree(const HDegree& d);
