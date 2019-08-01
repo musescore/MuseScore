@@ -161,13 +161,13 @@ void MixerTrackChannel::updateNameLabel()
                            "Channel: %3\n"
                            "Bank: %4\n"
                            "Program: %5\n"
-                           "Patch: %6")
+                           "Sound: %6")
                   .arg(part->partName(),
                        instr->trackName(),
                        qApp->translate("InstrumentsXML", chan->name().toUtf8().data()),
                        QString::number(chan->bank()),
                        QString::number(chan->program()),
-                       mp ? mp->name : tr("~no patch~"));
+                       mp ? mp->name : tr("~no sound~"));
 
       trackLabel->setToolTip(tooltip);
 
