@@ -159,6 +159,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
       xml.tag("showUnprintable", _showUnprintable);
       xml.tag("showFrames",      _showFrames);
       xml.tag("showMargins",     _showPageborders);
+      xml.tag("markIrregularMeasures", _markIrregularMeasures, true);
 
       QMapIterator<QString, QString> i(_metaTags);
       while (i.hasNext()) {

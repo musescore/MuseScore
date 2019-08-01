@@ -91,6 +91,8 @@ bool Score::read(XmlReader& e)
                   _showFrames = e.readInt();
             else if (tag == "showMargins")
                   _showPageborders = e.readInt();
+            else if (tag == "markIrregularMeasures")
+                  _markIrregularMeasures = e.readInt();
             else if (tag == "Style") {
                   qreal sp = style().value(Sid::spatium).toDouble();
                   style().load(e);
