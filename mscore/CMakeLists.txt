@@ -211,6 +211,7 @@ else (APPLE)
             musescorefonts-Gootville.qrc
             musescorefonts-Bravura.qrc
             musescorefonts-MuseJazz.qrc
+            musescorefonts-Campania.qrc
             musescorefonts-FreeSerif.qrc
             musescorefonts-Free.qrc
             shortcut.qrc)
@@ -1024,6 +1025,7 @@ if (APPLE)
       ../fonts/gootville/GootvilleText.otf
       ../fonts/mscore/MScoreText.ttf
       ../fonts/musejazz/MuseJazzText.otf
+      ../fonts/campania/Campania.otf
       ../fonts/FreeSerif.ttf
       ../fonts/FreeSerifBold.ttf
       ../fonts/FreeSerifItalic.ttf
