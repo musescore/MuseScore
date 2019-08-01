@@ -177,12 +177,12 @@ void MixerTrackPart::updateNameLabel()
                                 "Primary Instrument: %2\n"
                                 "Bank: %3\n"
                                 "Program: %4\n"
-                                "Patch: %5")
+                                "Sound: %5")
                   .arg(part->partName(),
                        part->longName().replace("&amp;", "&"),
                        QString::number(chan->bank()),
                        QString::number(chan->program()),
-                       mp ? mp->name : tr("~no patch~"));
+                       mp ? mp->name : tr("~no sound~"));
 
       trackLabel->setToolTip(tooltip);
 
