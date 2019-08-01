@@ -38,7 +38,7 @@ PluginManager::PluginManager(QWidget* parent)
 //---------------------------------------------------------
 
 void PluginManager::setupUI(QLineEdit* pluginName_, QLineEdit* pluginPath_, QLineEdit* pluginVersion_,
-      QLineEdit* pluginShortcut_, QTextBrowser* pluginDescription_, QTreeWidget* pluginTreeWidget_,
+      QLineEdit* pluginShortcut_, QWebEngineView* pluginDescription_, QTreeWidget* pluginTreeWidget_,
       QLabel* label_shortcut_, QLabel* label_version_, QPushButton* defineShortcut_, QPushButton* clearShortcut_)
       {
       pluginName = pluginName_;
@@ -536,7 +536,7 @@ void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidg
             pluginShortcut->setHidden(false);
             label_shortcut->setHidden(false);
             pluginShortcut->setText(d.shortcut.keysToString());
-            pluginDescription->setText(d.description);
+            pluginDescription->setHtml(d.description);
             definePluginShortcut->setEnabled(true);
             clearPluginShortcut->setEnabled(true);
             }

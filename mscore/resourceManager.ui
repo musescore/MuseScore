@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
+    <width>741</width>
     <height>577</height>
    </rect>
   </property>
@@ -362,12 +362,12 @@
             </layout>
            </item>
            <item row="7" column="2" colspan="9">
-            <widget class="QTextBrowser" name="pluginDescription">
-             <property name="placeholderText">
-              <string>Description</string>
-             </property>
-             <property name="openExternalLinks">
-              <bool>true</bool>
+            <widget class="QWebEngineView" name="pluginDescription">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
             </widget>
            </item>
@@ -426,16 +426,6 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="6" colspan="5">
-            <widget class="QLineEdit" name="pluginName">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="0" rowspan="9" colspan="2">
             <widget class="QTreeWidget" name="pluginTreeWidget">
              <property name="headerHidden">
@@ -446,6 +436,16 @@
                <string notr="true">1</string>
               </property>
              </column>
+            </widget>
+           </item>
+           <item row="2" column="6" colspan="5">
+            <widget class="QLineEdit" name="pluginName">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
           </layout>
@@ -459,6 +459,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
