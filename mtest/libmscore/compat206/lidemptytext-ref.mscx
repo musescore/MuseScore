@@ -178,6 +178,9 @@
         <Channel name="tremolo">
           <program value="44"/>
           </Channel>
+        <Channel name="harmony">
+          <program value="43"/>
+          </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
@@ -346,6 +349,9 @@
             </Channel>
           <Channel name="tremolo">
             <program value="44"/>
+            </Channel>
+          <Channel name="harmony">
+            <program value="43"/>
             </Channel>
           </Instrument>
         </Part>
