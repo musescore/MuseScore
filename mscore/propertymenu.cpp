@@ -504,53 +504,9 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
       if (si.exec()) {
             const InstrumentTemplate* it = si.instrTemplate();
             if (it) {
-                  Fraction tickStart = ic->segment()->tick();
-                  Part* part = ic->staff()->part();
-                  Interval oldV = part->instrument(tickStart)->transpose();
-                  //Instrument* oi = ic->instrument();  //part->instrument(tickStart);
-                  //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
-                  // change the clef for each staff
-                  for (int i = 0; i < part->nstaves(); i++) {
-                        if (part->instrument(tickStart)->clefType(i) != it->clefType(i)) {
-                              ClefType clefType = score()->styleB(Sid::concertPitch) ? it->clefType(i)._concertClef : it->clefType(i)._transposingClef;
-                              // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
-                              Element* element = ic->rtick().isZero() ? toElement(ic->findMeasure()) : toElement(ic);
-                              score()->undoChangeClef(part->staff(i), element, clefType, ic);
-                              }
-                        }
-                  // Change key signature if necessary
-                  if (it->transpose != oldV) {
-                        for (int i = 0; i < part->nstaves(); i++) {
-                              if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
-                                    KeySigEvent ks;
-                                    ks.setForInstrumentChange(true);
-                                    Key key = part->staff(i)->key(tickStart);
-                                    if (!score()->styleB(Sid::concertPitch))
-                                          key = transposeKey(key, oldV);
-                                    ks.setKey(key);
-                                    score()->undoChangeKeySig(part->staff(i), tickStart, ks, ic);
-                                    }
-                              }
-                        }
-                  // change instrument in all linked scores
-                  for (ScoreElement* se : ic->linkList()) {
-                        InstrumentChange* lic = toInstrumentChange(se);
-                        Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
-                        lic->score()->undo(new ChangeInstrument(lic, instrument));
-                        }
-                  // transpose for current score only
-                  // this automatically propagates to linked scores
-                  if (part->instrument(tickStart)->transpose() != oldV) {
-                        auto i = part->instruments()->upper_bound(tickStart.ticks());    // find(), ++i
-                        Fraction tickEnd;
-                        if (i == part->instruments()->end())
-                              tickEnd = Fraction(-1, 1);
-                        else
-                              tickEnd = Fraction::fromTicks(i->first);
-                        ic->score()->transpositionChanged(part, oldV, tickStart, tickEnd);
-                        }
-                  const QString newInstrChangeText(Instrument::fromTemplate(it).trackName());
-                  ic->undoChangeProperty(Pid::TEXT, TextBase::plainToXmlText(newInstrChangeText));
+                  Instrument instr = Instrument::fromTemplate(it);
+                  ic->setInit(true);
+                  ic->setupInstrument(&instr);
                   }
             else
                   qDebug("no template selected?");

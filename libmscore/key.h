@@ -119,7 +119,7 @@ class KeySigEvent {
       bool isValid() const       { return _key != Key::INVALID;    }
       bool isAtonal() const      { return _mode == KeyMode::NONE;  }
       void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
-      bool isForInstrumentChange() const{ return _forInstrumentChange; }
+      bool forInstrumentChange() const{ return _forInstrumentChange; }
       void initFromSubtype(int);    // for backward compatibility
       QList<KeySym>& keySymbols()             { return _keySymbols; }
       const QList<KeySym>& keySymbols() const { return _keySymbols; }
