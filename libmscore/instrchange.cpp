@@ -145,10 +145,12 @@ void InstrumentChange::setNextChord(ChordRest* chord)
       {
       InstrumentChangeWarning* nextWarning = score()->nextICWarning(chord->part(), chord->segment());
       if (nextWarning)
-            score()->deleteItem(nextWarning);
-      InstrumentChangeWarning* instrumentChangeWarning = new InstrumentChangeWarning(score());
-      instrumentChangeWarning->setPlainText(instrument()->trackName());
-      chord->undoAddAnnotation(instrumentChangeWarning, true);
+            score()->undoRemoveElement(nextWarning);
+      if (_init && _showWarning && chord->tick() != tick()) {
+            InstrumentChangeWarning* instrumentChangeWarning = new InstrumentChangeWarning(score());
+            instrumentChangeWarning->setPlainText(instrument()->trackName());
+            chord->undoAddAnnotation(instrumentChangeWarning, true);
+            }
       }
 
 //---------------------------------------------------------

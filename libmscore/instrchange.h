@@ -42,6 +42,7 @@ class InstrumentChangeWarning final : public StaffTextBase {
 class InstrumentChange final : public TextBase {
       Instrument* _instrument;  // Staff holds ownership if part of score
       bool _init = false;
+      bool _showWarning = true;
       Q_DECLARE_TR_FUNCTIONS(setupInstrument)
 
    public:
@@ -65,11 +66,13 @@ class InstrumentChange final : public TextBase {
       std::vector<KeySig*> keySigs() const;
       std::vector<Clef*> clefs() const;
 
-      InstrumentChangeWarning* warning() const;
-      void setNextChord(ChordRest* chord);
 
       bool init() const                     { return _init; }
       void setInit(bool init)               { _init = init; }
+
+      bool showWarning() const              { return _showWarning; }
+      void setShowWarning(bool showWarning) { _showWarning = showWarning; }
+      void setNextChord(ChordRest* chord);
 
       Segment* segment() const              { return toSegment(parent()); }
 

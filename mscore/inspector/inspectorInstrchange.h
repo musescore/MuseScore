@@ -29,9 +29,11 @@ class InspectorInstrumentChange : public InspectorTextBase {
 
    private slots:
       void selectInstrumentClicked();
+      void showWarningChanged(int state);
 
    public:
       InspectorInstrumentChange(QWidget* parent);
+      virtual void setElement() override;
       };
 
 } // namespace Ms
