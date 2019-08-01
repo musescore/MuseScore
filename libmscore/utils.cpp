@@ -1076,6 +1076,25 @@ InstrumentChange* Score::prevInstrumentChange(Segment* seg, const Part* part, bo
       return nullptr;
       }
 
+//---------------------------------------------------------
+//   nextICWarning
+//    returns the next instrument change warning
+//---------------------------------------------------------
+
+InstrumentChangeWarning* Score::nextICWarning(Part* part, Segment* seg)
+      {
+      int startVoice = part->staff(0)->idx() * VOICES;
+      int endVoice = (part->staff(part->nstaves() - 1)->idx() + 1) * VOICES - 1;
+      for (seg; seg; seg = seg->next1(SegmentType::ChordRest)) {
+            InstrumentChange* ic = toInstrumentChange(seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, startVoice, endVoice));
+            InstrumentChangeWarning* w = toInstrumentChangeWarning(seg->findAnnotation(ElementType::INSTRUMENT_CHANGE_WARNING, startVoice, endVoice));
+            if (ic)
+                  return nullptr;
+            if (w)
+                  return w;
+            }
+      return nullptr;
+      }
 
 }
 

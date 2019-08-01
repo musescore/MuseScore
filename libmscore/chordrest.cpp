@@ -47,6 +47,7 @@
 #include "page.h"
 #include "hook.h"
 #include "rehearsalmark.h"
+#include "instrchange.h"
 
 namespace Ms {
 
@@ -536,14 +537,7 @@ Element* ChordRest::drop(EditData& data)
             case ElementType::STAFF_TEXT:
             case ElementType::SYSTEM_TEXT:
             case ElementType::STAFF_STATE:
-            case ElementType::INSTRUMENT_CHANGE:
-                  if (e->isInstrumentChange() && part()->instruments()->find(tick().ticks()) != part()->instruments()->end()) {
-                        qDebug()<<"InstrumentChange already exists at tick = "<<tick().ticks();
-                        delete e;
-                        return 0;
-                        }
                   // fall through
-
             case ElementType::REHEARSAL_MARK:
                   {
                   e->setParent(segment());
@@ -556,6 +550,27 @@ Element* ChordRest::drop(EditData& data)
                   score()->undoAddElement(e);
                   return e;
                   }
+            case ElementType::INSTRUMENT_CHANGE:
+                  if (e->isInstrumentChange() && part()->instruments()->find(tick().ticks()) != part()->instruments()->end()) {
+                        qDebug() << "InstrumentChange already exists at tick = " << tick().ticks();
+                        delete e;
+                        return 0;
+                        }
+                  else {
+                        InstrumentChange* ic = toInstrumentChange(e);
+                        ic->setParent(segment());
+                        ic->setTrack((track() / VOICES) * VOICES);
+                        Instrument* instr = ic->instrument();
+                        Instrument* prevInstr = part()->instrument(tick());
+                        if (instr && *instr != *prevInstr) {
+                              ic->setupInstrument(instr);
+                              /*Chord* nextChord = score()->nextChord(segment(), part());
+                              if (nextChord)
+                                    ic->setNextChord(nextChord);*/
+                              }
+                        score()->undoAddElement(ic);
+                        return e;
+                        }
             case ElementType::FIGURED_BASS:
                   {
                   bool bNew;
@@ -1341,7 +1356,7 @@ void ChordRest::undoAddAnnotation(Element* a, bool useTopStaff/* = false*/)
                         break;
                         }
                   }
-            Q_ASSERT(topStaff->show());
+            Q_ASSERT(topStaff && topStaff->show());
             a->setTrack(topStaff->idx() * VOICES);
             }
       else

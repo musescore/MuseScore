@@ -33,8 +33,8 @@ static const ElementStyle InstrumentChangeWarningStyle {
 //   InstrumentChangeWarning
 //---------------------------------------------------------
 
-InstrumentChangeWarning::InstrumentChangeWarning(InstrumentChange* ic, Score* s, Tid tid)
-   : StaffTextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF), _ic(ic)
+InstrumentChangeWarning::InstrumentChangeWarning(Score* s, Tid tid)
+   : StaffTextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initElementStyle(&InstrumentChangeWarningStyle);
       }

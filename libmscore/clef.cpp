@@ -286,6 +286,8 @@ void Clef::read(XmlReader& e)
                   _clefTypes._transposingClef = Clef::clefType(e.readElementText());
             else if (tag == "showCourtesyClef")
                   _showCourtesy = e.readInt();
+            else if (tag == "forInstrumentChange")
+                  _forInstrumentChange = e.readBool();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -304,6 +306,8 @@ void Clef::write(XmlWriter& xml) const
       writeProperty(xml, Pid::CLEF_TYPE_TRANSPOSING);
       if (!_showCourtesy)
             xml.tag("showCourtesyClef", _showCourtesy);
+      if (_forInstrumentChange)
+            xml.tag("forInstrumentChange", _forInstrumentChange);
       Element::writeProperties(xml);
       xml.etag();
       }

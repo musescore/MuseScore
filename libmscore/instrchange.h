@@ -20,7 +20,6 @@
 
 namespace Ms {
 
-class InstrumentChange;
 //---------------------------------------------------------
 //   @@ InstrumentChangeWarning
 //---------------------------------------------------------
@@ -28,15 +27,12 @@ class InstrumentChange;
 class InstrumentChangeWarning final : public StaffTextBase {
       virtual Sid getPropertyStyle(Pid) const override;
       virtual QVariant propertyDefault(Pid id) const override;
-      InstrumentChange* _ic;
 
    public:
-      InstrumentChangeWarning(InstrumentChange* ic, Score* s = 0, Tid = Tid::INSTRUMENT_CHANGE);
+      InstrumentChangeWarning(Score* s = 0, Tid = Tid::INSTRUMENT_CHANGE);
       virtual InstrumentChangeWarning* clone() const override { return new InstrumentChangeWarning(*this); }
       virtual ElementType type() const override { return ElementType::INSTRUMENT_CHANGE_WARNING; }
       virtual void layout() override;
-      InstrumentChange* instrumentChange() const { return _ic; }
-      void setInstrumentChange(InstrumentChange* ic) { _ic = ic; }
       };
 
 //---------------------------------------------------------
@@ -45,9 +41,8 @@ class InstrumentChangeWarning final : public StaffTextBase {
 
 class InstrumentChange final : public TextBase {
       Instrument* _instrument;  // Staff holds ownership if part of score
-      std::vector<KeySig*> _keySigs;
-      std::vector<Clef*> _clefs;
-      InstrumentChangeWarning* _warning = nullptr;
+      bool _init = false;
+      Q_DECLARE_TR_FUNCTIONS(setupInstrument)
 
    public:
       InstrumentChange(Score*);
@@ -65,18 +60,16 @@ class InstrumentChange final : public TextBase {
       void setInstrument(Instrument* i)     { _instrument = i;     }
       void setInstrument(Instrument&& i)    { *_instrument = i;    }
       void setInstrument(const Instrument& i);
+      void setupInstrument(const Instrument* instrument);
 
+      std::vector<KeySig*> keySigs() const;
+      std::vector<Clef*> clefs() const;
+
+      InstrumentChangeWarning* warning() const;
       void setNextChord(ChordRest* chord);
-      void removeWarning();
 
-      std::vector<KeySig*> keySigs() const  { return _keySigs;     }
-      void addKeySig(KeySig* keySig)        { _keySigs.push_back(keySig); }
-
-      std::vector<Clef*> clefs()            { return _clefs;       }
-      void addClef(Clef* clef)              { _clefs.push_back(clef); }
-
-      InstrumentChangeWarning* warning() const { return _warning; }
-      void setWarning(InstrumentChangeWarning* warning) { _warning = warning; }
+      bool init() const                     { return _init; }
+      void setInit(bool init)               { _init = init; }
 
       Segment* segment() const              { return toSegment(parent()); }
 

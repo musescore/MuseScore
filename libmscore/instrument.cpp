@@ -1188,6 +1188,42 @@ bool Instrument::operator==(const Instrument& i) const
       }
 
 //---------------------------------------------------------
+//   operator!=
+//---------------------------------------------------------
+
+bool Instrument::operator!=(const Instrument& i) const
+      {
+      int n = _longNames.size();
+      if (i._longNames.size() != n)
+            return true;
+      for (int k = 0; k < n; ++k) {
+            if (!(i._longNames[k] == _longNames[k]))
+                  return true;
+            }
+      n = _shortNames.size();
+      if (i._shortNames.size() != n)
+            return true;
+      for (int k = 0; k < n; ++k) {
+            if (!(i._shortNames[k] == _shortNames[k].name()))
+                  return true;
+            }
+
+      return i._minPitchA != _minPitchA
+            || i._maxPitchA != _maxPitchA
+            || i._minPitchP != _minPitchP
+            || i._maxPitchP != _maxPitchP
+            || i._useDrumset != _useDrumset
+            || i._midiActions != _midiActions
+            || i._articulation != _articulation
+            || i._transpose.diatonic != _transpose.diatonic
+            || i._transpose.chromatic != _transpose.chromatic
+            || i._trackName != _trackName
+            || !(*i.stringData() == *stringData())
+            || i._singleNoteDynamics != _singleNoteDynamics;
+      //return !operator==(i);
+      }
+
+//---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
 
