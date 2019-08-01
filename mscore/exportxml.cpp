@@ -5811,18 +5811,29 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   _xml.stag(QString("harmony print-frame=\"yes\""));     // .append(relative));
             else
                   _xml.stag(QString("harmony print-frame=\"no\""));      // .append(relative));
-            if (h->harmonyType() == HarmonyType::STANDARD) {
-                  _xml.stag("root");
-                  _xml.tag("root-step text=\"\"", "C");
-                  _xml.etag();       // root
-                  QString k = "kind text=\"" + h->hTextName() + "\"";
-                  _xml.tag(k, "none");
-                  }
-            else {
-                  // TODO: parse?
-                  _xml.tag("function", h->hTextName());
-                  QString k = "kind text=\"" + h->hTextName() + "\"";
-                  _xml.tag(k, "none");
+            switch (h->harmonyType()) {
+                  case HarmonyType::NASHVILLE: {
+                        _xml.tag("function", h->hFunction());
+                        QString k = "kind text=\"" + h->hTextName() + "\"";
+                        _xml.tag(k, "none");
+                        }
+                        break;
+                  case HarmonyType::ROMAN: {
+                        // TODO: parse?
+                        _xml.tag("function", h->hTextName());
+                        QString k = "kind text=\"\"";
+                        _xml.tag(k, "none");
+                        }
+                        break;
+                  case HarmonyType::STANDARD:
+                  default: {
+                        _xml.stag("root");
+                        _xml.tag("root-step text=\"\"", "C");
+                        _xml.etag();       // root
+                        QString k = "kind text=\"" + h->hTextName() + "\"";
+                        _xml.tag(k, "none");
+                        }
+                        break;
                   }
             _xml.etag();       // harmony
 #if 0

@@ -4881,7 +4881,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       QString printFrame = _e.attributes().value("print-frame").toString();
       QString printStyle = _e.attributes().value("print-style").toString();
 
-      QString kind, kindText, symbols, parens;
+      QString kind, kindText, functionText, symbols, parens;
       QList<HDegree> degreeList;
 
       /* TODO ?
@@ -4930,9 +4930,9 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                   // attributes: print-style
                   ha->setRootTpc(Tpc::TPC_INVALID);
                   ha->setBaseTpc(Tpc::TPC_INVALID);
+                  functionText = _e.readElementText();
+                  // TODO: parse to decide between ROMAN and NASHVILLE
                   ha->setHarmonyType(HarmonyType::ROMAN);
-                  QString text = _e.readElementText();
-                  ha->setHarmony(text);
                   }
             else if (_e.name() == "kind") {
                   // attributes: use-symbols  yes-no
@@ -5032,7 +5032,8 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
             }
       else {
             ha->setId(-1);
-            ha->setTextName(kindText);
+            QString textName = functionText + kindText;
+            ha->setTextName(textName);
             }
       ha->render();
 
