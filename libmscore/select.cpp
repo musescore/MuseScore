@@ -339,6 +339,7 @@ void Selection::add(Element* el)
 
 //---------------------------------------------------------
 //   canSelect
+//   see also `static const char* labels[]` in selectionwindow.cpp
 //---------------------------------------------------------
 
 bool SelectionFilter::canSelect(const Element* e) const
@@ -373,7 +374,7 @@ bool SelectionFilter::canSelect(const Element* e) const
           return isFiltered(SelectionFilterType::OTHER_TEXT);
       if (e->isSLine()) // NoteLine, Volta
           return isFiltered(SelectionFilterType::OTHER_LINE);
-      if (e->isTremolo() && !toTremolo(e)->twoNotes())
+      if (e->isTremolo())
           return isFiltered(SelectionFilterType::TREMOLO);
       if (e->isChord() && toChord(e)->isGrace())
           return isFiltered(SelectionFilterType::GRACE_NOTE);

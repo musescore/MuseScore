@@ -513,7 +513,7 @@ Palette* MuseScore::newFingeringPalette()
 Palette* MuseScore::newTremoloPalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Tremolo"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Tremolos"));
       sp->setGrid(27, 40);
       sp->setDrawGrid(true);
 
