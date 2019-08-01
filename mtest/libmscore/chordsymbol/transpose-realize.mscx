@@ -86,8 +86,6 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <controller ctrl="0" value="0"/>
-          <controller ctrl="32" value="0"/>
           <program value="0"/>
           </Channel>
         </Instrument>
