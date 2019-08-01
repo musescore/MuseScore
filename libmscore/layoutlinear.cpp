@@ -164,7 +164,7 @@ void Score::resetSystems(bool layoutAll, LayoutContext& lc)
                         m->removeSystemTrailer();
                   if (m->tick() >= lc.startTick && m->tick() <= lc.endTick) {
                         // for measures in range, do full layout
-                        m->createEndBarLines(true);
+                        m->createEndBarLines(false);
                         m->computeMinWidth();
                         ww = m->width();
                         m->stretchMeasure(ww);
