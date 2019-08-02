@@ -158,8 +158,9 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   Segment* parent = _score->tick2segment(Fraction::fromTicks(tick));
 
                   // Find maximum width for the staff name
+                  qreal _nameWidth = 0;
                   QList<StaffName>& staffNamesLong = currentStaff->part()->instrument(Fraction::fromTicks(tick))->longNames();
-                  QString staffName = staffNamesLong.isEmpty() ? " " : staffNamesLong[0].name();
+                  QString staffName = staffNamesLong.isEmpty() ? "" : staffNamesLong[0].name();
                   if (staffName == "") {
                         QList<StaffName>& staffNamesShort = currentStaff->part()->instrument(Fraction::fromTicks(tick))->shortNames();
                         staffName = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name();
@@ -173,6 +174,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   newName->layout();
                   newName->setPlainText(newName->plainText());
                   newName->layout();
+                  _nameWidth = newName->width() + _score->styleP(Sid::clefLeftMargin) + _widthClef;
 
                   // Find maximum width for the current Clef
                   Clef* newClef = new Clef(_score);
