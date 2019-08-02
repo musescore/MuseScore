@@ -82,17 +82,16 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       //
       // Set panel height for whole system
       //
-      _height = 6 * _spatium;
-      _y = system->staffYpage(0) + system->page()->pos().y();
-      double y2 = 0.0;
-      for (int i = 0; i < _score->nstaves(); ++i) {
+      qreal _padding = 8 * _spatium;
+      _y = system->staffYpage(0) + system->page()->pos().y() - _padding;
+      double _staff_height = 0.0;                          
+      for (int i = 0; i < _score->nstaves(); ++i) {             // Gets height of staff
             SysStaff* ss = system->staff(i);
             if (!ss->show() || !_score->staff(i)->show())
                   continue;
-            y2 = ss->y() + ss->bbox().height();
+            _staff_height = ss->y() + ss->bbox().height();
             }
-      _height += y2 + 6*_spatium;
-      _y -= 6 * _spatium;
+      _height = _staff_height + 2 * _padding;
 
       //
       // Check elements at current panel position
