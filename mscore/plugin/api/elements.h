@@ -74,6 +74,11 @@ class Element : public Ms::PluginAPI::ScoreElement {
       Q_OBJECT
 
       /**
+       * Parent element for this element.
+       * \since 3.3
+       */
+      Q_PROPERTY(Ms::PluginAPI::Element* parent READ parent)
+      /**
        * X-axis offset from a reference position in spatium units.
        * \see Element::offset
        */
@@ -84,10 +89,29 @@ class Element : public Ms::PluginAPI::ScoreElement {
        */
       Q_PROPERTY(qreal offsetY READ offsetY WRITE setOffsetY)
       /**
-       * Parent element for this element.
-       * \since 3.3
+       * Reference position of this element relative to its parent element.
+       *
+       * This is an offset from the parent object that is determined by the 
+       * autoplace feature. It includes any other offsets applied to the 
+       * element. You can use this value to accurately position other elements 
+       * related to the same parent.
+       *
+       * This value is in spatium units for compatiblity with Element.offsetX.
+       * \since MuseScore 3.3
        */
-      Q_PROPERTY(Ms::PluginAPI::Element* parent READ parent)
+      Q_PROPERTY(qreal posX READ posX)
+      /**
+       * Reference position of this element relative to its parent element.
+       *
+       * This is an offset from the parent object that is determined by the 
+       * autoplace feature. It includes any other offsets applied to the 
+       * element. You can use this value to accurately position other elements 
+       * related to the same parent.
+       *
+       * This value is in spatium units for compatiblity with Element.offsetY.
+       * \since MuseScore 3.3
+       */
+      Q_PROPERTY(qreal posY READ posY)
 
       API_PROPERTY( subtype,                 SUBTYPE                   )
       API_PROPERTY_READ_ONLY_T( bool, selected, SELECTED               )
@@ -325,6 +349,9 @@ class Element : public Ms::PluginAPI::ScoreElement {
       qreal offsetY() const { return element()->offset().y() / element()->spatium(); }
       void setOffsetX(qreal offX);
       void setOffsetY(qreal offY);
+
+      qreal posX() const { return element()->pos().x() / element()->spatium(); }
+      qreal posY() const { return element()->pos().y() / element()->spatium(); }
 
       Ms::PluginAPI::Element* parent() const { return wrap(element()->parent()); }
 
