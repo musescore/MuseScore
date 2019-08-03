@@ -4223,6 +4223,9 @@ void ScoreView::cmdRepeatSelection()
             return;
             }
 
+      if (!checkCopyOrCut())
+            return;
+
       QString mimeType = selection.mimeType();
       if (mimeType.isEmpty()) {
             qDebug("mime type is empty");
