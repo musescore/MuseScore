@@ -584,6 +584,7 @@ void Segment::add(Element* el)
 //                  ChordRest* cr = toChordRest(el);
 //                  if (cr->tuplet() && !cr->tuplet()->elements().empty() && cr->tuplet()->elements().front() == cr && cr->tuplet()->tick() < 0)
 //                        cr->tuplet()->setTick(cr->tick());
+                  score()->setPlaylistDirty();
                   }
                   // fall through
 
@@ -639,6 +640,7 @@ void Segment::remove(Element* el)
                         if (start != s->startElement() || end != s->endElement())
                               score()->undo(new ChangeStartEndSpanner(s, start, end));
                         }
+                  score()->setPlaylistDirty();
                   }
                   break;
 
