@@ -97,8 +97,6 @@ enum class HairpinType : signed char;
 enum class SegmentType;
 enum class OttavaType : char;
 
-extern bool showRubberBand;
-
 enum class POS : char { CURRENT, LEFT, RIGHT };
 
 enum class Pad : char {
@@ -481,11 +479,7 @@ class Score : public QObject, public ScoreElement {
       void cmdAddParentheses();
       void resetUserStretch();
 
-      bool layoutSystem(qreal& minWidth, qreal w, bool, bool);
       void createMMRest(Measure*, Measure*, const Fraction&);
-      bool layoutSystem1(qreal& minWidth, bool, bool);
-      QList<System*> layoutSystemRow(qreal w, bool, bool);
-      bool doReLayout();
 
       void beamGraceNotes(Chord*, bool);
 
@@ -762,7 +756,6 @@ class Score : public QObject, public ScoreElement {
       bool saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
       bool saveCompressedFile(QFileInfo&, bool onlySelection);
       bool saveCompressedFile(QFileDevice*, QFileInfo&, bool onlySelection, bool createThumbnail = true);
-      bool exportFile();
 
       void print(QPainter* printer, int page);
       ChordRest* getSelectedChordRest() const;
@@ -978,7 +971,6 @@ class Score : public QObject, public ScoreElement {
 
       void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       void scanElementsInRange(void* data, void (*func)(void*, Element*), bool all = true);
-      QByteArray buildCanonical(int track);
       int fileDivision() const { return _fileDivision; } ///< division of current loading *.msc file
       void splitStaff(int staffIdx, int splitPoint);
       QString tmpName() const           { return _tmpName;      }
@@ -999,9 +991,6 @@ class Score : public QObject, public ScoreElement {
       void doLayout();
       void doLayoutRange(const Fraction&, const Fraction&);
       void layoutLinear(bool layoutAll, LayoutContext& lc);
-
-      void layoutSystemsUndoRedo();
-      void layoutPagesUndoRedo();
 
       void layoutChords1(Segment* segment, int staffIdx);
       qreal layoutChords2(std::vector<Note*>& notes, bool up);
@@ -1393,7 +1382,6 @@ inline Movements* Score::movements()                   { return _masterScore->mo
 inline const Movements* Score::movements() const       { return _masterScore->movements();       }
 
 extern MasterScore* gscore;
-extern void fixTicks();
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 
