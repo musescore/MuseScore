@@ -28,6 +28,7 @@
 namespace Ms {
 
 class Score;
+class EditStyle;
 
 //---------------------------------------------------------
 //   StyleWidget
@@ -39,6 +40,14 @@ struct StyleWidget {
       QObject* widget;
       QToolButton* reset;
       };
+
+//---------------------------------------------------------
+//   EditStylePage
+///   This is a type for a pointer to any QWidget that is a member of EditStyle.
+///   It's used to create static references to the pointers to pages.
+//---------------------------------------------------------
+
+typedef QWidget* EditStyle::* EditStylePage;
 
 //---------------------------------------------------------
 //   EditStyle
@@ -64,6 +73,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void applyToAllParts();
       const StyleWidget& styleWidget(Sid) const;
 
+      static const std::map<ElementType, EditStylePage> PAGES;
+
    private slots:
       void selectChordDescriptionFile();
       void setChordStyle(bool);
@@ -87,10 +98,12 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void endEditUserStyleName();
       void resetUserStyleName();
 
-public:
-      static const int PAGE_NOTE = 10;
+   public:
       EditStyle(Score*, QWidget*);
       void setPage(int no);
+
+      void gotoElement(Element* e);
+      static bool elementHasPage(Element* e);
       };
 
 
