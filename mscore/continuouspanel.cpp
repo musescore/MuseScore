@@ -28,6 +28,7 @@
 #include "preferences.h"
 #include "scoreview.h"
 #include "continuouspanel.h"
+#include <QDebug>
 
 namespace Ms {
 
@@ -157,6 +158,16 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   Staff* currentStaff = _score->staff(e->staffIdx());
                   Segment* parent = _score->tick2segment(Fraction::fromTicks(tick));
 
+                  // Find maximum width for the current Clef
+                  Clef* newClef = new Clef(_score);
+                  ClefType currentClef = currentStaff->clef(Fraction::fromTicks(tick));
+                  newClef->setClefType(currentClef);
+                  newClef->setParent(parent);
+                  newClef->setTrack(e->track());
+                  newClef->layout();
+                  if (newClef->width() > _widthClef)
+                        _widthClef = newClef->width();
+
                   // Find maximum width for the staff name
                   qreal _nameWidth = 0;
                   QList<StaffName>& staffNamesLong = currentStaff->part()->instrument(Fraction::fromTicks(tick))->longNames();
@@ -175,16 +186,6 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   newName->setPlainText(newName->plainText());
                   newName->layout();
                   _nameWidth = newName->width() + _score->styleP(Sid::clefLeftMargin) + _widthClef;
-
-                  // Find maximum width for the current Clef
-                  Clef* newClef = new Clef(_score);
-                  ClefType currentClef = currentStaff->clef(Fraction::fromTicks(tick));
-                  newClef->setClefType(currentClef);
-                  newClef->setParent(parent);
-                  newClef->setTrack(e->track());
-                  newClef->layout();
-                  if (newClef->width() > _widthClef)
-                        _widthClef = newClef->width();
 
                   // Find maximum width for the current KeySignature
                   KeySig* newKs = new KeySig(_score);
@@ -276,19 +277,19 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       painter.setBrush(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
       QRectF bg(_rect);
 
-      bg.setWidth(_widthClef + _widthKeySig + _widthTimeSig + _leftMarginTotal + _panelRightPadding);
+      painter.setClipRect(_rect);
+      painter.setClipping(true);
+
       QPixmap* fgPixmap = _sv->fgPixmap();
-      if (fgPixmap == 0 || fgPixmap->isNull())
+      if (fgPixmap == 0 || fgPixmap->isNull()) {
             painter.fillRect(bg, preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
+            }
       else {
-            painter.setMatrixEnabled(false);
+            painter.setMatrixEnabled(false);            // Paints background when custom backing is used
             painter.drawTiledPixmap(bg, *fgPixmap, bg.topLeft()
                - QPoint(lrint(_sv->matrix().dx()), lrint(_sv->matrix().dy())));
             painter.setMatrixEnabled(true);
             }
-
-      painter.setClipRect(_rect);
-      painter.setClipping(true);
 
       QColor color(MScore::layoutBreakColor);
 
