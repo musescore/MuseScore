@@ -295,6 +295,7 @@ class ExportMusicXml {
       void timesig(TimeSig* tsig);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
+      void barlineMiddle(const BarLine* bl);
       void barlineRight(Measure* m);
       void lyrics(const std::vector<Lyrics*>* ll, const int trk);
       void work(const MeasureBase* measure);
@@ -1466,6 +1467,79 @@ void ExportMusicXml::barlineLeft(Measure* m)
       if (rs)
             _xml.tagE("repeat direction=\"forward\"");
       _xml.etag();
+      }
+
+//---------------------------------------------------------
+//   shortBarlineStyle -- recognize normal but shorter barline styles
+//---------------------------------------------------------
+
+static QString shortBarlineStyle(const BarLine* bl)
+      {
+      if (bl->barLineType() == BarLineType::NORMAL && !bl->spanStaff()) {
+            if (bl->spanTo() < 0) {
+                  // lowest point of barline above lowest staff line
+                  if (bl->spanFrom() < 0) {
+                        return "tick";       // highest point of barline above highest staff line
+                        }
+                  else
+                        return "short";       // highest point of barline below highest staff line
+                  }
+            }
+
+      return "";
+      }
+
+//---------------------------------------------------------
+//   normalBarlineStyle -- recognize other barline styles
+//---------------------------------------------------------
+
+static QString normalBarlineStyle(const BarLine* bl)
+      {
+      const auto bst = bl->barLineType();
+
+      switch (bst) {
+            case BarLineType::NORMAL:
+                  return "regular";
+            case BarLineType::DOUBLE:
+                  return "light-light";
+            case BarLineType::END_REPEAT:
+                  return "light-heavy";
+            case BarLineType::BROKEN:
+                  return "dashed";
+            case BarLineType::DOTTED:
+                  return "dotted";
+            case BarLineType::END:
+            case BarLineType::END_START_REPEAT:
+                  return "light-heavy";
+            default:
+                  qDebug("bar subtype %d not supported", int(bst));
+            }
+
+      return "";
+      }
+
+//---------------------------------------------------------
+//   barlineMiddle -- handle barline middle
+//---------------------------------------------------------
+
+void ExportMusicXml::barlineMiddle(const BarLine* bl)
+      {
+      auto vis = bl->visible();
+      auto shortStyle = shortBarlineStyle(bl);
+      auto normalStyle = normalBarlineStyle(bl);
+      QString barStyle;
+      if (!vis)
+            barStyle = "none";
+      else if (shortStyle != "")
+            barStyle = shortStyle;
+      else
+            barStyle = normalStyle;
+
+      if (barStyle != "") {
+            _xml.stag(QString("barline location=\"middle\""));
+            _xml.tag("bar-style", barStyle);
+            _xml.etag();
+            }
       }
 
 //---------------------------------------------------------
@@ -5115,6 +5189,15 @@ static void partList(XmlWriter& xml, Score* score, const QList<Part*>& il, MxmlI
       }
 
 //---------------------------------------------------------
+//  tickIsInMiddleOfMeasure
+//---------------------------------------------------------
+
+static bool tickIsInMiddleOfMeasure(const Fraction ti, const Measure* m)
+      {
+      return ti != m->tick() && ti != m->endTick();
+      }
+
+//---------------------------------------------------------
 //  writeElement
 //---------------------------------------------------------
 
@@ -5137,7 +5220,7 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
             if (el->generated()) {
                   clefDebug("exportxml: generated clef not exported");
                   }
-            else if (!el->generated() && ti != m->tick() && ti != m->endTick())
+            else if (!el->generated() && tickIsInMiddleOfMeasure(ti, m))
                   clef(sstaff, cle->clefType(), color2xml(cle));
             else
                   clefDebug("exportxml: clef not exported");
@@ -5161,7 +5244,12 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
             if (!(r->isGap()))
                   rest(r, sstaff);
             }
-      else if (el->isKeySig() || el->isTimeSig() || el->isBarLine() || el->isBreath()) {
+      else if (el->isBarLine()) {
+            const auto barln = toBarLine(el);
+            if (tickIsInMiddleOfMeasure(barln->tick(), m))
+                  barlineMiddle(barln);
+            }
+      else if (el->isKeySig() || el->isTimeSig() || el->isBreath()) {
             // handled elsewhere
             }
       else
