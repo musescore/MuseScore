@@ -60,6 +60,7 @@ private slots:
       void arpGliss3() { mxmlIoTest("testArpGliss3"); }
       void barStyles() { mxmlIoTest("testBarStyles"); }
       void barStyles2() { mxmlIoTest("testBarStyles2"); }
+      void barStyles3() { mxmlIoTest("testBarStyles3"); }
       void chordDiagrams1() { mxmlIoTest("testChordDiagrams1"); }
       void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
       void clefs1() { mxmlIoTest("testClefs1"); }
