@@ -78,8 +78,8 @@ class RealizedHarmony {
 
       bool valid() const { return !_dirty && _harmony; }
 
-      const QList<int> pitches() const { return _notes.keys(); }
-      const QList<int> tpcs() const { return _notes.values(); }
+      const QList<int> pitches() const { return notes().keys(); }
+      const QList<int> tpcs() const { return notes().values(); }
 
       const QMap<int, int>& notes() const;
       const QMap<int, int> generateNotes(int rootTpc, int bassTpc, bool literal,
