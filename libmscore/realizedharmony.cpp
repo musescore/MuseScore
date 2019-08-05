@@ -272,6 +272,7 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
       //handle modifiers
       for (QString s : modList) {
             //find number, split up mods
+            bool modded = false;
             for (int c = 0; c < s.length(); ++c) {
                   if (s[c].isDigit()) {
                         Q_ASSERT(c > 0); //we shouldn't have just a number
@@ -297,18 +298,50 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
                               if (deg == 5)
                                     alt5 = true;
                               omit |= 1 << deg;
+                              modded = true;
                               }
                         else if (extType == "sus") {
                               ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_3RD, tpcInterval(rootTpc, deg, alter));
                               omit |= 1 << 3;
+                              modded = true;
                               }
-                        else if (extType == "no" || ext == 5)
+                        else if (extType == "no") {
                               omit |= 1 << deg;
-                        else if (ext == 5) //power chord so omit the 3rd
-                              omit |= 1 << 3;
+                              modded = true;
+                              }
                         }
                   }
+
+            //check for special chords, not modded but no number means we haven't found
+            if (!modded) {
+                  if (s == "phryg") {
+                        ret.insert(step2pitchInterval(9, -1) + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, 9, -1));
+                        omit |= 1 << 9;
+                        }
+                  else if (s == "lyd") {
+                        ret.insert(step2pitchInterval(11, +1) + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 11, +1));
+                        omit |= 1 << 11;
+                        }
+                  else if (s == "blues") {
+                        ret.insert(step2pitchInterval(9, +1) + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 9, +1));
+                        omit |= 1 << 9;
+                        }
+                  else if (s == "alt") {
+                        ret.insert(step2pitchInterval(5, -1) + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 5, -1));
+                        ret.insert(step2pitchInterval(5, +1) + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, 5, +1));
+                        omit |= 1 << 5;
+                        ret.insert(step2pitchInterval(9, -1) + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, 9, -1));
+                        ret.insert(step2pitchInterval(9, +1) + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, 9, +1));
+                        omit |= 1 << 9;
+                        }
+                  else  //no easy way to realize tristan chords since they are more analytical tools
+                        omit = ~0;
+                  }
             }
+
+      //handle ext = 5: power chord so omit the 3rd
+      if (ext == 5)
+            omit |= 1 << 3;
 
       //handle chord quality
       if (quality == "minor") {
@@ -404,7 +437,6 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
             //pitch from current to next harmony normalized to a range between 0 and 12
             //add PITCH_DELTA_OCTAVE before modulo so that we can ensure arithmetic mod rather than computer mod
             int keyTpc = int(next->staff()->key(next->tick())) + 14; //tpc of key (ex. F# major would be Tpc::F_S)
-            int keyTpcMinor = keyTpc + 3; //tpc of relative minor of the key signature (ex. F minor would be Tpc::Ab + 3 = Tpc::F)a
             int pitchBetween = (tpc2pitch(next->rootTpc()) + PITCH_DELTA_OCTAVE - tpc2pitch(rootTpc)) % PITCH_DELTA_OCTAVE;
 
             //dont add 9 for chords with altered 5s
