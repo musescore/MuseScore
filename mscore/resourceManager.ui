@@ -336,6 +336,81 @@
            <string>Installed Plugins</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_2">
+           <item row="4" column="9">
+            <widget class="QLabel" name="label_shortcut">
+             <property name="text">
+              <string>Shortcut:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="10">
+            <widget class="QLineEdit" name="pluginShortcut">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="2" colspan="9">
+            <widget class="QWebEngineView" name="pluginDescription">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="label_compat">
+             <property name="text">
+              <string>Name:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLabel" name="label_path">
+             <property name="text">
+              <string>Path:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QLabel" name="label_version">
+             <property name="text">
+              <string>Version:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="6" colspan="5">
+            <widget class="QLineEdit" name="pluginPath">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="6">
+            <widget class="QLineEdit" name="pluginVersion">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="6" colspan="5">
+            <widget class="QLineEdit" name="pluginName">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
            <item row="8" column="2" colspan="9">
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
@@ -361,72 +436,7 @@
              </item>
             </layout>
            </item>
-           <item row="7" column="2" colspan="9">
-            <widget class="QWebEngineView" name="pluginDescription">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="9">
-            <widget class="QLabel" name="label_shortcut">
-             <property name="text">
-              <string>Shortcut:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="10">
-            <widget class="QLineEdit" name="pluginShortcut">
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QLabel" name="label_compat">
-             <property name="text">
-              <string>Name:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QLabel" name="label_path">
-             <property name="text">
-              <string>Path:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QLabel" name="label_version">
-             <property name="text">
-              <string>Version:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="6">
-            <widget class="QLineEdit" name="pluginVersion">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="6" colspan="5">
-            <widget class="QLineEdit" name="pluginPath">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0" rowspan="9" colspan="2">
+           <item row="1" column="0" rowspan="8" colspan="2">
             <widget class="QTreeWidget" name="pluginTreeWidget">
              <property name="headerHidden">
               <bool>true</bool>
@@ -438,13 +448,10 @@
              </column>
             </widget>
            </item>
-           <item row="2" column="6" colspan="5">
-            <widget class="QLineEdit" name="pluginName">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
+           <item row="9" column="10">
+            <widget class="QDialogButtonBox" name="buttonBox">
+             <property name="standardButtons">
+              <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
              </property>
             </widget>
            </item>
@@ -467,5 +474,38 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Resource</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>610</x>
+     <y>532</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>370</x>
+     <y>288</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Resource</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>610</x>
+     <y>532</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>370</x>
+     <y>288</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

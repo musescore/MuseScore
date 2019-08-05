@@ -43,6 +43,7 @@ public:
 
 public slots:
     virtual void done(int) override;
+    virtual void accept();
 
 private:
     QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
