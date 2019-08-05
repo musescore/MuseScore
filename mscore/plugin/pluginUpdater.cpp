@@ -391,6 +391,8 @@ void ResourceManager::updatePlugin()
       const PluginPackageDescription& desc = mscore->getPluginManager()->getPackageDescription(button->property("page_url").toString());
       button->setEnabled(false);
       button->setText(tr("Pending…"));
+      QPushButton* uninstall = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(button->property("row").toInt(), 3)));
+      uninstall->setEnabled(false);
       PluginWorker* worker = new PluginWorker(desc, this);
       QtConcurrent::run(&workerThreads, worker, &PluginWorker::updateInstall, button);
       }
