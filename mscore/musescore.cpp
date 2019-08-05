@@ -4667,6 +4667,18 @@ void MuseScore::play(Element* e) const
                   }
             seq->startNoteTimer(MScore::defaultPlayDuration);
             }
+      else if (e->isHarmony()) {
+            //TODO - PHV: control preferences for playing harmony
+            seq->stopNotes();
+            Harmony* h = toHarmony(e);
+            RealizedHarmony r = h->getRealizedHarmony();
+            QList<int> pitches = r.pitches();
+
+            int channel = e->part()->harmonyChannel()->channel();
+            for (int pitch : pitches)
+                  seq->startNote(channel, pitch, 80, 0);
+            seq->startNoteTimer(MScore::defaultPlayDuration);
+            }
       }
 
 void MuseScore::play(Element* e, int pitch) const

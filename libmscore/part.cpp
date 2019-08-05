@@ -539,12 +539,24 @@ int Part::harmonyCount() const
       return count;
       }
 
+//---------------------------------------------------------
+//   updateHarmonyChannels
+///   update the harmony channel by creating a new channel
+///   or using the existing one
+//---------------------------------------------------------
 void Part::updateHarmonyChannels()
       {
       // add harmony channel if this is the first harmony
       // FIXME - PHV: this is pretty inefficient because of the use of harmonyCount()
-      if (harmonyCount() > 0 && instrument()->channelIdx("harmony") == -1) {
+      if (!_harmonyChannel && harmonyCount() > 0) {
             Instrument* instr = instrument();
+            int hChannel = instr->channelIdx("harmony");
+            if (hChannel != -1) {
+                  //we already have a channel, but it's just not properly set yet
+                  //so we just need to set it
+                  _harmonyChannel = instr->channel(hChannel);
+                  return;
+                  }
             Channel* c = new Channel(*instr->channel(0));
             c->setName("harmony");
             instr->appendChannel(c);
