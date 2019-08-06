@@ -838,6 +838,10 @@ void Harmony::endEdit(EditData& ed)
             s.replace("\ue262",  "\u266f");     // sharp
             }
 
+      //play chord on edit and set dirty
+      score()->setPlayChord(true);
+      _realizedHarmony.setDirty(true);
+
       // render and layout chord symbol
       // (needs to be done here if text hasn't changed, or redone if replacemens were performed above)
       score()->startCmd();

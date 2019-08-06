@@ -4656,6 +4656,8 @@ void MuseScore::play(Element* e) const
             //TODO - PHV: control preferences for playing harmony
             seq->stopNotes();
             Harmony* h = toHarmony(e);
+            if (h->empty())
+                  return;
             RealizedHarmony r = h->getRealizedHarmony();
             QList<int> pitches = r.pitches();
 

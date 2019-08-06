@@ -713,6 +713,10 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                   harmonyBeatsTab(true, editData.modifiers & Qt::ShiftModifier);
                   return;
                   }
+            else if (editData.key == Qt::Key_Return) {
+                  changeState(ViewState::NORMAL);
+                  return;
+                  }
             }
       else if (editData.element->isFiguredBass()) {
             if (editData.key == Qt::Key_Space && !(editData.modifiers & CONTROL_MODIFIER)) {
