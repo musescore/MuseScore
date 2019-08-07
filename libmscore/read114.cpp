@@ -3269,7 +3269,6 @@ Score::FileError MasterScore::read114(XmlReader& e)
       rebuildMidiMapping();
       updateChannel();
 
-      //TODO - PHV: is this a good place to do this?
       for (Part* p : parts()) {
             p->updateHarmonyChannels();
             }

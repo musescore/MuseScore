@@ -554,7 +554,6 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
             bool mute = event.isMuted();
             if (!mute) {
                   //maybe we have a harmony channel to account for
-                  //TODO - PHV: check to see if there are non note non harmony things
                   Score* score = cs->playbackScore();
                   Staff* staff = score->staff(event.getOriginatingStaff());
                   const Channel* a = staff->part()->harmonyChannel();

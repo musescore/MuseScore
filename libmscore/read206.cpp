@@ -3904,7 +3904,6 @@ static bool readScore(Score* score, XmlReader& e)
  //           ms->createPlayEvents();
             }
 
-      //TODO - PHV: is this a good place to do this?
       for (Part* p : score->parts()) {
             p->updateHarmonyChannels();
             }

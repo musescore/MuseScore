@@ -531,12 +531,10 @@ static int getControllerFromCC(int cc)
 static void renderHarmony(EventMap* events, Measure* m, Harmony* h)
       {
       Staff* staff = m->score()->staff(h->track() / VOICES);
-      Instrument* instr = staff->part()->instrument(); //TODO - PHV: watch out for instr changes
-      int channelIdx = instr->channelIdx("harmony");
-      Q_ASSERT(channelIdx != -1);
+      const Channel* channel = staff->part()->harmonyChannel();
+      Q_ASSERT(channel);
 
-      int channel = instr->channel(channelIdx)->channel(); //FIXME - PHV: this is temp
-      events->registerChannel(channel);
+      events->registerChannel(channel->channel());
       if (!staff->primaryStaff())
             return;
 
@@ -546,7 +544,7 @@ static void renderHarmony(EventMap* events, Measure* m, Harmony* h)
       RealizedHarmony r = h->getRealizedHarmony();
       QList<int> pitches = r.pitches();
 
-      NPlayEvent ev(ME_NOTEON, channel, 0, velocity);
+      NPlayEvent ev(ME_NOTEON, channel->channel(), 0, velocity);
       Fraction duration = h->ticksTilNext();
 
       int onTime = h->tick().ticks();
@@ -589,7 +587,7 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
                   Harmony* h = toHarmony(e);
                   if (!h->play())
                         continue;
-                  //TODO - PHV: account for note event maybe
+                  //TODO - PHV: account for note event maybe and triplets
                   renderHarmony(events, m, h);
                   }
 
@@ -669,7 +667,7 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                   Harmony* h = toHarmony(e);
                   if (!h->play())
                         continue;
-                  //TODO - PHV: account for note event maybe
+                  //TODO - PHV: account for note event maybe and triplets
                   renderHarmony(events, m, h);
                   }
 

@@ -546,8 +546,12 @@ int Part::harmonyCount() const
 //---------------------------------------------------------
 void Part::updateHarmonyChannels()
       {
+      //TODO - PHV: consider when harmony is deleted or undone (with parameter)
       // add harmony channel if this is the first harmony
-      // FIXME - PHV: this is pretty inefficient because of the use of harmonyCount()
+
+      // usage of harmony count is okay even if expensive since checking harmony channel will shortcircuit if existent
+      // harmonyCount will only be called on loading of a score (where it will need to be scanned for harmony anyway)
+      // or when the first harmony of a score is just added
       if (!_harmonyChannel && harmonyCount() > 0) {
             Instrument* instr = instrument();
             int hChannel = instr->channelIdx("harmony");

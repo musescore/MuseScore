@@ -4583,7 +4583,6 @@ void Score::undoAddElement(Element* element)
                         undo(new AddElement(ne));
                         if (element->isHarmony()) {
                               //update harmony channels
-                              //TODO - PHV: is this efficient?
                               element->part()->updateHarmonyChannels();
 
                               // transpose harmony if necessary
