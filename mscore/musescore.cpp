@@ -4667,8 +4667,7 @@ void MuseScore::play(Element* e) const
                   }
             seq->startNoteTimer(MScore::defaultPlayDuration);
             }
-      else if (e->isHarmony()) {
-            //TODO - PHV: control preferences for playing harmony
+      else if (e->isHarmony() && preferences.getBool(PREF_SCORE_HARMONY_PLAYWHENEDITING)) {
             seq->stopNotes();
             Harmony* h = toHarmony(e);
             if (h->empty())
