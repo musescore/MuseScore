@@ -1745,7 +1745,6 @@ bool ScoreView::normalPaste(Fraction scale)
 void ScoreView::cmdGotoElement(Element* e)
       {
       if (e) {
-            //TODO - PHV: temporary, check pref
             if (e->type() == ElementType::NOTE || e->type() == ElementType::HARMONY)
                   score()->setPlayNote(true);
             score()->select(e, SelectType::SINGLE, 0);
@@ -4068,9 +4067,6 @@ void ScoreView::cmdAddChordName(HarmonyType ht)
       harmony->setHarmonyType(ht);
       _score->undoAddElement(harmony);
       _score->endCmd();
-
-      //TODO - PHV: consider updating here rather than in undoAddElement()
-      //harmony->part()->updateHarmonyChannels();
 
       _score->select(harmony, SelectType::SINGLE, 0);
       startEditMode(harmony);

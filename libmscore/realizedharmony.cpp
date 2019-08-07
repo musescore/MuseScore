@@ -219,13 +219,14 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
 //---------------------------------------------------
 void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0*/)
       {
-      //TODO - PHV: consider the design of this
       //on transposition the dirty flag is set by the harmony, but it's a little
       //bit risky design since these 3 parameters rely on the dirty bit and are not
       //otherwise checked by RealizedHarmony. This saves us 3 ints of space, but
       //has the added risk
-      if (!_dirty)
+      if (!_dirty) {
+            Q_ASSERT(_notes.first() == rootTpc || _notes.first() == bassTpc);
             return;
+            }
 
       _notes = generateNotes(rootTpc, bassTpc, _literal, _voicing, transposeOffset);
       _dirty = false;
