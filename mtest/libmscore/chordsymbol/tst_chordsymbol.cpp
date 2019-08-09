@@ -56,6 +56,7 @@ class TestChordSymbol : public QObject, public MTest {
       void testRealize6Note();
       void testRealizeTransposed();
       void testRealizeOverride();
+      void testRealizeTriplet();
       };
 
 //---------------------------------------------------------
@@ -330,16 +331,27 @@ void TestChordSymbol::testRealizeOverride()
       MasterScore* score = test_pre("realize-override");
       //realize all chord symbols
       selectAllChordSymbols(score);
-      QList<Harmony*> hlist;
-      for (Element* e : score->selection().elements()) {
-            if (e->isHarmony())
-                  hlist << toHarmony(e);
-            }
       score->startCmd();
       score->cmdRealizeChordSymbols(true, Voicing::ROOT_ONLY);
       score->endCmd();
       test_post(score, "realize-override");
       }
+
+//---------------------------------------------------------
+//   testRealizeTriplet
+///   Check for correctness when realizing chord symbols on triplets
+//---------------------------------------------------------
+void TestChordSymbol::testRealizeTriplet()
+      {
+      MasterScore* score = test_pre("realize-triplet");
+      //realize all chord symbols
+      selectAllChordSymbols(score);
+      score->startCmd();
+      score->cmdRealizeChordSymbols();
+      score->endCmd();
+      test_post(score, "realize-triplet");
+      }
+
 
 QTEST_MAIN(TestChordSymbol)
 #include "tst_chordsymbol.moc"
