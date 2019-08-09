@@ -3168,8 +3168,34 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
             if (track % VOICES)
                   expandVoice(segment, track);
 
+            Tuplet* t = cr ? cr->tuplet() : 0;
+            Fraction tDur = segment->ticks();
+            if (t) {
+                  tDur *= t->ratio(); //scale by tuplet ratio to get "normal" length rather than actual
+                  //only realize the current chord rest for this iteration
+                  //nothing for now
+                  }
+            else {
+                  //try to find tuplet a which we will need to stop at
+                  Segment* seg = segment->next(); //use next() since we are only looking in measure
+                  while (seg) {
+                        if (seg->segmentType() != SegmentType::ChordRest) {
+                              seg = seg->next();
+                              continue;
+                              }
+                        ChordRest* testCr = toChordRest(seg->element(track));
+                        if (testCr && testCr->tuplet())
+                              break; //only make a gap until end of measure or tuplet start
+                        tDur += seg->ticks();
+                        seg = seg->next();
+                        }
+                  }
+
+            //TODO - PHV: properly determine full duration for when we want to realize chords between multiple triplet notes
+            //so that we don't have too mnay ties.
+
             // the returned gap ends at the measure boundary or at tuplet end
-            Fraction dd = makeGap(segment, track, dur, cr ? cr->tuplet() : 0);
+            Fraction dd = makeGap(segment, track, tDur, t);
 
             if (dd.isZero()) {
                   qDebug("cannot get gap at %d type: %d/%d", tick.ticks(), dur.numerator(),
@@ -3191,7 +3217,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
                   chord->setDurationType(d);
                   chord->setTicks(d.fraction());
                   chord->setStemDirection(stemDirection);
-                  chord->setTuplet(cr ? cr->tuplet() : 0);
+                  chord->setTuplet(t);
                   undoAddCR(chord, measure, tick);
                   //if there is something to tie, complete tie backwards
                   //and add the tie to score
@@ -3221,7 +3247,10 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
                   tick += chord->actualTicks();
                   }
 
-            dur -= dd;
+            if (t)
+                  dur -= dd / t->ratio();
+            else
+                  dur -= dd;
             if (dur.isZero())
                   break;
 
