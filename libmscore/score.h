@@ -1034,7 +1034,6 @@ class Score : public QObject, public ScoreElement {
       void setSynthesizerState(const SynthesizerState& s);
 
       void updateHairpin(Hairpin*);       // add/modify hairpin to pitchOffset list
-      void removeHairpin(Hairpin*);       // remove hairpin from pitchOffset list
 
       MasterScore* masterScore() const    { return _masterScore; }
       void setMasterScore(MasterScore* s) { _masterScore = s;    }
