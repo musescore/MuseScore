@@ -3186,6 +3186,10 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
                         ChordRest* testCr = toChordRest(seg->element(track));
                         if (testCr && testCr->tuplet())
                               break; //only make a gap until end of measure or tuplet start
+                        if (tDur >= dur) {
+                              tDur = dur;
+                              break;
+                              }
                         tDur += seg->ticks();
                         seg = seg->next();
                         }
