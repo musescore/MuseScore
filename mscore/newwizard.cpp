@@ -26,6 +26,7 @@
 #include "templateBrowser.h"
 #include "extension.h"
 #include "icons.h"
+#include "scoreaccessibility.h"
 
 #include "libmscore/instrtemplate.h"
 #include "libmscore/score.h"
@@ -390,9 +391,11 @@ NewWizardKeysigPage::NewWizardKeysigPage(QWidget* parent)
       int keysigCMajorIdx = 14;
       sp->setSelected(keysigCMajorIdx);
       PaletteScrollArea* sa = new PaletteScrollArea(sp);
-      // set widget name to include name of selected key signature
+      // set widget name to include name of selected element
       // we could set the description, but some screen readers ignore it
-      sa->setAccessibleName(tr("Key Signature: %1").arg(qApp->translate("Palette", sp->cellAt(keysigCMajorIdx)->name.toUtf8())));
+      QString name = tr("Key Signature: %1").arg(qApp->translate("Palette", sp->cellAt(keysigCMajorIdx)->name.toUtf8()));
+      ScoreAccessibility::makeReadable(name);
+      sa->setAccessibleName(name);
       QAccessibleEvent event(sa, QAccessible::NameChanged);
       QAccessible::updateAccessibility(&event);
       QVBoxLayout* l1 = new QVBoxLayout;

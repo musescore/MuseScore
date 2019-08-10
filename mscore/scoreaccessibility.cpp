@@ -159,6 +159,7 @@ void ScoreAccessibility::currentInfoChanged()
 
             statusBarLabel->setText(rez);
             QString screenReaderRez = QString("%1%2 %3 %4").arg(e->screenReaderInfo()).arg(barsAndBeats).arg(staff).arg(e->accessibleExtraInfo());
+            makeReadable(screenReaderRez);
             score->setAccessibleInfo(screenReaderRez);
             }
       else if (score->selection().isRange()) {
@@ -249,4 +250,18 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
             }
       return pair<int,float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
       }
+
+void ScoreAccessibility::makeReadable(QString& s)
+      {
+      static std::vector<std::pair<QString, QString>> replacements {
+            { "♭", tr(" flat") },
+            { "♯", tr(" sharp") },
+            { "𝄫", tr(" double flat") },
+            { "𝄪", tr(" double sharp") },
+      };
+
+      for (auto const &r : replacements)
+          s.replace(r.first, r.second);
+      }
+
 }
