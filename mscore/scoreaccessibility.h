@@ -48,6 +48,7 @@ class ScoreAccessibility : public QObject {
       static void createInstance(QMainWindow* statusBar);
       static ScoreAccessibility* instance();
       void currentInfoChanged();
+      static void makeReadable(QString&);
       };
 
 }
