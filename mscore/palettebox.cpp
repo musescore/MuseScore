@@ -60,6 +60,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       _searchBox->installEventFilter(this);
       _searchBox->setClearButtonEnabled(true);
       _searchBox->setPlaceholderText(tr("Search"));
+      _searchBox->setAccessibleName(tr("Search palette"));
       connect(_searchBox, SIGNAL(textChanged(const QString&)), this, SLOT(filterPalettes(const QString&)));
       QHBoxLayout* hlSearch = new QHBoxLayout;
       hlSearch->setContentsMargins(5,0,5,0);

@@ -947,6 +947,12 @@ void ScoreView::changeState(ViewState s)
       if (s == state)
             return;
 
+      // TODO - screenreader should announce the change of mode
+      // updating accessibility info here does not work,
+      // because it gets cleared as part of updateAccessibilityInfo() in endCmd()
+      //QString info = stateName(s);
+      //QAccessibleValueChangeEvent ev(mainWindow, info);
+      //QAccessible::updateAccessibility(&ev);
       qDebug("changeState %s  -> %s", stateName(state), stateName(s));
       //
       //    end current state

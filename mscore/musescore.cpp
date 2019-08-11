@@ -5867,10 +5867,13 @@ void MuseScore::cmd(QAction* a)
             PaletteBox* pb = getPaletteBox();
             QLineEdit* sb = pb->searchBox();
             sb->setFocus();
-            if (pb->noSelection())
+            if (pb->noSelection()) {
                   pb->setKeyboardNavigation(false);
-            else
+                  sb->setAccessibleDescription("");
+                  }
+            else {
                   pb->setKeyboardNavigation(true);
+                  }
             return;
             }
       if (cmdn == "apply-current-palette-element") {
@@ -6262,7 +6265,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "next-score")
             changeScore(1);
       else if (cmd == "previous-score")
-            changeScore(1);
+            changeScore(-1);
       else if (cmd == "transpose")
             transpose();
       else if (cmd == "save-style") {

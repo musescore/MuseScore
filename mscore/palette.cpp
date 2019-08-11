@@ -882,8 +882,28 @@ void Palette::leaveEvent(QEvent*)
       }
 
 //---------------------------------------------------------
+//   setCurrentIdx
+//---------------------------------------------------------
+
+void Palette::setCurrentIdx(int i)
+      {
+      currentIdx = i;
+      if (i < 0)
+            return;
+
+      // screenreader support
+      QString name = qApp->translate("Palette", cellAt(i)->name.toUtf8());
+      ScoreAccessibility::makeReadable(name);
+      QWidget* sb = mscore->getPaletteBox()->searchBox();
+      sb->setAccessibleDescription(name);
+      QAccessibleEvent ev(sb, QAccessible::DescriptionChanged);
+      QAccessible::updateAccessibility(&ev);
+      }
+
+//---------------------------------------------------------
 //   nextPaletteElement
 //---------------------------------------------------------
+
 void Palette::nextPaletteElement()
       {
       PaletteBox* pb = mscore->getPaletteBox();
@@ -894,12 +914,7 @@ void Palette::nextPaletteElement()
             return;
       i++;
       if (i < size() && cellAt(i))
-            currentIdx = i;
-
-      // TODO: screenreader support
-      //QString name = qApp->translate("Palette", cellAt(i)->name.toUtf8());
-      //ScoreAccessibility::makeReadable(name);
-
+            setCurrentIdx(i);
       update();
       }
 
@@ -917,12 +932,7 @@ void Palette::prevPaletteElement()
             return;
       i--;
       if (i >= 0 && cellAt(i))
-            currentIdx = i;
-
-      // TODO: screenreader support
-      //QString name = qApp->translate("Palette", cellAt(i)->name.toUtf8());
-      //ScoreAccessibility::makeReadable(name);
-
+            setCurrentIdx(i);
       update();
       }
 
