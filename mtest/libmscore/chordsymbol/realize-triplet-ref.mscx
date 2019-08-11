@@ -746,6 +746,10 @@
               <text>3</text>
               </Number>
             </Tuplet>
+          <Beam>
+            <l1>-4</l1>
+            <l2>0</l2>
+            </Beam>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1127,6 +1131,10 @@
               <text>3</text>
               </Number>
             </Tuplet>
+          <Beam>
+            <l1>-5</l1>
+            <l2>-5</l2>
+            </Beam>
           <Chord>
             <durationType>32nd</durationType>
             <Note>

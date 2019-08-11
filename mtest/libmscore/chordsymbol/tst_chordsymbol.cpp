@@ -307,7 +307,7 @@ void TestChordSymbol::testRealize6Note()
 //---------------------------------------------------------
 void TestChordSymbol::testRealizeTransposed()
       {
-      MasterScore* score = test_pre("transpose-realize");
+      MasterScore* score = test_pre("realize-transpose");
       //concert pitch off
       score->startCmd();
       score->cmdConcertPitchChanged(false, true);
@@ -318,7 +318,7 @@ void TestChordSymbol::testRealizeTransposed()
       score->startCmd();
       score->cmdRealizeChordSymbols();
       score->endCmd();
-      test_post(score, "transpose-realize");
+      test_post(score, "realize-transpose");
       }
 
 //---------------------------------------------------------
