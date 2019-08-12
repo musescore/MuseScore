@@ -536,7 +536,6 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
                   Harmony* h = toHarmony(e);
                   if (!h->play())
                         continue;
-                  //TODO - PHV: account for note event maybe and triplets
                   renderHarmony(events, m, h);
                   }
 
@@ -757,7 +756,6 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                   Harmony* h = toHarmony(e);
                   if (!h->play())
                         continue;
-                  //TODO - PHV: account for note event maybe and triplets
                   renderHarmony(events, m, h);
                   }
 
