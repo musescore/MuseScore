@@ -3170,33 +3170,26 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
 
             Tuplet* t = cr ? cr->tuplet() : 0;
             Fraction tDur = segment->ticks();
-            if (t) {
-                  tDur *= t->ratio(); //scale by tuplet ratio to get "normal" length rather than actual
-                  //only realize the current chord rest for this iteration
-                  //nothing for now
-                  }
-            else {
-                  //try to find tuplet a which we will need to stop at
-                  Segment* seg = segment->next(); //use next() since we are only looking in measure
-                  while (seg) {
-                        if (seg->segmentType() != SegmentType::ChordRest) {
-                              seg = seg->next();
-                              continue;
-                              }
+            Segment* seg = segment->next();
+            while (seg) {
+                  if (seg->segmentType() == SegmentType::ChordRest) {
+                        //design choice made to keep multiple notes across a tuplet as tied single notes rather than combining them
+                        //since it's arguably more readable, but the other code is still here (commented)
                         ChordRest* testCr = toChordRest(seg->element(track));
-                        if (testCr && testCr->tuplet())
-                              break; //only make a gap until end of measure or tuplet start
-                        if (tDur >= dur) {
-                              tDur = dur;
+                        /*if (!!t ^ (testCr && testCr->tuplet())) //stop if we started with a tuplet and reach something that's not a tuplet,
+                              break;                          //or start with not a tuplet and reach a tuplet */
+                        if (testCr && testCr->tuplet()) //stop on tuplet
                               break;
-                              }
                         tDur += seg->ticks();
-                        seg = seg->next();
                         }
+                  if (tDur >= dur) {
+                        tDur = dur;
+                        break;
+                        }
+                  seg = seg->next();
                   }
-
-            //TODO - PHV: properly determine full duration for when we want to realize chords between multiple triplet notes
-            //so that we don't have too mnay ties.
+            if (t)
+                  tDur *= t->ratio(); //scale by tuplet ratio to get "normal" length rather than actual length when dealing with tuplets
 
             // the returned gap ends at the measure boundary or at tuplet end
             Fraction dd = makeGap(segment, track, tDur, t);
