@@ -132,6 +132,7 @@ class Part final : public ScoreElement {
 
       void updateHarmonyChannels();
       const Channel* harmonyChannel() const { return _harmonyChannel; }
+      void setHarmonyChannel(Channel* c) { _harmonyChannel = c; }
 
       const Part* masterPart() const;
       Part* masterPart();

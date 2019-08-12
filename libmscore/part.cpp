@@ -552,7 +552,7 @@ void Part::updateHarmonyChannels()
       // usage of harmony count is okay even if expensive since checking harmony channel will shortcircuit if existent
       // harmonyCount will only be called on loading of a score (where it will need to be scanned for harmony anyway)
       // or when the first harmony of a score is just added
-      if (!_harmonyChannel && harmonyCount() > 0) {
+      if (!_harmonyChannel) {
             Instrument* instr = instrument();
             int hChannel = instr->channelIdx("harmony");
             if (hChannel != -1) {
@@ -561,15 +561,17 @@ void Part::updateHarmonyChannels()
                   _harmonyChannel = instr->channel(hChannel);
                   return;
                   }
-            Channel* c = new Channel(*instr->channel(0));
-            c->setName("harmony");
-            instr->appendChannel(c);
-            _harmonyChannel = c;
+            if (harmonyCount() > 0) {
+                  Channel* c = new Channel(*instr->channel(0));
+                  c->setName("harmony");
+                  instr->appendChannel(c);
+                  _harmonyChannel = c;
 
-            masterScore()->rebuildMidiMapping();
-            masterScore()->updateChannel();
-            score()->setInstrumentsChanged(true);
-            score()->setLayoutAll(); //do we need this?
+                  masterScore()->rebuildMidiMapping();
+                  masterScore()->updateChannel();
+                  score()->setInstrumentsChanged(true);
+                  score()->setLayoutAll(); //do we need this?
+                  }
             }
       }
 
