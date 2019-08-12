@@ -69,8 +69,6 @@ ResourceManager::ResourceManager(QWidget *parent) :
       QObject::connect(definePluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(definePluginShortcutClicked()));
       QObject::connect(clearPluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(clearPluginShortcutClicked()));
       QObject::connect(reloadPlugins, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(reloadPluginsClicked()));
-      //QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-      //QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
       QObject::connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(filterPluginList()));
       QObject::connect(categories, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ResourceManager::filterPluginList);
       languagesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);

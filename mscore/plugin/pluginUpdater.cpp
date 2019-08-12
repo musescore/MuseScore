@@ -311,6 +311,7 @@ static std::vector<PluginPackageLink> getLinks(const QByteArray& html_raw_array)
       {
       QString html_raw(html_raw_array);
       auto GetLocalHint = [](QRegularExpressionMatch& match, PluginPackageLink& link, const QString& html_raw) {
+            // `match` must have a group called `text`
             int start_idx = match.capturedStart(0);
             int end_idx = match.capturedEnd();
             int newline_start = start_idx, newline_end = end_idx;
@@ -318,11 +319,10 @@ static std::vector<PluginPackageLink> getLinks(const QByteArray& html_raw_array)
                   newline_start--;
             while (newline_end < html_raw.length() && html_raw[newline_end] != '\n')
                   newline_end++;
-            // TODO: first use hyper link text as hint, 
-            // and if not strong enough, use the whole line 
             link.newline_index = newline_start;
             link.curr_line = html_raw.mid(newline_start, newline_end - newline_start + 1);
-            link.score = CompatEstimate(link.curr_line);
+            // use hyper link text or the whole line as the hint
+            link.score = std::max(CompatEstimate(match.captured("text")), CompatEstimate(link.curr_line));
             };
       std::vector<PluginPackageLink> attachments = getAttachments(html_raw, GetLocalHint);
       std::vector<PluginPackageLink> github_links = getGitHubLinks(html_raw, GetLocalHint);
@@ -332,7 +332,7 @@ static std::vector<PluginPackageLink> getLinks(const QByteArray& html_raw_array)
       std::set<int> begin_idx;
       for (auto& url : urls)
             begin_idx.insert(url.newline_index);
-      // now, get more hints from the line above each link
+      // now, get more hints from the line above each link, and update the score if we have clearer hints
       for (size_t i = 0; i < urls.size(); i++) {
             auto& link = urls[i];
             if (link.score >= -1) {
@@ -442,7 +442,6 @@ std::map<PluginPackageSource, QString> PluginPackageSourceVerboseStr{
 
 void ResourceManager::refreshPluginButton(int row, bool updated/* = true*/)
       {
-      // TODO: get button, then plugin url, then update status
       // install button
       QPushButton* install = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 2)));
       install->disconnect();
@@ -771,6 +770,8 @@ bool PluginWorker::install(QString& download_pkg, PluginStatus* result/*= nullpt
 
             // extract and copy
             for (MQZipReader::FileInfo fi : allFiles) {
+                  if (fi.filePath.startsWith("__MACOSX"))
+                        continue;
                   if (fi.isDir)
                         QDir().mkdir(destination_prefix + "/" + filePathStripper(fi.filePath));
                   else if (fi.isFile) {
