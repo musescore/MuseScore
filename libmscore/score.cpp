@@ -1490,6 +1490,9 @@ void Score::addElement(Element* element)
                         createPlayEvents(toChord(cr));
                   }
                   break;
+            case ElementType::HARMONY:
+                  element->part()->updateHarmonyChannels();
+                  break;
 
             default:
                   break;
@@ -1650,6 +1653,9 @@ void Score::removeElement(Element* element)
                   if (cr->isChord())
                         createPlayEvents(toChord(cr));
                   }
+                  break;
+            case ElementType::HARMONY:
+                  element->part()->updateHarmonyChannels(true);
                   break;
 
             default:

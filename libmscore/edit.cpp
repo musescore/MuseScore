@@ -4582,9 +4582,6 @@ void Score::undoAddElement(Element* element)
 
                         undo(new AddElement(ne));
                         if (element->isHarmony()) {
-                              //update harmony channels
-                              element->part()->updateHarmonyChannels();
-
                               // transpose harmony if necessary
                               if (ne != element) {
                                     Harmony* h = toHarmony(ne);

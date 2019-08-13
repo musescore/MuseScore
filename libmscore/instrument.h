@@ -312,6 +312,7 @@ class Instrument {
 
       const QList<Channel*>& channel() const                 { return _channel; }
       void appendChannel(Channel* c)                         { _channel.append(c); }
+      void removeChannel(Channel* c)                         { _channel.removeOne(c);}
       void clearChannels()                                   { _channel.clear(); }
 
       void setMidiActions(const QList<NamedEventList>& l)    { _midiActions = l;  }

@@ -544,7 +544,7 @@ int Part::harmonyCount() const
 ///   update the harmony channel by creating a new channel
 ///   or using the existing one
 //---------------------------------------------------------
-void Part::updateHarmonyChannels()
+void Part::updateHarmonyChannels(bool checkRemoval)
       {
       //TODO - PHV: consider when harmony is deleted or undone (with parameter)
       // add harmony channel if this is the first harmony
@@ -552,6 +552,22 @@ void Part::updateHarmonyChannels()
       // usage of harmony count is okay even if expensive since checking harmony channel will shortcircuit if existent
       // harmonyCount will only be called on loading of a score (where it will need to be scanned for harmony anyway)
       // or when the first harmony of a score is just added
+      if (checkRemoval) { //check removal
+            if (harmonyCount() == 0) {
+                  Instrument* instr = instrument();
+                  int hChannel = instr->channelIdx("harmony");
+                  if (hChannel != -1) {
+                        instr->removeChannel(instr->channel(hChannel));
+                        _harmonyChannel = 0;
+
+                        masterScore()->rebuildMidiMapping();
+                        masterScore()->updateChannel();
+                        score()->setInstrumentsChanged(true);
+                        score()->setLayoutAll(); //do we need this?
+                        return;
+                        }
+                  }
+            }
       if (!_harmonyChannel) {
             Instrument* instr = instrument();
             int hChannel = instr->channelIdx("harmony");

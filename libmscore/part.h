@@ -130,7 +130,7 @@ class Part final : public ScoreElement {
       bool hasTabStaff() const;
       bool hasDrumStaff() const;
 
-      void updateHarmonyChannels();
+      void updateHarmonyChannels(bool checkRemoval = false);
       const Channel* harmonyChannel() const { return _harmonyChannel; }
       void setHarmonyChannel(Channel* c) { _harmonyChannel = c; }
 
