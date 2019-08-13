@@ -2263,8 +2263,6 @@ void Chord::layoutTablature()
             //
             // tab duration symbols
             //
-            // check duration of prev. CR segm
-            ChordRest * prevCR = prevChordRest(this);
             // if no previous CR
             // OR symbol repeat set to ALWAYS
             // OR symbol repeat condition is triggered
@@ -2274,23 +2272,33 @@ void Chord::layoutTablature()
             // AND no not-stem
             // set a duration symbol (trying to re-use existing symbols where existing to minimize
             // symbol creation and deletion)
-            TablatureSymbolRepeat symRepeat = tab->symRepeat();
-            if (  (prevCR == 0
-                  || symRepeat == TablatureSymbolRepeat::ALWAYS
-                  || (symRepeat == TablatureSymbolRepeat::MEASURE && measure() != prevCR->measure())
-                  || (symRepeat == TablatureSymbolRepeat::SYSTEM && measure()->system() != prevCR->measure()->system())
-                  || beamMode() != Beam::Mode::AUTO
-                  || prevCR->durationType().type() != durationType().type()
-                  || prevCR->dots() != dots()
-                  || prevCR->tuplet() != tuplet()
-                  || prevCR->type() == ElementType::REST)
-                        && !noStem() ) {
+            bool needTabDur = false;
+            bool repeat = false;
+            if (!noStem()) {
+                  // check duration of prev. CR segm
+                  ChordRest * prevCR = prevChordRest(this);
+                  if (prevCR == 0)
+                        needTabDur = true;
+                  else if (beamMode() != Beam::Mode::AUTO
+                        || prevCR->durationType().type() != durationType().type()
+                        || prevCR->dots() != dots()
+                        || prevCR->tuplet() != tuplet()
+                        || prevCR->type() == ElementType::REST)
+                        needTabDur = true;
+                  else if (tab->symRepeat() == TablatureSymbolRepeat::ALWAYS
+                        || measure() != prevCR->measure()) {
+                        needTabDur = true;
+                        repeat = true;
+                        }
+                  }
+            if (needTabDur) {
                   // symbol needed; if not exist, create; if exists, update duration
                   if (!_tabDur)
                         _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
                   else
                         _tabDur->setDuration(durationType().type(), dots(), tab);
                   _tabDur->setParent(this);
+                  _tabDur->setRepeat(repeat);
 //                  _tabDur->setMag(mag());           // useless to set grace mag: graces have no dur. symbol
                   _tabDur->layout();
                   if (minY < 0) {                     // if some fret extends above tab body (like bass strings)
