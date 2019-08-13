@@ -677,6 +677,7 @@ void Selection::updateState()
                   _currentTick = toSpannerSegment(e)->spanner()->tick();
             else
                   _currentTick = e->tick();
+            // ignore system elements (e.g., frames)
             if (e->track() >= 0)
                   _currentTrack = e->track();
             }
