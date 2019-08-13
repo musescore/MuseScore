@@ -60,6 +60,7 @@ Fraction InputState::tick() const
 
 ChordRest* InputState::cr() const
       {
+      // _track could potentially be -1, for instance after navigation through a frame
       return _segment && _track >= 0 ? toChordRest(_segment->element(_track)) : 0;
       }
 
