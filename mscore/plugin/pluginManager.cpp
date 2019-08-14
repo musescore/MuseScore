@@ -398,6 +398,7 @@ void PluginManager::loadList(bool forceRefresh)
       {
       if (!uiAttached) return;
       QStringList saveLoaded; // If forcing a refresh, the load flags are lost. Keep a copy and reapply.
+      QMap<QString, Shortcut> saveShortcut; // Keep a copy for shortcuts for the same reason
       int n = _pluginList.size();
       if (forceRefresh && n > 0) {
             for (int i = 0; i < n; i++) {
@@ -406,6 +407,8 @@ void PluginManager::loadList(bool forceRefresh)
                         saveLoaded.append(d.path);
                         mscore->unregisterPlugin(&d);  // This will force the menu to rebuild.
                         }
+                  if (!d.shortcut.keys().empty())
+                        saveShortcut[d.path] = d.shortcut;
                   }
             }
       updatePluginList(forceRefresh);
@@ -429,6 +432,8 @@ void PluginManager::loadList(bool forceRefresh)
       // add packages' qml files and local stand-alone qmls
       for (int i = 0; i < n; ++i) {
             PluginDescription& d = _pluginList[i];
+            if (saveShortcut.contains(d.path))
+                  d.shortcut = saveShortcut[d.path];
             Shortcut* s = &d.shortcut;
             localShortcuts[s->key()] = new Shortcut(*s);
             if (saveLoaded.contains(d.path)) d.load = true;
