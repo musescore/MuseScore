@@ -1929,17 +1929,24 @@ void Palette::dropEvent(QDropEvent* event)
       emit changed();
       }
 
-
 //---------------------------------------------------------
 //   Palette List (QListWidget)
 //---------------------------------------------------------
 
 PaletteList::PaletteList(QWidget* parent) : QListWidget(parent)
       {
+      extraMag      = 1.0;
+      currentIdx    = -1;
+      dragIdx       = 0;
+      selectedIdx   = -1;
+      setMouseTracking(true);
       setAutoFillBackground(true);
       setViewMode(QListView::IconMode);
       setResizeMode(QListView::Adjust);
-      setUniformItemSizes(true);
+      setDragEnabled(true);
+      setAcceptDrops(true);
+      setDropIndicatorShown(true);
+      //setUniformItemSizes(true);
       }
 
 void PaletteList::read(XmlReader& e)
@@ -1974,16 +1981,14 @@ void PaletteList::read(XmlReader& e)
             else
                   e.unknown();
             }
-            qDebug()<<"The HGrid is: "<< hgrid;
-            qDebug()<<"The VGrid is: "<< vgrid;
             setGrid(hgrid,vgrid);
 
       }
 
 void PaletteList::setGrid(int hh, int vv)
       {
-      hgrid = hh+20;
-      vgrid = vv+10;
+      hgrid = hh + 20;
+      vgrid = vv + 10;
       QSize s(hgrid, vgrid);
       setGridSize(s);
       //setSizeIncrement(s);
@@ -2007,8 +2012,11 @@ void PaletteList::keyPressEvent(QKeyEvent *event)
       int numItems = count();
       currIdx = this->currentItem();
       int pos = row(currIdx);
-      qDebug()<<"The position of the current element is "<< pos;
       switch(event->key()){
+            case Qt::Key_Return:
+                  applyPaletteElement(static_cast<PaletteCellItem*>(currIdx), event->modifiers());
+                  return;    
+                  break;
             case Qt::Key_Down:
                 pos++;
                 if (pos < numItems) {
@@ -2147,6 +2155,539 @@ QPixmap PaletteCellItem::pixmap(qreal extraMag) const
       return pm;
       }
 
+//---------------------------------------------------------
+//   mouseMoveEvent
+//---------------------------------------------------------
 
+void PaletteList::mouseMoveEvent(QMouseEvent* ev)
+      {
+      PaletteBox* pb = mscore->getPaletteBox();
+      if (pb->getKeyboardNavigation()) {
+            ev->ignore();
+            return;
+            }
+      if ((currentIdx != -1) && (row(dragIdx) == currentIdx) && (ev->buttons() & Qt::LeftButton)
+         && (ev->pos() - dragStartPosition).manhattanLength() > QApplication::startDragDistance())
+            {
+            PaletteCellItem* cell = static_cast<PaletteCellItem*>(item(currentIdx));
+            if (cell && cell->element) {
+                  QDrag* drag         = new QDrag(this);
+                  QMimeData* mimeData = new QMimeData;
+                  Element* el         = cell->element;
+
+                  mimeData->setData(mimeSymbolFormat, el->mimeData(QPointF()));
+                  drag->setMimeData(mimeData);
+
+                  drag->setPixmap(cell->pixmap(1.0));
+
+                  QPoint hotsp(drag->pixmap().rect().bottomRight());
+                  drag->setHotSpot(hotsp);
+                  Qt::DropActions da;
+                  if ((ev->modifiers() & Qt::ShiftModifier)) {
+                        dragCells = cells;      // backup
+                        da = Qt::MoveAction;
+                        }
+                  else
+                        da = Qt::CopyAction;
+                  Qt::DropAction a = drag->exec(da);
+                  if (da == Qt::MoveAction && a != da)
+                        cells = dragCells;      // restore on a failed move action
+                  update();
+                  }
+            }
+      else {
+            PaletteCellItem* curr = static_cast<PaletteCellItem*>(currentItem());
+            currentIdx = row(curr);
+            if (currentIdx != -1 && item(currentIdx) == 0)
+                  currentIdx = -1;
+            update();
+            }
+      }
+
+//---------------------------------------------------------
+//   mouseDoubleClickEvent
+//---------------------------------------------------------
+
+void PaletteList::mouseDoubleClickEvent(QMouseEvent* ev)
+      {
+      if (_disableDoubleClick)
+            return;
+      int i = currentRow();
+      if (i == -1)
+            return;
+      Score* score = mscore->currentScore();
+      if (score == 0)
+            return;
+      if (score->selection().isNone())
+            return;
+      
+      // exit edit mode, to allow for palette element to be applied properly
+      ScoreView* viewer = mscore->currentScoreView();
+      if (viewer && viewer->editMode() && !(viewer->mscoreState() & STATE_ALLTEXTUAL_EDIT))
+            viewer->changeState(ViewState::NORMAL);
+      
+      PaletteCellItem* cell = static_cast<PaletteCellItem*>(item(i));
+      applyPaletteElement(cell, ev->modifiers());
+      }
+
+//---------------------------------------------------------
+//   applyPaletteElement
+//---------------------------------------------------------
+
+void PaletteList::applyPaletteElement()
+      {
+      Score* score = mscore->currentScore();
+      if (score == 0)
+            return;
+      const Selection& sel = score->selection();
+      if (sel.isNone())
+            return;
+      // apply currently selected palette symbol to selected score elements
+      int i = currentIdx;
+      PaletteCellItem* cell = static_cast<PaletteCellItem*>(item(i));
+      if (/*i < size() && */cell)
+            applyPaletteElement(cell);
+      else
+            return;
+      }
+//---------------------------------------------------------
+//   applyPaletteElement
+//---------------------------------------------------------
+
+void PaletteList::applyPaletteElement(PaletteCellItem* cell, Qt::KeyboardModifiers modifiers)
+      {
+      Score* score = mscore->currentScore();
+      if (score == 0)
+            return;
+      const Selection sel = score->selection(); // make a copy of selection state before applying the operation.
+      if (sel.isNone())
+            return;
+
+      Element* element = 0;
+      if (cell)
+            element = cell->element;
+      if (element == 0)
+            return;
+      
+      if (element->isSpanner())
+            TourHandler::startTour("spanner-drop-apply");
+
+#ifdef MSCORE_UNSTABLE
+      if (ScriptRecorder* rec = mscore->getScriptRecorder()) {
+            if (modifiers == 0)
+                  rec->recordPaletteElement(element);
+            }
+#endif
+
+      ScoreView* viewer = mscore->currentScoreView();
+      if (viewer->mscoreState() != STATE_EDIT
+         && viewer->mscoreState() != STATE_LYRICS_EDIT
+         && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT) { // Already in startCmd in this case
+            score->startCmd();
+            }
+      if (sel.isList()) {
+            ChordRest* cr1 = sel.firstChordRest();
+            ChordRest* cr2 = sel.lastChordRest();
+            bool addSingle = false;       // add a single line only
+            if (cr1 && cr2 == cr1) {
+                  // one chordrest selected, ok to add line
+                  addSingle = true;
+                  }
+            else if (sel.elements().size() == 2 && cr1 && cr2 && cr1 != cr2) {
+                  // two chordrests selected
+                  // must be on same staff in order to add line, except for slur
+                  if (element->isSlur() || cr1->staffIdx() == cr2->staffIdx())
+                        addSingle = true;
+                  }
+            if (viewer->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM && element->isChord()) {
+                  // use input position rather than selection if possible
+                  Element* e = score->inputState().cr();
+                  if (!e)
+                        e = sel.elements().first();
+                  if (e) {
+                        // get note if selection was full chord
+                         if (e->isChord())
+                              e = toChord(e)->upNote();
+                        // use voice of element being added to (otherwise we can might corrupt the measure)
+                        element->setTrack(e->voice());
+                        applyDrop(score, viewer, e, element, modifiers);
+                        // continue in same track
+                        score->inputState().setTrack(e->track());
+                        }
+                  else
+                        qDebug("nowhere to place drum note");
+                  }
+            else if (element->isLayoutBreak()) {
+                  LayoutBreak* breakElement = toLayoutBreak(element);
+                  score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
+                  }
+            else if (element->isSlur() && addSingle) {
+                  viewer->addSlur();
+                  }
+            else if (element->isSLine() && !element->isGlissando() && addSingle) {
+                  Segment* startSegment = cr1->segment();
+                  Segment* endSegment = cr2->segment();
+                  if (element->type() == ElementType::PEDAL && cr2 != cr1)
+                        endSegment = endSegment->nextCR(cr2->track());
+                  // TODO - handle cross-voice selections
+                  int idx = cr1->staffIdx();
+
+                  QByteArray a = element->mimeData(QPointF());
+//printf("<<%s>>\n", a.data());
+                  XmlReader e(a);
+                  Fraction duration;  // dummy
+                  QPointF dragOffset;
+                  ElementType type = Element::readType(e, &dragOffset, &duration);
+                  Spanner* spanner = static_cast<Spanner*>(Element::create(type, score));
+                  spanner->read(e);
+                  spanner->styleChanged();
+                  score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
+                  }
+            else {
+                  for (Element* e : sel.elements())
+                        applyDrop(score, viewer, e, element, modifiers);
+                  }
+            }
+      else if (sel.isRange()) {
+            if (element->type() == ElementType::BAR_LINE
+                || element->type() == ElementType::MARKER
+                || element->type() == ElementType::JUMP
+                || element->type() == ElementType::SPACER
+                || element->type() == ElementType::VBOX
+                || element->type() == ElementType::HBOX
+                || element->type() == ElementType::TBOX
+                || element->type() == ElementType::MEASURE
+                || element->type() == ElementType::BRACKET
+                || element->type() == ElementType::STAFFTYPE_CHANGE
+                || (element->type() == ElementType::ICON
+                    && (toIcon(element)->iconType() == IconType::VFRAME
+                        || toIcon(element)->iconType() == IconType::HFRAME
+                        || toIcon(element)->iconType() == IconType::TFRAME
+                        || toIcon(element)->iconType() == IconType::MEASURE
+                        || toIcon(element)->iconType() == IconType::BRACKETS))) {
+                  Measure* last = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
+                  for (Measure* m = sel.startSegment()->measure(); m; m = m->nextMeasureMM()) {
+                        QRectF r = m->staffabbox(sel.staffStart());
+                        QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
+                        pt += m->system()->page()->pos();
+                        applyDrop(score, viewer, m, element, modifiers, pt);
+                        if (m == last)
+                              break;
+                        }
+                  }
+            else if (element->type() == ElementType::LAYOUT_BREAK) {
+                  LayoutBreak* breakElement = static_cast<LayoutBreak*>(element);
+                  score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
+                  }
+            else if (element->isClef() || element->isKeySig() || element->isTimeSig()) {
+                  Measure* m1 = sel.startSegment()->measure();
+                  Measure* m2 = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
+                  if (m2 == m1 && sel.startSegment()->rtick().isZero())
+                        m2 = nullptr;     // don't restore original if one full measure selected
+                  else if (m2)
+                        m2 = m2->nextMeasureMM();
+                  // for clefs, apply to each staff separately
+                  // otherwise just apply to top staff
+                  int staffIdx1 = sel.staffStart();
+                  int staffIdx2 = element->type() == ElementType::CLEF ? sel.staffEnd() : staffIdx1 + 1;
+                  for (int i = staffIdx1; i < staffIdx2; ++i) {
+                        // for clefs, use mid-measure changes if appropriate
+                        Element* e1 = nullptr;
+                        Element* e2 = nullptr;
+                        // use mid-measure clef changes as appropriate
+                        if (element->type() == ElementType::CLEF) {
+                              if (sel.startSegment()->isChordRestType() && sel.startSegment()->rtick().isNotZero()) {
+                                    ChordRest* cr = static_cast<ChordRest*>(sel.startSegment()->nextChordRest(i * VOICES));
+                                    if (cr && cr->isChord())
+                                          e1 = static_cast<Chord*>(cr)->upNote();
+                                    else
+                                          e1 = cr;
+                                    }
+                              if (sel.endSegment() && sel.endSegment()->segmentType() == SegmentType::ChordRest) {
+                                    ChordRest* cr = static_cast<ChordRest*>(sel.endSegment()->nextChordRest(i * VOICES));
+                                    if (cr && cr->isChord())
+                                          e2 = static_cast<Chord*>(cr)->upNote();
+                                    else
+                                          e2 = cr;
+                                    }
+                              }
+                        if (m2 || e2) {
+                              // restore original clef/keysig/timesig
+                              Staff* staff = score->staff(i);
+                              Fraction tick1 = sel.startSegment()->tick();
+                              Element* oelement = nullptr;
+                              switch (element->type()) {
+                                    case ElementType::CLEF:
+                                          {
+                                          Clef* oclef = new Clef(score);
+                                          oclef->setClefType(staff->clef(tick1));
+                                          oelement = oclef;
+                                          break;
+                                          }
+                                    case ElementType::KEYSIG:
+                                          {
+                                          KeySig* okeysig = new KeySig(score);
+                                          okeysig->setKeySigEvent(staff->keySigEvent(tick1));
+                                          if (!score->styleB(Sid::concertPitch) && !okeysig->isCustom() && !okeysig->isAtonal()) {
+                                                Interval v = staff->part()->instrument(tick1)->transpose();
+                                                if (!v.isZero()) {
+                                                      Key k = okeysig->key();
+                                                      okeysig->setKey(transposeKey(k, v));
+                                                      }
+                                                }
+                                          oelement = okeysig;
+                                          break;
+                                          }
+                                    case ElementType::TIMESIG:
+                                          {
+                                          TimeSig* otimesig = new TimeSig(score);
+                                          otimesig->setFrom(staff->timeSig(tick1));
+                                          oelement = otimesig;
+                                          break;
+                                          }
+                                    default:
+                                          break;
+                                    }
+                              if (oelement) {
+                                    if (e2) {
+                                          applyDrop(score, viewer, e2, oelement, modifiers);
+                                          }
+                                    else {
+                                          QRectF r = m2->staffabbox(i);
+                                          QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
+                                          pt += m2->system()->page()->pos();
+                                          applyDrop(score, viewer, m2, oelement, modifiers, pt);
+                                          }
+                                    delete oelement;
+                                    }
+                              }
+                        // apply new clef/keysig/timesig
+                        if (e1) {
+                              applyDrop(score, viewer, e1, element, modifiers);
+                              }
+                        else {
+                              QRectF r = m1->staffabbox(i);
+                              QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
+                              pt += m1->system()->page()->pos();
+                              applyDrop(score, viewer, m1, element, modifiers, pt);
+                              }
+                        }
+                  }
+            else if (element->isSlur()) {
+                  viewer->addSlur();
+                  }
+            else if (element->isSLine() && element->type() != ElementType::GLISSANDO) {
+                  Segment* startSegment = sel.startSegment();
+                  Segment* endSegment = sel.endSegment();
+                  int endStaff = sel.staffEnd();
+                  for (int i = sel.staffStart(); i < endStaff; ++i) {
+                        Spanner* spanner = static_cast<Spanner*>(element->clone());
+                        spanner->setScore(score);
+                        spanner->styleChanged();
+                        score->cmdAddSpanner(spanner, i, startSegment, endSegment);
+                        }
+                  }
+            else {
+                  int track1 = sel.staffStart() * VOICES;
+                  int track2 = sel.staffEnd() * VOICES;
+                  Segment* startSegment = sel.startSegment();
+                  Segment* endSegment = sel.endSegment(); //keep it, it could change during the loop
+                  for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
+                        for (int track = track1; track < track2; ++track) {
+                              Element* e = s->element(track);
+                              if (e == 0 || !score->selectionFilter().canSelect(e) || !score->selectionFilter().canSelectVoice(track))
+                                    continue;
+                              if (e->isChord()) {
+                                    Chord* chord = toChord(e);
+                                    for (Note* n : chord->notes())
+                                          applyDrop(score, viewer, n, element, modifiers);
+                                    }
+                              else {
+                                    // do not apply articulation to barline in a range selection
+                                    if (!e->isBarLine() || !element->isArticulation())
+                                          applyDrop(score, viewer, e, element, modifiers);
+                                    }
+                              }
+                        }
+                  }
+            }
+      else
+            qDebug("unknown selection state");
+
+      if (viewer->mscoreState() != STATE_EDIT
+         && viewer->mscoreState() != STATE_LYRICS_EDIT
+         && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT) { //Already in startCmd mode in this case
+            score->endCmd();
+            if (viewer->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM)
+                  viewer->moveCursor();
+            }
+      viewer->setDropTarget(0);
+//      mscore->endCmd();
+      }
+
+//---------------------------------------------------------
+//   mousePressedEvent
+//---------------------------------------------------------
+void PaletteList::mousePressEvent(QMouseEvent* ev)
+  	{
+  	QListWidget::mousePressEvent(ev);
+  	dragStartPosition = ev->pos();
+  	dragIdx       	= static_cast<PaletteCellItem*>(itemAt(dragStartPosition));
+      }
+
+//---------------------------------------------------------
+//   dragEnterEvent
+//---------------------------------------------------------
+
+void PaletteList::dragEnterEvent(QDragEnterEvent* event)
+      {
+      const QMimeData* dta = event->mimeData();
+      if (dta->hasUrls()) {
+            QList<QUrl>ul = event->mimeData()->urls();
+            QUrl u = ul.front();
+            if (MScore::debugMode) {
+                  qDebug("dragEnterEvent: Url: %s", qPrintable(u.toString()));
+                  qDebug("   scheme <%s> path <%s>", qPrintable(u.scheme()), qPrintable(u.path()));
+                  }
+            if (u.scheme() == "file") {
+                  QFileInfo fi(u.path());
+                  QString suffix(fi.suffix().toLower());
+                  if (suffix == "svg"
+                     || suffix == "jpg"
+                     || suffix == "jpeg"
+                     || suffix == "png"
+                     ) {
+                        event->acceptProposedAction();
+                        }
+                  }
+            }
+      else if (dta->hasFormat(mimeSymbolFormat)) {
+            event->accept();
+            update();
+            }
+      else {
+            event->ignore();
+#ifndef NDEBUG
+            qDebug("dragEnterEvent: formats:");
+            for (const QString& s : event->mimeData()->formats())
+                  qDebug("   %s", qPrintable(s));
+#endif
+            }
+      }
+
+//---------------------------------------------------------
+//   dragMoveEvent
+//---------------------------------------------------------
+
+void PaletteList::dragMoveEvent(QDragMoveEvent* event)
+      {
+      int i = currentRow();
+      if (event->source() == this) {
+            if (i != -1) {
+                  if (currentIdx != -1 && event->proposedAction() == Qt::MoveAction) {
+                        if (i != currentIdx) {
+                              PaletteCellItem* c = static_cast<PaletteCellItem*>(item(i));
+                              cells.insert(i, c);
+                              currentIdx = i;
+                              update();
+                              }
+                        event->accept();
+                        return;
+                        }
+                  }
+            event->ignore();
+            }
+      else
+            event->accept();
+      }
+
+//---------------------------------------------------------
+//   dropEvent
+//---------------------------------------------------------
+
+void PaletteList::dropEvent(QDropEvent* event)
+      {
+      Element* e = 0;
+      QString name;
+
+      const QMimeData* datap = event->mimeData();
+      if (datap->hasUrls()) {
+            QList<QUrl>ul = event->mimeData()->urls();
+            QUrl u = ul.front();
+            if (u.scheme() == "file") {
+                  QFileInfo fi(u.path());
+                  Image* s = new Image(gscore);
+                  QString filePath(u.toLocalFile());
+                  s->load(filePath);
+                  e = s;
+                  QFileInfo f(filePath);
+                  name = f.completeBaseName();
+                  }
+            }
+      else if (datap->hasFormat(mimeSymbolFormat)) {
+            QByteArray dta(event->mimeData()->data(mimeSymbolFormat));
+            XmlReader xml(dta);
+            QPointF dragOffset;
+            Fraction duration;
+            ElementType type = Element::readType(xml, &dragOffset, &duration);
+
+            if (type == ElementType::SYMBOL) {
+                  Symbol* symbol = new Symbol(gscore);
+                  symbol->read(xml);
+                  e = symbol;
+                  }
+            else {
+                  e = Element::create(type, gscore);
+                  if (e) {
+                        e->read(xml);
+                        e->setTrack(0);
+                        if (e->isIcon()) {
+                              Icon* i = toIcon(e);
+                              const QByteArray& action = i->action();
+                              if (!action.isEmpty()) {
+                                    const Shortcut* s = Shortcut::getShortcut(action);
+                                    if (s) {
+                                          QAction* a = s->action();
+                                          QIcon icon(a->icon());
+                                          i->setAction(action, icon);
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+      if (e == 0) {
+            event->ignore();
+            return;
+            }
+      if (event->source() == this) {
+            delete e;
+            if (event->proposedAction() == Qt::MoveAction) {
+                  event->accept();
+                  emit changed();
+                  return;
+                  }
+            event->ignore();
+            return;
+            }
+      
+      if (e->isFretDiagram()) {
+            name = toFretDiagram(e)->harmonyText();
+            }
+
+      e->setSelected(false);
+      /*int i = currentRow();
+      if (i == -1 || cells[i])
+            append(e, name);
+      else
+            add(i, e, name);
+      event->accept();
+      while (!cells.isEmpty() && cells.back() == 0)
+            cells.removeLast();
+      */
+      setFixedHeight(heightForWidth(width()));
+      updateGeometry();
+      update();
+      emit changed();
+      }
 }
-

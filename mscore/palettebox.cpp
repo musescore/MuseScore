@@ -615,7 +615,6 @@ void PaletteTree::resizeEvent(QResizeEvent* event)
       int numPalettes = topLevelItemCount();
       for (int i = 0; i < numPalettes; i++) {
             QTreeWidgetItem* paletteItem = topLevelItem(i);
-            qDebug()<<paletteItem->childCount();
             QTreeWidgetItem* paletteChild = paletteItem->child(0);
             if (paletteChild && !paletteChild->isHidden()) {
                   paletteChild->setHidden(true);
@@ -630,8 +629,6 @@ void PaletteTree::showEvent(QShowEvent* event)
       int numPalettes = topLevelItemCount();
       for (int i = 0; i < numPalettes; i++) {
             QTreeWidgetItem* paletteItem = topLevelItem(i);
-            qDebug()<<paletteItem->childCount();
-            QTreeWidgetItem* paletteChild = paletteItem->child(0);
             if (!paletteItem->isExpanded()) {
                   paletteItem->setExpanded(true);
                   paletteItem->setExpanded(true);
