@@ -33,15 +33,17 @@ class VoicingSelect : public QWidget, public Ui::VoicingSelect {
       void _voicingChanged();
 
    signals:
-      void voicingChanged(bool, int);
+      void voicingChanged(bool, int, int);
 
    public:
       VoicingSelect(QWidget* parent);
       int getVoicing() { return voicingBox->currentIndex(); }
       bool getLiteral() { return interpretBox->currentIndex(); }
+      int getDuration() { return durationBox->currentIndex(); }
 
       void setVoicing(int idx);
       void setLiteral(bool literal);
+      void setDuration(int duration);
       };
 
 }

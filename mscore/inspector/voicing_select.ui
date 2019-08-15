@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>331</width>
-    <height>114</height>
+    <height>174</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -103,6 +103,32 @@
      <item>
       <property name="text">
        <string>Three Note</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Duration</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="durationBox">
+     <item>
+      <property name="text">
+       <string>Until next chord symbol</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Stop at measure</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Segment duration</string>
       </property>
      </item>
     </widget>

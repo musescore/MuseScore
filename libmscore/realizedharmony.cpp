@@ -22,6 +22,8 @@
 #include "staff.h"
 #include "chordlist.h"
 #include "harmony.h"
+#include "fraction.h"
+#include "segment.h"
 
 namespace Ms {
 
@@ -30,7 +32,7 @@ namespace Ms {
 ///   creates empty realized harmony
 //---------------------------------------------------
 RealizedHarmony::RealizedHarmony(Harmony* h) : _harmony(h),
-      _notes(QMap<int, int>()), _voicing(Voicing::AUTO), _rhythm(Rhythm::AUTO), _dirty(1)
+      _notes(QMap<int, int>()), _dirty(1)
       {
       }
 
@@ -48,15 +50,15 @@ void RealizedHarmony::setVoicing(Voicing v)
       }
 
 //---------------------------------------------------
-//   setRhythm
-///   sets the rhythm and dirty flag if the passed
-///   rhythm is different than current
+//   setDuration
+///   sets the duration and dirty flag if the passed
+///   HDuration is different than current
 //---------------------------------------------------
-void RealizedHarmony::setRhythm(Rhythm r)
+void RealizedHarmony::setDuration(HDuration d)
       {
-      if (_rhythm == r)
+      if (_duration == d)
             return;
-      _rhythm = r;
+      _duration = d;
       cascadeDirty(true);
       }
 
@@ -230,6 +232,36 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
 
       _notes = generateNotes(rootTpc, bassTpc, _literal, _voicing, transposeOffset);
       _dirty = false;
+      }
+
+//--------------------------------------------------
+//    getActualDuration
+///    gets the fraction duration for how long
+///    the harmony should be realized based
+///    on the HDuration set.
+///
+///    This is opposed to RealizedHarmony::duration()
+///    which returns the HDuration, which is the duration
+///    setting.
+///
+///    Consider changing this to be less confusing ^
+//--------------------------------------------------
+Fraction RealizedHarmony::getActualDuration() const
+      {
+      switch (_duration)
+            {
+            case HDuration::UNTIL_NEXT_CHORD_SYMBOL:
+                  return _harmony->ticksTilNext(false);
+                  break;
+            case HDuration::STOP_AT_MEASURE_END:
+                  return _harmony->ticksTilNext(true);
+                  break;
+            case HDuration::SEGMENT_DURATION:
+                  return toSegment(_harmony->parent())->ticks();
+                  break;
+            default:
+                  return Fraction(0, 1);
+            }
       }
 
 //---------------------------------------------------

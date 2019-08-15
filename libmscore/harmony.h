@@ -129,7 +129,7 @@ class Harmony final : public TextBase {
 
       Harmony* findNext() const;
       Harmony* findPrev() const;
-      Fraction ticksTilNext() const;
+      Fraction ticksTilNext(bool stopAtMeasureEnd = false) const;
 
       const ChordDescription* descr() const;
       const ChordDescription* descr(const QString&, const ParsedChord* pc = 0) const;

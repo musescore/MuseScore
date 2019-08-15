@@ -239,6 +239,7 @@ enum class Pid {
 
       HARMONY_VOICE_LITERAL,
       HARMONY_VOICING,
+      HARMONY_DURATION,
 
       SYSTEM_BRACKET,
       GAP,
