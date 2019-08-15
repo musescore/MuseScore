@@ -249,6 +249,7 @@ enum class Sid {
       harmonyPlay,
       harmonyVoiceLiteral,
       harmonyVoicing,
+      harmonyDuration,
 
       chordSymbolAPosAbove,
       chordSymbolAPosBelow,

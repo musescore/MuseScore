@@ -147,7 +147,8 @@ const ElementStyle chordSymbolStyle {
       { Sid::minHarmonyDistance, Pid::MIN_DISTANCE },
       { Sid::harmonyPlay, Pid::PLAY },
       { Sid::harmonyVoiceLiteral, Pid::HARMONY_VOICE_LITERAL },
-      { Sid::harmonyVoicing, Pid::HARMONY_VOICING }
+      { Sid::harmonyVoicing, Pid::HARMONY_VOICING },
+      { Sid::harmonyDuration, Pid::HARMONY_DURATION }
       };
 
 //---------------------------------------------------------
@@ -355,6 +356,8 @@ void Harmony::read(XmlReader& e)
             else if (readProperty(tag, e, Pid::HARMONY_VOICE_LITERAL))
                   ;
             else if (readProperty(tag, e, Pid::HARMONY_VOICING))
+                  ;
+            else if (readProperty(tag, e, Pid::HARMONY_DURATION))
                   ;
             else if (!TextBase::readProperties(e))
                   e.unknown();
@@ -999,13 +1002,19 @@ Harmony* Harmony::findPrev() const
 //---------------------------------------------------------
 //   ticksTilNext
 ///   finds ticks until the next chord symbol or end of score
+///
+///   stopAtMeasureEnd being set to true will have the loop
+///   stop at measure end.
 //---------------------------------------------------------
-Fraction Harmony::ticksTilNext() const
+Fraction Harmony::ticksTilNext(bool stopAtMeasureEnd) const
       {
       Segment* seg = toSegment(parent());
       Fraction duration = seg->ticks();
       Segment* cur = seg->next1();
       while (cur) {
+            if (stopAtMeasureEnd && (cur->measure() != seg->measure()))
+                  break; //limit by measure end
+
             //find harmony on same track
             Element* e = cur->findAnnotation(ElementType::HARMONY,
                                        track(), track());
@@ -1167,10 +1176,9 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 //   getRealizedHarmony
 //    get realized harmony or create one for the current symbol
 //    also updates the realized harmony and accounts for
-//    transposition.
-//
-//    TODO - PHV: cache this so that chords only need to be
-//    realized once each
+//    transposition. RealizedHarmony objects cannot be cached
+//    since the notes generated depends on context rather than
+//    just root, bass, chord symbol, and voicing.
 //---------------------------------------------------------
 
 const RealizedHarmony& Harmony::getRealizedHarmony()
@@ -1188,9 +1196,6 @@ const RealizedHarmony& Harmony::getRealizedHarmony()
 //   realizedHarmony
 //    get realized harmony or create one for the current symbol
 //    without updating the realized harmony
-//
-//    TODO - PHV: cache this so that chords only need to be
-//    realized once each, also may be a little dangerous without const
 //---------------------------------------------------------
 
 RealizedHarmony& Harmony::realizedHarmony()
@@ -1997,6 +2002,9 @@ QVariant Harmony::getProperty(Pid pid) const
             case Pid::HARMONY_VOICING:
                   return int(_realizedHarmony.voicing());
                   break;
+            case Pid::HARMONY_DURATION:
+                  return int(_realizedHarmony.duration());
+                  break;
             default:
                   return TextBase::getProperty(pid);
             }
@@ -2020,6 +2028,9 @@ bool Harmony::setProperty(Pid pid, const QVariant& v)
                   break;
             case Pid::HARMONY_VOICING:
                   _realizedHarmony.setVoicing(Voicing(v.toInt()));
+                  break;
+            case Pid::HARMONY_DURATION:
+                  _realizedHarmony.setDuration(HDuration(v.toInt()));
                   break;
             default:
                   if (TextBase::setProperty(pid, v)) {

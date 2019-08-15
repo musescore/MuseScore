@@ -3110,7 +3110,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing)
             Harmony* h = toHarmony(e);
             RealizedHarmony r = h->getRealizedHarmony();
             Segment* seg = toSegment(h->parent());
-            Fraction duration = h->ticksTilNext();
+            Fraction duration = r.getActualDuration();
             Fraction tick = seg->tick();
             bool concertPitch = styleB(Sid::concertPitch);
 

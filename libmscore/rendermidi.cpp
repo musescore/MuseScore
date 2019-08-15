@@ -545,7 +545,7 @@ static void renderHarmony(EventMap* events, Measure* m, Harmony* h)
       QList<int> pitches = r.pitches();
 
       NPlayEvent ev(ME_NOTEON, channel->channel(), 0, velocity);
-      Fraction duration = h->ticksTilNext();
+      Fraction duration = r.getActualDuration();
 
       int onTime = h->tick().ticks();
       int offTime = onTime + duration.ticks();

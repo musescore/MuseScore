@@ -23,6 +23,7 @@
 namespace Ms {
 
 class Harmony;
+class Fraction;
 
 //voicing modes to use
 enum class Voicing : signed char {
@@ -37,9 +38,11 @@ enum class Voicing : signed char {
       THREE_NOTE
       };
 
-//rhythm mode to use
-enum class Rhythm : char {
-      AUTO = 0
+//duration to realize notes with
+enum class HDuration : char {
+      UNTIL_NEXT_CHORD_SYMBOL = 0,  //lasts until the next chord symbol or end of the schore
+      STOP_AT_MEASURE_END,              //lasts until next chord symbol or measure end
+      SEGMENT_DURATION              //lasts for the duration of the segment
       };
 
 //-----------------------------------------
@@ -55,7 +58,7 @@ class RealizedHarmony {
       QMap<int, int> _notes; //map from pitch to tpc
 
       Voicing _voicing;
-      Rhythm _rhythm;
+      HDuration _duration;
 
       //whether or not the current notes QMap is up to date
       bool _dirty;
@@ -63,17 +66,16 @@ class RealizedHarmony {
       bool _literal; //use all notes when possible and do not add any notes
 
    public:
-      RealizedHarmony() : _harmony(0), _notes(QMap<int, int>()), _voicing(Voicing::AUTO),
-            _rhythm(Rhythm::AUTO), _dirty(1) {}
+      RealizedHarmony() : _harmony(0), _notes(QMap<int, int>()), _dirty(1) {}
       RealizedHarmony(Harmony*);
 
       void setVoicing(Voicing);
-      void setRhythm(Rhythm);
+      void setDuration(HDuration);
       void setLiteral(bool);
       void setDirty(bool dirty) { cascadeDirty(dirty); } //set dirty flag and cascade
 
       Voicing voicing() const { return _voicing; }
-      Rhythm rhythm() const { return _rhythm; }
+      HDuration duration() const { return _duration; }
       bool literal() const { return _literal; }
 
       bool valid() const { return !_dirty && _harmony; }
@@ -87,9 +89,10 @@ class RealizedHarmony {
 
       void update(int rootTpc, int bassTpc, int transposeOffset = 0); //updates the notes map
 
-      QMap<int, int> getIntervals(int rootTpc, bool literal = true) const;
+      Fraction getActualDuration() const;
 
    private:
+      QMap<int, int> getIntervals(int rootTpc, bool literal = true) const;
       QMap<int, int> normalizeNoteMap(const QMap<int, int>& intervals, int rootTpc, int rootPitch, int max = 128, bool enforceMaxAsGoal = false) const;
       void cascadeDirty(bool dirty);
       };

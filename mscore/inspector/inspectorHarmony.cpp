@@ -29,7 +29,8 @@ InspectorHarmony::InspectorHarmony(QWidget* parent)
             { Pid::PLACEMENT, 0, h.placement,   h.resetPlacement  },
             { Pid::PLAY,      0, h.play,        h.resetPlay  },
             { Pid::HARMONY_VOICE_LITERAL, 0, h.voicingSelect->interpretBox, h.resetVoicing },
-            { Pid::HARMONY_VOICING, 0, h.voicingSelect->voicingBox, h.resetVoicing}
+            { Pid::HARMONY_VOICING, 0, h.voicingSelect->voicingBox, h.resetVoicing},
+            { Pid::HARMONY_DURATION, 0, h.voicingSelect->durationBox, h.resetVoicing}
             };
 
       const std::vector<InspectorPanel> ppList = {
