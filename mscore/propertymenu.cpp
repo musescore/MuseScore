@@ -267,11 +267,11 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->insertAction(b, a);
 
             genPropertyMenu1(e, popup);
-            popup->addSeparator();
 
-            popup->addAction(tr("Style…"))->setData("style");
-            if (enableExperimental)
+            if (enableExperimental) {
+                  popup->addSeparator();
                   popup->addAction(tr("Chord Articulation…"))->setData("articulation");
+                  }
             }
       else if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == LayoutBreak::Type::SECTION)
             popup->addAction(tr("Section Break Properties…"))->setData("break-props");
@@ -285,6 +285,11 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(tr("Staff/Part Properties…"))->setData("staff-props");
       else
             genPropertyMenu1(e, popup);
+
+      if (EditStyle::elementHasPage(e)) {
+            popup->addSeparator();
+            popup->addAction(tr("Style…"))->setData("style");
+            }
       }
 
 //---------------------------------------------------------
@@ -466,7 +471,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "style") {
             EditStyle es(e->score(), 0);
-            es.setPage(EditStyle::PAGE_NOTE);
+            es.gotoElement(e);
             es.exec();
             }
       else if (cmd == "break-props") {
