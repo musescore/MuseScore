@@ -57,6 +57,7 @@ class TestChordSymbol : public QObject, public MTest {
       void testRealizeTransposed();
       void testRealizeOverride();
       void testRealizeTriplet();
+      void testRealizeDuration();
       };
 
 //---------------------------------------------------------
@@ -350,6 +351,22 @@ void TestChordSymbol::testRealizeTriplet()
       score->cmdRealizeChordSymbols();
       score->endCmd();
       test_post(score, "realize-triplet");
+      }
+
+//---------------------------------------------------------
+//   testRealizeDuration
+///   Check for correctness when realizing chord symbols
+///   with different durations
+//---------------------------------------------------------
+void TestChordSymbol::testRealizeDuration()
+      {
+      MasterScore* score = test_pre("realize-duration");
+      //realize all chord symbols
+      selectAllChordSymbols(score);
+      score->startCmd();
+      score->cmdRealizeChordSymbols();
+      score->endCmd();
+      test_post(score, "realize-duration");
       }
 
 
