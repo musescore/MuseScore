@@ -469,12 +469,14 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
             QString qNext = next->parsedForm()->quality();
             //pitch from current to next harmony normalized to a range between 0 and 12
             //add PITCH_DELTA_OCTAVE before modulo so that we can ensure arithmetic mod rather than computer mod
-            int keyTpc = int(next->staff()->key(next->tick())) + 14; //tpc of key (ex. F# major would be Tpc::F_S)
+            //int keyTpc = int(next->staff()->key(next->tick())) + 14; //tpc of key (ex. F# major would be Tpc::F_S)
+            //int keyTpcMinor = keyTpc + 3;
             int pitchBetween = (tpc2pitch(next->rootTpc()) + PITCH_DELTA_OCTAVE - tpc2pitch(rootTpc)) % PITCH_DELTA_OCTAVE;
+            bool maj7 = qNext == "major" && next->parsedForm()->extension() >= 7; //whether or not the next chord has major 7
 
-            //dont add 9 for chords with altered 5s
-            if (!(omit & (1 << 9)) && !alt5) {
-                  if (quality == "dominant" && pitchBetween == 5 && qNext == "minor"
+            //dont add 9 for diminished chords
+            if (!(omit & (1 << 9)) && !(alt5 && (quality == "minor" || quality == "diminished" || quality == "half-diminished"))) {
+                  if (quality == "dominant" && pitchBetween == 5 && (qNext == "minor" || maj7)
                       /*((next->rootTpc() == keyTpc && qNext == "major") || (next->rootTpc() == keyTpcMinor && qNext == "minor"))*/) {
                         //flat 9 for dominant to a tonic chord a P4 up
                         //only for minor chords for now
@@ -485,7 +487,7 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
                   }
 
             if (!(omit & (1 << 13)) && !alt5) {
-                  if (quality == "dominant" && pitchBetween == 5 && qNext == "minor") {
+                  if (quality == "dominant" && pitchBetween == 5 && (qNext == "minor" || false)) {
                         //flat 13 for dominant to chord a P4 up
                         //only for minor chords for now
                         ret.remove(FIFTH);

@@ -58,6 +58,7 @@ class TestChordSymbol : public QObject, public MTest {
       void testRealizeOverride();
       void testRealizeTriplet();
       void testRealizeDuration();
+      void testRealizeJazz();
       };
 
 //---------------------------------------------------------
@@ -367,6 +368,22 @@ void TestChordSymbol::testRealizeDuration()
       score->cmdRealizeChordSymbols();
       score->endCmd();
       test_post(score, "realize-duration");
+      }
+
+//---------------------------------------------------------
+//   testRealizeJazz
+///   Check for correctness when realizing chord symbols
+///   with jazz mode
+//---------------------------------------------------------
+void TestChordSymbol::testRealizeJazz()
+      {
+      MasterScore* score = test_pre("realize-jazz");
+      //realize all chord symbols
+      selectAllChordSymbols(score);
+      score->startCmd();
+      score->cmdRealizeChordSymbols();
+      score->endCmd();
+      test_post(score, "realize-jazz");
       }
 
 
