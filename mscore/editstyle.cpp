@@ -680,6 +680,92 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   PAGES
+///   This is a map of element type to pages, to allow the creation of a 'Style...'
+///   menu for every possible element on the score.
+//---------------------------------------------------------
+
+const std::map<ElementType, EditStylePage> EditStyle::PAGES = {
+      { ElementType::SCORE,               &EditStyle::PageScore    },
+      { ElementType::PAGE,                &EditStyle::PagePage     },
+      { ElementType::MEASURE_NUMBER,      &EditStyle::PageSizes    },
+      { ElementType::BRACKET,             &EditStyle::PageSystem   },
+      { ElementType::BRACKET_ITEM,        &EditStyle::PageSystem   },
+      { ElementType::CLEF,                &EditStyle::PageClefs    },
+      { ElementType::KEYSIG,              &EditStyle::PageAccidentals },
+      { ElementType::MEASURE,             &EditStyle::PageMeasure  },
+      { ElementType::REST,                &EditStyle::PageMeasure  },
+      { ElementType::BAR_LINE,            &EditStyle::PageBarlines },
+      { ElementType::NOTE,                &EditStyle::PageNotes    },
+      { ElementType::CHORD,               &EditStyle::PageNotes    },
+      { ElementType::ACCIDENTAL,          &EditStyle::PageNotes    },
+      { ElementType::STEM,                &EditStyle::PageNotes    },
+      { ElementType::STEM_SLASH,          &EditStyle::PageNotes    },
+      { ElementType::LEDGER_LINE,         &EditStyle::PageNotes    },
+      { ElementType::BEAM,                &EditStyle::PageBeams    },
+      { ElementType::TUPLET,              &EditStyle::PageTuplets  },
+      { ElementType::ARPEGGIO,            &EditStyle::PageArpeggios },
+      { ElementType::SLUR,                &EditStyle::PageSlursTies },
+      { ElementType::SLUR_SEGMENT,        &EditStyle::PageSlursTies },
+      { ElementType::TIE,                 &EditStyle::PageSlursTies },
+      { ElementType::TIE_SEGMENT,         &EditStyle::PageSlursTies },
+      { ElementType::HAIRPIN,             &EditStyle::PageHairpins },
+      { ElementType::HAIRPIN_SEGMENT,     &EditStyle::PageHairpins },
+      { ElementType::VOLTA,               &EditStyle::PageVolta    },
+      { ElementType::VOLTA_SEGMENT,       &EditStyle::PageVolta    },
+      { ElementType::OTTAVA,              &EditStyle::PageOttava   },
+      { ElementType::OTTAVA_SEGMENT,      &EditStyle::PageOttava   },
+      { ElementType::PEDAL,               &EditStyle::PagePedal    },
+      { ElementType::PEDAL_SEGMENT,       &EditStyle::PagePedal    },
+      { ElementType::TRILL,               &EditStyle::PageTrill    },
+      { ElementType::TRILL_SEGMENT,       &EditStyle::PageTrill    },
+      { ElementType::VIBRATO,             &EditStyle::PageVibrato  },
+      { ElementType::VIBRATO_SEGMENT,     &EditStyle::PageVibrato  },
+      { ElementType::BEND,                &EditStyle::PageBend     },
+      { ElementType::TEXTLINE,            &EditStyle::PageTextLine },
+      { ElementType::TEXTLINE_SEGMENT,    &EditStyle::PageTextLine },
+      { ElementType::ARTICULATION,        &EditStyle::PageArticulationsOrnaments },
+      { ElementType::FERMATA,             &EditStyle::PageFermatas },
+      { ElementType::STAFF_TEXT,          &EditStyle::PageStaffText },
+      { ElementType::TEMPO_TEXT,          &EditStyle::PageTempoText },
+      { ElementType::LYRICS,              &EditStyle::PageLyrics   },
+      { ElementType::LYRICSLINE,          &EditStyle::PageLyrics   },
+      { ElementType::LYRICSLINE_SEGMENT,  &EditStyle::PageLyrics   },
+      { ElementType::DYNAMIC,             &EditStyle::PageDynamics },
+      { ElementType::REHEARSAL_MARK,      &EditStyle::PageRehearsalMarks },
+      { ElementType::FIGURED_BASS,        &EditStyle::PageFiguredBass },
+      { ElementType::HARMONY,             &EditStyle::PageChordSymbols },
+      { ElementType::FRET_DIAGRAM,        &EditStyle::PageFretboardDiagrams },
+      };
+
+//---------------------------------------------------------
+//   gotoElement
+///   switch the page to the one related to the element `e`
+//---------------------------------------------------------
+
+void EditStyle::gotoElement(Element* e)
+      {
+      const ElementType& t = e->type();
+      const auto i = PAGES.find(t);
+      if (i != PAGES.cend()) {
+            QWidget* page = this->*(i->second);
+            setPage(pageStack->indexOf(page));
+            }
+      }
+
+//---------------------------------------------------------
+//   elementHasPage
+///   check if an element has a style page related to it
+//---------------------------------------------------------
+
+bool EditStyle::elementHasPage(Element* e)
+      {
+      const ElementType& t = e->type();
+      const auto i = PAGES.find(t);
+      return i != PAGES.cend();
+      }
+
+//---------------------------------------------------------
 //   showEvent
 //---------------------------------------------------------
 
