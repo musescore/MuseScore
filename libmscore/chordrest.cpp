@@ -994,19 +994,21 @@ void ChordRest::processSiblings(std::function<void(Element*)> func)
 //   nextArticulationOrLyric
 //---------------------------------------------------------
 
-Element* ChordRest::nextArticulationOrLyric(Element* /*e*/)
+Element* ChordRest::nextArticulationOrLyric(Element* e)
       {
-#if 0 // TODO:fermata
-      auto i = std::find(_articulations.begin(), _articulations.end(), e);
-      if (i != _articulations.end()) {
-            if (i != _articulations.end()-1) {
-                  return *(i+1);
-                  }
-            else {
-                  if (!_lyrics.empty())
-                        return _lyrics[0];
-                  else
-                        return nullptr;
+      if (isChord() && e->isArticulation()) {
+            Chord* c = toChord(this);
+            auto i = std::find(c->articulations().begin(), c->articulations().end(), e);
+            if (i != c->articulations().end()) {
+                  if (i != c->articulations().end() - 1) {
+                        return *(i+1);
+                        }
+                  else {
+                        if (!_lyrics.empty())
+                              return _lyrics[0];
+                        else
+                              return nullptr;
+                        }
                   }
             }
       else {
@@ -1016,7 +1018,6 @@ Element* ChordRest::nextArticulationOrLyric(Element* /*e*/)
                       return *(i+1);
                   }
             }
-#endif
       return 0;
       }
 
@@ -1024,29 +1025,28 @@ Element* ChordRest::nextArticulationOrLyric(Element* /*e*/)
 //   prevArticulationOrLyric
 //---------------------------------------------------------
 
-Element* ChordRest::prevArticulationOrLyric(Element* /*e*/)
+Element* ChordRest::prevArticulationOrLyric(Element* e)
       {
-#if 0 // TODO:fermata
       auto i = std::find(_lyrics.begin(), _lyrics.end(), e);
       if (i != _lyrics.end()) {
             if (i != _lyrics.begin()) {
                   return *(i-1);
                   }
             else {
-                  if (!_articulations.empty())
-                        return _articulations.back();
+                  if (isChord() && !toChord(this)->articulations().empty())
+                        return toChord(this)->articulations().back();
                   else
                         return nullptr;
                   }
             }
-      else {
-            auto i = std::find(_articulations.begin(), _articulations.end(), e);
-            if (i != _articulations.end()) {
-                  if (i != _articulations.begin())
+      else if (isChord() && e->isArticulation()) {
+            Chord* c = toChord(this);
+            auto i = std::find(c->articulations().begin(), c->articulations().end(), e);
+            if (i != c->articulations().end()) {
+                  if (i != c->articulations().begin())
                         return *(i-1);
                   }
             }
-#endif
       return 0;
       }
 
@@ -1057,7 +1057,6 @@ Element* ChordRest::prevArticulationOrLyric(Element* /*e*/)
 Element* ChordRest::nextElement()
       {
       Element* e = score()->selection().element();
-#if 0 // TODO:fermata
       if (!e && !score()->selection().elements().isEmpty())
             e = score()->selection().elements().first();
       switch (e->type()) {
@@ -1070,15 +1069,14 @@ Element* ChordRest::nextElement()
                         break;
                   }
             default: {
-                  if (!_articulations.empty())
-                        return _articulations[0];
+                  if (isChord() && !toChord(this)->articulations().empty())
+                        return toChord(this)->articulations()[0];
                   else if (!_lyrics.empty())
                         return _lyrics[0];
                   else
                         break;
                   }
             }
-#endif
       int staffId = e->staffIdx();
       return segment()->nextElement(staffId);
       }
@@ -1090,7 +1088,6 @@ Element* ChordRest::nextElement()
 Element* ChordRest::prevElement()
       {
       Element* e = score()->selection().element();
-#if 0 // TODO:fermata
       if (!e && !score()->selection().elements().isEmpty())
             e = score()->selection().elements().last();
       switch (e->type()) {
@@ -1109,7 +1106,6 @@ Element* ChordRest::prevElement()
                   break;
                   }
             }
-#endif
       int staffId = e->staffIdx();
       return segment()->prevElement(staffId);
       }
@@ -1150,13 +1146,6 @@ Element* ChordRest::prevSegmentElement()
 QString ChordRest::accessibleExtraInfo() const
       {
       QString rez = "";
-#if 0       // TODO:fermata
-      for (Articulation* a : articulations()) {
-            if (!score()->selectionFilter().canSelect(a))
-                  continue;
-            rez = QString("%1 %2").arg(rez).arg(a->screenReaderInfo());
-            }
-#endif
       for (Element* l : lyrics()) {
             if (!score()->selectionFilter().canSelect(l))
                   continue;
