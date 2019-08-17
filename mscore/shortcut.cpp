@@ -1119,6 +1119,18 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "scr-prev",
+         QT_TRANSLATE_NOOP("action","Screen: Previous")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "scr-next",
+         QT_TRANSLATE_NOOP("action","Screen: Next")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "page-prev",
          QT_TRANSLATE_NOOP("action","Page: Previous")
          },
