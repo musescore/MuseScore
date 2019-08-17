@@ -63,6 +63,7 @@ class FluidGui : public Ms::SynthesizerGui, Ui::FluidGui {
       void loadSf();
 
    private slots:
+      void soundFontTopClicked();
       void soundFontUpClicked();
       void soundFontDownClicked();
       void soundFontAddClicked();

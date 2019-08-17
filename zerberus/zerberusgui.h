@@ -66,6 +66,7 @@ class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui {
       void loadSoundFontsAsync(QStringList sfonts);
 
    private slots:
+      void soundFontTopClicked();
       void soundFontUpClicked();
       void soundFontDownClicked();
       void soundFontAddClicked();
