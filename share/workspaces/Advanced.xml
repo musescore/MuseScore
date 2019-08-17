@@ -1438,7 +1438,7 @@
             </ChordLine>
           </Cell>
         </Palette>
-      <Palette name="Tremolo">
+      <Palette name="Tremolos">
         <gridWidth>27</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>
