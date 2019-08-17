@@ -2315,7 +2315,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
 static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Notations& notations)
       {
-      QString tagName = "";
+      QString tagName;
       switch (arp->arpeggioType()) {
             case ArpeggioType::NORMAL:
                   notations.tag(xml);
@@ -2346,9 +2346,10 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Not
                   break;
             }
 
-      tagName += addPositioningAttributes(arp);
-      if (tagName != "")
+      if (tagName != "") {
+            tagName += addPositioningAttributes(arp);
             xml.tagE(tagName);
+            }
       }
 
 //---------------------------------------------------------
