@@ -2296,6 +2296,8 @@ void Score::cmdDeleteSelection()
                         links = *e->links();
 
                   // find location of element to select after deleting notes
+                  // get tick of element itself if that is valid
+                  // or of spanner or parent if that is more valid
                   Fraction tick  = { -1, 1 };
                   int track = -1;
                   if (!cr) {
