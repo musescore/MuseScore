@@ -1440,8 +1440,7 @@ static void ending(XmlWriter& xml, Volta* v, bool left)
                         break;
                   default:
                         qDebug("unknown volta subtype %d", int(st));
-                        type = "unknown";
-                        break;
+                        return;
                   }
             }
       QString voltaXml = QString("ending number=\"%1\" type=\"%2\"").arg(number).arg(type);
@@ -3630,7 +3629,7 @@ int ExportMusicXml::findOttava(const Ottava* ot) const
 
 void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& tick)
       {
-      int n = findOttava(ot);
+      auto n = findOttava(ot);
       if (n >= 0)
             ottavas[n] = 0;
       else {
@@ -3643,11 +3642,8 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& t
                   }
             }
 
-      directionTag(_xml, _attr, ot);
-      _xml.stag("direction-type");
-
       QString octaveShiftXml;
-      OttavaType st = ot->ottavaType();
+      const auto st = ot->ottavaType();
       if (ot->tick() == tick) {
             const char* sz = 0;
             const char* tp = 0;
@@ -3682,10 +3678,15 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& t
             else
                   qDebug("ottava subtype %d not understood", int(st));
             }
-      octaveShiftXml += addPositioningAttributes(ot, ot->tick() == tick);
-      _xml.tagE(octaveShiftXml);
-      _xml.etag();
-      directionETag(_xml, staff);
+
+      if (octaveShiftXml != "") {
+            directionTag(_xml, _attr, ot);
+            _xml.stag("direction-type");
+            octaveShiftXml += addPositioningAttributes(ot, ot->tick() == tick);
+            _xml.tagE(octaveShiftXml);
+            _xml.etag();
+            directionETag(_xml, staff);
+            }
       }
 
 //---------------------------------------------------------
@@ -4328,7 +4329,7 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                               exp->harmony(toHarmony(e), fd);
                               fd = nullptr; // make sure to write only once ...
                               }
-                        else if (e->isFermata() ||  e->isFiguredBass() || e->isFretDiagram() || e->isJump())
+                        else if (e->isFermata() || e->isFiguredBass() || e->isFretDiagram() || e->isJump())
                               ;  // handled separately by chordAttributes(), figuredBass(), findFretDiagram() or ignored
                         else
                               qDebug("annotations: direction type %s at tick %d not implemented",
