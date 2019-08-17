@@ -793,7 +793,6 @@ class Score : public QObject, public ScoreElement {
       Segment* tick2segmentMM(const Fraction& tick, bool first, SegmentType st) const;
       Segment* tick2segmentMM(const Fraction& tick) const;
       Segment* tick2segmentMM(const Fraction& tick, bool first) const;
-      Segment* tick2segmentEnd(int track, const Fraction& tick) const;
       Segment* tick2leftSegment(const Fraction& tick) const;
       Segment* tick2rightSegment(const Fraction& tick) const;
       void fixTicks();

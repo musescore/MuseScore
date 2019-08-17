@@ -232,7 +232,7 @@ private:
       void attributes(const QString& partId, Measure* measure, const Fraction& tick);
       void measureStyle(Measure* measure);
       void print(Measure* measure);
-      void barline(const QString& partId, Measure* measure);
+      void barline(const QString& partId, Measure* measure, const Fraction& tick);
       void key(const QString& partId, Measure* measure, const Fraction& tick);
       void clef(const QString& partId, Measure* measure, const Fraction& tick);
       void time(const QString& partId, Measure* measure, const Fraction& tick);
