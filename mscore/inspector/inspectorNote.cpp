@@ -87,7 +87,7 @@ InspectorNote::InspectorNote(QWidget* parent)
             { Pid::FIXED,          0, n.fixed,         n.resetFixed         },
             { Pid::FIXED_LINE,     0, n.fixedLine,     n.resetFixedLine     },
 
-            { Pid::USER_OFF,       1, c.offset,        c.resetOffset        },
+            { Pid::OFFSET,         1, c.offset,        c.resetOffset        },
             { Pid::SMALL,          1, c.small,         c.resetSmall         },
             { Pid::NO_STEM,        1, c.stemless,      c.resetStemless      },
             { Pid::STEM_DIRECTION, 1, c.stemDirection, c.resetStemDirection },
@@ -129,8 +129,8 @@ void InspectorNote::setElement()
       n.beam->setEnabled(note->chord()->beam());
       n.tuplet->setEnabled(note->chord()->tuplet());
 
-      bool isNHGroupEnabled = note->chord()->staff()->isPitchedStaff(note->tick())
-         && note->chord()->staff()->staffType(note->tick())->noteHeadScheme() == NoteHeadScheme::HEAD_NORMAL;
+      const StaffType* st = const_cast<const Staff*>(note->chord()->staff())->staffType(note->tick());
+      bool isNHGroupEnabled = (st->group() == StaffGroup::STANDARD) && (st->noteHeadScheme() == NoteHeadScheme::HEAD_NORMAL);
       n.noteHeadGroup->setEnabled(isNHGroupEnabled);
 
       InspectorElementBase::setElement();

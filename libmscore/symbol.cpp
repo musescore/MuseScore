@@ -59,7 +59,19 @@ void Symbol::layout()
       // foreach(Element* e, leafs())     done in BSymbol::layout() ?
       //      e->layout();
       setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
-      ElementLayout::layout(this);
+      qreal w = width();
+      QPointF p;
+      if (align() & Align::BOTTOM)
+            p.setY(- height());
+      else if (align() & Align::VCENTER)
+            p.setY((- height()) * .5);
+      else if (align() & Align::BASELINE)
+            p.setY(-baseLine());
+      if (align() & Align::RIGHT)
+            p.setX(-w);
+      else if (align() & Align::HCENTER)
+            p.setX(-(w * .5));
+      setPos(p);
       BSymbol::layout();
       }
 
@@ -69,7 +81,7 @@ void Symbol::layout()
 
 void Symbol::draw(QPainter* p) const
       {
-      if (type() != ElementType::NOTEDOT || !staff()->isTabStaff(tick())) {
+      if (!isNoteDot() || !staff()->isTabStaff(tick())) {
             p->setPen(curColor());
             if (_scoreFont)
                   _scoreFont->draw(_sym, p, magS(), QPointF());
@@ -84,7 +96,7 @@ void Symbol::draw(QPainter* p) const
 
 void Symbol::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("name", Sym::id2name(_sym));
       if (_scoreFont)
             xml.tag("font", _scoreFont->name());
@@ -143,6 +155,37 @@ void Symbol::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   Symbol::getProperty
+//---------------------------------------------------------
+
+QVariant Symbol::getProperty(Pid propertyId) const
+      {
+      switch (propertyId) {
+            case Pid::SYMBOL:
+                  return QVariant::fromValue(_sym);
+            default:
+                  break;
+            }
+      return BSymbol::getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   Symbol::setProperty
+//---------------------------------------------------------
+
+bool Symbol::setProperty(Pid propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case Pid::SYMBOL:
+                  _sym = v.value<SymId>();
+                  break;
+            default:
+                  break;
+            }
+      return BSymbol::setProperty(propertyId, v);
+      }
+
+//---------------------------------------------------------
 //   FSymbol
 //---------------------------------------------------------
 
@@ -186,7 +229,7 @@ void FSymbol::draw(QPainter* painter) const
 
 void FSymbol::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("font",     _font.family());
       xml.tag("fontsize", _font.pointSizeF());
       xml.tag("code",     _code);

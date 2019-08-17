@@ -79,6 +79,7 @@
         </Staff>
       <Staff id="3">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Harp</trackName>

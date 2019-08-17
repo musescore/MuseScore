@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: timeline.h 4785 2011-09-14 10:06:35Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
@@ -173,9 +172,12 @@ class Timeline : public QGraphicsView {
       unsigned int correctMetaRow(unsigned int row);
       int correctStave(int stave);
 
+      QList<Part*> getParts();
+
    private slots:
       void handle_scroll(int value);
       void updateView();
+      void objectDestroyed(QObject*);
 
    public slots:
       void changeSelection(SelState);

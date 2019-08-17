@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: restproperties.cpp 1840 2009-05-20 11:57:51Z wschweer $
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -27,12 +26,11 @@
 #include "libmscore/measure.h"
 #include "libmscore/part.h"
 #include "exampleview.h"
+#include "menus.h"
 #include "musescore.h"
 #include "icons.h"
 
 namespace Ms {
-
-extern void populateIconPalette(Palette* p, const IconAction* a);
 
 //---------------------------------------------------------
 //    TimeSigProperties
@@ -124,7 +122,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       Groups g = t->groups();
       if (g.empty())
             g = Groups::endings(timesig->sig());     // initialize with default
-      groups->setSig(timesig->sig(), g);
+      groups->setSig(timesig->sig(), g, timesig->numeratorString(), timesig->denominatorString());
 
       MuseScore::restoreGeometry(this);
       }

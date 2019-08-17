@@ -332,6 +332,10 @@ QVariant MeasureBase::getProperty(Pid id) const
                   return repeatStart();
             case Pid::REPEAT_JUMP:
                   return repeatJump();
+            case Pid::NO_OFFSET:
+                  return noOffset();
+            case Pid::IRREGULAR:
+                  return irregular();
             default:
                   return Element::getProperty(id);
             }
@@ -353,12 +357,19 @@ bool MeasureBase::setProperty(Pid id, const QVariant& value)
             case Pid::REPEAT_JUMP:
                   setRepeatJump(value.toBool());
                   break;
+            case Pid::NO_OFFSET:
+                  setNoOffset(value.toInt());
+                  break;
+            case Pid::IRREGULAR:
+                  setIrregular(value.toBool());
+                  break;
             default:
                   if (!Element::setProperty(id, value))
                         return false;
                   break;
             }
       score()->setLayoutAll();
+      score()->setPlaylistDirty();
       return true;
       }
 
@@ -421,7 +432,8 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
             LayoutBreak* lb = new LayoutBreak(score());
             lb->setLayoutBreakType(type);
             lb->setTrack(-1);       // this are system elements
-            lb->setParent(this);
+            MeasureBase* mb = (isMeasure() && toMeasure(this)->isMMRest()) ? toMeasure(this)->mmRestLast() : this;
+            lb->setParent(mb);
             score()->undoAddElement(lb);
             }
       cleanupLayoutBreaks(true);
@@ -539,15 +551,6 @@ bool MeasureBase::readProperties(XmlReader& e)
       else
             return false;
       return true;
-      }
-
-//---------------------------------------------------------
-//   afrac
-//---------------------------------------------------------
-
-Fraction MeasureBase::afrac() const
-      {
-      return Fraction::fromTicks(_tick);
       }
 
 //---------------------------------------------------------

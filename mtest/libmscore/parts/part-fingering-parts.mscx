@@ -131,7 +131,7 @@
               <linkedMain/>
               <Fingering>
                 <linkedMain/>
-                <pos x="0.658089" y="-1.50001"/>
+                <offset x="0.658089" y="-1.50001"/>
                 <text>3</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -874,7 +874,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <pos x="0.658089" y="-1.50001"/>
+                  <offset x="0.658089" y="-1.50001"/>
                   <text>3</text>
                   </Fingering>
                 <pitch>72</pitch>

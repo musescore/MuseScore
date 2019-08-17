@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: breaksdialog -1   $
 //
 //  Copyright (C) 2008-2014 Werner Schweer and others
 //

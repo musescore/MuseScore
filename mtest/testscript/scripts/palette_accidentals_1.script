@@ -1,0 +1,100 @@
+init init/Voice-Piano-3-4.mscx
+cmd note-input
+cmd note-a
+cmd note-c
+cmd note-d
+cmd note-e
+cmd note-c
+cmd note-b
+cmd note-a
+cmd note-g
+cmd escape
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+palette Accidental subtype accidentalFlat
+cmd next-chord
+palette Accidental subtype accidentalNatural
+cmd next-chord
+cmd next-chord
+palette Accidental subtype accidentalSharp
+palette Accidental subtype accidentalSharp
+palette Accidental subtype accidentalDoubleSharp
+palette Accidental subtype accidentalNatural
+cmd next-chord
+palette Accidental subtype accidentalDoubleFlat
+cmd next-chord
+palette Accidental subtype accidentalNaturalFlat
+cmd next-chord
+palette Accidental subtype accidentalNaturalSharp
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+palette Icon action add-parentheses
+cmd prev-chord
+palette Icon action add-brackets
+cmd prev-chord
+palette Accidental subtype accidentalNatural
+cmd prev-chord
+palette Accidental subtype accidentalDoubleSharp
+cmd prev-chord
+palette Accidental subtype accidentalDoubleFlat
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd note-input
+cmd pad-note-16
+cmd note-a
+cmd note-c
+cmd note-d
+cmd note-e
+cmd note-g
+cmd interval9
+cmd pitch-down-octave
+cmd pitch-down-octave
+cmd note-a
+cmd note-a
+cmd note-a
+cmd flip
+cmd interval7
+cmd next-chord
+cmd note-a
+cmd pitch-down-octave
+cmd pitch-up-octave
+cmd pitch-up-octave
+cmd pitch-up
+cmd pitch-down
+cmd pitch-down
+cmd pitch-down
+cmd pitch-down
+cmd pitch-down
+cmd pitch-down
+cmd pitch-down
+cmd pitch-down
+cmd pitch-up
+cmd note-c
+cmd note-d
+cmd note-e
+cmd escape
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+palette Accidental subtype accidentalNatural
+cmd next-chord
+palette Accidental subtype accidentalSharp
+cmd prev-chord
+cmd prev-chord
+palette Accidental subtype accidentalDoubleSharp
+cmd prev-chord
+cmd prev-chord
+palette Accidental subtype accidentalNaturalFlat
+cmd prev-chord
+cmd prev-chord
+cmd next-chord
+palette Accidental subtype accidentalDoubleFlat
+cmd prev-chord
+cmd prev-chord
+palette Accidental subtype accidentalSharp
+test score palette_accidentals_1.mscx

@@ -25,6 +25,7 @@ namespace Ms {
 
 static const ElementStyle staffStyle {
       { Sid::staffTextPlacement, Pid::PLACEMENT },
+      { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------
@@ -43,8 +44,8 @@ StaffText::StaffText(Score* s, Tid tid)
 
 void StaffText::layout()
       {
-      layout2(Sid::staffTextPosAbove, Sid::staffTextPosBelow);
-      autoplaceSegmentElement(styleP(Sid::staffTextMinDistance));
+      TextBase::layout();
+      autoplaceSegmentElement();
       }
 
 //---------------------------------------------------------
@@ -57,8 +58,19 @@ QVariant StaffText::propertyDefault(Pid id) const
             case Pid::SUB_STYLE:
                   return int(Tid::STAFF);
             default:
-                  return TextBase::propertyDefault(id);
+                  return StaffTextBase::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid StaffText::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::staffTextPosAbove : Sid::staffTextPosBelow;
+      return TextBase::getPropertyStyle(pid);
       }
 
 }

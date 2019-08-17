@@ -36,8 +36,8 @@ class RepeatMeasure final : public Rest {
       virtual ElementType type() const override       { return ElementType::REPEAT_MEASURE; }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
-      virtual Fraction duration() const override;
-      Fraction actualDuration() const { return Rest::duration(); }
+      virtual Fraction ticks() const override;
+      Fraction actualTicks() const { return Rest::ticks(); }
 
       virtual QString accessibleInfo() const override;
       };

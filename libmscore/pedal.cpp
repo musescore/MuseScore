@@ -29,15 +29,9 @@ static const ElementStyle pedalStyle {
       { Sid::pedalFontSize,                      Pid::BEGIN_FONT_SIZE         },
       { Sid::pedalFontSize,                      Pid::CONTINUE_FONT_SIZE      },
       { Sid::pedalFontSize,                      Pid::END_FONT_SIZE           },
-      { Sid::pedalFontBold,                      Pid::BEGIN_FONT_BOLD         },
-      { Sid::pedalFontBold,                      Pid::CONTINUE_FONT_BOLD      },
-      { Sid::pedalFontBold,                      Pid::END_FONT_BOLD           },
-      { Sid::pedalFontItalic,                    Pid::BEGIN_FONT_ITALIC       },
-      { Sid::pedalFontItalic,                    Pid::CONTINUE_FONT_ITALIC    },
-      { Sid::pedalFontItalic,                    Pid::END_FONT_ITALIC         },
-      { Sid::pedalFontUnderline,                 Pid::BEGIN_FONT_UNDERLINE    },
-      { Sid::pedalFontUnderline,                 Pid::CONTINUE_FONT_UNDERLINE },
-      { Sid::pedalFontUnderline,                 Pid::END_FONT_UNDERLINE      },
+      { Sid::pedalFontStyle,                     Pid::BEGIN_FONT_STYLE        },
+      { Sid::pedalFontStyle,                     Pid::CONTINUE_FONT_STYLE     },
+      { Sid::pedalFontStyle,                     Pid::END_FONT_STYLE          },
       { Sid::pedalTextAlign,                     Pid::BEGIN_TEXT_ALIGN        },
       { Sid::pedalTextAlign,                     Pid::CONTINUE_TEXT_ALIGN     },
       { Sid::pedalTextAlign,                     Pid::END_TEXT_ALIGN          },
@@ -47,6 +41,7 @@ static const ElementStyle pedalStyle {
       { Sid::pedalBeginTextOffset,               Pid::CONTINUE_TEXT_OFFSET    },
       { Sid::pedalBeginTextOffset,               Pid::END_TEXT_OFFSET         },
       { Sid::pedalPlacement,                     Pid::PLACEMENT               },
+      { Sid::pedalPosBelow,                      Pid::OFFSET                  },
       };
 
 //---------------------------------------------------------
@@ -56,9 +51,28 @@ static const ElementStyle pedalStyle {
 void PedalSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7, Sid::pedalPosBelow, Sid::pedalPosAbove);
+      if (isStyled(Pid::OFFSET))
+            roffset() = pedal()->propertyDefault(Pid::OFFSET).toPointF();
+      autoplaceSpannerSegment();
       }
 
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid PedalSegment::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return spanner()->placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow;
+      return TextLineBaseSegment::getPropertyStyle(pid);
+      }
+
+Sid Pedal::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow;
+      return TextLineBase::getPropertyStyle(pid);
+      }
 
 //---------------------------------------------------------
 //   Pedal
@@ -104,14 +118,13 @@ void Pedal::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
 
       for (auto i : {
          Pid::END_HOOK_TYPE,
          Pid::BEGIN_TEXT,
          Pid::END_TEXT,
-         Pid::LINE_WIDTH,
-         Pid::LINE_STYLE,
+         Pid::LINE_VISIBLE,
          Pid::BEGIN_HOOK_TYPE
          }) {
             writeProperty(xml, i);
@@ -119,7 +132,7 @@ void Pedal::write(XmlWriter& xml) const
       for (const StyledProperty& spp : *styledProperties())
             writeProperty(xml, spp.pid);
 
-      Element::writeProperties(xml);
+      SLine::writeProperties(xml);
       xml.etag();
       }
 
@@ -128,18 +141,17 @@ void Pedal::write(XmlWriter& xml) const
 //   createLineSegment
 //---------------------------------------------------------
 
+static const ElementStyle pedalSegmentStyle {
+      { Sid::pedalPosBelow, Pid::OFFSET },
+      { Sid::pedalMinDistance, Pid::MIN_DISTANCE },
+      };
+
 LineSegment* Pedal::createLineSegment()
       {
-      return new PedalSegment(score());
-      }
-
-//---------------------------------------------------------
-//   setYoff
-//---------------------------------------------------------
-
-void Pedal::setYoff(qreal val)
-      {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow);
+      PedalSegment* p = new PedalSegment(this, score());
+      p->setTrack(track());
+      p->initElementStyle(&pedalSegmentStyle);
+      return p;
       }
 
 //---------------------------------------------------------
@@ -171,6 +183,9 @@ QVariant Pedal::propertyDefault(Pid propertyId) const
 
             case Pid::LINE_VISIBLE:
                   return true;
+
+            case Pid::PLACEMENT:
+                  return score()->styleV(Sid::pedalPlacement);
 
             default:
                   return TextLineBase::propertyDefault(propertyId);
@@ -226,6 +241,14 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
                                           break;
                                     }
                               else if (seg->segmentType() == SegmentType::EndBarLine) {
+                                    if (!seg->enabled()) {
+                                          // disabled barline layout is not reliable
+                                          // use width of measure instead
+                                          Measure* m = seg->measure();
+                                          s = seg->system();
+                                          x = m->width() + m->pos().x() - nhw * 2;
+                                          seg = nullptr;
+                                          }
                                     break;
                                     }
                               }
@@ -242,7 +265,7 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
                         x -= c->x();
                   }
             if (!s) {
-                  int t = tick2();
+                  Fraction t = tick2();
                   Measure* m = score()->tick2measure(t);
                   s = m->system();
                   x = m->tick2pos(t);

@@ -1,7 +1,6 @@
 #=============================================================================
 #  MusE
 #  Linux Music Editor
-#  $Id:$
 #
 #  Copyright (C) 2002-2016 by Werner Schweer and others
 #
@@ -35,6 +34,7 @@ add_library (
       midipanknob.cpp
       colorlabel.cpp
       slider.cpp
+      styledslider.cpp
       volslider.cpp
       mslider.cpp
       pitchedit.cpp
@@ -44,7 +44,8 @@ add_library (
       denomspinbox.cpp
       aslider.h colorlabel.h denomspinbox.h fastlog.h
       knob.h midipanknob.h mslider.h panknob.h pitchedit.h pitchlabel.h
-      poslabel.h slider.h utils.h volknob.h volslider.h
+      poslabel.h slider.h styledslider.h
+      utils.h volknob.h volslider.h
       )
 if (NOT MSVC)
    set_target_properties (
@@ -81,6 +82,7 @@ add_library (
       midipanknob.cpp
       colorlabel.cpp
       slider.cpp
+      styledslider.cpp
       volslider.cpp
       mslider.cpp
       denomspinbox.cpp

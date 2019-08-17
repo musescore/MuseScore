@@ -35,7 +35,7 @@ class LinkedElements;
 
 struct SpannerValues {
       int spannerId;
-      int tick2;
+      Fraction tick2;
       int track2;
       };
 
@@ -67,24 +67,30 @@ class LinksIndexer {
 class XmlReader : public QXmlStreamReader {
       QString docName;  // used for error reporting
 
+      // For readahead possibility.
+      // If needed, must be explicitly set by setReadAheadDevice.
+      QIODevice* _readAheadDevice = nullptr;
+
       // Score read context (for read optimizations):
-      int _tick             { 0       };
-      int _tickOffset       { 0       };
+      Fraction _tick             { Fraction(0, 1) };
+      Fraction _tickOffset       { Fraction(0, 1) };
+      int _intTick          { 0       };
       int _track            { 0       };
       int _trackOffset      { 0       };
       bool _pasteMode       { false   };        // modifies read behaviour on paste operation
       Measure* _lastMeasure { 0       };
-      Measure* _currMeasure { 0       };
-      int _currMeasureIdx   { 0       };
+      Measure* _curMeasure  { 0       };
+      int _curMeasureIdx    { 0       };
       QHash<int, Beam*>    _beams;
       QHash<int, Tuplet*>  _tuplets;
 
       QList<SpannerValues> _spannerValues;
       QList<std::pair<int,Spanner*>> _spanner;
       QList<StaffType> _staffTypes;
+      QList<std::pair<Element*, QPointF>> _fixOffsets;
 
-      QList<ConnectorInfoReader> _connectors;
-      QList<ConnectorInfoReader> _pendingConnectors; // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
+      std::vector<std::unique_ptr<ConnectorInfoReader>> _connectors;
+      std::vector<std::unique_ptr<ConnectorInfoReader>> _pendingConnectors; // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
 
       void htmlToString(int level, QString*);
       Interval _transpose;
@@ -95,12 +101,16 @@ class XmlReader : public QXmlStreamReader {
 
       QList<TextStyleMap> userTextStyles;
 
+      void addConnectorInfo(std::unique_ptr<ConnectorInfoReader>);
+      void removeConnector(const ConnectorInfoReader*); // Removes the whole ConnectorInfo chain from the connectors list.
+
    public:
       XmlReader(QFile* f) : QXmlStreamReader(f), docName(f->fileName()) {}
       XmlReader(const QByteArray& d, const QString& st = QString()) : QXmlStreamReader(d), docName(st)  {}
       XmlReader(QIODevice* d, const QString& st = QString()) : QXmlStreamReader(d), docName(st) {}
       XmlReader(const QString& d, const QString& st = QString()) : QXmlStreamReader(d), docName(st) {}
       XmlReader(const XmlReader&) = delete;
+      XmlReader& operator=(const XmlReader&) = delete;
       ~XmlReader();
 
       bool hasAccidental;                     // used for userAccidental backward compatibility
@@ -116,10 +126,12 @@ class XmlReader : public QXmlStreamReader {
       bool hasAttribute(const char* s) const;
 
       // helper routines based on readElementText():
-      int readInt()         { return readElementText().toInt();      }
-      int readInt(bool* ok) { return readElementText().toInt(ok);    }
-      int readIntHex()      { return readElementText().toInt(0, 16); }
-      double readDouble()   { return readElementText().toDouble();   }
+      int readInt()            { return readElementText().toInt();      }
+      int readInt(bool* ok)    { return readElementText().toInt(ok);    }
+      int readIntHex()         { return readElementText().toInt(0, 16); }
+      double readDouble()      { return readElementText().toDouble();   }
+      qlonglong readLongLong() { return readElementText().toLongLong(); }
+
       double readDouble(double min, double max);
       bool readBool();
       QPointF readPoint();
@@ -132,12 +144,12 @@ class XmlReader : public QXmlStreamReader {
       void setDocName(const QString& s) { docName = s; }
       QString getDocName() const        { return docName; }
 
-      int tick()  const            { return _tick + _tickOffset;  }
-      void initTick(int val)       { _tick = val;       }
-      void incTick(int val)        { _tick += val;      }
-      void setTickOffset(int val)  { _tickOffset = val; }
-      Fraction rfrac() const;
-      Fraction afrac() const;
+      Fraction tick()  const            { return _tick + _tickOffset; }
+      Fraction rtick()  const ;
+      void setTick(const Fraction& f);
+      void incTick(const Fraction& f);
+      void setTickOffset(const Fraction& val) { _tickOffset = val; }
+
       int track() const            { return _track + _trackOffset;     }
       void setTrackOffset(int val) { _trackOffset = val;   }
       int trackOffset() const      { return _trackOffset;   }
@@ -151,18 +163,18 @@ class XmlReader : public QXmlStreamReader {
                                          // account its type (absolute or relative).
 
       void addBeam(Beam* s);
-      Beam* findBeam(int id) const { return _beams.value(id);   }
+      Beam* findBeam(int id) const          { return _beams.value(id);   }
 
       void addTuplet(Tuplet* s);
-      Tuplet* findTuplet(int id) const { return _tuplets.value(id); }
-      QHash<int, Tuplet*>& tuplets()   { return _tuplets; }
+      Tuplet* findTuplet(int id) const      { return _tuplets.value(id); }
+      QHash<int, Tuplet*>& tuplets()        { return _tuplets; }
 
-      void setLastMeasure(Measure* m) { _lastMeasure = m;    }
-      Measure* lastMeasure() const    { return _lastMeasure; }
-      void setCurrentMeasure(Measure* m) { _currMeasure = m; }
-      Measure* currentMeasure() const { return _currMeasure; }
-      void setCurrentMeasureIndex(int idx)  { _currMeasureIdx = idx;  }
-      int currentMeasureIndex() const       { return _currMeasureIdx; }
+      void setLastMeasure(Measure* m)       { _lastMeasure = m;    }
+      Measure* lastMeasure() const          { return _lastMeasure; }
+      void setCurrentMeasure(Measure* m)    { _curMeasure = m; }
+      Measure* currentMeasure() const       { return _curMeasure; }
+      void setCurrentMeasureIndex(int idx)  { _curMeasureIdx = idx;  }
+      int currentMeasureIndex() const       { return _curMeasureIdx; }
 
       void removeSpanner(const Spanner*);
       void addSpanner(int id, Spanner*);
@@ -173,12 +185,9 @@ class XmlReader : public QXmlStreamReader {
       void addSpannerValues(const SpannerValues& sv) { _spannerValues.append(sv); }
       const SpannerValues* spannerValues(int id) const;
 
-      void addConnectorInfo(const ConnectorInfoReader&);
-      void addConnectorInfoLater(const ConnectorInfoReader&); // add connector info to be checked after calling checkConnectors()
+      void addConnectorInfoLater(std::unique_ptr<ConnectorInfoReader> c) { _pendingConnectors.push_back(std::move(c)); } // add connector info to be checked after calling checkConnectors()
       void checkConnectors();
       void reconnectBrokenConnectors();
-      void removeConnectorInfo(const ConnectorInfoReader&);
-      void removeConnector(const ConnectorInfoReader&); // Removes the whole ConnectorInfo chain from the connectors list.
 
       QList<StaffType>& staffType()     { return _staffTypes; }
       Interval transpose() const        { return _transpose; }
@@ -193,6 +202,13 @@ class XmlReader : public QXmlStreamReader {
       void checkTuplets();
       Tid addUserTextStyle(const QString& name);
       Tid lookupUserTextStyle(const QString& name);
+
+      // Ownership on read ahead device is NOT transfered to XmlReader.
+      void setReadAheadDevice(QIODevice* dev) { if (!dev->isSequential()) _readAheadDevice = dev; }
+      bool readAheadAvailable() const { return bool(_readAheadDevice); }
+      void performReadAhead(std::function<void(QIODevice&)> readAheadRoutine);
+
+      QList<std::pair<Element*, QPointF>>& fixOffsets() { return  _fixOffsets; }
       };
 
 //---------------------------------------------------------
@@ -204,23 +220,24 @@ class XmlWriter : public QTextStream {
 
       Score* _score;
       QList<QString> stack;
-      QList<std::pair<int,const Spanner*>> _spanner;
       SelectionFilter _filter;
 
-      int _spannerId      = { 1 };
-      int _curTick        = { 0 };       // used to optimize output
-      int _curTrack       = { -1 };
-      int _tickDiff       = { 0 };
-      int _trackDiff      = { 0 };       // saved track is curTrack-trackDiff
+      Fraction _curTick    { 0, 1 };     // used to optimize output
+      Fraction _tickDiff   { 0, 1 };
+      int _curTrack        { -1 };
+      int _trackDiff       { 0 };       // saved track is curTrack-trackDiff
 
-      bool _clipboardmode = { false };   // used to modify write() behaviour
-      bool _excerptmode   = { false };   // true when writing a part
-      bool _writeOmr      = { true };    // false if writing into *.msc file
-      int _tupletId       = { 1 };
-      int _beamId         = { 1 };
+      bool _clipboardmode  { false };   // used to modify write() behaviour
+      bool _excerptmode    { false };   // true when writing a part
+      bool _writeOmr       { true };    // false if writing into *.msc file
+      bool _writeTrack     { false };
+      bool _writePosition  { false };
 
       LinksIndexer _linksIndexer;
       QMap<int, int> _lidLocalIndices;
+
+      std::vector<std::pair<const ScoreElement*, QString>> _elements;
+      bool _recordElements = false;
 
       void putLevel();
 
@@ -228,39 +245,37 @@ class XmlWriter : public QTextStream {
       XmlWriter(Score*);
       XmlWriter(Score* s, QIODevice* dev);
 
-      int spannerId() const         { return _spannerId; }
-      int curTick() const           { return _curTick; }
-      Fraction afrac() const        { return Fraction::fromTicks(_curTick); }
-      int curTrack() const          { return _curTrack; }
-      int tickDiff() const          { return _tickDiff; }
-      int trackDiff() const         { return _trackDiff; }
+      Fraction curTick() const            { return _curTick; }
+      void setCurTick(const Fraction& v)  { _curTick   = v; }
+      void incCurTick(const Fraction& v)  { _curTick += v; }
 
-      bool clipboardmode() const    { return _clipboardmode; }
-      bool excerptmode() const      { return _excerptmode;   }
-      bool writeOmr() const         { return _writeOmr;   }
-      int nextTupletId()            { return _tupletId++;   }
-      int nextBeamId()              { return _beamId++; }
+      int curTrack() const                { return _curTrack; }
+      void setCurTrack(int v)             { _curTrack  = v; }
 
-      void setClipboardmode(bool v) { _clipboardmode = v; }
-      void setExcerptmode(bool v)   { _excerptmode = v;   }
-      void setWriteOmr(bool v)      { _writeOmr = v;      }
-      void setTupletId(int v)       { _tupletId = v;      }
-      void setBeamId(int v)         { _beamId = v;        }
-      void setSpannerId(int v)      { _spannerId = v; }
-      void setCurTick(int v)        { _curTick   = v; }
-      void setCurTrack(int v)       { _curTrack  = v; }
-      void setTickDiff(int v)       { _tickDiff  = v; }
-      void setTrackDiff(int v)      { _trackDiff = v; }
+      Fraction tickDiff() const           { return _tickDiff; }
+      void setTickDiff(const Fraction& v) { _tickDiff  = v; }
 
-      void incCurTick(int v)        { _curTick += v; }
+      int trackDiff() const               { return _trackDiff; }
+      void setTrackDiff(int v)            { _trackDiff = v; }
 
-      int addSpanner(const Spanner*);     // returns allocated id
-      const Spanner* findSpanner(int id);
-      int spannerId(const Spanner*);      // returns spanner id, allocates new one if none exists
+      bool clipboardmode() const          { return _clipboardmode; }
+      bool excerptmode() const            { return _excerptmode;   }
+      bool writeOmr() const               { return _writeOmr;   }
+      bool writeTrack() const             { return _writeTrack;    }
+      bool writePosition() const          { return _writePosition; }
+
+      void setClipboardmode(bool v)       { _clipboardmode = v; }
+      void setExcerptmode(bool v)         { _excerptmode = v;   }
+      void setWriteOmr(bool v)            { _writeOmr = v;      }
+      void setWriteTrack(bool v)          { _writeTrack= v;     }
+      void setWritePosition(bool v)       { _writePosition = v; }
 
       int assignLocalIndex(const Location& mainElementLocation);
       void setLidLocalIndex(int lid, int localIndex) { _lidLocalIndices.insert(lid, localIndex); }
       int lidLocalIndex(int lid) const { return _lidLocalIndices[lid]; }
+
+      const std::vector<std::pair<const ScoreElement*, QString>>& elements() const { return _elements; }
+      void setRecordElements(bool record) { _recordElements = record; }
 
       void sTag(const char* name, Spatium sp) { XmlWriter::tag(name, QVariant(sp.val())); }
       void pTag(const char* name, PlaceText);
@@ -269,6 +284,9 @@ class XmlWriter : public QTextStream {
 
       void stag(const QString&);
       void etag();
+
+      void stag(const ScoreElement* se, const QString& attributes = QString());
+      void stag(const QString& name, const ScoreElement* se, const QString& attributes = QString());
 
       void tagE(const QString&);
       void tagE(const char* format, ...);
@@ -297,8 +315,6 @@ class XmlWriter : public QTextStream {
       };
 
 extern PlaceText readPlacement(XmlReader&);
-extern QString docName;
-
 }     // namespace Ms
 #endif
 

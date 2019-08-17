@@ -1,10 +1,10 @@
 import QtQuick 2.1
-import MuseScore 1.0
+import MuseScore 3.0
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 
 MuseScore {
-      version:  "2.1"
+      version:  "3.0"
       description: "Create random score."
       menuPath: "Plugins.random2"
       requiresScore: false
@@ -45,7 +45,7 @@ MuseScore {
             cursor.rewind(0);
 
             var ts = newElement(Element.TIMESIG);
-            ts.setSig(numerator, denominator);
+            ts.timesig = fraction(numerator, denominator);
             cursor.add(ts);
 
             var realMeasures = Math.ceil(measures * denominator / numerator);

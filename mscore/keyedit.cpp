@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Copyright (C) 2009-2011 Werner Schweer and others
 //
@@ -190,9 +189,9 @@ void KeyCanvas::mouseReleaseEvent(QMouseEvent*)
 
 void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
       {
-      const QMimeData* data = event->mimeData();
-      if (data->hasFormat(mimeSymbolFormat)) {
-            QByteArray a = data->data(mimeSymbolFormat);
+      const QMimeData* dta = event->mimeData();
+      if (dta->hasFormat(mimeSymbolFormat)) {
+            QByteArray a = dta->data(mimeSymbolFormat);
 
             XmlReader e(a);
 
@@ -275,7 +274,7 @@ KeyEditor::KeyEditor(QWidget* parent)
       l->setContentsMargins(0, 0, 0, 0);
       frame->setLayout(l);
 
-      sp = MuseScore::newKeySigPalette(PaletteType::MASTER);
+      sp = MuseScore::newKeySigPalette();
       sp->setReadOnly(false);
 
       _keyPalette = new PaletteScrollArea(sp);
@@ -290,7 +289,7 @@ KeyEditor::KeyEditor(QWidget* parent)
       l = new QVBoxLayout();
       l->setContentsMargins(0, 0, 0, 0);
       frame_3->setLayout(l);
-      sp1 = MuseScore::newAccidentalsPalette(PaletteType::MASTER);
+      sp1 = MuseScore::newAccidentalsPalette();
       PaletteScrollArea* accPalette = new PaletteScrollArea(sp1);
       QSizePolicy policy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
       accPalette->setSizePolicy(policy1);

@@ -640,7 +640,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articMarcatoBelow</subtype>
+              <subtype>articMarcatoAbove</subtype>
               </Articulation>
             <Note>
               <pitch>69</pitch>
@@ -820,7 +820,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articMarcatoBelow</subtype>
+              <subtype>articMarcatoAbove</subtype>
               </Articulation>
             <Note>
               <pitch>65</pitch>

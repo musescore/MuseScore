@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: icons.cpp 5246 2012-01-24 18:48:55Z wschweer $
 //
 //  Copyright (C) 2002-2007 Werner Schweer and others
 //
@@ -86,6 +85,7 @@ static const char* iconNames[] = {
       "document-new.svg",
       "document-save.svg",
       "document-save-as.svg",
+      "document-save-online.svg",
       "mscore.png",
       "acciaccatura.svg",
       "appoggiatura.svg",
@@ -155,7 +155,10 @@ static const char* iconNames[] = {
       "edit-reset.svg",
       "window-close.svg",
       "arrow_up.svg",
-      "arrow_down.svg"
+      "arrow_down.svg",
+      "mail.svg",
+      "bug.svg",
+      "note_timewise.svg"
       };
 
 //---------------------------------------------------------

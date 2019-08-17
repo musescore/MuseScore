@@ -1,6 +1,7 @@
 #ifndef IMPORTMIDI_INNER_H
 #define IMPORTMIDI_INNER_H
 
+#include "importmidi_chord.h"
 #include "importmidi_fraction.h"
 #include "importmidi_tuplet.h"
 #include "importmidi_operation.h"

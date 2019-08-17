@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: preferences.h 5660 2012-05-22 14:17:39Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -95,6 +94,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_APP_PLAYBACK_FOLLOWSONG                        "application/playback/followSong"
 #define PREF_APP_PLAYBACK_PANPLAYBACK                       "application/playback/panPlayback"
 #define PREF_APP_PLAYBACK_PLAYREPEATS                       "application/playback/playRepeats"
+#define PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY             "application/playback/setLoopToSelectionOnPlay"
 #define PREF_APP_USESINGLEPALETTE                           "application/useSinglePalette"
 #define PREF_APP_STARTUP_FIRSTSTART                         "application/startup/firstStart"
 #define PREF_APP_STARTUP_SESSIONSTART                       "application/startup/sessionStart"
@@ -165,6 +165,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_UI_APP_STARTUP_SHOWPLAYPANEL                   "ui/application/startup/showPlayPanel"
 #define PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN                "ui/application/startup/showSplashScreen"
 #define PREF_UI_APP_STARTUP_SHOWSTARTCENTER                 "ui/application/startup/showStartCenter"
+#define PREF_UI_APP_STARTUP_SHOWTOURS                       "ui/application/startup/showTours"
 #define PREF_UI_APP_GLOBALSTYLE                             "ui/application/globalStyle"
 #define PREF_UI_APP_LANGUAGE                                "ui/application/language"
 #define PREF_UI_APP_RASTER_HORIZONTAL                       "ui/application/raster/horizontal"
@@ -182,6 +183,33 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_UI_SCORE_VOICE4_COLOR                          "ui/score/voice4/color"
 #define PREF_UI_THEME_ICONHEIGHT                            "ui/theme/iconHeight"
 #define PREF_UI_THEME_ICONWIDTH                             "ui/theme/iconWidth"
+#define PREF_UI_THEME_FONTFAMILY                            "ui/theme/fontFamily"
+#define PREF_UI_THEME_FONTSIZE                              "ui/theme/fontSize"
+#define PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR          "ui/pianoroll/dark/selectionBox/color"
+#define PREF_UI_PIANOROLL_DARK_NOTE_UNSEL_COLOR             "ui/pianoroll/dark/note/unselected/color"
+#define PREF_UI_PIANOROLL_DARK_NOTE_SEL_COLOR               "ui/pianoroll/dark/note/selected/color"
+#define PREF_UI_PIANOROLL_DARK_BG_BASE_COLOR                "ui/pianoroll/dark/background/base/color"
+#define PREF_UI_PIANOROLL_DARK_BG_KEY_WHITE_COLOR           "ui/pianoroll/dark/background/keys/white/color"
+#define PREF_UI_PIANOROLL_DARK_BG_KEY_BLACK_COLOR           "ui/pianoroll/dark/background/keys/black/color"
+#define PREF_UI_PIANOROLL_DARK_BG_GRIDLINE_COLOR            "ui/pianoroll/dark/background/gridLine/color"
+#define PREF_UI_PIANOROLL_DARK_BG_TEXT_COLOR                "ui/pianoroll/dark/background/text/color"
+#define PREF_UI_PIANOROLL_LIGHT_SELECTION_BOX_COLOR         "ui/pianoroll/light/selectionBox/color"
+#define PREF_UI_PIANOROLL_LIGHT_NOTE_UNSEL_COLOR            "ui/pianoroll/light/note/unselected/color"
+#define PREF_UI_PIANOROLL_LIGHT_NOTE_SEL_COLOR              "ui/pianoroll/light/note/selected/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_BASE_COLOR               "ui/pianoroll/light/background/base/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_KEY_WHITE_COLOR          "ui/pianoroll/light/background/keys/white/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_KEY_BLACK_COLOR          "ui/pianoroll/light/background/keys/black/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_GRIDLINE_COLOR           "ui/pianoroll/light/background/gridLine/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_TEXT_COLOR               "ui/pianoroll/light/background/text/color"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_ON     "ui/button/highlight/color/disabled/dark/on"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_OFF    "ui/button/highlight/color/disabled/dark/off"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_ON    "ui/button/highlight/color/disabled/light/on"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_OFF   "ui/button/highlight/color/disabled/light/off"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON      "ui/button/highlight/color/enabled/dark/on"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_OFF     "ui/button/highlight/color/enabled/dark/off"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON     "ui/button/highlight/color/enabled/light/on"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF    "ui/button/highlight/color/enabled/light/off"
+
 
 
 class PreferenceVisitor;
@@ -280,6 +308,11 @@ class Preferences {
       bool checkIfKeyExists(const QString key) const;
       bool checkType(const QString key, QMetaType::Type t) const;
 
+      // Used with workspace
+      QMap<QString, QVariant> localPreferences;
+      QMap<QString, QVariant> getDefaultLocalPreferences();
+      bool useLocalPrefs = false;
+
    public:
       Preferences();
       ~Preferences();
@@ -326,6 +359,12 @@ class Preferences {
       MidiRemote midiRemote(int recordId) const;
       void updateMidiRemote(int recordId, MidiRemoteType type, int data);
       void clearMidiRemote(int recordId);
+
+      QMap<QString, QVariant> getLocalPreferences()  { return localPreferences; }
+      void setLocalPreference(QString key, QVariant value);
+      void setUseLocalPreferences(bool value)         { useLocalPrefs = value;   }
+      bool getUseLocalPreferences()                   { return useLocalPrefs;    }
+      void updateLocalPreferences() { localPreferences = getDefaultLocalPreferences(); }
       };
 
 // singleton

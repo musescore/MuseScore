@@ -20,10 +20,17 @@
 #include "mscore.h"
 #include "part.h"
 #include "score.h"
+#include "synthesizer/synthesizer.h"
+#include "synthesizer/midipatch.h"
 
 namespace Ms {
 
 Instrument InstrumentList::defaultInstrument;
+const std::initializer_list<Channel::Prop> PartChannelSettingsLink::excerptProperties {
+      Channel::Prop::SOLOMUTE,
+      Channel::Prop::SOLO,
+      Channel::Prop::MUTE,
+      };
 
 //---------------------------------------------------------
 //   write
@@ -84,7 +91,7 @@ bool MidiArticulation::operator==(const MidiArticulation& i) const
 Instrument::Instrument()
       {
       Channel* a = new Channel;
-      a->name  = "normal";
+      a->setName(Channel::DEFAULT_NAME);
       _channel.append(a);
 
       _minPitchA   = 0;
@@ -93,6 +100,7 @@ Instrument::Instrument()
       _maxPitchP   = 127;
       _useDrumset  = false;
       _drumset     = 0;
+      _singleNoteDynamics = true;
       }
 
 Instrument::Instrument(const Instrument& i)
@@ -113,6 +121,7 @@ Instrument::Instrument(const Instrument& i)
       _stringData   = i._stringData;
       _midiActions  = i._midiActions;
       _articulation = i._articulation;
+      _singleNoteDynamics = i._singleNoteDynamics;
       for (Channel* c : i._channel)
             _channel.append(new Channel(*c));
       _clefType     = i._clefType;
@@ -140,6 +149,7 @@ void Instrument::operator=(const Instrument& i)
       _stringData   = i._stringData;
       _midiActions  = i._midiActions;
       _articulation = i._articulation;
+      _singleNoteDynamics = i._singleNoteDynamics;
       for (Channel* c : i._channel)
             _channel.append(new Channel(*c));
       _clefType     = i._clefType;
@@ -153,6 +163,15 @@ Instrument::~Instrument()
       {
       qDeleteAll(_channel);
       delete _drumset;
+      }
+
+//---------------------------------------------------------
+//   StaffName
+//---------------------------------------------------------
+
+StaffName::StaffName(const QString& s, int p) : _name(s), _pos(p)
+      {
+      Text::validateText(_name); // enforce HTML encoding
       }
 
 //---------------------------------------------------------
@@ -187,7 +206,7 @@ void StaffName::read(XmlReader& e)
 //   Instrument::write
 //---------------------------------------------------------
 
-void Instrument::write(XmlWriter& xml, Part* part) const
+void Instrument::write(XmlWriter& xml, const Part* part) const
       {
       xml.stag("Instrument");
       _longNames.write(xml, "longName");
@@ -237,11 +256,14 @@ void Instrument::write(XmlWriter& xml, Part* part) const
                   }
             }
 
+      if (_singleNoteDynamics != getSingleNoteDynamicsFromTemplate())
+            xml.tag("singleNoteDynamics", _singleNoteDynamics);
+
       if (!(_stringData == StringData()))
             _stringData.write(xml);
-      foreach(const NamedEventList& a, _midiActions)
+      for (const NamedEventList& a : _midiActions)
             a.write(xml, "MidiAction");
-      foreach(const MidiArticulation& a, _articulation)
+      for (const MidiArticulation& a : _articulation)
             a.write(xml);
       for (const Channel* a : _channel)
             a->write(xml, part);
@@ -255,16 +277,25 @@ void Instrument::write(XmlWriter& xml, Part* part) const
 void Instrument::read(XmlReader& e, Part* part)
       {
       bool customDrumset = false;
+      bool readSingleNoteDynamics = false;
 
       _channel.clear();       // remove default channel
       while (e.readNextStartElement()) {
-            if (!readProperties(e, part, &customDrumset))
+            const QStringRef& tag(e.name());
+            if (tag == "singleNoteDynamics") {
+                  _singleNoteDynamics = e.readBool();
+                  readSingleNoteDynamics = true;
+                  }
+            else if (!readProperties(e, part, &customDrumset))
                   e.unknown();
             }
+
+      if (!readSingleNoteDynamics)
+            setSingleNoteDynamicsFromTemplate();
+
       if (_useDrumset) {
-            if (_channel[0]->bank == 0 && _channel[0]->synti.toLower() != "zerberus")
-                  _channel[0]->bank = 128;
-            _channel[0]->updateInitList();
+            if (_channel[0]->bank() == 0 && _channel[0]->synti().toLower() != "zerberus")
+                  _channel[0]->setBank(128);
             }
       }
 
@@ -389,6 +420,10 @@ NamedEventList* Instrument::midiAction(const QString& s, int channelIdx) const
       return 0;
       }
 
+
+const char *Channel::DEFAULT_NAME = "normal";
+
+
 //---------------------------------------------------------
 //   Channel
 //---------------------------------------------------------
@@ -396,41 +431,246 @@ NamedEventList* Instrument::midiAction(const QString& s, int channelIdx) const
 Channel::Channel()
       {
       for(int i = 0; i < int(A::INIT_COUNT); ++i)
-            init.push_back(MidiCoreEvent());
-      synti    = "Fluid";     // default synthesizer
-      channel  = -1;
-      program  = -1;
-      bank     = 0;
-      volume   = 100;
-      pan      = 64; // actually 63.5 for center
-      chorus   = 0;
-      reverb   = 0;
+            _init.push_back(MidiCoreEvent());
+      _synti    = "Fluid";     // default synthesizer
+      _channel  = -1;
+      _program  = -1;
+      _bank     = 0;
+      _volume   = 100;
+      _pan      = 64; // actually 63.5 for center
+      _chorus   = 0;
+      _reverb   = 0;
+      _color = DEFAULT_COLOR;
 
-      mute     = false;
-      solo     = false;
-      soloMute = false;
+      _mute     = false;
+      _solo     = false;
+      _soloMute = false;
+
+//      qDebug("construct Channel ");
+      }
+
+//---------------------------------------------------------
+//   initList
+//---------------------------------------------------------
+
+std::vector<MidiCoreEvent>& Channel::initList() const
+      {
+      if (_mustUpdateInit) {
+            updateInitList();
+            _mustUpdateInit = false;
+            }
+      return _init;
+      }
+
+//---------------------------------------------------------
+//   setVolume
+//---------------------------------------------------------
+
+void Channel::setVolume(char value)
+      {
+      if (_volume != value) {
+            _volume = value;
+            firePropertyChanged(Prop::VOLUME);
+            }
+      _mustUpdateInit = true;
+      }
+
+//---------------------------------------------------------
+//   setPan
+//---------------------------------------------------------
+
+void Channel::setPan(char value)
+      {
+      if (_pan != value) {
+            _pan = value;
+            firePropertyChanged(Prop::PAN);
+            }
+      _mustUpdateInit = true;
+      }
+
+//---------------------------------------------------------
+//   setChorus
+//---------------------------------------------------------
+
+void Channel::setChorus(char value)
+      {
+      if (_chorus != value) {
+            _chorus = value;
+            firePropertyChanged(Prop::CHORUS);
+            }
+      _mustUpdateInit = true;
+      }
+
+//---------------------------------------------------------
+//   setReverb
+//---------------------------------------------------------
+
+void Channel::setReverb(char value)
+      {
+      if (_reverb != value) {
+            _reverb = value;
+            firePropertyChanged(Prop::REVERB);
+            }
+      _mustUpdateInit = true;
+      }
+
+//---------------------------------------------------------
+//   setName
+//---------------------------------------------------------
+
+void Channel::setName(const QString& value)
+      {
+      if (_name != value) {
+            _name = value;
+            firePropertyChanged(Prop::NAME);
+            }
+      }
+
+//---------------------------------------------------------
+//   setDescr
+//---------------------------------------------------------
+
+void Channel::setDescr(const QString& value)
+      {
+      if (_descr != value) {
+            _descr = value;
+            firePropertyChanged(Prop::DESCR);
+            }
+      }
+
+//---------------------------------------------------------
+//   setSynti
+//---------------------------------------------------------
+
+void Channel::setSynti(const QString& value)
+      {
+      if (_synti != value) {
+            _synti = value;
+            firePropertyChanged(Prop::SYNTI);
+            }
+      }
+
+//---------------------------------------------------------
+//   setColor
+//---------------------------------------------------------
+
+void Channel::setColor(int value)
+      {
+      if (_color != value) {
+            _color = value;
+            firePropertyChanged(Prop::COLOR);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProgram
+//---------------------------------------------------------
+
+void Channel::setProgram(int value)
+      {
+      if (_program != value) {
+            _program = value;
+            firePropertyChanged(Prop::PROGRAM);
+            }
+      _mustUpdateInit = true;
+      }
+
+//---------------------------------------------------------
+//   setBank
+//---------------------------------------------------------
+
+void Channel::setBank(int value)
+      {
+      if (_bank != value) {
+            _bank = value;
+            firePropertyChanged(Prop::BANK);
+            }
+      _mustUpdateInit = true;
+      }
+
+//---------------------------------------------------------
+//   setChannel
+//---------------------------------------------------------
+
+void Channel::setChannel(int value)
+      {
+      if (_channel != value) {
+            _channel = value;
+            firePropertyChanged(Prop::CHANNEL);
+            }
+      }
+
+//---------------------------------------------------------
+//   setSoloMute
+//---------------------------------------------------------
+
+void Channel::setSoloMute(bool value)
+      {
+      if (_soloMute != value) {
+            _soloMute = value;
+            firePropertyChanged(Prop::SOLOMUTE);
+            }
+      }
+
+//---------------------------------------------------------
+//   setMute
+//---------------------------------------------------------
+
+void Channel::setMute(bool value)
+      {
+      if (_mute != value) {
+            _mute = value;
+            firePropertyChanged(Prop::MUTE);
+            }
+      }
+
+//---------------------------------------------------------
+//   setSolo
+//---------------------------------------------------------
+
+void Channel::setSolo(bool value)
+      {
+      if (_solo != value) {
+            _solo = value;
+            firePropertyChanged(Prop::SOLO);
+            }
+      }
+
+//---------------------------------------------------------
+//   setUserBankController
+//---------------------------------------------------------
+
+void Channel::setUserBankController(bool val)
+      {
+      if (_userBankController != val) {
+            _userBankController = val;
+            firePropertyChanged(Prop::USER_BANK_CONTROL);
+            }
       }
 
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
-void Channel::write(XmlWriter& xml, Part* part) const
+void Channel::write(XmlWriter& xml, const Part* part) const
       {
-      if (name.isEmpty() || name == "normal")
+      if (_name.isEmpty() || _name == DEFAULT_NAME)
             xml.stag("Channel");
       else
-            xml.stag(QString("Channel name=\"%1\"").arg(name));
-      if (!descr.isEmpty())
-            xml.tag("descr", descr);
-      updateInitList();
-      foreach(const MidiCoreEvent& e, init) {
+            xml.stag(QString("Channel name=\"%1\"").arg(_name));
+      if (!_descr.isEmpty())
+            xml.tag("descr", _descr);
+      if (_color != DEFAULT_COLOR)
+            xml.tag("color", _color);
+
+      for (const MidiCoreEvent& e : initList()) {
             if (e.type() == ME_INVALID)
                   continue;
             if (e.type() == ME_CONTROLLER) {
-                  if (e.dataA() == CTRL_HBANK && e.dataB() == 0)
+                  // Don't write bank if automatically switched, but always write if switched by the user
+                  if (e.dataA() == CTRL_HBANK && e.dataB() == 0 && !_userBankController)
                         continue;
-                  if (e.dataA() == CTRL_LBANK && e.dataB() == 0)
+                  if (e.dataA() == CTRL_LBANK && e.dataB() == 0 && !_userBankController)
                         continue;
                   if (e.dataA() == CTRL_VOLUME && e.dataB() == 100)
                         continue;
@@ -446,14 +686,15 @@ void Channel::write(XmlWriter& xml, Part* part) const
             }
       if (!MScore::testMode)
             // xml.tag("synti", ::synti->name(synti));
-            xml.tag("synti", synti);
-      if (mute)
-            xml.tag("mute", mute);
-      if (solo)
-            xml.tag("solo", solo);
+            xml.tag("synti", _synti);
+      if (_mute)
+            xml.tag("mute", _mute);
+      if (_solo)
+            xml.tag("solo", _solo);
+
       if (part && part->masterScore()->exportMidiMapping() && part->score() == part->masterScore()) {
-            xml.tag("midiPort",    part->masterScore()->midiMapping(channel)->port);
-            xml.tag("midiChannel", part->masterScore()->midiMapping(channel)->channel);
+            xml.tag("midiPort",    part->masterScore()->midiMapping(_channel)->port());
+            xml.tag("midiChannel", part->masterScore()->midiMapping(_channel)->channel());
             }
       for (const NamedEventList& a : midiActions)
             a.write(xml, "MidiAction");
@@ -469,15 +710,19 @@ void Channel::write(XmlWriter& xml, Part* part) const
 void Channel::read(XmlReader& e, Part* part)
       {
       // synti = 0;
-      name = e.attribute("name");
-      if (name == "")
-            name = "normal";
+      _name = e.attribute("name");
+      if (_name == "")
+            _name = DEFAULT_NAME;
+
+      int midiPort = -1;
+      int midiChannel = -1;
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "program") {
-                  program = e.intAttribute("value", -1);
-                  if (program == -1)
-                        program = e.readInt();
+                  _program = e.intAttribute("value", -1);
+                  if (_program == -1)
+                        _program = e.readInt();
                   else
                         e.readNext();
                   }
@@ -486,22 +731,24 @@ void Channel::read(XmlReader& e, Part* part)
                   int ctrl  = e.intAttribute("ctrl", 0);
                   switch (ctrl) {
                         case CTRL_HBANK:
-                              bank = (value << 7) + (bank & 0x7f);
+                              _bank = (value << 7) + (_bank & 0x7f);
+                              _userBankController = true;
                               break;
                         case CTRL_LBANK:
-                              bank = (bank & ~0x7f) + (value & 0x7f);
+                              _bank = (_bank & ~0x7f) + (value & 0x7f);
+                              _userBankController = true;
                               break;
                         case CTRL_VOLUME:
-                              volume = value;
+                              _volume = value;
                               break;
                         case CTRL_PANPOT:
-                              pan = value;
+                              _pan = value;
                               break;
                         case CTRL_CHORUS_SEND:
-                              chorus = value;
+                              _chorus = value;
                               break;
                         case CTRL_REVERB_SEND:
-                              reverb = value;
+                              _reverb = value;
                               break;
                         default:
                               {
@@ -510,7 +757,7 @@ void Channel::read(XmlReader& e, Part* part)
                               ev.setChannel(0);
                               ev.setDataA(ctrl);
                               ev.setDataB(value);
-                              init.push_back(ev);
+                              _init.push_back(ev);
                               }
                               break;
                         }
@@ -527,36 +774,90 @@ void Channel::read(XmlReader& e, Part* part)
                   midiActions.append(a);
                   }
             else if (tag == "synti")
-                  synti = e.readElementText();
+                  _synti = e.readElementText();
             else if (tag == "descr")
-                  descr = e.readElementText();
+                  _descr = e.readElementText();
+            else if (tag == "color")
+                  _color = e.readInt();
             else if (tag == "mute")
-                  mute = e.readInt();
+                  _mute = e.readInt();
             else if (tag == "solo")
-                  solo = e.readInt();
+                  _solo = e.readInt();
             else if (tag == "midiPort") {
-                  int midiPort = e.readInt();
-                  if (part) {
-                        MidiMapping mm;
-                        mm.port = midiPort;
-                        mm.channel = -1;
-                        mm.part = part;
-                        mm.articulation = this;
-                        part->masterScore()->midiMapping()->append(mm);
-                        channel = part->masterScore()->midiMapping()->size() - 1;
-                        }
+                  midiPort = e.readInt();
                   }
             else if (tag == "midiChannel") {
-                  int midiChannel = e.readInt();
-                  if (part)
-                        part->masterScore()->midiMapping(channel)->channel = midiChannel;
+                  midiChannel = e.readInt();
                   }
             else
                   e.unknown();
             }
-      if (128 == bank && "zerberus" == synti.toLower())
-            bank = 0;
-      updateInitList();
+      if (128 == _bank && "zerberus" == _synti.toLower())
+            _bank = 0;
+
+      _mustUpdateInit = true;
+
+      if ((midiPort != -1 || midiChannel != -1) && part && part->score()->isMaster())
+            part->masterScore()->addMidiMapping(this, part, midiPort, midiChannel);
+      }
+
+//---------------------------------------------------------
+//   switchExpressive
+//    Switches channel from non-expressive to expressive patch or vice versa
+//    This works only with MuseScore General soundfont
+//---------------------------------------------------------
+
+void Channel::switchExpressive(Synthesizer* synth, bool expressive, bool force /* = false */)
+      {
+      if ((_userBankController && !force) || !synth)
+            return;
+
+      // Check that we're actually changing the MuseScore General soundfont
+      const auto fontsInfo = synth->soundFontsInfo();
+      if (fontsInfo.empty())
+            return;
+      const auto& info = fontsInfo.front();
+      if (!info.fontName.contains("MuseScore_General")) {
+            qDebug().nospace() << "Soundfont '" << info.fontName << "' is not MuseScore General, cannot update expressive";
+            return;
+            }
+
+      // Work out where the new expressive patch will be
+      // All expressive instruments are +1 bank higher than the
+      // normal counterparts, except on bank 0, where they are placed on bank 17
+      // and on bank 8, which uses bank 18 instead.
+      int searchBankNum;
+      int newBankNum;
+      if (expressive) {
+            int relativeBank = bank() % 129;
+            if (relativeBank == 0)
+                  newBankNum = 17;
+            else if (relativeBank == 8)
+                  newBankNum = 18;
+            else
+                  newBankNum = relativeBank + 1;
+            }
+      else {
+            int relativeBank = bank() % 129;
+            if (relativeBank == 17)
+                  newBankNum = 0;
+            else if (relativeBank == 18)
+                  newBankNum = 8;
+            else
+                  newBankNum = relativeBank - 1;
+            }
+
+      // Floor bank num to multiple of 129 and add new num to get bank num of new patch
+      searchBankNum = (bank() / 129) * 129 + newBankNum;
+      const auto& pl = synth->getPatchInfo();
+      for (const MidiPatch* p : pl) {
+            if (p->synti == "Fluid") {
+                  if (searchBankNum == p->bank && program() == p->prog) {
+                        setBank(p->bank);
+                        return;
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -566,30 +867,168 @@ void Channel::read(XmlReader& e, Part* part)
 void Channel::updateInitList() const
       {
       MidiCoreEvent e;
-      if (program != -1) {
+      if (_program != -1) {
             e.setType(ME_CONTROLLER);
             e.setDataA(CTRL_PROGRAM);
-            e.setDataB(program);
-            init[int(A::PROGRAM)] = e;
+            e.setDataB(_program);
+            _init[int(A::PROGRAM)] = e;
             }
 
-      e.setData(ME_CONTROLLER, CTRL_HBANK, (bank >> 7) & 0x7f);
-      init[int(A::HBANK)] = e;
+      e.setData(ME_CONTROLLER, CTRL_HBANK, (_bank >> 7) & 0x7f);
+      _init[int(A::HBANK)] = e;
 
-      e.setData(ME_CONTROLLER, CTRL_LBANK, bank & 0x7f);
-      init[int(A::LBANK)] = e;
+      e.setData(ME_CONTROLLER, CTRL_LBANK, _bank & 0x7f);
+      _init[int(A::LBANK)] = e;
 
-      e.setData(ME_CONTROLLER, CTRL_VOLUME, volume);
-      init[int(A::VOLUME)] = e;
+      e.setData(ME_CONTROLLER, CTRL_VOLUME, volume());
+      _init[int(A::VOLUME)] = e;
 
-      e.setData(ME_CONTROLLER, CTRL_PANPOT, pan);
-      init[int(A::PAN)] = e;
+      e.setData(ME_CONTROLLER, CTRL_PANPOT, pan());
+      _init[int(A::PAN)] = e;
 
-      e.setData(ME_CONTROLLER, CTRL_CHORUS_SEND, chorus);
-      init[int(A::CHORUS)] = e;
+      e.setData(ME_CONTROLLER, CTRL_CHORUS_SEND, chorus());
+      _init[int(A::CHORUS)] = e;
 
-      e.setData(ME_CONTROLLER, CTRL_REVERB_SEND, reverb);
-      init[int(A::REVERB)] = e;
+      e.setData(ME_CONTROLLER, CTRL_REVERB_SEND, reverb());
+      _init[int(A::REVERB)] = e;
+
+      }
+
+//---------------------------------------------------------
+//   addListener
+//---------------------------------------------------------
+
+void Channel::addListener(ChannelListener* l)
+      {
+      _notifier.addListener(l);
+      }
+
+//---------------------------------------------------------
+//   removeListener
+//---------------------------------------------------------
+
+void Channel::removeListener(ChannelListener* l)
+      {
+      _notifier.removeListener(l);
+      }
+
+//---------------------------------------------------------
+//   PartChannelSettingsLink
+//---------------------------------------------------------
+
+PartChannelSettingsLink::PartChannelSettingsLink(Channel* main, Channel* bound, bool excerpt)
+   : _main(main), _bound(bound), _excerpt(excerpt)
+      {
+      if (excerpt) {
+            for (Channel::Prop p : excerptProperties)
+                  applyProperty(p, /* from */ bound, /* to */ main);
+            }
+      // Maybe it would be good to assign common properties if the link
+      // is constructed in non-excerpt mode. But it is not currently
+      // necessary as playback channels are currently recreated on each
+      // MIDI remapping.
+
+      main->addListener(this);
+      }
+
+//---------------------------------------------------------
+//   PartChannelSettingsLink
+//---------------------------------------------------------
+
+PartChannelSettingsLink::PartChannelSettingsLink(PartChannelSettingsLink&& other)
+   : ChannelListener(), // swap() will set the notifier instead
+   _main(nullptr), _bound(nullptr), _excerpt(false)
+      {
+      swap(*this, other);
+      }
+
+//---------------------------------------------------------
+//   PartChannelSettingsLink::operator=
+//---------------------------------------------------------
+
+PartChannelSettingsLink& PartChannelSettingsLink::operator=(PartChannelSettingsLink&& other)
+      {
+      if (this != &other)
+            swap(*this, other);
+      return *this;
+      }
+
+//---------------------------------------------------------
+//   swap
+//---------------------------------------------------------
+
+void swap(PartChannelSettingsLink& l1, PartChannelSettingsLink& l2)
+      {
+      Ms::swap(static_cast<ChannelListener&>(l1), static_cast<ChannelListener&>(l2));
+      using std::swap;
+      swap(l1._main, l2._main);
+      swap(l1._bound, l2._bound);
+      swap(l1._excerpt, l2._excerpt);
+      }
+
+//---------------------------------------------------------
+//   PartChannelSettingsLink::applyProperty
+//---------------------------------------------------------
+
+void PartChannelSettingsLink::applyProperty(Channel::Prop p, const Channel* from, Channel* to)
+      {
+      switch (p) {
+            case Channel::Prop::VOLUME:
+                  to->setVolume(from->volume());
+                  break;
+            case Channel::Prop::PAN:
+                  to->setPan(from->pan());
+                  break;
+            case Channel::Prop::CHORUS:
+                  to->setChorus(from->chorus());
+                  break;
+            case Channel::Prop::REVERB:
+                  to->setReverb(from->reverb());
+                  break;
+            case Channel::Prop::NAME:
+                  to->setName(from->name());
+                  break;
+            case Channel::Prop::DESCR:
+                  to->setDescr(from->descr());
+                  break;
+            case Channel::Prop::PROGRAM:
+                  to->setProgram(from->program());
+                  break;
+            case Channel::Prop::BANK:
+                  to->setBank(from->bank());
+                  break;
+            case Channel::Prop::COLOR:
+                  to->setColor(from->color());
+                  break;
+            case Channel::Prop::SOLOMUTE:
+                  to->setSoloMute(from->soloMute());
+                  break;
+            case Channel::Prop::SOLO:
+                  to->setSolo(from->solo());
+                  break;
+            case Channel::Prop::MUTE:
+                  to->setMute(from->mute());
+                  break;
+            case Channel::Prop::SYNTI:
+                  to->setSynti(from->synti());
+                  break;
+            case Channel::Prop::CHANNEL:
+                  to->setChannel(from->channel());
+                  break;
+            case Channel::Prop::USER_BANK_CONTROL:
+                  to->setUserBankController(from->userBankController());
+                  break;
+            };
+      }
+
+//---------------------------------------------------------
+//   PartChannelSettingsLink::propertyChanged
+//---------------------------------------------------------
+
+void PartChannelSettingsLink::propertyChanged(Channel::Prop p)
+      {
+      if (isExcerptProperty(p) == _excerpt)
+            applyProperty(p, _main, _bound);
       }
 
 //---------------------------------------------------------
@@ -600,9 +1039,9 @@ int Instrument::channelIdx(const QString& s) const
       {
       int idx = 0;
       for (const Channel* a : _channel) {
-            if (a->name.isEmpty() && s == "normal")
+            if (a->name().isEmpty() && s == Channel::DEFAULT_NAME)
                   return idx;
-            if (s == a->name)
+            if (s == a->name())
                   return idx;
             ++idx;
             }
@@ -682,6 +1121,24 @@ void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const QString
             }
       }
 
+
+//---------------------------------------------------------
+//   updateGateTime
+//---------------------------------------------------------
+
+void Instrument::switchExpressive(MasterScore* score, Synthesizer* synth, bool expressive, bool force /* = false */)
+      {
+      // Only switch to expressive where necessary
+      if (!synth || (expressive && !singleNoteDynamics()))
+            return;
+
+      for (Channel* c : channel()) {
+            c->switchExpressive(synth, expressive, force);
+            if (score->playbackChannel(c))
+                  score->playbackChannel(c)->switchExpressive(synth, expressive, force);
+            }
+      }
+
 //---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
@@ -702,19 +1159,26 @@ bool Instrument::operator==(const Instrument& i) const
             if (!(i._shortNames[k] == _shortNames[k].name()))
                   return false;
             }
+      n = _channel.size();
+      if (i._channel.size() != n)
+            return false;
+      for (int k = 0; k < n; ++k) {
+            if (!(*i._channel[k] == *_channel[k]))
+                  return false;
+            }
+
       return i._minPitchA == _minPitchA
          &&  i._maxPitchA == _maxPitchA
          &&  i._minPitchP == _minPitchP
          &&  i._maxPitchP == _maxPitchP
          &&  i._useDrumset == _useDrumset
          &&  i._midiActions == _midiActions
-         &&  i._channel == _channel
          &&  i._articulation == _articulation
          &&  i._transpose.diatonic == _transpose.diatonic
          &&  i._transpose.chromatic == _transpose.chromatic
          &&  i._trackName == _trackName
-         &&  *i.stringData() == *stringData();
-         ;
+         &&  *i.stringData() == *stringData()
+         &&  i._singleNoteDynamics == _singleNoteDynamics;
       }
 
 //---------------------------------------------------------
@@ -982,7 +1446,49 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       for (const Channel& c : t->channel)
             instr._channel.append(new Channel(c));
       instr.setStringData(t->stringData);
+      instr.setSingleNoteDynamics(t->singleNoteDynamics);
       return instr;
+      }
+
+//---------------------------------------------------------
+//   Instrument::playbackChannel
+//---------------------------------------------------------
+
+const Channel* Instrument::playbackChannel(int idx, const MasterScore* score) const
+      {
+      return score->playbackChannel(channel(idx));
+      }
+
+
+//---------------------------------------------------------
+//   Instrument::playbackChannel
+//---------------------------------------------------------
+
+Channel* Instrument::playbackChannel(int idx, MasterScore* score)
+      {
+      return score->playbackChannel(channel(idx));
+      }
+
+//---------------------------------------------------------
+//   getSingleNoteDynamicsFromTemplate
+//---------------------------------------------------------
+
+bool Instrument::getSingleNoteDynamicsFromTemplate() const
+      {
+      QString templateName = trackName().toLower().replace(" ", "-").replace("♭", "b");
+      InstrumentTemplate* tp = searchTemplate(templateName);
+      if (tp)
+            return tp->singleNoteDynamics;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   setSingleNoteDynamicsFromTemplate
+//---------------------------------------------------------
+
+void Instrument::setSingleNoteDynamicsFromTemplate()
+      {
+      setSingleNoteDynamics(getSingleNoteDynamicsFromTemplate());
       }
 
 //---------------------------------------------------------

@@ -1571,6 +1571,8 @@ void ChordList::read(XmlReader& e)
             if (tag == "font") {
                   ChordFont f;
                   f.family = e.attribute("family", "default");
+                  if (f.family == "MuseJazz")
+                        f.family = "MuseJazz Text";
                   f.mag    = 1.0;
                   while (e.readNextStartElement()) {
                         if (e.name() == "sym") {
@@ -1722,7 +1724,6 @@ bool ChordList::read(const QString& name)
             return false;
             }
       XmlReader e(&f);
-      docName = f.fileName();
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
@@ -1753,7 +1754,7 @@ bool ChordList::write(const QString& name) const
       QFile f(info.filePath());
 
       if (!f.open(QIODevice::WriteOnly)) {
-            MScore::lastError = QObject::tr("Open Chord Description\n%1\nfailed: %2").arg(f.fileName()).arg(f.errorString());
+            MScore::lastError = QObject::tr("Open chord description\n%1\nfailed: %2").arg(f.fileName()).arg(f.errorString());
             return false;
             }
 
@@ -1764,7 +1765,7 @@ bool ChordList::write(const QString& name) const
       write(xml);
       xml.etag();
       if (f.error() != QFile::NoError) {
-            MScore::lastError = QObject::tr("Write Chord Description failed: %1").arg(f.errorString());
+            MScore::lastError = QObject::tr("Write chord description failed: %1").arg(f.errorString());
             }
       return true;
       }

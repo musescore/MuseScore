@@ -334,7 +334,7 @@ class PowerTab {
             int               repeatCount{ 0 };
             void              addToScore(ptSection& sec);
 
-            Measure*          createMeasure(ptBar* bar, int tick);
+            Measure*          createMeasure(ptBar* bar, const Fraction& tick);
             void              fillMeasure(tBeatList& elist, Measure* measure, int staff, std::vector<Note*>&);
 
             int               staves{ 0 };

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: excerptsdialog.cpp 5497 2012-03-26 10:59:16Z lasconic $
 //
 //  Copyright (C) 2008 Werner Schweer and others
 //
@@ -135,6 +134,9 @@ ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
               SLOT(addButtonClicked()));
       connect(title, SIGNAL(textChanged(const QString&)), SLOT(titleChanged(const QString&)));
 
+      moveUpButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      moveDownButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+      
       for (int i = 1; i <= VOICES; i++) {
             //partList->model()->setHeaderData(i, Qt::Horizontal, MScore::selectColor[i-1], Qt::BackgroundRole);
             partList->header()->resizeSection(i, 30);
@@ -269,7 +271,7 @@ void ExcerptsDialog::addButtonClicked()
 
       Excerpt* cur = ((ExcerptItem*)(excerptList->currentItem()))->excerpt();
 
-      foreach(QListWidgetItem* i, instrumentList->selectedItems()) {
+      for (QListWidgetItem* i : instrumentList->selectedItems()) {
             InstrumentItem* item = static_cast<InstrumentItem*>(i);
             const PartItem* it   = item->partItem();
             if (it == 0)
@@ -406,6 +408,7 @@ void ExcerptsDialog::titleChanged(const QString& s)
       ExcerptItem* cur = static_cast<ExcerptItem*>(excerptList->currentItem());
       if (cur == 0)
             return;
+      cur->excerpt()->setTitle(s);
       cur->setText(s);
       }
 
@@ -581,7 +584,7 @@ void ExcerptsDialog::accept()
       // The reference is the excerpt list. So we iterate following it and swap parts in the score accordingly
 
       for (int j = 0; j < excerptList->count(); ++j) {
-            excerptList->setCurrentRow(i);
+            excerptList->setCurrentRow(j);
             QListWidgetItem* cur = excerptList->currentItem();
             if (cur == 0)
                   continue;

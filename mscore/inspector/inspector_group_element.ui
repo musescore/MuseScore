@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorGroupElement</class>
  <widget class="QWidget" name="InspectorGroupElement">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>159</width>
-    <height>93</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Element Group Inspector</string>
   </property>
@@ -30,6 +22,16 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QToolButton" name="title">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -49,40 +51,27 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::HLine</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="lineWidth">
-      <number>2</number>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>
       </property>
+      <property name="topMargin">
+       <number>3</number>
+      </property>
       <property name="rightMargin">
        <number>3</number>
       </property>
-      <property name="horizontalSpacing">
+      <property name="bottomMargin">
        <number>3</number>
       </property>
-      <property name="verticalSpacing">
-       <number>0</number>
+      <property name="spacing">
+       <number>3</number>
       </property>
       <item row="0" column="1">
        <widget class="QPushButton" name="setColor">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Set Color</string>
         </property>
         <property name="text">
          <string>Set Color</string>
@@ -104,9 +93,6 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Set Visible</string>
-        </property>
         <property name="text">
          <string>Set Visible</string>
         </property>
@@ -117,11 +103,28 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Set Invisible</string>
-        </property>
         <property name="text">
          <string>Set Invisible</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="enableAutoplace">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="text">
+         <string>Enable Autoplace</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="disableAutoplace">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="text">
+         <string>Disable Autoplace</string>
         </property>
        </widget>
       </item>
@@ -143,6 +146,8 @@
   <tabstop>setColor</tabstop>
   <tabstop>setVisible</tabstop>
   <tabstop>setInvisible</tabstop>
+  <tabstop>enableAutoplace</tabstop>
+  <tabstop>disableAutoplace</tabstop>
  </tabstops>
  <resources/>
  <connections/>

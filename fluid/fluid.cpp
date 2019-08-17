@@ -572,6 +572,7 @@ void Fluid::updatePatchList()
       patches.clear();
 
       int bankOffset = 0;
+      int sfid = 0;
       for (SFont* sf : sfonts) {
             sf->setBankOffset(bankOffset);
             int banks = 0;
@@ -584,10 +585,13 @@ void Fluid::updatePatchList()
                   patch->bank = p->get_banknum() + bankOffset;
                   patch->prog = p->get_num();
                   patch->name = p->get_name();
+                  patch->sfid = sfid;
                   patches.append(patch);
                   }
+            sfid++;
             bankOffset += (banks + 1);
             }
+
       /* try to set the correct presets */
       int n = channel.size();
       for (int i = 0; i < n; i++)
@@ -604,6 +608,19 @@ QStringList Fluid::soundFonts() const
       for (SFont* f : sfonts)
             sf.append(QFileInfo(f->get_name()).fileName());
       return sf;
+      }
+
+//---------------------------------------------------------
+//   soundFontsInfo
+//---------------------------------------------------------
+
+std::vector<SoundFontInfo> Fluid::soundFontsInfo() const
+      {
+      std::vector<SoundFontInfo> sl;
+      sl.reserve(sfonts.size());
+      for (SFont* f : sfonts)
+            sl.emplace_back(QFileInfo(f->get_name()).fileName(), f->fontName());
+      return sl;
       }
 
 //---------------------------------------------------------
@@ -681,6 +698,9 @@ bool Fluid::removeSoundFont(const QString& s)
       for(Voice* v : activeVoices)
             v->off();
       SFont* sf = get_sfont_by_name(s);
+      if (!sf)
+            return false;
+      
       sfunload(sf->id());
       return true;
       }

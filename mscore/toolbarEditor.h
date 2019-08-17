@@ -24,6 +24,9 @@ namespace Ms {
 class ToolbarEditor : public QDialog, public Ui::ToolbarEditor {
       Q_OBJECT
 
+      std::vector<std::list<const char*>*> *new_toolbars;
+      void updateNewToolbar(int toolbar_to_update);
+
       void populateLists(const std::list<const char*>&, std::list<const char*>*);
       bool isSpacer(QListWidgetItem*) const;
 

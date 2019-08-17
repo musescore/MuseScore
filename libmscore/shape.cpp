@@ -16,6 +16,22 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   addHorizontalSpacing
+//    Currently implemented by adding rectangles of zero
+//    height to the Y position corresponding to the type.
+//    This is a simple solution but has its drawbacks too.
+//---------------------------------------------------------
+
+void Shape::addHorizontalSpacing(HorizontalSpacingType type, qreal leftEdge, qreal rightEdge)
+      {
+      constexpr qreal eps = 100 * std::numeric_limits<qreal>::epsilon();
+      const qreal y = eps * int(type);
+      if (leftEdge == rightEdge) // HACK zero-width shapes collide with everything currently.
+            rightEdge += eps;
+      add(QRectF(leftEdge, y, rightEdge - leftEdge, 0));
+      }
+
+//---------------------------------------------------------
 //   translate
 //---------------------------------------------------------
 
@@ -59,8 +75,8 @@ Shape Shape::translated(const QPointF& pt) const
 //-------------------------------------------------------------------
 //   minHorizontalDistance
 //    a is located right of this shape.
-//    Calculates the minimum vertical distance between the two shapes
-//    so they dont touch.
+//    Calculates the minimum horizontal distance between the two shapes
+//    so they don’t touch.
 //-------------------------------------------------------------------
 
 qreal Shape::minHorizontalDistance(const Shape& a) const
@@ -91,9 +107,13 @@ qreal Shape::minVerticalDistance(const Shape& a) const
       {
       qreal dist = -1000000.0;      // min real
       for (const QRectF& r2 : a) {
+            if (r2.height() <= 0.0)
+                  continue;
             qreal bx1 = r2.left();
             qreal bx2 = r2.right();
             for (const QRectF& r1 : *this) {
+                  if (r1.height() <= 0.0)
+                        continue;
                   qreal ax1 = r1.left();
                   qreal ax2 = r1.right();
                   if (Ms::intersects(ax1, ax2, bx1, bx2))
@@ -140,7 +160,7 @@ qreal Shape::right() const
 
 qreal Shape::top() const
       {
-      qreal dist = 0.0;
+      qreal dist = 1000000.0;
       for (const QRectF& r : *this) {
             if (r.top() < dist)
                   dist = r.top();
@@ -154,7 +174,7 @@ qreal Shape::top() const
 
 qreal Shape::bottom() const
       {
-      qreal dist = 0.0;
+      qreal dist = -1000000.0;
       for (const QRectF& r : *this) {
             if (r.bottom() > dist)
                   dist = r.bottom();
@@ -237,6 +257,19 @@ bool Shape::intersects(const QRectF& rr) const
       {
       for (const QRectF& r : *this) {
             if (r.intersects(rr))
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   intersects
+//---------------------------------------------------------
+
+bool Shape::intersects(const Shape& other) const
+      {
+      for (const QRectF& r : other) {
+            if (intersects(r))
                   return true;
             }
       return false;

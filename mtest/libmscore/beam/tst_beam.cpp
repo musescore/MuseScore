@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2012 Werner Schweer
 //
@@ -14,6 +13,8 @@
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
 #include "libmscore/score.h"
+#include "libmscore/measure.h"
+#include "libmscore/chordrest.h"
 
 #define DIR QString("libmscore/beam/")
 
@@ -42,6 +43,10 @@ class TestBeam : public QObject, public MTest
       void beam23()  { beam("Beam-23.mscx"); }
       void beamS0()  { beam("Beam-S0.mscx"); }
       void beamDir() { beam("Beam-dir.mscx"); }
+      void beamCrossMeasure1();
+      void beamCrossMeasure2() { beam("Beam-CrossM2.mscx"); }
+      void beamCrossMeasure3() { beam("Beam-CrossM3.mscx"); }
+      void beamCrossMeasure4() { beam("Beam-CrossM4.mscx"); }
       };
 
 //---------------------------------------------------------
@@ -65,6 +70,30 @@ void TestBeam::beam(const char* path)
       delete score;
       }
 
+//---------------------------------------------------------
+//   beamCrossMeasure1
+//   This method simulates following operations:
+//   - Update the score
+//   - Check if the beam has been recreated. If yes, this is wrong behaviour
+//---------------------------------------------------------
+void TestBeam::beamCrossMeasure1()
+      {
+      MasterScore* score = readScore(DIR + "Beam-CrossM1.mscx");
+      QVERIFY(score);
+      Measure* first_measure = score->firstMeasure();
+      // find the first segment that has a chord
+      Segment* s = first_measure->first(SegmentType::ChordRest);
+      while (s && !s->element(0)->isChord())
+            s = s->next(SegmentType::ChordRest);
+      // locate the first beam
+      ChordRest* first_note = toChordRest(s->element(0));
+      Beam* b = first_note->beam();
+      score->update();
+      // locate the beam again, and check if it is still b
+      Beam* new_b = first_note->beam();
+      QCOMPARE(new_b, b);
+      delete score;
+      }
 QTEST_MAIN(TestBeam)
 #include "tst_beam.moc"
 

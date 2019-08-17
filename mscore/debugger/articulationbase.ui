@@ -122,7 +122,7 @@
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>SymId:</string>
+           <string notr="true">SymId:</string>
           </property>
          </widget>
         </item>

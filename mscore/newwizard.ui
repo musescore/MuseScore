@@ -27,7 +27,7 @@
       <string>Title</string>
      </property>
      <property name="accessibleDescription">
-      <string>Insert title here</string>
+      <string>Enter score title</string>
      </property>
     </widget>
    </item>
@@ -44,7 +44,7 @@
       <string>Subtitle</string>
      </property>
      <property name="accessibleDescription">
-      <string>Insert subtitle here</string>
+      <string>Enter score subtitle</string>
      </property>
     </widget>
    </item>
@@ -61,7 +61,7 @@
       <string>Composer</string>
      </property>
      <property name="accessibleDescription">
-      <string>Insert composer's name here</string>
+      <string>Enter the composer's name</string>
      </property>
     </widget>
    </item>
@@ -78,7 +78,7 @@
       <string>Lyricist</string>
      </property>
      <property name="accessibleDescription">
-      <string>Insert lyricist's name here</string>
+      <string>Enter the lyricist's name</string>
      </property>
     </widget>
    </item>
@@ -95,7 +95,7 @@
       <string>Copyright</string>
      </property>
      <property name="accessibleDescription">
-      <string>Insert copyright here</string>
+      <string>Enter copyright information</string>
      </property>
     </widget>
    </item>

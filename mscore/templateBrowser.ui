@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TemplateBrowser</class>
+ <widget class="QWidget" name="TemplateBrowser">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>424</width>
+    <height>302</height>
+   </rect>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="Ms::SearchBox" name="templateSearch">
+       <property name="accessibleName">
+        <string>Template search</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Filter template scores by name or category</string>
+       </property>
+       <property name="placeholderText">
+        <string>Search</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Ms::FilterableTreeWidget" name="templateTree">
+       <property name="accessibleName">
+        <string>Template list</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Choose a template to use as a starting point for your score</string>
+       </property>
+       <property name="uniformRowHeights">
+        <bool>true</bool>
+       </property>
+       <property name="expandsOnDoubleClick">
+        <bool>false</bool>
+       </property>
+       <property name="columnCount">
+        <number>1</number>
+       </property>
+       <attribute name="headerVisible">
+        <bool>false</bool>
+       </attribute>
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Ms::ScorePreview" name="preview" native="true"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ScorePreview</class>
+   <extends>QWidget</extends>
+   <header>scorePreview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::FilterableTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>widgets/filterabletreeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Ms::SearchBox</class>
+   <extends>QLineEdit</extends>
+   <header>widgets/searchbox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

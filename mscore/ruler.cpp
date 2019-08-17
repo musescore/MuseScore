@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Copyright (C) 2009 Werner Schweer and others
 //
@@ -229,10 +228,10 @@ void Ruler::paintEvent(QPaintEvent* e)
       //    draw raster
       //---------------------------------------------------
 
-      int bar1, bar2, beat, tick;
+      int bar1, bar2, beat1, tick;
 
-      pos1.mbt(&bar1, &beat, &tick);
-      pos2.mbt(&bar2, &beat, &tick);
+      pos1.mbt(&bar1, &beat1, &tick);
+      pos2.mbt(&bar2, &beat1, &tick);
 
       int n = mag[magStep];
 
@@ -245,17 +244,17 @@ void Ruler::paintEvent(QPaintEvent* e)
             Pos stick(_score->tempomap(), _score->sigmap(), bar, 0, 0);
             if (magStep) {
                   p.setFont(_font2);
-                  int x = pos2pix(stick);
+                  int x1 = pos2pix(stick);
                   QString s;
                   s.setNum(bar + 1);
 
                   p.setPen(Qt::black);
-                  p.drawLine(x, y, x, y + h);
-                  QRect r = QRect(x+2, y, 1000, h);
-                  p.drawText(r, Qt::AlignLeft | Qt::AlignVCenter, s);
+                  p.drawLine(x1, y, x1, y + h);
+                  QRect r1 = QRect(x1+2, y, 1000, h);
+                  p.drawText(r1, Qt::AlignLeft | Qt::AlignVCenter, s);
                   p.setPen(Qt::lightGray);
-                  if (x > 0)
-                        p.drawLine(x, y1, x, y2);
+                  if (x1 > 0)
+                        p.drawLine(x1, y1, x1, y2);
                   }
             else {
                   SigEvent sig = stick.timesig();
@@ -266,7 +265,7 @@ void Ruler::paintEvent(QPaintEvent* e)
                         if (xp < 0)
                               continue;
                         QString s;
-                        QRect r(xp+2, y + 1, 1000, h);
+                        QRect r1(xp+2, y + 1, 1000, h);
                         int y3;
                         int num;
                         if (beat == 0) {
@@ -278,12 +277,12 @@ void Ruler::paintEvent(QPaintEvent* e)
                               num = beat + 1;
                               y3  = y + 8;
                               p.setFont(_font1);
-                              r.moveTop(r.top() + 1);
+                              r1.moveTop(r1.top() + 1);
                               }
                         s.setNum(num);
                         p.setPen(Qt::black);
                         p.drawLine(xp, y3, xp, y+h);
-                        p.drawText(r, Qt::AlignLeft | Qt::AlignVCenter, s);
+                        p.drawText(r1, Qt::AlignLeft | Qt::AlignVCenter, s);
                         p.setPen(beat == 0 ? Qt::lightGray : Qt::gray);
                         if (xp > 0)
                               p.drawLine(xp, y1, xp, y2);

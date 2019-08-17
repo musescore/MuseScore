@@ -14,7 +14,6 @@
 #define __STAFFSTATE_H__
 
 #include "element.h"
-#include "elementlayout.h"
 #include "instrument.h"
 
 namespace Ms {

@@ -24,7 +24,6 @@ enum class SymId;
 //---------------------------------------------------------
 //    @@ Rest
 ///     This class implements a rest.
-//    @P isFullMeasure  bool  (read only)
 //---------------------------------------------------------
 
 class Rest : public ChordRest {
@@ -38,7 +37,7 @@ class Rest : public ChordRest {
       virtual QRectF drag(EditData&) override;
       virtual qreal upPos()   const override;
       virtual qreal downPos() const override;
-      virtual void setUserOff(const QPointF& o) override;
+      virtual void setOffset(const QPointF& o) override;
 
 
    public:
@@ -93,7 +92,9 @@ class Rest : public ChordRest {
       virtual qreal stemPosX() const;
       virtual QPointF stemPosBeam() const;
 
+      virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
       virtual bool setProperty(Pid propertyId, const QVariant& v) override;
+      void undoChangeDotsVisible(bool v);
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual QVariant propertyDefault(Pid) const override;
 

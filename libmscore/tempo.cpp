@@ -139,6 +139,22 @@ void TempoMap::clear()
       }
 
 //---------------------------------------------------------
+//   clearRange
+//    Clears the given range, start tick included, end tick
+//    excluded.
+//---------------------------------------------------------
+
+void TempoMap::clearRange(int tick1, int tick2)
+      {
+      iterator first = lower_bound(tick1);
+      iterator last = lower_bound(tick2);
+      if (first == last)
+            return;
+      erase(first, last);
+      ++_tempoSN;
+      }
+
+//---------------------------------------------------------
 //   tempo
 //---------------------------------------------------------
 

@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "portmidi.h"
+#include "pmutil.h"
+#include "pminternal.h"
 #include "pmmacosxcm.h"
 #include "readbinaryplist.h"
 
@@ -43,33 +45,10 @@ PmDeviceID find_default_device(char *path, int input, PmDeviceID id)
         }
     }
     if (pref_str) { /* search devices for match */
-        int i;
-        int n = Pm_CountDevices();
-        /* first parse pref_str into name, interf parts */
-        char *interf_pref = ""; /* initially assume it is not there */
-        char *name_pref = strstr(pref_str, ", ");
-        if (name_pref) { /* found separator, adjust the pointer */
-            interf_pref = pref_str;
-            /* modify the string to split into two parts. This write goes
-               all the way into the prev_val data structure, but since
-               noone else is going to use the string, it's ok to modify
-               the data structure
-             */
-            interf_pref = pref_str;
-            name_pref[0] = 0;
-            name_pref += 2;
-        } else {
-            name_pref = pref_str; /* whole string is the name pattern */
-        }
-        for (i = 0; i < n; i++) {
-            const PmDeviceInfo *info = Pm_GetDeviceInfo(i);
-            if (info->input == input &&
-                strstr(info->name, name_pref) &&
-                strstr(info->interf, interf_pref)) {
-                id = i;
-                break;
-            }
-        }
+        int i = pm_find_default_device(pref_str, input);
+        if (i != pmNoDevice) {
+            id = i;
+	}
     }
     if (prefs) {
         bplist_free_data();

@@ -38,8 +38,6 @@ class InspectorElementBase : public InspectorBase {
       UiInspectorElement e;
 
    private slots:
-      void resetAutoplace();
-      void autoplaceChanged(bool);
 
    public:
       InspectorElementBase(QWidget* parent);

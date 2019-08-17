@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Copyright (C) 2011-2016 Werner Schweer and others
 //
@@ -155,9 +154,9 @@ QSize HPiano::sizeHint() const
 //   pressKeys
 //---------------------------------------------------------
 
-void HPiano::setPressedPitches(QSet<int> pitches)
+void HPiano::setPressedPlaybackPitches(QSet<int> pitches)
       {
-      _pressedPitches = pitches;
+      _pressedPlaybackPitches = pitches;
       updateAllKeys();
       }
 
@@ -185,7 +184,7 @@ void HPiano::releasePitch(int pitch)
 //   changeSelection
 //---------------------------------------------------------
 
-void HPiano::changeSelection(Selection selection)
+void HPiano::changeSelection(const Selection& selection)
       {
       for (PianoKeyItem* key : keys) {
             key->setHighlighted(false);
@@ -219,7 +218,8 @@ void HPiano::clearSelection()
 void HPiano::updateAllKeys()
       {
       for (PianoKeyItem* key : keys) {
-            key->setPressed(_pressedPitches.contains(key->pitch()));
+            key->setPressed(_pressedPitches.contains(key->pitch())
+                            || _pressedPlaybackPitches.contains(key->pitch()));
             key->update();
             }
       }
@@ -246,6 +246,10 @@ PianoKeyItem::PianoKeyItem(HPiano* _piano, int p)
       _selected = false;
       _highlighted = false;
       type = -1;
+
+      QString pitchNames[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+      QString text = pitchNames[_pitch % 12] + QString::number((_pitch / 12) - 1);
+      setToolTip(text);
       }
 
 //---------------------------------------------------------
@@ -395,11 +399,12 @@ void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* /*o*/, QWi
       else
             p->setBrush(type >= 7 ? Qt::black : Qt::white);
       p->drawPath(path());
-      if (_pitch == 60) {
-            QFont f("FreeSerif", 8);
+      if (_pitch % 12 == 0) {
+            QFont f("FreeSerif", 6);
             p->setFont(f);
+            QString text = "C" + QString::number((_pitch / 12) - 1);
             p->drawText(QRectF(KEY_WIDTH / 2, KEY_HEIGHT - 8, 0, 0),
-               Qt::AlignCenter | Qt::TextDontClip, "c'");
+               Qt::AlignCenter | Qt::TextDontClip, text);
             }
       }
 
@@ -439,13 +444,13 @@ void PianoTools::retranslate()
 //   heartBeat
 //---------------------------------------------------------
 
-void PianoTools::heartBeat(QList<const Ms::Note *> notes)
+void PianoTools::setPlaybackNotes(QList<const Ms::Note *> notes)
       {
       QSet<int> pitches;
       for (const Note* note : notes) {
           pitches.insert(note->ppitch());
           }
-      _piano->setPressedPitches(pitches);
+      _piano->setPressedPlaybackPitches(pitches);
       }
 
 //---------------------------------------------------------
@@ -529,7 +534,7 @@ bool HPiano::gestureEvent(QGestureEvent *event)
 //   changeSelection
 //---------------------------------------------------------
 
-void PianoTools::changeSelection(Selection selection)
+void PianoTools::changeSelection(const Selection& selection)
       {
       _piano->changeSelection(selection);
       }

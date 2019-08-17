@@ -17,8 +17,8 @@
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
-      <pedalPosBelow>0</pedalPosBelow>
-      <trillPosAbove>0</trillPosAbove>
+      <pedalPosBelow x="0" y="0"/>
+      <trillPosAbove x="0" y="0"/>
       <minMMRestWidth>0</minMMRestWidth>
       <titleFontSize>10</titleFontSize>
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
@@ -30,7 +30,7 @@
       <longInstrumentFontSize>10</longInstrumentFontSize>
       <shortInstrumentFontSize>10</shortInstrumentFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
-      <dynamicsFontItalic>0</dynamicsFontItalic>
+      <dynamicsFontStyle>0</dynamicsFontStyle>
       <tempoFontSize>10</tempoFontSize>
       <metronomeFontSize>10</metronomeFontSize>
       <translatorFontSize>10</translatorFontSize>

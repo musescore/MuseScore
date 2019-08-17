@@ -84,14 +84,7 @@
       </widget>
      </item>
      <item row="0" column="1" colspan="5">
-      <widget class="QLineEdit" name="filePath">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
+      <widget class="QLabel" name="filePath"/>
      </item>
     </layout>
    </item>

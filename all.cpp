@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE
 //  Linux Music Score Editor
-//  $Id: allqt.h,v 1.24 2006/03/02 17:08:30 wschweer Exp $
 //
 //  Copyright (C) 2004-2011 Werner Schweer (ws@seh.de)
 //

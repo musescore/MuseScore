@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id:$ drumtools.h
 //
 //  Copyright (C) 2010-2016 Werner Schweer and others
 //

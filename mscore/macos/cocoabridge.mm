@@ -25,3 +25,9 @@ void  CocoaBridge::setAllowsAutomaticWindowTabbing(bool flag)
     if ([NSWindow respondsToSelector:@selector(allowsAutomaticWindowTabbing)])
         [NSWindow setAllowsAutomaticWindowTabbing: flag];
 }
+
+bool  CocoaBridge::isSystemDarkTheme()
+{
+    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+    return ([osxMode isEqualToString:@"Dark"]);
+}

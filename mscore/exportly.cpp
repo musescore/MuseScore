@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: exportly.cpp 5510 2012-03-30 14:51:09Z wschweer $
 //
 //  Copyright (C) 2007 Werner Schweer and others
 //

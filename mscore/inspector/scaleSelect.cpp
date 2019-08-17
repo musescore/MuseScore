@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include "scaleSelect.h"
-#include "libmscore/elementlayout.h"
+#include "libmscore/types.h"
 #include "icons.h"
 #include "musescore.h"
 

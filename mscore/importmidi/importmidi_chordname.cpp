@@ -192,9 +192,8 @@ void setChordNames(QList<MTrack> &tracks)
                   const ReducedFraction &onTime = chord.first;
                   usedTimes.insert(onTime);
 
-                  Measure* measure = score->tick2measure(onTime.ticks());
-                  Segment* seg = measure->getSegment(SegmentType::ChordRest,
-                                                     onTime.ticks());
+                  Measure* measure = score->tick2measure(onTime.fraction());
+                  Segment* seg = measure->getSegment(SegmentType::ChordRest, onTime.fraction());
                   const int t = staff->idx() * VOICES;
 
                   Harmony* h = new Harmony(score);

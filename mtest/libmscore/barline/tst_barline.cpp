@@ -40,6 +40,7 @@ class TestBarline : public QObject, public MTest
       void barline05();
       void barline06();
       void barline179726();
+      void deleteSkipBarlines();
       };
 
 //---------------------------------------------------------
@@ -363,7 +364,7 @@ void dropNormalBarline(Element* e)
       EditData dropData(0);
       BarLine* barLine = new BarLine(e->score());
       barLine->setBarLineType(BarLineType::NORMAL);
-      dropData.element = barLine;
+      dropData.dropElement = barLine;
 
       e->score()->startCmd();
       e->drop(dropData);
@@ -388,7 +389,7 @@ void TestBarline::barline179726()
 
       // drop NORMAL onto initial START_REPEAT barline will remove that START_REPEAT
       dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
-      QVERIFY(m->findSegment(SegmentType::StartRepeatBarLine, 0) == NULL);
+      QVERIFY(m->findSegment(SegmentType::StartRepeatBarLine, Fraction(0,1)) == NULL);
 
       // drop NORMAL onto END_START_REPEAT will turn into NORMAL
       dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
@@ -439,6 +440,28 @@ void TestBarline::barline179726()
       delete score;
       }
 
+//---------------------------------------------------------
+//   deleteSkipBarlines
+//---------------------------------------------------------
+
+void TestBarline::deleteSkipBarlines()
+      {
+      MasterScore* score = readScore(DIR + "barlinedelete.mscx");
+
+      Measure* m1 = score->firstMeasure();
+      QVERIFY(m1);
+
+      score->startCmd();
+      score->cmdSelectAll();
+      score->cmdDeleteSelection();
+      score->endCmd();
+
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, QString("barlinedelete.mscx"),
+         DIR + QString("barlinedelete-ref.mscx")));
+      delete score;
+      }
 
 QTEST_MAIN(TestBarline)
 #include "tst_barline.moc"

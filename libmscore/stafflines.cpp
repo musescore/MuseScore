@@ -86,7 +86,7 @@ void StaffLines::layout()
 
 void StaffLines::layoutForWidth(qreal w)
       {
-      Staff* s       = staff();
+      const Staff* s = staff();
       qreal _spatium = spatium();
       qreal dist     = _spatium;
       setPos(QPointF(0.0, 0.0));
@@ -94,7 +94,7 @@ void StaffLines::layoutForWidth(qreal w)
       if (s) {
             setMag(s->mag(measure()->tick()));
             setColor(s->color());
-            StaffType* st = s->staffType(measure()->tick());
+            const StaffType* st = s->staffType(measure()->tick());
             dist         *= st->lineDistance().val();
             _lines        = st->lines();
             rypos()       = st->yoffset().val() * _spatium;
@@ -110,6 +110,11 @@ void StaffLines::layoutForWidth(qreal w)
       qreal x2 = x1 + w;
       qreal y  = pos().y();
       bbox().setRect(x1, -lw * .5 + y, w, (_lines-1) * dist + lw);
+
+      if (_lines == 1) {
+            qreal extraSize = _spatium;
+            bbox().adjust(0, -extraSize, 0, extraSize);
+      }
 
       lines.clear();
       for (int i = 0; i < _lines; ++i) {

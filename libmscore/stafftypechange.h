@@ -41,8 +41,8 @@ class StaffTypeChange final : public Element {
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
 
-      StaffType* staffType() const     { return _staffType; }
-      void setStaffType(StaffType* st) { _staffType = st; }
+      const StaffType* staffType() const     { return _staffType; }
+      void setStaffType(StaffType* st)       { _staffType = st; }
 
       Measure* measure() const         { return toMeasure(parent());   }
 

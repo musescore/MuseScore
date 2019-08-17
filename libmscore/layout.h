@@ -29,29 +29,35 @@ struct LayoutContext {
       bool firstSystem         { true };
       Page* page               { 0 };
       int curPage              { 0 };      // index in Score->page()s
-      int tick                 { 0 };
-      Fraction sig;
+      Fraction tick            { 0, 1 };
 
       QList<System*> systemList;          // reusable systems
+      std::set<Spanner*> processedSpanners;
 
       System* prevSystem       { 0 };     // used during page layout
       System* curSystem        { 0 };
 
       MeasureBase* systemOldMeasure;
+      MeasureBase* pageOldMeasure;
       bool rangeDone           { false };
 
       MeasureBase* prevMeasure { 0 };
       MeasureBase* curMeasure  { 0 };
       MeasureBase* nextMeasure { 0 };
       int measureNo            { 0 };
-      int endTick;
+      Fraction startTick;
+      Fraction endTick;
+
+      LayoutContext() = default;
+      LayoutContext(const LayoutContext&) = delete;
+      LayoutContext& operator=(const LayoutContext&) = delete;
+      ~LayoutContext();
 
       void layoutLinear();
-      void layoutMeasureLinear(MeasureBase*);
 
       void layout();
       int adjustMeasureNo(MeasureBase*);
-      void getEmptyPage();
+      void getNextPage();
       void collectPage();
       };
 
@@ -63,6 +69,10 @@ enum class VerticalAlignRange {
       SEGMENT, MEASURE, SYSTEM
       };
 
+extern bool isTopBeam(ChordRest* cr);
+extern bool notTopBeam(ChordRest* cr);
+extern bool isTopTuplet(ChordRest* cr);
+extern bool notTopTuplet(ChordRest* cr);
 
 }     // namespace Ms
 #endif

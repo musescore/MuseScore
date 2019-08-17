@@ -120,6 +120,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       QTimer* extendNoteTimer; // single-shot timer for initial advancement when a note is held
       bool allowRealtimeRests; // Allow entering rests in realtime mode? (See note above)
 
+      bool tripleClickPending = false;
+      bool popupActive = false;
+
       // Loop In/Out marks in the score
       PositionCursor* _curLoopIn;
       PositionCursor* _curLoopOut;
@@ -135,11 +138,15 @@ class ScoreView : public QWidget, public MuseScoreView {
       QPixmap* _bgPixmap;
       QPixmap* _fgPixmap;
 
+      // By default when the view will prevent viewpoint changes if
+      // it is inactive. Set this flag to true to change this behaviour.
+      bool _moveWhenInactive = false;
+
       virtual void paintEvent(QPaintEvent*);
       void paint(const QRect&, QPainter&);
 
       void objectPopup(const QPoint&, Element*);
-      void measurePopup(const QPoint&, Measure*);
+      void measurePopup(QContextMenuEvent* ev, Measure*);
 
       void saveChord(XmlWriter&);
 
@@ -167,6 +174,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void mousePressEventNormal(QMouseEvent*);
       void escapeCmd();
+      bool startTextEditingOnMouseRelease(QMouseEvent*);
+      void adjustCursorForTextEditing(QMouseEvent*);
 
       void constraintCanvas(int *dxx, int *dyy);
       void contextItem(Element*);
@@ -182,12 +191,13 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void lyricsUpDown(bool up, bool end) override;
       virtual void lyricsMinus() override;
       virtual void lyricsUnderscore() override;
+      virtual void textTab(bool back = false) override;
       void harmonyEndEdit();
       void harmonyTab(bool back);
       void harmonyBeatsTab(bool noterest, bool back);
-      void harmonyTicksTab(int ticks);
+      void harmonyTicksTab(const Fraction& ticks);
       void figuredBassTab(bool meas, bool back);
-      void figuredBassTicksTab(int ticks);
+      void figuredBassTicksTab(const Fraction& ticks);
       void figuredBassEndEdit();
       void realtimeAdvance(bool allowRests);
       void cmdAddFret(int fret);
@@ -214,7 +224,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void paintPageBorder(QPainter& p, Page* page);
       bool dropCanvas(Element*);
       void editCmd(const QString&);
-      void setLoopCursor(PositionCursor* curLoop, int tick, bool isInPos);
+      void setLoopCursor(PositionCursor* curLoop, const Fraction& tick, bool isInPos);
       void cmdMoveCR(bool left);
       void cmdGotoElement(Element*);
       bool checkCopyOrCut();
@@ -224,6 +234,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void startFotoDrag();
       void endFotoDrag();
       void endFotoDragEdit();
+      QImage getRectImage(const QRectF& rect, double dpi, bool transparent, bool printMode);
 
       virtual void startEdit();
       void endEdit();
@@ -247,6 +258,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdRealtimeAdvance();
       void extendCurrentNote();
       void seqStopped();
+      void tripleClickTimeOut();
 
    public slots:
       void setViewRect(const QRectF&);
@@ -260,15 +272,15 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void normalCut();
       void normalCopy();
-      void fotoModeCopy();
-      bool normalPaste();
+      void fotoModeCopy(bool includeLink = false);
+      bool normalPaste(Fraction scale = Fraction(1, 1));
       void normalSwap();
 
       void cloneElement(Element* e);
       void doFotoDragEdit(QMouseEvent* ev);
 
       void updateContinuousPanel();
-      void ticksTab(int ticks);     // helper function
+      void ticksTab(const Fraction& ticks);     // helper function
 
    signals:
       void viewRectChanged();
@@ -285,8 +297,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void startEdit(Element*, Grip) override;
       virtual void startEditMode(Element*) override;
 
-      void moveCursor(int tick);
-      int cursorTick() const;
+      void moveCursor(const Fraction& tick);
+      Fraction cursorTick() const;
       void setCursorOn(bool);
       void setBackground(QPixmap*);
       void setBackground(const QColor&);
@@ -307,6 +319,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void zoom(qreal _mag, const QPointF& pos);
       void contextPopup(QContextMenuEvent* ev);
       bool editKeyLyrics();
+      bool editKeySticking();
       void dragScoreView(QMouseEvent* ev);
       void doDragElement(QMouseEvent* ev);
       void doDragLasso(QMouseEvent* ev);
@@ -316,7 +329,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool fotoEditElementDragTransition(QMouseEvent* ev);
       void addSlur();
       virtual void cmdAddSlur(ChordRest*, ChordRest*) override;
-      virtual void cmdAddHairpin(HairpinType) override;
+      virtual void cmdAddHairpin(HairpinType);
       void cmdAddNoteLine();
 
       bool noteEntryMode() const { return state == ViewState::NOTE_ENTRY; }
@@ -335,6 +348,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       qreal yoffset() const;
       void setOffset(qreal x, qreal y);
       QSizeF fsize() const;
+      void screenNext();
+      void screenPrev();
       void pageNext();
       void pagePrev();
       void pageTop();
@@ -388,8 +403,10 @@ class ScoreView : public QWidget, public MuseScoreView {
       void setOmrView(OmrView* v)     { _omrView = v;    }
       FotoLasso* fotoLasso() const    { return _foto;    }
       Element* getEditElement();
+      void onElementDestruction(Element*) override;
 
       virtual Element* elementNear(QPointF);
+      QList<Element*> elementsNear(QPointF);
 //      void editFretDiagram(FretDiagram*);
       void editBendProperties(Bend*);
       void editTremoloBarProperties(TremoloBar*);
@@ -400,6 +417,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       bool clickOffElement;
       void updateGrips();
+      bool moveWhenInactive() const { return _moveWhenInactive; }
+      bool moveWhenInactive(bool move) { bool m = _moveWhenInactive; _moveWhenInactive = move; return m; }
       };
 
 } // namespace Ms

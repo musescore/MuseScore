@@ -24,7 +24,18 @@ namespace Ms {
 ScorePreview::ScorePreview(QWidget* parent)
    : QWidget(parent)
       {
+      messageNothingToShow = tr("Nothing selected");
       setupUi(this);
+      icon->setText(messageNothingToShow);
+      }
+
+//---------------------------------------------------------
+//   displayInfo
+//---------------------------------------------------------
+
+void ScorePreview::displayInfo(bool show)
+      {
+      info->setVisible(show);
       }
 
 //---------------------------------------------------------
@@ -48,6 +59,22 @@ void ScorePreview::setScore(const ScoreInfo& si)
       creationDate->setEnabled(true);
       fileSize->setEnabled(true);
       icon->setPixmap(si.pixmap());
+      }
+
+//---------------------------------------------------------
+//   unsetScore
+//---------------------------------------------------------
+
+void ScorePreview::unsetScore()
+      {
+      scoreInfo = ScoreInfo();
+      name->setText("");
+      creationDate->setText("");
+      fileSize->setText("");
+      name->setEnabled(false);
+      creationDate->setEnabled(true);
+      fileSize->setEnabled(true);
+      icon->setText(messageNothingToShow);
       }
 }
 

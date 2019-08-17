@@ -100,7 +100,7 @@ void Channel::setcc(int num, int value)
       {
       cc[num] = value;
 
-// printf("setcc %d %d\n", num, value);
+//printf("setcc %d %d\n", num, value);
 
       switch (num) {
             case SUSTAIN_SWITCH:

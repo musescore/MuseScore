@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: musescore.cpp 4961 2011-11-11 16:24:17Z lasconic $
 //
 //  Copyright (C) 2002-2011 Werner Schweer and others
 //
@@ -30,6 +29,7 @@
 #include "libmscore/note.h"
 #include "libmscore/undo.h"
 #include "mixer.h"
+#include "parteditbase.h"
 #include "scoreview.h"
 #include "playpanel.h"
 #include "preferences.h"
@@ -203,6 +203,7 @@ void MuseScore::oscTempo(int val)
 void MuseScore::oscTriggerPlugin(QString /*s*/)
       {
 #if 0 // TODO
+#ifdef SCRIPT_INTERFACE
       QStringList args = s.split(",");
       if(args.length() > 0) {
             int idx = pluginIdxFromPath(args.at(0));
@@ -214,6 +215,7 @@ void MuseScore::oscTriggerPlugin(QString /*s*/)
                   pluginTriggered(idx);
                   }
             }
+#endif
 #endif
       }
 
@@ -243,10 +245,10 @@ void MuseScore::oscColorNote(QVariantList list)
                   noteColor = color;
             }
 
-      Measure* measure = cs->tick2measure(tick);
+      Measure* measure = cs->tick2measure(Fraction::fromTicks(tick));
       if(!measure)
             return;
-      Segment* s = measure->findSegment(SegmentType::ChordRest, tick);
+      Segment* s = measure->findSegment(SegmentType::ChordRest, Fraction::fromTicks(tick));
       if (!s)
             return;
       //get all chords in segment...
@@ -290,15 +292,15 @@ void MuseScore::oscVolChannel(double val)
       PathObject* po = (PathObject*) sender();
 
       int i = po->path().mid(4).toInt() - 1;
-      QList<MidiMapping>* mms = cs->masterScore()->midiMapping();
-      if( i >= 0 && i < mms->size()) {
-            MidiMapping mm = mms->at(i);
-            Channel* channel = mm.articulation;
+      auto& mms = cs->masterScore()->midiMapping();
+      if( i >= 0 && i < int(mms.size())) {
+            MidiMapping& mm = mms[i];
+            Channel* channel = mm.articulation();
             int iv = lrint(val*127);
-            seq->setController(channel->channel, CTRL_VOLUME, iv);
-            channel->volume = iv;
+            seq->setController(channel->channel(), CTRL_VOLUME, iv);
+            channel->setVolume(val * 100.0);
             if (mixer)
-                  mixer->partEdit(i)->volume->setValue(iv);
+                  mixer->getPartAtIndex(i)->volume->setValue(val * 100.0);
             }
       }
 
@@ -313,15 +315,15 @@ void MuseScore::oscPanChannel(double val)
       PathObject* po = (PathObject*) sender();
 
       int i = po->path().mid(4).toInt() - 1;
-      QList<MidiMapping>* mms = cs->masterScore()->midiMapping();
-      if (i >= 0 && i < mms->size()) {
-            MidiMapping mm = mms->at(i);
-            Channel* channel = mm.articulation;
+      auto& mms = cs->masterScore()->midiMapping();
+      if (i >= 0 && i < int(mms.size())) {
+            MidiMapping& mm = mms[i];
+            Channel* channel = mm.articulation();
             int iv = lrint((val + 1) * 64);
-            seq->setController(channel->channel, CTRL_PANPOT, iv);
-            channel->volume = iv;
+            seq->setController(channel->channel(), CTRL_PANPOT, iv);
+            channel->setPan(val * 180.0);
             if (mixer)
-                  mixer->partEdit(i)->pan->setValue(iv);
+                  mixer->getPartAtIndex(i)->pan->setValue(val * 100.0);
             }
       }
 
@@ -336,13 +338,13 @@ void MuseScore::oscMuteChannel(double val)
       PathObject* po = (PathObject*) sender();
 
       int i = po->path().mid(5).toInt() - 1;
-      QList<MidiMapping>* mms = cs->masterScore()->midiMapping();
-      if (i >= 0 && i < mms->size()) {
-            MidiMapping mm = mms->at(i);
-            Channel* channel = mm.articulation;
-            channel->mute = (val==0.0f ? false : true);
+      auto& mms = cs->masterScore()->midiMapping();
+      if (i >= 0 && i < int(mms.size())) {
+            MidiMapping& mm = mms[i];
+            Channel* channel = mm.articulation();
+            channel->setMute(val==0.0f ? false : true);
             if (mixer)
-                  mixer->partEdit(i)->mute->setChecked(channel->mute);
+                  mixer->getPartAtIndex(i)->mute->setChecked(channel->mute());
             }
       }
 #endif // #ifndef OSC

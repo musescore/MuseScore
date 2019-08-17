@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: editdrumset.cpp 5384 2012-02-27 12:21:49Z wschweer $
 //
 //  Copyright (C) 2002-2007 Werner Schweer and others
 //
@@ -19,6 +18,7 @@
 //=============================================================================
 
 #include "editdrumset.h"
+#include "menus.h"
 #include "musescore.h"
 #include "libmscore/xml.h"
 #include "libmscore/utils.h"
@@ -28,8 +28,6 @@
 #include "libmscore/stem.h"
 
 namespace Ms {
-
-extern QMap<QString, QStringList>* smuflRanges();
 
 enum Column : char { PITCH, NOTE, SHORTCUT, NAME };
 
@@ -570,8 +568,11 @@ void EditDrumset::load()
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   if (e.attribute("version") != MSC_VERSION) {
-                        QMessageBox::critical(this, tr("Drumset too old"), tr("MuseScore cannot load this drumset file."));
-                        return;
+                        QMessageBox::StandardButton b = QMessageBox::warning(this, tr("Drumset file too old"),
+                                                                             tr("MuseScore may not be able to load this drumset file."),
+                                                                             QMessageBox::Cancel|QMessageBox::Ignore, QMessageBox::Cancel);
+                        if (b != QMessageBox::Ignore) // covers Cancel and Esc
+                              return;
                         }
                   while (e.readNextStartElement()) {
                         if (e.name() == "Drum")
@@ -597,8 +598,8 @@ void EditDrumset::save()
 
       QFile f(fname);
       if (!f.open(QIODevice::WriteOnly)) {
-            QString s = tr("Open File\n%1\nfailed: %1").arg(strerror(errno));
-            QMessageBox::critical(mscore, tr("Open File"), s.arg(f.fileName()));
+            QString s = tr("Open File\n%1\nfailed: %2").arg(f.fileName()).arg(strerror(errno));
+            QMessageBox::critical(mscore, tr("Open File"), s);
             return;
             }
       valueChanged();  //save last changes in name

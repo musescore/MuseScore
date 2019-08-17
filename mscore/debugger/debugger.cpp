@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: debugger.cpp 5656 2012-05-21 15:36:47Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -69,6 +68,7 @@
 #include "libmscore/trill.h"
 #include "libmscore/timesig.h"
 #include "libmscore/systemdivider.h"
+#include "libmscore/measurenumber.h"
 
 namespace Ms {
 
@@ -166,6 +166,10 @@ Debugger::Debugger(QWidget* parent)
       connect(selectButton, SIGNAL(clicked()), SLOT(selectElement()));
       connect(resetButton,  SIGNAL(clicked()), SLOT(resetElement()));
       connect(layoutButton, SIGNAL(clicked()), SLOT(layout()));
+
+      back->setIcon(*icons[int(Icons::goPrevious_ICON)]);
+      forward->setIcon(*icons[int(Icons::goNext_ICON)]);
+      reload->setIcon(*icons[int(Icons::viewRefresh_ICON)]);
       }
 
 //---------------------------------------------------------
@@ -466,10 +470,10 @@ void Debugger::updateList(Score* s)
                   }
             }
 
-      foreach (Page* page, cs->pages()) {
-            ElementItem* pi = new ElementItem(list, page);
+      foreach (Page* pg, cs->pages()) {
+            ElementItem* pi = new ElementItem(list, pg);
 
-            for (System* system : page->systems()) {
+            for (System* system : pg->systems()) {
                   ElementItem* si = new ElementItem(pi, system);
                   for (Bracket* b : system->brackets())
                         new ElementItem(si, b);
@@ -665,7 +669,9 @@ void Debugger::updateElement(Element* el)
                   case ElementType::MARKER:
                   case ElementType::JUMP:
                   case ElementType::TEXT:
+                  case ElementType::MEASURE_NUMBER:
                   case ElementType::STAFF_TEXT:
+                  case ElementType::SYSTEM_TEXT:
                   case ElementType::REHEARSAL_MARK:
                         ew = new TextView;
                         break;
@@ -802,8 +808,8 @@ void MeasureView::setElement(Element* e)
       mb.breakMultiMeasureRest->setChecked(m->breakMultiMeasureRest());
       mb.mmRestCount->setValue(m->mmRestCount());
       mb.timesig->setText(m->timesig().print());
-      mb.len->setText(m->len().print());
-      mb.tick->setValue(m->tick());
+      mb.len->setText(m->ticks().print());
+      mb.tick->setValue(m->tick().ticks());
       mb.startRepeat->setChecked(m->repeatStart());
       mb.endRepeat->setChecked(m->repeatEnd());
       mb.hasSystemHeader->setChecked(m->header());
@@ -811,11 +817,11 @@ void MeasureView::setElement(Element* e)
       mb.hasCourtesyKeySig->setChecked(m->hasCourtesyKeySig());
       mb.hasVoices->setChecked(m->hasVoices(0));
       mb.sel->clear();
-      for (const Element* el : m->el()) {
+      for (const Element* elm : m->el()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, el->name());
-//            item->setText(1, QString("%1").arg(el->subtype()));
-            void* p = (void*) el;
+            item->setText(0, elm->name());
+//            item->setText(1, QString("%1").arg(elm->subtype()));
+            void* p = (void*) elm;
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
             mb.sel->addTopLevelItem(item);
             }
@@ -859,7 +865,7 @@ void SegmentView::setElement(Element* e)
 
       Segment* s = (Segment*)e;
       ShowElementBase::setElement(e);
-      int tick = s->tick();
+      int tick = s->tick().ticks();
       TimeSigMap* sm = s->score()->sigmap();
 
       int bar = -1, beat = -1, ticks = -1;
@@ -868,9 +874,9 @@ void SegmentView::setElement(Element* e)
       sb.bar->setValue(bar);
       sb.beat->setValue(beat);
       sb.ticks->setValue(ticks);
-      sb.tick->setValue(s->tick());
-      sb.rtick->setValue(s->rtick());
-      sb.ticks2->setValue(s->ticks());
+      sb.tick->setValue(s->tick().ticks());
+      sb.rtick->setValue(s->rtick().ticks());
+      sb.ticks2->setValue(s->ticks().ticks());
       sb.segmentType->setText(s->subTypeName());
       sb.lyrics->clear();
 
@@ -952,15 +958,16 @@ void ChordDebug::setElement(Element* e)
       Chord* chord = (Chord*)e;
       ShowElementBase::setElement(e);
 
-      crb.tick->setValue(chord->tick());
+      crb.tick->setText(chord->tick().print());
+      crb.ticks->setText(chord->actualTicks().print());
+
       crb.beamButton->setEnabled(chord->beam());
       crb.tupletButton->setEnabled(chord->tuplet());
       crb.upFlag->setChecked(chord->up());
       crb.beamMode->setCurrentIndex(int(chord->beamMode()));
       crb.dots->setValue(chord->dots());
-      crb.ticks->setValue(chord->actualTicks());
       crb.durationType->setText(chord->durationType().name());
-      crb.duration->setText(chord->duration().print());
+      crb.duration->setText(chord->ticks().print());
       crb.move->setValue(chord->staffMove());
 
       cb.hookButton->setEnabled(chord->hook());
@@ -1168,8 +1175,8 @@ void ShowNoteWidget::setElement(Element* e)
             nb.fingering->addItem(item);
             }
       nb.noteEvents->clear();
-      for (const NoteEvent& el : note->playEvents()) {
-            QString s = QString("%1 %2 %3").arg(el.pitch()).arg(el.ontime()).arg(el.len());
+      for (const NoteEvent& elm : note->playEvents()) {
+            QString s = QString("%1 %2 %3").arg(elm.pitch()).arg(elm.ontime()).arg(elm.len());
             QListWidgetItem* item = new QListWidgetItem(s);
             nb.noteEvents->addItem(item);
             }
@@ -1276,16 +1283,16 @@ void RestView::setElement(Element* e)
       Rest* rest = toRest(e);
       ShowElementBase::setElement(e);
 
-      crb.tick->setValue(rest->tick());
+      crb.tick->setText(rest->tick().print());
+      crb.ticks->setText(rest->actualTicks().print());
+      crb.duration->setText(rest->ticks().print());
       crb.beamButton->setEnabled(rest->beam());
       crb.tupletButton->setEnabled(rest->tuplet());
       crb.upFlag->setChecked(rest->up());
       crb.beamMode->setCurrentIndex(int(rest->beamMode()));
       crb.attributes->clear();
       crb.dots->setValue(rest->dots());
-      crb.ticks->setValue(rest->actualTicks());
       crb.durationType->setText(rest->durationType().name());
-      crb.duration->setText(rest->duration().print());
       crb.move->setValue(rest->staffMove());
 
       crb.lyrics->clear();
@@ -1431,9 +1438,6 @@ void TextView::setElement(Element* e)
 
       ShowElementBase::setElement(e);
       tb.text->setPlainText(te->xmlText());
-      tb.xoffset->setValue(te->offset().x());
-      tb.yoffset->setValue(te->offset().y());
-      tb.offsetType->setCurrentIndex(int(te->offsetType()));
       tb.layoutToParentWidth->setChecked(te->layoutToParentWidth());
       Align a = te->align();
       const char* h;
@@ -1491,10 +1495,6 @@ void HarmonyView::setElement(Element* e)
 //TODO      tb.textStyle->setCurrentIndex(ts.textStyleType());
       tb.layoutToParentWidth->setChecked(harmony->layoutToParentWidth());
 
-      hb.tbboxx->setValue(harmony->bboxtight().x());
-      hb.tbboxy->setValue(harmony->bboxtight().y());
-      hb.tbboxw->setValue(harmony->bboxtight().width());
-      hb.tbboxh->setValue(harmony->bboxtight().height());
       hb.leftParen->setChecked(harmony->leftParen());
       hb.rightParen->setChecked(harmony->rightParen());
       hb.rootTpc->setValue(harmony->rootTpc());
@@ -1562,16 +1562,17 @@ void SpannerView::setElement(Element* e)
       {
       Spanner* spanner = static_cast<Spanner*>(e);
       ShowElementBase::setElement(e);
-      sp.tick->setValue(spanner->tick());
-      sp.ticks->setValue(spanner->ticks());
+      sp.tickZ->setValue(spanner->tick().numerator());
+      sp.tickN->setValue(spanner->tick().denominator());
+      sp.ticks->setValue(spanner->ticks().ticks());
       sp.anchor->setCurrentIndex(int(spanner->anchor()));
       sp.track2->setValue(spanner->track2());
 
       sp.segments->clear();
-      for (const Element* el : spanner->spannerSegments()) {
+      for (const Element* elm : spanner->spannerSegments()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, el->name());
-            void* p = (void*) el;
+            item->setText(0, elm->name());
+            void* p = (void*) elm;
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
             sp.segments->addTopLevelItem(item);
             }
@@ -1669,9 +1670,9 @@ void DynamicView::setElement(Element* e)
       Dynamic* dynamic = toDynamic(e);
 
       tb.text->setPlainText(dynamic->xmlText());
-      tb.xoffset->setValue(dynamic->offset().x());
-      tb.yoffset->setValue(dynamic->offset().y());
-      tb.offsetType->setCurrentIndex(int(dynamic->offsetType()));
+//      tb.xoffset->setValue(dynamic->offset().x());
+//      tb.yoffset->setValue(dynamic->offset().y());
+//      tb.offsetType->setCurrentIndex(int(dynamic->offsetType()));
       tb.layoutToParentWidth->setChecked(dynamic->layoutToParentWidth());
 
       ShowElementBase::setElement(e);
@@ -1738,15 +1739,15 @@ void TupletView::setElement(Element* e)
       tb.ratioN->setValue(tuplet->ratio().denominator());
       tb.number->setEnabled(tuplet->number());
       tb.tuplet->setEnabled(tuplet->tuplet());
-      tb.duration->setText(tuplet->duration().print());
+      tb.duration->setText(tuplet->ticks().print());
 
       tb.elements->clear();
-      for (DurationElement* el : tuplet->elements()) {
+      for (DurationElement* elm : tuplet->elements()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, el->name());
-            item->setText(1, QString("%1").arg(el->tick()));
-            item->setText(2, QString("%1").arg(el->actualTicks()));
-            void* p = (void*) el;
+            item->setText(0, elm->name());
+            item->setText(1, QString("%1").arg(elm->tick().ticks()));
+            item->setText(2, QString("%1").arg(elm->actualTicks().ticks()));
+            void* p = (void*) elm;
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
             tb.elements->addTopLevelItem(item);
             }
@@ -1862,14 +1863,16 @@ void ShowElementBase::setElement(Element* e)
       eb.enabled->setChecked(e->enabled());
       eb.header->setChecked(e->header());
       eb.trailer->setChecked(e->trailer());
+      eb.spatiumSize->setChecked(e->sizeIsSpatiumDependent());
+
       eb.track->setValue(e->track());
       eb.z->setValue(e->z());
       eb.posx->setValue(e->ipos().x());
       eb.posy->setValue(e->ipos().y());
       eb.cposx->setValue(e->pagePos().x());
       eb.cposy->setValue(e->pagePos().y());
-      eb.offsetx->setValue(e->userOff().x());
-      eb.offsety->setValue(e->userOff().y());
+      eb.offsetx->setValue(e->offset().x());
+      eb.offsety->setValue(e->offset().y());
       eb.autoplace->setChecked(e->autoplace());
       eb.placement->setCurrentIndex(int(e->placement()));
 
@@ -1954,7 +1957,7 @@ void ShowElementBase::link3Clicked()
 void ShowElementBase::offsetxChanged(double val)
       {
       QRectF r(el->abbox());
-      el->setUserXoffset(val);
+      el->rxoffset() = val;
 //      Element* e = el;
 //TODO      while ((e = e->parent()))
       el->score()->addRefresh(r | el->abbox());
@@ -1967,7 +1970,7 @@ void ShowElementBase::offsetxChanged(double val)
 void ShowElementBase::offsetyChanged(double val)
       {
       QRectF r(el->abbox());
-      el->setUserYoffset(val);
+      el->ryoffset() = val;
       el->score()->addRefresh(r | el->abbox());
       }
 
@@ -2119,16 +2122,17 @@ void VoltaView::setElement(Element* e)
 //      lb.rightElement->setText(QString("%1").arg((unsigned long)volta->endElement(), 8, 16));
 
       sp.segments->clear();
-      const QList<SpannerSegment*>& el = volta->spannerSegments();
-      for (const SpannerSegment* elm : el) {
+      const std::vector<SpannerSegment*>& ele = volta->spannerSegments();
+      for (const SpannerSegment* elm : ele) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setText(0, QString("%1").arg((quintptr)elm, 8, 16));
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)elm));
             sp.segments->addTopLevelItem(item);
             }
 
-      sp.tick->setValue(volta->tick());
-      sp.ticks->setValue(volta->ticks());
+      sp.tickZ->setValue(volta->tick().numerator());
+      sp.tickN->setValue(volta->tick().denominator());
+      sp.ticks->setValue(volta->ticks().ticks());
       sp.track2->setValue(volta->track2());
       sp.startElement->setEnabled(volta->startElement() != 0);
       sp.endElement->setEnabled(volta->endElement() != 0);
@@ -2249,7 +2253,7 @@ void LyricsView::setElement(Element* e)
       ShowElementBase::setElement(e);
 
       lb.row->setValue(l->no());
-      lb.endTick->setValue(l->endTick());
+      lb.endTick->setValue(l->endTick().ticks());
       lb.syllabic->setCurrentIndex(int(l->syllabic()));
       }
 
@@ -2320,7 +2324,7 @@ void BeamView::setElement(Element* e)
             item->setText(0, QString("%1").arg((quintptr)cr, 8, 16));
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)cr));
             item->setText(1, cr->name());
-            item->setText(2, QString("%1").arg(cr->segment()->tick()));
+            item->setText(2, QString("%1").arg(cr->segment()->tick().print()));
             bb.elements->addTopLevelItem(item);
             }
       bb.grow1->setValue(b->growLeft());
@@ -2780,10 +2784,10 @@ void SystemView::setElement(Element* e)
       System* vs = (System*)e;
       ShowElementBase::setElement(e);
       mb.spanner->clear();
-      for (const Element* el : vs->spannerSegments()) {
+      for (const Element* elm : vs->spannerSegments()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, el->name());
-            void* p = (void*) el;
+            item->setText(0, elm->name());
+            void* p = (void*) elm;
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
             mb.spanner->addTopLevelItem(item);
             }

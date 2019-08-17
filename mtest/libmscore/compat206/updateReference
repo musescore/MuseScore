@@ -9,12 +9,13 @@ fi
 cp $S/accidentals-test.mscx     accidentals-ref.mscx
 cp $S/ambitus-test.mscx         ambitus-ref.mscx
 cp $S/articulations-test.mscx   articulations-ref.mscx
+cp $S/articulations-double-test.mscx   articulations-double-ref.mscx
 cp $S/breath-test.mscx          breath-ref.mscx
 cp $S/clefs-test.mscx           clefs-ref.mscx
 cp $S/drumset-test.mscx         drumset-ref.mscx
 cp $S/markers-test.mscx         markers-ref.mscx
 cp $S/noteheads-test.mscx       noteheads-ref.mscx
-cp $S/textstyles-test.mscx      textstyles-ref.mscx
+# cp $S/textstyles-test.mscx      textstyles-ref.mscx
 cp $S/tuplets-test.mscx         tuplets-ref.mscx
 cp $S/hairpin-test.mscx         hairpin-ref.mscx
 cp $S/barlines-test.mscx        barlines-ref.mscx

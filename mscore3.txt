@@ -329,6 +329,11 @@ Serialization:
       bool Element::readProperty(const QStringRef&, XmlReader&, P_ID);
             This sets the property state to UNSTYLED if it is a styled property.
 
+Human-readable representation:
+
+      virtual QString propertyUserValue(Pid) const;
+            Returns the value of the property in a human-readable representation.
+
 Styled properties:
 
       virtual StyleIdx getPropertyStyle(P_ID) const;
@@ -369,4 +374,19 @@ Functions which must be implemented for any new ScoreElement:
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
+
+
+==============================================================
+      Element position
+==============================================================
+
+The position of an element is notated relative to its parent element so it has
+a local coordinate system starting with zero. The draw position of an element is the
+sum of Element->_pos + Element->_offset.
+
+For some element types _offset is styled. The style value gives the default position of an
+element. Each element can separatly moved by the user by changing the _offset value.
+
+If an element is "autoplaced" then Element->_pos is changed to move the element to a position without
+colliding with other element.
 

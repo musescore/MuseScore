@@ -12,6 +12,7 @@
 
 #include "text.h"
 #include "xml.h"
+#include "score.h"
 
 namespace Ms {
 
@@ -21,7 +22,6 @@ namespace Ms {
 
 static const ElementStyle defaultStyle {
       { Sid::defaultSystemFlag, Pid::SYSTEM_FLAG },
-//      { Sid::defaultText,       Pid::TEXT        },
       };
 
 //---------------------------------------------------------
@@ -66,6 +66,5 @@ QVariant Text::propertyDefault(Pid id) const
                   return TextBase::propertyDefault(id);
             }
       }
-
 }
 

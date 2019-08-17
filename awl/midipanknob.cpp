@@ -1,7 +1,6 @@
 //=============================================================================
 //  Awl
 //  Audio Widget Library
-//  $Id:$
 //
 //  Copyright (C) 2002-2006 by Werner Schweer and others
 //
@@ -39,10 +38,10 @@ MidiPanKnob::MidiPanKnob(QWidget* parent)
 //   valueChange
 //---------------------------------------------------------
 
-void MidiPanKnob::valueChange()
-      {
-      emit valueChanged(_value + 64.0f, _id);
-      update();
-      }
+//void MidiPanKnob::valueChange()
+//      {
+//      emit valueChanged(_value, _id);
+//      update();
+//      }
 
 }

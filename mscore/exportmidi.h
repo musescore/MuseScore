@@ -19,6 +19,7 @@ namespace Ms {
 
 class Score;
 class TempoMap;
+class SynthesizerState;
 
 //---------------------------------------------------------
 //   ExportMidi
@@ -53,6 +54,9 @@ class ExportMidi {
 
       ExportMidi(Score* s) { cs = s; }
       bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs);
+      bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs);
+      bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState);
+      bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState);
       };
 
 } // namespace Ms

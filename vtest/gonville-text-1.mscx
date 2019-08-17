@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+  <programRevision>c07ed54</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -86,81 +86,93 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
+      <Measure>
         <stretch>0.8</stretch>
-        <StaffText>
-          <text>Gonville-Text: Tempo</text>
-          </StaffText>
-        <Tempo>
-          <tempo>2.66667</tempo>
-          <followText>1</followText>
-          <text><sym>metNoteHalfUp</sym> = 80</text>
-          </Tempo>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <StaffText>
+            <text>Gonville-Text: Tempo</text>
+            </StaffText>
+          <Tempo>
+            <tempo>2.66667</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteHalfUp</sym> = 80</text>
+            </Tempo>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
+      <Measure>
         <stretch>0.8</stretch>
-        <Tempo>
-          <tempo>1.33333</tempo>
-          <followText>1</followText>
-          <text><sym>metNoteQuarterUp</sym> = 80</text>
-          </Tempo>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Tempo>
+            <tempo>1.33333</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = 80</text>
+            </Tempo>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="3">
+      <Measure>
         <stretch>0.8</stretch>
-        <Tempo>
-          <tempo>0.666667</tempo>
-          <followText>1</followText>
-          <text><sym>metNote8thUp</sym> = 80</text>
-          </Tempo>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Tempo>
+            <tempo>0.666667</tempo>
+            <followText>1</followText>
+            <text><sym>metNote8thUp</sym> = 80</text>
+            </Tempo>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="4">
+      <Measure>
         <stretch>0.8</stretch>
-        <Tempo>
-          <tempo>4</tempo>
-          <followText>1</followText>
-          <text><sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80</text>
-          </Tempo>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Tempo>
+            <tempo>4</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80</text>
+            </Tempo>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="5">
-        <Tempo>
-          <tempo>2</tempo>
-          <followText>1</followText>
-          <text><sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80</text>
-          </Tempo>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Tempo>
+            <tempo>2</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80</text>
+            </Tempo>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="6">
+      <Measure>
         <stretch>0.8</stretch>
-        <Tempo>
-          <tempo>1</tempo>
-          <followText>1</followText>
-          <text><sym>metNote8thUp</sym><sym>metAugmentationDot</sym> = 80</text>
-          </Tempo>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
-        <BarLine>
-          </BarLine>
+        <voice>
+          <Tempo>
+            <tempo>1</tempo>
+            <followText>1</followText>
+            <text><sym>metNote8thUp</sym><sym>metAugmentationDot</sym> = 80</text>
+            </Tempo>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     </Score>

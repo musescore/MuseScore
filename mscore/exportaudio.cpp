@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: exportaudio.cpp 5660 2012-05-22 14:17:39Z wschweer $
 //
 //  Copyright (C) 2009 Werner Schweer and others
 //
@@ -54,7 +53,7 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
     }
 
     EventMap events;
-    score->renderMidi(&events);
+    score->renderMidi(&events, synthesizerState());
     if(events.size() == 0)
           return false;
 
@@ -93,16 +92,16 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
           //
           // init instruments
           //
-          foreach(Part* part, score->parts()) {
+          for (Part* part : score->parts()) {
                 const InstrumentList* il = part->instruments();
-                for(auto i = il->begin(); i!= il->end(); i++) {
-                      for (const Channel* a : i->second->channel()) {
-                            a->updateInitList();
-                            for (MidiCoreEvent e : a->init) {
+                for (auto i = il->begin(); i!= il->end(); i++) {
+                      for (const Channel* instrChan : i->second->channel()) {
+                            const Channel* a = score->masterScore()->playbackChannel(instrChan);
+                            for (MidiCoreEvent e : a->initList()) {
                                   if (e.type() == ME_INVALID)
                                         continue;
-                                  e.setChannel(a->channel);
-                                  int syntiIdx = synth->index(score->masterScore()->midiMapping(a->channel)->articulation->synti);
+                                  e.setChannel(a->channel());
+                                  int syntiIdx = synth->index(score->masterScore()->midiMapping(a->channel())->articulation()->synti());
 								  synth->play(e, syntiIdx);
                                   }
                             }
@@ -137,9 +136,9 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                       const NPlayEvent& e = playPos->second;
                       if (e.isChannelEvent()) {
                             int channelIdx = e.channel();
-                            Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation;
-                            if (!c->mute) {
-                                  synth->play(e, synth->index(c->synti));
+                            const Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation();
+                            if (!c->mute()) {
+                                  synth->play(e, synth->index(c->synti()));
                                   }
                             }
                       }
@@ -164,7 +163,7 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                 playTime = endTime;
                 if (updateProgress) {
                     // normalize to [0, 1] range
-                    if (!updateProgress((pass * et + playTime) / passes / et)) {
+                    if (!updateProgress(float(pass * et + playTime) / passes / et)) {
                         cancelled = true;
                         break;
                     }
@@ -225,15 +224,15 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             }
         }
 
-        virtual qint64 readData(char *data, qint64 maxlen) override final {
-            Q_UNUSED(data);
+        virtual qint64 readData(char *dta, qint64 maxlen) override final {
+            Q_UNUSED(dta);
             qDebug() << "Error: No write supported!";
             return maxlen;
         }
 
-        virtual qint64 writeData(const char *data, qint64 len) override final {
+        virtual qint64 writeData(const char *dta, qint64 len) override final {
             size_t trueFrames = len / sizeof(float) / 2;
-            sf_writef_float(sf, reinterpret_cast<const float*>(data), trueFrames);
+            sf_writef_float(sf, reinterpret_cast<const float*>(dta), trueFrames);
             return trueFrames * 2 * sizeof(float);
         }
 
@@ -269,7 +268,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             }
 
       EventMap events;
-      score->renderMidi(&events);
+      score->renderMidi(&events, synthesizerState());
       if(events.size() == 0)
             return false;
 
@@ -295,7 +294,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
       progress.setWindowModality(Qt::ApplicationModal);
       //progress.setCancelButton(0);
       progress.setCancelButtonText(tr("Cancel"));
-      progress.setLabelText(tr("Exporting..."));
+      progress.setLabelText(tr("Exporting…"));
       if (!MScore::noGui) {
           // callback function that will update the progress bar
           // it will return false and thus cancel the export if the user

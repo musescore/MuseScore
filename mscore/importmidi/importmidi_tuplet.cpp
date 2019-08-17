@@ -757,17 +757,17 @@ bool isTupletRangeOk(
                   }
             }
       for (const auto &note: c.notes) {
-            const auto foundTuplets = findTupletsForTimeRange(
+            const auto foundTuplets1 = findTupletsForTimeRange(
                               c.voice, note.offTime, ReducedFraction(0, 1), tuplets, false);
-            if (note.isInTuplet && foundTuplets.empty()) {
+            if (note.isInTuplet && foundTuplets1.empty()) {
                   qDebug() << "Tuplet note off time is actually outside tuplets, "
                               "bar number (from 1):" << (c.barIndex + 1);
                   return false;
                   }
-            if (!note.isInTuplet && !foundTuplets.empty()) {
+            if (!note.isInTuplet && !foundTuplets1.empty()) {
                               // note off time can touch the tuplet
                               // at the beg/end and doesn't belong to it
-                  for (const auto &t: foundTuplets) {
+                  for (const auto &t: foundTuplets1) {
                         if (note.offTime != t->second.onTime
                                     && note.offTime != t->second.onTime + t->second.len) {
                               qDebug() << "Non-tuplet note off time is actually inside tuplet, "

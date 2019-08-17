@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Reader
 //  Music Score Reader
-//  $Id$
 //
 //  Copyright (C) 2010 Werner Schweer
 //

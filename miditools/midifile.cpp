@@ -274,8 +274,8 @@ int MidiFile::readEvent(MidiEvent* event)
                   double t = 1000000.0 / double(tempo);
                   _tempoMap.insert(std::pair<const int, qreal>(click, t));
                   }
-            // else
-            //      printf("META %02x\n", type);
+//else
+//printf("META %02x\n", type);
             delete[] data;
             if (type == META_EOT)
                   return 2;
@@ -415,7 +415,7 @@ void MidiFile::writeEvent(const MidiEvent& event)
                   break;
 #endif
             default:
-                  printf("unsupported\n");
+//fprintf(stderr, "unsupported\n");
                   break;
             }
       }

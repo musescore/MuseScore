@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Edit Staff/Part Properties</string>
+   <string>Staff/Part Properties</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
@@ -135,7 +135,7 @@
         <item row="5" column="2">
          <widget class="QPushButton" name="changeStaffType">
           <property name="text">
-           <string>Advanced Style Properties...</string>
+           <string>Advanced Style Properties…</string>
           </property>
          </widget>
         </item>
@@ -317,7 +317,7 @@
      <property name="title">
       <string>Part Properties</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0,0,0">
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0,0,0,0">
       <item>
        <layout class="QGridLayout" name="grid_PartProps">
         <property name="leftMargin">
@@ -344,7 +344,7 @@
           <item>
            <widget class="QPushButton" name="changeInstrument">
             <property name="text">
-             <string>Change Instrument...</string>
+             <string>Change Instrument…</string>
             </property>
            </widget>
           </item>
@@ -420,6 +420,9 @@
             <height>40</height>
            </size>
           </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="1" column="1">
@@ -429,6 +432,9 @@
             <width>0</width>
             <height>40</height>
            </size>
+          </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -575,8 +581,11 @@
        <layout class="QHBoxLayout" name="hLayout_Transposition">
         <item>
          <widget class="QLabel" name="labelTransp">
+          <property name="toolTip">
+           <string>Interval from written to sounding pitch</string>
+          </property>
           <property name="text">
-           <string>Transpose written pitches to sound:</string>
+           <string>Transposition:</string>
           </property>
           <property name="buddy">
            <cstring>iList</cstring>
@@ -585,6 +594,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="octave">
+          <property name="accessibleName">
+           <string>Octave</string>
+          </property>
           <property name="maximum">
            <number>10</number>
           </property>
@@ -607,6 +619,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="accessibleName">
+           <string>Interval</string>
           </property>
           <item>
            <property name="text">
@@ -803,7 +818,7 @@
          <item>
           <widget class="QPushButton" name="editStringData">
            <property name="text">
-            <string>Edit String Data...</string>
+            <string>Edit String Data…</string>
            </property>
           </widget>
          </item>
@@ -821,6 +836,16 @@
           </spacer>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="singleNoteDynamics">
+        <property name="accessibleName">
+         <string>Use single note dynamics</string>
+        </property>
+        <property name="text">
+         <string>Use single note dynamics</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -909,17 +934,18 @@
   <tabstop>spinExtraDistance</tabstop>
   <tabstop>mag</tabstop>
   <tabstop>hideMode</tabstop>
+  <tabstop>showIfEmpty</tabstop>
   <tabstop>showClef</tabstop>
   <tabstop>showTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
   <tabstop>hideSystemBarLine</tabstop>
-  <tabstop>showIfEmpty</tabstop>
   <tabstop>small</tabstop>
   <tabstop>invisible</tabstop>
   <tabstop>color</tabstop>
   <tabstop>cutaway</tabstop>
   <tabstop>changeStaffType</tabstop>
   <tabstop>changeInstrument</tabstop>
+  <tabstop>partName</tabstop>
   <tabstop>longName</tabstop>
   <tabstop>shortName</tabstop>
   <tabstop>minPitchA</tabstop>
@@ -930,13 +956,18 @@
   <tabstop>minPitchPSelect</tabstop>
   <tabstop>maxPitchP</tabstop>
   <tabstop>maxPitchPSelect</tabstop>
+  <tabstop>octave</tabstop>
   <tabstop>iList</tabstop>
   <tabstop>up</tabstop>
   <tabstop>down</tabstop>
   <tabstop>numOfStrings</tabstop>
   <tabstop>editStringData</tabstop>
+  <tabstop>singleNoteDynamics</tabstop>
+  <tabstop>previousButton</tabstop>
+  <tabstop>nextButton</tabstop>
  </tabstops>
  <resources>
+  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: breaks.cpp -1   $
 //
 //  Copyright (C) 2008-2011 Werner Schweer and others
 //

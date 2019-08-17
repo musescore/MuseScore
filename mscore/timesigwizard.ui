@@ -25,6 +25,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="accessibleDescription">
+      <string>Enter a numerical time signature or choose one of the time signature symbols</string>
+     </property>
      <property name="title">
       <string>Enter Time Signature:</string>
      </property>
@@ -36,6 +39,15 @@
         </property>
         <item>
          <widget class="QRadioButton" name="tsFraction">
+          <property name="toolTip">
+           <string>Custom numerical time signature</string>
+          </property>
+          <property name="accessibleName">
+           <string>Custom numerical time signature</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Enter a numerical time signature such as 4/4 or 6/8</string>
+          </property>
           <property name="text">
            <string notr="true"/>
           </property>
@@ -46,8 +58,14 @@
         </item>
         <item>
          <widget class="QSpinBox" name="timesigZ">
+          <property name="toolTip">
+           <string>Beats in a measure</string>
+          </property>
           <property name="accessibleName">
            <string>Beats in a measure</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>The numerator, or upper number, in the time signature</string>
           </property>
           <property name="minimum">
            <number>1</number>
@@ -78,8 +96,14 @@
         </item>
         <item>
          <widget class="QComboBox" name="timesigN">
+          <property name="toolTip">
+           <string>Beat unit</string>
+          </property>
           <property name="accessibleName">
            <string>Beat unit</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>The denominator, or lower number, in the time signature</string>
           </property>
           <property name="currentIndex">
            <number>2</number>
@@ -137,23 +161,6 @@
        </layout>
       </item>
       <item>
-       <widget class="QRadioButton" name="tsCutTime">
-        <property name="toolTip">
-         <string>Cut time</string>
-        </property>
-        <property name="accessibleName">
-         <string>Cut Time</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="musescore.qrc">
-          <normaloff>:/data/icons/timesig_allabreve.svg</normaloff>:/data/icons/timesig_allabreve.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QRadioButton" name="tsCommonTime">
         <property name="toolTip">
          <string>Common time</string>
@@ -161,12 +168,35 @@
         <property name="accessibleName">
          <string>Common Time</string>
         </property>
+        <property name="accessibleDescription">
+         <string>Use the common time symbol, the letter C, and a 4/4 meter</string>
+        </property>
         <property name="text">
          <string notr="true"/>
         </property>
         <property name="icon">
-         <iconset resource="musescore.qrc">
+         <iconset>
           <normaloff>:/data/icons/timesig_common.svg</normaloff>:/data/icons/timesig_common.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="tsCutTime">
+        <property name="toolTip">
+         <string>Cut time</string>
+        </property>
+        <property name="accessibleName">
+         <string>Cut Time</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Use the cut time symbol, the letter C with a vertical line through it, and a 2/2 meter</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/data/icons/timesig_allabreve.svg</normaloff>:/data/icons/timesig_allabreve.svg</iconset>
         </property>
        </widget>
       </item>
@@ -178,6 +208,9 @@
      <property name="accessibleName">
       <string>Pickup Measure</string>
      </property>
+     <property name="accessibleDescription">
+      <string>Begin the score with an incomplete measure</string>
+     </property>
      <property name="title">
       <string>Pickup Measure</string>
      </property>
@@ -185,7 +218,7 @@
       <bool>true</bool>
      </property>
      <property name="checked">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <layout class="QHBoxLayout">
       <item>
@@ -197,8 +230,14 @@
       </item>
       <item>
        <widget class="QSpinBox" name="pickupTimesigZ">
+        <property name="toolTip">
+         <string>Number of beats in the pickup measure</string>
+        </property>
         <property name="accessibleName">
-         <string>Beats in a measure</string>
+         <string>Pickup beats</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Number of beats in the pickup measure</string>
         </property>
         <property name="minimum">
          <number>1</number>
@@ -229,8 +268,14 @@
       </item>
       <item>
        <widget class="QComboBox" name="pickupTimesigN">
+        <property name="statusTip">
+         <string>Beat unit for the pickup measure</string>
+        </property>
         <property name="accessibleName">
-         <string>Beat unit</string>
+         <string>Pickup beat unit</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Beat unit for the pickup measure</string>
         </property>
         <property name="currentIndex">
          <number>2</number>
@@ -293,6 +338,9 @@
      <property name="accessibleName">
       <string>Enter Number of Measures</string>
      </property>
+     <property name="accessibleDescription">
+      <string>Hint: You can also add or remove measures after creation of the score.</string>
+     </property>
      <property name="title">
       <string>Enter Number of Measures:</string>
      </property>
@@ -315,11 +363,14 @@
       </item>
       <item row="1" column="1">
        <widget class="QSpinBox" name="measureCount">
+        <property name="toolTip">
+         <string>Number of measures</string>
+        </property>
         <property name="accessibleName">
          <string>Measures</string>
         </property>
         <property name="accessibleDescription">
-         <string>Hint: You can also add or remove measures after creation of the score.</string>
+         <string>The number of measures initially present in the score</string>
         </property>
         <property name="minimum">
          <number>1</number>
@@ -365,17 +416,15 @@
  </widget>
  <tabstops>
   <tabstop>tsFraction</tabstop>
+  <tabstop>tsCommonTime</tabstop>
+  <tabstop>tsCutTime</tabstop>
   <tabstop>timesigZ</tabstop>
   <tabstop>timesigN</tabstop>
-  <tabstop>tsCutTime</tabstop>
-  <tabstop>tsCommonTime</tabstop>
   <tabstop>pickupMeasure</tabstop>
   <tabstop>pickupTimesigZ</tabstop>
   <tabstop>pickupTimesigN</tabstop>
   <tabstop>measureCount</tabstop>
  </tabstops>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -26,12 +26,22 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   fermataStyle
+//---------------------------------------------------------
+
+static const ElementStyle fermataStyle {
+      { Sid::fermataPosAbove, Pid::OFFSET },
+      { Sid::fermataMinDistance, Pid::MIN_DISTANCE },
+      };
+
+//---------------------------------------------------------
 //   Fermata
 //---------------------------------------------------------
 
 Fermata::Fermata(Score* s)
    : Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
+      initElementStyle(&fermataStyle);
       setPlacement(Placement::ABOVE);
       _symId         = SymId::noSym;
       _timeStretch   = 1.0;
@@ -96,12 +106,27 @@ void Fermata::write(XmlWriter& xml) const
             qDebug("%s not written", name());
             return;
             }
-      xml.stag("Fermata");
+      xml.stag(this);
       xml.tag("subtype", Sym::id2name(_symId));
       writeProperty(xml, Pid::TIME_STRETCH);
       writeProperty(xml, Pid::PLAY);
+      if (!isStyled(Pid::OFFSET))
+            writeProperty(xml, Pid::OFFSET);
       Element::writeProperties(xml);
       xml.etag();
+      }
+
+//---------------------------------------------------------
+//   subtype
+//---------------------------------------------------------
+
+int Fermata::subtype() const
+      {
+      QString s = Sym::id2name(_symId);
+      if (s.endsWith("Below"))
+            return int(Sym::name2id(s.left(s.size() - 5) + "Above"));
+      else
+            return int(_symId);
       }
 
 //---------------------------------------------------------
@@ -187,26 +212,23 @@ Page* Fermata::page() const
 void Fermata::layout()
       {
       Segment* s = segment();
+      setPos(QPointF());
       if (!s) {          // for use in palette
-            setPos(QPointF());
+            setOffset(0.0, 0.0);
             QRectF b(symBbox(_symId));
             setbbox(b.translated(-0.5 * b.width(), 0.0));
             return;
             }
 
-      qreal x = 0.0;
+      if (isStyled(Pid::OFFSET))
+            setOffset(propertyDefault(Pid::OFFSET).toPointF());
       Element* e = s->element(track());
       if (e) {
             if (e->isChord())
-                  x = score()->noteHeadWidth() * staff()->mag(0) * .5;
+                  rxpos() += score()->noteHeadWidth() * staff()->mag(Fraction(0, 1)) * .5;
             else
-                  x = e->x() + e->width() * staff()->mag(0) * .5;
+                  rxpos() += e->x() + e->width() * staff()->mag(Fraction(0, 1)) * .5;
             }
-      qreal y = placeAbove() ? styleP(Sid::fermataPosAbove) : styleP(Sid::fermataPosBelow) + staff()->height();
-
-      setPos(QPointF(x, y));
-
-      // check used symbol
 
       QString name = Sym::id2name(_symId);
       if (placeAbove()) {
@@ -214,21 +236,13 @@ void Fermata::layout()
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Above");
             }
       else {
+            rypos() += staff()->height();
             if (name.endsWith("Above"))
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Below");
             }
       QRectF b(symBbox(_symId));
       setbbox(b.translated(-0.5 * b.width(), 0.0));
-      autoplaceSegmentElement(styleP(Sid::fermataMinDistance));
-      }
-
-//---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void Fermata::reset()
-      {
-      Element::reset();
+      autoplaceSegmentElement();
       }
 
 //---------------------------------------------------------
@@ -247,6 +261,8 @@ QLineF Fermata::dragAnchor() const
 QVariant Fermata::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::SYMBOL:
+                  return QVariant::fromValue(_symId);
             case Pid::TIME_STRETCH:
                   return timeStretch();
             case Pid::PLAY:
@@ -263,6 +279,9 @@ QVariant Fermata::getProperty(Pid propertyId) const
 bool Fermata::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case Pid::SYMBOL:
+                  setSymId(v.value<SymId>());
+                  break;
             case Pid::PLACEMENT: {
                   Placement p = Placement(v.toInt());
                   if (p != placement()) {
@@ -298,7 +317,7 @@ QVariant Fermata::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::PLACEMENT:
-                  return int(Placement::ABOVE);
+                  return int(track() & 1 ? Placement::BELOW : Placement::ABOVE);
             case Pid::TIME_STRETCH:
                   return 1.0; // articulationList[int(articulationType())].timeStretch;
             case Pid::PLAY:
@@ -307,15 +326,6 @@ QVariant Fermata::propertyDefault(Pid propertyId) const
                   break;
             }
       return Element::propertyDefault(propertyId);
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid Fermata::getPropertyStyle(Pid /*id*/) const
-      {
-      return Sid::NOSTYLE;
       }
 
 //---------------------------------------------------------
@@ -336,12 +346,34 @@ void Fermata::resetProperty(Pid id)
       }
 
 //---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Fermata::propertyId(const QStringRef& xmlName) const
+      {
+      if (xmlName == "subtype")
+            return Pid::SYMBOL;
+      return Element::propertyId(xmlName);
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid Fermata::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::fermataPosAbove : Sid::fermataPosBelow;
+      return ScoreElement::getPropertyStyle(pid);
+      }
+
+//---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
 qreal Fermata::mag() const
       {
-      return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag): 1.0;
+      return staff() ? staff()->mag(tick()) * score()->styleD(Sid::articulationMag) : 1.0;
       }
 
 //---------------------------------------------------------

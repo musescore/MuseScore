@@ -231,13 +231,15 @@ struct FiguredBassFont {
 
 class FiguredBass final : public TextBase {
       std::vector<FiguredBassItem*> items;      // the individual lines of the F.B.
-      QVector<qreal>    _lineLenghts;           // lengths of duration indicator lines (in raster units)
+      QVector<qreal>    _lineLengths;           // lengths of duration indicator lines (in raster units)
       bool              _onNote;                // true if this element is on a staff note | false if it is betweee notes
-      int               _ticks;                 // the duration (used for cont. lines and for multiple F.B.
+      Fraction          _ticks;                 // the duration (used for cont. lines and for multiple F.B.
                                                 // under the same note)
       qreal             _printedLineLength;     // the length of lines actually printed (i.e. continuation lines)
       void              layoutLines();
       bool              hasParentheses() const; // read / write MusicXML support
+
+      virtual Sid getPropertyStyle(Pid) const override;
 
    public:
       FiguredBass(Score* s = 0);
@@ -245,7 +247,7 @@ class FiguredBass final : public TextBase {
       ~FiguredBass();
 
       // a convenience static function to create/retrieve a new FiguredBass into/from its intended parent
-      static FiguredBass *    addFiguredBassToSegment(Segment *seg, int track, int extTicks, bool *pNew);
+      static FiguredBass* addFiguredBassToSegment(Segment* seg, int track, const Fraction& extTicks, bool *pNew);
 
       // static functions for font config files
       static bool       readConfigFile(const QString& fileName);
@@ -282,16 +284,16 @@ class FiguredBass final : public TextBase {
 //                                                            list.append(&item);
 //                                                      return QDeclarativeListProperty<FiguredBassItem>(this, &items, qmlItemsAppend);
 //                                                }
-      qreal             lineLength(int idx) const     {   if(_lineLenghts.size() > idx)
-                                                            return _lineLenghts.at(idx);
+      qreal             lineLength(int idx) const     {   if(_lineLengths.size() > idx)
+                                                            return _lineLengths.at(idx);
                                                           return 0;   }
       qreal             printedLineLength() const     { return _printedLineLength; }
       bool              onNote() const          { return _onNote; }
       size_t            numOfItems() const      { return items.size(); }
       void              setOnNote(bool val)     { _onNote = val;  }
       Segment *         segment() const         { return (Segment*)(parent()); }
-      int               ticks() const           { return _ticks;  }
-      void              setTicks(int val)       { _ticks = val;   }
+      Fraction          ticks() const           { return _ticks;  }
+      void              setTicks(const Fraction& v) { _ticks = v;   }
 
       qreal             additionalContLineX(qreal pagePosY) const;// returns the X coord (in page coord) of cont. line at pagePosY, if any
       FiguredBass *     nextFiguredBass() const;                  // returns next *adjacent* f.b. item, if any

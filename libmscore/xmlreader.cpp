@@ -31,15 +31,15 @@ namespace Ms {
 
 XmlReader::~XmlReader()
       {
-      if (!_connectors.isEmpty() || !_pendingConnectors.isEmpty()) {
+      if (!_connectors.empty() || !_pendingConnectors.empty()) {
             qDebug("XmlReader::~XmlReader: there are unpaired connectors left");
-            for (ConnectorInfoReader& c : _connectors) {
-                  Element* conn = c.releaseConnector();
+            for (auto& c : _connectors) {
+                  Element* conn = c->releaseConnector();
                   if (conn && !conn->isTuplet()) // tuplets are added to score even when not finished
                         delete conn;
                   }
-            for (ConnectorInfoReader& c : _pendingConnectors)
-                  delete c.releaseConnector();
+            for (auto& c : _pendingConnectors)
+                  delete c->releaseConnector();
             }
       }
 
@@ -189,8 +189,10 @@ Fraction XmlReader::readFraction()
       const QString& s(readElementText());
       if (!s.isEmpty()) {
             int i = s.indexOf('/');
-            if (i == -1)
-                  qFatal("illegal fraction <%s>", qPrintable(s));
+            if (i == -1) {
+                  qDebug("reading ticks <%s>", qPrintable(s));
+                  return Fraction::fromTicks(s.toInt());
+                  }
             else {
                   z = s.left(i).toInt();
                   n = s.mid(i+1).toInt();
@@ -214,28 +216,6 @@ void XmlReader::unknown()
       else
             qDebug("line %lld col %lld: %s", lineNumber(), columnNumber(), name().toUtf8().data());
       skipCurrentElement();
-      }
-
-//---------------------------------------------------------
-//   rfrac
-//    return relative position in measure
-//---------------------------------------------------------
-
-Fraction XmlReader::rfrac() const
-      {
-      if (_currMeasure)
-            return Fraction::fromTicks(tick() - _currMeasure->tick());
-      return afrac();
-      }
-
-//---------------------------------------------------------
-//   afrac
-//    return absolute position
-//---------------------------------------------------------
-
-Fraction XmlReader::afrac() const
-      {
-      return Fraction::fromTicks(tick());
       }
 
 //---------------------------------------------------------
@@ -265,7 +245,7 @@ void XmlReader::fillLocation(Location& l, bool forceAbsFrac) const
       if (l.track() == defaults.track())
             l.setTrack(track());
       if (l.frac() == defaults.frac())
-            l.setFrac(absFrac ? afrac() : rfrac());
+            l.setFrac(absFrac ? tick() : rtick());
       if (l.measure() == defaults.measure())
             l.setMeasure(absFrac ? 0 : currentMeasureIndex());
       }
@@ -281,16 +261,21 @@ void XmlReader::setLocation(const Location& l)
       if (l.isRelative()) {
             Location newLoc = l;
             newLoc.toAbsolute(location());
+            int intTicks = l.frac().ticks();
+            if (_tick == Fraction::fromTicks(_intTick + intTicks)) {
+                  _intTick += intTicks;
+                  setTrack(newLoc.track() - _trackOffset);
+                  return;
+                  }
             setLocation(newLoc); // recursion
             return;
             }
       setTrack(l.track() - _trackOffset);
-      int tick = l.frac().ticks() - _tickOffset;
+      setTick(l.frac() - _tickOffset);
       if (!pasteMode()) {
             Q_ASSERT(l.measure() == currentMeasureIndex());
-            tick += currentMeasure()->tick();
+            incTick(currentMeasure()->tick());
             }
-      initTick(tick);
       }
 
 //---------------------------------------------------------
@@ -361,6 +346,9 @@ void XmlReader::checkTuplets()
                   tuplet->sanitizeTuplet();
                   }
             }
+      // This requires a separate pass in case of nested tuplets that required sanitizing
+      for (Tuplet* tuplet : tuplets())
+            tuplet->addMissingElements();
       }
 
 //---------------------------------------------------------
@@ -408,7 +396,7 @@ QString XmlReader::readXml()
       QString s;
       int level = 1;
       for (QXmlStreamReader::TokenType t = readNext(); t != QXmlStreamReader::EndElement; t = readNext()) {
-            switch(t) {
+            switch (t) {
                   case QXmlStreamReader::StartElement:
                         htmlToString(level, &s);
                         break;
@@ -426,15 +414,6 @@ QString XmlReader::readXml()
                   }
             }
       return s;
-      }
-
-//---------------------------------------------------------
-//   compareProperty
-//---------------------------------------------------------
-
-template <class T> bool compareProperty(void* val, void* defaultVal)
-      {
-      return (defaultVal == 0) || (*(T*)val != *(T*)defaultVal);
       }
 
 //---------------------------------------------------------
@@ -562,19 +541,40 @@ Tid XmlReader::lookupUserTextStyle(const QString& name)
       }
 
 //---------------------------------------------------------
+//   performReadAhead
+//    If f is called, the device will be non-sequential and
+//    open. Reading position equals to the current value of
+//    characterOffset(), but it is possible to seek for any
+//    other position inside f.
+//---------------------------------------------------------
+
+void XmlReader::performReadAhead(std::function<void(QIODevice&)> f)
+      {
+      if (!_readAheadDevice || _readAheadDevice->isSequential())
+            return;
+      if (!_readAheadDevice->isOpen())
+            _readAheadDevice->open(QIODevice::ReadOnly);
+
+      const auto pos = _readAheadDevice->pos();
+      _readAheadDevice->seek(characterOffset());
+      f(*_readAheadDevice);
+      _readAheadDevice->seek(pos);
+      }
+
+//---------------------------------------------------------
 //   addConnectorInfo
 //---------------------------------------------------------
 
-void XmlReader::addConnectorInfo(const ConnectorInfoReader& c)
+void XmlReader::addConnectorInfo(std::unique_ptr<ConnectorInfoReader> c)
       {
-      _connectors.push_back(c);
-      ConnectorInfoReader& c1 = _connectors.back();
-      c1.update();
-      for (ConnectorInfoReader& c2 : _connectors) {
-            if (c2.connect(&c1)) {
-                  if (c2.finished()) {
-                        c2.addToScore(pasteMode());
-                        removeConnector(c2);
+      _connectors.push_back(std::move(c));
+      ConnectorInfoReader* c1 = _connectors.back().get();
+      c1->update();
+      for (std::unique_ptr<ConnectorInfoReader>& c2 : _connectors) {
+            if (c2->connect(c1)) {
+                  if (c2->finished()) {
+                        c2->addToScore(pasteMode());
+                        removeConnector(c2.get());
                         }
                   break;
                   }
@@ -582,37 +582,23 @@ void XmlReader::addConnectorInfo(const ConnectorInfoReader& c)
       }
 
 //---------------------------------------------------------
-//   removeConnectorInfo
-//---------------------------------------------------------
-
-void XmlReader::removeConnectorInfo(const ConnectorInfoReader& c)
-      {
-      _connectors.removeOne(c);
-      }
-
-//---------------------------------------------------------
 //   removeConnector
 //---------------------------------------------------------
 
-void XmlReader::removeConnector(const ConnectorInfoReader& cref)
+void XmlReader::removeConnector(const ConnectorInfoReader* c)
       {
-      const ConnectorInfoReader* c = &cref;
       while (c->prev())
             c = c->prev();
       while (c) {
             ConnectorInfoReader* next = c->next();
-            removeConnectorInfo(*c);
+            for (auto it = _connectors.begin(); it != _connectors.end(); ++it) {
+                  if (it->get() == c) {
+                        _connectors.erase(it);
+                        break;
+                        }
+                  }
             c = next;
             }
-      }
-
-//---------------------------------------------------------
-//   addConnectorInfoLater
-//---------------------------------------------------------
-
-void XmlReader::addConnectorInfoLater(const ConnectorInfoReader& c)
-      {
-      _pendingConnectors.push_back(c);
       }
 
 //---------------------------------------------------------
@@ -621,9 +607,8 @@ void XmlReader::addConnectorInfoLater(const ConnectorInfoReader& c)
 
 void XmlReader::checkConnectors()
       {
-      for (ConnectorInfoReader& c : _pendingConnectors) {
-            addConnectorInfo(c);
-            }
+      for (std::unique_ptr<ConnectorInfoReader>& c : _pendingConnectors)
+            addConnectorInfo(std::move(c));
       _pendingConnectors.clear();
       }
 
@@ -642,19 +627,19 @@ static bool distanceSort(const QPair<int, QPair<ConnectorInfoReader*, ConnectorI
 
 void XmlReader::reconnectBrokenConnectors()
       {
-      if (_connectors.isEmpty())
+      if (_connectors.empty())
             return;
-      qDebug("Reconnecting broken connectors (%d nodes)", _connectors.size());
+      qDebug("Reconnecting broken connectors (%d nodes)", int(_connectors.size()));
       QList<QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*>>> brokenPairs;
-      for (int i = 1; i < _connectors.size(); ++i) {
+      for (int i = 1; i < int(_connectors.size()); ++i) {
             for (int j = 0; j < i; ++j) {
-                  ConnectorInfoReader& c1 = _connectors[i];
-                  ConnectorInfoReader& c2 = _connectors[j];
-                  int d = c1.connectionDistance(c2);
+                  ConnectorInfoReader* c1 = _connectors[i].get();
+                  ConnectorInfoReader* c2 = _connectors[j].get();
+                  int d = c1->connectionDistance(*c2);
                   if (d >= 0)
-                        brokenPairs.append(qMakePair(d, qMakePair(&c1, &c2)));
+                        brokenPairs.append(qMakePair(d, qMakePair(c1, c2)));
                   else
-                        brokenPairs.append(qMakePair(-d, qMakePair(&c2, &c1)));
+                        brokenPairs.append(qMakePair(-d, qMakePair(c2, c1)));
                   }
             }
       std::sort(brokenPairs.begin(), brokenPairs.end(), distanceSort);
@@ -667,13 +652,14 @@ void XmlReader::reconnectBrokenConnectors()
             pair.first->forceConnect(pair.second);
             }
       QSet<ConnectorInfoReader*> reconnected;
-      for (ConnectorInfoReader& c : _connectors) {
-            if (c.finished())
-                  reconnected.insert(static_cast<ConnectorInfoReader*>(c.start()));
+      for (auto& conn : _connectors) {
+            ConnectorInfoReader* c = conn.get();
+            if (c->finished())
+                  reconnected.insert(static_cast<ConnectorInfoReader*>(c->start()));
             }
       for (ConnectorInfoReader* cptr : reconnected) {
             cptr->addToScore(pasteMode());
-            removeConnector(*cptr);
+            removeConnector(cptr);
             }
       qDebug("reconnected %d broken connectors", reconnected.count());
       }
@@ -739,6 +725,37 @@ int LinksIndexer::assignLocalIndex(const Location& mainElementLocation)
       _lastLocalIndex = 0;
       _lastLinkedElementLoc = mainElementLocation;
       return 0;
+      }
+
+//---------------------------------------------------------
+//   rtick
+//    return relative position in measure
+//---------------------------------------------------------
+
+Fraction XmlReader::rtick() const
+      {
+      return _curMeasure ? _tick - _curMeasure->tick() : _tick;
+      }
+
+//---------------------------------------------------------
+//   setTick
+//---------------------------------------------------------
+
+void XmlReader::setTick(const Fraction& f)
+      {
+      _tick = f.reduced();
+      _intTick = _tick.ticks();
+      }
+
+//---------------------------------------------------------
+//   incTick
+//---------------------------------------------------------
+
+void XmlReader::incTick(const Fraction& f)
+      {
+      _tick += f;
+      _tick.reduce();
+      _intTick += f.ticks();
       }
 }
 

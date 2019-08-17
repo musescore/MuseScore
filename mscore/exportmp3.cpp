@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: MP3Exporter.cpp 2992 2010-04-22 14:42:39Z lasconic $
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -135,7 +134,7 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
             qDebug("(Maybe) ask user for library");
             int ret = QMessageBox::question(0, qApp->translate("MP3Exporter", "Save as MP3"),
                   qApp->translate("MP3Exporter", "MuseScore does not export MP3 files directly, but instead uses "
-                   "the freely available LAME library.  You must obtain %1 "
+                   "the freely available LAME library. You must obtain %1 "
                    "separately (for details check the handbook), and then locate the file for MuseScore.\n"
                    "You only need to do this once.\n\n"
                    "Would you like to locate %2 now?").arg(getLibraryName()).arg(getLibraryName()),

@@ -55,14 +55,14 @@ void createTupletNotes(
             const auto &tupletRatio = tupletLimits(tupletData.tupletNumber).ratio;
             tuplet->setRatio(tupletRatio.fraction());
 
-            tuplet->setDuration(tupletData.len.fraction());
-            const TDuration baseLen = tupletData.len.fraction() / tupletRatio.denominator();
+            tuplet->setTicks(tupletData.len.fraction());
+            const TDuration baseLen = tupletData.len.fraction() / Fraction(tupletRatio.denominator(), 1);
             tuplet->setBaseLen(baseLen);
 
             tuplet->setTrack(track);
-            tuplet->setTick(tupletData.onTime.ticks());
+//            tuplet->setTick(tupletData.onTime.ticks());
             tuplet->setVoice(tupletData.voice);
-            Measure* measure = score->tick2measure(tupletData.onTime.ticks());
+            Measure* measure = score->tick2measure(tupletData.onTime.fraction());
             tuplet->setParent(measure);
 
             for (DurationElement *el: tupletData.elements) {
@@ -100,8 +100,8 @@ bool haveTupletsEnoughElements(const Staff *staff)
                                     }
                               int chordCount = 0;
                               for (const auto &e: tuplet->elements()) {
-                                    const ChordRest *cr = static_cast<ChordRest *>(e);
-                                    if (cr && cr->isChord())
+                                    const ChordRest *cr1 = static_cast<ChordRest *>(e);
+                                    if (cr1 && cr1->isChord())
                                           ++chordCount;
                                     }
                               if (chordCount == 0) {

@@ -13,6 +13,8 @@
 #ifndef __TEXTCURSOR_H__
 #define __TEXTCURSOR_H__
 
+#include "libmscore/fraction.h"
+
 namespace Ms {
 
 class ScoreView;
@@ -36,7 +38,7 @@ class PositionCursor {
       QRectF      _rect;
       bool        _visible    { false };
       QColor      _color;
-      int         _tick       { 0 };
+      Fraction    _tick       { 0,1 };
       CursorType  _type       { CursorType::POS };
 
    public:
@@ -49,11 +51,11 @@ class PositionCursor {
       void        setVisible(bool val)          { _visible = val;   }
       QColor      color() const                 { return _color;    }
       void        setColor(const QColor& c)     { _color = c;       }
-      int         tick() const                  { return _tick;     }
-      void        setTick(int val)              { _tick = val;      }
+      Fraction    tick() const                  { return _tick;     }
+      void        setTick(const Fraction& val)  { _tick = val;      }
 
       void update(QWidget*);
-      void move(int tick);
+      void move(const Fraction& tick);
       void paint(QPainter*);
       QRectF bbox() const;
       };

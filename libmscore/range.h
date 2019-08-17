@@ -45,14 +45,14 @@ class TrackList : public QList<Element*>
       TrackList(ScoreRange* r) { _range = r; }
       ~TrackList();
 
-      Fraction duration() const  { return _duration; }
+      Fraction ticks() const  { return _duration; }
       ScoreRange* range() const { return _range; }
 
       int track() const        { return _track; }
       void setTrack(int val)   { _track = val; }
 
       void read(const Segment* fs, const Segment* ls);
-      bool write(Score*, int tick) const;
+      bool write(Score*, const Fraction&) const;
 
       void appendGap(const Fraction&);
       bool truncate(const Fraction&);
@@ -64,7 +64,7 @@ class TrackList : public QList<Element*>
 //---------------------------------------------------------
 
 struct Annotation {
-      int tick;
+      Fraction tick;
       Element* e;
       };
 
@@ -85,8 +85,8 @@ class ScoreRange {
       ScoreRange() {}
       ~ScoreRange();
       void read(Segment* first, Segment* last, bool readSpanner = true);
-      bool write(Score*, int tick) const;
-      Fraction duration() const;
+      bool write(Score*, const Fraction&) const;
+      Fraction ticks() const;
       Segment* first() const { return _first; }
       Segment* last() const  { return _last;  }
       void fill(const Fraction&);

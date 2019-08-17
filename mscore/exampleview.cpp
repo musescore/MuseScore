@@ -117,6 +117,8 @@ void ExampleView::setScore(Score* s)
       _score = s;
       _score->addViewer(this);
       _score->setLayoutMode(LayoutMode::LINE);
+
+      ScoreLoad sl;
       _score->doLayout();
       update();
       }

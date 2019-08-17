@@ -32,22 +32,6 @@
 
 namespace Ms {
 
-static const ElementStyle headerStyle {
-      { Sid::headerFontFace,                     Pid::FONT_FACE              },
-      { Sid::headerFontSize,                     Pid::FONT_SIZE              },
-      { Sid::headerFontBold,                     Pid::FONT_BOLD              },
-      { Sid::headerFontItalic,                   Pid::FONT_ITALIC            },
-      { Sid::headerFontUnderline,                Pid::FONT_UNDERLINE         },
-      };
-
-static const ElementStyle footerStyle {
-      { Sid::footerFontFace,                     Pid::FONT_FACE              },
-      { Sid::footerFontSize,                     Pid::FONT_SIZE              },
-      { Sid::footerFontBold,                     Pid::FONT_BOLD              },
-      { Sid::footerFontItalic,                   Pid::FONT_ITALIC            },
-      { Sid::footerFontUnderline,                Pid::FONT_UNDERLINE         },
-      };
-
 //---------------------------------------------------------
 //   Page
 //---------------------------------------------------------
@@ -254,7 +238,7 @@ static void countElements(void* data, Element* /*e*/)
 void Page::doRebuildBspTree()
       {
       int n = 0;
-      scanElements(&n, countElements, true);
+      scanElements(&n, countElements, false);
 
       QRectF r;
       if (score()->layoutMode() == LayoutMode::LINE) {
@@ -273,7 +257,7 @@ void Page::doRebuildBspTree()
             r = abbox();
 
       bspTree.initialize(r, n);
-      scanElements(&bspTree, &bspInsert, true);
+      scanElements(&bspTree, &bspInsert, false);
       bspTreeValid = true;
       }
 #endif
@@ -418,7 +402,7 @@ bool Page::isOdd() const
 
 void Page::write(XmlWriter& xml) const
       {
-      xml.stag("Page");
+      xml.stag(this);
       foreach(System* system, _systems) {
             system->write(xml);
             }
@@ -527,9 +511,9 @@ QRectF Page::tbbox()
 //   endTick
 //---------------------------------------------------------
 
-int Page::endTick() const
+Fraction Page::endTick() const
       {
-      return _systems.empty() ? -1 : _systems.back()->measures().back()->endTick();
+      return _systems.empty() ? Fraction(-1,1) : _systems.back()->measures().back()->endTick();
       }
 }
 

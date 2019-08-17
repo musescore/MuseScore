@@ -46,9 +46,7 @@ static const qreal superScriptOffset = -.9;      // of x-height
 
 bool CharFormat::operator==(const CharFormat& cf) const
       {
-      return cf.bold()      == bold()
-         && cf.italic()     == italic()
-         && cf.underline()  == underline()
+      return cf.style()     == style()
          && cf.preedit()    == preedit()
          && cf.valign()     == valign()
          && cf.fontSize()   == fontSize()
@@ -73,9 +71,7 @@ void TextCursor::init()
       {
       _format.setFontFamily(_text->family());
       _format.setFontSize(_text->size());
-      _format.setBold(_text->bold());
-      _format.setItalic(_text->italic());
-      _format.setUnderline(_text->underline());
+      _format.setStyle(_text->fontStyle());
       _format.setPreedit(false);
       _format.setValign(VerticalAlignment::AlignNormal);
       }
@@ -111,10 +107,10 @@ void TextCursor::updateCursorFormat()
       TextBlock* block = &_text->_layout[_row];
       int col = hasSelection() ? selectColumn() : column();
       const CharFormat* format = block->formatAt(col);
-      if (format)
-            setFormat(*format);
-      else
+      if (!format || format->fontFamily() == "ScoreText")
             init();
+      else
+            setFormat(*format);
       }
 
 //---------------------------------------------------------
@@ -167,7 +163,6 @@ void TextCursor::changeSelectionFormat(FormatId id, QVariant val)
                   qSwap(c1, c2);
             }
       int rows = _text->rows();
-      QList<TextBlock> toDelete;
       for (int row = 0; row < rows; ++row) {
             TextBlock& t = _text->_layout[row];
             if (row < r1)
@@ -194,6 +189,7 @@ void TextCursor::setFormat(FormatId id, QVariant val)
       {
       changeSelectionFormat(id, val);
       format()->setFormat(id, val);
+      text()->setTextInvalid();
       }
 
 //---------------------------------------------------------
@@ -332,6 +328,39 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
       return true;
       }
 
+
+
+//---------------------------------------------------------
+//   doubleClickSelect
+//---------------------------------------------------------
+
+void TextCursor::doubleClickSelect()
+      {
+      clearSelection();
+
+      // if clicked on a space, select surrounding spaces
+      // otherwise select surround non-spaces
+      const bool selectSpaces = currentCharacter().isSpace();
+
+      //handle double-clicking inside a word
+      int startPosition = _column;
+
+      while (_column > 0 && currentCharacter().isSpace() == selectSpaces)
+            --_column;
+
+      if (currentCharacter().isSpace() != selectSpaces)
+            ++_column;
+
+      _selectColumn = _column;
+
+      _column = startPosition;
+      while (_column  < curLine().columns() && currentCharacter().isSpace() == selectSpaces)
+            ++_column;
+
+      updateCursorFormat();
+      _text->score()->addRefresh(_text->canvasBoundingRect());
+      }
+
 //---------------------------------------------------------
 //   set
 //---------------------------------------------------------
@@ -362,8 +391,8 @@ bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
                   clearSelection();
             if (hasSelection())
                   QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
-            updateCursorFormat();
             }
+      updateCursorFormat();
       return true;
       }
 
@@ -973,13 +1002,13 @@ void CharFormat::setFormat(FormatId id, QVariant data)
       {
       switch (id) {
             case FormatId::Bold:
-                  _bold = data.toBool();
+                  setBold(data.toBool());
                   break;
             case FormatId::Italic:
-                  _italic = data.toBool();
+                  setItalic(data.toBool());
                   break;
             case FormatId::Underline:
-                  _underline = data.toBool();
+                  setUnderline(data.toBool());
                   break;
             case FormatId::Valign:
                   _valign = static_cast<VerticalAlignment>(data.toInt());
@@ -1073,19 +1102,14 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
       _tid                    = tid;
       _family                 = "FreeSerif";
       _size                   = 10.0;
-      _bold                   = false;
-      _italic                 = false;
-      _underline              = false;
+      _fontStyle              = FontStyle::Normal;
       _bgColor                = QColor(255, 255, 255, 0);
       _frameColor             = QColor(0, 0, 0, 255);
       _align                  = Align::LEFT;
       _frameType              = FrameType::NO_FRAME;
-      _sizeIsSpatiumDependent = true;
       _frameWidth             = Spatium(0.1);
       _paddingWidth           = Spatium(0.2);
       _frameRound             = 0;
-      _offset                 = QPointF();
-      _offsetType             = OffsetType::SPATIUM;
       }
 
 TextBase::TextBase(Score* s, ElementFlags f)
@@ -1107,21 +1131,17 @@ TextBase::TextBase(const TextBase& st)
       _tid                         = st._tid;
       _family                      = st._family;
       _size                        = st._size;
-      _bold                        = st._bold;
-      _italic                      = st._italic;
-      _underline                   = st._underline;
+      _fontStyle                   = st._fontStyle;
       _bgColor                     = st._bgColor;
       _frameColor                  = st._frameColor;
       _align                       = st._align;
       _frameType                   = st._frameType;
-      _sizeIsSpatiumDependent      = st._sizeIsSpatiumDependent;
       _frameWidth                  = st._frameWidth;
       _paddingWidth                = st._paddingWidth;
       _frameRound                  = st._frameRound;
-      _offset                      = st._offset;
-      _offsetType                  = st._offsetType;
 
       size_t n = _elementStyle->size() + TEXT_STYLE_SIZE;
+      delete[] _propertyFlagsList;
       _propertyFlagsList = new PropertyFlags[n];
       for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = st._propertyFlagsList[i];
@@ -1250,17 +1270,24 @@ void TextBase::createLayout()
                   }
             else if (state == 1) {
                   if (c == '>') {
+                        bool unstyleFontStyle = false;
                         state = 0;
-                        if (token == "b")
+                        if (token == "b") {
                               cursor.format()->setBold(true);
+                              unstyleFontStyle = true;
+                              }
                         else if (token == "/b")
                               cursor.format()->setBold(false);
-                        else if (token == "i")
+                        else if (token == "i") {
                               cursor.format()->setItalic(true);
+                              unstyleFontStyle = true;
+                              }
                         else if (token == "/i")
                               cursor.format()->setItalic(false);
-                        else if (token == "u")
+                        else if (token == "u") {
                               cursor.format()->setUnderline(true);
+                              unstyleFontStyle = true;
+                              }
                         else if (token == "/u")
                               cursor.format()->setUnderline(false);
                         else if (token == "sub")
@@ -1294,17 +1321,22 @@ void TextBase::createLayout()
                               }
                         else if (token.startsWith("font ")) {
                               token = token.mid(5);
-                              if (token.startsWith("size=\""))
+                              if (token.startsWith("size=\"")) {
                                     cursor.format()->setFontSize(parseNumProperty(token.mid(6)));
+                                    setPropertyFlags(Pid::FONT_SIZE, PropertyFlags::UNSTYLED);
+                                    }
                               else if (token.startsWith("face=\"")) {
                                     QString face = parseStringProperty(token.mid(6));
                                     face = unEscape(face);
                                     cursor.format()->setFontFamily(face);
+                                    setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
                                     }
                               else
                                     qDebug("cannot parse html property <%s> in text <%s>",
                                        qPrintable(token), qPrintable(_text));
                               }
+                        if (unstyleFontStyle)
+                              setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
                         }
                   else
                         token += c;
@@ -1328,6 +1360,8 @@ void TextBase::createLayout()
                         token += c;
                   }
             }
+      if (_layout.empty())
+            _layout.append(TextBlock());
       layoutInvalid = false;
       }
 
@@ -1337,23 +1371,13 @@ void TextBase::createLayout()
 
 void TextBase::layout()
       {
-      QPointF o(_offset * (_offsetType == OffsetType::SPATIUM ? spatium() : DPI));
-
-      setPos(o);
-      layout1();
-      }
-
-//---------------------------------------------------------
-//   layout2
-//---------------------------------------------------------
-
-void TextBase::layout2(Sid posAbove, Sid posBelow)
-      {
-      qreal y = placeAbove() ? styleP(posAbove) : styleP(posBelow) + (staff() ? staff()->height() : 0.0);
-
-      QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
-      setPos(QPointF(0.0, y) + o);
-
+      setPos(QPointF());
+      if (!parent())
+            setOffset(0.0, 0.0);
+//      else if (isStyled(Pid::OFFSET))                                   // TODO: should be set already
+//            setOffset(propertyDefault(Pid::OFFSET).toPointF());
+      if (placeBelow())
+            rypos() = staff() ? staff()->height() : 0.0;
       layout1();
       }
 
@@ -1555,38 +1579,36 @@ class XmlNesting : public QStack<QString> {
 //   genText
 //---------------------------------------------------------
 
-void TextBase::genText()
+void TextBase::genText() const
       {
       _text.clear();
-      bool _bold      = false;
-      bool _italic    = false;
-      bool _underline = false;
+      bool bold_      = false;
+      bool italic_    = false;
+      bool underline_ = false;
 
       for (const TextBlock& block : _layout) {
             for (const TextFragment& f : block.fragments()) {
                   if (!f.format.bold() && bold())
-                        _bold = true;
+                        bold_ = true;
                   if (!f.format.italic() && italic())
-                        _italic = true;
+                        italic_ = true;
                   if (!f.format.underline() && underline())
-                        _underline = true;
+                        underline_ = true;
                   }
             }
       CharFormat fmt;
       fmt.setFontFamily(family());
       fmt.setFontSize(size());
-      fmt.setBold(bold());
-      fmt.setItalic(italic());
-      fmt.setUnderline(underline());
+      fmt.setStyle(fontStyle());
       fmt.setPreedit(false);
       fmt.setValign(VerticalAlignment::AlignNormal);
 
       XmlNesting xmlNesting(&_text);
-      if (_bold)
+      if (bold_)
             xmlNesting.pushB();
-      if (_italic)
+      if (italic_)
             xmlNesting.pushI();
-      if (_underline)
+      if (underline_)
             xmlNesting.pushU();
 
       for (const TextBlock& block : _layout) {
@@ -1657,6 +1679,23 @@ void TextBase::selectAll(TextCursor* _cursor)
       }
 
 //---------------------------------------------------------
+//   multiClickSelect
+//    for double and triple clicks
+//---------------------------------------------------------
+
+void TextBase::multiClickSelect(EditData& editData, MultiClick clicks)
+      {
+      switch (clicks) {
+            case MultiClick::Double:
+                  cursor(editData)->doubleClickSelect();
+                  break;
+            case MultiClick::Triple:
+                  selectAll(cursor(editData));
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -1664,7 +1703,7 @@ void TextBase::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
       writeProperties(xml, true, true);
       xml.etag();
       }
@@ -1690,14 +1729,32 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
       Element::writeProperties(xml);
       writeProperty(xml, Pid::SUB_STYLE);
 
-      for (const StyledProperty& spp : *_elementStyle)
-            writeProperty(xml, spp.pid);
-      for (const StyledProperty& spp : *textStyle(tid()))
-            writeProperty(xml, spp.pid);
-
+      for (const StyledProperty& spp : *_elementStyle) {
+            if (!isStyled(spp.pid))
+                  writeProperty(xml, spp.pid);
+            }
+      for (const StyledProperty& spp : *textStyle(tid())) {
+            if (!isStyled(spp.pid))
+                  writeProperty(xml, spp.pid);
+            }
       if (writeText)
             xml.writeXml("text", xmlText());
       }
+
+static constexpr std::array<Pid, 18> pids { {
+      Pid::SUB_STYLE,
+      Pid::FONT_FACE,
+      Pid::FONT_SIZE,
+      Pid::FONT_STYLE,
+      Pid::COLOR,
+      Pid::FRAME_TYPE,
+      Pid::FRAME_WIDTH,
+      Pid::FRAME_PADDING,
+      Pid::FRAME_ROUND,
+      Pid::FRAME_FG_COLOR,
+      Pid::FRAME_BG_COLOR,
+      Pid::ALIGN,
+      } };
 
 //---------------------------------------------------------
 //   readProperties
@@ -1705,25 +1762,6 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
 
 bool TextBase::readProperties(XmlReader& e)
       {
-      static const std::array<Pid, 18> pids { {
-            Pid::SUB_STYLE,
-            Pid::FONT_FACE,
-            Pid::FONT_SIZE,
-            Pid::FONT_BOLD,
-            Pid::FONT_ITALIC,
-            Pid::FONT_UNDERLINE,
-            Pid::FRAME_TYPE,
-            Pid::FRAME_WIDTH,
-            Pid::FRAME_PADDING,
-            Pid::FRAME_ROUND,
-            Pid::FRAME_FG_COLOR,
-            Pid::FRAME_BG_COLOR,
-            Pid::FONT_SPATIUM_DEPENDENT,
-            Pid::ALIGN,
-            Pid::OFFSET,
-            Pid::OFFSET_TYPE
-            } };
-
       const QStringRef& tag(e.name());
       for (Pid i :pids) {
             if (readProperty(tag, e, i))
@@ -1731,9 +1769,51 @@ bool TextBase::readProperties(XmlReader& e)
             }
       if (tag == "text")
             setXmlText(e.readXml());
+      else if (tag == "bold") {
+            bool val = e.readInt();
+            if (val)
+                  _fontStyle = _fontStyle + FontStyle::Bold;
+            else
+                  _fontStyle = _fontStyle - FontStyle::Bold;
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "italic") {
+            bool val = e.readInt();
+            if (val)
+                  _fontStyle = _fontStyle + FontStyle::Italic;
+            else
+                  _fontStyle = _fontStyle - FontStyle::Italic;
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "underline") {
+            bool val = e.readInt();
+            if (val)
+                  _fontStyle = _fontStyle + FontStyle::Underline;
+            else
+                  _fontStyle = _fontStyle - FontStyle::Underline;
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
       else if (!Element::readProperties(e))
             return false;
       return true;
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid TextBase::propertyId(const QStringRef& name) const
+      {
+      if (name == "text")
+            return Pid::TEXT;
+      for (Pid pid : pids) {
+            if (propertyName(pid) == name)
+                  return pid;
+            }
+      return Element::propertyId(name);
       }
 
 //---------------------------------------------------------
@@ -1846,7 +1926,10 @@ void TextBase::layoutEdit()
 
 bool TextBase::acceptDrop(EditData& data) const
       {
-      ElementType type = data.element->type();
+      // do not accept the drop if this text element is not being edited
+      if (!data.getData(this))
+            return false;
+      ElementType type = data.dropElement->type();
       return type == ElementType::SYMBOL || type == ElementType::FSYMBOL;
       }
 
@@ -1879,10 +1962,17 @@ QString TextBase::plainText() const
       {
       QString s;
 
-      if (layoutInvalid)
-            ((Text*)(this))->createLayout();  // ugh!
+      const TextBase* text = this;
+      std::unique_ptr<TextBase> tmpText;
+      if (layoutInvalid) {
+            // Create temporary text object to avoid side effects
+            // of createLayout() call.
+            tmpText.reset(toTextBase(this->clone()));
+            tmpText->createLayout();
+            text = tmpText.get();
+            }
 
-      for (const TextBlock& block : _layout) {
+      for (const TextBlock& block : text->_layout) {
             for (const TextFragment& f : block.fragments())
                   s += f.text;
             if (block.eol())
@@ -1897,9 +1987,26 @@ QString TextBase::plainText() const
 
 QString TextBase::xmlText() const
       {
+#if 1
+      // this is way too expensive
+      // what side effects has genText() ?
+      // this method is const by design
+
+      const TextBase* text = this;
+      std::unique_ptr<TextBase> tmpText;
+      if (textInvalid) {
+            // Create temporary text object to avoid side effects
+            // of genText() call.
+            tmpText.reset(toTextBase(this->clone()));
+            tmpText->genText();
+            text = tmpText.get();
+            }
+      return text->_text;
+#else
       if (textInvalid)
-            ((Text*)(this))->genText();    // ugh!
+            genText();
       return _text;
+#endif
       }
 
 //---------------------------------------------------------
@@ -1912,8 +2019,8 @@ QString TextBase::convertFromHtml(const QString& ss) const
       doc.setHtml(ss);
 
       QString s;
-      qreal _size = size();
-      QString _family = family();
+      qreal size_ = size();
+      QString family_ = family();
       for (auto b = doc.firstBlock(); b.isValid() ; b = b.next()) {
             if (!s.isEmpty())
                   s += "\n";
@@ -1926,13 +2033,13 @@ QString TextBase::convertFromHtml(const QString& ss) const
                         // html font sizes may have spatium adjustments; need to undo this
                         if (sizeIsSpatiumDependent())
                               htmlSize *= SPATIUM20 / spatium();
-                        if (fabs(_size - htmlSize) > 0.1) {
-                              _size = htmlSize;
-                              s += QString("<font size=\"%1\"/>").arg(_size);
+                        if (fabs(size_ - htmlSize) > 0.1) {
+                              size_ = htmlSize;
+                              s += QString("<font size=\"%1\"/>").arg(size_);
                               }
-                        if (_family != font.family()) {
-                              _family = font.family();
-                              s += QString("<font face=\"%1\"/>").arg(_family);
+                        if (family_ != font.family()) {
+                              family_ = font.family();
+                              s += QString("<font face=\"%1\"/>").arg(family_);
                               }
                         if (font.bold())
                               s += "<b>";
@@ -2051,7 +2158,7 @@ QString TextBase::accessibleInfo() const
             case Tid::POET:
             case Tid::TRANSLATOR:
             case Tid::MEASURE_NUMBER:
-                  rez = textStyleUserName(tid());
+                  rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
                   break;
             default:
                   rez = Element::accessibleInfo();
@@ -2060,7 +2167,7 @@ QString TextBase::accessibleInfo() const
       QString s = plainText().simplified();
       if (s.length() > 20) {
             s.truncate(20);
-            s += "...";
+            s += "…";
             }
       return  QString("%1: %2").arg(rez).arg(s);
       }
@@ -2080,7 +2187,7 @@ QString TextBase::screenReaderInfo() const
             case Tid::POET:
             case Tid::TRANSLATOR:
             case Tid::MEASURE_NUMBER:
-                  rez = textStyleUserName(tid());
+                  rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
                   break;
             default:
                   rez = Element::accessibleInfo();
@@ -2096,7 +2203,7 @@ QString TextBase::screenReaderInfo() const
 
 int TextBase::subtype() const
       {
-      return int(Tid());
+      return int(tid());
       }
 
 //---------------------------------------------------------
@@ -2105,14 +2212,14 @@ int TextBase::subtype() const
 
 QString TextBase::subtypeName() const
       {
-      return textStyleUserName(tid());
+      return score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
       }
 
 //---------------------------------------------------------
 //   fragmentList
 //---------------------------------------------------------
 
-/**
+/*
  Return the text as a single list of TextFragment
  Used by the MusicXML formatted export to avoid parsing the xml text format
  */
@@ -2150,7 +2257,7 @@ bool TextBase::validateText(QString& s)
       for (int i = 0; i < s.size(); ++i) {
             QChar c = s[i];
             if (c == '&') {
-                  const char* ok[] { "amp;", "lt;", "gt;", "quot" };
+                  const char* ok[] { "amp;", "lt;", "gt;", "quot;" };
                   QString t = s.mid(i+1);
                   bool found = false;
                   for (auto k : ok) {
@@ -2207,11 +2314,11 @@ bool TextBase::validateText(QString& s)
 QFont TextBase::font() const
       {
       qreal m = _size;
-      if (_sizeIsSpatiumDependent)
+      if (sizeIsSpatiumDependent())
             m *= spatium() / SPATIUM20;
-      QFont f(_family, m, _bold ? QFont::Bold : QFont::Normal, _italic);
-      if (_underline)
-            f.setUnderline(_underline);
+      QFont f(_family, m, bold() ? QFont::Bold : QFont::Normal, italic());
+      if (underline())
+            f.setUnderline(underline());
       return f;
       }
 
@@ -2237,14 +2344,8 @@ QVariant TextBase::getProperty(Pid propertyId) const
                   return family();
             case Pid::FONT_SIZE:
                   return size();
-            case Pid::FONT_SPATIUM_DEPENDENT:
-                  return sizeIsSpatiumDependent();
-            case Pid::FONT_BOLD:
-                  return bold();
-            case Pid::FONT_ITALIC:
-                  return italic();
-            case Pid::FONT_UNDERLINE:
-                  return underline();
+            case Pid::FONT_STYLE:
+                  return int(fontStyle());
             case Pid::FRAME_TYPE:
                   return int(frameType());
             case Pid::FRAME_WIDTH:
@@ -2259,10 +2360,6 @@ QVariant TextBase::getProperty(Pid propertyId) const
                   return bgColor();
             case Pid::ALIGN:
                   return QVariant::fromValue(align());
-            case Pid::OFFSET:
-                  return offset();
-            case Pid::OFFSET_TYPE:
-                  return int(offsetType());
             case Pid::TEXT:
                   return xmlText();
             default:
@@ -2289,14 +2386,8 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
             case Pid::FONT_SIZE:
                   setSize(v.toReal());
                   break;
-            case Pid::FONT_BOLD:
-                  setBold(v.toBool());
-                  break;
-            case Pid::FONT_ITALIC:
-                  setItalic(v.toBool());
-                  break;
-            case Pid::FONT_UNDERLINE:
-                  setUnderline(v.toBool());
+            case Pid::FONT_STYLE:
+                  setFontStyle(FontStyle(v.toInt()));
                   break;
             case Pid::FRAME_TYPE:
                   setFrameType(FrameType(v.toInt()));
@@ -2316,20 +2407,11 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
             case Pid::FRAME_BG_COLOR:
                   setBgColor(v.value<QColor>());
                   break;
-            case Pid::FONT_SPATIUM_DEPENDENT:
-                  setSizeIsSpatiumDependent(v.toBool());
-                  break;
             case Pid::TEXT:
                   setXmlText(v.toString());
                   break;
             case Pid::ALIGN:
                   setAlign(v.value<Align>());
-                  break;
-            case Pid::OFFSET:
-                  setOffset(v.toPointF());
-                  break;
-            case Pid::OFFSET_TYPE:
-                  setOffsetType(OffsetType(v.toInt()));
                   break;
             default:
                   rv = Element::setProperty(pid, v);
@@ -2353,17 +2435,9 @@ QVariant TextBase::propertyDefault(Pid id) const
             if (v.isValid())
                   return v;
             }
-      for (const StyledProperty& p : *textStyle(tid())) {
-            if (p.pid == id)
-                  return score()->styleV(p.sid);
-            }
-      for (const StyledProperty& p : *_elementStyle) {
-            if (p.pid == id) {
-                  if (propertyType(id) == P_TYPE::SP_REAL)
-                        return score()->styleP(p.sid);
-                  return score()->styleV(p.sid);
-                  }
-            }
+      Sid sid = getPropertyStyle(id);
+      if (sid != Sid::NOSTYLE)
+            return styleValue(id, sid);
       QVariant v;
       switch (id) {
             case Pid::SUB_STYLE:
@@ -2374,11 +2448,8 @@ QVariant TextBase::propertyDefault(Pid id) const
                   break;
             default:
                   for (const StyledProperty& p : *textStyle(Tid::DEFAULT)) {
-                        if (p.pid == id) {
-                              if (propertyType(id) == P_TYPE::SP_REAL)
-                                    return score()->styleP(p.sid);
-                              return score()->styleV(p.sid);
-                              }
+                        if (p.pid == id)
+                              return styleValue(id, p.sid);
                         }
                   return Element::propertyDefault(id);
             }
@@ -2403,32 +2474,6 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
             ++i;
             }
       return -1;
-      }
-
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags TextBase::propertyFlags(Pid id) const
-      {
-      static PropertyFlags f = PropertyFlags::NOSTYLE;
-
-      int i = getPropertyFlagsIdx(id);
-      if (i == -1)
-            return f;
-      return _propertyFlagsList[i];
-      }
-
-//---------------------------------------------------------
-//   setPropertyFlags
-//---------------------------------------------------------
-
-void TextBase::setPropertyFlags(Pid id, PropertyFlags f)
-      {
-      int i = getPropertyFlagsIdx(id);
-      if (i == -1)
-            return;
-      _propertyFlagsList[i] = f;
       }
 
 //---------------------------------------------------------
@@ -2461,26 +2506,14 @@ void TextBase::styleChanged()
       int i = 0;
       for (const StyledProperty& spp : *_elementStyle) {
             PropertyFlags f = _propertyFlagsList[i];
-            if (f == PropertyFlags::STYLED) {
-                  if (propertyType(spp.pid) == P_TYPE::SP_REAL) {
-                        qreal val = score()->styleP(spp.sid);
-                        setProperty(spp.pid, val);
-                        }
-                  else
-                        setProperty(spp.pid, score()->styleV(spp.sid));
-                  }
+            if (f == PropertyFlags::STYLED)
+                  setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
             ++i;
             }
       for (const StyledProperty& spp : *textStyle(tid())) {
             PropertyFlags f = _propertyFlagsList[i];
-            if (f == PropertyFlags::STYLED) {
-                  if (propertyType(spp.pid) == P_TYPE::SP_REAL) {
-                        qreal val = score()->styleP(spp.sid);
-                        setProperty(spp.pid, val);
-                        }
-                  else
-                        setProperty(spp.pid, score()->styleV(spp.sid));
-                  }
+            if (f == PropertyFlags::STYLED)
+                  setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
             ++i;
             }
       }
@@ -2492,33 +2525,40 @@ void TextBase::styleChanged()
 void TextBase::initElementStyle(const ElementStyle* ss)
       {
       _elementStyle = ss;
-      size_t n      = _elementStyle->size() + TEXT_STYLE_SIZE;
+      size_t n      = ss->size() + TEXT_STYLE_SIZE;
 
       delete[] _propertyFlagsList;
       _propertyFlagsList = new PropertyFlags[n];
       for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = PropertyFlags::STYLED;
-      for (const StyledProperty& p : *_elementStyle) {
-            QVariant v = propertyType(p.pid) == P_TYPE::SP_REAL ? score()->styleP(p.sid) : score()->styleV(p.sid);
-            setProperty(p.pid, v);
-            }
-      for (const StyledProperty& p : *textStyle(tid())) {
-            QVariant v = propertyType(p.pid) == P_TYPE::SP_REAL ? score()->styleP(p.sid) : score()->styleV(p.sid);
-            setProperty(p.pid, v);
-            }
+      for (const StyledProperty& p : *_elementStyle)
+            setProperty(p.pid, styleValue(p.pid, p.sid));
+      for (const StyledProperty& p : *textStyle(tid()))
+            setProperty(p.pid, styleValue(p.pid, p.sid));
       }
 
 //---------------------------------------------------------
 //   initTid
 //---------------------------------------------------------
 
+void TextBase::initTid(Tid tid, bool preserveDifferent)
+      {
+      if (! preserveDifferent)
+            initTid(tid);
+      else {
+            setTid(tid);
+            for (const StyledProperty& p : *textStyle(tid)) {
+                  if (getProperty(p.pid) == propertyDefault(p.pid))
+                        setProperty(p.pid, styleValue(p.pid, p.sid));
+                  }
+            }
+      }
+
 void TextBase::initTid(Tid tid)
       {
       setTid(tid);
       for (const StyledProperty& p : *textStyle(tid)) {
-            Pid pid    = p.pid;
-            QVariant v = propertyDefault(pid);
-            setProperty(pid, v);
+            setProperty(p.pid, styleValue(p.pid, p.sid));
             }
       }
 
@@ -2564,6 +2604,7 @@ void TextBase::editCopy(EditData& ed)
 TextCursor* TextBase::cursor(const EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+      Q_ASSERT(ted);
       return &ted->cursor;
       }
 
@@ -2574,9 +2615,12 @@ TextCursor* TextBase::cursor(const EditData& ed)
 void TextBase::draw(QPainter* p) const
       {
       if (hasFrame()) {
+            qreal baseSpatium = MScore::baseStyle().value(Sid::spatium).toDouble();
             if (frameWidth().val() != 0.0) {
                   QColor fColor = curColor(visible(), frameColor());
-                  QPen pen(fColor, frameWidth().val() * spatium(), Qt::SolidLine,
+                  qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
+
+                  QPen pen(fColor, frameWidthVal, Qt::SolidLine,
                      Qt::SquareCap, Qt::MiterJoin);
                   p->setPen(pen);
                   }
@@ -2587,10 +2631,12 @@ void TextBase::draw(QPainter* p) const
             if (circle())
                   p->drawEllipse(frame);
             else {
-                  int r2 = frameRound();
+                  qreal frameRoundFactor = (sizeIsSpatiumDependent() ? (spatium()/baseSpatium) / 2 : 0.5f);
+
+                  int r2 = frameRound() * frameRoundFactor;
                   if (r2 > 99)
                         r2 = 99;
-                  p->drawRoundedRect(frame, frameRound(), r2);
+                  p->drawRoundedRect(frame, frameRound() * frameRoundFactor, r2);
                   }
             }
       p->setBrush(Qt::NoBrush);
@@ -2655,7 +2701,10 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
       QPen pen(curColor());
       pen.setJoinStyle(Qt::MiterJoin);
       p->setPen(pen);
-      p->drawRect(_cursor->cursorRect());
+
+      // Don't draw cursor if there is a selection
+      if (!_cursor->hasSelection())
+            p->drawRect(_cursor->cursorRect());
 
       QMatrix matrix = p->matrix();
       p->translate(-pos);
@@ -2668,6 +2717,156 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
 
       p->drawRect(r);
       pen = QPen(MScore::defaultColor, 0.0);
+      }
+
+//---------------------------------------------------------
+//   hasCustomFormatting
+//---------------------------------------------------------
+
+bool TextBase::hasCustomFormatting() const
+      {
+      CharFormat fmt;
+      fmt.setFontFamily(family());
+      fmt.setFontSize(size());
+      fmt.setStyle(fontStyle());
+      fmt.setPreedit(false);
+      fmt.setValign(VerticalAlignment::AlignNormal);
+
+      for (const TextBlock& block : _layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  if (f.text.isEmpty())                     // skip empty fragments, not to
+                        continue;                           // insert extra HTML formatting
+                  const CharFormat& format = f.format;
+                  if (fmt.style() != format.style())
+                        return true;
+                  if (format.fontSize() != fmt.fontSize())
+                        return true;
+                  if (format.fontFamily() != fmt.fontFamily())
+                        return true;
+
+                  VerticalAlignment va = format.valign();
+                  VerticalAlignment cva = fmt.valign();
+                  if (cva != va)
+                        return true;
+                  }
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   stripText
+//    remove some custom text formatting and return
+//    result as xml string
+//---------------------------------------------------------
+
+QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) const
+      {
+      QString _txt;
+      bool bold_      = false;
+      bool italic_    = false;
+      bool underline_ = false;
+
+      for (const TextBlock& block : _layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  if (!f.format.bold() && bold())
+                        bold_ = true;
+                  if (!f.format.italic() && italic())
+                        italic_ = true;
+                  if (!f.format.underline() && underline())
+                        underline_ = true;
+                  }
+            }
+      CharFormat fmt;
+      fmt.setFontFamily(family());
+      fmt.setFontSize(size());
+      fmt.setStyle(fontStyle());
+      fmt.setPreedit(false);
+      fmt.setValign(VerticalAlignment::AlignNormal);
+
+      XmlNesting xmlNesting(&_txt);
+      if (!removeStyle) {
+            if (bold_)
+                  xmlNesting.pushB();
+            if (italic_)
+                  xmlNesting.pushI();
+            if (underline_)
+                  xmlNesting.pushU();
+            }
+
+      for (const TextBlock& block : _layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  if (f.text.isEmpty())                     // skip empty fragments, not to
+                        continue;                           // insert extra HTML formatting
+                  const CharFormat& format = f.format;
+                  if (!removeStyle) {
+                        if (fmt.bold() != format.bold()) {
+                              if (format.bold())
+                                    xmlNesting.pushB();
+                              else
+                                    xmlNesting.popB();
+                              }
+                        if (fmt.italic() != format.italic()) {
+                              if (format.italic())
+                                    xmlNesting.pushI();
+                              else
+                                    xmlNesting.popI();
+                              }
+                        if (fmt.underline() != format.underline()) {
+                              if (format.underline())
+                                    xmlNesting.pushU();
+                              else
+                                    xmlNesting.popU();
+                              }
+                        }
+
+                  if (!removeSize && (format.fontSize() != fmt.fontSize()))
+                        _txt += QString("<font size=\"%1\"/>").arg(format.fontSize());
+                  if (!removeFace && (format.fontFamily() != fmt.fontFamily()))
+                        _txt += QString("<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
+
+                  VerticalAlignment va = format.valign();
+                  VerticalAlignment cva = fmt.valign();
+                  if (cva != va) {
+                        switch (va) {
+                              case VerticalAlignment::AlignNormal:
+                                    xmlNesting.popToken(cva == VerticalAlignment::AlignSuperScript ? "sup" : "sub");
+                                    break;
+                              case VerticalAlignment::AlignSuperScript:
+                                    xmlNesting.pushToken("sup");
+                                    break;
+                              case VerticalAlignment::AlignSubScript:
+                                    xmlNesting.pushToken("sub");
+                                    break;
+                              }
+                        }
+                  _txt += XmlWriter::xmlString(f.text);
+                  fmt = format;
+                  }
+            if (block.eol())
+                  _txt += QChar::LineFeed;
+            }
+      while (!xmlNesting.empty())
+            xmlNesting.popToken();
+      return _txt;
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void TextBase::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+      {
+      if (ps == PropertyFlags::STYLED && v == propertyDefault(id)) {
+            // this is a reset
+            // remove some custom formatting
+            if (id == Pid::FONT_STYLE)
+                  undoChangeProperty(Pid::TEXT, stripText(true, false, false), propertyFlags(id));
+            else if (id == Pid::FONT_SIZE)
+                  undoChangeProperty(Pid::TEXT, stripText(false, true, false), propertyFlags(id));
+            else if (id == Pid::FONT_FACE)
+                  undoChangeProperty(Pid::TEXT, stripText(false, false, true), propertyFlags(id));
+            }
+      Element::undoChangeProperty(id, v, ps);
       }
 
 }

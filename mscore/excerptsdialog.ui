@@ -154,7 +154,7 @@
             <string>Generate new part for each instrument</string>
            </property>
            <property name="text">
-            <string>New All</string>
+            <string>Generate</string>
            </property>
           </widget>
          </item>
@@ -245,7 +245,7 @@
               </sizepolicy>
              </property>
              <property name="accessibleName">
-              <string>Partitur List</string>
+              <string>Part list</string>
              </property>
              <property name="alternatingRowColors">
               <bool>true</bool>
@@ -386,6 +386,16 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>excerptList</tabstop>
+  <tabstop>moveUpButton</tabstop>
+  <tabstop>moveDownButton</tabstop>
+  <tabstop>newAllButton</tabstop>
+  <tabstop>newButton</tabstop>
+  <tabstop>deleteButton</tabstop>
+  <tabstop>title</tabstop>
+  <tabstop>instrumentList</tabstop>
+  <tabstop>addButton</tabstop>
+  <tabstop>removeButton</tabstop>
   <tabstop>partList</tabstop>
  </tabstops>
  <resources>

@@ -36,6 +36,8 @@ class Arpeggio final : public Element {
       std::vector<SymId> symbols;
       bool _playArpeggio;
 
+      qreal _stretch;
+
       bool _hidden = false; // set in layout, will skip draw if true
 
       void symbolLine(SymId start, SymId fill);
@@ -67,6 +69,7 @@ class Arpeggio final : public Element {
 
       virtual void read(XmlReader& e) override;
       virtual void write(XmlWriter& xml) const override;
+      virtual void reset() override;
 
       int span() const      { return _span; }
       void setSpan(int val) { _span = val; }
@@ -80,9 +83,13 @@ class Arpeggio final : public Element {
       bool playArpeggio()       { return _playArpeggio; }
       void setPlayArpeggio(bool p) { _playArpeggio = p; }
 
+      qreal Stretch() const             { return _stretch; }
+      void setStretch(qreal val)        { _stretch = val;  }
+
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid propertyId) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
       };
 
 

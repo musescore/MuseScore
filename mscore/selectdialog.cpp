@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: select.cpp -1   $
 //
 //  Copyright (C) 2002-2011 Werner Schweer and others
 //
@@ -80,7 +79,7 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
 void SelectDialog::setPattern(ElementPattern* p)
       {
       p->type    = int(e->type());
-      p->subtype = int(e->subtype());
+      p->subtype = e->subtype();
       if (e->isSlurSegment())
             p->subtype = int(toSlurSegment(e)->spanner()->type());
 
@@ -101,6 +100,8 @@ void SelectDialog::setPattern(ElementPattern* p)
             const Rest* r = toRest(e);
             p->durationTicks = r->actualTicks();
             }
+      else
+            p->durationTicks = Fraction(-1,1);
 
       p->voice   = sameVoice->isChecked() ? e->voice() : -1;
       p->subtypeValid = sameSubtype->isChecked();

@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorEmpty</class>
  <widget class="QWidget" name="InspectorEmpty">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>94</width>
-    <height>13</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>«Empty» Inspector</string>
   </property>

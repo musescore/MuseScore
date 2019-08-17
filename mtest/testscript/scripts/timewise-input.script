@@ -1,0 +1,41 @@
+init init/Voice-Piano-3-4.mscx
+cmd note-input
+cmd insert-a
+cmd next-measure
+cmd note-a
+cmd insert-b
+cmd next-measure
+cmd note-a
+cmd note-b
+cmd note-c
+cmd prev-chord
+cmd insert-d
+cmd next-measure
+cmd down-chord
+cmd pad-note-2
+cmd pad-dot
+cmd note-a
+cmd prev-chord
+cmd up-chord
+cmd pad-note-4
+cmd note-a
+cmd insert-b
+cmd insert-c
+cmd escape
+cmd del-empty-measures
+test score timewise-input.mscx
+
+cmd undo
+cmd undo
+cmd undo
+cmd undo
+cmd undo
+cmd undo
+cmd undo
+cmd undo
+cmd undo
+cmd undo
+cmd undo
+cmd undo
+cmd escape
+test score init/Voice-Piano-3-4.mscx

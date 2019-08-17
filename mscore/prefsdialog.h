@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -81,6 +80,7 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       void filterShortcutsTextChanged(const QString &);
       void filterAdvancedPreferences(const QString&);
       void resetAdvancedPreferenceToDefault();
+      void restartAudioEngine();
 
       void changeSoundfontPaths();
       void updateTranslationClicked();

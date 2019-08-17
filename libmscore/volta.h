@@ -31,7 +31,7 @@ extern LineSegment* voltaDebug;
 
 class VoltaSegment final : public TextLineBaseSegment {
    public:
-      VoltaSegment(Score* s);
+      VoltaSegment(Spanner*, Score*);
       virtual ElementType type() const override     { return ElementType::VOLTA_SEGMENT; }
       virtual VoltaSegment* clone() const override  { return new VoltaSegment(*this); }
       Volta* volta() const                          { return (Volta*)spanner(); }
@@ -60,6 +60,11 @@ class Volta final : public TextLineBase {
 
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader& e) override;
+      virtual SpannerSegment* layoutSystem(System* system) override;
+
+      void setVelocity() const;
+      void setChannel() const;
+      void setTempo() const;
 
       QList<int> endings() const           { return _endings; }
       QList<int>& endings()                { return _endings; }

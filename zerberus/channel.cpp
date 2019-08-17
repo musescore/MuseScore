@@ -56,7 +56,7 @@ void Channel::controller(int c, int val)
             if (val < 0x40) {
                   for (Voice* v = _msynth->getActiveVoices(); v; v = v->next()) {
                         if (v->isSustained()) {
-                              // printf("sustain off %p\n", v);
+//printf("sustain off %p\n", v);
                               v->stop();
                               }
                         }
@@ -70,7 +70,10 @@ void Channel::controller(int c, int val)
             _panRightGain = sinf(M_PI_2 * float(val)/126.0);
             }
       else if (c == Ms::CTRL_VOLUME) {
-            _midiVolume = (float(val) * float(ctrl[Ms::CTRL_EXPRESSION])) / (127.0 * 127.0);
+            // This was previously:
+            // (float(val) * float(ctrl[Ms::CTRL_EXPRESSION])) / (127.0 * 127.0);
+            // which was a hack to include CC11 support for SFZ. If necessary, revert to this.
+            _midiVolume = float(val) / 127.0;
             }
       else if (c == Ms::CTRL_ALL_NOTES_OFF) {
             for (Voice* v = _msynth->getActiveVoices(); v; v = v->next()) {

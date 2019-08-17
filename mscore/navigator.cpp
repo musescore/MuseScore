@@ -114,6 +114,7 @@ void ViewRect::paintEvent(QPaintEvent* ev)
 Navigator::Navigator(NScrollArea* sa, QWidget* parent)
   : QWidget(parent)
       {
+      setObjectName("Navigator");
       setAttribute(Qt::WA_NoBackground);
       _score         = 0;
       scrollArea     = sa;
@@ -156,6 +157,7 @@ void Navigator::setScoreView(ScoreView* v)
             connect(_cv,  SIGNAL(viewRectChanged()), this, SLOT(updateViewRect()));
             rescale();
             updateViewRect();
+            update();
             }
       else {
             _score = 0;
@@ -171,7 +173,7 @@ void Navigator::setScoreView(ScoreView* v)
 
 void Navigator::setScore(Score* v)
       {
-      _cv    = 0;
+      setScoreView(nullptr); // ensure all connections to ScoreView get disconnected
       _score = v;
       rescale();
       updateViewRect();
@@ -346,7 +348,7 @@ void Navigator::paintEvent(QPaintEvent* ev)
       QRect r(ev->rect());
       p.fillRect(r, palette().color(QPalette::Window));
 
-//      qDebug("navigator paint %d %d", r.width(), r.height());
+//      qDebug("navigator paint x %d w %d h %d", r.x(), r.width(), r.height());
 
       if (!_score)
             return;
@@ -366,7 +368,7 @@ void Navigator::paintEvent(QPaintEvent* ev)
       for (Page* page : _score->pages()) {
             QPointF pos(page->pos());
             if (_previewOnly)
-                  pos = QPointF(i*page->width(), 0);
+                  pos = QPointF(i * page->width(), 0);
             QRectF pr(page->abbox().translated(pos));
             if (pr.right() < fr.left())
                   continue;

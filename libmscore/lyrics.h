@@ -25,8 +25,14 @@ namespace Ms {
 class LyricsLine;
 
 class Lyrics final : public TextBase {
+      Q_GADGET
    public:
-      enum class Syllabic : char { SINGLE, BEGIN, END, MIDDLE };
+      enum class Syllabic : char {
+            ///.\{
+            SINGLE, BEGIN, END, MIDDLE
+            ///\}
+            };
+      Q_ENUM(Syllabic)
 
       // MELISMA FIRST UNDERSCORE:
       // used as_ticks value to mark a melisma for which only the first chord has been spanned so far
@@ -40,7 +46,7 @@ class Lyrics final : public TextBase {
       // static constexpr qreal  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
 
    private:
-      int _ticks;             ///< if > 0 then draw an underline to tick() + _ticks
+      Fraction _ticks;        ///< if > 0 then draw an underline to tick() + _ticks
                               ///< (melisma)
       Syllabic _syllabic;
       LyricsLine* _separator;
@@ -83,9 +89,9 @@ class Lyrics final : public TextBase {
       virtual void remove(Element*) override;
       virtual void endEdit(EditData&) override;
 
-      int ticks() const                               { return _ticks;    }
-      void setTicks(int tick)                         { _ticks = tick;    }
-      int endTick() const;
+      Fraction ticks() const                          { return _ticks;    }
+      void setTicks(const Fraction& tick)             { _ticks = tick;    }
+      Fraction endTick() const;
       void removeFromScore();
 
       using ScoreElement::undoChangeProperty;
@@ -95,10 +101,12 @@ class Lyrics final : public TextBase {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
+      virtual Sid getPropertyStyle(Pid) const override;
       };
 
 //---------------------------------------------------------
 //   LyricsLine
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 class LyricsLine final : public SLine {
@@ -106,7 +114,7 @@ class LyricsLine final : public SLine {
       Lyrics* _nextLyrics;
 
    public:
-      LyricsLine(Score* s);
+      LyricsLine(Score*);
       LyricsLine(const LyricsLine&);
 
       virtual LyricsLine* clone() const override      { return new LyricsLine(*this); }
@@ -118,12 +126,15 @@ class LyricsLine final : public SLine {
 
       Lyrics* lyrics() const                          { return toLyrics(parent());   }
       Lyrics* nextLyrics() const                      { return _nextLyrics;         }
+      bool isEndMelisma() const                       { return lyrics()->ticks().isNotZero(); }
+      bool isDash() const                             { return !isEndMelisma(); }
       virtual bool setProperty(Pid propertyId, const QVariant& v) override;
       virtual SpannerSegment* layoutSystem(System*) override;
       };
 
 //---------------------------------------------------------
 //   LyricsLineSegment
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 class LyricsLineSegment final : public LineSegment {
@@ -132,7 +143,7 @@ class LyricsLineSegment final : public LineSegment {
       qreal _dashLength;
 
    public:
-      LyricsLineSegment(Score* s);
+      LyricsLineSegment(Spanner*, Score*);
 
       virtual LyricsLineSegment* clone() const override     { return new LyricsLineSegment(*this); }
       virtual ElementType type() const override             { return ElementType::LYRICSLINE_SEGMENT; }
@@ -144,8 +155,4 @@ class LyricsLineSegment final : public LineSegment {
       };
 
 }     // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::Lyrics::Syllabic);
-
 #endif
-

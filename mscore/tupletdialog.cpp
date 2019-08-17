@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: tuplet.cpp -1   $
 //
 //  Copyright (C) 2002-2011 Werner Schweer and others
 //
@@ -106,8 +105,8 @@ Tuplet* MuseScore::tupletDialog()
       tuplet->setTrack(cr->track());
       tuplet->setTick(cr->tick());
       td.setupTuplet(tuplet);
-      Fraction f1(cr->duration());
-      tuplet->setDuration(f1);
+      Fraction f1(cr->ticks());
+      tuplet->setTicks(f1);
       Fraction f = f1 * Fraction(1, tuplet->ratio().denominator());
       f.reduce();
 
@@ -116,9 +115,8 @@ Tuplet* MuseScore::tupletDialog()
          qPrintable(tuplet->ratio().print()),
          qPrintable(f.print()));
 
-      Fraction fbl(1, f.denominator());
-      if (TDuration::isValid(fbl))
-            tuplet->setBaseLen(fbl);
+      if (TDuration::isValid(f))
+            tuplet->setBaseLen(f);
       else
             tuplet->setBaseLen(TDuration::DurationType::V_INVALID);
 

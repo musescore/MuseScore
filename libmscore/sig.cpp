@@ -19,7 +19,7 @@ namespace Ms {
 //   ticks_beat
 //---------------------------------------------------------
 
-static int ticks_beat(int n)
+int ticks_beat(int n)
       {
       int m = (MScore::division * 4) / n;
       if ((MScore::division * 4) % n) {
@@ -227,6 +227,22 @@ void TimeSigMap::add(int tick, const SigEvent& ev)
 void TimeSigMap::del(int tick)
       {
       erase(tick);
+      normalize();
+      }
+
+//---------------------------------------------------------
+//   clearRange
+//    Clears the given range, start tick included, end tick
+//    excluded.
+//---------------------------------------------------------
+
+void TimeSigMap::clearRange(int tick1, int tick2)
+      {
+      iterator first = lower_bound(tick1);
+      iterator last = lower_bound(tick2);
+      if (first == last)
+            return;
+      erase(first, last);
       normalize();
       }
 

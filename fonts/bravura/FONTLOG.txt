@@ -344,3 +344,74 @@ Changelog
 – Added stylistic alternates for wiggleArpeggiatoUpSwash and wiggleArpeggiatoDownSwash based on Couperin's 'L'Art de Toucher Le Clavecin'
 – Changed the appearance of clefBridge (U+E078) to match the design used by Lachenmann in "...zwei Gefühle..." and added a stylistic alternate with the previous design
 – Fixed the appearance of figBassRaised5 to have a forward slash rather than a backward slash, the correct appearance for a diminished fifth (U+EA5A)
+
+27 January 2017 (Daniel Spreadbury) Bravura 1.211
+– Added dynamicCombinedSeparatorSlash (U+E549)
+– Added stylistic alternates for tuplet digits in lighter weight
+– Improved the tessellation of multi-segment lines, particularly the various wiggles for trills at different speeds.
+– Fixed timesig9denominator and timesig9numerator ligatures
+
+11 February 2017 (Daniel Spreadbury) Bravura 1.212
+– Added keyboardPedalParensLeft (U+E676) and keyboardPedalParensRight (U+E677)
+– Added vulgar fractions for 1/8 (U+215B), 1/4 (U+00BC), 1/2 (U+00BD), 3/4 (U+00BE)
+
+18 February 2017 (Daniel Spreadbury) Bravura 1.213
+– Decreased the width of the space character (U+0020) to 100du
+
+27 May 2017 (Daniel Spreadbury) Bravura 1.214
+– Improved the appearance of the glyphs in the 'Chord symbols' range (U+E870–U+E87F)
+– Added new 'Chord symbol accidentals' range (U+ED60-U+ED66)
+– BEWARE: Renumbered the optional glyphs from U+F400 upwards; many optional glyphs have moved
+
+31 May 2017 (Daniel Spreadbury) Bravura 1.215
+– Added optical variants for some chord symbols glyphs, e.g. +/- for augmented/diminished chord quality
+
+3 June 2017 (Daniel Spreadbury) Bravura 1.216
+– Added optical variants for chord symbol accidentals shown at smaller sizes
+
+18 July 2017 (Daniel Spreadbury) Bravura 1.217
+– Improved the shape and stem connection data of glyphs in the 'Shape note noteheads' range (U+E1B0–U+E1CF)
+
+9 August 2017 (Daniel Spreadbury) Bravura 1.218
+– Added new glyphs to the 'Fingering' range, with digits between 6 and 9, parentheses, brackets, and middle dot separator
+
+10 August 2017 (Daniel Spreadbury) Bravura 1.219
+– Improved the shape and stem connection data of glyphs in the 'Shape note noteheads' range (U+E1B0–U+E1CF)
+
+16 August 2017 (Daniel Spreadbury) Bravura 1.220
+– Increased the size of black and half noteheads in 'Shape note noteheads' range (U+E1B0–U+E1CF)
+
+25 October 2017 (Daniel Spreadbury) Bravura 1.250
+– Added new 'Kahnotation' range, with thanks to Matthew Dougherty, Sam Katz and Sam Weber (U+EDA0–U+EDF1)
+– Added new 'German organ tablature' range, with thanks to John McKean (U+EE00–U+EE3F)
+– Added new 'Clefs supplement' range, including new universal Indian drum notation clef (U+ED70)
+– Added new 'Fingering supplement' range, with italic fingering digits, parentheses and brackets (U+ED80-U+ED8D)
+– Added more separators for brass fingering (U+ED2D–U+ED2E) to 'Fingering' range
+– Added pictBeaterMalletDown (U+E7EC), pictBeaterBrassMalletsRight (U+E7ED), pictBeaterBrassMalletsLeft (U+E7EE), pictTriangleBeaterPlain (U+E7EF) to 'Beaters pictograms' range
+– Added vocalHalbGesungen (semi-sprechgesang) to 'Vocal techniques' range (U+E64B)
+– Added separate glyphs for upper dot, lower dot and central slash (U+E503–U+E505) to 'Bar repeats' range, to allow construction of bar repeats for arbitrary number of bars
+– Added lyricsTextRepeat glyph (U+E555) to 'Lyrics' range
+– Added one-handed roll (U+E233) and double lateral roll (U+E234) for mallet percussion, popularised by Leigh Howard Stevens, to 'Tremolos' range
+
+7 November 2017 (Daniel Spreadbury) Bravura 1.251
+– Resized csymAugmented and csymMinor
+– Adjusted the side bearings of noteheads whose stem attachment points should be offset from the edge of the glyph's bounding box
+
+14 November 2017 (Daniel Spreadbury) Bravura Text 1.252
+– Corrected scaling for chord symbols glyphs in Bravura Text
+
+11 December 2017 (Daniel Spreadbury) Bravura 1.260
+– Added new stylistic set (ss08) for oversized versions of the 'Slash notehead' range
+
+16 December 2017 (Daniel Spreadbury) Bravura Text 1.261
+– Corrected scaling for chord symbols standard accidentals glyphs in Bravura Text
+
+23 February 2018 (Daniel Spreadbury) Bravura 1.270
+– Expanded 'Large, narrow sans serif time signatures' stylistic set (ss04) to complete 'Time signatures' and 'Time signatures supplement' ranges
+– Added new 'Large, narrow bold serif time signatures' stylistic set (ss09)
+
+26 February 2018 (Daniel Spreadbury) Bravura 1.271
+– Resized 'Large, narrow sans serif time signatures' stylistic set (ss04) glyphs to give them the same scale factor as the other time signatures glyphs
+
+29 April 2018 (Daniel Spreadbury) Bravura 1.272
+– Improved 'Large, narrow sans serif time signatures' stylistic set (ss04) glyphs to make the forms more condensed

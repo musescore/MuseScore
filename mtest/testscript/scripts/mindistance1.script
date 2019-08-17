@@ -1,0 +1,10 @@
+init init/Treble.mscx
+cmd note-input
+cmd note-c
+cmd pitch-up-octave
+cmd escape
+palette StaffText style Staff text Staff&#032Text
+cmd pitch-down-octave
+cmd pitch-down-octave
+cmd escape
+test score mindistance1.mscx

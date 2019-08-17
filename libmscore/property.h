@@ -24,13 +24,13 @@ enum class Sid : int;
 //
 //    usage example:
 //    class Text : public Element {
-//          M_PROPERTY(bool, bold, setBold)
+//          M_PROPERTY(QColor, color, setColor)
 //          ...
 //          };
 //    this defines:
-//          bool _bold;
-//          const bool& bold() const { return _bold; }
-//          void setBold(const a& val) { _bold = val; }
+//          QColor _color;
+//          const QColor& color() const { return _color; }
+//          void setColor(const QColor& val) { _color = val; }
 //---------------------------------------------------------
 
 #define M_PROPERTY(a,b,c)                                      \
@@ -97,7 +97,7 @@ enum class Pid {
       BARLINE_SPAN,
       BARLINE_SPAN_FROM,
       BARLINE_SPAN_TO,
-      USER_OFF,
+      OFFSET,
       FRET,
       STRING,
       GHOST,
@@ -141,6 +141,7 @@ enum class Pid {
       TEMPO,
       TEMPO_FOLLOW_TEXT,
       ACCIDENTAL_BRACKET,
+      ACCIDENTAL_TYPE,
       NUMERATOR_STRING,
       DENOMINATOR_STRING,
       FBPREFIX,             // used for FiguredBassItem
@@ -163,13 +164,17 @@ enum class Pid {
       HAIRPIN_HEIGHT,
       HAIRPIN_CONT_HEIGHT,
       VELO_CHANGE,
+      VELO_CHANGE_METHOD,
+      VELO_CHANGE_SPEED,
+      DYNAMIC_TYPE,
       DYNAMIC_RANGE,
+      SINGLE_NOTE_DYNAMICS,
+//100
       PLACEMENT,
       VELOCITY,
       JUMP_TO,
       PLAY_UNTIL,
       CONTINUE_AT,
-//100
       LABEL,
       MARKER_TYPE,
       ARP_USER_LEN1,
@@ -185,7 +190,6 @@ enum class Pid {
       DIAGONAL,
       GROUPS,
       LINE_STYLE,
-      LINE_COLOR,
       LINE_WIDTH,
       LASSO_POS,
       LASSO_SIZE,
@@ -199,7 +203,7 @@ enum class Pid {
       SPANNER_TICK,
       SPANNER_TICKS,
       SPANNER_TRACK2,
-      USER_OFF2,
+      OFFSET2,
       BREAK_MMR,
       REPEAT_COUNT,
 
@@ -220,23 +224,18 @@ enum class Pid {
       LINE_VISIBLE,
       MAG,
       USE_DRUMSET,
-      PART_VOLUME,
-      PART_MUTE,
-      PART_PAN,
-      PART_REVERB,
-
-      PART_CHORUS,
       DURATION,
       DURATION_TYPE,
       ROLE,
       TRACK,
+
       GLISSANDO_STYLE,
       FRET_STRINGS,
       FRET_FRETS,
-      FRET_BARRE,
+      FRET_NUT,
       FRET_OFFSET,
-
       FRET_NUM_POS,
+
       SYSTEM_BRACKET,
       GAP,
       AUTOPLACE,
@@ -272,22 +271,20 @@ enum class Pid {
       BRACKET_COLUMN,
       INAME_LAYOUT_POSITION,
       SUB_STYLE,
+
       FONT_FACE,
       FONT_SIZE,
-      FONT_BOLD,
-      FONT_ITALIC,
-      FONT_UNDERLINE,
+      FONT_STYLE,
+
       FRAME_TYPE,
       FRAME_WIDTH,
-//200
       FRAME_PADDING,
       FRAME_ROUND,
       FRAME_FG_COLOR,
+//200
       FRAME_BG_COLOR,
-      FONT_SPATIUM_DEPENDENT,
+      SIZE_SPATIUM_DEPENDENT,
       ALIGN,
-      OFFSET,
-      OFFSET_TYPE,
       SYSTEM_FLAG,
       BEGIN_TEXT,
 
@@ -297,9 +294,7 @@ enum class Pid {
       BEGIN_HOOK_HEIGHT,
       BEGIN_FONT_FACE,
       BEGIN_FONT_SIZE,
-      BEGIN_FONT_BOLD,
-      BEGIN_FONT_ITALIC,
-      BEGIN_FONT_UNDERLINE,
+      BEGIN_FONT_STYLE,
       BEGIN_TEXT_OFFSET,
 
       CONTINUE_TEXT,
@@ -307,9 +302,7 @@ enum class Pid {
       CONTINUE_TEXT_PLACE,
       CONTINUE_FONT_FACE,
       CONTINUE_FONT_SIZE,
-      CONTINUE_FONT_BOLD,
-      CONTINUE_FONT_ITALIC,
-      CONTINUE_FONT_UNDERLINE,
+      CONTINUE_FONT_STYLE,
       CONTINUE_TEXT_OFFSET,
       END_TEXT,
 
@@ -319,12 +312,32 @@ enum class Pid {
       END_HOOK_HEIGHT,
       END_FONT_FACE,
       END_FONT_SIZE,
-      END_FONT_BOLD,
-      END_FONT_ITALIC,
-      END_FONT_UNDERLINE,
+      END_FONT_STYLE,
       END_TEXT_OFFSET,
 
       POS_ABOVE,
+
+      LOCATION_STAVES,
+      LOCATION_VOICES,
+      LOCATION_MEASURES,
+      LOCATION_FRACTIONS,
+      LOCATION_GRACE,
+      LOCATION_NOTE,
+
+      VOICE,
+      POSITION,
+
+      CLEF_TYPE_CONCERT,
+      CLEF_TYPE_TRANSPOSING,
+      KEY,
+      ACTION, // for Icon
+      MIN_DISTANCE,
+
+      ARPEGGIO_TYPE,
+      CHORD_LINE_TYPE,
+      CHORD_LINE_STRAIGHT,
+      TREMOLO_TYPE,
+      TREMOLO_PLACEMENT,
 
       END
       };
@@ -337,8 +350,9 @@ enum class P_TYPE : char {
       SP_REAL,          // real (point) value saved in (score) spatium units
       FRACTION,
       POINT,
-      POINT_SP,         // point units values saved in (score) spatium units
+      POINT_SP,         // point units, value saved in (score) spatium units
       POINT_MM,
+      POINT_SP_MM,      // point units, value saved as mm or spatium depending on Element->sizeIsSpatiumDependent()
       SIZE,
       SIZE_MM,
       STRING,
@@ -352,6 +366,7 @@ enum class P_TYPE : char {
       VALUE_TYPE,
       BEAM_MODE,
       PLACEMENT,
+      TEXT_PLACE,
       TEMPO,
       GROUPS,
       SYMID,
@@ -364,14 +379,21 @@ enum class P_TYPE : char {
       FONT,
       SUB_STYLE,
       ALIGN,
+      CHANGE_METHOD,    // enum class VeloChangeMethod (for single notedynamics)
+      CHANGE_SPEED,     // enum class Dynamic::Speed
+      CLEF_TYPE,        // enum class ClefType
+      DYNAMIC_TYPE      // enum class Dynamic::Type
       };
 
-extern QVariant getProperty(Pid type, XmlReader& e);
+extern QVariant readProperty(Pid type, XmlReader& e);
+extern QVariant propertyFromString(Pid type, QString value);
+extern QString propertyToString(Pid, QVariant value, bool mscx);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
-extern const char* propertyQmlName(Pid);
 extern bool propertyLink(Pid id);
-extern Pid propertyId(const QString&);
+extern Pid propertyId(const QString& name);
+extern Pid propertyId(const QStringRef& name);
+extern QString propertyUserName(Pid);
 
 }     // namespace Ms
 #endif

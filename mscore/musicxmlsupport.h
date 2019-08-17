@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: musicxmlsupport.h 5595 2012-04-29 15:30:32Z lvinken $
 //
 //  Copyright (C) 2012 Werner Schweer and others
 //
@@ -184,6 +183,8 @@ public:
 
 class ValidatorMessageHandler : public QAbstractMessageHandler
       {
+      Q_OBJECT
+
 public:
       ValidatorMessageHandler() : QAbstractMessageHandler(0) {}
       QString getErrors() const { return errors; }

@@ -26,6 +26,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>S-Gt</trackName>
@@ -42,6 +43,7 @@
         <instrumentId>pluck.guitar.acoustic</instrumentId>
         <concertClef>G8vb</concertClef>
         <transposingClef>G</transposingClef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
           <string>52</string>
@@ -76,6 +78,18 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
@@ -122,7 +136,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>T</text>
                 </Text>
               <pitch>60</pitch>
@@ -138,7 +151,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>60</pitch>
@@ -154,7 +166,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>60</pitch>
@@ -186,6 +197,7 @@
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="0" span="2" col="0"/>
           </Staff>
@@ -227,6 +239,7 @@
           <instrumentId>pluck.guitar.acoustic</instrumentId>
           <concertClef>G8vb</concertClef>
           <transposingClef>G</transposingClef>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>24</frets>
             <string>52</string>
@@ -261,6 +274,18 @@
             <gateTime>67</gateTime>
             </Articulation>
           <Articulation name="sforzato">
+            <velocity>150</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="sforzatoStaccato">
+            <velocity>150</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="marcatoStaccato">
+            <velocity>120</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="marcatoTenuto">
             <velocity>120</velocity>
             <gateTime>100</gateTime>
             </Articulation>
@@ -320,7 +345,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>T</text>
                   </Text>
                 <pitch>60</pitch>
@@ -339,7 +363,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>60</pitch>
@@ -358,7 +381,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>60</pitch>
@@ -397,7 +419,6 @@
                   <linked>
                     <indexDiff>5</indexDiff>
                     </linked>
-                  <align>center,center</align>
                   <text>T</text>
                   </Text>
                 <pitch>60</pitch>
@@ -416,7 +437,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>60</pitch>
@@ -435,7 +455,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>60</pitch>

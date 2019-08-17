@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2012 Werner Schweer
 //
@@ -64,6 +63,7 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste22() { copypaste("22"); }       // cross-staff slur
       void copypaste23() { copypaste("23"); }       // full measure tuplet 10/8
       void copypaste24() { copypaste("24"); }       // more complex non reduced tuplet
+      void copypaste25() { copypaste("25"); }       // copy full measure rest
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
@@ -374,6 +374,10 @@ void TestCopyPaste::copypaste2Voice6()
       delete score;
       }
 
+//---------------------------------------------------------
+//   copypastetuplet
+//---------------------------------------------------------
+
 void TestCopyPaste::copypastetuplet(const char* idx)
       {
       MasterScore* score = readScore(DIR + QString("copypaste_tuplet_%1.mscx").arg(idx));
@@ -382,9 +386,10 @@ void TestCopyPaste::copypastetuplet(const char* idx)
       Measure* m2 = m1->nextMeasure();
 
       Segment* s = m1->first(SegmentType::ChordRest);
-      score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
+      score->select(toChord(s->element(0))->notes().at(0));
       s = s->next(SegmentType::ChordRest);
       score->select(s->element(0), SelectType::RANGE);
+
       QVERIFY(score->selection().canCopy());
       QString mimeType = score->selection().mimeType();
       QVERIFY(!mimeType.isEmpty());

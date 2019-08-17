@@ -61,10 +61,10 @@ bool Score::read(XmlReader& e)
                   _playMode = PlayMode(e.readInt());
             else if (tag == "LayerTag") {
                   int id = e.intAttribute("id");
-                  const QString& tag = e.attribute("tag");
+                  const QString& t = e.attribute("tag");
                   QString val(e.readElementText());
                   if (id >= 0 && id < 32) {
-                        _layerTags[id] = tag;
+                        _layerTags[id] = t;
                         _layerTagComments[id] = val;
                         }
                   }
@@ -79,6 +79,8 @@ bool Score::read(XmlReader& e)
                   _currentLayer = e.readInt();
             else if (tag == "Synthesizer")
                   _synthesizerState.read(e);
+            else if (tag == "page-offset")
+                  _pageNumberOffset = e.readInt();
             else if (tag == "Division")
                   _fileDivision = e.readInt();
             else if (tag == "showInvisible")
@@ -89,6 +91,8 @@ bool Score::read(XmlReader& e)
                   _showFrames = e.readInt();
             else if (tag == "showMargins")
                   _showPageborders = e.readInt();
+            else if (tag == "markIrregularMeasures")
+                  _markIrregularMeasures = e.readInt();
             else if (tag == "Style") {
                   qreal sp = style().value(Sid::spatium).toDouble();
                   style().load(e);
@@ -164,13 +168,13 @@ bool Score::read(XmlReader& e)
                   else {
                         e.tracks().clear();     // ???
                         MasterScore* m = masterScore();
-                        Score* s       = new Score(m);
+                        Score* s       = new Score(m, MScore::baseStyle());
                         Excerpt* ex    = new Excerpt(m);
 
                         ex->setPartScore(s);
-                        ex->setTracks(e.tracks());
                         e.setLastMeasure(nullptr);
                         s->read(e);
+                        ex->setTracks(e.tracks());
                         m->addExcerpt(ex);
                         }
                   }
@@ -196,7 +200,7 @@ bool Score::read(XmlReader& e)
             qDebug("%s: xml read error at line %lld col %lld: %s",
                qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
                e.name().toUtf8().data());
-            MScore::lastError = QObject::tr("XML read error at line %1 column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(e.name().toString());
+            MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(e.name().toString());
             return false;
             }
 
@@ -260,7 +264,7 @@ bool Score::read(XmlReader& e)
       fixTicks();
       masterScore()->rebuildMidiMapping();
       masterScore()->updateChannel();
-      createPlayEvents();
+//      createPlayEvents();
       return true;
       }
 

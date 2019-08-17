@@ -113,6 +113,10 @@
         </VBox>
       <Measure>
         <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
           <TimeSig>
             <sigN>2</sigN>
             <sigD>4</sigD>
@@ -126,10 +130,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <Tempo>
             <tempo>1.66667</tempo>
             <text>𝅘𝅥 = 100</text>
@@ -211,6 +211,10 @@
     <Staff id="2">
       <Measure>
         <voice>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            </Clef>
           <TimeSig>
             <sigN>2</sigN>
             <sigD>4</sigD>
@@ -224,10 +228,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>F</concertClefType>
-            <transposingClefType>F</transposingClefType>
-            </Clef>
           <Rest>
             <linkedMain/>
             <durationType>measure</durationType>
@@ -266,6 +266,10 @@
     <Staff id="3">
       <Measure>
         <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
           <TimeSig>
             <sigN>2</sigN>
             <sigD>4</sigD>
@@ -279,10 +283,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <Rest>
             <linkedMain/>
             <durationType>measure</durationType>
@@ -398,6 +398,10 @@
           </VBox>
         <Measure>
           <voice>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              </Clef>
             <TimeSig>
               <sigN>2</sigN>
               <sigD>4</sigD>
@@ -413,10 +417,6 @@
         <Measure>
           <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <voice>
-            <Clef>
-              <concertClefType>G</concertClefType>
-              <transposingClefType>G</transposingClefType>
-              </Clef>
             <Tempo>
               <tempo>1.66667</tempo>
               <text>𝅘𝅥 = 100</text>
@@ -511,6 +511,10 @@
       <Staff id="2">
         <Measure>
           <voice>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              </Clef>
             <TimeSig>
               <sigN>2</sigN>
               <sigD>4</sigD>
@@ -525,10 +529,6 @@
           </Measure>
         <Measure>
           <voice>
-            <Clef>
-              <concertClefType>G</concertClefType>
-              <transposingClefType>G</transposingClefType>
-              </Clef>
             <Rest>
               <linked>
                 </linked>
@@ -642,6 +642,10 @@
           </VBox>
         <Measure>
           <voice>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              </Clef>
             <TimeSig>
               <sigN>2</sigN>
               <sigD>4</sigD>
@@ -657,10 +661,6 @@
         <Measure>
           <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <voice>
-            <Clef>
-              <concertClefType>G</concertClefType>
-              <transposingClefType>G</transposingClefType>
-              </Clef>
             <Tempo>
               <tempo>1.66667</tempo>
               <linkedMain/>

@@ -34,6 +34,7 @@ namespace Ms {
 static const ElementStyle tempoStyle {
       { Sid::tempoSystemFlag,                    Pid::SYSTEM_FLAG            },
       { Sid::tempoPlacement,                     Pid::PLACEMENT              },
+      { Sid::tempoMinDistance,                   Pid::MIN_DISTANCE           },
       };
 
 //---------------------------------------------------------
@@ -56,7 +57,7 @@ TempoText::TempoText(Score* s)
 
 void TempoText::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("tempo", _tempo);
       if (_followText)
             xml.tag("followText", _followText);
@@ -201,7 +202,7 @@ void TempoText::updateScore()
 
 void TempoText::updateRelative()
       {
-      qreal tempoBefore = score()->tempo(tick() - 1);
+      qreal tempoBefore = score()->tempo(tick() - Fraction::fromTicks(1));
       setTempo(tempoBefore * _relative);
       }
 
@@ -397,7 +398,7 @@ QVariant TempoText::propertyDefault(Pid id) const
 
 void TempoText::layout()
       {
-      layout2(Sid::tempoPosAbove, Sid::tempoPosBelow);
+      TextBase::layout();
 
       Segment* s = segment();
       if (!s)                       // for use in palette
@@ -405,7 +406,7 @@ void TempoText::layout()
 
       // tempo text on first chordrest of measure should align over time sig if present
       //
-      if (autoplace() && !s->rtick()) {
+      if (autoplace() && s->rtick().isZero()) {
             Segment* p = segment()->prev(SegmentType::TimeSig);
             if (p) {
                   rxpos() -= s->x() - p->x();
@@ -414,7 +415,7 @@ void TempoText::layout()
                         rxpos() += e->x();
                   }
             }
-      autoplaceSegmentElement(styleP(Sid::tempoMinDistance));
+      autoplaceSegmentElement();
       }
 
 //---------------------------------------------------------
@@ -471,6 +472,17 @@ QString TempoText::accessibleInfo() const
             }
       else
             return TextBase::accessibleInfo();
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid TempoText::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::tempoPosAbove : Sid::tempoPosBelow;
+      return TextBase::getPropertyStyle(pid);
       }
 
 }

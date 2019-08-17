@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: icons.h 5246 2012-01-24 18:48:55Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
@@ -35,6 +34,7 @@ enum class Icons : signed char { Invalid_ICON = -1,
       midiin_ICON, speaker_ICON, start_ICON, play_ICON, repeat_ICON, pan_ICON,
       sbeam_ICON, mbeam_ICON, nbeam_ICON, beam32_ICON, beam64_ICON, abeam_ICON, fbeam1_ICON, fbeam2_ICON,
       file_ICON, fileOpen_ICON, fileNew_ICON, fileSave_ICON, fileSaveAs_ICON,
+      fileSaveOnline_ICON,
       window_ICON, acciaccatura_ICON, appoggiatura_ICON,
       grace4_ICON, grace16_ICON, grace32_ICON,
       grace8after_ICON, grace16after_ICON, grace32after_ICON,
@@ -57,6 +57,8 @@ enum class Icons : signed char { Invalid_ICON = -1,
       timesig_prolatio03_ICON, timesig_prolatio04_ICON, timesig_prolatio05_ICON, timesig_prolatio07_ICON,
       timesig_prolatio08_ICON, timesig_prolatio10_ICON, timesig_prolatio11_ICON, edit_ICON, reset_ICON, close_ICON,
       arrowUp_ICON, arrowDown_ICON,
+      mail_ICON, bug_ICON,
+      noteTimewise_ICON,
       voice1_ICON, voice2_ICON, voice3_ICON, voice4_ICON,
       ICONS
       };

@@ -409,7 +409,6 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <tick>6188</tick>
         <Chord>
           <Tuplet>5</Tuplet>
           <durationType>16th</durationType>
@@ -450,14 +449,12 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <tick>6720</tick>
         <Rest>
           <durationType>half</durationType>
           </Rest>
         </Measure>
       <Measure number="5">
         <Tuplet id="7">
-          <pos x="0" y="-3.32255"/>
           <direction>up</direction>
           <normalNotes>6</normalNotes>
           <actualNotes>11</actualNotes>
@@ -466,7 +463,6 @@
             <style>Tuplet</style>
             <text>11</text>
             </Number>
-          <offset x="0" y="-3.32255"/>
           </Tuplet>
         <Chord>
           <Tuplet>7</Tuplet>
@@ -609,7 +605,6 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <tick>8466</tick>
         <Chord>
           <Tuplet>7</Tuplet>
           <durationType>eighth</durationType>
@@ -650,7 +645,6 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <tick>9120</tick>
         <Rest>
           <durationType>quarter</durationType>
           </Rest>

@@ -1,3 +1,23 @@
+:: SET "QTCACHE=qt-5.12.1-msvc.7z" & :: bump version here and .appveyor.yml to trigger cache rebuild when upgrading Qt
+:: set platform-dependent variables
+IF "%PLATFORM%" == "x64" (
+  :: SET "QTURL=https://utils.musescore.org.s3.amazonaws.com/qt5120_msvc2017_64.7z"
+  :: SET "QTDIR=%cd%\qt\msvc2017_64" & :: uncomment to use our Qt
+  SET "QTDIR=C:\Qt\5.12\msvc2017_64" & :: uncomment to use AppVeyor's Qt
+  SET "TARGET_PROCESSOR_BITS=64"
+  SET "TARGET_PROCESSOR_ARCH=x86_64"
+) ELSE (
+  :: SET "QTURL=https://utils.musescore.org.s3.amazonaws.com/qt5120_msvc2017_32.7z"
+  :: SET "QTDIR=%cd%\qt\msvc2017" & :: uncomment to use our Qt
+  SET "QTDIR=C:\Qt\5.12\msvc2017" & :: uncomment to use AppVeyor's Qt
+  SET "TARGET_PROCESSOR_BITS=32"
+  SET "TARGET_PROCESSOR_ARCH=x86"
+)
+
+:: Download Qt if necessary
+:: IF NOT EXIST "%QTCACHE%" ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "%QTURL%" -O "%QTCACHE%" )
+:: START " " /wait "7z" x -y "%QTCACHE%" "-oqt" & :: extract into `qt` directory
+
 :: keep full PATH for later
 SET OLD_PATH=%PATH%
 mkdir archive
@@ -11,29 +31,29 @@ XCOPY Jack "C:\Program Files (x86)\Jack" /E /I /Y
 XCOPY ccache "C:\ccache" /E /I /Y
 
 CD C:\MuseScore
-mkdir dependencies
-cd dependencies
 IF NOT EXIST dependencies.zip ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dependencies.7z" -O dependencies.zip )
+:: assumung dependencies.zip to contain the dependencies directory (with is subdirs)
 START " " /wait "7z" x -y dependencies.zip > nul
-CD include
+:: test
+CD dependencies\include
+CD C:\MuseScore
+
+MKDIR breakpad_tools
+CD breakpad_tools
+SET TOOLS_ARCHIVE=dump_syms.7z
+IF NOT EXIST %TOOLS_ARCHIVE% ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dump_syms.7z" -O %TOOLS_ARCHIVE% )
+START " " /wait "7z" x -y %TOOLS_ARCHIVE% > nul
 CD C:\MuseScore
 
 :: is MuseScore stable? Check here, no grep in PATH later on
-for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set UNSTABLE=%%i
-
-:: add stable keys for musescore.com
-IF "%UNSTABLE%" == "" (
-python build/add-mc-keys.py %MC_CONSUMER_KEY% %MC_CONSUMER_SECRET%
-)
+for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set NIGHTLY_BUILD=%%i
 
 :: get revision number
-SET PATH=C:\Qt\5.9\msvc2017_64\bin;%PATH%
+SET "PATH=%QTDIR%\bin;%PATH%"
+qmake --version & :: check qt is in %PATH%
 call C:\MuseScore\msvc_build.bat revision
-::git rev-parse --short=7 HEAD > mscore/revision.h
-SET /p MSversion=<mscore\revision.h
-
-:: CMake refuses to generate MinGW Makefiles if sh.exe is in the PATH (C:\Program Files\Git\usr\bin)
-SET PATH=C:\Qt\5.9\msvc2017_64\bin;C:\Program Files (x86)\CMake\bin;C:\Program Files\7-Zip;C:\ccache\bin;C:\Tools\curl\bin;%WIX%\bin;C:\Windows\system32;C:\Windows
+git rev-parse --short=7 HEAD > mscore/revision.h
+SET /p MSREVISION=<mscore\revision.h
 
 :: set ccache dir
 SET CCACHE_DIR=C:\ccache\cache

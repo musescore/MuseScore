@@ -25,10 +25,6 @@
 
 namespace Ms {
 
-// metrics for dashes and melisma; all in sp. units:
-static constexpr qreal  LYRICS_DASH_Y_POS_RATIO             = 0.67;     // the fraction of lyrics font x-height to
-                                                                        //    raise the dashes above text base line;
-
 //---------------------------------------------------------
 //   searchNextLyrics
 //---------------------------------------------------------
@@ -90,20 +86,20 @@ void LyricsLine::styleChanged()
 
 void LyricsLine::layout()
       {
-      bool tempMelismaTicks = (lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
-      if (lyrics()->ticks()) {              // melisma
+      bool tempMelismaTicks = (lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
+      if (isEndMelisma()) {         // melisma
             setLineWidth(score()->styleP(Sid::lyricsLineThickness));
             // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
             if (tempMelismaTicks)
-                  lyrics()->setTicks(0);
+                  lyrics()->setTicks(Fraction(0,1));
 
             // Lyrics::_ticks points to the beginning of the last spanned segment,
             // but the line shall include it:
             // include the duration of this last segment in the melisma duration
-            Segment* lyricsSegment = lyrics()->segment();
-            int lyricsStartTick    = lyricsSegment->tick();
-            int lyricsEndTick      = lyrics()->endTick();
-            int lyricsTrack        = lyrics()->track();
+            Segment* lyricsSegment   = lyrics()->segment();
+            Fraction lyricsStartTick = lyricsSegment->tick();
+            Fraction lyricsEndTick   = lyrics()->endTick();
+            int lyricsTrack          = lyrics()->track();
 
             // find segment with tick >= endTick
             Segment* s = lyricsSegment;
@@ -113,7 +109,7 @@ void LyricsLine::layout()
                   // user probably deleted measures at end of score, leaving this melisma too long
                   // set s to last segment and reset lyricsEndTick to trigger FIXUP code below
                   s = score()->lastSegment();
-                  lyricsEndTick = -1;
+                  lyricsEndTick = Fraction(-1,1);
                   }
             Element* se = s->element(lyricsTrack);
             // everything is OK if we have reached a chord at right tick on right track
@@ -149,30 +145,24 @@ void LyricsLine::layout()
                               // nothing to do but set ticks to 0
                               // this will result in melisma being deleted later
                               lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, 0);
-                              setTicks(0);
+                              setTicks(Fraction(0,1));
                               return;
                               }
                         }
                   lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, ps->tick() - lyricsStartTick);
                   }
+            // Spanner::computeEndElement() will actually ignore this value and use the (earlier) lyrics()->endTick() instead
+            // still, for consistency with other lines, we should set the ticks for this to the computed (later) value
             setTicks(s->tick() - lyricsStartTick);
             }
       else {                                    // dash(es)
             _nextLyrics = searchNextLyrics(lyrics()->segment(), staffIdx(), lyrics()->no(), lyrics()->placement());
             setTick2(_nextLyrics ? _nextLyrics->segment()->tick() : tick());
             }
-      if (ticks()) {                // only do layout if some time span
+      if (ticks().isNotZero()) {                // only do layout if some time span
             // do layout with non-0 duration
             if (tempMelismaTicks)
-                  lyrics()->setTicks(Lyrics::TEMP_MELISMA_TICKS);
-#if 0
-            SLine::layout();
-            // if temp melisma and there is a first line segment,
-            // extend it to be after the lyrics syllable (otherwise
-            // the melisma segment will be often covered by the syllable itself)
-            if (tempMelismaTicks && segments.size() > 0)
-                  segmentAt(0)->rxpos2() += lyrics()->width();
-#endif
+                  lyrics()->setTicks(Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
             }
       }
 
@@ -182,30 +172,16 @@ void LyricsLine::layout()
 
 SpannerSegment* LyricsLine::layoutSystem(System* system)
       {
-      int stick = system->firstMeasure()->tick();
-      int etick = system->lastMeasure()->endTick();
+      Fraction stick = system->firstMeasure()->tick();
+      Fraction etick = system->lastMeasure()->endTick();
 
-//      qDebug("%s %p %d-%d %d-%d", name(), this, stick, etick, tick(), tick2());
-
-      LyricsLineSegment* lineSegm = 0;
-      for (SpannerSegment* ss : segments) {
-            if (!ss->system()) {
-                  lineSegm = toLyricsLineSegment(ss);
-                  break;
-                  }
-            }
-      if (!lineSegm) {
-            lineSegm = toLyricsLineSegment(createLineSegment());
-            add(lineSegm);
-            }
-      lineSegm->setSystem(system);
-      lineSegm->setSpanner(this);
+      LyricsLineSegment* lineSegm = toLyricsLineSegment(getNextLayoutSystemSegment(system, [this]() { return createLineSegment(); }));
 
       SpannerSegmentType sst;
       if (tick() >= stick) {
             layout();
-            if (!ticks())                 // only do layout if some time span
-                  return 0;
+            if (ticks().isZero())                 // only do layout if some time span
+                  return nullptr;
             SLine::layout();
             //
             // this is the first call to layoutSystem,
@@ -273,35 +249,19 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
                   qreal len = p2.x() - x1;
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
                   lineSegm->setPos2(QPointF(len, 0.0));
-#if 1
-                  QList<SpannerSegment*> sl;
-                  for (SpannerSegment* ss : segments) {
-                        if (ss->system())
-                              sl.push_back(ss);
-                        else {
-                              qDebug("delete spanner segment %s", ss->name());
-                              score()->selection().remove(ss);
-                              delete ss;
-                              }
-                        }
-                  segments.swap(sl);
-#endif
                   }
                   break;
             }
       lineSegm->layout();
-#if 0
-      QList<SpannerSegment*> sl;
-      for (SpannerSegment* ss : segments) {
-            if (ss->system())
-                  sl.push_back(ss);
-            else {
-                  qDebug("delete spanner segment %s", ss->name());
-                  delete ss;
-                  }
-            }
-      segments.swap(sl);
-#endif
+      // if temp melisma extend the first line segment to be
+      // after the lyrics syllable (otherwise the melisma segment
+      // will be too short).
+      const bool tempMelismaTicks = (lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
+      if (tempMelismaTicks && spannerSegments().size() > 0 && spannerSegments().front() == lineSegm)
+            lineSegm->rxpos2() += lyrics()->width();
+      // avoid backwards melisma
+      if (lineSegm->pos2().x() < 0)
+            lineSegm->rxpos2() = 0;
       return lineSegm;
       }
 
@@ -311,7 +271,7 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
 
 LineSegment* LyricsLine::createLineSegment()
       {
-      LyricsLineSegment* seg = new LyricsLineSegment(score());
+      LyricsLineSegment* seg = new LyricsLineSegment(this, score());
       seg->setTrack(track());
       seg->setColor(color());
       return seg;
@@ -340,11 +300,11 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
                   {
                   // if parent lyrics has a melisma, change its length too
                   if (parent() && parent()->type() == ElementType::LYRICS
-                              && toLyrics(parent())->ticks() > 0) {
-                        int newTicks   = toLyrics(parent())->ticks() + v.toInt() - ticks();
+                              && isEndMelisma()) {
+                        Fraction newTicks   = toLyrics(parent())->ticks() + v.value<Fraction>() - ticks();
                         parent()->undoChangeProperty(Pid::LYRIC_TICKS, newTicks);
                         }
-                  setTicks(v.toInt());
+                  setTicks(v.value<Fraction>());
                   }
                   break;
             default:
@@ -360,8 +320,8 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
 //   LyricsLineSegment
 //=========================================================
 
-LyricsLineSegment::LyricsLineSegment(Score* s)
-      : LineSegment(s, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
+LyricsLineSegment::LyricsLineSegment(Spanner* sp, Score* s)
+      : LineSegment(sp, s, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
       {
       setGenerated(true);
       }
@@ -372,10 +332,10 @@ LyricsLineSegment::LyricsLineSegment(Score* s)
 
 void LyricsLineSegment::layout()
       {
-      rUserYoffset() = 0.0;
+      ryoffset() = 0.0;
 
       bool        endOfSystem       = false;
-      bool        isEndMelisma      = lyricsLine()->lyrics()->ticks() > 0;
+      bool        isEndMelisma      = lyricsLine()->isEndMelisma();
       Lyrics*     lyr               = 0;
       Lyrics*     nextLyr           = 0;
       qreal       fromX             = 0;
@@ -383,7 +343,7 @@ void LyricsLineSegment::layout()
       qreal       sp                = spatium();
       System*     sys;
 
-      if (lyricsLine()->ticks() <= 0) {   // if no span,
+      if (lyricsLine()->ticks() <= Fraction(0,1)) {   // if no span,
             _numOfDashes = 0;             // nothing to draw
             return;                       // and do nothing
             }
@@ -397,7 +357,7 @@ void LyricsLineSegment::layout()
             endOfSystem = (sys != system());
             // if next lyrics is on a different system, this line segment is at the end of its system:
             // do not adjust for next lyrics position
-            if (!endOfSystem) {
+            if (sys && !endOfSystem) {
                   qreal lyrX        = lyr->bbox().x();
                   qreal lyrXp       = lyr->pagePos().x();
                   qreal sysXp       = sys->pagePos().x();
@@ -426,15 +386,21 @@ void LyricsLineSegment::layout()
             }
 
       // VERTICAL POSITION: at the base line of the syllable text
-      if (!isEndType())
+      if (!isEndType()) {
             rypos() = lyr->ipos().y();
+            ryoffset() = lyr->offset().y();
+            }
       else {
             // use Y position of *next* syllable if there is one on same system
-            Lyrics* nextLyr = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
-            if (nextLyr && nextLyr->segment()->system() == system())
-                  rypos() = nextLyr->ipos().y();
-            else
+            Lyrics* nextLyr1 = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
+            if (nextLyr1 && nextLyr1->segment()->system() == system()) {
+                  rypos() = nextLyr1->ipos().y();
+                  ryoffset() = nextLyr1->offset().y();
+                  }
+            else {
                   rypos() = lyr->ipos().y();
+                  ryoffset() = lyr->offset().y();
+                  }
             }
 
       // MELISMA vs. DASHES
@@ -462,13 +428,13 @@ void LyricsLineSegment::layout()
                   else                                                        //   if within system or dash not forced
                         _numOfDashes = 0;                                     //     draw no dash
                   }
-            else if (len < (maxDashDist * 2.0)) {                           // if no room for two dashes
+            else if (len < (maxDashDist * 1.5)) {                             // if no room for two dashes
                   _numOfDashes = 1;                                           //    draw one dash
                   if (_dashLength > len)                                      // if no room for a full dash
                         _dashLength = len;                                    //    shorten it
                   }
             else
-                  _numOfDashes = len / (maxDashDist);                         // draw several dashes
+                  _numOfDashes = len / maxDashDist + 1;                       // draw several dashes
 
             // adjust next lyrics horiz. position if too little a space forced to skip the dash
             if (_numOfDashes == 0 && nextLyr != nullptr && len > 0)
@@ -494,11 +460,11 @@ void LyricsLineSegment::draw(QPainter* painter) const
       pen.setWidthF(lyricsLine()->lineWidth());
       pen.setCapStyle(Qt::FlatCap);
       painter->setPen(pen);
-      if (lyricsLine()->lyrics()->ticks() > 0)           // melisma
+      if (lyricsLine()->isEndMelisma())               // melisma
             painter->drawLine(QPointF(), pos2());
       else {                                          // dash(es)
-            qreal step  = pos2().x() / (_numOfDashes+1);
-            qreal x     = step - _dashLength * .5;
+            qreal step  = pos2().x() / _numOfDashes;
+            qreal x     = step * .5 - _dashLength * .5;
             for (int i = 0; i < _numOfDashes; i++, x += step)
                   painter->drawLine(QPointF(x, 0.0), QPointF(x + _dashLength, 0.0));
             }

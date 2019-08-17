@@ -833,7 +833,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                                                       continue;
                                                       }
                                                 if (newValue.toString() != value.toString())
-                                                      return "...";
+                                                      return "…";
                                                 }
                                           }
                                     else {

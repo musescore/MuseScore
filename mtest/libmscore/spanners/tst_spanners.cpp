@@ -23,6 +23,7 @@
 #include "libmscore/score.h"
 #include "libmscore/system.h"
 #include "libmscore/undo.h"
+#include "libmscore/line.h"
 
 #define DIR QString("libmscore/spanners/")
 
@@ -52,6 +53,7 @@ class TestSpanners : public QObject, public MTest
       void spanners12();            // remove a measure containing the middle portion of a LyricsLine and undo
 //      void spanners13();            // drop a line break at the middle of a LyricsLine and check LyricsLineSegments
       void spanners14();            // creating part from an existing grand staff containing a cross staff glissando
+      void spanners15();            // change the color of a line and save it
       };
 
 //---------------------------------------------------------
@@ -80,7 +82,7 @@ void TestSpanners::spanners01()
       // go to top note of first chord
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -89,7 +91,7 @@ void TestSpanners::spanners01()
       // drop a glissando on note
       gliss             = new Glissando(score); // create a new element each time, as drop() will eventually delete it
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO FROM TOP STAFF TO BOTTOM STAFF
@@ -105,7 +107,7 @@ void TestSpanners::spanners01()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO FROM BOTTOM STAFF TO TOP STAFF
@@ -121,7 +123,7 @@ void TestSpanners::spanners01()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO OVER INTERVENING NOTES IN ANOTHER VOICE
@@ -137,7 +139,7 @@ void TestSpanners::spanners01()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO OVER INTERVENING NOTES IN ANOTHER STAFF
@@ -153,7 +155,7 @@ void TestSpanners::spanners01()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       QVERIFY(saveCompareScore(score, "glissando01.mscx", DIR + "glissando01-ref.mscx"));
@@ -195,7 +197,7 @@ void TestSpanners::spanners03()
       // go to top note of first chord
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -204,7 +206,7 @@ void TestSpanners::spanners03()
       // drop a glissando on note
       gliss             = new Glissando(score); // create a new element each time, as drop() will eventually delete it
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO FROM AFTER-GRACE TO BEFORE-GRACE OF NEXT CHORD
@@ -215,7 +217,7 @@ void TestSpanners::spanners03()
       QVERIFY(note);
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO FROM MAIN NOTE TO BEFORE-GRACE OF NEXT CHORD
@@ -228,7 +230,7 @@ void TestSpanners::spanners03()
       QVERIFY(note);
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO FROM BEFORE-GRACE TO MAIN NOTE
@@ -244,7 +246,7 @@ void TestSpanners::spanners03()
       QVERIFY(note);
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       QVERIFY(saveCompareScore(score, "glissando-graces01.mscx", DIR + "glissando-graces01-ref.mscx"));
@@ -266,12 +268,12 @@ void TestSpanners::spanners04()
       Staff* oldStaff   = score->staff(0);
       Staff* newStaff   = new Staff(score);
       newStaff->setPart(oldStaff->part());
-      newStaff->initFromStaffType(oldStaff->staffType(0));
+      newStaff->initFromStaffType(oldStaff->staffType(Fraction(0,1)));
       newStaff->setDefaultClefType(ClefTypeList(ClefType::G));
 
       KeySigEvent ke;
       ke.setKey(Key::C);
-      newStaff->setKey(0, ke);
+      newStaff->setKey(Fraction(0,1), ke);
 
       score->undoInsertStaff(newStaff, 1, false);
       Excerpt::cloneStaff(oldStaff, newStaff);
@@ -328,7 +330,7 @@ void TestSpanners::spanners06()
       // DROP A GLISSANDO ON FIRST NOTE
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -337,7 +339,7 @@ void TestSpanners::spanners06()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       QVERIFY(saveCompareScore(score, "glissando-cloning03.mscx", DIR + "glissando-cloning03-ref.mscx"));
@@ -360,7 +362,7 @@ void TestSpanners::spanners07()
       // DROP A GLISSANDO ON FIRST NOTE
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -369,7 +371,7 @@ void TestSpanners::spanners07()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       QVERIFY(saveCompareScore(score, "glissando-cloning04.mscx", DIR + "glissando-cloning04-ref.mscx"));
@@ -572,7 +574,7 @@ void TestSpanners::spanners13()
       brk               = new LayoutBreak(score);
       brk->setLayoutBreakType(LayoutBreak::Type::LINE);
       dropData.pos      = msr->pagePos();
-      dropData.element  = brk;
+      dropData.dropElement  = brk;
       score->startCmd();
       msr->drop(dropData);
       score->endCmd();
@@ -618,6 +620,26 @@ void TestSpanners::spanners14()
       score->Score::undo(new AddExcerpt(ex));
 
       QVERIFY(saveCompareScore(score, "glissando-cloning05.mscx", DIR + "glissando-cloning05-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///  spanners15
+///   set the color of a spanner and save
+//---------------------------------------------------------
+
+void TestSpanners::spanners15()
+      {
+      MasterScore* score = readScore(DIR + "linecolor01.mscx");
+      QVERIFY(score);
+
+      for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
+            Spanner* spanner = (*it).second;
+            SLine* sl = static_cast<SLine*>(spanner);
+            sl->setProperty(Pid::COLOR, QVariant::fromValue(QColor(255, 0, 0, 255)));
+            }
+
+      QVERIFY(saveCompareScore(score, "linecolor01.mscx", DIR + "linecolor01-ref.mscx"));
       delete score;
       }
 

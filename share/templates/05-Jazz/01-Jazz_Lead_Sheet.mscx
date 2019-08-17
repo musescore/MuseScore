@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <programVersion>3.0.0</programVersion>
+  <programRevision>3543170</programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
+    <Division>480</Division>
+    <Style>
+      <lyricsLineThickness>0.3</lyricsLineThickness>
+      <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
+      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
+      <barWidth>0.3</barWidth>
+      <doubleBarWidth>0.3</doubleBarWidth>
+      <endBarWidth>0.6</endBarWidth>
+      <doubleBarDistance>0.6</doubleBarDistance>
+      <endBarDistance>0.75</endBarDistance>
+      <repeatBarlineDotSeparation>0.46</repeatBarlineDotSeparation>
+      <repeatBarTips>1</repeatBarTips>
+      <stemWidth>0.2</stemWidth>
+      <staffLineWidth>0.1</staffLineWidth>
+      <ledgerLineWidth>0.2</ledgerLineWidth>
+      <ledgerLineLength>0.2</ledgerLineLength>
+      <beamDistance>0.33</beamDistance>
+      <hairpinWidth>0.2</hairpinWidth>
+      <hairpinFontFace>MuseJazz Text</hairpinFontFace>
+      <pedalLineWidth>0.2</pedalLineWidth>
+      <pedalFontFace>MuseJazz Text</pedalFontFace>
+      <chordSymbolPosAbove x="0" y="-2.5"/>
+      <chordSymbolBPosAbove x="0" y="-5.5"/>
+      <chordSymbolAFontFace>MuseJazz Text</chordSymbolAFontFace>
+      <chordSymbolAFontSize>15</chordSymbolAFontSize>
+      <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
+      <chordSymbolBPosAbove x="0" y="-5.5"/>
+      <chordSymbolBFontFace>MuseJazz Text</chordSymbolBFontFace>
+      <chordSymbolBFontSize>12</chordSymbolBFontSize>
+      <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
+      <showMeasureNumber>0</showMeasureNumber>
+      <chordStyle>jazz</chordStyle>
+      <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
+      <slurEndWidth>0.12</slurEndWidth>
+      <slurMidWidth>0.25</slurMidWidth>
+      <musicalSymbolFont>MuseJazz</musicalSymbolFont>
+      <musicalTextFont>MuseJazz Text</musicalTextFont>
+      <voltaPosAbove x="-0.6" y="-5.6"/>
+      <voltaLineWidth>0.2</voltaLineWidth>
+      <voltaFontFace>MuseJazz Text</voltaFontFace>
+      <ottavaLineWidth>0.2</ottavaLineWidth>
+      <ottavaFontFace>MuseJazz Text</ottavaFontFace>
+      <tupletBracketWidth>0.2</tupletBracketWidth>
+      <tupletFontFace>MuseJazz Text</tupletFontFace>
+      <defaultFontFace>MuseJazz Text</defaultFontFace>
+      <titleFontFace>MuseJazz Text</titleFontFace>
+      <titleFontSize>28</titleFontSize>
+      <subTitleFontFace>MuseJazz Text</subTitleFontFace>
+      <composerFontFace>MuseJazz Text</composerFontFace>
+      <lyricistFontFace>MuseJazz Text</lyricistFontFace>
+      <fingeringFontFace>MuseJazz Text</fingeringFontFace>
+      <lhGuitarFingeringFontFace>MuseJazz Text</lhGuitarFingeringFontFace>
+      <rhGuitarFingeringFontFace>MuseJazz Text</rhGuitarFingeringFontFace>
+      <stringNumberFontFace>MuseJazz Text</stringNumberFontFace>
+      <longInstrumentFontFace>MuseJazz Text</longInstrumentFontFace>
+      <shortInstrumentFontFace>MuseJazz Text</shortInstrumentFontFace>
+      <partInstrumentFontFace>MuseJazz Text</partInstrumentFontFace>
+      <dynamicsFontFace>MuseJazz Text</dynamicsFontFace>
+      <expressionFontFace>MuseJazz Text</expressionFontFace>
+      <tempoFontFace>MuseJazz Text</tempoFontFace>
+      <metronomeFontFace>MuseJazz Text</metronomeFontFace>
+      <measureNumberFontFace>MuseJazz Text</measureNumberFontFace>
+      <translatorFontFace>MuseJazz Text</translatorFontFace>
+      <systemFontFace>MuseJazz Text</systemFontFace>
+      <staffFontFace>MuseJazz Text</staffFontFace>
+      <staffPlacement>1</staffPlacement>
+      <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
+      <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>
+      <repeatLeftFontFace>MuseJazz Text</repeatLeftFontFace>
+      <repeatRightFontFace>MuseJazz Text</repeatRightFontFace>
+      <frameFontFace>MuseJazz Text</frameFontFace>
+      <textLineFontFace>MuseJazz Text</textLineFontFace>
+      <glissandoFontFace>MuseJazz Text</glissandoFontFace>
+      <bendFontFace>MuseJazz Text</bendFontFace>
+      <headerFontFace>MuseJazz Text</headerFontFace>
+      <footerFontFace>MuseJazz Text</footerFontFace>
+      <instrumentChangeFontFace>MuseJazz Text</instrumentChangeFontFace>
+      <user1FontFace>MuseJazz Text</user1FontFace>
+      <user2FontFace>MuseJazz Text</user2FontFace>
+      <user3FontFace>MuseJazz Text</user3FontFace>
+      <user4FontFace>MuseJazz Text</user4FontFace>
+      <user5FontFace>MuseJazz Text</user5FontFace>
+      <user6FontFace>MuseJazz Text</user6FontFace>
+      <letRingFontFace>MuseJazz Text</letRingFontFace>
+      <palmMuteFontFace>MuseJazz Text</palmMuteFontFace>
+      <Spatium>1.85</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Jazz Lead Sheet</metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+            <velocity>150</velocity>
+            <gateTime>100</gateTime>
+        </Articulation>
+        <Articulation name="sforzatoStaccato">
+              <velocity>150</velocity>
+              <gateTime>50</gateTime>
+        </Articulation>
+        <Articulation name="marcatoStaccato">
+              <velocity>120</velocity>
+              <gateTime>50</gateTime>
+        </Articulation>
+        <Articulation name="marcatoTenuto">
+              <velocity>120</velocity>
+              <gateTime>100</gateTime>
+        </Articulation>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>Title</style>
+          <text>Jazz Lead Sheet</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

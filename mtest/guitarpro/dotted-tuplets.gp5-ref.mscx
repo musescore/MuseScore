@@ -26,12 +26,14 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Bells</trackName>
       <Instrument>
         <longName>Bells</longName>
         <trackName></trackName>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
           <string>40</string>
@@ -89,6 +91,7 @@
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <baseDots>1</baseDots>
             <Number>
               <style>Tuplet</style>
               <text>3</text>
@@ -182,6 +185,7 @@
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="0" span="2" col="0"/>
           </Staff>
@@ -213,6 +217,7 @@
         <Instrument>
           <longName>Bells</longName>
           <trackName></trackName>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>24</frets>
             <string>40</string>
@@ -280,6 +285,7 @@
               <normalNotes>2</normalNotes>
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
+              <baseDots>1</baseDots>
               <Number>
                 <style>Tuplet</style>
                 <text>3</text>
@@ -388,10 +394,12 @@
               </Rest>
             <Tuplet>
               <linked>
+                <indexDiff>1</indexDiff>
                 </linked>
               <normalNotes>2</normalNotes>
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
+              <baseDots>1</baseDots>
               <Number>
                 <style>Tuplet</style>
                 <text>3</text>
@@ -403,11 +411,13 @@
               </Beam>
             <Chord>
               <linked>
+                <indexDiff>1</indexDiff>
                 </linked>
               <dots>1</dots>
               <durationType>eighth</durationType>
               <Note>
                 <linked>
+                  <indexDiff>1</indexDiff>
                   </linked>
                 <pitch>71</pitch>
                 <tpc>19</tpc>

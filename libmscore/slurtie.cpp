@@ -46,7 +46,7 @@ SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
 
 QPointF SlurTieSegment::gripAnchor(Grip grip) const
       {
-      if (grip != Grip::START && grip != Grip::END)
+      if (!system() || (grip != Grip::START && grip != Grip::END))
             return QPointF();
 
       QPointF sp(system()->pagePos());
@@ -107,8 +107,9 @@ void SlurTieSegment::startEdit(EditData& ed)
 //   endEdit
 //---------------------------------------------------------
 
-void SlurTieSegment::endEdit(EditData&)
+void SlurTieSegment::endEdit(EditData& ed)
       {
+      Element::endEdit(ed);
       }
 
 //---------------------------------------------------------
@@ -118,7 +119,7 @@ void SlurTieSegment::endEdit(EditData&)
 void SlurTieSegment::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      for (auto i : { Pid::SLUR_UOFF1, Pid::SLUR_UOFF2, Pid::SLUR_UOFF3, Pid::SLUR_UOFF4, Pid::USER_OFF })
+      for (auto i : { Pid::SLUR_UOFF1, Pid::SLUR_UOFF2, Pid::SLUR_UOFF3, Pid::SLUR_UOFF4, Pid::OFFSET })
             eed->pushProperty(i);
       }
 
@@ -129,6 +130,7 @@ void SlurTieSegment::startEditDrag(EditData& ed)
 void SlurTieSegment::endEditDrag(EditData& ed)
       {
       Element::endEditDrag(ed);
+      triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -154,12 +156,12 @@ void SlurTieSegment::editDrag(EditData& ed)
                         Element* e = ed.view->elementNear(ed.pos);
                         if (e && e->isNote()) {
                               Note* note = toNote(e);
-                              int tick = note->chord()->tick();
+                              Fraction tick = note->chord()->tick();
                               if ((g == Grip::END && tick > slurTie()->tick()) || (g == Grip::START && tick < slurTie()->tick2())) {
                                     if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
                                           Chord* c = note->chord();
                                           ed.view->setDropTarget(note);
-                                          if (c != spanner->endChord())
+                                          if (c->part() == spanner->part() && c != spanner->endCR())
                                                 changeAnchor(ed, c);
                                           }
                                     }
@@ -178,7 +180,7 @@ void SlurTieSegment::editDrag(EditData& ed)
                   break;
             case Grip::DRAG:
                   ups(g).off = QPointF();
-                  setUserOff(userOff() + ed.delta);
+                  setOffset(offset() + ed.delta);
                   break;
             case Grip::NO_GRIP:
             case Grip::GRIPS:
@@ -270,8 +272,25 @@ void SlurTieSegment::reset()
       undoResetProperty(Pid::SLUR_UOFF2);
       undoResetProperty(Pid::SLUR_UOFF3);
       undoResetProperty(Pid::SLUR_UOFF4);
-      undoResetProperty(Pid::AUTOPLACE);
       slurTie()->reset();
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void SlurTieSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+      {
+      if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
+            // Switching autoplacement on. Save user-defined
+            // placement properties to undo stack.
+            undoPushProperty(Pid::SLUR_UOFF1);
+            undoPushProperty(Pid::SLUR_UOFF2);
+            undoPushProperty(Pid::SLUR_UOFF3);
+            undoPushProperty(Pid::SLUR_UOFF4);
+            // other will be saved in base classes.
+            }
+      SpannerSegment::undoChangeProperty(pid, val, ps);
       }
 
 //---------------------------------------------------------
@@ -280,17 +299,27 @@ void SlurTieSegment::reset()
 
 void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
       {
-      if (autoplace() && visible() && (color() == Qt::black))
+      if (visible() && autoplace()
+         && (color() == Qt::black)
+         && offset().isNull()
+         && ups(Grip::START).off.isNull()
+         && ups(Grip::BEZIER1).off.isNull()
+         && ups(Grip::BEZIER2).off.isNull()
+         && ups(Grip::END).off.isNull()
+         )
             return;
 
-      xml.stag(QString("%1 no=\"%2\"").arg(name()).arg(no));
+      xml.stag(this, QString("no=\"%1\"").arg(no));
 
       qreal _spatium = spatium();
-      xml.tag("o1", ups(Grip::START).off   / _spatium);
-      xml.tag("o2", ups(Grip::BEZIER1).off / _spatium);
-      xml.tag("o3", ups(Grip::BEZIER2).off / _spatium);
-      xml.tag("o4", ups(Grip::END).off     / _spatium);
-
+      if (!ups(Grip::START).off.isNull())
+            xml.tag("o1", ups(Grip::START).off / _spatium);
+      if (!ups(Grip::BEZIER1).off.isNull())
+            xml.tag("o2", ups(Grip::BEZIER1).off / _spatium);
+      if (!ups(Grip::BEZIER2).off.isNull())
+            xml.tag("o3", ups(Grip::BEZIER2).off / _spatium);
+      if (!ups(Grip::END).off.isNull())
+            xml.tag("o4", ups(Grip::END).off / _spatium);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -315,7 +344,6 @@ void SlurTieSegment::read(XmlReader& e)
             else if (!Element::readProperties(e))
                   e.unknown();
             }
-      setAutoplace(false);
       }
 
 //---------------------------------------------------------
@@ -408,6 +436,10 @@ bool SlurTie::readProperties(XmlReader& e)
       else if (tag == "lineType")
             _lineType = e.readInt();
       else if (tag == "SlurSegment" || tag == "TieSegment") {
+            const int idx = e.intAttribute("no", 0);
+            const int n = int(spannerSegments().size());
+            for (int i = n; i < idx; ++i)
+                  add(newSlurTieSegment());
             SlurTieSegment* s = newSlurTieSegment();
             s->read(e);
             add(s);
@@ -543,27 +575,7 @@ qreal SlurTie::firstNoteRestSegmentX(System* system)
 
 void SlurTie::fixupSegments(unsigned nsegs)
       {
-      unsigned onsegs = spannerSegments().size();
-      if (nsegs > onsegs) {
-            for (unsigned i = onsegs; i < nsegs; ++i) {
-                  SpannerSegment* s;
-                  if (!delSegments.empty()) {
-                        s = delSegments.dequeue();
-                        }
-                  else {
-                        s = newSlurTieSegment();
-                        }
-                  s->setTrack(track());
-                  add(s);
-                  }
-            }
-      else if (nsegs < onsegs) {
-            for (unsigned i = nsegs; i < onsegs; ++i) {
-                  SpannerSegment* s = spannerSegments().takeLast();
-                  s->setSystem(0);
-                  delSegments.enqueue(s);  // cannot delete: used in SlurSegment->edit()
-                  }
-            }
+      Spanner::fixupSegments(nsegs, [this]() { return newSlurTieSegment(); });
       }
 
 //---------------------------------------------------------

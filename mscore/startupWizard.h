@@ -67,6 +67,18 @@ class StartupWizardPage3 : public QWizardPage {
       void init();
       };
 
+class StartupWizardPage4 : public QWizardPage {
+      Q_OBJECT
+
+      QRadioButton* yesButton;
+      QRadioButton* noButton;
+
+   public:
+      StartupWizardPage4(QWidget* parent = 0);
+      bool showTours()  { return yesButton->isChecked(); }
+      void init();
+      };
+
 class StartupWizardFinalPage : public QWizardPage {
       Q_OBJECT
 
@@ -82,7 +94,8 @@ class StartupWizard : public QWizard {
       StartupWizardPage1* p1;
       StartupWizardPage2* p2;
       StartupWizardPage3* p3;
-      StartupWizardFinalPage* p4;
+      StartupWizardPage4* p4;
+      StartupWizardFinalPage* p5;
 
    public:
       StartupWizard(QWidget* parent = 0);
@@ -90,6 +103,7 @@ class StartupWizard : public QWizard {
       QString keyboardLayout()      { return p2->keyboardLayout(); }
       QString language()     { return p1->language(); }
       QString workspace()    { return p3->workspace(); }
+      bool showTours()       { return p4->showTours(); }
 
    private slots:
       void langChanged();

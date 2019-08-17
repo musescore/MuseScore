@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: transposedialog.h 4388 2011-06-18 13:17:58Z wschweer $
 //
 //  Copyright (C) 2008-2009 Werner Schweer and others
 //

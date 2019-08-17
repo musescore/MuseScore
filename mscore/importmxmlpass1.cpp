@@ -455,8 +455,8 @@ static void createMeasures(Score* score, const QVector<Fraction>& ml, const QVec
       {
       for (int i = 0; i < ml.size(); ++i) {
             Measure* measure  = new Measure(score);
-            measure->setTick(ms.at(i).ticks());
-            measure->setLen(ml.at(i));
+            measure->setTick(ms.at(i));
+            measure->setTicks(ml.at(i));
             measure->setNo(i);
             score->measures()->add(measure);
             }
@@ -726,7 +726,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             }
 
       if (vbox) {
-            vbox->setTick(0);
+            vbox->setTick(Fraction(0,1));
             score->measures()->add(vbox);
             }
       }
@@ -828,7 +828,7 @@ Score::FileError MusicXMLParserPass1::parse()
 static bool allStaffGroupsIdentical(Part const* const p)
       {
       for (int i = 1; i < p->nstaves(); ++i) {
-            if (p->staff(0)->staffType(0)->group() != p->staff(i)->staffType(0)->group())
+            if (p->staff(0)->constStaffType(Fraction(0,1))->group() != p->staff(i)->constStaffType(Fraction(0,1))->group())
                   return false;
             }
       return true;
@@ -1242,11 +1242,12 @@ static void updateStyles(Score* score,
                          const QString& lyricFamily, const QString& lyricSize)
       {
 //TODO:ws       const float fWordSize = wordSize.toFloat();   // note conversion error results in value 0.0
-      const float fLyricSize = lyricSize.toFloat(); // but avoid comparing float with exact value later
+      const auto dblLyricSize = lyricSize.toDouble(); // but avoid comparing floating point number with exact value later
 
       // loop over all text styles (except the empty, always hidden, first one)
       // set all text styles to the MusicXML defaults
 #if 0 // TODO:ws
+      // TODO: check if fWordSize must be a double too (issue #277029)
       for (int i = int(Tid::DEFAULT) + 1; i < int(Tid::TEXT_STYLES); ++i) {
             TextStyle ts = score->style().textStyle(TextStyleType(i));
             if (i == int(Tid::LYRIC1) || i == int(Tid::LYRIC2)) {
@@ -1268,9 +1269,9 @@ static void updateStyles(Score* score,
             score->style().set(Sid::lyricsOddFontFace, lyricFamily);
             score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
             }
-      if (fLyricSize > 0.001) {
-            score->style().set(Sid::lyricsOddFontSize, QVariant(fLyricSize));
-            score->style().set(Sid::lyricsEvenFontSize, QVariant(fLyricSize));
+      if (dblLyricSize > 0.001) {
+            score->style().set(Sid::lyricsOddFontSize, QVariant(dblLyricSize));
+            score->style().set(Sid::lyricsEvenFontSize, QVariant(dblLyricSize));
             }
       }
 
@@ -2128,11 +2129,10 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
 
 /**
  Parse the /score-partwise/part/measure/attributes/clef node.
- Set the staff type based on clef type
- TODO: check if staff type setting could be simplified
+ TODO: Store the clef type, to simplify staff type setting in pass 2.
  */
 
-void MusicXMLParserPass1::clef(const QString& partId)
+void MusicXMLParserPass1::clef(const QString& /* partId */)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "clef");
       _logger->logDebugTrace("MusicXMLParserPass1::clef", &_e);
@@ -2149,31 +2149,14 @@ void MusicXMLParserPass1::clef(const QString& partId)
                   n--;              // make zero-based
             }
 
-      StaffTypes staffType = StaffTypes::STANDARD;
-
       while (_e.readNextStartElement()) {
             if (_e.name() == "line")
                   _e.skipCurrentElement();  // skip but don't log
-            else if (_e.name() == "sign") {
+            else if (_e.name() == "sign")
                   QString sign = _e.readElementText();
-                  if (sign == "TAB")
-                        staffType = StaffTypes::TAB_DEFAULT;
-                  else if (sign == "percussion")
-                        staffType = StaffTypes::PERC_DEFAULT;
-                  }
             else
                   skipLogCurrElem();
             }
-
-      Part* part = getPart(partId);
-      Q_ASSERT(part);
-      int staves = part->nstaves();
-      int staffIdx = _score->staffIdx(part);
-
-      // TODO: changed for #55501, but now staff type init is shared between pass 1 and 2
-      // old code: if (0 <= n && n < staves && staffType != StaffTypes::STANDARD)
-      if (0 <= n && n < staves && staffType == StaffTypes::TAB_DEFAULT)
-            _score->staff(staffIdx + n)->setStaffType(0, StaffType::preset(staffType));
       }
 
 //---------------------------------------------------------

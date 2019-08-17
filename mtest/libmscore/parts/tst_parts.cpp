@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2012 Werner Schweer
 //
@@ -405,13 +404,13 @@ MasterScore* TestParts::doAddBreath()
       MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(MScore::division);
+      Segment* s   = m->tick2segment(Fraction(1,4));
       Ms::Chord* chord = toChord(s->element(0));
       Note* note   = chord->upNote();
       EditData dd(0);
       Breath* b = new Breath(score);
       b->setSymId(SymId::breathMarkComma);
-      dd.element = b;
+      dd.dropElement = b;
 
       score->startCmd();
       note->drop(dd);
@@ -526,13 +525,13 @@ MasterScore* TestParts::doAddFingering()
       MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(MScore::division);
+      Segment* s   = m->tick2segment(Fraction(1,4));
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       EditData dd(0);
       Fingering* b = new Fingering(score);
       b->setXmlText("3");
-      dd.element = b;
+      dd.dropElement = b;
 
       score->startCmd();
       note->drop(dd);
@@ -649,13 +648,13 @@ MasterScore* TestParts::doAddSymbol()
       MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(MScore::division);
+      Segment* s   = m->tick2segment(Fraction(1,4));
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       EditData dd(0);
       Symbol* b  = new Symbol(score);
       b->setSym(SymId::gClef);
-      dd.element = b;
+      dd.dropElement = b;
 
       score->startCmd();
       note->drop(dd);
@@ -772,13 +771,13 @@ MasterScore* TestParts::doAddChordline()
       MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(MScore::division);
+      Segment* s   = m->tick2segment(Fraction(1,4));
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       EditData dd(0);
       ChordLine* b  = new ChordLine(score);
       b->setChordLineType(ChordLineType::FALL);
-      dd.element = b;
+      dd.dropElement = b;
 
       score->startCmd();
       note->drop(dd);
@@ -901,7 +900,7 @@ MasterScore* TestParts::doAddImage()
       EditData dd(0);
       RasterImage* b = new RasterImage(score);
       b->load(DIR + "schnee.png");
-      dd.element = b;
+      dd.dropElement = b;
 
       score->startCmd();
       note->drop(dd);

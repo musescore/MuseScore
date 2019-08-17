@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011-2013 Werner Schweer and others
 //
@@ -23,7 +22,11 @@
 #include "offsetSelect.h"
 #include "scaleSelect.h"
 #include "sizeSelect.h"
+#include "fontStyleSelect.h"
 #include "scoreview.h"
+#include "script/script.h"
+#include "resetButton.h"
+#include "tourhandler.h"
 
 namespace Ms {
 
@@ -34,8 +37,10 @@ namespace Ms {
 InspectorBase::InspectorBase(QWidget* parent)
    : QWidget(parent)
       {
+      setObjectName("InspectorBase");
       setAccessibleName(tr("Inspector"));
       inspector = static_cast<Inspector*>(parent);
+      setParent(parent);
       _layout    = new QVBoxLayout(this);
       _layout->setSpacing(0);
       _layout->setContentsMargins(0, 10, 0, 0);
@@ -71,6 +76,8 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             v = static_cast<Awl::ColorLabel*>(w)->color();
       else if (qobject_cast<Ms::AlignSelect*>(w))
             v = int(static_cast<Ms::AlignSelect*>(w)->align());
+      else if (qobject_cast<Ms::FontStyleSelect*>(w))
+            v = int(static_cast<Ms::FontStyleSelect*>(w)->fontStyle());
       else if (qobject_cast<Ms::OffsetSelect*>(w))
             v = static_cast<Ms::OffsetSelect*>(w)->offset();
       else if (qobject_cast<Ms::ScaleSelect*>(w))
@@ -83,6 +90,14 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
       switch (propertyType(ii.t)) {
             case P_TYPE::POINT_SP:
                   v = v.toPointF() * inspector->element()->score()->spatium();
+                  break;
+            case P_TYPE::POINT_SP_MM: {
+                  Element* e = inspector->element();
+                  if (e->sizeIsSpatiumDependent())
+                        v = v.toPointF() * e->score()->spatium();
+                  else
+                        v = v.toPointF() * DPMM;
+                  }
                   break;
             case P_TYPE::SP_REAL:
                   v = v.toDouble() * inspector->element()->score()->spatium();
@@ -135,6 +150,14 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
       switch (propertyType(id)) {
             case P_TYPE::POINT_SP:
                   val = val.toPointF() / inspector->element()->score()->spatium();
+                  break;
+            case P_TYPE::POINT_SP_MM: {
+                  Element* e = inspector->element();
+                  if (e->sizeIsSpatiumDependent())
+                        val = val.toPointF() / e->score()->spatium();
+                  else
+                        val = val.toPointF() / DPMM;
+                  }
                   break;
             case P_TYPE::SP_REAL:
                   val = val.toDouble() / inspector->element()->score()->spatium();
@@ -205,6 +228,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             static_cast<Awl::ColorLabel*>(w)->setColor(val.value<QColor>());
       else if (qobject_cast<Ms::AlignSelect*>(w))
             static_cast<Ms::AlignSelect*>(w)->setAlign(Align(val.toInt()));
+      else if (qobject_cast<Ms::FontStyleSelect*>(w))
+            static_cast<Ms::FontStyleSelect*>(w)->setFontStyle(FontStyle(val.toInt()));
       else if (qobject_cast<Ms::OffsetSelect*>(w))
             static_cast<Ms::OffsetSelect*>(w)->setOffset(val.toPointF());
       else if (qobject_cast<Ms::ScaleSelect*>(w))
@@ -303,7 +328,7 @@ void InspectorBase::setElement()
 void InspectorBase::checkDifferentValues(const InspectorItem& ii)
       {
       bool valuesAreDifferent = false;
-      QColor c(preferences.isThemeDark() ? Qt::yellow : Qt::darkCyan);
+      QColor c(Ms::preferences.getColor(preferences.isThemeDark() ? PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON : PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON));
 
       if (inspector->el()->size() > 1) {
             Pid id      = ii.t;
@@ -319,7 +344,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   if (valuesAreDifferent)
                         break;
                   }
-            ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(c.name()) : "");
+            ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1; } QToolTip { color: palette(tooltiptext); }").arg(c.name()) : "");
             }
 
       //deal with reset if only one element, or if values are the same
@@ -330,7 +355,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
 
             switch (styledValue) {
                   case PropertyFlags::STYLED:
-                        ii.w->setStyleSheet(QString("* { color: %1 }").arg(c.name()));
+                        ii.w->setStyleSheet(QString("* { color: %1; } QToolTip { color: palette(tooltiptext); }").arg(c.name()));
                         enableReset = false;
                         break;
                   case PropertyFlags::UNSTYLED:
@@ -362,7 +387,18 @@ void InspectorBase::valueChanged(int idx, bool reset)
       const InspectorItem& ii = iList[idx];
       Pid id       = ii.t;
       QVariant val2 = getValue(ii);                   // get new value from UI
-      Score* score  = inspector->element()->score();
+      Element* iElement = inspector->element();
+      Score* score  = iElement->score();
+
+#ifdef MSCORE_UNSTABLE
+      if (ScriptRecorder* rec = mscore->getScriptRecorder())
+            rec->recordInspectorValueChange(iElement, ii, val2);
+#endif
+
+      if (ii.t == Pid::AUTOPLACE)
+            TourHandler::startTour("autoplace-tour");
+      else
+            TourHandler::startTour("inspector-tour");
 
       score->startCmd();
       for (Element* e : *inspector->el()) {
@@ -391,6 +427,14 @@ void InspectorBase::valueChanged(int idx, bool reset)
       checkDifferentValues(ii);
       score->endCmd();
       inspector->setInspectorEdit(false);
+
+      if (iElement != inspector->element()) {
+            // Something changed in selection as a result of value change.
+            recursion = false;
+            emit elementChanged();
+            return;
+            }
+
       postInit();
 
       // a subStyle change may change several other values:
@@ -418,22 +462,38 @@ void InspectorBase::resetClicked(int i)
 
 void InspectorBase::setStyleClicked(int i)
       {
-      Element* e   = inspector->element();
       const InspectorItem& ii = iList[i];
+      const Pid id = ii.t;
+      Element* e   = inspector->element();
+      if (Element* delegate = e->propertyDelegate(id))
+            e = delegate;
+      Score* score = e->score();
 
       Sid sidx = e->getPropertyStyle(ii.t);
       if (sidx == Sid::NOSTYLE)
             return;
-      e->score()->startCmd();
       QVariant val = getValue(ii);
-      e->undoChangeProperty(ii.t, val, PropertyFlags::STYLED);
-      Pid id      = ii.t;
-      P_TYPE t     = propertyType(id);
+      P_TYPE t = propertyType(id);
       if (t == P_TYPE::SP_REAL)
-            val = val.toDouble() / e->score()->spatium();
-      e->score()->undo(new ChangeStyleVal(e->score(), sidx, val));
+            val = val.toDouble() / score->spatium();
+      else if (t == P_TYPE::POINT_SP)
+            val = val.toPointF() / score->spatium();
+      else if (t == P_TYPE::POINT_SP_MM) {
+            if (e->sizeIsSpatiumDependent())
+                  val = val.toPointF() / score->spatium();
+            else
+                  val = val.toPointF() / DPMM;
+            }
+
+      score->startCmd();
+      for (Element* ee : *inspector->el()) {
+            if (Element* delegate = ee->propertyDelegate(ii.t))
+                  ee = delegate;
+            ee->undoChangeProperty(ii.t, val, PropertyFlags::STYLED);
+            }
+      score->undo(new ChangeStyleVal(score, sidx, val));
       checkDifferentValues(ii);
-      e->score()->endCmd();
+      score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -463,6 +523,7 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                               }});
                   title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
                   title->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+                  title->setStyleSheet("font: bold;");
                   QSettings s;
                   QString key = title->parent()->objectName();
                   bool visible = s.value(QString("inspector/%1_visible").arg(key), true).toBool();
@@ -476,17 +537,29 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
             iList.push_back(i);
       int i = 0;
       for (const InspectorItem& ii : iList) {
-            QToolButton* resetButton = ii.r;
-            if (resetButton) {
-                  resetButton->setIcon(*icons[int(Icons::reset_ICON)]);
-                  connect(resetButton, &QToolButton::clicked, [=] { resetClicked(i); });
-                  Sid sidx = inspector->element()->getPropertyStyle(ii.t);
-                  if (sidx != Sid::NOSTYLE) {
-                        QMenu* menu = new QMenu(this);
-                        resetButton->setMenu(menu);
-                        resetButton->setPopupMode(QToolButton::MenuButtonPopup);
-                        QAction* a = menu->addAction(tr("Set as style"));
-                        connect(a, &QAction::triggered, [=] { setStyleClicked(i); });
+            QWidget* rw = ii.r;
+            if (rw) {
+                  if (qobject_cast<QToolButton*>(rw)) {
+                        QToolButton* resetButton = qobject_cast<QToolButton*>(rw);
+                        resetButton->setIcon(*icons[int(Icons::reset_ICON)]);
+                        connect(resetButton, &QToolButton::clicked, [=] { resetClicked(i); });
+                        Sid sidx = inspector->element()->getPropertyStyle(ii.t);
+                        if (sidx != Sid::NOSTYLE) {
+                              QMenu* menu = new QMenu(this);
+                              resetButton->setMenu(menu);
+                              resetButton->setPopupMode(QToolButton::MenuButtonPopup);
+                              QAction* a = menu->addAction(tr("Set as style"));
+                              connect(a, &QAction::triggered, [=] { setStyleClicked(i); });
+                              }
+                        }
+                  else {
+                        ResetButton* b = qobject_cast<ResetButton*>(rw);
+                        connect(b, &ResetButton::resetClicked, [=] { resetClicked(i); });
+                        Sid sidx = inspector->element()->getPropertyStyle(ii.t);
+                        if (sidx != Sid::NOSTYLE) {
+                              b->enableSetStyle(true);
+                              connect(b, &ResetButton::setStyleClicked, [=] { setStyleClicked(i); });
+                              }
                         }
                   }
             QWidget* w = ii.w;
@@ -512,6 +585,8 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                   connect(qobject_cast<Awl::ColorLabel*>(w), QOverload<QColor>::of(&Awl::ColorLabel::colorChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::AlignSelect*>(w))
                   connect(qobject_cast<Ms::AlignSelect*>(w), QOverload<Align>::of(&Ms::AlignSelect::alignChanged), [=] { valueChanged(i); });
+            else if (qobject_cast<Ms::FontStyleSelect*>(w))
+                  connect(qobject_cast<Ms::FontStyleSelect*>(w), QOverload<FontStyle>::of(&Ms::FontStyleSelect::fontStyleChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::OffsetSelect*>(w))
                   connect(qobject_cast<Ms::OffsetSelect*>(w), QOverload<const QPointF&>::of(&Ms::OffsetSelect::offsetChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::ScaleSelect*>(w))

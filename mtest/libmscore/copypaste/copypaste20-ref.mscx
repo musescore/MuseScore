@@ -150,10 +150,8 @@
             <durationType>16th</durationType>
             </Rest>
           <Rest>
+            <dots>1</dots>
             <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <durationType>16th</durationType>
             </Rest>
           </voice>
         <voice>

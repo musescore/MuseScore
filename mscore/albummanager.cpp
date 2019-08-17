@@ -57,7 +57,7 @@ AlbumManager::AlbumManager(QWidget* parent)
 
 void AlbumManager::buttonBoxClicked(QAbstractButton*)
       {
-      printf("buttonBox clicked\n");
+//printf("buttonBox clicked\n");
       }
 
 //---------------------------------------------------------

@@ -20,6 +20,8 @@ namespace Ms {
 class XmlWriter;
 class XmlReader;
 
+int ticks_beat(int n);
+
 //-------------------------------------------------------------------
 //   BeatType
 //-------------------------------------------------------------------
@@ -133,11 +135,14 @@ class TimeSigMap : public std::map<int, SigEvent > {
 
       void del(int tick);
 
+      void clearRange(int tick1, int tick2);
+
       void read(XmlReader&, int fileDiv);
       void write(XmlWriter&) const;
       void dump() const;
 
       const SigEvent& timesig(int tick) const;
+      const SigEvent& timesig(const Fraction& f) const { return timesig(f.ticks()); }
 
       void tickValues(int t, int* bar, int* beat, int* tick) const;
       int bar2tick(int bar, int beat) const;

@@ -373,7 +373,7 @@ F Dizi</extracomment>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="105"/>
-        <source>B♭­ S. Oc.</source>
+        <source>B♭ S. Oc.</source>
         <extracomment>B♭ Soprano Ocarina</extracomment>
         <translation type="unfinished"></translation>
     </message>
@@ -412,13 +412,13 @@ F Dizi</extracomment>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="115"/>
-        <source>B♭­ Alto Ocarina</source>
+        <source>B♭ Alto Ocarina</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="117"/>
-        <source>B♭­ A. Oc.</source>
-        <extracomment>B♭­ Alto Ocarina</extracomment>
+        <source>B♭ A. Oc.</source>
+        <extracomment>B♭ Alto Ocarina</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>

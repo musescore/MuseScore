@@ -126,8 +126,8 @@ static Acc accList[] = {
       Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalQuarterSharpEqualTempered),
 
       // Persian
-      Acc(AccidentalVal::NATURAL, 50,   SymId::accidentalSori),                          // SORI
-      Acc(AccidentalVal::NATURAL, -50,  SymId::accidentalKoron),                         // KORON
+      Acc(AccidentalVal::NATURAL, 33,   SymId::accidentalSori),                          // SORI
+      Acc(AccidentalVal::NATURAL, -67,  SymId::accidentalKoron),                         // KORON
       };
 
 //---------------------------------------------------------
@@ -187,11 +187,11 @@ void Accidental::read(XmlReader& e)
 
 void Accidental::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
       writeProperty(xml, Pid::ROLE);
       writeProperty(xml, Pid::SMALL);
-      xml.tag("subtype", subtype2name(accidentalType()));
+      writeProperty(xml, Pid::ACCIDENTAL_TYPE);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -346,7 +346,7 @@ void Accidental::draw(QPainter* painter) const
 
 bool Accidental::acceptDrop(EditData& data) const
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       return e->isIcon() && (toIcon(e)->iconType() == IconType::BRACKETS || toIcon(e)->iconType() == IconType::PARENTHESES);
       }
 
@@ -356,7 +356,7 @@ bool Accidental::acceptDrop(EditData& data) const
 
 Element* Accidental::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       switch(e->type()) {
             case ElementType::ICON :
                   switch(toIcon(e)->iconType()) {
@@ -394,6 +394,7 @@ void Accidental::undoSetSmall(bool val)
 QVariant Accidental::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::ACCIDENTAL_TYPE:    return int(_accidentalType);
             case Pid::SMALL:              return _small;
             case Pid::ACCIDENTAL_BRACKET: return int(bracket());
             case Pid::ROLE:               return int(role());
@@ -409,6 +410,7 @@ QVariant Accidental::getProperty(Pid propertyId) const
 QVariant Accidental::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::ACCIDENTAL_TYPE:    return int(AccidentalType::NONE);
             case Pid::SMALL:              return false;
             case Pid::ACCIDENTAL_BRACKET: return int(AccidentalBracket::NONE);
             case Pid::ROLE:               return int(AccidentalRole::AUTO);
@@ -424,6 +426,9 @@ QVariant Accidental::propertyDefault(Pid propertyId) const
 bool Accidental::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case Pid::ACCIDENTAL_TYPE:
+                  setAccidentalType(AccidentalType(v.toInt()));
+                  break;
             case Pid::SMALL:
                   _small = v.toBool();
                   break;
@@ -438,6 +443,31 @@ bool Accidental::setProperty(Pid propertyId, const QVariant& v)
             }
       triggerLayout();
       return true;
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Accidental::propertyId(const QStringRef& xmlName) const
+      {
+      if (xmlName == propertyName(Pid::ACCIDENTAL_TYPE))
+            return Pid::ACCIDENTAL_TYPE;
+      return Element::propertyId(xmlName);
+      }
+
+//---------------------------------------------------------
+//   propertyUserValue
+//---------------------------------------------------------
+
+QString Accidental::propertyUserValue(Pid pid) const
+      {
+      switch(pid) {
+            case Pid::ACCIDENTAL_TYPE:
+                  return subtypeUserName();
+            default:
+                  return Element::propertyUserValue(pid);
+            }
       }
 
 //---------------------------------------------------------

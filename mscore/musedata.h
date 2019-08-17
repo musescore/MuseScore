@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: musedata.h 1840 2009-05-20 11:57:51Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
@@ -21,6 +20,8 @@
 #ifndef __MUSEDATA_H__
 #define __MUSEDATA_H__
 
+#include "libmscore/fraction.h"
+
 namespace Ms {
 
 class Staff;
@@ -37,7 +38,7 @@ class Slur;
 
 class MuseData {
       int _division;
-      int curTick;
+      Fraction curTick;
       QList<QStringList> parts;
       Score* score;
       ChordRest* chordRest;
@@ -54,8 +55,8 @@ class MuseData {
       void readBackup(const QString& s);
       Measure* createMeasure();
       int countStaves(const QStringList& sl);
-      void openSlur(int idx, int tick, Staff* staff, int voice);
-      void closeSlur(int idx, int tick, Staff* staff, int voice);
+      void openSlur(int idx, const Fraction& tick, Staff* staff, int voice);
+      void closeSlur(int idx, const Fraction& tick, Staff* staff, int voice);
       QString diacritical(QString);
 
    public:

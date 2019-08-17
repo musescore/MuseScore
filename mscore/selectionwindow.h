@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: selectionwindow.h 4775 2011-09-12 14:25:31Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //

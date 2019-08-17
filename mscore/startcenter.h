@@ -89,11 +89,13 @@ class Startcenter : public AbstractDialog, public Ui::Startcenter {
       void closed(bool);
 
     public:
-      Startcenter();
+      Startcenter(QWidget* parent);
       ~Startcenter();
       void updateRecentScores();
       void writeSettings();
       void readSettings();
+      void keyPressEvent(QKeyEvent*) override;
+      void keyReleaseEvent(QKeyEvent*) override;
       };
 }
 #endif //__STARTCENTER_H__

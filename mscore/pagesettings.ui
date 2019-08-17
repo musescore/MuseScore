@@ -217,14 +217,14 @@
         <item row="0" column="0">
          <widget class="QRadioButton" name="inchButton">
           <property name="text">
-           <string>inch</string>
+           <string>Inch (in)</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
          <widget class="QRadioButton" name="mmButton">
           <property name="text">
-           <string>mm</string>
+           <string>Millimeter (mm)</string>
           </property>
          </widget>
         </item>

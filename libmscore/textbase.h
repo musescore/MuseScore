@@ -14,7 +14,6 @@
 #define __TEXTBASE_H__
 
 #include "element.h"
-#include "elementlayout.h"
 #include "property.h"
 #include "style.h"
 
@@ -51,13 +50,19 @@ enum class FormatId : char {
       };
 
 //---------------------------------------------------------
+//   MultiClick
+//---------------------------------------------------------
+
+enum class MultiClick : char {
+      Double, Triple
+      };
+
+//---------------------------------------------------------
 //   CharFormat
 //---------------------------------------------------------
 
 class CharFormat {
-      bool _bold                { false };
-      bool _italic              { false };
-      bool _underline           { false };
+      FontStyle _style          { FontStyle::Normal };
       bool _preedit             { false };
       VerticalAlignment _valign { VerticalAlignment::AlignNormal };
       qreal _fontSize           { 12.0  };
@@ -66,17 +71,20 @@ class CharFormat {
    public:
       CharFormat() {}
       bool operator==(const CharFormat&) const;
-      bool bold() const                      { return _bold;        }
-      bool italic() const                    { return _italic;      }
-      bool underline() const                 { return _underline;   }
+
+      FontStyle style() const                { return _style;                         }
+      void setStyle(FontStyle s)             { _style = s;                            }
+      bool bold() const                      { return _style & FontStyle::Bold;       }
+      bool italic() const                    { return _style & FontStyle::Italic;     }
+      bool underline() const                 { return _style & FontStyle::Underline;  }
+      void setBold(bool val)                 { _style = val ? _style + FontStyle::Bold      : _style - FontStyle::Bold;      }
+      void setItalic(bool val)               { _style = val ? _style + FontStyle::Italic    : _style - FontStyle::Italic;    }
+      void setUnderline(bool val)            { _style = val ? _style + FontStyle::Underline : _style - FontStyle::Underline; }
+
       bool preedit() const                   { return _preedit;     }
       VerticalAlignment valign() const       { return _valign;      }
       qreal fontSize() const                 { return _fontSize;    }
       QString fontFamily() const             { return _fontFamily;  }
-
-      void setBold(bool val)                 { _bold        = val;  }
-      void setItalic(bool val)               { _italic      = val;  }
-      void setUnderline(bool val)            { _underline   = val;  }
       void setPreedit(bool val)              { _preedit     = val;  }
       void setValign(VerticalAlignment val)  { _valign      = val;  }
       void setFontSize(qreal val)            { Q_ASSERT(val > 0.0); _fontSize = val; }
@@ -124,6 +132,7 @@ class TextCursor {
       TextBlock& curLine() const;
       QRectF cursorRect() const;
       bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int count = 1);
+      void doubleClickSelect();
       void moveCursorToEnd()   { movePosition(QTextCursor::End);   }
       void moveCursorToStart() { movePosition(QTextCursor::Start); }
       QChar currentCharacter() const;
@@ -207,14 +216,9 @@ class TextBlock {
 
 class TextBase : public Element {
       // sorted by size to allow for most compact memory layout
-      M_PROPERTY(bool,       bold,                   setBold)
-      M_PROPERTY(bool,       italic,                 setItalic)
-      M_PROPERTY(bool,       underline,              setUnderline)
+      M_PROPERTY(FontStyle,  fontStyle,              setFontStyle)
       M_PROPERTY(Align,      align,                  setAlign)
       M_PROPERTY(FrameType,  frameType,              setFrameType)
-      M_PROPERTY(bool,       sizeIsSpatiumDependent, setSizeIsSpatiumDependent)
-      M_PROPERTY(OffsetType, offsetType,             setOffsetType)
-
       M_PROPERTY(QString,    family,                 setFamily)
       M_PROPERTY(qreal,      size,                   setSize)
       M_PROPERTY(QColor,     bgColor,                setBgColor)
@@ -222,30 +226,30 @@ class TextBase : public Element {
       M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)
       M_PROPERTY(Spatium,    paddingWidth,           setPaddingWidth)
       M_PROPERTY(int,        frameRound,             setFrameRound)
-      M_PROPERTY(QPointF,    offset,                 setOffset)            // inch or spatium
 
       // there are two representations of text; only one
       // might be valid and the other can be constructed from it
 
-      QString _text;
+      mutable QString _text;                          // cached
+      mutable bool textInvalid      { true  };
+
       QList<TextBlock> _layout;
-      bool textInvalid              { true  };
+      bool layoutInvalid            { true  };
       Tid _tid;         // text style id
 
       QString preEdit;              // move to EditData?
       bool _layoutToParentWidth     { false };
 
       int  hexState                 { -1    };
+      bool _primed                  { 0 };
 
       void drawSelection(QPainter*, const QRectF&) const;
-
       void insert(TextCursor*, uint code);
-      void genText();
-      int getPropertyFlagsIdx(Pid id) const;
+      void genText() const;
+      virtual int getPropertyFlagsIdx(Pid id) const override;
+      QString stripText(bool, bool, bool) const;
 
    protected:
-      bool layoutInvalid            { true  };
-
       QColor textColor() const;
       QRectF frame;           // calculated in layout()
       void layoutFrame();
@@ -274,7 +278,6 @@ class TextBase : public Element {
 
       virtual void layout() override;
       virtual void layout1();
-      void layout2(Sid placeAbove, Sid placeBelow);       // helper function
       qreal lineSpacing() const;
       qreal lineHeight() const;
       virtual qreal baseLine() const override;
@@ -295,6 +298,9 @@ class TextBase : public Element {
       bool deleteSelectedText(EditData&);
 
       void selectAll(TextCursor*);
+      void multiClickSelect(EditData&, MultiClick);
+      bool isPrimed() const               { return _primed; }
+      void setPrimed(bool primed)         { _primed = primed; }
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
@@ -322,12 +328,11 @@ class TextBase : public Element {
       static QString unEscape(QString s);
       static QString escape(QString s);
 
-      void undoSetText(const QString& s) { undoChangeProperty(Pid::TEXT, s); }
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
 
-      virtual int subtype() const;
-      virtual QString subtypeName() const;
+      virtual int subtype() const override;
+      virtual QString subtypeName() const override;
 
       QList<TextFragment> fragmentList() const; // for MusicXML formatted export
 
@@ -342,11 +347,10 @@ class TextBase : public Element {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(Pid id) const override;
-      virtual PropertyFlags propertyFlags(Pid) const;
-      virtual void setPropertyFlags(Pid, PropertyFlags);
+      virtual void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
       virtual Sid getPropertyStyle(Pid) const;
       virtual void styleChanged();
-
       void editInsertText(TextCursor*, const QString&);
 
       TextCursor* cursor(const EditData&);
@@ -355,8 +359,9 @@ class TextBase : public Element {
       QList<TextBlock>& textBlockList()          { return _layout; }
       int rows() const                           { return _layout.size(); }
 
-      void setTextInvalid()                      { textInvalid = true;   };
+      void setTextInvalid()                      { textInvalid = true;   }
       bool isTextInvalid() const                 { return textInvalid;   }
+      void setLayoutInvalid()                    { layoutInvalid = true; }
       bool isLayoutInvalid() const               { return layoutInvalid; }
 
       // helper functions
@@ -367,9 +372,20 @@ class TextBase : public Element {
       Tid tid() const                            { return _tid; }
       void setTid(Tid id)                        { _tid = id; }
       void initTid(Tid id);
+      void initTid(Tid id, bool preserveDifferent);
       virtual void initElementStyle(const ElementStyle*) override;
 
+      bool bold() const                      { return _fontStyle & FontStyle::Bold;       }
+      bool italic() const                    { return _fontStyle & FontStyle::Italic;     }
+      bool underline() const                 { return _fontStyle & FontStyle::Underline;  }
+      void setBold(bool val)                 { _fontStyle = val ? _fontStyle + FontStyle::Bold      : _fontStyle - FontStyle::Bold;      }
+      void setItalic(bool val)               { _fontStyle = val ? _fontStyle + FontStyle::Italic    : _fontStyle - FontStyle::Italic;    }
+      void setUnderline(bool val)            { _fontStyle = val ? _fontStyle + FontStyle::Underline : _fontStyle - FontStyle::Underline; }
+
+      bool hasCustomFormatting() const;
+
       friend class TextCursor;
+      using ScoreElement::undoChangeProperty;
       };
 
 }     // namespace Ms

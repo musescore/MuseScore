@@ -85,10 +85,11 @@ void Stem::layout()
       l         *= _up;
 
       qreal y1 = 0.0;                           // vertical displacement to match note attach point
-      Staff* stf = staff();
+      const Staff* stf = staff();
       if (chord()) {
-            int tick = chord()->tick();
-            StaffType* st = stf ? stf->staffType(tick) : nullptr;
+            setMag(chord()->mag());
+            Fraction tick = chord()->tick();
+            const StaffType* st = stf ? stf->staffType(tick) : 0;
             if (st && st->isTabStaff() ) {            // TAB staves
                   if (st->stemThrough()) {
                         // if stems through staves, gets Y pos. of stem-side note relative to chord other side
@@ -111,7 +112,7 @@ void Stem::layout()
                   }
             }
 
-      qreal lw5 = _lineWidth * .5;
+      qreal lw5 = _lineWidth * .5 * mag();
 
       line.setLine(0.0, y1, 0.0, l);
 
@@ -150,11 +151,11 @@ void Stem::draw(QPainter* painter) const
       if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
 
-      Staff* st      = staff();
-      StaffType* stt = st ? st->staffType(chord()->tick()) : 0;
-      bool useTab    = stt && stt->isTabStaff();
+      const Staff* st      = staff();
+      const StaffType* stt = st ? st->staffType(chord()->tick()) : 0;
+      bool useTab          = stt && stt->isTabStaff();
 
-      painter->setPen(QPen(curColor(), _lineWidth, Qt::SolidLine, Qt::RoundCap));
+      painter->setPen(QPen(curColor(), _lineWidth * mag(), Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
 
       if (!(useTab && chord()))
@@ -212,7 +213,7 @@ void Stem::draw(QPainter* painter) const
 
 void Stem::write(XmlWriter& xml) const
       {
-      xml.stag("Stem");
+      xml.stag(this);
       Element::writeProperties(xml);
       writeProperty(xml, Pid::USER_LEN);
       writeProperty(xml, Pid::LINE_WIDTH);
@@ -268,7 +269,8 @@ void Stem::startEdit(EditData& ed)
       Element::startEdit(ed);
       ed.grips   = 1;
       ed.curGrip = Grip::START;
-      undoPushProperty(Pid::USER_LEN);
+      ElementEditData* eed = ed.getData(this);
+      eed->pushProperty(Pid::USER_LEN);
       }
 
 //---------------------------------------------------------
@@ -301,7 +303,7 @@ void Stem::reset()
 
 bool Stem::acceptDrop(EditData& data) const
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       if ((e->type() == ElementType::TREMOLO) && (toTremolo(e)->tremoloType() <= TremoloType::R64)) {
             return true;
             }
@@ -314,7 +316,7 @@ bool Stem::acceptDrop(EditData& data) const
 
 Element* Stem::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       Chord* ch  = chord();
 
       switch(e->type()) {
@@ -390,7 +392,7 @@ QPointF Stem::hookPos() const
       {
       QPointF p(pos() + line.p2());
 
-      qreal xoff = _lineWidth * .5;
+      qreal xoff = _lineWidth * .5 * mag();
       p.rx() += xoff;
       return p;
       }

@@ -24,8 +24,11 @@ class Note;
 //---------------------------------------------------------
 
 class TextLineSegment final : public TextLineBaseSegment {
+
+      virtual Sid getPropertyStyle(Pid) const override;
+
    public:
-      TextLineSegment(Score* s);
+      TextLineSegment(Spanner* sp, Score* s);
       virtual ElementType type() const override       { return ElementType::TEXTLINE_SEGMENT; }
       virtual TextLineSegment* clone() const override { return new TextLineSegment(*this); }
       TextLine* textLine() const                      { return toTextLine(spanner()); }
@@ -37,6 +40,9 @@ class TextLineSegment final : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class TextLine final : public TextLineBase {
+
+      virtual Sid getPropertyStyle(Pid) const override;
+
    public:
       TextLine(Score* s);
       TextLine(const TextLine&);
@@ -44,6 +50,7 @@ class TextLine final : public TextLineBase {
 
       virtual TextLine* clone() const           { return new TextLine(*this); }
       virtual ElementType type() const          { return ElementType::TEXTLINE; }
+      virtual void write(XmlWriter&) const override;
       virtual LineSegment* createLineSegment() override;
       virtual QVariant propertyDefault(Pid) const override;
       };

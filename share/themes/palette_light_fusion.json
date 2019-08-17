@@ -10,5 +10,6 @@
 "ToolTipBase":   "#fefac2",
 "ToolTipText":   "#000000",
 "Link":          "#3a80c6",
-"LinkVisited":   "#3a80c6"
+"LinkVisited":   "#3a80c6",
+"Highlight":     "#88bff6"
 }

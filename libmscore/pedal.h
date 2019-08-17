@@ -24,8 +24,11 @@ class Pedal;
 //---------------------------------------------------------
 
 class PedalSegment final : public TextLineBaseSegment {
+
+      virtual Sid getPropertyStyle(Pid) const override;
+
    public:
-      PedalSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+      PedalSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
       virtual ElementType type() const override       { return ElementType::PEDAL_SEGMENT; }
       virtual PedalSegment* clone() const override    { return new PedalSegment(*this);    }
       Pedal* pedal() const                            { return toPedal(spanner());          }
@@ -39,6 +42,9 @@ class PedalSegment final : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class Pedal final : public TextLineBase {
+
+      virtual Sid getPropertyStyle(Pid) const override;
+
    protected:
       QPointF linePos(Grip, System**) const override;
 
@@ -49,7 +55,6 @@ class Pedal final : public TextLineBase {
       virtual void read(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
       LineSegment* createLineSegment();
-      virtual void setYoff(qreal) override;
       virtual QVariant propertyDefault(Pid propertyId) const override;
 
       friend class PedalLine;

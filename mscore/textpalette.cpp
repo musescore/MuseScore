@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: textpalette.cpp 4612 2011-07-27 13:14:35Z wschweer $
 //
 //  Copyright (C) 2002-2010 Werner Schweer and others
 //
@@ -19,6 +18,7 @@
 //=============================================================================
 
 #include "palette.h"
+#include "menus.h"
 #include "textpalette.h"
 #include "icons.h"
 #include "libmscore/text.h"
@@ -31,14 +31,12 @@
 
 namespace Ms {
 
-extern QMap<QString, QStringList>* smuflRanges();
-
 //const int buttonSize = 40;
 //const int iconSize   = 20;
 //const int fontSize   = 20;
 
 
-const QPoint rangeInfo[241] = {
+const QPoint rangeInfo[] = {
       { 0x0020, 0x007F },
       { 0x0080, 0x00FF },
       { 0x0100, 0x017F },

@@ -25,7 +25,7 @@ class LetRing;
 
 class LetRingSegment final : public TextLineBaseSegment {
    public:
-      LetRingSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)  { }
+      LetRingSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)  { }
       virtual ElementType type() const override       { return ElementType::LET_RING_SEGMENT; }
       virtual LetRingSegment* clone() const override  { return new LetRingSegment(*this);    }
       LetRing* letRing() const                        { return (LetRing*)spanner();          }
@@ -47,9 +47,8 @@ class LetRing final : public TextLineBase {
       virtual LetRing* clone() const override   { return new LetRing(*this);   }
       virtual ElementType type() const override { return ElementType::LET_RING; }
       virtual void read(XmlReader&) override;
-      virtual void write(XmlWriter& xml) const override;
+//      virtual void write(XmlWriter& xml) const override;
       LineSegment* createLineSegment();
-      virtual void setYoff(qreal) override;
       virtual QVariant propertyDefault(Pid propertyId) const override;
       virtual Sid getPropertyStyle(Pid) const override;
       };

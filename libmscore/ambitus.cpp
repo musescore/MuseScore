@@ -56,6 +56,15 @@ Ambitus::Ambitus(Score* s)
       }
 
 //---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal Ambitus::mag() const
+      {
+      return staff() ? staff()->mag(tick()) : 1.0;
+      }
+
+//---------------------------------------------------------
 //   initFrom
 //---------------------------------------------------------
 
@@ -182,7 +191,7 @@ void Ambitus::setBottomTpc(int val)
 
 void Ambitus::write(XmlWriter& xml) const
       {
-      xml.stag("Ambitus");
+      xml.stag(this);
       xml.tag(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
       xml.tag(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
       xml.tag(Pid::MIRROR_HEAD,int(_dir),           int(DIR_DEFAULT));
@@ -226,15 +235,15 @@ bool Ambitus::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       if (tag == "head")
-            setProperty(Pid::HEAD_GROUP, Ms::getProperty(Pid::HEAD_GROUP, e));
+            readProperty(e, Pid::HEAD_GROUP);
       else if (tag == "headType")
-            setProperty(Pid::HEAD_TYPE, Ms::getProperty(Pid::HEAD_TYPE, e));
+            readProperty(e, Pid::HEAD_TYPE);
       else if (tag == "mirror")
-            setProperty(Pid::MIRROR_HEAD, Ms::getProperty(Pid::MIRROR_HEAD, e).toInt());
+            readProperty(e, Pid::MIRROR_HEAD);
       else if (tag == "hasLine")
             setHasLine(e.readInt());
       else if (tag == "lineWidth")
-            setProperty(Pid::LINE_WIDTH, Ms::getProperty(Pid::LINE_WIDTH, e));
+            readProperty(e, Pid::LINE_WIDTH);
       else if (tag == "topPitch")
             _topPitch = e.readInt();
       else if (tag == "bottomPitch")
@@ -290,7 +299,7 @@ void Ambitus::layout()
       qreal       _spatium    = spatium();
       Staff*      stf         = nullptr;
       if (segm && track() > -1) {
-            int tick    = segm->tick();
+            Fraction tick    = segm->tick();
             stf         = score()->staff(staffIdx());
             lineDist    = stf->lineDistance(tick) * _spatium;
             numOfLines  = stf->lines(tick);
@@ -453,7 +462,7 @@ void Ambitus::draw(QPainter* p) const
 
       // draw ledger lines (if not in a palette)
       if (segment() && track() > -1) {
-            int tick          = segment()->tick();
+            Fraction tick          = segment()->tick();
             Staff* stf        = score()->staff(staffIdx());
             qreal lineDist    = stf->lineDistance(tick);
             int numOfLines    = stf->lines(tick);

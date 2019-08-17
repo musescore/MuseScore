@@ -34,28 +34,7 @@ InspectorText::InspectorText(QWidget* parent)
             { f.title, f.panel }
             };
 
-      f.style->clear();
-      for (auto ss : {
-         Tid::FRAME,
-         Tid::TITLE,
-         Tid::SUBTITLE,
-         Tid::COMPOSER,
-         Tid::POET,
-         Tid::INSTRUMENT_EXCERPT,
-         Tid::TRANSLATOR,
-         Tid::HEADER,
-         Tid::FOOTER,
-         Tid::USER1,
-         Tid::USER2,
-         Tid::USER3,
-         Tid::USER4,
-         Tid::USER5,
-         Tid::USER6
-         } )
-            {
-            f.style->addItem(textStyleUserName(ss), int(ss));
-            }
-
+      populateStyle(f.style);
       mapSignals(iiList, ppList);
       }
 

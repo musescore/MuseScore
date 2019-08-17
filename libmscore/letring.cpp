@@ -28,20 +28,20 @@ static const ElementStyle letRingStyle {
       { Sid::letRingFontSize,                      Pid::BEGIN_FONT_SIZE        },
       { Sid::letRingFontSize,                      Pid::CONTINUE_FONT_SIZE     },
       { Sid::letRingFontSize,                      Pid::END_FONT_SIZE          },
-      { Sid::letRingFontBold,                      Pid::BEGIN_FONT_BOLD        },
-      { Sid::letRingFontBold,                      Pid::CONTINUE_FONT_BOLD     },
-      { Sid::letRingFontBold,                      Pid::END_FONT_BOLD          },
-      { Sid::letRingFontItalic,                    Pid::BEGIN_FONT_ITALIC      },
-      { Sid::letRingFontItalic,                    Pid::CONTINUE_FONT_ITALIC   },
-      { Sid::letRingFontItalic,                    Pid::END_FONT_ITALIC        },
-      { Sid::letRingFontUnderline,                 Pid::BEGIN_FONT_UNDERLINE   },
-      { Sid::letRingFontUnderline,                 Pid::CONTINUE_FONT_UNDERLINE},
-      { Sid::letRingFontUnderline,                 Pid::END_FONT_UNDERLINE     },
+      { Sid::letRingFontStyle,                     Pid::BEGIN_FONT_STYLE       },
+      { Sid::letRingFontStyle,                     Pid::CONTINUE_FONT_STYLE    },
+      { Sid::letRingFontStyle,                     Pid::END_FONT_STYLE         },
       { Sid::letRingTextAlign,                     Pid::BEGIN_TEXT_ALIGN       },
       { Sid::letRingTextAlign,                     Pid::CONTINUE_TEXT_ALIGN    },
       { Sid::letRingTextAlign,                     Pid::END_TEXT_ALIGN         },
       { Sid::letRingHookHeight,                    Pid::BEGIN_HOOK_HEIGHT      },
       { Sid::letRingHookHeight,                    Pid::END_HOOK_HEIGHT        },
+      { Sid::letRingLineStyle,                     Pid::LINE_STYLE             },
+      { Sid::letRingBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET      },
+      { Sid::letRingEndHookType,                   Pid::END_HOOK_TYPE          },
+      { Sid::letRingLineWidth,                     Pid::LINE_WIDTH             },
+      { Sid::letRingPlacement,                     Pid::PLACEMENT              },
+      //{ Sid::letRingPosBelow,                      Pid::OFFSET                 },
       };
 
 //---------------------------------------------------------
@@ -51,7 +51,7 @@ static const ElementStyle letRingStyle {
 void LetRingSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7, Sid::letRingPosBelow, Sid::letRingPosAbove);
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -63,6 +63,13 @@ LetRing::LetRing(Score* s)
       {
       initElementStyle(&letRingStyle);
       resetProperty(Pid::LINE_VISIBLE);
+
+      resetProperty(Pid::BEGIN_TEXT_PLACE);
+      resetProperty(Pid::BEGIN_TEXT);
+      resetProperty(Pid::CONTINUE_TEXT_PLACE);
+      resetProperty(Pid::CONTINUE_TEXT);
+      resetProperty(Pid::END_TEXT_PLACE);
+      resetProperty(Pid::END_TEXT);
       }
 
 //---------------------------------------------------------
@@ -74,27 +81,44 @@ void LetRing::read(XmlReader& e)
       if (score()->mscVersion() < 301)
             e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement()) {
-            if (!TextLineBase::readProperties(e))
+            if (readProperty(e.name(), e, Pid::LINE_WIDTH))
+                  setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
+            else if (!TextLineBase::readProperties(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
 //   write
+//   
+//   The removal of this function is potentially a temporary
+//   change. For now, the intended behavior does no more than
+//   the base write function and so we will just use that.
+//
+//   also see palmmute.cpp
 //---------------------------------------------------------
 
+/*
 void LetRing::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
 
-      for (const StyledProperty& spp : *styledProperties())
-            writeProperty(xml, spp.pid);
+      for (const StyledProperty& spp : *styledProperties()) {
+            if (!isStyled(spp.pid))
+                  writeProperty(xml, spp.pid);
+            }
 
-      Element::writeProperties(xml);
+      TextLineBase::writeProperties(xml);
       xml.etag();
       }
+*/
+
+static const ElementStyle letRingSegmentStyle {
+      //{ Sid::letRingPosBelow,       Pid::OFFSET       },
+      { Sid::letRingMinDistance,    Pid::MIN_DISTANCE },
+      };
 
 //---------------------------------------------------------
 //   createLineSegment
@@ -102,16 +126,10 @@ void LetRing::write(XmlWriter& xml) const
 
 LineSegment* LetRing::createLineSegment()
       {
-      return new LetRingSegment(score());
-      }
-
-//---------------------------------------------------------
-//   setYoff
-//---------------------------------------------------------
-
-void LetRing::setYoff(qreal val)
-      {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::letRingPosAbove : Sid::letRingPosBelow);
+      LetRingSegment* lr = new LetRingSegment(this, score());
+      lr->setTrack(track());
+      lr->initElementStyle(&letRingSegmentStyle);
+      return lr;
       }
 
 //---------------------------------------------------------
@@ -133,26 +151,26 @@ QVariant LetRing::propertyDefault(Pid propertyId) const
             case Pid::LINE_VISIBLE:
                   return true;
 
-            case Pid::BEGIN_TEXT_OFFSET:
-                  return score()->styleV(Sid::letRingBeginTextOffset).toPointF();
+            case Pid::CONTINUE_TEXT_OFFSET:
+            case Pid::END_TEXT_OFFSET:
+                  return QPointF(0, 0);
 
-            case Pid::BEGIN_TEXT_ALIGN:
-            case Pid::CONTINUE_TEXT_ALIGN:
-            case Pid::END_TEXT_ALIGN:
-                  return score()->styleV(Sid::letRingTextAlign);
-
-            case Pid::BEGIN_HOOK_HEIGHT:
-            case Pid::END_HOOK_HEIGHT:
-                  return score()->styleV(Sid::letRingHookHeight);
-
-            case Pid::BEGIN_FONT_ITALIC:
-                  return score()->styleV(Sid::letRingFontItalic);
+            case Pid::BEGIN_FONT_STYLE:
+                  return score()->styleV(Sid::letRingFontStyle);
 
             case Pid::BEGIN_TEXT:
                   return score()->styleV(Sid::letRingText);
+            case Pid::CONTINUE_TEXT:
+            case Pid::END_TEXT:
+                  return "";
 
-            case Pid::END_HOOK_TYPE:
-                  return int(HookType::HOOK_90T);
+            case Pid::BEGIN_HOOK_TYPE:
+                  return int(HookType::NONE);
+
+            case Pid::BEGIN_TEXT_PLACE:
+            case Pid::CONTINUE_TEXT_PLACE:
+            case Pid::END_TEXT_PLACE:
+                  return int(PlaceText::AUTO);
 
             default:
                   return TextLineBase::propertyDefault(propertyId);
@@ -171,13 +189,13 @@ Sid LetRing::getPropertyStyle(Pid id) const
             case Pid::BEGIN_FONT_FACE:
                   return Sid::letRingFontFace;
             case Pid::BEGIN_FONT_SIZE:
+            case Pid::CONTINUE_FONT_SIZE:
+            case Pid::END_FONT_SIZE:
                   return Sid::letRingFontSize;
-            case Pid::BEGIN_FONT_BOLD:
-                  return Sid::letRingFontBold;
-            case Pid::BEGIN_FONT_ITALIC:
-                  return Sid::letRingFontItalic;
-            case Pid::BEGIN_FONT_UNDERLINE:
-                  return Sid::letRingFontUnderline;
+            case Pid::BEGIN_FONT_STYLE:
+            case Pid::CONTINUE_FONT_STYLE:
+            case Pid::END_FONT_STYLE:
+                  return Sid::letRingFontStyle;
             case Pid::BEGIN_TEXT_ALIGN:
             case Pid::CONTINUE_TEXT_ALIGN:
             case Pid::END_TEXT_ALIGN:
@@ -190,7 +208,7 @@ Sid LetRing::getPropertyStyle(Pid id) const
             default:
                   break;
             }
-      return Sid::NOSTYLE;
+      return TextLineBase::getPropertyStyle(id);
       }
 
 
@@ -255,7 +273,7 @@ QPointF LetRing::linePos(Grip grip, System** sys) const
                         x -= c->x();
                   }
             if (!s) {
-                  int t = tick2();
+                  Fraction t = tick2();
                   Measure* m = score()->tick2measure(t);
                   s = m->system();
                   x = m->tick2pos(t);

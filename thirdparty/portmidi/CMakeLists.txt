@@ -1,7 +1,6 @@
 #=============================================================================
 #  Mscore
 #  Linux Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2008 by Werner Schweer and others
 #
@@ -18,9 +17,10 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(CMAKE_C_FLAGS "-DNEWBUFFER -DPMNULL")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNEWBUFFER -DPMNULL")
 
 if (APPLE)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations -Wno-macro-redefined")
   file(GLOB_RECURSE INCS "*.h")
 
   add_library (
@@ -50,8 +50,18 @@ endif (APPLE)
 
 if (MSVC)
   set_target_properties( portmidi PROPERTIES
-    COMPILE_FLAGS "/wd4028 /wd4189 /wd4267 /wd4311 /wd4312"
+    COMPILE_FLAGS "/wd4028 /wd4057 /wd4100 /wd4133 /wd4189 /wd4206 /wd4244 /wd4267 /wd4311 /wd4312 /wd4456 /wd4706"
   )
+else (MSVC)
+  if (MINGW)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-incompatible-pointer-types")
+    if (BUILD_64)
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-pointer-to-int-cast")
+      set_target_properties( portmidi PROPERTIES
+        COMPILE_FLAGS "-Wno-int-to-pointer-cast"
+      )
+    endif (BUILD_64)
+  endif (MINGW)
 endif (MSVC)
 
 include_directories(

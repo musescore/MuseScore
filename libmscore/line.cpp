@@ -36,8 +36,6 @@ namespace Ms {
 LineSegment::LineSegment(const LineSegment& s)
    : SpannerSegment(s)
       {
-      _p2       = s._p2;
-      _userOff2 = s._userOff2;
       }
 
 //---------------------------------------------------------
@@ -61,15 +59,13 @@ bool LineSegment::readProperties(XmlReader& e)
       if (tag == "subtype")
             setSpannerSegmentType(SpannerSegmentType(e.readInt()));
       else if (tag == "off2") {
-            setUserOff2(e.readPoint() * spatium());
-            if (!userOff2().isNull())
-                  setAutoplace(false);
+            setUserOff2(e.readPoint() * score()->spatium());
             }
-      else if (tag == "pos") {
-            setUserOff(QPointF());
-            setAutoplace(false);
+/*      else if (tag == "pos") {
+            setOffset(QPointF());
             e.readNext();
             }
+      */
       else if (!SpannerSegment::readProperties(e)) {
             e.unknown();
             return false;
@@ -149,8 +145,11 @@ QPointF LineSegment::gripAnchor(Grip grip) const
 void LineSegment::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      eed->pushProperty(Pid::USER_OFF);
-      eed->pushProperty(Pid::USER_OFF2);
+      eed->pushProperty(Pid::OFFSET);
+      eed->pushProperty(Pid::OFFSET2);
+      eed->pushProperty(Pid::AUTOPLACE);
+      if (ed.modifiers & Qt::AltModifier)
+            setAutoplace(false);
       }
 
 //---------------------------------------------------------
@@ -261,7 +260,7 @@ bool LineSegment::edit(EditData& ed)
                      != note2->chord()->staff()->part()->instrument(note2->chord()->tick()) )
                         return true;
                   if (note1 != oldNote1 || note2 != oldNote2)
-                        spanner()->setNoteSpan(note1, note2);          // set new spanner span
+                        score()->undoChangeSpannerElements(spanner(), note1, note2);
                   }
                   break;
             case Spanner::Anchor::MEASURE:
@@ -339,19 +338,17 @@ void LineSegment::editDrag(EditData& ed)
 
       switch (ed.curGrip) {
             case Grip::START: // Resize the begin of element (left grip)
-                  setUserOff(userOff() + deltaResize);
-                  _userOff2 -= deltaResize;
-                  undoChangeProperty(Pid::AUTOPLACE, false);
+                  setOffset(offset() + deltaResize);
+                  _offset2 -= deltaResize;
                   break;
             case Grip::END: // Resize the end of element (right grip)
-                  _userOff2 += deltaResize;
-                  undoChangeProperty(Pid::AUTOPLACE, false);
+                  _offset2 += deltaResize;
                   break;
             case Grip::MIDDLE: { // Move the element (middle grip)
-                  // Only for moving, no y limitaion
+                  // Only for moving, no y limitation
                   QPointF deltaMove(ed.delta.x(), ed.delta.y());
-                  setUserOff(userOff() + deltaMove);
-                  undoChangeProperty(Pid::AUTOPLACE, false);
+                  setOffset(offset() + deltaMove);
+                  setOffsetChanged(true);
                   }
                   break;
             default:
@@ -371,11 +368,9 @@ void LineSegment::editDrag(EditData& ed)
                         Note* sNote   = toNote(l->startElement());
                         // do not change anchor if new note is before start note
                         if (sNote && sNote->chord() && noteNew->chord() && sNote->chord()->tick() < noteNew->chord()->tick()) {
-                              noteOld->removeSpannerBack(l);
-                              noteNew->addSpannerBack(l);
-                              l->setEndElement(noteNew);
+                              score()->undoChangeSpannerElements(l, sNote, noteNew);
 
-                              _userOff2 += noteOld->canvasPos() - noteNew->canvasPos();
+                              _offset2 += noteOld->canvasPos() - noteNew->canvasPos();
                               }
                         }
                   else if (ed.curGrip == Grip::START && e != l->startElement())
@@ -392,7 +387,7 @@ void LineSegment::editDrag(EditData& ed)
 void LineSegment::spatiumChanged(qreal ov, qreal nv)
       {
       Element::spatiumChanged(ov, nv);
-      _userOff2 *= nv / ov;
+      _offset2 *= nv / ov;
       }
 
 //---------------------------------------------------------
@@ -402,7 +397,7 @@ void LineSegment::spatiumChanged(qreal ov, qreal nv)
 void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
       {
       Element::localSpatiumChanged(ov, nv);
-      _userOff2 *= nv / ov;
+      _offset2 *= nv / ov;
       }
 
 //---------------------------------------------------------
@@ -412,7 +407,7 @@ void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
 Element* LineSegment::propertyDelegate(Pid pid)
       {
       if (pid == Pid::DIAGONAL
-         || pid == Pid::LINE_COLOR
+         || pid == Pid::COLOR
          || pid ==   Pid::LINE_WIDTH
          || pid ==   Pid::LINE_STYLE
          || pid ==   Pid::DASH_LINE_LEN
@@ -500,19 +495,19 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     int endTrack   = startTrack + VOICES;
                                     qreal width    = 0.0;
 
-                                    // dont consider full measure rests, which are centered
+                                    // don’t consider full measure rests, which are centered
                                     // (TODO: what if there is only a full measure rest?)
 
                                     for (int track = startTrack; track < endTrack; ++track) {
-                                          ChordRest* cr = toChordRest(s->element(track));
-                                          if (!cr)
+                                          ChordRest* cr1 = toChordRest(s->element(track));
+                                          if (!cr1)
                                                 continue;
-                                          if (cr->isChord()) {
-                                                for (Note* n : toChord(cr)->notes())
-                                                      width = qMax(width, n->shape().right() + n->pos().x() + cr->pos().x());
+                                          if (cr1->isChord()) {
+                                                for (Note* n : toChord(cr1)->notes())
+                                                      width = qMax(width, n->shape().right() + n->pos().x() + cr1->pos().x());
                                                 }
-                                          else if (cr->isRest() && (cr->actualDurationType() != TDuration::DurationType::V_MEASURE))
-                                                width = qMax(width, cr->bbox().right() + cr->pos().x());
+                                          else if (cr1->isRest() && (cr1->actualDurationType() != TDuration::DurationType::V_MEASURE))
+                                                width = qMax(width, cr1->bbox().right() + cr1->pos().x());
                                           }
 
                                     x = width + sp;
@@ -541,42 +536,47 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           }
                                     }
                               }
-                        else if (isLyricsLine() && toLyrics(parent())->ticks() > 0) {
+                        else if (isLyricsLine() && toLyrics(parent())->ticks() > Fraction(0,1)) {
                               // melisma line
                               // it is possible CR won't be in correct track
                               // prefer element in current track if available
                               if (!cr)
-                                    qDebug("no end for lyricsline segment - start %d, ticks %d", tick(), ticks());
+                                    qDebug("no end for lyricsline segment - start %d, ticks %d", tick().ticks(), ticks().ticks());
                               else if (cr->track() != track()) {
                                     Element* e = cr->segment()->element(track());
                                     if (e)
                                           cr = toChordRest(e);
                                     }
+
                               // layout to right edge of CR
-                              // if next segment is not a chord with lyrics which spans to the left
-                              if (cr) {
-                                    bool extendToRight = true;
+                              bool extendToEnd = true; // extend to end or start element?
+                              if (cr == toChordRest(startElement()))
+                                    extendToEnd = false;
+                              else if (cr) {
+                                    // if next segment is a chord with lyrics which spans to the left
+                                    // then do not extend to the right edge of end element.
                                     Segment* seg = cr->segment();
                                     seg = seg->next(SegmentType::ChordRest);
                                     if (seg) {
                                           ChordRest* cr2 = seg->cr(cr->track());
                                           if (cr2 && !cr2->lyrics().empty())
-                                                extendToRight = false;
+                                                extendToEnd = false;
                                           }
-                                    if (extendToRight) {
-                                          qreal maxRight = 0.0;
-                                          if (cr->isChord()) {
-                                                // chord bbox() is unreliable, look at notes
-                                                // this also allows us to more easily ignore ledger lines
-                                                for (Note* n : toChord(cr)->notes())
-                                                      maxRight = qMax(maxRight, cr->x() + n->x() + n->bboxRightPos());
-                                                }
-                                          else {
-                                                // rest - won't normally happen
-                                                maxRight = cr->x() + cr->width();
-                                                }
-                                          x = maxRight; // cr->width()
+                                    }
+                              ChordRest* right = extendToEnd ? cr : toChordRest(startElement());
+                              if (right) {
+                                    qreal maxRight = 0.0;
+                                    if (right->isChord()) {
+                                          // chord bbox() is unreliable, look at notes
+                                          // this also allows us to more easily ignore ledger lines
+                                          for (Note* n : toChord(right)->notes())
+                                                maxRight = qMax(maxRight, right->x() + n->x() + n->bboxRightPos());
                                           }
+                                    else {
+                                          // rest - won't normally happen
+                                          maxRight = right->x() + right->width();
+                                          }
+                                    x = maxRight;
                                     }
                              }
                         else if (isHairpin() || isTrill() || isVibrato() || isTextLine() || isLyricsLine()) {
@@ -605,14 +605,15 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           // allow lyrics hyphen to extend to barline
                                           // other lines stop 1sp short
                                           qreal gap = (type() == ElementType::LYRICSLINE) ? 0.0 : sp;
-                                          x2 = qMax(x2, seg->x() - gap);
+                                          qreal x3 = seg->enabled() ? seg->x() : seg->measure()->width();
+                                          x2 = qMax(x2, x3 - gap);
                                           }
                                     x = x2 - endElement()->parent()->x();
                                     }
                               }
                         }
 
-                  int t = grip == Grip::START ? tick() : tick2();
+                  Fraction t = grip == Grip::START ? tick() : tick2();
                   Measure* m = cr ? cr->measure() : score()->tick2measure(t);
 
                   if (m) {
@@ -630,12 +631,12 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   const Measure* m;
                   if (grip == Grip::START) {
                         m = startMeasure();
-                        // start after clef/key
+                        // start after clef/keysig/timesig/barline
                         qreal offset = 0.0;
                         Segment* s = m->first(SegmentType::ChordRest);
                         if (s) {
                               s = s->prev();
-                              if (s) {
+                              if (s && s->enabled()) {
                                     offset = s->x();
                                     Element* e = s->element(staffIdx() * VOICES);
                                     if (e)
@@ -667,15 +668,15 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         while (seg && seg->segmentType() != SegmentType::EndBarLine)
                               seg = seg->prev();
                         if (!seg || !seg->enabled()) {
-                              // no end bar line; look for BeginBarLine of next measure
+                              // no end bar line; look for BeginBarLine or StartRepeatBarLine of next measure
                               Measure* nm = m->nextMeasure();
                               if (nm->system() == m->system())
-                                    seg = nm->first(SegmentType::BeginBarLine);
+                                    seg = nm->first(SegmentType::BeginBarLine|SegmentType::StartRepeatBarLine);
                               }
-                        qreal mwidth = seg ? seg->x() : m->bbox().right();
+                        qreal mwidth = seg && seg->measure() == m ? seg->x() : m->bbox().right();
                         x = m->pos().x() + mwidth;
                         // align to barline
-                        if (seg && seg->isEndBarLineType()) {
+                        if (seg && (seg->segmentType() & SegmentType::BarLineType)) {
                               Element* e = seg->element(0);
                               if (e && e->type() == ElementType::BAR_LINE) {
                                     BarLineType blt = toBarLine(e)->barLineType();
@@ -712,9 +713,10 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   Element* e = grip == Grip::START ? startElement() : endElement();
                   if (!e)
                         return QPointF();
-                  System* s = toNote(e)->chord()->segment()->system();
+                  Note* n = toNote(e);
+                  System* s = n->chord()->segment()->system();
                   if (s == 0) {
-                        qDebug("no system: %s  start %s chord parent %s\n", name(), e->name(), toNote(e)->chord()->parent()->name());
+                        qDebug("no system: %s  start %s chord parent %s\n", name(), n->name(), n->chord()->parent()->name());
                         return QPointF();
                         }
                   *sys = s;
@@ -722,7 +724,10 @@ QPointF SLine::linePos(Grip grip, System** sys) const
 //                  QPointF     elemPagePos = e->pagePos();                   // DEBUG
 //                  QPointF     systPagePos = s->pagePos();
 //                  qreal       staffYPage  = s->staffYpage(e->staffIdx());
-                  return e->pagePos() - s->pagePos();
+                  QPointF p = n->pagePos() - s->pagePos();
+                  if (!isGlissando())
+                        p.rx() += n->headWidth() * 0.5;
+                  return p;
                   }
 
             case Spanner::Anchor::CHORD:
@@ -739,22 +744,10 @@ QPointF SLine::linePos(Grip grip, System** sys) const
 
 SpannerSegment* SLine::layoutSystem(System* system)
       {
-      int stick = system->firstMeasure()->tick();
-      int etick = system->lastMeasure()->endTick();
+      Fraction stick = system->firstMeasure()->tick();
+      Fraction etick = system->lastMeasure()->endTick();
 
-      LineSegment* lineSegm = 0;
-      for (SpannerSegment* ss : segments) {
-            if (!ss->system()) {
-                  lineSegm = toLineSegment(ss);
-                  break;
-                  }
-            }
-      if (!lineSegm) {
-            lineSegm = createLineSegment();
-            add(lineSegm);
-            }
-      lineSegm->setSystem(system);
-      lineSegm->setSpanner(this);
+      LineSegment* lineSegm = toLineSegment(getNextLayoutSystemSegment(system, [this]() { return createLineSegment(); }));
 
       SpannerSegmentType sst;
       if (tick() >= stick) {
@@ -824,47 +817,22 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   qreal len = p2.x() - x1;
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
                   lineSegm->setPos2(QPointF(len, 0.0));
-#if 1
-                  QList<SpannerSegment*> sl;
-                  for (SpannerSegment* ss : segments) {
-                        if (ss->system())
-                              sl.push_back(ss);
-                        else {
-                              qDebug("delete spanner segment %s", ss->name());
-                              score()->selection().remove(ss);
-                              delete ss;
-                              }
-                        }
-                  segments.swap(sl);
-#endif
                   }
                   break;
             }
       lineSegm->layout();
-#if 0
-      QList<SpannerSegment*> sl;
-      for (SpannerSegment* ss : segments) {
-            if (ss->system())
-                  sl.push_back(ss);
-            else {
-                  qDebug("delete spanner segment %s", ss->name());
-                  delete ss;
-                  }
-            }
-      segments.swap(sl);
-#endif
       return lineSegm;
       }
 
 //---------------------------------------------------------
 //   layout
 //    compute segments from tick1 tick2
-//    (obsolete)
+//    (used for palette, edit mode, and layout of note lines and glissandi)
 //---------------------------------------------------------
 
 void SLine::layout()
       {
-      if (score() == gscore || tick() == -1 || tick2() == 1) {
+      if (score() == gscore || (tick() == Fraction(-1,1)) || (tick2() == Fraction::fromTicks(1))) {
             //
             // when used in a palette or while dragging from palette,
             // SLine has no parent and
@@ -902,33 +870,18 @@ void SLine::layout()
             ++segmentsNeeded;
             }
 
-      int segCount = spannerSegments().size();
+      int segCount = int(spannerSegments().size());
 
       if (segmentsNeeded != segCount) {
+            fixupSegments(segmentsNeeded, [this]() { return createLineSegment(); });
             if (segmentsNeeded > segCount) {
-                  int n = segmentsNeeded - segCount;
-                  for (int i = 0; i < n; ++i) {
-                        LineSegment* lineSegm = createLineSegment();
-                        add(lineSegm);
+                  for (int i = segCount; i < segmentsNeeded; ++i) {
+                        LineSegment* lineSegm = segmentAt(i);
                         // set user offset to previous segment's offset
                         if (segCount > 0)
-                              lineSegm->setUserOff(QPointF(0, segmentAt(segCount+i-1)->userOff().y()));
+                              lineSegm->setOffset(QPointF(0, segmentAt(i-1)->offset().y()));
                         else
-                              lineSegm->setUserOff(QPointF(0, userOff().y()));
-                        }
-                  }
-            else {
-                  int n = segCount - segmentsNeeded;
-//                  qDebug("SLine: segments %d needed %d, remove %d", segCount, segmentsNeeded, n);
-                  for (int i = 0; i < n; ++i) {
-                        if (spannerSegments().empty()) {
-                              qDebug("SLine::layout(): no segment %d, %d expected", i, n);
-                              break;
-                              }
-                        else {
-                              /*LineSegment* lineSegm =*/ takeLastSegment();
-//                              delete lineSegm;
-                              }
+                              lineSegm->setOffset(QPointF(0, offset().y()));
                         }
                   }
             }
@@ -1013,14 +966,14 @@ void SLine::writeProperties(XmlWriter& xml) const
             xml.tag("diagonal", _diagonal);
       writeProperty(xml, Pid::LINE_WIDTH);
       writeProperty(xml, Pid::LINE_STYLE);
-      writeProperty(xml, Pid::LINE_COLOR);
+      writeProperty(xml, Pid::COLOR);
       writeProperty(xml, Pid::ANCHOR);
       writeProperty(xml, Pid::DASH_LINE_LEN);
       writeProperty(xml, Pid::DASH_GAP_LEN);
       if (score() == gscore) {
             // when used as icon
             if (!spannerSegments().empty()) {
-                  LineSegment* s = frontSegment();
+                  const LineSegment* s = frontSegment();
                   xml.tag("length", s->pos2().x());
                   }
             else
@@ -1032,7 +985,8 @@ void SLine::writeProperties(XmlWriter& xml) const
       //
       bool modified = false;
       for (const SpannerSegment* seg : spannerSegments()) {
-            if (!seg->autoplace() || !seg->visible()) {
+            if (!seg->autoplace() || !seg->visible() ||
+               (!seg->isStyled(Pid::OFFSET) && (!seg->offset().isNull() || !seg->userOff2().isNull()))) {
                   modified = true;
                   break;
                   }
@@ -1041,13 +995,20 @@ void SLine::writeProperties(XmlWriter& xml) const
             return;
 
       //
-      // write user modified layout
+      // write user modified layout and other segment properties
       //
-      qreal _spatium = spatium();
+      qreal _spatium = score()->spatium();
       for (const SpannerSegment* seg : spannerSegments()) {
-            xml.stag("Segment");
+            xml.stag("Segment", seg);
             xml.tag("subtype", int(seg->spannerSegmentType()));
+            // TODO:
+            // NOSTYLE offset written in Element::writeProperties,
+            // so we probably don't need to duplicate it here
+            // see https://musescore.org/en/node/286848
+            //if (seg->propertyFlags(Pid::OFFSET) & PropertyFlags::UNSTYLED)
+            xml.tag("offset", seg->offset() / _spatium);
             xml.tag("off2", seg->userOff2() / _spatium);
+            seg->writeProperty(xml, Pid::MIN_DISTANCE);
             seg->Element::writeProperties(xml);
             xml.etag();
             }
@@ -1062,14 +1023,14 @@ bool SLine::readProperties(XmlReader& e)
       const QStringRef& tag(e.name());
 
       if (tag == "tick2") {                // obsolete
-            if (tick() == -1) // not necessarily set (for first note of score?) #30151
+            if (tick() == Fraction(-1,1)) // not necessarily set (for first note of score?) #30151
                   setTick(e.tick());
-            setTick2(e.readInt());
+            setTick2(Fraction::fromTicks(e.readInt()));
             }
       else if (tag == "tick")             // obsolete
-            setTick(e.readInt());
+            setTick(Fraction::fromTicks(e.readInt()));
       else if (tag == "ticks")
-            setTicks(e.readInt());
+            setTicks(Fraction::fromTicks(e.readInt()));
       else if (tag == "Segment") {
             LineSegment* ls = createLineSegment();
             ls->setTrack(track()); // needed in read to get the right staff mag
@@ -1093,7 +1054,9 @@ bool SLine::readProperties(XmlReader& e)
             _dashGapLen = e.readDouble();
       else if (tag == "lineColor")
             _lineColor = e.readColor();
-      else if (!Element::readProperties(e))
+      else if (tag == "color")
+            _lineColor = e.readColor();
+      else if (!Spanner::readProperties(e))
             return false;
       return true;
       }
@@ -1132,7 +1095,7 @@ const QRectF& SLine::bbox() const
 
 void SLine::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       SLine::writeProperties(xml);
       xml.etag();
       }
@@ -1143,9 +1106,7 @@ void SLine::write(XmlWriter& xml) const
 
 void SLine::read(XmlReader& e)
       {
-      foreach(SpannerSegment* seg, spannerSegments())
-            delete seg;
-      spannerSegments().clear();
+      eraseSpannerSegments();
 
       if (score()->mscVersion() < 301)
             e.addSpanner(e.intAttribute("id", -1), this);
@@ -1165,7 +1126,7 @@ QVariant SLine::getProperty(Pid id) const
       switch (id) {
             case Pid::DIAGONAL:
                   return _diagonal;
-            case Pid::LINE_COLOR:
+            case Pid::COLOR:
                   return _lineColor;
             case Pid::LINE_WIDTH:
                   return _lineWidth;
@@ -1190,7 +1151,7 @@ bool SLine::setProperty(Pid id, const QVariant& v)
             case Pid::DIAGONAL:
                   _diagonal = v.toBool();
                   break;
-            case Pid::LINE_COLOR:
+            case Pid::COLOR:
                   _lineColor = v.value<QColor>();
                   break;
             case Pid::LINE_WIDTH:
@@ -1216,22 +1177,28 @@ bool SLine::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SLine::propertyDefault(Pid id) const
+QVariant SLine::propertyDefault(Pid pid) const
       {
-      switch (id) {
+      switch (pid) {
             case Pid::DIAGONAL:
                   return false;
-            case Pid::LINE_COLOR:
+            case Pid::COLOR:
                   return MScore::defaultColor;
             case Pid::LINE_WIDTH:
+                  if (propertyFlags(pid) != PropertyFlags::NOSTYLE)
+                        return Spanner::propertyDefault(pid);
                   return 0.15 * spatium();
             case Pid::LINE_STYLE:
+                  if (propertyFlags(pid) != PropertyFlags::NOSTYLE)
+                        return Spanner::propertyDefault(pid);
                   return int(Qt::SolidLine);
             case Pid::DASH_LINE_LEN:
             case Pid::DASH_GAP_LEN:
+                  if (propertyFlags(pid) != PropertyFlags::NOSTYLE)
+                        return Spanner::propertyDefault(pid);
                   return 5.0;
             default:
-                  return Spanner::propertyDefault(id);
+                  return Spanner::propertyDefault(pid);
             }
       }
 

@@ -19,8 +19,11 @@ namespace Ms {
 //   write
 //---------------------------------------------------------
 
-void SynthesizerState::write(XmlWriter& xml) const
+void SynthesizerState::write(XmlWriter& xml, bool force /* = false */) const
       {
+      if (isDefault() && !force)
+            return;
+
       xml.stag("Synthesizer");
       for (const SynthesizerGroup& g : *this) {
             if (!g.name().isEmpty()) {
@@ -39,6 +42,7 @@ void SynthesizerState::write(XmlWriter& xml) const
 
 void SynthesizerState::read(XmlReader& e)
       {
+      std::list<SynthesizerGroup> tempGroups;
       while (e.readNextStartElement()) {
             SynthesizerGroup group;
             group.setName(e.name().toString());
@@ -51,7 +55,13 @@ void SynthesizerState::read(XmlReader& e)
                   else
                         e.unknown();
                   }
-            push_back(group);
+            tempGroups.push_back(group);
+            }
+
+      if (!tempGroups.empty()) {
+            // Replace any previously set state if we have read a new state
+            swap(tempGroups);
+            setIsDefault(false);
             }
       }
 
@@ -85,6 +95,66 @@ bool SynthesizerState::isDefaultSynthSoundfont()
                   return true;
             }
       return false;
+      }
+
+//---------------------------------------------------------
+//   ccToUse
+//---------------------------------------------------------
+
+int SynthesizerState::ccToUse() const
+      {
+      SynthesizerGroup g = group("master");
+
+      int method = 1;
+      int cc = -1;
+
+      for (IdValue idVal : g) {
+            if (idVal.id == 4)
+                  method = idVal.data.toInt();
+            else if (idVal.id == 5) {
+                  switch (idVal.data.toInt()) {
+                        case 0:
+                              cc = 1;
+                              break;
+                        case 1:
+                              cc = 2;
+                              break;
+                        case 2:
+                              cc = 4;
+                              break;
+                        case 3:
+                              cc = 11;
+                              break;
+                        default:
+                              qWarning("Unrecognised CCToUse index from synthesizer: %d", idVal.data.toInt());
+                        }
+                  }
+            }
+
+      if (method == 0)        // velocity only
+            return -1;
+
+      return cc;
+      }
+
+//---------------------------------------------------------
+//   method
+//---------------------------------------------------------
+
+int SynthesizerState::method() const
+      {
+      SynthesizerGroup g = group("master");
+
+      int method = -1;
+
+      for (IdValue idVal : g) {
+            if (idVal.id == 4) {
+                  method = idVal.data.toInt();
+                  break;
+                  }
+            }
+
+      return method;
       }
 
 }

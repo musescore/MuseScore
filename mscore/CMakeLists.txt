@@ -17,6 +17,22 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+function(prepend_to_list_items # prepend a string to each item in list
+  LIST_INV # input list variable
+  STRING # the string to prepend to each list item
+  LIST_OUTV # input list variable
+  )
+  set(LIST_IN "${${LIST_INV}}")
+  set(LIST_OUT "") # empty list
+  foreach(ITEM IN LISTS LIST_IN)
+    list(APPEND LIST_OUT "${STRING}${ITEM}")
+  endforeach(ITEM)
+  set("${LIST_OUTV}" "${LIST_OUT}" PARENT_SCOPE)
+endfunction(prepend_to_list_items)
+
+add_subdirectory(widgets)
+prepend_to_list_items(WIDGETS_SOURCE_FILES "widgets/" WIDGETS_SOURCE_FILES)
+
 # This is not needed for MSVC compilation
 if (NOT MSVC)
    include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
@@ -33,13 +49,38 @@ include_directories(
       )
 
 if (SCRIPT_INTERFACE)
-      set (SCRIPT_FILES mscorePlugins pluginCreator.cpp qmledit.cpp pluginManager.cpp)
-      set (SCRIPT_UI   pluginCreator.ui pluginManager.ui)
+      set (SCRIPT_FILES
+            plugin/pluginCreator.h plugin/pluginManager.h plugin/qmledit.h
+            plugin/qmlplugin.h plugin/qmlpluginengine.h
+            plugin/api/qmlpluginapi.h plugin/api/cursor.h plugin/api/scoreelement.h plugin/api/elements.h
+            plugin/api/part.h
+            plugin/api/score.h
+            plugin/api/fraction.h
+            plugin/api/excerpt.h
+            plugin/api/util.h
+            plugin/api/selection.h
+            plugin/api/playevent.h
+
+            plugin/api/enums.cpp
+            plugin/mscorePlugins.cpp plugin/pluginCreator.cpp plugin/pluginManager.cpp plugin/qmledit.cpp
+            plugin/qmlplugin.cpp plugin/qmlpluginengine.cpp
+            plugin/api/qmlpluginapi.cpp plugin/api/cursor.cpp plugin/api/scoreelement.cpp plugin/api/elements.cpp
+            plugin/api/score.cpp
+            plugin/api/excerpt.cpp
+            plugin/api/util.cpp
+            plugin/api/selection.cpp
+            plugin/api/playevent.cpp
+            )
+
+      set (SCRIPT_UI
+            plugin/pluginCreator.ui plugin/pluginManager.ui
+            )
 endif (SCRIPT_INTERFACE)
 
 QT5_WRAP_UI (ui_headers
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
-      measuresdialog.ui pagesettings.ui mixer.ui playpanel.ui prefsdialog.ui measureproperties.ui
+      measuresdialog.ui pagesettings.ui mixer.ui mixertrackchannel.ui mixertrackpart.ui mixerdetails.ui parteditbase.ui
+      playpanel.ui prefsdialog.ui measureproperties.ui
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
       editstaff.ui timesigproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
@@ -50,11 +91,14 @@ QT5_WRAP_UI (ui_headers
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui
       omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
-      startcenter.ui scorePreview.ui scoreBrowser.ui
+      startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
       logindialog.ui uploadscoredialog.ui breaksdialog.ui
-      toolbarEditor.ui
+      toolbarEditor.ui workspacedialog.ui
 
       importmidi/importmidi_panel.ui
+
+      scorecmp/scorecmp_tool.ui
+      script/script_recorder.ui
 
       debugger/barline.ui
       debugger/harmony.ui
@@ -143,6 +187,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_bend.ui
       inspector/inspector_arpeggio.ui
       inspector/inspector_tremolo.ui
+      inspector/inspector_tremolobar.ui
       inspector/inspector_caesura.ui
       inspector/inspector_bracket.ui
       inspector/inspector_iname.ui
@@ -150,6 +195,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_frametext.ui
       inspector/inspector_fermata.ui
       inspector/align_select.ui
+      inspector/font_style_select.ui
       inspector/offset_select.ui
       inspector/scale_select.ui
       inspector/size_select.ui
@@ -231,6 +277,10 @@ if (APPLE)
       set (MACOSX_BUNDLE_BUNDLE_NAME MuseScore)
       set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION})
       set (MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL})
+      if(CMAKE_BUILD_NUMBER)
+        set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION_FULL}.${CMAKE_BUILD_NUMBER})
+        set (MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL}.${CMAKE_BUILD_NUMBER})
+      endif(CMAKE_BUILD_NUMBER)
       set (MACOSX_BUNDLE_COPYRIGHT musescore.org)
 else (APPLE)
       set (ExecutableName mscore)
@@ -243,9 +293,13 @@ endif (OMR)
 if (APPLE)
       file(GLOB_RECURSE INCS "*.h")
       set(COCOABRIDGE "macos/cocoabridge.mm")
+      if (SPARKLE_FOUND)
+            set(MAC_SPARKLE_FILES "macos/SparkleAutoUpdater.mm")
+      endif(SPARKLE_FOUND)
 else (APPLE)
       set(INCS "")
       set(COCOABRIDGE "")
+      set(MAC_SPARKLE_FILES  "")
 endif (APPLE)
 
 if (NOT MSVC)
@@ -274,18 +328,22 @@ add_executable ( ${ExecutableName}
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h importgtp.h importmxml.h
       importmxmllogger.h importmxmlnoteduration.h importmxmlnotepitch.h importmxmlpass1.h
       importmxmlpass2.h importptb.h importxmlfirstpass.h instrdialog.h instrwidget.h jackaudio.h
-      keycanvas.h keyedit.h layer.h licence.h logindialog.h loginmanager.h magbox.h masterpalette.h
-      measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h mixer.h musedata.h
+      keycanvas.h keyedit.h layer.h licence.h
+      logindialog.h network/loginmanager.h network/loginmanager_p.h
+      magbox.h masterpalette.h
+      measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h
+      mixer.h mixertrack.h mixertrackchannel.h mixertrackgroup.h mixertrackitem.h mixertrackpart.h mixerdetails.h musedata.h
       musescore.h musicxml.h musicxmlfonthandler.h musicxmlsupport.h navigator.h newwizard.h noteGroups.h
-      omrpanel.h ove.h pa.h pagesettings.h palette.h palettebox.h paletteBoxButton.h partedit.h
-      pathlistdialog.h piano.h pianoroll.h pianotools.h pianoview.h playpanel.h pluginCreator.h
-      pluginManager.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h qmledit.h
-      qmlplugin.h recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
+      omrpanel.h ove.h pa.h pagesettings.h palette.h palettebox.h paletteBoxButton.h partedit.h parteditbase.h
+      pathlistdialog.h piano.h pianolevels.h pianolevelschooser.h  pianolevelsfilter.h
+      pianokeyboard.h pianoroll.h pianoruler.h pianotools.h pianoview.h
+      playpanel.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h
+      recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
       sectionbreakprop.h selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
       startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
-      textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
+      templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
       toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h tremolobarprop.h
       tupletdialog.h updatechecker.h uploadscoredialog.h waveview.h webpage.h workspace.h
 
@@ -300,7 +358,9 @@ add_executable ( ${ExecutableName}
       debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
       timeline.cpp
-      mixer.cpp playpanel.cpp selectionwindow.cpp preferences.cpp measureproperties.cpp
+      mixer.cpp mixertrackchannel.cpp mixertrackitem.cpp mixertrackpart.cpp mixerdetails.cpp
+      parteditbase.cpp playpanel.cpp selectionwindow.cpp
+      preferences.cpp measureproperties.cpp
       seq.cpp textpalette.cpp
       timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp
       simplebutton.cpp musedata.cpp
@@ -309,7 +369,8 @@ add_executable ( ${ExecutableName}
       excerptsdialog.cpp metaedit.cpp magbox.cpp
       capella.cpp capxml.cpp exportaudio.cpp palettebox.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
-      pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
+      pianokeyboard.cpp pianolevels.cpp pianolevelschooser.cpp pianolevelsfilter.cpp
+      pianoruler.cpp pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
       updatechecker.cpp
       importove.cpp
       ove.cpp
@@ -319,7 +380,7 @@ add_executable ( ${ExecutableName}
       fotomode.cpp drumtools.cpp
       selinstrument.cpp editstafftype.cpp texttools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
-      workspace.cpp chordview.cpp
+      workspace.cpp workspacedialog.cpp chordview.cpp
       albummanager.cpp
       stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
@@ -340,6 +401,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorHarmony.cpp
       inspector/inspectorFret.cpp
       inspector/inspectorText.cpp
+      inspector/inspectorMeasureNumber.cpp
       inspector/inspectorLasso.cpp
       inspector/inspectorBarline.cpp
       inspector/inspectorVolta.cpp
@@ -356,6 +418,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorArpeggio.cpp
       inspector/inspectorFingering.cpp
       inspector/alignSelect.cpp
+      inspector/fontStyleSelect.cpp
       inspector/offsetSelect.cpp
       inspector/scaleSelect.cpp
       inspector/sizeSelect.cpp
@@ -368,9 +431,9 @@ add_executable ( ${ExecutableName}
       inspector/inspectorDynamic.cpp
       inspector/inspectorInstrchange.cpp
       inspector/inspectorElementBase.cpp
+      inspector/resetButton.cpp
       enableplayforwidget.cpp
       editelement.cpp
-      qmlplugin.cpp
       editlyrics.cpp
       musicxmlfonthandler.cpp
       musicxmlsupport.cpp
@@ -400,34 +463,43 @@ add_executable ( ${ExecutableName}
       importmidi/importmidi_voice.cpp importmidi/importmidi_view.cpp importmidi/importmidi_key.cpp
       importmidi/importmidi_tempo.cpp importmidi/importmidi_instrument.cpp
       importmidi/importmidi_chordname.cpp
+      scorecmp/scorecmp.cpp scorecmp/scorediffmodel.cpp scorecmp/scorelistmodel.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
-      startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp
-      logindialog.cpp loginmanager.cpp uploadscoredialog.cpp breaksdialog.cpp searchComboBox.cpp
+      startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp templateBrowser.cpp
+      logindialog.cpp network/loginmanager.cpp uploadscoredialog.cpp
+      breaksdialog.cpp searchComboBox.cpp
       help.cpp help.h
       toolbarEditor.cpp toolbarEditor.h
       abstractdialog.cpp abstractdialog.h
       toolbuttonmenu.cpp
       preferenceslistwidget.cpp preferenceslistwidget.h
       extension.cpp extension.h
+      tourhandler.cpp
+      script/script.cpp script/scriptentry.cpp script/testscript.cpp script/recorderwidget.cpp
 
+      ${WIDGETS_SOURCE_FILES}
       ${COCOABRIDGE}
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
+      ${MAC_SPARKLE_FILES}
       driver.h
       tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
+
+      sparkle/autoUpdater.h sparkle/sparkleAutoUpdater.h sparkle/winSparkleAutoUpdater.h
       )
 
-if (MSVC)
+
+
+if (MSVC OR MINGW)
 	target_link_libraries(mscore vorbisfiledll)
-else (MSVC)
+else (MSVC OR MINGW)
 	target_link_libraries(mscore vorbisfile)
-endif (MSVC)
+endif (MSVC OR MINGW)
 
 target_link_libraries(mscore
       awl
-      diff_match_patch
       bww
       rtf2html
       ${QTSINGLEAPPLICATION_LIBRARIES}
@@ -441,12 +513,18 @@ target_link_libraries(mscore
       kqoauth
       )
 
+if (BUILD_CRASH_REPORTER)
+      target_link_libraries(mscore crashreporter-handler)
+endif (BUILD_CRASH_REPORTER)
+
+add_dependencies(mscore workspaces)
+
 if (USE_SYSTEM_FREETYPE)
       target_link_libraries(mscore ${FREETYPE_LIBRARIES})
 endif (USE_SYSTEM_FREETYPE)
 
 if (MINGW OR MSVC)
-      set(MSCORE_OUTPUT_NAME ${MUSESCORE_NAME})
+      set(MSCORE_OUTPUT_NAME ${MUSESCORE_NAME}${MUSESCORE_VERSION_MAJOR})
 elseif (MSCORE_INSTALL_SUFFIX)
       set(MSCORE_OUTPUT_NAME "${ExecutableName}${MSCORE_INSTALL_SUFFIX}")
 endif (MINGW OR MSVC)
@@ -469,19 +547,19 @@ if (AEOLUS)
       target_link_libraries(mscore aeolus)
 endif (AEOLUS)
 if (SOUNDFONT3)
-      if (MSVC)
+      if (MSVC OR MINGW)
           target_link_libraries(mscore vorbisdll oggdll)
-      else (MSVC)
+      else (MSVC OR MINGW)
           target_link_libraries(mscore ${VORBIS_LIB} ${OGG_LIB})
-      endif (MSVC)
+      endif (MSVC OR MINGW)
 endif (SOUNDFONT3)
 
 if (HAS_AUDIOFILE)
-      if (MSVC)
+      if (MSVC OR MINGW)
          target_link_libraries(mscore audiofile sndfiledll)
-      else (MSVC)
+      else (MSVC OR MINGW)
          target_link_libraries(mscore audiofile ${SNDFILE_LIB})
-      endif (MSVC)
+      endif (MSVC OR MINGW)
 endif (HAS_AUDIOFILE)
 
 if (APPLE)
@@ -518,18 +596,18 @@ if (MINGW)
      set_target_properties( mscore
         PROPERTIES
            COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
-           LINK_FLAGS "-mwindows -mconsole -L ${QT_INSTALL_PREFIX}/lib"
+           LINK_FLAGS "-mwindows -mconsole -L ${QT_INSTALL_LIBS}"
         )
    else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscore
           PROPERTIES
              COMPILE_FLAGS "${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
-             LINK_FLAGS "-Wl,-S -mwindows -L ${QT_INSTALL_PREFIX}/lib"
+             LINK_FLAGS "-Wl,-S -mwindows -L ${QT_INSTALL_LIBS}"
           )
    endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
    target_link_libraries(mscore
-      portaudio
+      portaudiodll
       portmidi
       winmm
       mscore_freetype
@@ -537,7 +615,7 @@ if (MINGW)
       )
 
    if (OMR)
-      target_link_libraries(mscore omr poppler)
+      target_link_libraries(mscore omr poppler-qt5)
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
@@ -562,50 +640,65 @@ if (MINGW)
 
    install( TARGETS mscore RUNTIME DESTINATION bin )
 
+   if (BUILD_64)
+      install( FILES
+         ${MINGW_ROOT}/bin/libgcc_s_seh-1.dll
+         DESTINATION bin)
+      install( FILES
+         ${DEPENDENCIES_DIR}/portaudio.dll RENAME libportaudio-x86_64-w64-mingw32.static.dll
+         DESTINATION bin)
+   else (BUILD_64)
+      install( FILES
+         ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
+         ${DEPENDENCIES_DIR}/portaudio.dll
+         DESTINATION bin)
+   endif (BUILD_64)
+
    install( FILES
-      ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
       ${MINGW_ROOT}/bin/libstdc++-6.dll
       ${MINGW_ROOT}/bin/libwinpthread-1.dll
-      ${MINGW_ROOT}/lib/libogg.dll
-      ${MINGW_ROOT}/lib/libsndfile-1.dll
-      ${MINGW_ROOT}/lib/portaudio.dll
+      ${DEPENDENCIES_DIR}/libogg.dll
+      ${DEPENDENCIES_DIR}/libsndfile-1.dll
       ${MINGW_ROOT}/opt/bin/libeay32.dll
-      ${MINGW_ROOT}/lib/libvorbis.dll
-      ${MINGW_ROOT}/lib/libvorbisfile.dll
+      ${DEPENDENCIES_DIR}/libvorbis.dll
+      ${DEPENDENCIES_DIR}/libvorbisfile.dll
       ${MINGW_ROOT}/opt/bin/ssleay32.dll
+      ${QT_INSTALL_BINS}/libEGL.dll
+      ${QT_INSTALL_BINS}/libGLESv2.dll
+      ${QT_INSTALL_BINS}/opengl32sw.dll
       ${QtInstallLibraries}
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
    install (FILES
-      ${MINGW_ROOT}/lib/lame_enc.dll
+      ${DEPENDENCIES_DIR}/lame_enc.dll
       DESTINATION bin
       OPTIONAL)
 
     install(FILES
-      ${QT_INSTALL_PREFIX}/plugins/iconengines/qsvgicon.dll
+      ${QT_INSTALL_PLUGINS}/iconengines/qsvgicon.dll
       DESTINATION bin/iconengines)
 
     install(FILES
-      ${QT_INSTALL_PREFIX}/plugins/imageformats/qjpeg.dll
-      ${QT_INSTALL_PREFIX}/plugins/imageformats/qsvg.dll
-      ${QT_INSTALL_PREFIX}/plugins/imageformats/qtiff.dll
+      ${QT_INSTALL_PLUGINS}/imageformats/qjpeg.dll
+      ${QT_INSTALL_PLUGINS}/imageformats/qsvg.dll
+      ${QT_INSTALL_PLUGINS}/imageformats/qtiff.dll
       DESTINATION bin/imageformats)
 
     install(FILES
-      ${QT_INSTALL_PREFIX}/plugins/platforms/qwindows.dll
+      ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
       DESTINATION bin/platforms)
 
     install(FILES
-      ${QT_INSTALL_PREFIX}/plugins/printsupport/windowsprintersupport.dll
+      ${QT_INSTALL_PLUGINS}/printsupport/windowsprintersupport.dll
       DESTINATION bin/printsupport)
 
     install(FILES
-      ${QT_INSTALL_PREFIX}/plugins/sqldrivers/qsqlite.dll
+      ${QT_INSTALL_PLUGINS}/sqldrivers/qsqlite.dll
       DESTINATION bin/sqldrivers)
 
     install(DIRECTORY
-      ${QT_INSTALL_PREFIX}/qml
+      ${QT_INSTALL_QML}
       DESTINATION .
       REGEX ".*d\\.dll" EXCLUDE
       REGEX ".*QtGraphicalEffects.*" EXCLUDE
@@ -620,15 +713,15 @@ else (MINGW)
 ## install qwebengine core
       if (NOT APPLE AND USE_WEBENGINE)
          install(FILES
-            ${QT_INSTALL_PREFIX}/libexec/QtWebEngineProcess
+            ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess
             DESTINATION bin
             )
          install(DIRECTORY
-            ${QT_INSTALL_PREFIX}/resources
+            ${QT_INSTALL_DATA}/resources
             DESTINATION lib/qt5
             )
          install(DIRECTORY
-            ${QT_INSTALL_PREFIX}/translations/qtwebengine_locales
+            ${QT_INSTALL_TRANSLATIONS}/qtwebengine_locales
             DESTINATION lib/qt5/translations
             )
       endif(NOT APPLE AND USE_WEBENGINE)
@@ -671,7 +764,7 @@ else (MINGW)
          )
 
       if (OMR)
-         target_link_libraries(mscore omr poppler)
+         target_link_libraries(mscore omr poppler-qt5)
          if (OCR)
                target_link_libraries(mscore tesseract_api)
          endif (OCR)
@@ -718,11 +811,7 @@ else (MINGW)
                )
         endif (LN_EXECUTABLE)
         # Install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
-        if (MSCORE_UNSTABLE)
-            set(MSCORE_ICON_BASE ../assets/musescore-icon-square) # Square icons on development builds
-        else (MSCORE_UNSTABLE)
-            set(MSCORE_ICON_BASE ../assets/musescore-icon-round) # Round icons on stable releases
-        endif (MSCORE_UNSTABLE)
+        set(MSCORE_ICON_BASE ../assets/musescore-icon-round)
         install(FILES ${MSCORE_ICON_BASE}.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
         install(FILES ${MSCORE_ICON_BASE}-16.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/16x16/apps)
         install(FILES ${MSCORE_ICON_BASE}-24.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/24x24/apps)
@@ -762,21 +851,21 @@ else (MINGW)
       endforeach()
 
       # Windows: Add /SUBSYSTEM:WINDOWS to LINK_FLAGS to avoid a console window in release
-      if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+      if(CMAKE_BUILD_TYPE MATCHES "REL*")
         set_target_properties( mscore
            PROPERTIES
               COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
-              LINK_FLAGS    "/LIBPATH:${QT_INSTALL_PREFIX}/lib ${all_library_paths}"
+              LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
               LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup"
            )
-      else(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+      else(CMAKE_BUILD_TYPE MATCHES "REL*")
         set_target_properties( mscore
            PROPERTIES
               COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} /DQT_SVG_LIB /DQT_GUI_LIB /DQT_XML_LIB /DQT_CORE_LIB"
-              LINK_FLAGS    "/LIBPATH:${QT_INSTALL_PREFIX}/lib ${all_library_paths}"
+              LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
               LINK_FLAGS "/SUBSYSTEM:CONSOLE"
            )
-      endif(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+      endif(CMAKE_BUILD_TYPE MATCHES "REL*")
 
       include(FindStaticLibrary)
       target_link_libraries(mscore
@@ -788,7 +877,7 @@ else (MINGW)
          )
 
       if (OMR)
-         target_link_libraries(mscore omr poppler)
+         target_link_libraries(mscore omr poppler-qt5)
          if (OCR)
                target_link_libraries(mscore tesseract_api)
          endif (OCR)
@@ -799,28 +888,38 @@ else (MINGW)
 
       # Copy DLL dependencies to .EXE DIRECTORY
       list(APPEND dlls_to_copy
-                  "${QT_INSTALL_PREFIX}/bin/Qt5Core.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Gui.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Help.dll"
-                  "${QT_INSTALL_PREFIX}/bin/Qt5Network.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5PrintSupport.dll"
-                  "${QT_INSTALL_PREFIX}/bin/Qt5Qml.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Quick.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Sql.dll"
-                  "${QT_INSTALL_PREFIX}/bin/Qt5Svg.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Widgets.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Xml.dll"
-                  "${QT_INSTALL_PREFIX}/bin/Qt5XmlPatterns.dll"
-                  "${QT_INSTALL_PREFIX}/bin/Qt5WebChannel.dll"
-                  "${QT_INSTALL_PREFIX}/bin/Qt5QuickWidgets.dll" "${QT_INSTALL_PREFIX}/bin/Qt5Positioning.dll"
+                  "${QT_INSTALL_BINS}/Qt5Core.dll"  "${QT_INSTALL_BINS}/Qt5Gui.dll"  "${QT_INSTALL_BINS}/Qt5Help.dll"
+                  "${QT_INSTALL_BINS}/Qt5Network.dll"  "${QT_INSTALL_BINS}/Qt5PrintSupport.dll"
+                  "${QT_INSTALL_BINS}/Qt5Qml.dll"  "${QT_INSTALL_BINS}/Qt5Quick.dll"  "${QT_INSTALL_BINS}/Qt5Sql.dll"
+                  "${QT_INSTALL_BINS}/Qt5Svg.dll"  "${QT_INSTALL_BINS}/Qt5Widgets.dll"  "${QT_INSTALL_BINS}/Qt5Xml.dll"
+                  "${QT_INSTALL_BINS}/Qt5XmlPatterns.dll"
+                  "${QT_INSTALL_BINS}/Qt5WebChannel.dll"
+                  "${QT_INSTALL_BINS}/Qt5QuickWidgets.dll" "${QT_INSTALL_BINS}/Qt5Positioning.dll"
+                  "${QT_INSTALL_BINS}/libEGL.dll" "${QT_INSTALL_BINS}/libGLESv2.dll" "${QT_INSTALL_BINS}/opengl32sw.dll"
                   )
       if (USE_WEBENGINE)
-         list(APPEND dlls_to_copy "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineWidgets.dll" "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineCore.dll")
+         list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5WebEngineWidgets.dll" "${QT_INSTALL_BINS}/Qt5WebEngineCore.dll")
       endif(USE_WEBENGINE)
 
       set(CMAKE_FIND_LIBRARY_PREFIX "")
       set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
+
+      if (WIN_SPARKLE_ENABLED)
+            target_link_libraries(mscore winsparkledll)
+            find_library( dll_winsparkle  NAMES "WinSparkle" PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+            list(APPEND dlls_to_copy ${dll_winsparkle})
+      endif (WIN_SPARKLE_ENABLED)
+
       find_library( dll_lame        NAMES "lame_enc"       PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_ogg         NAMES "libogg"         PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_sndfile     NAMES "libsndfile-1"   PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_vorbis      NAMES "libvorbis"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_vorbisfile  NAMES "libvorbisfile"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_portaudio   NAMES "portaudio"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+      find_library( dll_ssl1        NAMES "libeay32"       PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+      find_library( dll_ssl2        NAMES "ssleay32"       PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
-      list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} "$<TARGET_FILE_DIR:mscore>/${MUSESCORE_NAME}.exe")
+      list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} ${dll_ssl1} ${dll_ssl2} "$<TARGET_FILE_DIR:mscore>/${MSCORE_OUTPUT_NAME}.exe")
       set( output_dir_for_dlls "${PROJECT_BINARY_DIR}/../msvc.install${ARCH_TYPE}/bin")
 
       COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
@@ -832,7 +931,7 @@ else (MINGW)
       get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
       get_filename_component (MINGW_ROOT ${COMPILER_DIR} DIRECTORY)
 
-	  foreach (QtLibrary ${QT_LIBRARIES})
+      foreach (QtLibrary ${QT_LIBRARIES})
          message("Library ${QtLibrary}")
          # always use release libs
          set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")
@@ -847,62 +946,65 @@ else (MINGW)
       add_dependencies(mscore lrelease)
 
       install( FILES
-#        ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
-#		 ${MINGW_ROOT}/bin/libstdc++-6.dll
-#		 ${MINGW_ROOT}/bin/libwinpthread-1.dll
-#		 ${MINGW_ROOT}/opt/bin/libeay32.dll
-#		 ${MINGW_ROOT}/opt/bin/ssleay32.dll
-		 ${dll_ogg}
-		 ${dll_lame}
-		 ${dll_sndfile}
-		 ${dll_portaudio}
-		 ${dll_vorbis}
-		 ${dll_vorbisfile}
-		 ${QtInstallLibraries}
-		 ${PROJECT_SOURCE_DIR}/build/qt.conf
-		 DESTINATION bin)
+            ${dll_ogg}
+            ${dll_lame}
+            ${dll_sndfile}
+            ${dll_portaudio}
+            ${dll_vorbis}
+            ${dll_vorbisfile}
+            ${dll_ssl1}
+            ${dll_ssl2}
+            ${dll_winsparkle}
+            ${QtInstallLibraries}
+            ${QT_INSTALL_BINS}/libEGL.dll
+            ${QT_INSTALL_BINS}/libGLESv2.dll
+            ${QT_INSTALL_BINS}/opengl32sw.dll
+            ${QT_INSTALL_BINS}/Qt5Positioning.dll
+            ${QT_INSTALL_BINS}/Qt5WebChannel.dll
+            ${PROJECT_SOURCE_DIR}/build/qt.conf
+            DESTINATION bin)
 
       install(FILES
-         ${QT_INSTALL_PREFIX}/plugins/iconengines/qsvgicon.dll
+         ${QT_INSTALL_PLUGINS}/iconengines/qsvgicon.dll
          DESTINATION bin/iconengines)
 
       install(FILES
-         ${QT_INSTALL_PREFIX}/plugins/imageformats/qjpeg.dll
-         ${QT_INSTALL_PREFIX}/plugins/imageformats/qsvg.dll
-         ${QT_INSTALL_PREFIX}/plugins/imageformats/qtiff.dll
+         ${QT_INSTALL_PLUGINS}/imageformats/qjpeg.dll
+         ${QT_INSTALL_PLUGINS}/imageformats/qsvg.dll
+         ${QT_INSTALL_PLUGINS}/imageformats/qtiff.dll
          DESTINATION bin/imageformats)
 
       install(FILES
-         ${QT_INSTALL_PREFIX}/plugins/platforms/qwindows.dll
+         ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
          DESTINATION bin/platforms)
 
       install(FILES
-         ${QT_INSTALL_PREFIX}/plugins/printsupport/windowsprintersupport.dll
+         ${QT_INSTALL_PLUGINS}/printsupport/windowsprintersupport.dll
          DESTINATION bin/printsupport)
 
       install(FILES
-         ${QT_INSTALL_PREFIX}/plugins/sqldrivers/qsqlite.dll
+         ${QT_INSTALL_PLUGINS}/sqldrivers/qsqlite.dll
          DESTINATION bin/sqldrivers)
 
       install( TARGETS mscore RUNTIME DESTINATION bin ) # this duplicate due to the correctly package step
 
       if (USE_WEBENGINE)
          install(FILES
-            ${QT_INSTALL_PREFIX}/bin/QtWebEngineProcess.exe
+            ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess.exe
             DESTINATION bin
             )
          install(DIRECTORY
-            ${QT_INSTALL_PREFIX}/resources
+            ${QT_INSTALL_DATA}/resources
             DESTINATION bin/webengineresources
             )
          install(DIRECTORY
-            ${QT_INSTALL_PREFIX}/translations/qtwebengine_locales
+            ${QT_INSTALL_TRANSLATIONS}/qtwebengine_locales
             DESTINATION bin/webengineresources/translations
             )
       endif (USE_WEBENGINE)
 
       install(DIRECTORY
-         ${QT_INSTALL_PREFIX}/qml
+         ${QT_INSTALL_QML}
          DESTINATION .
          REGEX ".*d\\.dll" EXCLUDE
          REGEX ".pdb" EXCLUDE
@@ -933,7 +1035,7 @@ if (APPLE)
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )
      install(DIRECTORY
-      ${QT_INSTALL_PREFIX}/qml
+      ${QT_INSTALL_QML}
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
       REGEX ".*QtWebkit.*" EXCLUDE
       REGEX ".*QtTest.*" EXCLUDE
@@ -949,3 +1051,55 @@ if (NOT MSVC)
    ADD_DEPENDENCIES(${ExecutableName} mops1)
    ADD_DEPENDENCIES(${ExecutableName} mops2)
 endif (NOT MSVC)
+
+add_library(
+      inspectorplugin SHARED
+      inspector/inspectorplugin.cpp
+      inspector/inspectorplugin.h
+#      inspector/alignSelect.cpp
+      inspector/fontStyleSelect.cpp
+#      inspector/offsetSelect.cpp
+#      inspector/scaleSelect.cpp
+#      inspector/sizeSelect.cpp
+      inspector/resetButton.cpp
+      icons.cpp
+      miconengine.cpp
+      ${qrc_files}
+      )
+
+if (APPLE)
+      set_property(SOURCE inspector/inspectorplugin.cpp inspector/inspectorplugin.h PROPERTY SKIP_AUTOGEN ON)
+endif (APPLE)
+
+if (NOT MSVC)
+   set_target_properties(inspectorplugin
+      PROPERTIES
+      COMPILE_FLAGS
+         "-fPIC -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SVG_LIB -DQT_SHARED -DQT_NO_DEBUG -include ${PROJECT_SOURCE_DIR}/all.h"
+      )
+else (NOT MSVC)
+   # x86 archictecture does not support position-independent code, the -fPIC option is not relevant for this processor.
+   set_target_properties (
+      inspectorplugin
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE} -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SVG_LIB -DQT_SHARED -DQT_NO_DEBUG"
+      )
+endif (NOT MSVC)
+
+# Don't install awlplugin on default
+#install( TARGETS inspectorplugin DESTINATION ${designerPlugins}/plugins/designer/ )
+
+# add_executable(itest inspector/itest.cpp)
+# target_link_libraries (itest inspectorplugin ${QT_LIBRARIES})
+# set_target_properties(itest PROPERTIES EXCLUDE_FROM_ALL 1)
+
+target_link_libraries (inspectorplugin ${QT_LIBRARIES})
+set_target_properties(inspectorplugin PROPERTIES EXCLUDE_FROM_ALL 1)
+
+if (MSCORE_OUTPUT_NAME)
+      set (MSCORE_EXECUTABLE_NAME ${MSCORE_OUTPUT_NAME})
+else (MSCORE_OUTPUT_NAME)
+      set (MSCORE_EXECUTABLE_NAME ${ExecutableName})
+endif (MSCORE_OUTPUT_NAME)
+# Export the executable name to the global context
+set (MSCORE_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}" PARENT_SCOPE)

@@ -49,7 +49,7 @@ class Image final : public BSymbol {
 
       virtual bool isEditable() const override { return true; }
       virtual void startEdit(EditData&) override;
-      virtual void startDrag(EditData&) override;
+      virtual void startEditDrag(EditData&) override;
       virtual void editDrag(EditData& ed) override;
       virtual void endEditDrag(EditData&) override;
       virtual void updateGrips(EditData&) const override;
@@ -85,6 +85,7 @@ class Image final : public BSymbol {
       QSizeF imageSize() const;
 
       void setImageType(ImageType);
+      ImageType getImageType() const { return imageType; }
       bool isValid() const           { return rasterDoc || svgDoc; }
       };
 

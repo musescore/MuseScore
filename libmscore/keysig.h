@@ -43,6 +43,7 @@ class KeySig final : public Element {
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
       virtual void layout() override;
+      virtual Shape shape() const override;
       virtual qreal mag() const override;
 
       //@ sets the key of the key signature
@@ -56,11 +57,11 @@ class KeySig final : public Element {
       Q_INVOKABLE Key key() const         { return _sig.key(); }
       bool isCustom() const               { return _sig.custom(); }
       bool isAtonal() const               { return _sig.isAtonal(); }
+      bool isChange() const;
       KeySigEvent keySigEvent() const     { return _sig; }
       bool operator==(const KeySig&) const;
       void changeKeySigEvent(const KeySigEvent&);
       void setKeySigEvent(const KeySigEvent& e)      { _sig = e; }
-      int tick() const;
 
       bool showCourtesy() const           { return _showCourtesy; }
       void setShowCourtesy(bool v)        { _showCourtesy = v;    }

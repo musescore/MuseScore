@@ -53,6 +53,14 @@
     <seq>Ctrl+V</seq>
     </SC>
   <SC>
+    <key>paste-half</key>
+    <seq>Ctrl+Shift+Q</seq>
+    </SC>
+  <SC>
+    <key>paste-double</key>
+    <seq>Ctrl+Shift+W</seq>
+    </SC>
+  <SC>
     <key>swap</key>
     <seq>Ctrl+Shift+X</seq>
     </SC>
@@ -159,6 +167,10 @@
   <SC>
     <key>chord-g</key>
     <seq>Shift+G</seq>
+    </SC>
+  <SC>
+    <key>chord-tie</key>
+    <seq>Alt++</seq>
     </SC>
   <SC>
     <key>insert-a</key>
@@ -361,12 +373,20 @@
     <seq>Shift+Down</seq>
     </SC>
   <SC>
-    <key>page-prev</key>
+    <key>scr-prev</key>
     <seq>PgUp</seq>
     </SC>
   <SC>
-    <key>page-next</key>
+    <key>scr-next</key>
     <seq>PgDown</seq>
+    </SC>
+  <SC>
+    <key>page-prev</key>
+    <seq>Ctrl+PgUp</seq>
+    </SC>
+  <SC>
+    <key>page-next</key>
+    <seq>Ctrl+PgDown</seq>
     </SC>
   <SC>
     <key>page-top</key>
@@ -614,9 +634,9 @@
     <key>clef-bass</key>
     <seq>Ctrl+Y,Ctrl+2</seq>
     </SC>
-   <SC>
+  <SC>
     <key>system-break</key>
-   <seq>Return</seq>
+    <seq>Return</seq>
     </SC>
   <SC>
     <key>page-break</key>
@@ -963,6 +983,10 @@
     <seq>;</seq>
     </SC>
   <SC>
+    <key>add-parentheses</key>
+    <seq>(</seq>
+    </SC>
+  <SC>
     <key>toggle-mmrest</key>
     <seq>M</seq>
     </SC>
@@ -973,10 +997,6 @@
   <SC>
     <key>text-word-left</key>
     <seq>Ctrl+Left</seq>
-    </SC>
-  <SC>
-    <key>relayout</key>
-    <seq>Shift+L</seq>
     </SC>
   <SC>
     <key>text-word-right</key>
@@ -1002,6 +1022,8 @@
     <key>toggle-insert-mode</key>
     <seq>Ctrl+I</seq>
     </SC>
-
+  <SC>
+    <key>toggle-autoplace</key>
+    <seq>=</seq>
+    </SC>
   </Shortcuts>
-

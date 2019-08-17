@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: jackaudio.h 4147 2011-04-07 14:39:44Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //

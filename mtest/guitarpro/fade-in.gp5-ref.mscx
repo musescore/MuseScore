@@ -26,12 +26,14 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Track 1</trackName>
       <Instrument>
         <longName>Track 1</longName>
         <trackName></trackName>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>32</frets>
           <string>40</string>
@@ -87,8 +89,8 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>guitarFadeIn</subtype>
-              <linkedMain/>
               <anchor>0</anchor>
+              <linkedMain/>
               </Articulation>
             <Note>
               <linkedMain/>
@@ -139,6 +141,7 @@
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="0" span="2" col="0"/>
           </Staff>
@@ -170,6 +173,7 @@
         <Instrument>
           <longName>Track 1</longName>
           <trackName></trackName>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>32</frets>
             <string>40</string>
@@ -237,9 +241,9 @@
               <durationType>quarter</durationType>
               <Articulation>
                 <subtype>guitarFadeIn</subtype>
+                <anchor>0</anchor>
                 <linked>
                   </linked>
-                <anchor>0</anchor>
                 </Articulation>
               <Note>
                 <linked>
@@ -307,10 +311,10 @@
               <durationType>quarter</durationType>
               <Articulation>
                 <subtype>guitarFadeIn</subtype>
+                <anchor>0</anchor>
                 <linked>
                   <indexDiff>1</indexDiff>
                   </linked>
-                <anchor>0</anchor>
                 </Articulation>
               <Note>
                 <linked>

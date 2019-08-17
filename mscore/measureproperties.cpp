@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: measureproperties.cpp 5628 2012-05-15 07:46:43Z wschweer $
 //
 //  Copyright (C) 2007 Werner Schweer and others
 //
@@ -121,8 +120,8 @@ void MeasureProperties::setMeasure(Measure* _m)
       m->score()->deselectAll();
       m->score()->select(m, SelectType::ADD, 0);
 
-      actualZ->setValue(m->len().numerator());
-      int index = actualN->findText(QString::number(m->len().denominator()));
+      actualZ->setValue(m->ticks().numerator());
+      int index = actualN->findText(QString::number(m->ticks().denominator()));
       if (index == -1)
             index = 2;
       actualN->setCurrentIndex(index);
@@ -245,11 +244,14 @@ void MeasureProperties::apply()
       {
       Score* score = m->score();
 
+      bool propertiesChanged = false;
       for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             bool v = visible(staffIdx);
             bool s = slashStyle(staffIdx);
-            if (m->visible(staffIdx) != v || m->slashStyle(staffIdx) != s)
+            if (m->visible(staffIdx) != v || m->slashStyle(staffIdx) != s) {
                   score->undo(new ChangeMStaffProperties(m, staffIdx, v, s));
+                  propertiesChanged = true;
+                  }
             }
 
       m->undoChangeProperty(Pid::REPEAT_COUNT, repeatCount());
@@ -259,7 +261,7 @@ void MeasureProperties::apply()
       m->undoChangeProperty(Pid::NO_OFFSET, measureNumberOffset->value());
       m->undoChangeProperty(Pid::IRREGULAR, isIrregular());
 
-      if (m->len() != len()) {
+      if (m->ticks() != len()) {
             ScoreRange range;
             range.read(m->first(), m->last());
             m->adjustToLen(len());
@@ -274,6 +276,11 @@ void MeasureProperties::apply()
                   }
 #endif
             }
+
+      if (propertiesChanged) {
+            score->setLayout(m->tick());
+            }
+
       score->select(m, SelectType::SINGLE, 0);
       score->update();
       mscore->timeline()->updateGrid();

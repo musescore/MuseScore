@@ -1,0 +1,18 @@
+init init/oneStaffWithNotesAndMM.mscx
+cmd note-input
+cmd escape
+cmd select-next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd copy
+cmd next-chord
+cmd paste
+test score paste_excceed_scoreLen_MMrest.mscx

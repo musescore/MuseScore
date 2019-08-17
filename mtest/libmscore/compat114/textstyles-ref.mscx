@@ -8,10 +8,9 @@
       <staffUpperBorder>6</staffUpperBorder>
       <staffLowerBorder>2</staffLowerBorder>
       <minSystemDistance>9.5</minSystemDistance>
-      <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <systemFrameDistance>1</systemFrameDistance>
       <minMeasureWidth>4</minMeasureWidth>
-      <endBarDistance>0.3</endBarDistance>
       <repeatBarTips>1</repeatBarTips>
       <bracketWidth>0.35</bracketWidth>
       <bracketDistance>0.2</bracketDistance>
@@ -33,11 +32,11 @@
       <chordDescriptionFile>cchords_muse.xml</chordDescriptionFile>
       <concertPitch>1</concertPitch>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
-      <voltaY>0</voltaY>
+      <voltaPosAbove x="0" y="-2"/>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
       <ChordList>
-        <font id="0" family="MuseJazz">
+        <font id="0" family="MuseJazz Text">
           <mag>1</mag>
           <sym name="#" code="0xe10c"/>
           <sym name="(" code="0x28"/>
@@ -80,7 +79,7 @@
           <sym name="sus4" code="0xe18d"/>
           <sym name="triangle" code="0xe18a"/>
           </font>
-        <font id="1" family="MuseJazz">
+        <font id="1" family="MuseJazz Text">
           <mag>1.25</mag>
           <sym name="0" code="0xe190"/>
           <sym name="1" code="0xe191"/>
@@ -97,7 +96,7 @@
           <sym name="add" code="0xe18b"/>
           <sym name="add11" code="0xe18c"/>
           </font>
-        <font id="2" family="MuseJazz">
+        <font id="2" family="MuseJazz Text">
           <mag>0.8</mag>
           <sym name="a" code="0x61"/>
           <sym name="c" code="0x63"/>
@@ -130,7 +129,7 @@
           <sym name="y" code="0x79"/>
           <sym name="z" code="0x7a"/>
           </font>
-        <font id="3" family="MuseJazz">
+        <font id="3" family="MuseJazz Text">
           <mag>0.55</mag>
           </font>
         <renderRoot>:n :a</renderRoot>
@@ -1669,7 +1668,6 @@
     <Staff id="1">
       <VBox>
         <height>6.36254</height>
-        <bottomGap>6</bottomGap>
         <leftMargin>5</leftMargin>
         <rightMargin>5</rightMargin>
         <topMargin>5</topMargin>
@@ -1688,7 +1686,7 @@
           </Text>
         <Text>
           <style>Lyricist</style>
-          <text><font size="10.5833"/><font face="MuseJazz"/>Lyricist</text>
+          <text><font face="MuseJazz"/>Lyricist</text>
           </Text>
         </VBox>
       <Measure>

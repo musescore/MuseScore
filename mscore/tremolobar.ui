@@ -104,7 +104,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Release(Up)</string>
+      <string>Release (Up)</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -190,7 +190,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Release(Down)</string>
+      <string>Release (Down)</string>
      </property>
      <property name="checkable">
       <bool>true</bool>

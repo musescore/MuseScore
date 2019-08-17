@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: magbox.cpp 5568 2012-04-22 10:08:43Z wschweer $
 //
 //  Copyright (C) 2002-2008 Werner Schweer and others
 //

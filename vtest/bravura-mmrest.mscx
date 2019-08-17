@@ -317,7 +317,6 @@ p, li { white-space: pre-wrap; }
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
-          <pos x="-6.22958" y="-5.47367"/>
           <text>Bravura - multi measure rest</text>
           </StaffText>
         <Rest>

@@ -7,6 +7,7 @@
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/spanner.h"
+#include "libmscore/sig.h"
 #include "inspector/inspector.h"
 #include "selectionwindow.h"
 #include "playpanel.h"
@@ -104,7 +105,9 @@ ScoreAccessibility::~ScoreAccessibility()
 void ScoreAccessibility::clearAccessibilityInfo()
       {
       statusBarLabel->setText("");
-      static_cast<MuseScore*>(mainWindow)->currentScoreView()->score()->setAccessibleInfo(tr("No selection"));
+      MuseScoreView* view = static_cast<MuseScore*>(mainWindow)->currentScoreView();
+      if (view)
+            view->score()->setAccessibleInfo(tr("No selection"));
       }
 
 void ScoreAccessibility::currentInfoChanged()
@@ -226,6 +229,7 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
       int ticks = 0;
       TimeSigMap* tsm = e->score()->sigmap();
       Element* p = e;
+      int ticksB = ticks_beat(tsm->timesig(0).timesig().denominator());
       while(p && p->type() != ElementType::SEGMENT && p->type() != ElementType::MEASURE)
             p = p->parent();
 
@@ -234,7 +238,8 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
             }
       else if (p->type() == ElementType::SEGMENT) {
             Segment* seg = static_cast<Segment*>(p);
-            tsm->tickValues(seg->tick(), &bar, &beat, &ticks);
+            tsm->tickValues(seg->tick().ticks(), &bar, &beat, &ticks);
+            ticksB = ticks_beat(tsm->timesig(seg->tick().ticks()).timesig().denominator());
             }
       else if (p->type() == ElementType::MEASURE) {
             Measure* m = static_cast<Measure*>(p);
@@ -242,6 +247,6 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
             beat = -1;
             ticks = 0;
             }
-      return pair<int,float>(bar + 1, beat + 1 + ticks / static_cast<float>(MScore::division));
+      return pair<int,float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
       }
 }

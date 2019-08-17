@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id:
 //
 //  jackWeakAPI based on code from Stéphane Letz (Grame)
 //  partly based on Julien Pommier (PianoTeq : http://www.pianoteq.com/) code.

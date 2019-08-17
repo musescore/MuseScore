@@ -74,7 +74,7 @@ class Page final : public Element {
       QPointF pagePos() const { return QPointF(); }     ///< position in page coordinates
       QList<Element*> elements();               ///< list of visible elements
       QRectF tbbox();                           // tight bounding box, excluding white space
-      int endTick() const;
+      Fraction endTick() const;
       };
 
 

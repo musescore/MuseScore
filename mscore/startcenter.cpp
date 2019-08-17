@@ -15,6 +15,7 @@
 #include "libmscore/mscore.h"
 #include "startcenter.h"
 #include "scoreBrowser.h"
+#include "tourhandler.h"
 
 namespace Ms {
 
@@ -22,25 +23,30 @@ namespace Ms {
 //   showStartcenter
 //---------------------------------------------------------
 
-void MuseScore::showStartcenter(bool val)
+void MuseScore::showStartcenter(bool show)
       {
       QAction* a = getAction("startcenter");
-      if (val && startcenter == nullptr) {
-            startcenter = new Startcenter;
+      if (show && startcenter == nullptr) {
+            startcenter = new Startcenter(this);
             startcenter->addAction(a);
             startcenter->readSettings();
             connect(startcenter, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
-            connect(startcenter, SIGNAL(rejected()), a, SLOT(toggle()));
+            connect(startcenter, SIGNAL(closed(bool)), tourHandler(), SLOT(showWelcomeTour()), Qt::QueuedConnection);
             }
-      startcenter->setVisible(val);
+      if (!startcenter)
+            return;
+      if (show)
+            startcenter->setVisible(true);
+      else
+            startcenter->close();
       }
 
 //---------------------------------------------------------
 //   Startcenter
 //---------------------------------------------------------
 
-Startcenter::Startcenter()
- : AbstractDialog(0)
+Startcenter::Startcenter(QWidget* parent)
+ : AbstractDialog(parent)
       {
       setObjectName("Startcenter");
       setupUi(this);
@@ -55,21 +61,33 @@ Startcenter::Startcenter()
 #ifdef USE_WEBENGINE
       if (!noWebView) {
             _webView = new MyWebView(this);
-            _webView->setMaximumWidth(200);  
+            _webView->setMaximumWidth(200);
 
             MyWebEnginePage* page = new MyWebEnginePage(this);
             MyWebUrlRequestInterceptor* wuri = new MyWebUrlRequestInterceptor(page);
-            page->profile()->setRequestInterceptor(wuri);
+            QWebEngineProfile* profile = page->profile();
+            profile->setRequestInterceptor(wuri);
             _webView->setPage(page);
 
-            _webView->setUrl(QUrl(QString("https://connect2.musescore.com/?version=%1").arg(VERSION)));
+            auto extendedVer = QString(VERSION) + "." + QString(BUILD_NUMBER);
+            QUrl connectPageUrl = QUrl(QString("https://connect2.musescore.com/?version=%1").arg(extendedVer));
+            _webView->setUrl(connectPageUrl);
 
             horizontalLayout->addWidget(_webView);
+            
+            //workaround for the crashes sometimes happend in Chromium on macOS with Qt 5.12
+            connect(_webView, &QWebEngineView::renderProcessTerminated, this, [this, profile, connectPageUrl](QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
+                    {
+                    qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;
+                    profile->clearHttpCache();
+                    _webView->load(connectPageUrl);
+                    _webView->show();
+                    });
             }
 #endif
 
       if (enableExperimental)
-// right now dont know how it use in WebEngine @handrok
+// right now don’t know how it use in WebEngine @handrok
 //            QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 //      QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);
       recentPage->setBoldTitle(false);
@@ -108,6 +126,7 @@ void Startcenter::loadScore(QString s)
 
 void Startcenter::newScore()
       {
+      mscore->tourHandler()->delayWelcomeTour();
       close();
       getAction("file-new")->trigger();
       }
@@ -116,8 +135,9 @@ void Startcenter::newScore()
 //   closeEvent
 //---------------------------------------------------------
 
-void Startcenter::closeEvent(QCloseEvent*)
+void Startcenter::closeEvent(QCloseEvent* event)
       {
+      AbstractDialog::closeEvent(event);
       emit closed(false);
       }
 
@@ -140,6 +160,7 @@ void Startcenter::updateRecentScores()
 
 void Startcenter::openScoreClicked()
       {
+      mscore->tourHandler()->delayWelcomeTour();
       close();
       getAction("file-open")->trigger();
       }
@@ -160,6 +181,31 @@ void Startcenter::writeSettings()
 void Startcenter::readSettings()
       {
       MuseScore::restoreGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   keyPressEvent
+//---------------------------------------------------------
+
+void Startcenter::keyPressEvent(QKeyEvent *event)
+      {
+      if(event->key() == Qt::Key_Escape)
+            event->ignore(); // will handle it on key release.
+      else
+            AbstractDialog::keyPressEvent(event);
+      }
+
+//---------------------------------------------------------
+//   keyReleaseEvent
+//---------------------------------------------------------
+
+void Startcenter::keyReleaseEvent(QKeyEvent *event)
+      {
+      if(event->key() == Qt::Key_Escape) {
+            close();
+            }
+      else
+            AbstractDialog::keyReleaseEvent(event);
       }
 
 #ifdef USE_WEBENGINE

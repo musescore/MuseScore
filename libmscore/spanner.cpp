@@ -20,6 +20,8 @@
 #include "measure.h"
 #include "undo.h"
 #include "staff.h"
+#include "lyrics.h"
+#include "musescoreCore.h"
 
 namespace Ms {
 
@@ -34,12 +36,19 @@ class SpannerWriter : public ConnectorInfoWriter {
    public:
       SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* spanner, int track, Fraction frac, bool start);
 
-      static void fillSpannerPosition(Location& l, const Element* endpoint, int tick, bool clipboardmode);
+      static void fillSpannerPosition(Location& l, const MeasureBase* endpoint, const Fraction& tick, bool clipboardmode);
       };
 
 //---------------------------------------------------------
 //   SpannerSegment
 //---------------------------------------------------------
+
+SpannerSegment::SpannerSegment(Spanner* sp, Score* s, ElementFlags f)
+   : Element(s, f)
+      {
+      _spanner = sp;
+      setSpannerSegmentType(SpannerSegmentType::SINGLE);
+      }
 
 SpannerSegment::SpannerSegment(Score* s, ElementFlags f)
    : Element(s, f)
@@ -51,17 +60,21 @@ SpannerSegment::SpannerSegment(Score* s, ElementFlags f)
 SpannerSegment::SpannerSegment(const SpannerSegment& s)
    : Element(s)
       {
-      _spanner = s._spanner;
+      _spanner            = s._spanner;
       _spannerSegmentType = s._spannerSegmentType;
+      _p2                 = s._p2;
+      _offset2            = s._offset2;
       }
 
 //---------------------------------------------------------
-//   system
+//   mag
 //---------------------------------------------------------
 
-System* SpannerSegment::system() const
+qreal SpannerSegment::mag() const
       {
-      return toSystem(parent());
+      if (spanner()->systemFlag())
+            return 1.0;
+      return staff() ? staff()->mag(spanner()->tick()) : 1.0;
       }
 
 //---------------------------------------------------------
@@ -81,12 +94,23 @@ void SpannerSegment::setSystem(System* s)
       }
 
 //---------------------------------------------------------
+//   mimeData
+//---------------------------------------------------------
+
+QByteArray SpannerSegment::mimeData(const QPointF& dragOffset) const
+      {
+      if (dragOffset.isNull()) // where is dragOffset used?
+            return spanner()->mimeData(dragOffset);
+      return Element::mimeData(dragOffset);
+      }
+
+//---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 
 Element* SpannerSegment::propertyDelegate(Pid pid)
       {
-      if (pid == Pid::COLOR || pid == Pid::VISIBLE)
+      if (pid == Pid::COLOR || pid == Pid::VISIBLE || pid == Pid::PLACEMENT)
             return spanner();
       return 0;
       }
@@ -100,8 +124,8 @@ QVariant SpannerSegment::getProperty(Pid pid) const
       if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
             return e->getProperty(pid);
       switch (pid) {
-            case Pid::USER_OFF2:
-                  return _userOff2;
+            case Pid::OFFSET2:
+                  return _offset2;
             default:
                   return Element::getProperty(pid);
             }
@@ -116,8 +140,8 @@ bool SpannerSegment::setProperty(Pid pid, const QVariant& v)
       if (Element* e = propertyDelegate(pid))
             return e->setProperty(pid, v);
       switch (pid) {
-            case Pid::USER_OFF2:
-                  _userOff2 = v.toPointF();
+            case Pid::OFFSET2:
+                  _offset2 = v.toPointF();
                   score()->setLayoutAll();
                   break;
             default:
@@ -135,7 +159,7 @@ QVariant SpannerSegment::propertyDefault(Pid pid) const
       if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
             return e->propertyDefault(pid);
       switch (pid) {
-            case Pid::USER_OFF2:
+            case Pid::OFFSET2:
                   return QVariant();
             default:
                   return Element::propertyDefault(pid);
@@ -190,9 +214,24 @@ void SpannerSegment::styleChanged()
 
 void SpannerSegment::reset()
       {
-      undoChangeProperty(Pid::USER_OFF2, QPointF());
+      undoChangeProperty(Pid::OFFSET2, QPointF());
       Element::reset();
       spanner()->reset();
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void SpannerSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+      {
+      if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
+            // Switching autoplacement on. Save user-defined
+            // placement properties to undo stack.
+            undoPushProperty(Pid::OFFSET2);
+            // other will be saved in Element::undoChangeProperty
+            }
+      Element::undoChangeProperty(pid, val, ps);
       }
 
 //---------------------------------------------------------
@@ -269,7 +308,8 @@ QString SpannerSegment::accessibleInfo() const
 
 void SpannerSegment::triggerLayout() const
       {
-      _spanner->triggerLayout();
+      if (_spanner)
+            _spanner->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -294,7 +334,19 @@ Spanner::Spanner(const Spanner& s)
 
 Spanner::~Spanner()
       {
-      qDeleteAll(spannerSegments());
+      qDeleteAll(segments);
+      qDeleteAll(unusedSegments);
+      }
+
+//---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal Spanner::mag() const
+      {
+      if (systemFlag())
+            return 1.0;
+      return staff() ? staff()->mag(tick()) : 1.0;
       }
 
 //---------------------------------------------------------
@@ -307,8 +359,8 @@ void Spanner::add(Element* e)
       ls->setSpanner(this);
       ls->setSelected(selected());
       ls->setTrack(track());
-      ls->setAutoplace(autoplace());
-      segments.append(ls);
+//      ls->setAutoplace(autoplace());
+      segments.push_back(ls);
       }
 
 //---------------------------------------------------------
@@ -320,7 +372,7 @@ void Spanner::remove(Element* e)
       SpannerSegment* ss = toSpannerSegment(e);
       if (ss->system())
             ss->system()->remove(ss);
-      segments.removeOne(ss);
+      segments.erase(std::remove(segments.begin(), segments.end(), ss), segments.end());
       }
 
 //---------------------------------------------------------
@@ -345,23 +397,23 @@ void Spanner::removeUnmanaged()
       }
 
 //---------------------------------------------------------
-//   undoInserTimeUnmanaged
+//   insertTimeUnmanaged
 //---------------------------------------------------------
 
-void Spanner::undoInsertTimeUnmanaged(int fromTick, int len)
+void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
       {
-      int   newTick1    = tick();
-      int   newTick2    = tick2();
+      Fraction newTick1 = tick();
+      Fraction newTick2 = tick2();
 
       // check spanner start and end point
-      if (len > 0) {                // adding time
+      if (len > Fraction(0,1)) {          // adding time
             if (tick() > fromTick)        // start after insertion point: shift start to right
                   newTick1 += len;
             if (tick2() > fromTick)       // end after insertion point: shift end to right
                   newTick2 += len;
             }
-      if (len < 0) {                // removing time
-            int toTick = fromTick - len;
+      if (len < Fraction(0,1)) {          // removing time
+            Fraction toTick = fromTick - len;
             if (tick() > fromTick) {      // start after beginning of removed time
                   if (tick() < toTick) {  // start within removed time: bring start at removing point
                         if (parent()) {
@@ -426,13 +478,23 @@ QVariant Spanner::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::SPANNER_TICK:
-                  return tick();
+                  return _tick;
             case Pid::SPANNER_TICKS:
-                  return ticks();
+                  return _ticks;
             case Pid::SPANNER_TRACK2:
                   return track2();
             case Pid::ANCHOR:
                   return int(anchor());
+            case Pid::LOCATION_STAVES:
+                  return (track2() / VOICES) - (track() / VOICES);
+            case Pid::LOCATION_VOICES:
+                  return (track2() % VOICES) - (track() / VOICES);
+            case Pid::LOCATION_FRACTIONS:
+                  return _ticks;
+            case Pid::LOCATION_MEASURES:
+            case Pid::LOCATION_GRACE:
+            case Pid::LOCATION_NOTE:
+                  return Location::getLocationProperty(propertyId, startElement(), endElement());
             default:
                   break;
             }
@@ -447,14 +509,14 @@ bool Spanner::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case Pid::SPANNER_TICK:
-                  setTick(v.toInt());
+                  setTick(v.value<Fraction>());
                   setStartElement(0);     // invalidate
                   setEndElement(0);       //
                   if (score() && score()->spannerMap().removeSpanner(this))
                         score()->addSpanner(this);
                   break;
             case Pid::SPANNER_TICKS:
-                  setTicks(v.toInt());
+                  setTicks(v.value<Fraction>());
                   setEndElement(0);       // invalidate
                   break;
             case Pid::TRACK:
@@ -533,25 +595,44 @@ void Spanner::computeEndElement()
             case Anchor::SEGMENT: {
                   if (track2() == -1)
                         setTrack2(track());
-                  if (ticks() == 0 && isTextLine() && parent())   // special case palette
+                  if (ticks().isZero() && isTextLine() && parent())   // special case palette
                         setTicks(score()->lastSegment()->tick() - _tick);
-                  // find last cr on this staff that ends before tick2
 
-                  _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
+                  if (isLyricsLine() && toLyricsLine(this)->isEndMelisma()) {
+                        // lyrics endTick should already indicate the segment we want
+                        // except for TEMP_MELISMA_TICKS case
+                        Lyrics* l = toLyricsLine(this)->lyrics();
+                        Fraction tick = (l->ticks().ticks() == Lyrics::TEMP_MELISMA_TICKS) ? l->tick() : l->endTick();
+                        Segment* s = score()->tick2segment(tick, true, SegmentType::ChordRest);
+                        if (!s) {
+                              qDebug("%s no end segment for tick %d", name(), tick.ticks());
+                              return;
+                              }
+                        int t = trackZeroVoice(track2());
+                        // take the first chordrest we can find;
+                        // linePos will substitute one in current voice if available
+                        for (int v = 0; v < VOICES; ++v) {
+                              _endElement = s->element(t + v);
+                              if (_endElement)
+                                    break;
+                              }
+                        }
+                  else {
+                        // find last cr on this staff that ends before tick2
+                        _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
+                        }
                   if (!_endElement) {
-                        qDebug("%s no end element for tick %d", name(), tick2());
+                        qDebug("%s no end element for tick %d", name(), tick2().ticks());
                         return;
                         }
+
                   if (!endCR()->measure()->isMMRest()) {
                         ChordRest* cr = endCR();
-                        int nticks = cr->tick() + cr->actualTicks() - _tick;
-                        // allow fudge factor for tuplets
-                        // TODO: replace with fraction-based calculation
-                        int fudge = cr->tuplet() ? 5 : 0;
-                        if (qAbs(_ticks - nticks) > fudge) {
-                              qDebug("%s ticks changed, %d -> %d", name(), _ticks, nticks);
+                        Fraction nticks = cr->tick() + cr->actualTicks() - _tick;
+                        if ((_ticks - nticks).isNotZero()) {
+                              qDebug("%s ticks changed, %d -> %d", name(), _ticks.ticks(), nticks.ticks());
                               setTicks(nticks);
-                              if (type() == ElementType::OTTAVA)
+                              if (isOttava())
                                     staff()->updateOttava();
                               }
                         }
@@ -559,9 +640,9 @@ void Spanner::computeEndElement()
                   break;
 
             case Anchor::MEASURE:
-                  _endElement = score()->tick2measure(tick2() - 1);
+                  _endElement = score()->tick2measure(tick2() - Fraction(1, 1920));
                   if (!_endElement) {
-                        qDebug("Spanner::computeEndElement(), measure not found for tick %d\n", tick2()-1);
+                        qDebug("Spanner::computeEndElement(), measure not found for tick %d\n", tick2().ticks()-1);
                         _endElement = score()->lastMeasure();
                         }
                   break;
@@ -710,8 +791,9 @@ ChordRest* Spanner::endCR()
       {
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
       if ((!_endElement || _endElement->score() != score())) {
-            Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
-            _endElement = s ? toChordRest(s->element(track2())) : 0;
+            Segment* s  = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
+            const int tr2 = (track2() == -1) ? track() : track2();
+            _endElement = s ? toChordRest(s->element(tr2)) : nullptr;
             }
       return toChordRest(_endElement);
       }
@@ -776,6 +858,17 @@ void Spanner::setVisible(bool f)
       }
 
 //---------------------------------------------------------
+//   setAutoplace
+//---------------------------------------------------------
+
+void Spanner::setAutoplace(bool f)
+      {
+      for (SpannerSegment* ss : spannerSegments())
+            ss->Element::setAutoplace(f);
+      Element::setAutoplace(f);
+      }
+
+//---------------------------------------------------------
 //   setColor
 //---------------------------------------------------------
 
@@ -819,7 +912,7 @@ void Spanner::setEndElement(Element* e)
 Spanner* Spanner::nextSpanner(Element* e, int activeStaff)
       {
     std::multimap<int, Spanner*> mmap = score()->spanner();
-          auto range = mmap.equal_range(tick());
+          auto range = mmap.equal_range(tick().ticks());
           if (range.first != range.second) { // range not empty
                 for (auto i = range.first; i != range.second; ++i) {
                       if (i->second == e) {
@@ -854,7 +947,7 @@ Spanner* Spanner::nextSpanner(Element* e, int activeStaff)
 Spanner* Spanner::prevSpanner(Element* e, int activeStaff)
       {
       std::multimap<int, Spanner*> mmap = score()->spanner();
-      auto range = mmap.equal_range(tick());
+      auto range = mmap.equal_range(tick().ticks());
       if (range.first != range.second) { // range not empty
             for (auto i = range.first; i != range.second; ++i) {
                   if (i->second == e) {
@@ -902,7 +995,7 @@ Element* Spanner::prevSegmentElement()
 //   setTick
 //---------------------------------------------------------
 
-void Spanner::setTick(int v)
+void Spanner::setTick(const Fraction& v)
       {
       _tick = v;
       if (score())
@@ -913,41 +1006,20 @@ void Spanner::setTick(int v)
 //   setTick2
 //---------------------------------------------------------
 
-void Spanner::setTick2(int v)
+void Spanner::setTick2(const Fraction& f)
       {
-      setTicks(v - _tick);
+      setTicks(f - _tick);
       }
 
 //---------------------------------------------------------
 //   setTicks
 //---------------------------------------------------------
 
-void Spanner::setTicks(int v)
+void Spanner::setTicks(const Fraction& f)
       {
-      _ticks = v;
+      _ticks = f;
       if (score())
             score()->spannerMap().setDirty();
-      }
-
-//---------------------------------------------------------
-//   afrac
-//---------------------------------------------------------
-
-Fraction Spanner::afrac() const
-      {
-      return Fraction::fromTicks(_tick);
-      }
-
-//---------------------------------------------------------
-//   rfrac
-//---------------------------------------------------------
-
-Fraction Spanner::rfrac() const
-      {
-      const Measure* m = toMeasure(findMeasure());
-      if (m)
-            return Fraction::fromTicks(_tick - m->tick());
-      return afrac();
       }
 
 //---------------------------------------------------------
@@ -961,6 +1033,107 @@ void Spanner::triggerLayout() const
       }
 
 //---------------------------------------------------------
+//   pushUnusedSegment
+//---------------------------------------------------------
+
+void Spanner::pushUnusedSegment(SpannerSegment* seg)
+      {
+      if (!seg)
+            return;
+      seg->setSystem(nullptr);
+      unusedSegments.push_back(seg);
+      }
+
+//---------------------------------------------------------
+//   popUnusedSegment
+//    Take the next unused segment for reusing it.
+//    If there is no unused segments left returns nullptr.
+//---------------------------------------------------------
+
+SpannerSegment* Spanner::popUnusedSegment()
+      {
+      if (unusedSegments.empty())
+            return nullptr;
+      SpannerSegment* seg = unusedSegments.front();
+      unusedSegments.pop_front();
+      return seg;
+      }
+
+//---------------------------------------------------------
+//   reuse
+//    called when segment from unusedSegments is added
+//    back to the spanner.
+//---------------------------------------------------------
+
+void Spanner::reuse(SpannerSegment* seg)
+      {
+      add(seg);
+      }
+
+//---------------------------------------------------------
+//   reuseSegments
+//    Adds \p number segments from unusedSegments to this
+//    spanner via reuse() call. Returns number of new
+//    segments that still need to be created, that is,
+//    returns (number - nMovedSegments).
+//---------------------------------------------------------
+
+int Spanner::reuseSegments(int number)
+      {
+      while (number > 0) {
+            SpannerSegment* seg = popUnusedSegment();
+            if (!seg)
+                  break;
+            reuse(seg);
+            --number;
+            }
+      return number;
+      }
+
+//---------------------------------------------------------
+//   fixupSegments
+//    Makes number of segments match targetNumber.
+//    Tries to reuse unused segments. If there are no
+//    unused segments left, uses \p createSegment to create
+//    the needed segments.
+//    Previously unused segments are added via reuse() call
+//---------------------------------------------------------
+
+void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegment*()> createSegment)
+      {
+      const int diff = targetNumber - int(nsegments());
+      if (diff == 0)
+            return;
+      if (diff > 0) {
+            const int ncreate = reuseSegments(diff);
+            for (int i = 0; i < ncreate; ++i)
+                  add(createSegment());
+            }
+      else { // diff < 0
+            const int nremove = -diff;
+            for (int i = 0; i < nremove; ++i) {
+                  SpannerSegment* seg = segments.back();
+                  segments.pop_back();
+                  pushUnusedSegment(seg);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   eraseSpannerSegments
+//    Completely erase all spanner segments, both used and
+//    unused.
+//---------------------------------------------------------
+
+void Spanner::eraseSpannerSegments()
+      {
+      qDeleteAll(segments);
+      qDeleteAll(unusedSegments);
+      segments.clear();
+      unusedSegments.clear();
+      }
+
+//---------------------------------------------------------
 //   layoutSystem
 //---------------------------------------------------------
 
@@ -970,12 +1143,102 @@ SpannerSegment* Spanner::layoutSystem(System*)
       return 0;
       }
 
+//---------------------------------------------------------
+//   getNextLayoutSystemSegment
+//---------------------------------------------------------
+
+SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::function<SpannerSegment*()> createSegment)
+      {
+      SpannerSegment* seg = nullptr;
+      for (SpannerSegment* ss : spannerSegments()) {
+            if (!ss->system()) {
+                  seg = ss;
+                  break;
+                  }
+            }
+      if (!seg) {
+            if ((seg = popUnusedSegment()))
+                  reuse(seg);
+            else {
+                  seg = createSegment();
+                  Q_ASSERT(seg);
+                  add(seg);
+                  }
+            }
+      seg->setSystem(system);
+      seg->setSpanner(this);
+      seg->setTrack(track());
+      seg->setVisible(visible());
+      return seg;
+      }
+
+//---------------------------------------------------------
+//   layoutSystemsDone
+//    Called after layout of all systems is done so precise
+//    number of systems for this spanner becomes available.
+//---------------------------------------------------------
+
+void Spanner::layoutSystemsDone()
+      {
+      std::vector<SpannerSegment*> validSegments;
+      for (SpannerSegment* seg : segments) {
+            if (seg->system())
+                  validSegments.push_back(seg);
+            else // TODO: score()->selection().remove(ss); needed?
+                  pushUnusedSegment(seg);
+            }
+      segments = std::move(validSegments);
+      }
+
+//--------------------------------------------------
+//   fraction
+//---------------------------------------------------------
+
+static Fraction fraction(const XmlWriter& xml, const Element* current, const Fraction& t)
+      {
+      Fraction tick(t);
+      if (!xml.clipboardmode()) {
+            const Measure* m = toMeasure(current->findMeasure());
+            if (m)
+                  tick -= m->tick();
+            }
+      return tick;
+      }
+
+//---------------------------------------------------------
+//   Spanner::readProperties
+//---------------------------------------------------------
+
+bool Spanner::readProperties(XmlReader& e)
+      {
+      const QStringRef tag(e.name());
+      if (e.pasteMode()) {
+            if (tag == "ticks_f") {
+                  setTicks(e.readFraction());
+                  return true;
+                  }
+            }
+      return Element::readProperties(e);
+      }
+
+//---------------------------------------------------------
+//   Spanner::writeProperties
+//---------------------------------------------------------
+
+void Spanner::writeProperties(XmlWriter& xml) const
+      {
+      if (xml.clipboardmode())
+            xml.tag("ticks_f", ticks());
+      Element::writeProperties(xml);
+      }
+
 //--------------------------------------------------
 //   Spanner::writeSpannerStart
 //---------------------------------------------------------
 
-void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac) const
+void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction tick) const
       {
+      Fraction frac = fraction(xml, current, tick);
       SpannerWriter w(xml, current, this, track, frac, true);
       w.write();
       }
@@ -984,41 +1247,11 @@ void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int trac
 //   Spanner::writeSpannerEnd
 //---------------------------------------------------------
 
-void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction frac) const
+void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction tick) const
       {
+      Fraction frac = fraction(xml, current, tick);
       SpannerWriter w(xml, current, this, track, frac, false);
       w.write();
-      }
-
-//--------------------------------------------------
-//   fraction
-//---------------------------------------------------------
-
-static Fraction fraction(const XmlWriter& xml, const Element* current, int tick) {
-      if (!xml.clipboardmode()) {
-            const Measure* m = toMeasure(current->findMeasure());
-            if (m)
-                  tick -= m->tick();
-            }
-      return Fraction::fromTicks(tick);
-      }
-
-//--------------------------------------------------
-//   Spanner::writeSpannerStart
-//---------------------------------------------------------
-
-void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int track, int tick) const
-      {
-      writeSpannerStart(xml, current, track, fraction(xml, current, tick));
-      }
-
-//--------------------------------------------------
-//   Spanner::writeSpannerEnd
-//---------------------------------------------------------
-
-void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, int tick) const
-      {
-      writeSpannerEnd(xml, current, track, fraction(xml, current, tick));
       }
 
 //--------------------------------------------------
@@ -1027,8 +1260,8 @@ void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track,
 
 void Spanner::readSpanner(XmlReader& e, Element* current, int track)
       {
-      ConnectorInfoReader info(e, current, track);
-      ConnectorInfoReader::readConnector(info, e);
+      std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, track));
+      ConnectorInfoReader::readConnector(std::move(info), e);
       }
 
 //--------------------------------------------------
@@ -1037,41 +1270,29 @@ void Spanner::readSpanner(XmlReader& e, Element* current, int track)
 
 void Spanner::readSpanner(XmlReader& e, Score* current, int track)
       {
-      ConnectorInfoReader info(e, current, track);
-      ConnectorInfoReader::readConnector(info, e);
+      std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, track));
+      ConnectorInfoReader::readConnector(std::move(info), e);
       }
 
 //---------------------------------------------------------
 //   SpannerWriter::fillSpannerPosition
 //---------------------------------------------------------
 
-void SpannerWriter::fillSpannerPosition(Location& l, const Element* endpoint, int tick, bool clipboardmode)
+void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const Fraction& tick, bool clipboardmode)
       {
       if (clipboardmode) {
             l.setMeasure(0);
-            l.setFrac(Fraction::fromTicks(tick));
+            l.setFrac(tick);
             }
       else {
-            const MeasureBase* m = toMeasureBase(endpoint->findMeasure());
             if (!m) {
                   qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
                   l.setMeasure(0);
-                  l.setFrac(Fraction::fromTicks(tick));
+                  l.setFrac(tick);
                   return;
                   }
-            // It may happen (hairpins!) that the spanner's end element is
-            // situated in the end of one measure but its end tick is in the
-            // beginning of the next measure. So we are to correct the found
-            // measure a bit.
-            while (tick >= m->endTick()) {
-                  const MeasureBase* next = m->next();
-                  if (next)
-                        m = next;
-                  else
-                        break;
-                  }
             l.setMeasure(m->measureIndex());
-            l.setFrac(Fraction::fromTicks(tick - m->tick()));
+            l.setFrac(tick - m->tick());
             }
       }
 
@@ -1094,12 +1315,14 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
             // elements and will try to obtain this info from the spanner itself.
             if (!start) {
                   _prevLoc.setTrack(sp->track());
-                  fillSpannerPosition(_prevLoc, sp->startElement(), sp->tick(), clipboardmode);
+                  Measure* m = sp->score()->tick2measure(sp->tick());
+                  fillSpannerPosition(_prevLoc, m, sp->tick(), clipboardmode);
                   }
             else {
                   const int track2 = (sp->track2() != -1) ? sp->track2() : sp->track();
                   _nextLoc.setTrack(track2);
-                  fillSpannerPosition(_nextLoc, sp->endElement(), sp->tick2(), clipboardmode);
+                  Measure* m = sp->score()->tick2measure(sp->tick2());
+                  fillSpannerPosition(_nextLoc, m, sp->tick2(), clipboardmode);
                   }
             }
       else {
@@ -1117,30 +1340,77 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
 //   autoplaceSpannerSegment
 //---------------------------------------------------------
 
-void SpannerSegment::autoplaceSpannerSegment(qreal minDistance, Sid posBelow, Sid posAbove)
+void SpannerSegment::autoplaceSpannerSegment()
       {
-      if (!parent())
+      if (!parent()) {
+            setOffset(QPointF());
             return;
-      if (spanner()->placeBelow())
-            rypos() = score()->styleP(posBelow) + (staff() ? staff()->height() : 0.0);
-      else
-            rypos() = score()->styleP(posAbove);
-      if (visible() && autoplace()) {
-            setUserOff(QPointF());
+            }
+      if (isStyled(Pid::OFFSET))
+            setOffset(spanner()->propertyDefault(Pid::OFFSET).toPointF());
 
-            SkylineLine sl(!spanner()->placeAbove());
-            sl.add(shape().translated(pos()));
-            if (spanner()->placeAbove()) {
+      if (spanner()->anchor() == Spanner::Anchor::NOTE)
+            return;
+
+      // rebase vertical offset on drag
+      qreal rebase = 0.0;
+      if (offsetChanged() != OffsetChange::NONE)
+            rebase = rebaseOffset();
+
+      if (autoplace()) {
+            qreal sp = score()->spatium();
+            if (!systemFlag() && !spanner()->systemFlag())
+                  sp *= staff()->mag(spanner()->tick());
+            qreal md = minDistance().val() * sp;
+            bool above = spanner()->placeAbove();
+            SkylineLine sl(!above);
+            Shape sh = shape();
+            sl.add(sh.translated(pos()));
+            qreal yd = 0.0;
+            if (above) {
                   qreal d  = system()->topDistance(staffIdx(), sl);
-                  if (d > -minDistance)
-                        rUserYoffset() = -(d + minDistance);
+                  if (d > -md)
+                        yd = -(d + md);
                   }
             else {
                   qreal d  = system()->bottomDistance(staffIdx(), sl);
-                  if (d > -minDistance)
-                        rUserYoffset() = d + minDistance;
+                  if (d > -md)
+                        yd = d + md;
+                  }
+            if (yd != 0.0) {
+                  if (offsetChanged() != OffsetChange::NONE) {
+                        // user moved element within the skyline
+                        // we may need to adjust minDistance, yd, and/or offset
+                        qreal adj = pos().y() + rebase;
+                        bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < staff()->height();
+                        rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
+                        }
+                  rypos() += yd;
                   }
             }
+      setOffsetChanged(false);
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void Spanner::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+      {
+      if (id == Pid::PLACEMENT) {
+            ScoreElement::undoChangeProperty(id, v, ps);
+            // change offset of all segments if styled
+
+            for (SpannerSegment* s : segments) {
+                  if (s->isStyled(Pid::OFFSET)) {
+                        s->setOffset(s->propertyDefault(Pid::OFFSET).toPointF());
+                        s->triggerLayout();
+                        }
+                  }
+            MuseScoreCore::mscoreCore->updateInspector();
+            return;
+            }
+      Element::undoChangeProperty(id, v, ps);
       }
 
 }

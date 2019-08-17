@@ -162,7 +162,7 @@
           <pos x="-0.529167" y="-4"/>
           <style>System</style>
           <text/>
-          </StaffText>		  
+          </StaffText>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -349,7 +349,6 @@
           <bottomGap>6</bottomGap>
           <lid>10</lid>
           <Text>
-            <pos x="0.362523" y="-2.94812"/>
             <style>Instrument Name (Part)</style>
             <text>Bass</text>
             </Text>

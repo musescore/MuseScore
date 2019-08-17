@@ -90,6 +90,8 @@ void ScoreView::startEditMode(Element* e)
             qDebug("The element cannot be edited");
             return;
             }
+      if (score()->undoStack()->active())
+            score()->endCmd();
       editData.element = e;
       changeState(ViewState::EDIT);
       }
@@ -104,8 +106,14 @@ void ScoreView::startEdit(Element* element, Grip startGrip)
             qDebug("The element cannot be edited");
             return;
             }
+
+      const bool forceStartEdit = (state == ViewState::EDIT && element != editData.element);
       editData.element = element;
-      changeState(ViewState::EDIT);
+      if (forceStartEdit) // call startEdit() forcibly to reinitialize edit mode.
+            startEdit();
+      else
+            changeState(ViewState::EDIT);
+
       if (startGrip != Grip::NO_GRIP)
             editData.curGrip = startGrip;
       }
@@ -159,7 +167,6 @@ void ScoreView::endEdit()
             else if (tp == ElementType::FIGURED_BASS)
                   figuredBassEndEdit();
             }
-
       editData.clearData();
       mscore->updateInspector();
       }
@@ -218,13 +225,13 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
 void ScoreView::endDragEdit()
       {
       _score->addRefresh(editData.element->canvasBoundingRect());
+
       editData.element->endEditDrag(editData);
-      score()->endCmd();
-      setDropTarget(0);
       updateGrips();
-      _score->rebuildBspTree();
       _score->addRefresh(editData.element->canvasBoundingRect());
-      _score->update();
+      setDropTarget(0);
+      score()->endCmd();            // calls update()
+      _score->rebuildBspTree();
       }
 }
 

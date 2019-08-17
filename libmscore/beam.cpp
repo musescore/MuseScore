@@ -207,7 +207,7 @@ void Beam::draw(QPainter* painter) const
             return;
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
-      qreal lw2 = score()->styleP(Sid::beamWidth) * .5 * mag();
+      qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
 
       // make beam thickness independent of slant
       // (expression can be simplified?)
@@ -260,7 +260,7 @@ bool Beam::twoBeamedNotes()
       if (c1->notes().size() != 1 || c2->notes().size() != 1)
             return false;
 
-      int upDnLimit = staff()->lines(0) - 1;           // was '4' hard-coded in the next 2 lines
+      int upDnLimit = staff()->lines(Fraction(0, 1)) - 1;           // was '4' hard-coded in the next 2 lines
       int dist1     = c1->upLine() - upDnLimit;
       int dist2     = c2->upLine() - upDnLimit;
       if ((dist1 == -dist2) || (-dist1 == dist2)) {
@@ -286,6 +286,7 @@ bool Beam::twoBeamedNotes()
 //---------------------------------------------------------
 //   layout1
 //    - remove beam segments
+//    - detach from system
 //    - calculate stem direction and set chord
 //---------------------------------------------------------
 
@@ -295,16 +296,18 @@ void Beam::layout1()
       qDeleteAll(beamSegments);
       beamSegments.clear();
 
+      setParent(nullptr); // parent is System
+
       maxDuration.setType(TDuration::DurationType::V_INVALID);
       Chord* c1 = 0;
       Chord* c2 = 0;
 
       // TAB's with stem beside staves have special layout
-      if (staff()->isTabStaff(0) && !staff()->staffType(0)->stemThrough()) {
+      if (staff()->isTabStaff(Fraction(0,1)) && !staff()->staffType(Fraction(0,1))->stemThrough()) {
             //TABULATURES: all beams (and related chords) are:
             //    UP or DOWN according to TAB duration position
             //    slope 0
-            _up   = !staff()->staffType(0)->stemsDown();
+            _up   = !staff()->staffType(Fraction(0,1))->stemsDown();
             slope   = 0.0;
             _cross  = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
@@ -319,7 +322,7 @@ void Beam::layout1()
                         }
                   }
             }
-      else if (staff()->isDrumStaff(0)) {
+      else if (staff()->isDrumStaff(Fraction(0,1))) {
             if (_direction != Direction::AUTO)
                   _up = _direction == Direction::UP;
             else {
@@ -331,8 +334,10 @@ void Beam::layout1()
                               }
                         }
                   }
-            for (ChordRest* cr : _elements)
+            for (ChordRest* cr : _elements) {
                   cr->setUp(_up);
+                  cr->layoutStem1();
+                  }
             }
       else {
             //PITCHED STAVES (and TAB's with stems through staves)
@@ -343,7 +348,7 @@ void Beam::layout1()
 
             int mUp     = 0;
             int mDown   = 0;
-            int upDnLimit = staff()->lines(0) - 1;           // was '4' hard-coded in following code
+            int upDnLimit = staff()->lines(Fraction(0,1)) - 1;           // was '4' hard-coded in following code
 
             int staffIdx = -1;
             for (ChordRest* cr : _elements) {
@@ -402,6 +407,8 @@ void Beam::layout1()
             _cross = minMove < maxMove;
             if (minMove == 1 && maxMove == 1)
                   setTrack(staffIdx * VOICES + voice());
+            else if (c1)
+                  setTrack(c1->staffIdx() * VOICES + voice());
 
             // int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
             slope = 0.0;
@@ -410,13 +417,11 @@ void Beam::layout1()
             // otherwise, assume beam direction is stem direction
 
             for (ChordRest* cr : _elements) {
-                  if (!cr->isChord())
-                        continue;
-                  Chord* chord = toChord(cr);
-                  if (!(_cross || chord->staffMove())) {
-                        if (chord->up() != _up) {
-                              chord->setUp(_up);
-                              chord->layoutStem1();
+                  const bool staffMove = cr->isChord() ? toChord(cr)->staffMove() : false;
+                  if (!_cross || !staffMove) {
+                        if (cr->up() != _up) {
+                              cr->setUp(_up);
+                              cr->layoutStem1();
                               }
                         }
                   }
@@ -459,11 +464,11 @@ void Beam::layoutGraceNotes()
       //
       // determine beam stem direction
       //
-      if (staff()->isTabStaff(0)) {
+      if (staff()->isTabStaff(Fraction(0,1))) {
             //TABULATURES: all beams (and related chords) are:
             //    UP or DOWN according to TAB duration position
             //    slope 0
-            _up   = !staff()->staffType(0)->stemsDown();
+            _up   = !staff()->staffType(Fraction(0,1))->stemsDown();
             }
       else {
             if (_direction != Direction::AUTO)
@@ -530,7 +535,7 @@ void Beam::layout()
                   fragments.append(new BeamFragment);
             layout2(crl, st, n);
 
-            qreal lw2      = score()->styleP(Sid::beamWidth) * .5 * mag();
+            qreal lw2      = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
 //            ChordRest* cr  = crl.front();
 //            Shape& s       = cr->segment()->shape(staffIdx());
 //            QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
@@ -1098,7 +1103,7 @@ static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
       // on tab staff, reduce a bit the stems (value 4 is experimental)
       // TODO : proper fix should adapt all the numeric vaues used in Beam::computeStemLen() below
       // to variable line distance
-      if (c1->staff() && c1->staff()->isTabStaff(0)) {
+      if (c1->staff() && c1->staff()->isTabStaff(Fraction(0,1))) {
             ml = (ml != 0) ? ml - 4 : 0;
             return ml;
             }
@@ -1179,7 +1184,7 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
       qreal _spatium      = spatium();
       qreal _spatium4     = _spatium * .25;
       // TAB: scale to staff line distance for vert. pos. within a staff
-      qreal _spStaff4     = staff()->isTabStaff(0) ? _spatium4 * staff()->lineDistance(0) : _spatium4;
+      qreal _spStaff4     = staff()->isTabStaff(Fraction(0,1)) ? _spatium4 * staff()->lineDistance(Fraction(0,1)) : _spatium4;
       const ChordRest* c1 = cl.front();
       const ChordRest* c2 = cl.back();
       qreal dx            = c2->pagePos().x() - c1->pagePos().x();
@@ -1458,8 +1463,9 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
             bm.l = ll1 - l1;
             }
       else { // if (beamLevels > 4) {
-            static const int t[] = { 0, 0, 4, 4, 8, 12, 16 }; // spatium4 added to stem len
-            int n = t[beamLevels] + 12;
+            //static const int t[] = { 0, 0, 4, 4, 8, 12, 15, 18, 21 }; // spatium4 added to stem len
+            //int n = t[beamLevels] + 12;
+            int n = (3 * (beamLevels - 5)) + 24;
             bm.s = 0;
             if (_up) {
                   bm.l = -n;
@@ -1481,6 +1487,26 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
       else
             slope   = (bm.s * _spatium4) / dx;
       int dy = (c1->line(_up) - c1->line(!_up)) * 2;
+
+      // Ensure the resulting stem lengths are not less than a reasonable minimum
+      qreal firstStemLenPoints = bm.l * _spStaff4;
+      const qreal sgn = (firstStemLenPoints < 0 ? -1.0 : 1.0);
+      const QPointF p1 = cl[0]->stemPosBeam();
+      for (const ChordRest* cr : cl) {
+            if (cr->isChord()) {
+                  const qreal minAbsLen = toChord(cr)->minAbsStemLength();
+
+                  const QPointF p2 = cr->stemPosBeam();
+
+                  const qreal crStemAbsLen = std::abs((p2.x() - p1.x()) * slope - p2.y() + p1.y() + firstStemLenPoints);
+
+                  if (crStemAbsLen < minAbsLen) {
+                        const qreal dl = minAbsLen - crStemAbsLen;
+                        firstStemLenPoints += sgn * dl;
+                        bm.l += sgn * dl / _spStaff4;
+                        }
+                  }
+            }
 
       py1 += (dy + bm.l) * _spStaff4;
       }
@@ -1521,9 +1547,9 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
       _beamDist *= c1->staff()->mag(c1->tick());
       size_t n = crl.size();
 
-      StaffType* tab = 0;
-      if (staff()->isTabStaff(0) )
-            tab = staff()->staffType(0);
+      const StaffType* tab = 0;
+      if (staff()->isTabStaff(Fraction(0,1)) )
+            tab = staff()->staffType(Fraction(0,1));
       if (tab && !tab->stemThrough()) {
             //
             // TAB STAVES with stems beside staves: beam position is fixed depending on TAB parameters and chordrest up/down
@@ -1553,9 +1579,10 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   //
                   bool relayoutGrace = false;
                   for (size_t i = 0; i < n; ++i) {
-                        Chord* c = toChord(crl.at(i));
-                        if (c->isRest())
+                        ChordRest* cr = crl.at(i);
+                        if (!cr->isChord())
                               continue;
+                        Chord* c = toChord(cr);
                         QPointF p = c->upNote()->pagePos();
                         qreal y1  = beamY + (p.x() - px1) * slope;
                         bool nup  = y1 < p.y();
@@ -1584,12 +1611,12 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   qreal y1   = -200000;
                   qreal y2   = 200000;
                   for (size_t i = 0; i < n; ++i) {
-                        Chord* c = toChord(crl.at(i));
+                        const ChordRest* c = crl.at(i);
                         qreal y;
                         if (c->isRest())
                               continue;   //y = c->pagePos().y();
                         else
-                              y  = c->upNote()->pagePos().y();
+                              y  = toChord(c)->upNote()->pagePos().y();
                         y1 = qMax(y1, y);
                         y2 = qMin(y2, y);
                         }
@@ -1617,6 +1644,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               // we should relayout entire measure
                               // this probably means starting over for beam as well
                               // see https://musescore.org/en/node/71901
+                              // also see https://musescore.org/en/node/289492
                               }
                         }
 
@@ -1822,7 +1850,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               // unless this is start of sub-beam
                               const Groups& g = cr1->staff()->group(cr1->measure()->tick());
                               Fraction stretch = cr1->staff()->timeStretch(cr1->measure()->tick());
-                              int currentTick = (cr1->rtick() * stretch.numerator()) / stretch.denominator();
+                              int currentTick = (cr1->rtick() * stretch).ticks();
                               Beam::Mode bm = g.beamMode(currentTick, currentDuration.type());
                               int beamsIn;
                               if (bm == Beam::Mode::BEGIN32)
@@ -1833,7 +1861,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                                     beamsIn = prevCR->durationType().hooks();
 
                               // remember, we are checking whether nextCR would have started sub-beam *if* same duration as this
-                              int nextTick = (nextCR->rtick() * stretch.numerator()) / stretch.denominator();
+                              int nextTick = (nextCR->rtick() * stretch).ticks();
                               bm = g.beamMode(nextTick, currentDuration.type());
 
                               if (currentHooks - beamsOut > 1 && beamsIn > beamsOut && currentHooks > beamsIn) {
@@ -1851,8 +1879,8 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               else {
                                     // determine if this is a logical group end as per 2) above
 
-                                    int baseTick = tuplet ? tuplet->tick() : cr1->measure()->tick();
-                                    int tickNext = nextCR->tick() - baseTick;
+                                    Fraction baseTick = tuplet ? tuplet->tick() : cr1->measure()->tick();;
+                                    Fraction tickNext = nextCR->tick() - baseTick;
                                     if (tuplet) {
                                           // for tuplets with odd ratios, apply ratio
                                           // thus, we are performing calculation relative to apparent rather than actual beat
@@ -1860,20 +1888,20 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                                           // see https://musescore.org/en/node/58061
                                           Fraction r = tuplet->ratio();
                                           if (r.numerator() & 1)
-                                                tickNext = (tickNext * r.numerator()) / r.denominator();
+                                                tickNext = tickNext * r;
                                           }
 
                                     // determine the tick length of a chord with one beam level less than this
                                     // (i.e. twice the ticks of this)
 
-                                    int tickMod  = cr1->duration().ticks() * 2;     // (tickNext - (crl[c1]->tick() - baseTick)) * 2;
+                                    int tickMod  = cr1->ticks().ticks() * 2;     // (tickNext - (crl[c1]->tick() - baseTick)) * 2;
 
                                     // if this completes, within the measure or tuplet, a unit of tickMod length, flip beam to left
                                     // (allow some tolerance for tick rounding in tuplets
                                     // without tuplet tolerance, could be simplified)
 
                                     static const int BEAM_TUPLET_TOLERANCE = 6;
-                                    int mod = tickNext % tickMod;
+                                    int mod = tickNext.ticks() % tickMod;
                                     if (mod <= BEAM_TUPLET_TOLERANCE || (tickMod - mod) <= BEAM_TUPLET_TOLERANCE)
                                           len = -len;
                                     }
@@ -1946,7 +1974,8 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
 
             Stem* stem = c->stem();
             if (stem) {
-                  qreal sw2  = stem->lineWidth() * .5;
+                  bool useTablature = staff() && staff()->isTabStaff(cr->tick());
+                  qreal sw2  = useTablature ? 0.f : stem->lineWidth() * .5;
                   if (c->up())
                         sw2 = -sw2;
                   stem->rxpos() = c->stemPosX() + sw2;
@@ -1988,7 +2017,7 @@ void Beam::write(XmlWriter& xml) const
       {
       if (_elements.empty())
             return;
-      xml.stag(name());
+      xml.stag(this);
       Element::writeProperties(xml);
 
       writeProperty(xml, Pid::STEM_DIRECTION);
@@ -2034,7 +2063,7 @@ void Beam::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "StemDirection") {
-                  setProperty(Pid::STEM_DIRECTION, Ms::getProperty(Pid::STEM_DIRECTION, e));
+                  readProperty(e, Pid::STEM_DIRECTION);
                   e.readNext();
                   }
             else if (tag == "distribute")
@@ -2236,9 +2265,9 @@ void Beam::triggerLayout() const
 
 bool Beam::acceptDrop(EditData& data) const
       {
-      return (data.element->type() == ElementType::ICON)
-         && ((toIcon(data.element)->iconType() == IconType::FBEAM1)
-         || (toIcon(data.element)->iconType() == IconType::FBEAM2));
+      return (data.dropElement->type() == ElementType::ICON)
+         && ((toIcon(data.dropElement)->iconType() == IconType::FBEAM1)
+         || (toIcon(data.dropElement)->iconType() == IconType::FBEAM2));
       }
 
 //---------------------------------------------------------
@@ -2247,9 +2276,9 @@ bool Beam::acceptDrop(EditData& data) const
 
 Element* Beam::drop(EditData& data)
       {
-      if (!data.element->isIcon())
+      if (!data.dropElement->isIcon())
             return 0;
-      Icon* e = toIcon(data.element);
+      Icon* e = toIcon(data.dropElement);
       qreal g1;
       qreal g2;
 
@@ -2408,7 +2437,9 @@ QVariant Beam::propertyDefault(Pid id) const
 
 void Beam::addSkyline(Skyline& sk)
       {
-      qreal lw2 = score()->styleP(Sid::beamWidth) * .5 * mag();
+      if (beamSegments.empty() || !addToSkyline())
+            return;
+      qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
       const QLineF* bs = beamSegments.front();
       double d  = (qAbs(bs->y2() - bs->y1())) / (bs->x2() - bs->x1());
       if (beamSegments.size() > 1 && d > M_PI/6.0)
@@ -2447,18 +2478,18 @@ void Beam::addSkyline(Skyline& sk)
 //   tick
 //---------------------------------------------------------
 
-int Beam::tick() const
+Fraction Beam::tick() const
       {
-      return _elements.empty() ? 0 : _elements.front()->tick();
+      return _elements.empty() ? Fraction(0, 1) : _elements.front()->segment()->tick();
       }
 
 //---------------------------------------------------------
 //   rtick
 //---------------------------------------------------------
 
-int Beam::rtick() const
+Fraction Beam::rtick() const
       {
-      return _elements.empty() ? 0 : _elements.front()->rtick();
+      return _elements.empty() ? Fraction(0, 1) : _elements.front()->segment()->rtick();
       }
 }
 

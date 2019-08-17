@@ -22,6 +22,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 class RehearsalMark final : public TextBase  {
+      virtual Sid getPropertyStyle(Pid) const override;
+
    public:
       RehearsalMark(Score* score);
       virtual RehearsalMark* clone() const override { return new RehearsalMark(*this); }

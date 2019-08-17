@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: palettebox.cpp 5576 2012-04-24 19:15:22Z wschweer $
 //
 //  Copyright (C) 2011-2016 Werner Schweer and others
 //
@@ -45,6 +44,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       hl->setContentsMargins(5,0,5,0);
 
       workspaceList = new QComboBox;
+      workspaceList->setObjectName("workspace-list");
       hl->addWidget(workspaceList);
       addWorkspaceButton = new QToolButton;
 
@@ -123,9 +123,6 @@ void PaletteBox::filterPalettes(const QString& text)
                  }
             else
                  b->showPalette(false);
-
-            // disable editing while palette is filtered
-            b->enableEditing(text.isEmpty());
             }
       }
 
@@ -166,8 +163,13 @@ void PaletteBox::updateWorkspaces()
                   curIdx = idx;
             ++idx;
             }
-      if (curIdx != -1)
-            workspaceList->setCurrentIndex(curIdx);
+      
+      //select first workspace in the list if the stored workspace vanished
+      Q_ASSERT(!pl.isEmpty());
+      if (curIdx == -1)
+            curIdx = 0;
+      
+      workspaceList->setCurrentIndex(curIdx);
       }
 
 //---------------------------------------------------------
@@ -177,6 +179,27 @@ void PaletteBox::updateWorkspaces()
 void PaletteBox::selectWorkspace(QString path)
       {
       int idx = workspaceList->findData(path);
+      selectWorkspace(idx);
+      }
+
+///---------------------------------------------------------
+///   selectWorkspace
+///       Selects the workspace in the workspaceList dropdown widget using specified @idx
+///       If @idx value is out of valid range:
+///           If currentIndex is valid, keep the index
+///           1st element of the list is selected othrwise
+///---------------------------------------------------------
+
+void PaletteBox::selectWorkspace(int idx)
+      {
+      if (idx < 0 || idx >= workspaceList->count()) {
+            //if selected index is valid, keep the index selection
+            if (workspaceList->currentIndex() < workspaceList->count())
+                  idx = workspaceList->currentIndex();
+            else
+                  idx = 0;
+            }
+      
       workspaceList->setCurrentIndex(idx);
       workspaceSelected(idx);
       }
@@ -283,7 +306,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                   QString path = mscore->getPaletteFilename(true);
                   if (!path.isEmpty()) {
                         QFileInfo fi(path);
-                        Palette* palette = newPalette(fi.completeBaseName(), slot);
+                        palette = newPalette(fi.completeBaseName(), slot);
                         palette->read(path);
                         }
                   }
@@ -291,7 +314,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                   break;
 
             case PaletteCommand::NEW:
-                  palette = newPalette(tr("new Palette"), slot);
+                  palette = newPalette(tr("New Palette"), slot);
                   item   = vbox->itemAt(slot);
                   b = static_cast<PaletteBoxButton*>(item->widget());
                   // fall through

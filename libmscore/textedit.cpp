@@ -24,8 +24,13 @@ void TextBase::editInsertText(TextCursor* cursor, const QString& s)
       Q_ASSERT(!layoutInvalid);
       textInvalid = true;
 
+      int col = 0;
+      for (const QChar& c : s) {
+            if (!c.isHighSurrogate())
+                  ++col;
+            }
       cursor->curLine().insert(cursor, s);
-      cursor->setColumn(cursor->column() + s.size());
+      cursor->setColumn(cursor->column() + col);
       cursor->clearSelection();
 
       triggerLayout();
@@ -66,12 +71,14 @@ void TextBase::startEdit(EditData& ed)
 void TextBase::endEdit(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      score()->undoStack()->remove(ted->startUndoIdx);           // remove all undo/redo records
+      const QString actualText = xmlText();
+      UndoStack* undo = score()->undoStack();
+      while (undo->getCurIdx() > ted->startUndoIdx)
+            undo->undo(&ed);
 
       // replace all undo/redo records collected during text editing with
       // one property change
 
-      QString actualText = xmlText();
       if (ted->oldXmlText.isEmpty()) {
             UndoStack* us = score()->undoStack();
             UndoCommand* ucmd = us->last();
@@ -88,7 +95,6 @@ void TextBase::endEdit(EditData& ed)
                                     ed.element = 0;
                                     }
                               else {
-                                    setXmlText(ted->oldXmlText);  // reset text to value before editing
                                     us->reopen();
                                     // combine undo records of text creation with text editing
                                     undoChangeProperty(Pid::TEXT, actualText);
@@ -108,11 +114,11 @@ void TextBase::endEdit(EditData& ed)
             score()->endCmd();
             return;
             }
-      setXmlText(ted->oldXmlText);                    // reset text to value before editing
       score()->startCmd();
       undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
                                                       // this also changes text of linked elements
       layout1();
+      triggerLayout();                                // force relayout even if text did not change
       score()->endCmd();
 
       static const qreal w = 2.0;
@@ -130,7 +136,6 @@ void TextBase::insertSym(EditData& ed, SymId id)
 
       deleteSelectedText(ed);
       QString s = score()->scoreFont()->toString(id);
-
       CharFormat fmt = *_cursor->format();  // save format
 //      uint code = ScoreFont::fallbackFont()->sym(id).code();
       _cursor->format()->setFontFamily("ScoreText");
@@ -210,7 +215,7 @@ bool TextBase::edit(EditData& ed)
             }
 
       if (!wasHex) {
-            // printf("======%x\n", s.isEmpty() ? -1 : s[0].unicode());
+//printf("======%x\n", s.isEmpty() ? -1 : s[0].unicode());
 
             switch (ed.key) {
                   case Qt::Key_Z:         // happens when the undo stack is empty
@@ -297,10 +302,17 @@ bool TextBase::edit(EditData& ed)
                         break;
 
                   case Qt::Key_Space:
-                        if (ed.modifiers & CONTROL_MODIFIER)
+                        if (ed.modifiers & CONTROL_MODIFIER) {
                               s = QString(QChar(0xa0)); // non-breaking space
-                        else
+                              }
+                        else {
+                              if (isFingering() && ed.view) {
+                                    score()->endCmd();
+                                    ed.view->textTab(ed.modifiers & Qt::ShiftModifier);
+                                    return true;
+                                    }
                               s = " ";
+                              }
                         ed.modifiers = 0;
                         break;
 
@@ -332,15 +344,15 @@ bool TextBase::edit(EditData& ed)
                                     }
                               break;
                         case Qt::Key_B:
-                              insertSym(ed, SymId::accidentalFlat);
-                              return true;
+                              s = "\u266d"; // Unicode flat
+                              break;
                         case Qt::Key_NumberSign:
-                              insertSym(ed, SymId::accidentalSharp);
-                              return true;
+                              s = "\u266f"; // Unicode sharp
+                              break;
                         case Qt::Key_H:
-                              insertSym(ed, SymId::accidentalNatural);
-                              return true;
-                        case Qt::Key_Space:
+                              s = "\u266e"; // Unicode natural
+                              break;
+                         case Qt::Key_Space:
                               insertSym(ed, SymId::space);
                               return true;
                         case Qt::Key_F:
@@ -462,6 +474,7 @@ void SplitJoinText::split(EditData* ed)
       c.curLine().setEol(true);
 
       c.setRow(line+1);
+      c.curLine().setEol(true);
       c.setColumn(0);
       c.setFormat(*charFmt);             // restore orig. format at new line
       c.clearSelection();
@@ -479,14 +492,14 @@ Element* TextBase::drop(EditData& ed)
       {
       TextCursor* _cursor = cursor(ed);
 
-      Element* e = ed.element;
+      Element* e = ed.dropElement;
+
       switch (e->type()) {
             case ElementType::SYMBOL:
                   {
                   SymId id = toSymbol(e)->sym();
                   delete e;
 
-                  deleteSelectedText(ed);
                   insertSym(ed, id);
                   }
                   break;
@@ -494,9 +507,8 @@ Element* TextBase::drop(EditData& ed)
             case ElementType::FSYMBOL:
                   {
                   uint code = toFSymbol(e)->code();
-                  delete e;
-
                   QString s = QString::fromUcs4(&code, 1);
+                  delete e;
 
                   deleteSelectedText(ed);
                   score()->undo(new InsertText(_cursor, s), &ed);
@@ -504,6 +516,7 @@ Element* TextBase::drop(EditData& ed)
                   break;
 
             default:
+                  qDebug("drop <%s> not handled", e->name());
                   break;
             }
       return 0;
@@ -659,6 +672,7 @@ void TextBase::inputTransition(EditData& ed, QInputMethodEvent* ie)
                   editInsertText(_cursor, preEdit);
                   setTextInvalid();
                   layout1();
+                  score()->update();
                   }
             }
       ie->accept();

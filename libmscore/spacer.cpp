@@ -62,7 +62,7 @@ void Spacer::layout0()
       path    = QPainterPath();
       qreal w = _spatium;
       qreal b = w * .5;
-      qreal h = _gap;
+      qreal h = parent() ? _gap : qMin(_gap, spatium() * 4.0);    // limit length for palette
 
       switch (spacerType()) {
             case SpacerType::DOWN:
@@ -128,6 +128,16 @@ void Spacer::startEdit(EditData& ed)
       }
 
 //---------------------------------------------------------
+//   startEditDrag
+//---------------------------------------------------------
+
+void Spacer::startEditDrag(EditData& ed)
+      {
+      ElementEditData* eed = ed.getData(this);
+      eed->pushProperty(Pid::SPACE);
+      }
+
+//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
@@ -176,7 +186,7 @@ void Spacer::updateGrips(EditData& ed) const
 
 void Spacer::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("subtype", int(_spacerType));
       Element::writeProperties(xml);
       xml.tag("space", _gap / spatium());

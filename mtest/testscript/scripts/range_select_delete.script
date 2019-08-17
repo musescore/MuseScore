@@ -1,0 +1,17 @@
+init init/Treble.mscx
+cmd note-input
+cmd note-a
+cmd note-b
+cmd note-c
+cmd note-d
+cmd note-e
+cmd note-f
+cmd note-g
+cmd note-a
+cmd escape
+cmd prev-measure
+cmd prev-measure
+cmd select-next-measure
+cmd select-next-measure
+cmd delete
+test score init/Treble.mscx

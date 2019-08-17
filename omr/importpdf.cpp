@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: importmidi.cpp 2721 2010-02-15 19:41:28Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer and others
 //
@@ -51,10 +50,10 @@ class OmrState {
    public:
       MasterScore* score = 0;
       Fraction timesig { 4, 4};
-      int tick = 0;
+      Fraction tick = Fraction(0, 1);
 
       void importPdfPage(OmrPage* omrPage, qreal top);
-      int importPdfSystem(OmrSystem* omrSystem);
+      Fraction importPdfSystem(OmrSystem* omrSystem);
       void importPdfMeasure(OmrMeasure* m, const OmrSystem* omrSystem);
       };
 
@@ -68,16 +67,16 @@ void OmrState::importPdfMeasure(OmrMeasure* m, const OmrSystem* omrSystem)
       measure->setTick(tick);
       if (m->timesig()) {
             timesig = m->timesig()->timesig;
-            score->sigmap()->add(tick, SigEvent(timesig));
+            score->sigmap()->add(tick.ticks(), SigEvent(timesig));
             }
       measure->setTimesig(timesig);
-      measure->setLen(timesig);
+      measure->setTicks(timesig);
       TDuration d(TDuration::DurationType::V_MEASURE);
       Rest* rest;
       Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
       for (int staffIdx = 0; staffIdx < omrSystem->staves().size(); ++staffIdx) {
             rest = new Rest(score, d);
-            rest->setDuration(timesig);
+            rest->setTicks(timesig);
             rest->setTrack(staffIdx*4);
             s->add(rest);
             }
@@ -126,7 +125,7 @@ void OmrState::importPdfMeasure(OmrMeasure* m, const OmrSystem* omrSystem)
             bool notesOk = nl == timesig;
 
             if (notesOk) {
-                  int ltick = 0;
+                  Fraction ltick = Fraction(0, 1);
                   foreach(const OmrChord& omrChord, chords) {
                         Chord* chord = new Chord(score);
                         chord->setDurationType(omrChord.duration);
@@ -144,7 +143,7 @@ void OmrState::importPdfMeasure(OmrMeasure* m, const OmrSystem* omrSystem)
                               note->setTpcFromPitch();
                               chord->add(note);
                               }
-                        ltick += omrChord.duration.ticks();
+                        ltick += omrChord.duration.fraction();
                         }
                   }
             else {
@@ -159,20 +158,19 @@ void OmrState::importPdfMeasure(OmrMeasure* m, const OmrSystem* omrSystem)
 #endif
 
       score->measures()->add(measure);
-      tick += measure->timesig().ticks();
+      tick += measure->timesig();
       }
 
 //---------------------------------------------------------
 //   importPdfSystem
 //---------------------------------------------------------
 
-int OmrState::importPdfSystem(OmrSystem* omrSystem)
+Fraction OmrState::importPdfSystem(OmrSystem* omrSystem)
       {
       for (int i = 0; i < omrSystem->measures().size(); ++i) {
             OmrMeasure* m = &omrSystem->measures()[i];
             importPdfMeasure(m, omrSystem);
             }
-
 
       if(score->lastMeasure()){
             LayoutBreak* b = new LayoutBreak(score);
@@ -199,7 +197,7 @@ void OmrState::importPdfPage(OmrPage* omrPage, qreal top)
       if (first_measure == 0 || first_measure->isVBox()) {
             VBox* vbox = new VBox(score);
             vbox->setNext(score->first());
-            vbox->setTick(0);
+            vbox->setTick(Fraction(0,1));
             vbox->setBoxHeight(Spatium(top));
             vbox->setBottomMargin(0);
             vbox->setBottomGap(0);

@@ -20,7 +20,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class ScoreInfo : public QFileInfo {
-      QPixmap _pixmap;
+      mutable QPixmap _pixmap;
 
    public:
       ScoreInfo() {}

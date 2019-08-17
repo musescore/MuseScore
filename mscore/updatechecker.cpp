@@ -27,6 +27,7 @@
 
 namespace Ms {
 
+#if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(MSCORE_UNSTABLE))
 //---------------------------------------------------------
 //   default period
 //---------------------------------------------------------
@@ -42,6 +43,7 @@ static int defaultPeriod()
             }
       return result;
       }
+#endif
 
 UpdateChecker::UpdateChecker(QObject* parent)
       : UpdateCheckerBase(parent)
@@ -181,7 +183,8 @@ bool UpdateCheckerBase::hasToCheck()
       {
       if(!getUpdatePrefValue())
             return false;
-
+//disable embedded updating for both stable/unstable Mac builds and stable Win builds
+#if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(MSCORE_UNSTABLE))
       QSettings s;
       s.beginGroup("Update");
       QDateTime now = QDateTime::currentDateTime();
@@ -193,6 +196,9 @@ bool UpdateCheckerBase::hasToCheck()
             }
       s.endGroup();
       return now == lastUpdate || now > lastUpdate.addSecs(3600 * defaultPeriod()) ;
+#else
+      return true;
+#endif
       }
 
 ExtensionsUpdateChecker::ExtensionsUpdateChecker(QObject* parent)
@@ -229,7 +235,7 @@ void ExtensionsUpdateChecker::check()
                   if (compareVersion(installedVersion, version)) {
                         QMessageBox msgBox;
                         msgBox.setWindowTitle(tr("Extension Updates Available"));
-                        msgBox.setText(tr("One or more installed extensions have updates available in Help / Resource Manager..."));
+                        msgBox.setText(tr("One or more installed extensions have updates available in Help > Resource Manager…"));
                         msgBox.setTextFormat(Qt::RichText);
                         msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
                         msgBox.setDefaultButton(QMessageBox::Ok);

@@ -22,7 +22,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle jumpStyle {
-      { Sid::repeatRightPlacement,               Pid::PLACEMENT              },
+      { Sid::repeatRightPlacement, Pid::PLACEMENT },
+      { Sid::repeatMinDistance,    Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------
@@ -100,8 +101,8 @@ QString Jump::jumpTypeUserName() const
 
 void Jump::layout()
       {
-      layout2(Sid::jumpPosAbove, Sid::jumpPosAbove);
-      autoplaceMeasureElement(0.5 * spatium());
+      TextBase::layout();
+      autoplaceMeasureElement();
       }
 
 //---------------------------------------------------------
@@ -131,7 +132,7 @@ void Jump::read(XmlReader& e)
 
 void Jump::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       TextBase::writeProperties(xml);
       xml.tag("jumpTo", _jumpTo);
       xml.tag("playUntil", _playUntil);

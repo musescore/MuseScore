@@ -26,12 +26,14 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Bass</trackName>
       <Instrument>
         <longName>Bass</longName>
         <trackName></trackName>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>32</frets>
           <string>28</string>
@@ -181,7 +183,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>38</pitch>
@@ -199,7 +200,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>
@@ -236,7 +236,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>33</pitch>
@@ -254,7 +253,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>
@@ -270,7 +268,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>33</pitch>
@@ -288,7 +285,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>
@@ -316,6 +312,7 @@
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="0" span="2" col="0"/>
           </Staff>
@@ -347,6 +344,7 @@
         <Instrument>
           <longName>Bass</longName>
           <trackName></trackName>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>32</frets>
             <string>28</string>
@@ -520,7 +518,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>38</pitch>
@@ -541,7 +538,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>
@@ -584,7 +580,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>33</pitch>
@@ -605,7 +600,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>
@@ -624,7 +618,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>33</pitch>
@@ -645,7 +638,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>
@@ -791,7 +783,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>38</pitch>
@@ -812,7 +803,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>
@@ -855,7 +845,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>33</pitch>
@@ -876,7 +865,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>
@@ -895,7 +883,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>33</pitch>
@@ -916,7 +903,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>

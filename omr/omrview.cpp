@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Reader
 //  Music Score Reader
-//  $Id$
 //
 //  Copyright (C) 2010 Werner Schweer
 //
@@ -415,7 +414,7 @@ void OmrView::setOffset(double x, double y)
 
 void OmrView::contextMenuEvent(QContextMenuEvent*)
       {
-      printf("context menu\n");
+//printf("context menu\n");
       }
 
 //---------------------------------------------------------

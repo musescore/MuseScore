@@ -98,7 +98,11 @@ ScoreListWidget* ScoreBrowser::createScoreList()
       if (!_showPreview)
             sl->setSelectionMode(QAbstractItemView::NoSelection);
 
-      connect(sl, SIGNAL(itemClicked(QListWidgetItem*)),   this, SLOT(scoreChanged(QListWidgetItem*)), Qt::QueuedConnection);
+      if (!style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick)) {
+            // Set our handler for item clicks only if Qt
+            // doesn't treat a click as an item activation.
+            connect(sl, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(scoreClicked(QListWidgetItem*)), Qt::QueuedConnection);
+            }
       connect(sl, SIGNAL(itemActivated(QListWidgetItem*)), SLOT(setScoreActivated(QListWidgetItem*)));
       scoreLists.append(sl);
       return sl;
@@ -151,7 +155,7 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
             f.setBold(true);
             }
       else if (fi.completeBaseName() == "Create_New_Score") {
-            item->setText(tr("Create New Score..."));
+            item->setText(tr("Create New Score…"));
             f.setBold(true);
             }
       else {
@@ -320,13 +324,14 @@ void ScoreBrowser::filter(const QString &searchString)
       }
 
 //---------------------------------------------------------
-//   scoreChanged
+//   scoreClicked
 //---------------------------------------------------------
 
-void ScoreBrowser::scoreChanged(QListWidgetItem* current)
+void ScoreBrowser::scoreClicked(QListWidgetItem* current)
       {
       if (!current)
             return;
+
       ScoreItem* item = static_cast<ScoreItem*>(current);
       if (!_showPreview)
             emit scoreActivated(item->info().filePath());

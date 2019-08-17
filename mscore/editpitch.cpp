@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: editpitch.cpp 3775 2010-12-17 23:55:35Z miwarre $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //

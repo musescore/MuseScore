@@ -14,7 +14,6 @@
 #define __BSYMBOL_H__
 
 #include "element.h"
-#include "elementlayout.h"
 
 namespace Ms {
 
@@ -23,8 +22,9 @@ namespace Ms {
 ///    base class for Symbol and Image
 //---------------------------------------------------------
 
-class BSymbol : public Element, public ElementLayout {
+class BSymbol : public Element {
       QList<Element*> _leafs;
+      Align _align;
 
    public:
       BSymbol(Score* s, ElementFlags f = ElementFlag::NOTHING);
@@ -42,6 +42,9 @@ class BSymbol : public Element, public ElementLayout {
 
       void writeProperties(XmlWriter& xml) const;
       bool readProperties(XmlReader&);
+
+      Align align() const { return _align; }
+      void setAlign(Align a) { _align = a; }
 
       const QList<Element*>& leafs() const { return _leafs; }
       QList<Element*>& leafs()             { return _leafs; }

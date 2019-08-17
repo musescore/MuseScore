@@ -231,7 +231,13 @@ void ResourceManager::displayLanguages()
 
             bool verifyInstruments = verifyLanguageFile(filenameInstruments, hashInstruments);
 
-            if (verifyMScore && verifyInstruments) { // compare local file with distant hash
+            QJsonObject toursObject = value.value("tours").toObject();
+            QString hashTours = toursObject.value("hash").toString();
+            QString filenameTours = toursObject.value("file_name").toString();
+
+            bool verifyTours = verifyLanguageFile(filenameTours, hashTours);
+
+            if (verifyMScore && verifyInstruments && verifyTours) { // compare local file with distant hash
                   temp->setText(tr("Updated"));
                   temp->setDisabled(1);
                   }

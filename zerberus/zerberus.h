@@ -22,6 +22,7 @@
 
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/event.h"
+#include "synthesizer/midipatch.h"
 #include "voice.h"
 
 
@@ -29,9 +30,9 @@ class Channel;
 class ZInstrument;
 enum class Trigger : char;
 
-static const int MAX_VOICES  = 512;
-static const int MAX_CHANNEL = 64;
-static const int MAX_TRIGGER = 512;
+static const int MAX_VOICES   = 512;
+static const int MAX_CHANNELS = 256;
+static const int MAX_TRIGGER  = 512;
 
 //---------------------------------------------------------
 //   VoiceFifo
@@ -74,12 +75,13 @@ class VoiceFifo {
 class Zerberus : public Ms::Synthesizer {
       static bool initialized;
       static std::list<ZInstrument*> globalInstruments;
-
+      QList<Ms::MidiPatch*> patches;
+      
       double _masterTuning = 440.0;
       std::atomic<bool> busy;
 
       std::list<ZInstrument*> instruments;
-      Channel* _channel[MAX_CHANNEL];
+      Channel* _channel[MAX_CHANNELS];
 
       int allocatedVoices = 0;
       VoiceFifo freeVoices;
@@ -117,7 +119,6 @@ class Zerberus : public Ms::Synthesizer {
       double ct2hz(double c) const { return pow(2.0, (c-6900.0) / 1200.0) * masterTuning(); }
 
       virtual const char* name() const;
-      virtual const QList<Ms::MidiPatch*>& getPatchInfo() const;
 
       virtual Ms::SynthesizerGroup state() const;
       virtual bool setState(const Ms::SynthesizerGroup&);
@@ -129,8 +130,13 @@ class Zerberus : public Ms::Synthesizer {
       virtual bool removeSoundFont(const QString&);
       virtual bool loadSoundFonts(const QStringList&);
       virtual bool removeSoundFonts(const QStringList& fileNames);
-      virtual QStringList soundFonts() const;
+      QStringList soundFonts() const;
+      std::vector<Ms::SoundFontInfo> soundFontsInfo() const override;
 
+      virtual const QList<Ms::MidiPatch*>& getPatchInfo() const override { return patches; }
+      
+      void updatePatchList();
+      
       virtual Ms::SynthesizerGui* gui();
       static QFileInfoList sfzFiles();
       };

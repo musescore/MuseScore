@@ -5,7 +5,7 @@
       <voice id="0">0</voice>
       </voiceOffset>
     <FiguredBass>
-      <ticks>480</ticks>
+      <ticks>1/4</ticks>
       <FiguredBassItem>
         <brackets b0="0" b1="0" b2="0" b3="0" b4="0"/>
         <prefix>2</prefix>
@@ -19,7 +19,7 @@
         </Note>
       </Chord>
     <FiguredBass>
-      <ticks>480</ticks>
+      <ticks>1/4</ticks>
       <FiguredBassItem>
         <brackets b0="0" b1="0" b2="0" b3="0" b4="0"/>
         <digit>6</digit>
@@ -37,7 +37,7 @@
         </Note>
       </Chord>
     <FiguredBass>
-      <ticks>480</ticks>
+      <ticks>1/4</ticks>
       <FiguredBassItem>
         <brackets b0="0" b1="0" b2="0" b3="0" b4="0"/>
         <digit>5</digit>
@@ -52,7 +52,7 @@
         </Note>
       </Chord>
     <FiguredBass>
-      <ticks>480</ticks>
+      <ticks>1/4</ticks>
       <FiguredBassItem>
         <brackets b0="0" b1="0" b2="0" b3="0" b4="0"/>
         <digit>7</digit>

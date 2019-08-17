@@ -80,9 +80,9 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <location>
-            <fractions>1/2</fractions>
-            </location>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
           <Chord>
             <durationType>quarter</durationType>
             <Note>

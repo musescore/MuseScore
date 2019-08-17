@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: bb.h 4823 2011-09-28 16:38:17Z wschweer $
 //
 //  Copyright (C) 2009-2011 Werner Schweer
 //
@@ -141,7 +140,7 @@ class BBFile {
 
       int timesigZ() { return styles[_style].timesigZ; }
       int timesigN() { return styles[_style].timesigN; }
-      int processPendingNotes(Score*, QList<MNote*>* notes, int, int);
+      Fraction processPendingNotes(Score*, QList<MNote*>* notes, const Fraction&, int);
 
    public:
       BBFile();

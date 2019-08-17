@@ -13,6 +13,8 @@
 #ifndef __EXCERPT_H__
 #define __EXCERPT_H__
 
+#include "fraction.h"
+
 namespace Ms {
 
 class MasterScore;
@@ -25,8 +27,6 @@ class XmlReader;
 
 //---------------------------------------------------------
 //   @@ Excerpt
-//   @P partScore  Score      the score object for this part
-//   @P title      string     the title of this part
 //---------------------------------------------------------
 
 #include <QMultiMap>
@@ -41,6 +41,8 @@ class Excerpt : public QObject {
 
    public:
       Excerpt(MasterScore* s = 0)          { _oscore = s;       }
+      Excerpt(const Excerpt& ex, bool copyPartScore = true);
+
       ~Excerpt();
 
       QList<Part*>& parts()                { return _parts;     }
@@ -67,7 +69,7 @@ class Excerpt : public QObject {
       static void createExcerpt(Excerpt*);
       static void cloneStaves(Score* oscore, Score* score, const QList<int>& map, QMultiMap<int, int>& allTracks);
       static void cloneStaff(Staff* ostaff, Staff* nstaff);
-      static void cloneStaff2(Staff* ostaff, Staff* nstaff, int stick, int etick);
+      static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& stick, const Fraction& etick);
       };
 
 }     // namespace Ms

@@ -1,7 +1,6 @@
 #=============================================================================
 #  Mscore
 #  Linux Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2002-2006 by Werner Schweer and others
 #
@@ -19,7 +18,7 @@
 #=============================================================================
 
 subdirs(templates wallpaper locale styles sound manual
-   workspaces instruments)
+   workspaces instruments tours)
 
 install (DIRECTORY
       plugins

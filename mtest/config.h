@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE
 //  Linux Music Editor
-//  $Id:$
 //
 //  Copyright (C) 2002-2010 by Werner Schweer and others
 //
@@ -17,6 +16,9 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+
+#ifndef MUSESCORE_CONFIG_H
+#define MUSESCORE_CONFIG_H
 
 #define USE_ALSA
 #define USE_JACK
@@ -47,4 +49,4 @@
 #define USE_BSP         true
 #define SCRIPT_INTERFACE true
 
-
+#endif /* MUSESCORE_CONFIG_H */

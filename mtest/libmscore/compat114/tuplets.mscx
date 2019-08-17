@@ -81,8 +81,6 @@ p, li { white-space: pre-wrap; }
       </VBox>
     <Measure number="1">
       <Tuplet id="0">
-        <numberType>0</numberType>
-        <bracketType>0</bracketType>
         <normalNotes>4</normalNotes>
         <actualNotes>6</actualNotes>
         <baseNote>eighth</baseNote>
@@ -168,8 +166,6 @@ p, li { white-space: pre-wrap; }
       </Measure>
     <Measure number="2">
       <Tuplet id="1">
-        <numberType>0</numberType>
-        <bracketType>0</bracketType>
         <normalNotes>8</normalNotes>
         <actualNotes>10</actualNotes>
         <baseNote>quarter</baseNote>
@@ -272,8 +268,6 @@ p, li { white-space: pre-wrap; }
       </Measure>
     <Measure number="3">
       <Tuplet id="2">
-        <numberType>0</numberType>
-        <bracketType>0</bracketType>
         <normalNotes>2</normalNotes>
         <actualNotes>3</actualNotes>
         <baseNote>eighth</baseNote>
@@ -291,8 +285,6 @@ p, li { white-space: pre-wrap; }
         </Tuplet>
       <Tuplet id="3">
         <tick>4800</tick>
-        <numberType>0</numberType>
-        <bracketType>0</bracketType>
         <normalNotes>2</normalNotes>
         <actualNotes>3</actualNotes>
         <baseNote>16th</baseNote>
@@ -372,8 +364,6 @@ p, li { white-space: pre-wrap; }
       </Measure>
     <Measure number="4">
       <Tuplet id="4">
-        <numberType>0</numberType>
-        <bracketType>0</bracketType>
         <normalNotes>8</normalNotes>
         <actualNotes>9</actualNotes>
         <baseNote>16th</baseNote>
@@ -393,8 +383,6 @@ p, li { white-space: pre-wrap; }
       <Tuplet id="5">
         <Tuplet>4</Tuplet>
         <tick>6078</tick>
-        <numberType>0</numberType>
-        <bracketType>0</bracketType>
         <normalNotes>4</normalNotes>
         <actualNotes>6</actualNotes>
         <baseNote>64th</baseNote>

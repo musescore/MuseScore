@@ -19,11 +19,10 @@
 #include "libmscore/key.h"
 #include "libmscore/icon.h"
 #include "libmscore/staff.h"
+#include "menus.h"
 #include "musescore.h"
 
 namespace Ms {
-
-extern void populateIconPalette(Palette* p, const IconAction* a);
 
 //---------------------------------------------------------
 //   createScore
@@ -35,9 +34,13 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       c.setTimeSig(_sig);
       c.createScore("");
       c.addPart("voice");
-      c.move(0, 0);
+      c.move(0, Fraction(0,1));
       c.addKeySig(Key::C);
       TimeSig* nts = c.addTimeSig(_sig);
+      if (!_z.isEmpty())
+            nts->setNumeratorString(_z);
+      if (!_n.isEmpty())
+            nts->setDenominatorString(_n);
       GroupNode node {0, 0};
       Groups ng;
       ng.push_back(node);
@@ -45,12 +48,12 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
 
       for (int i = 0; i < n; ++i) {
             Chord* chord = c.addChord(77, t);
-            int tick = chord->rtick();
-            chord->setBeamMode(_groups.beamMode(tick, t));
+            Fraction tick = chord->rtick();
+            chord->setBeamMode(_groups.beamMode(tick.ticks(), t));
             chord->setStemDirection(Direction::UP);
             chords->push_back(chord);
             }
-      c.score()->style().set(Sid::pageEvenLeftMargin, 0.0);
+      c.score()->style().set(Sid::pageOddTopMargin, 16.0/INCH);
       c.score()->style().set(Sid::pageOddLeftMargin, 0.0);
 
       c.score()->parts().front()->setLongName("");
@@ -59,9 +62,10 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       c.score()->style().set(Sid::MusicalTextFont, QString("Bravura Text"));
       c.score()->style().set(Sid::startBarlineSingle, true);
 
-      c.score()->staff(0)->setLines(0, 1); // single line only
-      c.score()->staff(0)->staffType(0)->setGenClef(false); // no clef
-      c.score()->staff(0)->staffType(0)->setGenTimesig(false); // don't display time sig since ExampleView is unable to reflect custom time sig text/symbols
+      StaffType* st = c.score()->staff(0)->staffType(Fraction(0,1));
+      st->setLines(1);          // single line only
+      st->setGenClef(false);    // no clef
+//      st->setGenTimesig(false); // don't display time sig since ExampleView is unable to reflect custom time sig text/symbols
 
       return c.score();
       }
@@ -102,20 +106,22 @@ NoteGroups::NoteGroups(QWidget* parent)
 //   setSig
 //---------------------------------------------------------
 
-void NoteGroups::setSig(Fraction sig, const Groups& g)
+void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const QString& n)
       {
       _sig    = sig;
+      _z      = z;
+      _n      = n;
       _groups = g;
       chords8.clear();
       chords16.clear();
       chords32.clear();
       Fraction f = _sig.reduced();
-      int n   = f.numerator() * (8 / f.denominator());
-      view8->setScore(createScore(n, TDuration::DurationType::V_EIGHTH, &chords8));
-      n   = f.numerator() * (16 / f.denominator());
-      view16->setScore(createScore(n, TDuration::DurationType::V_16TH, &chords16));
-      n   = f.numerator() * (32 / f.denominator());
-      view32->setScore(createScore(n, TDuration::DurationType::V_32ND, &chords32));
+      int nn   = f.numerator() * (8 / f.denominator());
+      view8->setScore(createScore(nn, TDuration::DurationType::V_EIGHTH, &chords8));
+      nn   = f.numerator() * (16 / f.denominator());
+      view16->setScore(createScore(nn, TDuration::DurationType::V_16TH, &chords16));
+      nn   = f.numerator() * (32 / f.denominator());
+      view32->setScore(createScore(nn, TDuration::DurationType::V_32ND, &chords32));
       view8->resetMatrix();
       view16->resetMatrix();
       view32->resetMatrix();
@@ -129,11 +135,11 @@ Groups NoteGroups::groups()
       {
       Groups g;
       for (Chord* chord : chords8)
-            g.addStop(chord->rtick(), chord->durationType().type(), chord->beamMode());
+            g.addStop(chord->rtick().ticks(), chord->durationType().type(), chord->beamMode());
       for (Chord* chord : chords16)
-            g.addStop(chord->rtick(), chord->durationType().type(), chord->beamMode());
+            g.addStop(chord->rtick().ticks(), chord->durationType().type(), chord->beamMode());
       for (Chord* chord : chords32)
-            g.addStop(chord->rtick(), chord->durationType().type(), chord->beamMode());
+            g.addStop(chord->rtick().ticks(), chord->durationType().type(), chord->beamMode());
       return g;
       }
 
@@ -143,7 +149,7 @@ Groups NoteGroups::groups()
 
 void NoteGroups::resetClicked()
       {
-      setSig(_sig, _groups);
+      setSig(_sig, _groups, _z, _n);
       }
 
 //---------------------------------------------------------
@@ -194,7 +200,7 @@ void NoteGroups::updateBeams(Chord* chord, Beam::Mode m)
       chord->score()->doLayout();
 
       if (changeShorterCheckBox->checkState() == Qt::Checked) {
-            int tick = chord->tick();
+            Fraction tick = chord->tick();
             bool foundChord = false;
             for (Chord* c : chords8) {
                   if (c == chord) {

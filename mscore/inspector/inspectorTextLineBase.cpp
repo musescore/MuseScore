@@ -24,7 +24,7 @@ namespace Ms {
 void populateHookType(QComboBox* b)
       {
       b->clear();
-      b->addItem(b->QObject::tr("None"), int(HookType::NONE));
+      b->addItem(b->QObject::tr("None", "no hook type"), int(HookType::NONE));
       b->addItem(b->QObject::tr("90\u00b0"), int(HookType::HOOK_90)); // &deg;
       b->addItem(b->QObject::tr("45\u00b0"), int(HookType::HOOK_45)); // &deg;
       b->addItem(b->QObject::tr("90\u00b0 centered"), int(HookType::HOOK_90T)); // &deg;
@@ -57,7 +57,7 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { Pid::DIAGONAL,                0, l.diagonal,                l.resetDiagonal              },
             { Pid::LINE_VISIBLE,            0, l.lineVisible,             l.resetLineVisible           },
-            { Pid::LINE_COLOR,              0, l.lineColor,               l.resetLineColor             },
+            { Pid::COLOR,                   0, l.lineColor,               l.resetLineColor             },
             { Pid::LINE_WIDTH,              0, l.lineWidth,               l.resetLineWidth             },
             { Pid::LINE_STYLE,              0, l.lineStyle,               l.resetLineStyle             },
             { Pid::DASH_LINE_LEN,           0, l.dashLineLength,          l.resetDashLineLength        },
@@ -68,9 +68,7 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
             { Pid::BEGIN_TEXT_ALIGN,        0, tl.beginTextAlign,        tl.resetBeginTextAlign        },
             { Pid::BEGIN_FONT_FACE,         0, tl.beginFontFace,         tl.resetBeginFontFace         },
             { Pid::BEGIN_FONT_SIZE,         0, tl.beginFontSize,         tl.resetBeginFontSize         },
-            { Pid::BEGIN_FONT_BOLD,         0, tl.beginFontBold,         tl.resetBeginFontBold         },
-            { Pid::BEGIN_FONT_ITALIC,       0, tl.beginFontItalic,       tl.resetBeginFontItalic       },
-            { Pid::BEGIN_FONT_UNDERLINE,    0, tl.beginFontUnderline,    tl.resetBeginFontUnderline    },
+            { Pid::BEGIN_FONT_STYLE,        0, tl.beginFontStyle,        tl.resetBeginFontStyle        },
             { Pid::BEGIN_TEXT_OFFSET,       0, tl.beginTextOffset,       tl.resetBeginTextOffset       },
 
             { Pid::BEGIN_HOOK_TYPE,         0, tl.beginHookType,         tl.resetBeginHookType         },
@@ -80,9 +78,7 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
             { Pid::CONTINUE_TEXT_ALIGN,     0, tl.continueTextAlign,     tl.resetContinueTextAlign     },
             { Pid::CONTINUE_FONT_FACE,      0, tl.continueFontFace,      tl.resetContinueFontFace      },
             { Pid::CONTINUE_FONT_SIZE,      0, tl.continueFontSize,      tl.resetContinueFontSize      },
-            { Pid::CONTINUE_FONT_BOLD,      0, tl.continueFontBold,      tl.resetContinueFontBold      },
-            { Pid::CONTINUE_FONT_ITALIC,    0, tl.continueFontItalic,    tl.resetContinueFontItalic    },
-            { Pid::CONTINUE_FONT_UNDERLINE, 0, tl.continueFontUnderline, tl.resetContinueFontUnderline },
+            { Pid::CONTINUE_FONT_STYLE,     0, tl.continueFontStyle,     tl.resetContinueFontStyle     },
             { Pid::CONTINUE_TEXT_OFFSET,    0, tl.continueTextOffset,    tl.resetContinueTextOffset    },
 
             { Pid::END_TEXT,                0, tl.endText,               tl.resetEndText               },
@@ -90,9 +86,7 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
             { Pid::END_TEXT_ALIGN,          0, tl.endTextAlign,          tl.resetEndTextAlign          },
             { Pid::END_FONT_FACE,           0, tl.endFontFace,           tl.resetEndFontFace           },
             { Pid::END_FONT_SIZE,           0, tl.endFontSize,           tl.resetEndFontSize           },
-            { Pid::END_FONT_BOLD,           0, tl.endFontBold,           tl.resetEndFontBold           },
-            { Pid::END_FONT_ITALIC,         0, tl.endFontItalic,         tl.resetEndFontItalic         },
-            { Pid::END_FONT_UNDERLINE,      0, tl.endFontUnderline,      tl.resetEndFontUnderline      },
+            { Pid::END_FONT_STYLE,          0, tl.endFontStyle,          tl.resetEndFontStyle          },
             { Pid::END_TEXT_OFFSET,         0, tl.endTextOffset,         tl.resetEndTextOffset         },
             { Pid::END_HOOK_TYPE,           0, tl.endHookType,           tl.resetEndHookType           },
             { Pid::END_HOOK_HEIGHT,         0, tl.endHookHeight,         tl.resetEndHookHeight         },
@@ -107,17 +101,6 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
       for (auto& i : ppList)
             pList.push_back(i);
 
-      tl.beginFontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
-      tl.beginFontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
-      tl.beginFontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
-
-      tl.continueFontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
-      tl.continueFontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
-      tl.continueFontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
-
-      tl.endFontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
-      tl.endFontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
-      tl.endFontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       populateHookType(tl.beginHookType);
       populateHookType(tl.endHookType);
       populateTextPlace(tl.beginTextPlacement);
@@ -180,9 +163,8 @@ void InspectorTextLineBase::updateBeginHookType()
       TextLineBase* t = ts->textLineBase();
       bool hook = t->beginHookType() != HookType::NONE;
 
-      tl.beginHookHeight->setVisible(hook);
+      tl.beginHookHeightWidget->setVisible(hook);
       tl.resetBeginHookHeight->setVisible(hook);
-      tl.beginHookHeightLabel->setVisible(hook);
       }
 
 //---------------------------------------------------------
@@ -195,9 +177,8 @@ void InspectorTextLineBase::updateEndHookType()
       TextLineBase* t = ts->textLineBase();
       bool hook = t->endHookType() != HookType::NONE;
 
-      tl.endHookHeight->setVisible(hook);
+      tl.endHookHeightWidget->setVisible(hook);
       tl.resetEndHookHeight->setVisible(hook);
-      tl.endHookHeightLabel->setVisible(hook);
       }
 
 //---------------------------------------------------------
@@ -213,6 +194,8 @@ void InspectorTextLineBase::valueChanged(int idx)
             updateBeginHookType();
       else if (iList[idx].t == Pid::END_HOOK_TYPE)
             updateEndHookType();
+      else if (iList[idx].t == Pid::COLOR)
+            inspector->update();
       }
 
 

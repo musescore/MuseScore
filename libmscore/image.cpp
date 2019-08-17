@@ -32,7 +32,7 @@ static bool defaultSizeIsSpatium    = true;
 //---------------------------------------------------------
 
 Image::Image(Score* s)
-   : BSymbol(s, ElementFlag::NOTHING)
+   : BSymbol(s, ElementFlag::MOVABLE)
       {
       imageType        = ImageType::NONE;
       rasterDoc        = 0;
@@ -214,7 +214,7 @@ void Image::write(XmlWriter& xml) const
       if (relativeFilePath.isEmpty())
             relativeFilePath = _linkPath;
 
-      xml.stag("Image");
+      xml.stag(this);
       BSymbol::writeProperties(xml);
       // keep old "path" tag, for backward compatibility and because it is used elsewhere
       // (for instance by Box:read(), Measure:read(), Note:read(), ...)
@@ -241,13 +241,18 @@ void Image::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "autoScale")
-                  setProperty(Pid::AUTOSCALE, Ms::getProperty(Pid::AUTOSCALE, e));
+                  readProperty(e, Pid::AUTOSCALE);
             else if (tag == "size")
-                  setProperty(Pid::SIZE, Ms::getProperty(Pid::SIZE, e));
+                  readProperty(e, Pid::SIZE);
             else if (tag == "lockAspectRatio")
-                  setProperty(Pid::LOCK_ASPECT_RATIO, Ms::getProperty(Pid::LOCK_ASPECT_RATIO, e));
+                  readProperty(e, Pid::LOCK_ASPECT_RATIO);
             else if (tag == "sizeIsSpatium")
-                  setProperty(Pid::SIZE_IS_SPATIUM, Ms::getProperty(Pid::SIZE_IS_SPATIUM, e));
+                  // setting this using the property Pid::SIZE_IS_SPATIUM breaks, because the
+                  // property setter attempts to maintain a constant size. If we're reading, we
+                  // don't want to do that, because the stored size will be in:
+                  //    mm if size isn't spatium
+                  //    sp if size is spatium
+                  _sizeIsSpatium = e.readBool();
             else if (tag == "path")
                   _storePath = e.readElementText();
             else if (tag == "linkPath")
@@ -361,7 +366,7 @@ class ImageEditData : public ElementEditData {
 //   startDrag
 //---------------------------------------------------------
 
-void Image::startDrag(EditData& data)
+void Image::startEditDrag(EditData& data)
       {
       ImageEditData* ed = new ImageEditData();
       ed->e    = this;

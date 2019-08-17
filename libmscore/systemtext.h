@@ -23,15 +23,15 @@ namespace Ms {
 
 class SystemText final : public StaffTextBase  {
       virtual void layout() override;
+      virtual Sid getPropertyStyle(Pid) const override;
+      virtual QVariant propertyDefault(Pid id) const override;
 
    public:
-      SystemText(Score*);
-      SystemText(Score*, Tid, ElementFlags = ElementFlag::NOTHING);
+      SystemText(Score* = 0, Tid = Tid::SYSTEM);
 
       virtual SystemText* clone() const override    { return new SystemText(*this); }
       virtual ElementType type() const override     { return ElementType::SYSTEM_TEXT; }
       Segment* segment() const                      { return (Segment*)parent(); }
-      virtual QVariant propertyDefault(Pid id) const override;
       };
 
 

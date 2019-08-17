@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: inspector.cpp
 //
 //  Copyright (C) 2011-2016 Werner Schweer
 //
@@ -40,6 +39,7 @@
 #include "inspectorVibrato.h"
 #include "inspectorNoteDot.h"
 #include "inspectorInstrchange.h"
+#include "inspectorMeasureNumber.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
@@ -86,7 +86,7 @@ void MuseScore::showInspector(bool visible)
             addDockWidget(Qt::RightDockWidgetArea, _inspector);
             }
       if (_inspector)
-            _inspector->setVisible(visible);
+            reDisplayDockWidget(_inspector, visible);
       if (visible)
             updateInspector();
       }
@@ -170,20 +170,19 @@ void Inspector::update(Score* s)
             return;
       _score = s;
       bool sameTypes = true;
-      if (!el())
-            return;
-
-      for (Element* ee : *el()) {
-            if (((element()->type() != ee->type()) && // different and
-                (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
-                (!element()->isStaffText()      || !ee->isSystemText()) && // staff text either side and
-                (!element()->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
-                (!element()->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
-                (!element()->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
-                (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(element())->chord()->isGrace())) // HACK
-                  {
-                  sameTypes = false;
-                  break;
+      if (el()) {
+            for (Element* ee : *el()) {
+                  if (((element()->type() != ee->type()) && // different and
+                      (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
+                      (!element()->isStaffText()      || !ee->isSystemText()) && // staff text either side and
+                      (!element()->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
+                      (!element()->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
+                      (!element()->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
+                      (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(element())->chord()->isGrace())) // HACK
+                        {
+                        sameTypes = false;
+                        break;
+                        }
                   }
             }
       if (oe != element() || oSameTypes != sameTypes) {
@@ -305,6 +304,9 @@ void Inspector::update(Score* s)
                         case ElementType::BEND:
                               ie = new InspectorBend(this);
                               break;
+                        case ElementType::TREMOLO:
+                              ie = new InspectorTremolo(this);
+                              break;
                         case ElementType::TREMOLOBAR:
                               ie = new InspectorTremoloBar(this);
                               break;
@@ -320,7 +322,11 @@ void Inspector::update(Score* s)
                         case ElementType::STAFF_TEXT:
                         case ElementType::SYSTEM_TEXT:
                         case ElementType::REHEARSAL_MARK:
+                        case ElementType::INSTRUMENT_CHANGE:
                               ie = new InspectorStaffText(this);
+                              break;
+                        case ElementType::MEASURE_NUMBER:
+                              ie = new InspectorMeasureNumber(this);
                               break;
                         case ElementType::STAFFTYPE_CHANGE:
                               ie = new InspectorStaffTypeChange(this);
@@ -329,10 +335,13 @@ void Inspector::update(Score* s)
                               ie = new InspectorBracket(this);
                               break;
                         case ElementType::INSTRUMENT_NAME:
-                              ie = new InspectorIname(this);
+                              //ie = new InspectorIname(this);
                               break;
                         case ElementType::FINGERING:
                               ie = new InspectorFingering(this);
+                              break;
+                        case ElementType::STICKING:
+                              ie = new InspectorText(this); // TODO: add a separate inspector for sticking?
                               break;
                         case ElementType::STEM:
                               ie = new InspectorStem(this);
@@ -346,9 +355,6 @@ void Inspector::update(Score* s)
                         case ElementType::NOTEDOT:
                               ie = new InspectorNoteDot(this);
                               break;
-                        case ElementType::INSTRUMENT_CHANGE:
-                              ie = new InspectorInstrumentChange(this);
-                              break;
                         default:
                               if (element()->isText())
                                     ie = new InspectorText(this);
@@ -357,6 +363,7 @@ void Inspector::update(Score* s)
                               break;
                         }
                   }
+            connect(ie, &InspectorBase::elementChanged, this, QOverload<>::of(&Inspector::update), Qt::QueuedConnection);
             sa->setWidget(ie);      // will destroy previous set widget
 
             //focus policies were set by hand in each inspector_*.ui. this code just helps keeping them like they are
@@ -615,31 +622,35 @@ InspectorRest::InspectorRest(QWidget* parent)
       l->setFont(font);
       l->setAlignment(Qt::AlignHCenter);
       _layout->addWidget(l);
-      QFrame* f = new QFrame;
-      f->setFrameStyle(QFrame::HLine | QFrame::Raised);
-      f->setLineWidth(2);
-      _layout->addWidget(f);
+
+      QVBoxLayout* vbox = new QVBoxLayout;
+      vbox->setSpacing(3);
+      vbox->setContentsMargins(3,3,3,3);
+      _layout->addLayout(vbox);
 
       QHBoxLayout* hbox = new QHBoxLayout;
-      dot1 = new QToolButton(this);
+      hbox->setSpacing(3);
+      dot1 = new QPushButton(this);
       dot1->setText(tr("Dot 1"));
       hbox->addWidget(dot1);
-      dot2 = new QToolButton(this);
+      dot2 = new QPushButton(this);
       dot2->setText(tr("Dot 2"));
       hbox->addWidget(dot2);
-      dot3 = new QToolButton(this);
+      dot3 = new QPushButton(this);
       dot3->setText(tr("Dot 3"));
       hbox->addWidget(dot3);
-      dot4 = new QToolButton(this);
+      vbox->addLayout(hbox);
+
+      hbox = new QHBoxLayout;
+      hbox->setSpacing(3);
+      dot4 = new QPushButton(this);
       dot4->setText(tr("Dot 4"));
       hbox->addWidget(dot4);
-      _layout->addLayout(hbox);
-      hbox = new QHBoxLayout;
-      tuplet = new QToolButton(this);
+      tuplet = new QPushButton(this);
       tuplet->setText(tr("Tuplet"));
       tuplet->setEnabled(false);
       hbox->addWidget(tuplet);
-      _layout->addLayout(hbox);
+      vbox->addLayout(hbox);
 
 //TODO      e.offset->setSingleStep(1.0);        // step in spatium units
 
@@ -728,9 +739,9 @@ void InspectorRest::tupletClicked()
       Rest* rest = toRest(inspector->element());
       if (rest == 0)
             return;
-      Tuplet* tuplet = rest->tuplet();
-      if (tuplet) {
-            rest->score()->select(tuplet);
+      Tuplet* t = rest->tuplet();
+      if (t) {
+            rest->score()->select(t);
             rest->score()->update();
             inspector->update();
             }
@@ -814,18 +825,13 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { Pid::FONT_FACE,      0, t.tupletFontFace,  t.resetTupletFontFace    },
             { Pid::FONT_SIZE,      0, t.tupletFontSize,  t.resetTupletFontSize    },
-            { Pid::FONT_BOLD,      0, t.tupletBold,      t.resetTupletBold        },
-            { Pid::FONT_ITALIC,    0, t.tupletItalic,    t.resetTupletItalic      },
-            { Pid::FONT_UNDERLINE, 0, t.tupletUnderline, t.resetTupletUnderline   },
+            { Pid::FONT_STYLE,     0, t.tupletFontStyle, t.resetTupletFontStyle   },
             { Pid::DIRECTION,      0, t.direction,       t.resetDirection         },
             { Pid::NUMBER_TYPE,    0, t.numberType,      t.resetNumberType        },
             { Pid::BRACKET_TYPE,   0, t.bracketType,     t.resetBracketType       },
             { Pid::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         }
             };
       const std::vector<InspectorPanel> ppList = { {t.title, t.panel} };
-      t.tupletBold->setIcon(*icons[int(Icons::textBold_ICON)]);
-      t.tupletUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
-      t.tupletItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       mapSignals(iiList, ppList);
       }
 
@@ -843,7 +849,7 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
             { Pid::ACCIDENTAL_BRACKET,  0, a.bracket,  a.resetBracket  }
             };
       a.bracket->clear();
-      a.bracket->addItem(tr("None"), int(AccidentalBracket::NONE));
+      a.bracket->addItem(tr("None", "no accidental bracket type"), int(AccidentalBracket::NONE));
       a.bracket->addItem(tr("Parenthesis"), int(AccidentalBracket::PARENTHESIS));
       a.bracket->addItem(tr("Bracket"), int(AccidentalBracket::BRACKET));
 
@@ -865,14 +871,9 @@ InspectorBend::InspectorBend(QWidget* parent)
             { Pid::PLAY,           0, g.playBend,    g.resetPlayBend    },
             { Pid::FONT_FACE,      0, g.fontFace,    g.resetFontFace    },
             { Pid::FONT_SIZE,      0, g.fontSize,    g.resetFontSize    },
-            { Pid::FONT_BOLD,      0, g.bold,        g.resetBold        },
-            { Pid::FONT_ITALIC,    0, g.italic,      g.resetItalic      },
-            { Pid::FONT_UNDERLINE, 0, g.underline,   g.resetUnderline   },
+            { Pid::FONT_STYLE,     0, g.fontStyle,   g.resetFontStyle   },
             };
       const std::vector<InspectorPanel> ppList = { {g.title, g.panel} };
-      g.bold->setIcon(*icons[int(Icons::textBold_ICON)]);
-      g.underline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
-      g.italic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       mapSignals(iiList, ppList);
       connect(g.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }
@@ -926,6 +927,23 @@ void InspectorTremoloBar::propertiesClicked()
       }
 
 //---------------------------------------------------------
+//   InspectorTremoloBar
+//---------------------------------------------------------
+
+InspectorTremolo::InspectorTremolo(QWidget* parent)
+   : InspectorElementBase(parent)
+      {
+      g.setupUi(addWidget());
+
+      const std::vector<InspectorItem> iiList = {
+            { Pid::TREMOLO_PLACEMENT, 0, g.tremoloPlacement, g.resetTremoloPlacement },
+            };
+      const std::vector<InspectorPanel> ppList = { { g.title, g.panel } };
+
+      mapSignals(iiList, ppList);
+      }
+
+//---------------------------------------------------------
 //   InspectorClef
 //---------------------------------------------------------
 
@@ -959,7 +977,8 @@ void InspectorClef::setElement()
 void InspectorClef::valueChanged(int idx)
       {
       // copy into 'other clef' the ShowCouretsy ser of this clef
-      if (idx == 6 && otherClef)
+      Pid pid = iList[idx].t;
+      if (pid == Pid::SHOW_COURTESY && otherClef)
             otherClef->setShowCourtesy(c.showCourtesy->isChecked());
       InspectorBase::valueChanged(idx);
       }
@@ -977,7 +996,8 @@ InspectorStem::InspectorStem(QWidget* parent)
             { Pid::LINE_WIDTH, 0, s.lineWidth,  s.resetLineWidth  },
             { Pid::USER_LEN,   0, s.userLength, s.resetUserLength },
             };
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = { { s.title, s.panel } };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -1003,12 +1023,14 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       const std::vector<InspectorItem> il = {
             { Pid::TEMPO,             0, tt.tempo,       tt.resetTempo       },
             { Pid::TEMPO_FOLLOW_TEXT, 0, tt.followText,  tt.resetFollowText  },
+            { Pid::SUB_STYLE,         0, tt.style,       tt.resetStyle       },
             { Pid::PLACEMENT,         0, tt.placement,   tt.resetPlacement   }
             };
       const std::vector<InspectorPanel> ppList = {
             { tt.title, tt.panel }
             };
       populatePlacement(tt.placement);
+      populateStyle(tt.style);
       mapSignals(il, ppList);
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
       }
@@ -1035,13 +1057,15 @@ InspectorLyric::InspectorLyric(QWidget* parent)
       l.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,          0, l.placement,    l.resetPlacement    },
-            { Pid::VERSE,              0, l.verse,        l.resetVerse        }
+            { Pid::VERSE,              0, l.verse,        l.resetVerse        },
+            { Pid::SUB_STYLE,          0, l.style,        l.resetStyle        },
+            { Pid::PLACEMENT,          0, l.placement,    l.resetPlacement    }
             };
       const std::vector<InspectorPanel> ppList = {
             { l.title, l.panel }
             };
       populatePlacement(l.placement);
+      populateStyle(l.style);
       mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
@@ -1055,57 +1079,27 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       {
       s.setupUi(addWidget());
 
-      Element* e = inspector->element();
+      Element* el = inspector->element();
       bool sameTypes = true;
 
       for (const auto& ee : *inspector->el()) {
-            if (e->isSystemText() != ee->isSystemText()) {
+            if (el->type() != ee->type() || el->isSystemText() != ee->isSystemText()) {
                   sameTypes = false;
                   break;
                   }
             }
       if (sameTypes)
-            s.title->setText(e->isSystemText() ? tr("System Text") : tr("Staff Text"));
+            s.title->setText(el->userName());
 
       const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, s.placement, s.resetPlacement },
-            { Pid::SUB_STYLE,  0, s.style,     s.resetStyle     }
+            { Pid::SUB_STYLE,  0, s.style,     s.resetStyle     },
+            { Pid::PLACEMENT,  0, s.placement, s.resetPlacement }
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel }
             };
       populatePlacement(s.placement);
-
-      s.style->clear();
-      for (auto ss : {
-         Tid::SYSTEM,
-         Tid::STAFF,
-         Tid::TEMPO,
-         Tid::METRONOME,
-         Tid::REHEARSAL_MARK,
-         Tid::EXPRESSION,
-         Tid::REPEAT_LEFT,
-         Tid::REPEAT_RIGHT,
-         Tid::FRAME,
-         Tid::TITLE,
-         Tid::SUBTITLE,
-         Tid::COMPOSER,
-         Tid::POET,
-         Tid::INSTRUMENT_EXCERPT,
-         Tid::TRANSLATOR,
-         Tid::HEADER,
-         Tid::FOOTER,
-         Tid::USER1,
-         Tid::USER2,
-         Tid::USER3,
-         Tid::USER4,
-         Tid::USER5,
-         Tid::USER6
-         } )
-            {
-            s.style->addItem(textStyleUserName(ss), int(ss));
-            }
-
+      populateStyle(s.style);
       mapSignals(il, ppList);
       }
 
@@ -1118,17 +1112,17 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent)
       {
       s.setupUi(addWidget());
 
-      Element* e = inspector->element();
+      Element* el = inspector->element();
       bool sameTypes = true;
 
       for (const auto& ee : *inspector->el()) {
-            if (ee->accessibleInfo() != e->accessibleInfo()) {
+            if (ee->accessibleInfo() != el->accessibleInfo()) {
                   sameTypes = false;
                   break;
                   }
             }
       if (sameTypes)
-            s.title->setText(e->accessibleInfo());
+            s.title->setText(el->accessibleInfo());
 
       const std::vector<InspectorItem> iiList = {
             { Pid::LINE_TYPE,       0, s.lineType,      s.resetLineType      },
@@ -1194,7 +1188,8 @@ InspectorBracket::InspectorBracket(QWidget* parent) : InspectorBase(parent)
       const std::vector<InspectorItem> il = {
             { Pid::BRACKET_COLUMN, 0, b.column, b.resetColumn }
             };
-      mapSignals(il);
+      const std::vector<InspectorPanel> ppList = { { b.title, b.panel } };
+      mapSignals(il, ppList);
       }
 
 //---------------------------------------------------------
@@ -1208,7 +1203,8 @@ InspectorIname::InspectorIname(QWidget* parent) : InspectorTextBase(parent)
       const std::vector<InspectorItem> il = {
             { Pid::INAME_LAYOUT_POSITION, 0, i.layoutPosition, i.resetLayoutPosition }
             };
-      mapSignals(il);
+      const std::vector<InspectorPanel> ppList = { { i.title, i.panel } };
+      mapSignals(il, ppList);
       }
 
 }

@@ -22,16 +22,16 @@ class XmlReader;
 //---------------------------------------------------------
 //   StaffTypeList
 //    this list is instantiated for every staff
-//    to keep track of key signature changes
+//    to keep track of staff type changes
 //---------------------------------------------------------
 
 class StaffTypeList : public std::map<int, StaffType> {
 
    public:
       StaffTypeList() {}
-      StaffType& staffType(int tick);
-      const StaffType& staffType(int tick) const;
-      StaffType* setStaffType(int tick, const StaffType*);
+      StaffType& staffType(const Fraction&);
+      const StaffType& staffType(const Fraction&) const;
+      StaffType* setStaffType(const Fraction&, const StaffType&);
       void read(XmlReader&, Score*);
       };
 

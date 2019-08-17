@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2012 Werner Schweer
 //
@@ -16,6 +15,7 @@
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/timesig.h"
+#include "libmscore/undo.h"
 
 #define DIR QString("libmscore/timesig/")
 
@@ -35,6 +35,9 @@ class TestTimesig : public QObject, public MTest
       void timesig02();
       void timesig03();
       void timesig04();
+      void timesig05();
+      void timesig06();
+      void timesig07();
       void timesig_78216();
       };
 
@@ -130,6 +133,80 @@ void TestTimesig::timesig04()
       delete score;
       }
 
+//---------------------------------------------------------
+///   timesig05
+///   Add a 3/4 time signature to the first measure.
+///   Test that spanners are preserved, especially those
+///   that span across time signature change border.
+///   Inspired by the issue #279593 where such spanners
+///   caused crashes.
+//---------------------------------------------------------
+
+void TestTimesig::timesig05()
+      {
+      MasterScore* score = readScore(DIR + "timesig-05.mscx");
+      QVERIFY(score);
+      Measure* m = score->firstMeasure();
+      TimeSig* ts = new TimeSig(score);
+      ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
+
+      score->cmdAddTimeSig(m, 0, ts, false);
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, "timesig-05.mscx", DIR + "timesig-05-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   timesig06
+//    Change timesig with a tremolo that doesn't end up across a barline
+//---------------------------------------------------------
+
+void TestTimesig::timesig06()
+      {
+      MasterScore* score = readScore(DIR + "timesig-06.mscx");
+      QVERIFY(score);
+      Measure* m = score->firstMeasure();
+      TimeSig* ts = new TimeSig(score);
+      ts->setSig(Fraction(5, 4), TimeSigType::NORMAL);
+
+      score->startCmd();
+      score->cmdAddTimeSig(m, 0, ts, false);
+      score->doLayout();
+      QVERIFY(saveCompareScore(score, "timesig-06.mscx", DIR + "timesig-06-ref.mscx"));
+      score->endCmd();
+
+      // Now undo the change, if it crashes, it will fail
+      score->undoStack()->undo(0);
+      score->doLayout();
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   timesig07
+//    Change timesig with a tremolo that _does_ end up across a barline
+//    The tremolo should end up removed.
+//---------------------------------------------------------
+
+void TestTimesig::timesig07()
+      {
+      MasterScore* score = readScore(DIR + "timesig-07.mscx");
+      QVERIFY(score);
+      Measure* m = score->firstMeasure();
+      TimeSig* ts = new TimeSig(score);
+      ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
+
+      score->startCmd();
+      score->cmdAddTimeSig(m, 0, ts, false);
+      score->doLayout();
+      QVERIFY(saveCompareScore(score, "timesig-07.mscx", DIR + "timesig-07-ref.mscx"));
+      score->endCmd();
+
+      // Now undo the change, if there is a crash the test will fail
+      score->undoStack()->undo(0);
+      score->doLayout();
+      delete score;
+      }
 
 //---------------------------------------------------------
 //   timesig_78216

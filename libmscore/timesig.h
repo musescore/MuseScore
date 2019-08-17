@@ -70,12 +70,14 @@ class TimeSig final : public Element {
       TimeSigType timeSigType() const    { return _timeSigType; }
 
       bool operator==(const TimeSig&) const;
+      bool operator!=(const TimeSig& ts) const { return !(*this == ts); }
 
       virtual qreal mag() const override;
       virtual void draw(QPainter*) const override;
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
+      virtual Shape shape() const override;
 
       Fraction sig() const               { return _sig; }
       void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
@@ -112,6 +114,7 @@ class TimeSig final : public Element {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
 
       const Groups& groups() const    { return _groups; }
       void setGroups(const Groups& e) { _groups = e; }

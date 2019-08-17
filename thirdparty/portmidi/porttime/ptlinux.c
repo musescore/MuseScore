@@ -40,6 +40,7 @@ CHANGE LOG
 static int time_started_flag = FALSE;
 static struct timeb time_offset = {0, 0, 0, 0};
 static pthread_t pt_thread_pid;
+static int pt_thread_created = FALSE;
 
 /* note that this is static data -- we only need one copy */
 typedef struct {
@@ -59,7 +60,7 @@ static void *Pt_CallbackProc(void *p)
     /* printf("pt_callback_proc_id %d, id %d\n", pt_callback_proc_id,
            parameters->id); */
     if (geteuid() == 0) setpriority(PRIO_PROCESS, 0, -20);
-	while (pt_callback_proc_id == parameters->id) {
+    while (pt_callback_proc_id == parameters->id) {
         /* wait for a multiple of resolution ms */
         struct timeval timeout;
         int delay = mytime++ * parameters->resolution - Pt_Time();
@@ -91,6 +92,7 @@ PtError Pt_Start(int resolution, PtCallback *callback, void *userData)
         res = pthread_create(&pt_thread_pid, NULL, 
                              Pt_CallbackProc, parms);
         if (res != 0) return ptHostError;
+        pt_thread_created = TRUE;
     }
     time_started_flag = TRUE;
     return ptNoError;
@@ -101,7 +103,10 @@ PtError Pt_Stop()
 {
     /* printf("Pt_Stop called\n"); */
     pt_callback_proc_id++;
-    pthread_join(pt_thread_pid, NULL);
+    if (pt_thread_created) {
+        pthread_join(pt_thread_pid, NULL);
+        pt_thread_created = FALSE;
+    }
     time_started_flag = FALSE;
     return ptNoError;
 }
@@ -124,7 +129,7 @@ PtTimestamp Pt_Time()
 }
 
 
-void Pt_Sleep(long duration)
+void Pt_Sleep(int32_t duration)
 {
     usleep(duration * 1000);
 }

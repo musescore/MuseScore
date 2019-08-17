@@ -144,6 +144,7 @@
             <Lyrics>
               <syllabic>end</syllabic>
               <ticks>480</ticks>
+              <ticks_f>1/4</ticks_f>
               <text>min</text>
               </Lyrics>
             <Note>
@@ -311,6 +312,7 @@
             <Lyrics>
               <syllabic>end</syllabic>
               <ticks>480</ticks>
+              <ticks_f>1/4</ticks_f>
               <text>min</text>
               </Lyrics>
             <Note>

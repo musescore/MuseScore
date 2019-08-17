@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: selectionwindow.cpp 4775 2011-09-12 14:25:31Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -27,32 +26,34 @@
 
 namespace Ms {
 
+// see `SelectionFilter::canSelect()` in select.cpp
+// and `enum class SelectionFilterType` in select.h
 static const char* labels[] = {
       QT_TRANSLATE_NOOP("selectionfilter", "All"),
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 1"),
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 2"),
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 3"),
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 4"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Dynamics"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Fingering"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Lyrics"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Dynamics & Hairpins"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Fingerings"),
       QT_TRANSLATE_NOOP("selectionfilter", "Chord Symbols"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Lyrics"),
       QT_TRANSLATE_NOOP("selectionfilter", "Other Text"),
       QT_TRANSLATE_NOOP("selectionfilter", "Articulations & Ornaments"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Slurs"),
       QT_TRANSLATE_NOOP("selectionfilter", "Figured Bass"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Ottava"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Slurs"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Ottavas"),
       QT_TRANSLATE_NOOP("selectionfilter", "Pedal Lines"),
       QT_TRANSLATE_NOOP("selectionfilter", "Other Lines"),
       QT_TRANSLATE_NOOP("selectionfilter", "Arpeggios"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Glissandos"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Glissandi"),
       QT_TRANSLATE_NOOP("selectionfilter", "Fretboard Diagrams"),
       QT_TRANSLATE_NOOP("selectionfilter", "Breath Marks"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Tremolo"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Tremolos"),
       QT_TRANSLATE_NOOP("selectionfilter", "Grace Notes")
       };
 
-const int numLabels = sizeof(labels)/sizeof(labels[0]);
+static const size_t numLabels = sizeof(labels)/sizeof(labels[0]);
 
 SelectionListWidget::SelectionListWidget(QWidget *parent) : QListWidget(parent)
       {
@@ -63,7 +64,7 @@ SelectionListWidget::SelectionListWidget(QWidget *parent) : QListWidget(parent)
       setFocusPolicy(Qt::TabFocus);
       setTabKeyNavigation(true);
 
-      for (int row = 0; row < numLabels; row++) {
+      for (size_t row = 0; row < numLabels; row++) {
             QListWidgetItem *listItem = new QListWidgetItem(this);
             listItem->setData(Qt::UserRole, row == 0 ? QVariant(-1) : QVariant(1 << (row - 1)));
             listItem->setCheckState(Qt::Unchecked);
@@ -74,7 +75,7 @@ SelectionListWidget::SelectionListWidget(QWidget *parent) : QListWidget(parent)
 
 void SelectionListWidget::retranslate()
       {
-      for (int row = 0; row < numLabels; row++) {
+      for (size_t row = 0; row < numLabels; row++) {
             QListWidgetItem *listItem = item(row);
             listItem->setText(qApp->translate("selectionfilter", labels[row]));
             listItem->setData(Qt::AccessibleTextRole, qApp->translate("selectionfilter", labels[row]));
@@ -86,8 +87,7 @@ void SelectionListWidget::focusInEvent(QFocusEvent* e) {
       QListWidget::focusInEvent(e);
       }
 
-SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
-      QDockWidget(parent)
+SelectionWindow::SelectionWindow(QWidget *parent, Score* score) : QDockWidget(parent)
       {
       setObjectName("SelectionWindow");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
@@ -163,14 +163,15 @@ void SelectionWindow::changeCheckbox(QListWidgetItem* item)
             _score->selectionFilter().setFiltered(static_cast<SelectionFilterType>(type), set);
             }
       else {
-            for (int row = 1; row < numLabels; row++)
+            for (size_t row = 1; row < numLabels; row++)
                   _score->selectionFilter().setFiltered(static_cast<SelectionFilterType>(1 << (row - 1)), set);
             }
+      _score->startCmd();
       if (_score->selection().isRange())
             _score->selection().updateSelectedElements();
       updateFilteredElements();
-//      _score->setUpdateAll();
-//      _score->end();
+      _score->setUpdateAll();
+      _score->endCmd();
       ScoreAccessibility::instance()->updateAccessibilityInfo();
       }
 
@@ -178,7 +179,7 @@ void SelectionWindow::changeCheckbox(QListWidgetItem* item)
 //   showSelectionWindow
 //---------------------------------------------------------
 
-void MuseScore::showSelectionWindow(bool val)
+void MuseScore::showSelectionWindow(bool visible)
       {
       QAction* a = getAction("toggle-selection-window");
       if (selectionWindow == 0) {
@@ -189,11 +190,12 @@ void MuseScore::showSelectionWindow(bool val)
                   tabifyDockWidget(paletteBox, selectionWindow);
                   }
             }
-      selectionWindow->setVisible(val);
-      if (val) {
+      reDisplayDockWidget(selectionWindow, visible);
+      if (visible) {
             selectionWindow->raise();
             }
       }
+
 void SelectionWindow::closeEvent(QCloseEvent* ev)
       {
       emit closed(false);

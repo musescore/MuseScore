@@ -16,7 +16,8 @@
 #include "libmscore/mscore.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/undo.h"
-#include "mscore/qmlplugin.h"
+#include "mscore/plugin/qmlplugin.h"
+#include "mscore/plugin/qmlpluginengine.h"
 
 #define DIR QString("scripting/")
 
@@ -30,8 +31,7 @@ class TestScripting : public QObject, public MTest
       {
       Q_OBJECT
 
-      QQmlEngine engine;
-      QQmlEngine* MsQmlEngine;
+      QQmlEngine* engine;
 
       QmlPlugin* loadPlugin(QString path);
       void runPlugin(QmlPlugin* p, Score* cs);
@@ -71,7 +71,7 @@ void TestScripting::runPlugin(QmlPlugin* p, Score* cs)
 
 QmlPlugin* TestScripting::loadPlugin(QString path)
       {
-      QQmlComponent component(MsQmlEngine);
+      QQmlComponent component(engine);
       component.loadUrl(QUrl::fromLocalFile(path));
       QObject* obj = component.create();
       if (obj == 0) {
@@ -90,9 +90,8 @@ QmlPlugin* TestScripting::loadPlugin(QString path)
 void TestScripting::initTestCase()
       {
       initMTest();
-      qmlRegisterType<MScore>    ("MuseScore", 1, 0, "MScore");
-      qmlRegisterType<QmlPlugin> ("MuseScore", 3, 0, "MuseScore");
-      MsQmlEngine = Ms::MScore::qml();
+//       qmlRegisterType<MScore>    ("MuseScore", 1, 0, "MScore");
+      engine = new QmlPluginEngine(this);
       }
 
 //---------------------------------------------------------
@@ -103,7 +102,7 @@ void TestScripting::initTestCase()
 void TestScripting::plugins01()
       {
       QString path = root + "/" + DIR + "plugins01.qml";
-      QQmlComponent component(&engine, QUrl::fromLocalFile(path));
+      QQmlComponent component(engine, QUrl::fromLocalFile(path));
       QObject* object = component.create();
       if (object == 0) {
             qDebug("creating component <%s> failed", qPrintable(path));
@@ -127,7 +126,7 @@ void TestScripting::plugins01()
 void TestScripting::plugins02()
       {
       QString path = root + "/" + DIR + "plugins02.qml";
-      QQmlComponent component(&engine,
+      QQmlComponent component(engine,
          QUrl::fromLocalFile(path));
       QObject* object = component.create();
       if (object == 0) {
@@ -157,9 +156,6 @@ void TestScripting::read1(const QString& file, const QString& script)
 
       QVERIFY(score);
       score->doLayout();
-
-      QQmlEngine* engine = Ms::MScore::qml();
-      QVERIFY(engine);
 
       QString scriptPath = root + "/" + DIR + script + ".qml";
 

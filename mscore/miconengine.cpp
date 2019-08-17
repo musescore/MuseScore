@@ -122,28 +122,47 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                   QByteArray ba = f.readAll();
                   if (mode == QIcon::Disabled) {
                         if (Ms::preferences.isThemeDark()) {
-                              if (state == QIcon::On)
-                                    ba.replace("#3b3f45", "#4171a2").replace("#3B3F45", "#4171a2");
-                              else
-                                    ba.replace("#3b3f45", "#a0a0a0").replace("#3B3F45", "#a0a0a0");
+                              if (state == QIcon::On) {
+                                    auto colorName = Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_ON).name().toLatin1();
+                                    ba.replace("#3b3f45", colorName).replace("#3B3F45", colorName).replace("rgb(59,63,69)", colorName);
+                                    }
+                                    
+                              else {
+                                    auto colorName = Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_OFF).name().toLatin1();
+                                    ba.replace("#3b3f45", colorName).replace("#3B3F45", colorName).replace("rgb(59,63,69)", colorName);
+                                    }
                               }
                         else {
-                              if (state == QIcon::On)
-                                    ba.replace("#3b3f45", "#8daac7").replace("#3B3F45", "#8daac7");
-                              else
-                                    ba.replace("#3b3f45", "#a0a0a0").replace("#3B3F45", "#a0a0a0");
+                              if (state == QIcon::On) {
+                                    auto colorName = Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_ON).name().toLatin1();
+                                    ba.replace("#3b3f45", colorName).replace("#3B3F45", colorName).replace("rgb(59,63,69)", colorName);
+                                    }
+                              else {
+                                    auto colorName = Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_OFF).name().toLatin1();
+                                    ba.replace("#3b3f45", colorName).replace("#3B3F45", colorName).replace("rgb(59,63,69)", colorName);
+                                    }
                               }
                         }
                   else {
                         if (Ms::preferences.isThemeDark()) {
-                              if (state == QIcon::On)
-                                    ba.replace("#3b3f45", "#78afe6").replace("#3B3F45", "#78afe6");
-			            else
-                                    ba.replace("#3b3f45", "#eff0f1").replace("#3B3F45", "#eff0f1");
+                              if (state == QIcon::On) {
+                                    auto colorName = Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON).name().toLatin1();
+                                    ba.replace("#3b3f45", colorName).replace("#3B3F45", colorName).replace("rgb(59,63,69)", colorName);
+                                    }
+			            else {
+                                    auto colorName = Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_OFF).name().toLatin1();
+                                    ba.replace("#3b3f45", colorName).replace("#3B3F45", colorName).replace("rgb(59,63,69)", colorName);
+                                    }
                               }
                         else {
-                              if (state == QIcon::On)
-                                    ba.replace("#3b3f45", "#4171a2").replace("#3B3F45", "#4171a2");
+                              if (state == QIcon::On) {
+                                    auto colorName = Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON).name().toLatin1();
+                                    ba.replace("#3b3f45", colorName).replace("#3B3F45", colorName).replace("rgb(59,63,69)", colorName);
+                                    }
+                              else {
+                                    auto colorName = Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF).name().toLatin1();
+                                    ba.replace("#3b3f45", colorName).replace("#3B3F45", colorName).replace("rgb(59,63,69)", colorName);
+                              }
                               }
                         }
                   renderer->load(ba);

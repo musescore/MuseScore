@@ -87,7 +87,7 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
                   }
             }
 
-      int track = cr->track();
+      int track      = cr->track();
       SegmentType st = SegmentType::ChordRest;
 
       for (Segment* seg = cr->segment()->next1MM(st); seg; seg = seg->next1MM(st)) {
@@ -437,7 +437,7 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
       if (!measure)
             return 0;
 
-      int endTick = element->measure()->last()->nextChordRest(element->track(), true)->tick();
+      Fraction endTick = element->measure()->last()->nextChordRest(element->track(), true)->tick();
       bool last   = false;
 
       if (selection().isRange()) {
@@ -486,7 +486,7 @@ ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
       else
             measure = element->measure()->prevMeasure();
 
-      int startTick = element->measure()->first()->nextChordRest(element->track())->tick();
+      Fraction startTick = element->measure()->first()->nextChordRest(element->track())->tick();
       bool last = false;
 
       if (selection().isRange() && selection().isEndActive() && selection().startSegment()->tick() <= startTick)

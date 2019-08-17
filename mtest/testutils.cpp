@@ -76,7 +76,6 @@ Element* MTest::writeReadElement(Element* element)
       //
       // write element
       //
-      qDebug("writeReadElement %s", element->name());
       QBuffer buffer;
       buffer.open(QIODevice::WriteOnly);
       XmlWriter xml(element->score(), &buffer);
@@ -87,13 +86,10 @@ Element* MTest::writeReadElement(Element* element)
       //
       // read element
       //
-// printf("===read <%s>===\n", element->name());
-// printf("%s\n", buffer.buffer().data());
 
       XmlReader e(buffer.buffer());
       e.readNextStartElement();
       QString tag(e.name().toString());
-// printf("read tag %s\n", qPrintable(tag));
       element = Element::name2Element(e.name(), score);
       element->read(e);
       return element;
@@ -130,7 +126,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
       score->setName(fi.completeBaseName());
       QString csl  = fi.suffix().toLower();
 
-      Score::isScoreLoaded() = true;
+      ScoreLoad sl;
       Score::FileError rv;
       if (csl == "cap") {
             rv = importCapella(score, name);
@@ -168,7 +164,6 @@ MasterScore* MTest::readCreatedScore(const QString& name)
             for (Score* s : score->scoreList())
                   s->doLayout();
             }
-      Score::isScoreLoaded() = false;
       return score;
       }
 
@@ -322,6 +317,7 @@ bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, co
 
 void MTest::initMTest()
       {
+      qputenv("QML_DISABLE_DISK_CACHE", "true");
       qSetMessagePattern("%{function}: %{message}");
       initMyResources();
 //      DPI  = 120;

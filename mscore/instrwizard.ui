@@ -22,14 +22,14 @@
      <item>
       <widget class="QComboBox" name="instrumentGenreFilter">
        <property name="accessibleName">
-        <string>Instrument Genre Filter</string>
+        <string>Instrument genre filter</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QTreeWidget" name="instrumentList">
        <property name="accessibleName">
-        <string>Instrument List</string>
+        <string>Instrument list</string>
        </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
@@ -245,7 +245,7 @@
    <item>
     <widget class="QTreeWidget" name="partiturList">
      <property name="accessibleName">
-      <string>Added Instruments</string>
+      <string>Added instruments</string>
      </property>
      <property name="alternatingRowColors">
       <bool>true</bool>

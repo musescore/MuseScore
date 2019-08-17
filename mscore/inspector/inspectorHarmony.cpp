@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -29,20 +28,16 @@ InspectorHarmony::InspectorHarmony(QWidget* parent)
       h.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::SUB_STYLE, 0, h.style, h.resetStyle       },
+            { Pid::SUB_STYLE, 0, h.style,       h.resetStyle      },
+            { Pid::PLACEMENT, 0, h.placement,   h.resetPlacement  }
             };
 
       const std::vector<InspectorPanel> ppList = {
             { h.title, h.panel }
             };
 
-      h.style->clear();
-      for (auto ss : { Tid::HARMONY_A, Tid::HARMONY_B } ) {
-            h.style->addItem(textStyleUserName(ss), int(ss));
-            }
-
+      populateStyle(h.style);
       t.resetToStyle->setVisible(false);
-
       mapSignals(iiList, ppList);
       }
 

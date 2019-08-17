@@ -13,8 +13,8 @@
 #ifndef __INSPECTOR_FINGERING_H__
 #define __INSPECTOR_FINGERING_H__
 
-#include "inspectorTextBase.h"
-#include "ui_inspector_fingering.h"
+#include "inspector.h"
+#include "ui_inspector_stafftext.h"
 
 namespace Ms {
 
@@ -22,13 +22,12 @@ namespace Ms {
 //   InspectorFingering
 //---------------------------------------------------------
 
-class InspectorFingering : public InspectorTextBase {
+class InspectorFingering : public InspectorStaffText {
       Q_OBJECT
-
-      Ui::InspectorFingering f;
 
    public:
       InspectorFingering(QWidget* parent);
+      virtual const std::vector<Tid>& allowedTextStyles() override;
       };
 
 

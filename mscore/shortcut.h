@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011-2016 Werner Schweer and others
 //
@@ -115,11 +114,15 @@ class Shortcut {
       QKeySequence::StandardKey _standardKey { QKeySequence::UnknownKey };
       mutable QAction* _action               { 0 };             //! cached action
 
+      static QString source;
+
       static Shortcut _sc[];
       static QHash<QByteArray, Shortcut*> _shortcuts;
       void translateAction(QAction* action) const;
 
    public:
+
+      static constexpr const char* defaultFileName = ":/data/shortcuts.xml";
 
       Shortcut() {}
       Shortcut(
@@ -154,6 +157,7 @@ class Shortcut {
       QKeySequence::StandardKey standardKey() const { return _standardKey; }
       void setStandardKey(QKeySequence::StandardKey k);
       void setKeys(const QList<QKeySequence>& ks);
+      void setKeys(const Shortcut&);
 
       bool compareKeys(const Shortcut&) const;
       QString keysToString() const;
@@ -171,12 +175,13 @@ class Shortcut {
       static void saveToNewFile(QString fileLocation);
       static void resetToDefault();
       static bool dirty;
+      static bool customSource() { return source != defaultFileName; }
       static Shortcut* getShortcut(const char* key);
       static const QHash<QByteArray, Shortcut*>& shortcuts() { return _shortcuts; }
       static QActionGroup* getActionGroupForWidget(MsWidget w);
       static QActionGroup* getActionGroupForWidget(MsWidget w, Qt::ShortcutContext newShortcutContext);
 
-      static QString keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt);
+      static QString keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt, bool escapeKeyStr = false);
       static QKeySequence keySeqFromString(const QString& str, QKeySequence::SequenceFormat fmt);
       };
 

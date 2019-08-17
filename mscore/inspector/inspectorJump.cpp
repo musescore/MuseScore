@@ -38,7 +38,6 @@ InspectorJump::InspectorJump(QWidget* parent)
             };
 
       mapSignals(iiList, ppList);
-      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 
 }

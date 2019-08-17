@@ -256,7 +256,7 @@ void Compressor::process(int frames, float* ip, float *op)
             op[pos * 2+1] = ip[pos * 2 + 1] * gain * mug;
             }
 
-//      printf("gain %f\n", gain);
+//printf("gain %f\n", gain);
 
 //      amplitude = lin2db(env);
 //      gain_red  = lin2db(gain);

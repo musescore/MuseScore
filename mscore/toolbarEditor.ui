@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="toolbarLabel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -28,7 +28,7 @@
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="actionsLabel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -41,7 +41,7 @@
     </widget>
    </item>
    <item row="1" column="4">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="availableActionsLabel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -69,7 +69,7 @@
    <item row="0" column="0" colspan="5">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="workspaceLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -82,7 +82,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="workspace">
+      <widget class="QLineEdit" name="workspaceName">
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -150,6 +150,16 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>workspaceName</tabstop>
+  <tabstop>toolbarList</tabstop>
+  <tabstop>actionList</tabstop>
+  <tabstop>add</tabstop>
+  <tabstop>remove</tabstop>
+  <tabstop>up</tabstop>
+  <tabstop>down</tabstop>
+  <tabstop>availableList</tabstop>
+ </tabstops>
  <resources>
   <include location="musescore.qrc"/>
  </resources>
@@ -161,8 +171,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>297</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -177,8 +187,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>297</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

@@ -17,6 +17,7 @@
 // need to get declaration for Sleep()
 #include "windows.h"
 #else
+#include <unistd.h>
 #define Sleep(n) usleep(n * 1000)
 #endif
 
@@ -58,11 +59,13 @@ void loopback_test()
     PmStream *midi_out;
     unsigned char msg[1024];
     char line[80];
-    long len;
+    int32_t len;
     int i;
     int data;
     PmEvent event;
     int shift;
+    long total_bytes = 0;
+    int32_t begin_time;
 
     Pt_Start(1, 0, 0);
     
@@ -86,12 +89,13 @@ void loopback_test()
 
     srand((unsigned int) Pt_Time()); /* seed for random numbers */
 
+    begin_time = Pt_Time();
     while (1) {
         PmError count;
-        long start_time;
-        long error_position = -1; /* 0; -1; -1 for continuous */ 
-        long expected = 0;
-        long actual = 0;
+        int32_t start_time;
+        int error_position = -1; /* 0; -1; -1 for continuous */ 
+        int expected = 0;
+        int actual = 0;
         /* this modification will run until an error is detected */
         /* set error_position above to 0 for interactive, -1 for */
         /* continuous */
@@ -124,7 +128,7 @@ void loopback_test()
 		}
 
         /* send the message */
-        printf("Sending %ld byte sysex message.\n", len + 2);
+        printf("Sending %d byte sysex message.\n", len + 2);
         Pm_WriteSysEx(midi_out, 0, msg);
 
         /* receive the message and compare to msg[] */
@@ -156,14 +160,19 @@ void loopback_test()
             }
         }
         if (error_position >= 0) {
-            printf("Error at byte %ld: sent %lx recd %lx\n", error_position, 
+            printf("Error at byte %d: sent %x recd %x.\n", error_position, 
                    expected, actual);
+            break;
         } else if (i != len + 2) {
-            printf("Error: byte %d not received\n", i);
+            printf("Error: byte %d not received.\n", i);
+            break;
         } else {
-            printf("Correctly ");
+            int seconds = (Pt_Time() - begin_time) / 1000;
+	    if (seconds == 0) seconds = 1;
+            printf("Correctly received %d byte sysex message.\n", i);
+	    total_bytes += i;
+	    printf("Cummulative bytes/sec: %d\n", total_bytes / seconds);
         }
-        printf("received %d byte sysex message.\n", i);
     }
 cleanup:
     Pm_Close(midi_out);
@@ -228,11 +237,11 @@ void send_multiple_test()
 
 #define MAX_MSG_LEN 1024
 static unsigned char receive_msg[MAX_MSG_LEN];
-static long receive_msg_index;
-static long receive_msg_length;
-static long receive_msg_count;
-static long receive_msg_error;
-static long receive_msg_messages;
+static int receive_msg_index;
+static int receive_msg_length;
+static int receive_msg_count;
+static int receive_msg_error;
+static int receive_msg_messages;
 static PmStream *receive_msg_midi_in;
 static int receive_poll_running;
 
@@ -316,7 +325,7 @@ void receive_multiple_test()
     /* Important: start PortTime first -- if it is not started first, it will
        be started by PortMidi, and then our attempt to open again will fail */
     receive_poll_running = false;
-    if (err = Pt_Start(1, receive_poll, 0)) {
+    if ((err = Pt_Start(1, receive_poll, 0))) {
         printf("PortTime error code: %d\n", err);
         goto cleanup;
     }

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2012 Werner Schweer and others
 //
@@ -33,6 +32,8 @@ InspectorGroupElement::InspectorGroupElement(QWidget* parent)
       connect(ge.setColor, SIGNAL(clicked()), SLOT(setColor()));
       connect(ge.setVisible, SIGNAL(clicked()), SLOT(setVisible()));
       connect(ge.setInvisible, SIGNAL(clicked()), SLOT(setInvisible()));
+      connect(ge.enableAutoplace, SIGNAL(clicked()), SLOT(enableAutoplace()));
+      connect(ge.disableAutoplace, SIGNAL(clicked()), SLOT(disableAutoplace()));
 
       //
       // Select
@@ -44,25 +45,27 @@ InspectorGroupElement::InspectorGroupElement(QWidget* parent)
       l->setFont(font);
       l->setAlignment(Qt::AlignHCenter);
       _layout->addWidget(l);
-      QFrame* f = new QFrame;
-      f->setFrameStyle(QFrame::HLine | QFrame::Raised);
-      f->setLineWidth(2);
-      _layout->addWidget(f);
-      QHBoxLayout* hbox = new QHBoxLayout;
 
-      notes = new QToolButton(this);
+      QHBoxLayout* hbox = new QHBoxLayout;
+      hbox->setSpacing(3);
+      hbox->setContentsMargins(3,3,3,3);
+
+      notes = new QPushButton(this);
       notes->setText(tr("Notes"));
       notes->setEnabled(true);
+      notes->setObjectName("notes");
       hbox->addWidget(notes);
 
-      graceNotes = new QToolButton(this);
+      graceNotes = new QPushButton(this);
       graceNotes->setText(tr("Grace Notes"));
       graceNotes->setEnabled(true);
+      graceNotes->setObjectName("graceNotes");
       hbox->addWidget(graceNotes);
 
-      rests = new QToolButton(this);
+      rests = new QPushButton(this);
       rests->setText(tr("Rests"));
       rests->setEnabled(true);
+      rests->setObjectName("rests");
       hbox->addWidget(rests);
 
       _layout->addLayout(hbox);
@@ -118,6 +121,40 @@ void InspectorGroupElement::setInvisible()
       for (Element* e : *inspector->el()) {
             if (e->getProperty(Pid::VISIBLE).toBool())
                   e->undoChangeProperty(Pid::VISIBLE, false);
+            }
+      score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   enableAutoplace
+//---------------------------------------------------------
+
+void InspectorGroupElement::enableAutoplace()
+      {
+      if (inspector->el()->isEmpty())
+            return;
+      Score* score = inspector->el()->front()->score();
+      score->startCmd();
+      for (Element* e : *inspector->el()) {
+            if (!e->getProperty(Pid::AUTOPLACE).toBool())
+                  e->undoChangeProperty(Pid::AUTOPLACE, true);
+            }
+      score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   disableAutoplace
+//---------------------------------------------------------
+
+void InspectorGroupElement::disableAutoplace()
+      {
+      if (inspector->el()->isEmpty())
+            return;
+      Score* score = inspector->el()->front()->score();
+      score->startCmd();
+      for (Element* e : *inspector->el()) {
+            if (e->getProperty(Pid::AUTOPLACE).toBool())
+                  e->undoChangeProperty(Pid::AUTOPLACE, false);
             }
       score->endCmd();
       }

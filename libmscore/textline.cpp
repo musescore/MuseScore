@@ -28,28 +28,23 @@ static const ElementStyle textLineStyle {
       { Sid::textLineFontSize,                   Pid::BEGIN_FONT_SIZE         },
       { Sid::textLineFontSize,                   Pid::CONTINUE_FONT_SIZE      },
       { Sid::textLineFontSize,                   Pid::END_FONT_SIZE           },
-      { Sid::textLineFontBold,                   Pid::BEGIN_FONT_BOLD         },
-      { Sid::textLineFontBold,                   Pid::CONTINUE_FONT_BOLD      },
-      { Sid::textLineFontBold,                   Pid::END_FONT_BOLD           },
-      { Sid::textLineFontItalic,                 Pid::BEGIN_FONT_ITALIC       },
-      { Sid::textLineFontItalic,                 Pid::CONTINUE_FONT_ITALIC    },
-      { Sid::textLineFontItalic,                 Pid::END_FONT_ITALIC         },
-      { Sid::textLineFontUnderline,              Pid::BEGIN_FONT_UNDERLINE    },
-      { Sid::textLineFontUnderline,              Pid::CONTINUE_FONT_UNDERLINE },
-      { Sid::textLineFontUnderline,              Pid::END_FONT_UNDERLINE      },
+      { Sid::textLineFontStyle,                  Pid::BEGIN_FONT_STYLE        },
+      { Sid::textLineFontStyle,                  Pid::CONTINUE_FONT_STYLE     },
+      { Sid::textLineFontStyle,                  Pid::END_FONT_STYLE          },
       { Sid::textLineTextAlign,                  Pid::BEGIN_TEXT_ALIGN        },
       { Sid::textLineTextAlign,                  Pid::CONTINUE_TEXT_ALIGN     },
       { Sid::textLineTextAlign,                  Pid::END_TEXT_ALIGN          },
+      { Sid::textLinePlacement,                  Pid::PLACEMENT               },
+      { Sid::textLinePosAbove,                   Pid::OFFSET                  },
       };
 
 //---------------------------------------------------------
 //   TextLineSegment
 //---------------------------------------------------------
 
-TextLineSegment::TextLineSegment(Score* s)
-   : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+TextLineSegment::TextLineSegment(Spanner* sp, Score* s)
+   : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      setPlacement(Placement::ABOVE);
       }
 
 //---------------------------------------------------------
@@ -59,7 +54,9 @@ TextLineSegment::TextLineSegment(Score* s)
 void TextLineSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7, Sid::textLinePosBelow, Sid::textLinePosAbove);
+      if (isStyled(Pid::OFFSET))
+            roffset() = textLine()->propertyDefault(Pid::OFFSET).toPointF();
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -71,7 +68,6 @@ TextLine::TextLine(Score* s)
       {
       initElementStyle(&textLineStyle);
 
-      setPlacement(Placement::ABOVE);
       setBeginText("");
       setContinueText("");
       setEndText("");
@@ -96,16 +92,65 @@ TextLine::TextLine(const TextLine& tl)
       }
 
 //---------------------------------------------------------
+//   write
+//---------------------------------------------------------
+
+void TextLine::write(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag(this);
+      // other styled properties are included in TextLineBase pids list
+      writeProperty(xml, Pid::PLACEMENT);
+      writeProperty(xml, Pid::OFFSET);
+      TextLineBase::writeProperties(xml);
+      xml.etag();
+      }
+
+static const ElementStyle textLineSegmentStyle {
+      { Sid::textLinePosAbove,      Pid::OFFSET       },
+      { Sid::textLineMinDistance,   Pid::MIN_DISTANCE },
+      };
+
+//---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
 
 LineSegment* TextLine::createLineSegment()
       {
-      TextLineSegment* seg = new TextLineSegment(score());
+      TextLineSegment* seg = new TextLineSegment(this, score());
+      seg->setTrack(track());
       // note-anchored line segments are relative to system not to staff
       if (anchor() == Spanner::Anchor::NOTE)
             seg->setFlag(ElementFlag::ON_STAFF, false);
+      seg->initElementStyle(&textLineSegmentStyle);
       return seg;
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid TextLineSegment::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET) {
+            if (spanner()->anchor() == Spanner::Anchor::NOTE)
+                  return Sid::NOSTYLE;
+            else
+                  return spanner()->placeAbove() ? Sid::textLinePosAbove : Sid::textLinePosBelow;
+            }
+      return TextLineBaseSegment::getPropertyStyle(pid);
+      }
+
+Sid TextLine::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET) {
+            if (anchor() == Spanner::Anchor::NOTE)
+                  return Sid::NOSTYLE;
+            else
+                  return placeAbove() ? Sid::textLinePosAbove : Sid::textLinePosBelow;
+            }
+      return TextLineBase::getPropertyStyle(pid);
       }
 
 //---------------------------------------------------------
@@ -116,7 +161,7 @@ QVariant TextLine::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::PLACEMENT:
-                  return int(Placement::ABOVE);
+                  return score()->styleV(Sid::textLinePlacement);
             case Pid::BEGIN_TEXT:
             case Pid::CONTINUE_TEXT:
             case Pid::END_TEXT:

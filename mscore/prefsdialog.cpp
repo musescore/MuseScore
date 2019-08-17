@@ -25,6 +25,8 @@
 #include "scoreview.h"
 #include "pa.h"
 #include "shortcut.h"
+#include "workspace.h"
+#include "palettebox.h"
 
 #ifdef USE_PORTMIDI
 #include "pm.h"
@@ -147,14 +149,24 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(fgWallpaperSelect,  SIGNAL(clicked()), SLOT(selectFgWallpaper()));
       connect(bgWallpaperSelect,  SIGNAL(clicked()), SLOT(selectBgWallpaper()));
 
+      bgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      fgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+
       connect(myScoresButton, SIGNAL(clicked()), SLOT(selectScoresDirectory()));
       connect(myStylesButton, SIGNAL(clicked()), SLOT(selectStylesDirectory()));
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
-      connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
-       connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
+      connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
+      connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
 
+      myScoresButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myStylesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myTemplatesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myPluginsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      mySoundfontsButton->setIcon(*icons[int(Icons::edit_ICON)]);
+      myImagesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myExtensionsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
@@ -164,6 +176,13 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(instrumentList1Button,  SIGNAL(clicked()), SLOT(selectInstrumentList1()));
       connect(instrumentList2Button,  SIGNAL(clicked()), SLOT(selectInstrumentList2()));
       connect(startWithButton,        SIGNAL(clicked()), SLOT(selectStartWith()));
+
+      defaultStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      partStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      styleFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      instrumentList1Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      instrumentList2Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      startWithButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       connect(shortcutList,   SIGNAL(itemActivated(QTreeWidgetItem*, int)), SLOT(defineShortcutClicked()));
       connect(resetShortcut,  SIGNAL(clicked()), SLOT(resetShortcutClicked()));
@@ -204,6 +223,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(jackDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
       connect(useJackAudio, SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       connect(useJackMidi,  SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
+      connect(rescanDrivers, SIGNAL(clicked()), this, SLOT(restartAudioEngine()));
       updateRemote();
 
       advancedWidget = new PreferencesListWidget();
@@ -254,7 +274,7 @@ void PreferenceDialog::hideEvent(QHideEvent* ev)
 
 void PreferenceDialog::recordButtonClicked(int val)
       {
-      foreach(QAbstractButton* b, recordButtons->buttons()) {
+      for (QAbstractButton* b : recordButtons->buttons()) {
             b->setChecked(recordButtons->id(b) == val);
             }
       mscore->setMidiRecordId(val);
@@ -331,6 +351,15 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       iconWidth->setValue(preferences.getInt(PREF_UI_THEME_ICONWIDTH));
       iconHeight->setValue(preferences.getInt(PREF_UI_THEME_ICONHEIGHT));
+      
+      //macOS default fonts are not in QFontCombobox because they are "private":
+      //https://code.woboq.org/qt5/qtbase/src/widgets/widgets/qfontcombobox.cpp.html#329
+      auto currFontFamily = preferences.getString(PREF_UI_THEME_FONTFAMILY);
+      if (-1 == fontFamily->findText(currFontFamily))
+            fontFamily->addItem(currFontFamily);
+      fontFamily->setCurrentIndex(fontFamily->findText(currFontFamily));
+      
+      fontSize->setValue(preferences.getInt(PREF_UI_THEME_FONTSIZE));
 
       enableMidiInput->setChecked(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
       realtimeDelay->setValue(preferences.getInt(PREF_IO_MIDI_REALTIMEDELAY));
@@ -343,6 +372,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       playPanelShow->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWPLAYPANEL));
       showSplashScreen->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN));
       showStartcenter->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER));
+      showTours->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
 
       alsaDriver->setChecked(preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO));
       jackDriver->setChecked(preferences.getBool(PREF_IO_JACK_USEJACKAUDIO) || preferences.getBool(PREF_IO_JACK_USEJACKMIDI));
@@ -408,7 +438,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       //
       qDeleteAll(localShortcuts);
       localShortcuts.clear();
-      foreach(const Shortcut* s, Shortcut::shortcuts())
+      for(const Shortcut* s : Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
 
@@ -498,7 +528,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       int idx = 0;
       importCharsetListOve->clear();
       importCharsetListGP->clear();
-      foreach (QByteArray charset, charsets) {
+      for (QByteArray charset : charsets) {
             importCharsetListOve->addItem(charset);
             importCharsetListGP->addItem(charset);
             if (charset == preferences.getString(PREF_IMPORT_OVERTURE_CHARSET))
@@ -585,7 +615,7 @@ bool ShortcutItem::operator<(const QTreeWidgetItem& item) const
 void PreferenceDialog::updateSCListView()
       {
       shortcutList->clear();
-      foreach (Shortcut* s, localShortcuts) {
+      for (Shortcut* s : localShortcuts) {
             if (!s)
                   continue;
             ShortcutItem* newItem = new ShortcutItem;
@@ -606,7 +636,6 @@ void PreferenceDialog::updateSCListView()
                             && !s->key().startsWith("debugger")
 #endif
                             && !s->key().startsWith("edit_harmony")
-                            && (MuseScore::unstable() && !s->key().startsWith("file-save-online"))
                             && !s->key().startsWith("insert-fretframe"))) {
                   shortcutList->addTopLevelItem(newItem);
                   }
@@ -934,6 +963,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_UI_APP_STARTUP_SHOWPLAYPANEL, playPanelShow->isChecked());
       preferences.setPreference(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN, showSplashScreen->isChecked());
       preferences.setPreference(PREF_UI_APP_STARTUP_SHOWSTARTCENTER, showStartcenter->isChecked());
+      preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, showTours->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_BG_USECOLOR, bgColorButton->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_BG_COLOR, bgColorLabel->color());
       preferences.setPreference(PREF_UI_CANVAS_FG_USECOLOR, fgColorButton->isChecked());
@@ -945,6 +975,8 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA, limitScrollArea->isChecked());
       preferences.setPreference(PREF_UI_THEME_ICONWIDTH, iconWidth->value());
       preferences.setPreference(PREF_UI_THEME_ICONHEIGHT, iconHeight->value());
+      preferences.setPreference(PREF_UI_THEME_FONTFAMILY, fontFamily->currentFont().family());
+      preferences.setPreference(PREF_UI_THEME_FONTSIZE, fontSize->value());
 
       bool wasJack = (preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_JACK_USEJACKAUDIO));
       bool wasJackAudio = preferences.getBool(PREF_IO_JACK_USEJACKAUDIO);
@@ -981,8 +1013,6 @@ void PreferenceDialog::apply()
          || (preferences.getInt(PREF_IO_ALSA_FRAGMENTS) != alsaFragments->value())
 #endif
             ) {
-            if (seq)
-                  seq->exit();
 
             preferences.setPreference(PREF_IO_ALSA_USEALSAAUDIO, alsaDriver->isChecked());
             preferences.setPreference(PREF_IO_PORTAUDIO_USEPORTAUDIO, portaudioDriver->isChecked());
@@ -991,19 +1021,8 @@ void PreferenceDialog::apply()
             preferences.setPreference(PREF_IO_ALSA_SAMPLERATE, alsaSampleRate->currentData().toInt());
             preferences.setPreference(PREF_IO_ALSA_PERIODSIZE, alsaPeriodSize->currentData().toInt());
             preferences.setPreference(PREF_IO_ALSA_FRAGMENTS, alsaFragments->value());
-            if (seq) {
-                  Driver* driver = driverFactory(seq, "");
-                  if (driver) {
-                        // Updating synthesizer's sample rate
-                        if (seq->synti()) {
-                              seq->synti()->setSampleRate(driver->sampleRate());
-                              seq->synti()->init();
-                              }
-                        seq->setDriver(driver);
-                        }
-                  if (!seq->init())
-                        qDebug("sequencer init failed");
-                  }
+
+            restartAudioEngine();
             }
 
 #ifdef USE_PORTAUDIO
@@ -1020,7 +1039,7 @@ void PreferenceDialog::apply()
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Possible MIDI Loopback"));
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Warning: You used the same CoreMIDI IAC bus for input and output.  This will cause problematic loopback, whereby MuseScore's outputted MIDI messages will be sent back to MuseScore as input, causing confusion.  To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore's MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore's MIDI output.  Other programs may then use that dedicated virtual port to receive MuseScore's MIDI output."));
+            msgBox.setText(tr("Warning: You used the same CoreMIDI IAC bus for input and output. This will cause problematic loopback, whereby MuseScore's output MIDI messages will be sent back to MuseScore as input, causing confusion. To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore's MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore's MIDI output. Other programs may then use that dedicated virtual port to receive MuseScore's MIDI output."));
             msgBox.exec();
             }
       preferences.setPreference(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS, portMidiOutputLatencyMilliseconds->value());
@@ -1049,11 +1068,11 @@ void PreferenceDialog::apply()
 
       if (shortcutsChanged) {
             shortcutsChanged = false;
-            foreach(const Shortcut* s, localShortcuts) {
+            for(const Shortcut* s : localShortcuts) {
                   Shortcut* os = Shortcut::getShortcut(s->key());
                   if (os) {
                         if (!os->compareKeys(*s))
-                              os->setKeys(s->keys());
+                              os->setKeys(*s);
                         }
                   }
             Shortcut::dirty = true;
@@ -1107,11 +1126,12 @@ void PreferenceDialog::apply()
             preferences.setPreference(PREF_SCORE_STYLE_PARTSTYLEFILE, partStyle->text());
             MScore::defaultStyleForPartsHasChanged();
             }
-
-      genIcons();
-
-      mscore->setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
-
+      
+      Workspace::retranslate();
+      preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
+      mscore->changeWorkspace(Workspace::currentWorkspace);
+      mscore->getPaletteBox()->updateWorkspaces();
+      
       emit preferencesChanged();
       preferences.save();
       mscore->startAutoSave();
@@ -1129,7 +1149,7 @@ void PreferenceDialog::resetAllValues()
       qDeleteAll(localShortcuts);
       localShortcuts.clear();
       Shortcut::resetToDefault();
-      foreach(const Shortcut* s, Shortcut::shortcuts())
+      for (const Shortcut* s : Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
       }
@@ -1362,6 +1382,7 @@ void PreferenceDialog::defineShortcutClicked()
       shortcutsChanged = true;
       }
 
+
 //---------------------------------------------------------
 //   printShortcutsClicked
 //---------------------------------------------------------
@@ -1433,6 +1454,15 @@ void PreferenceDialog::printShortcutsClicked()
       p.end();
 #endif
 }
+
+//---------------------------------------------------------
+//   rebuildAudioDrivers
+//---------------------------------------------------------
+
+void PreferenceDialog::restartAudioEngine()
+      {
+      mscore->restartAudioEngine();
+      }
 
 
 } // namespace Ms

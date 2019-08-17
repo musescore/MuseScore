@@ -263,7 +263,7 @@ void Voice::process(int frames, float* p)
                   long long idx = phase.index() * 2;
                   if (idx >= eidx) {
                         off();
-                        // printf("end of sample\n");
+//printf("end of sample\n");
                         break;
                         }
 

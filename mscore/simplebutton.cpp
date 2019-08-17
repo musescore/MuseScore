@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE
 //  Linux Music Editor
-//  $Id: simplebutton.cpp 3437 2010-09-04 18:18:49Z wschweer $
 //
 //  Copyright (C) 2002-2007 by Werner Schweer and others
 //

@@ -2,18 +2,10 @@
 <ui version="4.0">
  <class>SizeSelect</class>
  <widget class="QWidget" name="SizeSelect">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>253</width>
-    <height>31</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>3</number>
+   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -27,24 +19,25 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QDoubleSpinBox" name="xVal">
+    <widget class="QLabel" name="label">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="statusTip">
-      <string>width</string>
+     <property name="text">
+      <string>W:</string>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDoubleSpinBox" name="xVal">
      <property name="accessibleName">
       <string>Width</string>
      </property>
      <property name="prefix">
-      <string extracomment="width">W:</string>
-     </property>
-     <property name="suffix">
-      <string/>
+      <string extracomment="width"/>
      </property>
      <property name="decimals">
       <number>2</number>
@@ -53,7 +46,7 @@
       <double>0.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>1000.000000000000000</double>
      </property>
      <property name="singleStep">
       <double>0.200000000000000</double>
@@ -61,30 +54,31 @@
     </widget>
    </item>
    <item>
-    <widget class="QDoubleSpinBox" name="yVal">
+    <widget class="QLabel" name="label_2">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="statusTip">
-      <string>height</string>
+     <property name="text">
+      <string>H:</string>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDoubleSpinBox" name="yVal">
      <property name="accessibleName">
       <string>Height</string>
      </property>
      <property name="prefix">
-      <string extracomment="height">H:</string>
-     </property>
-     <property name="suffix">
-      <string/>
+      <string extracomment="height"/>
      </property>
      <property name="minimum">
       <double>0.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>1000.000000000000000</double>
      </property>
      <property name="singleStep">
       <double>0.200000000000000</double>

@@ -116,7 +116,7 @@ QString stringutils::convertFileSizeToHumanReadable(const qlonglong& bytes)
                         return number;
                         }
                   else {
-                        qlonglong result = (bytes + (0x100000 / 2)) / 0x100000;
+                        result = (bytes + (0x100000 / 2)) / 0x100000;
                         number = QLocale::system().toString(result);
                         number.append(" MB");
                         return number;
@@ -131,7 +131,7 @@ QString stringutils::convertFileSizeToHumanReadable(const qlonglong& bytes)
                               return number;
                               }
                         else {
-                              qlonglong result = (bytes + (0x40000000 / 2)) / 0x40000000;
+                              result = (bytes + (0x40000000 / 2)) / 0x40000000;
                               number = QLocale::system().toString(result);
                               number.append(" GB");
                               return number;
@@ -146,7 +146,7 @@ QString stringutils::convertFileSizeToHumanReadable(const qlonglong& bytes)
                                     return number;
                                     }
                               else {
-                                    qlonglong result = (bytes + (0x10000000000 / 2)) / 0x10000000000;
+                                    result = (bytes + (0x10000000000 / 2)) / 0x10000000000;
                                     number = QLocale::system().toString(result);
                                     number.append(" TB");
                                     return number;

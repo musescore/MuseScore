@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: stafftext.h -1   $
 //
 //  Copyright (C) 2002-2010 Werner Schweer and others
 //

@@ -34,6 +34,7 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups {
       std::vector<Chord*> chords32;
       Groups _groups;
       Fraction _sig;
+      QString _z, _n;
 
       Score* createScore(int n, TDuration::DurationType t, std::vector<Chord*>* chords);
       void updateBeams(Chord*, Beam::Mode);
@@ -45,7 +46,7 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups {
 
    public:
       NoteGroups(QWidget* parent);
-      void setSig(Fraction sig, const Groups&);
+      void setSig(Fraction sig, const Groups&, const QString& zText, const QString& nText);
       Groups groups();
       };
 

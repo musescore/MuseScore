@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: symboldialog.h 4341 2011-06-06 08:18:18Z lasconic $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //

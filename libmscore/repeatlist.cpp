@@ -99,14 +99,15 @@ RepeatSegment::RepeatSegment(RepeatSegment * const rs, Measure * const fromMeasu
             ++it;
             }
       if (!measureList.empty()) {
-            tick = measureList.cbegin()->first->tick();
+            tick = measureList.cbegin()->first->tick().ticks();
             }
       }
 
 void RepeatSegment::addMeasure(Measure * const m)
       {
+      Q_ASSERT(measureList.empty() || measureList.back().first->nextMeasure() == m);
       if (measureList.empty()) {
-            tick = m->tick();
+            tick = m->tick().ticks();
             }
       measureList.push_back(std::make_pair(m, m->playbackCount()));
       }
@@ -123,7 +124,7 @@ bool RepeatSegment::containsMeasure(Measure const * const m) const
 
 int RepeatSegment::len() const
       {
-      return (measureList.empty()) ? 0 : (measureList.last().first->endTick() - tick);
+      return (measureList.empty()) ? 0 : (measureList.last().first->endTick().ticks() - tick);
       }
 
 //---------------------------------------------------------
@@ -154,13 +155,22 @@ RepeatList::RepeatList(Score* s)
       }
 
 //---------------------------------------------------------
+//   ~RepeatList
+//---------------------------------------------------------
+
+RepeatList::~RepeatList()
+      {
+      qDeleteAll(*this);
+      }
+
+//---------------------------------------------------------
 //   ticks
 //---------------------------------------------------------
 
-int RepeatList::ticks()
+int RepeatList::ticks() const
       {
       if (length() > 0) {
-            RepeatSegment* s = last();
+            const RepeatSegment* s = last();
             return s->utick + s->len();
             }
       return 0;
@@ -170,7 +180,24 @@ int RepeatList::ticks()
 //   update
 //---------------------------------------------------------
 
-void RepeatList::update()
+void RepeatList::update(bool expand)
+      {
+      if (!_scoreChanged && expand == _expanded)
+            return;
+
+      if (expand)
+            unwind();
+      else
+            flatten();
+
+      _scoreChanged = false;
+      }
+
+//---------------------------------------------------------
+//   updateTempo
+//---------------------------------------------------------
+
+void RepeatList::updateTempo()
       {
       const TempoMap* tl = _score->tempomap();
 
@@ -217,6 +244,8 @@ int RepeatList::utick2tick(int tick) const
 
 int RepeatList::tick2utick(int tick) const
       {
+      if (empty())
+            return 0;
       for (const RepeatSegment* s : *this) {
             if (tick >= s->tick && tick < (s->tick + s->len() ))
                   return s->utick + (tick - s->tick);
@@ -270,17 +299,46 @@ void RepeatList::dump() const
       {
 #if 0
       qDebug("==Dump Repeat List:==");
-      foreach(const RepeatSegment* s, *this) {
+      for (const RepeatSegment* s : *this) {
             qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f", s,
                s->utick / MScore::division,
                s->utick / MScore::division / 4,
                s->tick / MScore::division,
                s->tick / MScore::division / 4,
-               s->len / MScore::division,
-               s->len / MScore::division / 4,
+               s->len() / MScore::division,
+               s->len() / MScore::division / 4,
                s->utime, s->timeOffset);
             }
 #endif
+      }
+
+//---------------------------------------------------------
+//   flatten
+///   Make this repeat list flat (don't expand repeats)
+//---------------------------------------------------------
+
+void RepeatList::flatten()
+      {
+      qDeleteAll(*this);
+      clear();
+
+      Measure* m = _score->firstMeasure();
+      if (!m)
+            return;
+
+      RepeatSegment* s = new RepeatSegment;
+      s->tick  = 0;
+      s->utick = 0;
+      s->utime = 0.0;
+      s->timeOffset = 0.0;
+      do {
+            s->addMeasure(m);
+            m = m->nextMeasure();
+            }
+      while (m);
+      push_back(s);
+
+      _expanded = false;
       }
 
 //---------------------------------------------------------
@@ -342,7 +400,8 @@ void RepeatList::unwind()
                   }
             }
 
-      update();
+      updateTempo();
+      _expanded = true;
       dump();
       }
 
@@ -413,7 +472,6 @@ std::map<Volta*, Measure*>::const_iterator RepeatList::searchVolta(Measure * con
 //---------------------------------------------------------
 //   unwindSection
 //    unwinds from sectionStartMeasure through sectionEndMeasure
-//    appends repeat segments using rs
 //---------------------------------------------------------
 
 void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* const sectionEndMeasure)
@@ -425,7 +483,7 @@ void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* cons
             return;
             }
 
-      rs = nullptr; // no measures to be played yet
+      RepeatSegment* rs = nullptr; // no measures to be played yet
 
       Measure* prevMeasure = nullptr; // the last processed measure that is part of this RepeatSegment
       Measure* currentMeasure = sectionStartMeasure; // the measure to be processed/evaluated
@@ -616,7 +674,7 @@ void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* cons
                                                                   // this is the most recent playthrough of this measure -> copy it
                                                                   if (nullptr == rs) {
                                                                         rs = new RepeatSegment();
-                                                                        rs->tick = referenceIt->first->tick();
+                                                                        rs->tick = referenceIt->first->tick().ticks();
                                                                         }
                                                                   rs->measureList.push_back(std::make_pair(referenceIt->first, referenceIt->second));
                                                                   }

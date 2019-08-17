@@ -25,40 +25,6 @@ class ChordRest;
 class Spanner;
 class System;
 
-//-------------------------------------------------------------------
-//   SegmentType
-//
-//    Type values determine the order of segments for a given tick
-//-------------------------------------------------------------------
-
-enum class SegmentType {
-      Invalid            = 0x0,
-      BeginBarLine       = 0x1,
-      HeaderClef         = 0x2,
-      KeySig             = 0x4,
-      Ambitus            = 0x8,
-      TimeSig            = 0x10,
-      Clef               = 0x20,
-      StartRepeatBarLine = 0x40,
-      BarLine            = 0x80,
-      Breath             = 0x100,
-      //--
-      ChordRest          = 0x200,
-      //--
-      EndBarLine         = 0x400,
-      KeySigAnnounce     = 0x800,
-      TimeSigAnnounce    = 0x1000,
-      All                = -1,
-      BarLineType        = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine
-      };
-
-constexpr SegmentType operator| (const SegmentType t1, const SegmentType t2) {
-      return static_cast<SegmentType>(static_cast<int>(t1) | static_cast<int>(t2));
-      }
-constexpr bool operator& (const SegmentType t1, const SegmentType t2) {
-      return static_cast<int>(t1) & static_cast<int>(t2);
-      }
-
 //------------------------------------------------------------------------
 //   @@ Segment
 //    A segment holds all vertical aligned staff elements.
@@ -83,8 +49,8 @@ constexpr bool operator& (const SegmentType t1, const SegmentType t2) {
 
 class Segment final : public Element {
       SegmentType _segmentType { SegmentType::Invalid };
-      int _tick = 0;                          // tick offset to measure
-      int _ticks = 0;
+      Fraction _tick;  // { Fraction(0, 1) };
+      Fraction _ticks; // { Fraction(0, 1) };
       Spatium _extraLeadingSpace;
       qreal _stretch;
 
@@ -107,34 +73,39 @@ class Segment final : public Element {
 
    public:
       Segment(Measure* m = 0);
-      Segment(Measure*, SegmentType, int tick);
+      Segment(Measure*, SegmentType, const Fraction&);
       Segment(const Segment&);
       ~Segment();
 
       virtual Segment* clone() const      { return new Segment(*this); }
       virtual ElementType type() const    { return ElementType::SEGMENT; }
 
-      virtual void setScore(Score*);
+      virtual void setScore(Score*) override;
 
       Segment* next() const               { return _next;   }
       Segment* next(SegmentType) const;
+      Segment* nextActive() const;
       Segment* nextEnabled() const;
       void setNext(Segment* e)            { _next = e;      }
 
       Segment* prev() const               { return _prev;   }
       Segment* prev(SegmentType) const;
+      Segment* prevActive() const;
       Segment* prevEnabled() const;
       void setPrev(Segment* e)            { _prev = e;      }
 
-      // dont stop at measure boundary:
+      // don’t stop at measure boundary:
       Segment* next1() const;
       Segment* next1enabled() const;
       Segment* next1MM() const;
+      Segment* next1MMenabled() const;
       Segment* next1(SegmentType) const;
       Segment* next1MM(SegmentType) const;
 
       Segment* prev1() const;
+      Segment* prev1enabled() const;
       Segment* prev1MM() const;
+      Segment* prev1MMenabled() const;
       Segment* prev1(SegmentType) const;
       Segment* prev1MM(SegmentType) const;
 
@@ -146,7 +117,7 @@ class Segment final : public Element {
 
       // a variant of the above function, specifically designed to be called from QML
       //@ returns the element at track 'track' (null if none)
-      Q_INVOKABLE Ms::Element* elementAt(int track) const;
+      Ms::Element* elementAt(int track) const;
 
       const std::vector<Element*>& elist() const { return _elist; }
       std::vector<Element*>& elist()             { return _elist; }
@@ -184,22 +155,23 @@ class Segment final : public Element {
 
       qreal stretch() const                      { return _stretch; }
       void setStretch(qreal v)                   { _stretch = v;    }
-      void setTick(int t)                        { _tick = t - parent()->tick(); }
-      virtual int tick() const override          { return _tick + parent()->tick(); }
-      virtual int rtick() const override         { return _tick;  } // tickposition relative to measure start
-      Fraction rfrac() const;
-      Fraction afrac() const;
-      void setRtick(int val)                     { _tick = val;   }
-      int ticks() const                          { return _ticks; }
-      void setTicks(int val)                     { _ticks = val;  }
+
+      virtual Fraction rtick() const override    { return _tick;    }
+      void setRtick(const Fraction& v)           { Q_ASSERT(v >= Fraction(0,1));  _tick = v;       }
+      virtual Fraction tick() const override;
+
+      Fraction ticks() const                     { return _ticks;   }
+      void setTicks(const Fraction& v)           { _ticks = v;      }
 
       bool splitsTuplet() const;
 
       const std::vector<Element*>& annotations() const { return _annotations;        }
       void clearAnnotations();
       void removeAnnotation(Element* e);
-      bool findAnnotationOrElement(ElementType type, int minTrack, int maxTrack);
-      bool findAnnotation(ElementType type, int minTrack, int maxTrack);
+      bool hasAnnotationOrElement(ElementType type, int minTrack, int maxTrack) const;
+      Element* findAnnotation(ElementType type, int minTrack, int maxTrack);
+      std::vector<Element*> findAnnotations(ElementType type, int minTrack, int maxTrack);
+      bool hasElements() const;
 
 
       qreal dotPosX(int staffIdx) const          { return _dotPosX[staffIdx];  }
@@ -219,7 +191,6 @@ class Segment final : public Element {
       bool operator>(const Segment&) const;
 
       virtual QString accessibleExtraInfo() const override;
-
 
       Element* firstInNextSegments(int activeStaff); //<
       Element* lastInPrevSegments(int activeStaff);   //<
@@ -272,14 +243,38 @@ class Segment final : public Element {
       };
 
 //---------------------------------------------------------
+//   nextActive
+//---------------------------------------------------------
+
+inline Segment* Segment::nextActive() const
+      {
+      Segment* ns = next();
+      while (ns && !(ns->enabled() && ns->visible()))
+            ns = ns->next();
+      return ns;
+      }
+
+//---------------------------------------------------------
 //   nextEnabled
 //---------------------------------------------------------
 
 inline Segment* Segment::nextEnabled() const
       {
-      Segment* ps = next();
-      while (ps && !ps->enabled())
-            ps = ps->next();
+      Segment* ns = next();
+      while (ns && !ns->enabled())
+            ns = ns->next();
+      return ns;
+      }
+
+//---------------------------------------------------------
+//   prevActive
+//---------------------------------------------------------
+
+inline Segment* Segment::prevActive() const
+      {
+      Segment* ps = prev();
+      while (ps && !(ps->enabled() && ps->visible()))
+            ps = ps->prev();
       return ps;
       }
 

@@ -18,19 +18,10 @@
 #include "sym.h"
 #include "note.h"
 #include "barline.h"
+#include "dynamic.h"
+#include "hairpin.h"
 
 namespace Ms {
-
-QString docName;
-
-//---------------------------------------------------------
-//   compareProperty
-//---------------------------------------------------------
-
-template <class T> bool compareProperty(void* val, void* defaultVal)
-      {
-      return (defaultVal == 0) || (*(T*)val != *(T*)defaultVal);
-      }
 
 //---------------------------------------------------------
 //   Xml
@@ -91,6 +82,34 @@ void XmlWriter::stag(const QString& s)
       putLevel();
       *this << '<' << s << '>' << endl;
       stack.append(s.split(' ')[0]);
+      }
+
+//---------------------------------------------------------
+//   stag
+//    <mops attribute="value">
+//---------------------------------------------------------
+
+void XmlWriter::stag(const ScoreElement* se, const QString& attributes)
+      {
+      stag(se->name(), se, attributes);
+      }
+
+//---------------------------------------------------------
+//   stag
+//    <mops attribute="value">
+//---------------------------------------------------------
+
+void XmlWriter::stag(const QString& name, const ScoreElement* se, const QString& attributes)
+      {
+      putLevel();
+      *this << '<' << name;
+      if (!attributes.isEmpty())
+            *this << ' ' << attributes;
+      *this << '>' << endl;
+      stack.append(name);
+
+      if (_recordElements)
+            _elements.emplace_back(se, name);
       }
 
 //---------------------------------------------------------
@@ -165,133 +184,11 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
       if (name == 0)
             return;
 
-      switch (propertyType(id)) {
-            case P_TYPE::BOOL:
-            case P_TYPE::INT:
-            case P_TYPE::ZERO_INT:
-            case P_TYPE::SPATIUM:
-            case P_TYPE::SP_REAL:
-            case P_TYPE::REAL:
-            case P_TYPE::SCALE:
-            case P_TYPE::POINT:
-            case P_TYPE::POINT_SP:
-            case P_TYPE::SIZE:
-            case P_TYPE::COLOR:
-            case P_TYPE::DIRECTION:
-            case P_TYPE::STRING:
-            case P_TYPE::FONT:
-            case P_TYPE::ALIGN:
-                  tag(name, data);
-                  break;
-            case P_TYPE::ORNAMENT_STYLE:
-                  switch (MScore::OrnamentStyle(data.toInt())) {
-                        case MScore::OrnamentStyle::BAROQUE:
-                              tag(name, QVariant("baroque"));
-                              break;
-                        default:
-                             // tag(name, QVariant("default"));
-                             break;
-                             }
-                  break;
-            case P_TYPE::GLISSANDO_STYLE:
-                  switch (GlissandoStyle(data.toInt())) {
-                        case GlissandoStyle::BLACK_KEYS:
-                              tag(name, QVariant("blackkeys"));
-                              break;
-                        case GlissandoStyle::WHITE_KEYS:
-                              tag(name, QVariant("whitekeys"));
-                              break;
-                        case GlissandoStyle::DIATONIC:
-                              tag(name, QVariant("diatonic"));
-                              break;
-                        default:
-                             //tag(name, QVariant("Chromatic"));
-                             break;
-                             }
-                  break;
-            case P_TYPE::DIRECTION_H:
-                  switch (MScore::DirectionH(data.toInt())) {
-                        case MScore::DirectionH::LEFT:
-                              tag(name, QVariant("left"));
-                              break;
-                        case MScore::DirectionH::RIGHT:
-                              tag(name, QVariant("right"));
-                              break;
-                        case MScore::DirectionH::AUTO:
-                              break;
-                        }
-                  break;
-            case P_TYPE::LAYOUT_BREAK:
-                  switch (LayoutBreak::Type(data.toInt())) {
-                        case LayoutBreak::LINE:
-                              tag(name, QVariant("line"));
-                              break;
-                        case LayoutBreak::PAGE:
-                              tag(name, QVariant("page"));
-                              break;
-                        case LayoutBreak::SECTION:
-                              tag(name, QVariant("section"));
-                              break;
-                        case LayoutBreak::NOBREAK:
-                              tag(name, QVariant("nobreak"));
-                              break;
-                        }
-                  break;
-            case P_TYPE::VALUE_TYPE:
-                  switch (Note::ValueType(data.toInt())) {
-                        case Note::ValueType::OFFSET_VAL:
-                              tag(name, QVariant("offset"));
-                              break;
-                        case Note::ValueType::USER_VAL:
-                              tag(name, QVariant("user"));
-                              break;
-                        }
-                  break;
-            case P_TYPE::PLACEMENT:
-                  switch (Placement(data.toInt())) {
-                        case Placement::ABOVE:
-                              tag(name, QVariant("above"));
-                              break;
-                        case Placement::BELOW:
-                              tag(name, QVariant("below"));
-                              break;
-                        }
-                  break;
-            case P_TYPE::SYMID:
-                  tag(name, Sym::id2name(SymId(data.toInt())));
-                  break;
-            case P_TYPE::BARLINE_TYPE:
-                  tag(name, BarLine::barLineTypeName(BarLineType(data.toInt())));
-                  break;
-            case P_TYPE::HEAD_GROUP:
-                  tag(name, NoteHead::group2name(NoteHead::Group(data.toInt())));
-                  break;
-            case P_TYPE::HEAD_TYPE:
-                  tag(name, NoteHead::type2name(NoteHead::Type(data.toInt())));
-                  break;
-            case P_TYPE::SUB_STYLE:
-                  tag(name, textStyleName(Tid(data.toInt())));
-                  break;
-            case P_TYPE::FRACTION:
-                  qFatal("unknown: FRACTION");
-            case P_TYPE::POINT_MM:
-                  qFatal("unknown: POINT_MM");
-            case P_TYPE::SIZE_MM:
-                  qFatal("unknown: SIZE_MM");
-            case P_TYPE::TDURATION:
-                  qFatal("unknown: TDURATION");
-            case P_TYPE::BEAM_MODE:
-                  qFatal("unknown: BEAM_MODE");
-            case P_TYPE::TEMPO:
-                  qFatal("unknown: TEMPO");
-            case P_TYPE::GROUPS:
-                  qFatal("unknown: GROUPS");
-            case P_TYPE::INT_LIST:
-                  qFatal("unknown: INT_LIST");
-
-//            default:
-//                  Q_ASSERT(false);
-            }
+      const QString writableVal(propertyToString(id, data, /* mscx */ true));
+      if (writableVal.isEmpty())
+            tag(name, data);
+      else
+            tag(name, QVariant(writableVal));
       }
 
 //---------------------------------------------------------
@@ -317,6 +214,11 @@ void XmlWriter::tag(const QString& name, QVariant data)
             case QVariant::UInt:
                   *this << "<" << name << ">";
                   *this << data.toInt();
+                  *this << "</" << ename << ">\n";
+                  break;
+            case QVariant::LongLong:
+                  *this << "<" << name << ">";
+                  *this << data.toLongLong();
                   *this << "</" << ename << ">\n";
                   break;
             case QVariant::Double:
@@ -374,6 +276,7 @@ void XmlWriter::tag(const QString& name, QVariant data)
                   else if (strcmp(type, "Ms::Direction") == 0)
                         *this << QString("<%1>%2</%1>\n").arg(name).arg(toString(data.value<Direction>()));
                   else if (strcmp(type, "Ms::Align") == 0) {
+                        // TODO: remove from here? (handled in Ms::propertyWritableValue())
                         Align a = Align(data.toInt());
                         const char* h;
                         if (a & Align::HCENTER)
@@ -498,43 +401,6 @@ void XmlWriter::writeXml(const QString& name, QString s)
       *this << "<" << name << ">";
       *this << s;
       *this << "</" << ename << ">\n";
-      }
-
-//---------------------------------------------------------
-//   addSpanner
-//---------------------------------------------------------
-
-int XmlWriter::addSpanner(const Spanner* s)
-      {
-      ++_spannerId;
-      _spanner.append(std::pair<int, const Spanner*>(_spannerId, s));
-      return _spannerId;
-      }
-
-//---------------------------------------------------------
-//   findSpanner
-//---------------------------------------------------------
-
-const Spanner* XmlWriter::findSpanner(int id)
-      {
-      for (auto i : _spanner) {
-            if (i.first == id)
-                  return i.second;
-            }
-      return nullptr;
-      }
-
-//---------------------------------------------------------
-//   spannerId
-//---------------------------------------------------------
-
-int XmlWriter::spannerId(const Spanner* s)
-      {
-      for (auto i : _spanner) {
-            if (i.second == s)
-                  return i.first;
-            }
-      return addSpanner(s);
       }
 
 //---------------------------------------------------------

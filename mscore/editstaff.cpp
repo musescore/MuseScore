@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: editstaff.cpp 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2010 Werner Schweer and others
 //
@@ -44,7 +43,7 @@ namespace Ms {
 //   EditStaff
 //---------------------------------------------------------
 
-EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
+EditStaff::EditStaff(Staff* s, const Fraction& tick, QWidget* parent)
    : QDialog(parent)
       {
       setObjectName("EditStaff");
@@ -53,7 +52,7 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
       setModal(true);
 
       staff = nullptr;
-      setStaff(s);
+      setStaff(s, tick);
 
       MuseScore::restoreGeometry(this);
 
@@ -74,6 +73,13 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
       connect(nextButton,           SIGNAL(clicked()),            SLOT(gotoNextStaff()));
       connect(previousButton,       SIGNAL(clicked()),            SLOT(gotoPreviousStaff()));
 
+      nextButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+      previousButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      minPitchASelect->setIcon(*icons[int(Icons::edit_ICON)]);
+      maxPitchASelect->setIcon(*icons[int(Icons::edit_ICON)]);
+      minPitchPSelect->setIcon(*icons[int(Icons::edit_ICON)]);
+      maxPitchPSelect->setIcon(*icons[int(Icons::edit_ICON)]);
+
       addAction(getAction("help"));  // why is this needed?
       }
 
@@ -81,55 +87,51 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
 //   setStaff
 //---------------------------------------------------------
 
-void EditStaff::setStaff(Staff* s)
+void EditStaff::setStaff(Staff* s, const Fraction& tick)
       {
       if (staff != nullptr)
             delete staff;
 
       orgStaff = s;
       Part* part        = orgStaff->part();
-      instrument        = *part->instrument(/*tick*/);
+      instrument        = *part->instrument(tick);
       Score* score      = part->score();
       staff             = new Staff(score);
-      staff->setSmall(0, orgStaff->small(0));
+      staff->setStaffType(Fraction(0,1), *orgStaff->staffType(Fraction(0,1)));
+      staff->setSmall(Fraction(0,1), orgStaff->small(Fraction(0,1)));
       staff->setInvisible(orgStaff->invisible());
       staff->setUserDist(orgStaff->userDist());
       staff->setColor(orgStaff->color());
-      staff->setStaffType(0, orgStaff->staffType(0));
       staff->setPart(part);
       staff->setCutaway(orgStaff->cutaway());
       staff->setHideWhenEmpty(orgStaff->hideWhenEmpty());
       staff->setShowIfEmpty(orgStaff->showIfEmpty());
-      staff->setUserMag(0, orgStaff->userMag(0));
+      staff->setUserMag(Fraction(0,1), orgStaff->userMag(Fraction(0,1)));
       staff->setHideSystemBarLine(orgStaff->hideSystemBarLine());
 
       // get tick range for instrument
-      auto i = part->instruments()->upper_bound(0);   // tick
+      auto i = part->instruments()->upper_bound(tick.ticks());
       if (i == part->instruments()->end())
-            _tickEnd = -1;
+            _tickEnd = Fraction(-1,1);
       else
-            _tickEnd = i->first;
-#if 1
-      _tickStart = -1;
-#else
+            _tickEnd = Fraction::fromTicks(i->first);
       --i;
       if (i == part->instruments()->begin())
-            _tickStart = 0;
+            _tickStart = Fraction(-1, 1);
       else
-            _tickStart = i->first;
-#endif
+            _tickStart = Fraction::fromTicks(i->first);
 
       // set dlg controls
       spinExtraDistance->setValue(s->userDist() / score->spatium());
       invisible->setChecked(staff->invisible());
-      small->setChecked(staff->small(0));
+      small->setChecked(staff->small(Fraction(0,1)));
       color->setColor(s->color());
       partName->setText(part->partName());
       cutaway->setChecked(staff->cutaway());
       hideMode->setCurrentIndex(int(staff->hideWhenEmpty()));
       showIfEmpty->setChecked(staff->showIfEmpty());
       hideSystemBarLine->setChecked(staff->hideSystemBarLine());
-      mag->setValue(staff->userMag(0) * 100.0);
+      mag->setValue(staff->userMag(Fraction(0,1)) * 100.0);
       updateStaffType();
       updateInstrument();
       updateNextPreviousButtons();
@@ -151,7 +153,7 @@ void EditStaff::hideEvent(QHideEvent* ev)
 
 void EditStaff::updateStaffType()
       {
-      StaffType* staffType = staff->staffType(0);
+      const StaffType* staffType = staff->staffType(Fraction(0,1));
       lines->setValue(staffType->lines());
       lineDistance->setValue(staffType->lineDistance().val());
       showClef->setChecked(staffType->genClef());
@@ -190,6 +192,7 @@ void EditStaff::updateInstrument()
       maxPitchA->setText(midiCodeToStr(_maxPitchA));
       minPitchP->setText(midiCodeToStr(_minPitchP));
       maxPitchP->setText(midiCodeToStr(_maxPitchP));
+      singleNoteDynamics->setChecked(instrument.singleNoteDynamics());
 
       // only show string data controls if instrument has strings
       int numStr = instrument.stringData() ? instrument.stringData()->strings() : 0;
@@ -251,7 +254,7 @@ void EditStaff::gotoNextStaff()
       Staff* nextStaff = orgStaff->score()->staff(orgStaff->idx() + 1);
       if (nextStaff)
             {
-            setStaff(nextStaff);
+            setStaff(nextStaff, _tickStart);
             }
       }
 
@@ -264,7 +267,7 @@ void EditStaff::gotoPreviousStaff()
       Staff* prevStaff = orgStaff->score()->staff(orgStaff->idx() - 1);
       if (prevStaff)
             {
-            setStaff(prevStaff);
+            setStaff(prevStaff, _tickStart);
             }
       }
 
@@ -335,8 +338,10 @@ void EditStaff::apply()
       instrument.setShortName(sn);
       instrument.setLongName(ln);
 
+      instrument.setSingleNoteDynamics(singleNoteDynamics->isChecked());
+
       bool inv       = invisible->isChecked();
-      ClefTypeList clefType = instrument.clefType(orgStaff->rstaff());
+      ClefTypeList clefType = orgStaff->defaultClefType();
       qreal userDist = spinExtraDistance->value();
       bool ifEmpty   = showIfEmpty->isChecked();
       bool hideSystemBL = hideSystemBarLine->isChecked();
@@ -344,12 +349,33 @@ void EditStaff::apply()
       Staff::HideMode hideEmpty = Staff::HideMode(hideMode->currentIndex());
 
       QString newPartName = partName->text().simplified();
-      if (!(instrument == *part->instrument()) || part->partName() != newPartName) {
+
+      bool instrumentFieldChanged = !(instrument == *part->instrument(_tickStart));
+      if (instrumentFieldChanged && _tickStart == Fraction(-1, 1))
+            clefType = instrument.clefType(orgStaff->rstaff());
+
+      if (instrumentFieldChanged || part->partName() != newPartName) {
             // instrument has changed
             Interval v1 = instrument.transpose();
-            Interval v2 = part->instrument()->transpose();
+            Interval v2 = part->instrument(_tickStart)->transpose();
 
-            score->undo(new ChangePart(part, new Instrument(instrument), newPartName));
+            if (_tickStart == Fraction(-1, 1)) {
+                  // change instrument and part name globally
+                  score->undo(new ChangePart(part, new Instrument(instrument), newPartName));
+                  }
+            else {
+                  // change part name globally, instrument locally if possible
+                  if (part->partName() != newPartName)
+                        score->undo(new ChangePart(part, new Instrument(*part->instrument()), newPartName));
+                  if (instrumentFieldChanged) {
+                        Segment* s = score->tick2segment(_tickStart, true, SegmentType::ChordRest);
+                        Element* e = s ? s->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack()) : nullptr;
+                        if (e)
+                              score->undo(new ChangeInstrument(toInstrumentChange(e), new Instrument(instrument)));
+                        else
+                              score->undo(new ChangePart(part, new Instrument(instrument), newPartName));
+                        }
+                  }
             emit instrumentChanged();
 
             if (v1 != v2)
@@ -370,13 +396,14 @@ void EditStaff::apply()
             score->undo(new ChangeStaff(orgStaff, inv, clefType, userDist * score->spatium(), hideEmpty, ifEmpty, cutAway, hideSystemBL));
             }
 
-      if ( !(*orgStaff->staffType(0) == *staff->staffType(0)) ) {
+      if ( !(*orgStaff->staffType(Fraction(0,1)) == *staff->staffType(Fraction(0,1))) ) {
             // updateNeeded |= (orgStaff->staffGroup() == StaffGroup::TAB || staff->staffGroup() == StaffGroup::TAB);
-            score->undo(new ChangeStaffType(orgStaff, *staff->staffType(0)));
+            score->undo(new ChangeStaffType(orgStaff, *staff->staffType(Fraction(0,1))));
             }
 
       score->update();
       score->masterScore()->updateChannel();
+      staff->score()->masterScore()->rebuildAndUpdateExpressive(MuseScore::synthesizer("Fluid"));
       }
 
 //---------------------------------------------------------
@@ -433,27 +460,31 @@ void EditStaff::maxPitchPClicked()
 
 void EditStaff::lineDistanceChanged()
       {
-      staff->staffType(0)->setLineDistance(Spatium(lineDistance->value()));
+      staff->staffType(Fraction(0,1))->setLineDistance(Spatium(lineDistance->value()));
       }
+
+//---------------------------------------------------------
+//   numOfLinesChanged
+//---------------------------------------------------------
 
 void EditStaff::numOfLinesChanged()
       {
-      staff->staffType(0)->setLines(lines->value());
+      staff->staffType(Fraction(0,1))->setLines(lines->value());
       }
 
 void EditStaff::showClefChanged()
       {
-      staff->staffType(0)->setGenClef(showClef->checkState() == Qt::Checked);
+      staff->staffType(Fraction(0,1))->setGenClef(showClef->checkState() == Qt::Checked);
       }
 
 void EditStaff::showTimeSigChanged()
       {
-      staff->staffType(0)->setGenTimesig(showTimesig->checkState() == Qt::Checked);
+      staff->staffType(Fraction(0,1))->setGenTimesig(showTimesig->checkState() == Qt::Checked);
       }
 
 void EditStaff::showBarlinesChanged()
       {
-      staff->staffType(0)->setShowBarlines(showBarlines->checkState() == Qt::Checked);
+      staff->staffType(Fraction(0,1))->setShowBarlines(showBarlines->checkState() == Qt::Checked);
       }
 
 //---------------------------------------------------------
@@ -529,16 +560,16 @@ void EditStaff::editStringDataClicked()
 
 static const char* g_cNoteName[] = {
       QT_TRANSLATE_NOOP("editstaff", "C"),
-      QT_TRANSLATE_NOOP("editstaff", "C#"),
+      QT_TRANSLATE_NOOP("editstaff", "C♯"),
       QT_TRANSLATE_NOOP("editstaff", "D"),
-      QT_TRANSLATE_NOOP("editstaff", "Eb"),
+      QT_TRANSLATE_NOOP("editstaff", "E♭"),
       QT_TRANSLATE_NOOP("editstaff", "E"),
       QT_TRANSLATE_NOOP("editstaff", "F"),
-      QT_TRANSLATE_NOOP("editstaff", "F#"),
+      QT_TRANSLATE_NOOP("editstaff", "F♯"),
       QT_TRANSLATE_NOOP("editstaff", "G"),
-      QT_TRANSLATE_NOOP("editstaff", "Ab"),
+      QT_TRANSLATE_NOOP("editstaff", "A♭"),
       QT_TRANSLATE_NOOP("editstaff", "A"),
-      QT_TRANSLATE_NOOP("editstaff", "Bb"),
+      QT_TRANSLATE_NOOP("editstaff", "B♭"),
       QT_TRANSLATE_NOOP("editstaff", "B")
       };
 
@@ -556,7 +587,7 @@ void EditStaff::showStaffTypeDialog()
       EditStaffType editor(this, staff);
       editor.setWindowModality(Qt::WindowModal);
       if (editor.exec()) {
-            staff->setStaffType(0, editor.getStaffType());
+            staff->setStaffType(Fraction(0,1), *editor.getStaffType());
             updateStaffType();
             }
       }

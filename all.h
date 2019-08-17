@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE
 //  Linux Music Score Editor
-//  $Id: allqt.h,v 1.24 2006/03/02 17:08:30 wschweer Exp $
 //
 //  Copyright (C) 2004-2011 Werner Schweer (ws@seh.de)
 //
@@ -39,6 +38,7 @@
 #include <limits.h>
 #include <map>
 #include <set>
+#include <deque>
 #include <errno.h>
 #include <fcntl.h>
 // VStudio does not have <unistd.h>, <io.h> & <process.h> replace many functions from it...
@@ -156,6 +156,7 @@
 #include <QFontComboBox>
 #include <QApplication>
 #include <QStatusBar>
+#include <QStyle>
 #include <QStylePainter>
 #include <QStyleOptionButton>
 #include <QHeaderView>
