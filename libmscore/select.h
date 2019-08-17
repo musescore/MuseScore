@@ -149,6 +149,9 @@ class Selection {
       Segment* _activeSegment;
       int _activeTrack;
 
+      Fraction _currentTick;  // tracks the most recent selection
+      int _currentTrack;
+
       QByteArray staffMimeData() const;
       QByteArray symbolListMimeData() const;
       SelectionFilter selectionFilter() const;
@@ -202,6 +205,7 @@ class Selection {
       ChordRest* activeCR() const;
       bool isStartActive() const;
       bool isEndActive() const;
+      ChordRest* currentCR() const;
       Fraction tickStart() const;
       Fraction tickEnd() const;
       int staffStart() const            { return _staffStart;  }
