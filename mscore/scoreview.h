@@ -348,6 +348,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       qreal yoffset() const;
       void setOffset(qreal x, qreal y);
       QSizeF fsize() const;
+      void screenNext();
+      void screenPrev();
       void pageNext();
       void pagePrev();
       void pageTop();
