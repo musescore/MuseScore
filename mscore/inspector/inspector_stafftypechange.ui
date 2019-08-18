@@ -114,7 +114,7 @@
       <item row="11" column="0" colspan="2">
        <widget class="QCheckBox" name="slashStyle">
         <property name="text">
-         <string>Slash style</string>
+         <string>Stemless</string>
         </property>
        </widget>
       </item>
@@ -295,7 +295,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Slash style' value</string>
+         <string>Reset 'Stemless' value</string>
         </property>
        </widget>
       </item>
