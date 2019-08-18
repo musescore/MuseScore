@@ -3813,21 +3813,31 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, const Fractio
       rest += addPositioningAttributes(tl, tl->tick() == tick);
 
       directionTag(_xml, _attr, tl);
+
       if (!tl->beginText().isEmpty() && tl->tick() == tick) {
             _xml.stag("direction-type");
             _xml.tag("words", tl->beginText());
             _xml.etag();
             }
+
       _xml.stag("direction-type");
       if (isDashes)
             _xml.tagE(QString("dashes type=\"%1\" number=\"%2\"").arg(type, QString::number(n + 1)));
       else
             _xml.tagE(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
       _xml.etag();
+
+      if (!tl->endText().isEmpty() && tl->tick() != tick) {
+            _xml.stag("direction-type");
+            _xml.tag("words", tl->endText());
+            _xml.etag();
+            }
+
       /*
       if (offs)
             xml.tag("offset", offs);
       */
+
       directionETag(_xml, staff);
       }
 
