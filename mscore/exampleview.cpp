@@ -85,8 +85,7 @@ void ExampleView::resetMatrix()
       double mag = 0.9 * guiScaling * (DPI_DISPLAY / DPI);  // 90% of nominal
       qreal _spatium = SPATIUM20 * mag;
       // example would normally be 10sp from top of page; this leaves 3sp margin above
-//      _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 7.0);
-      _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 10.0);
+      _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 7.0);
       imatrix  = _matrix.inverted();
       }
 
