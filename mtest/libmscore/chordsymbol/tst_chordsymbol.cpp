@@ -334,7 +334,7 @@ void TestChordSymbol::testRealizeOverride()
       //realize all chord symbols
       selectAllChordSymbols(score);
       score->startCmd();
-      score->cmdRealizeChordSymbols(true, Voicing::ROOT_ONLY);
+      score->cmdRealizeChordSymbols(true, Voicing::ROOT_ONLY, HDuration::SEGMENT_DURATION);
       score->endCmd();
       test_post(score, "realize-override");
       }
