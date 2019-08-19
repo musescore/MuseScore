@@ -127,6 +127,7 @@ static inline QString getExtFromURL(QString& direct_link) {
 //---------------------------------------------------------
 //   parsePluginRepo
 //---------------------------------------------------------
+
 void ResourceManager::parsePluginRepo(QByteArray html_raw)
       {
       QByteArray table_start("<table");
@@ -197,7 +198,7 @@ void ResourceManager::parsePluginRepo(QByteArray html_raw)
       }
 
 //---------------------------------------------------------
-//   displayPluginRepo
+//   filterPluginList
 //---------------------------------------------------------
 
 void ResourceManager::filterPluginList()
@@ -216,6 +217,11 @@ void ResourceManager::filterPluginList()
             }
       }
 
+//---------------------------------------------------------
+//   getAttachments
+//   Find musescore.com attachment links from HTML contents
+//   - localHint used to calculate score for each link
+//---------------------------------------------------------
 
 static std::vector<PluginPackageLink> getAttachments(const QString& html_raw, void(*localHint)(QRegularExpressionMatch&, PluginPackageLink&, const QString&))
       {
@@ -264,6 +270,11 @@ static std::vector<PluginPackageLink> getAttachments(const QString& html_raw, vo
       return file_urls;
       }
 
+//---------------------------------------------------------
+//   getGitHubLinks
+//   Find GitHub links from HTML contents.
+//---------------------------------------------------------
+
 static std::vector<PluginPackageLink> getGitHubLinks(const QString& html_raw, void(*localHint)(QRegularExpressionMatch&, PluginPackageLink&, const QString&))
       {
       std::vector<PluginPackageLink> github_urls;
@@ -306,6 +317,10 @@ static std::vector<PluginPackageLink> getGitHubLinks(const QString& html_raw, vo
             }
       return github_urls;
       }
+
+//---------------------------------------------------------
+//   getLinks
+//---------------------------------------------------------
 
 static std::vector<PluginPackageLink> getLinks(const QByteArray& html_raw_array)
       {
@@ -366,6 +381,9 @@ static QDateTime GetLastModified(QString& url)
             return QDateTime();
       }
 
+//---------------------------------------------------------
+//   scanPluginUpdate
+//---------------------------------------------------------
 
 void ResourceManager::scanPluginUpdate()
       {
@@ -410,6 +428,10 @@ void ResourceManager::downloadInstallPlugin()
       QtConcurrent::run(&workerThreads, worker, &PluginWorker::downloadInstall, button);
       }
 
+//---------------------------------------------------------
+//   uninstallPluginPackage
+//---------------------------------------------------------
+
 void ResourceManager::uninstallPluginPackage()
       {
       QPushButton* button = static_cast<QPushButton*>(sender());
@@ -440,33 +462,9 @@ std::map<PluginPackageSource, QString> PluginPackageSourceVerboseStr{
       {ATTACHMENT, QObject::tr("Attachment")}
 };
 
-void ResourceManager::refreshPluginButton(int row, bool updated/* = true*/)
-      {
-      // install button
-      QPushButton* install = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 2)));
-      install->disconnect();
-      QPushButton* uninstall = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 3)));
-      const QString& page_url = install->property("page_url").toString();
-      bool installed = mscore->getPluginManager()->isPackageInstalled(page_url);
-      uninstall->setEnabled(installed);
-      if (installed) {
-            if (updated) {
-                  install->setText(tr("Updated"));
-                  install->setEnabled(false);
-                  }
-            else {
-                  install->setText(tr("Update"));
-                  install->setEnabled(true);
-                  connect(install, SIGNAL(clicked()), this, SLOT(updatePlugin()));
-                  }
-            }
-      else {
-            install->setText(tr("Install"));
-            install->setEnabled(true);
-            connect(install, SIGNAL(clicked()), this, SLOT(downloadInstallPlugin()));
-            }
-
-      }
+//---------------------------------------------------------
+//   refreshPluginButton
+//---------------------------------------------------------
 
 void ResourceManager::refreshPluginButton(int row, PluginStatus status)
       {
@@ -508,6 +506,10 @@ PluginWorker::PluginWorker(const PluginPackageDescription& desc, ResourceManager
       QObject::connect(this, SIGNAL(updateAvailable(const QString, PluginPackageDescription*)), mscore->getPluginManager(), SLOT(updatePluginPackage(const QString, PluginPackageDescription*)));
       }
 
+//---------------------------------------------------------
+//   fetchExtensions
+//---------------------------------------------------------
+
 void PluginWorker::fetchExtensions()
       {
       DownloadUtils js;
@@ -518,6 +520,10 @@ void PluginWorker::fetchExtensions()
       emit extensionMetaAvailable(json);
       deleteLater();
       }
+
+//---------------------------------------------------------
+//   fetchLanguages
+//---------------------------------------------------------
 
 void PluginWorker::fetchLanguages()
       {
@@ -532,6 +538,10 @@ void PluginWorker::fetchLanguages()
       deleteLater();
       }
 
+//---------------------------------------------------------
+//   fetchPluginRepo
+//---------------------------------------------------------
+
 void PluginWorker::fetchPluginRepo()
       {
       // fetch plugin list from web
@@ -543,6 +553,10 @@ void PluginWorker::fetchPluginRepo()
       emit pluginRepoAvailable(html_raw);
       deleteLater();
       }
+
+//---------------------------------------------------------
+//   checkUpdate
+//---------------------------------------------------------
 
 void PluginWorker::checkUpdate(QPushButton* install)
       {
@@ -571,6 +585,10 @@ void PluginWorker::checkUpdate(QPushButton* install)
       deleteLater();
       }
 
+//---------------------------------------------------------
+//   detached
+//---------------------------------------------------------
+
 void PluginWorker::detached()
       {
       r = nullptr;
@@ -595,6 +613,10 @@ static QString getPackageDescriptionText(const QString& html_raw) {
       desc.replace(localHref, "\\1https://musescore.org\\2");
       return desc;
 }
+
+//---------------------------------------------------------
+//   analyzePluginPage
+//---------------------------------------------------------
 
 bool PluginWorker::analyzePluginPage(QString full_url)
       {
@@ -628,8 +650,6 @@ bool PluginWorker::analyzePluginPage(QString full_url)
             if (has_release) {
                   // there is a GitHub release, change source to RELEASE
                   if (desc.source != GITHUB_RELEASE || (desc.release_id != release_id && release_id > 0)) {
-                        qDebug() << "desc source original:" << int(desc.source) << " now:release";
-                        qDebug() << "release_id original:" << desc.release_id << "now: " << release_id;
                         desc.release_id = release_id;
                         desc.direct_link = direct_link;
                         desc.source = GITHUB_RELEASE;
@@ -650,8 +670,6 @@ bool PluginWorker::analyzePluginPage(QString full_url)
             QString sha = getLatestCommitSha(target.user, target.repo, branch);
             // compare the sha with previous stored sha. If the same, don't update.
             if (desc.source != GITHUB || (!sha.isEmpty() && desc.latest_commit != sha)) {
-                  qDebug() << "desc source original:" << int(desc.source) << " now:github";
-                  qDebug() << "commit sha original:" << desc.latest_commit << " now:" << sha;
                   desc.latest_commit = sha;
                   desc.direct_link = githubLatestArchiveURL(target.user, target.repo, "master");
                   desc.source = GITHUB;
@@ -663,8 +681,6 @@ bool PluginWorker::analyzePluginPage(QString full_url)
       else if (target.source == ATTACHMENT) {
             QDateTime date_time;
             if (desc.source != ATTACHMENT || desc.direct_link != target.url || (date_time = GetLastModified(target.url)) != desc.last_modified) {
-                  qDebug() << "desc source original:" << int(desc.source) << " now:attachment";
-                  qDebug() << "url before:" << desc.direct_link << " now:" << target.url;
                   desc.source = ATTACHMENT;
                   desc.direct_link = target.url;
                   if (!date_time.isValid())
@@ -680,6 +696,10 @@ bool PluginWorker::analyzePluginPage(QString full_url)
       else
             return false;
       }
+
+//---------------------------------------------------------
+//   download
+//---------------------------------------------------------
 
 QString PluginWorker::download(const QString& page_url, bool update/* = false*/)
       {
@@ -699,6 +719,11 @@ QString PluginWorker::download(const QString& page_url, bool update/* = false*/)
       src->last_modified = package.getHeader(QNetworkRequest::LastModifiedHeader).toDateTime();
       return localPath;
       }
+
+//---------------------------------------------------------
+//   updateInstall
+//   Triggered when "Update" is clicked
+//---------------------------------------------------------
 
 void PluginWorker::updateInstall(QPushButton* button)
       {
@@ -725,6 +750,10 @@ void PluginWorker::updateInstall(QPushButton* button)
             emit pluginStatusChanged(buttonRow, res);
       deleteLater();
       }
+
+//---------------------------------------------------------
+//   install
+//---------------------------------------------------------
 
 bool PluginWorker::install(QString& download_pkg, PluginStatus* result/*= nullptr*/)
       {
@@ -808,6 +837,11 @@ bool PluginWorker::install(QString& download_pkg, PluginStatus* result/*= nullpt
       QFile::remove(download_pkg);
       return true;
       }
+
+//---------------------------------------------------------
+//   downloadInstall
+//   Triggered when "Install" is clicked.
+//---------------------------------------------------------
 
 void PluginWorker::downloadInstall(QPushButton* button)
       {

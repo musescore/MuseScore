@@ -34,7 +34,7 @@ PluginManager::PluginManager(QWidget* parent)
 
 //---------------------------------------------------------
 //   setupUI
-//   Called by resourcemanager to give the resource manager's UI elements
+//   Called by resourcemanager to give the plugin manager necessary UI elements
 //---------------------------------------------------------
 
 void PluginManager::setupUI(QLineEdit* pluginName_, QLineEdit* pluginPath_, QLineEdit* pluginVersion_,
@@ -137,6 +137,10 @@ bool PluginManager::readPluginList()
             }
       return true;
       }
+
+//---------------------------------------------------------
+//   readPluginPackageList
+//---------------------------------------------------------
 
 bool PluginManager::readPluginPackageList()
       {
@@ -280,6 +284,10 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
       }
 #endif
 
+//---------------------------------------------------------
+//   writePluginPackageList
+//---------------------------------------------------------
+
 void PluginManager::writePluginPackageList()
       {
       QDir dir;
@@ -345,6 +353,11 @@ void PluginManager::updatePluginList(bool forceRefresh)
 #endif
       }
 
+//---------------------------------------------------------
+//   updatePluginPackage
+//   Called after a plugin is installed or updated from a plugin worker
+//---------------------------------------------------------
+
 void PluginManager::updatePluginPackage(const QString url, PluginPackageDescription* desc)
       {
       _pluginPackageList[url] = *desc;
@@ -358,6 +371,10 @@ void PluginManager::commitPlugin(const QString url, PluginPackageDescription* de
       // maybe there's a more efficient way than `loadList`
       loadList(false);
       }
+
+//---------------------------------------------------------
+//   uninstallPluginPackage
+//---------------------------------------------------------
 
 bool PluginManager::uninstallPluginPackage(const QString& page_url)
       {
@@ -374,7 +391,7 @@ bool PluginManager::uninstallPluginPackage(const QString& page_url)
                   }
             }
       // remove the folder
-      // In Qt 5.11 and earlier, qml cache files(.qmlc) may stay in the plugin folder, which casues
+      // In Qt 5.11 and earlier, qml cache files(.qmlc) may stay in the plugin folder, which causes
       // failure to remove the folder
       QDir d(desc.dir);
       if (!d.removeRecursively()) {
@@ -385,6 +402,9 @@ bool PluginManager::uninstallPluginPackage(const QString& page_url)
       return true;
       }
 
+//---------------------------------------------------------
+//   getPluginPackage
+//---------------------------------------------------------
 
 PluginPackageDescription * PluginManager::getPluginPackage(PluginDescription * desc)
       {
@@ -509,7 +529,7 @@ void PluginManager::accept()
 
 
 //---------------------------------------------------------
-//   pluginListWidgetItemChanged
+//   pluginTreeWidgetItemChanged
 //---------------------------------------------------------
 
 void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidgetItem*)

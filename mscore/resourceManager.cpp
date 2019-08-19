@@ -485,6 +485,10 @@ void ResourceManager::hideEvent(QHideEvent* event)
       QWidget::hideEvent(event);
       }
 
+//---------------------------------------------------------
+//   done
+//---------------------------------------------------------
+
 void ResourceManager::done(int status)
       {
       workerThreads.clear();
@@ -493,6 +497,11 @@ void ResourceManager::done(int status)
       mscore->getPluginManager()->writePluginPackageList();
       QDialog::done(status);
       }
+
+//---------------------------------------------------------
+//   accept
+//   Triggered by the "OK" button
+//---------------------------------------------------------
 
 void ResourceManager::accept()
       {
