@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tour name="inspector-tour">
-  <Event objectName="inspector">MouseButtonRelease</Event>
+  <Event objectName="inspector">MouseButtonPress</Event>
   <Event objectName="inspector">FocusIn</Event>
-  <Event objectName="InspectorBase">MouseButtonRelease</Event>
+  <Event objectName="InspectorBase">MouseButtonPress</Event>
   <Event objectName="InspectorBase">FocusIn</Event>
   <Message>
     <Text>Welcome to the Inspector, where you can change individual properties for selected elements.
