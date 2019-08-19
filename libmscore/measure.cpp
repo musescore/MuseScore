@@ -2054,6 +2054,8 @@ void Measure::read(XmlReader& e, int staffIdx)
             e.setTick(lm->tick() + lm->ticks());
             }
       e.setCurrentMeasure(nullptr);
+
+      connectTremolo();
       }
 
 //---------------------------------------------------------
@@ -2520,6 +2522,52 @@ void Measure::scanElements(void* data, void (*func)(void*, Element*), bool all)
             if (!s->enabled())
                   continue;
             s->scanElements(data, func, all);
+            }
+      }
+
+//---------------------------------------------------------
+//   connectTremolo
+///   Connect two-notes tremolo and update duration types
+///   for the involved chords.
+//---------------------------------------------------------
+
+void Measure::connectTremolo()
+      {
+      const int ntracks = score()->ntracks();
+      constexpr SegmentType st = SegmentType::ChordRest;
+      for (Segment* s = first(st); s; s = s->next(st)) {
+            for (int i = 0; i < ntracks; ++i) {
+                  Element* e = s->element(i);
+                  if (!e || !e->isChord())
+                        continue;
+
+                  Chord* c = toChord(e);
+                  Tremolo* tremolo = c->tremolo();
+                  if (tremolo && tremolo->twoNotes()) {
+                        // Ensure correct duration type for chord
+                        c->setDurationType(tremolo->durationType());
+
+                        // If it is the first tremolo's chord, find the second
+                        // chord for tremolo, if needed.
+                        if (!tremolo->chord1())
+                              tremolo->setChords(c, tremolo->chord2());
+                        else if (tremolo->chord1() != c || tremolo->chord2())
+                              continue;
+
+                        for (Segment* ls = s->next(st); ls; ls = ls->next(st)) {
+                              if (Element* element = ls->element(i)) {
+                                    if (!element->isChord()) {
+                                          qDebug("cannot connect tremolo");
+                                          continue;
+                                          }
+                                    Chord* nc = toChord(element);
+                                    tremolo->setChords(c, nc);
+                                    nc->setTremolo(tremolo);
+                                    break;
+                                    }
+                              }
+                        }
+                  }
             }
       }
 

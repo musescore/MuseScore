@@ -194,6 +194,7 @@ class Measure final : public MeasureBase {
       Segment* undoGetSegment(SegmentType st, const Fraction& f)       { return undoGetSegmentR(st, f - tick()); }
       Segment* getSegment(SegmentType st,     const Fraction& f)       { return getSegmentR(st, f - tick()); }
 
+      void connectTremolo();
 
       qreal createEndBarLines(bool);
       void barLinesSetSpan(Segment*);
