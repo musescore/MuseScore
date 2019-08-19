@@ -95,7 +95,7 @@ class MStaff {
       bool _hasVoices        { false };    ///< indicates that MStaff contains more than one voice,
                                           ///< this changes some layout rules
       bool _visible          { true  };
-      bool _slashStyle       { false };
+      bool _stemless         { false };
 #ifndef NDEBUG
       bool _corrupted        { false };
 #endif
@@ -125,8 +125,8 @@ class MStaff {
       bool visible() const           { return _visible;    }
       void setVisible(bool val)      { _visible = val;     }
 
-      bool slashStyle() const        { return _slashStyle; }
-      void setSlashStyle(bool val)   { _slashStyle = val;  }
+      bool stemless() const          { return _stemless; }
+      void setStemless(bool val)     { _stemless = val;  }
 
 #ifndef NDEBUG
       bool corrupted() const         { return _corrupted; }
@@ -150,7 +150,7 @@ MStaff::MStaff(const MStaff& m)
       _vspacerUp   = 0;
       _vspacerDown = 0;
       _visible     = m._visible;
-      _slashStyle  = m._slashStyle;
+      _stemless  = m._stemless;
 #ifndef NDEBUG
       _corrupted   = m._corrupted;
 #endif
@@ -285,7 +285,7 @@ StaffLines* Measure::staffLines(int staffIdx)                   { return _mstave
 Spacer* Measure::vspacerDown(int staffIdx) const                { return _mstaves[staffIdx]->vspacerDown(); }
 Spacer* Measure::vspacerUp(int staffIdx) const                  { return _mstaves[staffIdx]->vspacerUp(); }
 void Measure::setStaffVisible(int staffIdx, bool visible)       { _mstaves[staffIdx]->setVisible(visible); }
-void Measure::setStaffSlashStyle(int staffIdx, bool slashStyle) { _mstaves[staffIdx]->setSlashStyle(slashStyle); }
+void Measure::setStaffStemless(int staffIdx, bool stemless)     { _mstaves[staffIdx]->setStemless(stemless); }
 
 #ifndef NDEBUG
 bool Measure::corrupted(int staffIdx) const                     { return _mstaves[staffIdx]->corrupted(); }
@@ -1909,8 +1909,10 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
             }
       if (!mstaff->visible())
             xml.tag("visible", mstaff->visible());
-      if (mstaff->slashStyle())
-            xml.tag("slashStyle", mstaff->slashStyle());
+      if (mstaff->stemless()) {
+            xml.tag("slashStyle", mstaff->stemless()); // for backwards compatibility
+            xml.tag("stemless", mstaff->stemless());
+            }
 
       int strack = staff * VOICES;
       int etrack = strack + VOICES;
@@ -2024,8 +2026,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "visible")
                   _mstaves[staffIdx]->setVisible(e.readInt());
-            else if (tag == "slashStyle")
-                  _mstaves[staffIdx]->setSlashStyle(e.readInt());
+            else if ((tag == "slashStyle") || (tag == "stemless"))
+                  _mstaves[staffIdx]->setStemless(e.readInt());
             else if (tag == "SystemDivider") {
                   SystemDivider* sd = new SystemDivider(score());
                   sd->read(e);
@@ -2456,13 +2458,13 @@ bool Measure::visible(int staffIdx) const
       }
 
 //---------------------------------------------------------
-//   slashStyle
+//   stemless
 //---------------------------------------------------------
 
-bool Measure::slashStyle(int staffIdx) const
+bool Measure::stemless(int staffIdx) const
       {
       const Staff* staff = score()->staff(staffIdx);
-      return staff->slashStyle(tick()) || _mstaves[staffIdx]->slashStyle() || staff->staffType(tick())->slashStyle();
+      return staff->stemless(tick()) || _mstaves[staffIdx]->stemless() || staff->staffType(tick())->stemless();
       }
 
 //---------------------------------------------------------

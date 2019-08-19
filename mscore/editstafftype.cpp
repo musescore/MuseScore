@@ -206,7 +206,7 @@ void EditStaffType::setValues()
             case StaffGroup::STANDARD:
                   genKeysigPitched->setChecked(staffType.genKeysig());
                   showLedgerLinesPitched->setChecked(staffType.showLedgerLines());
-                  stemlessPitched->setChecked(staffType.slashStyle());
+                  stemlessPitched->setChecked(staffType.stemless());
                   noteHeadScheme->setCurrentIndex(int(staffType.noteHeadScheme()));
                   break;
 
@@ -235,7 +235,7 @@ void EditStaffType::setValues()
                   durFontName->setCurrentIndex(idx);
                   durFontSize->setValue(staffType.durationFontSize());
                   durY->setValue(staffType.durationFontUserY());
-                  // convert combined values of genDurations and slashStyle into noteValuesx radio buttons
+                  // convert combined values of genDurations and slashStyle/stemless into noteValuesx radio buttons
                   // Sbove/Below, Beside/Through and minim are only used if stems-and-beams
                   // but set them from stt values anyway, to ensure preset matching
                   stemAboveRadio->setChecked(!staffType.stemsDown());
@@ -257,7 +257,7 @@ void EditStaffType::setValues()
                         noteValuesStems->setChecked(false);
                         }
                   else {
-                        if (staffType.slashStyle()) {
+                        if (staffType.stemless()) {
                               noteValuesNone->setChecked(true);
                               noteValuesSymb->setChecked(false);
                               noteValuesStems->setChecked(false);
@@ -279,7 +279,7 @@ void EditStaffType::setValues()
             case StaffGroup::PERCUSSION:
                   genKeysigPercussion->setChecked(staffType.genKeysig());
                   showLedgerLinesPercussion->setChecked(staffType.showLedgerLines());
-                  stemlessPercussion->setChecked(staffType.slashStyle());
+                  stemlessPercussion->setChecked(staffType.stemless());
                   break;
             }
       updatePreview();
@@ -381,13 +381,13 @@ void EditStaffType::setFromDlg()
       if (staffType.group() == StaffGroup::STANDARD) {
             staffType.setGenKeysig(genKeysigPitched->isChecked());
             staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
-            staffType.setSlashStyle(stemlessPitched->isChecked());
+            staffType.setStemless(stemlessPitched->isChecked());
             staffType.setNoteHeadScheme(StaffType::name2scheme(noteHeadScheme->currentData().toString()));
             }
       if (staffType.group() == StaffGroup::PERCUSSION) {
             staffType.setGenKeysig(genKeysigPercussion->isChecked());
             staffType.setShowLedgerLines(showLedgerLinesPercussion->isChecked());
-            staffType.setSlashStyle(stemlessPercussion->isChecked());
+            staffType.setStemless(stemlessPercussion->isChecked());
             }
       staffType.setDurationFontName(durFontName->currentText());
       staffType.setDurationFontSize(durFontSize->value());
@@ -411,12 +411,12 @@ void EditStaffType::setFromDlg()
       staffType.setStemsDown(stemBelowRadio->isChecked());
       staffType.setStemsThrough(stemThroughRadio->isChecked());
       if (staffType.group() == StaffGroup::TAB) {
-            staffType.setSlashStyle(true);                 // assume no note values
+            staffType.setStemless(true);                   // assume no note values
             staffType.setGenDurations(false);              //    "     "
             if (noteValuesSymb->isChecked())
                   staffType.setGenDurations(true);
             if (noteValuesStems->isChecked())
-                  staffType.setSlashStyle(false);
+                  staffType.setStemless(false);
             }
       }
 

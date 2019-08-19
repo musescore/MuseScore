@@ -2266,7 +2266,7 @@ void Score::createBeams(Measure* measure)
             Staff* stf = staff(track2staff(track));
 
             // don’t compute beams for invisible staffs and tablature without stems
-            if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->slashStyle()))
+            if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->stemless()))
                   continue;
 
             ChordRest* a1    = 0;      // start of (potential) beam
@@ -2482,7 +2482,7 @@ static void breakCrossMeasureBeams(Measure* measure)
             Staff* stf = score->staff(track2staff(track));
 
             // don’t compute beams for invisible staffs and tablature without stems
-            if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->slashStyle()))
+            if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->stemless()))
                   continue;
 
             Element* e = fstSeg->element(track);

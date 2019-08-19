@@ -918,12 +918,12 @@ int Staff::bottomLine(const Fraction& tick) const
       }
 
 //---------------------------------------------------------
-//   slashStyle
+//   stemless
 //---------------------------------------------------------
 
-bool Staff::slashStyle(const Fraction& tick) const
+bool Staff::stemless(const Fraction& tick) const
       {
-      return staffType(tick)->slashStyle();
+      return staffType(tick)->stemless();
       }
 
 //---------------------------------------------------------
@@ -932,7 +932,7 @@ bool Staff::slashStyle(const Fraction& tick) const
 
 void Staff::setSlashStyle(const Fraction& tick, bool val)
       {
-      staffType(tick)->setSlashStyle(val);
+      staffType(tick)->setStemless(val);
       }
 
 //---------------------------------------------------------
