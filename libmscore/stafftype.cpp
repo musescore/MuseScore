@@ -61,7 +61,7 @@ StaffType::StaffType(StaffGroup sg, const QString& xml, const QString& name, int
    _lineDistance(Spatium(lineDist)),
    _showBarlines(showBarLines),
    _showLedgerLines(showLedgerLines),
-   _slashStyle(stemless),
+   _stemless(stemless),
    _genClef(genClef),
    _genTimesig(genTimeSig),
    _genKeysig(genKeySig)
@@ -84,7 +84,7 @@ StaffType::StaffType(StaffGroup sg, const QString& xml, const QString& name, int
       setLineDistance(Spatium(lineDist));
       setGenClef(genClef);
       setShowBarlines(showBarLines);
-      setSlashStyle(stemless);
+      setStemless(stemless);
       setGenTimesig(genTimesig);
       setDurationFontName(durFontName);
       setDurationFontSize(durFontSize);
@@ -159,7 +159,7 @@ bool StaffType::isSameStructure(const StaffType& st) const
          || st._lineDistance != _lineDistance
          || st._genClef      != _genClef
          || st._showBarlines != _showBarlines
-         || st._slashStyle   != _slashStyle
+         || st._stemless     != _stemless
          || st._genTimesig   != _genTimesig)
             return false;
       if (_group == StaffGroup::STANDARD)                   // standard specific
@@ -210,8 +210,10 @@ void StaffType::write(XmlWriter& xml) const
             xml.tag("stepOffset", _stepOffset);
       if (!_genClef)
             xml.tag("clef", _genClef);
-      if (_slashStyle)
-            xml.tag("slashStyle", _slashStyle);
+      if (_stemless) {
+            xml.tag("slashStyle", _stemless); // for backwards compatibility
+            xml.tag("stemless", _stemless);
+            }
       if (!_showBarlines)
             xml.tag("barlines", _showBarlines);
       if (!_genTimesig)
@@ -244,9 +246,9 @@ void StaffType::write(XmlWriter& xml) const
             xml.tag("upsideDown",       _upsideDown);
             xml.tag("showTabFingering", _showTabFingering, false);
             xml.tag("useNumbers",       _useNumbers);
-            // only output "showBackTied" if different from !"slashStyle"
+            // only output "showBackTied" if different from !"stemless"
             // to match the behaviour in 2.0.2 scores (or older)
-            if (_showBackTied != !_slashStyle)
+            if (_showBackTied != !_stemless)
                   xml.tag("showBackTied",  _showBackTied);
             }
       xml.etag();
@@ -288,9 +290,9 @@ void StaffType::read(XmlReader& e)
                   _stepOffset = e.readInt();
             else if (tag == "clef")
                   setGenClef(e.readInt());
-            else if (tag == "slashStyle") {
+            else if ((tag == "slashStyle") || (tag == "stemless")) {
                   bool val = e.readInt() != 0;
-                  setSlashStyle(val);
+                  setStemless(val);
                   setShowBackTied(!val);  // for compatibility with 2.0.2 scores where this prop
                   }                       // was lacking and controlled by "slashStyle" instead
             else if (tag == "barlines")
@@ -337,7 +339,7 @@ void StaffType::read(XmlReader& e)
                   setShowTabFingering(e.readBool());
             else if (tag == "useNumbers")
                   setUseNumbers(e.readBool());
-            else if (tag == "showBackTied")           // must be after reading "slashStyle" prop, as in older
+            else if (tag == "showBackTied")           // must be after reading "slashStyle"/"stemless" prop, as in older
                   setShowBackTied(e.readBool());      // scores, this prop was lacking and controlled by "slashStyle"
             else
                   e.unknown();
@@ -523,7 +525,7 @@ void StaffType::setFretFontName(const QString& name)
 
 qreal StaffType::durationBoxH() const
       {
-      if (!_genDurations && !_slashStyle)
+      if (!_genDurations && !_stemless)
             return 0.0;
       setDurationMetrics();
       return _durationBoxH;
@@ -531,7 +533,7 @@ qreal StaffType::durationBoxH() const
 
 qreal StaffType::durationBoxY() const
       {
-      if (!_genDurations && !_slashStyle)
+      if (!_genDurations && !_stemless)
             return 0.0;
       setDurationMetrics();
       return _durationBoxY + _durationFontUserY * SPATIUM20;
