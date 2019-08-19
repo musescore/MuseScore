@@ -1359,7 +1359,10 @@ Palette* MuseScore::newTimePalette()
             { 9,  8, TimeSigType::NORMAL, "9/8" },
             { 12, 8, TimeSigType::NORMAL, "12/8" },
             { 4,  4, TimeSigType::FOUR_FOUR,  tr("4/4 common time") },
-            { 2,  2, TimeSigType::ALLA_BREVE, tr("2/2 alla breve") }
+            { 2,  2, TimeSigType::ALLA_BREVE, tr("2/2 alla breve") },
+            { 2,  2, TimeSigType::NORMAL, "2/2" },
+            { 3,  2, TimeSigType::NORMAL, "3/2" },
+            { 4,  2, TimeSigType::NORMAL, "4/2" },
             };
 
       Palette* sp = new Palette;
