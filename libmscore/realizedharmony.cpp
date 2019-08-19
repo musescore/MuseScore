@@ -474,12 +474,10 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
             int pitchBetween = (tpc2pitch(next->rootTpc()) + PITCH_DELTA_OCTAVE - tpc2pitch(rootTpc)) % PITCH_DELTA_OCTAVE;
             bool maj7 = qNext == "major" && next->parsedForm()->extension() >= 7; //whether or not the next chord has major 7
 
-            //dont add 9 for diminished chords
-            if (!(omit & (1 << 9)) && !(alt5 && (quality == "minor" || quality == "diminished" || quality == "half-diminished"))) {
-                  if (quality == "dominant" && pitchBetween == 5 && (qNext == "minor" || maj7)
-                      /*((next->rootTpc() == keyTpc && qNext == "major") || (next->rootTpc() == keyTpcMinor && qNext == "minor"))*/) {
-                        //flat 9 for dominant to a tonic chord a P4 up
-                        //only for minor chords for now
+                                    //commented code: dont add 9 for diminished chords
+            if (!(omit & (1 << 9))) {// && !(alt5 && (quality == "minor" || quality == "diminished" || quality == "half-diminished"))) {
+                  if (quality == "dominant" && pitchBetween == 5 && (qNext == "minor" || maj7)) {
+                        //flat 9 when resolving a fourth up to a minor chord or major 7th
                         ret.insert(1 + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, 9, -1));
                         }
                   else //add major 9
