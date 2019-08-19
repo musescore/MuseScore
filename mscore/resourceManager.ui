@@ -338,6 +338,12 @@
           <layout class="QGridLayout" name="gridLayout_2">
            <item row="4" column="9">
             <widget class="QLabel" name="label_shortcut">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Shortcut:</string>
              </property>
@@ -345,6 +351,12 @@
            </item>
            <item row="4" column="10">
             <widget class="QLineEdit" name="pluginShortcut">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="readOnly">
               <bool>true</bool>
              </property>
@@ -362,6 +374,12 @@
            </item>
            <item row="2" column="2">
             <widget class="QLabel" name="label_compat">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Name:</string>
              </property>
@@ -369,15 +387,14 @@
            </item>
            <item row="3" column="2">
             <widget class="QLabel" name="label_path">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Path:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QLabel" name="label_version">
-             <property name="text">
-              <string>Version:</string>
              </property>
             </widget>
            </item>
@@ -396,15 +413,11 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="6" colspan="5">
-            <widget class="QLineEdit" name="pluginName">
-             <property name="enabled">
-              <bool>false</bool>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
              <property name="readOnly">
               <bool>true</bool>
@@ -452,6 +465,35 @@
             <widget class="QDialogButtonBox" name="buttonBox">
              <property name="standardButtons">
               <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="6" colspan="5">
+            <widget class="QLineEdit" name="pluginName">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2" colspan="2">
+            <widget class="QLabel" name="label_version">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>70</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Version:</string>
              </property>
             </widget>
            </item>

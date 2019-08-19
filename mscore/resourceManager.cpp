@@ -489,6 +489,8 @@ void ResourceManager::done(int status)
       {
       workerThreads.clear();
       mscore->getPluginManager()->disAttachUI();
+      // installed packages need to be stored even if we don't click OK
+      mscore->getPluginManager()->writePluginPackageList();
       QDialog::done(status);
       }
 
