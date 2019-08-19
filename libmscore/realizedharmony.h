@@ -40,6 +40,7 @@ enum class Voicing : signed char {
 
 //duration to realize notes with
 enum class HDuration : char {
+      INVALID = -1,
       UNTIL_NEXT_CHORD_SYMBOL = 0,  //lasts until the next chord symbol or end of the schore
       STOP_AT_MEASURE_END,              //lasts until next chord symbol or measure end
       SEGMENT_DURATION              //lasts for the duration of the segment
@@ -89,7 +90,7 @@ class RealizedHarmony {
 
       void update(int rootTpc, int bassTpc, int transposeOffset = 0); //updates the notes map
 
-      Fraction getActualDuration() const;
+      Fraction getActualDuration(HDuration durationType = HDuration::INVALID) const;
 
    private:
       QMap<int, int> getIntervals(int rootTpc, bool literal = true) const;

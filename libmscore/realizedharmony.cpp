@@ -244,11 +244,19 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
 ///    which returns the HDuration, which is the duration
 ///    setting.
 ///
-///    Consider changing this to be less confusing ^
+///    Specifying a parameter finds a duration based on the
+///    passed duration type while not specifying a parameter
+///    uses the setting set by the user for the specific
+///    harmony object.
 //--------------------------------------------------
-Fraction RealizedHarmony::getActualDuration() const
+Fraction RealizedHarmony::getActualDuration(HDuration durationType) const
       {
-      switch (_duration)
+      HDuration dur;
+      if (durationType != HDuration::INVALID)
+            dur = durationType;
+      else
+            dur = _duration;
+      switch (dur)
             {
             case HDuration::UNTIL_NEXT_CHORD_SYMBOL:
                   return _harmony->ticksTilNext(false);

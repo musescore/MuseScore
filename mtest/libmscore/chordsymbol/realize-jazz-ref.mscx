@@ -718,9 +718,9 @@
               <tpc2>13</tpc2>
               </Note>
             <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              <tpc2>19</tpc2>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <tpc2>21</tpc2>
               </Note>
             </Chord>
           <Harmony>
@@ -1013,9 +1013,9 @@
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
-              <pitch>54</pitch>
-              <tpc>20</tpc>
-              <tpc2>22</tpc2>
+              <pitch>56</pitch>
+              <tpc>22</tpc>
+              <tpc2>24</tpc2>
               </Note>
             <Note>
               <pitch>60</pitch>

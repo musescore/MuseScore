@@ -1163,7 +1163,7 @@ class Score : public QObject, public ScoreElement {
       void cmdResequenceRehearsalMarks();
       void cmdExchangeVoice(int, int);
       void cmdRemoveEmptyTrailingMeasures();
-      void cmdRealizeChordSymbols(bool lit = true, Voicing v = Voicing::INVALID);
+      void cmdRealizeChordSymbols(bool lit = true, Voicing v = Voicing::INVALID, HDuration durationType = HDuration::INVALID);
 
       void setAccessibleInfo(QString s)   { accInfo = s.remove(":").remove(";"); }
       QString accessibleInfo() const      { return accInfo;          }

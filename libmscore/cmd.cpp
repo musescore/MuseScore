@@ -3099,9 +3099,14 @@ void Score::cmdSlashRhythm()
 //---------------------------------------------------------
 //   cmdRealizeChordSymbols
 ///   Realize selected chord symbols into notes on the staff.
+///
+///   If a voicing and duration type are specified, the
+///   harmony voicing settings will be overridden by the
+///   passed parameters. Otherwise, the settings set on the
+///   harmony object will be used.
 //---------------------------------------------------------
 
-void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing)
+void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration durationType)
       {
       const QList<Element*> elist = selection().elements();
       for (Element* e : elist) {
@@ -3110,7 +3115,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing)
             Harmony* h = toHarmony(e);
             RealizedHarmony r = h->getRealizedHarmony();
             Segment* seg = toSegment(h->parent());
-            Fraction duration = r.getActualDuration();
+            Fraction duration = r.getActualDuration(durationType);
             Fraction tick = seg->tick();
             bool concertPitch = styleB(Sid::concertPitch);
 
@@ -3119,7 +3124,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing)
 
             //create chord from notes
             QMap<int, int> notes;
-            if (voicing == Voicing::INVALID)
+            if (voicing == Voicing::INVALID || durationType == HDuration::INVALID)
                   notes = r.notes();
             else {
                   int offset = 0;

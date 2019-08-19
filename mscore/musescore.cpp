@@ -5820,8 +5820,9 @@ void MuseScore::realizeChordSymbols()
 
       if (dialog.exec()) {    //realize the chord symbols onto the track
             cs->startCmd();
-            cs->cmdRealizeChordSymbols(dialog.getLiteral(), dialog.optionsOverride() ?
-                                             Voicing(dialog.getVoicing()) : Voicing::INVALID);
+            cs->cmdRealizeChordSymbols(dialog.getLiteral(),
+                                       dialog.optionsOverride() ? Voicing(dialog.getVoicing()) : Voicing::INVALID,
+                                       dialog.getDuration() ? HDuration(dialog.getDuration()) : HDuration::INVALID);
             cs->endCmd();
             }
       }
