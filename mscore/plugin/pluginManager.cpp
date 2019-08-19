@@ -163,8 +163,15 @@ bool PluginManager::readPluginPackageList()
                                           page_url = e.readElementText();
                                     else if (t == "pkgName")
                                           desc.package_name = e.readElementText();
-                                    else if (t == "source")
-                                          desc.source = (PluginPackageSource)e.readInt();
+                                    else if (t == "source") {
+                                          QString src = e.readElementText();
+                                          for (auto& pair : PluginPackageSourceVerboseStr) {
+                                                if (pair.second == src) {
+                                                      desc.source = pair.first;
+                                                      break;
+                                                }
+                                          }
+                                    }
                                     else if (t == "directLink")
                                           desc.direct_link = e.readElementText();
                                     else if (t == "path")
@@ -291,7 +298,7 @@ void PluginManager::writePluginPackageList()
             xml.tag("description", v.desc_text);
             xml.tag("pageURL", pkg);
             xml.tag("pkgName", v.package_name);
-            xml.tag("source", v.source);
+            xml.tag("source", PluginPackageSourceVerboseStr[v.source]);
             xml.tag("directLink", v.direct_link);
             xml.tag("path", v.dir);
             xml.stag("qmlPath");
@@ -521,7 +528,6 @@ void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidg
             pluginPath->setText(desc.dir);
             // show different info
             label_version->setText(tr("Source:"));
-            //pluginVersion->setText(PluginPackageSourceVerboseStr[desc.source]);
             pluginVersion->setText(desc.direct_link);
             pluginDescription->setHtml(desc.desc_text);
             definePluginShortcut->setEnabled(false);
