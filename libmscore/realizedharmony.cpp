@@ -28,15 +28,6 @@
 namespace Ms {
 
 //---------------------------------------------------
-//   RealizedHarmony
-///   creates empty realized harmony
-//---------------------------------------------------
-RealizedHarmony::RealizedHarmony(Harmony* h) : _harmony(h),
-      _notes(QMap<int, int>()), _dirty(1)
-      {
-      }
-
-//---------------------------------------------------
 //   setVoicing
 ///   sets the voicing and dirty flag if the passed
 ///   voicing is different than current
@@ -113,12 +104,11 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
 
 
       switch (voicing) {
-            case Voicing::ROOT_ONLY:
+            case Voicing::ROOT_ONLY: //already added root/bass so we are good
                   break;
             case Voicing::AUTO: //auto is close voicing for now since it is the most robust
+            case Voicing::CLOSE://Voices notes in close position in the first octave above middle C
                   // FALLTHROUGH
-            case Voicing::CLOSE:
-                  //Voices notes in close position in the first octave above middle C
                   {
                   notes.insert(rootPitch + 5*PITCH_DELTA_OCTAVE, rootTpc);
                   //ensure that notes fall under a specific range
@@ -131,8 +121,6 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                                       5*PITCH_DELTA_OCTAVE, i.value());
                         }
                   }
-                  break;
-            case Voicing::OPEN:
                   break;
             case Voicing::DROP_2:
                   {
@@ -153,6 +141,7 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                   break;
             case Voicing::THREE_NOTE:
                   {
+                  //Insert 2 notes in the octave above middle C
                   QMap<int, int> intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 2, true);
                   QMapIterator<int, int> i(intervals);
 
@@ -165,7 +154,7 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                   break;
             case Voicing::FOUR_NOTE:
                   {
-                  //four note drop 2
+                  //four note voicing, drop every other note
                   QMap<int, int> relIntervals = getIntervals(rootTpc, literal);
                   QMap<int, int> intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 3, true);
                   QMapIterator<int, int> i(intervals);
@@ -184,8 +173,8 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                   }
                   break;
             case Voicing::SIX_NOTE:
-                  //six note voicing
                   {
+                  //six note voicing, drop every other note
                   QMap<int, int> relIntervals = getIntervals(rootTpc, literal);
                   QMap<int, int> intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 5, true);
                   QMapIterator<int, int> i(intervals);
@@ -353,7 +342,7 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
                         }
                   }
 
-            //check for special chords, not modded but no number means we haven't found
+            //check for special chords, if we haven't modded anything yet there is a special or incomprehensible modifier
             if (!modded) {
                   if (s == "phryg") {
                         ret.insert(step2pitchInterval(9, -1) + RANK_MULT*RANK_9TH, tpcInterval(rootTpc, 9, -1));

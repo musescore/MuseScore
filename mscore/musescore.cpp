@@ -5822,7 +5822,7 @@ void MuseScore::realizeChordSymbols()
             cs->startCmd();
             cs->cmdRealizeChordSymbols(dialog.getLiteral(),
                                        dialog.optionsOverride() ? Voicing(dialog.getVoicing()) : Voicing::INVALID,
-                                       dialog.getDuration() ? HDuration(dialog.getDuration()) : HDuration::INVALID);
+                                       dialog.optionsOverride() ? HDuration(dialog.getDuration()) : HDuration::INVALID);
             cs->endCmd();
             }
       }

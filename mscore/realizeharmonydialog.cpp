@@ -52,7 +52,8 @@ void RealizeHarmonyDialog::toggleChordTable()
       }
 
 //---------------------------------------------------------
-//   set
+//   setChordList
+///   fill the chord list with the list of harmonies
 //---------------------------------------------------------
 void RealizeHarmonyDialog::setChordList(QList<Harmony*> hlist)
       {
