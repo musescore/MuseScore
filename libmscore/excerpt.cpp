@@ -150,11 +150,14 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       // Set instruments and create linked staffs
       for (const Part* part : parts) {
             Part* p = new Part(score);
+
+            //properly set harmony channel for newly created part
             const Instrument* instr = part->instrument();
             int chanIdx = instr->channelIdx("harmony");
             p->setInstrument(*instr);
             if (chanIdx != -1)
                   p->setHarmonyChannel(const_cast<Channel*>(instr->channel(chanIdx)));
+
             p->setPartName(part->partName());
 
             for (Staff* staff : *part->staves()) {

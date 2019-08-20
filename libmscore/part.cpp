@@ -542,14 +542,19 @@ int Part::harmonyCount() const
 //---------------------------------------------------------
 //   updateHarmonyChannels
 ///   update the harmony channel by creating a new channel
-///   or using the existing one
+///   when appropriate or using the existing one
+///
+///   checkRemoval can be set to true to check to see if we
+///   can remove the harmony channel
 //---------------------------------------------------------
 void Part::updateHarmonyChannels(bool checkRemoval)
       {
       // usage of harmony count is okay even if expensive since checking harmony channel will shortcircuit if existent
       // harmonyCount will only be called on loading of a score (where it will need to be scanned for harmony anyway)
       // or when the first harmony of a score is just added
-      if (checkRemoval) { //check removal
+      if (checkRemoval) {
+            //may be a bit expensive since it gets called after every single delete or undo, but it should be okay for now
+            //~OPTIM~
             if (harmonyCount() == 0) {
                   Instrument* instr = instrument();
                   int hChannel = instr->channelIdx("harmony");
