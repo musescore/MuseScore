@@ -38,8 +38,8 @@ PluginManager::PluginManager(QWidget* parent)
 //---------------------------------------------------------
 
 void PluginManager::setupUI(QLineEdit* pluginName_, QLineEdit* pluginPath_, QLineEdit* pluginVersion_,
-      QLineEdit* pluginShortcut_, QWebEngineView* pluginDescription_, QTreeWidget* pluginTreeWidget_,
-      QLabel* label_shortcut_, QLabel* label_version_, QPushButton* defineShortcut_, QPushButton* clearShortcut_)
+   QLineEdit* pluginShortcut_, QWebEngineView* pluginDescription_, QTreeWidget* pluginTreeWidget_,
+   QLabel* label_shortcut_, QLabel* label_version_, QPushButton* defineShortcut_, QPushButton* clearShortcut_)
       {
       pluginName = pluginName_;
       pluginPath = pluginPath_;

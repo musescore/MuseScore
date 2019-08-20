@@ -17,7 +17,6 @@
 #include "downloadUtils.h"
 #include "plugin/pluginManager.h"
 #include "plugin/pluginUpdater.h"
-#include "plugin/pluginManager.h"
 
 namespace Ms {
 

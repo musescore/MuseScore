@@ -228,7 +228,7 @@ static std::vector<PluginPackageLink> getAttachments(const QString& html_raw, vo
       std::vector<PluginPackageLink> file_urls;
 #if 0
       // This is the code that fetches the attachment table that appears at the bottom of the page.
-      // Now I find it more attracting to search for inline attachment urls instaed.
+      // Now I find it more attracting to search for inline attachment urls instead.
       int start_idx = html_raw.indexOf("<div class=\"field field--name-upload field--type-file field--label-above\">");
       if (start_idx == -1) {
             qDebug(tr("No attachment found."));
@@ -447,9 +447,9 @@ static const std::map<PluginStatus, PluginButtonStatus> buttonStatuses = {
       {NOT_INSTALLED, {QObject::tr("Install"), true, false}},
       {INSTALL_FAILED, {QObject::tr("Install failed. Try again"), true, false}},
       {INSTALL_FAILED_INVALID, {QObject::tr("Install failed. Invalid plugin."), false, false}},
-      {ANALYZING, {QObject::tr("Analyzing"), false, false}},
+      {ANALYZING, {QObject::tr("Analyzing…"), false, false}},
       {ANALYZE_FAILED, {QObject::tr("Analyze failed. Try again"), true, false}},
-      {DOWNLOADING, {QObject::tr("Downloading"), false, false}},
+      {DOWNLOADING, {QObject::tr("Downloading…"), false, false}},
       {DOWNLOAD_FAILED, {QObject::tr("Download failed. Try again"), true, false}},
       {UPDATED, {QObject::tr("Updated"), false, true}},
       {UPDATE_AVAILABLE, {QObject::tr("Update"), true, true}}
@@ -734,7 +734,7 @@ void PluginWorker::updateInstall(QPushButton* button)
             button->setText(tr("Unknown plugin source."));
             return;
             }
-      button->setText(tr("Downloading…"));
+      emit pluginStatusChanged(buttonRow, PluginStatus::DOWNLOADING);
       QString localPath = download(page_url, true);
       PluginStatus res;
       if (install(localPath, &res)) {
@@ -846,9 +846,9 @@ bool PluginWorker::install(QString& download_pkg, PluginStatus* result/*= nullpt
 void PluginWorker::downloadInstall(QPushButton* button)
       {
       button->setEnabled(false);
-      button->setText(tr("Analyzing…"));
       const QString page_url = button->property("page_url").toString();
       const int buttonRow = button->property("row").toInt();
+      emit pluginStatusChanged(buttonRow, PluginStatus::ANALYZING);
       desc.package_name = button->property("name").toString();
       analyzePluginPage("https://musescore.org" + page_url);
       if (desc.source == UNKNOWN) {
@@ -856,8 +856,8 @@ void PluginWorker::downloadInstall(QPushButton* button)
             button->setEnabled(true);
             return;
             }
-      if(r)
-            button->setText(tr("Downloading…"));
+      if (r)
+            emit pluginStatusChanged(buttonRow, PluginStatus::DOWNLOADING);
       QString localPath = download(page_url);
       PluginStatus result;
       if (install(localPath, &result)) {
