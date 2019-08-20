@@ -128,7 +128,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             if (w)
                   w->setPlainText(instrument->trackName());
             else {
-                  Chord* nextChord = score()->nextChord(segment(), part);
+                  Chord* nextChord = score()->nextChord(segment(), part, true);
                   if (nextChord)
                         setNextChord(nextChord);
                   }
@@ -175,7 +175,7 @@ std::vector<KeySig*> InstrumentChange::keySigs() const
       }
 
 //---------------------------------------------------------
-//   keySigs
+//   clefs
 //---------------------------------------------------------
 
 std::vector<Clef*> InstrumentChange::clefs() const

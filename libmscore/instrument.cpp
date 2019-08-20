@@ -1188,10 +1188,12 @@ bool Instrument::operator==(const Instrument& i) const
       }
 
 //---------------------------------------------------------
-//   operator!=
+//   isDifferentInstrument
+//    Checks if the passed instrument is a different instrument.
+//    Does not compare channels.
 //---------------------------------------------------------
 
-bool Instrument::operator!=(const Instrument& i) const
+bool Instrument::isDifferentInstrument(const Instrument& i) const
       {
       int n = _longNames.size();
       if (i._longNames.size() != n)

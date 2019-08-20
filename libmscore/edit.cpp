@@ -1919,9 +1919,16 @@ void Score::deleteItem(Element* el)
                         deleteItem(keySig);
                   for (Clef* clef : ic->clefs())
                         deleteItem(clef);
-                  InstrumentChangeWarning* warning = nextICWarning(ic->part(), ic->segment());
-                  if (warning)
-                        undoRemoveElement(warning);
+                  InstrumentChange* prevIc = prevInstrumentChange(ic->segment(), ic->part(), true);
+                  if (prevIc) {
+                        Chord* nextC = nextChord(ic->segment(), ic->part(), true);
+                        prevIc->setNextChord(nextC);
+                        }
+                  else {
+                        InstrumentChangeWarning* warning = nextICWarning(ic->part(), ic->segment());
+                        if (warning)
+                              undoRemoveElement(warning);
+                        }
                   if (part->instrument(tickStart)->transpose() != oldV) {
                         auto i = part->instruments()->upper_bound(tickStart.ticks());
                         Fraction tickEnd;
@@ -2759,7 +2766,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
 //   moveICWarning
 //---------------------------------------------------------
 
-void Ms::Score::moveICWarning(Ms::Part* part, Ms::Segment* currentSeg)
+void Score::moveICWarning(Part* part, Segment* currentSeg)
       {
       int minVoice = part->staff(0)->idx() * VOICES;
       int maxVoice = (part->staff(part->nstaves() - 1)->idx() + 1) * VOICES - 1;
@@ -3721,7 +3728,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
             }
       }
 
-void Score::updateInstrumentChangeTranspositions(Ms::KeySigEvent& key, Ms::Staff* staff, const Ms::Fraction& tick)
+void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff, const Fraction& tick)
       {
       if (!key.forInstrumentChange()) {
             KeyList* kl = staff->keyList();
@@ -3740,9 +3747,11 @@ void Score::updateInstrumentChangeTranspositions(Ms::KeySigEvent& key, Ms::Staff
                               }
                         else {
                               e.setMode(key.mode());
-                              Interval changeInterval = staff->part()->instrument(Fraction::fromTicks(nextTick))->transpose();
-                              changeInterval.flip();
-                              Key nkey = transposeKey(key.key(), changeInterval);
+                              Interval transposeInterval = staff->part()->instrument(Fraction::fromTicks(nextTick))->transpose();
+                              Interval previousTranspose = staff->part()->instrument(tick)->transpose();
+                              transposeInterval.flip();
+                              Key nkey = transposeKey(key.key(), transposeInterval);
+                              nkey = transposeKey(nkey, previousTranspose);
                               e.setKey(nkey);
                               }
                         undo(new ChangeKeySig(keySig, e, keySig->showCourtesy()));
@@ -3761,7 +3770,7 @@ void Score::updateInstrumentChangeTranspositions(Ms::KeySigEvent& key, Ms::Staff
 //    create a clef before element e
 //---------------------------------------------------------
 
-void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool ic)
+void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool forInstrumentChange)
       {
       bool moveClef = false;
       SegmentType st = SegmentType::Clef;
@@ -3863,7 +3872,7 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool ic)
                   score->undo(new AddElement(clef));
                   clef->layout();
                   }
-            if (ic) {
+            if (forInstrumentChange) {
                   clef->setForInstrumentChange(true);
                   }
             clef->setSmall(small);

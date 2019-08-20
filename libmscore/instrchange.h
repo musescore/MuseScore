@@ -41,7 +41,7 @@ class InstrumentChangeWarning final : public StaffTextBase {
 
 class InstrumentChange final : public TextBase {
       Instrument* _instrument;  // Staff holds ownership if part of score
-      bool _init = false;
+      bool _init = false; // Set if the instrument has been set by the user, as there is no other way to tell.
       bool _showWarning = true;
       Q_DECLARE_TR_FUNCTIONS(setupInstrument)
 
