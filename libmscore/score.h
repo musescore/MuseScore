@@ -496,7 +496,7 @@ class Score : public QObject, public ScoreElement {
 
       void beamGraceNotes(Chord*, bool);
 
-      void moveICWarning(Ms::Part* part, Ms::Segment* currentSeg);
+      void moveICWarning(Part* part, Segment* currentSeg);
 
       void checkSlurs();
       void checkScore();
@@ -628,7 +628,7 @@ class Score : public QObject, public ScoreElement {
       void dragPosition(const QPointF&, int* staffIdx, Segment**) const;
 
       void undoAddElement(Element* element);
-      Chord* nextChord(Segment* seg, const Part* part);
+      Chord* nextChord(Segment* seg, const Part* part, bool lookForIc = false);
       InstrumentChange* prevInstrumentChange(Segment* seg, const Part* part, bool lookForNotes);
       InstrumentChangeWarning* nextICWarning(Part* part, Segment* seg);
       void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
@@ -650,7 +650,7 @@ class Score : public QObject, public ScoreElement {
       void undoChangeTuning(Note*, qreal);
       void undoChangeUserMirror(Note*, MScore::DirectionH);
       void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
-      void undoChangeClef(Staff* ostaff, Element*, ClefType st, bool ic = false);
+      void undoChangeClef(Staff* ostaff, Element*, ClefType st, bool forInstrumentChange = false);
       bool undoPropertyChanged(Element* e, Pid t, const QVariant& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
       void undoPropertyChanged(ScoreElement*, Pid, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
       inline virtual UndoStack* undoStack() const;

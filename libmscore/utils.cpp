@@ -1036,9 +1036,12 @@ std::vector<SymId> toTimeSigString(const QString& s)
 
 //---------------------------------------------------------
 //   nextChord
+//    find the next chord. If lookForIc is set method will
+//    return nullptr if an instrumetn change is found before
+//    the next chord.
 //---------------------------------------------------------
 
-Chord* Score::nextChord(Segment* seg, const Part* part)
+Chord* Score::nextChord(Segment* seg, const Part* part, bool lookForIc)
       {
       while (seg) {
             for (Staff* staff : *part->staves()) {
@@ -1048,6 +1051,11 @@ Chord* Score::nextChord(Segment* seg, const Part* part)
                         }
                   }
             seg = seg->next1();
+            if (lookForIc) {
+                  Element* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->staff(0)->idx() * VOICES, (part->staff(part->nstaves() - 1)->idx() + 1) * VOICES - 1);
+                  if (ic)
+                        return nullptr;
+                  }
             }
       return nullptr;
       }
@@ -1085,7 +1093,7 @@ InstrumentChangeWarning* Score::nextICWarning(Part* part, Segment* seg)
       {
       int startVoice = part->staff(0)->idx() * VOICES;
       int endVoice = (part->staff(part->nstaves() - 1)->idx() + 1) * VOICES - 1;
-      for (Segment* s = seg; s; s = s->next1(SegmentType::ChordRest)) {
+      for (Segment* s = seg; s; s = s->next1()) {
             InstrumentChange* ic = toInstrumentChange(s->findAnnotation(ElementType::INSTRUMENT_CHANGE, startVoice, endVoice));
             InstrumentChangeWarning* w = toInstrumentChangeWarning(s->findAnnotation(ElementType::INSTRUMENT_CHANGE_WARNING, startVoice, endVoice));
             if (ic && s != seg)

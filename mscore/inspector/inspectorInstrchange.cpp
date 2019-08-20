@@ -77,7 +77,7 @@ void InspectorInstrumentChange::showWarningChanged(int state)
             }
       else {
             i->setShowWarning(true);
-            Chord* nextChord = score->nextChord(i->segment(), i->part());
+            Chord* nextChord = score->nextChord(i->segment(), i->part(), true);
             if (nextChord)
                   i->setNextChord(nextChord);
             }
