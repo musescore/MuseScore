@@ -580,7 +580,7 @@ void PluginManager::pluginTreeWidgetItemChanged(QTreeWidgetItem* item, QTreeWidg
 void PluginManager::pluginLoadToggled(QTreeWidgetItem* item, int col)
       {
       pluginTreeWidget->blockSignals(true);
-      if (!item->parent()) {
+      if (!item->parent() && item->data(0, TypeRole).toBool()) {
             // root, i.e., a package
             if (item->checkState(col) == Qt::PartiallyChecked)
                   return;
@@ -596,6 +596,12 @@ void PluginManager::pluginLoadToggled(QTreeWidgetItem* item, int col)
             int idx = item->data(col, Qt::UserRole).toInt();
             PluginDescription* d = &_pluginList[idx];
             d->load = (item->checkState(0) == Qt::Checked);
+            if (!item->parent()) {
+                  // stand-alone plugin
+                  pluginTreeWidget->blockSignals(false);
+                  return;
+                  }
+            // belonging to a package
             QTreeWidgetItem* parent_widget = item->parent();
             int selected_count = 0;
             for (int i = 0; i < parent_widget->childCount(); i++) {

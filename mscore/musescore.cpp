@@ -5378,7 +5378,6 @@ void MuseScore::showPluginManager()
       ResourceManager r(0);
       r.tabs->setCurrentIndex(2);
       r.pluginTab->setCurrentIndex(1);
-      pluginManager->init();
       r.exec();
 #endif
       }
