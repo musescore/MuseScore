@@ -39,7 +39,7 @@ enum class Voicing : signed char {
       };
 
 //duration to realize notes with
-enum class HDuration : char {
+enum class HDuration : signed char {
       INVALID = -1,
       UNTIL_NEXT_CHORD_SYMBOL = 0,  //lasts until the next chord symbol or end of the schore
       STOP_AT_MEASURE_END,              //lasts until next chord symbol or measure end

@@ -27,7 +27,6 @@
 #include "spannermap.h"
 #include "layoutbreak.h"
 #include "property.h"
-#include "realizedharmony.h"
 
 namespace Ms {
 
@@ -97,6 +96,8 @@ enum class Key;
 enum class HairpinType : signed char;
 enum class SegmentType;
 enum class OttavaType : char;
+enum class Voicing : signed char;
+enum class HDuration : signed char;
 
 enum class POS : char { CURRENT, LEFT, RIGHT };
 
@@ -1163,7 +1164,7 @@ class Score : public QObject, public ScoreElement {
       void cmdResequenceRehearsalMarks();
       void cmdExchangeVoice(int, int);
       void cmdRemoveEmptyTrailingMeasures();
-      void cmdRealizeChordSymbols(bool lit = true, Voicing v = Voicing::INVALID, HDuration durationType = HDuration::INVALID);
+      void cmdRealizeChordSymbols(bool lit = true, Voicing v = Voicing(-1), HDuration durationType = HDuration(-1));
 
       void setAccessibleInfo(QString s)   { accInfo = s.remove(":").remove(";"); }
       QString accessibleInfo() const      { return accInfo;          }

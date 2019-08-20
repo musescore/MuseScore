@@ -3119,14 +3119,15 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             Fraction tick = seg->tick();
             bool concertPitch = styleB(Sid::concertPitch);
 
-            Chord* chord = new Chord(this);
+            Chord* chord = new Chord(this); //chord template
             chord->setTrack(h->track()); //set track so notes have a track to sit on
 
             //create chord from notes
             QMap<int, int> notes;
             if (voicing == Voicing::INVALID || durationType == HDuration::INVALID)
-                  notes = r.notes();
+                  notes = r.notes(); //no override, just use notes from realize harmony
             else {
+                  //generate notes list based on overridden settings
                   int offset = 0;
                   Interval interval = h->staff()->part()->instrument(h->tick())->transpose();
                   if (!concertPitch)
@@ -3134,7 +3135,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
                   notes = r.generateNotes(h->rootTpc(), h->baseTpc(),
                         literal, voicing, offset);
                   }
-            QMapIterator<int, int> i(notes);
+            QMapIterator<int, int> i(notes); //add notes to chord
             while (i.hasNext()) {
                   i.next();
                   Note* note = new Note(this);
@@ -3148,7 +3149,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
                   note->setNval(nval, tick);
                   }
 
-            setChord(seg, h->track(), chord, duration);
+            setChord(seg, h->track(), chord, duration); //add chord using template
             delete chord;
             }
       }
@@ -3162,13 +3163,14 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
       Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
 
       Fraction tick = segment->tick();
-      Chord* nr     = 0;
-      std::vector<Tie*> tie(chordTemplate->notes().size());
-      ChordRest* cr = toChordRest(segment->element(track));
+      Chord* nr     = 0; //current added chord used so we can select the last added chord and so we can apply ties
+      std::vector<Tie*> tie(chordTemplate->notes().size()); //keep pointer to a tie for each note in the chord in case we need to tie notes
+      ChordRest* cr = toChordRest(segment->element(track)); //chord rest under the segment for the specified track
 
       bool addTie = false;
 
       Measure* measure = 0;
+      //keep creating chords and tieing them until we created the full duration asked for (dur)
       for (;;) {
             if (track % VOICES)
                   expandVoice(segment, track);
@@ -3176,6 +3178,9 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
             Tuplet* t = cr ? cr->tuplet() : 0;
             Fraction tDur = segment->ticks();
             Segment* seg = segment->next();
+
+            //we need to get a correct subduration so that makeGap can function properly
+            //since makeGap() takes "normal" duration rather than actual length
             while (seg) {
                   if (seg->segmentType() == SegmentType::ChordRest) {
                         //design choice made to keep multiple notes across a tuplet as tied single notes rather than combining them
@@ -3187,11 +3192,11 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
                               break;
                         tDur += seg->ticks();
                         }
-                  if (tDur >= dur) {
+                  if (tDur >= dur) { //do not go further than the duration asked for
                         tDur = dur;
                         break;
                         }
-                  seg = seg->next();
+                  seg = seg->next(); //iterate only across measure (hence usage of next() rather than next1())
                   }
             if (t)
                   tDur *= t->ratio(); //scale by tuplet ratio to get "normal" length rather than actual length when dealing with tuplets
@@ -3208,6 +3213,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
             measure = segment->measure();
             std::vector<TDuration> dl = toDurationList(dd, true);
             size_t n = dl.size();
+            //add chord, tieing when necessary within measure
             for (size_t i = 0; i < n; ++i) {
                   const TDuration& d = dl[i];
 
@@ -3243,19 +3249,21 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
                               addTie = true;
                               }
                         }
-                  //setPlayNote(true);
                   setPlayChord(true);
                   segment = chord->segment();
                   tick += chord->actualTicks();
                   }
 
+            //subtract the duration already realized and move on
             if (t)
                   dur -= dd / t->ratio();
             else
                   dur -= dd;
+            //we are done when there is no duration left to realize
             if (dur.isZero())
                   break;
 
+            //go to next segment unless we are at the score (which means we will just be done there)
             Segment* nseg = tick2segment(tick, false, SegmentType::ChordRest);
             if (nseg == 0) {
                   qDebug("reached end of score");

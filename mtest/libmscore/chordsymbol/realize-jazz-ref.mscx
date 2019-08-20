@@ -1013,9 +1013,9 @@
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
-              <pitch>56</pitch>
-              <tpc>22</tpc>
-              <tpc2>24</tpc2>
+              <pitch>54</pitch>
+              <tpc>20</tpc>
+              <tpc2>22</tpc2>
               </Note>
             <Note>
               <pitch>60</pitch>
@@ -1213,9 +1213,9 @@
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
-              <pitch>54</pitch>
-              <tpc>20</tpc>
-              <tpc2>22</tpc2>
+              <pitch>56</pitch>
+              <tpc>22</tpc>
+              <tpc2>24</tpc2>
               </Note>
             <Note>
               <pitch>60</pitch>

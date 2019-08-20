@@ -807,8 +807,8 @@ int tpc2degree(int tpc, Key key)
 
 //---------------------------------------------------------
 //   tpcInterval
-//    Finds tpc of a note based on an altered interval
-//    from a starting note
+///   Finds tpc of a note based on an altered interval
+///   from a starting note
 //---------------------------------------------------------
 
 int tpcInterval(int startTpc, int interval, int alter)
@@ -832,7 +832,12 @@ int tpcInterval(int startTpc, int interval, int alter)
 
 //---------------------------------------------------------
 //   step2pitchInterval
-//    Finds pit
+///   Finds pitch between notes a specified altered interval away
+///
+///   For example:
+///         step = 3, alter = 0 means major 3rd
+///         step = 5, alter = -1 means diminished 5
+///         step = 6, alter = 2 means augmented sixth
 //---------------------------------------------------------
 
 int step2pitchInterval(int step, int alter)
