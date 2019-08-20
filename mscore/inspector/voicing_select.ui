@@ -82,11 +82,6 @@
      </item>
      <item>
       <property name="text">
-       <string>Open</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
        <string>Drop 2</string>
       </property>
      </item>

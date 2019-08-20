@@ -280,8 +280,8 @@ void Harmony::write(XmlWriter& xml) const
       if (!_function.isEmpty())
             xml.tag("function", _function);
       TextBase::writeProperties(xml, false, true);
-      //Pid::PLAY, Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING
-      //written by the above function call
+      //Pid::PLAY, Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION
+      //written by the above function call because they are part of element style
       if (_rightParen)
             xml.tagE("rightParen");
       xml.etag();
@@ -1183,7 +1183,7 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 
 const RealizedHarmony& Harmony::getRealizedHarmony()
       {
-      int offset = 0;
+      int offset = 0; //semitone offset for pitch adjustment
       Staff* st = staff();
       Interval interval = st->part()->instrument(tick())->transpose();
       if (!score()->styleB(Sid::concertPitch))

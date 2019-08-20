@@ -91,7 +91,7 @@ class Harmony final : public TextBase {
       QList<TextSegment*> textList;       // rendered chord
 
       bool _leftParen, _rightParen;       // include opening and/or closing parenthesis
-      bool _play;
+      bool _play;                         // whether or not to play back the harmony
 
       mutable QRectF _tbbox;
 

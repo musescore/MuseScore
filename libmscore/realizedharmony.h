@@ -31,18 +31,17 @@ enum class Voicing : signed char {
       AUTO = 0,
       ROOT_ONLY,
       CLOSE,
-      OPEN,
       DROP_2,
       SIX_NOTE,
       FOUR_NOTE,
       THREE_NOTE
       };
 
-//duration to realize notes with
+//duration to realize notes for
 enum class HDuration : signed char {
       INVALID = -1,
       UNTIL_NEXT_CHORD_SYMBOL = 0,  //lasts until the next chord symbol or end of the schore
-      STOP_AT_MEASURE_END,              //lasts until next chord symbol or measure end
+      STOP_AT_MEASURE_END,          //lasts until next chord symbol or measure end
       SEGMENT_DURATION              //lasts for the duration of the segment
       };
 
@@ -68,7 +67,7 @@ class RealizedHarmony {
 
    public:
       RealizedHarmony() : _harmony(0), _notes(QMap<int, int>()), _dirty(1) {}
-      RealizedHarmony(Harmony*);
+      RealizedHarmony(Harmony* h) : _harmony(h), _notes(QMap<int, int>()), _dirty(1) {}
 
       void setVoicing(Voicing);
       void setDuration(HDuration);
