@@ -2368,7 +2368,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         }
                   startingBeam = beam;
                   }
-            else if (tag == "Segment")
+            else if (tag == "Segment" && segment)
                   segment->read(e);
             else if (tag == "Ambitus") {
                   Ambitus* range = new Ambitus(score());

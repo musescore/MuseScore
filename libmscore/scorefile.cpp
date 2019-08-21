@@ -1287,7 +1287,8 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                         cr->writeTupletEnd(xml);
                         }
 
-                  segment->write(xml);    // write only once
+                  if (!(e->isRest() && toRest(e)->isGap()))
+                        segment->write(xml);    // write only once
                   if (forceTimeSig) {
                         if (segment->segmentType() == SegmentType::KeySig)
                               keySigWritten = true;
