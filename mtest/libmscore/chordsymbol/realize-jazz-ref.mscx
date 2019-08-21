@@ -107,7 +107,7 @@
             <root>13</root>
             <name>m7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -151,7 +151,7 @@
             <root>12</root>
             <name>m7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             <offset x="1.66488" y="-2.29189"/>
             </Harmony>
           <Chord>
@@ -199,7 +199,7 @@
             <root>11</root>
             <name>7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -249,7 +249,7 @@
             <root>10</root>
             <name>maj7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -296,7 +296,7 @@
             <root>9</root>
             <name>maj7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -343,7 +343,7 @@
             <root>15</root>
             <name>7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -384,7 +384,7 @@
             <root>14</root>
             <name>maj7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             <offset x="-1.66488" y="-2.5"/>
             </Harmony>
           <Chord>
@@ -423,7 +423,7 @@
             <root>14</root>
             <name>+</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -464,7 +464,7 @@
             <root>14</root>
             <name>m7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -508,7 +508,7 @@
             <root>13</root>
             <name>m7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -552,7 +552,7 @@
             <root>12</root>
             <name>7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -599,7 +599,7 @@
             <root>11</root>
             <name>maj7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -643,7 +643,7 @@
             <root>10</root>
             <name>maj7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -690,7 +690,7 @@
             <root>17</root>
             <name>m7(b5)</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>half</durationType>
@@ -727,7 +727,7 @@
             <root>16</root>
             <name>7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>half</durationType>
@@ -768,7 +768,7 @@
             <root>15</root>
             <name>maj7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             <offset x="-2.70543" y="-2.60405"/>
             </Harmony>
           <Chord>
@@ -918,7 +918,7 @@
             <root>18</root>
             <name>7(#9)</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>half</durationType>
@@ -962,7 +962,7 @@
             <root>17</root>
             <name>m7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -1000,7 +1000,7 @@
             <root>16</root>
             <name>7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -1044,7 +1044,7 @@
             <root>15</root>
             <name>maj7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -1197,7 +1197,7 @@
             <root>20</root>
             <name>m7(b5)</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -1241,7 +1241,7 @@
             <root>19</root>
             <name>7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -1285,7 +1285,7 @@
             <root>18</root>
             <name>maj7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -1332,7 +1332,7 @@
             <root>14</root>
             <name>7(#5)</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -1379,7 +1379,7 @@
             <root>13</root>
             <name>m7</name>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
-            <harmonyVoicing>4</harmonyVoicing>
+            <harmonyVoicing>3</harmonyVoicing>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
