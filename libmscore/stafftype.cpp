@@ -146,6 +146,14 @@ bool StaffType::operator==(const StaffType& st) const
       }
 
 //---------------------------------------------------------
+//   operator!=
+//---------------------------------------------------------
+
+bool StaffType::operator!=(const StaffType& st) const
+      {
+      return !st.operator==(*this);
+      }
+//---------------------------------------------------------
 //   isSameStructure
 //
 //    same as operator==, but ignores names and fonts

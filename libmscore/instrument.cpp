@@ -115,6 +115,8 @@ Instrument::Instrument(const Instrument& i)
       _transpose    = i._transpose;
       _instrumentId = i._instrumentId;
       _stringData   = i._stringData;
+      _lines        = i._lines;
+      _staffGroup   = i._staffGroup;
       _drumset      = 0;
       setDrumset(i._drumset);
       _useDrumset   = i._useDrumset;
@@ -1480,6 +1482,11 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       instr.setTrackName(t->trackName);
       instr.setTranspose(t->transpose);
       instr.setInstrumentId(t->musicXMLid);
+      if (t->staffTypePreset)
+            instr.setLines(t->staffTypePreset->lines());
+      else
+            instr.setLines(5);
+      instr.setStaffGroup(t->staffGroup);
       if (t->useDrumset)
             instr.setDrumset(t->drumset ? t->drumset : smDrumset);
       for (int i = 0; i < t->nstaves(); ++i)
