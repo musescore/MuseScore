@@ -1346,7 +1346,7 @@ void ChordRest::undoAddAnnotation(Element* a, bool useTopStaff/* = false*/)
             seg = m->mmRestFirst()->findSegmentR(SegmentType::ChordRest, Fraction(0,1));
 
       if (useTopStaff) {
-            Staff* topStaff;
+            Staff* topStaff = nullptr;
             for (int i = 0; i < part()->nstaves(); i++) {
                   if (part()->staff(i)->show()) {
                         topStaff = part()->staff(i);

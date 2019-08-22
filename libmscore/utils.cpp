@@ -1051,7 +1051,7 @@ Chord* Score::nextChord(Segment* seg, const Part* part, bool lookForIc)
                         }
                   }
             seg = seg->next1();
-            if (lookForIc) {
+            if (lookForIc && seg) {
                   Element* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->staff(0)->idx() * VOICES, (part->staff(part->nstaves() - 1)->idx() + 1) * VOICES - 1);
                   if (ic)
                         return nullptr;

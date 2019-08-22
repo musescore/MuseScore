@@ -22,6 +22,7 @@
 #include "system.h"
 #include "chord.h"
 #include "keysig.h"
+#include "stafftypechange.h"
 
 namespace Ms {
 
@@ -80,15 +81,33 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             //Instrument* oi = ic->instrument();  //part->instrument(tickStart);
             //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
 
-            // change the clef for each stave
+            // change the clef for each stave and add staff type change if necessary
+            // must be part of the same loop, as it will first add the staff type change, then add the clef, then set the offset for the clef
             for (int i = 0; i < part->nstaves(); i++) {
+                  Spatium clefOffset;
+                  if (part->staff(i)->staffType(tickStart)->lines() != instrument->lines() || part->instrument(tickStart)->staffGroup() != instrument->staffGroup()) {
+                        StaffTypeChange* change = new StaffTypeChange(score());
+                        change->setParent(segment()->measure());
+                        change->setTrack(i * VOICES);
+                        score()->undoAddElement(change);
+                        StaffType* st = part->staff(i)->staffType(segment()->measure()->tick());
+                        StaffType* nst = part->staff(i)->setStaffType(segment()->measure()->tick(), *st);
+                        nst->setGroup(instrument->staffGroup());
+                        nst->setLines(instrument->lines());
+                        Spatium oldOffset = st->yoffset();
+                        Spatium newOffset = Spatium(2.5 - 0.5 * (float)instrument->lines());
+                        clefOffset = newOffset - oldOffset;
+                        nst->setYoffset(newOffset);
+                        part->staff(i)->staffTypeListChanged(segment()->measure()->tick());
+                        }
                   if (part->instrument(tickStart)->clefType(i) != instrument->clefType(i)) {
                         ClefType clefType = score()->styleB(Sid::concertPitch) ? instrument->clefType(i)._concertClef : instrument->clefType(i)._transposingClef;
                         // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
                         Element* element = rtick().isZero() ? toElement(findMeasure()) : toElement(this);
-                        score()->undoChangeClef(part->staff(i), element, clefType, true);
+                        score()->undoChangeClef(part->staff(i), element, clefType, true, QPointF(0, Spatium::toDouble(clefOffset) * SPATIUM20));
+                        }
                   }
-            }
+                  
             
             // Change key signature if necessary
             if (instrument->transpose() != oldV) {

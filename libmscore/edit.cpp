@@ -3826,7 +3826,7 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
 //    create a clef before element e
 //---------------------------------------------------------
 
-void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool forInstrumentChange)
+void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool forInstrumentChange, QPointF offset)
       {
       bool moveClef = false;
       SegmentType st = SegmentType::Clef;
@@ -3931,6 +3931,7 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool forInstr
             if (forInstrumentChange) {
                   clef->setForInstrumentChange(true);
                   }
+            clef->setOffset(offset);
             clef->setSmall(small);
             }
       }

@@ -1750,7 +1750,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                   }
             }
       else if (staffGroup == StaffGroup::PERCUSSION) {
-            const Instrument* instrument = part()->instrument();
+            const Instrument* instrument = part()->instrument(tick());
             const Drumset* drumset = instrument->drumset();
             if (!drumset)
                   qWarning("no drumset");

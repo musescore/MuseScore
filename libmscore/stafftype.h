@@ -269,9 +269,11 @@ class StaffType {
 
       virtual ~StaffType() {}
       bool operator==(const StaffType&) const;
+      bool operator!=(const StaffType& st) const;
       bool isSameStructure(const StaffType&) const;
 
       StaffGroup group() const                 { return _group;           }
+      void setGroup(const StaffGroup group)    { _group = group; }
       const QString& name() const              { return _name;            }
       const QString& xmlName() const           { return _xmlName;         }
       void setName(const QString& val)         { _name = val;             }
