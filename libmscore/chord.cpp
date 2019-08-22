@@ -1713,7 +1713,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       const Staff* st = staff();
       StaffGroup staffGroup = st->staffType(tick())->group();
       if (staffGroup == StaffGroup::TAB) {
-            const Instrument* instrument = part()->instrument();
+            const Instrument* instrument = part()->instrument(tick());
             for (Chord* ch : graceNotes())
                   instrument->stringData()->fretChords(ch);
             instrument->stringData()->fretChords(this);

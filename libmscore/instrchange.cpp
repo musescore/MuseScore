@@ -85,10 +85,11 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             // must be part of the same loop, as it will first add the staff type change, then add the clef, then set the offset for the clef
             for (int i = 0; i < part->nstaves(); i++) {
                   Spatium clefOffset;
-                  if (part->staff(i)->staffType(tickStart)->lines() != instrument->lines() || part->instrument(tickStart)->staffGroup() != instrument->staffGroup()) {
+                  if (part->staff(i)->staffType(tickStart)->lines() != instrument->lines() || instrument->staffGroup() != StaffGroup::STANDARD) {
                         StaffTypeChange* change = new StaffTypeChange(score());
                         change->setParent(segment()->measure());
                         change->setTrack(i * VOICES);
+                        change->setForInstrumentChange(true);
                         score()->undoAddElement(change);
                         StaffType* st = part->staff(i)->staffType(segment()->measure()->tick());
                         StaffType* nst = part->staff(i)->setStaffType(segment()->measure()->tick(), *st);
@@ -214,6 +215,20 @@ std::vector<Clef*> InstrumentChange::clefs() const
       return clefs;
       }
 
+//---------------------------------------------------------
+//   staffTypeChanges
+//---------------------------------------------------------
+
+std::vector<StaffTypeChange*> InstrumentChange::staffTypeChanges() const
+      {
+      std::vector<StaffTypeChange*> changes;
+      Measure* m = segment()->measure();
+      for (Element* e : m->el()) {
+            if (e->isStaffTypeChange() && toStaffTypeChange(e)->forInstrumentChange())
+                  changes.push_back(toStaffTypeChange(e));
+            }
+      return changes;
+      }
 
 //---------------------------------------------------------
 //   write

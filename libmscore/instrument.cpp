@@ -229,6 +229,12 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
             xml.tag("transposeChromatic", _transpose.chromatic);
       if (!_instrumentId.isEmpty())
             xml.tag("instrumentId", _instrumentId);
+      switch (_staffGroup) {
+            case StaffGroup::PERCUSSION: xml.tag("staffGroup", 1); break;
+            case StaffGroup::TAB: xml.tag("staffGroup", 2); break;
+            }
+      if (_lines > 0)
+            xml.tag("lines", _lines);
       if (_useDrumset) {
             xml.tag("useDrumset", _useDrumset);
             _drumset->save(xml);
@@ -396,6 +402,15 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
             QString val(e.readElementText());
             setClefType(idx, ClefTypeList(clefType(idx)._concertClef, Clef::clefType(val)));
             }
+      else if (tag == "staffGroup") {
+            switch (e.readInt()) {
+                  case 1: _staffGroup = StaffGroup::PERCUSSION; break;
+                  case 2: _staffGroup = StaffGroup::TAB; break;
+                  default: _staffGroup = StaffGroup::STANDARD;
+                  }
+            }
+      else if (tag == "lines")
+            _lines = e.readInt();
       else
             return false;
 
