@@ -55,6 +55,7 @@
 #include "breath.h"
 #include "glissando.h"
 #include "fermata.h"
+#include "stafftypechange.h"
 
 namespace Ms {
 
@@ -1919,10 +1920,13 @@ void Score::deleteItem(Element* el)
                         deleteItem(keySig);
                   for (Clef* clef : ic->clefs())
                         deleteItem(clef);
+                  for (StaffTypeChange* st : ic->staffTypeChanges())
+                        deleteItem(st);
                   InstrumentChange* prevIc = prevInstrumentChange(ic->segment(), ic->part(), true);
                   if (prevIc) {
                         Chord* nextC = nextChord(ic->segment(), ic->part(), true);
-                        prevIc->setNextChord(nextC);
+                        if (nextC)
+                              prevIc->setNextChord(nextC);
                         }
                   else {
                         InstrumentChangeWarning* warning = nextICWarning(ic->part(), ic->segment());

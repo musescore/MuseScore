@@ -26,6 +26,7 @@ class StaffType;
 class StaffTypeChange final : public Element {
       StaffType* _staffType { 0 };
       qreal lw;
+      bool _forInstrumentChange = false;
 
       virtual void layout() override;
       virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
@@ -37,6 +38,9 @@ class StaffTypeChange final : public Element {
       virtual StaffTypeChange* clone() const override { return new StaffTypeChange(*this); }
 
       virtual ElementType type() const override { return ElementType::STAFFTYPE_CHANGE; }
+
+      void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
+      bool forInstrumentChange() const { return _forInstrumentChange; }
 
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;

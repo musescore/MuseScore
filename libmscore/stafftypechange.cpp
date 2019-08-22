@@ -34,6 +34,7 @@ StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
    : Element(lb)
       {
       lw = lb.lw;
+      _forInstrumentChange = lb._forInstrumentChange;
       }
 
 //---------------------------------------------------------
@@ -45,6 +46,8 @@ void StaffTypeChange::write(XmlWriter& xml) const
       xml.stag(this);
       if (_staffType)
             _staffType->write(xml);
+      if (_forInstrumentChange)
+            xml.tag("forInstrumentChange", _forInstrumentChange);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -63,6 +66,8 @@ void StaffTypeChange::read(XmlReader& e)
                   // Measure::add() will replace this with a pointer to a copy in the staff
                   _staffType = st;
                   }
+            else if (tag == "forInstrumentChange")
+                  _forInstrumentChange = e.readBool();
             else if (!Element::readProperties(e))
                   e.unknown();
             }

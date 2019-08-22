@@ -65,6 +65,7 @@ class InstrumentChange final : public TextBase {
 
       std::vector<KeySig*> keySigs() const;
       std::vector<Clef*> clefs() const;
+      std::vector<StaffTypeChange*> staffTypeChanges() const;
 
 
       bool init() const                     { return _init; }
