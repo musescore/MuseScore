@@ -4607,8 +4607,8 @@ void Score::undoAddElement(Element* element)
                               sm = cr2->staffIdx() - cr1->staffIdx();
                         Chord* c1 = findLinkedChord(cr1, score->staff(staffIdx));
                         Chord* c2 = findLinkedChord(cr2, score->staff(staffIdx + sm));
-                        Note* nn1 = c1->findNote(n1->pitch());
-                        Note* nn2 = c2 ? c2->findNote(n2->pitch()) : 0;
+                        Note* nn1 = c1->findNote(n1->pitch(), n1->unisonIndex());
+                        Note* nn2 = c2 ? c2->findNote(n2->pitch(), n2->unisonIndex()) : 0;
 
                         // create tie
                         Tie* ntie = toTie(ne);

@@ -847,9 +847,11 @@ Note* searchTieNote(Note* note)
                               return gn2;
                         }
                   for (Note* n : c->notes()) {
-                        if (n->pitch() == note->pitch()) {
-                              if (note2 == 0 || c->track() == chord->track())
+                        if (n->pitch() == note->pitch() && !n->tieBack()) {
+                              if (note2 == 0 || c->track() == chord->track()) {
                                     note2 = n;
+                                    break;
+                                    }
                               }
                         }
                   }

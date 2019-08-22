@@ -385,6 +385,7 @@ class Note final : public Element {
       Note* firstTiedNote() const;
       const Note* lastTiedNote() const;
       Note* lastTiedNote()            { return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote()); }
+      int unisonIndex() const;
       void disconnectTiedNotes();
       void connectTiedNotes();
 

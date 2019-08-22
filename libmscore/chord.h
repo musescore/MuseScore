@@ -128,7 +128,7 @@ class Chord final : public ChordRest {
 
       qreal maxHeadWidth() const;
 
-      Note* findNote(int pitch) const;
+      Note* findNote(int pitch, int skip = 0) const;
 
       Stem* stem() const                     { return _stem; }
       Arpeggio* arpeggio() const             { return _arpeggio;  }
