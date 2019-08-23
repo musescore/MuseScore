@@ -48,7 +48,7 @@ void RealizeHarmonyDialog::toggleChordTable()
       {
       int visible = chordTable->isVisible();
       chordTable->setVisible(!visible);
-      showButton->setText(!visible ? tr("Show Less...") : tr("Show More..."));
+      showButton->setText(!visible ? tr("Show less...") : tr("Show more..."));
       }
 
 //---------------------------------------------------------
