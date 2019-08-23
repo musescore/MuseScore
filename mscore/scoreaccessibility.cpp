@@ -8,6 +8,8 @@
 #include "libmscore/measure.h"
 #include "libmscore/spanner.h"
 #include "libmscore/sig.h"
+#include "libmscore/staff.h"
+#include "libmscore/part.h"
 #include "inspector/inspector.h"
 #include "selectionwindow.h"
 #include "playpanel.h"
@@ -169,9 +171,18 @@ void ScoreAccessibility::currentInfoChanged()
             if (e->staffIdx() + 1) {
                   _oldStaff = e->staffIdx();
                   staff = tr("Staff %1").arg(QString::number(e->staffIdx() + 1));
-                  rez = QString("%1; %2").arg(rez).arg(staff);
+                  QString staffName = e->staff()->part()->longName(e->tick());
+                  if (staffName.isEmpty())
+                        staffName = e->staff()->partName();
+                  if (staffName.isEmpty()) {
+                        staffName = tr("Unnamed");    // for screenreader only
+                        rez = QString("%1; %2").arg(rez).arg(staff);
+                        }
+                  else {
+                        rez = QString("%1; %2 (%3)").arg(rez).arg(staff).arg(staffName);
+                        }
                   if (e->staffIdx() != oldStaff)
-                        optimizedStaff = staff;
+                        optimizedStaff = QString("%1 (%2)").arg(staff).arg(staffName);
                   }
 
             statusBarLabel->setText(rez);
