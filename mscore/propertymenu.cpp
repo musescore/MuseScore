@@ -587,6 +587,10 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
             if (it) {
                   Instrument instr = Instrument::fromTemplate(it);
                   ic->setInit(true);
+                  ic->setStaffGroup(it->staffGroup);
+                  ic->clearLines();
+                  if (it->staffTypePreset)
+                        ic->setLines(it->staffTypePreset->lines());
                   ic->setupInstrument(&instr);
                   }
             else

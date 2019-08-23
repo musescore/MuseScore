@@ -43,6 +43,8 @@ class InstrumentChange final : public TextBase {
       Instrument* _instrument;  // Staff holds ownership if part of score
       bool _init = false; // Set if the instrument has been set by the user, as there is no other way to tell.
       bool _showWarning = true;
+      std::vector<int> _lines;
+      StaffGroup _staffGroup = StaffGroup::STANDARD;
       Q_DECLARE_TR_FUNCTIONS(setupInstrument)
 
    public:
@@ -67,13 +69,16 @@ class InstrumentChange final : public TextBase {
       std::vector<Clef*> clefs() const;
       std::vector<StaffTypeChange*> staffTypeChanges() const;
 
-
       bool init() const                     { return _init; }
       void setInit(bool init)               { _init = init; }
 
       bool showWarning() const              { return _showWarning; }
-      void setShowWarning(bool showWarning) { _showWarning = showWarning; }
+      void setShowWarning(const bool showWarning) { _showWarning = showWarning; }
       void setNextChord(ChordRest* chord);
+      void setLines(const int lines)        { _lines.push_back(lines); }
+      void clearLines()                     { _lines.clear(); }
+
+      void setStaffGroup(const StaffGroup staffGroup) { _staffGroup = staffGroup; }
 
       Segment* segment() const              { return toSegment(parent()); }
 

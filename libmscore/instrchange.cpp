@@ -23,6 +23,7 @@
 #include "chord.h"
 #include "keysig.h"
 #include "stafftypechange.h"
+#include <vector>
 
 namespace Ms {
 
@@ -58,6 +59,8 @@ InstrumentChange::InstrumentChange(const InstrumentChange& is)
       {
       _instrument = new Instrument(*is._instrument);
       _init = is._init;
+      _lines = is._lines;
+      _staffGroup = is._staffGroup;
       }
 
 InstrumentChange::~InstrumentChange()
@@ -85,7 +88,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             // must be part of the same loop, as it will first add the staff type change, then add the clef, then set the offset for the clef
             for (int i = 0; i < part->nstaves(); i++) {
                   Spatium clefOffset;
-                  if (part->staff(i)->staffType(tickStart)->lines() != instrument->lines() || instrument->staffGroup() != StaffGroup::STANDARD) {
+                  if (part->staff(i)->staffType(tickStart)->lines() != _lines.at(i) || _staffGroup != StaffGroup::STANDARD) {
                         StaffTypeChange* change = new StaffTypeChange(score());
                         change->setParent(segment()->measure());
                         change->setTrack(i * VOICES);
@@ -93,10 +96,10 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
                         score()->undoAddElement(change);
                         StaffType* st = part->staff(i)->staffType(segment()->measure()->tick());
                         StaffType* nst = part->staff(i)->setStaffType(segment()->measure()->tick(), *st);
-                        nst->setGroup(instrument->staffGroup());
-                        nst->setLines(instrument->lines());
+                        nst->setGroup(_staffGroup);
+                        nst->setLines(_lines.at(i));
                         Spatium oldOffset = st->yoffset();
-                        Spatium newOffset = Spatium(2.5 - 0.5 * (float)instrument->lines());
+                        Spatium newOffset = Spatium(2.5 - 0.5 * (float) _lines.at(i));
                         clefOffset = newOffset - oldOffset;
                         nst->setYoffset(newOffset);
                         part->staff(i)->staffTypeListChanged(segment()->measure()->tick());
@@ -202,13 +205,15 @@ std::vector<Clef*> InstrumentChange::clefs() const
       {
       std::vector<Clef*> clefs;
       Segment* seg = segment()->prev1(SegmentType::Clef);
+      int minTrack = part()->staff(0)->idx() * VOICES;
+      int maxTrack = part()->staff(part()->nstaves() - 1)->idx() * VOICES;
       if (seg) {
             int startVoice = part()->staff(0)->idx() * VOICES;
             int endVoice = part()->staff(part()->nstaves() - 1)->idx() * VOICES;
             Fraction t = tick();
             for (int i = startVoice; i <= endVoice; i += VOICES) {
                   Clef* clef = toClef(seg->element(i));
-                  if (clef && clef->forInstrumentChange() && clef->tick() == t)
+                  if (clef && clef->forInstrumentChange() && clef->tick() == t && clef->track() >= minTrack && clef->track() <= maxTrack)
                         clefs.push_back(clef);
                   }
             }
@@ -222,7 +227,11 @@ std::vector<Clef*> InstrumentChange::clefs() const
 std::vector<StaffTypeChange*> InstrumentChange::staffTypeChanges() const
       {
       std::vector<StaffTypeChange*> changes;
+      if (!segment())
+            return changes;
       Measure* m = segment()->measure();
+      if (!m)
+            return changes;
       for (Element* e : m->el()) {
             if (e->isStaffTypeChange() && toStaffTypeChange(e)->forInstrumentChange())
                   changes.push_back(toStaffTypeChange(e));
@@ -240,6 +249,13 @@ void InstrumentChange::write(XmlWriter& xml) const
       _instrument->write(xml, part());
       if (_init)
             xml.tag("init", _init);
+      switch (_staffGroup) {
+            case StaffGroup::PERCUSSION: xml.tag("staffGroup", "percussion"); break;
+            case StaffGroup::TAB: xml.tag("staffGroup", "tab"); break;
+            }
+      for (StaffTypeChange* st : staffTypeChanges()) {
+            xml.tag("lines", st->staffType()->lines());
+            }
       TextBase::writeProperties(xml);
       xml.etag();
       }
@@ -256,6 +272,17 @@ void InstrumentChange::read(XmlReader& e)
                   _instrument->read(e, part());
             else if (tag == "init")
                   _init = e.readBool();
+            else if (tag == "staffGroup") {
+                  QString text = e.readElementText();
+                  if (text == "percussion")
+                        _staffGroup = StaffGroup::PERCUSSION;
+                  else if (text == "tab")
+                        _staffGroup = StaffGroup::TAB;
+                  else
+                        _staffGroup = StaffGroup::STANDARD;
+            }
+            else if (tag == "lines")
+                  _lines.push_back(e.readInt());
             else if (!TextBase::readProperties(e))
                   e.unknown();
             }
