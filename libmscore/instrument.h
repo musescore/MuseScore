@@ -255,8 +255,6 @@ class Instrument {
       Interval _transpose;
       QString _instrumentId;
 
-      StaffGroup _staffGroup;
-      int _lines;
       bool _useDrumset;
       Drumset* _drumset;
       StringData  _stringData;
@@ -294,12 +292,6 @@ class Instrument {
       QString instrumentId()                                 { return _instrumentId; }
       void setInstrumentId(const QString& instrumentId)      { _instrumentId = instrumentId; }
 
-      void setStaffGroup(const StaffGroup staffGroup)        { _staffGroup = staffGroup; }
-      const StaffGroup staffGroup() const                    { return _staffGroup; }
-      StaffGroup staffGroup()                                { return _staffGroup; }
-      void setLines(int lines)                               { _lines = lines; }
-      const int lines() const                                { return _lines; }
-      int lines()                                            { return _lines; }
       void setDrumset(const Drumset* ds);
       const Drumset* drumset() const                         { return _drumset;    }
       Drumset* drumset()                                     { return _drumset;    }

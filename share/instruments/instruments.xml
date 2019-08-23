@@ -8862,7 +8862,7 @@
                   <description>Banjo (Tablature)</description>
                   <musicXMLid>pluck.banjo</musicXMLid>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>common</genre>
                   <genre>jazz</genre>
             </Instrument>
@@ -8915,7 +8915,7 @@
                   <description>Irish Tenor Banjo (Tablature)</description>
                   <musicXMLid>pluck.banjo.tenor</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>world</genre>
             </Instrument>
             <Instrument id="balalaika">
@@ -9227,7 +9227,7 @@
                   <description>Acoustic Nylon Strung Guitar (Tablature)</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>common</genre>
             </Instrument>
             <Instrument id="7-string-guitar">
@@ -9261,7 +9261,7 @@
                   <description>7-string Guitar (Tablature)</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <stafftype staffTypePreset="tab7StrCommon">tablature</stafftype>
-                  <!-- <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>world</genre>
             </Instrument>
             <Instrument id="cavaquinho">
@@ -9292,7 +9292,7 @@
                   <description>Cavaquinho (4-string Guitar) (Tablature)</description>
                   <musicXMLid>pluck.guitar</musicXMLid>
                   <stafftype staffTypePreset="tab4StrSimple">tablature</stafftype>
-                  <!-- <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>world</genre>
             </Instrument>
             <Instrument id="baritone-guitar">
@@ -9420,7 +9420,7 @@
                   <description>Acoustic Steel Strung Guitar (Tablature)</description>
                   <musicXMLid>pluck.guitar.acoustic</musicXMLid>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>common</genre>
                   <genre>classroom</genre>
             </Instrument>
@@ -9584,7 +9584,7 @@
                   <init>electric-guitar</init>
                   <description>Electric Guitar (Tablature)</description>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>common</genre>
                   <genre>popular</genre>
             </Instrument>
@@ -9687,7 +9687,7 @@
                   <description>Lute (Tablature)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-5-course">
@@ -9973,7 +9973,7 @@
                   <description>Mandolin (Tablature)</description>
                   <musicXMLid>pluck.mandolin</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="mandola">
@@ -10141,7 +10141,7 @@
                   <description>Ukulele (4-str. TAB)</description>
                   <musicXMLid>pluck.ukulele</musicXMLid>
                   <stafftype staffTypePreset="tabUkulele">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>common</genre>
                   <genre>popular</genre>
                   <genre>classroom</genre>
@@ -10249,7 +10249,7 @@
                   <description>Bass Guitar (Tablature)</description>
                   <musicXMLid>pluck.bass</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>common</genre>
                   <genre>popular</genre>
             </Instrument>
@@ -10332,7 +10332,7 @@
                   <description>Electric Bass (Tablature)</description>
                   <musicXMLid>pluck.bass.electric</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>common</genre>
                   <genre>popular</genre>
             </Instrument>
@@ -10407,7 +10407,7 @@
                   <init>5-string-electric-bass</init>
                   <description>5-string Electric Bass (Tablature)</description>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>common</genre>
                   <genre>popular</genre>
             </Instrument>
@@ -10449,7 +10449,7 @@
                   <init>5-string-electric-bass-high-c</init>
                   <description>5-string Electric Bass (High C/Tenor) (Tablature)</description>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="6-string-electric-bass">
@@ -10490,7 +10490,7 @@
                   <init>6-string-electric-bass</init>
                   <description>6-string Electric Bass (Tablature)</description>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="prim">
@@ -11019,7 +11019,7 @@
                   <init>viola-da-gamba</init>
                   <description>Viola da gamba (Tablature)</description>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
+                  <clef>TAB</clef>
                   <genre>earlymusic</genre>
             </Instrument>
             <!-- Viola da Gamba (6 string) removed as a duplication -->
