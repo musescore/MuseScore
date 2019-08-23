@@ -70,7 +70,7 @@ void RealizeHarmonyDialog::setChordList(QList<Harmony*> hlist)
             s += h->harmonyName() + " ";
             QString intervals;
             QString noteNames = tpc2name(h->rootTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO);
-            QMap<int, int> map = h->getRealizedHarmony().notes();
+            RealizedHarmony::PitchMap map = h->getRealizedHarmony().notes();
             for (int pitch : map.keys()) {
                   intervals += QString::number((pitch - tpc2pitch(h->rootTpc())) % 128 % 12) + " ";
                   }

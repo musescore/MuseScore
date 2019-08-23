@@ -45,6 +45,7 @@ enum class HDuration : signed char {
       SEGMENT_DURATION              //lasts for the duration of the segment
       };
 
+
 //-----------------------------------------
 //    Realized Harmony
 ///     holds information and functions
@@ -53,9 +54,15 @@ enum class HDuration : signed char {
 ///     allow for chord symbol playback
 //-----------------------------------------
 class RealizedHarmony {
+
+   public:
+      typedef QMap<int, int> PitchMap; //map from pitch to tpc
+      typedef QMapIterator<int, int> PitchMapIterator;
+
+   private:
       Harmony* _harmony;
 
-      QMap<int, int> _notes; //map from pitch to tpc
+      PitchMap _notes;
 
       Voicing _voicing;
       HDuration _duration;
@@ -66,8 +73,8 @@ class RealizedHarmony {
       bool _literal; //use all notes when possible and do not add any notes
 
    public:
-      RealizedHarmony() : _harmony(0), _notes(QMap<int, int>()), _dirty(1) {}
-      RealizedHarmony(Harmony* h) : _harmony(h), _notes(QMap<int, int>()), _dirty(1) {}
+      RealizedHarmony() : _harmony(0), _notes(PitchMap()), _dirty(1) {}
+      RealizedHarmony(Harmony* h) : _harmony(h), _notes(PitchMap()), _dirty(1) {}
 
       void setVoicing(Voicing);
       void setDuration(HDuration);
@@ -83,8 +90,8 @@ class RealizedHarmony {
       const QList<int> pitches() const { return notes().keys(); }
       const QList<int> tpcs() const { return notes().values(); }
 
-      const QMap<int, int>& notes() const;
-      const QMap<int, int> generateNotes(int rootTpc, int bassTpc, bool literal,
+      const PitchMap& notes() const;
+      const PitchMap generateNotes(int rootTpc, int bassTpc, bool literal,
                                                   Voicing voicing, int transposeOffset) const;
 
       void update(int rootTpc, int bassTpc, int transposeOffset = 0); //updates the notes map
@@ -92,8 +99,8 @@ class RealizedHarmony {
       Fraction getActualDuration(HDuration durationType = HDuration::INVALID) const;
 
    private:
-      QMap<int, int> getIntervals(int rootTpc, bool literal = true) const;
-      QMap<int, int> normalizeNoteMap(const QMap<int, int>& intervals, int rootTpc, int rootPitch, int max = 128, bool enforceMaxAsGoal = false) const;
+      PitchMap getIntervals(int rootTpc, bool literal = true) const;
+      PitchMap normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch, int max = 128, bool enforceMaxAsGoal = false) const;
       void cascadeDirty(bool dirty);
       };
 }

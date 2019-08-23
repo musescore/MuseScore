@@ -5841,7 +5841,7 @@ void MuseScore::realizeChordSymbols()
             return;
       if (!cs->selection().isList()) {
             QErrorMessage err;
-            err.showMessage("Invalid Selection. Cannot Realize Chord");
+            err.showMessage(tr("Invalid Selection. Cannot Realize Chord"));
             err.exec();
             return;
             }
@@ -5857,7 +5857,7 @@ void MuseScore::realizeChordSymbols()
             }
       else {
             QErrorMessage err;
-            err.showMessage("No Chord Selected. Cannot Realize Chord");
+            err.showMessage(tr("No Chord Selected. Cannot Realize Chord"));
             err.exec();
             return;
             }
