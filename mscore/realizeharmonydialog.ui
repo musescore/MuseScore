@@ -166,7 +166,7 @@
          <item>
           <widget class="QPushButton" name="showButton">
            <property name="text">
-            <string>Show More...</string>
+            <string>Show more...</string>
            </property>
           </widget>
          </item>
