@@ -70,7 +70,7 @@ void RealizedHarmony::setLiteral(bool literal)
 //   notes
 ///   returns the list of notes
 //---------------------------------------------------
-const QMap<int, int>& RealizedHarmony::notes() const
+const RealizedHarmony::PitchMap& RealizedHarmony::notes() const
       {
       Q_ASSERT(!_dirty);
       //with the way that the code is currently structured, there should be no way to
@@ -80,13 +80,17 @@ const QMap<int, int>& RealizedHarmony::notes() const
       }
 
 //---------------------------------------------------
-//   notes
-///   returns the list of notes
+//   generateNotes
+///   generates a note list based on the passed parameters
 //---------------------------------------------------
-const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
+const RealizedHarmony::PitchMap RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                                                 bool literal, Voicing voicing, int transposeOffset) const
       {
-      QMap<int, int> notes;
+      //The octave which to generate the body of the harmony, this is static const for now
+      //but may be user controlled in the future
+      static const int DEFAULT_OCTAVE = 5; //octave above middle C
+
+      PitchMap notes;
       int rootPitch = tpc2pitch(rootTpc) + transposeOffset;
       //euclidian mod, we need to treat this new pitch as a pitch between
       //0 and 11, so that voicing remains consistent across transposition
@@ -98,9 +102,9 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
       //create root note or bass note in second octave below middle C
       if (bassTpc != Tpc::TPC_INVALID && voicing != Voicing::ROOT_ONLY)
             notes.insert(tpc2pitch(bassTpc) + transposeOffset
-                        + 3*PITCH_DELTA_OCTAVE, bassTpc);
+                        + (DEFAULT_OCTAVE-2)*PITCH_DELTA_OCTAVE, bassTpc);
       else
-            notes.insert(rootPitch + 3*PITCH_DELTA_OCTAVE, rootTpc);
+            notes.insert(rootPitch + (DEFAULT_OCTAVE-2)*PITCH_DELTA_OCTAVE, rootTpc);
 
 
       switch (voicing) {
@@ -110,74 +114,61 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
             case Voicing::CLOSE://Voices notes in close position in the first octave above middle C
                   // FALLTHROUGH
                   {
-                  notes.insert(rootPitch + 5*PITCH_DELTA_OCTAVE, rootTpc);
+                  notes.insert(rootPitch + DEFAULT_OCTAVE*PITCH_DELTA_OCTAVE, rootTpc);
                   //ensure that notes fall under a specific range
                   //for now this range is between 5*12 and 6*12
-                  QMap<int, int> intervals = getIntervals(rootTpc, literal);
-                  QMapIterator<int, int> i(intervals);
+                  PitchMap intervals = getIntervals(rootTpc, literal);
+                  PitchMapIterator i(intervals);
                   while (i.hasNext()) {
                         i.next();
                         notes.insert((rootPitch + (i.key() % 128)) % PITCH_DELTA_OCTAVE +
-                                      5*PITCH_DELTA_OCTAVE, i.value());
+                                      DEFAULT_OCTAVE*PITCH_DELTA_OCTAVE, i.value());
                         }
                   }
                   break;
             case Voicing::DROP_2:
                   {
                   //select 4 notes from list
-                  QMap<int, int> intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 4);
-                  QMapIterator<int, int> i(intervals);
+                  PitchMap intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 4);
+                  PitchMapIterator i(intervals);
                   i.toBack();
 
                   int counter = 0; //counter to drop the second note
                   while (i.hasPrevious()) {
                         i.previous();
                         if (++counter == 2)
-                              notes.insert(i.key() + 4*PITCH_DELTA_OCTAVE, i.value());
+                              notes.insert(i.key() + (DEFAULT_OCTAVE-1)*PITCH_DELTA_OCTAVE, i.value());
                         else
-                              notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
+                              notes.insert(i.key() + DEFAULT_OCTAVE*PITCH_DELTA_OCTAVE, i.value());
                         }
                   }
                   break;
             case Voicing::THREE_NOTE:
                   {
                   //Insert 2 notes in the octave above middle C
-                  QMap<int, int> intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 2, true);
-                  QMapIterator<int, int> i(intervals);
+                  PitchMap intervals = normalizeNoteMap(getIntervals(rootTpc, literal), rootTpc, rootPitch, 2, true);
+                  PitchMapIterator i(intervals);
 
                   i.next();
-                  notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
+                  notes.insert(i.key() + DEFAULT_OCTAVE*PITCH_DELTA_OCTAVE, i.value());
 
                   i.next();
-                  notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
+                  notes.insert(i.key() + DEFAULT_OCTAVE*PITCH_DELTA_OCTAVE, i.value());
                   }
                   break;
             case Voicing::FOUR_NOTE:
-                  {
-                  //four note voicing, drop every other note
-                  QMap<int, int> relIntervals = getIntervals(rootTpc, literal);
-                  QMap<int, int> intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 3, true);
-                  QMapIterator<int, int> i(intervals);
-                  i.toBack();
-
-                  int counter = 0; //how many notes have been added
-                  while (i.hasPrevious()) {
-                        i.previous();
-
-                        if (counter % 2)
-                              notes.insert(i.key() + 4*PITCH_DELTA_OCTAVE, i.value());
-                        else
-                              notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
-                        ++counter;
-                        }
-                  }
-                  break;
             case Voicing::SIX_NOTE:
+                  //FALLTHROUGH
                   {
-                  //six note voicing, drop every other note
-                  QMap<int, int> relIntervals = getIntervals(rootTpc, literal);
-                  QMap<int, int> intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 5, true);
-                  QMapIterator<int, int> i(intervals);
+                  //four/six note voicing, drop every other note
+                  PitchMap relIntervals = getIntervals(rootTpc, literal);
+                  PitchMap intervals;
+                  if (voicing == Voicing::FOUR_NOTE)
+                        intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 3, true);
+                  else //voicing == Voicing::SIX_NOTE
+                        intervals = normalizeNoteMap(relIntervals, rootTpc, rootPitch, 5, true);
+
+                  PitchMapIterator i(intervals);
                   i.toBack();
 
                   int counter = 0; //how many notes have been added
@@ -185,9 +176,9 @@ const QMap<int, int> RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                         i.previous();
 
                         if (counter % 2)
-                              notes.insert(i.key() + 4*PITCH_DELTA_OCTAVE, i.value());
+                              notes.insert(i.key() + (DEFAULT_OCTAVE-1)*PITCH_DELTA_OCTAVE, i.value());
                         else
-                              notes.insert(i.key() + 5*PITCH_DELTA_OCTAVE, i.value());
+                              notes.insert(i.key() + DEFAULT_OCTAVE*PITCH_DELTA_OCTAVE, i.value());
                         ++counter;
                         }
                   }
@@ -263,7 +254,7 @@ Fraction RealizedHarmony::getActualDuration(HDuration durationType) const
 
 //---------------------------------------------------
 //   getIntervals
-///   gets a map from intervals to TPCs based on
+///   gets a weighted map from intervals to TPCs based on
 ///   a passed root tpc (this allows for us to
 ///   keep pitches, but transpose notes on the score)
 ///
@@ -275,10 +266,10 @@ Fraction RealizedHarmony::getActualDuration(HDuration durationType) const
 ///   - Rank 3: Other alterations and additions
 ///   - Rank 4: 5th and (in major/dominant chords) 11th
 //---------------------------------------------------
-QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
+RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool literal) const
       {
       //RANKING SYSTEM
-      static const int RANK_MULT = 128;
+      static const int RANK_MULT = 128; //used as multiplier and mod since MIDI pitch goes from 0-127
       static const int RANK_3RD = 0;
       static const int RANK_7TH = 1;
       static const int RANK_9TH = 2;
@@ -287,7 +278,7 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
 
       static const int FIFTH = 7 + RANK_MULT*RANK_OMIT;
 
-      QMap<int, int> ret;
+      PitchMap ret;
 
       const ParsedChord* p = _harmony->parsedForm();
       QString quality = p->quality();
@@ -497,21 +488,21 @@ QMap<int, int> RealizedHarmony::getIntervals(int rootTpc, bool literal) const
 
 //---------------------------------------------------
 //   normalizeNoteMap
-///   normalize the note map from intervals to create pitches between 0 and 12
+///   normalize the pitch map from intervals to create pitches between 0 and 12
 ///   and resolve any weighting system.
 ///
 ///   enforceMaxEquals - enforce the max as a goal so that the max is how many notes is inserted
 //---------------------------------------------------
-QMap<int, int> RealizedHarmony::normalizeNoteMap(const QMap<int, int>& intervals, int rootTpc, int rootPitch, int max, bool enforceMaxAsGoal) const
+RealizedHarmony::PitchMap RealizedHarmony::normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch, int max, bool enforceMaxAsGoal) const
       {
-      QMap<int, int> ret;
-      QMapIterator<int, int> itr(intervals);
+      PitchMap ret;
+      PitchMapIterator itr(intervals);
 
       for (int i = 0; i < max; ++i) {
             if (!itr.hasNext())
                   break;
             itr.next();
-            ret.insert((itr.key() % 128 + rootPitch) % PITCH_DELTA_OCTAVE, itr.value());
+            ret.insert((itr.key() % 128 + rootPitch) % PITCH_DELTA_OCTAVE, itr.value()); //128 is RANK_MULT
             }
 
       //redo insertions if we must have a specific number of notes with insertMulti
@@ -520,7 +511,7 @@ QMap<int, int> RealizedHarmony::normalizeNoteMap(const QMap<int, int>& intervals
                   ret.insertMulti(rootPitch, rootTpc); //duplicate root
 
                   int size = max - ret.size();
-                  itr = QMapIterator<int, int>(intervals); //reset iterator
+                  itr = PitchMapIterator(intervals); //reset iterator
                   for (int i = 0; i < size; ++i) {
                         if (!itr.hasNext())
                               break;

@@ -3123,7 +3123,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             chord->setTrack(h->track()); //set track so notes have a track to sit on
 
             //create chord from notes
-            QMap<int, int> notes;
+            RealizedHarmony::PitchMap notes;
             if (voicing == Voicing::INVALID || durationType == HDuration::INVALID)
                   notes = r.notes(); //no override, just use notes from realize harmony
             else {
@@ -3135,7 +3135,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
                   notes = r.generateNotes(h->rootTpc(), h->baseTpc(),
                         literal, voicing, offset);
                   }
-            QMapIterator<int, int> i(notes); //add notes to chord
+            RealizedHarmony::PitchMapIterator i(notes); //add notes to chord
             while (i.hasNext()) {
                   i.next();
                   Note* note = new Note(this);
@@ -3186,8 +3186,11 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
                         //design choice made to keep multiple notes across a tuplet as tied single notes rather than combining them
                         //since it's arguably more readable, but the other code is still here (commented)
                         ChordRest* testCr = toChordRest(seg->element(track));
-                        /*if (!!t ^ (testCr && testCr->tuplet())) //stop if we started with a tuplet and reach something that's not a tuplet,
-                              break;                          //or start with not a tuplet and reach a tuplet */
+
+                        //code here allows us to combine tuplet realization together which I have opted not to do for readability (of the music)
+                        //if (!!t ^ (testCr && testCr->tuplet())) //stop if we started with a tuplet and reach something that's not a tuplet,
+                        //      break;                          //or start with not a tuplet and reach a tuplet
+
                         if (testCr && testCr->tuplet()) //stop on tuplet
                               break;
                         tDur += seg->ticks();
