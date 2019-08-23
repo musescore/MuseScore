@@ -477,7 +477,7 @@ static int getControllerFromCC(int cc)
 //    renderHarmony
 ///    renders chord symbols
 //---------------------------------------------------------
-static void renderHarmony(EventMap* events, Measure* m, Harmony* h)
+static void renderHarmony(EventMap* events, Measure* m, Harmony* h, int tickOffset)
       {
       Staff* staff = m->score()->staff(h->track() / VOICES);
       const Channel* channel = staff->part()->harmonyChannel();
@@ -496,7 +496,7 @@ static void renderHarmony(EventMap* events, Measure* m, Harmony* h)
       NPlayEvent ev(ME_NOTEON, channel->channel(), 0, velocity);
       Fraction duration = r.getActualDuration();
 
-      int onTime = h->tick().ticks();
+      int onTime = h->tick().ticks() + tickOffset;
       int offTime = onTime + duration.ticks();
 
       ev.setOriginatingStaff(staffIdx);
@@ -536,7 +536,7 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
                   Harmony* h = toHarmony(e);
                   if (!h->play())
                         continue;
-                  renderHarmony(events, m, h);
+                  renderHarmony(events, m, h, tickOffset);
                   }
 
             for (int track = strack; track < etrack; ++track) {
@@ -756,7 +756,7 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                   Harmony* h = toHarmony(e);
                   if (!h->play())
                         continue;
-                  renderHarmony(events, m, h);
+                  renderHarmony(events, m, h, tickOffset);
                   }
 
             for (int track = strack; track < etrack; ++track) {
