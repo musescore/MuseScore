@@ -1915,13 +1915,27 @@ void Score::deleteItem(Element* el)
                   Fraction tickStart = ic->segment()->tick();
                   Part* part = ic->part();
                   Interval oldV = part->instrument(tickStart)->transpose();
+                  Measure* measure = ic->segment()->measure();
+                  
                   undoRemoveElement(el);
+                  for (int i = 0; i < part->nstaves(); i++) {
+                        Staff* staff = part->staff(i);
+                        StaffType oldSt = *staff->staffType(measure->tick());
+                        StaffType newSt = *staff->staffType(measure->prev()->tick());
+                        if (oldSt != newSt) {
+                              //staff->removeStaffType(measure->tick());
+                              undo(new ChangeStaffType(staff, newSt, measure->tick()));
+                              InstrumentChange* nextIc = nextInstrumentChange(ic->segment(), staff, true);
+                              if (nextIc && (nextIc->lines() != oldSt.lines() || nextIc->staffGroup() != oldSt.group())) {
+                                    Spatium clefOffset = nextIc->setupStaffType(staff);
+                                    nextIc->setupClefs(nextIc->instrument(), i, staff, clefOffset);
+                                    }
+                              }
+                        }
                   for (KeySig* keySig : ic->keySigs())
                         deleteItem(keySig);
                   for (Clef* clef : ic->clefs())
                         deleteItem(clef);
-                  for (StaffTypeChange* st : ic->staffTypeChanges())
-                        deleteItem(st);
                   InstrumentChange* prevIc = prevInstrumentChange(ic->segment(), ic->part(), true);
                   if (prevIc) {
                         Chord* nextC = nextChord(ic->segment(), ic->part(), true);

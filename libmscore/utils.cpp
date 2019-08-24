@@ -1085,6 +1085,29 @@ InstrumentChange* Score::prevInstrumentChange(Segment* seg, const Part* part, bo
       }
 
 //---------------------------------------------------------
+//   nextInstrumentChange
+//    find the next instrument change. setting lookForStaffTypeChange
+//    to true will return nullptr if a StaffTypeChange is found before
+//    an instrument change.
+//---------------------------------------------------------
+
+InstrumentChange* Score::nextInstrumentChange(Segment* seg, const Staff* staff, bool lookForStaffTypeChange)
+      {
+      while (seg = seg->next1()) {
+            if (lookForStaffTypeChange) {
+                  for (Element* el : seg->measure()->el()) {
+                        if (el->isStaffTypeChange() && el->track() == staff->idx() * VOICES)
+                              return nullptr;
+                  }
+            }
+            Element* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, staff->idx() * VOICES, (staff->idx() + 1) * VOICES - 1);
+            if (ic)
+                  return toInstrumentChange(ic);
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   nextICWarning
 //    returns the next instrument change warning
 //---------------------------------------------------------

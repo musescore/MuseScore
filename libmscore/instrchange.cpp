@@ -88,30 +88,17 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             // must be part of the same loop, as it will first add the staff type change, then add the clef, then set the offset for the clef
             for (int i = 0; i < part->nstaves(); i++) {
                   Spatium clefOffset;
-                  if (part->staff(i)->staffType(tickStart)->lines() != _lines.at(i) || _staffGroup != StaffGroup::STANDARD) {
-                        StaffTypeChange* change = new StaffTypeChange(score());
-                        change->setParent(segment()->measure());
-                        change->setTrack(i * VOICES);
-                        change->setForInstrumentChange(true);
-                        score()->undoAddElement(change);
-                        StaffType* st = part->staff(i)->staffType(segment()->measure()->tick());
-                        StaffType* nst = part->staff(i)->setStaffType(segment()->measure()->tick(), *st);
-                        nst->setGroup(_staffGroup);
-                        nst->setLines(_lines.at(i));
-                        Spatium oldOffset = st->yoffset();
-                        Spatium newOffset = Spatium(2.5 - 0.5 * (float) _lines.at(i));
-                        clefOffset = newOffset - oldOffset;
-                        nst->setYoffset(newOffset);
-                        part->staff(i)->staffTypeListChanged(segment()->measure()->tick());
+                  Staff* staff = part->staff(i);
+                  if (part->staff(i)->staffType(tickStart)->lines() != _lines || _staffGroup != StaffGroup::STANDARD) {
+                        clefOffset = setupStaffType(staff);
                         }
-                  if (part->instrument(tickStart)->clefType(i) != instrument->clefType(i)) {
-                        ClefType clefType = score()->styleB(Sid::concertPitch) ? instrument->clefType(i)._concertClef : instrument->clefType(i)._transposingClef;
-                        // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
-                        Element* element = rtick().isZero() ? toElement(findMeasure()) : toElement(this);
-                        score()->undoChangeClef(part->staff(i), element, clefType, true, QPointF(0, Spatium::toDouble(clefOffset) * SPATIUM20));
+                  setupClefs(instrument, i, staff, clefOffset);
+                  InstrumentChange* nextIc = score()->nextInstrumentChange(segment(), staff, true);
+                  if (nextIc) {
+                        Spatium nextClefOffset = nextIc->setupStaffType(staff);
+                        nextIc->setupClefs(nextIc->instrument(), i, staff, nextClefOffset);
                         }
                   }
-                  
             
             // Change key signature if necessary
             if (instrument->transpose() != oldV) {
@@ -157,6 +144,46 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
                   }
             setPlainText(tr("To %1").arg(instrument->trackName()));
             }
+      }
+
+//---------------------------------------------------------
+//   setupStaffType
+//    sets the staff type for the new instrument.
+//    returns the clef offset.
+//---------------------------------------------------------
+
+Spatium InstrumentChange::setupStaffType(Staff* staff)
+      {
+      StaffType* st = staff->staffType(segment()->measure()->tick());
+      Spatium oldOffset = st->yoffset();
+      Spatium newOffset = Spatium(2.5 - 0.5 * (float)_lines);
+      Spatium clefOffset = newOffset - oldOffset;
+      StaffType nst = *st;
+      nst.setGroup(_staffGroup);
+      nst.setLines(_lines);
+      nst.setYoffset(newOffset);
+      score()->undo(new ChangeStaffType(staff, nst, segment()->measure()->tick()));
+      //StaffType* nst = staff->setStaffType(segment()->measure()->tick(), *st);
+      staff->staffTypeListChanged(segment()->measure()->tick());
+      return clefOffset;
+      }
+
+//---------------------------------------------------------
+//   setupClefs
+//    setup the new clefs for the instrument
+//---------------------------------------------------------
+
+void InstrumentChange::setupClefs(const Instrument* instrument, int i, Staff* staff, Spatium clefOffset)
+      {
+      bool concert = score()->styleB(Sid::concertPitch);
+      if (staff->clefList().size() == 0 || staff->clefType(tick()) != instrument->clefType(i)) {
+            ClefType clefType = concert ? instrument->clefType(i)._concertClef : instrument->clefType(i)._transposingClef;
+            // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
+            Element* element = rtick().isZero() ? toElement(findMeasure()) : toElement(this);
+            score()->undoChangeClef(staff, element, clefType, true, QPointF(0, Spatium::toDouble(clefOffset) * SPATIUM20));
+      }
+      else if (i < clefs().size())
+            score()->deleteItem(clefs().at(i));
       }
 
 //---------------------------------------------------------
@@ -221,25 +248,6 @@ std::vector<Clef*> InstrumentChange::clefs() const
       }
 
 //---------------------------------------------------------
-//   staffTypeChanges
-//---------------------------------------------------------
-
-std::vector<StaffTypeChange*> InstrumentChange::staffTypeChanges() const
-      {
-      std::vector<StaffTypeChange*> changes;
-      if (!segment())
-            return changes;
-      Measure* m = segment()->measure();
-      if (!m)
-            return changes;
-      for (Element* e : m->el()) {
-            if (e->isStaffTypeChange() && toStaffTypeChange(e)->forInstrumentChange())
-                  changes.push_back(toStaffTypeChange(e));
-            }
-      return changes;
-      }
-
-//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -253,9 +261,7 @@ void InstrumentChange::write(XmlWriter& xml) const
             case StaffGroup::PERCUSSION: xml.tag("staffGroup", "percussion"); break;
             case StaffGroup::TAB: xml.tag("staffGroup", "tab"); break;
             }
-      for (StaffTypeChange* st : staffTypeChanges()) {
-            xml.tag("lines", st->staffType()->lines());
-            }
+      xml.tag("lines", _lines);
       TextBase::writeProperties(xml);
       xml.etag();
       }
@@ -282,7 +288,7 @@ void InstrumentChange::read(XmlReader& e)
                         _staffGroup = StaffGroup::STANDARD;
             }
             else if (tag == "lines")
-                  _lines.push_back(e.readInt());
+                  _lines = e.readInt();
             else if (!TextBase::readProperties(e))
                   e.unknown();
             }
