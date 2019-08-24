@@ -1449,9 +1449,13 @@ void ChangeStaff::flip(EditData*)
 
 void ChangeStaffType::flip(EditData*)
       {
-      StaffType st = *staff->staffType(Fraction(0,1));      // TODO
+      StaffType st = *staff->staffType(tick);
+      StaffType previousSt = *staff->staffType(staff->score()->tick2segment(tick)->measure()->prev()->tick());
 
-      staff->setStaffType(Fraction(0,1), staffType);
+      if (previousSt != staffType)
+            staff->setStaffType(tick, staffType);
+      else
+            staff->removeStaffType(tick);
 
       staffType = st;
 

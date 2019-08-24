@@ -390,7 +390,7 @@ void MuseScore::editInstrList()
 
                               // use selected staff type
                               if (stfType->name() != staff->staffType(Fraction(0,1))->name())
-                                    masterScore->undo(new ChangeStaffType(staff, *stfType));
+                                    masterScore->undo(new ChangeStaffType(staff, *stfType, Fraction(0,1)));
                               }
                         else {
                               ++staffIdx;

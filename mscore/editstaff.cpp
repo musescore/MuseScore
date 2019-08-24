@@ -398,7 +398,7 @@ void EditStaff::apply()
 
       if ( !(*orgStaff->staffType(Fraction(0,1)) == *staff->staffType(Fraction(0,1))) ) {
             // updateNeeded |= (orgStaff->staffGroup() == StaffGroup::TAB || staff->staffGroup() == StaffGroup::TAB);
-            score->undo(new ChangeStaffType(orgStaff, *staff->staffType(Fraction(0,1))));
+            score->undo(new ChangeStaffType(orgStaff, *staff->staffType(Fraction(0,1)), Fraction(0,1)));
             }
 
       score->update();

@@ -615,11 +615,12 @@ class ChangeStaff : public UndoCommand {
 class ChangeStaffType : public UndoCommand {
       Staff*       staff;
       StaffType    staffType;
+      Fraction     tick;
 
       void flip(EditData*) override;
 
    public:
-      ChangeStaffType(Staff* s, const StaffType& t) : staff(s), staffType(t) {}
+      ChangeStaffType(Staff* s, const StaffType& t, Fraction tick) : staff(s), staffType(t), tick(tick) {}
       UNDO_NAME("ChangeStaffType")
       };
 
