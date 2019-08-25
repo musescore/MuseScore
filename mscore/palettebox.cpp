@@ -22,11 +22,6 @@ namespace Ms {
 //---------------------------------------------------------
 //   PaletteBox
 //---------------------------------------------------------
-PaletteTree::PaletteTree(QWidget* parent) 
-   : QTreeWidget(parent) 
-      {
-      
-      }
 
 PaletteBox::PaletteBox(QWidget* parent)
    : QDockWidget(tr("Palettes"), parent)
@@ -35,11 +30,13 @@ PaletteBox::PaletteBox(QWidget* parent)
       setObjectName("palette-box");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
 
+      /*
       singlePaletteAction = new QAction(this);
       singlePaletteAction->setCheckable(true);
       singlePaletteAction->setChecked(preferences.getBool(PREF_APP_USESINGLEPALETTE));
       addAction(singlePaletteAction);
       connect(singlePaletteAction, SIGNAL(toggled(bool)), SLOT(setSinglePalette(bool)));
+      */
 
       QWidget* w = new QWidget(this);
       w->setContextMenuPolicy(Qt::NoContextMenu);
@@ -78,15 +75,13 @@ PaletteBox::PaletteBox(QWidget* parent)
       sa->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
       sa->setWidgetResizable(true);
       sa->setFrameShape(QFrame::NoFrame);
-      vl->addWidget(sa);
-      vl->addLayout(hlSearch);
-      vl->addLayout(hl);
-      vl->addWidget(tree);
 
       tree = new PaletteTree(this);
       tree->setHeaderLabel("Palette");
       vl->addWidget(tree);
 
+      vl->addLayout(hlSearch);
+      vl->addLayout(hl);
       QWidget* paletteList = new QWidget;
       sa->setWidget(paletteList);
       vbox = new QVBoxLayout;
@@ -109,7 +104,7 @@ PaletteBox::PaletteBox(QWidget* parent)
 void PaletteBox::retranslate()
       {
       setWindowTitle(tr("Palettes"));
-      singlePaletteAction->setText(tr("Single Palette"));
+      //singlePaletteAction->setText(tr("Single Palette"));
       workspaceList->setToolTip(tr("Select workspace"));
       addWorkspaceButton->setText(tr("+"));
       addWorkspaceButton->setToolTip(tr("Add new workspace"));
@@ -428,15 +423,15 @@ bool PaletteBox::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Palette") {
-                  Palette* p = new Palette();
                   QString name = e.attribute("name");
-                  p->setName(name);
                   QTreeWidgetItem* paletteItem = new QTreeWidgetItem(tree);
                   paletteItem->setText(0,name);
                   PaletteList* paletteList = new PaletteList(tree);
+                  paletteList->_name = name;
                   QTreeWidgetItem* paletteElementsItem = new QTreeWidgetItem(paletteItem);
                   tree->setItemWidget(paletteElementsItem, 0, paletteList);
                   paletteList->read(e);
+                  connect(paletteList, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   paletteList->QAbstractScrollArea::setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
                   }
             else
@@ -607,33 +602,5 @@ bool PaletteBox::eventFilter(QObject* obj, QEvent *event)
             return false;
             }
       return QDockWidget::eventFilter(obj, event);
-      }
-
-void PaletteTree::resizeEvent(QResizeEvent* event)
-      {
-      QTreeWidget::resizeEvent(event);
-      int numPalettes = topLevelItemCount();
-      for (int i = 0; i < numPalettes; i++) {
-            QTreeWidgetItem* paletteItem = topLevelItem(i);
-            QTreeWidgetItem* paletteChild = paletteItem->child(0);
-            if (paletteChild && !paletteChild->isHidden()) {
-                  paletteChild->setHidden(true);
-                  paletteChild->setHidden(false);
-                  }
-            }
-      }
-
-void PaletteTree::showEvent(QShowEvent* event)
-      {
-      QTreeWidget::showEvent(event);
-      int numPalettes = topLevelItemCount();
-      for (int i = 0; i < numPalettes; i++) {
-            QTreeWidgetItem* paletteItem = topLevelItem(i);
-            if (!paletteItem->isExpanded()) {
-                  paletteItem->setExpanded(true);
-                  paletteItem->setExpanded(true);
-                  paletteItem->setExpanded(false);
-                  }  
-            }
       }
 }

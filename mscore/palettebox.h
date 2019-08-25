@@ -26,17 +26,6 @@ class Palette;
 //---------------------------------------------------------
 //   PaletteBox
 //---------------------------------------------------------
-class PaletteTree : public QTreeWidget {
-      Q_OBJECT
-
-      protected:
-         virtual void resizeEvent(QResizeEvent *event) override;
-         virtual void showEvent(QShowEvent *event) override;
-
-      public:
-         PaletteTree(QWidget* parent);
-   }; 
-
 
 class PaletteBox : public QDockWidget {
       Q_OBJECT
@@ -47,7 +36,7 @@ class PaletteBox : public QDockWidget {
       QLineEdit* _searchBox;
       PaletteTree* tree = nullptr;
       const int paletteStretch = 1000;
-      QAction* singlePaletteAction;
+      //QAction* singlePaletteAction;
       QToolButton* addWorkspaceButton;
       bool keyboardNavigation = false;
 

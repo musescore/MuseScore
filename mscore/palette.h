@@ -75,11 +75,11 @@ class PaletteProperties : public QDialog, private Ui::PaletteProperties {
 class PaletteCellProperties : public QDialog, private Ui::PaletteCellProperties {
       Q_OBJECT
 
-      PaletteCell* cell;
+      PaletteCellItem* cell;
       virtual void accept();
       virtual void hideEvent(QHideEvent*);
    public:
-      PaletteCellProperties(PaletteCell* p, QWidget* parent = 0);
+      PaletteCellProperties(PaletteCellItem* p, QWidget* parent = 0);
       };
 
 //---------------------------------------------------------
@@ -223,17 +223,17 @@ class Palette : public QWidget {
 
 class PaletteCellItem : public  QListWidgetItem {
 
-         QString name;           // used for tool tip
-         QString tag;
-         bool drawStaff { false };
-         double x       { 0.0   };
-         double y       { 0.0   };
-         double xoffset { 0.0   };
-         double yoffset { 0.0   };      // in spatium units of "gscore"
-         qreal mag      { 1.0   };
-         bool readOnly  { false };
-
          public:
+            QString name;           // used for tool tip
+            QString tag;
+            bool drawStaff { false };
+            double x       { 0.0   };
+            double y       { 0.0   };
+            double xoffset { 0.0   };
+            double yoffset { 0.0   };      // in spatium units of "gscore"
+            qreal mag      { 1.0   };
+            bool readOnly  { false };
+            
             PaletteCellItem(PaletteList* parent);
             Element* element = nullptr;
             void setName(QString name){setText(name);}
@@ -245,18 +245,13 @@ class PaletteCellItem : public  QListWidgetItem {
 class PaletteList : public QListWidget {
          Q_OBJECT
 
-         QList<PaletteCellItem*> cells;
-         QList<PaletteCellItem*> dragCells;
          int hgrid;
          int vgrid;
          qreal extraMag;
-         QListWidgetItem* currIdx;
-         int currentIdx;
-         PaletteCellItem* dragIdx;
-         int selectedIdx;
+         PaletteCellItem* dragItem;
          QPoint dragStartPosition;
          bool _moreElements;
-
+         bool _showContextMenu { true };
          bool _disableDoubleClick { false };
          void applyPaletteElement(PaletteCellItem* cell, Qt::KeyboardModifiers modifiers = 0);
 
@@ -270,17 +265,21 @@ class PaletteList : public QListWidget {
             virtual void dragEnterEvent(QDragEnterEvent*) override;
             virtual void dragMoveEvent(QDragMoveEvent*) override;
             virtual void dropEvent(QDropEvent*) override;
+            virtual void contextMenuEvent(QContextMenuEvent*) override;
 
          signals:
             void changed();
+            void displayMore(const QString& paletteName);
             
          public:
+            QString _name;
             void applyPaletteElement();
             PaletteList(QWidget* parent); 
             void  read(XmlReader& e);
             void setGrid(int ,int);
-            int getCurrentIdx() { return currentIdx; }
-            void setCurrentIdx(int i) { currentIdx = i; }
+            PaletteCellItem* currentItem() { return static_cast<PaletteCellItem*>(QListWidget::currentItem()); }
+            void setShowContextMenu(bool val) { _showContextMenu = val; }
+            void setMoreElements(bool val) { _moreElements = val; }
 
       };
 

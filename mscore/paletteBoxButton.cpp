@@ -18,6 +18,145 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   PaletteTree
+//---------------------------------------------------------
+
+PaletteTree::PaletteTree(QWidget* parent) 
+   : QTreeWidget(parent) 
+      {
+            
+      }
+
+//---------------------------------------------------------
+//  resizeEvent
+//---------------------------------------------------------
+
+void PaletteTree::resizeEvent(QResizeEvent* event)
+      {
+      QTreeWidget::resizeEvent(event);
+      int numPalettes = topLevelItemCount();
+      for (int i = 0; i < numPalettes; i++) {
+            QTreeWidgetItem* paletteItem = topLevelItem(i);
+            QTreeWidgetItem* paletteChild = paletteItem->child(0);
+            if (paletteChild && !paletteChild->isHidden()) {
+                  paletteChild->setHidden(true);
+                  paletteChild->setHidden(false);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void PaletteTree::showEvent(QShowEvent* event)
+      {
+      QTreeWidget::showEvent(event);
+      int numPalettes = topLevelItemCount();
+      for (int i = 0; i < numPalettes; i++) {
+            QTreeWidgetItem* paletteItem = topLevelItem(i);
+            if (!paletteItem->isExpanded()) {
+                  paletteItem->setExpanded(true);
+                  paletteItem->setExpanded(true);
+                  paletteItem->setExpanded(false);
+                  }  
+            }
+      }
+
+//---------------------------------------------------------
+//   ContextMenuEvent
+//---------------------------------------------------------
+
+void PaletteTree::contextMenuEvent(QContextMenuEvent* event) 
+  	{
+  	QTreeWidgetItem* item = itemAt(event->pos());
+  	QMenu menu;
+  	menu.addAction(item->text(0));
+      menu.addSeparator();
+      QAction* actionProperties = menu.addAction(tr("Palette Properties…"));
+      QAction* actionInsert     = menu.addAction(tr("Insert New Palette…"));
+      //QAction* actionUp         = menu.addAction(tr("Move Palette Up"));
+      //QAction* actionDown       = menu.addAction(tr("Move Palette Down"));
+      QAction* actionEdit       = menu.addAction(tr("Enable Editing"));
+      actionEdit->setCheckable(true);
+      //actionEdit->setChecked(!palette->readOnly());
+      //bool _systemPalette = palette->systemPalette();
+      /*
+      actionProperties->setDisabled(_systemPalette);
+      actionInsert->setDisabled(_systemPalette);
+      actionUp->setDisabled(_systemPalette);
+      actionDown->setDisabled(_systemPalette);
+      actionEdit->setDisabled(_systemPalette);
+      */
+      menu.addSeparator();
+      QAction* actionSave = menu.addAction(tr("Save Palette…"));
+      QAction* actionLoad = menu.addAction(tr("Load Palette…"));
+      //actionLoad->setDisabled(_systemPalette);
+
+      menu.addSeparator();
+      QAction* actionDelete = menu.addAction(tr("Delete Palette"));
+      //actionDelete->setDisabled(_systemPalette);
+
+      QAction* action = menu.exec(mapToGlobal(event->pos()));
+
+      if (action == actionProperties){}
+            //propertiesTriggered(item);
+      else if (action == actionInsert){}
+            //newTriggered(item);
+      /*else if (action == actionUp)
+            {
+                  if (item) {
+                        qDebug() << 
+                        qDebug() << "The Position of the paletteItem is " << currentIndex().row();
+                        int row  = currentIndex().row();
+                        if (item && row > 0)
+                              {
+                              takeTopLevelItem(row);
+                              insertTopLevelItem(row - 1, item);
+                              setCurrentItem(item);
+                              }
+                  //emit changed();
+                        }
+            }
+      else if (action == actionDown)
+            {
+                  if (item) {
+                  qDebug() << "The Position of the paletteItem is " << currentIndex().row();
+                  int row  = currentIndex().row();
+                  int n = topLevelItemCount();
+                        if (item && (row < n-1))
+                              {
+                              takeTopLevelItem(row);
+                              insertTopLevelItem(row + 1, item);
+                              setCurrentItem(item);
+                              }
+                  //emit changed(); 
+                        }
+                        
+            }
+      else if (action == actionEdit)
+            enableEditing(action->isChecked());
+      */
+      else if (action == actionSave){}
+            //saveTriggered(item);
+      else if (action == actionLoad){}
+            //loadTriggered(item);
+      else if (action == actionDelete)
+            {
+                  QMessageBox::StandardButton reply;
+                        reply = QMessageBox::question(0,
+                              QWidget::tr("Are you sure?"),
+                              QWidget::tr("Do you really want to delete the palette?"),
+                              QMessageBox::Yes | QMessageBox::No,
+                              QMessageBox::Yes
+                              );
+                        if (reply == QMessageBox::Yes) {
+                              delete item;
+                        }
+            }
+  	}
+
+//---------------------------------------------------------
 //   PaletteBoxButton
 //---------------------------------------------------------
 

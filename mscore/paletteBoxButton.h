@@ -28,6 +28,22 @@ enum class PaletteCommand : char {
       };
 
 //---------------------------------------------------------
+//   PaletteTree
+//---------------------------------------------------------
+
+class PaletteTree : public QTreeWidget {
+      Q_OBJECT
+
+      protected:
+         virtual void resizeEvent(QResizeEvent *event) override;
+         virtual void showEvent(QShowEvent *event) override;
+         virtual void contextMenuEvent(QContextMenuEvent*) override;
+
+      public:
+         PaletteTree(QWidget* parent);
+   }; 
+
+//---------------------------------------------------------
 //   PaletteBoxButton
 //---------------------------------------------------------
 
