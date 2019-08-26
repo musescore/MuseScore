@@ -54,6 +54,7 @@ class TestChordSymbol : public QObject, public MTest {
       void testRealize3Note();
       void testRealize4Note();
       void testRealize6Note();
+      void testRealizeConcertPitch();
       void testRealizeTransposed();
       void testRealizeOverride();
       void testRealizeTriplet();
@@ -303,17 +304,37 @@ void TestChordSymbol::testRealize6Note()
       }
 
 //---------------------------------------------------------
-//   testRealizeTransposed
+//   testRealizeConcertPitch
 ///   Check if the note pitches and tpcs are correct after realizing
 ///   chord symbols on transposed instruments.
 //---------------------------------------------------------
-void TestChordSymbol::testRealizeTransposed()
+void TestChordSymbol::testRealizeConcertPitch()
       {
-      MasterScore* score = test_pre("realize-transpose");
+      MasterScore* score = test_pre("realize-concert-pitch");
       //concert pitch off
       score->startCmd();
       score->cmdConcertPitchChanged(false, true);
       score->endCmd();
+
+      //realize all chord symbols
+      selectAllChordSymbols(score);
+      score->startCmd();
+      score->cmdRealizeChordSymbols();
+      score->endCmd();
+      test_post(score, "realize-concert-pitch");
+      }
+
+//---------------------------------------------------------
+//   testRealizeTransposed
+///   Check if the note pitches and tpcs are correct after
+///   transposing the score
+//---------------------------------------------------------
+void TestChordSymbol::testRealizeTransposed()
+      {
+      MasterScore* score = test_pre("transpose");
+      //transpose
+      score->cmdSelectAll();
+      score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
 
       //realize all chord symbols
       selectAllChordSymbols(score);
