@@ -227,7 +227,7 @@ void TestInstrumentChange::testWarning02()
       score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
       score->inputState().setNoteEntryMode(true);
       score->startCmd();
-      score->cmdAddPitch(72, false, false);
+      score->cmdAddPitch(43, false, false);
       score->endCmd();
       test_post(score, "warning02");
       }
