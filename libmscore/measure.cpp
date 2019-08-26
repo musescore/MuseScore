@@ -2303,7 +2303,6 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                || tag == "Sticking"
                || tag == "SystemText"
                || tag == "RehearsalMark"
-               || tag == "InstrumentChange"
                || tag == "InstrumentChangeWarning"
                || tag == "StaffState"
                || tag == "FiguredBass"
@@ -2315,6 +2314,17 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                   el->read(e);
                   segment = getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
+                  }
+            else if (tag == "InstrumentChange") {
+                  InstrumentChange* ic = new InstrumentChange(score());
+                  ic->setTrack(e.track());
+                  ic->read(e);
+                  segment = getSegment(SegmentType::ChordRest, e.tick());
+                  segment->add(ic);
+                  for (int i = 0; i < ic->part()->nstaves(); i++) {
+                        if (ic->part()->staff(i)->staffType(e.tick())->lines() != ic->lines() || ic->staffGroup() != StaffGroup::STANDARD)
+                              ic->setupStaffType(ic->part()->staff(i));
+                        }
                   }
             else if (tag == "Fermata") {
                   fermata = new Fermata(score());

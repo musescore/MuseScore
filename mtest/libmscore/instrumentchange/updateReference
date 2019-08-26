@@ -6,7 +6,9 @@ cp ../../../build.debug/mtest/libmscore/instrumentchange/copy-test.mscx   copy-r
 cp ../../../build.debug/mtest/libmscore/instrumentchange/delete-test.mscx delete-ref.mscx
 cp ../../../build.debug/mtest/libmscore/instrumentchange/mixer-test.mscx  mixer-ref.mscx
 cp ../../../build.debug/mtest/libmscore/instrumentchange/add_before-test.mscx  add_before-ref.mscx
+cp ../../../build.debug/mtest/libmscore/instrumentchange/add_clef_key-test.mscx  add_clef_key-ref.mscx
 cp ../../../build.debug/mtest/libmscore/instrumentchange/warning01-test.mscx  warning01-ref.mscx
 cp ../../../build.debug/mtest/libmscore/instrumentchange/warning02-test.mscx  warning02-ref.mscx
 cp ../../../build.debug/mtest/libmscore/instrumentchange/warning03-test.mscx  warning03-ref.mscx
 cp ../../../build.debug/mtest/libmscore/instrumentchange/warning04-test.mscx  warning04-ref.mscx
+cp ../../../build.debug/mtest/libmscore/instrumentchange/warning05-test.mscx  warning05-ref.mscx

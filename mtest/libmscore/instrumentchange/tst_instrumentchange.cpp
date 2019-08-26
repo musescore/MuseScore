@@ -44,10 +44,12 @@ class TestInstrumentChange : public QObject, public MTest {
       void testMixer();
       void testCopy();
       void testAddBefore();
+      void testAddClefKey();
       void testWarning01();
       void testWarning02();
       void testWarning03();
       void testWarning04();
+      void testWarning05();
       };
 
 //---------------------------------------------------------
@@ -180,6 +182,24 @@ void TestInstrumentChange::testAddBefore()
       test_post(score, "add_before");
       }
 
+void TestInstrumentChange::testAddClefKey()
+      {
+      MasterScore* score = test_pre("add_clef_key");
+      Measure* m = score->firstMeasure()->nextMeasure();
+      Segment* s = m->first(SegmentType::ChordRest);
+      InstrumentChange* nic = new InstrumentChange(score);
+      Instrument* ni = score->staff(1)->part()->instrument();
+      nic->setParent(s);
+      nic->setTrack(0);
+      score->startCmd();
+      score->undoAddElement(nic);
+      nic->setInit(true);
+      nic->setupInstrument(new Instrument(*ni));
+      score->endCmd();
+      score->doLayout();
+      test_post(score, "add_clef_key");
+      }
+
 void TestInstrumentChange::testWarning01()
       {
       MasterScore* score = test_pre("warning01");
@@ -200,20 +220,13 @@ void TestInstrumentChange::testWarning01()
 void TestInstrumentChange::testWarning02()
       {
       MasterScore* score = test_pre("warning02");
-      Measure* m = score->firstMeasure()->nextMeasure();
+      Measure* m = score->firstMeasure()->nextMeasure()->nextMeasure();
       Segment* s = m->first(SegmentType::ChordRest);
-      InstrumentChange* ic = new InstrumentChange(score);
-      Instrument* ni = score->staff(1)->part()->instrument();
-      InputState is = InputState(score);
-      is.setSegment(s);
-      is.setTrack(0);
-      score->setInputState(is);
-      ic->setParent(s);
-      ic->setTrack(0);
+      score->inputState().setTrack(0);
+      score->inputState().setSegment(s);
+      score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+      score->inputState().setNoteEntryMode(true);
       score->startCmd();
-      score->undoAddElement(ic);
-      ic->setInit(true);
-      ic->setupInstrument(new Instrument(*ni));
       score->cmdAddPitch(72, false, false);
       score->endCmd();
       test_post(score, "warning02");
@@ -247,6 +260,18 @@ void TestInstrumentChange::testWarning04()
       ic->setupInstrument(new Instrument(*ni));
       score->endCmd();
       test_post(score, "warning04");
+      }
+
+void TestInstrumentChange::testWarning05()
+      {
+      MasterScore* score = test_pre("warning05");
+      Measure* m = score->firstMeasure()->nextMeasure()->nextMeasure();
+      Segment* s = m->first(SegmentType::ChordRest);
+      Element* e = s->element(0);
+      score->startCmd();
+      score->deleteItem(e);
+      score->endCmd();
+      test_post(score, "warning05");
       }
 
 QTEST_MAIN(TestInstrumentChange)
