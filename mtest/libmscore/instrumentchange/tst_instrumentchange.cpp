@@ -44,6 +44,7 @@ class TestInstrumentChange : public QObject, public MTest {
       void testMixer();
       void testCopy();
       void testAddBefore();
+      void testWarning01;
       };
 
 //---------------------------------------------------------
@@ -173,7 +174,23 @@ void TestInstrumentChange::testAddBefore()
       score->doLayout();
       test_post(score, "add_before");
       }
-	
+
+void TestInstrumentChange::testWarning01()
+      {
+      MasterScore* score = test_pre("warning01");
+      Measure* m = score->firstMeasure()->nextMeasure();
+      Segment* s = m->first(SegmentType::ChordRest);
+      InstrumentChange* ic = new InstrumentChange(score);
+      Instrument* ni = score->staff(1)->part()->instrument();
+      ic->setParent(s);
+      ic->setTrack(0);
+      score->startCmd();
+      score->undoAddElement(ic);
+      nic->setInit(true);
+      nic->setupInstrument(new Instrument(*ni));
+      score->endCmd();
+      test_post(score, "warning01");
+      }
 
 QTEST_MAIN(TestInstrumentChange)
 #include "tst_instrumentchange.moc"

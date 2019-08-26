@@ -2304,6 +2304,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                || tag == "SystemText"
                || tag == "RehearsalMark"
                || tag == "InstrumentChange"
+               || tag == "InstrumentChangeWarning"
                || tag == "StaffState"
                || tag == "FiguredBass"
                ) {

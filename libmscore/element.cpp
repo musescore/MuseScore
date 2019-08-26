@@ -1027,6 +1027,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::SYSTEM_TEXT:       return new SystemText(score);
             case ElementType::REHEARSAL_MARK:    return new RehearsalMark(score);
             case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(score);
+            case ElementType::INSTRUMENT_CHANGE_WARNING: return new InstrumentChangeWarning(score);
             case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(score);
             case ElementType::NOTEHEAD:          return new NoteHead(score);
             case ElementType::NOTEDOT:           return new NoteDot(score);
@@ -1104,7 +1105,6 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::STAFF:
             case ElementType::SCORE:
             case ElementType::BRACKET_ITEM:
-            case ElementType::INSTRUMENT_CHANGE_WARNING:
                   break;
             }
       qDebug("cannot create type %d <%s>", int(type), Element::name(type));
