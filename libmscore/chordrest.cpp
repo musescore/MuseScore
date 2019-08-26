@@ -562,9 +562,11 @@ Element* ChordRest::drop(EditData& data)
                         ic->setTrack((track() / VOICES) * VOICES);
                         Instrument* instr = ic->instrument();
                         Instrument* prevInstr = part()->instrument(tick());
+                        // Only setup instrument change if changing to a different instrument.
                         if (instr && instr->isDifferentInstrument(*prevInstr)) {
                               ic->setupInstrument(instr);
                               }
+                        InstrumentChange* nextIc = score()->nextInstrumentChange(segment(), part(), false);
                         score()->undoAddElement(ic);
                         return e;
                         }
@@ -1343,6 +1345,7 @@ void ChordRest::undoAddAnnotation(Element* a, bool useTopStaff/* = false*/)
       if (m && m->isMMRest())
             seg = m->mmRestFirst()->findSegmentR(SegmentType::ChordRest, Fraction(0,1));
 
+      // Add to the top staff of the part, rather than the staff which the element is on.
       if (useTopStaff) {
             Staff* topStaff = nullptr;
             for (int i = 0; i < part()->nstaves(); i++) {

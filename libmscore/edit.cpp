@@ -1916,20 +1916,16 @@ void Score::deleteItem(Element* el)
                   Part* part = ic->part();
                   Interval oldV = part->instrument(tickStart)->transpose();
                   Measure* measure = ic->segment()->measure();
+                  InstrumentChange* nextIc = nextInstrumentChange(ic->segment(), part, true);
                   
                   undoRemoveElement(el);
+                  // Change the staff type if necessary.
                   for (int i = 0; i < part->nstaves(); i++) {
                         Staff* staff = part->staff(i);
                         StaffType oldSt = *staff->staffType(measure->tick());
                         StaffType newSt = *staff->staffType(measure->prev()->tick());
                         if (oldSt != newSt) {
-                              //staff->removeStaffType(measure->tick());
                               undo(new ChangeStaffType(staff, newSt, measure->tick()));
-                              InstrumentChange* nextIc = nextInstrumentChange(ic->segment(), staff, true);
-                              if (nextIc && (nextIc->lines() != oldSt.lines() || nextIc->staffGroup() != oldSt.group())) {
-                                    Spatium clefOffset = nextIc->setupStaffType(staff);
-                                    nextIc->setupClefs(nextIc->instrument(), i, staff, clefOffset);
-                                    }
                               }
                         }
                   for (KeySig* keySig : ic->keySigs())
@@ -1937,6 +1933,7 @@ void Score::deleteItem(Element* el)
                   for (Clef* clef : ic->clefs())
                         deleteItem(clef);
                   InstrumentChange* prevIc = prevInstrumentChange(ic->segment(), ic->part(), true);
+                  // If there is a preceeding instrument change with no notes, set the warning to the correct instrument.
                   if (prevIc) {
                         Chord* nextC = nextChord(ic->segment(), ic->part(), true);
                         if (nextC)
@@ -1947,6 +1944,7 @@ void Score::deleteItem(Element* el)
                         if (warning)
                               undoRemoveElement(warning);
                         }
+                  // Transpose section to new key
                   if (part->instrument(tickStart)->transpose() != oldV) {
                         auto i = part->instruments()->upper_bound(tickStart.ticks());
                         Fraction tickEnd;
@@ -1956,6 +1954,8 @@ void Score::deleteItem(Element* el)
                               tickEnd = Fraction::fromTicks(i->first);
                         transpositionChanged(part, oldV, tickStart, tickEnd);
                         }
+                  if (nextIc && nextIc->init())
+                        nextIc->setupInstrument(nextIc->instrument());
                   }
                   break;
 

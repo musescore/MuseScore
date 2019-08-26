@@ -41,6 +41,7 @@
 #include "drumset.h"
 #include "rest.h"
 #include "fret.h"
+#include "instrchange.h"
 
 Q_DECLARE_LOGGING_CATEGORY(undoRedo)
 
@@ -941,11 +942,12 @@ class ChangeChordPlayEventType : public UndoCommand {
 class ChangeInstrument : public UndoCommand {
       InstrumentChange* is;
       Instrument* instrument;
+      bool init;
 
       void flip(EditData*) override;
 
    public:
-      ChangeInstrument(InstrumentChange* _is, Instrument* i) : is(_is), instrument(i) {}
+      ChangeInstrument(InstrumentChange* _is, Instrument* i) : is(_is), instrument(i), init(_is->init()) {}
       UNDO_NAME("ChangeInstrument")
       };
 

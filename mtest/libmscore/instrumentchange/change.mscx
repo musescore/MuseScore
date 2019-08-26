@@ -54,7 +54,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="73"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -64,33 +67,69 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Oboe</trackName>
+      <trackName>B♭ Trumpet</trackName>
       <Instrument>
-        <longName>Oboe</longName>
-        <shortName>Ob.</shortName>
-        <trackName>Oboe</trackName>
-        <minPitchP>58</minPitchP>
-        <maxPitchP>93</maxPitchP>
-        <minPitchA>58</minPitchA>
-        <maxPitchA>87</maxPitchA>
+        <longName>B♭ Trumpet</longName>
+        <shortName>B♭ Tpt.</shortName>
+        <trackName>B♭ Trumpet</trackName>
+        <minPitchP>52</minPitchP>
+        <maxPitchP>85</maxPitchP>
+        <minPitchA>52</minPitchA>
+        <maxPitchA>80</maxPitchA>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>brass.trumpet.bflat</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
         <Articulation name="staccato">
           <velocity>100</velocity>
-          <gateTime>85</gateTime>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="tenuto">
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
-          <program value="68"/>
+        <Channel name="open">
+          <controller ctrl="32" value="17"/>
+          <program value="56"/>
+          <midiPort>0</midiPort>
+          <midiChannel>3</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <controller ctrl="32" value="17"/>
+          <program value="59"/>
+          <midiPort>0</midiPort>
+          <midiChannel>4</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -156,9 +195,13 @@
                 <gateTime>100</gateTime>
                 </Articulation>
               <Channel>
+                <controller ctrl="32" value="17"/>
                 <program value="73"/>
+                <midiPort>0</midiPort>
+                <midiChannel>1</midiChannel>
                 </Channel>
               </Instrument>
+            <lines>5</lines>
             <text>Instrument</text>
             </InstrumentChange>
           <Chord>
@@ -289,10 +332,9 @@
     <Staff id="2">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
+          <KeySig>
+            <accidental>2</accidental>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -302,6 +344,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -309,24 +352,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           </voice>
@@ -338,6 +364,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -345,24 +372,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           </voice>
@@ -374,6 +384,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -381,24 +392,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           </voice>
@@ -410,6 +404,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -417,6 +412,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           </voice>
@@ -428,6 +424,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -435,6 +432,67 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           </voice>

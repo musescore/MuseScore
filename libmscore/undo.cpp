@@ -1426,7 +1426,8 @@ void ChangeStaff::flip(EditData*)
 void ChangeStaffType::flip(EditData*)
       {
       StaffType st = *staff->staffType(tick);
-      StaffType previousSt = *staff->staffType(staff->score()->tick2segment(tick)->measure()->prev()->tick());
+      Measure* measure = staff->score()->tick2segment(tick)->measure();
+      StaffType previousSt = (measure->prev()) ? *staff->staffType(measure->prev()->tick()) : *staff->staffType(Fraction(0,1));
 
       if (previousSt != staffType)
             staff->setStaffType(tick, staffType);
@@ -1952,9 +1953,11 @@ void ChangeInstrument::flip(EditData*)
       Part* part = is->staff()->part();
       Fraction tickStart = is->segment()->tick();
       Instrument* oi = is->instrument();  //new Instrument(*is->instrument());
+      bool oInit = is->init();
 
       // set instrument in both part and instrument change element
       is->setInstrument(instrument);      //*instrument
+      is->setInit(init);
       part->setInstrument(instrument, tickStart);
 
       // update score
@@ -1965,6 +1968,7 @@ void ChangeInstrument::flip(EditData*)
 
       // remember original instrument
       instrument = oi;
+      init = oInit;
       }
 
 //---------------------------------------------------------

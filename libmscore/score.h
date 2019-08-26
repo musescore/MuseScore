@@ -615,7 +615,7 @@ class Score : public QObject, public ScoreElement {
       void undoAddElement(Element* element);
       Chord* nextChord(Segment* seg, const Part* part, bool lookForIc = false);
       InstrumentChange* prevInstrumentChange(Segment* seg, const Part* part, bool lookForNotes);
-      InstrumentChange* nextInstrumentChange(Segment* seg, const Staff* staff, bool lookForStaffTypeChange);
+      InstrumentChange* nextInstrumentChange(Segment* seg, const Part* part, bool lookForStaffTypeChange);
       StaffType* nextStaffType(MeasureBase* measure, Staff* staff);
       InstrumentChangeWarning* nextICWarning(Part* part, Segment* seg);
       void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);

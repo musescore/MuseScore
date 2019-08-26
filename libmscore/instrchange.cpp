@@ -79,8 +79,11 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
       {
       if (_init) {
             Fraction tickStart = segment()->tick();
+            Fraction prevTick = (tickStart.isZero()) ? tickStart : tickStart - Fraction(1, tickStart.denominator());
             Part* part = staff()->part();
-            Interval oldV = part->instrument(tickStart)->transpose();
+            Interval currentV = part->instrument(tickStart)->transpose();
+            Interval oldV = part->instrument(prevTick)->transpose();
+            InstrumentChange* nextIc = score()->nextInstrumentChange(segment(), part, true);
             //Instrument* oi = ic->instrument();  //part->instrument(tickStart);
             //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
 
@@ -93,11 +96,6 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
                         clefOffset = setupStaffType(staff);
                         }
                   setupClefs(instrument, i, staff, clefOffset);
-                  InstrumentChange* nextIc = score()->nextInstrumentChange(segment(), staff, true);
-                  if (nextIc) {
-                        Spatium nextClefOffset = nextIc->setupStaffType(staff);
-                        nextIc->setupClefs(nextIc->instrument(), i, staff, nextClefOffset);
-                        }
                   }
             
             // Change key signature if necessary
@@ -106,7 +104,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
                         if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
                               KeySigEvent ks;
                               ks.setForInstrumentChange(true);
-                              Key key = part->staff(i)->key(tickStart);
+                              Key key = part->staff(i)->key(prevTick);
                               if (!score()->styleB(Sid::concertPitch))
                                     key = transposeKey(key, oldV);
                               ks.setKey(key);
@@ -124,14 +122,14 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
 
             // transpose for current score only
             // this automatically propagates to linked scores
-            if (part->instrument(tickStart)->transpose() != oldV) {
+            if (part->instrument(tickStart)->transpose() != currentV) {
                   auto i = part->instruments()->upper_bound(tickStart.ticks());    // find(), ++i
                   Fraction tickEnd;
                   if (i == part->instruments()->end())
                         tickEnd = Fraction(-1, 1);
                   else
                         tickEnd = Fraction::fromTicks(i->first);
-                  score()->transpositionChanged(part, oldV, tickStart, tickEnd);
+                  score()->transpositionChanged(part, currentV, tickStart, tickEnd);
                   }
 
             InstrumentChangeWarning* w = score()->nextICWarning(part, segment());
@@ -142,6 +140,8 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
                   if (nextChord)
                         setNextChord(nextChord);
                   }
+            if (nextIc && nextIc->init())
+                  nextIc->setupInstrument(nextIc->instrument());
             setPlainText(tr("To %1").arg(instrument->trackName()));
             }
       }
@@ -176,7 +176,7 @@ Spatium InstrumentChange::setupStaffType(Staff* staff)
 void InstrumentChange::setupClefs(const Instrument* instrument, int i, Staff* staff, Spatium clefOffset)
       {
       bool concert = score()->styleB(Sid::concertPitch);
-      if (staff->clefList().size() == 0 || staff->clefType(tick()) != instrument->clefType(i)) {
+      if ((staff->clefList().size() == 0 && _staffGroup != StaffGroup::STANDARD) || staff->clefType(tick()) != instrument->clefType(i)) {
             ClefType clefType = concert ? instrument->clefType(i)._concertClef : instrument->clefType(i)._transposingClef;
             // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
             Element* element = rtick().isZero() ? toElement(findMeasure()) : toElement(this);

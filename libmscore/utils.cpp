@@ -1091,16 +1091,18 @@ InstrumentChange* Score::prevInstrumentChange(Segment* seg, const Part* part, bo
 //    an instrument change.
 //---------------------------------------------------------
 
-InstrumentChange* Score::nextInstrumentChange(Segment* seg, const Staff* staff, bool lookForStaffTypeChange)
+InstrumentChange* Score::nextInstrumentChange(Segment* seg, const Part* part, bool lookForStaffTypeChange)
       {
+      int minTrack = part->staff(0)->idx() * VOICES;
+      int maxTrack = (part->staff(part->nstaves() - 1)->idx() + 1) * VOICES;
       while (seg = seg->next1()) {
             if (lookForStaffTypeChange) {
                   for (Element* el : seg->measure()->el()) {
-                        if (el->isStaffTypeChange() && el->track() == staff->idx() * VOICES)
+                        if (el->isStaffTypeChange() && el->track() >= minTrack && el->track() < maxTrack)
                               return nullptr;
                   }
             }
-            Element* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, staff->idx() * VOICES, (staff->idx() + 1) * VOICES - 1);
+            Element* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, minTrack, maxTrack);
             if (ic)
                   return toInstrumentChange(ic);
             }
