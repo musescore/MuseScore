@@ -54,6 +54,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="73"/>
           </Channel>
         </Instrument>
@@ -90,6 +91,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="68"/>
           </Channel>
         </Instrument>
@@ -130,6 +132,10 @@
         </Measure>
       <Measure>
         <voice>
+          <KeySig>
+            <accidental>2</accidental>
+            <forInstrumentChange>1</forInstrumentChange>
+            </KeySig>
           <InstrumentChange>
             <Instrument>
               <longName>B♭ Trumpet</longName>
@@ -141,36 +147,64 @@
               <maxPitchA>80</maxPitchA>
               <transposeDiatonic>-1</transposeDiatonic>
               <transposeChromatic>-2</transposeChromatic>
+              <instrumentId>brass.trumpet.bflat</instrumentId>
               <Articulation>
                 <velocity>100</velocity>
                 <gateTime>100</gateTime>
                 </Articulation>
+              <Articulation name="staccatissimo">
+                <velocity>100</velocity>
+                <gateTime>33</gateTime>
+                </Articulation>
               <Articulation name="staccato">
                 <velocity>100</velocity>
-                <gateTime>85</gateTime>
+                <gateTime>50</gateTime>
+                </Articulation>
+              <Articulation name="portato">
+                <velocity>100</velocity>
+                <gateTime>67</gateTime>
                 </Articulation>
               <Articulation name="tenuto">
                 <velocity>100</velocity>
                 <gateTime>100</gateTime>
                 </Articulation>
+              <Articulation name="marcato">
+                <velocity>120</velocity>
+                <gateTime>67</gateTime>
+                </Articulation>
               <Articulation name="sforzato">
+                <velocity>150</velocity>
+                <gateTime>100</gateTime>
+                </Articulation>
+              <Articulation name="sforzatoStaccato">
+                <velocity>150</velocity>
+                <gateTime>50</gateTime>
+                </Articulation>
+              <Articulation name="marcatoStaccato">
+                <velocity>120</velocity>
+                <gateTime>50</gateTime>
+                </Articulation>
+              <Articulation name="marcatoTenuto">
                 <velocity>120</velocity>
                 <gateTime>100</gateTime>
                 </Articulation>
-              <Channel>
+              <Channel name="open">
                 <program value="56"/>
                 </Channel>
               <Channel name="mute">
                 <program value="59"/>
                 </Channel>
               </Instrument>
-            <text>Trumpet</text>
+            <init>1</init>
+            <lines>5</lines>
+            <text>To B♭ Trumpet</text>
             </InstrumentChange>
           <Chord>
             <durationType>half</durationType>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -178,24 +212,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           </voice>
@@ -207,6 +224,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -214,24 +232,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           </voice>
@@ -243,6 +244,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -250,24 +252,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           </voice>
@@ -279,6 +264,7 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
@@ -286,6 +272,67 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
               </Note>
             </Chord>
           </voice>
