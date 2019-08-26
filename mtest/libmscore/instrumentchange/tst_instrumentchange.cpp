@@ -44,7 +44,10 @@ class TestInstrumentChange : public QObject, public MTest {
       void testMixer();
       void testCopy();
       void testAddBefore();
-      void testWarning01;
+      void testWarning01();
+      void testWarning02();
+      void testWarning03();
+      void testWarning04();
       };
 
 //---------------------------------------------------------
@@ -57,7 +60,7 @@ void TestInstrumentChange::initTestCase()
       }
 
 //---------------------------------------------------------
-//   chordsymbol
+//   InstrumentChange
 //---------------------------------------------------------
 
 MasterScore* TestInstrumentChange::test_pre(const char* p)
@@ -153,6 +156,8 @@ void TestInstrumentChange::testCopy()
       nic->setParent(s);
       nic->setTrack(4);
       score->undoAddElement(nic);
+      nic->setInit(true);
+      nic->setupInstrument(nic->instrument());
       score->doLayout();
       test_post(score, "copy");
       }
@@ -186,10 +191,62 @@ void TestInstrumentChange::testWarning01()
       ic->setTrack(0);
       score->startCmd();
       score->undoAddElement(ic);
-      nic->setInit(true);
-      nic->setupInstrument(new Instrument(*ni));
+      ic->setInit(true);
+      ic->setupInstrument(new Instrument(*ni));
       score->endCmd();
       test_post(score, "warning01");
+      }
+
+void TestInstrumentChange::testWarning02()
+      {
+      MasterScore* score = test_pre("warning02");
+      Measure* m = score->firstMeasure()->nextMeasure();
+      Segment* s = m->first(SegmentType::ChordRest);
+      InstrumentChange* ic = new InstrumentChange(score);
+      Instrument* ni = score->staff(1)->part()->instrument();
+      InputState is = InputState(score);
+      is.setSegment(s);
+      is.setTrack(0);
+      score->setInputState(is);
+      ic->setParent(s);
+      ic->setTrack(0);
+      score->startCmd();
+      score->undoAddElement(ic);
+      ic->setInit(true);
+      ic->setupInstrument(new Instrument(*ni));
+      score->cmdAddPitch(72, false, false);
+      score->endCmd();
+      test_post(score, "warning02");
+      }
+
+void TestInstrumentChange::testWarning03()
+      {
+      MasterScore* score = test_pre("warning03");
+      Measure* m = score->firstMeasure()->nextMeasure()->nextMeasure();
+      Segment* s = m->first(SegmentType::ChordRest);
+      InstrumentChange* ic = toInstrumentChange(s->annotations()[0]);
+      score->startCmd();
+      score->deleteItem(ic);
+      score->endCmd();
+      score->doLayout();
+      test_post(score, "warning03");
+      }
+
+void TestInstrumentChange::testWarning04()
+      {
+      MasterScore* score = test_pre("warning04");
+      Measure* m = score->firstMeasure()->nextMeasure()->nextMeasure();
+      Segment* s = m->first(SegmentType::ChordRest);
+      InstrumentChange* ic = new InstrumentChange(score);
+      Instrument* ni = score->staff(1)->part()->instrument();
+      ic->setParent(s);
+      ic->setTrack(0);
+      score->startCmd();
+      score->undoAddElement(ic);
+      ic->setInit(true);
+      ic->setupInstrument(new Instrument(*ni));
+      score->endCmd();
+      test_post(score, "warning04");
       }
 
 QTEST_MAIN(TestInstrumentChange)

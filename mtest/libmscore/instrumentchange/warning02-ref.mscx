@@ -229,15 +229,11 @@
                 <gateTime>100</gateTime>
                 </Articulation>
               <Channel name="open">
-                <controller ctrl="0" value="0"/>
-                <controller ctrl="32" value="17"/>
                 <program value="56"/>
                 <midiPort>0</midiPort>
                 <midiChannel>3</midiChannel>
                 </Channel>
               <Channel name="mute">
-                <controller ctrl="0" value="0"/>
-                <controller ctrl="32" value="17"/>
                 <program value="59"/>
                 <midiPort>0</midiPort>
                 <midiChannel>4</midiChannel>
@@ -254,42 +250,40 @@
         </Measure>
       <Measure>
         <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <InstrumentChangeWarning>
             <style>Instrument Change</style>
             <text>B♭ Trumpet</text>
             </InstrumentChangeWarning>
           <Chord>
-            <durationType>half</durationType>
+            <durationType>quarter</durationType>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
               </Note>
             </Chord>
-          <Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
             <durationType>half</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              <tpc2>16</tpc2>
-              </Note>
-            </Chord>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
