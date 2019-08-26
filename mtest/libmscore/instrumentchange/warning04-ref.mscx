@@ -173,6 +173,77 @@
       <Measure>
         <voice>
           <KeySig>
+            <accidental>0</accidental>
+            <forInstrumentChange>1</forInstrumentChange>
+            </KeySig>
+          <InstrumentChange>
+            <Instrument>
+              <longName>Oboe</longName>
+              <shortName>Ob.</shortName>
+              <trackName>Oboe</trackName>
+              <minPitchP>58</minPitchP>
+              <maxPitchP>96</maxPitchP>
+              <minPitchA>58</minPitchA>
+              <maxPitchA>87</maxPitchA>
+              <instrumentId>wind.reed.oboe</instrumentId>
+              <Articulation>
+                <velocity>100</velocity>
+                <gateTime>100</gateTime>
+                </Articulation>
+              <Articulation name="staccatissimo">
+                <velocity>100</velocity>
+                <gateTime>33</gateTime>
+                </Articulation>
+              <Articulation name="staccato">
+                <velocity>100</velocity>
+                <gateTime>50</gateTime>
+                </Articulation>
+              <Articulation name="portato">
+                <velocity>100</velocity>
+                <gateTime>67</gateTime>
+                </Articulation>
+              <Articulation name="tenuto">
+                <velocity>100</velocity>
+                <gateTime>100</gateTime>
+                </Articulation>
+              <Articulation name="marcato">
+                <velocity>120</velocity>
+                <gateTime>67</gateTime>
+                </Articulation>
+              <Articulation name="sforzato">
+                <velocity>150</velocity>
+                <gateTime>100</gateTime>
+                </Articulation>
+              <Articulation name="sforzatoStaccato">
+                <velocity>150</velocity>
+                <gateTime>50</gateTime>
+                </Articulation>
+              <Articulation name="marcatoStaccato">
+                <velocity>120</velocity>
+                <gateTime>50</gateTime>
+                </Articulation>
+              <Articulation name="marcatoTenuto">
+                <velocity>120</velocity>
+                <gateTime>100</gateTime>
+                </Articulation>
+              <Channel>
+                <program value="68"/>
+                <midiPort>0</midiPort>
+                <midiChannel>3</midiChannel>
+                </Channel>
+              </Instrument>
+            <init>1</init>
+            <text>To Oboe</text>
+            </InstrumentChange>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
             <accidental>2</accidental>
             <forInstrumentChange>1</forInstrumentChange>
             </KeySig>
@@ -229,31 +300,19 @@
                 <gateTime>100</gateTime>
                 </Articulation>
               <Channel name="open">
-                <controller ctrl="0" value="0"/>
-                <controller ctrl="32" value="17"/>
                 <program value="56"/>
                 <midiPort>0</midiPort>
-                <midiChannel>3</midiChannel>
+                <midiChannel>4</midiChannel>
                 </Channel>
               <Channel name="mute">
-                <controller ctrl="0" value="0"/>
-                <controller ctrl="32" value="17"/>
                 <program value="59"/>
                 <midiPort>0</midiPort>
-                <midiChannel>4</midiChannel>
+                <midiChannel>5</midiChannel>
                 </Channel>
               </Instrument>
             <init>1</init>
             <text>To B♭ Trumpet</text>
             </InstrumentChange>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
