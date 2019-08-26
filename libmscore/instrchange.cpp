@@ -84,8 +84,6 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             Interval currentV = part->instrument(tickStart)->transpose();
             Interval oldV = part->instrument(prevTick)->transpose();
             InstrumentChange* nextIc = score()->nextInstrumentChange(segment(), part, true);
-            //Instrument* oi = ic->instrument();  //part->instrument(tickStart);
-            //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
 
             // change the clef for each stave and add staff type change if necessary
             // must be part of the same loop, as it will first add the staff type change, then add the clef, then set the offset for the clef
@@ -163,7 +161,6 @@ Spatium InstrumentChange::setupStaffType(Staff* staff)
       nst.setLines(_lines);
       nst.setYoffset(newOffset);
       score()->undo(new ChangeStaffType(staff, nst, segment()->measure()->tick()));
-      //StaffType* nst = staff->setStaffType(segment()->measure()->tick(), *st);
       staff->staffTypeListChanged(segment()->measure()->tick());
       return clefOffset;
       }
