@@ -54,6 +54,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="73"/>
           </Channel>
@@ -118,10 +119,12 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="56"/>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="59"/>
           </Channel>
@@ -227,7 +230,6 @@
                 </Channel>
               </Instrument>
             <init>1</init>
-            <lines>5</lines>
             <text>To B♭ Trumpet</text>
             </InstrumentChange>
           <Chord>
