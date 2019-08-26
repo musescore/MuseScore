@@ -61,6 +61,52 @@ struct MxmlOctaveShiftDesc {
       };
 
 //---------------------------------------------------------
+//   MxmlStartStop (also used in pass 2)
+//---------------------------------------------------------
+
+enum class MxmlStartStop : char {
+      NONE, START, STOP
+      };
+
+enum class MxmlTupletFlag : char {
+      NONE = 0,
+      STOP_PREVIOUS = 1,
+      START_NEW = 2,
+      ADD_CHORD = 4,
+      STOP_CURRENT = 8
+      };
+
+typedef QFlags<MxmlTupletFlag> MxmlTupletFlags;
+
+struct MxmlTupletState {
+      void addDurationToTuplet(const Fraction duration, const Fraction timeMod);
+      MxmlTupletFlags determineTupletAction(const Fraction noteDuration,
+                                            const Fraction timeMod,
+                                            const MxmlStartStop tupletStartStop,
+                                            const TDuration normalType,
+                                            Fraction& missingPreviousDuration,
+                                            Fraction& missingCurrentDuration
+                                            );
+      bool m_inTuplet { false };
+      bool m_implicit { false };
+      int m_actualNotes { 1 };
+      int m_normalNotes { 1 };
+      Fraction m_duration { 0, 1 };
+      int m_tupletType { 0 }; // smallest note type in the tuplet // TODO_NOW rename ?
+      int m_tupletCount { 0 }; // number of smallest notes in the tuplet // TODO_NOW rename ?
+      };
+
+using MxmlTupletStates = std::map<QString, MxmlTupletState>;
+
+//---------------------------------------------------------
+//   declarations
+//---------------------------------------------------------
+
+void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
+Fraction missingTupletDuration(const Fraction duration);
+
+
+//---------------------------------------------------------
 //   MusicXMLParserPass1
 //---------------------------------------------------------
 
@@ -92,7 +138,8 @@ public:
       void direction(const QString& partId, const Fraction cTime);
       void directionType(const Fraction cTime, QList<MxmlOctaveShiftDesc>& starts, QList<MxmlOctaveShiftDesc>& stops);
       void handleOctaveShift(const Fraction cTime, const QString& type, short size, MxmlOctaveShiftDesc& desc);
-      void note(const QString& partId, const Fraction cTime, Fraction& dura, VoiceOverlapDetector& vod);
+      void notations(MxmlStartStop& tupletStartStop);
+      void note(const QString& partId, const Fraction cTime, Fraction& missingPrev, Fraction& dura, Fraction& missingCurr, VoiceOverlapDetector& vod, MxmlTupletStates& tupletStates);
       void notePrintSpacingNo(Fraction& dura);
       void duration(Fraction& dura);
       void forward(Fraction& dura);
