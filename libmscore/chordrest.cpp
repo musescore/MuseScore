@@ -566,7 +566,6 @@ Element* ChordRest::drop(EditData& data)
                         if (instr && instr->isDifferentInstrument(*prevInstr)) {
                               ic->setupInstrument(instr);
                               }
-                        InstrumentChange* nextIc = score()->nextInstrumentChange(segment(), part(), false);
                         score()->undoAddElement(ic);
                         return e;
                         }

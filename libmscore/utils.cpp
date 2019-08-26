@@ -1095,7 +1095,7 @@ InstrumentChange* Score::nextInstrumentChange(Segment* seg, const Part* part, bo
       {
       int minTrack = part->staff(0)->idx() * VOICES;
       int maxTrack = (part->staff(part->nstaves() - 1)->idx() + 1) * VOICES;
-      while (seg = seg->next1()) {
+      while ((seg = seg->next1())) {
             if (lookForStaffTypeChange) {
                   for (Element* el : seg->measure()->el()) {
                         if (el->isStaffTypeChange() && el->track() >= minTrack && el->track() < maxTrack)

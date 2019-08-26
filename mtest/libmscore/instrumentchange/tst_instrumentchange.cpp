@@ -43,7 +43,7 @@ class TestInstrumentChange : public QObject, public MTest {
       void testChange();
       void testMixer();
       void testCopy();
-	void testAddBefore();
+      void testAddBefore();
       };
 
 //---------------------------------------------------------
@@ -96,9 +96,9 @@ void TestInstrumentChange::testDelete()
       Measure* m = score->firstMeasure()->nextMeasure();
       Segment* s = m->first(SegmentType::ChordRest);
       InstrumentChange* ic = toInstrumentChange(s->annotations()[0]);
-	score->startCmd();
+      score->startCmd();
       score->deleteItem(ic);
-	score->endCmd();
+      score->endCmd();
       score->doLayout();
       test_post(score, "delete");
       }
@@ -111,7 +111,7 @@ void TestInstrumentChange::testChange()
       InstrumentChange* ic = toInstrumentChange(s->annotations()[0]);
       Instrument* ni       = score->staff(1)->part()->instrument();
       score->startCmd();
-	ic->setInit(true);
+      ic->setInit(true);
       ic->setupInstrument(new Instrument(*ni));
       score->endCmd();
       score->doLayout();
@@ -155,12 +155,12 @@ void TestInstrumentChange::testCopy()
       score->doLayout();
       test_post(score, "copy");
       }
-	  
+
 void TestInstrumentChange::testAddBefore()
-	{
+      {
       MasterScore* score = test_pre("add_before");
       Measure* m = score->firstMeasure()->nextMeasure();
-      s = m->first(SegmentType::ChordRest);
+      Segment* s = m->first(SegmentType::ChordRest);
       InstrumentChange* nic = new InstrumentChange(score);
       Instrument* ni = score->staff(1)->part()->instrument();
       nic->setParent(s);
@@ -172,7 +172,7 @@ void TestInstrumentChange::testAddBefore()
       score->endCmd();
       score->doLayout();
       test_post(score, "add_before");
-	}
+      }
 	
 
 QTEST_MAIN(TestInstrumentChange)
