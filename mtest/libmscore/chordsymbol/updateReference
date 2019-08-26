@@ -8,6 +8,7 @@ cp ../../../build.debug/mtest/libmscore/chordsymbol/no-system-test.mscx   no-sys
 cp ../../../build.debug/mtest/libmscore/chordsymbol/transpose-part-test.mscx   transpose-part-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/transpose-test.mscx   transpose-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-override-test.mscx realize-override-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-concert-pitch-test.mscx realize-concert-pitch-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-transpose-test.mscx realize-transpose-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-triplet-test.mscx realize-triplet-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-jazz-test.mscx realize-jazz-ref.mscx

@@ -2756,7 +2756,6 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                               Harmony* he = toHarmony(se);    // toHarmony() does not work as e is an ScoreElement
                               if (he->staff() == h->staff()) {
                                     undoTransposeHarmony(he, rootTpc, baseTpc);
-                                    he->realizedHarmony().setDirty(true);
                                     }
                               }
                         //realized harmony should be invalid after a transpose command
