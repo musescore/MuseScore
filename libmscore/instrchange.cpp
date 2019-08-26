@@ -258,8 +258,7 @@ void InstrumentChange::write(XmlWriter& xml) const
             case StaffGroup::PERCUSSION: xml.tag("staffGroup", "percussion"); break;
             case StaffGroup::TAB: xml.tag("staffGroup", "tab"); break;
             }
-      if (_lines != 5)
-            xml.tag("lines", _lines);
+      xml.tag("lines", _lines, 5);
       TextBase::writeProperties(xml);
       xml.etag();
       }
