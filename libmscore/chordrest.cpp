@@ -1041,10 +1041,10 @@ Element* ChordRest::prevArticulationOrLyric(Element* e)
             }
       else if (isChord() && e->isArticulation()) {
             Chord* c = toChord(this);
-            auto i = std::find(c->articulations().begin(), c->articulations().end(), e);
-            if (i != c->articulations().end()) {
-                  if (i != c->articulations().begin())
-                        return *(i-1);
+            auto j = std::find(c->articulations().begin(), c->articulations().end(), e);
+            if (j != c->articulations().end()) {
+                  if (j != c->articulations().begin())
+                        return *(j-1);
                   }
             }
       return 0;

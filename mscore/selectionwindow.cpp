@@ -76,7 +76,7 @@ SelectionListWidget::SelectionListWidget(QWidget *parent) : QListWidget(parent)
 void SelectionListWidget::retranslate()
       {
       for (size_t row = 0; row < numLabels; row++) {
-            QListWidgetItem *listItem = item(row);
+            QListWidgetItem *listItem = item(int(row));
             listItem->setText(qApp->translate("selectionfilter", labels[row]));
             listItem->setData(Qt::AccessibleTextRole, qApp->translate("selectionfilter", labels[row]));
             }

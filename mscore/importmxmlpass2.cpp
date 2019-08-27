@@ -1328,6 +1328,7 @@ static void resetTuplets(Tuplets& tuplets)
 
 void MusicXMLParserPass2::initPartState(const QString& partId)
       {
+      Q_UNUSED(partId);
       _timeSigDura = Fraction(0, 0);             // invalid
       _tie    = 0;
       _lastVolta = 0;
@@ -4463,8 +4464,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             if (cue) cr->setSmall(cue);  // only once per chord
             }
 
-      auto part = _pass1.getPart(partId);
-      Q_ASSERT(part);
+      Q_ASSERT(_pass1.getPart(partId));
 
       // handle notations
       if (cr) {
