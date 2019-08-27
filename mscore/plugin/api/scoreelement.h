@@ -52,6 +52,26 @@ class ScoreElement : public QObject {
        * element name suitable for usage in a user interface.
        */
       Q_PROPERTY(QString   name READ name)
+      /**
+       * Unique element identifier for comparing MuseScore object equality.
+       *
+       * elementId is available for all elements so that QML scripting can
+       * compare two different QML elements to see if they are accessing the
+       * same MuseScore object beneath the plugin wrappers. This is needed
+       * because there may be more than one wrapper object for the same
+       * MuseScore object because that are provided in many different ways.
+       *
+       * \code{.js}
+       * var note = cursor.element.notes[0];
+       * if (note.elementId == note.firstTiedNote.elementId)
+       *    console.log("Both wrappers point to the same Note object.")
+       * else
+       *    console.log("Both wrappers point to different Note objects.")
+       * \endcode
+       *
+       * \since MuseScore 3.3
+       */
+      Q_PROPERTY(qint64 elementId READ elementId)
 
       Ownership _ownership;
 
@@ -76,6 +96,9 @@ class ScoreElement : public QObject {
 
       QString name() const;
       int type() const;
+
+      qint64 elementId() const { return qint64((void*)e); }
+
 
       QVariant get(Ms::Pid pid) const;
       void set(Ms::Pid pid, QVariant val);
