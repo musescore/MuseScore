@@ -3577,8 +3577,8 @@ void Chord::setNoteEventLists(QList<NoteEventList>& ell)
       {
       if (notes().empty())
             return;
-      Q_ASSERT(ell.size() == notes().size());
-      for (size_t i = 0; i < ell.size(); i++) {
+      Q_ASSERT(ell.size() == int(notes().size()));
+      for (size_t i = 0; int(i) < ell.size(); i++) {
             notes()[i]->setPlayEvents(ell[int(i)]);
             }
 
