@@ -18,6 +18,7 @@
 #include "part.h"
 #include "util.h"
 #include "selection.h"
+#include "tie.h"
 
 #ifndef TESTROOT
 #include "shortcut.h"
@@ -350,6 +351,7 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<Part>();
       qmlRegisterType<Excerpt>();
       qmlRegisterType<Selection>();
+      qmlRegisterType<Tie>();
       qmlRegisterType<PlayEvent>("MuseScore", 3, 0, "PlayEvent");
       //qmlRegisterType<Hook>();
       //qmlRegisterType<Stem>();

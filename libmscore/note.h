@@ -384,6 +384,7 @@ class Note final : public Element {
       void setTieBack(Tie* t)         { _tieBack = t;    }
       Note* firstTiedNote() const;
       const Note* lastTiedNote() const;
+      Note* lastTiedNote()            { return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote()); }
       void disconnectTiedNotes();
       void connectTiedNotes();
 

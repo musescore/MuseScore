@@ -59,6 +59,7 @@ if (SCRIPT_INTERFACE)
             plugin/api/excerpt.h
             plugin/api/util.h
             plugin/api/selection.h
+            plugin/api/tie.h
             plugin/api/playevent.h
 
             plugin/api/enums.cpp
@@ -69,6 +70,7 @@ if (SCRIPT_INTERFACE)
             plugin/api/excerpt.cpp
             plugin/api/util.cpp
             plugin/api/selection.cpp
+            plugin/api/tie.cpp
             plugin/api/playevent.cpp
             )
 
