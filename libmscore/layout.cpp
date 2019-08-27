@@ -3437,8 +3437,9 @@ System* Score::collectSystem(LayoutContext& lc)
                               if (!s->enabled())
                                     s->setEnabled(true);
                               }
+                        bool firstSystem = lc.prevMeasure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
                         if (curHeader)
-                              m->addSystemHeader(lc.firstSystem);
+                              m->addSystemHeader(firstSystem);
                         else
                               m->removeSystemHeader();
                         if (curTrailer)
