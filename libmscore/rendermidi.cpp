@@ -253,35 +253,31 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       if (chord->isGrace()) {
             Q_ASSERT( !graceNotesMerged(chord)); // this function should not be called on a grace note if grace notes are merged
             chord = toChord(chord->parent());
-            ticks = chord->actualTicks().ticks(); // ticks of the parent note
-            tieLen = 0;
             }
-      else {
-            ticks = chord->actualTicks().ticks(); // ticks of the actual note
-            // calculate additional length due to ties forward
-            // taking NoteEvent length adjustments into account
-            // but stopping at any note with multiple NoteEvents
-            // and processing those notes recursively
-            if (note->tieFor()) {
-                  Note* n = note->tieFor()->endNote();
-                  while (n) {
-                        NoteEventList nel = n->playEvents();
-                        if (nel.size() == 1) {
-                              // add value of this note to main note
-                              // if we wish to suppress first note of ornament,
-                              // then do this regardless of number of NoteEvents
-                              tieLen += (n->chord()->actualTicks().ticks() * (nel[0].len())) / 1000;
-                              }
-                        else {
-                              // recurse
-                              collectNote(events, channel, n, velo, tickOffset, staffIdx);
-                              break;
-                              }
-                        if (n->tieFor() && n != n->tieFor()->endNote())
-                              n = n->tieFor()->endNote();
-                        else
-                              break;
+      ticks = chord->actualTicks().ticks();
+      // calculate additional length due to ties forward
+      // taking NoteEvent length adjustments into account
+      // but stopping at any note with multiple NoteEvents
+      // and processing those notes recursively
+      if (note->tieFor()) {
+            Note* n = note->tieFor()->endNote();
+            while (n) {
+                  NoteEventList nel = n->playEvents();
+                  if (nel.size() == 1) {
+                        // add value of this note to main note
+                        // if we wish to suppress first note of ornament,
+                        // then do this regardless of number of NoteEvents
+                        tieLen += (n->chord()->actualTicks().ticks() * (nel[0].len())) / 1000;
                         }
+                  else {
+                        // recurse
+                        collectNote(events, channel, n, velo, tickOffset, staffIdx);
+                        break;
+                        }
+                  if (n->tieFor() && n != n->tieFor()->endNote())
+                        n = n->tieFor()->endNote();
+                  else
+                        break;
                   }
             }
 
