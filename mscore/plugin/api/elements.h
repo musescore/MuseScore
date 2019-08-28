@@ -592,6 +592,10 @@ class Measure : public Element {
       Q_PROPERTY(Ms::PluginAPI::Measure* prevMeasure       READ prevMeasure)
 //       Q_PROPERTY(Ms::Measure* prevMeasureMM     READ prevMeasureMM)
 
+      /// List of measure-related elements: layout breaks, jump/repeat markings etc.
+      /// \since MuseScore 3.3
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> elements READ elements)
+
    public:
       /// \cond MS_INTERNAL
       Measure(Ms::Measure* m = nullptr, Ownership own = Ownership::SCORE)
@@ -605,6 +609,8 @@ class Measure : public Element {
 
       Measure* prevMeasure() { return wrap<Measure>(measure()->prevMeasure(), Ownership::SCORE); }
       Measure* nextMeasure() { return wrap<Measure>(measure()->nextMeasure(), Ownership::SCORE); }
+
+      QQmlListProperty<Element> elements() { return wrapContainerProperty<Element>(this, measure()->el()); }
       /// \endcond
       };
 
