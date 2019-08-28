@@ -19,6 +19,27 @@
 namespace Ms {
 namespace PluginAPI {
 
+QHash<Ms::NoteEvent*, PlayEvent*> PlayEvent::_wrapMap;
+
+//---------------------------------------------------------
+//   PlayEvent::wrap
+//---------------------------------------------------------
+
+PlayEvent* PlayEvent::wrap(Ms::NoteEvent* ne, Note* parent)
+      {
+      if (!ne)
+            return nullptr;
+      // Use the existing wrapper for this object if it exists.
+      if (_wrapMap.contains(ne))
+            return _wrapMap.value(ne);
+      // Create a new wrapper.
+      PlayEvent* w = new PlayEvent(ne, parent);
+      _wrapMap[ne] = w;
+      // All wrapper objects should belong to JavaScript code.
+      QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
+      return w;
+      }
+
 //---------------------------------------------------------
 //   PlayEvent::setPitch
 //---------------------------------------------------------

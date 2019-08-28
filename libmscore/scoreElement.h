@@ -171,6 +171,9 @@ struct ElementName {
 
 class ScoreElement {
       Score* _score;
+#ifdef SCRIPT_INTERFACE
+      QObject* _plugInWrapper = nullptr;
+#endif
       static ElementStyle const emptyStyle;
 
    protected:
@@ -180,11 +183,14 @@ class ScoreElement {
       virtual int getPropertyFlagsIdx(Pid id) const;
 
    public:
-      ScoreElement(Score* s) : _score(s)   {}
+      ScoreElement(Score* s) : _score(s) {}
       ScoreElement(const ScoreElement& se);
 
       virtual ~ScoreElement();
-
+#ifdef SCRIPT_INTERFACE
+      QObject* getPlugInWrapper() const         { return _plugInWrapper; }
+      void setPlugInWrapper(QObject* wrapper)   { _plugInWrapper = wrapper; }
+#endif
       Score* score() const                 { return _score;      }
       MasterScore* masterScore() const;
       virtual void setScore(Score* s)      { _score = s;         }

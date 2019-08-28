@@ -390,6 +390,14 @@ bool MuseScore::loadPlugin(const QString& filename)
       }
 
 //---------------------------------------------------------
+//   closePlugin
+//---------------------------------------------------------
+void MuseScore::closePlugin()
+      {
+      getPluginEngine()->collectGarbage();
+      }
+
+//---------------------------------------------------------
 //   pluginTriggered
 //---------------------------------------------------------
 
@@ -469,12 +477,25 @@ void MuseScore::pluginTriggered(QString pp)
 
       p->setFilePath(pp.section('/', 0, -2));
 
-      // don’t call startCmd for non modal dialog
+      connect(engine, SIGNAL(quit()), SLOT(closePlugin()));
+
+      // don't call startCmd for non modal dialog
       if (cs && p->pluginType() != "dock")
             cs->startCmd();
       p->runPlugin();
       if (cs && p->pluginType() != "dock")
             cs->endCmd();
+
+      disconnect(engine, SIGNAL(quit()), this, SLOT(closePlugin()));
+
+      if (p->pluginType() != "dock" && p->pluginType() != "dialog")
+            {
+            // Since this plugin has no UI elements all work happens on the
+            // onRun event. Therefore, rather than rely on the "quit" or 
+            // "destroyed" events, just force a clean up now.
+            closePlugin();    // Ensure unused objects are garbage collected.
+            }
+
 //      endCmd();
       }
 

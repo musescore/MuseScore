@@ -141,6 +141,9 @@ static const ElementName elementNames[] = {
 
 ScoreElement::ScoreElement(const ScoreElement& se)
       {
+#ifdef SCRIPT_INTERFACE
+      _plugInWrapper = nullptr;
+#endif
       _score        = se._score;
       _elementStyle = se._elementStyle;
       if (_elementStyle) {

@@ -362,15 +362,25 @@ void PluginCreator::runClicked()
             connect(view, SIGNAL(destroyed()), SLOT(closePlugin()));
             }
 
-      connect(qml,  SIGNAL(quit()), SLOT(closePlugin()));
       connect(qml, &QmlPluginEngine::endCmd, item, &QmlPlugin::endCmd);
+      // Hook up the Qt.quit() handler.
+      connect(qml, SIGNAL(quit()), SLOT(closePlugin()), Qt::UniqueConnection);
 
       if (mscore->currentScore() && item->pluginType() != "dock")
             mscore->currentScore()->startCmd();
       item->runPlugin();
       if (mscore->currentScore() && item->pluginType() != "dock")
             mscore->currentScore()->endCmd();
-      mscore->endCmd();
+      mscore->endCmd();    //@@@@ WHY IS THIS HERE?
+
+      if (item->pluginType() != "dock" && item->pluginType() != "dialog")
+            {
+            // Since this plugin has no UI elements all work happens on the
+            // onRun event. Therefore, rather than rely on the "quit" or 
+            // "destroyed" events, just force a clean up now.
+            closePlugin();    // Ensure unused objects are garbage collected.
+            }
+
       // Main window is on top at this point. Make sure correct view is on top.
       if (item->pluginType() == "dock") {
             raise(); // Screen needs to be on top to see docked panel.
@@ -396,6 +406,9 @@ void PluginCreator::closePlugin()
       if (dock)
             dock->close();
       qInstallMessageHandler(0);
+      
+      mscore->getPluginEngine()->collectGarbage();
+
       raise();
       }
 

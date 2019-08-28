@@ -50,16 +50,20 @@ class PlayEvent : public QObject {
       Q_PROPERTY(int offtime READ offtime)
       /// \cond MS_INTERNAL
 
+   // Map of existing PlayEvent wrappers.
+   static QHash<Ms::NoteEvent*, PlayEvent*> _wrapMap;
+
    protected:
       Ms::NoteEvent* ne;
       Note* parentNote;
 
    public:
+      static PlayEvent* wrap(Ms::NoteEvent* t, Note* parent);
 
       PlayEvent(Ms::NoteEvent* _ne = new Ms::NoteEvent(), Note* _parent = nullptr)
          : QObject(), ne(_ne), parentNote(_parent) {}
       // Delete the NoteEvent if parentless.
-      virtual ~PlayEvent() { if (parentNote == nullptr) delete ne; }
+      virtual ~PlayEvent() { _wrapMap.remove(ne); if (parentNote == nullptr) delete ne; }
 
       const Ms::NoteEvent& getNoteEvent() { return *ne; }
       void setParentNote(Note* parent) { this->parentNote = parent; }
@@ -81,12 +85,9 @@ class PlayEvent : public QObject {
 ///   \relates Ms::NoteEvent
 //---------------------------------------------------------
 
-inline PlayEvent* playEventWrap(Ms::NoteEvent* t, Note* parent)
+inline PlayEvent* playEventWrap(Ms::NoteEvent* ne, Note* parent)
       {
-      PlayEvent* w = t ? new PlayEvent(t, parent) : nullptr;
-      // All wrapper objects should belong to JavaScript code.
-      QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
-      return w;
+      return PlayEvent::wrap(ne, parent);
       }
 
 //---------------------------------------------------------

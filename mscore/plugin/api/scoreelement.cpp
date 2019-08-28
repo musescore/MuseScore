@@ -28,6 +28,8 @@ ScoreElement::~ScoreElement()
       {
       if (_ownership == Ownership::PLUGIN)
             delete e;
+      else
+            e->setPlugInWrapper(nullptr);
       }
 
 QString ScoreElement::name() const

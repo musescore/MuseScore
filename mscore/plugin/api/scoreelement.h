@@ -119,9 +119,19 @@ class ScoreElement : public QObject {
 template <class Wrapper, class T>
 Wrapper* wrap(T* t, Ownership own = Ownership::SCORE)
       {
-      Wrapper* w = t ? new Wrapper(t, own) : nullptr;
-      // All wrapper objects should belong to JavaScript code.
-      QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
+      Wrapper* w = nullptr;
+      if (t != nullptr)
+            {
+            if (t->getPlugInWrapper() == nullptr)
+                  {
+                  w = new Wrapper(t, own);
+                  t->setPlugInWrapper(w);
+                  // All wrapper objects should belong to JavaScript code.
+                  QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
+                  }
+            else
+                  w = static_cast<Wrapper*>(t->getPlugInWrapper());
+            }
       return w;
       }
 

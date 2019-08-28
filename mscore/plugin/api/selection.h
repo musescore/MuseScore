@@ -33,13 +33,17 @@ class Selection : public QObject {
 
       /// \cond MS_INTERNAL
 
+      // Map of existing Selection wrappers.
+      static QHash<Ms::Selection*, Selection*> _wrapMap;
+
    protected:
       Ms::Selection* _select;
 
    public:
+      static Selection* wrap(Ms::Selection* select);
 
       Selection(Ms::Selection* select) : QObject(), _select(select) {}
-      virtual ~Selection() { }
+      virtual ~Selection() { _wrapMap.remove(_select); }
 
       QQmlListProperty<Element> elements()
             { return wrapContainerProperty<Element>(this, _select->elements()); }

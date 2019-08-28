@@ -580,6 +580,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void onFocusWindowChanged(QWindow*);
 
+#ifdef SCRIPT_INTERFACE
+      void closePlugin();
+#endif
       virtual QMenu* createPopupMenu() override;
 
       QByteArray exportPdfAsJSON(Score*);

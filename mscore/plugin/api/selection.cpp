@@ -11,21 +11,36 @@
 //=============================================================================
 
 #include "selection.h"
-#include "score.h"
 
 namespace Ms {
 namespace PluginAPI {
 
+QHash<Ms::Selection*, Selection*> Selection::_wrapMap;
+
 //---------------------------------------------------------
-//   QmlPlayEventsListAccess::append
+//   Selection::wrap
+//---------------------------------------------------------
+
+Selection* Selection::wrap(Ms::Selection* select)
+      {
+      // Use the existing wrapper for this object if it exists.
+      if (_wrapMap.contains(select))
+            return _wrapMap.value(select);
+      // Create a new wrapper.
+      Selection* w = new Selection(select);
+      _wrapMap[select] = w;
+      // All wrapper objects should belong to JavaScript code.
+      QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
+      return w;
+      }
+
+//---------------------------------------------------------
+//   selectionWrap
 //---------------------------------------------------------
 
 Selection* selectionWrap(Ms::Selection* select)
       {
-      Selection* w = new Selection(select);
-      // All wrapper objects should belong to JavaScript code.
-      QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
-      return w;
+      return Selection::wrap(select);
       }
 
 }
