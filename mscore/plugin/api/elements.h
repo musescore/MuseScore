@@ -290,7 +290,7 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( stepOffset,              STEP_OFFSET               )
       API_PROPERTY( staffShowBarlines,       STAFF_SHOW_BARLINES       )
       API_PROPERTY( staffShowLedgerlines,    STAFF_SHOW_LEDGERLINES    )
-      API_PROPERTY( staffSlashStyle,         STAFF_SLASH_STYLE         )
+      API_PROPERTY( staffStemless,           STAFF_STEMLESS            )
       API_PROPERTY( staffNoteheadScheme,     STAFF_NOTEHEAD_SCHEME     )
       API_PROPERTY( staffGenClef,            STAFF_GEN_CLEF            )
       API_PROPERTY( staffGenTimesig,         STAFF_GEN_TIMESIG         )

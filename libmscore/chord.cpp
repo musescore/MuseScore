@@ -860,14 +860,14 @@ void Chord::computeUp()
       // TAB STAVES
       if (tabStaff) {
             // if no stems or stem beside staves
-            if (tab->slashStyle() || !tab->stemThrough()) {
+            if (tab->stemless() || !tab->stemThrough()) {
                   // if measure has voices, set stem direction according to voice
                   if (measure()->hasVoices(staffIdx()))
                         _up = !(track() % 2);
                   else                          // if only voice 1,
                         // unconditionally set to down if not stems or according to TAB stem direction otherwise
                         // (even with no stems, stem direction controls position of slurs and ties)
-                        _up = tab->slashStyle() ? false : !tab->stemsDown();
+                        _up = tab->stemless() ? false : !tab->stemsDown();
                   return;
                   }
             // if TAB has stems through staves, chain into standard processing
@@ -1309,7 +1309,7 @@ qreal Chord::defaultStemLength() const
       const StaffType* tab = (st && st->isTabStaff(tick())) ? st->staffType(tick()) : nullptr;
       if (tab) {
             // require stems only if TAB is not stemless and this chord has a stem
-            if (!tab->slashStyle() && _stem) {
+            if (!tab->stemless() && _stem) {
                   // if stems are beside staff, apply special formatting
                   if (!tab->stemThrough()) {
                         // process stem:
@@ -1471,7 +1471,7 @@ void Chord::layoutStem1()
       {
       const Staff* stf = staff();
       const StaffType* st = stf ? stf->staffType(tick()) : 0;
-      if (durationType().hasStem() && !(_noStem || (measure() && measure()->slashStyle(staffIdx())) || (st && st->isTabStaff() && st->slashStyle()))) {
+      if (durationType().hasStem() && !(_noStem || (measure() && measure()->stemless(staffIdx())) || (st && st->isTabStaff() && st->stemless()))) {
             if (!_stem) {
                   Stem* stem = new Stem(score());
                   stem->setParent(this);
@@ -1515,7 +1515,7 @@ void Chord::layoutStem()
 
       int hookIdx  = durationType().hooks();
 
-      if (hookIdx && !(noStem() || measure()->slashStyle(staffIdx()))) {
+      if (hookIdx && !(noStem() || measure()->stemless(staffIdx()))) {
             if (!hook()) {
                   Hook* hook = new Hook(score());
                   hook->setParent(this);
@@ -1534,7 +1534,7 @@ void Chord::layoutStem()
       const StaffType* tab = st ? st->staffType(tick()) : 0;
       if (tab && tab->isTabStaff()) {
             // if stemless TAB
-            if (tab->slashStyle()) {
+            if (tab->stemless()) {
                   // if 'grid' duration symbol of MEDIALFINAL type, it is time to compute its width
                   if (_tabDur != nullptr && _tabDur->beamGrid() == TabBeamGrid::MEDIALFINAL)
                         _tabDur->layout2();
@@ -2212,7 +2212,7 @@ void Chord::layoutTablature()
       // or measure is stemless
       // or duration longer than half (if halves have stems) or duration longer than crochet
       // remove stems
-      if (tab->slashStyle() || _noStem || measure()->slashStyle(staffIdx()) || durationType().type() <
+      if (tab->stemless() || _noStem || measure()->stemless(staffIdx()) || durationType().type() <
          (tab->minimStyle() != TablatureMinimStyle::NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER) ) {
             if (_stem)
                   score()->undo(new RemoveElement(_stem));

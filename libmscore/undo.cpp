@@ -1576,7 +1576,7 @@ void ChangeVelocity::flip(EditData*)
 //---------------------------------------------------------
 
 ChangeMStaffProperties::ChangeMStaffProperties(Measure* m, int i, bool v, bool s)
-   : measure(m), staffIdx(i), visible(v), slashStyle(s)
+   : measure(m), staffIdx(i), visible(v), stemless(s)
       {
       }
 
@@ -1587,11 +1587,11 @@ ChangeMStaffProperties::ChangeMStaffProperties(Measure* m, int i, bool v, bool s
 void ChangeMStaffProperties::flip(EditData*)
       {
       bool v = measure->visible(staffIdx);
-      bool s = measure->slashStyle(staffIdx);
+      bool s = measure->stemless(staffIdx);
       measure->setStaffVisible(staffIdx, visible);
-      measure->setStaffSlashStyle(staffIdx, slashStyle);
+      measure->setStaffStemless(staffIdx, stemless);
       visible    = v;
-      slashStyle = s;
+      stemless = s;
       }
 
 //---------------------------------------------------------
