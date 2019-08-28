@@ -157,7 +157,7 @@ void Spacer::editDrag(EditData& ed)
       if (_gap < spatium() * 2.0)
             _gap = spatium() * 2;
       layout0();
-      score()->setLayoutAll();
+      triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -241,7 +241,7 @@ bool Spacer::setProperty(Pid propertyId, const QVariant& v)
                   break;
             }
       layout0();
-      score()->setLayoutAll();
+      triggerLayout();
       setGenerated(false);
       return true;
       }
