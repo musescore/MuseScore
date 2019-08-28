@@ -53,12 +53,13 @@ struct PropertyMetaData {
 static constexpr PropertyMetaData propertyList[] = {
       { Pid::SUBTYPE,                 false, "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "subtype")          },
       { Pid::SELECTED,                false, "selected",              P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "selected")         },
-      { Pid::GENERATED,               false,  "generated",            P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "generated")        },
+      { Pid::GENERATED,               false, "generated",             P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "generated")        },
       { Pid::COLOR,                   false, "color",                 P_TYPE::COLOR,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "color")            },
       { Pid::VISIBLE,                 false, "visible",               P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "visible")          },
       { Pid::Z,                       false, "z",                     P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "z")                },
       { Pid::SMALL,                   false, "small",                 P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "small")            },
       { Pid::SHOW_COURTESY,           false, "showCourtesySig",       P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "show courtesy")    },
+      { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEYMODE,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "show courtesy")    },
       { Pid::LINE_TYPE,               false, "lineType",              P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "line type")        },
       { Pid::PITCH,                   true,  "pitch",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "pitch")            },
 
@@ -159,13 +160,13 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::VELO_CHANGE_SPEED,       true,  "veloChangeSpeed",       P_TYPE::CHANGE_SPEED,        DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity change speed")  },
       { Pid::DYNAMIC_TYPE,            true,  "subtype",               P_TYPE::DYNAMIC_TYPE,        DUMMY_QT_TRANSLATE_NOOP("propertyName", "dynamic type")     },
       { Pid::DYNAMIC_RANGE,           true,  "dynType",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "dynamic range")    },
+//100
       { Pid::SINGLE_NOTE_DYNAMICS,    true,  "singleNoteDynamics",    P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "single note dynamics")   },
       { Pid::PLACEMENT,               false, "placement",             P_TYPE::PLACEMENT,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "placement")        },
       { Pid::VELOCITY,                false, "velocity",              P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity")         },
       { Pid::JUMP_TO,                 true,  "jumpTo",                P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "jump to")          },
       { Pid::PLAY_UNTIL,              true,  "playUntil",             P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "play until")       },
       { Pid::CONTINUE_AT,             true,  "continueAt",            P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue at")       },
-//100
       { Pid::LABEL,                   true,  "label",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "label")            },
       { Pid::MARKER_TYPE,             true,  0,                       P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "marker type")      },
       { Pid::ARP_USER_LEN1,           false, 0,                       P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "length 1")         },
@@ -271,6 +272,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FRAME_WIDTH,             false, "frameWidth",            P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame width")      },
       { Pid::FRAME_PADDING,           false, "framePadding",          P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame padding")    },
       { Pid::FRAME_ROUND,             false, "frameRound",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame round")      },
+//200
       { Pid::FRAME_FG_COLOR,          false, "frameFgColor",          P_TYPE::COLOR,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame foreground color") },
       { Pid::FRAME_BG_COLOR,          false, "frameBgColor",          P_TYPE::COLOR,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame background color") },
       { Pid::SIZE_SPATIUM_DEPENDENT,  false, "sizeIsSpatiumDependent",P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "spatium dependent font") },
@@ -675,6 +677,31 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
             case P_TYPE::STRING:
             case P_TYPE::FRACTION:
                   return value.toString();
+            case P_TYPE::KEYMODE:
+                  switch (KeyMode(value.toInt())) {
+                        case KeyMode::NONE:
+                              return "none";
+                        case KeyMode::MAJOR:
+                              return "major";
+                        case KeyMode::MINOR:
+                              return "minor";
+                        case KeyMode::DORIAN:
+                              return "dorian";
+                        case KeyMode::PHRYGIAN:
+                              return "phrygian";
+                        case KeyMode::LYDIAN:
+                              return "lydian";
+                        case KeyMode::MIXOLYDIAN:
+                              return "mixolydian";
+                        case KeyMode::AEOLIAN:
+                              return "aeolian";
+                        case KeyMode::IONIAN:
+                              return "ionian";
+                        case KeyMode::LOCRIAN:
+                              return "locrian";
+                        default:
+                              return "unknown";
+                        }
             case P_TYPE::ORNAMENT_STYLE:
                   switch (MScore::OrnamentStyle(value.toInt())) {
                         case MScore::OrnamentStyle::BAROQUE:
