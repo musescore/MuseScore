@@ -458,12 +458,22 @@
         </property>
         <item>
          <property name="text">
-          <string>Crescendo</string>
+          <string notr="true">Crescendo</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Decrescendo</string>
+          <string notr="true">Decrescendo</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Crescendo Line</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Decrescendo Line</string>
          </property>
         </item>
        </widget>

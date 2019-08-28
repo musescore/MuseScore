@@ -3453,15 +3453,26 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
                         key.setCustom(true);
                         key.setMode(KeyMode::NONE);
                         }
-                  else if (m == "major") {
+                  else if (m == "major")
                         key.setMode(KeyMode::MAJOR);
-                        }
-                  else if (m == "minor") {
+                  else if (m == "minor")
                         key.setMode(KeyMode::MINOR);
-                        }
-                  else {
+                  else if (m == "dorian")
+                        key.setMode(KeyMode::DORIAN);
+                  else if (m == "phrygian")
+                        key.setMode(KeyMode::PHRYGIAN);
+                  else if (m == "lydian")
+                        key.setMode(KeyMode::LYDIAN);
+                  else if (m == "mixolydian")
+                        key.setMode(KeyMode::MIXOLYDIAN);
+                  else if (m == "aeolian")
+                        key.setMode(KeyMode::AEOLIAN);
+                  else if (m == "ionian")
+                        key.setMode(KeyMode::IONIAN);
+                  else if (m == "locrian")
+                        key.setMode(KeyMode::LOCRIAN);
+                  else
                         _logger->logError(QString("Unsupported mode '%1'").arg(m), &_e);
-                        }
                   }
             else if (_e.name() == "cancel")
                   skipLogCurrElem();  // TODO ??
