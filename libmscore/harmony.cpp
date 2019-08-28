@@ -759,6 +759,16 @@ void Harmony::endEdit(EditData& ed)
       // disable spell check
       showSpell = false;
 
+      _userName.replace("\u1d12b", "bb"); // double-flat
+      _userName.replace("\u266d",  "b");  // flat
+      //_userName.replace("\u266e",  "n");  // natural, if one day we support that too
+      _userName.replace("\u266f",  "#");  // sharp
+      _userName.replace("\u1d12a", "x");  // double-sharp
+      _userName.replace("\u0394",  "t");  // &Delta;
+      _userName.replace("\u00d0",  "o");  // &deg;
+      _userName.replace("\u00f8",  "0");  // &oslash;
+      _userName.replace("\u00d8",  "0");  // &Oslash;
+
       TextBase::endEdit(ed);  // layout happens here
 
       if (links()) {
