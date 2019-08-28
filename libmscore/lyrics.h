@@ -139,8 +139,8 @@ class LyricsLine final : public SLine {
 
 class LyricsLineSegment final : public LineSegment {
    protected:
-      int   _numOfDashes;
-      qreal _dashLength;
+      int   _numOfDashes = 0;
+      qreal _dashLength = 0;
 
    public:
       LyricsLineSegment(Spanner*, Score*);
