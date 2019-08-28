@@ -158,7 +158,7 @@ void MeasureProperties::setMeasure(Measure* _m)
 
             item = new QTableWidgetItem(tr("stemless"));
             item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-            item->setCheckState(m->slashStyle(staffIdx) ? Qt::Checked : Qt::Unchecked);
+            item->setCheckState(m->stemless(staffIdx) ? Qt::Checked : Qt::Unchecked);
             staves->setItem(staffIdx, 2, item);
             }
       }
@@ -200,10 +200,10 @@ bool MeasureProperties::visible(int staffIdx)
       }
 
 //---------------------------------------------------------
-//   slashStyle
+//   stemless
 //---------------------------------------------------------
 
-bool MeasureProperties::slashStyle(int staffIdx)
+bool MeasureProperties::stemless(int staffIdx)
       {
       QTableWidgetItem* item = staves->item(staffIdx, 2);
       return item->checkState() == Qt::Checked;
@@ -247,8 +247,8 @@ void MeasureProperties::apply()
       bool propertiesChanged = false;
       for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             bool v = visible(staffIdx);
-            bool s = slashStyle(staffIdx);
-            if (m->visible(staffIdx) != v || m->slashStyle(staffIdx) != s) {
+            bool s = stemless(staffIdx);
+            if (m->visible(staffIdx) != v || m->stemless(staffIdx) != s) {
                   score->undo(new ChangeMStaffProperties(m, staffIdx, v, s));
                   propertiesChanged = true;
                   }
