@@ -146,10 +146,10 @@ extern Ms::Synthesizer* createZerberus();
 #endif
 
 #ifdef QT_NO_DEBUG
-      Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
+      Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg);
 #else
-      Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
-//      Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
+      Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg);
+//      Q_LOGGING_CATEGORY(undoRedo, "undoRedo");
 #endif
 
 #ifdef BUILD_CRASH_REPORTER
