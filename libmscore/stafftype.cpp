@@ -13,6 +13,7 @@
 #include "stafftype.h"
 
 #include "chord.h"
+#include "measure.h"
 #include "mscore.h"
 #include "navigate.h"
 #include "staff.h"
@@ -984,6 +985,14 @@ void TabDurationSymbol::draw(QPainter* painter) const
       {
       if (!_tab)
             return;
+
+      if (_repeat && (_tab->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
+            Chord* chord = toChord(parent());
+            ChordRest* prevCR = prevChordRest(chord);
+            if (prevCR && (chord->measure()->system() == prevCR->measure()->system()))
+                  return;
+            }
+
       qreal mag = magS();
       qreal imag = 1.0 / mag;
 

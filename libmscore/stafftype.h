@@ -423,6 +423,7 @@ class TabDurationSymbol final : public Element {
       TabBeamGrid _beamGrid;        // value for special 'English' grid display
       const StaffType*  _tab;
       QString     _text;
+      bool        _repeat;
 
    public:
       TabDurationSymbol(Score* s);
@@ -440,6 +441,8 @@ class TabDurationSymbol final : public Element {
             _tab = tab;
             _text = tab->durationString(type, dots);
             }
+      bool isRepeat() const                     { return _repeat; }
+      void setRepeat(bool val)                  { _repeat = val;  }
       };
 
 }     // namespace Ms
