@@ -2708,6 +2708,7 @@ void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& f
 
 static bool isTupletFilled(const MxmlTupletState& state, const TDuration normalType, const Fraction timeMod)
       {
+      Q_UNUSED(timeMod);
       bool res { false };
       const auto actualNotes = state.m_actualNotes;
       /*
