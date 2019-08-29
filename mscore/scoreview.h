@@ -203,7 +203,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void realtimeAdvance(bool allowRests);
       void cmdAddFret(int fret);
       void cmdAddChordName(HarmonyType ht);
-      void cmdAddText(Tid tid);
+      void cmdAddText(Tid tid, Tid customTid = Tid::DEFAULT);
       void cmdEnterRest(const TDuration&);
       void cmdEnterRest();
       void cmdTuplet(int n, ChordRest*);
