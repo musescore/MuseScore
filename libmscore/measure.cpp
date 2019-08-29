@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -1566,7 +1566,7 @@ Element* Measure::drop(EditData& data)
                         spacer->setGap(gap);
                         }
                   score()->undoAddElement(spacer);
-                  score()->setLayoutAll();
+                  triggerLayout();
                   return spacer;
                   }
 
