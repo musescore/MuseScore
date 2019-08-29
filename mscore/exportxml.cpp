@@ -4788,9 +4788,11 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
       bool prevMeasLineBreak = false;
       bool prevMeasPageBreak = false;
+      bool prevMeasSectionBreak = false;
       if (previousMeasure) {
             prevMeasLineBreak = previousMeasure->lineBreak();
             prevMeasPageBreak = previousMeasure->pageBreak();
+            prevMeasSectionBreak = previousMeasure->sectionBreak();
             }
 
       if (currentSystem != NoSystem) {
@@ -4804,7 +4806,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                         newThing = " new-page=\"yes\"";
                   }
             else if (preferences.musicxmlExportBreaks() == MusicxmlExportBreaks::MANUAL) {
-                  if (currentSystem == NewSystem && prevMeasLineBreak)
+                  if (currentSystem == NewSystem && (prevMeasLineBreak || prevMeasSectionBreak))
                         newThing = " new-system=\"yes\"";
                   else if (currentSystem == NewPage && prevMeasPageBreak)
                         newThing = " new-page=\"yes\"";
@@ -5363,6 +5365,75 @@ static void annotationsWithoutNote(ExportMusicXml* exp, const int strack, const 
       }
 
 //---------------------------------------------------------
+//  MeasureNumberStateHandler
+//---------------------------------------------------------
+
+/**
+ State handler used to calculate measure number including implict flag.
+ To be called once at the start of each measure in a part.
+ */
+
+class MeasureNumberStateHandler final
+      {
+public:
+      MeasureNumberStateHandler();
+      void updateForMeasure(const Measure* const m);
+      QString measureNumber() const;
+      bool isFirstActualMeasure() const;
+private:
+      void init();
+      int _measureNo;                     // number of next regular measure
+      int _irregularMeasureNo;            // number of next irregular measure
+      int _pickupMeasureNo;               // number of next pickup measure
+      QString _cachedAttributes;          // attributes calculated by updateForMeasure()
+      };
+
+MeasureNumberStateHandler::MeasureNumberStateHandler()
+      {
+      init();
+      }
+
+void MeasureNumberStateHandler::init()
+      {
+      _measureNo = 1;
+      _irregularMeasureNo = 1;
+      _pickupMeasureNo = 1;
+      }
+
+
+void MeasureNumberStateHandler::updateForMeasure(const Measure* const m)
+      {
+      // restart measure numbering after a section break if startWithMeasureOne is set
+      const auto previousMeasure = m->prevMeasure();
+      if (previousMeasure) {
+            const auto layoutSectionBreak = previousMeasure->sectionBreakElement();
+            if (layoutSectionBreak && layoutSectionBreak->startWithMeasureOne())
+                  init();
+            }
+
+      // update measure numers and cache result
+      _cachedAttributes = " number=";
+      if ((_irregularMeasureNo + _measureNo) == 2 && m->irregular()) {
+            _cachedAttributes += "\"0\" implicit=\"yes\"";
+            _pickupMeasureNo++;
+            }
+      else if (m->irregular())
+            _cachedAttributes += QString("\"X%1\" implicit=\"yes\"").arg(_irregularMeasureNo++);
+      else
+            _cachedAttributes += QString("\"%1\"").arg(_measureNo++);
+      }
+
+QString MeasureNumberStateHandler::measureNumber() const
+      {
+      return _cachedAttributes;
+      }
+
+bool MeasureNumberStateHandler::isFirstActualMeasure() const
+      {
+      return (_irregularMeasureNo + _measureNo + _pickupMeasureNo) == 4;
+      }
+
+//---------------------------------------------------------
 //  write
 //---------------------------------------------------------
 
@@ -5399,8 +5470,7 @@ void ExportMusicXml::write(QIODevice* dev)
       _xml << "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n";
       _xml.stag("score-partwise version=\"3.1\"");
 
-      const MeasureBase* measure = _score->measures()->first();
-      work(measure);
+      work(_score->measures()->first());
 
       identification(_xml, _score);
 
@@ -5409,13 +5479,13 @@ void ExportMusicXml::write(QIODevice* dev)
             credits(_xml);
             }
 
-      const QList<Part*>& il = _score->parts();
+      const auto& il = _score->parts();
       partList(_xml, _score, il, instrMap);
 
       int staffCount = 0;
 
       for (int idx = 0; idx < il.size(); ++idx) {
-            Part* part = il.at(idx);
+            const auto part = il.at(idx);
             _tick = { 0,1 };
             _xml.stag(QString("part id=\"P%1\"").arg(idx+1));
 
@@ -5427,28 +5497,20 @@ void ExportMusicXml::write(QIODevice* dev)
             _trillStop.clear();
             initInstrMap(instrMap, part->instruments(), _score);
 
-            int measureNo = 1;          // number of next regular measure
-            int irregularMeasureNo = 1; // number of next irregular measure
-            int pickupMeasureNo = 1;    // number of next pickup measure
+            MeasureNumberStateHandler mnsh;
 
             FigBassMap fbMap;           // pending figured bass extends
 
-            for (MeasureBase* mb = _score->measures()->first(); mb; mb = mb->next()) {
-                  if (mb->type() != ElementType::MEASURE)
+            for (auto mb = _score->measures()->first(); mb; mb = mb->next()) {
+                  if (!mb->isMeasure())
                         continue;
-                  Measure* m = static_cast<Measure*>(mb);
+                  const auto m = toMeasure(mb);
 
                   // pickup and other irregular measures need special care
-                  QString measureTag = "measure number=";
-                  if ((irregularMeasureNo + measureNo) == 2 && m->irregular()) {
-                        measureTag += "\"0\" implicit=\"yes\"";
-                        pickupMeasureNo++;
-                        }
-                  else if (m->irregular())
-                        measureTag += QString("\"X%1\" implicit=\"yes\"").arg(irregularMeasureNo++);
-                  else
-                        measureTag += QString("\"%1\"").arg(measureNo++);
-                  const bool isFirstActualMeasure = (irregularMeasureNo + measureNo + pickupMeasureNo) == 4;
+                  QString measureTag = "measure";
+                  mnsh.updateForMeasure(m);
+                  measureTag += mnsh.measureNumber();
+                  const bool isFirstActualMeasure = mnsh.isFirstActualMeasure();
 
                   if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT))
                         measureTag += QString(" width=\"%1\"").arg(QString::number(m->bbox().width() / DPMM / millimeters * tenths,'f',2));
@@ -5513,13 +5575,13 @@ void ExportMusicXml::write(QIODevice* dev)
 
                         int sstaff = (staves > 1) ? st - strack + VOICES : 0;
                         sstaff /= VOICES;
-                        for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                              Element* el = seg->element(st);
+                        for (auto seg = m->first(); seg; seg = seg->next()) {
+                              const auto el = seg->element(st);
                               if (!el) {
                                     continue;
                                     }
                               // must ignore start repeat to prevent spurious backup/forward
-                              if (el->type() == ElementType::BAR_LINE && static_cast<BarLine*>(el)->barLineType() == BarLineType::START_REPEAT)
+                              if (el->isBarLine() && toBarLine(el)->barLineType() == BarLineType::START_REPEAT)
                                     continue;
 
                               // generate backup or forward to the start time of the element
@@ -5533,13 +5595,13 @@ void ExportMusicXml::write(QIODevice* dev)
                                     _attr.doAttr(_xml, false);
                                     annotations(this, strack, etrack, st, sstaff, seg);
                                     // look for more harmony
-                                    for (Segment* seg1 = seg->next(); seg1; seg1 = seg1->next()) {
+                                    for (auto seg1 = seg->next(); seg1; seg1 = seg1->next()) {
                                           if (seg1->isChordRestType()) {
-                                                Element* el1 = seg1->element(st);
+                                                const auto el1 = seg1->element(st);
                                                 if (el1) // found a ChordRest, next harmony will be attach to this one
                                                       break;
-                                                for (Element* annot : seg1->annotations()) {
-                                                      if (annot->type() == ElementType::HARMONY && annot->track() == st)
+                                                for (auto annot : seg1->annotations()) {
+                                                      if (annot->isHarmony() && annot->track() == st)
                                                             harmony(toHarmony(annot), 0, (seg1->tick() - seg->tick()).ticks() / div);
                                                       }
                                                 }
