@@ -138,7 +138,7 @@ class Spanner : public Element {
       enum class Anchor {
             SEGMENT, MEASURE, CHORD, NOTE
             };
-      Q_ENUM(Anchor)
+      Q_ENUM(Anchor);
    private:
 
       Element* _startElement { 0  };

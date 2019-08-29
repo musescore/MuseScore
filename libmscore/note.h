@@ -136,8 +136,8 @@ class NoteHead final : public Symbol {
             ///\}
             };
 
-      Q_ENUM(Group)
-      Q_ENUM(Type)
+      Q_ENUM(Group);
+      Q_ENUM(Type);
 
       NoteHead(Score* s = 0) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&) = delete;
@@ -212,7 +212,7 @@ class Note final : public Element {
       Q_GADGET
    public:
       enum class ValueType : char { OFFSET_VAL, USER_VAL };
-      Q_ENUM(ValueType)
+      Q_ENUM(ValueType);
 
    private:
       bool _ghost         { false };      ///< ghost note (guitar: death note)
