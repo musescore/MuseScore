@@ -395,6 +395,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                               breath->setTrack(e.track());
                               Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                               Measure* m = tick2measure(tick);
+                              if (m->tick() == tick)
+                                    m = m->prevMeasure();
                               Segment* segment = m->undoGetSegment(SegmentType::Breath, tick);
                               breath->setParent(segment);
                               undoChangeElement(segment->element(e.track()), breath);
