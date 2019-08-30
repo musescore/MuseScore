@@ -4183,7 +4183,8 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
             qreal w;
 
             if (ns) {
-                  if (isSystemHeader && ns->isChordRestType()) {        // this is the system header gap
+                  if (isSystemHeader && (ns->isChordRestType() || (ns->isClefType() && !ns->header()))) {
+                        // this is the system header gap
                         w = s->minHorizontalDistance(ns, true);
                         isSystemHeader = false;
                         }
