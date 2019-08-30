@@ -98,7 +98,7 @@ void PaletteBox::retranslate()
       setWindowTitle(tr("Palettes"));
       singlePaletteAction->setText(tr("Single Palette"));
       workspaceList->setToolTip(tr("Select workspace"));
-      addWorkspaceButton->setText(tr("+"));
+      addWorkspaceButton->setText("+");
       addWorkspaceButton->setToolTip(tr("Add new workspace"));
       updateWorkspaces();
       }
