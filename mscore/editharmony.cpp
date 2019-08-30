@@ -34,6 +34,8 @@ void ScoreView::harmonyTab(bool back)
             return;
             }
       int track        = harmony->track();
+      HarmonyType ht   = harmony->harmonyType();
+      Tid tid          = harmony->tid();
       Segment* segment = toSegment(harmony->parent());
       if (!segment) {
             qDebug("harmonyTicksTab: no segment");
@@ -65,7 +67,7 @@ void ScoreView::harmonyTab(bool back)
       // search for next chord name
       harmony = 0;
       for (Element* e : segment->annotations()) {
-            if (e->isHarmony() && e->track() == track) {
+            if (e->isHarmony() && e->track() == track && toHarmony(e)->tid() == tid) {
                   Harmony* h = toHarmony(e);
                   harmony = h;
                   break;
@@ -76,6 +78,7 @@ void ScoreView::harmonyTab(bool back)
             harmony = new Harmony(_score);
             harmony->setTrack(track);
             harmony->setParent(segment);
+            harmony->setHarmonyType(ht);
             _score->startCmd();
             _score->undoAddElement(harmony);
             _score->endCmd();
@@ -104,6 +107,8 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
             return;
             }
       int track        = harmony->track();
+      HarmonyType ht   = harmony->harmonyType();
+      Tid tid          = harmony->tid();
       Segment* segment = toSegment(harmony->parent());
       if (!segment) {
             qDebug("no segment");
@@ -170,7 +175,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       // search for next chord name
       harmony = 0;
       for (Element* e : segment->annotations()) {
-            if (e->isHarmony() && e->track() == track) {
+            if (e->isHarmony() && e->track() == track && toHarmony(e)->tid() == tid) {
                   Harmony* h = toHarmony(e);
                   harmony = h;
                   break;
@@ -181,6 +186,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
             harmony = new Harmony(_score);
             harmony->setTrack(track);
             harmony->setParent(segment);
+            harmony->setHarmonyType(ht);
             _score->undoAddElement(harmony);
             }
       _score->endCmd();
@@ -207,6 +213,8 @@ void ScoreView::harmonyTicksTab(const Fraction& ticks)
             return;
             }
       int track        = harmony->track();
+      HarmonyType ht   = harmony->harmonyType();
+      Tid tid          = harmony->tid();
       Segment* segment = toSegment(harmony->parent());
       if (!segment) {
             qDebug("no segment");
@@ -240,7 +248,7 @@ void ScoreView::harmonyTicksTab(const Fraction& ticks)
       // search for next chord name
       harmony = 0;
       for (Element* e : segment->annotations()) {
-            if (e->isHarmony() && e->track() == track) {
+            if (e->isHarmony() && e->track() == track && toHarmony(e)->tid() == tid) {
                   Harmony* h = toHarmony(e);
                   harmony = h;
                   break;
@@ -251,6 +259,7 @@ void ScoreView::harmonyTicksTab(const Fraction& ticks)
             harmony = new Harmony(_score);
             harmony->setTrack(track);
             harmony->setParent(segment);
+            harmony->setHarmonyType(ht);
             _score->startCmd();
             _score->undoAddElement(harmony);
             _score->endCmd();

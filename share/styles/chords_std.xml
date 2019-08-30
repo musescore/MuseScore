@@ -34,6 +34,9 @@
       configured text style font family is used.
 -->
 
+<!-- allow style to control mag and position adjustments -->
+  <autoAdjust mag="0.8" adjust="-4.0">1</autoAdjust>
+
   <font>
 
     <sym code="0x0394" name="triangle"/>
@@ -60,6 +63,64 @@
 
     </font>
 
+  <font class="extension">
+<!--  <mag>0.9</mag> -->
+    <sym value="0" name="e0"/>
+    <sym value="1" name="e1"/>
+    <sym value="2" name="e2"/>
+    <sym value="3" name="e3"/>
+    <sym value="4" name="e4"/>
+    <sym value="5" name="e5"/>
+    <sym value="6" name="e6"/>
+    <sym value="7" name="e7"/>
+    <sym value="8" name="e8"/>
+    <sym value="9" name="e9"/>
+    <sym value="10" name="e10"/>
+    <sym value="11" name="e11"/>
+    <sym value="12" name="e12"/>
+    <sym value="13" name="e13"/>
+    <sym value="(" name="e("/>
+    <sym value=")" name="e)"/>
+    <sym value="," name="e,"/>
+    <sym value="/" name="e/"/>
+    </font>
+
+  <font class="modifier">
+<!--  <mag>0.8</mag> -->
+    <sym value="0" name="s0"/>
+    <sym value="1" name="s1"/>
+    <sym value="2" name="s2"/>
+    <sym value="3" name="s3"/>
+    <sym value="4" name="s4"/>
+    <sym value="5" name="s5"/>
+    <sym value="6" name="s6"/>
+    <sym value="7" name="s7"/>
+    <sym value="8" name="s8"/>
+    <sym value="9" name="s9"/>
+    <sym value="10" name="s10"/>
+    <sym value="11" name="s11"/>
+    <sym value="12" name="s12"/>
+    <sym value="13" name="s13"/>
+    <sym value="(" name="s("/>
+    <sym value=")" name="s)"/>
+    <sym value="," name="s,"/>
+    <sym value="/" name="s/"/>
+    <sym value="M" name="sM"/>
+    <sym value="Ma" name="sMa"/>
+    <sym value="Maj" name="sMaj"/>
+    <sym value="ma" name="sma"/>
+    <sym value="maj" name="smaj"/>
+    <sym code="0x266d" name="sb"/>
+    <sym code="0x266f" name="s#"/>
+    <sym code="0x0394" name="striangle"/>
+    </font>
+
+  <font>
+    <mag>0.75</mag>
+    <sym value="6" name="696"/>
+    <sym value="9" name="699"/>
+    </font>
+
 <!--
       Part II: token list
             define how the various tokens within a chord symbol should be rendered
@@ -77,11 +138,253 @@
     </token>
 
   <token>
+    <name>o</name>
+    <render>circle</render>
+    </token>
+
+  <token>
     <name>0</name>
     <render>oslash</render>
     </token>
 
+  <token>
+    <name>69</name>
+    <render>:push m:0:-6 696 :pop m:0:2 699 m:0:-2</render>
+    </token>
+
+  <token class="extension">
+    <name>6,9</name>
+    <render>e6 e, e9</render>
+    </token>
+
+  <token class="extension">
+    <name>6/9</name>
+    <render>e6 e/ e9</render>
+    </token>
+
+  <token class="extension">
+    <name>0</name>
+    <render>e0</render>
+    </token>
+
+  <token class="extension">
+    <name>1</name>
+    <render>e1</render>
+    </token>
+
+  <token class="extension">
+    <name>2</name>
+    <render>e2</render>
+    </token>
+
+  <token class="extension">
+    <name>3</name>
+    <render>e3</render>
+    </token>
+
+  <token class="extension">
+    <name>4</name>
+    <render>e4</render>
+    </token>
+
+  <token class="extension">
+    <name>5</name>
+    <render>e5</render>
+    </token>
+
+  <token class="extension">
+    <name>6</name>
+    <render>e6</render>
+    </token>
+
+  <token class="extension">
+    <name>7</name>
+    <render>e7</render>
+    </token>
+
+  <token class="extension">
+    <name>8</name>
+    <render>e8</render>
+    </token>
+
+  <token class="extension">
+    <name>9</name>
+    <render>e9</render>
+    </token>
+
+  <token class="extension">
+    <name>10</name>
+    <render>e10</render>
+    </token>
+
+  <token class="extension">
+    <name>11</name>
+    <render>e11</render>
+    </token>
+
+  <token class="extension">
+    <name>12</name>
+    <render>e12</render>
+    </token>
+
+  <token class="extension">
+    <name>13</name>
+    <render>e13</render>
+    </token>
+
+  <token class="extension">
+    <name>(</name>
+    <render>e(</render>
+    </token>
+
+  <token class="extension">
+    <name>)</name>
+    <render>e)</render>
+    </token>
+
+  <token class="extension">
+    <name>,</name>
+    <render>e,</render>
+    </token>
+
+  <token class="extension">
+    <name>/</name>
+    <render>e/</render>
+    </token>
+
+  <token class="modifier">
+    <name>0</name>
+    <render>s0</render>
+    </token>
+
+  <token class="modifier">
+    <name>1</name>
+    <render>s1</render>
+    </token>
+
+  <token class="modifier">
+    <name>2</name>
+    <render>s2</render>
+    </token>
+
+  <token class="modifier">
+    <name>3</name>
+    <render>s3</render>
+    </token>
+
+  <token class="modifier">
+    <name>4</name>
+    <render>s4</render>
+    </token>
+
+  <token class="modifier">
+    <name>5</name>
+    <render>s5</render>
+    </token>
+
+  <token class="modifier">
+    <name>6</name>
+    <render>s6</render>
+    </token>
+
+  <token class="modifier">
+    <name>7</name>
+    <render>s7</render>
+    </token>
+
+  <token class="modifier">
+    <name>8</name>
+    <render>s8</render>
+    </token>
+
+  <token class="modifier">
+    <name>9</name>
+    <render>s9</render>
+    </token>
+
+  <token class="modifier">
+    <name>10</name>
+    <render>s10</render>
+    </token>
+
+  <token class="modifier">
+    <name>11</name>
+    <render>s11</render>
+    </token>
+
+  <token class="modifier">
+    <name>12</name>
+    <render>s12</render>
+    </token>
+
+  <token class="modifier">
+    <name>13</name>
+    <render>s13</render>
+    </token>
+
+  <token class="modifier">
+    <name>(</name>
+    <render>s(</render>
+    </token>
+
+  <token class="modifier">
+    <name>)</name>
+    <render>s)</render>
+    </token>
+
+  <token class="modifier">
+    <name>,</name>
+    <render>s,</render>
+    </token>
+
+  <token class="modifier">
+    <name>/</name>
+    <render>s/</render>
+    </token>
+
+  <token class="modifier">
+    <name>M</name>
+    <render>sM</render>
+    </token>
+
+  <token class="modifier">
+    <name>Ma</name>
+    <render>sMa</render>
+    </token>
+
+  <token class="modifier">
+    <name>Maj</name>
+    <render>sMaj</render>
+    </token>
+
+  <token class="modifier">
+    <name>ma</name>
+    <render>sma</render>
+    </token>
+
+  <token class="modifier">
+    <name>maj</name>
+    <render>maj</render>
+    </token>
+
+  <token class="modifier">
+    <name>b</name>
+    <render>sb</render>
+    </token>
+
+  <token class="modifier">
+    <name>#</name>
+    <render>s#</render>
+    </token>
+
+  <token class="modifier">
+    <name>t</name>
+    <name>^</name>
+    <render>striangle</render>
+    </token>
+
   <renderRoot>:n :a m:0.5:0</renderRoot>
+  <renderFunction>:a m:0.5:0 :n</renderFunction>
   <renderBase>m:-0.2:1 / m:0.2:1 :n :a m:0:-2</renderBase>
 
 <!--
@@ -112,6 +415,18 @@
                   if omitted, chord will be rendered directly from the first name listed above
                   so you can get all major seventh chords to render as "ma7" by creating a chord definition
                   with no id or render tag, and just the single name "ma7"
+-->
+
+<!--
+    <chord>
+      <name>6/9</name>
+      <render>m:0:-4 e6 e/ e9 m:0:4</render>
+      </chord>
+
+    <chord>
+      <name>6,9</name>
+      <render>m:0:-4 e6 e, e9 m:0:4</render>
+      </chord>
 -->
 
   </museScore>

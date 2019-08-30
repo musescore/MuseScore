@@ -1876,7 +1876,15 @@ void ScoreView::cmd(const char* s)
             cmdAddNoteLine();
       else if (cmd == "chord-text") {
             changeState(ViewState::NORMAL);
-            cmdAddChordName();
+            cmdAddChordName(HarmonyType::STANDARD);
+            }
+      else if (cmd == "roman-numeral-text") {
+            changeState(ViewState::NORMAL);
+            cmdAddChordName(HarmonyType::ROMAN);
+            }
+      else if (cmd == "nashville-number-text") {
+            changeState(ViewState::NORMAL);
+            cmdAddChordName(HarmonyType::NASHVILLE);
             }
       else if (cmd == "title-text")
             cmdAddText(Tid::TITLE);
@@ -3982,7 +3990,7 @@ void ScoreView::cmdRealtimeAdvance()
 //   cmdAddChordName
 //---------------------------------------------------------
 
-void ScoreView::cmdAddChordName()
+void ScoreView::cmdAddChordName(HarmonyType ht)
       {
       if (!_score->checkHasMeasures())
             return;
@@ -4009,6 +4017,7 @@ void ScoreView::cmdAddChordName()
       Harmony* harmony = new Harmony(_score);
       harmony->setTrack(track);
       harmony->setParent(newParent);
+      harmony->setHarmonyType(ht);
       _score->undoAddElement(harmony);
       _score->endCmd();
 

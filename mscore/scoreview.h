@@ -19,6 +19,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/mscoreview.h"
 #include "libmscore/pos.h"
+#include "libmscore/harmony.h"
 
 namespace Ms {
 
@@ -201,7 +202,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void figuredBassEndEdit();
       void realtimeAdvance(bool allowRests);
       void cmdAddFret(int fret);
-      void cmdAddChordName();
+      void cmdAddChordName(HarmonyType ht);
       void cmdAddText(Tid tid);
       void cmdEnterRest(const TDuration&);
       void cmdEnterRest();
