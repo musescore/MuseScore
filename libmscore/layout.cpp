@@ -2061,39 +2061,46 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       //
       cs = m->findSegmentR(SegmentType::ChordRest, Fraction(0,1));
       if (cs) {
+            // clone elements from underlying measure to mmr
             for (Element* e : cs->annotations()) {
+                  // look at elements in underlying measure
                   if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
                         continue;
-
+                  // try to find a match in mmr
                   bool found = false;
                   for (Element* ee : s->annotations()) {
-                        if (ee->type() == e->type() && ee->track() == e->track()) {
+                        if (e->linkList().contains(ee)) {
                               found = true;
                               break;
                               }
                         }
+                  // add to mmr if no match found
                   if (!found) {
                         Element* ne = e->linkedClone();
                         ne->setParent(s);
                         undo(new AddElement(ne));
                         }
                   }
-            }
 
-      for (Element* e : s->annotations()) {
-            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
-                  continue;
-            bool found = false;
-            for (Element* ee : cs->annotations()) {
-                  if (ee->type() == e->type() && ee->track() == e->track()) {
-                        found = true;
-                        break;
+            // remove stray elements (possibly leftover from a previous layout of this mmr)
+            // this should not happen since the elements are linked?
+            for (Element* e : s->annotations()) {
+                  // look at elements in mmr
+                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
+                        continue;
+                  // try to find a match in underlying measure
+                  bool found = false;
+                  for (Element* ee : cs->annotations()) {
+                        if (e->linkList().contains(ee)) {
+                              found = true;
+                              break;
+                              }
                         }
+                  // remove from mmr if no match found
+                  if (!found)
+                        undo(new RemoveElement(e));
                   }
-            if (!found)
-                  undo(new RemoveElement(e));
             }
-
       MeasureBase* nm = _showVBox ? lm->next() : lm->nextMeasure();
       mmr->setNext(nm);
       mmr->setPrev(m->prev());
