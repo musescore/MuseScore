@@ -1074,7 +1074,7 @@ class Score : public QObject, public ScoreElement {
       bool isSpannerStartEnd(const Fraction& tick, int track) const;
       void removeSpanner(Spanner*);
       void addSpanner(Spanner*);
-      void cmdAddSpanner(Spanner* spanner, const QPointF& pos);
+      void cmdAddSpanner(Spanner* spanner, const QPointF& pos, bool firstStaffOnly = false);
       void cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment, Segment* endSegment);
       void checkSpanner(const Fraction& startTick, const Fraction& lastTick);
       const std::set<Spanner*> unmanagedSpanners() { return _unmanagedSpanner; }
