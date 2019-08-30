@@ -280,11 +280,13 @@ void Score::deletePostponed()
 //        HAIRPIN, LET_RING, VIBRATO and TEXTLINE
 //---------------------------------------------------------
 
-void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
+void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos, bool firstStaffOnly)
       {
       int staffIdx;
       Segment* segment;
       MeasureBase* mb = pos2measure(pos, &staffIdx, 0, &segment, 0);
+      if (firstStaffOnly)
+            staffIdx = 0;
       // ignore if we do not have a measure
       if (mb == 0 || mb->type() != ElementType::MEASURE) {
             qDebug("cmdAddSpanner: cannot put object here");
@@ -308,7 +310,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             Measure* m = toMeasure(mb);
             QRectF b(m->canvasBoundingRect());
 
-            if (pos.x() >= (b.x() + b.width() * .5) && m != lastMeasureMM())
+            if (pos.x() >= (b.x() + b.width() * .5) && m != lastMeasureMM() && m->nextMeasure()->system() == m->system())
                   m = m->nextMeasure();
             spanner->setTick(m->tick());
             spanner->setTick2(m->endTick());
