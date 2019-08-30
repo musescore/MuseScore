@@ -56,7 +56,14 @@ enum class KeyMode {
       UNKNOWN = -1,
       NONE,
       MAJOR,
-      MINOR
+      MINOR,
+      DORIAN,
+      PHRYGIAN,
+      LYDIAN,
+      MIXOLYDIAN,
+      AEOLIAN,
+      IONIAN,
+      LOCRIAN
       };
 
 static inline bool operator< (Key a, Key b) { return static_cast<int>(a) < static_cast<int>(b); }
