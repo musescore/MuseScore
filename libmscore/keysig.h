@@ -67,6 +67,10 @@ class KeySig final : public Element {
       void setShowCourtesy(bool v)        { _showCourtesy = v;    }
       void undoSetShowCourtesy(bool v);
 
+      KeyMode mode() const                { return _sig.mode(); }
+      void setMode(KeyMode v)             { _sig.setMode(v); }
+      void undoSetMode(KeyMode v);
+
       void setHideNaturals(bool hide)     { _hideNaturals = hide; }
 
       QVariant getProperty(Pid propertyId) const;
