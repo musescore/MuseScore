@@ -9268,6 +9268,164 @@
             </widget>
            </item>
            <item>
+            <widget class="QGroupBox" name="formattingGroup">
+             <property name="title">
+              <string>Formatting</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_45">
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelExtensionMag">
+                <property name="text">
+                 <string>Extension scaling:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>extensionMag</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QDoubleSpinBox" name="extensionMag">
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetExtensionMag">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Extension scaling' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLabel" name="labelModifierMag">
+                <property name="text">
+                 <string>Modifier scaling:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>modifierMag</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="QDoubleSpinBox" name="modifierMag">
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="QToolButton" name="resetModifierMag">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Modifier scaling' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="labelExtensionAdjust">
+                <property name="text">
+                 <string>Extension vertical offset:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>extensionAdjust</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QDoubleSpinBox" name="extensionAdjust">
+                <property name="minimum">
+                 <double>-99.99</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QToolButton" name="resetExtensionAdjust">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Extension vertical offset' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QLabel" name="labelModifierAdjust">
+                <property name="text">
+                 <string>Modifier vertical offset:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>modifierAdjust</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="4">
+               <widget class="QDoubleSpinBox" name="modifierAdjust">
+                <property name="minimum">
+                 <double>-99.99</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="5">
+               <widget class="QToolButton" name="resetModifierAdjust">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Modifier vertical offset' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="6">
+               <spacer name="horizontalSpacer_13">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <widget class="QGroupBox" name="groupBox_23">
              <property name="title">
               <string>Note Spelling</string>
@@ -10733,6 +10891,14 @@
   <tabstop>chordDescriptionFile</tabstop>
   <tabstop>chordDescriptionFileButton</tabstop>
   <tabstop>chordsXmlFile</tabstop>
+  <tabstop>extensionMag</tabstop>
+  <tabstop>resetExtensionMag</tabstop>
+  <tabstop>extensionAdjust</tabstop>
+  <tabstop>resetExtensionAdjust</tabstop>
+  <tabstop>modifierMag</tabstop>
+  <tabstop>resetModifierMag</tabstop>
+  <tabstop>modifierAdjust</tabstop>
+  <tabstop>resetModifierAdjust</tabstop>
   <tabstop>useStandardNoteNames</tabstop>
   <tabstop>useGermanNoteNames</tabstop>
   <tabstop>useFullGermanNoteNames</tabstop>
@@ -10781,7 +10947,6 @@
   <tabstop>buttonTogglePagelist</tabstop>
  </tabstops>
  <resources>
-  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

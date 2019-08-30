@@ -395,6 +395,8 @@ enum class Tid {
       STAFF,
       HARMONY_A,
       HARMONY_B,
+      HARMONY_ROMAN,
+      HARMONY_NASHVILLE,
       REHEARSAL_MARK,
       REPEAT_LEFT,       // align to start of measure
       REPEAT_RIGHT,      // align to end of measure
