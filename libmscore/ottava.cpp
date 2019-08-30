@@ -185,7 +185,7 @@ Sid Ottava::getPropertyStyle(Pid pid) const
             Sid::ottava22MBContinueText,
             };
 
-      int idx = int(_ottavaType) * 3 + (_numbersOnly ? 0 : ss.size()/2);
+      size_t idx = size_t(_ottavaType) * 3 + (_numbersOnly ? 0 : ss.size()/2);
       switch (pid) {
             case Pid::OFFSET:
                   return placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
