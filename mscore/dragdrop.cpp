@@ -210,12 +210,18 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
       const QMimeData* dta = event->mimeData();
 
       if (dta->hasFormat(mimeSymbolListFormat) || dta->hasFormat(mimeStaffListFormat)) {
-            event->accept();
+            if (event->possibleActions() & Qt::CopyAction) {
+                  event->setDropAction(Qt::CopyAction);
+                  event->accept();
+                  }
             return;
             }
 
       if (dta->hasFormat(mimeSymbolFormat)) {
-            event->accept();
+            if (event->possibleActions() & Qt::CopyAction) {
+                  event->setDropAction(Qt::CopyAction);
+                  event->accept();
+                  }
 
             QByteArray a = dta->data(mimeSymbolFormat);
 
@@ -334,6 +340,14 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       if (!editData.dropElement || mscore->state() == STATE_PLAY) {  // no editing during play
             event->ignore();
             return;
+            }
+
+      const QMimeData* dta = event->mimeData();
+      if (dta->hasFormat(mimeSymbolFormat)
+         || dta->hasFormat(mimeSymbolListFormat)
+         || dta->hasFormat(mimeStaffListFormat)) {
+            if (event->possibleActions() & Qt::CopyAction)
+                  event->setDropAction(Qt::CopyAction);
             }
 
       // convert window to canvas position

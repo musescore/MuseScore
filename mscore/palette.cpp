@@ -51,11 +51,6 @@
 
 namespace Ms {
 
-PaletteCell::~PaletteCell()
-      {
-      delete element;
-      }
-
 //---------------------------------------------------------
 //   needsStaff
 //    should a staff been drawn if e is used as icon in
@@ -327,7 +322,7 @@ void Palette::setGrid(int hh, int vv)
 Element* Palette::element(int idx)
       {
       if (idx < size() && cellAt(idx))
-            return cellAt(idx)->element;
+            return cellAt(idx)->element.get();
       else
             return 0;
       }
@@ -386,7 +381,7 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
             if (cell && cell->element) {
                   QDrag* drag         = new QDrag(this);
                   QMimeData* mimeData = new QMimeData;
-                  Element* el         = cell->element;
+                  const Element* el   = cell->element.get();
 
                   mimeData->setData(mimeSymbolFormat, el->mimeData(QPointF()));
                   drag->setMimeData(mimeData);
@@ -455,7 +450,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 //   applyPaletteElement
 //---------------------------------------------------------
 
-void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modifiers)
+void Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers)
       {
       Score* score = mscore->currentScore();
       if (score == 0)
@@ -464,9 +459,9 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
       if (sel.isNone())
             return;
 
-      Element* element = 0;
-      if (cell)
-            element = cell->element;
+//       Element* element = 0;
+//       if (cell)
+//             element = cell->element.get();
       if (element == 0)
             return;
       
@@ -787,7 +782,11 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       if (viewer && viewer->editMode() && !(viewer->mscoreState() & STATE_ALLTEXTUAL_EDIT))
             viewer->changeState(ViewState::NORMAL);
 
-      applyPaletteElement(cellAt(i), ev->modifiers());
+      PaletteCell* cell = cellAt(i);
+      if (!cell)
+            return;
+
+      applyPaletteElement(cell->element.get(), ev->modifiers());
       }
 
 //---------------------------------------------------------
@@ -931,7 +930,7 @@ void Palette::applyPaletteElement()
       // apply currently selected palette symbol to selected score elements
       int i = currentIdx;
       if (i < size() && cellAt(i))
-            applyPaletteElement(cellAt(i));
+            applyPaletteElement(cellAt(i)->element.get());
       else
             return;
       }
@@ -983,7 +982,7 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
                   cells.append(0);
             }
       cells[idx]      = cell;
-      cell->element   = s;
+      cell->element.reset(s);
       cell->name      = name;
       cell->tag       = tag;
       cell->drawStaff = needsStaff(s);
@@ -1099,7 +1098,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
             p.setPen(pen);
 
-            Element* el = cc->element;
+            Element* el = cc->element.get();
             if (el == 0)
                   continue;
             bool drawStaff = cc->drawStaff;
@@ -1175,7 +1174,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
       if (!c || !c->element)
             return QPixmap();
       qreal cellMag = c->mag * mag;
-      Element* e = c->element;
+      Element* e = c->element.get();
       e->layout();
       QRectF r = e->bbox();
       int w    = lrint(r.width()  * cellMag);
@@ -1438,7 +1437,7 @@ void Palette::write(const QString& p)
       for (int i = 0; i < n; ++i) {
             if (cells[i] == 0 || cells[i]->element == 0 || cells[i]->element->type() != ElementType::IMAGE)
                   continue;
-            images.insert(static_cast<Image*>(cells[i]->element)->storeItem());
+            images.insert(static_cast<Image*>(cells[i]->element.get())->storeItem());
             }
 
       QString path(p);
@@ -1536,7 +1535,7 @@ void Palette::read(XmlReader& e)
                         else if (t1 == "tag")
                               cell->tag = e.readElementText();
                         else {
-                              cell->element = Element::name2Element(t1, gscore);
+                              cell->element.reset(Element::name2Element(t1, gscore));
                               if (cell->element == 0) {
                                     e.unknown();
                                     delete cell;
@@ -1546,7 +1545,7 @@ void Palette::read(XmlReader& e)
                                     cell->element->read(e);
                                     cell->element->styleChanged();
                                     if (cell->element->type() == ElementType::ICON) {
-                                          Icon* icon = static_cast<Icon*>(cell->element);
+                                          Icon* icon = static_cast<Icon*>(cell->element.get());
                                           QAction* ac = getAction(icon->action());
                                           if (ac) {
                                                 QIcon qicon(ac->icon());
@@ -1635,9 +1634,9 @@ void Palette::actionToggled(bool /*val*/)
       selectedIdx = -1;
       int nn = ccp()->size();
       for (int n = 0; n < nn; ++n) {
-            Element* e = cellAt(n)->element;
+            const Element* e = cellAt(n)->element.get();
             if (e && e->type() == ElementType::ICON) {
-                  QAction* a = getAction(static_cast<Icon*>(e)->action());
+                  QAction* a = getAction(static_cast<const Icon*>(e)->action());
                   if (a->isChecked()) {
                         selectedIdx = n;
                         break;

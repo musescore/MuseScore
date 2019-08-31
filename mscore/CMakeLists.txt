@@ -52,6 +52,7 @@ if (SCRIPT_INTERFACE)
       set (SCRIPT_FILES
             plugin/pluginCreator.h plugin/pluginManager.h plugin/qmledit.h
             plugin/qmlplugin.h plugin/qmlpluginengine.h
+            plugin/qmliconview.h
             plugin/api/qmlpluginapi.h plugin/api/cursor.h plugin/api/scoreelement.h plugin/api/elements.h
             plugin/api/part.h
             plugin/api/score.h
@@ -65,6 +66,7 @@ if (SCRIPT_INTERFACE)
             plugin/api/enums.cpp
             plugin/mscorePlugins.cpp plugin/pluginCreator.cpp plugin/pluginManager.cpp plugin/qmledit.cpp
             plugin/qmlplugin.cpp plugin/qmlpluginengine.cpp
+            plugin/qmliconview.cpp
             plugin/api/qmlpluginapi.cpp plugin/api/cursor.cpp plugin/api/scoreelement.cpp plugin/api/elements.cpp
             plugin/api/score.cpp
             plugin/api/excerpt.cpp
@@ -206,9 +208,13 @@ QT5_WRAP_UI (ui_headers
       )
 
 if (APPLE)
-      QT5_ADD_RESOURCES (qrc_files musescore.qrc musescorefonts-Mac.qrc shortcut-Mac.qrc)
+      QT5_ADD_RESOURCES (qrc_files musescore.qrc
+            qml.qrc # TODO: replace with qtquick_compiler_add_resources on Qt >= 5.11
+            musescorefonts-Mac.qrc shortcut-Mac.qrc
+            )
 else (APPLE)
       QT5_ADD_RESOURCES (qrc_files musescore.qrc
+            qml.qrc # TODO: replace with qtquick_compiler_add_resources on Qt >= 5.11
             musescorefonts-MScore.qrc
             musescorefonts-Gootville.qrc
             musescorefonts-Bravura.qrc
@@ -384,6 +390,7 @@ add_executable ( ${ExecutableName}
       selinstrument.cpp editstafftype.cpp texttools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
       workspace.cpp workspacedialog.cpp chordview.cpp
+      workspacecombobox.cpp
       albummanager.cpp
       stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
@@ -466,6 +473,8 @@ add_executable ( ${ExecutableName}
       importmidi/importmidi_voice.cpp importmidi/importmidi_view.cpp importmidi/importmidi_key.cpp
       importmidi/importmidi_tempo.cpp importmidi/importmidi_instrument.cpp
       importmidi/importmidi_chordname.cpp
+      palette/palettedialogs.cpp
+      palette/palettemodel.cpp palette/palettetree.cpp palette/paletteworkspace.cpp palette/palettewidget.cpp
       scorecmp/scorecmp.cpp scorecmp/scorediffmodel.cpp scorecmp/scorelistmodel.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
@@ -480,6 +489,7 @@ add_executable ( ${ExecutableName}
       extension.cpp extension.h
       tourhandler.cpp
       script/script.cpp script/scriptentry.cpp script/testscript.cpp script/recorderwidget.cpp
+      qmldockwidget.cpp
 
       ${WIDGETS_SOURCE_FILES}
       ${COCOABRIDGE}
