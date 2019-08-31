@@ -88,6 +88,7 @@ class TDockWidget;
 class Sym;
 class MasterPalette;
 class PluginCreator;
+class MsQmlEngine;
 #ifdef SCRIPT_INTERFACE
 class PluginManager;
 class QmlPluginEngine;
@@ -297,6 +298,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PluginManager* pluginManager         { 0 };
       QmlPluginEngine* _qmlEngine          { 0 };
 #endif
+      MsQmlEngine* _qmlUiEngine            { 0 };
       SelectionWindow* selectionWindow     { 0 };
 
       QMenu* menuFile;
@@ -661,6 +663,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PluginManager* getPluginManager() const     { return pluginManager; }
       QmlPluginEngine* getPluginEngine();
 #endif
+      MsQmlEngine* getQmlUiEngine();
       void writeSessionFile(bool);
       bool restoreSession(bool);
       bool splitScreen() const { return _splitScreen; }

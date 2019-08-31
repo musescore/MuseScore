@@ -17,20 +17,18 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __QMLPLUGINENGINE_H__
-#define __QMLPLUGINENGINE_H__
-
-#include "../qml/msqmlengine.h"
+#ifndef __MSQMLENGINE_H__
+#define __MSQMLENGINE_H__
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   QmlPluginEngine
+//   MsQmlEngine
 //---------------------------------------------------------
 
-class QmlPluginEngine : public MsQmlEngine {
+class MsQmlEngine : public QQmlEngine {
    public:
-      QmlPluginEngine(QObject* parent = nullptr);
+      MsQmlEngine(QObject* parent = nullptr);
       };
 
 } // namespace Ms

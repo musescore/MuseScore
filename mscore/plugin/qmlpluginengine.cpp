@@ -18,33 +18,17 @@
 //=============================================================================
 
 #include "qmlpluginengine.h"
-#include "api/cursor.h"
 #include "api/qmlpluginapi.h"
 
 namespace Ms {
-
-extern QString mscoreGlobalShare;
 
 //---------------------------------------------------------
 //   QmlPluginEngine
 //---------------------------------------------------------
 
 QmlPluginEngine::QmlPluginEngine(QObject* parent)
-   : QQmlEngine(parent)
+   : MsQmlEngine(parent)
       {
-#ifdef Q_OS_WIN
-      QStringList importPaths;
-      QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-      importPaths.append(dir.absolutePath());
-      setImportPathList(importPaths);
-#endif
-#ifdef Q_OS_MAC
-      QStringList importPaths;
-      QDir dir(mscoreGlobalShare + QString("/qml"));
-      importPaths.append(dir.absolutePath());
-      setImportPathList(importPaths);
-#endif
-
       PluginAPI::PluginAPI::registerQmlTypes();
       }
 }
