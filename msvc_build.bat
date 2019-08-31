@@ -35,25 +35,26 @@ SET BUILD_FOR_WINSTORE=OFF
 SET "BUILD_FOLDER=msvc.build"
 SET "INSTALL_FOLDER=msvc.install"
 
-IF NOT "%2"=="" (
-   IF "%2"=="32" (
-       SET "ARCH=x86"
-       SET GENERATOR_NAME="Visual Studio 15 2017"
-       SET BUILD_64=OFF
-       )
-   IF "%2"=="64" (
-       SET "ARCH=x64"
-       SET GENERATOR_NAME="Visual Studio 15 2017 Win64"
-       SET BUILD_64=ON
-       ) ELSE (
-           echo Invalid second argument
-           GOTO :END
-       )
-   ) ELSE (
-       SET "ARCH=x64"
-       SET GENERATOR_NAME="Visual Studio 15 2017 Win64"
-       SET BUILD_64=ON
-   )
+IF "%2"=="32" (
+    SET "ARCH=x86"
+    SET GENERATOR_NAME="Visual Studio 15 2017"
+    SET BUILD_64=OFF
+) ELSE (
+    IF NOT "%2"=="" (
+        IF NOT "%2"=="64" (
+            echo Invalid second argument
+            GOTO :END
+        ) ELSE (
+            SET "ARCH=x64"
+            SET GENERATOR_NAME="Visual Studio 15 2017 Win64"
+            SET BUILD_64=ON
+        )
+    ) ELSE (
+        SET "ARCH=x64"
+        SET GENERATOR_NAME="Visual Studio 15 2017 Win64"
+        SET BUILD_64=ON
+    )
+)    
 
 IF NOT "%3"=="" (
    SET BUILD_NUMBER="%3"
