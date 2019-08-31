@@ -1795,8 +1795,8 @@ Element* Note::drop(EditData& data)
                   n->setParent(ch);
                   score()->undoRemoveElement(this);
                   score()->undoAddElement(n);
+                  return n;
                   }
-                  break;
 
             case ElementType::GLISSANDO:
                   {
@@ -1827,6 +1827,7 @@ Element* Note::drop(EditData& data)
                               }
                         gliss->setParent(this);
                         score()->undoAddElement(e);
+                        return e;
                         }
                   else {
                         qDebug("no segment for second note of glissando found");
