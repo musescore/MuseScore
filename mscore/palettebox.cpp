@@ -16,6 +16,7 @@
 #include "preferences.h"
 #include "libmscore/xml.h"
 #include "workspace.h"
+#include "workspacecombobox.h"
 
 namespace Ms {
 
@@ -43,10 +44,11 @@ PaletteBox::PaletteBox(QWidget* parent)
       QHBoxLayout* hl = new QHBoxLayout;
       hl->setContentsMargins(5,0,5,0);
 
-      workspaceList = new QComboBox;
+      workspaceList = new WorkspaceComboBox(mscore);
       workspaceList->setObjectName("workspace-list");
       hl->addWidget(workspaceList);
       addWorkspaceButton = new QToolButton;
+      addWorkspaceButton->setDefaultAction(getAction("create-new-workspace"));
 
       addWorkspaceButton->setMinimumHeight(24);
       hl->addWidget(addWorkspaceButton);
@@ -84,8 +86,6 @@ PaletteBox::PaletteBox(QWidget* parent)
       vbox->addStretch();
       paletteList->show();
 
-      connect(addWorkspaceButton, SIGNAL(clicked()), SLOT(newWorkspaceClicked()));
-      connect(workspaceList, SIGNAL(activated(int)), SLOT(workspaceSelected(int)));
       retranslate();
       }
 
@@ -97,10 +97,7 @@ void PaletteBox::retranslate()
       {
       setWindowTitle(tr("Palettes"));
       singlePaletteAction->setText(tr("Single Palette"));
-      workspaceList->setToolTip(tr("Select workspace"));
-      addWorkspaceButton->setText("+");
-      addWorkspaceButton->setToolTip(tr("Add new workspace"));
-      updateWorkspaces();
+      workspaceList->retranslate();
       }
 
 //---------------------------------------------------------
@@ -124,52 +121,6 @@ void PaletteBox::filterPalettes(const QString& text)
             else
                  b->showPalette(false);
             }
-      }
-
-//---------------------------------------------------------
-//   workspaceSelected
-//---------------------------------------------------------
-
-void PaletteBox::workspaceSelected(int idx)
-      {
-      Workspace* w = Workspace::workspaces().at(idx);
-      preferences.setPreference(PREF_APP_WORKSPACE, w->name());
-      mscore->changeWorkspace(w);
-      }
-
-//---------------------------------------------------------
-//   newWorkspaceClicked
-//---------------------------------------------------------
-
-void PaletteBox::newWorkspaceClicked()
-      {
-      mscore->createNewWorkspace();
-      updateWorkspaces();
-      }
-
-//---------------------------------------------------------
-//   updateWorkspaces
-//---------------------------------------------------------
-
-void PaletteBox::updateWorkspaces()
-      {
-      workspaceList->clear();
-      const QList<Workspace*> pl = Workspace::workspaces();
-      int idx = 0;
-      int curIdx = -1;
-      for (Workspace* p : pl) {
-            workspaceList->addItem(qApp->translate("Ms::Workspace", p->name().toUtf8()), p->path());
-            if (p->name() == preferences.getString(PREF_APP_WORKSPACE))
-                  curIdx = idx;
-            ++idx;
-            }
-      
-      //select first workspace in the list if the stored workspace vanished
-      Q_ASSERT(!pl.isEmpty());
-      if (curIdx == -1)
-            curIdx = 0;
-      
-      workspaceList->setCurrentIndex(curIdx);
       }
 
 //---------------------------------------------------------
@@ -201,7 +152,6 @@ void PaletteBox::selectWorkspace(int idx)
             }
       
       workspaceList->setCurrentIndex(idx);
-      workspaceSelected(idx);
       }
 
 //---------------------------------------------------------
@@ -496,7 +446,8 @@ void PaletteBox::mousePressEvent(QMouseEvent* ev, Palette* p1)
 
 void PaletteBox::navigation(QKeyEvent *event)
       {
-      if (!palettes().first()->isFilterActive())
+      const QList<Palette*> palettesList = palettes();
+      if (palettesList.empty() || !palettesList.first()->isFilterActive())
             return;
       if (event->key() == Qt::Key_Down) {
             for (Palette* p : palettes()) {

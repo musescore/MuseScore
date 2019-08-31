@@ -170,6 +170,7 @@ void Cursor::add(Element* wrapped)
       if (!_segment || !s)
             return;
 
+      // TODO: check that the previous ownership was PLUGIN
       wrapped->setOwnership(Ownership::SCORE);
       s->setTrack(_track);
       s->setParent(_segment);

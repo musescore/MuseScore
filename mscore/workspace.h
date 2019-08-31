@@ -113,6 +113,8 @@ class Workspace : public QObject {
       static void writeGlobalGUIState();
 
       static void retranslate(QList<Workspace*>* workspacesList = 0);
+
+      static bool useModelViewPalettes;
       };
 
 }

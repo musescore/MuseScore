@@ -27,13 +27,18 @@
 #include "preferences.h"
 #include "palette.h"
 #include "palettebox.h"
+#include "palette/paletteworkspace.h"
 #include "extension.h"
+
 
 namespace Ms {
 
 bool Workspace::workspacesRead = false;
 //std::unordered_map<std::string, QVariant> Workspace::localPreferences {};
 Workspace* Workspace::currentWorkspace = nullptr;
+
+// DEBUG
+bool Workspace::useModelViewPalettes = true;
 
 QList<Workspace*> Workspace::_workspaces {};
 
@@ -95,7 +100,8 @@ void MuseScore::showWorkspaceMenu()
       menuWorkspaces->addAction(a);
 
       a = new QAction(tr("Undo Changes"), this);
-      a->setDisabled(Workspace::currentWorkspace->readOnly());
+      if (!Workspace::useModelViewPalettes) // new palettes accept changes by default
+            a->setDisabled(Workspace::currentWorkspace->readOnly());
       connect(a, SIGNAL(triggered()), SLOT(undoWorkspace()));
       menuWorkspaces->addAction(a);
       }
@@ -138,10 +144,7 @@ void MuseScore::deleteWorkspace()
       PaletteBox* pb = mscore->getPaletteBox();
       pb->clear();
       Workspace::currentWorkspace = Workspace::workspaces().first();
-      preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
       changeWorkspace(Workspace::currentWorkspace);
-      pb = mscore->getPaletteBox();
-      pb->updateWorkspaces();
       updateIcons();
       }
 
@@ -151,17 +154,22 @@ void MuseScore::deleteWorkspace()
 
 void MuseScore::changeWorkspace(QAction* a)
       {
+      changeWorkspace(a->text());
+      }
+
+//---------------------------------------------------------
+//   changeWorkspace
+//---------------------------------------------------------
+
+void MuseScore::changeWorkspace(const QString& name)
+      {
       for (Workspace* p :Workspace::workspaces()) {
-            if (qApp->translate("Ms::Workspace", p->name().toUtf8()) == a->text()) {
+            if (qApp->translate("Ms::Workspace", p->name().toUtf8()) == name) {
                   changeWorkspace(p);
-                  preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
-                  PaletteBox* pb = mscore->getPaletteBox();
-                  pb->updateWorkspaces();
-                  updateIcons();
                   return;
                   }
             }
-      qDebug("   workspace \"%s\" not found", qPrintable(a->text()));
+      qDebug("   workspace \"%s\" not found", qPrintable(name));
       }
 
 //---------------------------------------------------------
@@ -179,6 +187,9 @@ void MuseScore::changeWorkspace(Workspace* p, bool first)
             updateIcons();
             preferencesChanged(true);
             }
+
+      preferences.setPreference(PREF_APP_WORKSPACE, p->name());
+      emit mscore->workspacesChanged();
       }
 
 //---------------------------------------------------------
@@ -303,8 +314,14 @@ void Workspace::write()
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       xml.stag("Workspace");
       // xml.tag("name", _name);
-      PaletteBox* pb = mscore->getPaletteBox();
-      pb->write(xml);
+      if (useModelViewPalettes) {
+            const PaletteWorkspace* w = mscore->getPaletteWorkspace();
+            w->write(xml);
+            }
+      else {
+            PaletteBox* pb = mscore->getPaletteBox();
+            pb->write(xml);
+            }
 
       // write toolbar settings
       if (saveToolbars) {
@@ -607,13 +624,19 @@ void Workspace::read(XmlReader& e)
             if (tag == "name")
                   e.readElementText();
             else if (tag == "PaletteBox") {
-                  PaletteBox* paletteBox = mscore->getPaletteBox();
-                  paletteBox->clear();
-                  paletteBox->read(e);
-                  QList<Palette*> pl = paletteBox->palettes();
-                  foreach (Palette* p, pl) {
-                        p->setSystemPalette(_readOnly);
-                        connect(paletteBox, SIGNAL(changed()), SLOT(setDirty()));
+                  if (useModelViewPalettes) {
+                        PaletteWorkspace* w = mscore->getPaletteWorkspace();
+                        w->read(e);
+                        }
+                  else {
+                        PaletteBox* paletteBox = mscore->getPaletteBox();
+                        paletteBox->clear();
+                        paletteBox->read(e);
+                        QList<Palette*> pl = paletteBox->palettes();
+                        foreach (Palette* p, pl) {
+                              p->setSystemPalette(_readOnly);
+                              connect(paletteBox, SIGNAL(changed()), SLOT(setDirty()));
+                              }
                         }
                   }
             else if (tag == "Toolbar") {
@@ -953,11 +976,27 @@ void Workspace::save()
       if (!saveToolbars)
             writeGlobalToolBar();
 
-      if (_readOnly)
-            return;
-      PaletteBox* pb = mscore->getPaletteBox();
-      if (pb)
+      if (useModelViewPalettes) {
+            if (_readOnly) {
+                  PaletteWorkspace* pw = mscore->getPaletteWorkspace();
+                  if (pw->paletteChanged()) {
+                        const QString customizedWorkspaceName(name() + "__edited"); // TODO: ?
+                        Workspace::currentWorkspace = createNewWorkspace(customizedWorkspaceName);
+                        mscore->changeWorkspace(customizedWorkspaceName); // HACK: just to get that name reflected in preferences...
+                        }
+                  return;
+                  }
             write();
+            }
+      else {
+            if (_readOnly)
+                  return;
+
+            PaletteBox* pb = mscore->getPaletteBox();
+            if (pb)
+                  write();
+            }
+
       }
 
 //---------------------------------------------------------
