@@ -109,15 +109,6 @@
         单击“下一个”来了解更多。</translation>
     </message>
     <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation>键盘上的导航键，如 PgUp、PgDn、Home 和 End 可起到移动页面的作用
-    （正如在其他应用程序中的作用一样）。
-    缺少这些键位的键盘通常可用 Fn + 上/下/左/右键来实现同等功能。</translation>
-    </message>
-    <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
         <translation>额外的导航工具（包括时间轴及导航器）可以在顶部“视图”菜单中找到。</translation>
@@ -215,38 +206,6 @@
     单击“下一个”来了解更多。</translation>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation>要单选，单击您要选择的元素即可。
-        选中的元素会高亮显示以表明其被选中。
-        你可以使用左/右箭头来（在音符及休止符间）移动所选元素。
-        小技巧：如果在按箭头时一并按下 Alt 键（macOS 对应 Option 键），则所选元素也可在其他元素之中移动，还能够在谱表与谱表间上下移动。</translation>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation>框选囊括了同一时间点到点选中的一切。
-    框选由一个蓝色矩形框来提示，框内即为选距。
-    要进行框选，单击您想要选中部分的第一个音符、休止符或小节，然后在最后一个要选中的元素上单击并按下 Shift。
-    您也可在按下 Shift 的同时使用键盘上的箭头来进行框选。</translation>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation>另一种框选方法是：按住 Shift 键的同时进行拖拽。
-        若您的选择囊括了音符，系统就会自动将其生成一个选区。
-        否则，它将被视为列选。</translation>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>最后，过滤器（可以在顶部菜单栏的“视图”中找到）让您可以通过给定的类型排除选区中的元素。</translation>
@@ -266,6 +225,15 @@
         <comment>navigate-tour</comment>
         <translation>要快捷地滚动乐谱，请使用鼠标滚轮或对应的触控手势（例如：双指滑动）。
         要横向地滚动，请在鼠标滚轮滚动或使用触控手势的同时按住 Shift。</translation>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
+        <comment>navigate-tour</comment>
+        <translation>键盘上的导航键，如 PgUp、PgDn、Home 和 End 可起到移动页面的作用
+    （正如在其他应用程序中的作用一样）。
+    缺少这些键位的键盘通常可用 Fn + 上/下/左/右键来实现同等功能。</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
@@ -299,6 +267,18 @@
         <translation>要创建一个三连音或其他连音，请先选取连音的总时值，然后按下 Ctrl + 数字。也可使用顶部菜单栏里的“添加”&gt;“连音符”。</translation>
     </message>
     <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation>要单选，单击您要选择的元素即可。
+        选中的元素会高亮显示以表明其被选中。
+        你可以使用左/右箭头来（在音符及休止符间）移动所选元素。
+        小技巧：如果在按箭头时一并按下 Alt 键（macOS 对应 Option 键），则所选元素也可在其他元素之中移动，还能够在谱表与谱表间上下移动。</translation>
+    </message>
+    <message>
         <source>A list selection is a combination of single selections.
     Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
@@ -310,13 +290,33 @@
     接着选择弹出菜单中的“选择”选项即可。</translation>
     </message>
     <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation>框选囊括了同一时间点到点选中的一切。
+    框选由一个蓝色矩形框来提示，框内即为选距。
+    要进行框选，单击您想要选中部分的第一个音符、休止符或小节，然后在最后一个要选中的元素上单击并按下 Shift。
+    您也可在按下 Shift 的同时使用键盘上的箭头来进行框选。</translation>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation>另一种框选方法是：按住 Shift 键的同时进行拖拽。
+        若您的选择囊括了音符，系统就会自动将其生成一个选区。
+        否则，它将被视为列选。</translation>
+    </message>
+    <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
         <translation>大多数在线性符号面板中的元素会从一个起始元素延伸到终端元素。
 
