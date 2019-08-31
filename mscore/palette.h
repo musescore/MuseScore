@@ -20,6 +20,7 @@
 #ifndef __PALETTE_H__
 #define __PALETTE_H__
 
+#include "palette/palettetree.h"
 #include "ui_palette.h"
 #include "ui_cellproperties.h"
 #include "libmscore/sym.h"
@@ -31,26 +32,6 @@ class Sym;
 class XmlWriter;
 class XmlReader;
 class Palette;
-
-//---------------------------------------------------------
-//   PaletteCell
-//---------------------------------------------------------
-
-struct PaletteCell {
-      ~PaletteCell();
-
-      Element* element { 0 };
-      QString name;           // used for tool tip
-      QString tag;
-
-      bool drawStaff { false };
-      double x       { 0.0   };
-      double y       { 0.0   };
-      double xoffset { 0.0   };
-      double yoffset { 0.0   };      // in spatium units of "gscore"
-      qreal mag      { 1.0   };
-      bool readOnly  { false };
-      };
 
 //---------------------------------------------------------
 //   PaletteProperties
@@ -136,7 +117,6 @@ class Palette : public QWidget {
       virtual void leaveEvent(QEvent*) override;
       virtual bool event(QEvent*) override;
       virtual void resizeEvent(QResizeEvent*) override;
-      void applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modifiers = 0);
 
       virtual void dragEnterEvent(QDragEnterEvent*) override;
       virtual void dragMoveEvent(QDragMoveEvent*) override;
@@ -165,6 +145,7 @@ class Palette : public QWidget {
       void nextPaletteElement();
       void prevPaletteElement();
       void applyPaletteElement();
+      static void applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers = 0);
       PaletteCell* append(Element*, const QString& name, QString tag = QString(),
          qreal mag = 1.0);
       PaletteCell* add(int idx, Element*, const QString& name,

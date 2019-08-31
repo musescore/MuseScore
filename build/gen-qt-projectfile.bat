@@ -17,4 +17,6 @@ for /r %1 %%a in (*.cpp) do echo     %%a \
 echo.
 echo.
 
+echo RESOURCES = ./mscore/qml.qrc
+
 cd /d %OLD_DIR%

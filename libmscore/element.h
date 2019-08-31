@@ -341,6 +341,7 @@ class Element : public ScoreElement {
       void undoSetVisible(bool v);
 
       static ElementType readType(XmlReader& node, QPointF*, Fraction*);
+      static Element* readMimeData(Score* score, const QByteArray& data, QPointF*, Fraction*);
 
       virtual QByteArray mimeData(const QPointF&) const;
 /**

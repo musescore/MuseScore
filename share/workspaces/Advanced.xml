@@ -3,6 +3,7 @@
   <Workspace>
     <PaletteBox>
       <Palette name="Clefs">
+        <type>Clef</type>
         <gridWidth>35</gridWidth>
         <gridHeight>50</gridHeight>
         <mag>0.8</mag>
@@ -178,6 +179,7 @@
           </Cell>
         </Palette>
       <Palette name="Key Signatures">
+        <type>KeySig</type>
         <gridWidth>56</gridWidth>
         <gridHeight>55</gridHeight>
         <mag>1</mag>
@@ -282,6 +284,7 @@
           </Cell>
         </Palette>
       <Palette name="Time Signatures">
+        <type>TimeSig</type>
         <gridWidth>42</gridWidth>
         <gridHeight>38</gridHeight>
         <mag>0.8</mag>
@@ -381,6 +384,7 @@
           </Cell>
         </Palette>
       <Palette name="Brackets">
+        <type>Bracket</type>
         <gridWidth>40</gridWidth>
         <gridHeight>60</gridHeight>
         <mag>0.7</mag>
@@ -404,6 +408,7 @@
           </Cell>
         </Palette>
       <Palette name="Accidentals">
+        <type>Accidental</type>
         <gridWidth>33</gridWidth>
         <gridHeight>36</gridHeight>
         <mag>1</mag>
@@ -463,6 +468,7 @@
           </Cell>
         </Palette>
       <Palette name="Articulations">
+        <type>Articulation</type>
         <gridWidth>42</gridWidth>
         <gridHeight>25</gridHeight>
         <mag>1</mag>
@@ -679,6 +685,7 @@
           </Cell>
         </Palette>
       <Palette name="Ornaments">
+        <type>Ornament</type>
         <gridWidth>42</gridWidth>
         <gridHeight>25</gridHeight>
         <mag>1</mag>
@@ -761,6 +768,7 @@
           </Cell>
         </Palette>
       <Palette name="Breaths &amp;&amp; Pauses">
+        <type>Breath</type>
         <gridWidth>42</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>
@@ -812,6 +820,7 @@
           </Cell>
         </Palette>
       <Palette name="Grace Notes">
+        <type>GraceNote</type>
         <gridWidth>32</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>
@@ -867,6 +876,7 @@
           </Cell>
         </Palette>
       <Palette name="Noteheads">
+        <type>NoteHead</type>
         <gridWidth>33</gridWidth>
         <gridHeight>36</gridHeight>
         <mag>1.3</mag>
@@ -995,6 +1005,7 @@
           </Cell>
         </Palette>
       <Palette name="Lines">
+        <type>Line</type>
         <gridWidth>75</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.8</mag>
@@ -1263,6 +1274,7 @@
           </Cell>
         </Palette>
       <Palette name="Barlines">
+        <type>BarLine</type>
         <gridWidth>42</gridWidth>
         <gridHeight>38</gridHeight>
         <mag>0.8</mag>
@@ -1344,6 +1356,7 @@
           </Cell>
         </Palette>
       <Palette name="Arpeggios &amp;&amp; Glissandi">
+        <type>Arpeggio</type>
         <gridWidth>27</gridWidth>
         <gridHeight>50</gridHeight>
         <mag>1</mag>
@@ -1446,6 +1459,7 @@
           </Cell>
         </Palette>
       <Palette name="Tremolos">
+        <type>Tremolo</type>
         <gridWidth>27</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>
@@ -1498,6 +1512,7 @@
           </Cell>
         </Palette>
       <Palette name="Text">
+        <type>Text</type>
         <gridWidth>84</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.85</mag>
@@ -1586,6 +1601,7 @@
           </Cell>
         </Palette>
       <Palette name="Tempo">
+        <type>Tempo</type>
         <gridWidth>66</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.65</mag>
@@ -1759,6 +1775,7 @@
           </Cell>
         </Palette>
       <Palette name="Dynamics">
+        <type>Dynamic</type>
         <gridWidth>42</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.8</mag>
@@ -1904,6 +1921,7 @@
           </Cell>
         </Palette>
       <Palette name="Fingering">
+        <type>Fingering</type>
         <gridWidth>28</gridWidth>
         <gridHeight>30</gridHeight>
         <mag>1.5</mag>
@@ -2080,6 +2098,7 @@
           </Cell>
         </Palette>
       <Palette name="Repeats &amp;&amp; Jumps">
+        <type>Repeat</type>
         <gridWidth>75</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.65</mag>
@@ -2202,6 +2221,7 @@
           </Cell>
       </Palette>
       <Palette name="Fretboard Diagrams">
+        <type>FretboardDiagram</type>
         <gridWidth>42</gridWidth>
         <gridHeight>45</gridHeight>
         <mag>1</mag>
@@ -3078,6 +3098,7 @@
           </Cell>
         </Palette>
       <Palette name="Breaks &amp;&amp; Spacers">
+        <type>Break</type>
         <gridWidth>42</gridWidth>
         <gridHeight>36</gridHeight>
         <mag>1</mag>
@@ -3124,6 +3145,7 @@
           </Cell>
         </Palette>
       <Palette name="Frames &amp;&amp; Measures">
+        <type>Frame</type>
         <gridWidth>27</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>
@@ -3155,6 +3177,7 @@
           </Cell>
         </Palette>
       <Palette name="Beam Properties">
+        <type>Beam</type>
         <gridWidth>27</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>
