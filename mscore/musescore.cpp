@@ -7940,6 +7940,17 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       }
 
 //---------------------------------------------------------
+//   getQmlEngine
+//---------------------------------------------------------
+
+MsQmlEngine* MuseScore::getQmlUiEngine()
+      {
+      if (!_qmlUiEngine)
+            _qmlUiEngine = new MsQmlEngine(this);
+      return _qmlUiEngine;
+      }
+
+//---------------------------------------------------------
 //   getPluginEngine
 //---------------------------------------------------------
 

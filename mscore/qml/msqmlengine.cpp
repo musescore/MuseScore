@@ -17,21 +17,30 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __QMLPLUGINENGINE_H__
-#define __QMLPLUGINENGINE_H__
-
-#include "../qml/msqmlengine.h"
+#include "msqmlengine.h"
 
 namespace Ms {
 
+extern QString mscoreGlobalShare;
+
 //---------------------------------------------------------
-//   QmlPluginEngine
+//   MsQmlEngine
 //---------------------------------------------------------
 
-class QmlPluginEngine : public MsQmlEngine {
-   public:
-      QmlPluginEngine(QObject* parent = nullptr);
-      };
-
-} // namespace Ms
+MsQmlEngine::MsQmlEngine(QObject* parent)
+   : QQmlEngine(parent)
+      {
+#ifdef Q_OS_WIN
+      QStringList importPaths;
+      QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
+      importPaths.append(dir.absolutePath());
+      setImportPathList(importPaths);
 #endif
+#ifdef Q_OS_MAC
+      QStringList importPaths;
+      QDir dir(mscoreGlobalShare + QString("/qml"));
+      importPaths.append(dir.absolutePath());
+      setImportPathList(importPaths);
+#endif
+      }
+}

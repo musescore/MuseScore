@@ -87,6 +87,7 @@
 
 #include "palette/palettetree.h"
 #include "palette/palettewidget.h"
+#include "qml/msqmlengine.h"
 
 namespace Ms {
 
@@ -1185,7 +1186,7 @@ void MuseScore::showPalette(bool visible)
             preferencesChanged();
             updateIcons();
 
-            paletteWidget = new PaletteWidget(getPaletteWorkspace(), this);
+            paletteWidget = new PaletteWidget(getPaletteWorkspace(), getQmlUiEngine(), this);
             QAction* a = getAction("toggle-palette");
             connect(paletteWidget, &PaletteWidget::visibilityChanged, a, &QAction::setChecked);
             addDockWidget(Qt::LeftDockWidgetArea, paletteWidget);

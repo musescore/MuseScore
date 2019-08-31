@@ -489,6 +489,7 @@ add_executable ( ${ExecutableName}
       extension.cpp extension.h
       tourhandler.cpp
       script/script.cpp script/scriptentry.cpp script/testscript.cpp script/recorderwidget.cpp
+      qml/msqmlengine.cpp
       qmldockwidget.cpp
 
       ${WIDGETS_SOURCE_FILES}
@@ -925,6 +926,7 @@ else (MINGW)
                   "${QT_INSTALL_BINS}/Qt5Core.dll"  "${QT_INSTALL_BINS}/Qt5Gui.dll"  "${QT_INSTALL_BINS}/Qt5Help.dll"
                   "${QT_INSTALL_BINS}/Qt5Network.dll"  "${QT_INSTALL_BINS}/Qt5PrintSupport.dll"
                   "${QT_INSTALL_BINS}/Qt5Qml.dll"  "${QT_INSTALL_BINS}/Qt5Quick.dll"  "${QT_INSTALL_BINS}/Qt5Sql.dll"
+                  "${QT_INSTALL_BINS}/Qt5QuickControls2.dll" "${QT_INSTALL_BINS}/Qt5QuickTemplates2.dll"
                   "${QT_INSTALL_BINS}/Qt5Svg.dll"  "${QT_INSTALL_BINS}/Qt5Widgets.dll"  "${QT_INSTALL_BINS}/Qt5Xml.dll"
                   "${QT_INSTALL_BINS}/Qt5XmlPatterns.dll"
                   "${QT_INSTALL_BINS}/Qt5WebChannel.dll"
