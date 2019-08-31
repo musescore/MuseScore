@@ -15,7 +15,7 @@ branches:
 cache:
   - dependencies.7z
   - qt-5.12.3-msvc_64.7z # if not using AppVeyor's built-in Qt in before_build.bat
-  - qt-5.12.3-msvc.7z # if not using AppVeyor's built-in Qt in before_build.bat
+  - qt-5.12.3-msvc_32.7z # if not using AppVeyor's built-in Qt in before_build.bat
   - C:\Program Files (x86)\Jack
   - C:\MuseScore\build.release\thirdparty
   - C:\ccache
