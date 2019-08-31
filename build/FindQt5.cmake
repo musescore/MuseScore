@@ -6,6 +6,8 @@ set(_components
     Test
     Qml
     Quick
+    QuickControls2
+    QuickTemplates2
     QuickWidgets
     Xml
     XmlPatterns
