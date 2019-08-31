@@ -986,13 +986,13 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                               deselect(target);
 
                               // perform the drop
-                              target->drop(ddata);
+                              Element* pastedElement = target->drop(ddata);
 
                               // if the target is a rest rather than a note,
                               // a new note is generated, and nel becomes invalid as well
                               // (ChordRest::drop() will select it for us)
-                              if (targetType == ElementType::NOTE)
-                                    select(nel);
+                              if (pastedElement && targetType == ElementType::NOTE)
+                                    select(pastedElement);
                               }
                         else {
                               target->drop(ddata);
