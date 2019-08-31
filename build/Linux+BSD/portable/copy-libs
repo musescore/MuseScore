@@ -78,6 +78,8 @@ getCrossPlatformDependencies() {
   copyLib libQt5PrintSupport.so.5
   copyLib libQt5Qml.so.5
   copyLib libQt5Quick.so.5
+  copyLib libQt5QuickControls2.so.5
+  copyLib libQt5QuickTemplates2.so.5
   copyLib libQt5Sensors.so.5
   copyLib libQt5Sql.so.5
   copyLib libQt5Svg.so.5
