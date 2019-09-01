@@ -115,9 +115,9 @@ class PaletteWorkspace : public QObject {
       PaletteTreeModel* userPalette;
       PaletteTreeModel* masterPalette;
 
-      QAbstractItemModel* mainPalette;                ///< visible userPalette entries
+      QAbstractItemModel* mainPalette = nullptr;            ///< visible userPalette entries
 //       PaletteTreeModel* poolPalette;               ///< masterPalette entries not yet added to mainPalette
-      FilterPaletteTreeModel* customPoolPalette;      ///< invisible userPalette entries that do not belong to masterPalette
+      FilterPaletteTreeModel* customPoolPalette = nullptr;  ///< invisible userPalette entries that do not belong to masterPalette
 
       UserPaletteController* mainPaletteController = nullptr;
 //       PaletteController* masterPaletteController;
