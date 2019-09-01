@@ -747,13 +747,17 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
                   else if (idx >= p->size())
                         idx = 0;
                   p->setSelected(idx);
+
+                  // TODO: make this work more reliably
                   // set widget name to name of selected element
-                  // we could set the description, but some screen readers ignore it
+                  // we set the description too, but some screen readers ignore it
                   QString name = qApp->translate("Palette", p->cellAt(idx)->name.toUtf8());
                   ScoreAccessibility::makeReadable(name);
                   setAccessibleName(name);
+                  setAccessibleDescription(name);
                   QAccessibleEvent aev(this, QAccessible::NameChanged);
                   QAccessible::updateAccessibility(&aev);
+
                   p->update();
                   break;
                   }
@@ -879,25 +883,6 @@ void Palette::leaveEvent(QEvent*)
                   currentIdx = -1;
             update(r);
             }
-      }
-
-//---------------------------------------------------------
-//   setCurrentIdx
-//---------------------------------------------------------
-
-void Palette::setCurrentIdx(int i)
-      {
-      currentIdx = i;
-      if (i < 0)
-            return;
-
-      // screenreader support
-      QString name = qApp->translate("Palette", cellAt(i)->name.toUtf8());
-      ScoreAccessibility::makeReadable(name);
-      QWidget* sb = mscore->getPaletteBox()->searchBox();
-      sb->setAccessibleDescription(name);
-      QAccessibleEvent ev(sb, QAccessible::DescriptionChanged);
-      QAccessible::updateAccessibility(&ev);
       }
 
 //---------------------------------------------------------

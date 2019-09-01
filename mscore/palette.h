@@ -192,7 +192,7 @@ class Palette : public QWidget {
       void setShowContextMenu(bool val) { _showContextMenu = val; }
 
       int getCurrentIdx() { return currentIdx; }
-      void setCurrentIdx(int i);
+      void setCurrentIdx(int i) { currentIdx = i; }
       bool isFilterActive() { return filterActive == true; }
       QList<PaletteCell*> getDragCells() { return dragCells; }
       virtual int heightForWidth(int) const;

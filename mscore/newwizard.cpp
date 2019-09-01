@@ -392,12 +392,14 @@ NewWizardKeysigPage::NewWizardKeysigPage(QWidget* parent)
       sp->setSelected(keysigCMajorIdx);
       PaletteScrollArea* sa = new PaletteScrollArea(sp);
       // set widget name to include name of selected element
-      // we could set the description, but some screen readers ignore it
+      // we set the description too, but some screen readers ignore it
       QString name = tr("Key Signature: %1").arg(qApp->translate("Palette", sp->cellAt(keysigCMajorIdx)->name.toUtf8()));
       ScoreAccessibility::makeReadable(name);
       sa->setAccessibleName(name);
-      QAccessibleEvent event(sa, QAccessible::NameChanged);
-      QAccessible::updateAccessibility(&event);
+      sa->setAccessibleDescription(name);
+      // TODO: evaluate
+      //QAccessibleEvent event(sa, QAccessible::NameChanged);
+      //QAccessible::updateAccessibility(&event);
       QVBoxLayout* l1 = new QVBoxLayout;
       l1->addWidget(sa);
       b1->setLayout(l1);

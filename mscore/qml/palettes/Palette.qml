@@ -275,7 +275,9 @@ GridView {
 //                             ToolTip.timeout: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: model.toolTip
 
-            text: model.toolTip
+            text: model.accessibleText
+            Accessible.name: model.accessibleText
+            Accessible.description: model.accessibleDescription
 
             onClicked: {
                 forceActiveFocus();
