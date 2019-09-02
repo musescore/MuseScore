@@ -145,7 +145,7 @@ Palette* MuseScore::newBeamPalette()
 Palette* MuseScore::newFramePalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Frames && Measures"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Frames & Measures"));
       sp->setGrid(27, 40);
       sp->setDrawGrid(true);
 
@@ -355,7 +355,7 @@ Palette* MuseScore::newBarLinePalette()
 Palette* MuseScore::newRepeatsPalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Repeats && Jumps"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Repeats & Jumps"));
       sp->setMag(0.65);
       sp->setGrid(75, 28);
       sp->setDrawGrid(true);
@@ -409,7 +409,7 @@ Palette* MuseScore::newBreaksPalette()
       {
       qreal _spatium = gscore->spatium();
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaks && Spacers"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaks & Spacers"));
       sp->setMag(1.0);
       sp->setGrid(42, 36);
       sp->setDrawGrid(true);
@@ -798,7 +798,7 @@ Palette* MuseScore::newBracketsPalette()
 Palette* MuseScore::newBreathPalette()
       {
       Palette* sp = new Palette();
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaths && Pauses"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaths & Pauses"));
       sp->setGrid(42, 40);
       sp->setDrawGrid(true);
       sp->setDrawGrid(true);
@@ -819,7 +819,7 @@ Palette* MuseScore::newBreathPalette()
 Palette* MuseScore::newArpeggioPalette()
       {
       Palette* sp = new Palette();
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Arpeggios && Glissandi"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Arpeggios & Glissandi"));
       sp->setGrid(27, 50);
       sp->setDrawGrid(true);
 
@@ -1574,7 +1574,7 @@ PalettePanel* MuseScore::newBeamPalettePanel()
 PalettePanel* MuseScore::newFramePalettePanel()
       {
       PalettePanel* sp = new PalettePanel(PalettePanel::Type::Frame);
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Frames && Measures"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Frames & Measures"));
       sp->setGrid(27, 40);
       sp->setDrawGrid(true);
 
@@ -1784,7 +1784,7 @@ PalettePanel* MuseScore::newBarLinePalettePanel()
 PalettePanel* MuseScore::newRepeatsPalettePanel()
       {
       PalettePanel* sp = new PalettePanel(PalettePanel::Type::Repeat);
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Repeats && Jumps"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Repeats & Jumps"));
       sp->setMag(0.65);
       sp->setGrid(75, 28);
       sp->setDrawGrid(true);
@@ -1838,7 +1838,7 @@ PalettePanel* MuseScore::newBreaksPalettePanel()
       {
       qreal _spatium = gscore->spatium();
       PalettePanel* sp = new PalettePanel(PalettePanel::Type::Break);
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaks && Spacers"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaks & Spacers"));
       sp->setMag(1.0);
       sp->setGrid(42, 36);
       sp->setDrawGrid(true);
@@ -2227,7 +2227,7 @@ PalettePanel* MuseScore::newBracketsPalettePanel()
 PalettePanel* MuseScore::newBreathPalettePanel()
       {
       PalettePanel* sp = new PalettePanel(PalettePanel::Type::Breath);
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaths && Pauses"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaths & Pauses"));
       sp->setGrid(42, 40);
       sp->setDrawGrid(true);
       sp->setDrawGrid(true);
@@ -2248,7 +2248,7 @@ PalettePanel* MuseScore::newBreathPalettePanel()
 PalettePanel* MuseScore::newArpeggioPalettePanel()
       {
       PalettePanel* sp = new PalettePanel(PalettePanel::Type::Arpeggio);
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Arpeggios && Glissandi"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Arpeggios & Glissandi"));
       sp->setGrid(27, 50);
       sp->setDrawGrid(true);
 
