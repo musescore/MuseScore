@@ -767,7 +767,7 @@
             </Articulation>
           </Cell>
         </Palette>
-      <Palette name="Breaths &amp;&amp; Pauses">
+      <Palette name="Breaths &amp; Pauses">
         <type>Breath</type>
         <gridWidth>42</gridWidth>
         <gridHeight>40</gridHeight>
@@ -1355,7 +1355,7 @@
             </BarLine>
           </Cell>
         </Palette>
-      <Palette name="Arpeggios &amp;&amp; Glissandi">
+      <Palette name="Arpeggios &amp; Glissandi">
         <type>Arpeggio</type>
         <gridWidth>27</gridWidth>
         <gridHeight>50</gridHeight>
@@ -2097,7 +2097,7 @@
             </Articulation>
           </Cell>
         </Palette>
-      <Palette name="Repeats &amp;&amp; Jumps">
+      <Palette name="Repeats &amp; Jumps">
         <type>Repeat</type>
         <gridWidth>75</gridWidth>
         <gridHeight>28</gridHeight>
@@ -3097,7 +3097,7 @@
             </FretDiagram>
           </Cell>
         </Palette>
-      <Palette name="Breaks &amp;&amp; Spacers">
+      <Palette name="Breaks &amp; Spacers">
         <type>Break</type>
         <gridWidth>42</gridWidth>
         <gridHeight>36</gridHeight>
@@ -3144,7 +3144,7 @@
             </Spacer>
           </Cell>
         </Palette>
-      <Palette name="Frames &amp;&amp; Measures">
+      <Palette name="Frames &amp; Measures">
         <type>Frame</type>
         <gridWidth>27</gridWidth>
         <gridHeight>40</gridHeight>
