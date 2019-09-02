@@ -10,6 +10,7 @@
 #include "libmscore/sig.h"
 #include "libmscore/staff.h"
 #include "libmscore/part.h"
+#include "libmscore/sym.h"
 #include "inspector/inspector.h"
 #include "selectionwindow.h"
 #include "playpanel.h"
@@ -290,15 +291,25 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
 
 void ScoreAccessibility::makeReadable(QString& s)
       {
-      static std::vector<std::pair<QString, QString>> replacements {
+      static std::vector<std::pair<QString, QString>> unicodeReplacements {
             { "♭", tr(" flat") },
             { "♯", tr(" sharp") },
             { "𝄫", tr(" double flat") },
             { "𝄪", tr(" double sharp") },
       };
 
-      for (auto const &r : replacements)
-          s.replace(r.first, r.second);
+      if (!QAccessible::isActive())
+            return;
+      for (auto const &r : unicodeReplacements)
+            s.replace(r.first, r.second);
+      ScoreFont* sf = gscore->scoreFont();
+      for (auto id : Sym::commonScoreSymbols) {
+            if (id == SymId::space)
+                  continue;               // don't read "space"
+            QString src = sf->toString(id);
+            QString replacement = Sym::id2userName(id);
+            s.replace(src, replacement);
+            }
       }
 
 }
