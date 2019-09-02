@@ -20,6 +20,7 @@
 #include "palettemodel.h"
 
 #include "palettetree.h"
+#include "preferences.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -35,6 +36,28 @@ PaletteTreeModel::PaletteTreeModel(std::unique_ptr<PaletteTree> tree, QObject* p
       connect(this, &QAbstractItemModel::rowsInserted, this, &PaletteTreeModel::setTreeChanged);
       connect(this, &QAbstractItemModel::rowsMoved, this, &PaletteTreeModel::setTreeChanged);
       connect(this, &QAbstractItemModel::rowsRemoved, this, &PaletteTreeModel::setTreeChanged);
+      }
+
+//---------------------------------------------------------
+//   PaletteTreeModel::onDataChanged
+//---------------------------------------------------------
+
+void PaletteTreeModel::onDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
+      {
+      Q_UNUSED(topLeft);
+      Q_UNUSED(bottomRight);
+      static const std::set<int> nonPersistentRoles({ CellActiveRole, PaletteExpandedRole });
+
+      bool treeChanged = false;
+      for (int role : roles) {
+            if (!nonPersistentRoles.count(role)) {
+                  treeChanged = true;
+                  break;
+                  }
+            }
+
+      if (treeChanged)
+            setTreeChanged();
       }
 
 //---------------------------------------------------------
@@ -208,6 +231,8 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                         return pp->gridSize();
                   case DrawGridRole:
                         return pp->drawGrid();
+                  case PaletteExpandedRole:
+                        return pp->expanded();
                   // TODO showMore?
                   case PaletteTypeRole:
                         return QVariant::fromValue(pp->type());
@@ -263,6 +288,31 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
                               if (val != pp->visible()) {
                                     pp->setVisible(val);
                                     emit dataChanged(index, index, { VisibleRole });
+                                    }
+                              return true;
+                              }
+                        return false;
+                  case PaletteExpandedRole:
+                        if (value.canConvert<bool>()) {
+                              const bool val = value.toBool();
+                              if (val != pp->expanded()) {
+                                    const bool singlePalette = preferences.getBool(PREF_APP_USESINGLEPALETTE);
+
+                                    if (singlePalette && val) {
+                                          for (auto& palette : palettes())
+                                                palette->setExpanded(false);
+                                          pp->setExpanded(val);
+
+                                          const QModelIndex parent = index.parent();
+                                          const int rows = rowCount(parent);
+                                          const QModelIndex first = PaletteTreeModel::index(0, 0, parent);
+                                          const QModelIndex last = PaletteTreeModel::index(rows - 1, 0, parent);
+                                          emit dataChanged(first, last, { PaletteExpandedRole });
+                                          }
+                                    else {
+                                          pp->setExpanded(val);
+                                          emit dataChanged(index, index, { PaletteExpandedRole });
+                                          }
                                     }
                               return true;
                               }
@@ -366,6 +416,7 @@ QHash<int, QByteArray> PaletteTreeModel::roleNames() const
       roles[GridSizeRole] = "gridSize";
       roles[DrawGridRole] = "drawGrid";
       roles[CustomRole] = "custom";
+      roles[PaletteExpandedRole] = "expanded";
       return roles;
       }
 
@@ -626,6 +677,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
             for (int i = 0; i < count; ++i) {
                   std::unique_ptr<PalettePanel> p(new PalettePanel(PalettePanel::Type::Custom));
                   p->setName(QT_TRANSLATE_NOOP("Palette", "Custom"));
+                  p->setExpanded(true);
                   palettes().insert(palettes().begin() + row, std::move(p));
                   }
             endInsertRows();

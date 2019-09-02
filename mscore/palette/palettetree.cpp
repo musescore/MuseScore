@@ -80,6 +80,7 @@ template<class T>
 static std::unique_ptr<T> readMimeData(const QByteArray& data, const QString& tagName)
       {
       XmlReader e(data);
+      e.setPasteMode(true);
       while (e.readNextStartElement()) {
             const QStringRef tag(e.name());
             if (tag == tagName) {
@@ -292,6 +293,8 @@ bool PalettePanel::read(XmlReader& e)
                   }
             else if (t == "visible")
                   _visible = e.readBool();
+            else if (e.pasteMode() && t == "expanded")
+                  _expanded = e.readBool();
             else if (t == "Cell") {
                   std::unique_ptr<PaletteCell> cell(new PaletteCell);
                   if (!cell->read(e))
@@ -341,6 +344,9 @@ void PalettePanel::write(XmlWriter& xml) const
             xml.tag("yoffset", _yOffset);
 
       xml.tag("visible", _visible, true);
+
+      if (xml.clipboardmode())
+            xml.tag("expanded", _expanded, false);
 
       for (auto& cell: cells) {
 //             if (cells[i] && cells[i]->tag == "ShowMore")
