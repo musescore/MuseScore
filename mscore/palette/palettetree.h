@@ -132,6 +132,7 @@ class PalettePanel {
 //       bool _showContextMenu { true };
 
       bool _visible = true;
+      bool _expanded = false;
 
       Type guessType() const;
 
@@ -181,6 +182,9 @@ class PalettePanel {
       bool insertCell(int idx, std::unique_ptr<PaletteCell> cell);
 
       int findPaletteCell(const PaletteCell& cell, bool matchName = true) const;
+
+      bool expanded() const { return _expanded; }
+      void setExpanded(bool val) { _expanded = val; }
 
       Type type() const { return _type; }
       void setType(Type t) { _type = t; }

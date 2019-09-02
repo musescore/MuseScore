@@ -47,11 +47,6 @@ ListView {
         model: paletteTree.paletteModel
     }
 
-    ItemSelectionModel {
-        id: paletteExpandedModel
-        model: paletteTree.paletteModel
-    }
-
     property var expandedPopupIndex: null // TODO: or use selection model? That would allow to preserve popups on removing palettes
 
     onExpandedPopupIndexChanged: {
@@ -103,9 +98,9 @@ ListView {
             property int rowIndex: index
             property var modelIndex: paletteTree.model.modelIndex(index, 0)
 
-            property bool expanded: filter.length || (paletteExpandedModel.hasSelection ? paletteExpandedModel.isSelected(modelIndex) : false)
+            property bool expanded: filter.length || model.expanded
             function toggleExpand() {
-                paletteExpandedModel.select(modelIndex, ItemSelectionModel.Toggle);
+                model.expanded = !expanded
             }
 
             property bool selected: paletteSelectionModel.hasSelection ? paletteSelectionModel.isSelected(modelIndex) : false

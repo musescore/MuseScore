@@ -92,6 +92,7 @@ class PaletteTreeModel : public QAbstractItemModel {
             MimeDataRole,
             GridSizeRole,
             DrawGridRole,
+            PaletteExpandedRole,
             PaletteTypeRole
             };
       Q_ENUM(PaletteTreeModelRoles);
