@@ -5584,6 +5584,57 @@ QVector<oldName> oldNames = {
 };
 
 //---------------------------------------------------------
+//   commonScoreSymbols
+//    subset for use in text palette, possible translations, etc
+//---------------------------------------------------------
+
+const QVector<SymId> Sym::commonScoreSymbols = {
+      SymId::accidentalFlat,
+      SymId::accidentalNatural,
+      SymId::accidentalSharp,
+      SymId::accidentalDoubleFlat,
+      SymId::accidentalDoubleSharp,
+      SymId::metNoteWhole,
+      SymId::metNoteHalfUp,
+      SymId::metNoteQuarterUp,
+      SymId::metNote8thUp,
+      SymId::metNote16thUp,
+      SymId::metNote32ndUp,
+      SymId::metNote64thUp,
+      SymId::metNote128thUp,
+      SymId::metAugmentationDot,
+      SymId::restWholeLegerLine,
+      SymId::restHalfLegerLine,
+      SymId::restQuarter,
+      SymId::rest8th,
+      SymId::rest16th,
+      SymId::rest32nd,
+      SymId::rest64th,
+      SymId::rest128th,
+      SymId::segno,
+      SymId::coda,
+      SymId::segnoSerpent1,
+      SymId::codaSquare,
+      SymId::repeat1Bar,
+      SymId::repeat2Bars,
+      SymId::repeat4Bars,
+      SymId::gClef,
+      SymId::fClef,
+      SymId::cClef,
+      SymId::lyricsElisionNarrow,
+      SymId::lyricsElision,
+      SymId::lyricsElisionWide,
+      SymId::dynamicPiano,
+      SymId::dynamicMezzo,
+      SymId::dynamicForte,
+      SymId::dynamicNiente,
+      SymId::dynamicRinforzando,
+      SymId::dynamicSforzando,
+      SymId::dynamicZ,
+      SymId::space
+      };
+
+//---------------------------------------------------------
 //   userName2id
 //---------------------------------------------------------
 
