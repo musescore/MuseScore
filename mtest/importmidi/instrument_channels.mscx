@@ -88,7 +88,7 @@
           </Channel>
         <Channel name="pizzicato">
           <controller ctrl="0" value="0"/>
-          <controller ctrl="32" value="21"/>
+          <controller ctrl="32" value="20"/>
           <program value="45"/>
           <midiPort>0</midiPort>
           <midiChannel>1</midiChannel>
