@@ -28,8 +28,10 @@ Item {
     property bool expanded: false
     property string text: ""
     property bool hidePaletteElementVisible
+    property bool editingEnabled: true
 
     signal toggleExpandRequested()
+    signal enableEditingToggled(bool val)
     signal hideSelectedElementsRequested()
     signal hidePaletteRequested()
     signal editPalettePropertiesRequested()
@@ -79,7 +81,7 @@ Item {
 //         icon.name: "delete" // can't use icon until Qt 5.10... https://doc.qt.io/qt-5/qtquickcontrols2-icons.html
 //         icon.source: "icons/delete.png"
         text: qsTr("Remove element")
-        visible: paletteHeader.hidePaletteElementVisible
+        visible: paletteHeader.hidePaletteElementVisible && paletteHeader.editingEnabled
 
         ToolTip.visible: hovered
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -137,6 +139,13 @@ Item {
         MenuItem {
             text: qsTr("Hide")
             onTriggered: paletteHeader.hidePaletteRequested()
+        }
+        MenuSeparator {}
+        MenuItem {
+            text: qsTr("Enable Editing")
+            checkable: true
+            checked: paletteHeader.editingEnabled
+            onTriggered: paletteHeader.enableEditingToggled(checked)
         }
         MenuSeparator {}
         MenuItem {

@@ -227,6 +227,8 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                         return pp->visible();
                   case CustomRole:
                         return pp->custom();
+                  case EditableRole:
+                        return pp->editable();
                   case GridSizeRole:
                         return pp->gridSize();
                   case DrawGridRole:
@@ -258,6 +260,11 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                         return cell->visible;
                   case CustomRole:
                         return cell->custom;
+                  case EditableRole: {
+                        if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer()))
+                              return pp->editable();
+                        return false;
+                        }
                   case MimeDataRole: {
                         QVariantMap map;
                         if (cell->element)
@@ -269,6 +276,14 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                         break;
                   }
             return QVariant();
+            }
+
+      // data for root item
+      switch (role) {
+            case EditableRole:
+                  return true;
+            default:
+                  break;
             }
 
       return QVariant();
@@ -291,6 +306,21 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
                                     }
                               return true;
                               }
+                        return false;
+                  case EditableRole:
+                        if (value.canConvert<bool>()) {
+                              const bool val = value.toBool();
+                              if (val != pp->editable()) {
+                                    pp->setEditable(val);
+                                    emit dataChanged(index, index, { EditableRole });
+                                    // notify cells editability changed too
+                                    const QModelIndex childFirstIndex = PaletteTreeModel::index(0, 0, index);
+                                    const int rows = rowCount(index);
+                                    const QModelIndex childLastIndex = PaletteTreeModel::index(rows - 1, 0, index);
+                                    emit dataChanged(childFirstIndex, childLastIndex, { EditableRole });
+                              }
+                              return true;
+                        }
                         return false;
                   case PaletteExpandedRole:
                         if (value.canConvert<bool>()) {
@@ -326,7 +356,7 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
 //                                     }
 //                               return true;
 //                               }
-                        return false;
+//                         return false;
 //                   case Qt::DisplayRole:
 //                   case Qt::AccessibleTextRole:
 //                         return pp->name();
@@ -417,6 +447,7 @@ QHash<int, QByteArray> PaletteTreeModel::roleNames() const
       roles[DrawGridRole] = "drawGrid";
       roles[CustomRole] = "custom";
       roles[PaletteExpandedRole] = "expanded";
+      roles[EditableRole] = "editable";
       return roles;
       }
 

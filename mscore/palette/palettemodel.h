@@ -89,6 +89,7 @@ class PaletteTreeModel : public QAbstractItemModel {
             PaletteCellRole = Qt::UserRole,
             VisibleRole,
             CustomRole,
+            EditableRole,
             MimeDataRole,
             GridSizeRole,
             DrawGridRole,

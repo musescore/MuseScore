@@ -36,6 +36,7 @@ StyledPopup {
     property string paletteName
     readonly property string libraryPaletteName: (poolPalette && poolPaletteRootIndex) ? poolPalette.data(poolPaletteRootIndex, Qt.DisplayRole) : ""
     property bool paletteIsCustom: false
+    property bool paletteEditingEnabled: true
 
     property size cellSize
     property bool drawGrid
@@ -55,7 +56,7 @@ StyledPopup {
             width: parent.width
 
             text: qsTr("Add to %1").arg(paletteName)
-            enabled: masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection
+            enabled: moreElementsPopup.paletteEditingEnabled && (masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection)
 
             onClicked: {
                 function collectMimeData(palette, selection) {
