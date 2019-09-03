@@ -4670,7 +4670,7 @@ void MuseScore::play(Element* e) const
       else if (e->isHarmony() && preferences.getBool(PREF_SCORE_HARMONY_PLAYWHENEDITING)) {
             seq->stopNotes();
             Harmony* h = toHarmony(e);
-            if (h->empty())
+            if (!h->isRealizable())
                   return;
             RealizedHarmony r = h->getRealizedHarmony();
             QList<int> pitches = r.pitches();

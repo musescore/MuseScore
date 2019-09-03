@@ -3113,6 +3113,8 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             if (!e->isHarmony())
                   continue;
             Harmony* h = toHarmony(e);
+            if (!h->isRealizable())
+                  continue;
             RealizedHarmony r = h->getRealizedHarmony();
             Segment* seg = toSegment(h->parent());
             Fraction duration = r.getActualDuration(durationType);

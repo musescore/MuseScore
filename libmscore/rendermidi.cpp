@@ -530,6 +530,8 @@ static int getControllerFromCC(int cc)
 //---------------------------------------------------------
 static void renderHarmony(EventMap* events, Measure* m, Harmony* h, int tickOffset)
       {
+      if (!h->isRealizable())
+            return;
       Staff* staff = m->score()->staff(h->track() / VOICES);
       const Channel* channel = staff->part()->harmonyChannel();
       Q_ASSERT(channel);

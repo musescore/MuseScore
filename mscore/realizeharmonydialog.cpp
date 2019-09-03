@@ -66,6 +66,8 @@ void RealizeHarmonyDialog::setChordList(QList<Harmony*> hlist)
       chordTable->setHorizontalHeaderLabels(header);
       for (int i = 0; i < rows; ++i) {
             Harmony* h = hlist.at(i);
+            if (!h->isRealizable())
+                  continue;
 
             s += h->harmonyName() + " ";
             QString intervals;

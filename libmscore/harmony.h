@@ -152,6 +152,7 @@ class Harmony final : public TextBase {
       virtual bool edit(EditData&) override;
       virtual void endEdit(EditData&) override;
 
+      bool isRealizable() const                { return _rootTpc != Tpc::TPC_INVALID; }
       QString hFunction() const                { return _function;     }
       QString hUserName() const                { return _userName;     }
       QString hTextName() const                { return _textName;     }
