@@ -184,6 +184,8 @@ bool NPlayEvent::isMuted(Score* score) const
       else if (score) {
             //maybe we have a harmony channel to account for
             Staff* staff = score->staff(getOriginatingStaff());
+            if (!staff)
+                  return false;
             const Channel* a = staff->part()->harmonyChannel();
             if (a) //if there is a harmony channel
                   return a->mute() || a->soloMute();
