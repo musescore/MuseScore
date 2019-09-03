@@ -35,11 +35,14 @@ class PaletteQmlInterface : public QObject
       Q_OBJECT
 
       Q_PROPERTY(Ms::PaletteWorkspace* paletteWorkspace READ paletteWorkspace WRITE setPaletteWorkspace NOTIFY paletteWorkspaceChanged)
+      Q_PROPERTY(QColor paletteBackground READ paletteBackground NOTIFY paletteBackgroundChanged)
 
       PaletteWorkspace* w;
+      QColor _paletteBackground;
 
    signals:
       void paletteWorkspaceChanged();
+      void paletteBackgroundChanged();
 
    public:
       PaletteQmlInterface(PaletteWorkspace* workspace, QObject* parent = nullptr)
@@ -48,6 +51,9 @@ class PaletteQmlInterface : public QObject
       PaletteWorkspace* paletteWorkspace() { return w; }
       const PaletteWorkspace* paletteWorkspace() const { return w; }
       void setPaletteWorkspace(PaletteWorkspace* workspace) { w = workspace; emit paletteWorkspaceChanged(); }
+
+      QColor paletteBackground() const { return _paletteBackground; }
+      void setPaletteBackground(const QColor& val);
 
       Q_INVOKABLE Qt::KeyboardModifiers keyboardModifiers() const { return QGuiApplication::keyboardModifiers(); }
       };
@@ -66,6 +72,7 @@ class PaletteWidget : public QmlDockWidget
       static void registerQmlTypes();
 
       void retranslate();
+      void setupStyle();
 
    public slots:
       void setSinglePalette(bool);

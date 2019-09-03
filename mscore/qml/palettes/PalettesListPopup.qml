@@ -29,6 +29,8 @@ StyledPopup {
         id: header
         anchors.top: parent.top
         text: qsTr("More palettes")
+        font: globalStyle.font
+        color: globalStyle.windowText
     }
 
     ToolSeparator {
@@ -77,10 +79,16 @@ StyledPopup {
 
                     Text {
                         height: parent.height
+                        anchors.left: parent.left
+                        anchors.right: addButton.left
                         text: morePalettesDelegate.text
+                        font: globalStyle.font
+                        color: globalStyle.windowText
                         verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHLeft
+                        elide: Text.ElideRight
                     }
-                    Button {
+                    StyledButton {
                         id: addButton
 //                         height: parent.height
                         anchors.right: parent.right
@@ -103,6 +111,9 @@ StyledPopup {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     text: qsTr("%1 Added!").arg(model.display)
+                    font: globalStyle.font
+                    color: globalStyle.windowText
+                    elide: Text.ElideMiddle
                 }
             }
         }
@@ -115,7 +126,7 @@ StyledPopup {
         width: parent.width
     }
 
-    Button {
+    StyledButton {
         id: createCustomPaletteButton
         anchors.bottom: parent.bottom
         width: parent.width

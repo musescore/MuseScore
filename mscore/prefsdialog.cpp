@@ -856,8 +856,10 @@ void PreferenceDialog::updateFgView(bool useColor)
       {
       fgColorButton->setChecked(useColor);
       fgWallpaperButton->setChecked(!useColor);
+      fgUseColorInPalettes->setChecked(preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES));
       fgWallpaper->setEnabled(!useColor);
       fgWallpaperSelect->setEnabled(!useColor);
+      fgUseColorInPalettes->setEnabled(useColor);
 
       if (useColor) {
             fgColorLabel->setColor(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
@@ -967,6 +969,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_UI_CANVAS_BG_USECOLOR, bgColorButton->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_BG_COLOR, bgColorLabel->color());
       preferences.setPreference(PREF_UI_CANVAS_FG_USECOLOR, fgColorButton->isChecked());
+      preferences.setPreference(PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES, fgUseColorInPalettes->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_FG_COLOR, fgColorLabel->color());
       preferences.setPreference(PREF_UI_CANVAS_BG_WALLPAPER, bgWallpaper->text());
       preferences.setPreference(PREF_UI_CANVAS_FG_WALLPAPER, fgWallpaper->text());

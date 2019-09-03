@@ -64,6 +64,7 @@ Item {
         paletteWorkspace: palettesWidget.paletteWorkspace
 
         filter: palettesWidgetHeader.cellFilter
+        enableAnimations: !palettesWidgetHeader.searching
 
         anchors {
             top: separator.bottom

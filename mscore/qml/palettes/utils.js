@@ -19,11 +19,9 @@
 
 .pragma library
 
-//     function stretched(cw, w) {
-//         return cw + (w % cw) / Math.floor(w / cw);
-// //         const n = Math.floor(w / cw);
-// //         return n + w/n - 1;
-//     }
+function stretched(cw, w) {
+    return cw + (w % cw) / Math.floor(w / cw);
+}
 
 function dropEventMimeData(drag) {
 

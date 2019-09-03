@@ -28,6 +28,18 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   PaletteQmlInterface::setPaletteBackground
+//---------------------------------------------------------
+
+void PaletteQmlInterface::setPaletteBackground(const QColor& val)
+      {
+      if (_paletteBackground != val) {
+            _paletteBackground = val;
+            emit paletteBackgroundChanged();
+            }
+      }
+
+//---------------------------------------------------------
 //   PaletteWidget
 //---------------------------------------------------------
 
@@ -42,6 +54,7 @@ PaletteWidget::PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent
       Q_ASSERT(ctx);
 
       qmlInterface = new PaletteQmlInterface(w, this);
+      setupStyle();
       ctx->setContextProperty("mscore", qmlInterface);
 
       setSource(QUrl("qrc:/qml/palettes/PalettesWidget.qml"));
@@ -83,14 +96,34 @@ void PaletteWidget::retranslate()
       }
 
 //---------------------------------------------------------
+//   setupStyle
+//---------------------------------------------------------
+
+void PaletteWidget::setupStyle()
+      {
+      if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR) && preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES))
+            qmlInterface->setPaletteBackground(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
+      else
+            qmlInterface->setPaletteBackground(QColor("#f9f9f9"));
+      }
+
+//---------------------------------------------------------
 //   changeEvent
 //---------------------------------------------------------
 
 void PaletteWidget::changeEvent(QEvent* evt)
       {
       QmlDockWidget::changeEvent(evt);
-      if (evt->type() == QEvent::LanguageChange)
-            retranslate();
+      switch (evt->type()) {
+            case QEvent::LanguageChange:
+                  retranslate();
+                  break;
+            case QEvent::StyleChange:
+                  setupStyle();
+                  break;
+            default:
+                  break;
+            }
       }
 
 //---------------------------------------------------------
