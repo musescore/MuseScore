@@ -156,7 +156,7 @@ void TextLineBaseSegment::draw(QPainter* painter) const
                         painter->drawLines(&points[end-1], 1);
                         end--;
                         }
-                  numPairs = adjustedLineLength / (dash + gap);
+                  numPairs = max(qreal(1), adjustedLineLength / (dash + gap));
                   nDashes[1] = (adjustedLineLength - dash * (numPairs + 1)) / numPairs;
                   pen.setDashPattern(nDashes);
                   }
