@@ -17,6 +17,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/instrument.h"
 #include "libmscore/part.h"
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -170,7 +171,7 @@ NPlayEvent::NPlayEvent(BeatType beatType)
 //   isMuted
 //---------------------------------------------------------
 
-bool NPlayEvent::isMuted() const
+bool NPlayEvent::isMuted(Score* score) const
       {
       const Note* n = note();
       if (n) {
@@ -179,6 +180,13 @@ bool NPlayEvent::isMuted() const
             Instrument* instr = staff->part()->instrument(n->tick());
             const Channel* a = instr->playbackChannel(n->subchannel(), cs);
             return a->mute() || a->soloMute() || !staff->playbackVoice(n->voice());
+            }
+      else if (score) {
+            //maybe we have a harmony channel to account for
+            Staff* staff = score->staff(getOriginatingStaff());
+            const Channel* a = staff->part()->harmonyChannel();
+            if (a) //if there is a harmony channel
+                  return a->mute() || a->soloMute();
             }
       return false;
       }
