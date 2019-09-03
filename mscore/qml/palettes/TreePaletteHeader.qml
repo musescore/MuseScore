@@ -20,6 +20,8 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 
+import MuseScore.Utils 3.3
+
 Item {
     id: paletteHeader
 
@@ -33,30 +35,43 @@ Item {
     signal editPalettePropertiesRequested()
 
     implicitHeight: paletteExpandArrow.height
-    ToolButton {
+    StyledToolButton {
         id: paletteExpandArrow
         z: 1000
         width: height
         visible: paletteHeader.text.length // TODO: make a separate palette placeholder component
-        text: paletteHeader.expanded ? "\u25bc" : "\u25b6"
-        Accessible.name: paletteHeader.expanded ? qsTr("Collapse") : qsTr("Expand")
+        text: paletteHeader.expanded ? qsTr("Collapse") : qsTr("Expand")
+
+        padding: 0
+
+        contentItem: StyledIcon {
+            source: paletteHeader.expanded ? "icons/arrow_drop_down.png" : "icons/arrow_right_black.png"
+        }
 
         onClicked: paletteHeader.toggleExpandRequested()
     }
     Text {
         height: parent.height
         verticalAlignment: Text.AlignVCenter
-        anchors { left: paletteExpandArrow.right; leftMargin: 8 }
+        horizontalAlignment: Text.AlignHLeft
+        anchors {
+            left: paletteExpandArrow.right; leftMargin: 4;
+            right: deleteButton.visible ? deleteButton.left : paletteHeaderMenuButton.left
+        }
         text: paletteHeader.text
+        font: globalStyle.font
+        color: globalStyle.text
+        elide: Text.ElideRight
     }
-//     ToolButton {
+//     StyledToolButton {
 //         z: 1000
 //         height: parent.height
 //         anchors { left: paletteExpandArrow.right }
 //         text: paletteHeader.text
 //     }
 
-    ToolButton {
+    StyledToolButton {
+        id: deleteButton
         z: 1000
         height: parent.height
         width: height
@@ -70,26 +85,33 @@ Item {
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
         ToolTip.text: text
 
-        contentItem: Image {
-            fillMode: Image.PreserveAspectFit
+        padding: 4
+
+        contentItem: StyledIcon {
             source: "icons/delete.png"
         }
 
         onClicked: hideSelectedElementsRequested()
     }
 
-    ToolButton {
+    StyledToolButton {
         id: paletteHeaderMenuButton
         z: 1000
         height: parent.height
         anchors.right: parent.right
-        text: "…"
+
+        padding: 4
+
+        contentItem: StyledIcon {
+            source: "icons/more.png"
+        }
 
         Accessible.name: qsTr("Palette menu")
 
         onClicked: {
             paletteHeaderMenu.x = paletteHeaderMenuButton.x + paletteHeaderMenuButton.width - paletteHeaderMenu.width;
-            paletteHeaderMenu.y = paletteHeaderMenuButton.y + paletteHeaderMenuButton.height;
+            paletteHeaderMenu.y = paletteHeaderMenuButton.y;
+//             paletteHeaderMenu.y = paletteHeaderMenuButton.y + paletteHeaderMenuButton.height;
             paletteHeaderMenu.open();
         }
     }

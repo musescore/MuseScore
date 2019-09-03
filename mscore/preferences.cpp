@@ -154,6 +154,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_SCORE_STYLE_PARTSTYLEFILE,                       new StringPreference("", false)},
             {PREF_UI_CANVAS_BG_USECOLOR,                           new BoolPreference(true, false)},
             {PREF_UI_CANVAS_FG_USECOLOR,                           new BoolPreference(true, false)},
+            {PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES,               new BoolPreference(false, false)},
             {PREF_UI_CANVAS_BG_COLOR,                              new ColorPreference(QColor("#142433"), false)},
             {PREF_UI_CANVAS_FG_COLOR,                              new ColorPreference(QColor("#f9f9f9"), false)},
             {PREF_UI_CANVAS_BG_WALLPAPER,                          new StringPreference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/background1.png")).absoluteFilePath(), false)},
@@ -455,6 +456,7 @@ QMap<QString, QVariant> Preferences::getDefaultLocalPreferences() {
       QMap<QString, QVariant> defaultLocalPreferences;
       for (QString s : {PREF_UI_CANVAS_BG_USECOLOR,
                         PREF_UI_CANVAS_FG_USECOLOR,
+                        PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES,
                         PREF_UI_CANVAS_BG_COLOR,
                         PREF_UI_CANVAS_FG_COLOR,
                         PREF_UI_CANVAS_BG_WALLPAPER,

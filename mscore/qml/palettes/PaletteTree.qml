@@ -42,6 +42,8 @@ ListView {
             paletteModel.setFilterFixedString(filter);
     }
 
+    property bool enableAnimations: true
+
     ItemSelectionModel {
         id: paletteSelectionModel
         model: paletteTree.paletteModel
@@ -80,7 +82,14 @@ ListView {
         }
     }
 
+    displaced: Transition {
+        enabled: paletteTree.enableAnimations
+        NumberAnimation { property: "y"; duration: 150 }
+    }
+
     ScrollBar.vertical: ScrollBar {}
+
+    maximumFlickVelocity: 1500
 
     PlaceholderManager {
         id: placeholder
@@ -110,12 +119,12 @@ ListView {
                 paletteSelectionModel.setCurrentIndex(modelIndex, cmd);
                 paletteTree.currentIndex = index;
             }
-            Rectangle {
+
+            background: Rectangle {
+                visible: !control.Drag.active
                 z: -1
                 anchors.fill: parent
-                visible: control.selected
-                color: "lightsteelblue";
-                radius: 5
+                color: control.selected ? globalStyle.highlight: (control.highlighted ? Qt.lighter(globalStyle.button, 1.2) : (control.down ? globalStyle.button : "transparent"))
             }
 
             highlighted: activeFocus && !selected
@@ -187,7 +196,7 @@ ListView {
                 keys: [ "application/musescore/palettetree" ]
                 onEntered: {
                     if (rowIndex != -1)
-                        placeholder.makePlaceholder(rowIndex, { display: "", gridSize: Qt.size(1, 1), drawGrid: false });
+                        placeholder.makePlaceholder(rowIndex, { display: "", gridSize: Qt.size(1, 1), drawGrid: false, custom: false });
                 }
                 onDropped: {
                     if (drop.proposedAction == Qt.MoveAction)
@@ -215,14 +224,17 @@ ListView {
                 transitions: [
                     Transition {
                         from: "collapsed"; to: "expanded"
+                        enabled: paletteTree.enableAnimations
                         NumberAnimation { target: mainPaletteContainer; property: "height"; from: 0; to: mainPaletteContainer.implicitHeight; easing.type: Easing.OutCubic; duration: 150 }
                     },
                     Transition {
                         from: "expanded"; to: "collapsed"
+                        enabled: paletteTree.enableAnimations
                         SequentialAnimation {
                             PropertyAction { target: mainPaletteContainer; property: "visible"; value: true } // temporarily set palette visible to animate it being hidden
                             NumberAnimation { target: mainPaletteContainer; property: "height"; from: mainPaletteContainer.implicitHeight; to: 0; easing.type: Easing.OutCubic; duration: 150 }
                             PropertyAction { target: mainPaletteContainer; property: "visible"; value: false } // make palette invisible again
+                            PropertyAction { target: mainPaletteContainer; property: "height"; value: mainPaletteContainer.implicitHeight } // restore the height binding
                         }
                     }
                 ]
@@ -272,17 +284,15 @@ ListView {
 
                 Rectangle {
                     id: mainPaletteContainer
-                    property int padding: 1
+                    readonly property int padding: 1
                     implicitHeight: mainPalette.implicitHeight + 2 * padding
-                    implicitWidth: mainPalette.implicitWidth + 2 * padding
+                    implicitWidth: parent.width
                     height: implicitHeight
-                    width: implicitWidth
                     border { width: 1; color: "black" }
 
                     Palette {
                         id: mainPalette
                         anchors { fill: parent; margins: parent.padding }
-                        maxWidth: control.availableWidth - 2 * parent.padding
 
                         cellSize: control.cellSize
                         drawGrid: control.drawGrid
@@ -299,6 +309,7 @@ ListView {
                                 control.togglePopup();
                         }
 
+                        enableAnimations: paletteTree.enableAnimations
                         externalMoveBlocked: paletteTree.expandedPopupIndex && !control.popupExpanded // FIXME: find another way to prevent drops go under a popup
                     }
                 }
@@ -306,6 +317,7 @@ ListView {
                 MoreElementsPopup {
                     id: palettePopup
                     visible: control.popupExpanded
+                    maxHeight: Math.min(0.75 * paletteTree.height, 500)
 
                     y: mainPaletteContainer.y + mainPaletteContainer.height
                     width: parent.width
@@ -337,6 +349,9 @@ ListView {
                         if (control.popupExpanded != visible)
                             control.togglePopup();
                     }
+
+                    onOpened: enablePaletteAnimations = true
+                    onClosed: enablePaletteAnimations = false
 
                     property bool needScrollToBottom: false
 

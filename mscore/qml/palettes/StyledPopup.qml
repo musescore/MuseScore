@@ -24,8 +24,8 @@ Popup {
     property int arrowHeight: 10
     property int arrowWidth: 21 // odd values work better here
 
-    property color borderColor: "black"
-    property color fillColor: "white"
+    property color borderColor: globalStyle.windowText
+    property color fillColor: globalStyle.base
 
     topPadding: bottomPadding + arrowHeight
 
@@ -66,6 +66,7 @@ Popup {
                 var ctx = getContext("2d");
                 ctx.lineWidth = 2;
                 ctx.fillStyle = fillColor;
+                ctx.strokeStyle = borderColor;
 
                 ctx.beginPath();
                 ctx.moveTo(0, height);

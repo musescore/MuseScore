@@ -22,6 +22,7 @@ import QtQuick.Controls 2.1
 import QtQml.Models 2.2
 import MuseScore.Palette 3.3
 import MuseScore.Views 3.3
+import MuseScore.Utils 3.3
 
 import "utils.js" as Utils
 
@@ -34,11 +35,6 @@ GridView {
     keyNavigationEnabled: true
     activeFocusOnTab: true
 
-    highlightFollowsCurrentItem: true
-//     preferredHighlightBegin: height / 2 - 100 // 100 being item height / 2
-//     preferredHighlightEnd: height / 2 + 100 // 100 being item height / 2
-//     highlightRangeMode: GridView.StrictlyEnforceRange
-
     property size cellSize
     property bool drawGrid: false
     property bool showMoreButton: false
@@ -48,29 +44,42 @@ GridView {
     property PaletteController paletteController
     property var selectionModel: null
 
-    property bool empty: !paletteCellDelegateModel.count
-
-    property int maxWidth: parent.width
+    property int ncells: paletteCellDelegateModel.count
+    property bool empty: !ncells
 
     property bool externalMoveBlocked: false;
 
-    // internal property: whether the palette fits to one row
-    property bool oneRow: cellWidth * paletteCellDelegateModel.count + moreButton.implicitWidth < maxWidth
+    property bool enableAnimations: true
 
-    implicitWidth: {
-        if (showMoreButton && oneRow)
-            return maxWidth;
-        return maxWidth - (maxWidth % cellWidth); // TODO or stretch cells instead?
-    }
+    states: [
+        State {
+            name: "default"
+        },
+        State {
+            name: "drag"
+            PropertyChanges {
+                target: paletteView
+                // unbind width stretching from the delegate model's state while dragging
+                explicit: true
+                stretchWidth: paletteCellDelegateModel.stretchWidth
+                restoreEntryValues: true
+            }
+        }
+    ]
+
+    state: "default"
+
+    // internal property: whether the palette fits to one row
+    readonly property bool oneRow: cellDefaultWidth * ncells + moreButton.implicitWidth < width
+
     implicitHeight: {
-        const ncells = paletteCellDelegateModel.count
         if (!ncells)
             return cellHeight;
         if (!showMoreButton || oneRow)
             return contentHeight;
 
         const moreButtonCells = Math.ceil(moreButton.implicitWidth / cellWidth);
-        const rowCells = Math.floor(maxWidth / cellWidth);
+        const rowCells = Math.floor(width / cellWidth);
         const lastRowCells = ncells % rowCells;
         const freeCells = lastRowCells ? rowCells - lastRowCells : 0;
 
@@ -79,26 +88,29 @@ GridView {
         return contentHeight + cellHeight;
     }
 
-//     cellWidth: stretched(cellSize.width, width) // definition in utils.js
-    cellWidth: cellSize.width
+    readonly property int cellDefaultWidth: cellSize.width
+    property bool stretchWidth: !(oneRow && showMoreButton)
+    cellWidth: stretchWidth ? Math.floor(Utils.stretched(cellDefaultWidth, width)) : cellDefaultWidth
     cellHeight: cellSize.height
 
     signal moreButtonClicked()
 
-    Button {
+    StyledButton {
         id: moreButton
         visible: showMoreButton
 
         background: Rectangle {
-            color: moreButton.down ? "mediumslateblue" : "white"
+            color: moreButton.down ? globalStyle.button : mscore.paletteBackground
         }
 
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        width: implicitWidth + (parent.width - implicitWidth) % cellWidth - 1 // -1 allows to fit into a cell if palette grid is visible
+        width: paletteView.empty ? implicitWidth : (implicitWidth + (parent.width - implicitWidth) % cellWidth - 1) // -1 allows to fit into a cell if palette grid is visible
         height: cellHeight - (paletteView.oneRow ? 0 : 1)
 
         text: qsTr("More")
+        textColor: down ? globalStyle.buttonText : "black"// palette background has white or light color
+        visualFocusTextColor: "darkblue"
 
         onClicked: paletteView.moreButtonClicked()
     }
@@ -116,6 +128,7 @@ GridView {
         offsetY: parent.contentY
 
         DropArea {
+            id: paletteDropArea
             anchors { fill: parent/*; margins: 10*/ }
 
 //             keys: [ "application/musescore/symbol", "application/musescore/palette/cell" ]
@@ -152,6 +165,7 @@ GridView {
                 // If event is accepted, process the drag in a usual way
                 if (drag.accepted) {
                     drag.source.internalDrag = internal;
+                    paletteView.state = "drag";
                     onDrag(drag);
                     }
             }
@@ -159,39 +173,90 @@ GridView {
             onPositionChanged: onDrag(drag)
 
             function onDragOverPaletteFinished() {
-                placeholder.removePlaceholder();
-                if (drag.source.parentModelIndex == paletteView.paletteRootIndex)
+                if (placeholder.active) {
+                    placeholder.removePlaceholder();
+                    paletteView.state = "default";
+                }
+                if (drag.source && drag.source.parentModelIndex == paletteView.paletteRootIndex)
                     drag.source.internalDrag = false;
             }
 
             onExited: onDragOverPaletteFinished();
 
             onDropped: {
-                if (!action)
+                if (!action) {
+                    onDragOverPaletteFinished();
                     return;
+                    }
 
                 const destIndex = placeholder.active ? placeholder.index : paletteView.paletteModel.rowCount(paletteView.paletteRootIndex);
                 onDragOverPaletteFinished();
 
-                var success = false;
-                if (drag.source.parentModelIndex == paletteView.paletteRootIndex)
-                    success = paletteView.moveCell(drag.source.rowIndex, destIndex);
-                else
-                    success = paletteView.insertCell(destIndex, Utils.dropEventMimeData(drop))
+                // Moving cells here causes Drag.onDragFinished be not called properly.
+                // Therefore record the necessary information to move cells later.
+                const data = {
+                    srcParentModelIndex: drag.source.parentModelIndex,
+                    srcRowIndex: drag.source.rowIndex,
+                    paletteView: paletteView,
+                    destIndex: destIndex,
+                    mimeData: Utils.dropEventMimeData(drop)
+                };
 
-                if (success)
-                    drop.accept(action);
-                else
-                    drop.accepted = false;
+                Qt.callLater(function() {
+                    if (data) {
+                        if (data.srcParentModelIndex == data.paletteView.paletteRootIndex)
+                            data.paletteView.moveCell(data.srcRowIndex, data.destIndex);
+                        else
+                            data.paletteView.insertCell(data.destIndex, data.mimeData);
+                    }
+                });
+
+                drop.accept(action);
             }
         }
     }
 
     Text {
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            left: parent.left; leftMargin: 8
+            right: moreButton.left
+        }
         visible: parent.empty
+        font: globalStyle.font
         text: paletteController && paletteController.canDropElements
             ? qsTr("Drag and drop any element here")
             : qsTr("No elements")
+        verticalAlignment: Text.AlignVCenter
+        color: "grey"
+        wrapMode: Text.WordWrap
+        elide: Text.ElideRight
+    }
+
+    add: Transition {
+        id: addTransition
+        enabled: paletteView.enableAnimations
+        readonly property bool unresolvedItem: ViewTransition.item && ViewTransition.item.DelegateModel.isUnresolved;
+        ParallelAnimation {
+            NumberAnimation { property: "scale"; from: 0; to: 1; duration: addTransition.unresolvedItem ? 0 : 150; easing.type: Easing.InOutQuad }
+            NumberAnimation { property: "opacity"; from: 0; to: 1; duration: addTransition.unresolvedItem ? 0 : 250 }
+        }
+    }
+
+    remove: Transition {
+        id: removeTransition
+        enabled: paletteView.enableAnimations && !paletteDropArea.containsDrag
+        readonly property bool unresolvedItem: ViewTransition.item && ViewTransition.item.DelegateModel.isUnresolved;
+        ParallelAnimation {
+            NumberAnimation { property: "scale"; to: 0; duration: removeTransition.unresolvedItem ? 0 : 150; easing.type: Easing.InOutQuad }
+            NumberAnimation { property: "opacity"; to: 0; duration: removeTransition.unresolvedItem ? 0 : 250 }
+        }
+    }
+
+    displaced: Transition {
+        enabled: paletteView.enableAnimations
+        NumberAnimation { properties: "x,y"; duration: 150 }
     }
 
     function isSelected(modelIndex) {
@@ -270,12 +335,13 @@ GridView {
                 selected: paletteCell.selected
             }
 
+            readonly property var toolTip: model.toolTip
+
             ToolTip.visible: hovered
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-//                             ToolTip.timeout: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.text: model.toolTip
+            ToolTip.text: toolTip ? toolTip : ""
 
-            text: model.toolTip
+            text: toolTip ? toolTip : ""
 
             onClicked: {
                 forceActiveFocus();
@@ -285,7 +351,7 @@ GridView {
                 const selection = paletteView.selectionModel;
 
                 if (selection) {
-                    const modifiers = mscore.keyboardModifiers(); // TODO: check on moving from a plugin-based widget
+                    const modifiers = mscore.keyboardModifiers();
                     const rootIndex = paletteView.paletteRootIndex;
 
                     if (selection.currentIndex.parent != rootIndex)
@@ -352,7 +418,6 @@ GridView {
                 }
             }
 
-
             Drag.active: paletteCellDragArea.drag.active
             Drag.dragType: Drag.Automatic
             Drag.supportedActions: Qt.CopyAction | Qt.MoveAction // TODO: it would be good to switch to Qt.MoveAction
@@ -363,9 +428,13 @@ GridView {
 
             onInternalDragChanged: DelegateModel.inItems = !internalDrag;
 
-            Drag.onDragStarted: DelegateModel.inPersistedItems = true;
+            Drag.onDragStarted: {
+                paletteView.state = "drag";
+                DelegateModel.inPersistedItems = true;
+            }
 
             Drag.onDragFinished: {
+                paletteView.state = "default";
                 internalDrag = false;
                 DelegateModel.inPersistedItems = false;
             }
