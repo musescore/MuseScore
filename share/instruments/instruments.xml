@@ -10700,7 +10700,7 @@
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <controller ctrl="32" value="21"/> <!--Violins Pizzicato Expr.-->.
+                        <controller ctrl="32" value="20"/> <!--Violins Pizzicato-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
@@ -10745,7 +10745,7 @@
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <controller ctrl="32" value="31"/> <!--Violas Pizzicato Expr.-->.
+                        <controller ctrl="32" value="30"/> <!--Violas Pizzicato-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
@@ -10791,7 +10791,7 @@
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <controller ctrl="32" value="41"/> <!--Celli Pizzicato Expr.-->.
+                        <controller ctrl="32" value="40"/> <!--Celli Pizzicato-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
@@ -10843,7 +10843,7 @@
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <controller ctrl="32" value="51"/> <!--Basses Pisszcato Expr.-->.
+                        <controller ctrl="32" value="50"/> <!--Basses Pizzicato-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
