@@ -124,7 +124,7 @@ class PalettePanel {
 
       qreal _mag = 1.0;
       bool _drawGrid = false;
-//       bool _readOnly;
+      bool _editable = true;
 //       bool _systemPalette;
       qreal _yOffset = 0.0;                // in spatium units of "gscore"
 
@@ -185,6 +185,9 @@ class PalettePanel {
 
       bool expanded() const { return _expanded; }
       void setExpanded(bool val) { _expanded = val; }
+
+      bool editable() const { return _editable; }
+      void setEditable(bool val) { _editable = val; }
 
       Type type() const { return _type; }
       void setType(Type t) { _type = t; }

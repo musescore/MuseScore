@@ -257,6 +257,9 @@ ListView {
                         control.toggleExpand();
                     }
 
+                    editingEnabled: model.editable
+                    onEnableEditingToggled: model.editable = val
+
                     onHideSelectedElementsRequested: paletteTree.removeSelectedItems(control.modelIndex);
 
                     onHidePaletteRequested: control.hidePalette();
@@ -333,6 +336,7 @@ ListView {
 
                     paletteName: control.text
                     paletteIsCustom: model.custom
+                    paletteEditingEnabled: model.editable
 
                     onVisibleChanged: {
                         // build pool model on first popup appearance

@@ -295,6 +295,8 @@ bool PalettePanel::read(XmlReader& e)
                   _visible = e.readBool();
             else if (e.pasteMode() && t == "expanded")
                   _expanded = e.readBool();
+            else if (t == "editable")
+                  _editable = e.readBool();
             else if (t == "Cell") {
                   std::unique_ptr<PaletteCell> cell(new PaletteCell);
                   if (!cell->read(e))
@@ -344,6 +346,7 @@ void PalettePanel::write(XmlWriter& xml) const
             xml.tag("yoffset", _yOffset);
 
       xml.tag("visible", _visible, true);
+      xml.tag("editable", _editable, true);
 
       if (xml.clipboardmode())
             xml.tag("expanded", _expanded, false);

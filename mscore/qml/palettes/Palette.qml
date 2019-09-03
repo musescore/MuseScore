@@ -152,7 +152,7 @@ GridView {
                 // first check if controller allows dropping this item here
                 const mimeData = Utils.dropEventMimeData(drag);
                 internal = (drag.source.parentModelIndex == paletteView.paletteRootIndex);
-                action = paletteView.paletteController.dropAction(mimeData, drag.supportedActions, internal);
+                action = paletteView.paletteController.dropAction(mimeData, drag.supportedActions, paletteView.paletteRootIndex, internal);
 
                 const externalMove = (action == Qt.MoveAction) && !internal;
                 const accept = (action & drag.supportedActions) && !(externalMove && paletteView.externalMoveBlocked);
@@ -407,6 +407,9 @@ GridView {
                 acceptedButtons: Qt.RightButton
 
                 onClicked: {
+                    if (!paletteView.paletteController.canEdit(paletteView.paletteRootIndex))
+                        return;
+
                     contextMenu.modelIndex = paletteCell.modelIndex;
                     if (contextMenu.popup) // Menu.popup() is available since Qt 5.10 only
                         contextMenu.popup();
@@ -420,9 +423,7 @@ GridView {
 
             Drag.active: paletteCellDragArea.drag.active
             Drag.dragType: Drag.Automatic
-            Drag.supportedActions: Qt.CopyAction | Qt.MoveAction // TODO: it would be good to switch to Qt.MoveAction
-                                                 // on drags within a palette or between master and
-                                                 // visible palettes but this doesn't seem possible
+            Drag.supportedActions: Qt.CopyAction | (model.editable ? Qt.MoveAction : 0)
             Drag.proposedAction: Qt.CopyAction
             Drag.mimeData: Drag.active ? mimeData : {}
 

@@ -78,9 +78,12 @@ static QModelIndex convertProxyIndex(const QModelIndex& srcIndex, const QAbstrac
 //   UserPaletteController::dropAction
 //---------------------------------------------------------
 
-Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt::DropActions supportedActions, bool internal) const
+Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt::DropActions supportedActions, const QModelIndex& parent, bool internal) const
       {
-      if (internal && readOnly())
+      if (internal && !userEditable())
+            return Qt::IgnoreAction;
+      const bool parentEditingEnabled = model()->data(parent, PaletteTreeModel::EditableRole).toBool();
+      if (!parentEditingEnabled)
             return Qt::IgnoreAction;
 
       if (mimeData.contains(PaletteCell::mimeDataFormat) && (supportedActions & Qt::MoveAction)) {
@@ -105,7 +108,9 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
 
 bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVariantMap& mimeData)
       {
-      const Qt::DropAction action = dropAction(mimeData, Qt::DropActions(Qt::CopyAction | Qt::MoveAction), false); // TODO: make it an argument, then there won't be a need in this override
+      const Qt::DropAction action = dropAction(mimeData, Qt::DropActions(Qt::CopyAction | Qt::MoveAction), parent, false); // TODO: make it an argument, then there won't be a need in this override
+      if (action == Qt::IgnoreAction)
+          return false;
 
       std::unique_ptr<PaletteCell> cell;
 
@@ -122,6 +127,8 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
                   const QModelIndex foundIndex(_userPalette->findPaletteCell(*cell, visiblePaletteParentIndex));
                   if (foundIndex.isValid())
                         return _userPalette->setData(foundIndex, _visible, PaletteTreeModel::VisibleRole);
+                  else if (!userEditable())
+                        return false;
                   }
             }
       else if (mimeData.contains(mimeSymbolFormat) && (action == Qt::CopyAction))
@@ -149,7 +156,7 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
 
 bool UserPaletteController::move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild)
       {
-      if (readOnly())
+      if (!canEdit(sourceParent) || !canEdit(destinationParent))
             return false;
       if (sourceParent == destinationParent && (sourceParent.model() == model() || !sourceParent.isValid())) {
             const QModelIndex srcIndex = convertProxyIndex(model()->index(sourceRow, 0, sourceParent), _userPalette);
@@ -165,7 +172,7 @@ bool UserPaletteController::move(const QModelIndex& sourceParent, int sourceRow,
 
 bool UserPaletteController::remove(const QModelIndex& parent, int row)
       {
-      if (readOnly())
+      if (!canEdit(parent))
             return false;
 
       const QModelIndex index = model()->index(row, 0, parent);
@@ -184,7 +191,7 @@ bool UserPaletteController::remove(const QModelIndex& parent, int row)
 
 void UserPaletteController::editPaletteProperties(const QModelIndex& index)
       {
-      if (readOnly())
+      if (!canEdit(index))
             return;
 
       const QModelIndex srcIndex = convertProxyIndex(index, _userPalette);
@@ -206,7 +213,7 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
 
 void UserPaletteController::editCellProperties(const QModelIndex& index)
       {
-      if (readOnly())
+      if (!canEdit(index))
             return;
 
       const QModelIndex srcIndex = convertProxyIndex(index, _userPalette);
@@ -220,6 +227,18 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
       d->setModal(true);
       d->setAttribute(Qt::WA_DeleteOnClose);
       d->open();
+      }
+
+//---------------------------------------------------------
+//   UserPaletteController::canEdit
+//---------------------------------------------------------
+
+bool UserPaletteController::canEdit(const QModelIndex& index) const
+      {
+      if (!userEditable())
+            return false;
+
+      return model()->data(index, PaletteTreeModel::EditableRole).toBool();
       }
 
 //---------------------------------------------------------
@@ -346,7 +365,7 @@ AbstractPaletteController* PaletteWorkspace::poolPaletteController(FilterPalette
       UserPaletteController* c = new UserPaletteController(poolPaletteModel, userPalette);
       c->setVisible(false);
       c->setCustom(false);
-      c->setReadOnly(true); // TODO: rename to disable just internal move
+      c->setUserEditable(false);
 //       AbstractPaletteController* c = new MasterPaletteController(poolPaletteModel, userPalette, this);
       QQmlEngine::setObjectOwnership(c, QQmlEngine::JavaScriptOwnership);
       return c;

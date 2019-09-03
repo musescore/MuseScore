@@ -42,9 +42,9 @@ class AbstractPaletteController : public QObject {
       AbstractPaletteController(QObject* parent = nullptr) : QObject(parent) {}
 
       // TODO: add proposedAction argument or revert to canDropMimeData analog.
-      Q_INVOKABLE virtual Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropActions supportedActions, bool internal) const
+      Q_INVOKABLE virtual Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropActions supportedActions, const QModelIndex& parent, bool internal) const
             {
-            Q_UNUSED(mimeData); Q_UNUSED(supportedActions); Q_UNUSED(internal);
+            Q_UNUSED(mimeData); Q_UNUSED(supportedActions); Q_UNUSED(parent); Q_UNUSED(internal);
             return Qt::IgnoreAction;
             }
       Q_INVOKABLE virtual bool dropMimeData(const QVariantMap& data, Qt::DropAction action, int row, int column, const QModelIndex& parent) { Q_UNUSED(data); Q_UNUSED(action); Q_UNUSED(row); Q_UNUSED(column); Q_UNUSED(parent); return false; }
@@ -53,6 +53,8 @@ class AbstractPaletteController : public QObject {
       Q_INVOKABLE virtual bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData) = 0; // TODO replace with dropMimeData?
       Q_INVOKABLE virtual bool remove(const QModelIndex& parent, int row) = 0;
       Q_INVOKABLE bool remove(const QModelIndex& index) { return remove(index.parent(), index.row()); }
+
+      Q_INVOKABLE virtual bool canEdit(const QModelIndex&) const { return false; }
 
       Q_INVOKABLE virtual void editPaletteProperties(const QModelIndex& index) { Q_UNUSED(index); }
       Q_INVOKABLE virtual void editCellProperties(const QModelIndex& index) { Q_UNUSED(index); }
@@ -72,9 +74,9 @@ class UserPaletteController : public AbstractPaletteController {
       bool _custom = false;
       bool _filterCustom = false;
 
-      bool _readOnly = false;
+      bool _userEditable = true;
 
-      bool canDropElements() const override { return !_readOnly; }
+      bool canDropElements() const override { return _userEditable; }
 
    protected:
       QAbstractItemModel* model() { return _model; }
@@ -89,7 +91,7 @@ class UserPaletteController : public AbstractPaletteController {
       bool custom() const { return _custom; }
       void setCustom(bool val) { _custom = val; _filterCustom = true; }
 
-      Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropActions supportedActions, bool internal) const override;
+      Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropActions supportedActions, const QModelIndex& parent, bool internal) const override;
 //       Q_INVOKABLE virtual bool dropMimeData(const QVariantMap& data, Qt::DropAction action, int row, int column, const QModelIndex& parent) { return false; }
 
       bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild) override;
@@ -99,8 +101,10 @@ class UserPaletteController : public AbstractPaletteController {
       void editPaletteProperties(const QModelIndex& index) override;
       void editCellProperties(const QModelIndex& index) override;
 
-      bool readOnly() const { return _readOnly; }
-      void setReadOnly(bool val) { _readOnly = val; }
+      bool userEditable() const { return _userEditable; }
+      void setUserEditable(bool val) { _userEditable = val; }
+
+      bool canEdit(const QModelIndex&) const override;
 
       void applyPaletteElement(const QModelIndex& index, Qt::KeyboardModifiers modifiers) override;
       };
