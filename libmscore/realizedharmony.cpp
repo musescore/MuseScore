@@ -106,13 +106,15 @@ const RealizedHarmony::PitchMap RealizedHarmony::generateNotes(int rootTpc, int 
       else
             notes.insert(rootPitch + (DEFAULT_OCTAVE-2)*PITCH_DELTA_OCTAVE, rootTpc);
 
-
       switch (voicing) {
             case Voicing::ROOT_ONLY: //already added root/bass so we are good
                   break;
             case Voicing::AUTO: //auto is close voicing for now since it is the most robust
-            case Voicing::CLOSE://Voices notes in close position in the first octave above middle C
+                  //but just render the root if the harmony isn't understandable
+                  if (!_harmony->parsedForm()->understandable())
+                        break;
                   // FALLTHROUGH
+            case Voicing::CLOSE://Voices notes in close position in the first octave above middle C
                   {
                   notes.insert(rootPitch + DEFAULT_OCTAVE*PITCH_DELTA_OCTAVE, rootTpc);
                   //ensure that notes fall under a specific range
