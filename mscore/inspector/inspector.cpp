@@ -844,7 +844,8 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
             { Pid::DIRECTION,      0, t.direction,       t.resetDirection         },
             { Pid::NUMBER_TYPE,    0, t.numberType,      t.resetNumberType        },
             { Pid::BRACKET_TYPE,   0, t.bracketType,     t.resetBracketType       },
-            { Pid::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         }
+            { Pid::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         },
+            { Pid::SIZE_SPATIUM_DEPENDENT,      0,    t.spatiumDependent,     t.resetSpatiumDependent },
             };
       const std::vector<InspectorPanel> ppList = { {t.title, t.panel} };
       mapSignals(iiList, ppList);
