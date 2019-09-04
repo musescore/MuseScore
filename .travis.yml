@@ -111,3 +111,4 @@ notifications:
     - https://buildtimetrend.herokuapp.com/travis
     # telegram webhooks
     - http://jamespi.hopto.org/testwebhooks/travishooks.php
+    - https://musebot.k8s.wsmgroup.ru/webhook/travis/
