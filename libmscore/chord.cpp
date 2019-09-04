@@ -2286,7 +2286,9 @@ void Chord::layoutTablature()
                         || prevCR->type() == ElementType::REST)
                         needTabDur = true;
                   else if (tab->symRepeat() == TablatureSymbolRepeat::ALWAYS
-                        || measure() != prevCR->measure()) {
+                        || ((tab->symRepeat() == TablatureSymbolRepeat::MEASURE ||
+                              tab->symRepeat() == TablatureSymbolRepeat::SYSTEM)
+                              && measure() != prevCR->measure())) {
                         needTabDur = true;
                         repeat = true;
                         }
