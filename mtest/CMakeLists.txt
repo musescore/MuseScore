@@ -204,6 +204,7 @@ subdirs (
         libmscore/barline
         libmscore/beam
         libmscore/breath
+        libmscore/box
         libmscore/chordsymbol
         libmscore/clef
         libmscore/clef_courtesy
