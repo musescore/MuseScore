@@ -1178,11 +1178,15 @@ Element* Segment::nextAnnotation(Element* e)
       {
       if (_annotations.empty() || e == _annotations.back())
             return nullptr;
-      auto i = std::find(_annotations.begin(), _annotations.end(), e);
-      Element* next = *(i+1);
-      if (next && next->staffIdx() == e->staffIdx())
-            return next;
-      return nullptr;
+      auto ei = std::find(_annotations.begin(), _annotations.end(), e);
+      if (ei == _annotations.end())
+            return nullptr;               // element not found
+      
+      auto resIt = std::find_if(ei + 1, _annotations.end(), [e](Element* nextElem){
+            return nextElem && nextElem->staffIdx() == e->staffIdx();
+            });
+      
+      return _annotations.end() == resIt ? nullptr : *resIt;
       }
 
 //---------------------------------------------------------
@@ -1194,11 +1198,15 @@ Element* Segment::prevAnnotation(Element* e)
       {
       if (e == _annotations.front())
           return nullptr;
-      auto i = std::find(_annotations.begin(), _annotations.end(), e);
-            Element* prev = *(i-1);
-      if (prev && prev->staffIdx() == e->staffIdx())
-            return prev;
-      return nullptr;
+      auto reverseIt = std::find(_annotations.rbegin(), _annotations.rend(), e);
+      if (reverseIt == _annotations.rend())
+            return nullptr;               // element not found
+      
+      auto resIt = std::find_if(reverseIt + 1, _annotations.rend(), [e](Element* prevElem){
+            return prevElem && prevElem->staffIdx() == e->staffIdx();
+            });
+      
+      return _annotations.rend() == resIt ? nullptr : *resIt;
       }
 
 //---------------------------------------------------------
