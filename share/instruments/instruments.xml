@@ -5201,6 +5201,25 @@
                   </Channel>
                   <genre>world</genre>
             </Instrument>
+            <Instrument id="carillon">
+                  <longName>Carillon</longName>
+                  <shortName>Car.</shortName>
+                  <description>Carillon</description>
+                  <musicXMLid>metal.bells.carillon</musicXMLid>
+                  <staves>2</staves>
+                  <clef>G</clef>
+                  <bracket>1</bracket>
+                  <bracketSpan>2</bracketSpan>
+                  <barlineSpan>2</barlineSpan>
+                  <clef staff="2">F</clef>
+                  <aPitchRange>48-96</aPitchRange>
+                  <pPitchRange>48-96</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <program value="14"/> <!-- Tubular Bells -->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="unpitched-percussion">
             <name>Percussion - Unpitched</name>
