@@ -3646,16 +3646,16 @@ void ScoreView::cmdChangeEnharmonic(bool both)
             else {
                   static const int tab[36] = {
                         26, 14,  2,  // 60  B#   C   Dbb
-                        21, 21,  9,  // 61  C#   C#  Db
+                        33, 21,  9,  // 61  B##  C#  Db
                         28, 16,  4,  // 62  C##  D   Ebb
-                        23, 23, 11,  // 63  D#   D#  Eb
+                        23, 11, -1,  // 63  D#   Eb  Fbb
                         30, 18,  6,  // 64  D##  E   Fb
                         25, 13,  1,  // 65  E#   F   Gbb
-                        20, 20,  8,  // 66  F#   F#  Gb
+                        32, 20,  8,  // 66  E##  F#  Gb
                         27, 15,  3,  // 67  F##  G   Abb
                         22, 22, 10,  // 68  G#   G#  Ab
                         29, 17,  5,  // 69  G##  A   Bbb
-                        24, 24, 12,  // 70  A#   A#  Bb
+                        24, 12,  0,  // 70  A#   Bb  Cbb
                         31, 19,  7,  // 71  A##  B   Cb
                         };
                   int tpc = n->tpc();
