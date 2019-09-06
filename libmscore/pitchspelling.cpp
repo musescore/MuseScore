@@ -851,5 +851,31 @@ int step2pitchInterval(int step, int alter)
       return intervals[(step - 1) % 7] + alter;
       }
 
+//----------------------------------------------
+//   function2Tpc
+///   might be temporary, just used to parse nashville notation now
+///
+//----------------------------------------------
+int function2Tpc(const QString& s, Key key) {
+      //TODO - PHV: allow for alternate spellings
+      int alter = 0;
+      int step;
+      if (!s.isEmpty() && s[0].isDigit()) {
+            step = s[0].digitValue();
+            }
+      else if (s.size() > 1 && s[1].isDigit()) {
+            step = s[1].digitValue();
+            if (s[0] == 'b')
+                  alter = -1;
+            else if (s[0] == '#')
+                  alter = 1;
+            }
+      else
+            return Tpc::TPC_INVALID;
+
+      int keyTpc = int(key) + 14; //tpc of key (ex. F# major would be Tpc::F_S)
+      return tpcInterval(keyTpc, step, alter);
+      }
+
 }
 

@@ -200,6 +200,9 @@ const RealizedHarmony::PitchMap RealizedHarmony::generateNotes(int rootTpc, int 
 ///   transposeOffset -- is the necessary adjustment
 ///   that is added to the root and bass
 ///   to get the correct sounding pitch
+///
+///   TODO -: Don't worry about realized harmony for
+///         RNA harmony?
 //---------------------------------------------------
 void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0*/)
       {
@@ -208,7 +211,7 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
       //otherwise checked by RealizedHarmony. This saves us 3 ints of space, but
       //has the added risk
       if (!_dirty) {
-            Q_ASSERT(_notes.first() == rootTpc || _notes.first() == bassTpc);
+            Q_ASSERT(_harmony->harmonyType() != HarmonyType::STANDARD || (_notes.first() == rootTpc || _notes.first() == bassTpc));
             return;
             }
 

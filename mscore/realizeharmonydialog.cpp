@@ -19,6 +19,7 @@
 
 #include "realizeharmonydialog.h"
 #include "libmscore/harmony.h"
+#include "libmscore/staff.h"
 
 namespace Ms {
 
@@ -71,10 +72,19 @@ void RealizeHarmonyDialog::setChordList(QList<Harmony*> hlist)
 
             s += h->harmonyName() + " ";
             QString intervals;
-            QString noteNames = tpc2name(h->rootTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO);
+            QString noteNames;
+            int rootTpc;
+
+            //adjust for nashville function
+            if (h->harmonyType() == HarmonyType::NASHVILLE)
+                  rootTpc = function2Tpc(h->hFunction(), h->staff()->key(h->tick()));
+            else
+                  rootTpc = h->rootTpc();
+
+            noteNames = tpc2name(rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO);
             RealizedHarmony::PitchMap map = h->getRealizedHarmony().notes();
             for (int pitch : map.keys()) {
-                  intervals += QString::number((pitch - tpc2pitch(h->rootTpc())) % 128 % 12) + " ";
+                  intervals += QString::number((pitch - tpc2pitch(rootTpc)) % 128 % 12) + " ";
                   }
             for (int tpc : map.values()) {
                   noteNames += ", " + tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO);

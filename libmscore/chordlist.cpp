@@ -764,6 +764,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                         extl << "6" << "9";
                         correctXmlText();
                         }
+                  _extension = "69";
                   chord += 9;
                   chord += 2;
                   }
