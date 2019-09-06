@@ -1188,7 +1188,24 @@ const RealizedHarmony& Harmony::getRealizedHarmony()
       Interval interval = st->part()->instrument(tick())->transpose();
       if (!score()->styleB(Sid::concertPitch))
             offset = interval.chromatic;
-      _realizedHarmony.update(_rootTpc, _baseTpc, offset);
+
+      //Adjust for Nashville Notation, might be temporary
+      if (_harmonyType == HarmonyType::NASHVILLE && !_realizedHarmony.valid()) {
+            Key key = staff()->key(tick());
+            //parse root
+            int rootTpc = function2Tpc(_function, key);
+
+            //parse bass
+            int slash = _textName.lastIndexOf('/');
+            int bassTpc;
+            if (slash == -1)
+                  bassTpc = Tpc::TPC_INVALID;
+            else
+                  bassTpc = function2Tpc(_textName.mid(slash + 1), key);
+            _realizedHarmony.update(rootTpc, bassTpc, offset);
+            }
+      else
+            _realizedHarmony.update(_rootTpc, _baseTpc, offset);
       return _realizedHarmony;
       }
 
