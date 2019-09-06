@@ -1,4 +1,4 @@
-﻿//=============================================================================
+//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -2396,7 +2396,8 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                   }
             }
       if (fermata) {
-            segment = getSegment(SegmentType::EndBarLine, e.tick());
+            SegmentType st = (e.tick() == endTick() ? SegmentType::EndBarLine : SegmentType::ChordRest);
+            segment = getSegment(st, e.tick());
             segment->add(fermata);
             fermata = nullptr;
             }
