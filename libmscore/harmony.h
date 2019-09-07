@@ -154,8 +154,8 @@ class Harmony final : public TextBase {
 
       bool isRealizable() const
             {
-            return (_rootTpc != Tpc::TPC_INVALID && _parsedForm && _parsedForm->understandable())
-                        || (_harmonyType == HarmonyType::NASHVILLE && _parsedForm && _parsedForm->understandable());
+            return (_rootTpc != Tpc::TPC_INVALID)
+                        || (_harmonyType == HarmonyType::NASHVILLE); // unable to fully check at for nashville at the moment
             }
       QString hFunction() const                { return _function;     }
       QString hUserName() const                { return _userName;     }
