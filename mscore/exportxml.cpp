@@ -1143,6 +1143,10 @@ static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, 
 
 static void creditWords(XmlWriter& xml, Score* s, double x, double y, QString just, QString val, const QList<TextFragment>& words)
       {
+      // prevent incorrect MusicXML for empty text
+      if (words.isEmpty())
+            return;
+
       const QString mtf = s->styleSt(Sid::MusicalTextFont);
       CharFormat defFmt;
       defFmt.setFontFamily(s->styleSt(Sid::staffTextFontFace));
@@ -1183,9 +1187,6 @@ static double parentHeight(const Element* element)
 
 void ExportMusicXml::credits(XmlWriter& xml)
       {
-      const MeasureBase* measure = _score->measures()->first();
-      QString rights = _score->metaTag("copyright");
-
       // determine page formatting
       const double h  = getTenthsFromInches(_score->styleD(Sid::pageHeight));
       const double w  = getTenthsFromInches(_score->styleD(Sid::pageWidth));
@@ -1196,10 +1197,11 @@ void ExportMusicXml::credits(XmlWriter& xml)
       //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
       // write the credits
+      const MeasureBase* measure = _score->measures()->first();
       if (measure) {
             for (const Element* element : measure->el()) {
-                  if (element->type() == ElementType::TEXT) {
-                        const Text* text = (const Text*)element;
+                  if (element->isText()) {
+                        const Text* text = toText(element);
                         const double ph = getTenthsFromDots(parentHeight(text));
 
                         double tx = w / 2;
@@ -1244,6 +1246,7 @@ void ExportMusicXml::credits(XmlWriter& xml)
                   }
             }
 
+      const QString rights = _score->metaTag("copyright");
       if (!rights.isEmpty()) {
             // put copyright at the bottom center of the page
             // note: as the copyright metatag contains plain text, special XML characters must be escaped
