@@ -2393,6 +2393,27 @@ static int determineTupletNormalTicks(ChordRest const* const chord)
       }
 
 //---------------------------------------------------------
+//   beamFanAttribute
+//---------------------------------------------------------
+
+static QString beamFanAttribute(const Beam* const b)
+      {
+      const qreal epsilon = 0.1;
+
+      QString fan;
+      if ((b->growRight() - b->growLeft() > epsilon))
+            fan = "accel";
+
+      if ((b->growLeft() - b->growRight() > epsilon))
+            fan = "rit";
+
+      if (fan != "")
+            return QString(" fan=\"%1\"").arg(fan);
+
+      return "";
+      }
+
+//---------------------------------------------------------
 //   writeBeam
 //---------------------------------------------------------
 
@@ -2403,10 +2424,10 @@ static int determineTupletNormalTicks(ChordRest const* const chord)
 //    <beam number="1">backward hook</beam>
 //    <beam number="1">forward hook</beam>
 
-static void writeBeam(XmlWriter& xml, ChordRest* cr, Beam* b)
+static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
       {
       const auto& elements = b->elements();
-      int idx = elements.indexOf(cr);
+      const int idx = elements.indexOf(cr);
       if (idx == -1) {
             qDebug("Beam::writeMusicXml(): cannot find ChordRest");
             return;
@@ -2416,32 +2437,38 @@ static void writeBeam(XmlWriter& xml, ChordRest* cr, Beam* b)
       int bln = -1; // beam level next chord
       // find beam level previous chord
       for (int i = idx - 1; blp == -1 && i >= 0; --i) {
-            ChordRest* crst = elements[i];
-            if (crst->type() == ElementType::CHORD)
-                  blp = (static_cast<Chord*>(crst))->beams();
+            const auto crst = elements[i];
+            if (crst->isChord())
+                  blp = toChord(crst)->beams();
             }
       // find beam level current chord
-      if (cr->type() == ElementType::CHORD)
-            blc = (static_cast<Chord*>(cr))->beams();
+      if (cr->isChord())
+            blc = toChord(cr)->beams();
       // find beam level next chord
       for (int i = idx + 1; bln == -1 && i < elements.size(); ++i) {
-            ChordRest* crst = elements[i];
-            if (crst->type() == ElementType::CHORD)
-                  bln = (static_cast<Chord*>(crst))->beams();
+            const auto crst = elements[i];
+            if (crst->isChord())
+                  bln = toChord(crst)->beams();
             }
+      // find beam type and write
       for (int i = 1; i <= blc; ++i) {
-            QString s;
-            if (blp < i && bln >= i) s = "begin";
+            QString text;
+            if (blp < i && bln >= i) text = "begin";
             else if (blp < i && bln < i) {
-                  if (bln > 0) s = "forward hook";
-                  else if (blp > 0) s = "backward hook";
+                  if (bln > 0) text = "forward hook";
+                  else if (blp > 0) text = "backward hook";
                   }
             else if (blp >= i && bln < i)
-                  s = "end";
+                  text = "end";
             else if (blp >= i && bln >= i)
-                  s = "continue";
-            if (s != "")
-                  xml.tag(QString("beam number=\"%1\"").arg(i), s);
+                  text = "continue";
+            if (text != "") {
+                  QString tag = "beam";
+                  tag += QString(" number=\"%1\"").arg(i);
+                  if (text == "begin")
+                        tag += beamFanAttribute(b);
+                  xml.tag(tag, text);
+                  }
             }
       }
 
