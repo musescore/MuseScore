@@ -2821,7 +2821,11 @@ QString Note::accessibleExtraInfo() const
                   }
             }
 
-      rez = QString("%1 %2").arg(rez).arg(chord()->accessibleExtraInfo());
+      // only read extra information for top note of chord
+      // (it is reached directly on next/previous element)
+      if (this == chord()->upNote())
+            rez = QString("%1 %2").arg(rez).arg(chord()->accessibleExtraInfo());
+
       return rez;
       }
 
