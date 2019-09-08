@@ -1842,6 +1842,23 @@ int ExportMusicXml::findTrill(const Trill* tr) const
       }
 
 //---------------------------------------------------------
+//   writeAccidental
+//---------------------------------------------------------
+
+static void writeAccidental(XmlWriter& xml, const QString& tagName, const Accidental* const acc)
+      {
+      if (acc) {
+            QString s = accidentalType2MxmlString(acc->accidentalType());
+            if (s != "") {
+                  QString tag = tagName;
+                  if (acc->bracket() != AccidentalBracket::NONE)
+                        tag += " parentheses=\"yes\"";
+                  xml.tag(tag, s);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   wavyLineStart
 //---------------------------------------------------------
 
@@ -1851,6 +1868,7 @@ static void wavyLineStart(const Trill* tr, const int number, Notations& notation
       notations.tag(xml);
       ornaments.tag(xml);
       xml.tagE("trill-mark");
+      writeAccidental(xml, "accidental-mark", tr->accidental());
       QString tagName = "wavy-line type=\"start\"";
       tagName += QString(" number=\"%1\"").arg(number + 1);
       tagName += color2xml(tr);
@@ -2734,24 +2752,6 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
       }
 
 //---------------------------------------------------------
-//   writeAccidental
-//---------------------------------------------------------
-
-static void writeAccidental(XmlWriter& xml, const Note* const note)
-      {
-      auto acc = note->accidental();
-      if (acc) {
-            QString s = accidentalType2MxmlString(acc->accidentalType());
-            if (s != "") {
-                  if (note->accidental()->bracket() != AccidentalBracket::NONE)
-                        xml.tag("accidental parentheses=\"yes\"", s);
-                  else
-                        xml.tag("accidental", s);
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   notePosition
 //---------------------------------------------------------
 
@@ -2866,7 +2866,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
             _xml.tag("voice", voice);
 
             writeTypeAndDots(_xml, note);
-            writeAccidental(_xml, note);
+            writeAccidental(_xml, "accidental", note->accidental());
             writeTimeModification(_xml, note);
 
             // no stem for whole notes and beyond
