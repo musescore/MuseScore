@@ -3884,7 +3884,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, const Fractio
 
 // In MuseScore dynamics are essentially user-defined texts, therefore the ones
 // supported by MusicXML need to be filtered out. Everything not recognized
-// as MusicXML dynamics is written as words.
+// as MusicXML dynamics is written as other-dynamics.
 
 void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       {
@@ -3903,16 +3903,65 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       QString tagName = "dynamics";
       tagName += addPositioningAttributes(dyn);
       _xml.stag(tagName);
-      QString dynTypeName = dyn->dynamicTypeName();
+      const QString dynTypeName = dyn->dynamicTypeName();
+
       if (set.contains(dynTypeName)) {
             _xml.tagE(dynTypeName);
             }
       else if (dynTypeName != "") {
+            std::map<ushort, QChar> map;
+            map[0xE520] = 'p';
+            map[0xE521] = 'm';
+            map[0xE522] = 'f';
+            map[0xE523] = 'r';
+            map[0xE524] = 's';
+            map[0xE525] = 'z';
+            map[0xE526] = 'n';
+
             QString dynText = dynTypeName;
             if (dyn->dynamicType() == Dynamic::Type::OTHER)
                   dynText = dyn->plainText();
-            _xml.tag("other-dynamics", dynText);
+
+            // collect consecutive runs of either dynamics glyphs
+            // or other characters and write the runs.
+            QString text;
+            bool inDynamicsSym = false;
+            for (const auto ch : dynText) {
+                  const auto it = map.find(ch.unicode());
+                  if (it != map.end()) {
+                        // found a SMUFL single letter dynamics glyph
+                        if (!inDynamicsSym) {
+                              if (text != "") {
+                                    _xml.tag("other-dynamics", text);
+                                    text = "";
+                                    }
+                              inDynamicsSym = true;
+                              }
+                        text += it->second;
+                        }
+                  else {
+                        // found a non-dynamics character
+                        if (inDynamicsSym) {
+                              if (text != "") {
+                                    if (set.contains(text))
+                                          _xml.tagE(text);
+                                    else
+                                          _xml.tag("other-dynamics", text);
+                                    text = "";
+                                    }
+                              inDynamicsSym = false;
+                              }
+                        text += ch;
+                        }
+                  }
+            if (text != "") {
+                  if (inDynamicsSym && set.contains(text))
+                        _xml.tagE(text);
+                  else
+                        _xml.tag("other-dynamics", text);
+                  }
             }
+
       _xml.etag();
 
       _xml.etag();
