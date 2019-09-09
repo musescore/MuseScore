@@ -299,6 +299,20 @@ void TimeSig::layout()
             ds.clear();
             }
       else {
+            // "other" timesigs are placed at the middle of the staff too
+            if (sigType == TimeSigType::NORMAL && denominatorString().isEmpty()) {
+                  for (ProlatioTable pt : prolatioList) {
+                        if (numeratorString() == score()->scoreFont()->toString(pt.id)) {
+                              pz = QPointF(0.0, yoff);
+                              setbbox(symBbox(pt.id).translated(pz));
+                              ns.clear();
+                              ns.push_back(pt.id);
+                              ds.clear();
+                              return;
+                              }
+                        }
+                  }
+
             ns = toTimeSigString(_numeratorString.isEmpty()   ? QString::number(_sig.numerator())   : _numeratorString);
             ds = toTimeSigString(_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString);
 
@@ -314,7 +328,7 @@ void TimeSig::layout()
 
             qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
 
-            //align on the wider
+            // align on the wider
             qreal pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
             qreal pnY = yoff + displ + denRect.height() * .5;
 
@@ -491,7 +505,7 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll();      // TODO
+      triggerLayout();
       setGenerated(false);
       return true;
       }

@@ -84,23 +84,6 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
                   break;
             }
 
-      // set ID's of other symbols
-      struct ProlatioTable {
-            SymId id;
-            Icons icon;
-            };
-      static const std::vector<ProlatioTable> prolatioList = {
-            { SymId::mensuralProlation1,  Icons::timesig_prolatio01_ICON },  // tempus perfectum, prol. perfecta
-            { SymId::mensuralProlation2,  Icons::timesig_prolatio02_ICON },  // tempus perfectum, prol. imperfecta
-            { SymId::mensuralProlation3,  Icons::timesig_prolatio03_ICON },  // tempus perfectum, prol. imperfecta, dimin.
-            { SymId::mensuralProlation4,  Icons::timesig_prolatio04_ICON },  // tempus perfectum, prol. perfecta, dimin.
-            { SymId::mensuralProlation5,  Icons::timesig_prolatio05_ICON },  // tempus imperf. prol. perfecta
-            { SymId::mensuralProlation7,  Icons::timesig_prolatio07_ICON },  // tempus imperf., prol. imperfecta, reversed
-            { SymId::mensuralProlation8,  Icons::timesig_prolatio08_ICON },  // tempus imperf., prol. perfecta, dimin.
-            { SymId::mensuralProlation10, Icons::timesig_prolatio10_ICON },  // tempus imperf., prol imperfecta, dimin., reversed
-            { SymId::mensuralProlation11, Icons::timesig_prolatio11_ICON },  // tempus inperf., prol. perfecta, reversed
-            };
-
       ScoreFont* scoreFont = gscore->scoreFont();
       int idx = 0;
       otherCombo->clear();
@@ -134,31 +117,31 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
 void TimeSigProperties::accept()
       {
       TimeSigType ts = TimeSigType::NORMAL;
-      if (textButton->isChecked())
+      if (textButton->isChecked() || otherButton->isChecked())
             ts = TimeSigType::NORMAL;
       else if (fourfourButton->isChecked())
             ts = TimeSigType::FOUR_FOUR;
       else if (allaBreveButton->isChecked())
             ts = TimeSigType::ALLA_BREVE;
-      else if (otherButton->isChecked()) {
-            // if other symbol, set as normal text...
-            ts = TimeSigType::NORMAL;
-            ScoreFont* scoreFont = timesig->score()->scoreFont();
-            SymId symId = (SymId)( otherCombo->itemData(otherCombo->currentIndex()).toInt() );
-            // ...and set numerator to font string for symbol and denominator to empty string
-            timesig->setNumeratorString(scoreFont->toString(symId));
-            timesig->setDenominatorString(QString());
-            }
 
       Fraction actual(zActual->value(), nActual->value());
       Fraction nominal(zNominal->value(), nNominal->value());
       timesig->setSig(actual, ts);
       timesig->setStretch(nominal / actual);
 
-      if (zText->text() != timesig->numeratorString())
-            timesig->setNumeratorString(zText->text());
-      if (nText->text() != timesig->denominatorString())
-            timesig->setDenominatorString(nText->text());
+      if (!otherButton->isChecked()) {
+            if (zText->text() != timesig->numeratorString())
+                  timesig->setNumeratorString(zText->text());
+            if (nText->text() != timesig->denominatorString())
+                  timesig->setDenominatorString(nText->text());
+            }
+      else {
+            ScoreFont* scoreFont = timesig->score()->scoreFont();
+            SymId symId = (SymId)(otherCombo->itemData(otherCombo->currentIndex()).toInt());
+            // set numerator to font string for symbol and denominator to empty string
+            timesig->setNumeratorString(scoreFont->toString(symId));
+            timesig->setDenominatorString(QString());
+            }
 
       Groups g = groups->groups();
       timesig->setGroups(g);

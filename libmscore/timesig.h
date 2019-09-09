@@ -17,6 +17,8 @@
 #include "sig.h"
 #include "mscore.h"
 #include "groups.h"
+#include "sym.h"
+#include "mscore/icons.h"
 
 namespace Ms {
 
@@ -108,7 +110,6 @@ class TimeSig final : public Element {
 
       void setScale(const QSizeF& s)      { _scale = s; }
 
-
       void setFrom(const TimeSig*);
 
       virtual QVariant getProperty(Pid propertyId) const override;
@@ -129,6 +130,27 @@ class TimeSig final : public Element {
       virtual QString accessibleInfo() const override;
       };
 
+//---------------------------------------------------------
+//   ProlatioTable
+//    "Other" symbols
+//---------------------------------------------------------
+
+struct ProlatioTable {
+      SymId id;
+      Icons icon;
+      };
+
+const std::vector<ProlatioTable> prolatioList = {
+      { SymId::mensuralProlation1,  Icons::timesig_prolatio01_ICON },  // tempus perfectum, prol. perfecta
+      { SymId::mensuralProlation2,  Icons::timesig_prolatio02_ICON },  // tempus perfectum, prol. imperfecta
+      { SymId::mensuralProlation3,  Icons::timesig_prolatio03_ICON },  // tempus perfectum, prol. imperfecta, dimin.
+      { SymId::mensuralProlation4,  Icons::timesig_prolatio04_ICON },  // tempus perfectum, prol. perfecta, dimin.
+      { SymId::mensuralProlation5,  Icons::timesig_prolatio05_ICON },  // tempus imperf. prol. perfecta
+      { SymId::mensuralProlation7,  Icons::timesig_prolatio07_ICON },  // tempus imperf., prol. imperfecta, reversed
+      { SymId::mensuralProlation8,  Icons::timesig_prolatio08_ICON },  // tempus imperf., prol. perfecta, dimin.
+      { SymId::mensuralProlation10, Icons::timesig_prolatio10_ICON },  // tempus imperf., prol imperfecta, dimin., reversed
+      { SymId::mensuralProlation11, Icons::timesig_prolatio11_ICON },  // tempus inperf., prol. perfecta, reversed
+      };
+
 }     // namespace Ms
 #endif
-
