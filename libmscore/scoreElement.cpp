@@ -169,6 +169,10 @@ ScoreElement::~ScoreElement()
                   }
             }
       delete[] _propertyFlagsList;
+      if (_plugInWrapper != nullptr)
+            {
+            QMetaObject::invokeMethod(_plugInWrapper, "symbiantDestroyed");
+            }
       }
 
 //---------------------------------------------------------

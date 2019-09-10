@@ -77,8 +77,11 @@ class ScoreElement : public QObject {
 
    protected:
       /// \cond MS_INTERNAL
-      Ms::ScoreElement* const e;
+      Ms::ScoreElement* e;
       /// \endcond
+
+   public slots:
+      void symbiantDestroyed();
 
    public:
       /// \cond MS_INTERNAL
@@ -126,8 +129,14 @@ Wrapper* wrap(T* t, Ownership own = Ownership::SCORE)
                   {
                   w = new Wrapper(t, own);
                   t->setPlugInWrapper(w);
-                  // All wrapper objects should belong to JavaScript code.
-                  QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
+                  //@@@@@@ // All wrapper objects should belong to JavaScript code.
+                  //@@@@@@ QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
+
+				  // All ScoreElement based wrapper objects should belong to Cpp code.
+				  // When the associated MuseScore object is destroyed it will call
+                  // slot "symbiantDestroyed". That handler will set object ownership back to
+                  // the Javascript Engine.
+                  QQmlEngine::setObjectOwnership(w, QQmlEngine::CppOwnership);
                   }
             else
                   w = static_cast<Wrapper*>(t->getPlugInWrapper());

@@ -21,25 +21,44 @@ namespace Ms {
 namespace PluginAPI {
 
 //---------------------------------------------------------
-//   ScoreElement
+//   ScoreElement::~ScoreElement
 //---------------------------------------------------------
 
 ScoreElement::~ScoreElement()
       {
       if (_ownership == Ownership::PLUGIN)
             delete e;
-      else
+      else if (e)
             e->setPlugInWrapper(nullptr);
       }
 
+//---------------------------------------------------------
+//   ScoreElement::symbiantDestroyed
+//---------------------------------------------------------
+
+void ScoreElement::symbiantDestroyed()
+      {
+      QQmlEngine::setObjectOwnership(this, QQmlEngine::JavaScriptOwnership);
+      // Wipe out our pointer to the wrapped object.
+      e = nullptr;
+      }
+
+//---------------------------------------------------------
+//   ScoreElement::name
+//---------------------------------------------------------
+
 QString ScoreElement::name() const
       {
-      return QString(e->name());
+      return QString(e ? e->name() : "");
       }
+
+//---------------------------------------------------------
+//   ScoreElement::type
+//---------------------------------------------------------
 
 int ScoreElement::type() const
       {
-      return int(e->type());
+      return int(e ? e->type() : Ms::ElementType::ELEMENT);
       }
 
 //---------------------------------------------------------
@@ -51,7 +70,7 @@ int ScoreElement::type() const
 
 QString ScoreElement::userName() const
       {
-      return e->userName();
+      return e ? e->userName() : QString("No Score");
       }
 
 //---------------------------------------------------------
@@ -82,7 +101,7 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
       if (propertyType(pid) == P_TYPE::FRACTION) {
             FractionWrapper* f = val.value<FractionWrapper*>();
             if (!f) {
-                  qWarning("ScoreElement::set: trying to assing value of wrong type to fractional property");
+                  qWarning("ScoreElement::set: trying to assign value of wrong type to fractional property");
                   return;
                   }
             val = QVariant::fromValue(f->fraction());
