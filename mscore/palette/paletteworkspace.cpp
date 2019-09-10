@@ -78,7 +78,7 @@ void PaletteElementEditor::onElementAdded(const Element* el)
             }
       QVariantMap mimeData;
       mimeData[mimeSymbolFormat] = el->mimeData(QPointF());
-      _controller->insert(_paletteIndex, -1, mimeData);
+      _controller->insert(_paletteIndex, -1, mimeData, Qt::CopyAction);
       }
 
 //---------------------------------------------------------
@@ -185,7 +185,7 @@ PaletteElementEditor* AbstractPaletteController::elementEditor(const QModelIndex
 //   UserPaletteController::dropAction
 //---------------------------------------------------------
 
-Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt::DropActions supportedActions, const QModelIndex& parent, bool internal) const
+Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt::DropAction proposedAction, const QModelIndex& parent, bool internal) const
       {
       if (internal && !userEditable())
             return Qt::IgnoreAction;
@@ -193,7 +193,7 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
       if (!parentEditingEnabled)
             return Qt::IgnoreAction;
 
-      if (mimeData.contains(PaletteCell::mimeDataFormat) && (supportedActions & Qt::MoveAction)) {
+      if (mimeData.contains(PaletteCell::mimeDataFormat) && proposedAction == Qt::MoveAction) {
             const auto cell = PaletteCell::readMimeData(mimeData[PaletteCell::mimeDataFormat].toByteArray());
             if (!cell)
                   return Qt::IgnoreAction;
@@ -201,7 +201,7 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
                   return Qt::IgnoreAction;
             return Qt::MoveAction;
             }
-      if (mimeData.contains(mimeSymbolFormat) && (supportedActions & Qt::CopyAction)) {
+      if (mimeData.contains(mimeSymbolFormat) && proposedAction == Qt::CopyAction) {
             if (_filterCustom && !_custom)
                   return Qt::IgnoreAction;
             return Qt::CopyAction;
@@ -213,16 +213,15 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
 //   UserPaletteController::insert
 //---------------------------------------------------------
 
-bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVariantMap& mimeData)
+bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action)
       {
+      if (dropAction(mimeData, action, parent, false) == Qt::IgnoreAction)
+            return false;
+
       if (row < 0)
             row = parent.model()->rowCount(parent);
 
-      const Qt::DropAction action = dropAction(mimeData, Qt::DropActions(Qt::CopyAction | Qt::MoveAction), parent, false); // TODO: make it an argument, then there won't be a need in this override
-      if (action == Qt::IgnoreAction)
-          return false;
-
-      std::unique_ptr<PaletteCell> cell;
+      PaletteCellPtr cell;
 
       if (mimeData.contains(PaletteCell::mimeDataFormat)) {
             cell = PaletteCell::readMimeData(mimeData[PaletteCell::mimeDataFormat].toByteArray());
@@ -396,11 +395,11 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
             return;
 
       const QModelIndex srcIndex = convertProxyIndex(index, _userPalette);
-      PaletteCell* cell = _userPalette->findCell(srcIndex);
+      PaletteCellPtr cell = _userPalette->findCell(srcIndex);
       if (!cell)
             return;
 
-      PaletteCellProperties* d = new PaletteCellProperties(cell, mscore);
+      PaletteCellProperties* d = new PaletteCellProperties(cell.get(), mscore);
       PaletteTreeModel* m = _userPalette;
       connect(d, &QDialog::accepted, m, [m, srcIndex]() { m->itemDataChanged(srcIndex); });
       d->setModal(true);

@@ -204,7 +204,7 @@ bool PaletteCell::read(XmlReader& e)
 //   PaletteCell::readMimeData
 //---------------------------------------------------------
 
-std::unique_ptr<PaletteCell> PaletteCell::readMimeData(const QByteArray& data)
+PaletteCellPtr PaletteCell::readMimeData(const QByteArray& data)
       {
       return Ms::readMimeData<PaletteCell>(data, "Cell");
       }
@@ -213,7 +213,7 @@ std::unique_ptr<PaletteCell> PaletteCell::readMimeData(const QByteArray& data)
 //   PaletteCell::readMimeData
 //---------------------------------------------------------
 
-std::unique_ptr<PaletteCell> PaletteCell::readElementMimeData(const QByteArray& data)
+PaletteCellPtr PaletteCell::readElementMimeData(const QByteArray& data)
       {
       QPointF dragOffset;
       Fraction duration(1, 4);
@@ -240,7 +240,7 @@ std::unique_ptr<PaletteCell> PaletteCell::readElementMimeData(const QByteArray& 
 
       const QString name = (e->isFretDiagram()) ? toFretDiagram(e.get())->harmonyText() : e->userName();
 
-      return std::unique_ptr<PaletteCell>(new PaletteCell(std::move(e), name));
+      return PaletteCellPtr(new PaletteCell(std::move(e), name));
       }
 
 //---------------------------------------------------------
@@ -298,7 +298,7 @@ bool PalettePanel::read(XmlReader& e)
             else if (t == "editable")
                   _editable = e.readBool();
             else if (t == "Cell") {
-                  std::unique_ptr<PaletteCell> cell(new PaletteCell);
+                  PaletteCellPtr cell(new PaletteCell);
                   if (!cell->read(e))
                         continue;
                   cells.push_back(std::move(cell));
@@ -389,9 +389,9 @@ PaletteCell* PalettePanel::append(Element* e, const QString& name, QString tag, 
 //   PalettePanel::takeCells
 //---------------------------------------------------------
 
-std::vector<std::unique_ptr<PaletteCell>> PalettePanel::takeCells(int idx, int count)
+std::vector<PaletteCellPtr> PalettePanel::takeCells(int idx, int count)
       {
-      std::vector<std::unique_ptr<PaletteCell>> removedCells;
+      std::vector<PaletteCellPtr> removedCells;
       removedCells.reserve(count);
 
       if (idx < 0 || idx + count > int(cells.size()))
@@ -410,7 +410,7 @@ std::vector<std::unique_ptr<PaletteCell>> PalettePanel::takeCells(int idx, int c
 //   PalettePanel::insertCells
 //---------------------------------------------------------
 
-bool PalettePanel::insertCells(int idx, std::vector<std::unique_ptr<PaletteCell>> insertedCells)
+bool PalettePanel::insertCells(int idx, std::vector<PaletteCellPtr> insertedCells)
       {
       if (idx < 0 || idx > int(cells.size()))
             return false;
@@ -424,7 +424,7 @@ bool PalettePanel::insertCells(int idx, std::vector<std::unique_ptr<PaletteCell>
 //   PalettePanel::insertCell
 //---------------------------------------------------------
 
-bool PalettePanel::insertCell(int idx, std::unique_ptr<PaletteCell> cell)
+bool PalettePanel::insertCell(int idx, PaletteCellPtr cell)
       {
       if (idx < 0 || idx > int(cells.size()))
             return false;
@@ -721,7 +721,10 @@ void PaletteCellIconEngine::paint(QPainter* painter, const QRect& rect, QIcon::M
 //                   continue;
 //             PaletteCell* cc = ccp()->at(idx);      // current cell
 
-            const PaletteCell* cc = _cell; // TODO: current cell
+            PaletteCellConstPtr cc = cell();
+
+            if (!cc)
+                return;
 
             QString tag = cc->tag;
             if (!tag.isEmpty()) {

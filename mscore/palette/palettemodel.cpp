@@ -109,7 +109,7 @@ PalettePanel* PaletteTreeModel::findPalettePanel(const QModelIndex& index)
 //   PaletteTreeModel::findCell
 //---------------------------------------------------------
 
-const PaletteCell* PaletteTreeModel::findCell(const QModelIndex& index) const
+PaletteCellConstPtr PaletteTreeModel::findCell(const QModelIndex& index) const
       {
       if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer())) {
             const int row = index.row();
@@ -125,9 +125,9 @@ const PaletteCell* PaletteTreeModel::findCell(const QModelIndex& index) const
 //   PaletteTreeModel::findCell
 //---------------------------------------------------------
 
-PaletteCell* PaletteTreeModel::findCell(const QModelIndex& index)
+PaletteCellPtr PaletteTreeModel::findCell(const QModelIndex& index)
       {
-      return const_cast<PaletteCell*>(const_cast<const PaletteTreeModel*>(this)->findCell(index));
+      return std::const_pointer_cast<PaletteCell>(const_cast<const PaletteTreeModel*>(this)->findCell(index));
       }
 
 //---------------------------------------------------------
@@ -242,7 +242,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
             return QVariant();
             }
 
-      if (const PaletteCell* cell = findCell(index)) {
+      if (PaletteCellConstPtr cell = findCell(index)) {
             switch (role) {
                   case Qt::DisplayRole: // TODO don't display cell names in palettes
                   case Qt::ToolTipRole:
@@ -255,7 +255,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                         return QIcon(new PaletteCellIconEngine(cell, extraMag));
                         }
                   case PaletteCellRole:
-                        return QVariant::fromValue(cell);
+                        return QVariant::fromValue(cell.get());
                   case VisibleRole:
                         return cell->visible;
                   case CustomRole:
@@ -370,7 +370,7 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
             return false;
             }
 
-      if (PaletteCell* cell = findCell(index)) {
+      if (PaletteCellPtr cell = findCell(index)) {
             switch (role) {
 //                   case Qt::DisplayRole:
 //                   case Qt::ToolTipRole:
@@ -409,7 +409,7 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
 
                         if (map.contains(PaletteCell::mimeDataFormat)) {
                               const QByteArray cellMimeData = map[PaletteCell::mimeDataFormat].toByteArray();
-                              std::unique_ptr<PaletteCell> newCell(PaletteCell::readMimeData(cellMimeData));
+                              PaletteCellPtr newCell(PaletteCell::readMimeData(cellMimeData));
                               if (!newCell)
                                     return false;
                               *cell = std::move(*newCell);
@@ -483,7 +483,7 @@ QMimeData* PaletteTreeModel::mimeData(const QModelIndexList& indexes) const
       if (const PalettePanel* pp = findPalettePanel(indexes[0])) {
             mime->setData(PalettePanel::mimeDataFormat, pp->mimeData());
             }
-      else if (const PaletteCell* cell = findCell(indexes[0])) {
+      else if (PaletteCellConstPtr cell = findCell(indexes[0])) {
             mime->setData(mimeSymbolFormat, cell->element->mimeData(QPointF()));
             }
 
@@ -552,7 +552,7 @@ bool PaletteTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action
             if (row < 0 || row > pp->ncells())
                   return false;
 
-            std::unique_ptr<PaletteCell> cell;
+            PaletteCellPtr cell;
 
             if (data->hasFormat(PaletteCell::mimeDataFormat)) {
                   cell = PaletteCell::readMimeData(data->data(PaletteCell::mimeDataFormat));
@@ -722,7 +722,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
 
             beginInsertRows(parent, row, row + count - 1);
             for (int i = 0; i < count; ++i)
-                  panel->insertCell(row, std::unique_ptr<PaletteCell>(new PaletteCell));
+                  panel->insertCell(row, PaletteCellPtr(new PaletteCell));
             endInsertRows();
             return true;
             }

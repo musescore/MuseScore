@@ -124,6 +124,9 @@ ListView {
         id: placeholder
         delegateModel: paletteTreeDelegateModel
     }
+    function placeholderData() {
+        return { display: "", gridSize: Qt.size(1, 1), drawGrid: false, custom: false, editable: false };
+    }
 
     model: DelegateModel {
         id: paletteTreeDelegateModel
@@ -152,7 +155,6 @@ ListView {
             background: Rectangle {
                 visible: !control.Drag.active
                 z: -1
-                anchors.fill: parent
                 color: control.selected ? globalStyle.highlight: (control.highlighted ? Qt.lighter(globalStyle.button, 1.2) : (control.down ? globalStyle.button : "transparent"))
             }
 
@@ -203,6 +205,7 @@ ListView {
                     togglePopup();
                 DelegateModel.inPersistedItems = true;
                 DelegateModel.inItems = false;
+                placeholder.makePlaceholder(control.rowIndex, paletteTree.placeholderData());
             }
 
             Drag.onDragFinished: {
@@ -224,8 +227,9 @@ ListView {
                 anchors { fill: parent/*; margins: 10*/ }
                 keys: [ "application/musescore/palettetree" ]
                 onEntered: {
-                    if (rowIndex != -1)
-                        placeholder.makePlaceholder(rowIndex, { display: "", gridSize: Qt.size(1, 1), drawGrid: false, custom: false });
+                    const idx = control.DelegateModel.itemsIndex;
+                    if (!control.DelegateModel.isUnresolved)
+                        placeholder.makePlaceholder(idx, paletteTree.placeholderData());
                 }
                 onDropped: {
                     if (drop.proposedAction == Qt.MoveAction)
@@ -234,6 +238,7 @@ ListView {
             }
 
             contentItem: Column {
+                visible: !control.DelegateModel.isUnresolved
                 states: [
                     State {
                         name: "collapsed"
@@ -330,7 +335,7 @@ ListView {
                         cellSize: control.cellSize
                         drawGrid: control.drawGrid
 
-                        paletteModel: control.text.length ? paletteTree.paletteModel : null // TODO: other way to detect a placeholder?
+                        paletteModel: control.DelegateModel.isUnresolved ? null : paletteTree.paletteModel
                         paletteRootIndex: control.modelIndex
                         paletteController: paletteTree.paletteController
                         selectionModel: paletteSelectionModel
@@ -343,7 +348,7 @@ ListView {
                         }
 
                         enableAnimations: paletteTree.enableAnimations
-                        externalMoveBlocked: paletteTree.expandedPopupIndex && !control.popupExpanded // FIXME: find another way to prevent drops go under a popup
+                        externalDropBlocked: paletteTree.expandedPopupIndex && !control.popupExpanded // FIXME: find another way to prevent drops go under a popup
                     }
                 }
 
@@ -410,7 +415,7 @@ ListView {
                         var idx = paletteTree.paletteModel.rowCount(parentIndex);
                         for (var i = 0; i < mimeDataList.length; i++) {
                             const mimeData = mimeDataList[i];
-                            if (paletteTree.paletteController.insert(parentIndex, idx, mimeData))
+                            if (paletteTree.paletteController.insert(parentIndex, idx, mimeData, Qt.MoveAction))
                                 idx++;
                         }
                     }
