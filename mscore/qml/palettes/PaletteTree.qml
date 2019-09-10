@@ -280,6 +280,7 @@ ListView {
                             && paletteSelectionModel.hasSelection && paletteSelectionModel.columnIntersectsSelection(0, control.modelIndex)
                             && paletteTree.paletteModel.parent(paletteSelectionModel.currentIndex) == control.modelIndex; // HACK to work around a (possible?) bug in columnIntersectsSelection
                     }
+                    custom: model.custom
 
                     onToggleExpandRequested: {
                         paletteTree.currentIndex = control.rowIndex;

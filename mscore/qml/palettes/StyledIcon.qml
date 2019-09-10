@@ -22,6 +22,7 @@ import QtGraphicalEffects 1.0
 
 Item {
     property string source: ""
+    property color color: globalStyle.buttonText
 
     Image {
         id: img
@@ -32,6 +33,6 @@ Item {
     ColorOverlay {
         anchors.fill: img
         source: img
-        color: globalStyle.buttonText
+        color: parent.color
     }
 }

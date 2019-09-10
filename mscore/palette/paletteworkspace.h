@@ -68,6 +68,12 @@ class AbstractPaletteController : public QObject {
       virtual bool canDropElements() const { return false; }
 
    public:
+      enum class RemoveAction {
+            NoAction,
+            Hide,
+            DeletePermanently
+            };
+
       AbstractPaletteController(QObject* parent = nullptr) : QObject(parent) {}
 
       // TODO: add proposedAction argument or revert to canDropMimeData analog.
@@ -80,8 +86,7 @@ class AbstractPaletteController : public QObject {
 
       Q_INVOKABLE virtual bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild) = 0;
       Q_INVOKABLE virtual bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData) = 0; // TODO replace with dropMimeData?
-      Q_INVOKABLE virtual bool remove(const QModelIndex& parent, int row) = 0;
-      Q_INVOKABLE bool remove(const QModelIndex& index) { return remove(index.parent(), index.row()); }
+      Q_INVOKABLE virtual bool remove(const QModelIndex&) { return false; };
 
       Q_INVOKABLE virtual bool canEdit(const QModelIndex&) const { return false; }
 
@@ -98,6 +103,8 @@ class AbstractPaletteController : public QObject {
 //---------------------------------------------------------
 
 class UserPaletteController : public AbstractPaletteController {
+      Q_OBJECT
+
       QAbstractItemModel* _model;
       PaletteTreeModel* _userPalette;
 
@@ -108,6 +115,9 @@ class UserPaletteController : public AbstractPaletteController {
       bool _userEditable = true;
 
       bool canDropElements() const override { return _userEditable; }
+
+      AbstractPaletteController::RemoveAction showHideOrDeleteDialog(const QString& question) const;
+      AbstractPaletteController::RemoveAction queryRemoveAction(const QModelIndex& index) const;
 
    protected:
       QAbstractItemModel* model() { return _model; }
@@ -127,7 +137,7 @@ class UserPaletteController : public AbstractPaletteController {
 
       bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild) override;
       bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData) override; // TODO replace with dropMimeData? (+ action)
-      bool remove(const QModelIndex& parent, int row) override;
+      bool remove(const QModelIndex& index) override;
 
       void editPaletteProperties(const QModelIndex& index) override;
       void editCellProperties(const QModelIndex& index) override;
@@ -170,6 +180,11 @@ class PaletteWorkspace : public QObject {
       FilterPaletteTreeModel* customElementsPaletteModel();
       AbstractPaletteController* getCustomElementsPaletteController();
 
+      enum PalettesModelRoles {
+            CustomRole = Qt::UserRole + 1,
+            PaletteIndexRole
+            };
+
    public:
       explicit PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master = nullptr, QObject* parent = nullptr)
          : QObject(parent), userPalette(user), masterPalette(master) {}
@@ -182,9 +197,10 @@ class PaletteWorkspace : public QObject {
 
       PaletteTreeModel* userPaletteModel() { return userPalette; }
 
-      Q_INVOKABLE QAbstractItemModel* availableExtraPalettePanelsModel();
-      Q_INVOKABLE bool addPalette(QString name);
+      Q_INVOKABLE QAbstractItemModel* availableExtraPalettesModel();
+      Q_INVOKABLE bool addPalette(const QPersistentModelIndex&);
       Q_INVOKABLE bool addCustomPalette(int idx = -1);
+      Q_INVOKABLE bool removeCustomPalette(const QPersistentModelIndex&);
 
       bool paletteChanged() const { return userPalette->paletteTreeChanged(); }
 

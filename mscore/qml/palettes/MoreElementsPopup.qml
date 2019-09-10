@@ -22,6 +22,8 @@ import QtQuick.Controls 2.1
 import QtQml.Models 2.2
 import MuseScore.Palette 3.3
 
+import "utils.js" as Utils
+
 StyledPopup {
     id: moreElementsPopup
 
@@ -162,15 +164,44 @@ StyledPopup {
                 }
 
                 ToolSeparator {
+                    id: separator
                     visible: !customPalette.empty
                     orientation: Qt.Horizontal
                     width: parent.contentWidth
                 }
 
-                Text {
-                    id: customPaletteLabel
+                Item {
+                    width: separator.width
+                    implicitHeight: customPaletteLabel.implicitHeight
                     visible: !customPalette.empty
-                    text: qsTr("Custom")
+
+                    Text {
+                        id: customPaletteLabel
+                        text: qsTr("Custom")
+                    }
+
+                    StyledToolButton {
+                        id: deleteButton
+                        height: customPaletteLabel.height
+                        width: height
+                        anchors.right: parent.right
+                        text: qsTr("Delete element(s)")
+                        enabled: customPaletteSelectionModel.hasSelection
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: text
+
+                        padding: 0
+
+                        contentItem: StyledIcon {
+                            source: "icons/delete.png"
+                            color: "black"
+                            opacity: deleteButton.enabled ? 1.0 : 0.3
+                        }
+
+                        onClicked: Utils.removeSelectedItems(moreElementsPopup.customPalette, moreElementsPopup.customPaletteController, customPaletteSelectionModel, moreElementsPopup.customPaletteRootIndex);
+                    }
                 }
 
                 ItemSelectionModel {

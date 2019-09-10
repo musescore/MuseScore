@@ -845,14 +845,15 @@ void PaletteCellFilter::connectToModel(const QAbstractItemModel* model)
 
 class ExcludePaletteCellFilter : public PaletteCellFilter {
       const PalettePanel* excludePanel;
+      const QPersistentModelIndex panelIndex; // filter is valid as long as this index is valid too
 
    public:
-      ExcludePaletteCellFilter(const PalettePanel* p, QObject* parent = nullptr)
-         : PaletteCellFilter(parent), excludePanel(p) {}
+      ExcludePaletteCellFilter(const PalettePanel* p, QPersistentModelIndex index, QObject* parent = nullptr)
+         : PaletteCellFilter(parent), excludePanel(p), panelIndex(std::move(index)) {}
 
       bool acceptCell(const PaletteCell& cell) const override
             {
-            return -1 == excludePanel->findPaletteCell(cell, /* matchName */ false);
+            return panelIndex.isValid() && -1 == excludePanel->findPaletteCell(cell, /* matchName */ false);
             }
       };
 
@@ -865,7 +866,7 @@ class ExcludePaletteCellFilter : public PaletteCellFilter {
 PaletteCellFilter* PaletteTreeModel::getFilter(const QModelIndex& index) const
       {
       if (const PalettePanel* pp = findPalettePanel(index)) {
-            ExcludePaletteCellFilter* filter = new ExcludePaletteCellFilter(pp);
+            ExcludePaletteCellFilter* filter = new ExcludePaletteCellFilter(pp, index);
             filter->connectToModel(this);
             return filter;
             }
