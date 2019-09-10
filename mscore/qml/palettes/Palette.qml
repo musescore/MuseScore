@@ -95,6 +95,12 @@ GridView {
 
     signal moreButtonClicked()
 
+    MouseArea {
+        // Dummy MouseArea to prevent propagation of clicks on empty place to palette's parent
+        z: -1000
+        anchors.fill: parent
+    }
+
     StyledButton {
         id: moreButton
         visible: showMoreButton
