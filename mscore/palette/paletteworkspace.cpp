@@ -277,22 +277,91 @@ bool UserPaletteController::move(const QModelIndex& sourceParent, int sourceRow,
       }
 
 //---------------------------------------------------------
+//   UserPaletteController::showHideOrDeleteDialog
+//---------------------------------------------------------
+
+AbstractPaletteController::RemoveAction UserPaletteController::showHideOrDeleteDialog(const QString& question) const
+      {
+      QMessageBox msg;
+      msg.setIcon(QMessageBox::Question);
+      msg.setText(question);
+      msg.setTextFormat(Qt::PlainText);
+      QPushButton* deleteButton = msg.addButton(tr("Delete permanently"), QMessageBox::DestructiveRole);
+      QPushButton* hideButton = msg.addButton(tr("Keep a copy"), QMessageBox::AcceptRole);
+      msg.addButton(QMessageBox::Cancel);
+      msg.setDefaultButton(hideButton);
+
+      msg.exec();
+      QAbstractButton* btn = msg.clickedButton();
+      if (btn == deleteButton)
+            return RemoveAction::DeletePermanently;
+      if (btn == hideButton)
+            return RemoveAction::Hide;
+      return RemoveAction::NoAction;
+      }
+
+//---------------------------------------------------------
 //   UserPaletteController::remove
 //---------------------------------------------------------
 
-bool UserPaletteController::remove(const QModelIndex& parent, int row)
+AbstractPaletteController::RemoveAction UserPaletteController::queryRemoveAction(const QModelIndex& index) const
       {
-      if (!canEdit(parent))
-            return false;
+      using RemoveAction = AbstractPaletteController::RemoveAction;
 
-      const QModelIndex index = model()->index(row, 0, parent);
-      const bool custom = model()->data(index, PaletteTreeModel::CustomRole).toBool(); // TODO: check canConvert?
-      const bool visible = model()->data(index, PaletteTreeModel::VisibleRole).toBool(); // TODO: check canConvert?
+      if (!canEdit(index.parent()))
+            return RemoveAction::NoAction;
+
+      const bool custom = model()->data(index, PaletteTreeModel::CustomRole).toBool();
+      const bool visible = model()->data(index, PaletteTreeModel::VisibleRole).toBool();
       const bool isCell = bool(model()->data(index, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>());
-      if ((custom || !isCell) && visible)
-            return model()->setData(index, false, PaletteTreeModel::VisibleRole);
-      else // no need to keep standard insivible cells, just remove them from the model
-            return model()->removeRow(row, parent);
+
+      if (isCell) {
+            if (!custom) {
+                  // no need to keep standard insivible cells, just remove them from the model
+                  return RemoveAction::DeletePermanently;
+                  }
+
+            if (visible)
+                  return showHideOrDeleteDialog(tr("Do you want to permanently delete this custom palette cell or keep a copy in the library?"));
+            else {
+                  const auto answer = QMessageBox::question(
+                        nullptr,
+                        "",
+                        tr("Do you want to permanently delete this custom palette?"),
+                        QMessageBox::Yes | QMessageBox::No
+                        );
+
+                  if (answer == QMessageBox::Yes)
+                        return RemoveAction::DeletePermanently;
+                  return RemoveAction::NoAction;
+                  }
+
+            return RemoveAction::NoAction;
+            }
+      else {
+            if (visible && custom)
+                  return showHideOrDeleteDialog(tr("Do you want to permanently delete this custom palette or keep a copy in the \"More Palettes\" list?"));
+            return RemoveAction::Hide;
+            }
+      }
+
+//---------------------------------------------------------
+//   UserPaletteController::remove
+//---------------------------------------------------------
+
+bool UserPaletteController::remove(const QModelIndex& index)
+      {
+      using RemoveAction = AbstractPaletteController::RemoveAction;
+      const RemoveAction action = queryRemoveAction(index);
+      switch (action) {
+            case RemoveAction::NoAction:
+                  break;
+            case RemoveAction::Hide:
+                  return model()->setData(index, false, PaletteTreeModel::VisibleRole);
+            case RemoveAction::DeletePermanently:
+                  return model()->removeRow(index.row(), index.parent());
+            }
+      return false;
       }
 
 //---------------------------------------------------------
@@ -485,19 +554,28 @@ AbstractPaletteController* PaletteWorkspace::poolPaletteController(FilterPalette
 //   PaletteWorkspace::availableExtraPalettePanelsModel
 //---------------------------------------------------------
 
-QAbstractItemModel* PaletteWorkspace::availableExtraPalettePanelsModel()
+QAbstractItemModel* PaletteWorkspace::availableExtraPalettesModel()
       {
       QStandardItemModel* m = new QStandardItemModel;
+
+      {
+      auto roleNames = m->roleNames();
+      roleNames[CustomRole] = "custom";
+      roleNames[PaletteIndexRole] = "paletteIndex";
+      m->setItemRoleNames(roleNames);
+      }
 
       QStandardItem* root = m->invisibleRootItem();
 
       const int masterRows = masterPalette->rowCount();
       for (int row = 0; row < masterRows; ++row) {
             const QModelIndex idx = masterPalette->index(row, 0);
-            // add everything that cannot be found in visible palette
-            if (!convertIndex(idx, mainPalette).isValid()) {
+            // add everything that cannot be found in user palette
+            if (!convertIndex(idx, userPalette).isValid()) {
                   const QString name = masterPalette->data(idx, Qt::DisplayRole).toString();
                   QStandardItem* item = new QStandardItem(name);
+                  item->setData(false, CustomRole); // this palette is from master palette, hence not custom
+                  item->setData(QPersistentModelIndex(idx), PaletteIndexRole);
                   root->appendRow(item);
                   }
             }
@@ -508,9 +586,11 @@ QAbstractItemModel* PaletteWorkspace::availableExtraPalettePanelsModel()
             // add invisible custom palettes
             const bool visible = userPalette->data(idx, PaletteTreeModel::VisibleRole).toBool();
             const bool custom = userPalette->data(idx, PaletteTreeModel::CustomRole).toBool();
-            if (!visible && custom) {
+            if (!visible) {
                   const QString name = userPalette->data(idx, Qt::DisplayRole).toString();
                   QStandardItem* item = new QStandardItem(name);
+                  item->setData(custom, CustomRole);
+                  item->setData(QPersistentModelIndex(idx), PaletteIndexRole);
                   root->appendRow(item);
                   }
             }
@@ -523,31 +603,48 @@ QAbstractItemModel* PaletteWorkspace::availableExtraPalettePanelsModel()
 //   PaletteWorkspace::addPalette
 //---------------------------------------------------------
 
-bool PaletteWorkspace::addPalette(QString name)
+bool PaletteWorkspace::addPalette(const QPersistentModelIndex& index)
       {
-      const int role = Qt::DisplayRole;
-      const QVariant value(name);
+      if (!index.isValid())
+            return false;
 
-      // try to find a palette in invisible user palette's items
-      {
-      const QModelIndex start = userPalette->index(0, 0);
-      const QAbstractItemModel* m = userPalette;
-      const QModelIndexList foundIndexList = m->match(start, role, value);
-      if (!foundIndexList.empty())
-            return userPalette->setData(foundIndexList[0], true, PaletteTreeModel::VisibleRole);
-      }
+      if (index.model() == userPalette)
+            return userPalette->setData(index, true, PaletteTreeModel::VisibleRole);
 
-      // if not found, add from a master palette
-      // TODO: need some "basic" default palette
-      {
-      const QModelIndex start = masterPalette->index(0, 0);
-      const QAbstractItemModel* m = masterPalette;
-      const QModelIndexList foundIndexList = m->match(start, role, value);
-      if (!foundIndexList.empty()) {
-            const QMimeData* data = masterPalette->mimeData(foundIndexList);
+      if (index.model() == masterPalette) {
+            const QMimeData* data = masterPalette->mimeData({ QModelIndex(index) });
             return userPalette->dropMimeData(data, Qt::CopyAction, 0, 0, QModelIndex());
             }
+
+      return false;
       }
+
+//---------------------------------------------------------
+//   PaletteWorkspace::removeCustomPalette
+//---------------------------------------------------------
+
+bool PaletteWorkspace::removeCustomPalette(const QPersistentModelIndex& index)
+      {
+      if (!index.isValid())
+            return false;
+
+
+      if (index.model() == userPalette) {
+            const bool custom = index.data(PaletteTreeModel::CustomRole).toBool();
+            if (!custom)
+                  return false;
+
+            const auto answer = QMessageBox::question(
+                  nullptr,
+                  "",
+                  tr("Do you want to permanently delete this custom palette?"),
+                  QMessageBox::Yes | QMessageBox::No
+                  );
+
+            if (answer == QMessageBox::Yes)
+                  return userPalette->removeRow(index.row(), index.parent());
+            return false;
+            }
 
       return false;
       }

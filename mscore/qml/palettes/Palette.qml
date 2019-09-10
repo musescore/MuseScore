@@ -292,7 +292,7 @@ GridView {
     }
 
     function removeCell(row) {
-        return paletteController.remove(paletteRootIndex, row);
+        return paletteController.remove(model.modelIndex(row));
     }
 
     function removeSelectedCells() {

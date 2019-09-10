@@ -29,6 +29,7 @@ Item {
     property string text: ""
     property bool hidePaletteElementVisible
     property bool editingEnabled: true
+    property bool custom: false
 
     signal toggleExpandRequested()
     signal enableEditingToggled(bool val)
@@ -137,7 +138,7 @@ Item {
     Menu {
         id: paletteHeaderMenu
         MenuItem {
-            text: qsTr("Hide")
+            text: custom ? qsTr("Hide/Delete Palette") : qsTr("Hide Palette")
             onTriggered: paletteHeader.hidePaletteRequested()
         }
         MenuSeparator {}
