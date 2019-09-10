@@ -76,16 +76,15 @@ class AbstractPaletteController : public QObject {
 
       AbstractPaletteController(QObject* parent = nullptr) : QObject(parent) {}
 
-      // TODO: add proposedAction argument or revert to canDropMimeData analog.
-      Q_INVOKABLE virtual Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropActions supportedActions, const QModelIndex& parent, bool internal) const
+      Q_INVOKABLE virtual Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropAction proposedAction, const QModelIndex& parent, bool internal) const
             {
-            Q_UNUSED(mimeData); Q_UNUSED(supportedActions); Q_UNUSED(parent); Q_UNUSED(internal);
+            Q_UNUSED(mimeData); Q_UNUSED(proposedAction); Q_UNUSED(parent); Q_UNUSED(internal);
             return Qt::IgnoreAction;
             }
-      Q_INVOKABLE virtual bool dropMimeData(const QVariantMap& data, Qt::DropAction action, int row, int column, const QModelIndex& parent) { Q_UNUSED(data); Q_UNUSED(action); Q_UNUSED(row); Q_UNUSED(column); Q_UNUSED(parent); return false; }
 
       Q_INVOKABLE virtual bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild) = 0;
-      Q_INVOKABLE virtual bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData) = 0; // TODO replace with dropMimeData?
+      Q_INVOKABLE virtual bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action) = 0;
+      Q_INVOKABLE virtual bool insertNewItem(const QModelIndex& parent, int row) = 0;
       Q_INVOKABLE virtual bool remove(const QModelIndex&) { return false; };
 
       Q_INVOKABLE virtual bool canEdit(const QModelIndex&) const { return false; }
@@ -132,11 +131,11 @@ class UserPaletteController : public AbstractPaletteController {
       bool custom() const { return _custom; }
       void setCustom(bool val) { _custom = val; _filterCustom = true; }
 
-      Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropActions supportedActions, const QModelIndex& parent, bool internal) const override;
-//       Q_INVOKABLE virtual bool dropMimeData(const QVariantMap& data, Qt::DropAction action, int row, int column, const QModelIndex& parent) { return false; }
+      Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropAction proposedAction, const QModelIndex& parent, bool internal) const override;
 
       bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild) override;
-      bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData) override; // TODO replace with dropMimeData? (+ action)
+      bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action) override;
+      bool insertNewItem(const QModelIndex& parent, int row) override;
       bool remove(const QModelIndex& index) override;
 
       void editPaletteProperties(const QModelIndex& index) override;

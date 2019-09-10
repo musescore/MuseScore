@@ -25,6 +25,10 @@
 
 namespace Ms {
 
+class PaletteCell;
+using PaletteCellPtr = std::shared_ptr<PaletteCell>;
+using PaletteCellConstPtr = std::shared_ptr<const PaletteCell>;
+
 //---------------------------------------------------------
 //   PaletteCell
 //---------------------------------------------------------
@@ -53,8 +57,8 @@ struct PaletteCell {
       void write(XmlWriter& xml) const;
       bool read(XmlReader&);
       QByteArray mimeData() const;
-      static std::unique_ptr<PaletteCell> readMimeData(const QByteArray& data);
-      static std::unique_ptr<PaletteCell> readElementMimeData(const QByteArray& data);
+      static PaletteCellPtr readMimeData(const QByteArray& data);
+      static PaletteCellPtr readElementMimeData(const QByteArray& data);
       };
 
 //---------------------------------------------------------
@@ -62,14 +66,16 @@ struct PaletteCell {
 //---------------------------------------------------------
 
 class PaletteCellIconEngine : public QIconEngine {
-      const PaletteCell* _cell;
+      PaletteCellConstPtr _cell;
       qreal _extraMag = 1.0;
 
+      PaletteCellConstPtr cell() const { return _cell; }
+
    public:
-      PaletteCellIconEngine(const PaletteCell* cell, qreal extraMag = 1.0)
+      PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0)
          : _cell(cell), _extraMag(extraMag) {}
 
-      QIconEngine* clone() const override { return new PaletteCellIconEngine(_cell); }
+      QIconEngine* clone() const override { return new PaletteCellIconEngine(cell(), _extraMag); }
 
       void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) override;
       };
@@ -116,7 +122,7 @@ class PalettePanel {
       QString _name;
       Type _type;
 
-      std::vector<std::unique_ptr<PaletteCell>> cells;
+      std::vector<PaletteCellPtr> cells;
 
       QSize _gridSize = QSize(64, 64);
 //       int hgrid;
@@ -174,12 +180,12 @@ class PalettePanel {
 
       int ncells() const { return cells.size(); }
       bool empty() const { return cells.empty(); }
-      PaletteCell* cell(int idx) { return cells[idx].get(); }
-      const PaletteCell* cell(int idx) const { return cells[idx].get(); }
+      PaletteCellPtr cell(int idx) { return cells[idx]; }
+      PaletteCellConstPtr cell(int idx) const { return cells[idx]; }
 
-      std::vector<std::unique_ptr<PaletteCell>> takeCells(int idx, int count);
-      bool insertCells(int idx, std::vector<std::unique_ptr<PaletteCell>> cells);
-      bool insertCell(int idx, std::unique_ptr<PaletteCell> cell);
+      std::vector<PaletteCellPtr> takeCells(int idx, int count);
+      bool insertCells(int idx, std::vector<PaletteCellPtr> cells);
+      bool insertCell(int idx, PaletteCellPtr cell);
 
       int findPaletteCell(const PaletteCell& cell, bool matchName = true) const;
 

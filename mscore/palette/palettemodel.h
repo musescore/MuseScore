@@ -154,8 +154,8 @@ class PaletteTreeModel : public QAbstractItemModel {
 
       const PalettePanel* findPalettePanel(const QModelIndex&) const;
       PalettePanel* findPalettePanel(const QModelIndex& index);
-      const PaletteCell* findCell(const QModelIndex&) const;
-      PaletteCell* findCell(const QModelIndex& index);
+      PaletteCellConstPtr findCell(const QModelIndex&) const;
+      PaletteCellPtr findCell(const QModelIndex& index);
       };
 
 //---------------------------------------------------------

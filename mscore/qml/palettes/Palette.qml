@@ -47,7 +47,7 @@ GridView {
     property int ncells: paletteCellDelegateModel.count
     property bool empty: !ncells
 
-    property bool externalMoveBlocked: false;
+    property bool externalDropBlocked: false
 
     property bool enableAnimations: true
 
@@ -140,9 +140,15 @@ GridView {
 //             keys: [ "application/musescore/symbol", "application/musescore/palette/cell" ]
 
             property var action
+            property var proposedAction: Qt.IgnoreAction
             property bool internal: false
 
             function onDrag(drag) {
+                if (drag.proposedAction != proposedAction) {
+                    onEntered(drag);
+                    return;
+                }
+
                 drag.accept(action); // confirm we accept the action we determined inside onEntered
 
                 var idx = paletteView.indexAt(drag.x, drag.y);
@@ -155,13 +161,18 @@ GridView {
             }
 
             onEntered: {
+                onDragOverPaletteFinished();
+
                 // first check if controller allows dropping this item here
                 const mimeData = Utils.dropEventMimeData(drag);
                 internal = (drag.source.parentModelIndex == paletteView.paletteRootIndex);
-                action = paletteView.paletteController.dropAction(mimeData, drag.supportedActions, paletteView.paletteRootIndex, internal);
+                action = paletteView.paletteController.dropAction(mimeData, drag.proposedAction, paletteView.paletteRootIndex, internal);
+                proposedAction = drag.proposedAction;
 
-                const externalMove = (action == Qt.MoveAction) && !internal;
-                const accept = (action & drag.supportedActions) && !(externalMove && paletteView.externalMoveBlocked);
+                if (action != Qt.MoveAction)
+                    internal = false;
+
+                const accept = (action & drag.supportedActions) && (internal || !externalDropBlocked);
 
                 if (accept)
                     drag.accept(action);
@@ -171,6 +182,7 @@ GridView {
                 // If event is accepted, process the drag in a usual way
                 if (drag.accepted) {
                     drag.source.internalDrag = internal;
+                    drag.source.dragCopy = action == Qt.CopyAction;
                     paletteView.state = "drag";
                     onDrag(drag);
                     }
@@ -201,6 +213,7 @@ GridView {
                 // Moving cells here causes Drag.onDragFinished be not called properly.
                 // Therefore record the necessary information to move cells later.
                 const data = {
+                    action: action,
                     srcParentModelIndex: drag.source.parentModelIndex,
                     srcRowIndex: drag.source.rowIndex,
                     paletteView: paletteView,
@@ -208,14 +221,10 @@ GridView {
                     mimeData: Utils.dropEventMimeData(drop)
                 };
 
-                Qt.callLater(function() {
-                    if (data) {
-                        if (data.srcParentModelIndex == data.paletteView.paletteRootIndex)
-                            data.paletteView.moveCell(data.srcRowIndex, data.destIndex);
-                        else
-                            data.paletteView.insertCell(data.destIndex, data.mimeData);
-                    }
-                });
+                if (typeof data.srcParentModelIndex !== "undefined")
+                    drag.source.dropData = data;
+                else
+                    data.paletteView.insertCell(data.destIndex, data.mimeData, data.action);
 
                 drop.accept(action);
             }
@@ -278,14 +287,9 @@ GridView {
         );
     }
 
-    function insertCell(row, mimeData) {
-        return paletteController.insert(paletteRootIndex, row, mimeData);
+    function insertCell(row, mimeData, action) {
+        return paletteController.insert(paletteRootIndex, row, mimeData, action);
     }
-
-//     function appendCell(mimeData) {
-//         const row = paletteView.paletteModel.rowCount(paletteView.paletteRootIndex);
-//         insertCell(row, mimeData);
-//     }
 
     function drop(row, mimeData, supportedActions) {
         // TODO
@@ -323,6 +327,7 @@ GridView {
 
             property bool dragged: Drag.active
             property bool internalDrag: false
+            property bool dragCopy: false
 
             property bool selected: (paletteView.selectionModel && paletteView.selectionModel.hasSelection) ? paletteView.isSelected(modelIndex) : false // hasSelection is to trigger property bindings if selection changes, see https://doc.qt.io/qt-5/qml-qtqml-models-itemselectionmodel.html#hasSelection-prop
 
@@ -335,7 +340,7 @@ GridView {
 
             contentItem: QmlIconView {
                 id: icon
-                visible: !parent.dragged
+                visible: !parent.dragged || parent.dragCopy
                 anchors.fill: parent
                 icon: model.decoration
                 selected: paletteCell.selected
@@ -430,10 +435,11 @@ GridView {
             Drag.active: paletteCellDragArea.drag.active
             Drag.dragType: Drag.Automatic
             Drag.supportedActions: Qt.CopyAction | (model.editable ? Qt.MoveAction : 0)
-            Drag.proposedAction: Qt.CopyAction
             Drag.mimeData: Drag.active ? mimeData : {}
 
             onInternalDragChanged: DelegateModel.inItems = !internalDrag;
+
+            property var dropData: null
 
             Drag.onDragStarted: {
                 paletteView.state = "drag";
@@ -444,6 +450,16 @@ GridView {
                 paletteView.state = "default";
                 internalDrag = false;
                 DelegateModel.inPersistedItems = false;
+
+                if (dropData) {
+                    var data = dropData;
+                    if (data.action == Qt.MoveAction && data.srcParentModelIndex == data.paletteView.paletteRootIndex)
+                        data.paletteView.moveCell(data.srcRowIndex, data.destIndex);
+                    else
+                        data.paletteView.insertCell(data.destIndex, data.mimeData, data.action);
+
+                    dropData = null;
+                }
             }
 //                             Drag.hotSpot: Qt.point(64, 0) // TODO
         }
