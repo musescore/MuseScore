@@ -56,6 +56,11 @@ ListView {
             footerItem.height = 0;
     }
 
+    onCurrentIndexChanged: {
+        if (paletteSelectionModel.hasSelection && paletteSelectionModel.currentIndex.row != currentIndex)
+            paletteSelectionModel.clear();
+    }
+
     function ensureYVisible(y) {
         if (y > footerItem.y)
             footerItem.height = y - footerItem.y
@@ -78,6 +83,30 @@ ListView {
         if (event.key == Qt.Key_Backspace) {
             expandedPopupIndex = null;
             removeSelectedItems();
+            event.accepted = true;
+        } else if (event.key == Qt.Key_Home) {
+            positionViewAtBeginning();
+            event.accepted = true;
+        } else if (event.key == Qt.Key_End) {
+            positionViewAtEnd();
+            event.accepted = true;
+        } else if (event.key == Qt.Key_PageUp) {
+            var idx = indexAt(contentX, contentY);
+            if (idx < 0)
+                idx = 0;
+            if (idx > 0 && itemAt(contentX, contentY).height > height)
+                contentY -= height;
+            else
+                positionViewAtIndex(idx, ListView.End);
+            event.accepted = true;
+        } else if (event.key == Qt.Key_PageDown) {
+            var idx = indexAt(contentX, contentY + height);
+            if (idx < 0)
+                idx = count - 1;
+            if (idx < count - 1 && itemAt(contentX, contentY + height).height > height)
+                contentY += height;
+            else
+                positionViewAtIndex(idx, ListView.Beginning);
             event.accepted = true;
         }
     }
