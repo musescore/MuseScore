@@ -33,6 +33,8 @@ StyledPopup {
     property var customPaletteRootIndex: null
     property PaletteController customPaletteController: null
 
+    property PaletteElementEditor elementEditor: customPaletteRootIndex && customPaletteController ? customPaletteController.elementEditor(customPaletteRootIndex) : null
+
     property string paletteName
     readonly property string libraryPaletteName: (poolPalette && poolPaletteRootIndex) ? poolPalette.data(poolPaletteRootIndex, Qt.DisplayRole) : ""
     property bool paletteIsCustom: false
@@ -124,7 +126,7 @@ StyledPopup {
             border { width: 1; color: "black" }
             color: mscore.paletteBackground
 
-            readonly property int availableHeight: moreElementsPopup.maxHeight - addToPaletteButton.height - (masterIndexControls ? masterIndexControls.height : 0) - bottomText.height - 40
+            readonly property int availableHeight: moreElementsPopup.maxHeight - addToPaletteButton.height - (masterIndexControls ? masterIndexControls.height : 0) - bottomText.height - (elementEditorButton.visible ? elementEditorButton.height : 0) - 40
 
             Column {
                 width: parent.width
@@ -204,6 +206,15 @@ StyledPopup {
             font.family: globalStyle.font.family
             // make this label's font slightly smaller than other popup text
             font.pointSize: globalStyle.font.pointSize * 0.8
+        }
+
+        StyledButton {
+            id: elementEditorButton
+            visible: moreElementsPopup.elementEditor && moreElementsPopup.elementEditor.valid
+            enabled: moreElementsPopup.paletteEditingEnabled
+            width: parent.width
+            text: moreElementsPopup.elementEditor ? moreElementsPopup.elementEditor.actionName : ""
+            onClicked: moreElementsPopup.elementEditor.open()
         }
     }
 }

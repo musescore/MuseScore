@@ -24,7 +24,36 @@
 
 namespace Ms {
 
+class AbstractPaletteController;
 class PaletteWorkspace;
+
+//---------------------------------------------------------
+//   PaletteElementEditor
+//---------------------------------------------------------
+
+class PaletteElementEditor : public QObject {
+      Q_OBJECT
+
+      AbstractPaletteController* _controller = nullptr;
+      QPersistentModelIndex _paletteIndex;
+      PalettePanel::Type _type = PalettePanel::Type::Unknown;
+
+      Q_PROPERTY(bool valid READ valid CONSTANT)
+      Q_PROPERTY(QString actionName READ actionName CONSTANT) // TODO: make NOTIFY instead of CONSTANT for retranslations
+
+   private slots:
+      void onElementAdded(const Element*);
+
+   public:
+      PaletteElementEditor(QObject* parent = nullptr) : QObject(parent) {}
+      PaletteElementEditor(AbstractPaletteController* controller, QPersistentModelIndex paletteIndex, PalettePanel::Type type, QObject* parent = nullptr)
+         : QObject(parent), _controller(controller), _paletteIndex(paletteIndex), _type(type) {}
+
+      bool valid() const;
+      QString actionName() const;
+
+      Q_INVOKABLE void open();
+      };
 
 //---------------------------------------------------------
 //   AbstractPaletteController
@@ -60,6 +89,8 @@ class AbstractPaletteController : public QObject {
       Q_INVOKABLE virtual void editCellProperties(const QModelIndex& index) { Q_UNUSED(index); }
 
       Q_INVOKABLE virtual void applyPaletteElement(const QModelIndex& index, Qt::KeyboardModifiers modifiers) { Q_UNUSED(index); Q_UNUSED(modifiers); }
+
+      Q_INVOKABLE Ms::PaletteElementEditor* elementEditor(const QModelIndex& index);
       };
 
 //---------------------------------------------------------
