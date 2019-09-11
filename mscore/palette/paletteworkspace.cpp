@@ -19,11 +19,107 @@
 
 #include "paletteworkspace.h"
 
+#include "libmscore/keysig.h"
+#include "libmscore/timesig.h"
+
+#include "keyedit.h"
 #include "musescore.h"
 #include "palette.h" // applyPaletteElement
 #include "palettedialogs.h"
+#include "timedialog.h"
 
 namespace Ms {
+
+//---------------------------------------------------------
+//   PaletteElementEditor::valid
+//---------------------------------------------------------
+
+bool PaletteElementEditor::valid() const
+      {
+      using Type = PalettePanel::Type;
+      switch (_type) {
+            case Type::KeySig:
+            case Type::TimeSig:
+                  return true;
+            default:
+                  break;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   PaletteElementEditor::actionName
+//---------------------------------------------------------
+
+QString PaletteElementEditor::actionName() const
+      {
+      using Type = PalettePanel::Type;
+      switch (_type) {
+            case Type::KeySig:
+                  return tr("Create Key Signature");
+            case Type::TimeSig:
+                  return tr("Create Time Signature");
+            default:
+                  break;
+            }
+      return QString();
+      }
+
+//---------------------------------------------------------
+//   PaletteElementEditor::onElementAdded
+//---------------------------------------------------------
+
+void PaletteElementEditor::onElementAdded(const Element* el)
+      {
+      if (!_paletteIndex.isValid()
+         || !_paletteIndex.data(PaletteTreeModel::VisibleRole).toBool()) {
+            QMessageBox::information(mscore, "", tr("The palette was hidden or changed"));
+            return;
+            }
+      QVariantMap mimeData;
+      mimeData[mimeSymbolFormat] = el->mimeData(QPointF());
+      _controller->insert(_paletteIndex, -1, mimeData);
+      }
+
+//---------------------------------------------------------
+//   PaletteElementEditor::open
+//---------------------------------------------------------
+
+void PaletteElementEditor::open()
+      {
+      if (!_paletteIndex.isValid())
+            return;
+
+      QWidget* editor = nullptr;
+
+      using Type = PalettePanel::Type;
+      switch (_type) {
+            case Type::KeySig: {
+                  KeyEditor* keyEditor = new KeyEditor(mscore);
+                  keyEditor->showKeyPalette(false);
+                  connect(keyEditor, &KeyEditor::keySigAdded, this, &PaletteElementEditor::onElementAdded);
+                  editor = keyEditor;
+                  }
+                  break;
+            case Type::TimeSig: {
+                  TimeDialog* timeEditor = new TimeDialog(mscore);
+                  timeEditor->showTimePalette(false);
+                  connect(timeEditor, &TimeDialog::timeSigAdded, this, &PaletteElementEditor::onElementAdded);
+                  editor = timeEditor;
+                  }
+                  break;
+            default:
+                  break;
+            }
+
+      if (!editor)
+            return;
+
+      mscore->stackUnder(editor);
+      editor->setAttribute(Qt::WA_DeleteOnClose);
+
+      editor->show();
+      }
 
 //---------------------------------------------------------
 //   findPaletteIndex
@@ -75,6 +171,17 @@ static QModelIndex convertProxyIndex(const QModelIndex& srcIndex, const QAbstrac
       }
 
 //---------------------------------------------------------
+//   AbstractPaletteController::elementEditor
+//---------------------------------------------------------
+
+PaletteElementEditor* AbstractPaletteController::elementEditor(const QModelIndex& paletteIndex)
+      {
+      PaletteElementEditor* ed = new PaletteElementEditor(this, paletteIndex, paletteIndex.data(PaletteTreeModel::PaletteTypeRole).value<PalettePanel::Type>(), this);
+      QQmlEngine::setObjectOwnership(ed, QQmlEngine::JavaScriptOwnership);
+      return ed;
+      }
+
+//---------------------------------------------------------
 //   UserPaletteController::dropAction
 //---------------------------------------------------------
 
@@ -108,6 +215,9 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
 
 bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVariantMap& mimeData)
       {
+      if (row < 0)
+            row = parent.model()->rowCount(parent);
+
       const Qt::DropAction action = dropAction(mimeData, Qt::DropActions(Qt::CopyAction | Qt::MoveAction), parent, false); // TODO: make it an argument, then there won't be a need in this override
       if (action == Qt::IgnoreAction)
           return false;

@@ -139,6 +139,8 @@ void PaletteWidget::registerQmlTypes()
       qmlRegisterUncreatableType<PaletteWorkspace>("MuseScore.Palette", 3, 3, "PaletteWorkspace", "Cannot create palette workspace from QML");
       qmlRegisterUncreatableType<AbstractPaletteController>("MuseScore.Palette", 3, 3, "PaletteController", "Cannot create palette controller from QML");
 
+      qmlRegisterUncreatableType<PaletteElementEditor>("MuseScore.Palette", 3, 3, "PaletteElementEditor", "");
+
       qmlRegisterUncreatableType<PaletteTreeModel>("MuseScore.Palette", 3, 3, "PaletteTreeModel", "Cannot create palette model from QML");
       qmlRegisterUncreatableType<FilterPaletteTreeModel>("MuseScore.Palette", 3, 3, "FilterPaletteTreeModel", "Cannot create palette model from QML");
 

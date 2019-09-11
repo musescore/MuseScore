@@ -348,6 +348,7 @@ void KeyEditor::addClicked()
       ks->setKeySigEvent(e);
       sp->append(ks, "custom");
       _dirty = true;
+      emit keySigAdded(ks);
       }
 
 //---------------------------------------------------------
@@ -357,6 +358,15 @@ void KeyEditor::addClicked()
 void KeyEditor::clearClicked()
       {
       canvas->clear();
+      }
+
+//---------------------------------------------------------
+//   showKeyPalette
+//---------------------------------------------------------
+
+void KeyEditor::showKeyPalette(bool val)
+      {
+      _keyPalette->setVisible(val);
       }
 
 //---------------------------------------------------------
