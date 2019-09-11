@@ -28,7 +28,6 @@ ListView {
     id: paletteTree
     implicitHeight: contentHeight
 
-//         interactive: false
     keyNavigationEnabled: true
     activeFocusOnTab: true
 
@@ -132,7 +131,7 @@ ListView {
         delegateModel: paletteTreeDelegateModel
     }
     function placeholderData() {
-        return { display: "", gridSize: Qt.size(1, 1), drawGrid: false, custom: false, editable: false };
+        return { display: "", gridSize: Qt.size(1, 1), drawGrid: false, custom: false, editable: false, expanded: false };
     }
 
     model: DelegateModel {
