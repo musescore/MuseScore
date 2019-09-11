@@ -157,7 +157,7 @@ GridView {
 
                 if (placeholder.active && placeholder.index == idx)
                     return;
-                placeholder.makePlaceholder(idx, { decoration: "#eeeeee", toolTip: "placeholder", mimeData: {} });
+                placeholder.makePlaceholder(idx, { decoration: "#eeeeee", toolTip: "placeholder", cellActive: false, mimeData: {} });
             }
 
             onEntered: {
