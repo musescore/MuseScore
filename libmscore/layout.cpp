@@ -2445,22 +2445,11 @@ void Score::createBeams(Measure* measure)
             if (beam)
                   beam->layout1();
             else if (a1) {
-                  // is a1 the last chord/rest in the measure for its track?
-                  bool lastCR = true;
-                  for (Segment* s = a1->segment()->next(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-                        if (s->element(track)) {
-                              lastCR = false;
-                              break;
-                              }
-                        }
-                  if (lastCR) {
-                        const auto b = a1->beam();
-                        // if the second chord/rest in a1's beam (it must be in next measure) has forced MID beam mode
-                        if (b && b->elements().startsWith(a1) && b->elements().size()>=2 && b->elements()[1]->beamMode() == Beam::Mode::MID)
-                              // do not delete the origin beam
-                              continue;
-                        }
-                  a1->removeDeleteBeam(false);
+                  Fraction nextTick = a1->tick() + a1->actualTicks();
+                  Measure* m = (nextTick >= measure->endTick() ? measure->nextMeasure() : measure);
+                  ChordRest* nextCR = (m ? m->findChordRest(nextTick, track) : nullptr);
+                  if (!nextCR || !beamModeMid(nextCR->beamMode()))
+                        a1->removeDeleteBeam(false);
                   }
             }
       }
