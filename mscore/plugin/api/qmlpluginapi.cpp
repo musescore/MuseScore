@@ -103,7 +103,9 @@ PluginAPI::PluginAPI(QQuickItem* parent)
 
 Score* PluginAPI::curScore() const
       {
-      return wrap<Score>(msc()->currentScore(), Ownership::SCORE);
+      Score* pscore = wrap<Score>(msc()->currentScore(), Ownership::SCORE);
+      QQmlEngine::setObjectOwnership(pscore, QQmlEngine::CppOwnership);
+      return pscore;
       }
 
 //---------------------------------------------------------
