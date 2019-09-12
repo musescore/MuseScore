@@ -369,6 +369,8 @@ void PalettePanel::write(XmlWriter& xml) const
 
 PaletteCell* PalettePanel::insert(int idx, Element* e, const QString& name, QString tag, qreal mag)
       {
+      if (e)
+            e->layout(); // layout may be important for comparing cells, e.g. filtering "More" popup content
       PaletteCell* cell = new PaletteCell(std::unique_ptr<Element>(e), name, tag, mag);
       cells.emplace(cells.begin() + idx, cell);
       return cell;
@@ -380,6 +382,8 @@ PaletteCell* PalettePanel::insert(int idx, Element* e, const QString& name, QStr
 
 PaletteCell* PalettePanel::append(Element* e, const QString& name, QString tag, qreal mag)
       {
+      if (e)
+            e->layout(); // layout may be important for comparing cells, e.g. filtering "More" popup content
       PaletteCell* cell = new PaletteCell(std::unique_ptr<Element>(e), name, tag, mag);
       cells.emplace_back(cell);
       return cell;
