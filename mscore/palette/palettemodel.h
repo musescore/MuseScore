@@ -178,16 +178,14 @@ class FilterPaletteTreeModel : public QSortFilterProxyModel {
       };
 
 //---------------------------------------------------------
-//   RecursiveFilterProxyModel
-///   Filters model recursively. A similar effect can be
-///   achieved since Qt 5.10 by enabling
-///   QSortFilterProxyModel::recursiveFilteringEnabled
+//   ChildFilterProxyModel
+///   Filters model's items that do not have own children.
 //---------------------------------------------------------
 
-class RecursiveFilterProxyModel : public QSortFilterProxyModel {
+class ChildFilterProxyModel : public QSortFilterProxyModel {
       Q_OBJECT
    public:
-      RecursiveFilterProxyModel(QObject* parent = nullptr) : QSortFilterProxyModel(parent) {}
+      ChildFilterProxyModel(QObject* parent = nullptr) : QSortFilterProxyModel(parent) {}
 
       bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
       };

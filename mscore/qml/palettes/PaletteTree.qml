@@ -38,6 +38,8 @@ ListView {
 
     property string filter: ""
     onFilterChanged: {
+        if (filter.length)
+            expandedPopupIndex = null;
         if (paletteModel)
             paletteModel.setFilterFixedString(filter);
     }
@@ -348,7 +350,7 @@ ListView {
                         paletteController: paletteTree.paletteController
                         selectionModel: paletteSelectionModel
 
-                        showMoreButton: true
+                        showMoreButton: !filter.length
                         onMoreButtonClicked: control.togglePopup();
                         onVisibleChanged: {
                             if (!visible && control.popupExpanded)

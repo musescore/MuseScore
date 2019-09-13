@@ -22,7 +22,7 @@ import QtQuick.Controls 2.0
 
 Canvas {
     property bool drawGrid: false
-    readonly property real verticalGridWidth: parent.oneRow ? width : (width - (width % parent.cellWidth))
+    readonly property real verticalGridWidth: parent.stretchWidth ? (width - (width % parent.cellWidth)) : width
     property real offsetX: 0.
     property real offsetY: 0.
 

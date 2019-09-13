@@ -16,6 +16,7 @@
         <file>qml/palettes/utils.js</file>
         <file>qml/palettes/icons/arrow_drop_down.png</file>
         <file>qml/palettes/icons/arrow_right_black.png</file>
+        <file>qml/palettes/icons/backspace.png</file>
         <file>qml/palettes/icons/delete.png</file>
         <file>qml/palettes/icons/more.png</file>
         <file>qml/palettes/icons/search.png</file>

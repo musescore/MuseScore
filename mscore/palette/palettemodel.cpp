@@ -905,17 +905,17 @@ bool FilterPaletteTreeModel::filterAcceptsRow(int sourceRow, const QModelIndex& 
       }
 
 //---------------------------------------------------------
-//   RecursiveFilterProxyModel::filterAcceptsRow
+//   ChildFilterProxyModel::filterAcceptsRow
 //---------------------------------------------------------
 
-bool RecursiveFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+bool ChildFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
       {
-      if (QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent))
-            return true;
-
       const QAbstractItemModel* model = sourceModel();
       const QModelIndex rowIndex = model->index(sourceRow, 0, sourceParent);
       const int rowCount = model->rowCount(rowIndex);
+
+      if (rowCount == 0)
+            return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
 
       for (int i = 0; i < rowCount; ++i) {
             if (filterAcceptsRow(i, rowIndex))
