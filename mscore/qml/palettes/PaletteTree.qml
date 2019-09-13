@@ -44,6 +44,11 @@ ListView {
 
     property bool enableAnimations: true
 
+    function insertCustomPalette(idx) {
+        if (paletteTree.paletteController.insertNewItem(paletteTreeDelegateModel.rootIndex, idx))
+            positionViewAtIndex(idx, ListView.Contain);
+    }
+
     ItemSelectionModel {
         id: paletteSelectionModel
         model: paletteTree.paletteModel
@@ -297,7 +302,10 @@ ListView {
 
                     onHideSelectedElementsRequested: paletteTree.removeSelectedItems(control.modelIndex);
 
+                    onInsertNewPaletteRequested: paletteTree.insertCustomPalette(control.rowIndex);
                     onHidePaletteRequested: control.hidePalette();
+
+                    onPaletteResetRequested: paletteWorkspace.resetPalette(control.modelIndex)
 
                     onEditPalettePropertiesRequested: {
                         const modelIndex = control.modelIndex;

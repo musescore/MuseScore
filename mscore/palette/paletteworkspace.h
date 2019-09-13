@@ -158,6 +158,7 @@ class PaletteWorkspace : public QObject {
 
       PaletteTreeModel* userPalette;
       PaletteTreeModel* masterPalette;
+      PaletteTreeModel* defaultPalette; // palette used by "Reset palette" action
 
       QAbstractItemModel* mainPalette = nullptr;            ///< visible userPalette entries
 //       PaletteTreeModel* poolPalette;               ///< masterPalette entries not yet added to mainPalette
@@ -185,8 +186,7 @@ class PaletteWorkspace : public QObject {
             };
 
    public:
-      explicit PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master = nullptr, QObject* parent = nullptr)
-         : QObject(parent), userPalette(user), masterPalette(master) {}
+      explicit PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master = nullptr, QObject* parent = nullptr);
 
       Q_INVOKABLE QModelIndex poolPaletteIndex(const QModelIndex& index, Ms::FilterPaletteTreeModel* poolPalette);
       Q_INVOKABLE QModelIndex customElementsPaletteIndex(const QModelIndex& index);
@@ -198,8 +198,9 @@ class PaletteWorkspace : public QObject {
 
       Q_INVOKABLE QAbstractItemModel* availableExtraPalettesModel();
       Q_INVOKABLE bool addPalette(const QPersistentModelIndex&);
-      Q_INVOKABLE bool addCustomPalette(int idx = -1);
       Q_INVOKABLE bool removeCustomPalette(const QPersistentModelIndex&);
+
+      Q_INVOKABLE bool resetPalette(const QModelIndex&);
 
       bool paletteChanged() const { return userPalette->paletteTreeChanged(); }
 

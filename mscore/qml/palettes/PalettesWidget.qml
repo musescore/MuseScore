@@ -49,6 +49,8 @@ Item {
             right: parent.right
             rightMargin: 12
         }
+
+        onAddCustomPaletteRequested: paletteTree.insertCustomPalette(0);
     }
 
     ToolSeparator {

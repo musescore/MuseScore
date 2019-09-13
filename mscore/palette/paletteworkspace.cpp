@@ -260,6 +260,17 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
       }
 
 //---------------------------------------------------------
+//   UserPaletteController::insertNewItem
+//---------------------------------------------------------
+
+bool UserPaletteController::insertNewItem(const QModelIndex& parent, int row)
+      {
+      if (canEdit(parent))
+            return model()->insertRow(row, parent);
+      return false;
+      }
+
+//---------------------------------------------------------
 //   UserPaletteController::move
 //---------------------------------------------------------
 
@@ -429,6 +440,14 @@ void UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
       if (cell && cell->element)
             Palette::applyPaletteElement(cell->element.get(), modifiers);
       }
+
+//---------------------------------------------------------
+//   PaletteWorkspace
+//---------------------------------------------------------
+
+PaletteWorkspace::PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master, QObject* parent)
+   : QObject(parent), userPalette(user), masterPalette(master), defaultPalette(master)
+      {}
 
 //---------------------------------------------------------
 //   PaletteWorkspace::masterPaletteModel
@@ -611,8 +630,10 @@ bool PaletteWorkspace::addPalette(const QPersistentModelIndex& index)
             return userPalette->setData(index, true, PaletteTreeModel::VisibleRole);
 
       if (index.model() == masterPalette) {
-            const QMimeData* data = masterPalette->mimeData({ QModelIndex(index) });
-            return userPalette->dropMimeData(data, Qt::CopyAction, 0, 0, QModelIndex());
+            QMimeData* data = masterPalette->mimeData({ QModelIndex(index) });
+            const bool success = userPalette->dropMimeData(data, Qt::CopyAction, 0, 0, QModelIndex());
+            data->deleteLater();
+            return success;
             }
 
       return false;
@@ -649,15 +670,52 @@ bool PaletteWorkspace::removeCustomPalette(const QPersistentModelIndex& index)
       }
 
 //---------------------------------------------------------
-//   PaletteWorkspace::addCustomPalette
+//   PaletteWorkspace::resetPalette
 //---------------------------------------------------------
 
-bool PaletteWorkspace::addCustomPalette(int idx)
+bool PaletteWorkspace::resetPalette(const QModelIndex& index)
       {
-      if (idx < 0)
-            idx = 0; // insert to the beginning by default
+      if (!index.isValid())
+            return false;
 
-      return userPalette->insertRow(idx, QModelIndex());
+      const auto answer = QMessageBox::question(
+            nullptr,
+            "",
+            tr("Do you want to restore this palette to its default state? All changes to this palette will be lost."),
+            QMessageBox::Yes | QMessageBox::No
+            );
+
+      if (answer != QMessageBox::Yes)
+            return false;
+
+      Q_ASSERT(defaultPalette != userPalette);
+      const QModelIndex defaultPaletteIndex = convertIndex(index, defaultPalette);
+
+      const QModelIndex userPaletteIndex = convertProxyIndex(index, userPalette);
+      const QModelIndex parent = userPaletteIndex.parent();
+      const int row = userPaletteIndex.row();
+      const int column = userPaletteIndex.column();
+
+      // restore visibility and expanded state of the palette after restoring its state
+      const bool wasVisible = index.data(PaletteTreeModel::VisibleRole).toBool();
+      const bool wasExpanded = index.data(PaletteTreeModel::PaletteExpandedRole).toBool();
+
+      if (!userPalette->removeRow(row, parent))
+            return false;
+
+      if (defaultPaletteIndex.isValid()) {
+            QMimeData* data = defaultPalette->mimeData({ defaultPaletteIndex });
+            userPalette->dropMimeData(data, Qt::CopyAction, row, column, parent);
+            data->deleteLater();
+            }
+      else
+            userPalette->insertRow(row, parent);
+
+      const QModelIndex newIndex = userPalette->index(row, column, parent);
+      userPalette->setData(newIndex, wasVisible, PaletteTreeModel::VisibleRole);
+      userPalette->setData(newIndex, wasExpanded, PaletteTreeModel::PaletteExpandedRole);
+
+      return true;
       }
 
 //---------------------------------------------------------
