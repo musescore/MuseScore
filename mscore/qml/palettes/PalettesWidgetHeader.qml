@@ -28,6 +28,8 @@ Item {
     property string cellFilter: searchTextInput.text
     readonly property bool searching: searchTextInput.activeFocus
 
+    signal addCustomPaletteRequested()
+
     implicitHeight: childrenRect.height
 
     StyledButton {
@@ -68,6 +70,8 @@ Item {
         dim: false
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        onAddCustomPaletteRequested: header.addCustomPaletteRequested()
     }
 
     Connections {

@@ -28,6 +28,8 @@ StyledPopup {
 
     property bool inMenuAction: false
 
+    signal addCustomPaletteRequested()
+
     Text {
         id: header
         anchors.top: parent.top
@@ -151,7 +153,7 @@ StyledPopup {
         width: parent.width
         text: qsTr("Create custom palette")
         onClicked: {
-            paletteWorkspace.addCustomPalette();
+            addCustomPaletteRequested();
             palettesListPopup.close();
         }
     }

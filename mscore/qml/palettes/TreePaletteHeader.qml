@@ -34,7 +34,9 @@ Item {
     signal toggleExpandRequested()
     signal enableEditingToggled(bool val)
     signal hideSelectedElementsRequested()
+    signal insertNewPaletteRequested()
     signal hidePaletteRequested()
+    signal paletteResetRequested()
     signal editPalettePropertiesRequested()
 
     implicitHeight: paletteExpandArrow.height
@@ -141,12 +143,21 @@ Item {
             text: custom ? qsTr("Hide/Delete Palette") : qsTr("Hide Palette")
             onTriggered: paletteHeader.hidePaletteRequested()
         }
+        MenuItem {
+            text: qsTr("Insert New Palette")
+            onTriggered: paletteHeader.insertNewPaletteRequested()
+        }
         MenuSeparator {}
         MenuItem {
             text: qsTr("Enable Editing")
             checkable: true
             checked: paletteHeader.editingEnabled
             onTriggered: paletteHeader.enableEditingToggled(checked)
+        }
+        MenuSeparator {}
+        MenuItem {
+            text: qsTr("Reset Palette")
+            onTriggered: paletteHeader.paletteResetRequested()
         }
         MenuSeparator {}
         MenuItem {
