@@ -1307,27 +1307,49 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
       _hasDrumset = false;
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
             _slurs[i] = SlurDesc();
-      for (int i = 0; i < MAX_BRACKETS; ++i)
-            _brackets[i] = 0;
-      for (int i = 0; i < MAX_DASHES; ++i)
-            _dashes[i] = 0;
-      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
-            _ottavas[i] = 0;
-      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
-            _hairpins[i] = 0;
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
             _trills[i] = 0;
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
             _glissandi[i][0] = _glissandi[i][1] = 0;
-      _pedal = 0;
       _pedalContinue = 0;
       _harmony = 0;
       _tremStart = 0;
       _figBass = 0;
-      //      glissandoText = "";
-      //      glissandoColor = "";
       _multiMeasureRestCount = -1;
       _extendedLyrics.init();
+      }
+
+//---------------------------------------------------------
+//   findIncompleteSpannersInStack
+//---------------------------------------------------------
+
+static void findIncompleteSpannersInStack(const QString& spannerType, SpannerStack& stack, SpannerSet& res)
+      {
+      for (auto& desc : stack) {
+            if (desc._sp) {
+                  qDebug("%s not terminated at end of part", qPrintable(spannerType));
+                  res.insert(desc._sp);
+                  desc = {};
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   findIncompleteSpannersAtPartEnd
+//---------------------------------------------------------
+
+SpannerSet MusicXMLParserPass2::findIncompleteSpannersAtPartEnd()
+      {
+      SpannerSet res;
+      findIncompleteSpannersInStack("bracket", _brackets, res);
+      findIncompleteSpannersInStack("wedge", _hairpins, res);
+      findIncompleteSpannersInStack("octave-shift", _ottavas, res);
+      if (_pedal._sp) {
+            qDebug("pedal not terminated at end of part");
+            res.insert(_pedal._sp);
+            _pedal = {};
+            }
+      return res;
       }
 
 //---------------------------------------------------------
@@ -1592,17 +1614,25 @@ void MusicXMLParserPass2::part()
                   _extendedLyrics.setExtend(-1, trk, lastTick);
             }
 
+      const auto incompleteSpanners =  findIncompleteSpannersAtPartEnd();
       //qDebug("spanner list:");
       auto i = _spanners.constBegin();
       while (i != _spanners.constEnd()) {
-            Spanner* sp = i.key();
+            auto sp = i.key();
             Fraction tick1 = Fraction::fromTicks(i.value().first);
             Fraction tick2 = Fraction::fromTicks(i.value().second);
-            //qDebug("spanner %p tp %hhd tick1 %d tick2 %d track %d track2 %d",
-            //       sp, sp->type(), tick1, tick2, sp->track(), sp->track2());
-            sp->setTick(tick1);
-            sp->setTick2(tick2);
-            sp->score()->addElement(sp);
+            //qDebug("spanner %p tp %d tick1 %s tick2 %s track1 %d track2 %d",
+            //       sp, sp->type(), qPrintable(tick1.print()), qPrintable(tick2.print()), sp->track(), sp->track2());
+            if (incompleteSpanners.find(sp) == incompleteSpanners.end()) {
+                  // complete spanner -> add to score
+                  sp->setTick(tick1);
+                  sp->setTick2(tick2);
+                  sp->score()->addElement(sp);
+                  }
+            else {
+                  // incomplete spanner -> cleanup
+                  delete sp;
+                  }
             ++i;
             }
       _spanners.clear();
@@ -2408,24 +2438,47 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
       // handle the spanner stops first
       foreach (auto desc, stops) {
-            SLine* sp = _pass2.getSpanner(desc);
-            if (sp) {
-                  handleSpannerStop(sp, track, tick, spanners);
-                  _pass2.clearSpanner(desc);
+            auto& spdesc = _pass2.getSpanner({ desc._tp, desc._nr });
+            if (spdesc._isStopped) {
+                  _logger->logError("spanner already stopped", &_e);
+                  delete desc._sp;
                   }
-            else
-                  _logger->logError("spanner stop without spanner start", &_e);
+            else {
+                  if (spdesc._isStarted) {
+                        handleSpannerStop(spdesc._sp, track, tick, spanners);
+                        _pass2.clearSpanner(desc);
+                        }
+                  else {
+                        spdesc._sp = desc._sp;
+                        spdesc._tick2 = tick;
+                        spdesc._track2 = track;
+                        spdesc._isStopped = true;
+                        }
+                  }
             }
 
       // then handle the spanner starts
       foreach (auto desc, starts) {
-            SLine* sp = _pass2.getSpanner(desc);
-            if (!sp) {
-                  _pass2.addSpanner(desc);
-                  handleSpannerStart(desc.sp, track, placement, tick, spanners);
-                  }
-            else
+            auto& spdesc = _pass2.getSpanner({ desc._tp, desc._nr });
+            if (spdesc._isStarted) {
                   _logger->logError("spanner already started", &_e);
+                  delete desc._sp;
+                  }
+            else {
+                  if (spdesc._isStopped) {
+                        _pass2.addSpanner(desc);
+                        // handleSpannerStart and handleSpannerStop must be called in order
+                        // due to allocation of elements in the map
+                        handleSpannerStart(desc._sp, track, placement, tick, spanners);
+                        handleSpannerStop(spdesc._sp, spdesc._track2, spdesc._tick2, spanners);
+                        _pass2.clearSpanner(desc);
+                        }
+                  else {
+                        _pass2.addSpanner(desc);
+                        handleSpannerStart(desc._sp, track, placement, tick, spanners);
+                        spdesc._isStarted = true;
+                        }
+                  }
             }
 
       Q_ASSERT(_e.isEndElement() && _e.name() == "direction");
@@ -2701,8 +2754,9 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
       {
       QStringRef lineEnd = _e.attributes().value("line-end");
       QStringRef lineType = _e.attributes().value("line-type");
+      const auto& spdesc = _pass2.getSpanner({ ElementType::TEXTLINE, number });
       if (type == "start") {
-            TextLine* b = new TextLine(_score);
+            auto b = spdesc._isStopped ? toTextLine(spdesc._sp) : new TextLine(_score);
             // if (placement == "") placement = "above";  // TODO ? set default
 
             b->setBeginHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
@@ -2727,13 +2781,11 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
             starts.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
             }
       else if (type == "stop") {
-            TextLine* b = static_cast<TextLine*>(_pass2.getSpanner(MusicXmlSpannerDesc(ElementType::TEXTLINE, number)));
-            if (b) {
-                  b->setEndHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
-                  if (lineEnd == "up")
-                        b->setEndHookHeight(-1 * b->endHookHeight());
-                  }
-            stops.append(MusicXmlSpannerDesc(ElementType::TEXTLINE, number));
+            auto b = spdesc._isStarted ? toTextLine(spdesc._sp) : new TextLine(_score);
+            b->setEndHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
+            if (lineEnd == "up")
+                  b->setEndHookHeight(-1 * b->endHookHeight());
+            stops.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
             }
       _e.skipCurrentElement();
       }
@@ -2749,8 +2801,9 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
 void MusicXMLParserDirection::dashes(const QString& type, const int number,
                                      QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops)
       {
+      const auto& spdesc = _pass2.getSpanner({ ElementType::HAIRPIN, number });
       if (type == "start") {
-            TextLine* b = new TextLine(_score);
+            auto b = spdesc._isStopped ? toTextLine(spdesc._sp) : new TextLine(_score);
             // if (placement == "") placement = "above";  // TODO ? set default
 
             // hack: combine with a previous words element
@@ -2768,8 +2821,10 @@ void MusicXMLParserDirection::dashes(const QString& type, const int number,
             // use mxml specific type instead
             starts.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
             }
-      else if (type == "stop")
-            stops.append(MusicXmlSpannerDesc(ElementType::TEXTLINE, number));
+      else if (type == "stop") {
+            auto b = spdesc._isStarted ? toTextLine(spdesc._sp) : new TextLine(_score);
+            stops.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
+            }
       _e.skipCurrentElement();
       }
 
@@ -2784,13 +2839,14 @@ void MusicXMLParserDirection::dashes(const QString& type, const int number,
 void MusicXMLParserDirection::octaveShift(const QString& type, const int number,
                                           QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops)
       {
+      const auto& spdesc = _pass2.getSpanner({ ElementType::OTTAVA, number });
       if (type == "up" || type == "down") {
             int ottavasize = _e.attributes().value("size").toInt();
             if (!(ottavasize == 8 || ottavasize == 15)) {
                   _logger->logError(QString("unknown octave-shift size %1").arg(ottavasize), &_e);
                   }
             else {
-                  Ottava* o = new Ottava(_score);
+                  auto o = spdesc._isStopped ? toOttava(spdesc._sp) : new Ottava(_score);
 
                   // if (placement == "") placement = "above";  // TODO ? set default
 
@@ -2802,8 +2858,10 @@ void MusicXMLParserDirection::octaveShift(const QString& type, const int number,
                   starts.append(MusicXmlSpannerDesc(o, ElementType::OTTAVA, number));
                   }
             }
-      else if (type == "stop")
-            stops.append(MusicXmlSpannerDesc(ElementType::OTTAVA, number));
+      else if (type == "stop") {
+            auto o = spdesc._isStarted ? toOttava(spdesc._sp) : new Ottava(_score);
+            stops.append(MusicXmlSpannerDesc(o, ElementType::OTTAVA, number));
+            }
       _e.skipCurrentElement();
       }
 
@@ -2819,23 +2877,27 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                                     QList<MusicXmlSpannerDesc>& starts,
                                     QList<MusicXmlSpannerDesc>& stops)
       {
+      const int number { 0 };
       QStringRef line = _e.attributes().value("line");
       QString sign = _e.attributes().value("sign").toString();
       if (line != "yes" && sign == "") sign = "yes";       // MusicXML 2.0 compatibility
       if (line == "yes" && sign == "") sign = "no";        // MusicXML 2.0 compatibility
       if (line == "yes") {
+            const auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
             if (type == "start") {
-                  Pedal* p = new Pedal(_score);
+                  auto p = spdesc._isStopped ? toPedal(spdesc._sp) : new Pedal(_score);
                   if (sign == "yes")
                         p->setBeginText("<sym>keyboardPedalPed</sym>");
                   else
                         p->setBeginHookType(HookType::HOOK_90);
                   p->setEndHookType(HookType::HOOK_90);
                   // if (placement == "") placement = "below";  // TODO ? set default
-                  starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, 0));
+                  starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
                   }
-            else if (type == "stop")
-                  stops.append(MusicXmlSpannerDesc(ElementType::PEDAL, 0));
+            else if (type == "stop") {
+                  auto p = spdesc._isStarted ? toPedal(spdesc._sp) : new Pedal(_score);
+                  stops.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+                  }
             else if (type == "change") {
 #if 0
                   TODO
@@ -2848,7 +2910,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                         pedal = 0;
                         }
                   // then start a new one
-                  pedal = static_cast<Pedal*>(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
+                  pedal = toPedal(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
                   pedal->setBeginHookType(HookType::HOOK_45);
                   pedal->setEndHookType(HookType::HOOK_90);
                   if (placement == "") placement = "below";
@@ -2890,8 +2952,9 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
                                     QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops)
       {
       QStringRef niente = _e.attributes().value("niente");
+      const auto& spdesc = _pass2.getSpanner({ ElementType::HAIRPIN, number });
       if (type == "crescendo" || type == "diminuendo") {
-            Hairpin* h = new Hairpin(_score);
+            auto h = spdesc._isStopped ? toHairpin(spdesc._sp) : new Hairpin(_score);
             h->setHairpinType(type == "crescendo"
                               ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
             if (niente == "yes")
@@ -2899,12 +2962,29 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
             starts.append(MusicXmlSpannerDesc(h, ElementType::HAIRPIN, number));
             }
       else if (type == "stop") {
-            Hairpin* h = static_cast<Hairpin*>(_pass2.getSpanner(MusicXmlSpannerDesc(ElementType::HAIRPIN, number)));
+            auto h = spdesc._isStarted ? toHairpin(spdesc._sp) : new Hairpin(_score);
             if (niente == "yes")
                   h->setHairpinCircledTip(true);
-            stops.append(MusicXmlSpannerDesc(ElementType::HAIRPIN, number));
+            stops.append(MusicXmlSpannerDesc(h, ElementType::HAIRPIN, number));
             }
       _e.skipCurrentElement();
+      }
+
+//---------------------------------------------------------
+//   toString
+//---------------------------------------------------------
+
+QString MusicXmlExtendedSpannerDesc::toString() const
+      {
+      QString string;
+      QTextStream(&string) << _sp;
+      return QString("sp %1 tp %2 tick2 %3 track2 %4 %5 %6")
+             .arg(string)
+             .arg(_tick2.print())
+             .arg(_track2)
+             .arg(_isStarted ? "started" : "")
+             .arg(_isStopped ? "stopped" : "")
+      ;
       }
 
 //---------------------------------------------------------
@@ -2913,33 +2993,26 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
 
 void MusicXMLParserPass2::addSpanner(const MusicXmlSpannerDesc& d)
       {
-      if (d.tp == ElementType::HAIRPIN && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
-            _hairpins[d.nr] = d.sp;
-      else if (d.tp == ElementType::OTTAVA && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
-            _ottavas[d.nr] = d.sp;
-      else if (d.tp == ElementType::PEDAL && 0 == d.nr)
-            _pedal = d.sp;
-      // TODO: check MAX_BRACKETS vs MAX_NUMBER_LEVEL
-      else if (d.tp == ElementType::TEXTLINE && 0 <= d.nr && d.nr < MAX_BRACKETS)
-            _brackets[d.nr] = d.sp;
+      auto& spdesc = getSpanner(d);
+      spdesc._sp = d._sp;
       }
 
 //---------------------------------------------------------
 //   getSpanner
 //---------------------------------------------------------
 
-SLine* MusicXMLParserPass2::getSpanner(const MusicXmlSpannerDesc& d)
+MusicXmlExtendedSpannerDesc& MusicXMLParserPass2::getSpanner(const MusicXmlSpannerDesc& d)
       {
-      if (d.tp == ElementType::HAIRPIN && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
-            return _hairpins[d.nr];
-      else if (d.tp == ElementType::OTTAVA && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
-            return _ottavas[d.nr];
-      else if (d.tp == ElementType::PEDAL && 0 == d.nr)
+      if (d._tp == ElementType::HAIRPIN && 0 <= d._nr && d._nr < MAX_NUMBER_LEVEL)
+            return _hairpins[d._nr];
+      else if (d._tp == ElementType::OTTAVA && 0 <= d._nr && d._nr < MAX_NUMBER_LEVEL)
+            return _ottavas[d._nr];
+      else if (d._tp == ElementType::PEDAL && 0 == d._nr)
             return _pedal;
-      // TODO: check MAX_BRACKETS vs MAX_NUMBER_LEVEL
-      else if (d.tp == ElementType::TEXTLINE && 0 <= d.nr && d.nr < MAX_BRACKETS)
-            return _brackets[d.nr];
-      return 0;
+      else if (d._tp == ElementType::TEXTLINE && 0 <= d._nr && d._nr < MAX_NUMBER_LEVEL)
+            return _brackets[d._nr];
+      _logger->logError(QString("invalid number %1").arg(d._nr + 1), &_e);
+      return _dummyNewMusicXmlSpannerDesc;
       }
 
 //---------------------------------------------------------
@@ -2948,15 +3021,8 @@ SLine* MusicXMLParserPass2::getSpanner(const MusicXmlSpannerDesc& d)
 
 void MusicXMLParserPass2::clearSpanner(const MusicXmlSpannerDesc& d)
       {
-      if (d.tp == ElementType::HAIRPIN && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
-            _hairpins[d.nr] = 0;
-      else if (d.tp == ElementType::OTTAVA && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
-            _ottavas[d.nr] = 0;
-      else if (d.tp == ElementType::PEDAL && 0 == d.nr)
-            _pedal = 0;
-      // TODO: check MAX_BRACKETS vs MAX_NUMBER_LEVEL
-      else if (d.tp == ElementType::TEXTLINE && 0 <= d.nr && d.nr < MAX_BRACKETS)
-            _brackets[d.nr] = 0;
+      auto& spdesc = getSpanner(d);
+      spdesc = {};
       }
 
 //---------------------------------------------------------
