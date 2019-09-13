@@ -26,7 +26,7 @@ Item {
 
     property PaletteWorkspace paletteWorkspace: null
     property string cellFilter: searchTextInput.text
-    readonly property bool searching: searchTextInput.activeFocus
+    readonly property bool searching: searchTextInput.activeFocus || searchTextClearButton.activeFocus
 
     signal addCustomPaletteRequested()
 
@@ -53,6 +53,31 @@ Item {
         background: Rectangle {
             color: globalStyle.base
             border.color: "#aeaeae"
+        }
+
+        StyledToolButton {
+            id: searchTextClearButton
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+                margins: 1
+            }
+            width: height
+            visible: searchTextInput.text.length && searchTextInput.width > 2 * width
+            flat: true
+            onClicked: searchTextInput.clear()
+
+            padding: 8
+
+            text: qsTr("Clear search text")
+            ToolTip.visible: hovered
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.text: text
+
+            contentItem: StyledIcon {
+                source: "icons/backspace.png"
+            }
         }
     }
 
