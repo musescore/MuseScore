@@ -48,6 +48,7 @@ struct PaletteCell {
 
       bool visible   { true  };
       bool custom    { false };
+      bool active    { false };
 
       PaletteCell() = default;
       PaletteCell(std::unique_ptr<Element> e, const QString& _name, QString _tag = QString(), qreal _mag = 1.0);

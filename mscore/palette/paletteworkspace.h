@@ -206,6 +206,8 @@ class PaletteWorkspace : public QObject {
 
       void write(XmlWriter&) const;
       bool read(XmlReader&);
+
+      void updateCellsState(const Selection& sel, bool deactivateAll) { userPalette->updateCellsState(sel, deactivateAll); }
       };
 
 } // namespace Ms

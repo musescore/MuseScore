@@ -344,6 +344,7 @@ GridView {
                 anchors.fill: parent
                 icon: model.decoration
                 selected: paletteCell.selected
+                active: model.cellActive
             }
 
             readonly property var toolTip: model.toolTip

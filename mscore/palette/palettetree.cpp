@@ -717,13 +717,10 @@ void PaletteCellIconEngine::paint(QPainter* painter, const QRect& rect, QIcon::M
                   c.setAlpha(100);
                   p.fillRect(r, c);
                   }
-//             else if (idx == currentIdx) { // TODO: what is this?
-//                   c.setAlpha(50);
-//                   p.fillRect(r, c);
-//                   }
-//             if (ccp()->at(idx) == 0)
-//                   continue;
-//             PaletteCell* cc = ccp()->at(idx);      // current cell
+            else if (state == QIcon::On) {
+                  c.setAlpha(60);
+                  p.fillRect(r, c);
+                  }
 
             PaletteCellConstPtr cc = cell();
 
