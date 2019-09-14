@@ -32,9 +32,11 @@ class QmlIconView : public QQuickPaintedItem {
       QColor _color;
       QIcon _icon;
       bool _selected;
+      bool _active = false;
 
       Q_PROPERTY(QVariant icon READ icon WRITE setIcon)
       Q_PROPERTY(bool selected READ selected WRITE setSelected)
+      Q_PROPERTY(bool active READ active WRITE setActive)
 
    public:
       QmlIconView(QQuickItem* parent = nullptr)
@@ -45,6 +47,9 @@ class QmlIconView : public QQuickPaintedItem {
 
       bool selected() const { return _selected; }
       void setSelected(bool val) { _selected = val; update(); }
+
+      bool active() const { return _active; }
+      void setActive(bool val) { _active = val; update(); }
 
       void paint(QPainter*) override;
       };

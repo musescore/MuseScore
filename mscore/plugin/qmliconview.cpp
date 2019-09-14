@@ -33,7 +33,8 @@ void QmlIconView::paint(QPainter* p)
             }
 
       const QIcon::Mode mode = _selected ? QIcon::Selected : QIcon::Active;
-      _icon.paint(p, QRect(0, 0, width(), height()), Qt::AlignCenter, mode);
+      const QIcon::State state = _active ? QIcon::On : QIcon::Off;
+      _icon.paint(p, QRect(0, 0, width(), height()), Qt::AlignCenter, mode, state);
       }
 
 //---------------------------------------------------------

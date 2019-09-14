@@ -25,6 +25,7 @@ class Chord;
 class System;
 class Skyline;
 
+enum class IconType : signed char;
 enum class SpannerSegmentType;
 
 struct BeamFragment;
@@ -155,6 +156,8 @@ class Beam final : public Element {
       void addSkyline(Skyline&);
 
       virtual void triggerLayout() const override;
+
+      static IconType iconType(Mode);
       };
 
 

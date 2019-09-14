@@ -2294,6 +2294,9 @@ void MuseScore::selectionChanged(SelState selectionState)
 
 void MuseScore::updatePaletteBeamMode(bool unselect)
       {
+      if (paletteWorkspace)
+            paletteWorkspace->updateCellsState(cs->selection(), unselect);
+#if 0 // old palettes code
       for (Palette* p : paletteBox->palettes()) {
             if (p->name() == "Beam Properties") {
                   if (unselect) {
@@ -2344,6 +2347,7 @@ void MuseScore::updatePaletteBeamMode(bool unselect)
                   p->update();
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -6000,7 +6004,7 @@ void MuseScore::endCmd()
             selectionChanged(SelState::NONE);
             }
       updateInspector();
-      if (cv && paletteBox)
+      if (cv)
             updatePaletteBeamMode(cv->clickOffElement);
       }
 

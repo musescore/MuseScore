@@ -24,6 +24,8 @@
 
 namespace Ms {
 
+class Selection;
+
 //---------------------------------------------------------
 //   PaletteCellFilter
 ///   Interface for filtering elements in a palette
@@ -94,7 +96,8 @@ class PaletteTreeModel : public QAbstractItemModel {
             GridSizeRole,
             DrawGridRole,
             PaletteExpandedRole,
-            PaletteTypeRole
+            PaletteTypeRole,
+            CellActiveRole
             };
       Q_ENUM(PaletteTreeModelRoles);
 
@@ -109,6 +112,7 @@ class PaletteTreeModel : public QAbstractItemModel {
       const PalettePanel* iptrToPalettePanel(void* iptr, int* idx = nullptr) const { return const_cast<PaletteTreeModel*>(this)->iptrToPalettePanel(iptr, idx); }
 
    private slots:
+      void onDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles);
       void setTreeChanged() { _treeChanged = true; }
 
    public slots:
@@ -156,6 +160,8 @@ class PaletteTreeModel : public QAbstractItemModel {
       PalettePanel* findPalettePanel(const QModelIndex& index);
       PaletteCellConstPtr findCell(const QModelIndex&) const;
       PaletteCellPtr findCell(const QModelIndex& index);
+
+      void updateCellsState(const Selection&, bool deactivateAll);
       };
 
 //---------------------------------------------------------

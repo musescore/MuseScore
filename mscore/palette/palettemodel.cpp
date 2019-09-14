@@ -19,6 +19,10 @@
 
 #include "palettemodel.h"
 
+#include "libmscore/beam.h"
+#include "libmscore/chordrest.h"
+#include "libmscore/icon.h"
+#include "libmscore/select.h"
 #include "palettetree.h"
 #include "preferences.h"
 
@@ -30,7 +34,7 @@ namespace Ms {
 PaletteTreeModel::PaletteTreeModel(std::unique_ptr<PaletteTree> tree, QObject* parent)
    : QAbstractItemModel(parent), _paletteTree(std::move(tree))
       {
-      connect(this, &QAbstractItemModel::dataChanged, this, &PaletteTreeModel::setTreeChanged);
+      connect(this, &QAbstractItemModel::dataChanged, this, &PaletteTreeModel::onDataChanged);
       connect(this, &QAbstractItemModel::layoutChanged, this, &PaletteTreeModel::setTreeChanged);
       connect(this, &QAbstractItemModel::modelReset, this, &PaletteTreeModel::setTreeChanged);
       connect(this, &QAbstractItemModel::rowsInserted, this, &PaletteTreeModel::setTreeChanged);
@@ -272,6 +276,8 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                         map[PaletteCell::mimeDataFormat] = cell->mimeData();
                         return map;
                         }
+                  case CellActiveRole:
+                        return cell->active;
                   default:
                         break;
                   }
@@ -446,8 +452,9 @@ QHash<int, QByteArray> PaletteTreeModel::roleNames() const
       roles[GridSizeRole] = "gridSize";
       roles[DrawGridRole] = "drawGrid";
       roles[CustomRole] = "custom";
-      roles[PaletteExpandedRole] = "expanded";
       roles[EditableRole] = "editable";
+      roles[PaletteExpandedRole] = "expanded";
+      roles[CellActiveRole] = "cellActive";
       return roles;
       }
 
@@ -728,6 +735,42 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
             }
 
       return false;
+      }
+
+//---------------------------------------------------------
+//   PaletteTreeModel::updateCellsState
+//---------------------------------------------------------
+
+void PaletteTreeModel::updateCellsState(const Selection& sel, bool deactivateAll)
+      {
+      const ChordRest* cr = sel.cr();
+      const IconType beamIconType = cr ? Beam::iconType(cr->beamMode()) : IconType::NONE;
+
+      if (!sel.isSingle() || !cr)
+            deactivateAll = true;
+
+      const int npalettes = palettes().size();
+      for (int row = 0; row < npalettes; ++row) {
+            PalettePanel* palette = palettes()[row].get();
+            // TODO: should this be turned on for all palettes?
+            if (palette->type() != PalettePanel::Type::Beam)
+                  continue;
+
+            for (int ci = 0; ci < palette->ncells(); ++ci) {
+                  PaletteCellPtr cell = palette->cell(ci);
+                  if (deactivateAll)
+                        cell->active = false;
+                  else if (cell->element && cell->element->isIcon()) {
+                        const Icon* icon = toIcon(cell->element.get());
+                        cell->active = (icon->iconType() == beamIconType);
+                        }
+                  }
+
+            const QModelIndex parent = index(row, 0, QModelIndex());
+            const QModelIndex first = index(0, 0, parent);
+            const QModelIndex last = index(palette->ncells() - 1, 0, parent);
+            emit dataChanged(first, last, { CellActiveRole });
+            }
       }
 
 //---------------------------------------------------------
