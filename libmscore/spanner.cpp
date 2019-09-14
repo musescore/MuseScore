@@ -976,7 +976,7 @@ Element* Spanner::nextSegmentElement()
       Segment* s = startSegment();
       if (s)
             return s->firstElement(staffIdx());
-      return score()->firstElement();
+      return score()->lastElement();
       }
 
 //---------------------------------------------------------
@@ -988,7 +988,7 @@ Element* Spanner::prevSegmentElement()
       Segment* s = endSegment();
       if (s)
             return s->lastElement(staffIdx());
-      return score()->lastElement();
+      return score()->firstElement();
       }
 
 //---------------------------------------------------------

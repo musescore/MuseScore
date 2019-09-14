@@ -3215,7 +3215,7 @@ Element* Measure::nextElementStaff(int staff)
       if (next)
             return next;
 
-      return score()->firstElement();
+      return score()->lastElement();
       }
 
 //---------------------------------------------------------
@@ -3246,7 +3246,7 @@ Element* Measure::prevElementStaff(int staff)
             if (seg)
                   return seg->lastElement(staff);
             }
-      return score()->lastElement();
+      return score()->firstElement();
       }
 
 //---------------------------------------------------------

@@ -1575,7 +1575,7 @@ Element* Segment::nextElement(int activeStaff)
                   Segment* nextSegment =  seg->next1enabled();
                   if (!nextSegment) {
                         MeasureBase* mb = measure()->next();
-                        return mb && mb->isBox() ? mb : score()->firstElement();
+                        return mb && mb->isBox() ? mb : score()->lastElement();
                         }
 
                   Measure* nsm = nextSegment->measure();
@@ -1718,7 +1718,7 @@ Element* Segment::prevElement(int activeStaff)
                    Segment* prevSeg = seg->prev1enabled();
                    if (!prevSeg) {
                          MeasureBase* mb = measure()->prev();
-                         return mb && mb->isBox() ? mb : score()->lastElement();
+                         return mb && mb->isBox() ? mb : score()->firstElement();
                          }
 
                    Measure* psm = prevSeg->measure();
@@ -1738,7 +1738,7 @@ Element* Segment::prevElement(int activeStaff)
                          prev = lastElementOfSegment(prevSeg, activeStaff);
                          }
                    if (!prevSeg)
-                         return score()->lastElement();
+                         return score()->firstElement();
 
                    if (notChordRestType(prevSeg)) {
                          Element* lastEl = lastElementOfSegment(prevSeg, activeStaff);
