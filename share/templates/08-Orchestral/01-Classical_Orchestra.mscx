@@ -153,7 +153,7 @@
       <Instrument>
         <longName>Clarinets in B♭</longName>
         <shortName>B♭ Cl.</shortName>
-        <trackName>B♭ Clarinet</trackName>
+        <trackName>Clarinet in B♭</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>
         <minPitchA>50</minPitchA>
@@ -318,7 +318,7 @@
       <Instrument>
         <longName>Trumpets in B♭</longName>
         <shortName>B♭ Tpt.</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <trackName>Trumpet in B♭</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>

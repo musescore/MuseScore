@@ -147,10 +147,10 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Clarinet</trackName>
+      <trackName>Clarinet in B♭</trackName>
       <Instrument>
-        <longName>B♭ Clarinet</longName>
-        <trackName>B♭ Clarinet</trackName>
+        <longName>Clarinet in B♭</longName>
+        <trackName>Clarinet in B♭</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>
         <minPitchA>50</minPitchA>

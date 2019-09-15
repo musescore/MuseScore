@@ -114,7 +114,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="db-piccolo">
-                  <longName>D♭ Piccolo</longName>
+                  <longName>Piccolo in D♭</longName>
                   <shortName>D♭ Picc.</shortName>
                   <description>Piccolo Flute in Db</description>
                   <musicXMLid>wind.flutes.flute.piccolo</musicXMLid>
@@ -1628,7 +1628,7 @@
             <Instrument id="clarinet">
                   <longName>Clarinet</longName>
                   <shortName>Cl.</shortName>
-                  <description>B♭ Clarinet (generic)</description>
+                  <description>Clarinet in B♭ (generic)</description>
                   <musicXMLid>wind.reed.clarinet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -1672,9 +1672,9 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="c-clarinet">
-                  <longName>C Clarinet</longName>
+                  <longName>Clarinet in C</longName>
                   <shortName>C Cl.</shortName>
-                  <description>C Clarinet</description>
+                  <description>Clarinet in C</description>
                   <musicXMLid>wind.reed.clarinet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -1685,9 +1685,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="d-clarinet">
-                  <longName>D Clarinet</longName>
+                  <longName>Clarinet in D</longName>
                   <shortName>D Cl.</shortName>
-                  <description>D Clarinet</description>
+                  <description>Clarinet in D</description>
                   <musicXMLid>wind.reed.clarinet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -1700,9 +1700,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-clarinet">
-                  <longName>E♭ Clarinet</longName>
+                  <longName>Clarinet in E♭</longName>
                   <shortName>E♭ Cl.</shortName>
-                  <description>E♭ Clarinet</description>
+                  <description>Clarinet in E♭</description>
                   <musicXMLid>wind.reed.clarinet.eflat</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -1718,9 +1718,9 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="g-clarinet">
-                  <longName>G Clarinet</longName>
+                  <longName>Clarinet in G</longName>
                   <shortName>G Cl.</shortName>
-                  <description>G Clarinet</description>
+                  <description>Clarinet in G</description>
                   <musicXMLid>wind.reed.clarinet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -1733,9 +1733,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-clarinet">
-                  <longName>B♭ Clarinet</longName>
+                  <longName>Clarinet in B♭</longName>
                   <shortName>B♭ Cl.</shortName>
-                  <description>B♭ Clarinet (same as clarinet, added for MusicXML 3 compatibility)</description>
+                  <description>Clarinet in B♭ (same as clarinet, added for MusicXML 3 compatibility)</description>
                   <musicXMLid>wind.reed.clarinet.bflat</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -1753,9 +1753,9 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="a-clarinet">
-                  <longName>A Clarinet</longName>
+                  <longName>Clarinet in A</longName>
                   <shortName>A Cl.</shortName>
-                  <description>A Clarinet</description>
+                  <description>Clarinet in A</description>
                   <musicXMLid>wind.reed.clarinet.a</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -1836,10 +1836,27 @@
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
-            <Instrument id="bb-bass-clarinet-bass-clef">
-                  <longName>B♭ Bass Clarinet (Bass Clef)</longName>
+            <Instrument id="bb-bass-clarinet">
+                  <longName>Bass Clarinet in B♭</longName>
                   <shortName>B♭ B. Cl.</shortName>
-                  <description>Bass Clarinet (Bass Clef)</description>
+                  <description>Bass Clarinet in B♭</description>
+                  <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>37-75</aPitchRange>
+                  <pPitchRange>34-79</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-14</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="bb-bass-clarinet-bass-clef">
+                  <trackName>Bass Clarinet in B♭ (Bass Clef)</trackName>
+                  <longName>Bass Clarinet in B♭</longName>
+                  <shortName>B♭ B. Cl.</shortName>
+                  <description>Bass Clarinet in B♭ (Bass Clef)</description>
                   <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
                   <transposingClef>F</transposingClef>
                   <concertClef>F</concertClef>
@@ -1853,9 +1870,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="a-bass-clarinet">
-                  <longName>A Bass Clarinet</longName>
+                  <longName>Bass Clarinet in A</longName>
                   <shortName>A B. Cl.</shortName>
-                  <description>Bass Clarinet</description>
+                  <description>Bass Clarinet in A</description>
                   <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
                   <transposingClef>G</transposingClef>
                   <concertClef>G8vb</concertClef>
@@ -1869,10 +1886,11 @@
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
-            <Instrument id="a-bass-clarinet-bass-clef)">
-                  <longName>A Bass Clarinet (Bass Clef)</longName>
+            <Instrument id="a-bass-clarinet-bass-clef">
+                  <trackName>Bass Clarinet in A (Bass Clef)</trackName>
+                  <longName>Bass Clarinet in A</longName>
                   <shortName>A B. Cl.</shortName>
-                  <description>Bass Clarinet (Bass Clef)</description>
+                  <description>Bass Clarinet in A (Bass Clef)</description>
                   <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
                   <transposingClef>F</transposingClef>
                   <concertClef>F</concertClef>
@@ -3237,7 +3255,7 @@
             <Instrument id="trumpet">
                   <longName>Trumpet</longName>
                   <shortName>Tpt.</shortName>
-                  <description>B♭ Trumpet (generic)</description>
+                  <description>Trumpet in B♭ (generic)</description>
                   <musicXMLid>brass.trumpet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3309,9 +3327,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="f-trumpet">
-                  <longName>F Trumpet</longName>
+                  <longName>Trumpet in F</longName>
                   <shortName>F Tpt.</shortName>
-                  <description>F Trumpet</description>
+                  <description>Trumpet in F</description>
                   <musicXMLid>brass.trumpet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3327,9 +3345,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="e-trumpet">
-                  <longName>E Trumpet</longName>
+                  <longName>Trumpet in E</longName>
                   <shortName>E Tpt.</shortName>
-                  <description>E Trumpet</description>
+                  <description>Trumpet in E</description>
                   <musicXMLid>brass.trumpet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3345,9 +3363,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-trumpet">
-                  <longName>E♭ Trumpet</longName>
+                  <longName>Trumpet in E♭</longName>
                   <shortName>E♭ Tpt.</shortName>
-                  <description>E♭ Trumpet</description>
+                  <description>Trumpet in E♭</description>
                   <musicXMLid>brass.trumpet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3363,9 +3381,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="d-trumpet">
-                  <longName>D Trumpet</longName>
+                  <longName>Trumpet in D</longName>
                   <shortName>D Tpt.</shortName>
-                  <description>D Trumpet</description>
+                  <description>Trumpet in D</description>
                   <musicXMLid>brass.trumpet.d</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3381,9 +3399,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-trumpet">
-                  <longName>C Trumpet</longName>
+                  <longName>Trumpet in C</longName>
                   <shortName>C Tpt.</shortName>
-                  <description>C Trumpet</description>
+                  <description>Trumpet in C</description>
                   <musicXMLid>brass.trumpet.c</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3398,9 +3416,9 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bb-trumpet">
-                  <longName>B♭ Trumpet</longName>
+                  <longName>Trumpet in B♭</longName>
                   <shortName>B♭ Tpt.</shortName>
-                  <description>B♭ Trumpet</description>
+                  <description>Trumpet in B♭</description>
                   <musicXMLid>brass.trumpet.bflat</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3421,9 +3439,9 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="a-trumpet">
-                  <longName>A Trumpet</longName>
+                  <longName>Trumpet in A</longName>
                   <shortName>A Tpt.</shortName>
-                  <description>A Trumpet</description>
+                  <description>Trumpet in A</description>
                   <musicXMLid>brass.trumpet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3512,9 +3530,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-bass-trumpet">
-                  <longName>E♭ Bass Trumpet</longName>
+                  <longName>Bass Trumpet in E♭</longName>
                   <shortName>E♭ B. Tpt.</shortName>
-                  <description>E♭ Bass Trumpet</description>
+                  <description>Bass Trumpet in E♭</description>
                   <musicXMLid>brass.trumpet.bass</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3550,9 +3568,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-bass-trumpet">
-                  <longName>B♭ Bass Trumpet</longName>
+                  <longName>Bass Trumpet in B♭</longName>
                   <shortName>B♭ B. Tpt.</shortName>
-                  <description>B♭ Bass Trumpet</description>
+                  <description>Bass Trumpet in B♭</description>
                   <musicXMLid>brass.trumpet.bass</musicXMLid>
                   <transposingClef>G</transposingClef>
                   <concertClef>G8vb</concertClef>

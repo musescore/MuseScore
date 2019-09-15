@@ -79,10 +79,10 @@
         <bracket type="0" span="5" col="0"/>
         <barLineSpan>4</barLineSpan>
         </Staff>
-      <trackName>B♭ Trumpet 1</trackName>
+      <trackName>Trumpet in B♭ 1</trackName>
       <Instrument>
-        <longName>B♭ Trumpet 1</longName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 1</longName>
+        <trackName>Trumpet in B♭</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
@@ -147,10 +147,10 @@
           </StaffType>
         <barLineSpan>3</barLineSpan>
         </Staff>
-      <trackName>B♭ Trumpet 2</trackName>
+      <trackName>Trumpet in B♭ 2</trackName>
       <Instrument>
-        <longName>B♭ Trumpet 2</longName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>Trumpet in B♭ 2</longName>
+        <trackName>Trumpet in B♭</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>

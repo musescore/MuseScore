@@ -108,11 +108,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
+      <trackName>Trumpet in B♭</trackName>
       <Instrument>
-        <longName>B♭ Trumpet</longName>
+        <longName>Trumpet in B♭</longName>
         <shortName>B♭ Tpt.</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <trackName>Trumpet in B♭</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>52</minPitchA>
