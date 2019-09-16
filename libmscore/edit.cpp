@@ -1369,8 +1369,12 @@ void Score::cmdAddOttava(OttavaType type)
 void Score::cmdSetBeamMode(Beam::Mode mode)
       {
       for (ChordRest* cr : getSelectedChordRests()) {
-            if (cr)
-                  cr->undoChangeProperty(Pid::BEAM_MODE, int(mode));
+            if (cr) {
+                  if (cr->isRest() && (mode == Beam::Mode::AUTO))
+                        cr->undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
+                  else
+                        cr->undoChangeProperty(Pid::BEAM_MODE, int(mode));
+                  }
             }
       }
 
