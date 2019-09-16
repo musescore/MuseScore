@@ -592,7 +592,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
                         undoAddElement(tie);
                         }
                   }
-            
+
             tick += ncr->actualTicks();
             ocr = ncr;
             }
@@ -3708,7 +3708,8 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "beam-start",                 [this]{ cmdSetBeamMode(Beam::Mode::BEGIN);                          }},
             { "beam-mid",                   [this]{ cmdSetBeamMode(Beam::Mode::MID);                            }},
             { "no-beam",                    [this]{ cmdSetBeamMode(Beam::Mode::NONE);                           }},
-            { "beam-32",                    [this]{ cmdSetBeamMode(Beam::Mode::BEGIN32);                        }},
+            { "beam32",                     [this]{ cmdSetBeamMode(Beam::Mode::BEGIN32);                        }},
+            { "beam64",                     [this]{ cmdSetBeamMode(Beam::Mode::BEGIN64);                        }},
             { "sharp2",                     [this]{ changeAccidental(AccidentalType::SHARP2);                   }},
             { "sharp",                      [this]{ changeAccidental(AccidentalType::SHARP);                    }},
             { "nat",                        [this]{ changeAccidental(AccidentalType::NATURAL);                  }},
