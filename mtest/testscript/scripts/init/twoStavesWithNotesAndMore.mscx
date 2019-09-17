@@ -230,6 +230,11 @@
           </voice>
         </Measure>
       <Measure>
+        <Marker>
+          <style>Repeat Text Right</style>
+          <text>Fine</text>
+          <label>fine</label>
+          </Marker>
         <voice>
           <Chord>
             <durationType>half</durationType>
