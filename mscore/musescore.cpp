@@ -5863,29 +5863,20 @@ void MuseScore::cmd(QAction* a)
             }
       if (cmdn == "toggle-palette") {
             showPalette(a->isChecked());
-#if 0
-            PaletteBox* pb = mscore->getPaletteBox();
-            QLineEdit* sb = pb->searchBox();
             if (a->isChecked()) {
                   lastFocusWidget = QApplication::focusWidget();
-                  sb->setFocus();
-                  if (pb->noSelection())
-                        pb->setKeyboardNavigation(false);
-                  else
-                        pb->setKeyboardNavigation(true);
+                  paletteWidget->activateSearchBox();
                   }
             else {
                   if (lastFocusWidget)
                         lastFocusWidget->setFocus();
                   }
-#endif
             return;
             }
       if (cmdn == "palette-search") {
-            // TODO: use new search box, or rename command to just "palette"
             showPalette(true);
             if (paletteWidget)
-                  paletteWidget->setFocus();
+                  paletteWidget->activateSearchBox();
             return;
             }
       if (cmdn == "apply-current-palette-element") {

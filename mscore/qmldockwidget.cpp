@@ -194,6 +194,16 @@ QQuickView* QmlDockWidget::getView()
       }
 
 //---------------------------------------------------------
+//   QmlDockWidget::ensureQmlViewFocused
+//---------------------------------------------------------
+
+void QmlDockWidget::ensureQmlViewFocused()
+      {
+      if (_view && !_view->activeFocusItem())
+            widget()->setFocus();
+      }
+
+//---------------------------------------------------------
 //   QmlDockWidget::setupStyle
 //---------------------------------------------------------
 
