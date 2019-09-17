@@ -999,7 +999,7 @@ void Staff::staffTypeListChanged(const Fraction& tick)
             ++i;
             if (i != _staffTypeList.end())
                   score()->setLayout(Fraction::fromTicks(i->first));
-            else
+            else if (score()->lastMeasure())
                   score()->setLayout(score()->lastMeasure()->endTick());
             }
       }
