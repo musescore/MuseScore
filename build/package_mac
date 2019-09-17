@@ -10,7 +10,7 @@ then
     VERSION=$1
 else
     LONG_NAME=MuseScore
-    LONGER_NAME="MuseScore 3"
+    LONGER_NAME="MuseScore 3 Beta 2"
     VERSION=3.3.0
 fi
 
