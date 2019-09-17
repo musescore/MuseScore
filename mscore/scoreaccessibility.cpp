@@ -8,6 +8,9 @@
 #include "libmscore/measure.h"
 #include "libmscore/spanner.h"
 #include "libmscore/sig.h"
+#include "libmscore/staff.h"
+#include "libmscore/part.h"
+#include "libmscore/sym.h"
 #include "inspector/inspector.h"
 #include "selectionwindow.h"
 #include "playpanel.h"
@@ -112,9 +115,15 @@ void ScoreAccessibility::clearAccessibilityInfo()
 
 void ScoreAccessibility::currentInfoChanged()
       {
-      clearAccessibilityInfo();
       ScoreView* scoreView =  static_cast<MuseScore*>(mainWindow)->currentScoreView();
       Score* score = scoreView->score();
+      int oldStaff = _oldStaff;
+      int oldBar = _oldBar;
+      _oldStaff = -1;
+      _oldBar = -1;
+      QString oldStatus = statusBarLabel->text();
+      QString oldScreenReaderInfo = score->accessibleInfo();
+      clearAccessibilityInfo();
       if (score->selection().isSingle()) {
             Element* e = score->selection().element();
             if (!e) {
@@ -122,7 +131,8 @@ void ScoreAccessibility::currentInfoChanged()
                   }
             Element* el = e->isSpannerSegment() ? static_cast<SpannerSegment*>(e)->spanner() : e;
             QString barsAndBeats = "";
-            if (el->isSpanner()){
+            QString optimizedBarsAndBeats = "";
+            if (el->isSpanner()) {
                   Spanner* s = static_cast<Spanner*>(el);
                   std::pair<int, float> bar_beat = barbeat(s->startSegment());
                   barsAndBeats += tr("Start Measure: %1; Start Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
@@ -137,13 +147,19 @@ void ScoreAccessibility::currentInfoChanged()
 
                   bar_beat = barbeat(seg);
                   barsAndBeats += "; " + tr("End Measure: %1; End Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
+                  optimizedBarsAndBeats = barsAndBeats;
                   }
             else {
                   std::pair<int, float>bar_beat = barbeat(el);
                   if (bar_beat.first) {
+                        _oldBar = bar_beat.first;
                         barsAndBeats += " " + tr("Measure: %1").arg(QString::number(bar_beat.first));
-                        if (bar_beat.second)
+                        if (bar_beat.first != oldBar)
+                              optimizedBarsAndBeats += " " + tr("Measure: %1").arg(QString::number(bar_beat.first));
+                        if (bar_beat.second) {
                               barsAndBeats += "; " + tr("Beat: %1").arg(QString::number(bar_beat.second));
+                              optimizedBarsAndBeats += "; " + tr("Beat: %1").arg(QString::number(bar_beat.second));
+                              }
                         }
                   }
 
@@ -152,13 +168,36 @@ void ScoreAccessibility::currentInfoChanged()
                   rez += "; " + barsAndBeats;
 
             QString staff = "";
+            QString optimizedStaff = "";
             if (e->staffIdx() + 1) {
+                  _oldStaff = e->staffIdx();
                   staff = tr("Staff %1").arg(QString::number(e->staffIdx() + 1));
-                  rez = QString("%1; %2").arg(rez).arg(staff);
+                  QString staffName = e->staff()->part()->longName(e->tick());
+                  if (staffName.isEmpty())
+                        staffName = e->staff()->partName();
+                  if (staffName.isEmpty()) {
+                        staffName = tr("Unnamed");    // for screenreader only
+                        rez = QString("%1; %2").arg(rez).arg(staff);
+                        }
+                  else {
+                        rez = QString("%1; %2 (%3)").arg(rez).arg(staff).arg(staffName);
+                        }
+                  if (e->staffIdx() != oldStaff)
+                        optimizedStaff = QString("%1 (%2)").arg(staff).arg(staffName);
                   }
 
             statusBarLabel->setText(rez);
-            QString screenReaderRez = QString("%1%2 %3 %4").arg(e->screenReaderInfo()).arg(barsAndBeats).arg(staff).arg(e->accessibleExtraInfo());
+            QString screenReaderRez;
+            if (rez != oldStatus) {
+                  screenReaderRez = QString("%1%2 %3 %4").arg(e->screenReaderInfo()).arg(optimizedBarsAndBeats).arg(optimizedStaff).arg(e->accessibleExtraInfo());
+                  makeReadable(screenReaderRez);
+                  }
+            else {
+                  // if status has not changed, we may have over-optimized screenreader info
+                  // this happens if this function is called twice within same command
+                  // so let the previous screenreader info stand
+                  screenReaderRez = oldScreenReaderInfo;
+                  }
             score->setAccessibleInfo(screenReaderRez);
             }
       else if (score->selection().isRange()) {
@@ -249,4 +288,28 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
             }
       return pair<int,float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
       }
+
+void ScoreAccessibility::makeReadable(QString& s)
+      {
+      static std::vector<std::pair<QString, QString>> unicodeReplacements {
+            { "♭", tr(" flat") },
+            { "♯", tr(" sharp") },
+            { "𝄫", tr(" double flat") },
+            { "𝄪", tr(" double sharp") },
+      };
+
+      if (!QAccessible::isActive())
+            return;
+      for (auto const &r : unicodeReplacements)
+            s.replace(r.first, r.second);
+      ScoreFont* sf = gscore->scoreFont();
+      for (auto id : Sym::commonScoreSymbols) {
+            if (id == SymId::space)
+                  continue;               // don't read "space"
+            QString src = sf->toString(id);
+            QString replacement = Sym::id2userName(id);
+            s.replace(src, replacement);
+            }
+      }
+
 }

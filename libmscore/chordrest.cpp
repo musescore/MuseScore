@@ -1156,7 +1156,7 @@ QString ChordRest::accessibleExtraInfo() const
             for (Element* e : segment()->annotations()) {
                   if (!score()->selectionFilter().canSelect(e))
                         continue;
-                  if (e->staffIdx() == staffIdx() )
+                  if (e->track() == track())
                         rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
 

@@ -759,5 +759,28 @@ void FBox::add(Element* e)
             }
       el().push_back(e);
       }
+
+//---------------------------------------------------------
+//   accessibleExtraInfo
+//---------------------------------------------------------
+
+QString Box::accessibleExtraInfo() const
+      {
+      QString rez = "";
+      for (Element* e : el())
+            rez += " " + e->screenReaderInfo();
+      return rez;
+      }
+
+//---------------------------------------------------------
+//   accessibleExtraInfo
+//---------------------------------------------------------
+
+QString TBox::accessibleExtraInfo() const
+      {
+      QString rez = _text->screenReaderInfo();
+      return rez;
+      }
+
 }
 

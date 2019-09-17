@@ -800,7 +800,9 @@ QString Rest::accessibleInfo() const
 
 QString Rest::screenReaderInfo() const
       {
-      QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      Measure* m = measure();
+      bool voices = m ? m->hasVoices(staffIdx()) : false;
+      QString voice = voices ? QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1)) : "";
       return QString("%1 %2 %3").arg(Element::accessibleInfo()).arg(durationUserName()).arg(voice);
       }
 
