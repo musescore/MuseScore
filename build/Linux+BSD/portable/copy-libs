@@ -109,7 +109,7 @@ getCrossPlatformDependencies() {
   # except some as listed in "mscore/CMakeLists.txt".
   export -f copy copyQt # make functions available to xargs
   find "$qt_prefix/qml" \! -type d \
-    | grep -vE "QtGraphicalEffects|QtMultimedia|QtSensors|QtTest|QtWebEngine" \
+    | grep -vE "QtMultimedia|QtSensors|QtTest|QtWebEngine" \
     | sed "s|$qt_prefix/||" | xargs -n1 -I '%%%' \
         bash -c "qt_prefix='$qt_prefix' qt_dest='$qt_dest' copyQt %%%"
 }
