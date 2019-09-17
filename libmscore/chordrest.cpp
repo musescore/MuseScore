@@ -843,7 +843,10 @@ bool ChordRest::setProperty(Pid propertyId, const QVariant& v)
                   setSmall(v.toBool());
                   break;
             case Pid::BEAM_MODE:
-                  setBeamMode(Beam::Mode(v.toInt()));
+                  if (isRest() && (v == int(Beam::Mode::AUTO)))
+                        setBeamMode(Beam::Mode::NONE);
+                  else
+                        setBeamMode(Beam::Mode(v.toInt()));
                   break;
             case Pid::STAFF_MOVE:
                   setStaffMove(v.toInt());
