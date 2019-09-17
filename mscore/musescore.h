@@ -120,6 +120,7 @@ enum class MagIdx : char;
 extern QString mscoreGlobalShare;
 static const int PROJECT_LIST_LEN = 6;
 extern const char* voiceActions[];
+extern bool mscoreFirstStart;
 
 //---------------------------------------------------------
 //   IconActions

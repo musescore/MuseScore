@@ -125,6 +125,9 @@ class QmlDockWidget : public QDockWidget
       QQuickView* getView();
       void setupStyle();
 
+   protected:
+      QSize initialViewSize() const { return _view ? _view->initialSize() : QSize(); }
+
    public:
       QmlDockWidget(QQmlEngine* e = nullptr, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
       QmlDockWidget(QQmlEngine* e, const QString& title, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
