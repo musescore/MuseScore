@@ -6268,7 +6268,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "next-score")
             changeScore(1);
       else if (cmd == "previous-score")
-            changeScore(1);
+            changeScore(-1);
       else if (cmd == "transpose")
             transpose();
       else if (cmd == "save-style") {
