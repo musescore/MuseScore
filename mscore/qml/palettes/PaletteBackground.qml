@@ -22,8 +22,11 @@ import QtQuick.Controls 2.0
 
 Canvas {
     property bool drawGrid: false
+    readonly property real verticalGridWidth: parent.stretchWidth ? (width - (width % parent.cellWidth)) : width
     property real offsetX: 0.
     property real offsetY: 0.
+
+    property color background: mscore.paletteBackground
 
     onVisibleChanged: {
         if (visible)
@@ -51,7 +54,7 @@ Canvas {
         ctx.beginPath();
 
         const offX = offsetX % parent.cellWidth;
-        const ncols = Math.ceil((width - offX) / parent.cellWidth) + (offX ? 1 : 0);
+        const ncols = Math.ceil((verticalGridWidth - offX) / parent.cellWidth) + (offX ? 1 : 0);
         for (var i = 1; i < ncols; ++i) {
             const x = i * parent.cellWidth - offX;
             ctx.moveTo(x, 0);
@@ -71,7 +74,7 @@ Canvas {
     onPaint: {
         var ctx = getContext("2d");
         ctx.reset();
-        ctx.fillStyle = "#FFFFFF"; // TODO: remove fill, leave only grid?
+        ctx.fillStyle = background;
         ctx.fillRect(0, 0, width, height);
         if (drawGrid)
             doDrawGrid(ctx)

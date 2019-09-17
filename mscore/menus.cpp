@@ -2436,7 +2436,9 @@ PalettePanel* MuseScore::newLinesPalettePanel()
       Hairpin* gabel4 = new Hairpin(gscore);
       gabel4->setHairpinType(HairpinType::CRESC_HAIRPIN);
       gabel4->setBeginText("<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
+      gabel4->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
       gabel4->setBeginTextAlign(Align::VCENTER);
+      gabel4->setPropertyFlags(Pid::BEGIN_TEXT_ALIGN, PropertyFlags::UNSTYLED);
       gabel4->setLen(w);
       sp->append(gabel4, qApp->translate("lines", "Dynamic + hairpin"));
 

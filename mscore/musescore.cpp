@@ -208,6 +208,8 @@ QString revision;
 QErrorMessage* errorMessage;
 const char* voiceActions[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
 
+bool mscoreFirstStart = false;
+
 const std::list<const char*> MuseScore::_allNoteInputMenuEntries {
             "note-input",
             "pad-note-128",
@@ -2294,6 +2296,9 @@ void MuseScore::selectionChanged(SelState selectionState)
 
 void MuseScore::updatePaletteBeamMode(bool unselect)
       {
+      if (paletteWorkspace)
+            paletteWorkspace->updateCellsState(cs->selection(), unselect);
+#if 0 // old palettes code
       for (Palette* p : paletteBox->palettes()) {
             if (p->name() == "Beam Properties") {
                   if (unselect) {
@@ -2344,6 +2349,7 @@ void MuseScore::updatePaletteBeamMode(bool unselect)
                   p->update();
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -6000,7 +6006,7 @@ void MuseScore::endCmd()
             selectionChanged(SelState::NONE);
             }
       updateInspector();
-      if (cv && paletteBox)
+      if (cv)
             updatePaletteBeamMode(cv->clickOffElement);
       }
 
@@ -7718,6 +7724,7 @@ int main(int argc, char* av[])
 
       if (!MScore::noGui) {
             if (preferences.getBool(PREF_APP_STARTUP_FIRSTSTART)) {
+                  mscoreFirstStart = true;
                   StartupWizard* sw = new StartupWizard;
                   sw->exec();
                   preferences.setPreference(PREF_APP_STARTUP_FIRSTSTART, false);

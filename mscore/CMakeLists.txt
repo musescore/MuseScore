@@ -489,7 +489,7 @@ add_executable ( ${ExecutableName}
       extension.cpp extension.h
       tourhandler.cpp
       script/script.cpp script/scriptentry.cpp script/testscript.cpp script/recorderwidget.cpp
-      qml/msqmlengine.cpp
+      qml/msqmlengine.cpp qml/nativemenu.cpp
       qmldockwidget.cpp
 
       ${WIDGETS_SOURCE_FILES}
@@ -731,7 +731,6 @@ if (MINGW)
       ${QT_INSTALL_QML}
       DESTINATION .
       REGEX ".*d\\.dll" EXCLUDE
-      REGEX ".*QtGraphicalEffects.*" EXCLUDE
       REGEX ".*QtMultimedia.*" EXCLUDE
       REGEX ".*QtSensors.*" EXCLUDE
       REGEX ".*QtTest.*" EXCLUDE
@@ -1049,7 +1048,6 @@ else (MINGW)
          DESTINATION .
          REGEX ".*d\\.dll" EXCLUDE
          REGEX ".pdb" EXCLUDE
-         REGEX ".*QtGraphicalEffects.*" EXCLUDE
          REGEX ".*QtMultimedia.*" EXCLUDE
          REGEX ".*QtSensors.*" EXCLUDE
          REGEX ".*QtTest.*" EXCLUDE
@@ -1082,7 +1080,6 @@ if (APPLE)
       REGEX ".*QtWebkit.*" EXCLUDE
       REGEX ".*QtTest.*" EXCLUDE
       REGEX ".*QtSensors.*" EXCLUDE
-      REGEX ".*QtGraphicalEffects.*" EXCLUDE
       REGEX ".*QtMultimedia.*" EXCLUDE
       REGEX ".*QtAudioEngine.*" EXCLUDE
       REGEX ".*_debug\\.dylib" EXCLUDE)

@@ -8,10 +8,17 @@
         <file>qml/palettes/PalettesWidget.qml</file>
         <file>qml/palettes/PaletteTree.qml</file>
         <file>qml/palettes/PlaceholderManager.qml</file>
+        <file>qml/palettes/StyledButton.qml</file>
+        <file>qml/palettes/StyledIcon.qml</file>
         <file>qml/palettes/StyledPopup.qml</file>
+        <file>qml/palettes/StyledToolButton.qml</file>
         <file>qml/palettes/TreePaletteHeader.qml</file>
         <file>qml/palettes/utils.js</file>
+        <file>qml/palettes/icons/arrow_drop_down.png</file>
+        <file>qml/palettes/icons/arrow_right_black.png</file>
+        <file>qml/palettes/icons/backspace.png</file>
         <file>qml/palettes/icons/delete.png</file>
+        <file>qml/palettes/icons/more.png</file>
         <file>qml/palettes/icons/search.png</file>
     </qresource>
 </RCC>

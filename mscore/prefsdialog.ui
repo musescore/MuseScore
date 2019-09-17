@@ -941,7 +941,7 @@
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <layout class="QHBoxLayout">
             <property name="spacing">
              <number>6</number>
@@ -967,7 +967,7 @@
             </item>
            </layout>
           </item>
-          <item row="1" column="2">
+          <item row="2" column="2">
            <layout class="QHBoxLayout">
             <property name="spacing">
              <number>6</number>
@@ -1026,13 +1026,20 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="2" column="1">
            <widget class="QLineEdit" name="fgWallpaper">
             <property name="accessibleName">
              <string>Paper wallpaper path</string>
             </property>
             <property name="accessibleDescription">
              <string>Insert path to paper wallpaper file</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="fgUseColorInPalettes">
+            <property name="text">
+             <string>Use the same color in palettes</string>
             </property>
            </widget>
           </item>
@@ -4204,6 +4211,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>bgWallpaperSelect</tabstop>
   <tabstop>fgColorButton</tabstop>
   <tabstop>fgColorLabel</tabstop>
+  <tabstop>fgUseColorInPalettes</tabstop>
   <tabstop>fgWallpaperButton</tabstop>
   <tabstop>fgWallpaper</tabstop>
   <tabstop>fgWallpaperSelect</tabstop>
@@ -4325,5 +4333,22 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
  <resources>
   <include location="musescore.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>fgColorButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>fgUseColorInPalettes</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>82</x>
+     <y>221</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>83</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

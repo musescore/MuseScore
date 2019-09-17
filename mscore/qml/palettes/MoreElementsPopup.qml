@@ -22,6 +22,8 @@ import QtQuick.Controls 2.1
 import QtQml.Models 2.2
 import MuseScore.Palette 3.3
 
+import "utils.js" as Utils
+
 StyledPopup {
     id: moreElementsPopup
 
@@ -33,12 +35,19 @@ StyledPopup {
     property var customPaletteRootIndex: null
     property PaletteController customPaletteController: null
 
+    property PaletteElementEditor elementEditor: customPaletteRootIndex && customPaletteController ? customPaletteController.elementEditor(customPaletteRootIndex) : null
+
     property string paletteName
     readonly property string libraryPaletteName: (poolPalette && poolPaletteRootIndex) ? poolPalette.data(poolPaletteRootIndex, Qt.DisplayRole) : ""
     property bool paletteIsCustom: false
+    property bool paletteEditingEnabled: true
 
     property size cellSize
     property bool drawGrid
+
+    property int maxHeight: 400
+
+    property bool enablePaletteAnimations: false // disabled by default to avoid unnecessary "add" animations on opening this popup at first time
 
     signal addElementsRequested(var mimeDataList)
 
@@ -46,11 +55,12 @@ StyledPopup {
         width: parent.width
         spacing: 8
 
-        Button {
+        StyledButton {
+            id: addToPaletteButton
             width: parent.width
 
             text: qsTr("Add to %1").arg(paletteName)
-            enabled: masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection
+            enabled: moreElementsPopup.paletteEditingEnabled && (masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection)
 
             onClicked: {
                 function collectMimeData(palette, selection) {
@@ -82,7 +92,7 @@ StyledPopup {
             visible: enabled
             anchors { left: parent.left; right: parent.right }
             implicitHeight: prevButton.implicitHeight
-            Button {
+            StyledButton {
                 id: prevButton
                 width: height
                 anchors.left: parent.left
@@ -98,7 +108,7 @@ StyledPopup {
                 anchors.centerIn: parent
                 text: moreElementsPopup.libraryPaletteName
             }
-            Button {
+            StyledButton {
                 width: height
                 anchors.right: parent.right
                 flat: true
@@ -112,9 +122,13 @@ StyledPopup {
         }
 
         Rectangle {
+            id: paletteContainer
             width: parent.width
             height: childrenRect.height
             border { width: 1; color: "black" }
+            color: mscore.paletteBackground
+
+            readonly property int availableHeight: moreElementsPopup.maxHeight - addToPaletteButton.height - (masterIndexControls ? masterIndexControls.height : 0) - bottomText.height - (elementEditorButton.visible ? elementEditorButton.height : 0) - 40
 
             Column {
                 width: parent.width
@@ -128,8 +142,14 @@ StyledPopup {
 
                 Palette {
                     id: masterPalette
-                    height: 100
-                    maxWidth: parent.contentWidth
+                    height: Math.max(
+                                cellSize.height,
+                                Math.min(
+                                    implicitHeight,
+                                    paletteContainer.availableHeight - (customPalette.visible ? (customPalette.height + customPaletteLabel.height) : 0)
+                                    )
+                                )
+                    width: parent.contentWidth
 
                     // TODO: change settings to "hidden" model?
                     cellSize: moreElementsPopup.cellSize
@@ -139,18 +159,49 @@ StyledPopup {
                     paletteRootIndex: moreElementsPopup.poolPaletteRootIndex
                     paletteController: moreElementsPopup.poolPaletteController
                     selectionModel: masterPaletteSelectionModel
+
+                    enableAnimations: moreElementsPopup.enablePaletteAnimations
                 }
 
                 ToolSeparator {
+                    id: separator
                     visible: !customPalette.empty
                     orientation: Qt.Horizontal
                     width: parent.contentWidth
                 }
 
-                Text {
-                    id: customPaletteLabel
+                Item {
+                    width: separator.width
+                    implicitHeight: customPaletteLabel.implicitHeight
                     visible: !customPalette.empty
-                    text: qsTr("Custom")
+
+                    Text {
+                        id: customPaletteLabel
+                        text: qsTr("Custom")
+                    }
+
+                    StyledToolButton {
+                        id: deleteButton
+                        height: customPaletteLabel.height
+                        width: height
+                        anchors.right: parent.right
+                        text: qsTr("Delete element(s)")
+                        enabled: customPaletteSelectionModel.hasSelection
+
+                        ToolTip.visible: hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        ToolTip.text: text
+
+                        padding: 0
+
+                        contentItem: StyledIcon {
+                            source: "icons/delete.png"
+                            color: "black"
+                            opacity: deleteButton.enabled ? 1.0 : 0.3
+                        }
+
+                        onClicked: Utils.removeSelectedItems(moreElementsPopup.customPalette, moreElementsPopup.customPaletteController, customPaletteSelectionModel, moreElementsPopup.customPaletteRootIndex);
+                    }
                 }
 
                 ItemSelectionModel {
@@ -161,8 +212,7 @@ StyledPopup {
                 Palette {
                     id: customPalette
                     visible: !empty
-                    height: 50
-                    maxWidth: parent.contentWidth
+                    width: parent.contentWidth
 
                     cellSize: control.cellSize
                     drawGrid: control.drawGrid
@@ -171,17 +221,31 @@ StyledPopup {
                     paletteRootIndex: moreElementsPopup.customPaletteRootIndex
                     paletteController: moreElementsPopup.customPaletteController
                     selectionModel: customPaletteSelectionModel
+
+                    enableAnimations: moreElementsPopup.enablePaletteAnimations
                 }
             }
         }
 
         Text {
+            id: bottomText
             width: parent.width
             text: qsTr("Drag items to the palette or directly on your score")
+            color: globalStyle.windowText
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
+            font.family: globalStyle.font.family
             // make this label's font slightly smaller than other popup text
-            font.pointSize: Qt.application.font.pointSize * 0.8
+            font.pointSize: globalStyle.font.pointSize * 0.8
+        }
+
+        StyledButton {
+            id: elementEditorButton
+            visible: moreElementsPopup.elementEditor && moreElementsPopup.elementEditor.valid
+            enabled: moreElementsPopup.paletteEditingEnabled
+            width: parent.width
+            text: moreElementsPopup.elementEditor ? moreElementsPopup.elementEditor.actionName : ""
+            onClicked: moreElementsPopup.elementEditor.open()
         }
     }
 }

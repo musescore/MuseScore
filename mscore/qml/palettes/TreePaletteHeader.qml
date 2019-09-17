@@ -20,43 +20,66 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 
+import MuseScore.Utils 3.3
+
 Item {
     id: paletteHeader
 
     property bool expanded: false
     property string text: ""
     property bool hidePaletteElementVisible
+    property bool editingEnabled: true
+    property bool custom: false
 
     signal toggleExpandRequested()
+    signal enableEditingToggled(bool val)
     signal hideSelectedElementsRequested()
+    signal insertNewPaletteRequested()
     signal hidePaletteRequested()
+    signal paletteResetRequested()
     signal editPalettePropertiesRequested()
 
     implicitHeight: paletteExpandArrow.height
-    ToolButton {
+    implicitWidth: paletteExpandArrow.implicitWidth + textItem.implicitWidth + paletteHeaderMenuButton.implicitWidth + 8 // 8 for margins
+
+    StyledToolButton {
         id: paletteExpandArrow
         z: 1000
         width: height
         visible: paletteHeader.text.length // TODO: make a separate palette placeholder component
-        text: paletteHeader.expanded ? "\u25bc" : "\u25b6"
-        Accessible.name: paletteHeader.expanded ? qsTr("Collapse") : qsTr("Expand")
+        text: paletteHeader.expanded ? qsTr("Collapse") : qsTr("Expand")
+
+        padding: 0
+
+        contentItem: StyledIcon {
+            source: paletteHeader.expanded ? "icons/arrow_drop_down.png" : "icons/arrow_right_black.png"
+        }
 
         onClicked: paletteHeader.toggleExpandRequested()
     }
     Text {
+        id: textItem
         height: parent.height
         verticalAlignment: Text.AlignVCenter
-        anchors { left: paletteExpandArrow.right; leftMargin: 8 }
+        horizontalAlignment: Text.AlignHLeft
+        anchors {
+            left: paletteExpandArrow.right; leftMargin: 4;
+            right: deleteButton.visible ? deleteButton.left : paletteHeaderMenuButton.left
+        }
         text: paletteHeader.text
+        font: globalStyle.font
+        color: globalStyle.text
+        elide: Text.ElideRight
     }
-//     ToolButton {
+//     StyledToolButton {
 //         z: 1000
 //         height: parent.height
 //         anchors { left: paletteExpandArrow.right }
 //         text: paletteHeader.text
 //     }
 
-    ToolButton {
+    StyledToolButton {
+        id: deleteButton
         z: 1000
         height: parent.height
         width: height
@@ -64,32 +87,39 @@ Item {
 //         icon.name: "delete" // can't use icon until Qt 5.10... https://doc.qt.io/qt-5/qtquickcontrols2-icons.html
 //         icon.source: "icons/delete.png"
         text: qsTr("Remove element")
-        visible: paletteHeader.hidePaletteElementVisible
+        visible: paletteHeader.hidePaletteElementVisible && paletteHeader.editingEnabled
 
         ToolTip.visible: hovered
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
         ToolTip.text: text
 
-        contentItem: Image {
-            fillMode: Image.PreserveAspectFit
+        padding: 4
+
+        contentItem: StyledIcon {
             source: "icons/delete.png"
         }
 
         onClicked: hideSelectedElementsRequested()
     }
 
-    ToolButton {
+    StyledToolButton {
         id: paletteHeaderMenuButton
         z: 1000
         height: parent.height
         anchors.right: parent.right
-        text: "…"
+
+        padding: 4
+
+        contentItem: StyledIcon {
+            source: "icons/more.png"
+        }
 
         Accessible.name: qsTr("Palette menu")
 
         onClicked: {
             paletteHeaderMenu.x = paletteHeaderMenuButton.x + paletteHeaderMenuButton.width - paletteHeaderMenu.width;
-            paletteHeaderMenu.y = paletteHeaderMenuButton.y + paletteHeaderMenuButton.height;
+            paletteHeaderMenu.y = paletteHeaderMenuButton.y;
+//             paletteHeaderMenu.y = paletteHeaderMenuButton.y + paletteHeaderMenuButton.height;
             paletteHeaderMenu.open();
         }
     }
@@ -113,8 +143,24 @@ Item {
     Menu {
         id: paletteHeaderMenu
         MenuItem {
-            text: qsTr("Hide")
+            text: custom ? qsTr("Hide/Delete Palette") : qsTr("Hide Palette")
             onTriggered: paletteHeader.hidePaletteRequested()
+        }
+        MenuItem {
+            text: qsTr("Insert New Palette")
+            onTriggered: paletteHeader.insertNewPaletteRequested()
+        }
+        MenuSeparator {}
+        MenuItem {
+            text: qsTr("Enable Editing")
+            checkable: true
+            checked: paletteHeader.editingEnabled
+            onTriggered: paletteHeader.enableEditingToggled(checked)
+        }
+        MenuSeparator {}
+        MenuItem {
+            text: qsTr("Reset Palette")
+            onTriggered: paletteHeader.paletteResetRequested()
         }
         MenuSeparator {}
         MenuItem {

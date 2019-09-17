@@ -34,6 +34,7 @@ Item {
     readonly property bool hasFocus: Window.activeFocusItem
 
     implicitHeight: paletteTree.implicitHeight + palettesWidgetHeader.implicitHeight
+    implicitWidth: paletteTree.implicitWidth
 
     FocusChainBreak {}
 
@@ -49,6 +50,8 @@ Item {
             right: parent.right
             rightMargin: 12
         }
+
+        onAddCustomPaletteRequested: paletteTree.insertCustomPalette(0);
     }
 
     ToolSeparator {
@@ -64,6 +67,7 @@ Item {
         paletteWorkspace: palettesWidget.paletteWorkspace
 
         filter: palettesWidgetHeader.cellFilter
+        enableAnimations: !palettesWidgetHeader.searching
 
         anchors {
             top: separator.bottom
