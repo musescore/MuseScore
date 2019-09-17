@@ -1828,6 +1828,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
             mmr->setTick(m->tick());
             undo(new ChangeMMRest(m, mmr));
             }
+      mmr->setTimesig(m->timesig());
       mmr->setPageBreak(lm->pageBreak());
       mmr->setLineBreak(lm->lineBreak());
       mmr->setMMRestCount(n);
