@@ -122,6 +122,16 @@ void PaletteWidget::setupStyle()
       }
 
 //---------------------------------------------------------
+//   PaletteWidget::activateSearchBox
+//---------------------------------------------------------
+
+void PaletteWidget::activateSearchBox()
+      {
+      ensureQmlViewFocused();
+      qmlInterface->requestPaletteSearch();
+      }
+
+//---------------------------------------------------------
 //   PaletteWidget::showEvent
 //---------------------------------------------------------
 

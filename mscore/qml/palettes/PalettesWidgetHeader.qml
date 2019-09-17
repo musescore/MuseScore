@@ -118,4 +118,9 @@ Item {
                 palettePopup.visible = false;
         }
     }
+
+    Connections {
+        target: mscore
+        onPaletteSearchRequested: searchTextInput.forceActiveFocus()
+    }
 }
