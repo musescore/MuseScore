@@ -37,6 +37,7 @@ cmd next-element
 cmd toggle-visible
 cmd next-element
 cmd next-element
+cmd delete
 cmd next-element
 cmd next-element
 cmd next-element
