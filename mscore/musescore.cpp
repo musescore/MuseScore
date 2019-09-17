@@ -38,6 +38,7 @@
 #include "palette.h"
 #include "palettebox.h"
 #include "palette/palettemodel.h"
+#include "palette/palettewidget.h"
 #include "palette/paletteworkspace.h"
 #include "libmscore/part.h"
 #include "libmscore/drumset.h"
@@ -5870,13 +5871,10 @@ void MuseScore::cmd(QAction* a)
             return;
             }
       if (cmdn == "palette-search") {
-            PaletteBox* pb = getPaletteBox();
-            QLineEdit* sb = pb->searchBox();
-            sb->setFocus();
-            if (pb->noSelection())
-                  pb->setKeyboardNavigation(false);
-            else
-                  pb->setKeyboardNavigation(true);
+            // TODO: use new search box, or rename command to just "palette"
+            showPalette(true);
+            if (paletteWidget)
+                  paletteWidget->setFocus();
             return;
             }
       if (cmdn == "apply-current-palette-element") {

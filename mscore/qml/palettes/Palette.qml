@@ -353,7 +353,10 @@ GridView {
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: toolTip ? toolTip : ""
 
-            text: toolTip ? toolTip : ""
+            text: model.accessibleText
+            // TODO: these may be needed for support of other screenreaders
+            //Accessible.name: model.accessibleText
+            //Accessible.description: model.accessibleText
 
             onClicked: {
                 forceActiveFocus();
