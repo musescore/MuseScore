@@ -677,7 +677,9 @@ void Selection::updateState()
                   _currentTick = toSpannerSegment(e)->spanner()->tick();
             else
                   _currentTick = e->tick();
-            _currentTrack = e->track();
+            // ignore system elements (e.g., frames)
+            if (e->track() >= 0)
+                  _currentTrack = e->track();
             }
       if (!_score->noteEntryMode())
              _score->inputState().update(e);

@@ -48,6 +48,7 @@
 #include "tourhandler.h"
 #include "script/recorderwidget.h"
 #include "libmscore/fret.h"
+#include "scoreaccessibility.h"
 
 namespace Ms {
 
@@ -746,9 +747,11 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
                   else if (idx >= p->size())
                         idx = 0;
                   p->setSelected(idx);
-                  // Set widget name to name of selected key signature. We could
-                  // set the description, but some screen readers ignore it.
-                  setAccessibleName(qApp->translate("Palette", p->cellAt(idx)->name.toUtf8()));
+                  // set widget name to name of selected element
+                  // we could set the description, but some screen readers ignore it
+                  QString name = qApp->translate("Palette", p->cellAt(idx)->name.toUtf8());
+                  ScoreAccessibility::makeReadable(name);
+                  setAccessibleName(name);
                   QAccessibleEvent aev(this, QAccessible::NameChanged);
                   QAccessible::updateAccessibility(&aev);
                   p->update();
@@ -893,6 +896,10 @@ void Palette::nextPaletteElement()
       if (i < size() && cellAt(i))
             currentIdx = i;
 
+      // TODO: screenreader support
+      //QString name = qApp->translate("Palette", cellAt(i)->name.toUtf8());
+      //ScoreAccessibility::makeReadable(name);
+
       update();
       }
 
@@ -911,6 +918,10 @@ void Palette::prevPaletteElement()
       i--;
       if (i >= 0 && cellAt(i))
             currentIdx = i;
+
+      // TODO: screenreader support
+      //QString name = qApp->translate("Palette", cellAt(i)->name.toUtf8());
+      //ScoreAccessibility::makeReadable(name);
 
       update();
       }

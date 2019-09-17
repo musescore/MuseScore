@@ -270,8 +270,13 @@ Note* Score::downAltCtrl(Note* note) const
 //   firstElement
 //---------------------------------------------------------
 
-Element* Score::firstElement()
+Element* Score::firstElement(bool frame)
       {
+      if (frame) {
+            MeasureBase* mb = measures()->first();
+            if (mb && mb->isBox())
+                  return mb;
+            }
       Segment *s = firstSegment(SegmentType::All);
       return s ? s->element(0) : nullptr;
       }
@@ -280,8 +285,13 @@ Element* Score::firstElement()
 //   lastElement
 //---------------------------------------------------------
 
-Element* Score::lastElement()
+Element* Score::lastElement(bool frame)
       {
+      if (frame) {
+            MeasureBase* mb = measures()->last();
+            if (mb && mb->isBox())
+                  return mb;
+            }
       Element* re = 0;
       Segment* seg = lastSegment();
       if (!seg)
@@ -604,6 +614,22 @@ Element* Score::nextElement()
                         else
                               break;
                         }
+                  case ElementType::VBOX:
+                  case ElementType::HBOX:
+                  case ElementType::TBOX: {
+                        MeasureBase* mb = toMeasureBase(e)->next();
+                        if (!mb) {
+                              break;
+                              }
+                        else if (mb->isMeasure()) {
+                              ChordRest* cr = selection().currentCR();
+                              int si = cr ? cr->staffIdx() : 0;
+                              return toMeasure(mb)->nextElementStaff(si);
+                              }
+                        else {
+                              return mb;
+                              }
+                        }
                   default:
                         break;
                   }
@@ -710,6 +736,24 @@ Element* Score::prevElement()
                               return prev;
                         else
                               break;
+                        }
+                  case ElementType::VBOX:
+                  case ElementType::HBOX:
+                  case ElementType::TBOX: {
+                        MeasureBase* mb = toMeasureBase(e)->prev();
+                        if (!mb) {
+                              break;
+                              }
+                        else if (mb->isMeasure()) {
+                              ChordRest* cr = selection().currentCR();
+                              int si = cr ? cr->staffIdx() : 0;
+                              Segment* s = toMeasure(mb)->last();
+                              if (s)
+                                    return s->lastElement(si);
+                              }
+                        else {
+                              return mb;
+                              }
                         }
                   default:
                         break;
