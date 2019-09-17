@@ -69,6 +69,8 @@ class PaletteWidget : public QmlDockWidget
       QAction* singlePaletteAction = nullptr;
       PaletteQmlInterface* qmlInterface;
 
+      bool wasShown = false;
+
       static void registerQmlTypes();
 
       void retranslate();
@@ -81,6 +83,7 @@ class PaletteWidget : public QmlDockWidget
       PaletteWidget(PaletteWorkspace* w, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
       PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent, Qt::WindowFlags flags = Qt::WindowFlags());
 
+      void showEvent(QShowEvent* event) override;
       void changeEvent(QEvent* evt) override;
       };
 

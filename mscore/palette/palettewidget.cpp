@@ -19,6 +19,7 @@
 
 #include "palettewidget.h"
 
+#include "musescore.h"
 #include "palette/paletteworkspace.h"
 #include "plugin/qmliconview.h"
 #include "preferences.h"
@@ -105,6 +106,22 @@ void PaletteWidget::setupStyle()
             qmlInterface->setPaletteBackground(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
       else
             qmlInterface->setPaletteBackground(QColor("#f9f9f9"));
+      }
+
+//---------------------------------------------------------
+//   PaletteWidget::showEvent
+//---------------------------------------------------------
+
+void PaletteWidget::showEvent(QShowEvent* evt)
+      {
+      QDockWidget::showEvent(evt);
+      if (!wasShown) {
+            wasShown = true;
+            if (mscoreFirstStart) {
+                  // set default width for palettes
+                  mscore->resizeDocks({ this }, { initialViewSize().width() }, Qt::Horizontal);
+                  }
+            }
       }
 
 //---------------------------------------------------------

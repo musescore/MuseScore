@@ -145,6 +145,11 @@ ListView {
             property int rowIndex: index
             property var modelIndex: paletteTree.model.modelIndex(index, 0)
 
+            Component.onCompleted: {
+                const w = paletteHeader.implicitWidth + leftPadding + rightPadding;
+                paletteTree.implicitWidth = Math.max(paletteTree.implicitWidth, w);
+            }
+
             property bool expanded: filter.length || model.expanded
             function toggleExpand() {
                 model.expanded = !expanded

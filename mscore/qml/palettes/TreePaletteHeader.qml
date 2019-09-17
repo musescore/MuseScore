@@ -40,6 +40,8 @@ Item {
     signal editPalettePropertiesRequested()
 
     implicitHeight: paletteExpandArrow.height
+    implicitWidth: paletteExpandArrow.implicitWidth + textItem.implicitWidth + paletteHeaderMenuButton.implicitWidth + 8 // 8 for margins
+
     StyledToolButton {
         id: paletteExpandArrow
         z: 1000
@@ -56,6 +58,7 @@ Item {
         onClicked: paletteHeader.toggleExpandRequested()
     }
     Text {
+        id: textItem
         height: parent.height
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHLeft
