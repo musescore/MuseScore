@@ -46,6 +46,9 @@ Item {
         anchors.right: parent.right
 
         placeholderText: qsTr("Search")
+        //TODO: in the future we may wish these values to differ
+        //Accessible.name: qsTr("Search")
+        Accessible.name: placeholderText
         font: globalStyle.font
 
         color: globalStyle.text
