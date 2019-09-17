@@ -25,6 +25,7 @@
 #include "libmscore/select.h"
 #include "palettetree.h"
 #include "preferences.h"
+#include "scoreaccessibility.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -250,8 +251,12 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
             switch (role) {
                   case Qt::DisplayRole: // TODO don't display cell names in palettes
                   case Qt::ToolTipRole:
-                  case Qt::AccessibleTextRole:
                         return qApp->translate("Palette", cell->name.toUtf8());
+                  case Qt::AccessibleTextRole: {
+                        QString name = qApp->translate("Palette", cell->name.toUtf8());
+                        ScoreAccessibility::makeReadable(name);
+                        return name;
+                        }
                   case Qt::DecorationRole: {
                         qreal extraMag = 1.0;
                         if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer()))
@@ -455,6 +460,7 @@ QHash<int, QByteArray> PaletteTreeModel::roleNames() const
       roles[EditableRole] = "editable";
       roles[PaletteExpandedRole] = "expanded";
       roles[CellActiveRole] = "cellActive";
+      roles[Qt::AccessibleTextRole] = "accessibleText";
       return roles;
       }
 
