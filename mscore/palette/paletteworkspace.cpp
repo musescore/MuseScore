@@ -19,11 +19,107 @@
 
 #include "paletteworkspace.h"
 
+#include "libmscore/keysig.h"
+#include "libmscore/timesig.h"
+
+#include "keyedit.h"
 #include "musescore.h"
 #include "palette.h" // applyPaletteElement
 #include "palettedialogs.h"
+#include "timedialog.h"
 
 namespace Ms {
+
+//---------------------------------------------------------
+//   PaletteElementEditor::valid
+//---------------------------------------------------------
+
+bool PaletteElementEditor::valid() const
+      {
+      using Type = PalettePanel::Type;
+      switch (_type) {
+            case Type::KeySig:
+            case Type::TimeSig:
+                  return true;
+            default:
+                  break;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   PaletteElementEditor::actionName
+//---------------------------------------------------------
+
+QString PaletteElementEditor::actionName() const
+      {
+      using Type = PalettePanel::Type;
+      switch (_type) {
+            case Type::KeySig:
+                  return tr("Create Key Signature");
+            case Type::TimeSig:
+                  return tr("Create Time Signature");
+            default:
+                  break;
+            }
+      return QString();
+      }
+
+//---------------------------------------------------------
+//   PaletteElementEditor::onElementAdded
+//---------------------------------------------------------
+
+void PaletteElementEditor::onElementAdded(const Element* el)
+      {
+      if (!_paletteIndex.isValid()
+         || !_paletteIndex.data(PaletteTreeModel::VisibleRole).toBool()) {
+            QMessageBox::information(mscore, "", tr("The palette was hidden or changed"));
+            return;
+            }
+      QVariantMap mimeData;
+      mimeData[mimeSymbolFormat] = el->mimeData(QPointF());
+      _controller->insert(_paletteIndex, -1, mimeData, Qt::CopyAction);
+      }
+
+//---------------------------------------------------------
+//   PaletteElementEditor::open
+//---------------------------------------------------------
+
+void PaletteElementEditor::open()
+      {
+      if (!_paletteIndex.isValid())
+            return;
+
+      QWidget* editor = nullptr;
+
+      using Type = PalettePanel::Type;
+      switch (_type) {
+            case Type::KeySig: {
+                  KeyEditor* keyEditor = new KeyEditor(mscore);
+                  keyEditor->showKeyPalette(false);
+                  connect(keyEditor, &KeyEditor::keySigAdded, this, &PaletteElementEditor::onElementAdded);
+                  editor = keyEditor;
+                  }
+                  break;
+            case Type::TimeSig: {
+                  TimeDialog* timeEditor = new TimeDialog(mscore);
+                  timeEditor->showTimePalette(false);
+                  connect(timeEditor, &TimeDialog::timeSigAdded, this, &PaletteElementEditor::onElementAdded);
+                  editor = timeEditor;
+                  }
+                  break;
+            default:
+                  break;
+            }
+
+      if (!editor)
+            return;
+
+      mscore->stackUnder(editor);
+      editor->setAttribute(Qt::WA_DeleteOnClose);
+
+      editor->show();
+      }
 
 //---------------------------------------------------------
 //   findPaletteIndex
@@ -75,15 +171,29 @@ static QModelIndex convertProxyIndex(const QModelIndex& srcIndex, const QAbstrac
       }
 
 //---------------------------------------------------------
+//   AbstractPaletteController::elementEditor
+//---------------------------------------------------------
+
+PaletteElementEditor* AbstractPaletteController::elementEditor(const QModelIndex& paletteIndex)
+      {
+      PaletteElementEditor* ed = new PaletteElementEditor(this, paletteIndex, paletteIndex.data(PaletteTreeModel::PaletteTypeRole).value<PalettePanel::Type>(), this);
+      QQmlEngine::setObjectOwnership(ed, QQmlEngine::JavaScriptOwnership);
+      return ed;
+      }
+
+//---------------------------------------------------------
 //   UserPaletteController::dropAction
 //---------------------------------------------------------
 
-Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt::DropActions supportedActions, bool internal) const
+Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt::DropAction proposedAction, const QModelIndex& parent, bool internal) const
       {
-      if (internal && readOnly())
+      if (internal && !userEditable())
+            return Qt::IgnoreAction;
+      const bool parentEditingEnabled = model()->data(parent, PaletteTreeModel::EditableRole).toBool();
+      if (!parentEditingEnabled)
             return Qt::IgnoreAction;
 
-      if (mimeData.contains(PaletteCell::mimeDataFormat) && (supportedActions & Qt::MoveAction)) {
+      if (mimeData.contains(PaletteCell::mimeDataFormat) && proposedAction == Qt::MoveAction) {
             const auto cell = PaletteCell::readMimeData(mimeData[PaletteCell::mimeDataFormat].toByteArray());
             if (!cell)
                   return Qt::IgnoreAction;
@@ -91,7 +201,7 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
                   return Qt::IgnoreAction;
             return Qt::MoveAction;
             }
-      if (mimeData.contains(mimeSymbolFormat) && (supportedActions & Qt::CopyAction)) {
+      if (mimeData.contains(mimeSymbolFormat) && proposedAction == Qt::CopyAction) {
             if (_filterCustom && !_custom)
                   return Qt::IgnoreAction;
             return Qt::CopyAction;
@@ -103,11 +213,15 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
 //   UserPaletteController::insert
 //---------------------------------------------------------
 
-bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVariantMap& mimeData)
+bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action)
       {
-      const Qt::DropAction action = dropAction(mimeData, Qt::DropActions(Qt::CopyAction | Qt::MoveAction), false); // TODO: make it an argument, then there won't be a need in this override
+      if (dropAction(mimeData, action, parent, false) == Qt::IgnoreAction)
+            return false;
 
-      std::unique_ptr<PaletteCell> cell;
+      if (row < 0)
+            row = parent.model()->rowCount(parent);
+
+      PaletteCellPtr cell;
 
       if (mimeData.contains(PaletteCell::mimeDataFormat)) {
             cell = PaletteCell::readMimeData(mimeData[PaletteCell::mimeDataFormat].toByteArray());
@@ -122,6 +236,8 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
                   const QModelIndex foundIndex(_userPalette->findPaletteCell(*cell, visiblePaletteParentIndex));
                   if (foundIndex.isValid())
                         return _userPalette->setData(foundIndex, _visible, PaletteTreeModel::VisibleRole);
+                  else if (!userEditable())
+                        return false;
                   }
             }
       else if (mimeData.contains(mimeSymbolFormat) && (action == Qt::CopyAction))
@@ -144,12 +260,23 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
       }
 
 //---------------------------------------------------------
+//   UserPaletteController::insertNewItem
+//---------------------------------------------------------
+
+bool UserPaletteController::insertNewItem(const QModelIndex& parent, int row)
+      {
+      if (canEdit(parent))
+            return model()->insertRow(row, parent);
+      return false;
+      }
+
+//---------------------------------------------------------
 //   UserPaletteController::move
 //---------------------------------------------------------
 
 bool UserPaletteController::move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild)
       {
-      if (readOnly())
+      if (!canEdit(sourceParent) || !canEdit(destinationParent))
             return false;
       if (sourceParent == destinationParent && (sourceParent.model() == model() || !sourceParent.isValid())) {
             const QModelIndex srcIndex = convertProxyIndex(model()->index(sourceRow, 0, sourceParent), _userPalette);
@@ -160,22 +287,91 @@ bool UserPaletteController::move(const QModelIndex& sourceParent, int sourceRow,
       }
 
 //---------------------------------------------------------
+//   UserPaletteController::showHideOrDeleteDialog
+//---------------------------------------------------------
+
+AbstractPaletteController::RemoveAction UserPaletteController::showHideOrDeleteDialog(const QString& question) const
+      {
+      QMessageBox msg;
+      msg.setIcon(QMessageBox::Question);
+      msg.setText(question);
+      msg.setTextFormat(Qt::PlainText);
+      QPushButton* deleteButton = msg.addButton(tr("Delete permanently"), QMessageBox::DestructiveRole);
+      QPushButton* hideButton = msg.addButton(tr("Keep a copy"), QMessageBox::AcceptRole);
+      msg.addButton(QMessageBox::Cancel);
+      msg.setDefaultButton(hideButton);
+
+      msg.exec();
+      QAbstractButton* btn = msg.clickedButton();
+      if (btn == deleteButton)
+            return RemoveAction::DeletePermanently;
+      if (btn == hideButton)
+            return RemoveAction::Hide;
+      return RemoveAction::NoAction;
+      }
+
+//---------------------------------------------------------
 //   UserPaletteController::remove
 //---------------------------------------------------------
 
-bool UserPaletteController::remove(const QModelIndex& parent, int row)
+AbstractPaletteController::RemoveAction UserPaletteController::queryRemoveAction(const QModelIndex& index) const
       {
-      if (readOnly())
-            return false;
+      using RemoveAction = AbstractPaletteController::RemoveAction;
 
-      const QModelIndex index = model()->index(row, 0, parent);
-      const bool custom = model()->data(index, PaletteTreeModel::CustomRole).toBool(); // TODO: check canConvert?
-      const bool visible = model()->data(index, PaletteTreeModel::VisibleRole).toBool(); // TODO: check canConvert?
+      if (!canEdit(index.parent()))
+            return RemoveAction::NoAction;
+
+      const bool custom = model()->data(index, PaletteTreeModel::CustomRole).toBool();
+      const bool visible = model()->data(index, PaletteTreeModel::VisibleRole).toBool();
       const bool isCell = bool(model()->data(index, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>());
-      if ((custom || !isCell) && visible)
-            return model()->setData(index, false, PaletteTreeModel::VisibleRole);
-      else // no need to keep standard insivible cells, just remove them from the model
-            return model()->removeRow(row, parent);
+
+      if (isCell) {
+            if (!custom) {
+                  // no need to keep standard insivible cells, just remove them from the model
+                  return RemoveAction::DeletePermanently;
+                  }
+
+            if (visible)
+                  return showHideOrDeleteDialog(tr("Do you want to permanently delete this custom palette cell or keep a copy in the library?"));
+            else {
+                  const auto answer = QMessageBox::question(
+                        nullptr,
+                        "",
+                        tr("Do you want to permanently delete this custom palette?"),
+                        QMessageBox::Yes | QMessageBox::No
+                        );
+
+                  if (answer == QMessageBox::Yes)
+                        return RemoveAction::DeletePermanently;
+                  return RemoveAction::NoAction;
+                  }
+
+            return RemoveAction::NoAction;
+            }
+      else {
+            if (visible && custom)
+                  return showHideOrDeleteDialog(tr("Do you want to permanently delete this custom palette or keep a copy in the \"More Palettes\" list?"));
+            return RemoveAction::Hide;
+            }
+      }
+
+//---------------------------------------------------------
+//   UserPaletteController::remove
+//---------------------------------------------------------
+
+bool UserPaletteController::remove(const QModelIndex& index)
+      {
+      using RemoveAction = AbstractPaletteController::RemoveAction;
+      const RemoveAction action = queryRemoveAction(index);
+      switch (action) {
+            case RemoveAction::NoAction:
+                  break;
+            case RemoveAction::Hide:
+                  return model()->setData(index, false, PaletteTreeModel::VisibleRole);
+            case RemoveAction::DeletePermanently:
+                  return model()->removeRow(index.row(), index.parent());
+            }
+      return false;
       }
 
 //---------------------------------------------------------
@@ -184,7 +380,7 @@ bool UserPaletteController::remove(const QModelIndex& parent, int row)
 
 void UserPaletteController::editPaletteProperties(const QModelIndex& index)
       {
-      if (readOnly())
+      if (!canEdit(index))
             return;
 
       const QModelIndex srcIndex = convertProxyIndex(index, _userPalette);
@@ -206,20 +402,32 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
 
 void UserPaletteController::editCellProperties(const QModelIndex& index)
       {
-      if (readOnly())
+      if (!canEdit(index))
             return;
 
       const QModelIndex srcIndex = convertProxyIndex(index, _userPalette);
-      PaletteCell* cell = _userPalette->findCell(srcIndex);
+      PaletteCellPtr cell = _userPalette->findCell(srcIndex);
       if (!cell)
             return;
 
-      PaletteCellProperties* d = new PaletteCellProperties(cell, mscore);
+      PaletteCellProperties* d = new PaletteCellProperties(cell.get(), mscore);
       PaletteTreeModel* m = _userPalette;
       connect(d, &QDialog::accepted, m, [m, srcIndex]() { m->itemDataChanged(srcIndex); });
       d->setModal(true);
       d->setAttribute(Qt::WA_DeleteOnClose);
       d->open();
+      }
+
+//---------------------------------------------------------
+//   UserPaletteController::canEdit
+//---------------------------------------------------------
+
+bool UserPaletteController::canEdit(const QModelIndex& index) const
+      {
+      if (!userEditable())
+            return false;
+
+      return model()->data(index, PaletteTreeModel::EditableRole).toBool();
       }
 
 //---------------------------------------------------------
@@ -232,6 +440,14 @@ void UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
       if (cell && cell->element)
             Palette::applyPaletteElement(cell->element.get(), modifiers);
       }
+
+//---------------------------------------------------------
+//   PaletteWorkspace
+//---------------------------------------------------------
+
+PaletteWorkspace::PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master, QObject* parent)
+   : QObject(parent), userPalette(user), masterPalette(master), defaultPalette(master)
+      {}
 
 //---------------------------------------------------------
 //   PaletteWorkspace::masterPaletteModel
@@ -248,7 +464,7 @@ QAbstractItemModel* PaletteWorkspace::mainPaletteModel()
             visFilterModel->setSourceModel(userPalette);
 
             // Wrap it into another proxy model to enable filtering by palette cell name
-            QSortFilterProxyModel* textFilterModel = new RecursiveFilterProxyModel(this);
+            QSortFilterProxyModel* textFilterModel = new ChildFilterProxyModel(this);
             textFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
             textFilterModel->setSourceModel(visFilterModel);
             visFilterModel->setParent(textFilterModel);
@@ -346,7 +562,7 @@ AbstractPaletteController* PaletteWorkspace::poolPaletteController(FilterPalette
       UserPaletteController* c = new UserPaletteController(poolPaletteModel, userPalette);
       c->setVisible(false);
       c->setCustom(false);
-      c->setReadOnly(true); // TODO: rename to disable just internal move
+      c->setUserEditable(false);
 //       AbstractPaletteController* c = new MasterPaletteController(poolPaletteModel, userPalette, this);
       QQmlEngine::setObjectOwnership(c, QQmlEngine::JavaScriptOwnership);
       return c;
@@ -356,19 +572,28 @@ AbstractPaletteController* PaletteWorkspace::poolPaletteController(FilterPalette
 //   PaletteWorkspace::availableExtraPalettePanelsModel
 //---------------------------------------------------------
 
-QAbstractItemModel* PaletteWorkspace::availableExtraPalettePanelsModel()
+QAbstractItemModel* PaletteWorkspace::availableExtraPalettesModel()
       {
       QStandardItemModel* m = new QStandardItemModel;
+
+      {
+      auto roleNames = m->roleNames();
+      roleNames[CustomRole] = "custom";
+      roleNames[PaletteIndexRole] = "paletteIndex";
+      m->setItemRoleNames(roleNames);
+      }
 
       QStandardItem* root = m->invisibleRootItem();
 
       const int masterRows = masterPalette->rowCount();
       for (int row = 0; row < masterRows; ++row) {
             const QModelIndex idx = masterPalette->index(row, 0);
-            // add everything that cannot be found in visible palette
-            if (!convertIndex(idx, mainPalette).isValid()) {
+            // add everything that cannot be found in user palette
+            if (!convertIndex(idx, userPalette).isValid()) {
                   const QString name = masterPalette->data(idx, Qt::DisplayRole).toString();
                   QStandardItem* item = new QStandardItem(name);
+                  item->setData(false, CustomRole); // this palette is from master palette, hence not custom
+                  item->setData(QPersistentModelIndex(idx), PaletteIndexRole);
                   root->appendRow(item);
                   }
             }
@@ -379,9 +604,11 @@ QAbstractItemModel* PaletteWorkspace::availableExtraPalettePanelsModel()
             // add invisible custom palettes
             const bool visible = userPalette->data(idx, PaletteTreeModel::VisibleRole).toBool();
             const bool custom = userPalette->data(idx, PaletteTreeModel::CustomRole).toBool();
-            if (!visible && custom) {
+            if (!visible) {
                   const QString name = userPalette->data(idx, Qt::DisplayRole).toString();
                   QStandardItem* item = new QStandardItem(name);
+                  item->setData(custom, CustomRole);
+                  item->setData(QPersistentModelIndex(idx), PaletteIndexRole);
                   root->appendRow(item);
                   }
             }
@@ -394,45 +621,101 @@ QAbstractItemModel* PaletteWorkspace::availableExtraPalettePanelsModel()
 //   PaletteWorkspace::addPalette
 //---------------------------------------------------------
 
-bool PaletteWorkspace::addPalette(QString name)
+bool PaletteWorkspace::addPalette(const QPersistentModelIndex& index)
       {
-      const int role = Qt::DisplayRole;
-      const QVariant value(name);
+      if (!index.isValid())
+            return false;
 
-      // try to find a palette in invisible user palette's items
-      {
-      const QModelIndex start = userPalette->index(0, 0);
-      const QAbstractItemModel* m = userPalette;
-      const QModelIndexList foundIndexList = m->match(start, role, value);
-      if (!foundIndexList.empty())
-            return userPalette->setData(foundIndexList[0], true, PaletteTreeModel::VisibleRole);
-      }
+      if (index.model() == userPalette)
+            return userPalette->setData(index, true, PaletteTreeModel::VisibleRole);
 
-      // if not found, add from a master palette
-      // TODO: need some "basic" default palette
-      {
-      const QModelIndex start = masterPalette->index(0, 0);
-      const QAbstractItemModel* m = masterPalette;
-      const QModelIndexList foundIndexList = m->match(start, role, value);
-      if (!foundIndexList.empty()) {
-            const QMimeData* data = masterPalette->mimeData(foundIndexList);
-            return userPalette->dropMimeData(data, Qt::CopyAction, 0, 0, QModelIndex());
+      if (index.model() == masterPalette) {
+            QMimeData* data = masterPalette->mimeData({ QModelIndex(index) });
+            const bool success = userPalette->dropMimeData(data, Qt::CopyAction, 0, 0, QModelIndex());
+            data->deleteLater();
+            return success;
             }
-      }
 
       return false;
       }
 
 //---------------------------------------------------------
-//   PaletteWorkspace::addCustomPalette
+//   PaletteWorkspace::removeCustomPalette
 //---------------------------------------------------------
 
-bool PaletteWorkspace::addCustomPalette(int idx)
+bool PaletteWorkspace::removeCustomPalette(const QPersistentModelIndex& index)
       {
-      if (idx < 0)
-            idx = 0; // insert to the beginning by default
+      if (!index.isValid())
+            return false;
 
-      return userPalette->insertRow(idx, QModelIndex());
+
+      if (index.model() == userPalette) {
+            const bool custom = index.data(PaletteTreeModel::CustomRole).toBool();
+            if (!custom)
+                  return false;
+
+            const auto answer = QMessageBox::question(
+                  nullptr,
+                  "",
+                  tr("Do you want to permanently delete this custom palette?"),
+                  QMessageBox::Yes | QMessageBox::No
+                  );
+
+            if (answer == QMessageBox::Yes)
+                  return userPalette->removeRow(index.row(), index.parent());
+            return false;
+            }
+
+      return false;
+      }
+
+//---------------------------------------------------------
+//   PaletteWorkspace::resetPalette
+//---------------------------------------------------------
+
+bool PaletteWorkspace::resetPalette(const QModelIndex& index)
+      {
+      if (!index.isValid())
+            return false;
+
+      const auto answer = QMessageBox::question(
+            nullptr,
+            "",
+            tr("Do you want to restore this palette to its default state? All changes to this palette will be lost."),
+            QMessageBox::Yes | QMessageBox::No
+            );
+
+      if (answer != QMessageBox::Yes)
+            return false;
+
+      Q_ASSERT(defaultPalette != userPalette);
+      const QModelIndex defaultPaletteIndex = convertIndex(index, defaultPalette);
+
+      const QModelIndex userPaletteIndex = convertProxyIndex(index, userPalette);
+      const QModelIndex parent = userPaletteIndex.parent();
+      const int row = userPaletteIndex.row();
+      const int column = userPaletteIndex.column();
+
+      // restore visibility and expanded state of the palette after restoring its state
+      const bool wasVisible = index.data(PaletteTreeModel::VisibleRole).toBool();
+      const bool wasExpanded = index.data(PaletteTreeModel::PaletteExpandedRole).toBool();
+
+      if (!userPalette->removeRow(row, parent))
+            return false;
+
+      if (defaultPaletteIndex.isValid()) {
+            QMimeData* data = defaultPalette->mimeData({ defaultPaletteIndex });
+            userPalette->dropMimeData(data, Qt::CopyAction, row, column, parent);
+            data->deleteLater();
+            }
+      else
+            userPalette->insertRow(row, parent);
+
+      const QModelIndex newIndex = userPalette->index(row, column, parent);
+      userPalette->setData(newIndex, wasVisible, PaletteTreeModel::VisibleRole);
+      userPalette->setData(newIndex, wasExpanded, PaletteTreeModel::PaletteExpandedRole);
+
+      return true;
       }
 
 //---------------------------------------------------------

@@ -20,6 +20,10 @@
 #include "qmldockwidget.h"
 
 #include "musescore.h"
+#include "preferences.h"
+#include "qml/nativemenu.h"
+
+#include <QQmlContext>
 
 namespace Ms {
 
@@ -79,6 +83,10 @@ void MsQuickView::registerQmlTypes()
             return;
 
       qmlRegisterType<FocusChainBreak>("MuseScore.Utils", 3, 3, "FocusChainBreak");
+
+      qmlRegisterType<QmlNativeMenu>("MuseScore.Utils", 3, 3, "Menu");
+      qmlRegisterType<QmlMenuSeparator>("MuseScore.Utils", 3, 3, "MenuSeparator");
+      qmlRegisterType<QmlMenuItem>("MuseScore.Utils", 3, 3, "MenuItem");
 
       registered = true;
       }
@@ -140,6 +148,17 @@ void MsQuickView::keyPressEvent(QKeyEvent* evt)
       }
 
 //---------------------------------------------------------
+//   QmlStyle
+//---------------------------------------------------------
+
+QmlStyle::QmlStyle(QPalette p, QObject* parent)
+   : QObject(parent), _palette(p)
+      {
+      _font.setFamily(preferences.getString(PREF_UI_THEME_FONTFAMILY));
+      _font.setPointSize(preferences.getInt(PREF_UI_THEME_FONTSIZE));
+      }
+
+//---------------------------------------------------------
 //   QmlDockWidget
 //---------------------------------------------------------
 
@@ -171,6 +190,22 @@ QQuickView* QmlDockWidget::getView()
       }
 
 //---------------------------------------------------------
+//   QmlDockWidget::setupStyle
+//---------------------------------------------------------
+
+void QmlDockWidget::setupStyle()
+      {
+      QQuickView* view = getView();
+      view->setColor(QApplication::palette().color(QPalette::Window));
+
+      if (qmlStyle)
+            qmlStyle->deleteLater();
+
+      qmlStyle = new QmlStyle(QApplication::palette(), this);
+      rootContext()->setContextProperty("globalStyle", qmlStyle);
+      }
+
+//---------------------------------------------------------
 //   QmlDockWidget::setSource
 //---------------------------------------------------------
 
@@ -178,10 +213,26 @@ void QmlDockWidget::setSource(const QUrl& url)
       {
       QQuickView* view = getView();
 
-      view->setSource(url);
+      setupStyle();
 
-      view->setColor(QApplication::palette().color(QPalette::Window));
+      view->setSource(url);
       view->setResizeMode(QQuickView::SizeRootObjectToView);
+      }
+
+//---------------------------------------------------------
+//   QmlDockWidget::changeEvent
+//---------------------------------------------------------
+
+void QmlDockWidget::changeEvent(QEvent* evt)
+      {
+      QDockWidget::changeEvent(evt);
+      switch (evt->type()) {
+            case QEvent::StyleChange:
+                  setupStyle();
+                  break;
+            default:
+                  break;
+            }
       }
 }
 

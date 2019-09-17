@@ -24,6 +24,8 @@
 
 namespace Ms {
 
+class Selection;
+
 //---------------------------------------------------------
 //   PaletteCellFilter
 ///   Interface for filtering elements in a palette
@@ -89,10 +91,13 @@ class PaletteTreeModel : public QAbstractItemModel {
             PaletteCellRole = Qt::UserRole,
             VisibleRole,
             CustomRole,
+            EditableRole,
             MimeDataRole,
             GridSizeRole,
             DrawGridRole,
-            PaletteTypeRole
+            PaletteExpandedRole,
+            PaletteTypeRole,
+            CellActiveRole
             };
       Q_ENUM(PaletteTreeModelRoles);
 
@@ -107,6 +112,7 @@ class PaletteTreeModel : public QAbstractItemModel {
       const PalettePanel* iptrToPalettePanel(void* iptr, int* idx = nullptr) const { return const_cast<PaletteTreeModel*>(this)->iptrToPalettePanel(iptr, idx); }
 
    private slots:
+      void onDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles);
       void setTreeChanged() { _treeChanged = true; }
 
    public slots:
@@ -152,8 +158,10 @@ class PaletteTreeModel : public QAbstractItemModel {
 
       const PalettePanel* findPalettePanel(const QModelIndex&) const;
       PalettePanel* findPalettePanel(const QModelIndex& index);
-      const PaletteCell* findCell(const QModelIndex&) const;
-      PaletteCell* findCell(const QModelIndex& index);
+      PaletteCellConstPtr findCell(const QModelIndex&) const;
+      PaletteCellPtr findCell(const QModelIndex& index);
+
+      void updateCellsState(const Selection&, bool deactivateAll);
       };
 
 //---------------------------------------------------------
@@ -176,16 +184,14 @@ class FilterPaletteTreeModel : public QSortFilterProxyModel {
       };
 
 //---------------------------------------------------------
-//   RecursiveFilterProxyModel
-///   Filters model recursively. A similar effect can be
-///   achieved since Qt 5.10 by enabling
-///   QSortFilterProxyModel::recursiveFilteringEnabled
+//   ChildFilterProxyModel
+///   Filters model's items that do not have own children.
 //---------------------------------------------------------
 
-class RecursiveFilterProxyModel : public QSortFilterProxyModel {
+class ChildFilterProxyModel : public QSortFilterProxyModel {
       Q_OBJECT
    public:
-      RecursiveFilterProxyModel(QObject* parent = nullptr) : QSortFilterProxyModel(parent) {}
+      ChildFilterProxyModel(QObject* parent = nullptr) : QSortFilterProxyModel(parent) {}
 
       bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
       };

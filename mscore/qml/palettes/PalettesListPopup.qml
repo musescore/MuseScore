@@ -20,15 +20,22 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 import MuseScore.Palette 3.3
+import MuseScore.Utils 3.3
 
 StyledPopup {
     id: palettesListPopup
     property PaletteWorkspace paletteWorkspace: null
 
+    property bool inMenuAction: false
+
+    signal addCustomPaletteRequested()
+
     Text {
         id: header
         anchors.top: parent.top
         text: qsTr("More palettes")
+        font: globalStyle.font
+        color: globalStyle.windowText
     }
 
     ToolSeparator {
@@ -54,7 +61,7 @@ StyledPopup {
 
         onVisibleChanged: {
             if (visible) {
-                model = paletteWorkspace.availableExtraPalettePanelsModel();
+                model = paletteWorkspace.availableExtraPalettesModel();
             }
         }
 
@@ -64,7 +71,9 @@ StyledPopup {
             height: addButton.height
             topPadding: 0
             bottomPadding: 0
+
             property bool added: false // TODO: store in some model
+            property bool removed: false
 
             text: model.display
 
@@ -72,15 +81,35 @@ StyledPopup {
                 height: parent.availableHeight
                 width: parent.availableWidth
                 Item {
-                    visible: !morePalettesDelegate.added
+                    visible: !(morePalettesDelegate.added || morePalettesDelegate.removed)
                     anchors.fill: parent
 
                     Text {
                         height: parent.height
+                        anchors.left: parent.left
+                        anchors.right: addButton.left
                         text: morePalettesDelegate.text
+                        font: globalStyle.font
+                        color: globalStyle.windowText
                         verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHLeft
+                        elide: Text.ElideRight
+
+                        MouseArea {
+                            id: rightClickArea
+                            anchors.fill: parent
+                            acceptedButtons: Qt.RightButton
+
+                            onClicked: {
+                                if (!model.custom)
+                                    return;
+                                contextMenu.paletteIndex = model.paletteIndex;
+                                contextMenu.item = morePalettesDelegate;
+                                contextMenu.popup();
+                            }
+                        }
                     }
-                    Button {
+                    StyledButton {
                         id: addButton
 //                         height: parent.height
                         anchors.right: parent.right
@@ -91,18 +120,21 @@ StyledPopup {
                         Accessible.description: ToolTip.text
 
                         onClicked: {
-                            paletteWorkspace.addPalette(model.display);
-                            morePalettesDelegate.added = true; // TODO: store in some model
+                            if (paletteWorkspace.addPalette(model.paletteIndex))
+                                morePalettesDelegate.added = true; // TODO: store in some model
                         }
                     }
                 }
 
                 Text {
-                    visible: morePalettesDelegate.added
+                    visible: morePalettesDelegate.added || morePalettesDelegate.removed
                     anchors.fill: parent
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    text: qsTr("%1 Added!").arg(model.display)
+                    text: morePalettesDelegate.added ? qsTr("%1 Added!").arg(model.display) : (morePalettesDelegate.removed ? qsTr("%1 removed").arg(model.display) : "")
+                    font: globalStyle.font
+                    color: globalStyle.windowText
+                    elide: Text.ElideMiddle
                 }
             }
         }
@@ -115,14 +147,30 @@ StyledPopup {
         width: parent.width
     }
 
-    Button {
+    StyledButton {
         id: createCustomPaletteButton
         anchors.bottom: parent.bottom
         width: parent.width
         text: qsTr("Create custom palette")
         onClicked: {
-            paletteWorkspace.addCustomPalette();
+            addCustomPaletteRequested();
             palettesListPopup.close();
+        }
+    }
+
+    Menu {
+        id: contextMenu
+        property var paletteIndex: null
+        property ItemDelegate item: null
+
+        MenuItem {
+            text: qsTr("Delete")
+            onTriggered: {
+                palettesListPopup.inMenuAction = true;
+                if (paletteWorkspace.removeCustomPalette(contextMenu.paletteIndex))
+                    contextMenu.item.removed = true;
+                palettesListPopup.inMenuAction = false;
+            }
         }
     }
 }

@@ -26,85 +26,59 @@ Item {
 
     property PaletteWorkspace paletteWorkspace: null
     property string cellFilter: searchTextInput.text
+    readonly property bool searching: searchTextInput.activeFocus || searchTextClearButton.activeFocus
+
+    signal addCustomPaletteRequested()
 
     implicitHeight: childrenRect.height
 
-    states: [
-        State {
-            name: "default"
-            PropertyChanges { target: searchTextInput; text: ""; restoreEntryValues: false }
-        },
-
-        State {
-            name: "searchExpanded"
-//             PropertyChanges { target: morePalettesButton; visible: false }
-            PropertyChanges { target: searchButton; visible: false }
-            PropertyChanges { target: searchTextInput; /*visible: true; */focus: true }
-        }
-    ]
-
-    state: "default"
-    property int animationDuration: 150
-
-    transitions: [
-        Transition {
-            from: "default"
-            to: "searchExpanded"
-            SequentialAnimation {
-                PropertyAction { target: searchTextInput; property: "visible"; value: true }
-                NumberAnimation { target: searchTextInput; property: "width"; from: 0; to: header.width; duration: animationDuration }
-            }
-            SequentialAnimation {
-                NumberAnimation { target: morePalettesButton; property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: animationDuration }
-                PropertyAction { target: morePalettesButton; property: "visible"; value: false }
-            }
-        },
-        Transition {
-            from: "searchExpanded"
-            to: "default"
-            SequentialAnimation {
-                NumberAnimation { target: searchTextInput; property: "width"; to: 0; duration: animationDuration }
-                PropertyAction { target: searchTextInput; property: "visible"; value: false }
-            }
-            SequentialAnimation {
-                PropertyAction { target: morePalettesButton; property: "visible"; value: true }
-                NumberAnimation { target: morePalettesButton; property: "opacity"; from: 0.0; to: 1.0; easing.type: Easing.OutCubic; duration: animationDuration }
-            }
-        }
-    ]
-
-    Button {
+    StyledButton {
         id: morePalettesButton
-        text: qsTr("Add more palettes")
+        height: searchTextInput.height
+        width: parent.width / 2 - 4
+        text: qsTr("Add palettes")
         onClicked: palettePopup.visible = !palettePopup.visible
     }
 
     TextField {
         id: searchTextInput
-        visible: false
+        width: parent.width / 2 - 4
         anchors.right: parent.right
 
-        placeholderText: qsTr("Search palettes")
+        placeholderText: qsTr("Search")
+        font: globalStyle.font
 
-        Keys.onEscapePressed: header.state = "default"
-    }
+        color: globalStyle.text
 
-    Button {
-        id: searchButton
-        flat: true
-        anchors.right: parent.right
-
-        height: searchTextInput.height
-        width: height
-
-        // Button.icon property is unavailable until Qt 5.10
-        contentItem: Image {
-            fillMode: Image.PreserveAspectFit
-            source: "icons/search.png"
-            // TODO: add ColorOverlay to get a correct appearance in a dark theme, see https://forum.qt.io/topic/75792/qtquick-controls-2-button-icon/5
+        background: Rectangle {
+            color: globalStyle.base
+            border.color: "#aeaeae"
         }
 
-        onClicked: header.state = "searchExpanded"
+        StyledToolButton {
+            id: searchTextClearButton
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+                margins: 1
+            }
+            width: height
+            visible: searchTextInput.text.length && searchTextInput.width > 2 * width
+            flat: true
+            onClicked: searchTextInput.clear()
+
+            padding: 8
+
+            text: qsTr("Clear search text")
+            ToolTip.visible: hovered
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.text: text
+
+            contentItem: StyledIcon {
+                source: "icons/backspace.png"
+            }
+        }
     }
 
     PalettesListPopup {
@@ -118,14 +92,17 @@ Item {
         height: paletteTree.height * 0.8
 
         modal: true
+        dim: false
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        onAddCustomPaletteRequested: header.addCustomPaletteRequested()
     }
 
     Connections {
         target: palettesWidget
         onHasFocusChanged: {
-            if (!palettesWidget.hasFocus)
+            if (!palettesWidget.hasFocus && !palettePopup.inMenuAction)
                 palettePopup.visible = false;
         }
     }
