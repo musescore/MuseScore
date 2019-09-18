@@ -1674,7 +1674,6 @@ PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
       cellWidth->setValue(palette->gridWidth());
       cellHeight->setValue(palette->gridHeight());
       showGrid->setChecked(palette->drawGrid());
-      moreElements->setChecked(palette->moreElements());
       elementOffset->setValue(palette->yOffset());
       mag->setValue(palette->mag());
 
@@ -1690,7 +1689,6 @@ void PaletteProperties::accept()
       palette->setName(name->text());
       palette->setGrid(cellWidth->value(), cellHeight->value());
       palette->setDrawGrid(showGrid->isChecked());
-      palette->setMoreElements(moreElements->isChecked());
       palette->setYOffset(elementOffset->value());
       palette->setMag(mag->value());
       palette->emitChanged();

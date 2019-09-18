@@ -89,7 +89,7 @@ QT5_WRAP_UI (ui_headers
       editstaff.ui timesigproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
       transposedialog.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
-      articulation.ui metaedit.ui palette.ui selectdialog.ui selectnotedialog.ui
+      articulation.ui metaedit.ui paletteProperties.ui selectdialog.ui selectnotedialog.ui
       synthcontrol.ui splitstaff.ui cellproperties.ui keyedit.ui selectinstr.ui
       fretdprops.ui editstafftype.ui sectionbreak.ui  bend.ui tremolobar.ui
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui

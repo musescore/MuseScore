@@ -21,7 +21,7 @@
 #define __PALETTE_H__
 
 #include "palette/palettetree.h"
-#include "ui_palette.h"
+#include "ui_paletteProperties.h"
 #include "ui_cellproperties.h"
 #include "libmscore/sym.h"
 

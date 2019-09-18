@@ -135,13 +135,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QCheckBox" name="moreElements">
-       <property name="text">
-        <string>Show 'More Elements…'</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>

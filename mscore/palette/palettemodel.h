@@ -113,10 +113,11 @@ class PaletteTreeModel : public QAbstractItemModel {
 
    private slots:
       void onDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles);
-      void setTreeChanged() { _treeChanged = true; }
-
+      
    public slots:
       void itemDataChanged(const QModelIndex& idx);
+      void setTreeChanged() { _treeChanged = true; }
+      void setTreeUnchanged() { _treeChanged = false; }
 
    public:
       explicit PaletteTreeModel(std::unique_ptr<PaletteTree> tree, QObject* parent = nullptr);
