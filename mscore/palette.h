@@ -48,20 +48,6 @@ class PaletteProperties : public QDialog, private Ui::PaletteProperties {
       };
 
 //---------------------------------------------------------
-//   PaletteCellProperties
-//---------------------------------------------------------
-
-class PaletteCellProperties : public QDialog, private Ui::PaletteCellProperties {
-      Q_OBJECT
-
-      PaletteCell* cell;
-      virtual void accept();
-      virtual void hideEvent(QHideEvent*);
-   public:
-      PaletteCellProperties(PaletteCell* p, QWidget* parent = 0);
-      };
-
-//---------------------------------------------------------
 //    PaletteScrollArea
 //---------------------------------------------------------
 

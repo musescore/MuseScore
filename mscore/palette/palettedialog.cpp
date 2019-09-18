@@ -17,7 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "palettedialogs.h"
+#include "palettedialog.h"
 
 #include "musescore.h"
 #include "palettetree.h"
@@ -36,8 +36,9 @@ PalettePropertiesDialog::PalettePropertiesDialog(PalettePanel* p, QWidget* paren
       ui->setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      if (p)
-            setData(p);
+      Q_ASSERT(p);
+      fillControlsWithData();
+      setInitialProperties();
       
       connect(ui->showGrid, &QCheckBox::stateChanged, this, &PalettePropertiesDialog::gridCheckBoxChanged);
       connect(ui->name, &QLineEdit::textEdited, this, &PalettePropertiesDialog::nameChanged);
@@ -62,19 +63,17 @@ PalettePropertiesDialog::~PalettePropertiesDialog()
 //   PalettePropertiesDialog::setData
 //---------------------------------------------------------
 
-void PalettePropertiesDialog::setData(const PalettePanel* p)
+void PalettePropertiesDialog::fillControlsWithData()
       {
-      ui->name->setText(p->name());
-      const QSize grid = p->gridSize();
+      ui->name->setText(palette->name());
+      const QSize grid = palette->gridSize();
       ui->cellWidth->setValue(grid.width());
       ui->cellHeight->setValue(grid.height());
-      ui->showGrid->setChecked(p->drawGrid());
-      ui->elementOffset->setValue(p->yOffset());
-      ui->mag->setValue(p->mag());
+      ui->showGrid->setChecked(palette->drawGrid());
+      ui->elementOffset->setValue(palette->yOffset());
+      ui->mag->setValue(palette->mag());
 
       ui->elementOffset->setEnabled(false); // not enabled currently (need to allow a parameter in PaletteCellIconEngine)
-      
-      setInitialProperties(p);
       }
 
 //---------------------------------------------------------
@@ -165,17 +164,17 @@ void PalettePropertiesDialog::reject()
             }
       }
       
-void PalettePropertiesDialog::setInitialProperties(const PalettePanel* p)
+void PalettePropertiesDialog::setInitialProperties()
       {
-      gridCheckboxInitialState = p->drawGrid() ? Qt::Checked : Qt::Unchecked;
-      initialName = p->name();
-      initialWidth = p->gridSize().width();
-      initialHeight = p->gridSize().height();
-      initialOffset = p->yOffset();
-      initialScale = p->mag();
+      gridCheckboxInitialState = palette->drawGrid() ? Qt::Checked : Qt::Unchecked;
+      initialName = palette->name();
+      initialWidth = palette->gridSize().width();
+      initialHeight = palette->gridSize().height();
+      initialOffset = palette->yOffset();
+      initialScale = palette->mag();
       }
 
-bool PalettePropertiesDialog::areInitialPropertiesChanged()
+bool PalettePropertiesDialog::areInitialPropertiesChanged() const
       {
       return !isGridCheckBoxChanged && !isNameChanged && !isHeightChanged && !isWidthChanged && !isOffsetChanged && !isScaleChanged;
       }

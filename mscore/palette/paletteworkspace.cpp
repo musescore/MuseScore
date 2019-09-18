@@ -25,7 +25,8 @@
 #include "keyedit.h"
 #include "musescore.h"
 #include "palette.h" // applyPaletteElement
-#include "palettedialogs.h"
+#include "palettedialog.h"
+#include "palettecelldialog.h"
 #include "timedialog.h"
 
 namespace Ms {
@@ -388,14 +389,13 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
       if (!p)
             return;
 
-      PalettePropertiesDialog* d = new PalettePropertiesDialog(p, mscore);
       PaletteTreeModel* m = _userPalette;
       bool paletteChangedState = m->paletteTreeChanged();
+      PalettePropertiesDialog* d = new PalettePropertiesDialog(p, mscore);
       connect(d, &QDialog::rejected, m, [m, srcIndex, paletteChangedState]() {
             m->itemDataChanged(srcIndex);
             paletteChangedState ? m->setTreeChanged() : m->setTreeUnchanged();
       });
-      
       connect(d, &PalettePropertiesDialog::changed, m, [m, srcIndex]() {
             m->itemDataChanged(srcIndex);
       });
@@ -419,9 +419,17 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
       if (!cell)
             return;
 
-      PaletteCellProperties* d = new PaletteCellProperties(cell.get(), mscore);
+      PaletteCellPropertiesDialog* d = new PaletteCellPropertiesDialog(cell.get(), mscore);
       PaletteTreeModel* m = _userPalette;
-      connect(d, &QDialog::accepted, m, [m, srcIndex]() { m->itemDataChanged(srcIndex); });
+      bool paletteChangedState = m->paletteTreeChanged();
+      connect(d, &QDialog::rejected, m, [m, srcIndex, paletteChangedState]() {
+            m->itemDataChanged(srcIndex);
+            paletteChangedState ? m->setTreeChanged() : m->setTreeUnchanged();
+      });
+      connect(d, &PaletteCellPropertiesDialog::changed, m, [m, srcIndex]() {
+            m->itemDataChanged(srcIndex);
+      });
+
       d->setModal(true);
       d->setAttribute(Qt::WA_DeleteOnClose);
       d->open();
