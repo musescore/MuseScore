@@ -55,6 +55,9 @@ struct PaletteCell {
 
       static constexpr const char* mimeDataFormat = "application/musescore/palette/cell";
 
+      const char* translationContext() const;
+      QString translatedName() const { return qApp->translate(translationContext(), name.toUtf8()); }
+
       void write(XmlWriter& xml) const;
       bool read(XmlReader&);
       QByteArray mimeData() const;
