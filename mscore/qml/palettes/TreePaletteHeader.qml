@@ -165,6 +165,7 @@ Item {
         MenuSeparator {}
         MenuItem {
             text: qsTr("Palette Properties")
+            //enabled: paletteHeader.editingEnabled
             onTriggered: paletteHeader.editPalettePropertiesRequested()
         }
     }
