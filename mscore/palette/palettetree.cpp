@@ -107,6 +107,43 @@ PaletteCell::PaletteCell(std::unique_ptr<Element> e, const QString& _name, QStri
       }
 
 //---------------------------------------------------------
+//   PaletteCell::translationContext
+//---------------------------------------------------------
+
+const char* PaletteCell::translationContext() const
+      {
+      const ElementType type = element ? element->type() : ElementType::INVALID;
+      switch (type) {
+            case ElementType::ARTICULATION:
+            case ElementType::FERMATA:
+                  return "symUserNames"; // libmscore/sym.cpp, Sym::symUserNames
+            case ElementType::CLEF:
+                  return "clefTable"; // libmscore/clef.cpp, ClefInfo::clefTable[]
+            case ElementType::KEYSIG:
+                  return "MuseScore"; // libmscore/keysig.cpp, keyNames[]
+            case ElementType::MARKER:
+                  return "markerType"; // libmscore/marker.cpp, markerTypeTable[]
+            case ElementType::JUMP:
+                  return "jumpType"; // libmscore/jump.cpp, jumpTypeTable[]
+            case ElementType::TREMOLO:
+                  return "Tremolo"; // libmscore/tremolo.cpp, tremoloName[]
+            case ElementType::BAGPIPE_EMBELLISHMENT:
+                  return "bagpipe"; // libmscore/bagpembell.cpp, BagpipeEmbellishment::BagpipeEmbellishmentList[]
+            case ElementType::TRILL:
+                  return "trillType"; // libmscore/trill.cpp, trillTable[]
+            case ElementType::VIBRATO:
+                  return "vibratoType"; // libmscore/vibrato.cpp, vibratoTable[]
+            case ElementType::CHORDLINE:
+                  return "Ms"; // libmscore/chordline.cpp, scorelineNames[]
+            case ElementType::ICON:
+                  return "action"; // mscore/shortcut.cpp, Shortcut::_sc[]
+            default:
+                  break;
+            }
+      return "Palette";
+      }
+
+//---------------------------------------------------------
 //   PaletteCell::write
 //---------------------------------------------------------
 
