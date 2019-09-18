@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 Werner Schweer and others
+//  Copyright (C) 2019 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,72 +17,60 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __PALETTEDIALOGS_H__
-#define __PALETTEDIALOGS_H__
+#ifndef __PALETTECELLDIALOGS_H__
+#define __PALETTECELLDIALOGS_H__
 
 namespace Ui {
-      class PaletteProperties;
-      }
+      class PaletteCellProperties;
+}
 
 namespace Ms {
-
-class PalettePanel;
-
+      struct PaletteCell;
+      
 //---------------------------------------------------------
-//   PalettePropertiesDialog
+//   PaletteCellProperties
 //---------------------------------------------------------
 
-class PalettePropertiesDialog : public QDialog {
+class PaletteCellPropertiesDialog : public QDialog {
       Q_OBJECT
-
-      Ui::PaletteProperties* ui;
-
-      PalettePanel* palette;
-
-      void setData(const PalettePanel*);
-
+      
+      Ui::PaletteCellProperties* ui;
+      PaletteCell* cell;
+      
       virtual void hideEvent(QHideEvent*);
       virtual void reject();
       
-      void setInitialProperties(const PalettePanel* p);
       void applyInitialPropertiesToThePalette();
-      bool areInitialPropertiesChanged();
+      bool areInitialPropertiesChanged() const;
+      void fillControlsWithData();
+      void setInitialProperties();
       
-      bool isGridCheckBoxChanged = false;
+      bool isDrawStaffCheckBoxChanged = false;
       bool isNameChanged = false;
-      bool isHeightChanged = false;
-      bool isWidthChanged = false;
+      bool isXOffsetChanged = false;
+      bool isYOffsetChanged = false;
       bool isScaleChanged = false;
-      bool isOffsetChanged = false;
       
-      int gridCheckboxInitialState = 0;
+      int drawStaffCheckboxInitialState = 0;
       QString initialName;
-      int initialWidth = 0;
-      int initialHeight = 0;
-      double initialOffset = 0.f;
+      double initialXOffset = 0.f;
+      double initialYOffset = 0.f;
       double initialScale = 0.f;
       
-   public:
-      PalettePropertiesDialog(PalettePanel*, QWidget* parent = nullptr);
-      ~PalettePropertiesDialog();
+public:
+      PaletteCellPropertiesDialog(PaletteCell* p, QWidget* parent = 0);
+      ~PaletteCellPropertiesDialog();
       
-      /*
-      /  checkBoxChanged(int state)
-      /      The @state values are Qt::Unchecked and Qt::Checked
-      */
-      void gridCheckBoxChanged(int state);
-      
+      void drawStaffCheckBoxChanged(int state);
       void nameChanged(const QString &text);
-      void heightChanged(int height);
-      void widthChanged(int width);
-      void offsetChanged(double offset);
+      void xOffsetChanged(double xOffset);
+      void yOffsetChanged(double yOffset);
       void scaleChanged(double scale);
       
-   signals:
+signals:
       void changed();
-      
-      };
+};
 
 } // namespace Ms
 
-#endif
+#endif //__PALETTECELLDIALOGS_H__

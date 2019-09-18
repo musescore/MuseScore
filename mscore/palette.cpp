@@ -277,12 +277,13 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             emit changed();
             }
       else if (action == contextAction) {
-            PaletteCell* c = cellAt(i);
+            //disable due to the new implementation
+            /*PaletteCell* c = cellAt(i);
             if (c == 0)
                   return;
             PaletteCellProperties props(c);
             if (props.exec())
-                  emit changed();
+                  emit changed();*/
             }
       else if (moreAction && (action == moreAction))
             emit displayMore(_name);
@@ -1700,52 +1701,6 @@ void PaletteProperties::accept()
 //---------------------------------------------------------
 
 void PaletteProperties::hideEvent(QHideEvent* event)
-      {
-      MuseScore::saveGeometry(this);
-      QWidget::hideEvent(event);
-      }
-
-//---------------------------------------------------------
-//   PaletteCellProperties
-//---------------------------------------------------------
-
-PaletteCellProperties::PaletteCellProperties(PaletteCell* p, QWidget* parent)
-   : QDialog(parent)
-      {
-      setObjectName("PaletteCellProperties");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-      cell = p;
-
-      xoffset->setValue(cell->xoffset);
-      yoffset->setValue(cell->yoffset);
-      scale->setValue(cell->mag);
-      drawStaff->setChecked(cell->drawStaff);
-      name->setText(p->name);
-
-      MuseScore::restoreGeometry(this);
-      }
-
-//---------------------------------------------------------
-//   accept
-//---------------------------------------------------------
-
-void PaletteCellProperties::accept()
-      {
-      cell->xoffset = xoffset->value();
-      cell->yoffset = yoffset->value();
-      cell->mag     = scale->value();
-      cell->name    = name->text();
-      cell->drawStaff = drawStaff->isChecked();
-      QDialog::accept();
-      }
-
-//---------------------------------------------------------
-//   hideEvent
-//---------------------------------------------------------
-
-void PaletteCellProperties::hideEvent(QHideEvent* event)
       {
       MuseScore::saveGeometry(this);
       QWidget::hideEvent(event);
