@@ -478,6 +478,11 @@ void Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
 #endif
 
       ScoreView* viewer = mscore->currentScoreView();
+
+      // exit edit mode, to allow for palette element to be applied properly
+      if (viewer && viewer->editMode() && !(viewer->mscoreState() & STATE_ALLTEXTUAL_EDIT))
+            viewer->changeState(ViewState::NORMAL);
+
       if (viewer->mscoreState() != STATE_EDIT
          && viewer->mscoreState() != STATE_LYRICS_EDIT
          && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT) { // Already in startCmd in this case
@@ -780,11 +785,6 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             return;
       if (score->selection().isNone())
             return;
-      
-      // exit edit mode, to allow for palette element to be applied properly
-      ScoreView* viewer = mscore->currentScoreView();
-      if (viewer && viewer->editMode() && !(viewer->mscoreState() & STATE_ALLTEXTUAL_EDIT))
-            viewer->changeState(ViewState::NORMAL);
 
       PaletteCell* cell = cellAt(i);
       if (!cell)
