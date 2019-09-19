@@ -780,6 +780,15 @@ void PaletteTreeModel::updateCellsState(const Selection& sel, bool deactivateAll
       }
 
 //---------------------------------------------------------
+//   PaletteTreeModel::retranslate
+//---------------------------------------------------------
+
+void PaletteTreeModel::retranslate()
+      {
+      _paletteTree->retranslate();
+      }
+
+//---------------------------------------------------------
 //   PaletteTreeModel::findPaletteCell
 //---------------------------------------------------------
 

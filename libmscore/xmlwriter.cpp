@@ -334,6 +334,8 @@ QString XmlWriter::xmlString(ushort c)
                   return QLatin1String("&amp;");
             case '\"':
                   return QLatin1String("&quot;");
+            case '%':
+                  return QLatin1String("&#37;");
             default:
                   // ignore invalid characters in xml 1.0
                   if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D))
