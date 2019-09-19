@@ -29,6 +29,7 @@
 #include "libmscore/icon.h"
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
+#include "libmscore/textbase.h"
 
 namespace Ms {
 
@@ -144,6 +145,50 @@ const char* PaletteCell::translationContext() const
       }
 
 //---------------------------------------------------------
+//   PaletteCell::translatedName
+//---------------------------------------------------------
+
+QString PaletteCell::translatedName() const
+      {
+      const QString trName(qApp->translate(translationContext(), name.toUtf8()));
+
+      if (element && element->isTextBase() && name.contains("%1"))
+            return trName.arg(toTextBase(element.get())->plainText());
+      return trName;
+      }
+
+//---------------------------------------------------------
+//   PaletteCell::retranslate
+///   Retranslates cell content, e.g. text if the element
+///   is TextBase.
+//---------------------------------------------------------
+
+void PaletteCell::retranslate()
+      {
+      if (untranslatedElement && element->isTextBase()) {
+            TextBase* target = toTextBase(element.get());
+            TextBase* orig = toTextBase(untranslatedElement.get());
+            const QString& text = orig->xmlText();
+            target->setXmlText(qApp->translate("Palette", text.toUtf8().constData()));
+            }
+      }
+
+//---------------------------------------------------------
+//   PaletteCell::setElementTranslated
+//---------------------------------------------------------
+
+void PaletteCell::setElementTranslated(bool translate)
+      {
+      if (translate && element) {
+            untranslatedElement = std::move(element);
+            element.reset(untranslatedElement->clone());
+            retranslate();
+            }
+      else
+            untranslatedElement.reset();
+      }
+
+//---------------------------------------------------------
 //   PaletteCell::write
 //---------------------------------------------------------
 
@@ -157,10 +202,11 @@ void PaletteCell::write(XmlWriter& xml) const
       // using attributes for `custom` and `visible`
       // properties instead of nested tags for pre-3.3
       // version compatibility
-      xml.stag(QString("Cell%1%2%3")
+      xml.stag(QString("Cell%1%2%3%4")
          .arg(!name.isEmpty() ? QString(" name=\"%1\"").arg(XmlWriter::xmlString(name)) : "")
          .arg(custom ? " custom=\"1\"" : "")
          .arg(!visible ? " visible=\"0\"" : "")
+         .arg(untranslatedElement ? " trElement=\"1\"" : "")
          );
 
       if (drawStaff)
@@ -173,7 +219,11 @@ void PaletteCell::write(XmlWriter& xml) const
             xml.tag("tag", tag);
       if (mag != 1.0)
             xml.tag("mag", mag);
-      element->write(xml);
+
+      if (untranslatedElement)
+            untranslatedElement->write(xml);
+      else
+            element->write(xml);
       xml.etag();
       }
 
@@ -190,6 +240,8 @@ bool PaletteCell::read(XmlReader& e)
       // pre-3.3 version compatibility
       custom = e.hasAttribute("custom") ? e.intAttribute("custom") : false; // TODO: actually check master palette?
       visible = e.hasAttribute("visible") ? e.intAttribute("visible") : true;
+
+      const bool translateElement = e.hasAttribute("trElement") ? e.intAttribute("trElement") : false;
 
       while (e.readNextStartElement()) {
             const QStringRef& t1(e.name());
@@ -213,10 +265,8 @@ bool PaletteCell::read(XmlReader& e)
 
             else {
                   element.reset(Element::name2Element(t1, gscore));
-                  if (!element) {
+                  if (!element)
                         e.unknown();
-                        return false;
-                        }
                   else {
                         element->read(e);
                         element->styleChanged();
@@ -234,7 +284,10 @@ bool PaletteCell::read(XmlReader& e)
                         }
                   }
             }
-      return add;
+
+      setElementTranslated(translateElement);
+
+      return add && element;
       }
 
 //---------------------------------------------------------
@@ -489,7 +542,7 @@ static bool isSame(const Element& e1, const Element& e2)
       }
 
 //---------------------------------------------------------
-//   PaletteTreeModel::findPaletteCell
+//   PalettePanel::findPaletteCell
 //---------------------------------------------------------
 
 int PalettePanel::findPaletteCell(const PaletteCell& cell, bool matchName) const
@@ -610,6 +663,16 @@ PalettePanel::Type PalettePanel::guessType() const
       }
 
 //---------------------------------------------------------
+//   PalettePanel::retranslate
+//---------------------------------------------------------
+
+void PalettePanel::retranslate()
+      {
+      for (auto& c : cells)
+            c->retranslate();
+      }
+
+//---------------------------------------------------------
 //   PaletteTree::insert
 ///   PaletteTree takes the ownership over the PalettePanel
 //---------------------------------------------------------
@@ -658,6 +721,16 @@ bool PaletteTree::read(XmlReader& e)
                   e.unknown();
             }
       return true;
+      }
+
+//---------------------------------------------------------
+//   PaletteTree::retranslate
+//---------------------------------------------------------
+
+void PaletteTree::retranslate()
+      {
+      for (auto& p : palettes)
+            p->retranslate();
       }
 
 //---------------------------------------------------------
