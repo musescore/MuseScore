@@ -251,9 +251,9 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
             switch (role) {
                   case Qt::DisplayRole: // TODO don't display cell names in palettes
                   case Qt::ToolTipRole:
-                        return qApp->translate("Palette", cell->name.toUtf8());
+                        return cell->translatedName();
                   case Qt::AccessibleTextRole: {
-                        QString name = qApp->translate("Palette", cell->name.toUtf8());
+                        QString name = cell->translatedName();
                         ScoreAccessibility::makeReadable(name);
                         return name;
                         }
@@ -777,6 +777,15 @@ void PaletteTreeModel::updateCellsState(const Selection& sel, bool deactivateAll
             const QModelIndex last = index(palette->ncells() - 1, 0, parent);
             emit dataChanged(first, last, { CellActiveRole });
             }
+      }
+
+//---------------------------------------------------------
+//   PaletteTreeModel::retranslate
+//---------------------------------------------------------
+
+void PaletteTreeModel::retranslate()
+      {
+      _paletteTree->retranslate();
       }
 
 //---------------------------------------------------------

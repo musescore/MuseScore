@@ -208,6 +208,7 @@ class PaletteWorkspace : public QObject {
       bool read(XmlReader&);
 
       void updateCellsState(const Selection& sel, bool deactivateAll) { userPalette->updateCellsState(sel, deactivateAll); }
+      void retranslate() { userPalette->retranslate(); masterPalette->retranslate(); defaultPalette->retranslate(); }
       };
 
 } // namespace Ms
