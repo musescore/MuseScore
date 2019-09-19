@@ -2012,6 +2012,9 @@ void MuseScore::retranslate()
 
       Shortcut::retranslate();
       Workspace::retranslate();
+
+      if (paletteWorkspace)
+          paletteWorkspace->retranslate();
       }
       
 //---------------------------------------------------------

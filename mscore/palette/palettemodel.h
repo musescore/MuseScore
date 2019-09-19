@@ -163,6 +163,7 @@ class PaletteTreeModel : public QAbstractItemModel {
       PaletteCellPtr findCell(const QModelIndex& index);
 
       void updateCellsState(const Selection&, bool deactivateAll);
+      void retranslate();
       };
 
 //---------------------------------------------------------

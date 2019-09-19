@@ -35,6 +35,7 @@ using PaletteCellConstPtr = std::shared_ptr<const PaletteCell>;
 
 struct PaletteCell {
       std::unique_ptr<Element> element;
+      std::unique_ptr<Element> untranslatedElement;
       QString name;           // used for tool tip
       QString tag;
 
@@ -54,6 +55,12 @@ struct PaletteCell {
       PaletteCell(std::unique_ptr<Element> e, const QString& _name, QString _tag = QString(), qreal _mag = 1.0);
 
       static constexpr const char* mimeDataFormat = "application/musescore/palette/cell";
+
+      const char* translationContext() const;
+      QString translatedName() const;
+
+      void retranslate();
+      void setElementTranslated(bool translate);
 
       void write(XmlWriter& xml) const;
       bool read(XmlReader&);
@@ -198,6 +205,8 @@ class PalettePanel {
 
       Type type() const { return _type; }
       void setType(Type t) { _type = t; }
+
+      void retranslate();
       };
 
 //---------------------------------------------------------
@@ -212,6 +221,8 @@ struct PaletteTree {
 
       void insert(int idx, PalettePanel*);
       void append(PalettePanel*);
+
+      void retranslate();
       };
 
 } // namespace Ms
