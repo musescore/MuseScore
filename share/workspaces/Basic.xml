@@ -249,7 +249,7 @@
             <subtype>accidentalNatural</subtype>
             </Accidental>
           </Cell>
-        <Cell name="Add brackets to element">
+        <Cell name="Add brackets to accidental">
           <Icon>
             <subtype>21</subtype>
             <action>add-brackets</action>

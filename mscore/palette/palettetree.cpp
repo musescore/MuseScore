@@ -115,8 +115,11 @@ const char* PaletteCell::translationContext() const
       {
       const ElementType type = element ? element->type() : ElementType::INVALID;
       switch (type) {
+            case ElementType::ACCIDENTAL:
             case ElementType::ARTICULATION:
+            case ElementType::BREATH:
             case ElementType::FERMATA:
+            case ElementType::SYMBOL:
                   return "symUserNames"; // libmscore/sym.cpp, Sym::symUserNames
             case ElementType::CLEF:
                   return "clefTable"; // libmscore/clef.cpp, ClefInfo::clefTable[]
@@ -136,6 +139,8 @@ const char* PaletteCell::translationContext() const
                   return "vibratoType"; // libmscore/vibrato.cpp, vibratoTable[]
             case ElementType::CHORDLINE:
                   return "Ms"; // libmscore/chordline.cpp, scorelineNames[]
+            case ElementType::NOTEHEAD:
+                  return "noteheadnames"; // libmscore/note.cpp, noteHeadGroupNames[]
             case ElementType::ICON:
                   return "action"; // mscore/shortcut.cpp, Shortcut::_sc[]
             default:
