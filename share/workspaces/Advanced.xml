@@ -454,7 +454,7 @@
             <subtype>accidentalNaturalSharp</subtype>
             </Accidental>
           </Cell>
-        <Cell name="Add brackets to element">
+        <Cell name="Add brackets to accidental">
           <Icon>
             <subtype>21</subtype>
             <action>add-brackets</action>
@@ -741,7 +741,7 @@
             <subtype>ornamentUpMordent</subtype>
             </Articulation>
           </Cell>
-        <Cell name="Down prall">
+        <Cell name="Down mordent">
           <Articulation>
             <subtype>ornamentDownMordent</subtype>
             </Articulation>
@@ -751,12 +751,12 @@
             <subtype>ornamentPrallDown</subtype>
             </Articulation>
           </Cell>
-        <Cell name="Down mordent">
+        <Cell name="Prall up">
           <Articulation>
             <subtype>ornamentPrallUp</subtype>
             </Articulation>
           </Cell>
-        <Cell name="Prall up">
+        <Cell name="Line prall">
           <Articulation>
             <subtype>ornamentLinePrall</subtype>
             </Articulation>
@@ -1259,7 +1259,7 @@
             <length>200</length>
             </Vibrato>
           </Cell>
-        <Cell name="tremolo sawtooth wide">
+        <Cell name="Tremolo sawtooth wide">
           <Vibrato id="34">
             <subtype>vibratoSawtoothWide</subtype>
             <ticks>0</ticks>
