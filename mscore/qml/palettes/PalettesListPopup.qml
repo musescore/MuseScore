@@ -114,10 +114,17 @@ StyledPopup {
 //                         height: parent.height
                         anchors.right: parent.right
                         text: qsTr("Add")
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+
                         ToolTip.text: qsTr("Add %1 palette").arg(model.display)
                         Accessible.description: ToolTip.text
+
+                        onHoveredChanged: {
+                            if (hovered) {
+                                mscore.tooltip.item = addButton;
+                                mscore.tooltip.text = addButton.ToolTip.text;
+                            } else if (mscore.tooltip.item == addButton)
+                                mscore.tooltip.item = null;
+                        }
 
                         onClicked: {
                             if (paletteWorkspace.addPalette(model.paletteIndex))

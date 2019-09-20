@@ -192,6 +192,14 @@ StyledPopup {
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: text
 
+                        onHoveredChanged: {
+                            if (hovered) {
+                                mscore.tooltip.item = deleteButton;
+                                mscore.tooltip.text = deleteButton.texst;
+                            } else if (mscore.tooltip.item == deleteButton)
+                                mscore.tooltip.item = null;
+                        }
+
                         padding: 0
 
                         contentItem: StyledIcon {
