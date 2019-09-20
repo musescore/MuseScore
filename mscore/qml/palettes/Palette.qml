@@ -349,9 +349,13 @@ GridView {
 
             readonly property var toolTip: model.toolTip
 
-            ToolTip.visible: hovered
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.text: toolTip ? toolTip : ""
+            onHoveredChanged: {
+                if (hovered) {
+                    mscore.tooltip.item = paletteCell;
+                    mscore.tooltip.text = model.toolTip;
+                } else if (mscore.tooltip.item == paletteCell)
+                    mscore.tooltip.item = null;
+            }
 
             text: model.accessibleText
             // TODO: these may be needed for support of other screenreaders

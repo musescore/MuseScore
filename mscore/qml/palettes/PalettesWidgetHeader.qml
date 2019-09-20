@@ -74,9 +74,14 @@ Item {
             padding: 8
 
             text: qsTr("Clear search text")
-            ToolTip.visible: hovered
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.text: text
+
+            onHoveredChanged: {
+                if (hovered) {
+                    mscore.tooltip.item = searchTextClearButton;
+                    mscore.tooltip.text = searchTextClearButton.text;
+                } else if (mscore.tooltip.item == searchTextClearButton)
+                    mscore.tooltip.item = null;
+            }
 
             contentItem: StyledIcon {
                 source: "icons/backspace.png"
