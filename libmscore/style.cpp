@@ -2415,7 +2415,7 @@ bool MStyle::readProperties(XmlReader& e)
                         e.readElementText();
                         }
                   else if (!strcmp("QSizeF", type)) {
-                        qreal x = e.intAttribute("w", 0);
+                        qreal x = e.doubleAttribute("w", 0.0);
                         qreal y = e.doubleAttribute("h", 0.0);
                         set(idx, QSizeF(x, y));
                         e.readElementText();
