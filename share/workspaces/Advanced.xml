@@ -1259,7 +1259,7 @@
             <length>200</length>
             </Vibrato>
           </Cell>
-        <Cell name="tremolo sawtooth wide">
+        <Cell name="Vibrato sawtooth wide">
           <Vibrato id="34">
             <subtype>vibratoSawtoothWide</subtype>
             <ticks>0</ticks>
