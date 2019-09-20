@@ -6333,8 +6333,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             addTempo();
       else if (cmd == "loop") {
             if (loop()) {
-                  if (cs->selection().isRange())
-                        seq->setLoopSelection();
+                  seq->setLoopSelection();
                   }
             }
       else if (cmd == "loop-in") {

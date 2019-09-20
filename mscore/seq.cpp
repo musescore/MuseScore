@@ -1141,8 +1141,7 @@ int Seq::getPlayStartUtick()
       {
       if ((mscore->loop())) {
             if (preferences.getBool(PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY)) {
-                  if (cs->selection().isRange())
-                        setLoopSelection();
+                  setLoopSelection();
                   }
             return cs->repeatList().tick2utick(cs->loopInTick().ticks());
             }
@@ -1710,8 +1709,13 @@ void Seq::setPos(POS, unsigned t)
 
 void Seq::setLoopSelection()
       {
-      cs->setLoopInTick(cs->selection().tickStart());
-      cs->setLoopOutTick(cs->selection().tickEnd());
+      const Score* score = mscore->currentScore();
+      Q_ASSERT(!score || score->masterScore() == cs);
+
+      if (score && score->selection().isRange()) {
+            cs->setLoopInTick(score->selection().tickStart());
+            cs->setLoopOutTick(score->selection().tickEnd());
+            }
       }
 
 //---------------------------------------------------------

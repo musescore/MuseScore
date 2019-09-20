@@ -434,8 +434,6 @@ class Score : public QObject, public ScoreElement {
       bool _defaultsRead        { false };      ///< defaults were read at MusicXML import, allow export of defaults in convertermode
       bool _isPalette           { false };
 
-      Fraction _pos[3];                    ///< 0 - current, 1 - left loop, 2 - right loop
-
       int _mscVersion { MSCVERSION };   ///< version of current loading *.msc file
 
       QMap<QString, QString> _metaTags;
@@ -851,8 +849,8 @@ class Score : public QObject, public ScoreElement {
       void setLoopInTick(const Fraction& tick)      { setPos(POS::LEFT, tick);    }
       void setLoopOutTick(const Fraction& tick)     { setPos(POS::RIGHT, tick);   }
 
-      Fraction pos(POS pos) const                   {  return _pos[int(pos)]; }
-      void setPos(POS pos, Fraction tick);
+      inline Fraction pos(POS pos) const;
+      inline void setPos(POS pos, Fraction tick);
 
       bool noteEntryMode() const                   { return inputState().noteEntryMode(); }
       void setNoteEntryMode(bool val)              { inputState().setNoteEntryMode(val); }
@@ -1211,6 +1209,8 @@ class MasterScore : public Score {
       Omr* _omr               { 0 };
       bool _showOmr           { false };
 
+      Fraction _pos[3];                    ///< 0 - current, 1 - left loop, 2 - right loop
+
       int _midiPortCount      { 0 };                  // A count of JACK/ALSA midi out ports
       QQueue<MidiInputEvent> _midiInputQueue;         // MIDI events that have yet to be processed
       std::list<MidiInputEvent> _activeMidiPitches;   // MIDI keys currently being held down
@@ -1319,6 +1319,10 @@ class MasterScore : public Score {
       void updateExpressive(Synthesizer* synth, bool expressive, bool force = false);
       void setSoloMute();
 
+      using Score::pos;
+      Fraction pos(POS pos) const { return _pos[int(pos)]; }
+      void setPos(POS pos, Fraction tick);
+
       void addExcerpt(Excerpt*);
       void removeExcerpt(Excerpt*);
       void deleteExcerpt(Excerpt*);
@@ -1379,6 +1383,9 @@ inline void Score::addLayoutFlags(LayoutFlags f)       { _masterScore->addLayout
 inline void Score::setInstrumentsChanged(bool v)       { _masterScore->setInstrumentsChanged(v); }
 inline Movements* Score::movements()                   { return _masterScore->movements();       }
 inline const Movements* Score::movements() const       { return _masterScore->movements();       }
+
+inline Fraction Score::pos(POS pos) const              { return _masterScore->pos(pos);          }
+inline void Score::setPos(POS pos, Fraction tick)      { _masterScore->setPos(pos, tick);        }
 
 extern MasterScore* gscore;
 
