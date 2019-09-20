@@ -279,7 +279,6 @@
         <voice>
           <Tuplet>
             <linkedMain/>
-            <numberType>1</numberType>
             <normalNotes>8</normalNotes>
             <actualNotes>15</actualNotes>
             <baseNote>16th</baseNote>
@@ -287,6 +286,7 @@
               <style>Tuplet</style>
               <text>15:8</text>
               </Number>
+            <numberType>1</numberType>
             </Tuplet>
           <Beam>
             <l1>19</l1>
@@ -858,7 +858,6 @@
             <Tuplet>
               <linked>
                 </linked>
-              <numberType>1</numberType>
               <normalNotes>8</normalNotes>
               <actualNotes>15</actualNotes>
               <baseNote>16th</baseNote>
@@ -866,6 +865,7 @@
                 <style>Tuplet</style>
                 <text>15:8</text>
                 </Number>
+              <numberType>1</numberType>
               </Tuplet>
             <Beam>
               <l1>19</l1>
@@ -1337,7 +1337,6 @@
             <Tuplet>
               <linked>
                 </linked>
-              <numberType>1</numberType>
               <normalNotes>8</normalNotes>
               <actualNotes>15</actualNotes>
               <baseNote>16th</baseNote>
@@ -1345,6 +1344,7 @@
                 <style>Tuplet</style>
                 <text>15:8</text>
                 </Number>
+              <numberType>1</numberType>
               </Tuplet>
             <Beam>
               <l1>46</l1>

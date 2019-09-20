@@ -42,6 +42,7 @@ class TestTuplet : public QObject, public MTest
       void split2() { split("split2.mscx",   "split2-ref.mscx");  }
       void split3() { split("split3.mscx",   "split3-ref.mscx");  }
       void split4() { split("split4.mscx",   "split4-ref.mscx");  }
+      void saveLoad();
       void addStaff();
       };
 
@@ -176,6 +177,19 @@ void TestTuplet::addStaff()
       score->undoInsertStaff(newStaff, 0, true);
 
       QVERIFY(saveCompareScore(score, "nestedTuplets_addStaff.mscx", DIR + "nestedTuplets_addStaff-ref.mscx"));
+      delete score;
+      }
+
+//-----------------------------------------
+//    saveLoad
+//     checks that properties persist after loading and saving
+//-----------------------------------------
+void TestTuplet::saveLoad()
+      {
+      MasterScore* score = readScore(DIR + "save-load.mscx");
+      QVERIFY(score);
+      //simply load and save
+      QVERIFY(saveCompareScore(score, "save-load.mscx", DIR + "save-load.mscx"));
       delete score;
       }
 
