@@ -117,7 +117,7 @@ class Accidental final : public Element {
       static const char* subtype2name(AccidentalType);
       static AccidentalType value2subtype(AccidentalVal);
       static AccidentalType name2subtype(const QString&);
-      static bool isMicrotonal(AccidentalType t)  { return t > AccidentalType::FLAT2; }
+      static bool isMicrotonal(AccidentalType t)  { return t > AccidentalType::SHARP_SHARP; }
 
       QString accessibleInfo() const override;
       };
