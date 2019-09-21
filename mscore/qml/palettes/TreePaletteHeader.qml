@@ -169,7 +169,7 @@ Item {
         MenuSeparator {}
         MenuItem {
             text: qsTr("Palette Properties")
-            //enabled: paletteHeader.editingEnabled
+            enabled: paletteHeader.editingEnabled
             onTriggered: paletteHeader.editPalettePropertiesRequested()
         }
     }

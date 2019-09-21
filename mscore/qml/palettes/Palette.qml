@@ -111,7 +111,17 @@ GridView {
 
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        width: paletteView.empty ? implicitWidth : (implicitWidth + (parent.width - implicitWidth) % cellWidth - 1) // -1 allows to fit into a cell if palette grid is visible
+        width: {
+            if (paletteView.empty)
+                return implicitWidth;
+
+            // align to the left border of some palette cell
+            const addition = (parent.width - implicitWidth) % cellWidth - 1; // -1 allows to fit into a cell if palette grid is visible
+            if (addition < 0)
+                addition += cellWidth;
+
+            return implicitWidth + addition;
+        }
         height: cellHeight - (paletteView.oneRow ? 0 : 1)
 
         text: qsTr("More")
@@ -344,7 +354,7 @@ GridView {
                 anchors.fill: parent
                 icon: model.decoration
                 selected: paletteCell.selected
-                active: model.cellActive
+                active: !!model.cellActive
             }
 
             readonly property var toolTip: model.toolTip

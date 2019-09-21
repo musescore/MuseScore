@@ -21,11 +21,14 @@ import QtQuick 2.8
 import QtQuick.Controls 2.1
 
 Popup {
+    id: popup
     property int arrowHeight: 10
     property int arrowWidth: 21 // odd values work better here
 
     property color borderColor: globalStyle.windowText
-    property color fillColor: globalStyle.base
+    property color fillColor: globalStyle.window
+
+    property var arrowX: width / 2
 
     topPadding: bottomPadding + arrowHeight
 
@@ -60,7 +63,7 @@ Popup {
             z: 1
             height: arrowHeight + 1
             width: arrowWidth
-            anchors.horizontalCenter: parent.horizontalCenter
+            x: Math.floor(popup.arrowX - width / 2)
 
             onPaint: {
                 var ctx = getContext("2d");

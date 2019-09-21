@@ -26,7 +26,6 @@ import "utils.js" as Utils
 
 ListView {
     id: paletteTree
-    implicitHeight: contentHeight
 
     keyNavigationEnabled: true
     activeFocusOnTab: true
@@ -34,6 +33,12 @@ ListView {
     property PaletteWorkspace paletteWorkspace
     property var paletteModel: paletteWorkspace ? paletteWorkspace.mainPaletteModel : null
     property PaletteController paletteController: paletteWorkspace ? paletteWorkspace.mainPaletteController : null
+
+    // Scroll palettes list when dragging a palette close to the list's border
+    property bool itemDragged: false
+    preferredHighlightBegin: Math.min(48, Math.floor(0.1 * height))
+    preferredHighlightEnd: Math.ceil(height - preferredHighlightBegin)
+    highlightRangeMode: itemDragged ? ListView.ApplyRange : ListView.NoHighlightRange
 
     property string filter: ""
     onFilterChanged: {
@@ -141,7 +146,7 @@ ListView {
         delegate: ItemDelegate {
             id: control
             topPadding: 0
-            bottomPadding: 0
+            bottomPadding: expanded ? 4 : 0
             property int rowIndex: index
             property var modelIndex: paletteTree.model.modelIndex(index, 0)
 
@@ -175,8 +180,6 @@ ListView {
             function togglePopup() {
                 const expand = !popupExpanded;
                 paletteTree.expandedPopupIndex = expand ? modelIndex : null;
-                if (expand)
-                    palettePopup.needScrollToBottom = true;
             }
 
             property size cellSize: model.gridSize
@@ -214,12 +217,14 @@ ListView {
             Drag.onDragStarted: {
                 if (popupExpanded)
                     togglePopup();
+                paletteTree.itemDragged = true;
                 DelegateModel.inPersistedItems = true;
                 DelegateModel.inItems = false;
                 placeholder.makePlaceholder(control.rowIndex, paletteTree.placeholderData());
             }
 
             Drag.onDragFinished: {
+                paletteTree.itemDragged = false;
                 const destIndex = placeholder.active ? placeholder.index : control.rowIndex;
                 placeholder.removePlaceholder();
                 const controller = paletteTree.paletteController;
@@ -239,8 +244,10 @@ ListView {
                 keys: [ "application/musescore/palettetree" ]
                 onEntered: {
                     const idx = control.DelegateModel.itemsIndex;
-                    if (!control.DelegateModel.isUnresolved)
+                    if (!control.DelegateModel.isUnresolved) {
                         placeholder.makePlaceholder(idx, paletteTree.placeholderData());
+                        paletteTree.currentIndex = idx;
+                        }
                 }
                 onDropped: {
                     if (drop.proposedAction == Qt.MoveAction)
@@ -403,24 +410,27 @@ ListView {
                             control.togglePopup();
                     }
 
-                    onOpened: enablePaletteAnimations = true
-                    onClosed: enablePaletteAnimations = false
-
                     property bool needScrollToBottom: false
 
-                    function scrollToPopupBottom() {
+                    onAboutToShow: {
+                        needScrollToBottom = true;
+                        if (implicitHeight)
+                            scrollToPopupBottom();
+                    }
+                    onOpened: {
+                        scrollToPopupBottom();
                         needScrollToBottom = false;
+                        enablePaletteAnimations = true;
+                    }
+                    onClosed: enablePaletteAnimations = false
+
+                    function scrollToPopupBottom() {
                         const popupBottom = implicitHeight + y + control.y;
                         paletteTree.ensureYVisible(popupBottom);
                     }
 
-                    onNeedScrollToBottomChanged: {
-                        if (needScrollToBottom && implicitHeight)
-                            scrollToPopupBottom();
-                    }
-
                     onImplicitHeightChanged: {
-                        if (needScrollToBottom)
+                        if (visible && (needScrollToBottom || atYEnd))
                             scrollToPopupBottom();
                     }
 

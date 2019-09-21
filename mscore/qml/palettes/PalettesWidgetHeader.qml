@@ -97,7 +97,9 @@ Item {
 
         y: morePalettesButton.y + morePalettesButton.height
         width: parent.width
-        height: paletteTree.height * 0.8
+        maxHeight: paletteTree.height * 0.8
+
+        arrowX: morePalettesButton.x + morePalettesButton.width / 2 - x
 
         modal: true
         dim: false

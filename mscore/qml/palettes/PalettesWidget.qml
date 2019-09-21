@@ -33,7 +33,7 @@ Item {
 
     readonly property bool hasFocus: Window.activeFocusItem
 
-    implicitHeight: paletteTree.implicitHeight + palettesWidgetHeader.implicitHeight
+    implicitHeight: 4 * palettesWidgetHeader.implicitHeight
     implicitWidth: paletteTree.implicitWidth
 
     FocusChainBreak {}

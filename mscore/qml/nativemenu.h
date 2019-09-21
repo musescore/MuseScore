@@ -74,10 +74,12 @@ class QmlMenuItem : public QObject {
       QString _text;
       bool _checkable = false;
       bool _checked = false;
+      bool _enabled = true;
 
       Q_PROPERTY(QString text MEMBER _text)
       Q_PROPERTY(bool checkable MEMBER _checkable)
       Q_PROPERTY(bool checked MEMBER _checked)
+      Q_PROPERTY(bool enabled MEMBER _enabled)
 
    signals:
       void triggered(bool checked);
@@ -88,6 +90,7 @@ class QmlMenuItem : public QObject {
       const QString& text() const { return _text; }
       bool checkable() const { return _checkable; }
       bool checked() const { return _checked; }
+      bool enabled() const { return _enabled; }
       };
 
 } // namespace Ms
