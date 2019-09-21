@@ -60,8 +60,7 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
       {
       switch (t) {
             case QAccessible::Name:
-//TODO                  return tr("Score %1").arg(s->score()->name());
-                  return "Score ???";
+                  return s->score()->title();
             case QAccessible::Value:
                   return s->score()->accessibleInfo();
             default:
