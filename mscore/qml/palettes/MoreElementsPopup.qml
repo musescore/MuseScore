@@ -46,12 +46,14 @@ StyledPopup {
     property bool drawGrid
 
     property int maxHeight: 400
+    implicitHeight: column.height + topPadding + bottomPadding
 
     property bool enablePaletteAnimations: false // disabled by default to avoid unnecessary "add" animations on opening this popup at first time
 
     signal addElementsRequested(var mimeDataList)
 
     Column {
+        id: column
         width: parent.width
         spacing: 8
 
@@ -107,6 +109,8 @@ StyledPopup {
             Text {
                 anchors.centerIn: parent
                 text: moreElementsPopup.libraryPaletteName
+                font: globalStyle.font
+                color: globalStyle.windowText
             }
             StyledButton {
                 width: height

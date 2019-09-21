@@ -44,6 +44,7 @@ QMenu* QmlNativeMenu::createMenu() const
                   QAction* a = menu->addAction(m->text());
                   a->setCheckable(m->checkable());
                   a->setChecked(m->checked());
+                  a->setEnabled(m->enabled());
                   connect(a, &QAction::triggered, m, &QmlMenuItem::triggered, Qt::QueuedConnection);
                   }
             }
