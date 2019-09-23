@@ -384,7 +384,6 @@ ListView {
 
                     modal: false
                     focus: true
-                    clip: true
                     closePolicy: paletteTree.popupPinned ? Popup.NoAutoClose : (Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent)
 
                     pinned: paletteTree.popupPinned
@@ -429,7 +428,7 @@ ListView {
                     onClosed: enablePaletteAnimations = false
 
                     function scrollToPopupBottom() {
-                        const popupBottom = implicitHeight + y + control.y;
+                        const popupBottom = implicitHeight + y + control.y + 14; // 14 for DropShadow in StyledPopup: depends on blur radius and vertical offset
                         paletteTree.ensureYVisible(popupBottom);
                     }
 
