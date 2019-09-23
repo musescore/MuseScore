@@ -384,7 +384,7 @@ ListView {
                     modal: false
                     focus: true
                     clip: true
-                    closePolicy: Popup.CloseOnEscape// | Popup.CloseOnPressOutside
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
 
                     // TODO: change settings to "hidden" model?
                     cellSize: control.cellSize
@@ -454,8 +454,10 @@ ListView {
     Connections {
         target: palettesWidget
         onHasFocusChanged: {
-            if (!palettesWidget.hasFocus)
+            if (!palettesWidget.hasFocus) {
                 paletteSelectionModel.clear();
+                expandedPopupIndex = null;
+            }
         }
     }
 }
