@@ -17,62 +17,56 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "nativemenu.h"
+#include "nativetooltip.h"
+#include "musescore.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   QmlNativeMenu
+//   QmlNativeToolTip
 //---------------------------------------------------------
 
-QmlNativeMenu::QmlNativeMenu(QQuickItem* parent)
-   : QQuickItem(parent)
-      {}
-
-//---------------------------------------------------------
-//   QmlNativeMenu::createMenu
-//---------------------------------------------------------
-
-QMenu* QmlNativeMenu::createMenu() const
+QmlNativeToolTip::QmlNativeToolTip(QWidget* w, QObject* parent)
+   : QObject(parent), _widget(w)
       {
-      QMenu* menu = new QMenu();
+      _timer.setSingleShot(true);
+      connect(&_timer, &QTimer::timeout, this, &QmlNativeToolTip::showToolTip);
+      }
 
-      for (QObject* obj : _contentData) {
-            if (qobject_cast<QmlMenuSeparator*>(obj))
-                  menu->addSeparator();
-            else if (QmlMenuItem* m = qobject_cast<QmlMenuItem*>(obj)) {
-                  QAction* a = menu->addAction(m->text());
-                  a->setCheckable(m->checkable());
-                  a->setChecked(m->checked());
-                  a->setEnabled(m->enabled());
-                  connect(a, &QAction::triggered, m, &QmlMenuItem::triggered, Qt::QueuedConnection);
-                  }
+//---------------------------------------------------------
+//   QmlNativeToolTip::setItem
+//---------------------------------------------------------
+
+void QmlNativeToolTip::setItem(QQuickItem* i)
+      {
+      if (i != _item) {
+            const int interval = i && _lastShownText.isEmpty() ? qApp->styleHints()->mousePressAndHoldInterval() : 100;
+            _timer.start(interval);
+            _item = i;
             }
-
-      return menu;
       }
 
 //---------------------------------------------------------
-//   QmlNativeMenu::open
+//   QmlNativeToolTip::showToolTip
 //---------------------------------------------------------
 
-void QmlNativeMenu::open()
+void QmlNativeToolTip::showToolTip()
       {
-      QMenu* menu = createMenu();
-      const QPoint globalPos = parentItem()->mapToGlobal(pos).toPoint();
-      menu->exec(globalPos);
-      menu->deleteLater();
-      }
+      if (QToolTip::text() == _lastShownText)
+            QToolTip::hideText();
+      _lastShownText.clear();
 
-//---------------------------------------------------------
-//   QmlNativeMenu::popup
-//---------------------------------------------------------
+      if (!_item)
+            return;
 
-void QmlNativeMenu::popup()
-      {
-      QMenu* menu = createMenu();
-      menu->exec(QCursor::pos());
-      menu->deleteLater();
+      const QPointF topLeft = _item->mapToGlobal(QPointF(0, 0));
+      const QRect rect(topLeft.x(), topLeft.y(), _item->width(), _item->height());
+      const QPoint pos(QCursor::pos());
+
+      if (rect.contains(pos)) {
+            QToolTip::showText(pos, _text, _widget, rect); // TODO: it doesn't look like setting rect has an effect here...
+            _lastShownText = _text;
+            }
       }
 
 } // namespace Ms

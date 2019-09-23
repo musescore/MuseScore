@@ -89,9 +89,13 @@ Item {
         text: qsTr("Remove element")
         visible: paletteHeader.hidePaletteElementVisible && paletteHeader.editingEnabled
 
-        ToolTip.visible: hovered
-        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-        ToolTip.text: text
+        onHoveredChanged: {
+            if (hovered) {
+                mscore.tooltip.item = deleteButton;
+                mscore.tooltip.text = deleteButton.text;
+            } else if (mscore.tooltip.item == deleteButton)
+                mscore.tooltip.item = null;
+        }
 
         padding: 4
 
@@ -165,7 +169,7 @@ Item {
         MenuSeparator {}
         MenuItem {
             text: qsTr("Palette Properties")
-            //enabled: paletteHeader.editingEnabled
+            enabled: paletteHeader.editingEnabled
             onTriggered: paletteHeader.editPalettePropertiesRequested()
         }
     }

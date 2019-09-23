@@ -19,6 +19,7 @@
         <file>qml/palettes/icons/backspace.png</file>
         <file>qml/palettes/icons/delete.png</file>
         <file>qml/palettes/icons/more.png</file>
+        <file>qml/palettes/icons/pin.png</file>
         <file>qml/palettes/icons/search.png</file>
     </qresource>
 </RCC>
