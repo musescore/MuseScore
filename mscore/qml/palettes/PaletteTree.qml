@@ -61,6 +61,7 @@ ListView {
     }
 
     property var expandedPopupIndex: null // TODO: or use selection model? That would allow to preserve popups on removing palettes
+    property bool popupPinned: false
 
     onExpandedPopupIndexChanged: {
         if (footerItem)
@@ -384,7 +385,10 @@ ListView {
                     modal: false
                     focus: true
                     clip: true
-                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
+                    closePolicy: paletteTree.popupPinned ? Popup.NoAutoClose : (Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent)
+
+                    pinned: paletteTree.popupPinned
+                    onPinPopupRequested: paletteTree.popupPinned = pin
 
                     // TODO: change settings to "hidden" model?
                     cellSize: control.cellSize
@@ -456,7 +460,8 @@ ListView {
         onHasFocusChanged: {
             if (!palettesWidget.hasFocus) {
                 paletteSelectionModel.clear();
-                expandedPopupIndex = null;
+                if (!popupPinned)
+                    expandedPopupIndex = null;
             }
         }
     }
