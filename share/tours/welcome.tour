@@ -34,7 +34,7 @@
     </Message>
   <Message>
     <Text>The Palettes allow you to add most other notation elements to your score.</Text>
-    <Widget>palette-box</Widget>
+    <Widget>palette-widget</Widget>
     </Message>
   <Message>
     <Text>The Inspector allows you to control various properties of the elements in your score.</Text>

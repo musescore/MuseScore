@@ -45,9 +45,9 @@ ToolButton {
         color: button.highlighted || button.visualFocus
             ? (button.down ? globalStyle.button : Qt.lighter(globalStyle.button, 1.2))
             : (button.down ? Qt.darker(globalStyle.button, 1.2) : globalStyle.button)
-//         border {
-//             color: globalStyle.buttonText
-//             width: 1
-//         }
+        border {
+            color: "#aeaeae"
+            width: button.flat ? 0 : 1
+        }
     }
 }

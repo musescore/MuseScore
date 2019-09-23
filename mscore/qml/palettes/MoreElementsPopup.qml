@@ -46,43 +46,68 @@ StyledPopup {
     property bool drawGrid
 
     property int maxHeight: 400
+    implicitHeight: column.height + topPadding + bottomPadding
 
     property bool enablePaletteAnimations: false // disabled by default to avoid unnecessary "add" animations on opening this popup at first time
+    property bool pinned: false
 
     signal addElementsRequested(var mimeDataList)
+    signal pinPopupRequested(bool pin)
 
     Column {
+        id: column
         width: parent.width
         spacing: 8
 
-        StyledButton {
-            id: addToPaletteButton
-            width: parent.width
 
-            text: qsTr("Add to %1").arg(paletteName)
-            enabled: moreElementsPopup.paletteEditingEnabled && (masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection)
+        Row {
+            StyledButton {
+                id: addToPaletteButton
+                width: column.width - pinButton.width
 
-            onClicked: {
-                function collectMimeData(palette, selection) {
-                    const selectedList = selection.selectedIndexes;
-                    var mimeArr = [];
-                    for (var i = 0; i < selectedList.length; i++) {
-                        const mimeData = palette.paletteModel.data(selectedList[i], PaletteTreeModel.MimeDataRole);
-                        mimeArr.push(mimeData);
+                text: qsTr("Add to %1").arg(paletteName)
+                enabled: moreElementsPopup.paletteEditingEnabled && (masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection)
+
+                onClicked: {
+                    function collectMimeData(palette, selection) {
+                        const selectedList = selection.selectedIndexes;
+                        var mimeArr = [];
+                        for (var i = 0; i < selectedList.length; i++) {
+                            const mimeData = palette.paletteModel.data(selectedList[i], PaletteTreeModel.MimeDataRole);
+                            mimeArr.push(mimeData);
+                        }
+                        return mimeArr;
                     }
-                    return mimeArr;
+
+                    const mimeMasterPalette = collectMimeData(masterPalette, masterPaletteSelectionModel);
+                    const mimeCustomPalette = collectMimeData(customPalette, customPaletteSelectionModel);
+
+                    masterPaletteSelectionModel.clear();
+                    customPaletteSelectionModel.clear();
+
+                    if (mimeMasterPalette.length)
+                        addElementsRequested(mimeMasterPalette);
+                    if (mimeCustomPalette.length)
+                        addElementsRequested(mimeCustomPalette);
                 }
+            }
 
-                const mimeMasterPalette = collectMimeData(masterPalette, masterPaletteSelectionModel);
-                const mimeCustomPalette = collectMimeData(customPalette, customPaletteSelectionModel);
 
-                masterPaletteSelectionModel.clear();
-                customPaletteSelectionModel.clear();
+            StyledToolButton {
+                id: pinButton
+                height: addToPaletteButton.height
+                width: height
+                checkable: true
+                checked: moreElementsPopup.pinned
+                flat: !checked
 
-                if (mimeMasterPalette.length)
-                    addElementsRequested(mimeMasterPalette);
-                if (mimeCustomPalette.length)
-                    addElementsRequested(mimeCustomPalette);
+                onCheckedChanged: moreElementsPopup.pinPopupRequested(checked)
+
+                padding: 4
+
+                contentItem: StyledIcon {
+                    source: "icons/pin.png"
+                }
             }
         }
 
@@ -107,6 +132,8 @@ StyledPopup {
             Text {
                 anchors.centerIn: parent
                 text: moreElementsPopup.libraryPaletteName
+                font: globalStyle.font
+                color: globalStyle.windowText
             }
             StyledButton {
                 width: height
@@ -191,6 +218,14 @@ StyledPopup {
                         ToolTip.visible: hovered
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: text
+
+                        onHoveredChanged: {
+                            if (hovered) {
+                                mscore.tooltip.item = deleteButton;
+                                mscore.tooltip.text = deleteButton.texst;
+                            } else if (mscore.tooltip.item == deleteButton)
+                                mscore.tooltip.item = null;
+                        }
 
                         padding: 0
 

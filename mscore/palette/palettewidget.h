@@ -25,6 +25,7 @@
 namespace Ms {
 
 class PaletteWorkspace;
+class QmlNativeToolTip;
 
 //---------------------------------------------------------
 //   PaletteQmlInterface
@@ -35,18 +36,21 @@ class PaletteQmlInterface : public QObject
       Q_OBJECT
 
       Q_PROPERTY(Ms::PaletteWorkspace* paletteWorkspace READ paletteWorkspace WRITE setPaletteWorkspace NOTIFY paletteWorkspaceChanged)
+      Q_PROPERTY(Ms::QmlNativeToolTip* tooltip READ getTooltip)
       Q_PROPERTY(QColor paletteBackground READ paletteBackground NOTIFY paletteBackgroundChanged)
 
       PaletteWorkspace* w;
+      QmlNativeToolTip* tooltip;
       QColor _paletteBackground;
+
+      QmlNativeToolTip* getTooltip() { return tooltip; }
 
    signals:
       void paletteWorkspaceChanged();
       void paletteBackgroundChanged();
 
    public:
-      PaletteQmlInterface(PaletteWorkspace* workspace, QObject* parent = nullptr)
-         : QObject(parent), w(workspace) {}
+      PaletteQmlInterface(PaletteWorkspace* workspace, QmlNativeToolTip* t, QObject* parent = nullptr);
 
       PaletteWorkspace* paletteWorkspace() { return w; }
       const PaletteWorkspace* paletteWorkspace() const { return w; }

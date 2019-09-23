@@ -23,10 +23,21 @@
 #include "palette/paletteworkspace.h"
 #include "plugin/qmliconview.h"
 #include "preferences.h"
+#include "qml/nativetooltip.h"
 
 #include <QQmlContext>
 
 namespace Ms {
+
+//---------------------------------------------------------
+//   PaletteQmlInterface
+//---------------------------------------------------------
+
+PaletteQmlInterface::PaletteQmlInterface(PaletteWorkspace* workspace, QmlNativeToolTip* t, QObject* parent)
+   : QObject(parent), w(workspace), tooltip(t)
+      {
+      tooltip->setParent(this);
+      }
 
 //---------------------------------------------------------
 //   PaletteQmlInterface::setPaletteBackground
@@ -54,7 +65,9 @@ PaletteWidget::PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent
       QQmlContext* ctx = rootContext();
       Q_ASSERT(ctx);
 
-      qmlInterface = new PaletteQmlInterface(w, this);
+      QmlNativeToolTip* tooltip = new QmlNativeToolTip(widget());
+
+      qmlInterface = new PaletteQmlInterface(w, tooltip, this);
       setupStyle();
       ctx->setContextProperty("mscore", qmlInterface);
 
@@ -160,6 +173,8 @@ void PaletteWidget::registerQmlTypes()
 
       qmlRegisterUncreatableType<PaletteTreeModel>("MuseScore.Palette", 3, 3, "PaletteTreeModel", "Cannot create palette model from QML");
       qmlRegisterUncreatableType<FilterPaletteTreeModel>("MuseScore.Palette", 3, 3, "FilterPaletteTreeModel", "Cannot create palette model from QML");
+
+      qmlRegisterUncreatableType<QmlNativeToolTip>("MuseScore.Palette", 3, 3, "NativeToolTip", "Use mscore.palette global variable");
 
       qmlRegisterType<QmlIconView>("MuseScore.Views", 3, 3, "QmlIconView");
 

@@ -26,7 +26,6 @@ import "utils.js" as Utils
 
 ListView {
     id: paletteTree
-    implicitHeight: contentHeight
 
     keyNavigationEnabled: true
     activeFocusOnTab: true
@@ -34,6 +33,12 @@ ListView {
     property PaletteWorkspace paletteWorkspace
     property var paletteModel: paletteWorkspace ? paletteWorkspace.mainPaletteModel : null
     property PaletteController paletteController: paletteWorkspace ? paletteWorkspace.mainPaletteController : null
+
+    // Scroll palettes list when dragging a palette close to the list's border
+    property bool itemDragged: false
+    preferredHighlightBegin: Math.min(48, Math.floor(0.1 * height))
+    preferredHighlightEnd: Math.ceil(height - preferredHighlightBegin)
+    highlightRangeMode: itemDragged ? ListView.ApplyRange : ListView.NoHighlightRange
 
     property string filter: ""
     onFilterChanged: {
@@ -56,6 +61,7 @@ ListView {
     }
 
     property var expandedPopupIndex: null // TODO: or use selection model? That would allow to preserve popups on removing palettes
+    property bool popupPinned: false
 
     onExpandedPopupIndexChanged: {
         if (footerItem)
@@ -141,7 +147,7 @@ ListView {
         delegate: ItemDelegate {
             id: control
             topPadding: 0
-            bottomPadding: 0
+            bottomPadding: expanded ? 4 : 0
             property int rowIndex: index
             property var modelIndex: paletteTree.model.modelIndex(index, 0)
 
@@ -175,8 +181,6 @@ ListView {
             function togglePopup() {
                 const expand = !popupExpanded;
                 paletteTree.expandedPopupIndex = expand ? modelIndex : null;
-                if (expand)
-                    palettePopup.needScrollToBottom = true;
             }
 
             property size cellSize: model.gridSize
@@ -214,12 +218,14 @@ ListView {
             Drag.onDragStarted: {
                 if (popupExpanded)
                     togglePopup();
+                paletteTree.itemDragged = true;
                 DelegateModel.inPersistedItems = true;
                 DelegateModel.inItems = false;
                 placeholder.makePlaceholder(control.rowIndex, paletteTree.placeholderData());
             }
 
             Drag.onDragFinished: {
+                paletteTree.itemDragged = false;
                 const destIndex = placeholder.active ? placeholder.index : control.rowIndex;
                 placeholder.removePlaceholder();
                 const controller = paletteTree.paletteController;
@@ -239,8 +245,10 @@ ListView {
                 keys: [ "application/musescore/palettetree" ]
                 onEntered: {
                     const idx = control.DelegateModel.itemsIndex;
-                    if (!control.DelegateModel.isUnresolved)
+                    if (!control.DelegateModel.isUnresolved) {
                         placeholder.makePlaceholder(idx, paletteTree.placeholderData());
+                        paletteTree.currentIndex = idx;
+                        }
                 }
                 onDropped: {
                     if (drop.proposedAction == Qt.MoveAction)
@@ -376,8 +384,10 @@ ListView {
 
                     modal: false
                     focus: true
-                    clip: true
-                    closePolicy: Popup.CloseOnEscape// | Popup.CloseOnPressOutside
+                    closePolicy: paletteTree.popupPinned ? Popup.NoAutoClose : (Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent)
+
+                    pinned: paletteTree.popupPinned
+                    onPinPopupRequested: paletteTree.popupPinned = pin
 
                     // TODO: change settings to "hidden" model?
                     cellSize: control.cellSize
@@ -403,24 +413,27 @@ ListView {
                             control.togglePopup();
                     }
 
-                    onOpened: enablePaletteAnimations = true
-                    onClosed: enablePaletteAnimations = false
-
                     property bool needScrollToBottom: false
 
-                    function scrollToPopupBottom() {
+                    onAboutToShow: {
+                        needScrollToBottom = true;
+                        if (implicitHeight)
+                            scrollToPopupBottom();
+                    }
+                    onOpened: {
+                        scrollToPopupBottom();
                         needScrollToBottom = false;
-                        const popupBottom = implicitHeight + y + control.y;
+                        enablePaletteAnimations = true;
+                    }
+                    onClosed: enablePaletteAnimations = false
+
+                    function scrollToPopupBottom() {
+                        const popupBottom = implicitHeight + y + control.y + 14; // 14 for DropShadow in StyledPopup: depends on blur radius and vertical offset
                         paletteTree.ensureYVisible(popupBottom);
                     }
 
-                    onNeedScrollToBottomChanged: {
-                        if (needScrollToBottom && implicitHeight)
-                            scrollToPopupBottom();
-                    }
-
                     onImplicitHeightChanged: {
-                        if (needScrollToBottom)
+                        if (visible && (needScrollToBottom || atYEnd))
                             scrollToPopupBottom();
                     }
 
@@ -444,8 +457,11 @@ ListView {
     Connections {
         target: palettesWidget
         onHasFocusChanged: {
-            if (!palettesWidget.hasFocus)
+            if (!palettesWidget.hasFocus) {
                 paletteSelectionModel.clear();
+                if (!popupPinned)
+                    expandedPopupIndex = null;
+            }
         }
     }
 }
