@@ -99,6 +99,13 @@
               <beginHookType>1</beginHookType>
               <color r="255" g="0" b="0" a="255"/>
               <color r="255" g="0" b="0" a="255"/>
+              <Segment>
+                <subtype>0</subtype>
+                <offset x="0" y="4"/>
+                <off2 x="0" y="0"/>
+                <minDistance>0</minDistance>
+                <color r="255" g="0" b="0" a="255"/>
+                </Segment>
               </Pedal>
             <next>
               <location>
