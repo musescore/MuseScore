@@ -19,6 +19,7 @@
 
 import QtQuick 2.8
 import QtQuick.Controls 2.1
+import QtGraphicalEffects 1.0
 
 Popup {
     id: popup
@@ -58,38 +59,51 @@ Popup {
     background: Item {
         anchors.fill: parent
 
-        Canvas {
-            id: arrow
-            z: 1
-            height: arrowHeight + 1
-            width: arrowWidth
-            x: Math.floor(popup.arrowX - width / 2)
+        Item {
+            id: mainBackground
+            anchors.fill: parent
 
-            onPaint: {
-                var ctx = getContext("2d");
-                ctx.lineWidth = 2;
-                ctx.fillStyle = fillColor;
-                ctx.strokeStyle = borderColor;
+            Canvas {
+                id: arrow
+                z: 1
+                height: arrowHeight + 1
+                width: arrowWidth
+                x: Math.floor(popup.arrowX - width / 2)
 
-                ctx.beginPath();
-                ctx.moveTo(0, height);
-                ctx.lineTo(width / 2, 1);
-                ctx.lineTo(width, height);
-                ctx.stroke();
-                ctx.fill();
+                onPaint: {
+                    var ctx = getContext("2d");
+                    ctx.lineWidth = 2;
+                    ctx.fillStyle = fillColor;
+                    ctx.strokeStyle = borderColor;
+
+                    ctx.beginPath();
+                    ctx.moveTo(0, height);
+                    ctx.lineTo(width / 2, 1);
+                    ctx.lineTo(width, height);
+                    ctx.stroke();
+                    ctx.fill();
+                }
+            }
+
+            Rectangle {
+                color: fillColor
+                border { width: 1; color: borderColor }
+                anchors {
+                    top: arrow.bottom
+                    topMargin: -1
+                    bottom: parent.bottom
+                    left: parent.left
+                    right: parent.right
+                }
             }
         }
 
-        Rectangle {
-            color: fillColor
-            border { width: 1; color: borderColor }
-            anchors {
-                top: arrow.bottom
-                topMargin: -1
-                bottom: parent.bottom
-                left: parent.left
-                right: parent.right
-            }
+        DropShadow {
+            anchors.fill: parent
+            source: mainBackground
+            color: "grey"
+            verticalOffset: 4
+            samples: 29
         }
     }
 }
