@@ -1317,7 +1317,7 @@ Element* Segment::nextElementOfSegment(Segment* s, Element* e, int activeStaff)
                                 (!nextEl || nextEl->staffIdx() != activeStaff)) {
                                nextEl = s->element(++track);
                                }
-                         if (!nextEl)
+                         if (!nextEl || nextEl->staffIdx() != activeStaff)
                                return nullptr;
                          if (nextEl->isChord())
                                return toChord(nextEl)->notes().back();
