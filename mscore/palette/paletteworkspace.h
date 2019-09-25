@@ -204,6 +204,7 @@ class PaletteWorkspace : public QObject {
 
       bool paletteChanged() const { return userPalette->paletteTreeChanged(); }
 
+      void setUserPaletteTree(std::unique_ptr<PaletteTree> tree);
       void write(XmlWriter&) const;
       bool read(XmlReader&);
 
