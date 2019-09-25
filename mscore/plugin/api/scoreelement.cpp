@@ -86,13 +86,15 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
             val = QVariant::fromValue(f->fraction());
             }
 
+      const PropertyFlags f = e->propertyFlags(pid);
+      const PropertyFlags newFlags = (f == PropertyFlags::NOSTYLE) ? f : PropertyFlags::UNSTYLED;
+
       if (_ownership == Ownership::SCORE) {
-            const PropertyFlags f = e->propertyFlags(pid);
-            const PropertyFlags newFlags = (f == PropertyFlags::NOSTYLE) ? f : PropertyFlags::UNSTYLED;
             e->undoChangeProperty(pid, val, newFlags);
             }
       else { // not added to a score so no need (and dangerous) to deal with undo stack
             e->setProperty(pid, val);
+            e->setPropertyFlags(pid, newFlags);
             }
       }
 
