@@ -1782,10 +1782,6 @@ Element* Note::drop(EditData& data)
 
             case ElementType::NOTE:
                   {
-                  if (ch->noteType() != NoteType::NORMAL) {
-                        delete e;
-                        return 0;
-                        }
                   // calculate correct transposed tpc
                   Note* n = toNote(e);
                   Interval v = part()->instrument(ch->tick())->transpose();
