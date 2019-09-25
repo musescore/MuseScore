@@ -234,5 +234,18 @@ void QmlDockWidget::changeEvent(QEvent* evt)
                   break;
             }
       }
-}
 
+//---------------------------------------------------------
+//   QmlDockWidget::resizeEvent
+//---------------------------------------------------------
+
+void QmlDockWidget::resizeEvent(QResizeEvent* evt)
+      {
+      QDockWidget::resizeEvent(evt);
+      // update() call prevents QML content from being drawn
+      // at incorrect position when maximizing/demaximizing
+      // MuseScore window (Qt 5.9 only?)
+      if (_view)
+            _view->update();
+      }
+}

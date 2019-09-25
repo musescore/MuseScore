@@ -30,6 +30,7 @@ Item {
     property bool hidePaletteElementVisible
     property bool editingEnabled: true
     property bool custom: false
+    property bool unresolved: false
 
     signal toggleExpandRequested()
     signal enableEditingToggled(bool val)
@@ -46,7 +47,7 @@ Item {
         id: paletteExpandArrow
         z: 1000
         width: height
-        visible: paletteHeader.text.length // TODO: make a separate palette placeholder component
+        visible: !paletteHeader.unresolved // TODO: make a separate palette placeholder component
         text: paletteHeader.expanded ? qsTr("Collapse") : qsTr("Expand")
 
         padding: 0
