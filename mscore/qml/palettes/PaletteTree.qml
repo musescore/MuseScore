@@ -61,7 +61,6 @@ ListView {
     }
 
     property var expandedPopupIndex: null // TODO: or use selection model? That would allow to preserve popups on removing palettes
-    property bool popupPinned: false
 
     onExpandedPopupIndexChanged: {
         if (footerItem)
@@ -128,7 +127,14 @@ ListView {
         NumberAnimation { property: "y"; duration: 150 }
     }
 
-    ScrollBar.vertical: ScrollBar {}
+    ScrollBar.vertical: ScrollBar {
+        id: scrollbar
+
+        readonly property color baseColor: (globalStyle.base.hslLightness > 0.5) ? "#28282a" : "#d7d7d5"
+        readonly property color pressedColor: "#bdbebf"
+
+        Component.onCompleted: contentItem.color = Qt.binding(function() { return scrollbar.pressed ? baseColor : "#bdbebf"; })
+    }
 
     maximumFlickVelocity: 1500
 
@@ -167,6 +173,11 @@ ListView {
                 const cmd = selected ? ItemSelectionModel.Toggle : ItemSelectionModel.ClearAndSelect;
                 paletteSelectionModel.setCurrentIndex(modelIndex, cmd);
                 paletteTree.currentIndex = index;
+            }
+            onDoubleClicked: {
+                forceActiveFocus();
+                paletteSelectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.Deselect);
+                toggleExpand();
             }
 
             background: Rectangle {
@@ -306,6 +317,8 @@ ListView {
                     }
                     custom: model.custom
 
+                    unresolved: control.DelegateModel.isUnresolved
+
                     onToggleExpandRequested: {
                         paletteTree.currentIndex = control.rowIndex;
                         control.toggleExpand();
@@ -379,15 +392,12 @@ ListView {
                     visible: control.popupExpanded
                     maxHeight: Math.min(0.75 * paletteTree.height, 500)
 
-                    y: mainPaletteContainer.y + mainPaletteContainer.height
+                    y: mainPaletteContainer.y + mainPaletteContainer.height + Utils.style.popupMargin
                     width: parent.width
 
                     modal: false
                     focus: true
-                    closePolicy: paletteTree.popupPinned ? Popup.NoAutoClose : (Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent)
-
-                    pinned: paletteTree.popupPinned
-                    onPinPopupRequested: paletteTree.popupPinned = pin
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
 
                     // TODO: change settings to "hidden" model?
                     cellSize: control.cellSize
@@ -459,8 +469,7 @@ ListView {
         onHasFocusChanged: {
             if (!palettesWidget.hasFocus) {
                 paletteSelectionModel.clear();
-                if (!popupPinned)
-                    expandedPopupIndex = null;
+                expandedPopupIndex = null;
             }
         }
     }
