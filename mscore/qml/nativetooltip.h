@@ -33,7 +33,7 @@ class QmlNativeToolTip : public QObject {
       Q_PROPERTY(QString text READ text WRITE setText)
 
       QWidget* _widget;
-      QQuickItem* _item = nullptr;
+      QPointer<QQuickItem> _item = nullptr;
       QString _text;
       QString _lastShownText;
       QTimer _timer;
