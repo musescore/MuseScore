@@ -790,6 +790,8 @@ void ChordRest::removeDeleteBeam(bool beamed)
             _beam->remove(this);
             if (b->empty())
                   score()->undoRemoveElement(b);
+            else
+                  b->layout1();
             }
       if (!beamed && isChord())
             toChord(this)->layoutStem();
