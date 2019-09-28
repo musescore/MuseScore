@@ -133,7 +133,6 @@ static const char* iconNames[] = {
       "frame-fretboard.svg",
       "measure.svg",
       "object-select.svg",
-      "mscz-icon.svg",
       "help-contents.svg",
       "go-home.svg",
       "go-previous.svg",
