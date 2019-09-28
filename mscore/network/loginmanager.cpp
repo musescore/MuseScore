@@ -126,30 +126,6 @@ ApiInfo::ApiInfo(const QByteArray _clientId, const QByteArray _apiKey)
       }
 
 //---------------------------------------------------------
-//   ApiInfo::getUpdateScoreInfoUrl
-//---------------------------------------------------------
-
-QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& accessToken, bool newScore, const QString& customPath)
-      {
-      QUrl url(mscoreHost);
-      url.setPath(customPath.isEmpty() ? defaultUpdateScoreInfoPath : customPath);
-
-      QUrlQuery query;
-      query.addQueryItem("id", scoreId);
-      query.addQueryItem("newScore", QString::number(newScore));
-
-#ifdef USE_WEBENGINE
-      query.addQueryItem("_token", accessToken);
-#else
-      Q_UNUSED(accessToken); // we'll be redirected to a browser, don't put access token there
-#endif
-
-      url.setQuery(query);
-
-      return url;
-      }
-
-//---------------------------------------------------------
 //   LoginManager
 //---------------------------------------------------------
 
@@ -364,24 +340,6 @@ void LoginManager::onTryLoginError(const QString& error)
 /*------- END - TRY LOGIN ROUTINES ----------------------------*/
 
 //---------------------------------------------------------
-//   clearHttpCacheOnRenderFinish
-//---------------------------------------------------------
-
-static void clearHttpCacheOnRenderFinish(QWebEngineView* webView)
-      {
-      QWebEnginePage* page = webView->page();
-      QWebEngineProfile* profile = page->profile();
-
-      // workaround for the crashes sometimes happend in Chromium on macOS with Qt 5.12
-      QObject::connect(webView, &QWebEngineView::renderProcessTerminated, webView, [profile, webView](QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
-            {
-            qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;
-            profile->clearHttpCache();
-            webView->show();
-            });
-      }
-
-//---------------------------------------------------------
 //   loginInteractive
 //---------------------------------------------------------
 
@@ -398,7 +356,13 @@ void LoginManager::loginInteractive()
       profile->setPersistentCookiesPolicy(QWebEngineProfile::NoPersistentCookies);
       profile->setRequestInterceptor(new ApiWebEngineRequestInterceptor(profile));
 
-      clearHttpCacheOnRenderFinish(webView);
+      //workaround for the crashes sometimes happend in Chromium on macOS with Qt 5.12
+      connect(webView, &QWebEngineView::renderProcessTerminated, this, [profile, webView](QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
+              {
+              qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;
+              profile->clearHttpCache();
+              webView->show();
+              });
       
       connect(page, &QWebEnginePage::loadFinished, this, [this, page, webView](bool ok) {
             if (!ok)
@@ -596,7 +560,6 @@ void LoginManager::onGetUserReply(QNetworkReply* reply, int code, const QJsonObj
             if (user.value("name") != QJsonValue::Undefined) {
                   _userName = user.value("name").toString();
                   _uid = user.value("id").toString().toInt();
-                  _avatar = QUrl(user.value("avatar_url").toString());
                   emit getUserSuccess();
                   }
             else
@@ -784,7 +747,7 @@ void LoginManager::uploadMedia()
             return;
             }
       if (!_mp3File->exists()) {
-            emit mediaUploadSuccess();
+            emit displaySuccess();
             return;
             }
       if (_mp3File->open(QIODevice::ReadOnly)) { // probably cancelled, no error handling
@@ -820,7 +783,7 @@ void LoginManager::mediaUploadFinished()
             _mp3File->remove();
             delete _mp3File;
             _mediaUrl = "";
-            emit mediaUploadSuccess();
+            emit displaySuccess();
             }
       else if (e == QNetworkReply::RemoteHostClosedError && _uploadTryCount < MAX_UPLOAD_TRY_COUNT) {
             uploadMedia();
@@ -851,8 +814,11 @@ void LoginManager::mediaUploadProgress(qint64 progress, qint64 total)
 //   upload
 //---------------------------------------------------------
 
-void LoginManager::upload(const QString& path, int nid, const QString& title)
+void LoginManager::upload(const QString &path, int nid, const QString &title, const QString &description, const QString& priv, const QString& license, const QString& tags, const QString& changes)
       {
+#if ! 0 // see further down
+      Q_UNUSED(changes);
+#endif
       qDebug() << "file upload" << nid;
 //       KQOAuthRequest *oauthRequest = new KQOAuthRequest(this);
 //       QUrl url(QString("https://%1/services/rest/score.json").arg(MUSESCORE_HOST));
@@ -860,7 +826,7 @@ void LoginManager::upload(const QString& path, int nid, const QString& title)
 //             url = QUrl(QString("https://%1/services/rest/score/%2/update.json").arg(MUSESCORE_HOST).arg(nid));
 
       ApiRequest* r = new ApiRequest(this);
-      r->setPath("/score/upload-light")
+      r->setPath("/score/upload")
          .setToken(_accessToken);
 
       QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType, /* parent */ r);
@@ -877,8 +843,9 @@ void LoginManager::upload(const QString& path, int nid, const QString& title)
 
       if (nid > 0) {
             QHttpPart idPart;
+            qDebug() << "added idPart";
             idPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
-            idPart.setBody(QString::number(nid).toLatin1());
+            idPart.setBody(QString::number(nid).toLatin1()); // TODO: check
             multiPart->append(idPart);
             }
 
@@ -887,8 +854,38 @@ void LoginManager::upload(const QString& path, int nid, const QString& title)
       titlePart.setBody(title.toUtf8());
       multiPart->append(titlePart);
 
+      QHttpPart descriptionPart;
+      descriptionPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"description\""));
+      descriptionPart.setBody(description.toUtf8());
+      multiPart->append(descriptionPart);
+
+      QHttpPart privatePart;
+      privatePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"private\""));
+      privatePart.setBody(priv.toUtf8());
+      multiPart->append(privatePart);
+
+      QHttpPart licensePart;
+      licensePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"license\""));
+      licensePart.setBody(license.toUtf8());
+      multiPart->append(licensePart);
+
+      QHttpPart tagsPart;
+      tagsPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"tags\""));
+      tagsPart.setBody(tags.toUtf8());
+      multiPart->append(tagsPart);
+
+#if 0 // TODO: what is this and is this now supported?
+      if (nid > 0) {
+            QHttpPart changesPart;
+            changesPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"revision_log\""));
+            changesPart.setBody(changes.toUtf8());
+            multiPart->append(changesPart);
+      }
+#endif
+
       r->setMultiPartData(multiPart);
 
+      // TODO: "uri" parameter?
       if (nid > 0) // score exists, update
             r->setMethod(ApiRequest::HTTP_PUT);
       else // score doesn't exist, post a new score
@@ -909,9 +906,6 @@ void LoginManager::onUploadReply(QNetworkReply* reply, int code, const QJsonObje
       {
       qDebug() << "onUploadReply" << code << reply->errorString();
       if (code == HTTP_OK) {
-            constexpr const char* pathKey = "_webview_url";
-            _updateScoreDataPath = obj.contains(pathKey) ? obj.value(pathKey).toString() : QString();
-
             if (obj.value("permalink") != QJsonValue::Undefined) {
                   emit uploadSuccess(obj.value("permalink").toString(), obj.value("id").toString(), obj.value("vid").toString());
                   }
@@ -921,35 +915,6 @@ void LoginManager::onUploadReply(QNetworkReply* reply, int code, const QJsonObje
             }
       else
             emit uploadError(tr("Cannot upload: %1").arg(getErrorString(reply, obj)));
-      }
-
-//---------------------------------------------------------
-//   updateScoreData
-//---------------------------------------------------------
-
-void LoginManager::updateScoreData(const QString& nid, bool newScore)
-      {
-      const QUrl url(ApiInfo::getUpdateScoreInfoUrl(nid, _accessToken, newScore, _updateScoreDataPath));
-#ifdef USE_WEBENGINE
-      QWebEngineView* webView = new QWebEngineView;
-      webView->setWindowModality(Qt::ApplicationModal);
-      webView->setAttribute(Qt::WA_DeleteOnClose);
-
-      QWebEnginePage* page = webView->page();
-      QWebEngineProfile* profile = page->profile();
-
-      profile->setPersistentCookiesPolicy(QWebEngineProfile::NoPersistentCookies);
-      profile->setRequestInterceptor(new ApiWebEngineRequestInterceptor(profile));
-
-      connect(page, &QWebEnginePage::windowCloseRequested, webView, &QWebEngineView::close);
-
-      clearHttpCacheOnRenderFinish(webView);
-
-      webView->load(url);
-      webView->show();
-#else
-      QDesktopServices::openUrl(url);
-#endif
       }
 
 //---------------------------------------------------------
