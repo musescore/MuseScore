@@ -72,6 +72,7 @@
         <file>data/icons/frame-fretboard.svg</file>
         <file>data/icons/measure.svg</file>
         <file>data/icons/object-select.svg</file>
+        <file>data/icons/mscz-icon.svg</file>
         <file>schema/musicxml.xsd</file>
         <file>schema/xlink.xsd</file>
         <file>schema/xml.xsd</file>
