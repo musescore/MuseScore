@@ -29,11 +29,9 @@ class UploadScoreDialog : public QDialog, public Ui::UploadScoreDialog
 
       LoginManager* _loginManager;
       int _nid;
-      bool _newScore = true;
       QString _url;
 
-      void showEvent(QShowEvent*) override;
-
+      virtual void hideEvent(QHideEvent*);
    private slots:
       void buttonBoxClicked(QAbstractButton* button);
       void uploadSuccess(const QString& url, const QString& nid, const QString& vid);
@@ -42,8 +40,6 @@ class UploadScoreDialog : public QDialog, public Ui::UploadScoreDialog
       void onGetScoreError(const QString& error);
       void logout();
       void display();
-      void updateScoreData(const QString& nid, bool newScore);
-      void updateScoreData();
       void displaySuccess();
 
    private:
