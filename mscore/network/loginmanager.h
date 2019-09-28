@@ -46,7 +46,10 @@ class LoginManager : public QObject
       QString _accessToken;
       QString _refreshToken;
       QString _userName;
+      QUrl _avatar;
       int _uid = -1;
+
+      QString _updateScoreDataPath;
 
       QString _mediaUrl;
       QFile* _mp3File;
@@ -77,7 +80,7 @@ class LoginManager : public QObject
       void uploadError(const QString& error);
       void uploadSuccess(const QString& url, const QString& nid, const QString& vid);
       void tryLoginSuccess();
-      void displaySuccess();
+      void mediaUploadSuccess();
 
    private slots:
       void uploadMedia();
@@ -96,7 +99,8 @@ class LoginManager : public QObject
 #ifdef USE_WEBENGINE
       void loginInteractive();
 #endif
-      void upload(const QString& path, int nid, const QString& title, const QString& description, const QString& priv, const QString& license, const QString& tags, const QString& changes);
+      void upload(const QString& path, int nid, const QString& title);
+      void updateScoreData(const QString& nid, bool newScore);
       bool hasAccessToken();
       void getUser();
       void getScoreInfo(int nid);
@@ -107,8 +111,9 @@ class LoginManager : public QObject
 
       bool logout();
 
-      QString userName() { return _userName; }
-      int uid()          { return _uid; }
+      const QString& userName() const { return _userName; }
+      int uid() const { return _uid; }
+      const QUrl& avatar() const { return _avatar; }
       };
 }
 

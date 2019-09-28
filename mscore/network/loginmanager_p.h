@@ -42,6 +42,9 @@ class ApiInfo
       static QString apiInfoLocation();
       static QString getOsInfo();
 
+      static constexpr const char* mscoreHost = "https://musescore.com";
+      static constexpr const char* defaultUpdateScoreInfoPath = "/score/manage/upload/update";
+
    public:
       static const ApiInfo& instance()
             {
@@ -58,6 +61,8 @@ class ApiInfo
 
       static constexpr const char* loginPage = "https://musescore.com/user/auth/webview";
       static constexpr const char* loginSuccessPage = "https://musescore.com/user/auth/webview/success";
+
+      static QUrl getUpdateScoreInfoUrl(const QString& scoreId, const QString& accessToken, bool newScore, const QString& customPath);
 
       static const QUrl loginUrl;
       static const QUrl loginSuccessUrl;
