@@ -27,6 +27,10 @@
 
 namespace Ms {
 
+#ifndef NDEBUG
+bool useSourceQmlFiles = false;
+#endif
+
 //---------------------------------------------------------
 //   FocusChainBreak
 //---------------------------------------------------------
@@ -206,6 +210,23 @@ void QmlDockWidget::setupStyle()
       }
 
 //---------------------------------------------------------
+//   QmlDockWidget::qmlSourcePrefix
+//---------------------------------------------------------
+
+QString QmlDockWidget::qmlSourcePrefix()
+      {
+#ifndef NDEBUG
+      if (useSourceQmlFiles) {
+            const QFileInfo fi(__FILE__);
+            const QDir mscoreDir = fi.absoluteDir();
+            return QUrl::fromLocalFile(mscoreDir.absolutePath()).toString() + '/';
+            }
+#endif
+      static const QString qmlResourcesRoot("qrc:/");
+      return qmlResourcesRoot;
+      }
+
+//---------------------------------------------------------
 //   QmlDockWidget::setSource
 //---------------------------------------------------------
 
@@ -217,6 +238,15 @@ void QmlDockWidget::setSource(const QUrl& url)
 
       view->setSource(url);
       view->setResizeMode(QQuickView::SizeRootObjectToView);
+      }
+
+//---------------------------------------------------------
+//   QmlDockWidget::source
+//---------------------------------------------------------
+
+QUrl QmlDockWidget::source() const
+      {
+      return _view ? _view->source() : QUrl();
       }
 
 //---------------------------------------------------------
