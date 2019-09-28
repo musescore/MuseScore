@@ -22,6 +22,10 @@
 
 namespace Ms {
 
+#ifndef NDEBUG
+extern bool useSourceQmlFiles;
+#endif
+
 //---------------------------------------------------------
 //   FocusChainBreak
 //---------------------------------------------------------
@@ -132,8 +136,9 @@ class QmlDockWidget : public QDockWidget
       QmlDockWidget(QQmlEngine* e = nullptr, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
       QmlDockWidget(QQmlEngine* e, const QString& title, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
 
+      static QString qmlSourcePrefix();
       void setSource(const QUrl& url);
-      void source();
+      QUrl source() const;
 
       QQmlContext* rootContext() { return getView()->rootContext(); }
       QQuickItem* rootObject() { return getView()->rootObject(); }

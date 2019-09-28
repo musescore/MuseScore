@@ -71,7 +71,7 @@ PaletteWidget::PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent
       setupStyle();
       ctx->setContextProperty("mscore", qmlInterface);
 
-      setSource(QUrl("qrc:/qml/palettes/PalettesWidget.qml"));
+      setSource(QUrl(qmlSourcePrefix() + "qml/palettes/PalettesWidget.qml"));
 
       singlePaletteAction = new QAction(this);
       singlePaletteAction->setCheckable(true);
