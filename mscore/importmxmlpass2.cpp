@@ -504,33 +504,6 @@ static void setStaffTypePercussion(Part* part, Drumset* drumset)
       }
 
 //---------------------------------------------------------
-//   findDeleteStaffText
-//---------------------------------------------------------
-
-/**
- Find a non-empty staff text in \a s at \a track (which originates as MusicXML <words>).
- If found, delete it and return its text.
- */
-
-static QString findDeleteStaffText(Segment* s, int track)
-      {
-      //qDebug("findDeleteWords(s %p track %d)", s, track);
-      foreach (Element* e, s->annotations()) {
-            //qDebug("findDeleteWords e %p type %hhd track %d", e, e->type(), e->track());
-            if (e->type() != ElementType::STAFF_TEXT || e->track() < track || e->track() >= track+VOICES)
-                  continue;
-            Text* t = static_cast<Text*>(e);
-            //qDebug("findDeleteWords t %p text '%s'", t, qPrintable(t->text()));
-            QString res = t->xmlText();
-            if (res != "") {
-                  s->remove(t);
-                  return res;
-                  }
-            }
-      return "";
-      }
-
-//---------------------------------------------------------
 //   setPartInstruments
 //---------------------------------------------------------
 
@@ -574,11 +547,10 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
                               InstrumentChange* ic = new InstrumentChange(instr, score);
                               ic->setTrack(track);
 
-                              // if there is already a staff text at this tick / track,
-                              // delete it and use its text here instead of "Instrument change"
-                              // TODO: else use instrument name (if known)
-                              QString text = findDeleteStaffText(segment, track);
+                              // for text use instrument name (if known) else use "Instrument change"
+                              const QString text = mxmlInstr.name;
                               ic->setXmlText(text.isEmpty() ? "Instrument change" : text);
+                              ic->setVisible(false);
                               segment->add(ic); // note: includes part::setInstrument(instr);
 
                               // setMidiChannel() depends on setInstrument() already been done
