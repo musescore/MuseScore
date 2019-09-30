@@ -165,6 +165,8 @@ void ScoreAccessibility::currentInfoChanged()
             QString rez = e->accessibleInfo();
             if (!barsAndBeats.isEmpty())
                   rez += "; " + barsAndBeats;
+            else
+                  oldScreenReaderInfo.clear();  // force regeneration for elements with no barbeat info - see below
 
             QString staff = "";
             QString optimizedStaff = "";
@@ -187,14 +189,21 @@ void ScoreAccessibility::currentInfoChanged()
 
             statusBarLabel->setText(rez);
             QString screenReaderRez;
-            if (rez != oldStatus) {
+            if (rez != oldStatus || oldScreenReaderInfo.isEmpty()) {
+                  // status has changed since last call, or there is no existing screenreader info
+                  //
+                  // build new screenreader info
                   screenReaderRez = QString("%1%2 %3 %4").arg(e->screenReaderInfo()).arg(optimizedBarsAndBeats).arg(optimizedStaff).arg(e->accessibleExtraInfo());
                   makeReadable(screenReaderRez);
                   }
             else {
-                  // if status has not changed, we may have over-optimized screenreader info
-                  // this happens if this function is called twice within same command
-                  // so let the previous screenreader info stand
+                  // status has not changed since last call, and there is existing screenreader info
+                  //
+                  // if this function is called twice within the same command,
+                  // then status does not change between calls,
+                  // but the second call may result in too much information being optimized away for screenreader
+                  // so in these cases, let the previous screenreader info stand
+                  // (this is relevant only for elements with bar and beat info)
                   screenReaderRez = oldScreenReaderInfo;
                   }
             score->setAccessibleInfo(screenReaderRez);
