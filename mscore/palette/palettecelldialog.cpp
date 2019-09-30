@@ -50,7 +50,7 @@ void PaletteCellPropertiesDialog::fillControlsWithData()
       ui->yoffset->setValue(cell->yoffset);
       ui->scale->setValue(cell->mag);
       ui->drawStaff->setChecked(cell->drawStaff);
-      ui->name->setText(cell->name);
+      ui->name->setText(cell->translatedName());
       }
       
 PaletteCellPropertiesDialog::~PaletteCellPropertiesDialog()
@@ -74,8 +74,8 @@ void PaletteCellPropertiesDialog::drawStaffCheckBoxChanged(int state)
       
 void PaletteCellPropertiesDialog::nameChanged(const QString &text)
       {
-      isNameChanged = (text != initialName);
-      cell->name = text;
+      isNameChanged = (text != initialTranslatedName);
+      cell->name = isNameChanged ? text : initialName; // preserve old name if possible to keep translations
       // don't mark cell custom if only its name gets changed
       emit changed();
       }
@@ -145,6 +145,7 @@ void PaletteCellPropertiesDialog::setInitialProperties()
       {
       drawStaffCheckboxInitialState = cell->drawStaff ? Qt::Checked : Qt::Unchecked;
       initialName = cell->name;
+      initialTranslatedName = cell->translatedName();
       initialYOffset = cell->yoffset;
       initialXOffset = cell->xoffset;
       initialScale = cell->mag;
