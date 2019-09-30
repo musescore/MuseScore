@@ -53,6 +53,7 @@ class PaletteCellPropertiesDialog : public QDialog {
       
       int drawStaffCheckboxInitialState = 0;
       QString initialName;
+      QString initialTranslatedName;
       double initialXOffset = 0.f;
       double initialYOffset = 0.f;
       double initialScale = 0.f;

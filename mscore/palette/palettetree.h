@@ -159,6 +159,8 @@ class PalettePanel {
       const QString& name() const { return _name; }
       void setName(const QString& str) { _name = str; }
 
+      QString translatedName() const { return qApp->translate("Palette", name().toUtf8()); }
+
       QSize gridSize() const { return _gridSize; }
       void setGrid(QSize s) { _gridSize = s; }
       void setGrid(int w, int h) { _gridSize = QSize(w, h); }
