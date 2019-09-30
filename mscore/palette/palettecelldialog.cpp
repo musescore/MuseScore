@@ -68,6 +68,7 @@ void PaletteCellPropertiesDialog::drawStaffCheckBoxChanged(int state)
       {
       isDrawStaffCheckBoxChanged = (state != drawStaffCheckboxInitialState);
       cell->drawStaff = ui->drawStaff->isChecked();
+      cell->custom = true;
       emit changed();
       }
       
@@ -75,6 +76,7 @@ void PaletteCellPropertiesDialog::nameChanged(const QString &text)
       {
       isNameChanged = (text != initialName);
       cell->name = text;
+      // don't mark cell custom if only its name gets changed
       emit changed();
       }
       
@@ -83,6 +85,7 @@ void PaletteCellPropertiesDialog::xOffsetChanged(double xOffset)
       //see https://doc.qt.io/qt-5/qtglobal.html#qFuzzyCompare to clarify using 1.f below
       isXOffsetChanged = !qFuzzyCompare((1.f + xOffset), (1.f + initialXOffset));
       cell->xoffset = xOffset;
+      cell->custom = true;
       emit changed();
       }
 
@@ -91,6 +94,7 @@ void PaletteCellPropertiesDialog::yOffsetChanged(double yOffset)
       //see https://doc.qt.io/qt-5/qtglobal.html#qFuzzyCompare to clarify using 1.f below
       isYOffsetChanged = !qFuzzyCompare((1.f + yOffset), (1.f + initialYOffset));
       cell->yoffset = yOffset;
+      cell->custom = true;
       emit changed();
       }
 
@@ -99,6 +103,7 @@ void PaletteCellPropertiesDialog::scaleChanged(double scale)
       //see https://doc.qt.io/qt-5/qtglobal.html#qFuzzyCompare to clarify using 1.f below
       isScaleChanged = !qFuzzyCompare((1.f + scale), (1.f + initialScale));
       cell->mag = scale;
+      cell->custom = true;
       emit changed();
       }
 /*
@@ -143,6 +148,7 @@ void PaletteCellPropertiesDialog::setInitialProperties()
       initialYOffset = cell->yoffset;
       initialXOffset = cell->xoffset;
       initialScale = cell->mag;
+      initialCustomState = cell->custom;
       }
 
 bool PaletteCellPropertiesDialog::areInitialPropertiesChanged() const
@@ -157,6 +163,7 @@ void PaletteCellPropertiesDialog::applyInitialPropertiesToThePalette()
       cell->xoffset = initialXOffset;
       cell->yoffset = initialYOffset;
       cell->mag = initialScale;
+      cell->custom = initialCustomState;
       }
       
 } // namespace Ms
