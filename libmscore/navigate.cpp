@@ -635,7 +635,7 @@ Element* Score::nextElement()
                   }
             e = e->parent();
             }
-      return score()->firstElement();
+      return score()->lastElement();
       }
 
 //---------------------------------------------------------
@@ -760,7 +760,7 @@ Element* Score::prevElement()
                   }
             e = e->parent();
             }
-      return score()->lastElement();
+      return score()->firstElement();
       }
 
 }
