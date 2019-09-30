@@ -49,65 +49,42 @@ StyledPopup {
     implicitHeight: column.height + topPadding + bottomPadding
 
     property bool enablePaletteAnimations: false // disabled by default to avoid unnecessary "add" animations on opening this popup at first time
-    property bool pinned: false
 
     signal addElementsRequested(var mimeDataList)
-    signal pinPopupRequested(bool pin)
 
     Column {
         id: column
         width: parent.width
         spacing: 8
 
+        StyledButton {
+            id: addToPaletteButton
+            width: parent.width
 
-        Row {
-            StyledButton {
-                id: addToPaletteButton
-                width: column.width - pinButton.width
+            text: qsTr("Add to %1").arg(paletteName)
+            enabled: moreElementsPopup.paletteEditingEnabled && (masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection)
 
-                text: qsTr("Add to %1").arg(paletteName)
-                enabled: moreElementsPopup.paletteEditingEnabled && (masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection)
-
-                onClicked: {
-                    function collectMimeData(palette, selection) {
-                        const selectedList = selection.selectedIndexes;
-                        var mimeArr = [];
-                        for (var i = 0; i < selectedList.length; i++) {
-                            const mimeData = palette.paletteModel.data(selectedList[i], PaletteTreeModel.MimeDataRole);
-                            mimeArr.push(mimeData);
-                        }
-                        return mimeArr;
+            onClicked: {
+                function collectMimeData(palette, selection) {
+                    const selectedList = selection.selectedIndexes;
+                    var mimeArr = [];
+                    for (var i = 0; i < selectedList.length; i++) {
+                        const mimeData = palette.paletteModel.data(selectedList[i], PaletteTreeModel.MimeDataRole);
+                        mimeArr.push(mimeData);
                     }
-
-                    const mimeMasterPalette = collectMimeData(masterPalette, masterPaletteSelectionModel);
-                    const mimeCustomPalette = collectMimeData(customPalette, customPaletteSelectionModel);
-
-                    masterPaletteSelectionModel.clear();
-                    customPaletteSelectionModel.clear();
-
-                    if (mimeMasterPalette.length)
-                        addElementsRequested(mimeMasterPalette);
-                    if (mimeCustomPalette.length)
-                        addElementsRequested(mimeCustomPalette);
+                    return mimeArr;
                 }
-            }
 
+                const mimeMasterPalette = collectMimeData(masterPalette, masterPaletteSelectionModel);
+                const mimeCustomPalette = collectMimeData(customPalette, customPaletteSelectionModel);
 
-            StyledToolButton {
-                id: pinButton
-                height: addToPaletteButton.height
-                width: height
-                checkable: true
-                checked: moreElementsPopup.pinned
-                flat: !checked
+                masterPaletteSelectionModel.clear();
+                customPaletteSelectionModel.clear();
 
-                onCheckedChanged: moreElementsPopup.pinPopupRequested(checked)
-
-                padding: 4
-
-                contentItem: StyledIcon {
-                    source: "icons/pin.png"
-                }
+                if (mimeMasterPalette.length)
+                    addElementsRequested(mimeMasterPalette);
+                if (mimeCustomPalette.length)
+                    addElementsRequested(mimeCustomPalette);
             }
         }
 
@@ -177,6 +154,8 @@ StyledPopup {
                                     )
                                 )
                     width: parent.contentWidth
+
+                    ScrollBar.vertical: ScrollBar { enabled: masterPalette.height < masterPalette.implicitHeight }
 
                     // TODO: change settings to "hidden" model?
                     cellSize: moreElementsPopup.cellSize
@@ -262,6 +241,12 @@ StyledPopup {
             }
         }
 
+        Item {
+            // spacer item, adds extra spacing before "drag items..." text
+            width: 1
+            height: 2 - column.spacing
+        }
+
         Text {
             id: bottomText
             width: parent.width
@@ -272,6 +257,12 @@ StyledPopup {
             font.family: globalStyle.font.family
             // make this label's font slightly smaller than other popup text
             font.pointSize: globalStyle.font.pointSize * 0.8
+        }
+
+        Item {
+            // spacer item, adds extra spacing after "drag items..." text
+            width: 1
+            height: 2 - column.spacing
         }
 
         StyledButton {

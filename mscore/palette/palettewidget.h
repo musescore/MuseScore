@@ -48,6 +48,7 @@ class PaletteQmlInterface : public QObject
    signals:
       void paletteWorkspaceChanged();
       void paletteBackgroundChanged();
+      void paletteSearchRequested();
 
    public:
       PaletteQmlInterface(PaletteWorkspace* workspace, QmlNativeToolTip* t, QObject* parent = nullptr);
@@ -58,6 +59,8 @@ class PaletteQmlInterface : public QObject
 
       QColor paletteBackground() const { return _paletteBackground; }
       void setPaletteBackground(const QColor& val);
+
+      void requestPaletteSearch() { emit paletteSearchRequested(); }
 
       Q_INVOKABLE Qt::KeyboardModifiers keyboardModifiers() const { return QGuiApplication::keyboardModifiers(); }
       };
@@ -86,6 +89,8 @@ class PaletteWidget : public QmlDockWidget
    public:
       PaletteWidget(PaletteWorkspace* w, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
       PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent, Qt::WindowFlags flags = Qt::WindowFlags());
+
+      void activateSearchBox();
 
       void showEvent(QShowEvent* event) override;
       void changeEvent(QEvent* evt) override;

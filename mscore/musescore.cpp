@@ -1783,6 +1783,8 @@ MuseScore::MuseScore()
       menuDebug->addAction(a);
       a = getAction("relayout");
       menuDebug->addAction(a);
+      a = getAction("qml-reload-source");
+      menuDebug->addAction(a);
       Workspace::addMenuAndString(menuDebug, "menu-debug");
 #endif
 
@@ -1973,6 +1975,12 @@ MuseScore::~MuseScore()
             autoUpdater->cleanup();
 
       delete synti;
+
+      // A crash is possible if paletteWorkspace gets
+      // deleted before paletteWidget, so force the widget
+      // be deleted before paletteWorkspace.
+      delete paletteWidget;
+      paletteWidget = nullptr;
       }
 
 //---------------------------------------------------------
@@ -5868,29 +5876,20 @@ void MuseScore::cmd(QAction* a)
             }
       if (cmdn == "toggle-palette") {
             showPalette(a->isChecked());
-#if 0
-            PaletteBox* pb = mscore->getPaletteBox();
-            QLineEdit* sb = pb->searchBox();
             if (a->isChecked()) {
                   lastFocusWidget = QApplication::focusWidget();
-                  sb->setFocus();
-                  if (pb->noSelection())
-                        pb->setKeyboardNavigation(false);
-                  else
-                        pb->setKeyboardNavigation(true);
+                  paletteWidget->activateSearchBox();
                   }
             else {
                   if (lastFocusWidget)
                         lastFocusWidget->setFocus();
                   }
-#endif
             return;
             }
       if (cmdn == "palette-search") {
-            // TODO: use new search box, or rename command to just "palette"
             showPalette(true);
             if (paletteWidget)
-                  paletteWidget->setFocus();
+                  paletteWidget->activateSearchBox();
             return;
             }
       if (cmdn == "apply-current-palette-element") {
@@ -6447,6 +6446,20 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (cs) {
                   cs->setLayoutAll();
                   cs->update();
+                  }
+            }
+      else if (cmd == "qml-reload-source") {
+            const QList<QmlDockWidget*> qmlWidgets = findChildren<QmlDockWidget*>();
+
+            const QString oldPrefix = QmlDockWidget::qmlSourcePrefix();
+            useSourceQmlFiles = true;
+            const QString newPrefix = QmlDockWidget::qmlSourcePrefix();
+
+            getQmlUiEngine()->clearComponentCache();
+
+            for (QmlDockWidget* w : qmlWidgets) {
+                  const QString urlString = w->source().toString().replace(oldPrefix, newPrefix);
+                  w->setSource(QUrl(urlString));
                   }
             }
 #endif

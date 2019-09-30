@@ -142,6 +142,8 @@ GridView {
         drawGrid: parent.drawGrid && !parent.empty
         offsetX: parent.contentX
         offsetY: parent.contentY
+        cellWidth: parent.cellWidth
+        cellHeight: parent.cellHeight
 
         DropArea {
             id: paletteDropArea
@@ -167,7 +169,7 @@ GridView {
 
                 if (placeholder.active && placeholder.index == idx)
                     return;
-                placeholder.makePlaceholder(idx, { decoration: "#eeeeee", toolTip: "placeholder", cellActive: false, mimeData: {} });
+                placeholder.makePlaceholder(idx, { decoration: "#eeeeee", toolTip: "placeholder", accessibleText: "", cellActive: false, mimeData: {} });
             }
 
             onEntered: {
@@ -251,7 +253,7 @@ GridView {
         visible: parent.empty
         font: globalStyle.font
         text: paletteController && paletteController.canDropElements
-            ? qsTr("Drag and drop any element here")
+            ? qsTr("Drag and drop any element here\n(Use %1+Shift to add custom element from the score)").arg(Qt.platform.os === "osx" ? "Cmd" : "Ctrl")
             : qsTr("No elements")
         verticalAlignment: Text.AlignVCenter
         color: "grey"
@@ -362,7 +364,7 @@ GridView {
             onHoveredChanged: {
                 if (hovered) {
                     mscore.tooltip.item = paletteCell;
-                    mscore.tooltip.text = model.toolTip;
+                    mscore.tooltip.text = paletteCell.toolTip ? paletteCell.toolTip : "";
                 } else if (mscore.tooltip.item == paletteCell)
                     mscore.tooltip.item = null;
             }
@@ -436,17 +438,9 @@ GridView {
                 acceptedButtons: Qt.RightButton
 
                 onClicked: {
-                    if (!paletteView.paletteController.canEdit(paletteView.paletteRootIndex))
-                        return;
-
                     contextMenu.modelIndex = paletteCell.modelIndex;
-                    if (contextMenu.popup) // Menu.popup() is available since Qt 5.10 only
-                        contextMenu.popup();
-                    else {
-                        contextMenu.x = mouseX;
-                        contextMenu.y = mouseY;
-                        contextMenu.open();
-                    }
+                    contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex);
+                    contextMenu.popup();
                 }
             }
 
@@ -486,8 +480,15 @@ GridView {
     Menu {
         id: contextMenu
         property var modelIndex: null
+        property bool canEdit: true
 
         MenuItem {
+            enabled: contextMenu.canEdit
+            text: qsTr("Delete")
+            onTriggered: paletteView.paletteController.remove(contextMenu.modelIndex)
+        }
+        MenuItem {
+            enabled: contextMenu.canEdit
             text: qsTr("Properties…")
             onTriggered: paletteView.paletteController.editCellProperties(contextMenu.modelIndex)
         }

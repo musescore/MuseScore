@@ -56,6 +56,7 @@ class PalettePropertiesDialog : public QDialog {
       
       int gridCheckboxInitialState = 0;
       QString initialName;
+      QString initialTranslatedName;
       int initialWidth = 0;
       int initialHeight = 0;
       double initialOffset = 0.f;

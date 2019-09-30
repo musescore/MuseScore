@@ -71,7 +71,7 @@ PaletteWidget::PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent
       setupStyle();
       ctx->setContextProperty("mscore", qmlInterface);
 
-      setSource(QUrl("qrc:/qml/palettes/PalettesWidget.qml"));
+      setSource(QUrl(qmlSourcePrefix() + "qml/palettes/PalettesWidget.qml"));
 
       singlePaletteAction = new QAction(this);
       singlePaletteAction->setCheckable(true);
@@ -119,6 +119,16 @@ void PaletteWidget::setupStyle()
             qmlInterface->setPaletteBackground(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
       else
             qmlInterface->setPaletteBackground(QColor("#f9f9f9"));
+      }
+
+//---------------------------------------------------------
+//   PaletteWidget::activateSearchBox
+//---------------------------------------------------------
+
+void PaletteWidget::activateSearchBox()
+      {
+      ensureQmlViewFocused();
+      qmlInterface->requestPaletteSearch();
       }
 
 //---------------------------------------------------------

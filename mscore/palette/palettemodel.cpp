@@ -227,7 +227,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
             switch (role) {
                   case Qt::DisplayRole:
                   case Qt::AccessibleTextRole:
-                        return qApp->translate("Palette", pp->name().toUtf8());
+                        return pp->translatedName();
                   case VisibleRole:
                         return pp->visible();
                   case CustomRole:

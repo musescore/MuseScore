@@ -65,7 +65,7 @@ PalettePropertiesDialog::~PalettePropertiesDialog()
 
 void PalettePropertiesDialog::fillControlsWithData()
       {
-      ui->name->setText(palette->name());
+      ui->name->setText(palette->translatedName());
       const QSize grid = palette->gridSize();
       ui->cellWidth->setValue(grid.width());
       ui->cellHeight->setValue(grid.height());
@@ -95,8 +95,8 @@ void PalettePropertiesDialog::gridCheckBoxChanged(int state)
       
 void PalettePropertiesDialog::nameChanged(const QString &text)
       {
-      isNameChanged = (text != initialName);
-      palette->setName(ui->name->text());
+      isNameChanged = (text != initialTranslatedName);
+      palette->setName(isNameChanged ? ui->name->text() : initialName); // preserve old name if possible to keep translations
       emit changed();
       }
       
@@ -168,6 +168,7 @@ void PalettePropertiesDialog::setInitialProperties()
       {
       gridCheckboxInitialState = palette->drawGrid() ? Qt::Checked : Qt::Unchecked;
       initialName = palette->name();
+      initialTranslatedName = palette->translatedName();
       initialWidth = palette->gridSize().width();
       initialHeight = palette->gridSize().height();
       initialOffset = palette->yOffset();
