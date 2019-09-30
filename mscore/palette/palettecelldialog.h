@@ -56,6 +56,7 @@ class PaletteCellPropertiesDialog : public QDialog {
       double initialXOffset = 0.f;
       double initialYOffset = 0.f;
       double initialScale = 0.f;
+      bool initialCustomState = false;
       
 public:
       PaletteCellPropertiesDialog(PaletteCell* p, QWidget* parent = 0);
