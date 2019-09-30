@@ -21,6 +21,8 @@ import QtQuick 2.8
 import QtQuick.Controls 2.1
 import MuseScore.Palette 3.3
 
+import "utils.js" as Utils
+
 Item {
     id: header
 
@@ -71,7 +73,7 @@ Item {
             flat: true
             onClicked: searchTextInput.clear()
 
-            padding: 8
+            padding: 4
 
             text: qsTr("Clear search text")
 
@@ -84,7 +86,7 @@ Item {
             }
 
             contentItem: StyledIcon {
-                source: "icons/backspace.png"
+                source: "icons/clear.png"
             }
         }
     }
@@ -95,7 +97,7 @@ Item {
 
         visible: false
 
-        y: morePalettesButton.y + morePalettesButton.height
+        y: morePalettesButton.y + morePalettesButton.height + Utils.style.popupMargin
         width: parent.width
         maxHeight: paletteTree.height * 0.8
 
@@ -115,5 +117,10 @@ Item {
             if (!palettesWidget.hasFocus && !palettePopup.inMenuAction)
                 palettePopup.visible = false;
         }
+    }
+
+    Connections {
+        target: mscore
+        onPaletteSearchRequested: searchTextInput.forceActiveFocus()
     }
 }

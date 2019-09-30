@@ -298,7 +298,7 @@ AbstractPaletteController::RemoveAction UserPaletteController::showHideOrDeleteD
       msg.setText(question);
       msg.setTextFormat(Qt::PlainText);
       QPushButton* deleteButton = msg.addButton(tr("Delete permanently"), QMessageBox::DestructiveRole);
-      QPushButton* hideButton = msg.addButton(tr("Keep a copy"), QMessageBox::AcceptRole);
+      QPushButton* hideButton = msg.addButton(tr("Hide"), QMessageBox::AcceptRole);
       msg.addButton(QMessageBox::Cancel);
       msg.setDefaultButton(hideButton);
 
@@ -333,7 +333,7 @@ AbstractPaletteController::RemoveAction UserPaletteController::queryRemoveAction
                   }
 
             if (visible)
-                  return showHideOrDeleteDialog(tr("Do you want to permanently delete this custom palette cell or keep a copy in the library?"));
+                  return showHideOrDeleteDialog(tr("Do you want to hide this custom palette cell or permanently delete it?"));
             else {
                   const auto answer = QMessageBox::question(
                         nullptr,
@@ -351,7 +351,7 @@ AbstractPaletteController::RemoveAction UserPaletteController::queryRemoveAction
             }
       else {
             if (visible && custom)
-                  return showHideOrDeleteDialog(tr("Do you want to permanently delete this custom palette or keep a copy in the \"More Palettes\" list?"));
+                  return showHideOrDeleteDialog(tr("Do you want to hide this custom palette or permanently delete it?"));
             return RemoveAction::Hide;
             }
       }

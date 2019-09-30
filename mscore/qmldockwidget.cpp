@@ -27,6 +27,10 @@
 
 namespace Ms {
 
+#ifndef NDEBUG
+bool useSourceQmlFiles = false;
+#endif
+
 //---------------------------------------------------------
 //   FocusChainBreak
 //---------------------------------------------------------
@@ -190,6 +194,16 @@ QQuickView* QmlDockWidget::getView()
       }
 
 //---------------------------------------------------------
+//   QmlDockWidget::ensureQmlViewFocused
+//---------------------------------------------------------
+
+void QmlDockWidget::ensureQmlViewFocused()
+      {
+      if (_view && !_view->activeFocusItem())
+            widget()->setFocus();
+      }
+
+//---------------------------------------------------------
 //   QmlDockWidget::setupStyle
 //---------------------------------------------------------
 
@@ -203,6 +217,23 @@ void QmlDockWidget::setupStyle()
 
       qmlStyle = new QmlStyle(QApplication::palette(), this);
       rootContext()->setContextProperty("globalStyle", qmlStyle);
+      }
+
+//---------------------------------------------------------
+//   QmlDockWidget::qmlSourcePrefix
+//---------------------------------------------------------
+
+QString QmlDockWidget::qmlSourcePrefix()
+      {
+#ifndef NDEBUG
+      if (useSourceQmlFiles) {
+            const QFileInfo fi(__FILE__);
+            const QDir mscoreDir = fi.absoluteDir();
+            return QUrl::fromLocalFile(mscoreDir.absolutePath()).toString() + '/';
+            }
+#endif
+      static const QString qmlResourcesRoot("qrc:/");
+      return qmlResourcesRoot;
       }
 
 //---------------------------------------------------------
@@ -220,6 +251,15 @@ void QmlDockWidget::setSource(const QUrl& url)
       }
 
 //---------------------------------------------------------
+//   QmlDockWidget::source
+//---------------------------------------------------------
+
+QUrl QmlDockWidget::source() const
+      {
+      return _view ? _view->source() : QUrl();
+      }
+
+//---------------------------------------------------------
 //   QmlDockWidget::changeEvent
 //---------------------------------------------------------
 
@@ -234,5 +274,18 @@ void QmlDockWidget::changeEvent(QEvent* evt)
                   break;
             }
       }
-}
 
+//---------------------------------------------------------
+//   QmlDockWidget::resizeEvent
+//---------------------------------------------------------
+
+void QmlDockWidget::resizeEvent(QResizeEvent* evt)
+      {
+      QDockWidget::resizeEvent(evt);
+      // update() call prevents QML content from being drawn
+      // at incorrect position when maximizing/demaximizing
+      // MuseScore window (Qt 5.9 only?)
+      if (_view)
+            _view->update();
+      }
+}

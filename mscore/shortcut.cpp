@@ -3806,6 +3806,16 @@ Shortcut Shortcut::_sc[] = {
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
          },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "qml-reload-source",
+         "Reload QML code",
+         "Reload QML code",
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
 #endif
       };
 

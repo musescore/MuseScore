@@ -22,9 +22,11 @@ import QtQuick.Controls 2.0
 
 Canvas {
     property bool drawGrid: false
-    readonly property real verticalGridWidth: parent.stretchWidth ? (width - (width % parent.cellWidth)) : width
+    readonly property real verticalGridWidth: parent.stretchWidth ? (width - (width % cellWidth)) : width
     property real offsetX: 0.
     property real offsetY: 0.
+    property int cellWidth: 24
+    property int cellHeight: 24
 
     property color background: mscore.paletteBackground
 
@@ -48,22 +50,32 @@ Canvas {
             requestPaint();
     }
 
+    onCellWidthChanged: {
+        if (visible && drawGrid)
+            requestPaint();
+    }
+
+    onCellHeightChanged: {
+        if (visible && drawGrid)
+            requestPaint();
+    }
+
     function doDrawGrid(ctx) {
         ctx.lineWidth = 1;
         ctx.strokeStyle = "gray";
         ctx.beginPath();
 
-        const offX = offsetX % parent.cellWidth;
-        const ncols = Math.ceil((verticalGridWidth - offX) / parent.cellWidth) + (offX ? 1 : 0);
+        const offX = offsetX % cellWidth;
+        const ncols = Math.ceil((verticalGridWidth - offX) / cellWidth) + (offX ? 1 : 0);
         for (var i = 1; i < ncols; ++i) {
-            const x = i * parent.cellWidth - offX;
+            const x = i * cellWidth - offX;
             ctx.moveTo(x, 0);
             ctx.lineTo(x, height);
         }
-        const offY = offsetY % parent.cellHeight;
-        const nrows = Math.ceil((height - offY) / parent.cellHeight) + (offY ? 1 : 0);
+        const offY = offsetY % cellHeight;
+        const nrows = Math.ceil((height - offY) / cellHeight) + (offY ? 1 : 0);
         for (var i = 1; i < nrows; ++i) {
-            const y = i * parent.cellHeight - offY;
+            const y = i * cellHeight - offY;
             ctx.moveTo(0, y);
             ctx.lineTo(width, y);
         }
