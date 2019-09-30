@@ -23,6 +23,7 @@
 #include "musescore.h"
 #include "navigator.h"
 #include "preferences.h"
+#include "scoreaccessibility.h"
 #include "scoretab.h"
 #include "seq.h"
 #include "splitstaff.h"
@@ -2143,6 +2144,25 @@ void ScoreView::cmd(const char* s)
             }
       else if (cmd == "last-element") {
             cmdGotoElement(score()->lastElement(false));
+            }
+      else if (cmd == "get-location") {
+            // get current selection
+            Element* e = score()->selection().element();
+            if (!e) {
+                  // no current selection - restore lost selection
+                  e = score()->selection().currentCR();
+                  if (e && e->isChord())
+                        e = toChord(e)->upNote();
+                  }
+            if (!e) {
+                  // no current or last selection - fall back to first element
+                  e = score()->firstElement(false);
+                  }
+            // TODO: find & read current key & time signatures
+            if (e) {
+                  ScoreAccessibility::instance()->clearAccessibilityInfo();
+                  cmdGotoElement(e);
+                  }
             }
       else if (cmd == "rest" || cmd == "rest-TAB")
             cmdEnterRest();
