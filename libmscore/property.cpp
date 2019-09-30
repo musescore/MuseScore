@@ -278,7 +278,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::SIZE_SPATIUM_DEPENDENT,  false, "sizeIsSpatiumDependent",P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "spatium dependent font") },
       { Pid::ALIGN,                   false, "align",                 P_TYPE::ALIGN,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "align")            },
       { Pid::SYSTEM_FLAG,             false, "systemFlag",            P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "system flag")      },
-      { Pid::BEGIN_TEXT,              false, "beginText",             P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin text")       },
+      { Pid::BEGIN_TEXT,              true,  "beginText",             P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin text")       },
 
       { Pid::BEGIN_TEXT_ALIGN,        false, "beginTextAlign",        P_TYPE::ALIGN,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin text align") },
       { Pid::BEGIN_TEXT_PLACE,        false, "beginTextPlace",        P_TYPE::TEXT_PLACE,          DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin text place") },
@@ -289,14 +289,14 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::BEGIN_FONT_STYLE,        false, "beginFontStyle",        P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin font style")  },
       { Pid::BEGIN_TEXT_OFFSET,       false, "beginTextOffset",       P_TYPE::POINT_SP,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin text offset")  },
 
-      { Pid::CONTINUE_TEXT,           false, "continueText",          P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue text")    },
+      { Pid::CONTINUE_TEXT,           true,  "continueText",          P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue text")    },
       { Pid::CONTINUE_TEXT_ALIGN,     false, "continueTextAlign",     P_TYPE::ALIGN,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue text align") },
       { Pid::CONTINUE_TEXT_PLACE,     false, "continueTextPlace",     P_TYPE::TEXT_PLACE,          DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue text place") },
       { Pid::CONTINUE_FONT_FACE,      false, "continueFontFace",      P_TYPE::FONT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue font face") },
       { Pid::CONTINUE_FONT_SIZE,      false, "continueFontSize",      P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue font size") },
       { Pid::CONTINUE_FONT_STYLE,     false, "continueFontStyle",     P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue font style") },
       { Pid::CONTINUE_TEXT_OFFSET,    false, "continueTextOffset",    P_TYPE::POINT_SP,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue text offset") },
-      { Pid::END_TEXT,                false, "endText",               P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "end text")         },
+      { Pid::END_TEXT,                true,  "endText",               P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "end text")         },
 
       { Pid::END_TEXT_ALIGN,          false, "endTextAlign",          P_TYPE::ALIGN,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "end text align")   },
       { Pid::END_TEXT_PLACE,          false, "endTextPlace",          P_TYPE::TEXT_PLACE,          DUMMY_QT_TRANSLATE_NOOP("propertyName", "end text place")   },
