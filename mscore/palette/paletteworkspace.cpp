@@ -736,6 +736,18 @@ bool PaletteWorkspace::resetPalette(const QModelIndex& index)
       }
 
 //---------------------------------------------------------
+//   PaletteWorkspace::setUserPaletteTree
+//---------------------------------------------------------
+
+void PaletteWorkspace::setUserPaletteTree(std::unique_ptr<PaletteTree> tree)
+      {
+      if (userPalette)
+            userPalette->setPaletteTree(std::move(tree));
+      else
+            userPalette = new PaletteTreeModel(std::move(tree), /* parent */ this);
+      }
+
+//---------------------------------------------------------
 //   PaletteWorkspace::write
 //---------------------------------------------------------
 
@@ -757,10 +769,7 @@ bool PaletteWorkspace::read(XmlReader& e)
       if (!tree->read(e))
             return false;
 
-      if (userPalette)
-            userPalette->setPaletteTree(std::move(tree));
-      else
-            userPalette = new PaletteTreeModel(std::move(tree), /* parent */ this);
+      setUserPaletteTree(std::move(tree));
 
       return true;
       }

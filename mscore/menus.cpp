@@ -87,6 +87,7 @@
 
 #include "palette/palettetree.h"
 #include "palette/palettewidget.h"
+#include "palette/paletteworkspace.h"
 #include "qml/msqmlengine.h"
 
 namespace Ms {
@@ -2877,33 +2878,35 @@ PalettePanel* MuseScore::newFretboardDiagramPalettePanel()
 
 void MuseScore::setDefaultPalette()
       {
-      mscore->getPaletteBox();
-      paletteBox->clear();
-      paletteBox->addPalette(newClefsPalette(true));
-      paletteBox->addPalette(newKeySigPalette());
-      paletteBox->addPalette(newTimePalette());
-      paletteBox->addPalette(newBracketsPalette());
-      paletteBox->addPalette(newAccidentalsPalette(true));
-      paletteBox->addPalette(newArticulationsPalette());
-      paletteBox->addPalette(newOrnamentsPalette());
-      paletteBox->addPalette(newBreathPalette());
-      paletteBox->addPalette(newGraceNotePalette());
-      paletteBox->addPalette(newNoteHeadsPalette());
-      paletteBox->addPalette(newLinesPalette());
-      paletteBox->addPalette(newBarLinePalette());
-      paletteBox->addPalette(newArpeggioPalette());
-      paletteBox->addPalette(newTremoloPalette());
-      paletteBox->addPalette(newTextPalette(true));
-      paletteBox->addPalette(newTempoPalette(true));
-      paletteBox->addPalette(newDynamicsPalette(true));
-      paletteBox->addPalette(newFingeringPalette());
-      paletteBox->addPalette(newRepeatsPalette());
-      paletteBox->addPalette(newFretboardDiagramPalette());
-      paletteBox->addPalette(newAccordionPalette());
-      paletteBox->addPalette(newBagpipeEmbellishmentPalette());
-      paletteBox->addPalette(newBreaksPalette());
-      paletteBox->addPalette(newFramePalette());
-      paletteBox->addPalette(newBeamPalette());
+      std::unique_ptr<PaletteTree> defaultPalette(new PaletteTree);
+
+      defaultPalette->append(newClefsPalettePanel(true));
+      defaultPalette->append(newKeySigPalettePanel());
+      defaultPalette->append(newTimePalettePanel());
+      defaultPalette->append(newBracketsPalettePanel());
+      defaultPalette->append(newAccidentalsPalettePanel(true));
+      defaultPalette->append(newArticulationsPalettePanel());
+      defaultPalette->append(newOrnamentsPalettePanel());
+      defaultPalette->append(newBreathPalettePanel());
+      defaultPalette->append(newGraceNotePalettePanel());
+      defaultPalette->append(newNoteHeadsPalettePanel());
+      defaultPalette->append(newLinesPalettePanel());
+      defaultPalette->append(newBarLinePalettePanel());
+      defaultPalette->append(newArpeggioPalettePanel());
+      defaultPalette->append(newTremoloPalettePanel());
+      defaultPalette->append(newTextPalettePanel(true));
+      defaultPalette->append(newTempoPalettePanel(true));
+      defaultPalette->append(newDynamicsPalettePanel(true));
+      defaultPalette->append(newFingeringPalettePanel());
+      defaultPalette->append(newRepeatsPalettePanel());
+      defaultPalette->append(newFretboardDiagramPalettePanel());
+      defaultPalette->append(newAccordionPalettePanel());
+      defaultPalette->append(newBagpipeEmbellishmentPalettePanel());
+      defaultPalette->append(newBreaksPalettePanel());
+      defaultPalette->append(newFramePalettePanel());
+      defaultPalette->append(newBeamPalettePanel());
+
+      mscore->getPaletteWorkspace()->setUserPaletteTree(std::move(defaultPalette));
       }
 
 //---------------------------------------------------------
