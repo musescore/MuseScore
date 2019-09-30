@@ -825,7 +825,7 @@ bool MuseScore::importExtension(QString path)
             if (!wsList.isEmpty()) {
                   Workspace::refreshWorkspaces();
                   emit workspacesChanged();
-                  paletteBox->selectWorkspace(wsList.last().absoluteFilePath());
+                  changeWorkspace(Workspace::workspaces().last());
                   }
             }
       return true;
@@ -889,9 +889,22 @@ bool MuseScore::uninstallExtension(QString extensionId)
       mscore->reloadInstrumentTemplates();
       mscore->updateInstrumentDialog();
       if (refreshWorkspaces) {
+            const auto& curWorkspaceName = Workspace::currentWorkspace->name();
             Workspace::refreshWorkspaces();
             emit workspacesChanged();
-            paletteBox->selectWorkspace(-1);
+            auto workspaces = Workspace::workspaces();
+            //If current worksapce is alive, do nothing
+            //Select first available workspace in the list otherwise
+            bool curWorkspaceDisappeared = true;
+            for (auto workspace : workspaces) {
+                  if (workspace->name() == curWorkspaceName) {
+                        curWorkspaceDisappeared = false;
+                        break;
+                        }
+                  }
+            if (curWorkspaceDisappeared)
+                  changeWorkspace(Workspace::workspaces().last());
+            //paletteBox->selectWorkspace(-1);
             }
       return true;
       }
