@@ -537,6 +537,7 @@ Element* Score::nextElement()
       while (e) {
             switch (e->type()) {
                   case ElementType::NOTE:
+                  case ElementType::REST:
                   case ElementType::CHORD: {
                         Element* next = e->nextElement();
                         if (next)

@@ -1506,7 +1506,9 @@ Element* Segment::nextElement(int activeStaff)
             case ElementType::STAFF_STATE:
             case ElementType::INSTRUMENT_CHANGE:
             case ElementType::STICKING: {
-                  Element* next = nextAnnotation(e);
+                  Element* next = nullptr;
+                  if (e->parent() == this)
+                        next = nextAnnotation(e);
                   if (next)
                         return next;
                   else {
@@ -1624,7 +1626,9 @@ Element* Segment::prevElement(int activeStaff)
             case ElementType::STAFF_STATE:
             case ElementType::INSTRUMENT_CHANGE:
             case ElementType::STICKING: {
-                  Element* prev = prevAnnotation(e);
+                  Element* prev = nullptr;
+                  if (e->parent() == this)
+                        prev = prevAnnotation(e);
                   if (prev)
                         return prev;
                   if (notChordRestType(this)) {

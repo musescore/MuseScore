@@ -4479,6 +4479,12 @@ void Score::undoAddElement(Element* element)
                                           }
                                     }
                               }
+                        else if (ne->isFretDiagram()) {
+                              // update track of child harmony
+                              FretDiagram* fd = toFretDiagram(ne);
+                              if (fd->harmony())
+                                    fd->harmony()->setTrack(ntrack);
+                              }
 
                         undo(new AddElement(ne));
                         // transpose harmony if necessary
