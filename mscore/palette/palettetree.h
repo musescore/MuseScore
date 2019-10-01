@@ -211,6 +211,8 @@ class PalettePanel {
       Type type() const { return _type; }
       void setType(Type t) { _type = t; }
 
+      Type contentType() const;
+
       void retranslate();
       };
 
