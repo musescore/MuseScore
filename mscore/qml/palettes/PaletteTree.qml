@@ -226,6 +226,7 @@ ListView {
             }
 
             highlighted: activeFocus && !selected
+            opacity: enabled ? 1 : 0.3
 
             property bool popupExpanded: paletteTree.expandedPopupIndex == modelIndex
             function togglePopup() {
