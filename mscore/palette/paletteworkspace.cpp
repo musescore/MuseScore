@@ -344,7 +344,7 @@ AbstractPaletteController::RemoveAction UserPaletteController::queryRemoveAction
 
                   if (answer == QMessageBox::Yes)
                         return RemoveAction::DeletePermanently;
-                  return RemoveAction::NoAction;
+                  //return RemoveAction::NoAction;
                   }
 
             return RemoveAction::NoAction;
@@ -576,6 +576,7 @@ FilterPaletteTreeModel* PaletteWorkspace::poolPaletteModel(const QModelIndex& in
 
 AbstractPaletteController* PaletteWorkspace::poolPaletteController(FilterPaletteTreeModel* poolPaletteModel, const QModelIndex& rootIndex)
       {
+      Q_UNUSED(rootIndex);
       UserPaletteController* c = new UserPaletteController(poolPaletteModel, userPalette);
       c->setVisible(false);
       c->setCustom(false);

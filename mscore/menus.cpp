@@ -1177,7 +1177,7 @@ void MuseScore::showPalette(bool visible)
             updateIcons();
 
             paletteWidget = new PaletteWidget(getPaletteWorkspace(), getQmlUiEngine(), this);
-            QAction* a = getAction("toggle-palette");
+            a = getAction("toggle-palette");
             connect(paletteWidget, &PaletteWidget::visibilityChanged, a, &QAction::setChecked);
             addDockWidget(Qt::LeftDockWidgetArea, paletteWidget);
             }
@@ -2963,8 +2963,8 @@ void MuseScore::addTempo()
       Measure* m = tt->findMeasure();
       if (m && m->hasMMRest() && tt->links()) {
             Measure* mmRest = m->mmRest();
-            for (ScoreElement* se1 : *tt->links()) {
-                  TempoText* tt1 = toTempoText(se1);
+            for (ScoreElement* se : *tt->links()) {
+                  TempoText* tt1 = toTempoText(se);
                   if (tt != tt1 && tt1->findMeasure() == mmRest) {
                         tt = tt1;
                         break;

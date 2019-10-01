@@ -29,8 +29,8 @@ namespace Ms {
 //   WorkspaceComboBox
 //---------------------------------------------------------
 
-WorkspaceComboBox::WorkspaceComboBox(MuseScore* mscore, QWidget* parent)
-   : QComboBox(parent), _mscore(mscore)
+WorkspaceComboBox::WorkspaceComboBox(MuseScore* mScore, QWidget* parent)
+   : QComboBox(parent), _mscore(mScore)
       {
       retranslate();
       connect(_mscore, &MuseScore::workspacesChanged, this, &WorkspaceComboBox::updateWorkspaces);
