@@ -42,8 +42,6 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/slur.h"
-#include "paletteBoxButton.h"
-#include "palettebox.h"
 #include "shortcut.h"
 #include "tourhandler.h"
 #include "script/recorderwidget.h"
@@ -124,15 +122,6 @@ bool Palette::filter(const QString& text)
       filterActive = false;
       setMouseTracking(true);
       QString t = text.toLower();
-      if (t == "") {
-            mscore->getPaletteBox()->setKeyboardNavigation(false);
-            for (Palette* p : mscore->getPaletteBox()->palettes()) {
-                  if (p->getCurrentIdx() != -1) {
-                        p->setCurrentIdx(-1);
-                        p->update();
-                        }
-                  }
-            }
       bool res = true;
       dragCells.clear();
       // if palette name is searched for, display all elements in the palette
@@ -358,11 +347,6 @@ void Palette::mousePressEvent(QMouseEvent* ev)
       PaletteCell* cell = cellAt(dragIdx);
       if (cell && (cell->tag == "ShowMore"))
             emit displayMore(_name);
-      if (mscore->getPaletteBox()->getKeyboardNavigation()) {
-            PaletteBox* pb = mscore->getPaletteBox();
-            pb->mousePressEvent(ev, this);
-            update();
-            }
       }
 
 //---------------------------------------------------------
@@ -371,11 +355,6 @@ void Palette::mousePressEvent(QMouseEvent* ev)
 
 void Palette::mouseMoveEvent(QMouseEvent* ev)
       {
-      PaletteBox* pb = mscore->getPaletteBox();
-      if (pb->getKeyboardNavigation()) {
-            ev->ignore();
-            return;
-            }
       if ((currentIdx != -1) && (dragIdx == currentIdx) && (ev->buttons() & Qt::LeftButton)
          && (ev->pos() - dragStartPosition).manhattanLength() > QApplication::startDragDistance())
             {
@@ -875,8 +854,7 @@ void Palette::leaveEvent(QEvent*)
       {
       if (currentIdx != -1) {
             QRect r = idxRect(currentIdx);
-            PaletteBox* pb = mscore->getPaletteBox();
-            if (!pb->getKeyboardNavigation() && !(QGuiApplication::keyboardModifiers() & Qt::ShiftModifier))
+            if (!(QGuiApplication::keyboardModifiers() & Qt::ShiftModifier))
                   currentIdx = -1;
             update(r);
             }
@@ -887,9 +865,6 @@ void Palette::leaveEvent(QEvent*)
 //---------------------------------------------------------
 void Palette::nextPaletteElement()
       {
-      PaletteBox* pb = mscore->getPaletteBox();
-      if (!pb->getKeyboardNavigation())
-            return;
       int i = currentIdx;
       if (i == -1)
             return;
@@ -910,9 +885,6 @@ void Palette::nextPaletteElement()
 
 void Palette::prevPaletteElement()
       {
-      PaletteBox* pb = mscore->getPaletteBox();
-      if (!pb->getKeyboardNavigation())
-            return;
       int i = currentIdx;
       if (i == -1)
             return;
@@ -1234,9 +1206,8 @@ QPixmap Palette::pixmap(int paletteIdx) const
 
 bool Palette::event(QEvent* ev)
       {
-      PaletteBox* pb = mscore->getPaletteBox();
       // disable mouse hover when keyboard navigation is enabled
-      if (filterActive && pb->getKeyboardNavigation() && (ev->type() == QEvent::MouseMove || ev->type() == QEvent::ToolTip
+      if (filterActive && (ev->type() == QEvent::MouseMove || ev->type() == QEvent::ToolTip
           || ev->type() == QEvent::WindowDeactivate)) {
             return true;
             }

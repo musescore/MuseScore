@@ -35,6 +35,7 @@ class PaletteQmlInterface : public QObject
       {
       Q_OBJECT
 
+      Q_PROPERTY(bool palettesEnabled READ palettesEnabled NOTIFY palettesEnabledChanged)
       Q_PROPERTY(Ms::PaletteWorkspace* paletteWorkspace READ paletteWorkspace WRITE setPaletteWorkspace NOTIFY paletteWorkspaceChanged)
       Q_PROPERTY(Ms::QmlNativeToolTip* tooltip READ getTooltip)
       Q_PROPERTY(QColor paletteBackground READ paletteBackground NOTIFY paletteBackgroundChanged)
@@ -42,16 +43,18 @@ class PaletteQmlInterface : public QObject
       PaletteWorkspace* w;
       QmlNativeToolTip* tooltip;
       QColor _paletteBackground;
+      bool _palettesEnabled;
 
       QmlNativeToolTip* getTooltip() { return tooltip; }
 
    signals:
+      void palettesEnabledChanged();
       void paletteWorkspaceChanged();
       void paletteBackgroundChanged();
       void paletteSearchRequested();
 
    public:
-      PaletteQmlInterface(PaletteWorkspace* workspace, QmlNativeToolTip* t, QObject* parent = nullptr);
+      PaletteQmlInterface(PaletteWorkspace* workspace, QmlNativeToolTip* t, bool enabled, QObject* parent = nullptr);
 
       PaletteWorkspace* paletteWorkspace() { return w; }
       const PaletteWorkspace* paletteWorkspace() const { return w; }
@@ -59,6 +62,9 @@ class PaletteQmlInterface : public QObject
 
       QColor paletteBackground() const { return _paletteBackground; }
       void setPaletteBackground(const QColor& val);
+
+      bool palettesEnabled() const { return _palettesEnabled; }
+      void setPalettesEnabled(bool val);
 
       void requestPaletteSearch() { emit paletteSearchRequested(); }
 

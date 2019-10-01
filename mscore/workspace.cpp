@@ -26,7 +26,6 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "preferences.h"
 #include "palette.h"
-#include "palettebox.h"
 #include "palette/paletteworkspace.h"
 #include "extension.h"
 
@@ -36,9 +35,6 @@ namespace Ms {
 bool Workspace::workspacesRead = false;
 //std::unordered_map<std::string, QVariant> Workspace::localPreferences {};
 Workspace* Workspace::currentWorkspace = nullptr;
-
-// DEBUG
-bool Workspace::useModelViewPalettes = true;
 
 QList<Workspace*> Workspace::_workspaces {};
 
@@ -100,8 +96,6 @@ void MuseScore::showWorkspaceMenu()
       menuWorkspaces->addAction(a);
 
       a = new QAction(tr("Undo Changes"), this);
-      if (!Workspace::useModelViewPalettes) // new palettes accept changes by default
-            a->setDisabled(Workspace::currentWorkspace->readOnly());
       connect(a, SIGNAL(triggered()), SLOT(undoWorkspace()));
       menuWorkspaces->addAction(a);
       }
@@ -141,8 +135,6 @@ void MuseScore::deleteWorkspace()
       QFile f(workspace->path());
       f.remove();
       delete workspace;
-      PaletteBox* pb = mscore->getPaletteBox();
-      pb->clear();
       Workspace::currentWorkspace = Workspace::workspaces().first();
       changeWorkspace(Workspace::currentWorkspace);
       updateIcons();
@@ -314,14 +306,8 @@ void Workspace::write()
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       xml.stag("Workspace");
       // xml.tag("name", _name);
-      if (useModelViewPalettes) {
-            const PaletteWorkspace* w = mscore->getPaletteWorkspace();
-            w->write(xml);
-            }
-      else {
-            PaletteBox* pb = mscore->getPaletteBox();
-            pb->write(xml);
-            }
+      const PaletteWorkspace* w = mscore->getPaletteWorkspace();
+      w->write(xml);
 
       // write toolbar settings
       if (saveToolbars) {
@@ -624,20 +610,8 @@ void Workspace::read(XmlReader& e)
             if (tag == "name")
                   e.readElementText();
             else if (tag == "PaletteBox") {
-                  if (useModelViewPalettes) {
-                        PaletteWorkspace* w = mscore->getPaletteWorkspace();
-                        w->read(e);
-                        }
-                  else {
-                        PaletteBox* paletteBox = mscore->getPaletteBox();
-                        paletteBox->clear();
-                        paletteBox->read(e);
-                        QList<Palette*> pl = paletteBox->palettes();
-                        foreach (Palette* p, pl) {
-                              p->setSystemPalette(_readOnly);
-                              connect(paletteBox, SIGNAL(changed()), SLOT(setDirty()));
-                              }
-                        }
+                  PaletteWorkspace* w = mscore->getPaletteWorkspace();
+                  w->read(e);
                   }
             else if (tag == "Toolbar") {
                   saveToolbars = true;
@@ -976,27 +950,16 @@ void Workspace::save()
       if (!saveToolbars)
             writeGlobalToolBar();
 
-      if (useModelViewPalettes) {
-            if (_readOnly) {
-                  PaletteWorkspace* pw = mscore->getPaletteWorkspace();
-                  if (pw->paletteChanged()) {
-                        const QString customizedWorkspaceName(name() + "__edited"); // TODO: ?
-                        Workspace::currentWorkspace = createNewWorkspace(customizedWorkspaceName);
-                        mscore->changeWorkspace(customizedWorkspaceName); // HACK: just to get that name reflected in preferences...
-                        }
-                  return;
+      if (_readOnly) {
+            PaletteWorkspace* pw = mscore->getPaletteWorkspace();
+            if (pw->paletteChanged()) { // TODO: use Workspace::dirty instead
+                  const QString customizedWorkspaceName(name() + "__edited"); // TODO: ?
+                  Workspace::currentWorkspace = createNewWorkspace(customizedWorkspaceName);
+                  mscore->changeWorkspace(customizedWorkspaceName); // HACK: just to get that name reflected in preferences...
                   }
-            write();
+            return;
             }
-      else {
-            if (_readOnly)
-                  return;
-
-            PaletteBox* pb = mscore->getPaletteBox();
-            if (pb)
-                  write();
-            }
-
+      write();
       }
 
 //---------------------------------------------------------
@@ -1107,16 +1070,6 @@ Workspace* Workspace::createNewWorkspace(const QString& name)
       w->setDirty(false);
       w->setReadOnly(false);
       w->write();
-
-      // all palettes in new workspace are editable
-
-      PaletteBox* paletteBox = mscore->getPaletteBox();
-      QList<Palette*> pl = paletteBox->palettes();
-      for (Palette* p : pl) {
-            p->setSystemPalette(false);
-            for (int i = 0; i < p->size(); ++i)
-                  p->setCellReadOnly(i, false);
-            }
 
       _workspaces.append(w);
       return w;

@@ -36,6 +36,8 @@ Item {
     implicitHeight: 4 * palettesWidgetHeader.implicitHeight
     implicitWidth: paletteTree.implicitWidth
 
+    enabled: mscore.palettesEnabled
+
     FocusChainBreak {}
 
     PalettesWidgetHeader {
