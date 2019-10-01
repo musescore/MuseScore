@@ -243,6 +243,8 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                   // TODO showMore?
                   case PaletteTypeRole:
                         return QVariant::fromValue(pp->type());
+                  case PaletteContentTypeRole:
+                        return QVariant::fromValue(pp->contentType());
                   }
             return QVariant();
             }

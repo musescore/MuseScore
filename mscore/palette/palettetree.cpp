@@ -840,6 +840,24 @@ PalettePanel::Type PalettePanel::guessType() const
       }
 
 //---------------------------------------------------------
+//   PalettePanel::contentType
+///   Returns palette type if it is defined or deduces it
+///   from the palette content for custom palettes.
+//---------------------------------------------------------
+
+PalettePanel::Type PalettePanel::contentType() const
+      {
+      Type t = type();
+      if (t == Type::Unknown || t == Type::Custom)
+            t = guessType();
+
+      if (t == Type::Unknown || t == Type::Custom)
+            return Type::Clef; // if no type can be deduced, use Clef type by default
+
+      return t;
+      }
+
+//---------------------------------------------------------
 //   PalettePanel::retranslate
 //---------------------------------------------------------
 
