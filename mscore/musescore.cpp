@@ -14,7 +14,6 @@
 #include "network/loginmanager.h"
 #include "uploadscoredialog.h"
 #include <QStyleFactory>
-#include "palettebox.h"
 #include "config.h"
 #include "musescore.h"
 #include "scoreview.h"
@@ -36,7 +35,6 @@
 #include "mixer.h"
 #include "selectionwindow.h"
 #include "palette.h"
-#include "palettebox.h"
 #include "palette/palettemodel.h"
 #include "palette/palettewidget.h"
 #include "palette/paletteworkspace.h"
@@ -904,7 +902,6 @@ bool MuseScore::uninstallExtension(QString extensionId)
                   }
             if (curWorkspaceDisappeared)
                   changeWorkspace(Workspace::workspaces().last());
-            //paletteBox->selectWorkspace(-1);
             }
       return true;
       }
@@ -2323,58 +2320,6 @@ void MuseScore::updatePaletteBeamMode(bool unselect)
       {
       if (paletteWorkspace)
             paletteWorkspace->updateCellsState(cs->selection(), unselect);
-#if 0 // old palettes code
-      for (Palette* p : paletteBox->palettes()) {
-            if (p->name() == "Beam Properties") {
-                  if (unselect) {
-                        p->setSelected(-1);
-                        p->update();
-                        return;
-                        }
-                  const Selection sel = cs->selection();
-                  const ChordRest* cr = sel.cr();
-                  if (sel.isSingle() && cr) {
-                        Beam::Mode bm = cr->beamMode();
-                        IconType type;
-                        switch (bm) {
-                        case Beam::Mode::BEGIN:
-                              type = IconType::SBEAM;
-                              break;
-                        case Beam::Mode::MID:
-                              type = IconType::MBEAM;
-                              break;
-                        case Beam::Mode::NONE:
-                              type = IconType::NBEAM;
-                              break;
-                        case Beam::Mode::BEGIN32:
-                              type = IconType::BEAM32;
-                              break;
-                        case Beam::Mode::BEGIN64:
-                              type = IconType::BEAM64;
-                              break;
-                        case Beam::Mode::AUTO:
-                              type = IconType::AUTOBEAM;
-                              break;
-                        default:
-                              p->setSelected(-1);
-                              p->update();
-                              return;
-                        }
-                        for (int i = 0; i < p->size(); ++i) {
-                              if (toIcon(p->element(i))->iconType() == type) {
-                                    p->setSelected(i);
-                                    p->update();
-                                    return;
-                                    }
-                              }
-                  }
-                  else {
-                        p->setSelected(-1);
-                        }
-                  p->update();
-                  }
-            }
-#endif
       }
 
 //---------------------------------------------------------
@@ -4000,8 +3945,7 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                               }
 
                         QWidget* w = static_cast<QWidget*>(obj);
-                        if(getPaletteBox()->isAncestorOf(w) ||
-                           inspector()->isAncestorOf(w) ||
+                        if (inspector()->isAncestorOf(w) ||
                            (selectionWindow && selectionWindow->isAncestorOf(w))) {
                               activateWindow();
                               focusScoreView();
@@ -4410,8 +4354,8 @@ void MuseScore::changeState(ScoreState val)
                   qFatal("MuseScore::changeState: illegal state %d", val);
                   break;
             }
-      if (paletteBox)
-            paletteBox->setDisabled(val == STATE_PLAY || val == STATE_DISABLED);
+      if (paletteWidget)
+            paletteWidget->setDisabled(val == STATE_PLAY || val == STATE_DISABLED);
       if (selectionWindow)
             selectionWindow->setDisabled(val == STATE_PLAY || val == STATE_DISABLED);
       QAction* a = getAction("note-input");
@@ -4507,7 +4451,7 @@ void MuseScore::writeSettings()
       MuseScore::saveGeometry(this);
 
       settings.beginGroup("MainWindow");
-      settings.setValue("showPanel", paletteBox && paletteBox->isVisible());
+      settings.setValue("showPanel", paletteWidget && paletteWidget->isVisible());
       settings.setValue("showInspector", _inspector && _inspector->isVisible());
       settings.setValue("showPianoKeyboard", _pianoTools && _pianoTools->isVisible());
       settings.setValue("showSelectionWindow", selectionWindow && selectionWindow->isVisible());
@@ -5507,23 +5451,6 @@ PaletteWorkspace* MuseScore::getPaletteWorkspace()
       }
 
 //---------------------------------------------------------
-//   getPaletteBox
-//---------------------------------------------------------
-
-PaletteBox* MuseScore::getPaletteBox()
-      {
-      if (paletteBox == 0) {
-            paletteBox = new PaletteBox(this);
-#if 0
-            QAction* a = getAction("toggle-palette");
-            connect(paletteBox, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
-            addDockWidget(Qt::LeftDockWidgetArea, paletteBox);
-#endif
-            }
-      return paletteBox;
-      }
-
-//---------------------------------------------------------
 //   midiNoteReceived
 //---------------------------------------------------------
 
@@ -5893,13 +5820,8 @@ void MuseScore::cmd(QAction* a)
             return;
             }
       if (cmdn == "apply-current-palette-element") {
-            PaletteBox* pb = getPaletteBox();
-            for (Palette* p : pb->palettes()) {
-                  if (p->getCurrentIdx() != -1) {
-                        p->applyPaletteElement();
-                        break;
-                        }
-                  }
+            if (paletteWidget)
+                  paletteWidget->applyCurrentPaletteElement();
             return;
             }
       if (cmdn == "repeat-cmd") {

@@ -42,8 +42,10 @@ ListView {
 
     property string filter: ""
     onFilterChanged: {
-        if (filter.length)
+        if (filter.length) {
+            paletteSelectionModel.clear();
             expandedPopupIndex = null;
+            }
         if (paletteModel)
             paletteModel.setFilterFixedString(filter);
     }
@@ -60,6 +62,17 @@ ListView {
         model: paletteTree.paletteModel
     }
 
+    function applyCurrentElement() {
+        var index = paletteSelectionModel.currentIndex;
+        if (!index.valid && filter.length) {
+            // in search and no cell selected: apply the first found element
+            const parentIndex = paletteTreeDelegateModel.modelIndex(0);
+            index = paletteModel.index(0, 0, parentIndex);
+            }
+
+        paletteController.applyPaletteElement(index, Qt.NoModifier);
+    }
+
     property var expandedPopupIndex: null // TODO: or use selection model? That would allow to preserve popups on removing palettes
 
     onExpandedPopupIndexChanged: {
@@ -69,7 +82,7 @@ ListView {
 
     onCurrentIndexChanged: {
         if (paletteSelectionModel.hasSelection && paletteSelectionModel.currentIndex.row != currentIndex)
-            paletteSelectionModel.clear();
+            paletteSelectionModel.clearSelection();
     }
 
     function ensureYVisible(y) {
@@ -146,6 +159,22 @@ ListView {
         return { display: "", gridSize: Qt.size(1, 1), drawGrid: false, custom: false, editable: false, expanded: false };
     }
 
+    function focusFirstItem() {
+        currentIndex = 0;
+        if (filter.length) // on searching jump directly to the found cells
+            currentItem.focusFirstItem();
+        else
+            currentItem.forceActiveFocus();
+    }
+
+    function focusLastItem() {
+        currentIndex = count - 1;
+        if (filter.length) // on searching jump directly to the found cells
+            currentItem.focusLastItem();
+        else
+            currentItem.forceActiveFocus();
+    }
+
     model: DelegateModel {
         id: paletteTreeDelegateModel
         model: paletteTree.paletteModel
@@ -160,6 +189,16 @@ ListView {
             Component.onCompleted: {
                 const w = paletteHeader.implicitWidth + leftPadding + rightPadding;
                 paletteTree.implicitWidth = Math.max(paletteTree.implicitWidth, w);
+            }
+
+            function focusFirstItem() {
+                mainPalette.currentIndex = 0;
+                mainPalette.currentItem.forceActiveFocus();
+            }
+
+            function focusLastItem() {
+                mainPalette.currentIndex = mainPalette.count - 1;
+                mainPalette.currentItem.forceActiveFocus();
             }
 
             property bool expanded: filter.length || model.expanded
@@ -468,7 +507,7 @@ ListView {
         target: palettesWidget
         onHasFocusChanged: {
             if (!palettesWidget.hasFocus) {
-                paletteSelectionModel.clear();
+                paletteSelectionModel.clearSelection();
                 expandedPopupIndex = null;
             }
         }

@@ -386,7 +386,7 @@ GridView {
                     const rootIndex = paletteView.paletteRootIndex;
 
                     if (selection.currentIndex.parent != rootIndex)
-                        selection.clear();
+                        selection.clearSelection();
 
                     if (modifiers & Qt.ShiftModifier && selection.currentIndex.parent == rootIndex) {
                         const model = paletteView.paletteModel;
@@ -410,7 +410,11 @@ GridView {
                 }
             }
 
-            onDoubleClicked: paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, mscore.keyboardModifiers());
+            onDoubleClicked: {
+                const index = paletteCell.modelIndex;
+                paletteView.selectionModel.setCurrentIndex(index, ItemSelectionModel.Current);
+                paletteView.paletteController.applyPaletteElement(index, mscore.keyboardModifiers());
+            }
 
             MouseArea {
                 id: paletteCellDragArea
@@ -427,7 +431,9 @@ GridView {
 
             Keys.onPressed: {
                 if (event.key == Qt.Key_Enter || event.key == Qt.Key_Return) {
-                    paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, mscore.keyboardModifiers());
+                    const index = paletteCell.modelIndex;
+                    paletteView.selectionModel.setCurrentIndex(index, ItemSelectionModel.Current);
+                    paletteView.paletteController.applyPaletteElement(index, mscore.keyboardModifiers());
                     event.accepted = true;
                 }
             }

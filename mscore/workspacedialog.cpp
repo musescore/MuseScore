@@ -14,7 +14,6 @@
 #include "workspace.h"
 #include "preferences.h"
 #include "musescore.h"
-#include "palettebox.h"
 
 namespace Ms {
 
@@ -72,7 +71,7 @@ WorkspaceDialog::WorkspaceDialog(QWidget* parent)
 
 void WorkspaceDialog::display()
       {
-      mscore->getPaletteBox()->searchBox()->clear();
+      // TODO: clear search box?
       if (editMode) {
             componentsCheck->setChecked(Workspace::currentWorkspace->getSaveComponents());
             toolbarsCheck->setChecked(Workspace::currentWorkspace->getSaveToolbars());

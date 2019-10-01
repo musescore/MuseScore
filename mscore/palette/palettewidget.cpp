@@ -33,8 +33,8 @@ namespace Ms {
 //   PaletteQmlInterface
 //---------------------------------------------------------
 
-PaletteQmlInterface::PaletteQmlInterface(PaletteWorkspace* workspace, QmlNativeToolTip* t, QObject* parent)
-   : QObject(parent), w(workspace), tooltip(t)
+PaletteQmlInterface::PaletteQmlInterface(PaletteWorkspace* workspace, QmlNativeToolTip* t, bool enabled, QObject* parent)
+   : QObject(parent), w(workspace), tooltip(t), _palettesEnabled(enabled)
       {
       tooltip->setParent(this);
       }
@@ -48,6 +48,18 @@ void PaletteQmlInterface::setPaletteBackground(const QColor& val)
       if (_paletteBackground != val) {
             _paletteBackground = val;
             emit paletteBackgroundChanged();
+            }
+      }
+
+//---------------------------------------------------------
+//   PaletteQmlInterface::setPalettesEnabled
+//---------------------------------------------------------
+
+void PaletteQmlInterface::setPalettesEnabled(bool val)
+      {
+      if (_palettesEnabled != val) {
+            _palettesEnabled = val;
+            emit palettesEnabledChanged();
             }
       }
 
@@ -67,7 +79,7 @@ PaletteWidget::PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent
 
       QmlNativeToolTip* tooltip = new QmlNativeToolTip(widget());
 
-      qmlInterface = new PaletteQmlInterface(w, tooltip, this);
+      qmlInterface = new PaletteQmlInterface(w, tooltip, isEnabled(), this);
       setupStyle();
       ctx->setContextProperty("mscore", qmlInterface);
 
@@ -132,6 +144,16 @@ void PaletteWidget::activateSearchBox()
       }
 
 //---------------------------------------------------------
+//   PaletteWidget::applyCurrentPaletteElement
+//---------------------------------------------------------
+
+void PaletteWidget::applyCurrentPaletteElement()
+      {
+      const bool invoked = QMetaObject::invokeMethod(rootObject(), "applyCurrentPaletteElement");
+      Q_ASSERT(invoked);
+      }
+
+//---------------------------------------------------------
 //   PaletteWidget::showEvent
 //---------------------------------------------------------
 
@@ -160,6 +182,9 @@ void PaletteWidget::changeEvent(QEvent* evt)
                   break;
             case QEvent::StyleChange:
                   setupStyle();
+                  break;
+            case QEvent::EnabledChange:
+                  qmlInterface->setPalettesEnabled(isEnabled());
                   break;
             default:
                   break;
