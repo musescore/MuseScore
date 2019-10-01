@@ -1143,6 +1143,10 @@ static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, 
 
 static void creditWords(XmlWriter& xml, Score* s, double x, double y, QString just, QString val, const QList<TextFragment>& words)
       {
+      // prevent incorrect MusicXML for empty text
+      if (words.isEmpty())
+            return;
+
       const QString mtf = s->styleSt(Sid::MusicalTextFont);
       CharFormat defFmt;
       defFmt.setFontFamily(s->styleSt(Sid::staffTextFontFace));
@@ -1183,9 +1187,6 @@ static double parentHeight(const Element* element)
 
 void ExportMusicXml::credits(XmlWriter& xml)
       {
-      const MeasureBase* measure = _score->measures()->first();
-      QString rights = _score->metaTag("copyright");
-
       // determine page formatting
       const double h  = getTenthsFromInches(_score->styleD(Sid::pageHeight));
       const double w  = getTenthsFromInches(_score->styleD(Sid::pageWidth));
@@ -1196,10 +1197,11 @@ void ExportMusicXml::credits(XmlWriter& xml)
       //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
       // write the credits
+      const MeasureBase* measure = _score->measures()->first();
       if (measure) {
             for (const Element* element : measure->el()) {
-                  if (element->type() == ElementType::TEXT) {
-                        const Text* text = (const Text*)element;
+                  if (element->isText()) {
+                        const Text* text = toText(element);
                         const double ph = getTenthsFromDots(parentHeight(text));
 
                         double tx = w / 2;
@@ -1244,6 +1246,7 @@ void ExportMusicXml::credits(XmlWriter& xml)
                   }
             }
 
+      const QString rights = _score->metaTag("copyright");
       if (!rights.isEmpty()) {
             // put copyright at the bottom center of the page
             // note: as the copyright metatag contains plain text, special XML characters must be escaped
@@ -1839,6 +1842,23 @@ int ExportMusicXml::findTrill(const Trill* tr) const
       }
 
 //---------------------------------------------------------
+//   writeAccidental
+//---------------------------------------------------------
+
+static void writeAccidental(XmlWriter& xml, const QString& tagName, const Accidental* const acc)
+      {
+      if (acc) {
+            QString s = accidentalType2MxmlString(acc->accidentalType());
+            if (s != "") {
+                  QString tag = tagName;
+                  if (acc->bracket() != AccidentalBracket::NONE)
+                        tag += " parentheses=\"yes\"";
+                  xml.tag(tag, s);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   wavyLineStart
 //---------------------------------------------------------
 
@@ -1848,6 +1868,7 @@ static void wavyLineStart(const Trill* tr, const int number, Notations& notation
       notations.tag(xml);
       ornaments.tag(xml);
       xml.tagE("trill-mark");
+      writeAccidental(xml, "accidental-mark", tr->accidental());
       QString tagName = "wavy-line type=\"start\"";
       tagName += QString(" number=\"%1\"").arg(number + 1);
       tagName += color2xml(tr);
@@ -2390,6 +2411,27 @@ static int determineTupletNormalTicks(ChordRest const* const chord)
       }
 
 //---------------------------------------------------------
+//   beamFanAttribute
+//---------------------------------------------------------
+
+static QString beamFanAttribute(const Beam* const b)
+      {
+      const qreal epsilon = 0.1;
+
+      QString fan;
+      if ((b->growRight() - b->growLeft() > epsilon))
+            fan = "accel";
+
+      if ((b->growLeft() - b->growRight() > epsilon))
+            fan = "rit";
+
+      if (fan != "")
+            return QString(" fan=\"%1\"").arg(fan);
+
+      return "";
+      }
+
+//---------------------------------------------------------
 //   writeBeam
 //---------------------------------------------------------
 
@@ -2400,10 +2442,10 @@ static int determineTupletNormalTicks(ChordRest const* const chord)
 //    <beam number="1">backward hook</beam>
 //    <beam number="1">forward hook</beam>
 
-static void writeBeam(XmlWriter& xml, ChordRest* cr, Beam* b)
+static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
       {
       const auto& elements = b->elements();
-      int idx = elements.indexOf(cr);
+      const int idx = elements.indexOf(cr);
       if (idx == -1) {
             qDebug("Beam::writeMusicXml(): cannot find ChordRest");
             return;
@@ -2413,32 +2455,38 @@ static void writeBeam(XmlWriter& xml, ChordRest* cr, Beam* b)
       int bln = -1; // beam level next chord
       // find beam level previous chord
       for (int i = idx - 1; blp == -1 && i >= 0; --i) {
-            ChordRest* crst = elements[i];
-            if (crst->type() == ElementType::CHORD)
-                  blp = (static_cast<Chord*>(crst))->beams();
+            const auto crst = elements[i];
+            if (crst->isChord())
+                  blp = toChord(crst)->beams();
             }
       // find beam level current chord
-      if (cr->type() == ElementType::CHORD)
-            blc = (static_cast<Chord*>(cr))->beams();
+      if (cr->isChord())
+            blc = toChord(cr)->beams();
       // find beam level next chord
       for (int i = idx + 1; bln == -1 && i < elements.size(); ++i) {
-            ChordRest* crst = elements[i];
-            if (crst->type() == ElementType::CHORD)
-                  bln = (static_cast<Chord*>(crst))->beams();
+            const auto crst = elements[i];
+            if (crst->isChord())
+                  bln = toChord(crst)->beams();
             }
+      // find beam type and write
       for (int i = 1; i <= blc; ++i) {
-            QString s;
-            if (blp < i && bln >= i) s = "begin";
+            QString text;
+            if (blp < i && bln >= i) text = "begin";
             else if (blp < i && bln < i) {
-                  if (bln > 0) s = "forward hook";
-                  else if (blp > 0) s = "backward hook";
+                  if (bln > 0) text = "forward hook";
+                  else if (blp > 0) text = "backward hook";
                   }
             else if (blp >= i && bln < i)
-                  s = "end";
+                  text = "end";
             else if (blp >= i && bln >= i)
-                  s = "continue";
-            if (s != "")
-                  xml.tag(QString("beam number=\"%1\"").arg(i), s);
+                  text = "continue";
+            if (text != "") {
+                  QString tag = "beam";
+                  tag += QString(" number=\"%1\"").arg(i);
+                  if (text == "begin")
+                        tag += beamFanAttribute(b);
+                  xml.tag(tag, text);
+                  }
             }
       }
 
@@ -2704,24 +2752,6 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
       }
 
 //---------------------------------------------------------
-//   writeAccidental
-//---------------------------------------------------------
-
-static void writeAccidental(XmlWriter& xml, const Note* const note)
-      {
-      auto acc = note->accidental();
-      if (acc) {
-            QString s = accidentalType2MxmlString(acc->accidentalType());
-            if (s != "") {
-                  if (note->accidental()->bracket() != AccidentalBracket::NONE)
-                        xml.tag("accidental parentheses=\"yes\"", s);
-                  else
-                        xml.tag("accidental", s);
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   notePosition
 //---------------------------------------------------------
 
@@ -2836,7 +2866,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
             _xml.tag("voice", voice);
 
             writeTypeAndDots(_xml, note);
-            writeAccidental(_xml, note);
+            writeAccidental(_xml, "accidental", note->accidental());
             writeTimeModification(_xml, note);
 
             // no stem for whole notes and beyond
@@ -3854,7 +3884,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, const Fractio
 
 // In MuseScore dynamics are essentially user-defined texts, therefore the ones
 // supported by MusicXML need to be filtered out. Everything not recognized
-// as MusicXML dynamics is written as words.
+// as MusicXML dynamics is written as other-dynamics.
 
 void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       {
@@ -3873,16 +3903,65 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       QString tagName = "dynamics";
       tagName += addPositioningAttributes(dyn);
       _xml.stag(tagName);
-      QString dynTypeName = dyn->dynamicTypeName();
+      const QString dynTypeName = dyn->dynamicTypeName();
+
       if (set.contains(dynTypeName)) {
             _xml.tagE(dynTypeName);
             }
       else if (dynTypeName != "") {
+            std::map<ushort, QChar> map;
+            map[0xE520] = 'p';
+            map[0xE521] = 'm';
+            map[0xE522] = 'f';
+            map[0xE523] = 'r';
+            map[0xE524] = 's';
+            map[0xE525] = 'z';
+            map[0xE526] = 'n';
+
             QString dynText = dynTypeName;
             if (dyn->dynamicType() == Dynamic::Type::OTHER)
                   dynText = dyn->plainText();
-            _xml.tag("other-dynamics", dynText);
+
+            // collect consecutive runs of either dynamics glyphs
+            // or other characters and write the runs.
+            QString text;
+            bool inDynamicsSym = false;
+            for (const auto ch : dynText) {
+                  const auto it = map.find(ch.unicode());
+                  if (it != map.end()) {
+                        // found a SMUFL single letter dynamics glyph
+                        if (!inDynamicsSym) {
+                              if (text != "") {
+                                    _xml.tag("other-dynamics", text);
+                                    text = "";
+                                    }
+                              inDynamicsSym = true;
+                              }
+                        text += it->second;
+                        }
+                  else {
+                        // found a non-dynamics character
+                        if (inDynamicsSym) {
+                              if (text != "") {
+                                    if (set.contains(text))
+                                          _xml.tagE(text);
+                                    else
+                                          _xml.tag("other-dynamics", text);
+                                    text = "";
+                                    }
+                              inDynamicsSym = false;
+                              }
+                        text += ch;
+                        }
+                  }
+            if (text != "") {
+                  if (inDynamicsSym && set.contains(text))
+                        _xml.tagE(text);
+                  else
+                        _xml.tag("other-dynamics", text);
+                  }
             }
+
       _xml.etag();
 
       _xml.etag();
