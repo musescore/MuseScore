@@ -371,7 +371,8 @@ ListView {
                     onInsertNewPaletteRequested: paletteTree.insertCustomPalette(control.rowIndex);
                     onHidePaletteRequested: control.hidePalette();
 
-                    onPaletteResetRequested: paletteWorkspace.resetPalette(control.modelIndex)
+                    paletteWorkspace: paletteTree.paletteWorkspace
+                    modelIndex: control.modelIndex
 
                     onEditPalettePropertiesRequested: {
                         const modelIndex = control.modelIndex;

@@ -20,6 +20,7 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 
+import MuseScore.Palette 3.3
 import MuseScore.Utils 3.3
 
 Item {
@@ -32,12 +33,14 @@ Item {
     property bool custom: false
     property bool unresolved: false
 
+    property PaletteWorkspace paletteWorkspace
+    property var modelIndex: null
+
     signal toggleExpandRequested()
     signal enableEditingToggled(bool val)
     signal hideSelectedElementsRequested()
     signal insertNewPaletteRequested()
     signal hidePaletteRequested()
-    signal paletteResetRequested()
     signal editPalettePropertiesRequested()
 
     implicitHeight: paletteExpandArrow.height
@@ -162,10 +165,18 @@ Item {
             checked: paletteHeader.editingEnabled
             onTriggered: paletteHeader.enableEditingToggled(checked)
         }
+        MenuItem {
+            text: qsTr("Save Palette")
+            onTriggered: paletteHeader.paletteWorkspace.savePalette(paletteHeader.modelIndex)
+        }
+        MenuItem {
+            text: qsTr("Load Palette")
+            onTriggered: paletteHeader.paletteWorkspace.loadPalette(paletteHeader.modelIndex)
+        }
         MenuSeparator {}
         MenuItem {
             text: qsTr("Reset Palette")
-            onTriggered: paletteHeader.paletteResetRequested()
+            onTriggered: paletteHeader.paletteWorkspace.resetPalette(paletteHeader.modelIndex)
         }
         MenuSeparator {}
         MenuItem {

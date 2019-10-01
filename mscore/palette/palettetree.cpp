@@ -27,9 +27,14 @@
 #include "libmscore/articulation.h"
 #include "libmscore/fret.h"
 #include "libmscore/icon.h"
+#include "libmscore/image.h"
+#include "libmscore/imageStore.h"
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
 #include "libmscore/textbase.h"
+
+#include "thirdparty/qzip/qzipreader_p.h"
+#include "thirdparty/qzip/qzipwriter_p.h"
 
 namespace Ms {
 
@@ -456,6 +461,173 @@ void PalettePanel::write(XmlWriter& xml) const
             cell->write(xml);
             }
       xml.etag();
+      }
+
+//---------------------------------------------------------
+//   writePaletteFailed
+//---------------------------------------------------------
+
+static void writePaletteFailed(const QString& path)
+      {
+      QString s = qApp->translate("Palette", "Writing Palette File\n%1\nfailed: ").arg(path); // reason?
+      QMessageBox::critical(mscore, qApp->translate("Palette", "Writing Palette File"), s);
+      }
+
+//---------------------------------------------------------
+//   PalettePanel::writeToFile
+///   write as compressed zip file and include
+///   images as needed
+//---------------------------------------------------------
+
+bool PalettePanel::writeToFile(const QString& p) const
+      {
+      QSet<ImageStoreItem*> images;
+      int n = cells.size();
+      for (int i = 0; i < n; ++i) {
+            if (cells[i] == 0 || cells[i]->element == 0 || cells[i]->element->type() != ElementType::IMAGE)
+                  continue;
+            images.insert(toImage(cells[i]->element.get())->storeItem());
+            }
+
+      QString path(p);
+      if (!path.endsWith(".mpal"))
+            path += ".mpal";
+
+      MQZipWriter f(path);
+      // f.setCompressionPolicy(QZipWriter::NeverCompress);
+      f.setCreationPermissions(
+         QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
+         | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
+         | QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup
+         | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
+
+      if (f.status() != MQZipWriter::NoError) {
+            writePaletteFailed(path);
+            return false;
+            }
+      QBuffer cbuf;
+      cbuf.open(QIODevice::ReadWrite);
+      XmlWriter xml(gscore, &cbuf);
+      xml.header();
+      xml.stag("container");
+      xml.stag("rootfiles");
+      xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString("palette.xml")));
+      xml.etag();
+      foreach (ImageStoreItem* ip, images) {
+            QString ipath = QString("Pictures/") + ip->hashName();
+            xml.tag("file", ipath);
+            }
+      xml.etag();
+      xml.etag();
+      cbuf.seek(0);
+      //f.addDirectory("META-INF");
+      //f.addDirectory("Pictures");
+      f.addFile("META-INF/container.xml", cbuf.data());
+
+      // save images
+      foreach(ImageStoreItem* ip, images) {
+            QString ipath = QString("Pictures/") + ip->hashName();
+            f.addFile(ipath, ip->buffer());
+            }
+      {
+      QBuffer cbuf1;
+      cbuf1.open(QIODevice::ReadWrite);
+      XmlWriter xml1(gscore, &cbuf1);
+      xml1.header();
+      xml1.stag("museScore version=\"" MSC_VERSION "\"");
+      write(xml1);
+      xml1.etag();
+      cbuf1.close();
+      f.addFile("palette.xml", cbuf1.data());
+      }
+      f.close();
+      if (f.status() != MQZipWriter::NoError) {
+            writePaletteFailed(path);
+            return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   PalettePanel::readFromFile
+//---------------------------------------------------------
+
+bool PalettePanel::readFromFile(const QString& p)
+      {
+      QString path(p);
+      if (!path.endsWith(".mpal"))
+            path += ".mpal";
+
+      MQZipReader f(path);
+      if (!f.exists()) {
+            qDebug("palette <%s> not found", qPrintable(path));
+            return false;
+            }
+      cells.clear();
+
+      QByteArray ba = f.fileData("META-INF/container.xml");
+
+      XmlReader e(ba);
+      // extract first rootfile
+      QString rootfile = "";
+      QList<QString> images;
+      while (e.readNextStartElement()) {
+            if (e.name() != "container") {
+                  e.unknown();
+                  break;;
+                  }
+            while (e.readNextStartElement()) {
+                  if (e.name() != "rootfiles") {
+                        e.unknown();
+                        break;
+                        }
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+
+                        if (tag == "rootfile") {
+                              if (rootfile.isEmpty())
+                                    rootfile = e.attribute("full-path");
+                              e.readNext();
+                              }
+                        else if (tag == "file")
+                              images.append(e.readElementText());
+                        else
+                              e.unknown();
+                        }
+                  }
+            }
+      //
+      // load images
+      //
+      foreach(const QString& s, images)
+            imageStore.add(s, f.fileData(s));
+
+      if (rootfile.isEmpty()) {
+            qDebug("can't find rootfile in: %s", qPrintable(path));
+            return false;
+            }
+
+      ba = f.fileData(rootfile);
+      e.clear();
+      e.addData(ba);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  QString version = e.attribute("version");
+                  QStringList sl = version.split('.');
+                  int versionId = sl[0].toInt() * 100 + sl[1].toInt();
+                  gscore->setMscVersion(versionId); // TODO: what is this?
+
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Palette")
+                              read(e);
+                        else
+                              e.unknown();
+                        }
+                  }
+            else
+                  e.unknown();
+            }
+      return true;
       }
 
 //---------------------------------------------------------

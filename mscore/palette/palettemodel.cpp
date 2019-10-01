@@ -744,6 +744,20 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
       }
 
 //---------------------------------------------------------
+//   PaletteTreeModel::insertPalettePanel
+//---------------------------------------------------------
+
+bool PaletteTreeModel::insertPalettePanel(std::unique_ptr<PalettePanel> pp, int row, const QModelIndex& parent)
+      {
+      if (row < 0 || row > int(palettes().size()) || parent != QModelIndex())
+            return false;
+      beginInsertRows(parent, row, row);
+      palettes().insert(palettes().begin() + row, std::move(pp));
+      endInsertRows();
+      return true;
+      }
+
+//---------------------------------------------------------
 //   PaletteTreeModel::updateCellsState
 //---------------------------------------------------------
 
