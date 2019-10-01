@@ -551,7 +551,8 @@ QModelIndex PaletteWorkspace::poolPaletteIndex(const QModelIndex& index, Ms::Fil
       const QModelIndex poolPaletteIndex = convertIndex(index, poolPalette);
       if (poolPaletteIndex.isValid())
             return poolPaletteIndex;
-      return findPaletteIndex(poolPalette, PalettePanel::Type::Clef);
+      const auto contentType = index.data(PaletteTreeModel::PaletteContentTypeRole).value<PalettePanel::Type>();
+      return findPaletteIndex(poolPalette, contentType);
       }
 
 //---------------------------------------------------------
