@@ -342,6 +342,8 @@ QVariant Stem::getProperty(Pid propertyId) const
                   return lineWidth();
             case Pid::USER_LEN:
                   return userLen();
+            case Pid::STEM_DIRECTION:
+                  return QVariant::fromValue<Direction>(chord()->stemDirection());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -359,6 +361,9 @@ bool Stem::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::USER_LEN:
                   setUserLen(v.toDouble());
+                  break;
+            case Pid::STEM_DIRECTION:
+                  chord()->setStemDirection(v.value<Direction>());
                   break;
             default:
                   return Element::setProperty(propertyId, v);
@@ -378,6 +383,8 @@ QVariant Stem::propertyDefault(Pid id) const
                   return 0.0;
 //            case Pid::LINE_WIDTH:
 //                  return score()->styleP(Sid::stemWidth);
+            case Pid::STEM_DIRECTION:
+                  return QVariant::fromValue<Direction>(Direction::AUTO);
             default:
                   return Element::propertyDefault(id);
             }
