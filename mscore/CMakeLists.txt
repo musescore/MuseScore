@@ -343,7 +343,7 @@ add_executable ( ${ExecutableName}
       measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h
       mixer.h mixertrack.h mixertrackchannel.h mixertrackgroup.h mixertrackitem.h mixertrackpart.h mixerdetails.h musedata.h
       musescore.h musicxml.h musicxmlfonthandler.h musicxmlsupport.h navigator.h newwizard.h noteGroups.h
-      omrpanel.h ove.h pa.h pagesettings.h palette.h palettebox.h paletteBoxButton.h partedit.h parteditbase.h
+      omrpanel.h ove.h pa.h pagesettings.h palette.h partedit.h parteditbase.h
       pathlistdialog.h piano.h pianolevels.h pianolevelschooser.h  pianolevelsfilter.h
       pianokeyboard.h pianoroll.h pianoruler.h pianotools.h pianoview.h
       playpanel.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h
@@ -376,7 +376,7 @@ add_executable ( ${ExecutableName}
       editdrumset.cpp editstaff.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       excerptsdialog.cpp metaedit.cpp magbox.cpp
-      capella.cpp capxml.cpp exportaudio.cpp palettebox.cpp
+      capella.cpp capxml.cpp exportaudio.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianokeyboard.cpp pianolevels.cpp pianolevelschooser.cpp pianolevelsfilter.cpp
       pianoruler.cpp pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
@@ -451,7 +451,6 @@ add_executable ( ${ExecutableName}
       importxml.cpp
       importxmlfirstpass.cpp
       savePositions.cpp
-      paletteBoxButton.cpp
       driver.cpp
       exportmidi.cpp
       noteGroups.cpp

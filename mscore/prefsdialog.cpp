@@ -26,7 +26,6 @@
 #include "pa.h"
 #include "shortcut.h"
 #include "workspace.h"
-#include "palettebox.h"
 
 #ifdef USE_PORTMIDI
 #include "pm.h"

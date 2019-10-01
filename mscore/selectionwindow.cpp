@@ -21,7 +21,7 @@
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/select.h"
-#include "palettebox.h"
+#include "palette/palettewidget.h"
 #include "scoreaccessibility.h"
 
 namespace Ms {
@@ -186,8 +186,8 @@ void MuseScore::showSelectionWindow(bool visible)
             selectionWindow = new SelectionWindow(this,this->currentScore());
             connect(selectionWindow, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             addDockWidget(Qt::LeftDockWidgetArea,selectionWindow);
-            if (paletteBox && paletteBox->isVisible()) {
-                  tabifyDockWidget(paletteBox, selectionWindow);
+            if (paletteWidget && paletteWidget->isVisible()) {
+                  tabifyDockWidget(paletteWidget, selectionWindow);
                   }
             }
       reDisplayDockWidget(selectionWindow, visible);
