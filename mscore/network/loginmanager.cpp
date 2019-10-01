@@ -367,7 +367,6 @@ void LoginManager::onTryLoginError(const QString& error)
 //   clearHttpCacheOnRenderFinish
 //---------------------------------------------------------
 
-#ifdef USE_WEBENGINE
 static void clearHttpCacheOnRenderFinish(QWebEngineView* webView)
       {
       QWebEnginePage* page = webView->page();
@@ -381,7 +380,7 @@ static void clearHttpCacheOnRenderFinish(QWebEngineView* webView)
             webView->show();
             });
       }
-#endif
+
 //---------------------------------------------------------
 //   loginInteractive
 //---------------------------------------------------------
