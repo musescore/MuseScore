@@ -141,11 +141,10 @@ class Palette : public QWidget {
       Element* element(int idx);
       void setDrawGrid(bool val)     { _drawGrid = val; }
       bool drawGrid() const          { return _drawGrid; }
-      bool read(const QString& path);
-      void write(const QString& path);
+      bool read(const QString& path); // TODO: remove/reuse PalettePanel code
+      void write(const QString& path); // TODO: remove/reuse PalettePanel code
       void read(XmlReader&);
       void write(XmlWriter&) const;
-      bool read(QFile*);
       void clear();
       void setSelectable(bool val)   { _selectable = val;  }
       bool selectable() const        { return _selectable; }

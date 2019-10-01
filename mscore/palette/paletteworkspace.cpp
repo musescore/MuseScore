@@ -737,6 +737,47 @@ bool PaletteWorkspace::resetPalette(const QModelIndex& index)
       }
 
 //---------------------------------------------------------
+//   PaletteWorkspace::savePalette
+//---------------------------------------------------------
+
+bool PaletteWorkspace::savePalette(const QModelIndex& index)
+      {
+      const QModelIndex srcIndex = convertProxyIndex(index, userPalette);
+      const PalettePanel* pp = userPalette->findPalettePanel(srcIndex);
+      if (!pp)
+            return false;
+
+      const QString path = mscore->getPaletteFilename(/* load? */ false, pp->translatedName());
+
+      if (path.isEmpty())
+            return false;
+      return pp->writeToFile(path);
+      }
+
+//---------------------------------------------------------
+//   PaletteWorkspace::loadPalette
+//---------------------------------------------------------
+
+bool PaletteWorkspace::loadPalette(const QModelIndex& index)
+      {
+      const QString path = mscore->getPaletteFilename(/* load? */ true);
+      if (path.isEmpty())
+            return false;
+
+      std::unique_ptr<PalettePanel> pp(new PalettePanel);
+      if (!pp->readFromFile(path))
+            return false;
+      pp->setType(PalettePanel::Type::Custom); // mark the loaded palette custom
+
+      const QModelIndex srcIndex = convertProxyIndex(index, userPalette);
+
+      const int row = srcIndex.row();
+      const QModelIndex parent = srcIndex.parent();
+
+      return userPalette->insertPalettePanel(std::move(pp), row, parent);
+      }
+
+//---------------------------------------------------------
 //   PaletteWorkspace::setUserPaletteTree
 //---------------------------------------------------------
 

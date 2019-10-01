@@ -188,6 +188,9 @@ class PalettePanel {
       QByteArray mimeData() const;
       static std::unique_ptr<PalettePanel> readMimeData(const QByteArray& data);
 
+      bool readFromFile(const QString& path);
+      bool writeToFile(const QString& path) const;
+
       int ncells() const { return int(cells.size()); }
       bool empty() const { return cells.empty(); }
       PaletteCellPtr cell(int idx) { return cells[idx]; }
