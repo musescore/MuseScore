@@ -23,7 +23,6 @@
 #include <tuple>
 #include "libmscore/score.h"
 #include "palette.h"
-#include "palettebox.h"
 #include "libmscore/note.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/dynamic.h"
@@ -1172,16 +1171,6 @@ Palette* MuseScore::newLinesPalette()
 void MuseScore::showPalette(bool visible)
       {
       QAction* a = getAction("toggle-palette");
-#if 0
-      if (paletteBox == 0) {
-            getPaletteBox(); // ensure palette box is created
-            Workspace::currentWorkspace->read();
-            preferencesChanged();
-            updateIcons();
-            }
-      if (paletteBox)   // read failed?
-            reDisplayDockWidget(paletteBox, visible);
-#endif
       if (!paletteWidget) {
             Workspace::currentWorkspace->read();
             preferencesChanged();

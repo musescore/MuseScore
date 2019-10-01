@@ -52,7 +52,6 @@ class MasterScore;
 class Score;
 class Tuplet;
 class PageSettings;
-class PaletteBox;
 class Palette;
 class PaletteScrollArea;
 class SelectionWindow;
@@ -358,7 +357,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PaletteWorkspace* paletteWorkspace { nullptr };
       PaletteWidget* paletteWidget { nullptr };
 
-      PaletteBox* paletteBox         { 0 };
       Inspector* _inspector          { 0 };
       OmrPanel* omrPanel             { 0 };
       QWidget* lastFocusWidget       { 0 };
@@ -723,7 +721,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PaletteWorkspace* getPaletteWorkspace();
       void changeWorkspace(const QString& name);
 
-      PaletteBox* getPaletteBox();
       void disableCommands(bool val) { inChordEditor = val; }
 
       Tuplet* tupletDialog();
