@@ -2432,7 +2432,7 @@ void ScoreView::textTab(bool back)
       changeState(ViewState::NORMAL);
 
       // find new note to add text to
-      bool here = false;      // prevent infinite loop
+      bool here = false;      // prevent infinite loop (relevant if navigation is allowed to wrap around end of score)
       while (el) {
             if (el->isNote()) {
                   Note* n = toNote(el);
@@ -2455,12 +2455,18 @@ void ScoreView::textTab(bool back)
                   }
             // get prev/next note
             score()->select(el);
-            el = back ? score()->prevElement() : score()->nextElement();
+            Element* el2 = back ? score()->prevElement() : score()->nextElement();
+            // start/end of score reached
+            if (el2 == el)
+                  break;
+            el = el2;
             }
       if (!el || !el->isNote()) {
-            // nothing found, re-select original element and give up
-            score()->select(oe);
-            changeState(ViewState::EDIT);
+            // nothing found, exit cleanly
+            if (op->selectable())
+                  score()->select(op);
+            else
+                  score()->deselectAll();
             return;
             }
       Note* nn = toNote(el);
@@ -2499,7 +2505,6 @@ void ScoreView::textTab(bool back)
       if (el) {
             // edit existing text
             score()->select(el);
-            mscore->updateInspector();    // needed for Space with fingering
             startEditMode(el);
             }
       else {
