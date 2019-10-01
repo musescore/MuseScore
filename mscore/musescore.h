@@ -67,7 +67,6 @@ class ScoreTab;
 class Drumset;
 class TextTools;
 class DrumTools;
-class ScriptEngine;
 class KeyEditor;
 class ChordStyleEditor;
 class Navigator;
@@ -107,7 +106,7 @@ class TourHandler;
 class GeneralAutoUpdater;
 
 class PalettePanel;
-class PaletteTree;
+struct PaletteTree;
 class PaletteWidget;
 class PaletteWorkspace;
 
@@ -365,7 +364,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       bool _midiinEnabled            { true };
       QList<QString> plugins;
-      ScriptEngine* se               { 0 };
       QString pluginPath;
 
 #ifdef SCRIPT_INTERFACE

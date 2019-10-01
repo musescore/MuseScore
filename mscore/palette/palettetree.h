@@ -25,7 +25,7 @@
 
 namespace Ms {
 
-class PaletteCell;
+struct PaletteCell;
 using PaletteCellPtr = std::shared_ptr<PaletteCell>;
 using PaletteCellConstPtr = std::shared_ptr<const PaletteCell>;
 
@@ -188,7 +188,7 @@ class PalettePanel {
       QByteArray mimeData() const;
       static std::unique_ptr<PalettePanel> readMimeData(const QByteArray& data);
 
-      int ncells() const { return cells.size(); }
+      int ncells() const { return int(cells.size()); }
       bool empty() const { return cells.empty(); }
       PaletteCellPtr cell(int idx) { return cells[idx]; }
       PaletteCellConstPtr cell(int idx) const { return cells[idx]; }
