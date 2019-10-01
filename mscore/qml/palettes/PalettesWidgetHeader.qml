@@ -60,6 +60,11 @@ Item {
             border.color: "#aeaeae"
         }
 
+        KeyNavigation.up: paletteTree
+        KeyNavigation.down: paletteTree
+        Keys.onDownPressed: paletteTree.focusFirstItem();
+        Keys.onUpPressed: paletteTree.focusLastItem();
+
         StyledToolButton {
             id: searchTextClearButton
             anchors {
