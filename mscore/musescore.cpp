@@ -5820,16 +5820,8 @@ void MuseScore::cmd(QAction* a)
             return;
             }
       if (cmdn == "apply-current-palette-element") {
-            // TODO: implement "current element" concept in QML palettes
-#if 0
-            PaletteBox* pb = getPaletteBox();
-            for (Palette* p : pb->palettes()) {
-                  if (p->getCurrentIdx() != -1) {
-                        p->applyPaletteElement();
-                        break;
-                        }
-                  }
-#endif
+            if (paletteWidget)
+                  paletteWidget->applyCurrentPaletteElement();
             return;
             }
       if (cmdn == "repeat-cmd") {

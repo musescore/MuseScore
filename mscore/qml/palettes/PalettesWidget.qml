@@ -38,6 +38,10 @@ Item {
 
     enabled: mscore.palettesEnabled
 
+    function applyCurrentPaletteElement() {
+        paletteTree.applyCurrentElement();
+    }
+
     FocusChainBreak {}
 
     PalettesWidgetHeader {
