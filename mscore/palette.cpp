@@ -1283,36 +1283,6 @@ void Palette::write(XmlWriter& xml) const
 
 //---------------------------------------------------------
 //   read
-//    return false on error
-//---------------------------------------------------------
-
-bool Palette::read(QFile* qf)
-      {
-      XmlReader e(qf);
-      while (e.readNextStartElement()) {
-            if (e.name() == "museScore") {
-                  QString version = e.attribute("version");
-                  QStringList sl = version.split('.');
-                  int versionId = sl[0].toInt() * 100 + sl[1].toInt();
-                  gscore->setMscVersion(versionId);
-
-                  while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "Palette") {
-                              QString name = e.attribute("name");
-                              setName(name);
-                              read(e);
-                              }
-                        else
-                              e.unknown();
-                        }
-                  }
-            }
-      return true;
-      }
-
-//---------------------------------------------------------
-//   read
 //---------------------------------------------------------
 
 bool Palette::read(const QString& p)
