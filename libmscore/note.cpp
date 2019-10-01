@@ -2874,6 +2874,8 @@ Element* Note::nextInEl(Element* e)
       if (e == _el.back())
             return nullptr;
       auto i = std::find(_el.begin(), _el.end(), e);
+      if (i == _el.end())
+            return nullptr;
       return *(i+1);
       }
 
@@ -2887,6 +2889,8 @@ Element* Note::prevInEl(Element* e)
       if (e == _el.front())
             return nullptr;
       auto i = std::find(_el.begin(), _el.end(), e);
+      if (i == _el.end())
+            return nullptr;
       return *(i-1);
       }
 
