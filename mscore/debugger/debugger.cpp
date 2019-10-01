@@ -757,6 +757,9 @@ MeasureView::MeasureView()
       connect(mb.nextButton, SIGNAL(clicked()), SLOT(nextClicked()));
       connect(mb.prevButton, SIGNAL(clicked()), SLOT(prevClicked()));
       connect(mb.mmRest, SIGNAL(clicked()), SLOT(mmRestClicked()));
+
+      mb.prevButton->setIcon(*icons[int(Icons::goPrevious_ICON)]);
+      mb.nextButton->setIcon(*icons[int(Icons::goNext_ICON)]);
       }
 
 //---------------------------------------------------------

@@ -26,6 +26,7 @@
 #include "libmscore/range.h"
 #include "musescore.h"
 #include "timeline.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -46,6 +47,9 @@ MeasureProperties::MeasureProperties(Measure* _m, QWidget* parent)
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(bboxClicked(QAbstractButton*)));
       connect(nextButton, SIGNAL(clicked()), SLOT(gotoNextMeasure()));
       connect(previousButton, SIGNAL(clicked()), SLOT(gotoPreviousMeasure()));
+
+      nextButton->setIcon(*icons[int(Icons::goNext_ICON)]);
+      previousButton->setIcon(*icons[int(Icons::goPrevious_ICON)]);
 
       nextButton->setEnabled(_m->nextMeasure() != 0);
       previousButton->setEnabled(_m->prevMeasure() != 0);

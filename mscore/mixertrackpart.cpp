@@ -30,6 +30,7 @@
 #include "synthcontrol.h"
 #include "synthesizer/msynthesizer.h"
 #include "preferences.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -93,6 +94,7 @@ MixerTrackPart::MixerTrackPart(QWidget *parent, MixerTrackItemPtr mti, bool expa
 
       expandBn->setEnabled(numChannels > 1);
       expandBn->setChecked(expanded);
+      expandBn->setIcon(expanded ? *icons[int(Icons::goPrevious_ICON)] : *icons[int(Icons::goNext_ICON)]);
 
       connect(expandBn, SIGNAL(toggled(bool)), SLOT(expandToggled(bool)));
 
@@ -158,6 +160,7 @@ void MixerTrackPart::applyStyle()
 void MixerTrackPart::expandToggled(bool expanded)
       {
       _group->expandToggled(_mti->part(), expanded);
+      expandBn->setIcon(expanded ? *icons[int(Icons::goPrevious_ICON)] : *icons[int(Icons::goNext_ICON)]);
       }
 
 //---------------------------------------------------------
