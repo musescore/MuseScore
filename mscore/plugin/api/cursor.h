@@ -98,6 +98,7 @@ class Cursor : public QObject {
       // utility methods
       void nextInTrack();
       void setScore(Ms::Score* s);
+      Ms::Element* currentElement() const;
 
    public:
       /// \cond MS_INTERNAL
