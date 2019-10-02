@@ -156,6 +156,59 @@ class PluginAPI : public Ms::QmlPlugin {
       /// Implement \p onRun() function in your plugin to handle this signal.
       void run();
 
+      /**
+       * Notifies plugin about changes in score state.
+       * Called after each user (or plugin) action which may have changed a
+       * score. Implement \p onScoreStateChanged() function in your plugin to
+       * handle this signal.
+       *
+       * \p state variable is available within the handler with following
+       * fields:
+       *
+       * - \p selectionChanged
+       * - \p excerptsChanged
+       * - \p instrumentsChanged
+       *
+       * If a plugin modifies score in this handler, then it should:
+       * 1. enclose all modifications within Score::startCmd() / Score::endCmd()
+       * 2. take care of preventing an infinite recursion, as plugin-originated
+       *    changes will trigger this signal again after calling Score::endCmd()
+       *
+       * Example:
+       * \code
+       * import QtQuick 2.0
+       * import MuseScore 3.0
+       *
+       * MuseScore {
+       *     menuPath: "Plugins.selectionChangeExample"
+       *     pluginType: "dock"
+       *     dockArea:   "left"
+       *     implicitHeight: 75 // necessary for dock widget to appear with nonzero height
+       *     implicitWidth: 150
+       *
+       *     Text {
+       *        // A label which will display pitch of the currently selected note
+       *        id: pitchLabel
+       *        anchors.fill: parent
+       *     }
+       *
+       *     onScoreStateChanged: {
+       *         if (state.selectionChanged) {
+       *             var el = curScore ? curScore.selection.elements[0] : null;
+       *             if (el && el.type == Element.NOTE)
+       *                 pitchLabel.text = el.pitch;
+       *             else
+       *                 pitchLabel.text = "no note selected";
+       *         }
+       *     }
+       * }
+       * \endcode
+       * \warning This functionality is considered experimental.
+       * This API may change in future versions of MuseScore.
+       * \since MuseScore 3.3
+       */
+      void scoreStateChanged(const QMap<QString, QVariant>& state);
+
    public:
       /// \cond MS_INTERNAL
       PluginAPI(QQuickItem* parent = 0);
@@ -163,6 +216,7 @@ class PluginAPI : public Ms::QmlPlugin {
       static void registerQmlTypes();
 
       void runPlugin() override            { emit run();       }
+      void endCmd(const QMap<QString, QVariant>& stateInfo) override { emit scoreStateChanged(stateInfo); }
 
       Score* curScore() const;
       QQmlListProperty<Score> scores();
