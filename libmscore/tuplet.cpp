@@ -755,10 +755,6 @@ void Tuplet::write(XmlWriter& xml) const
       xml.stag(this);
       Element::writeProperties(xml);
 
-      writeProperty(xml, Pid::DIRECTION);
-      writeProperty(xml, Pid::NUMBER_TYPE);
-      writeProperty(xml, Pid::BRACKET_TYPE);
-      writeProperty(xml, Pid::LINE_WIDTH);
       writeProperty(xml, Pid::NORMAL_NOTES);
       writeProperty(xml, Pid::ACTUAL_NOTES);
       writeProperty(xml, Pid::P1);
@@ -773,6 +769,9 @@ void Tuplet::write(XmlWriter& xml) const
             _number->writeProperties(xml);
             xml.etag();
             }
+
+      writeStyledProperties(xml);
+
       xml.etag();
       }
 
@@ -803,6 +802,24 @@ bool Tuplet::readProperties(XmlReader& e)
 
       if (readStyledProperty(e, tag))
             ;
+      else if (tag == "bold") { //important that these properties are read after number is created
+            bool val = e.readInt();
+            _number->setBold(val);
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "italic") {
+            bool val = e.readInt();
+            _number->setItalic(val);
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "underline") {
+            bool val = e.readInt();
+            _number->setUnderline(val);
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
       else if (tag == "normalNotes")
             _ratio.setDenominator(e.readInt());
       else if (tag == "actualNotes")
