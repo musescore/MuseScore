@@ -3193,6 +3193,19 @@ Element* Measure::nextElementStaff(int staff)
       Element* e = score()->selection().element();
       if (!e && !score()->selection().elements().isEmpty())
             e = score()->selection().elements().first();
+
+      // handle measure elements
+      if (e->parent() == this) {
+            auto i = std::find(el().begin(), el().end(), e);
+            if (i != el().end()) {
+                  if (++i != el().end()) {
+                        Element* e = *i;
+                        if (e)
+                              return e;
+                        }
+                  }
+            }
+
       for (; e && e->type() != ElementType::SEGMENT; e = e->parent()) {
             ;
       }
@@ -3211,6 +3224,22 @@ Element* Measure::nextElementStaff(int staff)
 
 Element* Measure::prevElementStaff(int staff)
       {
+      Element* e = score()->selection().element();
+      if (!e && !score()->selection().elements().isEmpty())
+            e = score()->selection().elements().first();
+
+      // handle measure elements
+      if (e->parent() == this) {
+            auto i = std::find(el().rbegin(), el().rend(), e);
+            if (i != el().rend()) {
+                  if (++i != el().rend()) {
+                        Element* e = *i;
+                        if (e)
+                              return e;
+                        }
+                  }
+            }
+
       Measure* prevM = prevMeasureMM();
       if (prevM) {
             Segment* seg = prevM->last();

@@ -1588,11 +1588,16 @@ Element* Segment::nextElement(int activeStaff)
                         return mb && mb->isBox() ? mb : score()->lastElement();
                         }
 
-                  // check for frame
-                  MeasureBase* nmb = measure()->next();
                   Measure* nsm = nextSegment->measure();
-                  if (nsm != measure() && nsm != nmb)
-                        return nmb;
+                  if (nsm != measure()) {
+                        // check for frame, measure elements
+                        MeasureBase* nmb = measure()->next();
+                        Element* nme = nsm->el().empty() ? nullptr : nsm->el().front();
+                        if (nsm != nmb)
+                              return nmb;
+                        else if (nme && nme->isTextBase() && nme->staffIdx() == e->staffIdx())
+                              return nme;
+                        }
 
                   while (nextSegment) {
                         nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
@@ -1728,11 +1733,16 @@ Element* Segment::prevElement(int activeStaff)
                          return mb && mb->isBox() ? mb : score()->firstElement();
                          }
 
-                   // check for frame
-                   MeasureBase* pmb = measure()->prev();
                    Measure* psm = prevSeg->measure();
-                   if (psm != measure() && psm != pmb)
-                         return pmb;
+                   if (psm != measure()) {
+                         // check for frame, measure elements
+                         MeasureBase* pmb = measure()->prev();
+                         Element* me = measure()->el().empty() ? nullptr : measure()->el().back();
+                         if (me && me->isTextBase() && me->staffIdx() == e->staffIdx())
+                               return me;
+                         else if (psm != pmb)
+                              return pmb;
+                         }
 
                    prev = lastElementOfSegment(prevSeg, activeStaff);
                    while (!prev && prevSeg) {
