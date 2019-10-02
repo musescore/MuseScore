@@ -1671,6 +1671,8 @@ void Chord::layout2()
                   xOff -= minNoteDist + g->_spaceLw;    // move to left by grace note right space and inter-grace distance
                   }
             }
+      if (_tabDur)
+            _tabDur->layout2();
       }
 
 //---------------------------------------------------------
