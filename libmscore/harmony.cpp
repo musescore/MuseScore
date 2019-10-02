@@ -644,8 +644,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
       if (_leftParen || _rightParen)
             s = s.simplified();     // in case of spaces inside parentheses
 
-      int n = s.size();
-      if (n < 1)
+      if (s.isEmpty())
             return 0;
 
       bool preferMinor;
@@ -1678,8 +1677,7 @@ QString Harmony::userName() const
             case HarmonyType::NASHVILLE:
                   return QObject::tr("Nashville number");
             case HarmonyType::STANDARD:
-            default:
-                  return Element::userName();
+                  break;
             }
       return Element::userName();
       }

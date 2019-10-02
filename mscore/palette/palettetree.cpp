@@ -249,27 +249,27 @@ bool PaletteCell::read(XmlReader& e)
       const bool translateElement = e.hasAttribute("trElement") ? e.intAttribute("trElement") : false;
 
       while (e.readNextStartElement()) {
-            const QStringRef& t1(e.name());
-            if (t1 == "staff")
+            const QStringRef& s(e.name());
+            if (s == "staff")
                   drawStaff = e.readInt();
-            else if (t1 == "xoffset")
+            else if (s == "xoffset")
                   xoffset = e.readDouble();
-            else if (t1 == "yoffset")
+            else if (s == "yoffset")
                   yoffset = e.readDouble();
-            else if (t1 == "mag")
+            else if (s == "mag")
                   mag = e.readDouble();
-            else if (t1 == "tag")
+            else if (s == "tag")
                   tag = e.readElementText();
 
             // added on palettes rework
             // TODO: remove or leave to switch from using attributes later?
-            else if (t1 == "custom")
+            else if (s == "custom")
                   custom = e.readBool();
-            else if (t1 == "visible")
+            else if (s == "visible")
                   visible = e.readBool();
 
             else {
-                  element.reset(Element::name2Element(t1, gscore));
+                  element.reset(Element::name2Element(s, gscore));
                   if (!element)
                         e.unknown();
                   else {
@@ -365,34 +365,34 @@ bool PalettePanel::read(XmlReader& e)
       _name = e.attribute("name");
       _type = Type::Unknown;
       while (e.readNextStartElement()) {
-            const QStringRef t(e.name());
-            if (t == "gridWidth")
+            const QStringRef tag(e.name());
+            if (tag == "gridWidth")
                   _gridSize.setWidth(e.readDouble());
-            else if (t == "gridHeight")
+            else if (tag == "gridHeight")
                   _gridSize.setHeight(e.readDouble());
-            else if (t == "mag")
+            else if (tag == "mag")
                   _mag = e.readDouble();
-            else if (t == "grid")
+            else if (tag == "grid")
                   _drawGrid = e.readInt();
-            else if (t == "moreElements")
+            else if (tag == "moreElements")
                   setMoreElements(e.readInt());
-            else if (t == "yoffset")
+            else if (tag == "yoffset")
                   _yOffset = e.readDouble();
-            else if (t == "drumPalette")      // obsolete
+            else if (tag == "drumPalette")      // obsolete
                   e.skipCurrentElement();
-            else if (t == "type") {
+            else if (tag == "type") {
                   bool ok;
                   const int t = QMetaEnum::fromType<Type>().keyToValue(e.readElementText().toLatin1().constData(), &ok);
                   if (ok)
                         _type = Type(t);
                   }
-            else if (t == "visible")
+            else if (tag == "visible")
                   _visible = e.readBool();
-            else if (e.pasteMode() && t == "expanded")
+            else if (e.pasteMode() && tag == "expanded")
                   _expanded = e.readBool();
-            else if (t == "editable")
+            else if (tag == "editable")
                   _editable = e.readBool();
-            else if (t == "Cell") {
+            else if (tag == "Cell") {
                   PaletteCellPtr cell(new PaletteCell);
                   if (!cell->read(e))
                         continue;

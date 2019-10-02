@@ -890,11 +890,11 @@ bool MuseScore::uninstallExtension(QString extensionId)
             const auto& curWorkspaceName = Workspace::currentWorkspace->name();
             Workspace::refreshWorkspaces();
             emit workspacesChanged();
-            auto workspaces = Workspace::workspaces();
+            auto ws = Workspace::workspaces();
             //If current worksapce is alive, do nothing
             //Select first available workspace in the list otherwise
             bool curWorkspaceDisappeared = true;
-            for (auto workspace : workspaces) {
+            for (auto workspace : ws) {
                   if (workspace->name() == curWorkspaceName) {
                         curWorkspaceDisappeared = false;
                         break;
