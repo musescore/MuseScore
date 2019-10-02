@@ -110,14 +110,14 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <numberType>1</numberType>
-            <bracketType>1</bracketType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
               <text>3:2</text>
               </Number>
+            <numberType>1</numberType>
+            <bracketType>1</bracketType>
             </Tuplet>
           <Chord>
             <durationType>eighth</durationType>
@@ -159,14 +159,14 @@
             <fractions>-1/960</fractions>
             </location>
           <Tuplet>
-            <numberType>1</numberType>
-            <bracketType>1</bracketType>
             <normalNotes>4</normalNotes>
             <actualNotes>6</actualNotes>
             <baseNote>32nd</baseNote>
             <Number>
               <text>6:4</text>
               </Number>
+            <numberType>1</numberType>
+            <bracketType>1</bracketType>
             </Tuplet>
           <Beam>
             <l1>15</l1>
