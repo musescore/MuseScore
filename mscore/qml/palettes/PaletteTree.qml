@@ -225,7 +225,7 @@ ListView {
                 color: control.selected ? globalStyle.highlight: (control.highlighted ? Qt.lighter(globalStyle.button, 1.2) : (control.down ? globalStyle.button : "transparent"))
             }
 
-            highlighted: activeFocus && !selected
+            highlighted: (activeFocus && !selected) || DelegateModel.isUnresolved
             opacity: enabled ? 1 : 0.3
 
             property bool popupExpanded: paletteTree.expandedPopupIndex == modelIndex
@@ -277,6 +277,8 @@ ListView {
 
             Drag.onDragFinished: {
                 paletteTree.itemDragged = false;
+                if (dropAction != Qt.IgnoreAction)
+                    paletteTree.currentIndex = -1;
                 const destIndex = placeholder.active ? placeholder.index : control.rowIndex;
                 placeholder.removePlaceholder();
                 const controller = paletteTree.paletteController;
@@ -320,7 +322,7 @@ ListView {
                     },
                     State {
                         name: "dragged"
-                        PropertyChanges { target: paletteHeader; text: "" }
+                        PropertyChanges { target: paletteHeader; text: ""; unresolved: true }
                         PropertyChanges { target: mainPaletteContainer; visible: false }
                     }
                 ]
