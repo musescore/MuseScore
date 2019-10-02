@@ -68,12 +68,12 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
                   val = cb->itemData(val).toInt();
             v = val;
             }
+      else if (qobject_cast<Awl::ColorLabel*>(w))
+            v = static_cast<Awl::ColorLabel*>(w)->color();
       else if (qobject_cast<QCheckBox*>(w) || qobject_cast<QPushButton*>(w) || qobject_cast<QToolButton*>(w))
             v = w->property("checked");
       else if (qobject_cast<QLineEdit*>(w))
             v =  w->property("text");
-      else if (qobject_cast<Awl::ColorLabel*>(w))
-            v = static_cast<Awl::ColorLabel*>(w)->color();
       else if (qobject_cast<Ms::AlignSelect*>(w))
             v = int(static_cast<Ms::AlignSelect*>(w)->align());
       else if (qobject_cast<Ms::FontStyleSelect*>(w))
@@ -218,14 +218,14 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             }
       else if (qobject_cast<QCheckBox*>(w))
             static_cast<QCheckBox*>(w)->setChecked(val.toBool());
+      else if (qobject_cast<Awl::ColorLabel*>(w))
+            static_cast<Awl::ColorLabel*>(w)->setColor(val.value<QColor>());
       else if (qobject_cast<QPushButton*>(w))
             static_cast<QPushButton*>(w)->setChecked(val.toBool());
       else if (qobject_cast<QToolButton*>(w))
             static_cast<QToolButton*>(w)->setChecked(val.toBool());
       else if (qobject_cast<QLineEdit*>(w))
             static_cast<QLineEdit*>(w)->setText(val.toString());
-      else if (qobject_cast<Awl::ColorLabel*>(w))
-            static_cast<Awl::ColorLabel*>(w)->setColor(val.value<QColor>());
       else if (qobject_cast<Ms::AlignSelect*>(w))
             static_cast<Ms::AlignSelect*>(w)->setAlign(Align(val.toInt()));
       else if (qobject_cast<Ms::FontStyleSelect*>(w))
@@ -575,14 +575,14 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                   connect(qobject_cast<QComboBox*>(w), QOverload<int>::of(&QComboBox::currentIndexChanged), [=] { valueChanged(i); });
             else if (qobject_cast<QCheckBox*>(w))
                   connect(qobject_cast<QCheckBox*>(w), QOverload<bool>::of(&QCheckBox::toggled), [=] { valueChanged(i); });
+            else if (qobject_cast<Awl::ColorLabel*>(w))
+                  connect(qobject_cast<Awl::ColorLabel*>(w), QOverload<QColor>::of(&Awl::ColorLabel::colorChanged), [=] { valueChanged(i); });
             else if (qobject_cast<QPushButton*>(w))
                   connect(qobject_cast<QPushButton*>(w), QOverload<bool>::of(&QPushButton::toggled), [=] { valueChanged(i); });
             else if (qobject_cast<QToolButton*>(w))
                   connect(qobject_cast<QToolButton*>(w), QOverload<bool>::of(&QToolButton::toggled), [=] { valueChanged(i); });
             else if (qobject_cast<QLineEdit*>(w))
                   connect(qobject_cast<QLineEdit*>(w), QOverload<const QString&>::of(&QLineEdit::textChanged), [=] { valueChanged(i); });
-            else if (qobject_cast<Awl::ColorLabel*>(w))
-                  connect(qobject_cast<Awl::ColorLabel*>(w), QOverload<QColor>::of(&Awl::ColorLabel::colorChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::AlignSelect*>(w))
                   connect(qobject_cast<Ms::AlignSelect*>(w), QOverload<Align>::of(&Ms::AlignSelect::alignChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::FontStyleSelect*>(w))

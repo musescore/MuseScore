@@ -139,9 +139,6 @@
         <property name="accessibleName">
          <string>Line color</string>
         </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
        </widget>
       </item>
       <item row="5" column="1">
@@ -379,7 +376,7 @@
   </customwidget>
   <customwidget>
    <class>Awl::ColorLabel</class>
-   <extends>QFrame</extends>
+   <extends>QPushButton</extends>
    <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>

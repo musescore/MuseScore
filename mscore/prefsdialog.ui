@@ -909,9 +909,6 @@
             <property name="accessibleDescription">
              <string>Opens a dialog for selecting the background color</string>
             </property>
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
            </widget>
           </item>
          </layout>
@@ -1020,9 +1017,6 @@
             </property>
             <property name="accessibleDescription">
              <string>Opens a dialog for selecting the paper color</string>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
             </property>
            </widget>
           </item>
@@ -4151,7 +4145,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
  <customwidgets>
   <customwidget>
    <class>Awl::ColorLabel</class>
-   <extends>QFrame</extends>
+   <extends>QPushButton</extends>
    <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>
