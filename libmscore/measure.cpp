@@ -3932,7 +3932,7 @@ void Measure::addSystemTrailer(Measure* nm)
 
       // locate a time sig. in the next measure and, if found,
       // check if it has court. sig. turned off
-      TimeSig* ts;
+      TimeSig* ts = nullptr;
       bool showCourtesySig = false;
       Segment* s = findSegmentR(SegmentType::TimeSigAnnounce, _rtick);
       if (score()->genCourtesyTimesig() && !isFinalMeasure && !score()->floatMode()) {
