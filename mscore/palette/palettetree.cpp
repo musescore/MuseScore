@@ -482,8 +482,8 @@ static void writePaletteFailed(const QString& path)
 bool PalettePanel::writeToFile(const QString& p) const
       {
       QSet<ImageStoreItem*> images;
-      int n = cells.size();
-      for (int i = 0; i < n; ++i) {
+      size_t n = cells.size();
+      for (size_t i = 0; i < n; ++i) {
             if (cells[i] == 0 || cells[i]->element == 0 || cells[i]->element->type() != ElementType::IMAGE)
                   continue;
             images.insert(toImage(cells[i]->element.get())->storeItem());
