@@ -401,7 +401,7 @@ void MuseScore::pluginTriggered(int idx)
 
 void MuseScore::pluginTriggered(QString pp)
       {
-      QQmlEngine* engine = getPluginEngine();
+      QmlPluginEngine* engine = getPluginEngine();
 
       QQmlComponent component(engine);
       component.loadUrl(QUrl::fromLocalFile(pp));
@@ -464,6 +464,8 @@ void MuseScore::pluginTriggered(QString pp)
                   view->show();
                   }
             }
+
+      connect(engine, &QmlPluginEngine::endCmd, p, &QmlPlugin::endCmd);
 
       p->setFilePath(pp.section('/', 0, -2));
 

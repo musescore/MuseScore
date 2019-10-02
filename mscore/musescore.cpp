@@ -5860,6 +5860,9 @@ void MuseScore::cmd(QAction* a)
 
 void MuseScore::endCmd()
       {
+#ifdef SCRIPT_INTERFACE
+      getPluginEngine()->beginEndCmd(this);
+#endif
       if (timeline())
             timeline()->updateGrid();
       if (MScore::_error != MS_NO_ERROR)
@@ -5943,6 +5946,9 @@ void MuseScore::endCmd()
       updateInspector();
       if (cv)
             updatePaletteBeamMode(cv->clickOffElement);
+#ifdef SCRIPT_INTERFACE
+      getPluginEngine()->endEndCmd(this);
+#endif
       }
 
 //---------------------------------------------------------

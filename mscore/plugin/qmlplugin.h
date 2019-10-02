@@ -61,6 +61,9 @@ class QmlPlugin : public QQuickItem {
       MuseScoreCore* msc()             { return MuseScoreCore::mscoreCore; }
       const MuseScoreCore* msc() const { return MuseScoreCore::mscoreCore; }
 
+   public slots:
+      virtual void endCmd(const QMap<QString, QVariant>&) = 0;
+
    public:
       QmlPlugin(QQuickItem* parent = 0);
 
