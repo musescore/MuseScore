@@ -226,7 +226,6 @@ ListView {
             }
 
             highlighted: (activeFocus && !selected) || DelegateModel.isUnresolved
-            opacity: enabled ? 1 : 0.3
 
             property bool popupExpanded: paletteTree.expandedPopupIndex == modelIndex
             function togglePopup() {
@@ -350,6 +349,7 @@ ListView {
                 TreePaletteHeader {
                     id: paletteHeader
                     width: parent.width
+                    opacity: enabled ? 1 : 0.3
                     expanded: control.expanded
                     text: control.text
                     hidePaletteElementVisible: {
@@ -404,7 +404,7 @@ ListView {
                     implicitHeight: mainPalette.implicitHeight + 2 * padding
                     implicitWidth: parent.width
                     height: implicitHeight
-                    border { width: 1; color: "black" }
+                    border { width: 1; color: enabled ? "black" : "#33000000" }
 
                     Palette {
                         id: mainPalette
@@ -458,7 +458,7 @@ ListView {
                             poolPaletteController = paletteTree.paletteWorkspace.poolPaletteController(poolPalette, control.modelIndex);
 
                             customPalette = paletteTree.paletteWorkspace.customElementsPaletteModel
-                            customPaletteRootIndex = paletteTree.paletteWorkspace.customElementsPaletteIndex(poolPaletteRootIndex) // TODO: make a property binding? (but that works incorrectly)
+                            customPaletteRootIndex = paletteTree.paletteWorkspace.customElementsPaletteIndex(control.modelIndex) // TODO: make a property binding? (but that works incorrectly)
                             customPaletteController = paletteTree.paletteWorkspace.customElementsPaletteController
                         }
                         // if closing by other reasons than pressing "More" button again (e.g. via Esc key), synchronize "expanded" status

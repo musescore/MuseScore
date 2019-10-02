@@ -29,8 +29,14 @@ Canvas {
     property int cellHeight: 24
 
     property color background: mscore.paletteBackground
+    property color gridColor: enabled ? "#808080" : "#55808080"
 
     onVisibleChanged: {
+        if (visible)
+            requestPaint();
+    }
+
+    onEnabledChanged: {
         if (visible)
             requestPaint();
     }
@@ -62,7 +68,7 @@ Canvas {
 
     function doDrawGrid(ctx) {
         ctx.lineWidth = 1;
-        ctx.strokeStyle = "gray";
+        ctx.strokeStyle = gridColor;
         ctx.beginPath();
 
         const offX = offsetX % cellWidth;
