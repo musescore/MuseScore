@@ -97,6 +97,32 @@ Palette::Palette(QWidget* parent)
       setObjectName("palette-cells");
       }
 
+Palette::Palette(std::unique_ptr<PalettePanel> pp, QWidget* parent)
+   : Palette(parent)
+      {
+      setName(pp->name());
+      const QSize gridSize = pp->gridSize();
+      setGrid(gridSize.width(), gridSize.height());
+      setMag(pp->mag());
+      setDrawGrid(pp->drawGrid());
+      setMoreElements(pp->moreElements());
+
+      const auto cells = pp->takeCells(0, pp->ncells());
+      for (const PaletteCellPtr& cell : cells) {
+            Element* e = cell.unique() ? cell->element.release() : (cell->element ? cell->element->clone() : nullptr);
+            if (e) {
+                  PaletteCell* newCell = append(e, cell->name, cell->tag, cell->mag);
+                  newCell->drawStaff = cell->drawStaff;
+                  newCell->xoffset = cell->xoffset;
+                  newCell->yoffset = cell->yoffset;
+                  newCell->readOnly = cell->readOnly;
+                  }
+            }
+
+      if (moreElements())
+            connect(this, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
+      }
+
 Palette::~Palette()
       {
       for (PaletteCell* cell : cells)

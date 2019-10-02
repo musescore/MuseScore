@@ -125,6 +125,7 @@ class Palette : public QWidget {
 
    public:
       Palette(QWidget* parent = 0);
+      Palette(std::unique_ptr<PalettePanel>, QWidget* parent = nullptr);
       virtual ~Palette();
 
       void nextPaletteElement();
