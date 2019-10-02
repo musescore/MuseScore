@@ -142,8 +142,7 @@ class PalettePanel {
 //       bool _systemPalette;
       qreal _yOffset = 0.0;                // in spatium units of "gscore"
 
-      bool _moreElements = true; // TODO: needed?
-//       bool _showContextMenu { true };
+      bool _moreElements = false; // not used by QML palettes, default is false for compatibility with Palette class. TODO: remove?
 
       bool _visible = true;
       bool _expanded = false;
