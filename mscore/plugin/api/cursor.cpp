@@ -166,11 +166,16 @@ bool Cursor::nextMeasure()
 
 void Cursor::add(Element* wrapped)
       {
-      Ms::Element* s = wrapped->element();
+      Ms::Element* s = wrapped ? wrapped->element() : nullptr;
       if (!_segment || !s)
             return;
 
-      // TODO: check that the previous ownership was PLUGIN
+      // Ensure that the object has the expected ownership
+      if (wrapped->ownership() == Ownership::SCORE) {
+            qWarning("Chord::add: Cannot add this element. The element is already part of the score.");
+            return;        // Don't allow operation.
+            }
+
       wrapped->setOwnership(Ownership::SCORE);
       s->setTrack(_track);
       s->setParent(_segment);
@@ -190,15 +195,48 @@ void Cursor::add(Element* wrapped)
             _segment = m->first(_filter);
             nextInTrack();
             }
-      else if (s->type() == ElementType::LAYOUT_BREAK) {
-            Ms::Measure* m = _segment->measure();
-            s->setParent(m);
-            _score->undoAddElement(s);
-            }
       else {
-            _score->undoAddElement(s);
+            switch (s->type()) {
+                  case ElementType::MEASURE_NUMBER:
+                  case ElementType::SPACER:
+                  case ElementType::JUMP:
+                  case ElementType::MARKER:
+                  case ElementType::HBOX:
+                  case ElementType::STAFFTYPE_CHANGE:
+                  case ElementType::LAYOUT_BREAK: {
+                        Ms::Measure* m = _segment->measure();
+                        s->setParent(m);
+                        _score->undoAddElement(s);
+                        break;
+                        }
+
+                  case ElementType::NOTE:
+                  case ElementType::ARPEGGIO:
+                  case ElementType::TREMOLO:
+                  case ElementType::CHORDLINE:
+                  case ElementType::ARTICULATION: {
+                        Ms::Element* curElement = currentElement();
+                        if (curElement->isChord()) {
+                              // call Chord::addInternal() (i.e. do the same as a call to Chord.add())
+                              Chord::addInternal(toChord(curElement), s);
+                              }
+                        break;
+                        }
+
+                  case ElementType::LYRICS: {
+                        Ms::Element* curElement = currentElement();
+                        if (curElement->isChordRest()) {
+                              s->setParent(curElement);
+                              _score->undoAddElement(s);
+                              }
+                        break;
+                        }
+
+                  default:
+                        _score->undoAddElement(s);
+                        break;
+                  }
             }
-      _score->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -266,6 +304,15 @@ qreal Cursor::tempo()
       }
 
 //---------------------------------------------------------
+//   currentElement
+//---------------------------------------------------------
+
+Ms::Element* Cursor::currentElement() const
+      {
+      return _segment && _segment->element(_track) ? _segment->element(_track) : nullptr;
+      }
+
+//---------------------------------------------------------
 //   segment
 //---------------------------------------------------------
 
@@ -280,7 +327,7 @@ Segment* Cursor::segment() const
 
 Element* Cursor::element() const
       {
-      Ms::Element* e = _segment && _segment->element(_track) ? _segment->element(_track) : nullptr;
+      Ms::Element* e = currentElement();
       if (!e)
             return nullptr;
       return wrap(e, Ownership::SCORE);
