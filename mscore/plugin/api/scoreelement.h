@@ -80,6 +80,8 @@ class ScoreElement : public QObject {
       /// \endcond
 
       Q_INVOKABLE QString userName() const;
+      /// Checks whether two variables represent the same object. \since MuseScore 3.3
+      Q_INVOKABLE bool is(Ms::PluginAPI::ScoreElement* other) { return other && element() == other->element(); }
       };
 
 //---------------------------------------------------------
