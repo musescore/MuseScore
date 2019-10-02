@@ -338,7 +338,7 @@ AbstractPaletteController::RemoveAction UserPaletteController::queryRemoveAction
                   const auto answer = QMessageBox::question(
                         nullptr,
                         "",
-                        tr("Do you want to permanently delete this custom palette?"),
+                        tr("Do you want to permanently delete this custom palette cell?"),
                         QMessageBox::Yes | QMessageBox::No
                         );
 
@@ -510,6 +510,8 @@ AbstractPaletteController* PaletteWorkspace::getMainPaletteController()
 QModelIndex PaletteWorkspace::customElementsPaletteIndex(const QModelIndex& index)
       {
       const QAbstractItemModel* model = customElementsPaletteModel();
+      if (index.model() == mainPalette && index.parent() == QModelIndex())
+            return model->index(index.row(), 0);
       return convertIndex(index, model);
       }
 
