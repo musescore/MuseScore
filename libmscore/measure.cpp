@@ -3199,9 +3199,9 @@ Element* Measure::nextElementStaff(int staff)
             auto i = std::find(el().begin(), el().end(), e);
             if (i != el().end()) {
                   if (++i != el().end()) {
-                        Element* e = *i;
-                        if (e)
-                              return e;
+                        Element* el = *i;
+                        if (el)
+                              return el;
                         }
                   }
             }
@@ -3233,9 +3233,9 @@ Element* Measure::prevElementStaff(int staff)
             auto i = std::find(el().rbegin(), el().rend(), e);
             if (i != el().rend()) {
                   if (++i != el().rend()) {
-                        Element* e = *i;
-                        if (e)
-                              return e;
+                        Element* el = *i;
+                        if (el)
+                              return el;
                         }
                   }
             }
