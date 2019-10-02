@@ -107,8 +107,8 @@ Palette::Palette(std::unique_ptr<PalettePanel> pp, QWidget* parent)
       setDrawGrid(pp->drawGrid());
       setMoreElements(pp->moreElements());
 
-      const auto cells = pp->takeCells(0, pp->ncells());
-      for (const PaletteCellPtr& cell : cells) {
+      const auto allCells = pp->takeCells(0, pp->ncells());
+      for (const PaletteCellPtr& cell : allCells) {
             Element* e = cell.unique() ? cell->element.release() : (cell->element ? cell->element->clone() : nullptr);
             if (e) {
                   PaletteCell* newCell = append(e, cell->name, cell->tag, cell->mag);
