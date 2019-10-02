@@ -165,22 +165,22 @@ Item {
             checked: paletteHeader.editingEnabled
             onTriggered: paletteHeader.enableEditingToggled(checked)
         }
-        MenuItem {
-            text: qsTr("Save Palette")
-            onTriggered: paletteHeader.paletteWorkspace.savePalette(paletteHeader.modelIndex)
-        }
-        MenuItem {
-            text: qsTr("Load Palette")
-            onTriggered: paletteHeader.paletteWorkspace.loadPalette(paletteHeader.modelIndex)
-        }
         MenuSeparator {}
         MenuItem {
             text: qsTr("Reset Palette")
             onTriggered: paletteHeader.paletteWorkspace.resetPalette(paletteHeader.modelIndex)
         }
+        MenuItem {
+            text: qsTr("Save Palette…")
+            onTriggered: paletteHeader.paletteWorkspace.savePalette(paletteHeader.modelIndex)
+        }
+        MenuItem {
+            text: qsTr("Load Palette…")
+            onTriggered: paletteHeader.paletteWorkspace.loadPalette(paletteHeader.modelIndex)
+        }
         MenuSeparator {}
         MenuItem {
-            text: qsTr("Palette Properties")
+            text: qsTr("Palette Properties…")
             enabled: paletteHeader.editingEnabled
             onTriggered: paletteHeader.editPalettePropertiesRequested()
         }
