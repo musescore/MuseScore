@@ -363,6 +363,7 @@ void PluginCreator::runClicked()
             }
 
       connect(qml,  SIGNAL(quit()), SLOT(closePlugin()));
+      connect(qml, &QmlPluginEngine::endCmd, item, &QmlPlugin::endCmd);
 
       if (mscore->currentScore() && item->pluginType() != "dock")
             mscore->currentScore()->startCmd();

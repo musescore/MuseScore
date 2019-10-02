@@ -24,13 +24,26 @@
 
 namespace Ms {
 
+class MuseScore;
+
 //---------------------------------------------------------
 //   QmlPluginEngine
 //---------------------------------------------------------
 
 class QmlPluginEngine : public MsQmlEngine {
+      Q_OBJECT
+
+      QMap<QString, QVariant> endCmdInfo;
+      int cmdCount = 0;
+      bool recursion = false;
+
+   signals:
+      void endCmd(const QMap<QString, QVariant>& changes);
    public:
       QmlPluginEngine(QObject* parent = nullptr);
+
+      void beginEndCmd(MuseScore*);
+      void endEndCmd(MuseScore*);
       };
 
 } // namespace Ms

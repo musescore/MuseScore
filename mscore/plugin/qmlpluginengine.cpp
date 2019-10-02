@@ -19,8 +19,12 @@
 
 #include "qmlpluginengine.h"
 #include "api/qmlpluginapi.h"
+#include "libmscore/score.h"
+#include "musescore.h"
 
 namespace Ms {
+
+static constexpr int maxCmdCount = 10; // recursion prevention
 
 //---------------------------------------------------------
 //   QmlPluginEngine
@@ -30,5 +34,47 @@ QmlPluginEngine::QmlPluginEngine(QObject* parent)
    : MsQmlEngine(parent)
       {
       PluginAPI::PluginAPI::registerQmlTypes();
+      }
+
+//---------------------------------------------------------
+//   QmlPluginEngine::beginEndCmd
+//---------------------------------------------------------
+
+void QmlPluginEngine::beginEndCmd(MuseScore* ms)
+      {
+      ++cmdCount;
+
+      // TODO: most of plugins are never deleted so receivers usually never decrease
+      if (!receivers(SIGNAL(endCmd(const QMap<QString, QVariant>&))))
+            return;
+
+      const Score* cs = ms->currentScore();
+
+      endCmdInfo["selectionChanged"] = !cs || cs->selectionChanged();
+      endCmdInfo["excerptsChanged"] = !cs || cs->masterScore()->excerptsChanged();
+      endCmdInfo["instrumentsChanged"] = !cs || cs->masterScore()->instrumentsChanged();
+
+      // TODO: gather the information on which part of a score has changed?
+//       endCmdInfo["startLayoutTick"] = cs ? cs->cmdState().startTick().ticks() : -1;
+//       endCmdInfo["endLayoutTick"] = cs ? cs->cmdState().endTick().ticks() : -1;
+      }
+
+//---------------------------------------------------------
+//   QmlPluginEngine::endEndCmd
+//---------------------------------------------------------
+
+void QmlPluginEngine::endEndCmd(MuseScore*)
+      {
+      if (cmdCount >= maxCmdCount) {
+            QMessageBox::warning(mscore, tr("Plugin Error"), tr("Score update recursion limit reached (%1)").arg(maxCmdCount));
+            recursion = true;
+            }
+
+      if (!recursion)
+            emit endCmd(endCmdInfo);
+
+      --cmdCount;
+      if (!cmdCount)
+            recursion = false;
       }
 }
