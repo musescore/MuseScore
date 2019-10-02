@@ -90,7 +90,7 @@ void Chord::setPlayEventType(Ms::PlayEventType v)
 
 void Chord::add(Ms::PluginAPI::Element* wrapped)
       {
-      Ms::Element* s = wrapped->element();
+      Ms::Element* s = wrapped ? wrapped->element() : nullptr;
       if (s)
             {
             // Ensure that the object has the expected ownership
@@ -100,16 +100,26 @@ void Chord::add(Ms::PluginAPI::Element* wrapped)
                   }
             // Score now owns the object.
             wrapped->setOwnership(Ownership::SCORE);
-            // Provide parentage for element.
-            s->setParent(chord());
-            // If a note, ensure the element has proper Tpc values. (Will crash otherwise)
-            if (s->isNote()) {
-                  s->setTrack(chord()->track());
-                  toNote(s)->setTpcFromPitch();
-                  }
-            // Create undo op and add the element.
-            chord()->score()->undoAddElement(s);
+
+            addInternal(chord(), s);
             }
+      }
+
+//---------------------------------------------------------
+//   Chord::addInternal
+//---------------------------------------------------------
+
+void Chord::addInternal(Ms::Chord* chord, Ms::Element* s)
+      {
+      // Provide parentage for element.
+      s->setParent(chord);
+      // If a note, ensure the element has proper Tpc values. (Will crash otherwise)
+      if (s->isNote()) {
+            s->setTrack(chord->track());
+            toNote(s)->setTpcFromPitch();
+            }
+      // Create undo op and add the element.
+      chord->score()->undoAddElement(s);
       }
 
 //---------------------------------------------------------

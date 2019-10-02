@@ -522,6 +522,8 @@ class Chord : public Element {
       Ms::NoteType noteType()                  { return chord()->noteType(); }
       Ms::PlayEventType playEventType()        { return chord()->playEventType(); }
       void setPlayEventType(Ms::PlayEventType v);
+
+      static void addInternal(Ms::Chord* chord, Ms::Element* el);
       /// \endcond
 
       /// Add to a chord's elements.
