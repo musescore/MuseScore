@@ -171,6 +171,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Stem direction</string>
+        </property>
         <item>
          <property name="text">
           <string>Auto</string>
@@ -208,12 +211,12 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="stemDirection">
+       <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Direction:</string>
         </property>
         <property name="buddy">
-         <cstring>stemDirection</cstring>
+         <cstring>label_3</cstring>
         </property>
        </widget>
       </item>
