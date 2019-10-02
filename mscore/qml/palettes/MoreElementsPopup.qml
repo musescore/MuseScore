@@ -101,7 +101,18 @@ StyledPopup {
                 flat: true
                 text: "<" // TODO: replace?
 
-                property var prevIndex: masterIndexControls.enabled ? poolPalette.sibling(poolPaletteRootIndex.row - 1, 0, poolPaletteRootIndex) : null
+                property var prevIndex: {
+                    if (!masterIndexControls.enabled)
+                        return null;
+
+                    var idx = poolPalette.sibling(poolPaletteRootIndex.row - 1, 0, poolPaletteRootIndex);
+                    if (!idx.valid) {
+                        const nrows = poolPalette.rowCount(poolPaletteRootIndex.parent);
+                        idx = poolPalette.sibling(nrows - 1, 0, poolPaletteRootIndex)
+                    }
+                    return idx;
+                }
+
                 enabled: prevIndex && prevIndex.valid
 
                 onClicked: poolPaletteRootIndex = prevIndex;
@@ -118,7 +129,16 @@ StyledPopup {
                 flat: true
                 text: ">" // TODO: replace?
 
-                property var nextIndex: masterIndexControls.enabled ? poolPalette.sibling(poolPaletteRootIndex.row + 1, 0, poolPaletteRootIndex) : null
+                property var nextIndex: {
+                    if (!masterIndexControls.enabled)
+                        return null;
+
+                    var idx = poolPalette.sibling(poolPaletteRootIndex.row + 1, 0, poolPaletteRootIndex);
+                    if (!idx.valid)
+                        idx = poolPalette.sibling(0, 0, poolPaletteRootIndex)
+                    return idx;
+                }
+
                 enabled: nextIndex && nextIndex.valid
 
                 onClicked: poolPaletteRootIndex = nextIndex
@@ -178,40 +198,39 @@ StyledPopup {
 
                 Item {
                     width: separator.width
-                    implicitHeight: customPaletteLabel.implicitHeight
+                    implicitHeight: deleteButton.implicitHeight
                     visible: !customPalette.empty
 
                     Text {
                         id: customPaletteLabel
+                        height: deleteButton.height
+                        verticalAlignment: Text.AlignVCenter
                         text: qsTr("Custom")
                     }
 
                     StyledToolButton {
                         id: deleteButton
-                        height: customPaletteLabel.height
                         width: height
                         anchors.right: parent.right
                         text: qsTr("Delete element(s)")
                         enabled: customPaletteSelectionModel.hasSelection
 
-                        ToolTip.visible: hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: text
 
                         onHoveredChanged: {
                             if (hovered) {
                                 mscore.tooltip.item = deleteButton;
-                                mscore.tooltip.text = deleteButton.texst;
+                                mscore.tooltip.text = deleteButton.text;
                             } else if (mscore.tooltip.item == deleteButton)
                                 mscore.tooltip.item = null;
                         }
 
-                        padding: 0
+                        padding: 4
 
                         contentItem: StyledIcon {
                             source: "icons/delete.png"
                             color: "black"
-                            opacity: deleteButton.enabled ? 1.0 : 0.3
+                            opacity: deleteButton.enabled ? 1.0 : 0.1
                         }
 
                         onClicked: Utils.removeSelectedItems(moreElementsPopup.customPalette, moreElementsPopup.customPaletteController, customPaletteSelectionModel, moreElementsPopup.customPaletteRootIndex);

@@ -337,6 +337,8 @@ GridView {
             property var modelIndex: paletteView.model.modelIndex(index)
             property var parentModelIndex: paletteView.paletteRootIndex
 
+            opacity: enabled ? 1.0 : 0.3
+
             property bool dragged: Drag.active
             property bool internalDrag: false
             property bool dragCopy: false
