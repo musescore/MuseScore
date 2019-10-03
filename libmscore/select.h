@@ -76,7 +76,8 @@ enum class SelState : char {
 
 //---------------------------------------------------------
 //   SelectionFilterType
-//   see also `static const char* labels[]` in selectionwindow.cpp
+//   see also `static const char* labels[]` in mscore/selectionwindow.cpp
+//   need to keep those in sync!
 //---------------------------------------------------------
 
 enum class SelectionFilterType {
