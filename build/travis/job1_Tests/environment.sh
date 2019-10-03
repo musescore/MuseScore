@@ -33,7 +33,7 @@ export PATH="$PATH:$HOME/bin:$HOME/software/bin"
 
 # Prepare for post-install upload of artifacts to S3
 export TRAVIS_SHORT_COMMIT="$(echo $TRAVIS_COMMIT | cut -c 1-8)"
-export ARTIFACTS_TARGET_PATHS="$TRAVIS_SHORT_COMMIT"
+export ARTIFACTS_TARGET_PATHS="$TRAVIS_SHORT_COMMIT:latest"
 export ARTIFACTS_PERMISSIONS=public-read
 export TRAVIS_BUILD_DIR=vtest/html
 #compatibility between ruby travis artifact and GO one

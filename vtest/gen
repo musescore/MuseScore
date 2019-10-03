@@ -105,6 +105,16 @@ echo "{}]" >> $JSON_FILE
 echo "Generate PNG files"
 $MSCORE -j $JSON_FILE -r $DPI >LOG 2>&1
 
+if [ "$VTEST_GEN_METADATA" = "1" ]
+then
+    git branch --sort=-committerdate --format="%(refname:short) %(objectname:short)" > branches.list
+    rm -f tests.list
+    for F in $SRC
+    do
+        echo "$F" >> tests.list
+    done
+fi
+
 echo "Compare PNG files and references"
 for src in $SRC; do
       if test -f $src-1.png; then
