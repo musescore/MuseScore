@@ -61,6 +61,9 @@ class ToolButtonMenu : public AccessibleToolButton { // : public QToolButton {
    private slots:
       void handleAlternativeAction(QAction* a);
 
+   protected:
+      void keyPressEvent(QKeyEvent* event) override;
+
       };
 
 } // namespace Ms
