@@ -69,4 +69,19 @@ void ToolButtonMenu::handleAlternativeAction(QAction* a)
             def->trigger();
       }
 
+void ToolButtonMenu::keyPressEvent(QKeyEvent* event)
+      {
+      switch(event->key()) {
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+            case Qt::Key_Space:
+                  menu()->exec(this->mapToGlobal(QPoint(0, size().height())));
+                  menu()->setFocus();
+                  menu()->setActiveAction(defaultAction());
+                  break;
+            default:
+                  AccessibleToolButton::keyPressEvent(event);
+            }
+      }
+
 } // namespace Ms
