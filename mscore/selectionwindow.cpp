@@ -26,8 +26,9 @@
 
 namespace Ms {
 
-// see `SelectionFilter::canSelect()` in select.cpp
-// and `enum class SelectionFilterType` in select.h
+// see `SelectionFilter::canSelect()` in libmscore/select.cpp
+// and `enum class SelectionFilterType` in libmscore/select.h,
+// keep in sync with the latter!
 static const char* labels[] = {
       QT_TRANSLATE_NOOP("selectionfilter", "All"),
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 1"),
@@ -36,12 +37,12 @@ static const char* labels[] = {
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 4"),
       QT_TRANSLATE_NOOP("selectionfilter", "Dynamics & Hairpins"),
       QT_TRANSLATE_NOOP("selectionfilter", "Fingerings"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Chord Symbols"),
       QT_TRANSLATE_NOOP("selectionfilter", "Lyrics"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Chord Symbols"),
       QT_TRANSLATE_NOOP("selectionfilter", "Other Text"),
       QT_TRANSLATE_NOOP("selectionfilter", "Articulations & Ornaments"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Figured Bass"),
       QT_TRANSLATE_NOOP("selectionfilter", "Slurs"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Figured Bass"),
       QT_TRANSLATE_NOOP("selectionfilter", "Ottavas"),
       QT_TRANSLATE_NOOP("selectionfilter", "Pedal Lines"),
       QT_TRANSLATE_NOOP("selectionfilter", "Other Lines"),
