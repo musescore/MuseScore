@@ -544,6 +544,25 @@ void Tie::write(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
+//   restsDeletedInOtherVoices
+//    returns true if the track we're checking is the first one in its staff
+//    and the rests in other tracks are deleted for the spanned time period
+//---------------------------------------------------------
+
+static bool restsDeletedInOtherVoices(int track, Measure* m, Fraction tick, Fraction ticks)
+      {
+      if (track & 3 != 0)
+            return false;
+      else {
+            for (int i = 1; i <= 3; ++i) {
+                  if (!m->isOnlyDeletedRests(track + i, tick, tick + ticks))
+                        return false;
+                  }
+            return true;
+            }
+      }
+
+//---------------------------------------------------------
 //   calculateDirection
 //---------------------------------------------------------
 
@@ -557,10 +576,10 @@ void Tie::calculateDirection()
       if (_slurDirection == Direction::AUTO) {
             std::vector<Note*> notes = c1->notes();
             size_t n = notes.size();
-            if (m1->hasVoices(c1->staffIdx()) || m2->hasVoices(c2->staffIdx())) {
+            if ((m1->hasVoices(c1->staffIdx()) && !restsDeletedInOtherVoices(track(), m1, tick(), ticks()))
+               || (m2->hasVoices(c2->staffIdx()) && !restsDeletedInOtherVoices(track(), m2, tick(), ticks())))
                   // in polyphonic passage, ties go on the stem side
                   _up = c1->up();
-                  }
             else if (n == 1) {
                   //
                   // single note
@@ -632,10 +651,10 @@ TieSegment* Tie::layoutFor(System* system)
                   }
             Chord* c1 = startNote()->chord();
             if (_slurDirection == Direction::AUTO) {
-                  if (c1->measure()->hasVoices(c1->staffIdx())) {
+                  if (c1->measure()->hasVoices(c1->staffIdx())
+                     && !restsDeletedInOtherVoices(track(), c1->measure(), tick(), ticks()))
                         // in polyphonic passage, ties go on the stem side
                         _up = c1->up();
-                        }
                   else
                         _up = !c1->up();
                   }

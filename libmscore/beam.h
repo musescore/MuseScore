@@ -93,6 +93,7 @@ class Beam final : public Element {
 
       virtual Fraction tick() const override;
       virtual Fraction rtick() const override;
+      Fraction ticks() const;
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
@@ -110,7 +111,7 @@ class Beam final : public Element {
       void clear()                        { _elements.clear(); }
       bool empty() const                { return _elements.empty(); }
       bool contains(const ChordRest* cr) const { return std::find(_elements.begin(), _elements.end(), cr) != _elements.end(); }
-
+      
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
 

@@ -1013,6 +1013,25 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
       }
 
 //---------------------------------------------------------
+//   restsDeletedInOtherVoices
+//    returns true if the track we're checking is the first one in its staff
+//    and the rests in other tracks are deleted for the spanned time period
+//---------------------------------------------------------
+
+static bool restsDeletedInOtherVoices(int track, Measure* m, Fraction tick, Fraction ticks)
+      {
+      if (track & 3 != 0)
+            return false;
+      else {
+            for (int i = 1; i <= 3; ++i) {
+                  if (!m->isOnlyDeletedRests(track + i, tick, tick + ticks))
+                        return false;
+                  }
+            return true;
+            }
+      }
+
+//---------------------------------------------------------
 //   layoutSystem
 //    layout slurSegment for system
 //---------------------------------------------------------
@@ -1080,7 +1099,8 @@ SpannerSegment* Slur::layoutSystem(System* system)
                               // but grace notes are exceptions
                               _up = true;
                               }
-                        else if (m1->hasVoices(startCR()->staffIdx()) && c1 && !c1->isGrace()) {
+                        else if (m1->hasVoices(startCR()->staffIdx()) && c1 && !c1->isGrace()
+                           && !restsDeletedInOtherVoices(track(), m1, tick(), ticks())) {
                               // in polyphonic passage, slurs go on the stem side
                               _up = startCR()->up();
                               }
@@ -1202,7 +1222,8 @@ void Slur::layout()
                         // but grace notes are exceptions
                         _up = true;
                         }
-                  else if (m1->hasVoices(startCR()->staffIdx()) && c1 && c1->noteType() == NoteType::NORMAL) {
+                  else if (m1->hasVoices(startCR()->staffIdx()) && c1 && c1->noteType() == NoteType::NORMAL
+                     && !restsDeletedInOtherVoices(track(), m1, tick(), ticks())){
                         // in polyphonic passage, slurs go on the stem side
                         _up = startCR()->up();
                         }

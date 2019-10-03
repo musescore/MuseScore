@@ -284,6 +284,25 @@ bool Beam::twoBeamedNotes()
       }
 
 //---------------------------------------------------------
+//   restsDeletedInOtherVoices
+//    returns true if the track we're checking is the first one in its staff
+//    and the rests in other tracks are deleted for the spanned time period
+//---------------------------------------------------------
+
+static bool restsDeletedInOtherVoices(int track, Measure* m, Fraction tick, Fraction ticks)
+      {
+      if (track & 3 != 0)
+            return false;
+      else {
+            for (int i = 1; i <= 3; ++i) {
+                  if (!m->isOnlyDeletedRests(track + i, tick, tick + ticks))
+                        return false;
+                  }
+            return true;
+            }
+      }
+
+//---------------------------------------------------------
 //   layout1
 //    - remove beam segments
 //    - detach from system
@@ -390,7 +409,8 @@ void Beam::layout1()
                         Measure* m = c1->measure();
                         if (c1->stemDirection() != Direction::AUTO)
                               _up = c1->stemDirection() == Direction::UP;
-                        else if (m->hasVoices(c1->staffIdx()))
+                        else if (m->hasVoices(c1->staffIdx())
+                           && !restsDeletedInOtherVoices(track(), m, tick(), ticks()))
                               _up = !(c1->voice() % 2);
                         else if (!twoBeamedNotes()) {
                               // highest or lowest note determines stem direction
@@ -475,9 +495,9 @@ void Beam::layoutGraceNotes()
                   _up = _direction == Direction::UP;
             else {
                   ChordRest* cr = _elements[0];
-
                   Measure* m = cr->measure();
-                  if (m->hasVoices(cr->staffIdx()))
+                  if (m->hasVoices(cr->staffIdx())
+                     && !restsDeletedInOtherVoices(track(), m, tick(), ticks()))
                         _up = !(cr->voice() % 2);
                   else
                         _up = true;
@@ -2490,6 +2510,20 @@ Fraction Beam::tick() const
 Fraction Beam::rtick() const
       {
       return _elements.empty() ? Fraction(0, 1) : _elements.front()->segment()->rtick();
+      }
+
+//---------------------------------------------------------
+//   ticks
+//    calculate the ticks of all chords and rests connected by the beam
+//---------------------------------------------------------
+
+Fraction Beam::ticks() const
+      {
+      Fraction ticks = Fraction(0, 1);
+      for (size_t i = 0; i < _elements.size(); ++i) {
+            ticks += _elements[i]->globalTicks();
+            return ticks;
+            }
       }
 
 //---------------------------------------------------------
