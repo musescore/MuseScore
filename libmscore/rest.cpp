@@ -488,8 +488,13 @@ int Rest::computeLineOffset(int lines)
                         offsetVoices = false;
                         }
                   }
-            else if (measure()->isOnlyDeletedRests(track() + 1, tick(), tick() + globalTicks()))
+            else {
                   offsetVoices = false;
+                  for (int i = 1; i < VOICES; ++i) {
+                        if (!measure()->isOnlyDeletedRests(track() + i, tick(), tick() + globalTicks()))
+                              offsetVoices = true;
+                        }
+                  }
             }
 #if 0
       if (offsetVoices && staff()->mergeMatchingRests()) {
