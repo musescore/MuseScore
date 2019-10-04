@@ -116,12 +116,12 @@ static const StyleType styleTypes[] {
       { Sid::lyricsEvenFontStyle,     "lyricsEvenFontStyle",     int(FontStyle::Normal) },
       { Sid::lyricsEvenColor,         "lyricsEvenColor",         QColor(0, 0, 0, 255) },
       { Sid::lyricsEvenAlign,         "lyricsEvenAlign",         QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
-      { Sid::lyricsEvenFrameType,     "lyricsOddFrameType",      int(FrameType::NO_FRAME) },
-      { Sid::lyricsEvenFramePadding,  "lyricsOddFramePadding",   0.2 },
-      { Sid::lyricsEvenFrameWidth,    "lyricsOddFrameWidth",     0.1 },
-      { Sid::lyricsEvenFrameRound,    "lyricsOddFrameRound",     0 },
-      { Sid::lyricsEvenFrameFgColor,  "lyricsOddFrameFgColor",   QColor(0, 0, 0, 255) },
-      { Sid::lyricsEvenFrameBgColor,  "lyricsOddFrameBgColor",   QColor(255, 255, 255, 0) },
+      { Sid::lyricsEvenFrameType,     "lyricsEvenFrameType",     int(FrameType::NO_FRAME) },
+      { Sid::lyricsEvenFramePadding,  "lyricsEvenFramePadding",  0.2 },
+      { Sid::lyricsEvenFrameWidth,    "lyricsEvenFrameWidth",    0.1 },
+      { Sid::lyricsEvenFrameRound,    "lyricsEvenFrameRound",    0 },
+      { Sid::lyricsEvenFrameFgColor,  "lyricsEvenFrameFgColor",  QColor(0, 0, 0, 255) },
+      { Sid::lyricsEvenFrameBgColor,  "lyricsEvenFrameBgColor",  QColor(255, 255, 255, 0) },
 
       { Sid::figuredBassFontFamily,   "figuredBassFontFamily",   QString("MScoreBC") },
 
