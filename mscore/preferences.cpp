@@ -227,7 +227,7 @@ QVariant Preferences::defaultValue(const QString key) const
       {
       checkIfKeyExists(key);
       Preference* pref = _allPreferences.value(key);
-      return pref->defaultValue();
+      return pref ? pref->defaultValue() : QVariant();
       }
 
 QSettings* Preferences::settings() const
