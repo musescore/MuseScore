@@ -299,8 +299,14 @@ void TimeSig::layout()
             ds.clear();
             }
       else {
-            ns = toTimeSigString(_numeratorString.isEmpty()   ? QString::number(_sig.numerator())   : _numeratorString);
-            ds = toTimeSigString(_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString);
+            if (_numeratorString.isEmpty() && _denominatorString.isEmpty()) {
+                  ns = toTimeSigString(QString::number(_sig.numerator()));
+                  ds = toTimeSigString(QString::number(_sig.denominator()));
+                  }
+            else {
+                  ns = toTimeSigString(_numeratorString);
+                  ds = toTimeSigString(_denominatorString);
+                  }
 
             ScoreFont* font = score()->scoreFont();
             QSizeF mag(magS() * _scale);
@@ -314,20 +320,19 @@ void TimeSig::layout()
 
             qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
 
-            //align on the wider
+            // align on the wider
+            // if the other is empty, directly put in the centre of the clef
             qreal pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
-            qreal pnY = yoff + displ + denRect.height() * .5;
+            qreal pnY = yoff + (numRect.width() < 0.01 ? 0.0 : (displ + denRect.height() * .5));
 
             if (numRect.width() >= denRect.width()) {
-                  // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
                   pz = QPointF(0.0, pzY);
-                  // denominator: horiz: centred around centre of numerator | vert: one space below centre line
+                  // centred around centre of numerator horizontally
                   pn = QPointF((numRect.width() - denRect.width())*.5, pnY);
                   }
             else {
-                  // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
+                  // centred around centre of denominator horizontally
                   pz = QPointF((denRect.width() - numRect.width())*.5, pzY);
-                  // denominator: horiz: centred around centre of numerator | vert: one space below centre line
                   pn = QPointF(0.0, pnY);
                   }
 
