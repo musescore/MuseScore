@@ -134,6 +134,7 @@ public:
       void attributes(const QString& partId, const Fraction cTime);
       void clef(const QString& partId);
       void time(const Fraction cTime);
+      void transpose(const QString& partId, const Fraction& tick);
       void divisions();
       void staves(const QString& partId);
       void direction(const QString& partId, const Fraction cTime);
@@ -160,6 +161,7 @@ public:
       MusicXMLDrumset getDrumset(const QString& id) const { return _drumsets.value(id); }
       void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line, const Direction sd);
       MusicXmlInstrList getInstrList(const QString id) const;
+      MusicXmlIntervalList getIntervals(const QString id) const;
       Fraction getMeasureStart(const int i) const;
       int octaveShift(const QString& id, const int staff, const Fraction f) const;
       const CreditWordsList& credits() const { return _credits; }
