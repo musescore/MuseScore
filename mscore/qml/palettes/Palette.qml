@@ -171,7 +171,7 @@ GridView {
                     drag.source.dragCopy = action == Qt.CopyAction;
                     paletteView.state = "drag";
                     drag.source.paletteDrag = true;
-                } else
+                } else if (typeof drag.source.paletteDrag !== "undefined") // if this is a palette and not, e.g., scoreview
                     return;
 
                 drag.accept(action); // confirm we accept the action we determined inside onEntered
