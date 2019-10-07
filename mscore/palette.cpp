@@ -729,6 +729,8 @@ void Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
             if (viewer->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM)
                   viewer->moveCursor();
             }
+      else if (viewer->mscoreState() & STATE_ALLTEXTUAL_EDIT)
+            viewer->setFocus();
       viewer->setDropTarget(0);
 //      mscore->endCmd();
       }
