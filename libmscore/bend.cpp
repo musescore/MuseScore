@@ -31,6 +31,7 @@ static const char* label[] = {
       };
 
 static const ElementStyle bendStyle {
+      { Sid::bendFontFace,                       Pid::FONT_FACE              },
       { Sid::bendFontSize,                       Pid::FONT_SIZE              },
       { Sid::bendFontStyle,                      Pid::FONT_STYLE             },
       { Sid::bendLineWidth,                      Pid::LINE_WIDTH             },
