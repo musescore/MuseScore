@@ -136,6 +136,11 @@ GridView {
         delegateModel: paletteCellDelegateModel
     }
 
+    Timer {
+        id: dragDropReorderTimer
+        interval: 400
+    }
+
     PaletteBackground {
         z: -1
         anchors.fill: parent
@@ -160,6 +165,14 @@ GridView {
                     onEntered(drag);
                     return;
                 }
+
+                if (drag.source.dragged) {
+                    drag.source.internalDrag = internal;
+                    drag.source.dragCopy = action == Qt.CopyAction;
+                    paletteView.state = "drag";
+                    drag.source.paletteDrag = true;
+                } else
+                    return;
 
                 drag.accept(action); // confirm we accept the action we determined inside onEntered
 
@@ -192,12 +205,8 @@ GridView {
                     drag.accepted = false;
 
                 // If event is accepted, process the drag in a usual way
-                if (drag.accepted) {
-                    drag.source.internalDrag = internal;
-                    drag.source.dragCopy = action == Qt.CopyAction;
-                    paletteView.state = "drag";
+                if (drag.accepted)
                     onDrag(drag);
-                    }
             }
 
             onPositionChanged: onDrag(drag)
@@ -339,7 +348,8 @@ GridView {
 
             opacity: enabled ? 1.0 : 0.3
 
-            property bool dragged: Drag.active
+            readonly property bool dragged: Drag.active && !dragDropReorderTimer.running
+            property bool paletteDrag: false
             property bool internalDrag: false
             property bool dragCopy: false
 
@@ -354,7 +364,7 @@ GridView {
 
             contentItem: QmlIconView {
                 id: icon
-                visible: !parent.dragged || parent.dragCopy
+                visible: !parent.paletteDrag || parent.dragCopy
                 anchors.fill: parent
                 icon: model.decoration
                 selected: paletteCell.selected
@@ -425,6 +435,7 @@ GridView {
 
                 onPressed: icon.grabToImage(function(result) {
                     parent.Drag.imageSource = result.url
+                    dragDropReorderTimer.restart();
                 })
 
                 onClicked: parent.onClicked(mouse)
@@ -457,7 +468,12 @@ GridView {
             Drag.supportedActions: Qt.CopyAction | (model.editable ? Qt.MoveAction : 0)
             Drag.mimeData: Drag.active ? mimeData : {}
 
-            onInternalDragChanged: DelegateModel.inItems = !internalDrag;
+            onInternalDragChanged: {
+                if (internalDrag && dragDropReorderTimer.running)
+                    return;
+                DelegateModel.inItems = !internalDrag;
+            }
+            onDraggedChanged: DelegateModel.inItems = !internalDrag;
 
             property var dropData: null
 
@@ -468,6 +484,7 @@ GridView {
 
             Drag.onDragFinished: {
                 paletteView.state = "default";
+                paletteDrag = false;
                 internalDrag = false;
                 DelegateModel.inPersistedItems = false;
 
