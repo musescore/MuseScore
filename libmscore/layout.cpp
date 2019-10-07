@@ -128,7 +128,7 @@ static bool vUp(Chord* chord)
                   up = false;
             else if (chord->track() > chord->beam()->track())
                   up = true;
-            else if (chord->measure()->hasVoices(chord->staffIdx()))
+            else if (chord->measure()->hasVoices(chord->staffIdx(), chord->tick(), chord->actualTicks()))
                   up = !(chord->track() % 2);
             else
                   up = !chord->staff()->isTop();

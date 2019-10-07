@@ -480,7 +480,7 @@ int Rest::getDotline(TDuration::DurationType durationType)
 int Rest::computeLineOffset(int lines)
       {
       Segment* s = segment();
-      bool offsetVoices = s && measure() && measure()->hasVoices(staffIdx());
+      bool offsetVoices = s && measure() && measure()->hasVoices(staffIdx(), tick(), actualTicks());
       if (offsetVoices && voice() == 0) {
             // do not offset voice 1 rest if there exists a matching invisible rest in voice 2;
             Element* e = s->element(track() + 1);
@@ -490,8 +490,6 @@ int Rest::computeLineOffset(int lines)
                         offsetVoices = false;
                         }
                   }
-            else if (measure()->isOnlyDeletedRests(track() + 1, tick(), tick() + globalTicks()))
-                  offsetVoices = false;
             }
 #if 0
       if (offsetVoices && staff()->mergeMatchingRests()) {

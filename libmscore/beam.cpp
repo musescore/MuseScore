@@ -396,7 +396,7 @@ void Beam::layout1()
                         Measure* m = c1->measure();
                         if (c1->stemDirection() != Direction::AUTO)
                               _up = c1->stemDirection() == Direction::UP;
-                        else if (m->hasVoices(c1->staffIdx()))
+                        else if (m->hasVoices(c1->staffIdx(), tick(), ticks()))
                               _up = !(c1->voice() % 2);
                         else if (!twoBeamedNotes()) {
                               // highest or lowest note determines stem direction
@@ -483,7 +483,7 @@ void Beam::layoutGraceNotes()
                   ChordRest* cr = _elements[0];
 
                   Measure* m = cr->measure();
-                  if (m->hasVoices(cr->staffIdx()))
+                  if (m->hasVoices(cr->staffIdx(), tick(), ticks()))
                         _up = !(cr->voice() % 2);
                   else
                         _up = true;
@@ -2491,6 +2491,19 @@ Fraction Beam::tick() const
 Fraction Beam::rtick() const
       {
       return _elements.empty() ? Fraction(0, 1) : _elements.front()->segment()->rtick();
+      }
+
+//---------------------------------------------------------
+//   ticks
+//    calculate the ticks of all chords and rests connected by the beam
+//---------------------------------------------------------
+
+Fraction Beam::ticks() const
+      {
+      Fraction ticks = Fraction(0, 1);
+      for (ChordRest* cr : _elements)
+            ticks += cr->actualTicks();
+      return ticks;
       }
 
 //---------------------------------------------------------

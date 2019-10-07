@@ -2682,19 +2682,34 @@ void Measure::exchangeVoice(int strack, int dtrack, int staffIdx)
 
 void Measure::checkMultiVoices(int staffIdx)
       {
+      if (hasVoices(staffIdx, tick(), ticks()))
+            _mstaves[staffIdx]->setHasVoices(true);
+      else
+            _mstaves[staffIdx]->setHasVoices(false);
+      }
+
+//---------------------------------------------------------
+//   hasVoices
+//---------------------------------------------------------
+
+bool Measure::hasVoices(int staffIdx, Fraction stick, Fraction len) const
+      {
       int strack = staffIdx * VOICES + 1;
       int etrack = staffIdx * VOICES + VOICES;
-      _mstaves[staffIdx]->setHasVoices(false);
+      Fraction etick = stick + len;
 
       for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            if (s->tick() >= etick)
+                  break;
             for (int track = strack; track < etrack; ++track) {
-                  Element* e = s->element(track);
-                  if (e) {
-                        bool v;
-                        if (e->isChord()) {
-                              v = false;
+                  ChordRest* cr = toChordRest(s->element(track));
+                  if (cr) {
+                        if (cr->tick() + cr->actualTicks() <= stick)
+                              continue;
+                        bool v = false;
+                        if (cr->isChord()) {
                               // consider chord visible if any note is visible
-                              Chord* c = toChord(e);
+                              Chord* c = toChord(cr);
                               for (Note* n : c->notes()) {
                                     if (n->visible()) {
                                           v = true;
@@ -2702,15 +2717,14 @@ void Measure::checkMultiVoices(int staffIdx)
                                           }
                                     }
                               }
-                        else
-                              v = e->visible();
-                        if (v) {
-                              _mstaves[staffIdx]->setHasVoices(true);
-                              return;
-                              }
+                        else if (cr->isRest())
+                              v = cr->visible() && !toRest(cr)->isGap();
+                        if (v)
+                              return true;
                         }
                   }
             }
+      return false;
       }
 
 //---------------------------------------------------------
@@ -2873,27 +2887,6 @@ bool Measure::isOnlyDeletedRests(int track) const
             if (s->segmentType() != st || !s->element(track))
                   continue;
             if (s->element(track)->isRest() ? !toRest(s->element(track))->isGap() : !s->element(track)->isRest())
-                  return false;
-            }
-      return true;
-      }
-
-//---------------------------------------------------------
-//   isOnlyDeletedRests
-//---------------------------------------------------------
-
-bool Measure::isOnlyDeletedRests(int track, const Fraction& stick, const Fraction& etick) const
-      {
-      static const SegmentType st { SegmentType::ChordRest };
-      for (const Segment* s = first(st); s; s = s->next(st)) {
-            if (s->segmentType() != st || !s->element(track))
-                  continue;
-            ChordRest* cr = toChordRest(s->element(track));
-            if (cr->tick() + cr->globalTicks() <= stick)
-                  continue;
-            if (cr->tick() >= etick)
-                  return true;
-            if (!cr->isRest() || !toRest(cr)->isGap())
                   return false;
             }
       return true;
