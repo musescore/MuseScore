@@ -188,7 +188,6 @@ void Bend::draw(QPainter* painter) const
 
       QFont f = font(_spatium * MScore::pixelRatio);
       painter->setFont(f);
-      QFontMetrics fm(f, MScore::paintDevice());
 
       qreal x  = noteWidth + _spatium * .2;
       qreal y  = -_spatium * .8;
@@ -214,9 +213,18 @@ void Bend::draw(QPainter* painter) const
                   int idx = (pitch + 12)/25;
                   const char* l = label[idx];
                   QString s(l);
+#if 1
+                  painter->drawText(QRectF(x2, y2, .0, .0), Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, s);
+#else
+                  // this is the code used originally,
+                  // and it worked in 2.3.2, but fails currently - textWidth & textHeight are too large
+                  // presumably they would need to be scaled accoridng to pixelRatio, DPI, and/or SPATIUM20
+                  // now that the font & fontmetrics are also scaled
+                  QFontMetrics fm(f, MScore::paintDevice());
                   qreal textWidth = fm.width(s);
                   qreal textHeight = fm.height();
                   painter->drawText(QRectF(x2 - textWidth / 2, y2 - textHeight / 2, .0, .0), Qt::AlignVCenter|Qt::TextDontClip, s);
+#endif
 
                   y = y2;
                   }
