@@ -91,6 +91,7 @@ void Bend::layout()
             }
       else {
             notePos   = note->pos();
+            notePos.ry() = qMax(notePos.y(), 0.0);
             noteWidth = note->width();
             }
       QRectF bb;
