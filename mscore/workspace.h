@@ -34,9 +34,6 @@ class XmlWriter;
 class Workspace : public QObject {
       Q_OBJECT
 
-      static const char* advancedWorkspaceTranslatableName;
-      static const char* basicWorkspaceTranslatableName;
-
       static QList<Workspace*> _workspaces;
       static QList<QPair<QAction*, QString>> actionToStringList;
       static QList<QPair<QMenu*, QString>> menuToStringList;

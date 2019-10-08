@@ -41,8 +41,10 @@ QList<Workspace*> Workspace::_workspaces {};
 QList<QPair<QAction*, QString>> Workspace::actionToStringList {};
 QList<QPair<QMenu*  , QString>> Workspace::menuToStringList   {};
 
-const char* Workspace::advancedWorkspaceTranslatableName{ QT_TRANSLATE_NOOP("Ms::Workspace", "Advanced") };
-const char* Workspace::basicWorkspaceTranslatableName{ QT_TRANSLATE_NOOP("Ms::Workspace", "Basic") };
+static const std::vector<QString> defaultWorkspaces {
+      QT_TRANSLATE_NOOP("Ms::Workspace", "Basic"),
+      QT_TRANSLATE_NOOP("Ms::Workspace", "Advanced"),
+      };
 
 //---------------------------------------------------------
 //   undoWorkspace
@@ -941,10 +943,6 @@ void Workspace::readGlobalGUIState()
 
 void Workspace::save()
       {
-      QFile workspace(_path);
-      if (!workspace.exists())
-            return;
-      
       if (!saveComponents)
             writeGlobalGUIState();
       if (!saveToolbars)
@@ -962,6 +960,33 @@ void Workspace::save()
       write();
       }
 
+static QStringList findWorkspaceFiles()
+      {
+      QStringList path;
+      path << mscoreGlobalShare + "workspaces";
+      path << dataPath + "/workspaces";
+
+      QStringList extensionsDir = Extension::getDirectoriesByType(Extension::workspacesDir);
+      path.append(extensionsDir);
+
+      QStringList nameFilters;
+      nameFilters << "*.workspace";
+
+      QStringList workspaces;
+
+      for (const QString& s : path) {
+            QDir dir(s);
+            QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
+
+            for (const QString& entry : pl) {
+                  const QString workspacePath(s + "/" + entry);
+                  workspaces << workspacePath;
+                  }
+            }
+
+      return workspaces;
+      }
+
 //---------------------------------------------------------
 //   workspaces
 //---------------------------------------------------------
@@ -969,60 +994,52 @@ void Workspace::save()
 QList<Workspace*>& Workspace::workspaces()
       {
       if (!workspacesRead) {
-            // Remove all workspaces but Basic and Advanced
-            QMutableListIterator<Workspace*> it(_workspaces);
-            int index = 0;
-            while (it.hasNext()) {
-                  Workspace* w = it.next();
-                  if (index >= 2) {
-                        delete w;
-                        it.remove();
-                        }
-                  index++;
-                  }
+            QList<Workspace*> oldWorkspaces(_workspaces);
             
-            QStringList path;
-            path << mscoreGlobalShare + "workspaces";
-            path << dataPath + "/workspaces";
+            for (const QString& path : findWorkspaceFiles()) {
+                  Workspace* p = 0;
+                  QFileInfo fi(path);
+                  QString name(fi.completeBaseName());
 
-            QStringList extensionsDir = Extension::getDirectoriesByType(Extension::workspacesDir);
-            path.append(extensionsDir);
+                  const bool translate = std::find(defaultWorkspaces.begin(), defaultWorkspaces.end(), name) != defaultWorkspaces.end();
 
-            QStringList nameFilters;
-            nameFilters << "*.workspace";
-
-            for (const QString& s : path) {
-                  QDir dir(s);
-                  bool translate = (s == (mscoreGlobalShare + "workspaces"));
-                  QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
-                  foreach (const QString& entry, pl) {
-                        Workspace* p = 0;
-                        QFileInfo fi(s + "/" + entry);
-                        QString name(fi.completeBaseName());
-                        
-                        for (Workspace* w : _workspaces) {
-                              if (w->name() == name) {
-                                    p = w;
-                                    break;
-                                    }
-                              }
-                        
-                        if (!p) {
-                              p = new Workspace;
-                              p->setPath(s + "/" + entry);
-                              p->setName(name);
-                              
-                              if (translate)
-                                    p->setTranslatableName(name);
-                              
-                              p->setReadOnly(!fi.isWritable());
-                              _workspaces.append(p);
+                  for (Workspace* w : _workspaces) {
+                        if (w->name() == name || (translate && w->translatableName() == name)) {
+                              p = w;
+                              break;
                               }
                         }
+
+                  if (p)
+                        oldWorkspaces.removeOne(p);
+                  else {
+                        p = new Workspace;
+                        _workspaces.append(p);
+                        }
+
+                  p->setPath(path);
+                  p->setName(name);
+
+                  if (translate)
+                        p->setTranslatableName(name);
+
+                  p->setReadOnly(!fi.isWritable());
                   }
+
+            for (Workspace* old : oldWorkspaces)
+                  _workspaces.removeOne(old);
+
+            if (_workspaces.empty())
+                  qFatal("No workspaces found");
+
+            if (oldWorkspaces.contains(Workspace::currentWorkspace))
+                  Workspace::currentWorkspace = _workspaces.first();
+
+            qDeleteAll(oldWorkspaces);
+
             // hack
             for (int i = 0; i < _workspaces.size(); i++) {
-                  if (_workspaces[i]->translatableName() == basicWorkspaceTranslatableName) {
+                  if (_workspaces[i]->translatableName() == defaultWorkspaces[0]) {
                         _workspaces.move(i, 0);
                         break;
                         }
