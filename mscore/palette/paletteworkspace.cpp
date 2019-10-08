@@ -510,8 +510,10 @@ AbstractPaletteController* PaletteWorkspace::getMainPaletteController()
 QModelIndex PaletteWorkspace::customElementsPaletteIndex(const QModelIndex& index)
       {
       const QAbstractItemModel* model = customElementsPaletteModel();
-      if (index.model() == mainPalette && index.parent() == QModelIndex())
-            return model->index(index.row(), 0);
+      if (index.model() == mainPalette && index.parent() == QModelIndex()) {
+            const int row = convertProxyIndex(index, userPalette).row();
+            return model->index(row, 0);
+            }
       return convertIndex(index, model);
       }
 
