@@ -368,13 +368,23 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
 //   addNote from NoteVal
 //---------------------------------------------------------
 
-Note* Score::addNote(Chord* chord, NoteVal& noteVal)
+Note* Score::addNote(Chord* chord, NoteVal& noteVal, bool forceAccidental)
       {
       Note* note = new Note(this);
       note->setParent(chord);
       note->setTrack(chord->track());
       note->setNval(noteVal);
       undoAddElement(note);
+      if (forceAccidental) {
+            int tpc = styleB(Sid::concertPitch) ? noteVal.tpc2 : noteVal.tpc1;
+            AccidentalVal alter = tpc2alter(tpc);
+            AccidentalType at = Accidental::value2subtype(alter);
+            Accidental* a = new Accidental(this);
+            a->setAccidentalType(at);
+            a->setRole(AccidentalRole::USER);
+            a->setParent(note);
+            undoAddElement(a);
+            }
       setPlayNote(true);
       setPlayChord(true);
       select(note, SelectType::SINGLE, 0);
@@ -1045,7 +1055,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                               lastRest = cr;
                               }
                         Fraction restTicks = lastRest->tick() + lastRest->ticks() - curr->tick();
-                        seg = setNoteRest(seg, curr->track(), NoteVal(), restTicks, Direction::AUTO, true);
+                        seg = setNoteRest(seg, curr->track(), NoteVal(), restTicks, Direction::AUTO, false, true);
                         }
                   else if (curr->isChord()) {
                         // combine tied chords

@@ -87,6 +87,8 @@ void MuseScore::updateInputState(Score* score)
                         break;
                   }
             }
+      else
+            is.update(score->selection());
 
       getAction("pad-rest")->setChecked(is.rest());
       getAction("pad-dot")->setChecked(is.duration().dots() == 1);
@@ -129,6 +131,12 @@ void MuseScore::updateInputState(Score* score)
       getAction("pad-note-32")->setChecked(is.duration() == TDuration::DurationType::V_32ND);
       getAction("pad-note-64")->setChecked(is.duration() == TDuration::DurationType::V_64TH);
       getAction("pad-note-128")->setChecked(is.duration() == TDuration::DurationType::V_128TH);
+
+      getAction("sharp2")->setChecked(is.accidentalType() == AccidentalType::SHARP2);
+      getAction("sharp")->setChecked(is.accidentalType() == AccidentalType::SHARP);
+      getAction("nat")->setChecked(is.accidentalType() == AccidentalType::NATURAL);
+      getAction("flat")->setChecked(is.accidentalType() == AccidentalType::FLAT);
+      getAction("flat2")->setChecked(is.accidentalType() == AccidentalType::FLAT2);
 
       // uncheck all voices if multi-selection
       int voice = score->selection().isSingle() ? is.voice() : -1;

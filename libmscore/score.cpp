@@ -2757,7 +2757,7 @@ void Score::addAudioTrack()
 //   padToggle
 //---------------------------------------------------------
 
-void Score::padToggle(Pad n)
+void Score::padToggle(Pad n, const EditData& ed)
       {
       int oldDots = _is.duration().dots();
       switch (n) {
@@ -2792,7 +2792,21 @@ void Score::padToggle(Pad n)
                   _is.setDuration(TDuration::DurationType::V_128TH);
                   break;
             case Pad::REST:
-                  _is.setRest(!_is.rest());
+                  if (noteEntryMode()) {
+                        _is.setRest(!_is.rest());
+                        _is.setAccidentalType(AccidentalType::NONE);
+                        }
+                  else if (selection().isNone()) {
+                        ed.view->startNoteEntryMode();
+                        _is.setDuration(TDuration::DurationType::V_QUARTER);
+                        _is.setRest(true);
+                        }
+                  else {
+                        for (ChordRest* cr : getSelectedChordRests()) {
+                              if (!cr->isRest())
+                                    setNoteRest(cr->segment(), cr->track(), NoteVal(), cr->durationTypeTicks());
+                              }
+                        }
                   break;
             case Pad::DOT:
                   if ((_is.duration().dots() == 1) || (_is.duration() == TDuration::DurationType::V_1024TH))
@@ -2838,10 +2852,10 @@ void Score::padToggle(Pad n)
                   if (usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
                         switch (oldDots) {
                               case 1:
-                                    padToggle(Pad::DOT);
+                                    padToggle(Pad::DOT, ed);
                                     break;
                               case 2:
-                                    padToggle(Pad::DOTDOT);
+                                    padToggle(Pad::DOTDOT, ed);
                                     break;
                               }
                         NoteVal nval;
@@ -2889,6 +2903,12 @@ void Score::padToggle(Pad n)
 
             if (cr)
                   crs.push_back(cr);
+            }
+      else if (selection().isNone() && n != Pad::REST) {
+            TDuration td = _is.duration();
+            ed.view->startNoteEntryMode();
+            _is.setDuration(td);
+            _is.setAccidentalType(AccidentalType::NONE);
             }
       else {
             const auto elements = selection().uniqueElements();

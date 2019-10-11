@@ -18,6 +18,9 @@
 #include "chord.h"
 #include "rest.h"
 #include "measure.h"
+#include "accidental.h"
+#include "durationtype.h"
+#include "select.h"
 
 namespace Ms {
 
@@ -65,11 +68,69 @@ ChordRest* InputState::cr() const
       }
 
 //---------------------------------------------------------
+//   setDots
+//---------------------------------------------------------
+
+void InputState::setDots(int n)
+      {
+      if (n && (!_duration.isValid() || _duration.isZero() || _duration.isMeasure()))
+            _duration = TDuration::DurationType::V_QUARTER;
+      _duration.setDots(n);
+      }
+
+//---------------------------------------------------------
 //   update
 //---------------------------------------------------------
 
-void InputState::update(Element* e)
+void InputState::update(Selection& selection)
       {
+      setDuration(TDuration::DurationType::V_INVALID);
+      setRest(false);
+      setAccidentalType(AccidentalType::NONE);
+      Note* n1 = nullptr;
+      ChordRest* cr1 = nullptr;
+      bool differentAccidentals = false;
+      bool differentDurations = false;
+      bool chordsAndRests = false;
+      for (Element* e : selection.elements()) {
+            ChordRest* cr = nullptr;
+            if (e->isNote()) {
+                  Note* n = toNote(e);
+                  if (n1) {
+                        if (n->accidentalType() != n1->accidentalType()) {
+                              setAccidentalType(AccidentalType::NONE);
+                              differentAccidentals = true;
+                              }
+                        }
+                  else {
+                        setAccidentalType(n->accidentalType());
+                        n1 = n;
+                        }
+                  cr = toChordRest(n->chord());
+                  }
+            else if (e->isChordRest())
+                  cr = toChordRest(e);
+            if (cr) {
+                  if (cr1) {
+                        if (cr->durationType() != cr1->durationType()) {
+                              setDuration(TDuration::DurationType::V_INVALID);
+                              differentDurations = true;
+                              }
+                        if ((cr->isRest() && !cr1->isRest()) || (!cr->isRest() && cr1->isRest())) {
+                              setRest(false);
+                              chordsAndRests = true;
+                              }
+                        }
+                  else {
+                        setDuration(cr->durationType());
+                        setRest(cr->isRest());
+                        cr1 = cr;
+                        }
+                  }
+            if (differentAccidentals && differentDurations && chordsAndRests)
+                  break;
+            }
+      Element* e = selection.element();
       if (e == 0)
             return;
       if (e && e->isChord())
@@ -79,19 +140,12 @@ void InputState::update(Element* e)
       if (e->isNote()) {
             Note* note    = toNote(e);
             Chord* chord  = note->chord();
-            setDuration(chord->durationType());
-            setRest(false);
             setTrack(note->track());
             setNoteType(note->noteType());
             setBeamMode(chord->beamMode());
             }
       else if (e->isRest() || e->isRepeatMeasure()) {
             Rest* rest = toRest(e);
-            if (rest->durationType().type() == TDuration::DurationType::V_MEASURE)
-                  setDuration(TDuration::DurationType::V_QUARTER);
-            else
-                  setDuration(rest->durationType());
-            setRest(true);
             setTrack(rest->track());
             setBeamMode(rest->beamMode());
             setNoteType(NoteType::NORMAL);

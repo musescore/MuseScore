@@ -1787,8 +1787,14 @@ void ScoreView::cmd(const char* s)
       if (cmd == "escape")
             escapeCmd();
       else if (cmd == "note-input") {
-            if (state == ViewState::NORMAL)
+            if (state == ViewState::NORMAL) {
                   changeState(ViewState::NOTE_ENTRY);
+                  TDuration td = _score->inputState().duration();
+                  if (!td.isValid() || td.isZero() || td.isMeasure())
+                        _score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+                  _score->inputState().setAccidentalType(AccidentalType::NONE);
+                  _score->inputState().setRest(false);
+                  }
             else if (state == ViewState::NOTE_ENTRY)
                   changeState(ViewState::NORMAL);
             }
@@ -2674,7 +2680,6 @@ void ScoreView::startNoteEntry()
             is.setDuration(TDuration(TDuration::DurationType::V_QUARTER));
 
       _score->select(el, SelectType::SINGLE, 0);
-      is.update(el);
       is.setRest(false);
       is.setNoteEntryMode(true);
       adjustCanvasPosition(el, false);
