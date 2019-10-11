@@ -1574,7 +1574,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Note input: Double ♯"),
          QT_TRANSLATE_NOOP("action","Double ♯"),
          Icons::sharpsharp_ICON,
-         Qt::WindowShortcut
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
          },
       {
          MsWidget::SCORE_TAB,
@@ -1584,7 +1585,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Note input: ♯"),
          QT_TRANSLATE_NOOP("action","♯"),
          Icons::sharp_ICON,
-         Qt::WindowShortcut
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
          },
       {
          MsWidget::SCORE_TAB,
@@ -1594,7 +1596,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Note input: ♮"),
          QT_TRANSLATE_NOOP("action","♮"),
          Icons::natural_ICON,
-         Qt::WindowShortcut
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
          },
       {
          MsWidget::SCORE_TAB,
@@ -1604,7 +1607,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Note input: ♭"),
          QT_TRANSLATE_NOOP("action","♭"),
          Icons::flat_ICON,
-         Qt::WindowShortcut
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
          },
       {
          MsWidget::SCORE_TAB,
@@ -1614,7 +1618,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Note input: Double ♭"),
          QT_TRANSLATE_NOOP("action","Double ♭"),
          Icons::flatflat_ICON,
-         Qt::WindowShortcut
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
          },
       {
          MsWidget::SCORE_TAB,

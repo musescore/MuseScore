@@ -284,8 +284,7 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                   if (editData.startMove == editData.pos && clickOffElement) {
                         _score->deselectAll();
                         _score->update();
-                        mscore->updateInspector();
-                        ScoreAccessibility::instance()->updateAccessibilityInfo();
+                        mscore->endCmd();
                         }
             case ViewState::EDIT:
             case ViewState::NOTE_ENTRY:
