@@ -25,6 +25,7 @@
 #include "staff.h"
 #include "excerpt.h"
 #include "repeat.h"
+#include "tremolo.h"
 
 namespace Ms {
 
@@ -526,6 +527,15 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                                     remains  -= gd;
 
                                     if (cr->isChord()) {
+                                          if (!firstpart && toChord(cr)->tremolo() && toChord(cr)->tremolo()->twoNotes()) { // remove partial two-note tremolo
+                                                if (toChord(e)->tremolo()->chord1() == toChord(e))
+                                                      toChord(cr)->tremolo()->setChords(toChord(cr),nullptr);
+                                                else
+                                                      toChord(cr)->tremolo()->setChords(nullptr,toChord(cr));
+                                                Tremolo* tremoloPointer = toChord(cr)->tremolo();
+                                                toChord(cr)->setTremolo(nullptr);
+                                                delete tremoloPointer;
+                                                }
                                           for (Note* note : toChord(cr)->notes()) {
                                                 if (!duration.isZero() && !note->tieFor()) {
                                                       Tie* tie = new Tie(score);

@@ -39,6 +39,7 @@ class TestTimesig : public QObject, public MTest
       void timesig06();
       void timesig07();
       void timesig08();
+      void timesig09();
       void timesig10();
       void timesig_78216();
       };
@@ -227,6 +228,32 @@ void TestTimesig::timesig08()
       Element* el = seg->element(4); // stave no.2
 
       QVERIFY2(el, "Should be a courtesy signature in the second staff at the end of measure 1.");
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   timesig09
+//    Change timesig with tremolos on notes that end up across barlines
+//---------------------------------------------------------
+
+void TestTimesig::timesig09()
+      {
+      MasterScore* score = readScore(DIR + "timesig-09.mscx");
+      QVERIFY(score);
+      Measure* m = score->firstMeasure();
+      TimeSig* ts = new TimeSig(score);
+      ts->setSig(Fraction(9, 8), TimeSigType::NORMAL);
+
+      score->startCmd();
+      score->cmdAddTimeSig(m, 0, ts, false);
+      score->doLayout();
+      QVERIFY(saveCompareScore(score, "timesig-09-1.mscx", DIR + "timesig-09-ref.mscx"));
+      score->endCmd();
+
+      // Now undo the change
+      score->undoStack()->undo(0);
+      score->doLayout();
+      QVERIFY(saveCompareScore(score, "timesig-09-2.mscx", DIR + "timesig-09.mscx"));
       delete score;
       }
 
