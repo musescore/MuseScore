@@ -79,6 +79,7 @@ class PreferenceVisitor;
 //---------------------------------------------------------
 //   Preference
 //---------------------------------------------------------
+
 class Preference {
    private:
       QVariant _defaultValue = 0;
@@ -98,11 +99,19 @@ class Preference {
       virtual void accept(QString key, PreferenceVisitor&) = 0;
       };
 
+//---------------------------------------------------------
+//   IntPreference
+//---------------------------------------------------------
+
 class IntPreference : public Preference {
    public:
       IntPreference(int defaultValue, bool showInAdvancedList = true);
       virtual void accept(QString key, PreferenceVisitor&);
       };
+
+//---------------------------------------------------------
+//   DoublePreference
+//---------------------------------------------------------
 
 class DoublePreference : public Preference {
    public:
@@ -110,11 +119,19 @@ class DoublePreference : public Preference {
       virtual void accept(QString key, PreferenceVisitor&);
       };
 
+//---------------------------------------------------------
+//   BoolPreference
+//---------------------------------------------------------
+
 class BoolPreference : public Preference {
    public:
       BoolPreference(bool defaultValue, bool showInAdvancedList = true);
       virtual void accept(QString key, PreferenceVisitor&);
       };
+
+//---------------------------------------------------------
+//   StringPreference
+//---------------------------------------------------------
 
 class StringPreference: public Preference {
    public:
@@ -122,11 +139,19 @@ class StringPreference: public Preference {
       virtual void accept(QString key, PreferenceVisitor&);
       };
 
+//---------------------------------------------------------
+//   ColorPreference
+//---------------------------------------------------------
+
 class ColorPreference: public Preference {
    public:
       ColorPreference(QColor defaultValue, bool showInAdvancedList = true);
       virtual void accept(QString key, PreferenceVisitor&);
       };
+
+//---------------------------------------------------------
+//   EnumPreference
+//---------------------------------------------------------
 
 // Support for EnumPreference is currently not fully implemented
 class EnumPreference: public Preference {
@@ -185,9 +210,9 @@ class Preferences {
       void init(bool storeInMemoryOnly = false);
       void save();
       // set to true to let getters return default values instead of values from QSettings
-      void setReturnDefaultValuesMode(bool returnDefaultValues) {_returnDefaultValues = returnDefaultValues;}
+      void setReturnDefaultValuesMode(bool returnDefaultValues) { _returnDefaultValues = returnDefaultValues; }
 
-      const prefs_map_t& allPreferences() const {return _allPreferences;}
+      const prefs_map_t& allPreferences() const { return _allPreferences; }
 
       // general getters
       QVariant defaultValue(const QString key) const;
@@ -220,17 +245,14 @@ class Preferences {
       bool isThemeDark() const;
 
       template<typename T>
-      void setCustomPreference(const QString key, T t)
-            {
-            set(key, QVariant::fromValue<T>(t));
-            }
+      void setCustomPreference(const QString key, T t) { set(key, QVariant::fromValue<T>(t)); }
 
       // The midiRemote preference requires special handling due to its complexity
       MidiRemote midiRemote(int recordId) const;
       void updateMidiRemote(int recordId, MidiRemoteType type, int data);
       void clearMidiRemote(int recordId);
 
-      QMap<QString, QVariant> getLocalPreferences()  { return localPreferences; }
+      QMap<QString, QVariant> getLocalPreferences()   { return localPreferences; }
       void setLocalPreference(QString key, QVariant value);
       void setUseLocalPreferences(bool value)         { useLocalPrefs = value;   }
       bool getUseLocalPreferences()                   { return useLocalPrefs;    }
@@ -240,53 +262,60 @@ class Preferences {
 // singleton
 extern Preferences preferences;
 
+//---------------------------------------------------------
+//   QDataStream& operators
+//---------------------------------------------------------
+
 // Stream operators for enum classes
 // enum classes don't play well with QSettings without custom serialization
 inline QDataStream&
-operator<<(QDataStream &out, const Ms::MuseScoreStyleType &val)
-{
-    return out << static_cast<int>(val);
-}
+   operator<<(QDataStream &out, const Ms::MuseScoreStyleType &val)
+      {
+      return out << static_cast<int>(val);
+      }
 
 inline QDataStream&
-operator>>(QDataStream &in, Ms::MuseScoreStyleType &val)
-{
-    int tmp;
-    in >> tmp;
-    val = static_cast<Ms::MuseScoreStyleType>(tmp);
-    return in;
-}
+   operator>>(QDataStream &in, Ms::MuseScoreStyleType &val)
+      {
+      int tmp;
+      in >> tmp;
+      val = static_cast<Ms::MuseScoreStyleType>(tmp);
+      return in;
+      }
 
 inline QDataStream&
-operator<<(QDataStream &out, const Ms::SessionStart &val)
-{
-    return out << static_cast<int>(val);
-}
+   operator<<(QDataStream &out, const Ms::SessionStart &val)
+      {
+      return out << static_cast<int>(val);
+      }
 
 inline QDataStream&
-operator>>(QDataStream &in, Ms::SessionStart &val)
-{
-    int tmp;
-    in >> tmp;
-    val = static_cast<Ms::SessionStart>(tmp);
-    return in;
-}
+   operator>>(QDataStream &in, Ms::SessionStart &val)
+      {
+      int tmp;
+      in >> tmp;
+      val = static_cast<Ms::SessionStart>(tmp);
+      return in;
+      }
 
 inline QDataStream&
-operator<<(QDataStream &out, const Ms::MusicxmlExportBreaks &val)
-{
-    return out << static_cast<int>(val);
-}
+   operator<<(QDataStream &out, const Ms::MusicxmlExportBreaks &val)
+      {
+      return out << static_cast<int>(val);
+      }
 
 inline QDataStream&
-operator>>(QDataStream &in, Ms::MusicxmlExportBreaks &val)
-{
-    int tmp;
-    in >> tmp;
-    val = static_cast<Ms::MusicxmlExportBreaks>(tmp);
-    return in;
-}
+   operator>>(QDataStream &in, Ms::MusicxmlExportBreaks &val)
+      {
+      int tmp;
+      in >> tmp;
+      val = static_cast<Ms::MusicxmlExportBreaks>(tmp);
+      return in;
+      }
 
+//---------------------------------------------------------
+//   PreferenceVisitor
+//---------------------------------------------------------
 
 class PreferenceVisitor {
    public:
@@ -296,7 +325,6 @@ class PreferenceVisitor {
       virtual void visit(QString key, StringPreference*) = 0;
       virtual void visit(QString key, ColorPreference*) = 0;
       };
-
 
 } // namespace Ms
 

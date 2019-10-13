@@ -29,6 +29,82 @@ namespace Ms {
 
 Preferences preferences;
 
+//---------------------------------------------------------
+//   Preferences
+//---------------------------------------------------------
+
+Preferences::Preferences()
+   : _settings(0)
+      {}
+
+Preferences::~Preferences()
+      {
+      // clean up _allPreferences
+      for (Preference* pref : _allPreferences.values())
+            delete pref;
+
+      if (_settings)
+            delete _settings;
+      }
+
+//---------------------------------------------------------
+//   get<Type>
+//---------------------------------------------------------
+
+bool Preferences::getBool(const QString key) const
+      {
+      checkType(key, QMetaType::Bool);
+      return preference(key).toBool();
+      }
+
+QColor Preferences::getColor(const QString key) const
+      {
+      checkType(key, QMetaType::QColor);
+      QVariant v = preference(key);
+      if (v.type() == QVariant::Color)
+            return v.value<QColor>();
+      else {
+            // in case the color is expressed in settings file as a textual color representation
+            QColor c(v.toString());
+            return c.isValid() ? c : defaultValue(key).value<QColor>();
+            }
+      }
+
+QString Preferences::getString(const QString key) const
+      {
+      checkType(key, QMetaType::QString);
+      return preference(key).toString();
+      }
+
+int Preferences::getInt(const QString key) const
+      {
+      checkType(key, QMetaType::Int);
+      QVariant v = preference(key);
+      bool ok;
+      int pref = v.toInt(&ok);
+      if (!ok) {
+            qWarning("Can not convert preference %s to int. Returning default value.", key.toUtf8().constData());
+            return defaultValue(key).toInt();
+            }
+      return pref;
+      }
+
+double Preferences::getDouble(const QString key) const
+      {
+      checkType(key, QMetaType::Double);
+      QVariant v = preference(key);
+      bool ok;
+      double pref = v.toDouble(&ok);
+      if (!ok) {
+            qWarning("Can not convert preference %s to double. Returning default value.", key.toUtf8().constData());
+            return defaultValue(key).toDouble();
+            }
+      return pref;
+      }
+
+//---------------------------------------------------------
+//   init
+//---------------------------------------------------------
 
 void Preferences::init(bool storeInMemoryOnly)
       {
@@ -74,151 +150,152 @@ void Preferences::init(bool storeInMemoryOnly)
 
       _allPreferences = prefs_map_t(
       {
-            {PREF_APP_AUTOSAVE_AUTOSAVETIME,                       new IntPreference(2 /* minutes */, false)},
-            {PREF_APP_AUTOSAVE_USEAUTOSAVE,                        new BoolPreference(true, false)},
-            {PREF_APP_KEYBOARDLAYOUT,                              new StringPreference("US - International")},
-            {PREF_APP_PATHS_INSTRUMENTLIST1,                       new StringPreference(":/data/instruments.xml", false)},
-            {PREF_APP_PATHS_INSTRUMENTLIST2,                       new StringPreference("", false)},
-            {PREF_APP_PATHS_MYIMAGES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory", "Images"))).absoluteFilePath(), false)},
-            {PREF_APP_PATHS_MYPLUGINS,                             new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory", "Plugins"))).absoluteFilePath(), false)},
-            {PREF_APP_PATHS_MYSCORES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("scores_directory", "Scores"))).absoluteFilePath(), false)},
-            {PREF_APP_PATHS_MYSOUNDFONTS,                          new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "SoundFonts"))).absoluteFilePath(), false)},
-            {PREF_APP_PATHS_MYSHORTCUTS,                           new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("shortcuts_directory", "Shortcuts"))).absoluteFilePath(), false)},
-            {PREF_APP_PATHS_MYSTYLES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("styles_directory", "Styles"))).absoluteFilePath(), false)},
-            {PREF_APP_PATHS_MYTEMPLATES,                           new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory", "Templates"))).absoluteFilePath(), false)},
-            {PREF_APP_PATHS_MYEXTENSIONS,                          new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("extensions_directory", "Extensions"))).absoluteFilePath(), false)},
-            {PREF_APP_PLAYBACK_FOLLOWSONG,                         new BoolPreference(true)},
-            {PREF_APP_PLAYBACK_PANPLAYBACK,                        new BoolPreference(true)},
-            {PREF_APP_PLAYBACK_PLAYREPEATS,                        new BoolPreference(true)},
-            {PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY,              new BoolPreference(true)},
-            {PREF_APP_USESINGLEPALETTE,                            new BoolPreference(false)},
-            {PREF_APP_PALETTESCALE,                                new DoublePreference(1.0)},
-            {PREF_APP_STARTUP_FIRSTSTART,                          new BoolPreference(true)},
-            {PREF_APP_STARTUP_SESSIONSTART,                        new EnumPreference(QVariant::fromValue(SessionStart::SCORE), false)},
-            {PREF_APP_STARTUP_STARTSCORE,                          new StringPreference(":/data/My_First_Score.mscx", false)},
-            {PREF_UI_APP_STARTUP_SHOWTOURS,                        new BoolPreference(true)},
-            {PREF_APP_WORKSPACE,                                   new StringPreference("Basic", false)},
-            {PREF_APP_TELEMETRY_ALLOWED,                           new BoolPreference(false, false)},
-            {PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED,          new StringPreference("", false)},
-            {PREF_APP_BACKUP_GENERATE_BACKUP,                      new BoolPreference(true)},
-            {PREF_EXPORT_AUDIO_NORMALIZE,                          new BoolPreference(true)},
-            {PREF_EXPORT_AUDIO_SAMPLERATE,                         new IntPreference(44100, false)},
-            {PREF_EXPORT_AUDIO_PCMRATE,                            new IntPreference(16)},
-            {PREF_EXPORT_MP3_BITRATE,                              new IntPreference(128, false)},
-            {PREF_EXPORT_MUSICXML_EXPORTBREAKS,                    new EnumPreference(QVariant::fromValue(MusicxmlExportBreaks::ALL), false)},
-            {PREF_EXPORT_MUSICXML_EXPORTLAYOUT,                    new BoolPreference(true, false)},
-            {PREF_EXPORT_PDF_DPI,                                  new IntPreference(300, false)},
-            {PREF_EXPORT_PNG_RESOLUTION,                           new DoublePreference(DPI, false)},
-            {PREF_EXPORT_PNG_USETRANSPARENCY,                      new BoolPreference(true, false)},
-            {PREF_IMPORT_GUITARPRO_CHARSET,                        new StringPreference("UTF-8", false)},
-            {PREF_IMPORT_MUSICXML_IMPORTBREAKS,                    new BoolPreference(true, false)},
-            {PREF_IMPORT_MUSICXML_IMPORTLAYOUT,                    new BoolPreference(true, false)},
-            {PREF_IMPORT_OVERTURE_CHARSET,                         new StringPreference("GBK", false)},
-            {PREF_IMPORT_STYLE_STYLEFILE,                          new StringPreference("", false)},
-            {PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS,    new StringPreference("", false)},
-            {PREF_IO_ALSA_DEVICE,                                  new StringPreference("default", false)},
-            {PREF_IO_ALSA_FRAGMENTS,                               new IntPreference(3, false)},
-            {PREF_IO_ALSA_PERIODSIZE,                              new IntPreference(1024, false)},
-            {PREF_IO_ALSA_SAMPLERATE,                              new IntPreference(48000, false)},
-            {PREF_IO_ALSA_USEALSAAUDIO,                            new BoolPreference(defaultUseAlsaAudio, false)},
-            {PREF_IO_JACK_REMEMBERLASTCONNECTIONS,                 new BoolPreference(true, false)},
-            {PREF_IO_JACK_TIMEBASEMASTER,                          new BoolPreference(false, false)},
-            {PREF_IO_JACK_USEJACKAUDIO,                            new BoolPreference(defaultUseJackAudio, false)},
-            {PREF_IO_JACK_USEJACKMIDI,                             new BoolPreference(false, false)},
-            {PREF_IO_JACK_USEJACKTRANSPORT,                        new BoolPreference(false, false)},
-            {PREF_IO_MIDI_ADVANCEONRELEASE,                        new BoolPreference(true, false)},
-            {PREF_IO_MIDI_ENABLEINPUT,                             new BoolPreference(true, false)},
-            {PREF_IO_MIDI_EXPANDREPEATS,                           new BoolPreference(true, false)},
-            {PREF_IO_MIDI_EXPORTRPNS,                              new BoolPreference(false, false)},
-            {PREF_IO_MIDI_REALTIMEDELAY,                           new IntPreference(750 /* ms */, false)},
-            {PREF_IO_MIDI_SHORTESTNOTE,                            new IntPreference(MScore::division/4, false)},
-            {PREF_IO_MIDI_SHOWCONTROLSINMIXER,                     new BoolPreference(false, false)},
-            {PREF_IO_MIDI_USEREMOTECONTROL,                        new BoolPreference(false, false)},
-            {PREF_IO_OSC_PORTNUMBER,                               new IntPreference(5282, false)},
-            {PREF_IO_OSC_USEREMOTECONTROL,                         new BoolPreference(false, false)},
-            {PREF_IO_PORTAUDIO_DEVICE,                             new IntPreference(-1, false)},
-            {PREF_IO_PORTAUDIO_USEPORTAUDIO,                       new BoolPreference(defaultUsePortAudio, false)},
-            {PREF_IO_PORTMIDI_INPUTBUFFERCOUNT,                    new IntPreference(100)},
-            {PREF_IO_PORTMIDI_INPUTDEVICE,                         new StringPreference("")},
-            {PREF_IO_PORTMIDI_OUTPUTBUFFERCOUNT,                   new IntPreference(65536)},
-            {PREF_IO_PORTMIDI_OUTPUTDEVICE,                        new StringPreference("")},
-            {PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS,           new IntPreference(0)},
-            {PREF_IO_PULSEAUDIO_USEPULSEAUDIO,                     new BoolPreference(defaultUsePulseAudio, false)},
-            {PREF_SCORE_CHORD_PLAYONADDNOTE,                       new BoolPreference(true, false)},
-            {PREF_SCORE_HARMONY_PLAY,                              new BoolPreference(false, false)},
-            {PREF_SCORE_HARMONY_PLAY_ONEDIT,                       new BoolPreference(true, false)},
-            {PREF_SCORE_MAGNIFICATION,                             new DoublePreference(1.0, false)},
-            {PREF_SCORE_NOTE_PLAYONCLICK,                          new BoolPreference(true, false)},
-            {PREF_SCORE_NOTE_DEFAULTPLAYDURATION,                  new IntPreference(300 /* ms */, false)},
-            {PREF_SCORE_NOTE_WARNPITCHRANGE,                       new BoolPreference(true, false)},
-            {PREF_SCORE_STYLE_DEFAULTSTYLEFILE,                    new StringPreference("", false)},
-            {PREF_SCORE_STYLE_PARTSTYLEFILE,                       new StringPreference("", false)},
-            {PREF_UI_CANVAS_BG_USECOLOR,                           new BoolPreference(true, false)},
-            {PREF_UI_CANVAS_FG_USECOLOR,                           new BoolPreference(true, false)},
-            {PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES,               new BoolPreference(false, false)},
-            {PREF_UI_CANVAS_BG_COLOR,                              new ColorPreference(QColor("#142433"), false)},
-            {PREF_UI_CANVAS_FG_COLOR,                              new ColorPreference(QColor("#f9f9f9"), false)},
-            {PREF_UI_CANVAS_BG_WALLPAPER,                          new StringPreference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/background1.png")).absoluteFilePath(), false)},
-            {PREF_UI_CANVAS_FG_WALLPAPER,                          new StringPreference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/paper5.png")).absoluteFilePath(), false)},
-            {PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING,               new BoolPreference(true, false)},
-            {PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY,               new IntPreference(6, false)},
-            {PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA,                new BoolPreference(false, false)},
-            {PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION,            new BoolPreference(false, false)},
-            {PREF_UI_APP_STARTUP_CHECKUPDATE,                      new BoolPreference(checkUpdateStartup, false)},
-            {PREF_UI_APP_STARTUP_CHECK_EXTENSIONS_UPDATE,          new BoolPreference(checkExtensionsUpdateStartup, false)},
-            {PREF_UI_APP_STARTUP_SHOWNAVIGATOR,                    new BoolPreference(false, false)},
-            {PREF_UI_APP_STARTUP_SHOWPLAYPANEL,                    new BoolPreference(false, false)},
-            {PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN,                 new BoolPreference(true, false)},
-            {PREF_UI_APP_STARTUP_SHOWSTARTCENTER,                  new BoolPreference(true, false)},
-            {PREF_UI_APP_GLOBALSTYLE,                              new EnumPreference(QVariant::fromValue(defaultAppGlobalStyle), false)},
-            {PREF_UI_APP_LANGUAGE,                                 new StringPreference("system", false)},
-            {PREF_UI_APP_RASTER_HORIZONTAL,                        new IntPreference(2)},
-            {PREF_UI_APP_RASTER_VERTICAL,                          new IntPreference(2)},
-            {PREF_UI_APP_SHOWSTATUSBAR,                            new BoolPreference(true)},
-            {PREF_UI_APP_USENATIVEDIALOGS,                         new BoolPreference(true)},
-            {PREF_UI_PIANO_HIGHLIGHTCOLOR,                         new ColorPreference(QColor("#0065BF"))},
-            {PREF_UI_SCORE_NOTE_DROPCOLOR,                         new ColorPreference(QColor("#0065BF"))},
-            {PREF_UI_SCORE_DEFAULTCOLOR,                           new ColorPreference(QColor("#000000"))},
-            {PREF_UI_SCORE_FRAMEMARGINCOLOR,                       new ColorPreference(QColor("#A0A0A4"))},
-            {PREF_UI_SCORE_LAYOUTBREAKCOLOR,                       new ColorPreference(QColor("#A0A0A4"))},
-            {PREF_UI_SCORE_VOICE1_COLOR,                           new ColorPreference(QColor("#0065BF"))},
-            {PREF_UI_SCORE_VOICE2_COLOR,                           new ColorPreference(QColor("#007F00"))},
-            {PREF_UI_SCORE_VOICE3_COLOR,                           new ColorPreference(QColor("#C53F00"))},
-            {PREF_UI_SCORE_VOICE4_COLOR,                           new ColorPreference(QColor("#C31989"))},
-            {PREF_UI_THEME_ICONWIDTH,                              new IntPreference(28, false)},
-            {PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)},
-            {PREF_UI_THEME_FONTFAMILY,                             new StringPreference(QApplication::font().family(), false) },
-            {PREF_UI_THEME_FONTSIZE,                               new IntPreference(QApplication::font().pointSize(), false) },
-            {PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR,           new ColorPreference(QColor("#0cebff"))},
-            {PREF_UI_PIANOROLL_DARK_NOTE_UNSEL_COLOR,              new ColorPreference(QColor("#1dcca0"))},
-            {PREF_UI_PIANOROLL_DARK_NOTE_SEL_COLOR,                new ColorPreference(QColor("#ffff00"))},
-            {PREF_UI_PIANOROLL_DARK_BG_BASE_COLOR,                 new ColorPreference(QColor("#3a3a3a"))},
-            {PREF_UI_PIANOROLL_DARK_BG_KEY_WHITE_COLOR,            new ColorPreference(QColor("#3a3a3a"))},
-            {PREF_UI_PIANOROLL_DARK_BG_KEY_BLACK_COLOR,            new ColorPreference(QColor("#262626"))},
-            {PREF_UI_PIANOROLL_DARK_BG_GRIDLINE_COLOR,             new ColorPreference(QColor("#111111"))},
-            {PREF_UI_PIANOROLL_DARK_BG_TEXT_COLOR,                 new ColorPreference(QColor("#999999"))},
-            {PREF_UI_PIANOROLL_LIGHT_SELECTION_BOX_COLOR,          new ColorPreference(QColor("#2085c3"))},
-            {PREF_UI_PIANOROLL_LIGHT_NOTE_UNSEL_COLOR,             new ColorPreference(QColor("#1dcca0"))},
-            {PREF_UI_PIANOROLL_LIGHT_NOTE_SEL_COLOR,               new ColorPreference(QColor("#ffff00"))},
-            {PREF_UI_PIANOROLL_LIGHT_BG_BASE_COLOR,                new ColorPreference(QColor("#e0e0e7"))},
-            {PREF_UI_PIANOROLL_LIGHT_BG_KEY_WHITE_COLOR,           new ColorPreference(QColor("#ffffff"))},
-            {PREF_UI_PIANOROLL_LIGHT_BG_KEY_BLACK_COLOR,           new ColorPreference(QColor("#e6e6e6"))},
-            {PREF_UI_PIANOROLL_LIGHT_BG_GRIDLINE_COLOR,            new ColorPreference(QColor("#a2a2a6"))},
-            {PREF_UI_PIANOROLL_LIGHT_BG_TEXT_COLOR,                new ColorPreference(QColor("#111111"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_ON,      new ColorPreference(QColor("#7F7F7F"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_OFF,     new ColorPreference(QColor("#a0a0a0"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_ON,     new ColorPreference(QColor("#7F7F7F"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_OFF,    new ColorPreference(QColor("#a0a0a0"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON,       new ColorPreference(QColor("#36B2FF"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_OFF,      new ColorPreference(QColor("#eff0f1"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON,      new ColorPreference(QColor("#0065BF"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF,     new ColorPreference(QColor("#3b3f45"))},
-            {PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_LIGHT,            new ColorPreference(QColor("#0066BF"))},
-            {PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK,             new ColorPreference(QColor("#36B2FF"))},
+            { PREF_APP_AUTOSAVE_AUTOSAVETIME,                       new IntPreference(2 /* minutes */, false)          },
+            { PREF_APP_AUTOSAVE_USEAUTOSAVE,                        new BoolPreference(true, false)                    },
+            { PREF_APP_KEYBOARDLAYOUT,                              new StringPreference("US - International")         },
+            { PREF_APP_PATHS_INSTRUMENTLIST1,                       new StringPreference(":/data/instruments.xml", false) },
+            { PREF_APP_PATHS_INSTRUMENTLIST2,                       new StringPreference("", false)                    },
+            { PREF_APP_PATHS_MYIMAGES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory", "Images"))).absoluteFilePath(), false)         },
+            { PREF_APP_PATHS_MYPLUGINS,                             new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory", "Plugins"))).absoluteFilePath(), false)       },
+            { PREF_APP_PATHS_MYSCORES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("scores_directory", "Scores"))).absoluteFilePath(), false)         },
+            { PREF_APP_PATHS_MYSOUNDFONTS,                          new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "SoundFonts"))).absoluteFilePath(), false) },
+            { PREF_APP_PATHS_MYSHORTCUTS,                           new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("shortcuts_directory", "Shortcuts"))).absoluteFilePath(), false)   },
+            { PREF_APP_PATHS_MYSTYLES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("styles_directory", "Styles"))).absoluteFilePath(), false)         },
+            { PREF_APP_PATHS_MYTEMPLATES,                           new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory", "Templates"))).absoluteFilePath(), false)   },
+            { PREF_APP_PATHS_MYEXTENSIONS,                          new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("extensions_directory", "Extensions"))).absoluteFilePath(), false) },
+            { PREF_APP_PLAYBACK_FOLLOWSONG,                         new BoolPreference(true)                           },
+            { PREF_APP_PLAYBACK_PANPLAYBACK,                        new BoolPreference(true)                           },
+            { PREF_APP_PLAYBACK_PLAYREPEATS,                        new BoolPreference(true)                           },
+            { PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY,              new BoolPreference(true)                           },
+            { PREF_APP_USESINGLEPALETTE,                            new BoolPreference(false)                          },
+            { PREF_APP_PALETTESCALE,                                new DoublePreference(1.0)                          },
+            { PREF_APP_STARTUP_FIRSTSTART,                          new BoolPreference(true)                           },
+            { PREF_APP_STARTUP_SESSIONSTART,                        new EnumPreference(QVariant::fromValue(SessionStart::SCORE), false) },
+            { PREF_APP_STARTUP_STARTSCORE,                          new StringPreference(":/data/My_First_Score.mscx", false) },
+            { PREF_APP_WORKSPACE,                                   new StringPreference("Basic", false)               },
+            { PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED,          new StringPreference("", false)                    },
+            { PREF_APP_TELEMETRY_ALLOWED,                           new BoolPreference(false, false)                   },
+            { PREF_APP_BACKUP_GENERATE_BACKUP,                      new BoolPreference(true)                           },
+            { PREF_EXPORT_AUDIO_NORMALIZE,                          new BoolPreference(true)                           },
+            { PREF_EXPORT_AUDIO_SAMPLERATE,                         new IntPreference(44100, false)                    },
+            { PREF_EXPORT_AUDIO_PCMRATE,                            new IntPreference(16)                              },
+            { PREF_EXPORT_MP3_BITRATE,                              new IntPreference(128, false)                      },
+            { PREF_EXPORT_MUSICXML_EXPORTBREAKS,                    new EnumPreference(QVariant::fromValue(MusicxmlExportBreaks::ALL), false) },
+            { PREF_EXPORT_MUSICXML_EXPORTLAYOUT,                    new BoolPreference(true, false)                    },
+            { PREF_EXPORT_PDF_DPI,                                  new IntPreference(300, false)                      },
+            { PREF_EXPORT_PNG_RESOLUTION,                           new DoublePreference(DPI, false)                   },
+            { PREF_EXPORT_PNG_USETRANSPARENCY,                      new BoolPreference(true, false)                    },
+            { PREF_IMPORT_GUITARPRO_CHARSET,                        new StringPreference("UTF-8", false)               },
+            { PREF_IMPORT_MUSICXML_IMPORTBREAKS,                    new BoolPreference(true, false)                    },
+            { PREF_IMPORT_MUSICXML_IMPORTLAYOUT,                    new BoolPreference(true, false)                    },
+            { PREF_IMPORT_OVERTURE_CHARSET,                         new StringPreference("GBK", false)                 },
+            { PREF_IMPORT_STYLE_STYLEFILE,                          new StringPreference("", false)                    },
+            { PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS,    new StringPreference("", false)                    },
+            { PREF_IO_ALSA_DEVICE,                                  new StringPreference("default", false)             },
+            { PREF_IO_ALSA_FRAGMENTS,                               new IntPreference(3, false)                        },
+            { PREF_IO_ALSA_PERIODSIZE,                              new IntPreference(1024, false)                     },
+            { PREF_IO_ALSA_SAMPLERATE,                              new IntPreference(48000, false)                    },
+            { PREF_IO_ALSA_USEALSAAUDIO,                            new BoolPreference(defaultUseAlsaAudio, false)     },
+            { PREF_IO_JACK_REMEMBERLASTCONNECTIONS,                 new BoolPreference(true, false)                    },
+            { PREF_IO_JACK_TIMEBASEMASTER,                          new BoolPreference(false, false)                   },
+            { PREF_IO_JACK_USEJACKAUDIO,                            new BoolPreference(defaultUseJackAudio, false)     },
+            { PREF_IO_JACK_USEJACKMIDI,                             new BoolPreference(false, false)                   },
+            { PREF_IO_JACK_USEJACKTRANSPORT,                        new BoolPreference(false, false)                   },
+            { PREF_IO_MIDI_ADVANCEONRELEASE,                        new BoolPreference(true, false)                    },
+            { PREF_IO_MIDI_ENABLEINPUT,                             new BoolPreference(true, false)                    },
+            { PREF_IO_MIDI_EXPANDREPEATS,                           new BoolPreference(true, false)                    },
+            { PREF_IO_MIDI_EXPORTRPNS,                              new BoolPreference(false, false)                   },
+            { PREF_IO_MIDI_REALTIMEDELAY,                           new IntPreference(750 /* ms */, false)             },
+            { PREF_IO_MIDI_SHORTESTNOTE,                            new IntPreference(MScore::division/4, false)       },
+            { PREF_IO_MIDI_SHOWCONTROLSINMIXER,                     new BoolPreference(false, false)                   },
+            { PREF_IO_MIDI_USEREMOTECONTROL,                        new BoolPreference(false, false)                   },
+            { PREF_IO_OSC_PORTNUMBER,                               new IntPreference(5282, false)                     },
+            { PREF_IO_OSC_USEREMOTECONTROL,                         new BoolPreference(false, false)                   },
+            { PREF_IO_PORTAUDIO_DEVICE,                             new IntPreference(-1, false)                       },
+            { PREF_IO_PORTAUDIO_USEPORTAUDIO,                       new BoolPreference(defaultUsePortAudio, false)     },
+            { PREF_IO_PORTMIDI_INPUTBUFFERCOUNT,                    new IntPreference(100)                             },
+            { PREF_IO_PORTMIDI_INPUTDEVICE,                         new StringPreference("")                           },
+            { PREF_IO_PORTMIDI_OUTPUTBUFFERCOUNT,                   new IntPreference(65536)                           },
+            { PREF_IO_PORTMIDI_OUTPUTDEVICE,                        new StringPreference("")                           },
+            { PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS,           new IntPreference(0)                               },
+            { PREF_IO_PULSEAUDIO_USEPULSEAUDIO,                     new BoolPreference(defaultUsePulseAudio, false)    },
+            { PREF_SCORE_CHORD_PLAYONADDNOTE,                       new BoolPreference(true, false)                    },
+            { PREF_SCORE_HARMONY_PLAY,                              new BoolPreference(false, false)                   },
+            { PREF_SCORE_HARMONY_PLAY_ONEDIT,                       new BoolPreference(true, false)                    },
+            { PREF_SCORE_MAGNIFICATION,                             new DoublePreference(1.0, false)                   },
+            { PREF_SCORE_NOTE_PLAYONCLICK,                          new BoolPreference(true, false)                    },
+            { PREF_SCORE_NOTE_DEFAULTPLAYDURATION,                  new IntPreference(300 /* ms */, false)             },
+            { PREF_SCORE_NOTE_WARNPITCHRANGE,                       new BoolPreference(true, false)                    },
+            { PREF_SCORE_STYLE_DEFAULTSTYLEFILE,                    new StringPreference("", false)                    },
+            { PREF_SCORE_STYLE_PARTSTYLEFILE,                       new StringPreference("", false)                    },
+            { PREF_UI_CANVAS_BG_USECOLOR,                           new BoolPreference(true, false)                    },
+            { PREF_UI_CANVAS_FG_USECOLOR,                           new BoolPreference(true, false)                    },
+            { PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES,               new BoolPreference(false, false)                   },
+            { PREF_UI_CANVAS_BG_COLOR,                              new ColorPreference(QColor("#142433"), false)      },
+            { PREF_UI_CANVAS_FG_COLOR,                              new ColorPreference(QColor("#f9f9f9"), false)      },
+            { PREF_UI_CANVAS_BG_WALLPAPER,                          new StringPreference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/background1.png")).absoluteFilePath(), false)},
+            { PREF_UI_CANVAS_FG_WALLPAPER,                          new StringPreference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/paper5.png")).absoluteFilePath(), false)},
+            { PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING,               new BoolPreference(true, false)                    },
+            { PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY,               new IntPreference(6, false)                        },
+            { PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA,                new BoolPreference(false, false)                   },
+            { PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION,            new BoolPreference(false, false)                   },
+            { PREF_UI_APP_STARTUP_CHECKUPDATE,                      new BoolPreference(checkUpdateStartup, false)      },
+            { PREF_UI_APP_STARTUP_CHECK_EXTENSIONS_UPDATE,          new BoolPreference(checkExtensionsUpdateStartup, false)},
+            { PREF_UI_APP_STARTUP_SHOWNAVIGATOR,                    new BoolPreference(false, false)                   },
+            { PREF_UI_APP_STARTUP_SHOWPLAYPANEL,                    new BoolPreference(false, false)                   },
+            { PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN,                 new BoolPreference(true, false)                    },
+            { PREF_UI_APP_STARTUP_SHOWSTARTCENTER,                  new BoolPreference(true, false)                    },
+            { PREF_UI_APP_STARTUP_SHOWTOURS,                        new BoolPreference(true)                           },
+            { PREF_UI_APP_GLOBALSTYLE,                              new EnumPreference(QVariant::fromValue(defaultAppGlobalStyle), false)},
+            { PREF_UI_APP_LANGUAGE,                                 new StringPreference("system", false)              },
+            { PREF_UI_APP_RASTER_HORIZONTAL,                        new IntPreference(2)                               },
+            { PREF_UI_APP_RASTER_VERTICAL,                          new IntPreference(2)                               },
+            { PREF_UI_APP_SHOWSTATUSBAR,                            new BoolPreference(true)                           },
+            { PREF_UI_APP_USENATIVEDIALOGS,                         new BoolPreference(true)                           },
+            { PREF_UI_PIANO_HIGHLIGHTCOLOR,                         new ColorPreference(QColor("#0065BF"))             },
+            { PREF_UI_SCORE_NOTE_DROPCOLOR,                         new ColorPreference(QColor("#0065BF"))             },
+            { PREF_UI_SCORE_DEFAULTCOLOR,                           new ColorPreference(QColor("#000000"))             },
+            { PREF_UI_SCORE_FRAMEMARGINCOLOR,                       new ColorPreference(QColor("#A0A0A4"))             },
+            { PREF_UI_SCORE_LAYOUTBREAKCOLOR,                       new ColorPreference(QColor("#A0A0A4"))             },
+            { PREF_UI_SCORE_VOICE1_COLOR,                           new ColorPreference(QColor("#0065BF"))             },
+            { PREF_UI_SCORE_VOICE2_COLOR,                           new ColorPreference(QColor("#007F00"))             },
+            { PREF_UI_SCORE_VOICE3_COLOR,                           new ColorPreference(QColor("#C53F00"))             },
+            { PREF_UI_SCORE_VOICE4_COLOR,                           new ColorPreference(QColor("#C31989"))             },
+            { PREF_UI_THEME_ICONWIDTH,                              new IntPreference(28, false)                       },
+            { PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)                       },
+            { PREF_UI_THEME_FONTFAMILY,                             new StringPreference(QApplication::font().family(), false) },
+            { PREF_UI_THEME_FONTSIZE,                               new IntPreference(QApplication::font().pointSize(), false) },
+            { PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR,           new ColorPreference(QColor("#0cebff"))             },
+            { PREF_UI_PIANOROLL_DARK_NOTE_UNSEL_COLOR,              new ColorPreference(QColor("#1dcca0"))             },
+            { PREF_UI_PIANOROLL_DARK_NOTE_SEL_COLOR,                new ColorPreference(QColor("#ffff00"))             },
+            { PREF_UI_PIANOROLL_DARK_BG_BASE_COLOR,                 new ColorPreference(QColor("#3a3a3a"))             },
+            { PREF_UI_PIANOROLL_DARK_BG_KEY_WHITE_COLOR,            new ColorPreference(QColor("#3a3a3a"))             },
+            { PREF_UI_PIANOROLL_DARK_BG_KEY_BLACK_COLOR,            new ColorPreference(QColor("#262626"))             },
+            { PREF_UI_PIANOROLL_DARK_BG_GRIDLINE_COLOR,             new ColorPreference(QColor("#111111"))             },
+            { PREF_UI_PIANOROLL_DARK_BG_TEXT_COLOR,                 new ColorPreference(QColor("#999999"))             },
+            { PREF_UI_PIANOROLL_LIGHT_SELECTION_BOX_COLOR,          new ColorPreference(QColor("#2085c3"))             },
+            { PREF_UI_PIANOROLL_LIGHT_NOTE_UNSEL_COLOR,             new ColorPreference(QColor("#1dcca0"))             },
+            { PREF_UI_PIANOROLL_LIGHT_NOTE_SEL_COLOR,               new ColorPreference(QColor("#ffff00"))             },
+            { PREF_UI_PIANOROLL_LIGHT_BG_BASE_COLOR,                new ColorPreference(QColor("#e0e0e7"))             },
+            { PREF_UI_PIANOROLL_LIGHT_BG_KEY_WHITE_COLOR,           new ColorPreference(QColor("#ffffff"))             },
+            { PREF_UI_PIANOROLL_LIGHT_BG_KEY_BLACK_COLOR,           new ColorPreference(QColor("#e6e6e6"))             },
+            { PREF_UI_PIANOROLL_LIGHT_BG_GRIDLINE_COLOR,            new ColorPreference(QColor("#a2a2a6"))             },
+            { PREF_UI_PIANOROLL_LIGHT_BG_TEXT_COLOR,                new ColorPreference(QColor("#111111"))             },
+            { PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_ON,      new ColorPreference(QColor("#7F7F7F"))             },
+            { PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_OFF,     new ColorPreference(QColor("#a0a0a0"))             },
+            { PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_ON,     new ColorPreference(QColor("#7F7F7F"))             },
+            { PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_OFF,    new ColorPreference(QColor("#a0a0a0"))             },
+            { PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON,       new ColorPreference(QColor("#36B2FF"))             },
+            { PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_OFF,      new ColorPreference(QColor("#eff0f1"))             },
+            { PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON,      new ColorPreference(QColor("#0065BF"))             },
+            { PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF,     new ColorPreference(QColor("#3b3f45"))             },
+            { PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_LIGHT,            new ColorPreference(QColor("#0066BF"))             },
+            { PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK,             new ColorPreference(QColor("#36B2FF"))             },
+            { PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK,             new ColorPreference(QColor("#36B2FF"))             },
 #ifdef AVSOMR
-            {PREF_IMPORT_AVSOMR_USELOCAL,                          new BoolPreference(false, false)},
-            {PREF_UI_AVSOMR_RECOGNITION_COLOR,                     new ColorPreference(QColor("#1DCCA0"))},
-            {PREF_UI_AVSOMR_NOT_RECOGNITION_COLOR,                 new ColorPreference(QColor("#C31989"))},
+            { PREF_IMPORT_AVSOMR_USELOCAL,                          new BoolPreference(false, false)                   },
+            { PREF_UI_AVSOMR_RECOGNITION_COLOR,                     new ColorPreference(QColor("#1DCCA0"))             },
+            { PREF_UI_AVSOMR_NOT_RECOGNITION_COLOR,                 new ColorPreference(QColor("#C31989"))             },
 #endif
       });
 
@@ -226,10 +303,18 @@ void Preferences::init(bool storeInMemoryOnly)
       updateLocalPreferences();
       }
 
+//---------------------------------------------------------
+//   save
+//---------------------------------------------------------
+
 void Preferences::save()
       {
       settings()->sync();
       }
+
+//---------------------------------------------------------
+//   defaultValue
+//---------------------------------------------------------
 
 QVariant Preferences::defaultValue(const QString key) const
       {
@@ -237,6 +322,10 @@ QVariant Preferences::defaultValue(const QString key) const
       Preference* pref = _allPreferences.value(key);
       return pref ? pref->defaultValue() : QVariant();
       }
+
+//---------------------------------------------------------
+//   settings
+//---------------------------------------------------------
 
 QSettings* Preferences::settings() const
       {
@@ -247,6 +336,10 @@ QSettings* Preferences::settings() const
 
       return _settings;
       }
+
+//---------------------------------------------------------
+//   get
+//---------------------------------------------------------
 
 QVariant Preferences::get(const QString key) const
       {
@@ -262,6 +355,10 @@ QVariant Preferences::get(const QString key) const
             return settings()->value(key);
       }
 
+//---------------------------------------------------------
+//   set
+//---------------------------------------------------------
+
 void Preferences::set(const QString key, QVariant value, bool temporary)
       {
       if (_storeInMemoryOnly || temporary)
@@ -272,6 +369,10 @@ void Preferences::set(const QString key, QVariant value, bool temporary)
             settings()->setValue(key, value);
       }
 
+//---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
 void Preferences::remove(const QString key)
       {
       // remove both preference stored "in memory" and in QSettings
@@ -279,10 +380,18 @@ void Preferences::remove(const QString key)
       settings()->remove(key);
       }
 
+//---------------------------------------------------------
+//   has
+//---------------------------------------------------------
+
 bool Preferences::has(const QString key) const
       {
       return _inMemorySettings.contains(key) || settings()->contains(key);
       }
+
+//---------------------------------------------------------
+//   preference
+//---------------------------------------------------------
 
 QVariant Preferences::preference(const QString key) const
       {
@@ -296,6 +405,10 @@ QVariant Preferences::preference(const QString key) const
             return pref;
       }
 
+//---------------------------------------------------------
+//   checkIfKeyExists
+//---------------------------------------------------------
+
 bool Preferences::checkIfKeyExists(const QString key) const
       {
       bool exists = _allPreferences.contains(key);
@@ -306,6 +419,10 @@ bool Preferences::checkIfKeyExists(const QString key) const
       return exists;
       }
 
+//---------------------------------------------------------
+//   type
+//---------------------------------------------------------
+
 QMetaType::Type Preferences::type(const QString key) const
       {
       if (_allPreferences.contains(key))
@@ -314,6 +431,10 @@ QMetaType::Type Preferences::type(const QString key) const
             return QMetaType::UnknownType;
             }
       }
+
+//---------------------------------------------------------
+//   checkType
+//---------------------------------------------------------
 
 bool Preferences::checkType(const QString key, QMetaType::Type t) const
       {
@@ -324,97 +445,54 @@ bool Preferences::checkType(const QString key, QMetaType::Type t) const
       return type(key) == t;
       }
 
-Preferences::Preferences()
-      : _settings(0)
-      {}
-
-Preferences::~Preferences()
-      {
-      // clean up _allPreferences
-      for (Preference* pref : _allPreferences.values())
-            delete pref;
-
-      if (_settings) {
-            delete _settings;
-            }
-      }
-
-bool Preferences::getBool(const QString key) const
-      {
-      checkType(key, QMetaType::Bool);
-      return preference(key).toBool();
-      }
-
-QColor Preferences::getColor(const QString key) const
-      {
-      checkType(key, QMetaType::QColor);
-      QVariant v = preference(key);
-      if (v.type() == QVariant::Color)
-            return v.value<QColor>();
-      else {
-            // in case the color is expressed in settings file as a textual color representation
-            QColor c(v.toString());
-            return c.isValid() ? c : defaultValue(key).value<QColor>();
-            }
-      }
-
-QString Preferences::getString(const QString key) const
-      {
-      checkType(key, QMetaType::QString);
-      return preference(key).toString();
-      }
-
-int Preferences::getInt(const QString key) const
-      {
-      checkType(key, QMetaType::Int);
-      QVariant v = preference(key);
-      bool ok;
-      int pref = v.toInt(&ok);
-      if (!ok) {
-            qWarning("Can not convert preference %s to int. Returning default value.", key.toUtf8().constData());
-            return defaultValue(key).toInt();
-            }
-      return pref;
-}
-
-double Preferences::getDouble(const QString key) const
-      {
-      checkType(key, QMetaType::Double);
-      QVariant v = preference(key);
-      bool ok;
-      double pref = v.toDouble(&ok);
-      if (!ok) {
-            qWarning("Can not convert preference %s to double. Returning default value.", key.toUtf8().constData());
-            return defaultValue(key).toDouble();
-            }
-      return pref;
-      }
+//---------------------------------------------------------
+//   sessionStart
+//---------------------------------------------------------
 
 SessionStart Preferences::sessionStart() const
       {
       return preference(PREF_APP_STARTUP_SESSIONSTART).value<SessionStart>();
       }
 
+//---------------------------------------------------------
+//   musicxmlExportBreaks
+//---------------------------------------------------------
+
 MusicxmlExportBreaks Preferences::musicxmlExportBreaks() const
       {
       return preference(PREF_EXPORT_MUSICXML_EXPORTBREAKS).value<MusicxmlExportBreaks>();
       }
+
+//---------------------------------------------------------
+//   globalStyle
+//---------------------------------------------------------
 
 MuseScoreStyleType Preferences::globalStyle() const
       {
       return preference(PREF_UI_APP_GLOBALSTYLE).value<MuseScoreStyleType>();
       }
 
+//---------------------------------------------------------
+//   isThemeDark
+//---------------------------------------------------------
+
 bool Preferences::isThemeDark() const
       {
       return globalStyle() == MuseScoreStyleType::DARK_FUSION;
       }
+
+//---------------------------------------------------------
+//   setToDefaultValue
+//---------------------------------------------------------
 
 void Preferences::setToDefaultValue(const QString key)
       {
       set(key, defaultValue(key));
       }
 
+//---------------------------------------------------------
+//   setPreference
+//---------------------------------------------------------
 
 void Preferences::setPreference(const QString key, QVariant value)
       {
@@ -424,6 +502,10 @@ void Preferences::setPreference(const QString key, QVariant value)
           l(key, value);
       }
 
+//---------------------------------------------------------
+//   addOnSetListener
+//---------------------------------------------------------
+
 Preferences::ListenerID Preferences::addOnSetListener(const OnSetListener& l)
       {
       static ListenerID lastId{0};
@@ -432,10 +514,18 @@ Preferences::ListenerID Preferences::addOnSetListener(const OnSetListener& l)
       return lastId;
       }
 
+//---------------------------------------------------------
+//   removeOnSetListener
+//---------------------------------------------------------
+
 void Preferences::removeOnSetListener(const ListenerID& id)
       {
       _onSetListeners.remove(id);
       }
+
+//---------------------------------------------------------
+//   setTemporaryPreference
+//---------------------------------------------------------
 
 void Preferences::setTemporaryPreference(const QString key, QVariant value)
       {
@@ -443,6 +533,10 @@ void Preferences::setTemporaryPreference(const QString key, QVariant value)
       // called before init() which is ok since the preference is only stored "in memory"
       set(key, value, true);
       }
+
+//---------------------------------------------------------
+//   midiRemote
+//---------------------------------------------------------
 
 MidiRemote Preferences::midiRemote(int recordId) const
       {
@@ -460,6 +554,10 @@ MidiRemote Preferences::midiRemote(int recordId) const
       return remote;
       }
 
+//---------------------------------------------------------
+//   updateMidiRemote
+//---------------------------------------------------------
+
 void Preferences::updateMidiRemote(int recordId, MidiRemoteType type, int data)
       {
       QString baseKey = QString(PREF_IO_MIDI_REMOTE) + QString("%1%2%3").arg("/").arg(recordId).arg("/");
@@ -467,11 +565,19 @@ void Preferences::updateMidiRemote(int recordId, MidiRemoteType type, int data)
       set(baseKey + "data", data);
       }
 
+//---------------------------------------------------------
+//   clearMidiRemote
+//---------------------------------------------------------
+
 void Preferences::clearMidiRemote(int recordId)
       {
       QString baseKey = QString(PREF_IO_MIDI_REMOTE) + QString("%1%2").arg("/").arg(recordId);
       remove(baseKey);
       }
+
+//---------------------------------------------------------
+//   getDefaultLocalPreferences
+//---------------------------------------------------------
 
 QMap<QString, QVariant> Preferences::getDefaultLocalPreferences() {
       bool tmp = useLocalPrefs;
@@ -512,20 +618,30 @@ QMap<QString, QVariant> Preferences::getDefaultLocalPreferences() {
       return defaultLocalPreferences;
       }
 
+//---------------------------------------------------------
+//   setLocalPreferences
+//---------------------------------------------------------
+
 void Preferences::setLocalPreference(QString key, QVariant value)
       {
       if (localPreferences.contains(key))
             localPreferences[key] = value;
       }
 
+//---------------------------------------------------------
+//   Preference
+//---------------------------------------------------------
+
 Preference::Preference(QVariant defaultValue, QMetaType::Type type, bool showInAdvancedList)
-      : _defaultValue(defaultValue),
-        _showInAdvancedList(showInAdvancedList),
-        _type(type)
+   : _defaultValue(defaultValue), _showInAdvancedList(showInAdvancedList), _type(type)
       {}
 
+//---------------------------------------------------------
+//   IntPreference
+//---------------------------------------------------------
+
 IntPreference::IntPreference(int defaultValue, bool showInAdvancedList)
-      : Preference(defaultValue, QMetaType::Int, showInAdvancedList)
+   : Preference(defaultValue, QMetaType::Int, showInAdvancedList)
       {}
 
 void IntPreference::accept(QString key, PreferenceVisitor& v)
@@ -533,8 +649,12 @@ void IntPreference::accept(QString key, PreferenceVisitor& v)
       v.visit(key, this);
       }
 
+//---------------------------------------------------------
+//   DoublePreference
+//---------------------------------------------------------
+
 DoublePreference::DoublePreference(double defaultValue, bool showInAdvancedList)
-      : Preference(defaultValue, QMetaType::Double, showInAdvancedList)
+   : Preference(defaultValue, QMetaType::Double, showInAdvancedList)
       {}
 
 void DoublePreference::accept(QString key, PreferenceVisitor& v)
@@ -542,8 +662,12 @@ void DoublePreference::accept(QString key, PreferenceVisitor& v)
       v.visit(key, this);
       }
 
+//---------------------------------------------------------
+//   BoolPreference
+//---------------------------------------------------------
+
 BoolPreference::BoolPreference(bool defaultValue, bool showInAdvancedList)
-      : Preference(defaultValue, QMetaType::Bool, showInAdvancedList)
+   : Preference(defaultValue, QMetaType::Bool, showInAdvancedList)
       {}
 
 void BoolPreference::accept(QString key, PreferenceVisitor& v)
@@ -551,8 +675,12 @@ void BoolPreference::accept(QString key, PreferenceVisitor& v)
       v.visit(key, this);
       }
 
+//---------------------------------------------------------
+//   StringPreference
+//---------------------------------------------------------
+
 StringPreference::StringPreference(QString defaultValue, bool showInAdvancedList)
-      : Preference(defaultValue, QMetaType::QString, showInAdvancedList)
+   : Preference(defaultValue, QMetaType::QString, showInAdvancedList)
       {}
 
 void StringPreference::accept(QString key, PreferenceVisitor& v)
@@ -560,8 +688,12 @@ void StringPreference::accept(QString key, PreferenceVisitor& v)
       v.visit(key, this);
       }
 
+//---------------------------------------------------------
+//   ColorPreference
+//---------------------------------------------------------
+
 ColorPreference::ColorPreference(QColor defaultValue, bool showInAdvancedList)
-      : Preference(defaultValue, QMetaType::QColor, showInAdvancedList)
+   : Preference(defaultValue, QMetaType::QColor, showInAdvancedList)
       {}
 
 void ColorPreference::accept(QString key, PreferenceVisitor& v)
@@ -569,14 +701,16 @@ void ColorPreference::accept(QString key, PreferenceVisitor& v)
       v.visit(key, this);
       }
 
+//---------------------------------------------------------
+//   EnumPreference
+//---------------------------------------------------------
+
 EnumPreference::EnumPreference(QVariant defaultValue, bool showInAdvancedList)
-      : Preference(defaultValue, QMetaType::User, showInAdvancedList)
+   : Preference(defaultValue, QMetaType::User, showInAdvancedList)
       {}
 
 void EnumPreference::accept(QString, PreferenceVisitor&)
       {
       }
-
-
 
 } // namespace Ms
