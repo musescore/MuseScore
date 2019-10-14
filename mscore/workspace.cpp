@@ -320,6 +320,8 @@ void Workspace::write()
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       xml.stag("Workspace");
       // xml.tag("name", _name);
+      if (!_sourceWorkspaceName.isEmpty())
+            xml.tag("source", _sourceWorkspaceName);
       const PaletteWorkspace* w = mscore->getPaletteWorkspace();
       w->write(xml);
 
@@ -567,6 +569,37 @@ extern QString readRootFile(MQZipReader*, QList<QString>&);
 //   read
 //---------------------------------------------------------
 
+void Workspace::readWorkspaceFile(const QString& path, std::function<void(XmlReader&)> readWorkspace)
+      {
+      MQZipReader f(path);
+      QList<QString> images;
+      QString rootfile = readRootFile(&f, images);
+      //
+      // load images
+      //
+      for (const QString& s : images)
+            imageStore.add(s, f.fileData(s));
+
+      if (rootfile.isEmpty()) {
+            qDebug("can't find rootfile in: %s", qPrintable(path));
+            return;
+            }
+
+      QByteArray ba = f.fileData(rootfile);
+      XmlReader e(ba);
+
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Workspace")
+                              readWorkspace(e);
+                        else
+                              e.unknown();
+                        }
+                  }
+            }
+      }
+
 void Workspace::read()
       {
       saveToolbars = saveMenuBar = saveComponents = false;
@@ -583,35 +616,23 @@ void Workspace::read()
       QFileInfo fi(_path);
       _readOnly = !fi.isWritable();
 
-      MQZipReader f(_path);
-      QList<QString> images;
-      QString rootfile = readRootFile(&f, images);
-      //
-      // load images
-      //
-      for (const QString& s : images)
-            imageStore.add(s, f.fileData(s));
-
-      if (rootfile.isEmpty()) {
-            qDebug("can't find rootfile in: %s", qPrintable(_path));
-            return;
-            }
-
-      QByteArray ba = f.fileData(rootfile);
-      XmlReader e(ba);
-
       preferences.updateLocalPreferences();
 
-      while (e.readNextStartElement()) {
-            if (e.name() == "museScore") {
-                  while (e.readNextStartElement()) {
-                        if (e.name() == "Workspace")
-                              read(e);
-                        else
-                              e.unknown();
-                        }
+      readWorkspaceFile(_path, [this](XmlReader& e) { read(e); });
+      }
+
+std::unique_ptr<PaletteTree> Workspace::getPaletteTree() const
+      {
+      std::unique_ptr<PaletteTree> paletteTree(new PaletteTree);
+      readWorkspaceFile(_path, [&](XmlReader& e) {
+            while (e.readNextStartElement()) {
+                  if (e.name() == "PaletteBox")
+                        paletteTree->read(e);
+                  else
+                        e.skipCurrentElement();
                   }
-            }
+            });
+      return std::move(paletteTree);
       }
 
 void Workspace::read(XmlReader& e)
@@ -623,6 +644,8 @@ void Workspace::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "name")
                   e.readElementText();
+            else if (tag == "source")
+                  _sourceWorkspaceName = e.readElementText();
             else if (tag == "PaletteBox") {
                   PaletteWorkspace* w = mscore->getPaletteWorkspace();
                   w->read(e);
@@ -774,6 +797,9 @@ void Workspace::read(XmlReader& e)
             readGlobalMenuBar();
       if (!saveComponents)
             readGlobalGUIState();
+
+      if (const Workspace* src = sourceWorkspace())
+            mscore->getPaletteWorkspace()->setDefaultPaletteTree(src->getPaletteTree());
       }
 
 //---------------------------------------------------------
@@ -1071,6 +1097,21 @@ QList<Workspace*>& Workspace::refreshWorkspaces()
       {
       workspacesRead = false;
       return workspaces();
+      }
+
+const Workspace* Workspace::sourceWorkspace() const
+      {
+      const QString sourceName = _sourceWorkspaceName.isEmpty() ? defaultWorkspaces[0] : _sourceWorkspaceName;
+
+      if (translatableName() == sourceName || name() == sourceName)
+            return this;
+
+      for (const Workspace* w : workspaces()) {
+            if (w->translatableName() == sourceName || w->name() == sourceName)
+                  return w;
+            }
+
+      return workspaces()[0];
       }
 
 //---------------------------------------------------------
