@@ -148,7 +148,6 @@ void Bend::layout()
 
                   int idx = (_points[pt+1].pitch + 12)/25;
                   const char* l = label[idx];
-                  QRectF r;
                   bb |= fm.boundingRect(QRectF(x2, y2, 0, 0),
                      Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l));
                   }
