@@ -1,0 +1,49 @@
+<svg id="XML" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 353.01 465.01">
+    <defs>
+        <linearGradient id="linear-gradient" x1="-53.67" y1="646.37" x2="-54.56" y2="645.48" gradientTransform="matrix(320.01, 0, 0, -309.34, 17561.59, 200076.09)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-opacity="0.5"/>
+            <stop offset="0.01" stop-opacity="0.35"/>
+            <stop offset="0.02" stop-opacity="0.31"/>
+            <stop offset="0.04" stop-opacity="0.26"/>
+            <stop offset="0.12" stop-opacity="0.2"/>
+            <stop offset="0.18" stop-opacity="0.13"/>
+            <stop offset="0.32" stop-opacity="0.06"/>
+            <stop offset="1" stop-opacity="0.01"/>
+        </linearGradient>
+        <linearGradient id="linear-gradient-2" x1="83.01" y1="250.95" x2="436.01" y2="250.95" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#c7c8ce"/>
+            <stop offset="1" stop-color="#949495"/>
+        </linearGradient>
+        <linearGradient id="linear-gradient-3" x1="-51.54" y1="642.3" x2="-52.54" y2="641.3" gradientTransform="matrix(40, 0, 0, -40, 2417.98, 25789.74)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-opacity="0.5"/>
+            <stop offset="0.01" stop-opacity="0.35"/>
+            <stop offset="0.02" stop-opacity="0.31"/>
+            <stop offset="0.04" stop-opacity="0.26"/>
+            <stop offset="0.08" stop-opacity="0.2"/>
+            <stop offset="0.16" stop-opacity="0.13"/>
+            <stop offset="0.32" stop-opacity="0.06"/>
+            <stop offset="0.64" stop-opacity="0.01"/>
+            <stop offset="1" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+    <title>
+        xml-icon-master
+    </title>
+    <g id="Paper">
+        <g id="page">
+            <path id="white" d="M83.51,19V483h352V259c0-48,1-81-19-101l-120-120c-20-20-53-19-101-19Z" transform="translate(-83.01 -18.45)" style="fill:#fff"/>
+            <path id="shading" d="M83.51,19V483h352V259c0-48,1-81-19-101l-120-120c-20-20-53-19-101-19Z" transform="translate(-83.01 -18.45)" style="stroke-miterlimit:10;fill:url(#linear-gradient);stroke:url(#linear-gradient-2)"/>
+        </g>
+        <g id="fold">
+            <path id="white-2" data-name="white" d="M296.51,38c20,20,19,53,19,101,48,0,81-1,101,19Z" transform="translate(-83.01 -18.45)" style="fill:#fff"/>
+            <path id="shading-2" data-name="shading" d="M296.51,38c20,20,19,53,19,101,48,0,81-1,101,19Z" transform="translate(-83.01 -18.45)" style="fill:url(#linear-gradient-3)"/>
+        </g>
+    </g>
+    <g id="Content">
+        <text transform="translate(98.5 409.85)" style="font-size:76px;fill:#989898;font-family:Roboto-Bold,Roboto;font-weight:700">
+            XML
+        </text>
+        <path d="M182,251.1l43.21,16.41V285.3L163.9,258V243.85l61.31-27.25v17.8Z" transform="translate(-83.01 -18.45)" style="fill:#4d4d4d;stroke:#333;stroke-width:.75px"/>
+        <path d="M327.53,250.73l-45.27-16.62V216.6l63.28,27.25V258l-63.28,27.25v-17.5Z" transform="translate(-83.01 -18.45)" style="fill:#4d4d4d;stroke:#333;stroke-width:.75px"/>
+    </g>
+</svg>
