@@ -62,6 +62,8 @@ class Workspace : public QObject {
       void readGlobalMenuBar();
       void readGlobalGUIState();
 
+      static QString makeUserWorkspacePath(const QString& name);
+
    public slots:
       void setDirty(bool val = true) { _dirty = val;    }
 

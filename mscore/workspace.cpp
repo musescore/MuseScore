@@ -251,19 +251,31 @@ Workspace::Workspace()
       }
 
 //---------------------------------------------------------
+//   makeUserWorkspacePath
+///   Returns path for the workspace with the given \p name
+///   creating all the necessary directories.
+//---------------------------------------------------------
+
+QString Workspace::makeUserWorkspacePath(const QString& name)
+      {
+      const QString ext(".workspace");
+      QDir dir;
+      dir.mkpath(dataPath);
+      QString path(dataPath + "/workspaces");
+      dir.mkpath(path);
+      path += "/" + name + ext;
+      return path;
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
 void Workspace::write()
       {
-      if (_path.isEmpty()) {
-            QString ext(".workspace");
-            QDir dir;
-            dir.mkpath(dataPath);
-            _path = dataPath + "/workspaces";
-            dir.mkpath(_path);
-            _path += "/" + _name + ext;
-            }
+      if (_path.isEmpty())
+            _path = Workspace::makeUserWorkspacePath(_name);
+
       MQZipWriter f(_path);
       f.setCreationPermissions(
          QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
@@ -1208,10 +1220,14 @@ QString Workspace::findStringFromMenu(QMenu* menu)
 
 void Workspace::rename(const QString& s)
       {
-      QFile file (_path);
-      file.remove();
+      const QString newPath = Workspace::makeUserWorkspacePath(s);
+
+      QFile file(_path);
+      if (file.exists())
+            file.rename(newPath);
+
       setName(s);
-      _path = "";
+      _path = newPath;
       save();
       }
 }
