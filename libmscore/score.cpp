@@ -244,7 +244,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 //---------------------------------------------------------
 
 Score::Score()
-   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
+   : ScoreElement(this), _selection(this), _selectionFilter(this)
       {
       Score::validScores.insert(this);
       _masterScore = 0;
