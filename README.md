@@ -1,4 +1,4 @@
-![MuseScore](mscore/data/musescore_logo_full.png)  
+![MuseScore](mscore/data/musescore_logo_full.png)
  Music notation and composition software
 
 [![Travis CI](https://secure.travis-ci.org/musescore/MuseScore.svg?branch=master)](https://travis-ci.org/musescore/MuseScore)
@@ -26,7 +26,7 @@ MuseScore is an open source and free music notation software. For support, contr
 * [How to compile MuseScore?](https://musescore.org/en/developers-handbook/compilation)
 
 ## License
-MuseScore is licensed under GPL version 2.0. See LICENSE.GPL in the same directory.
+MuseScore is licensed under GPL version 2.0. See [LICENSE.GPL](https://github.com/musescore/MuseScore/blob/master/LICENSE.GPL) in the same directory.
 
 ## Packages
 * **aeolus** Clone of [Aeolus](http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/)
