@@ -649,8 +649,14 @@ bool PaletteWorkspace::addPalette(const QPersistentModelIndex& index)
       if (!index.isValid())
             return false;
 
-      if (index.model() == userPalette)
-            return userPalette->setData(index, true, PaletteTreeModel::VisibleRole);
+      if (index.model() == userPalette) {
+            const bool ok = userPalette->setData(index, true, PaletteTreeModel::VisibleRole);
+            if (!ok)
+                  return false;
+            const QModelIndex parent = index.parent();
+            userPalette->moveRow(parent, index.row(), parent, 0);
+            return true;
+            }
 
       if (index.model() == masterPalette) {
             QMimeData* data = masterPalette->mimeData({ QModelIndex(index) });
