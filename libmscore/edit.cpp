@@ -4801,8 +4801,11 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
                                     if (nt == 0)
                                           qWarning("linked tuplet not found");
                                     }
-                              newcr->setTuplet(nt);
-                              nt->setParent(newcr->measure());
+
+                              if (nt) {
+                                    newcr->setTuplet(nt);
+                                    nt->setParent(newcr->measure());
+                                    }
                               }
                         }
 
