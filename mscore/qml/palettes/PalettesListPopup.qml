@@ -63,7 +63,8 @@ StyledPopup {
             id: palettesList
             width: parent.width
             clip: true
-            model: null
+            property var extraPalettesModel: null // keeping a separate variable for a model prevents it from being deleted by QML
+            model: extraPalettesModel
 
             readonly property int availableHeight: palettesListPopup.maxHeight - header.height - createCustomPaletteButton.height - topSeparator.height - bottomSeparator.height
             height: Math.min(availableHeight, contentHeight)
@@ -74,7 +75,7 @@ StyledPopup {
 
             onVisibleChanged: {
                 if (visible) {
-                    model = paletteWorkspace.availableExtraPalettesModel();
+                    extraPalettesModel = paletteWorkspace.availableExtraPalettesModel();
                 }
             }
 
