@@ -413,7 +413,7 @@ Element* UndoMacro::selectedElement(const Selection& sel)
       }
 
 UndoMacro::UndoMacro(Score* s)
-   : undoInputState(s->inputState()), redoInputState(s),
+   : undoInputState(s->inputState()),
    undoSelectedElement(selectedElement(s->selection())), score(s)
       {
       }
