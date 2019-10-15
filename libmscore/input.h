@@ -39,7 +39,6 @@ enum class NoteEntryMethod : char {
 //---------------------------------------------------------
 
 class InputState {
-      Score*      _score;
       TDuration   _duration    { TDuration::DurationType::V_INVALID };  // currently duration
       int         _drumNote    { -1 };
       int         _track       { 0 };
@@ -58,8 +57,6 @@ class InputState {
       Segment* nextInputPos() const;
 
    public:
-      InputState(Score* s) : _score(s) {}
-
       ChordRest* cr() const;
 
       Fraction tick() const;

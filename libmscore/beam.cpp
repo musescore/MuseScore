@@ -2056,7 +2056,6 @@ void Beam::write(XmlWriter& xml) const
 
 void Beam::read(XmlReader& e)
       {
-      QPointF p1, p2;
       qreal _spatium = spatium();
       if (score()->mscVersion() < 301)
             _id = e.intAttribute("id");

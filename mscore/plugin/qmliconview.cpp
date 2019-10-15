@@ -44,7 +44,7 @@ void QmlIconView::paint(QPainter* p)
 void QmlIconView::setIcon(QVariant v)
       {
       if (v.canConvert<QIcon>())
-            _icon = std::move(v.value<QIcon>());
+            _icon = v.value<QIcon>();
       else if (v.canConvert<QColor>()) {
             _color = v.value<QColor>();
             _icon = QIcon();

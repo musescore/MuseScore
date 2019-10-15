@@ -632,7 +632,7 @@ std::unique_ptr<PaletteTree> Workspace::getPaletteTree() const
                         e.skipCurrentElement();
                   }
             });
-      return std::move(paletteTree);
+      return paletteTree;
       }
 
 void Workspace::read(XmlReader& e)
