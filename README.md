@@ -1,5 +1,5 @@
-![MuseScore](mscore/data/musescore_logo_full.png)
- Music notation and composition software
+![MuseScore](mscore/data/musescore_logo_full.png)  
+Music notation and composition software
 
 [![Travis CI](https://secure.travis-ci.org/musescore/MuseScore.svg?branch=master)](https://travis-ci.org/musescore/MuseScore)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/bp3ww6v985i64ece/branch/master?svg=true)](https://ci.appveyor.com/project/MuseScore/musescore/branch/master)
