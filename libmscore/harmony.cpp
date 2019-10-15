@@ -49,7 +49,8 @@ QString Harmony::harmonyName() const
 
       if (_textName != "") {
             e = _textName;
-            e.remove('=');
+            if (_harmonyType != HarmonyType::ROMAN)
+                  e.remove('=');
             }
       else if (!_degreeList.empty()) {
             hc.add(_degreeList);
@@ -635,23 +636,6 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             useLiteral = true;
       QString s = ss.simplified();
 
-      if ((_leftParen = s.startsWith('(')))
-            s.remove(0,1);
-
-      if ((_rightParen = (s.endsWith(')') && s.count('(') < s.count(')'))))
-            s.remove(s.size()-1,1);
-
-      if (_leftParen || _rightParen)
-            s = s.simplified();     // in case of spaces inside parentheses
-
-      if (s.isEmpty())
-            return 0;
-
-      bool preferMinor;
-      if (score()->styleB(Sid::lowerCaseMinorChords) && s[0].isLower())
-            preferMinor = true;
-      else
-            preferMinor = false;
       if (_harmonyType == HarmonyType::ROMAN) {
             _userName = s;
             _textName = s;
@@ -659,7 +643,25 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             *base = Tpc::TPC_INVALID;
             return 0;
             }
-      else if (_harmonyType == HarmonyType::NASHVILLE) {
+
+      // pre-process for parentheses
+      if ((_leftParen = s.startsWith('(')))
+            s.remove(0,1);
+      if ((_rightParen = (s.endsWith(')') && s.count('(') < s.count(')'))))
+            s.remove(s.size()-1,1);
+      if (_leftParen || _rightParen)
+            s = s.simplified();     // in case of spaces inside parentheses
+      if (s.isEmpty())
+            return 0;
+
+      // pre-process for lower case minor chords
+      bool preferMinor;
+      if (score()->styleB(Sid::lowerCaseMinorChords) && s[0].isLower())
+            preferMinor = true;
+      else
+            preferMinor = false;
+
+      if (_harmonyType == HarmonyType::NASHVILLE) {
             int n = 0;
             if (s[0].isDigit())
                   n = 1;
