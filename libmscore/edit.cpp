@@ -5073,6 +5073,11 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
 void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
       {
       Q_ASSERT(m1 && m2);
+
+      const Fraction startTick = m1->tick();
+      const Fraction endTick = m2->endTick();
+      std::set<Spanner*> spannersToRemove;
+
       //
       //  handle ties which start before m1 and end in (m1-m2)
       //
@@ -5085,15 +5090,31 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
                         continue;
                   Chord* c = toChord(e);
                   for (Note* n : c->notes()) {
+                        // Remove ties crossing measure range boundaries
                         Tie* t = n->tieBack();
-                        if (t && (t->startNote()->chord()->tick() < m1->tick()))
+                        if (t && (t->startNote()->chord()->tick() < startTick))
                               undoRemoveElement(t);
                         t = n->tieFor();
-                        if (t && (t->endNote()->chord()->tick() >= m2->endTick()))
+                        if (t && (t->endNote()->chord()->tick() >= endTick))
                               undoRemoveElement(t);
+
+                        // Do the same for other note-anchored spanners (e.g. glissandi).
+                        // Delay actual removing to avoid modifying lists inside loops over them.
+                        for (Spanner* s : n->spannerBack()) {
+                              if (s->tick() < startTick)
+                                    spannersToRemove.insert(s);
+                              }
+                        for (Spanner* s : n->spannerFor()) {
+                              if (s->tick2() >= endTick)
+                                    spannersToRemove.insert(s);
+                              }
                         }
                   }
             }
+
+      for (Spanner* s : spannersToRemove)
+            undoRemoveElement(s);
+
       undo(new RemoveMeasures(m1, m2));
       }
 
