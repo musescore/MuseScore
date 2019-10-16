@@ -8,6 +8,9 @@
 template <class InputIter>
 void skip_group(InputIter &iter);
 
+template <class InputIter>
+std::string char_by_code(InputIter &iter);
+
 
 /****************************************
 function assumes that file pointer points AFTER the opening brace
@@ -40,6 +43,29 @@ void skip_group(InputIter &iter)
          break;
       }
       }
+   }
+}
+
+template <class InputIter>
+std::string char_by_code(InputIter &iter)
+{
+   std::string stmp(1, *iter++);
+   stmp += *iter++;
+   int code = std::strtol(stmp.c_str(), NULL, 16);
+   switch (code)
+   {
+      case 0x3f:
+         return std::string();
+      case 147:
+         return "&ldquo;";
+      case 148:
+         return "&rdquo;";
+      case 167:
+         return "&sect;";
+      case 188:
+         return "&frac14;";
+      default:
+         return std::string(1, (char)code); //(std::string("&#") + from_int(code) + ";");
    }
 }
 

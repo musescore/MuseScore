@@ -71,7 +71,7 @@ std::string table::make()
    {
       if ((*row)->CellDefs->size()!=(*row)->Cells.size())
          throw std::logic_error("Number of Cells and number of CellDefs are unequal!");
-      for (cell_def=(*row)->CellDefs->begin(), cell=(*row)->Cells.begin();
+      for (cell_def=(*row)->CellDefs->begin(), cell=(*row)->Cells.begin(); 
            cell!=(*row)->Cells.end();
            ++cell, prev_cell_def=cell_def++
           )
@@ -82,7 +82,7 @@ std::string table::make()
             (*cell_def)->Left=(*prev_cell_def)->Right;
          if ((*cell_def)->FirstMerged)
          {
-            for (span_row=row, ++span_row; span_row!=end();
+            for (span_row=row, ++span_row; span_row!=end(); 
                  ++span_row)
             {
                cell_def_2=
@@ -113,7 +113,7 @@ std::string table::make()
          result+=from_int(std::distance(pts.begin(), pt));
          result+="></td>";
       }
-      for (cell_def=(*row)->CellDefs->begin(), cell=(*row)->Cells.begin();
+      for (cell_def=(*row)->CellDefs->begin(), cell=(*row)->Cells.begin(); 
            cell!=(*row)->Cells.end(); ++cell, ++cell_def)
       {
          ptp=pts.find((*cell_def)->Right);
@@ -200,7 +200,7 @@ std::string table::make()
                result+=" valign=bottom";
                break;
             case table_cell_def::valign_center:
-                break;
+               break;
             }
 
             result+=">";
