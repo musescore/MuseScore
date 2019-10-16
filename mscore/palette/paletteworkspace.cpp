@@ -27,6 +27,7 @@
 #include "palette.h" // applyPaletteElement
 #include "palettedialog.h"
 #include "palettecelldialog.h"
+#include "palettewidget.h"
 #include "timedialog.h"
 
 namespace Ms {
@@ -288,71 +289,158 @@ bool UserPaletteController::move(const QModelIndex& sourceParent, int sourceRow,
       }
 
 //---------------------------------------------------------
+//   ensurePaletteFocused
+//---------------------------------------------------------
+
+static void ensurePaletteFocused()
+      {
+      PaletteWidget* p = mscore->getPaletteWidget();
+      if (p)
+            p->ensureQmlViewFocused();
+      }
+
+//---------------------------------------------------------
 //   UserPaletteController::showHideOrDeleteDialog
 //---------------------------------------------------------
 
-AbstractPaletteController::RemoveAction UserPaletteController::showHideOrDeleteDialog(const QString& question) const
+void UserPaletteController::showHideOrDeleteDialog(const QString& question, std::function<void(AbstractPaletteController::RemoveAction)> resultHandler) const
       {
-      QMessageBox msg;
-      msg.setIcon(QMessageBox::Question);
-      msg.setText(question);
-      msg.setTextFormat(Qt::PlainText);
-      QPushButton* deleteButton = msg.addButton(tr("Delete permanently"), QMessageBox::DestructiveRole);
-      QPushButton* hideButton = msg.addButton(tr("Hide"), QMessageBox::AcceptRole);
-      msg.addButton(QMessageBox::Cancel);
-      msg.setDefaultButton(hideButton);
+      QMessageBox* msg = new QMessageBox(mscore);
+      msg->setIcon(QMessageBox::Question);
+      msg->setText(question);
+      msg->setTextFormat(Qt::PlainText);
+      QPushButton* deleteButton = msg->addButton(tr("Delete permanently"), QMessageBox::DestructiveRole);
+      QPushButton* hideButton = msg->addButton(tr("Hide"), QMessageBox::AcceptRole);
+      msg->addButton(QMessageBox::Cancel);
+      msg->setDefaultButton(hideButton);
 
-      msg.exec();
-      QAbstractButton* btn = msg.clickedButton();
-      if (btn == deleteButton)
-            return RemoveAction::DeletePermanently;
-      if (btn == hideButton)
-            return RemoveAction::Hide;
-      return RemoveAction::NoAction;
+      connect(msg, &QDialog::finished, this, [=]() {
+            ensurePaletteFocused();
+
+            RemoveAction action = RemoveAction::NoAction;
+
+            const QAbstractButton* btn = msg->clickedButton();
+            if (btn == deleteButton)
+                  action = RemoveAction::DeletePermanently;
+            else if (btn == hideButton)
+                  action = RemoveAction::Hide;
+
+            resultHandler(action);
+            });
+
+      msg->setWindowModality(Qt::ApplicationModal);
+      msg->setAttribute(Qt::WA_DeleteOnClose);
+      msg->open();
       }
 
 //---------------------------------------------------------
-//   UserPaletteController::remove
+//   UserPaletteController::queryRemove
 //---------------------------------------------------------
 
-AbstractPaletteController::RemoveAction UserPaletteController::queryRemoveAction(const QModelIndex& index) const
+void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, int customCount)
       {
       using RemoveAction = AbstractPaletteController::RemoveAction;
 
-      if (!canEdit(index.parent()))
-            return RemoveAction::NoAction;
+      if (removeIndices.empty() || !canEdit(removeIndices[0].parent()))
+            return;
 
-      const bool custom = model()->data(index, PaletteTreeModel::CustomRole).toBool();
-      const bool visible = model()->data(index, PaletteTreeModel::VisibleRole).toBool();
-      const bool isCell = bool(model()->data(index, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>());
+      if (!customCount) {
+            remove(removeIndices, RemoveAction::AutoAction);
+            return;
+            }
+
+      // these parameters should not depend on exact index as all they should have the same parent in palette tree
+      const bool visible = removeIndices[0].data(PaletteTreeModel::VisibleRole).toBool();
+      const bool isCell = bool(removeIndices[0].data(PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>());
+
+      RemoveAction action = RemoveAction::AutoAction;
 
       if (isCell) {
-            if (!custom) {
-                  // no need to keep standard insivible cells, just remove them from the model
-                  return RemoveAction::DeletePermanently;
+            if (visible) {
+                  showHideOrDeleteDialog(
+                     customCount == 1 ? tr("Do you want to hide this custom palette cell or permanently delete it?") : tr("Do you want to hide these custom palette cells or permanently delete them?"),
+                     [=](RemoveAction action) { remove(removeIndices, action); }
+                     );
+                  return;
                   }
-
-            if (visible)
-                  return showHideOrDeleteDialog(tr("Do you want to hide this custom palette cell or permanently delete it?"));
             else {
-                  const auto answer = QMessageBox::question(
-                        nullptr,
-                        "",
-                        tr("Do you want to permanently delete this custom palette cell?"),
-                        QMessageBox::Yes | QMessageBox::No
-                        );
+                  QMessageBox* msg = new QMessageBox(
+                     QMessageBox::Question,
+                     "",
+                     customCount == 1 ? tr("Do you want to permanently delete this custom palette cell?") : tr("Do you want to permanently delete these custom palette cells?"),
+                     QMessageBox::Yes | QMessageBox::No,
+                     mscore
+                     );
 
-                  if (answer == QMessageBox::Yes)
-                        return RemoveAction::DeletePermanently;
-                  //return RemoveAction::NoAction;
+                  connect(msg, &QDialog::finished, this, [=]() {
+                        ensurePaletteFocused();
+
+                        const auto result = msg->standardButton(msg->clickedButton());
+                        if (result == QMessageBox::Yes)
+                              remove(removeIndices, RemoveAction::DeletePermanently);
+                        });
+
+                  msg->setWindowModality(Qt::ApplicationModal);
+                  msg->setAttribute(Qt::WA_DeleteOnClose);
+                  msg->open();
+                  return;
                   }
-
-            return RemoveAction::NoAction;
             }
       else {
-            if (visible && custom)
-                  return showHideOrDeleteDialog(tr("Do you want to hide this custom palette or permanently delete it?"));
-            return RemoveAction::Hide;
+            if (visible) {
+                  showHideOrDeleteDialog(
+                     customCount == 1 ? tr("Do you want to hide this custom palette or permanently delete it?") : tr("Do you want to hide these custom palettes or permanently delete them?"),
+                     [=](RemoveAction action) { remove(removeIndices, action); }
+                     );
+                  return;
+                  }
+            else
+                  action = RemoveAction::Hide;
+            }
+
+      remove(removeIndices, action);
+      }
+
+//---------------------------------------------------------
+//   UserPaletteController::remove
+//---------------------------------------------------------
+
+void UserPaletteController::remove(const QModelIndexList& unsortedRemoveIndices, AbstractPaletteController::RemoveAction action)
+      {
+      using RemoveAction = AbstractPaletteController::RemoveAction;
+
+      if (action == RemoveAction::NoAction)
+            return;
+
+      QModelIndexList removeIndices = unsortedRemoveIndices;
+      std::sort(removeIndices.begin(), removeIndices.end(), [](const QModelIndex& a, const QModelIndex& b) { return a.row() < b.row(); });
+
+      // remove in reversed order to leave the previous model indices in the list valid
+      for (auto i = removeIndices.rbegin(); i != removeIndices.rend(); ++i) {
+            const QModelIndex& index = *i;
+
+            RemoveAction indexAction = action;
+            const bool custom = model()->data(index, PaletteTreeModel::CustomRole).toBool();
+
+            if (!custom || indexAction == RemoveAction::AutoAction) {
+                  const bool isCell = bool(model()->data(index, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>());
+                  indexAction = custom ? RemoveAction::NoAction : (isCell ? RemoveAction::DeletePermanently : RemoveAction::Hide);
+                  }
+
+            switch (indexAction) {
+                  case RemoveAction::NoAction:
+                        break;
+                  case RemoveAction::Hide:
+                        model()->setData(index, false, PaletteTreeModel::VisibleRole);
+                        break;
+                  case RemoveAction::DeletePermanently:
+                        model()->removeRow(index.row(), index.parent());
+                        break;
+                  case RemoveAction::AutoAction:
+                        // impossible, we have just assigned another action for that case
+                        Q_ASSERT(false);
+                        break;
+                  }
             }
       }
 
@@ -360,19 +448,37 @@ AbstractPaletteController::RemoveAction UserPaletteController::queryRemoveAction
 //   UserPaletteController::remove
 //---------------------------------------------------------
 
-bool UserPaletteController::remove(const QModelIndex& index)
+void UserPaletteController::remove(const QModelIndex& index)
       {
-      using RemoveAction = AbstractPaletteController::RemoveAction;
-      const RemoveAction action = queryRemoveAction(index);
-      switch (action) {
-            case RemoveAction::NoAction:
-                  break;
-            case RemoveAction::Hide:
-                  return model()->setData(index, false, PaletteTreeModel::VisibleRole);
-            case RemoveAction::DeletePermanently:
-                  return model()->removeRow(index.row(), index.parent());
+      if (!canEdit(index.parent()))
+            return;
+
+      const bool customItem = index.data(PaletteTreeModel::CustomRole).toBool();
+      queryRemove({ index }, customItem ? 1 : 0);
+      }
+
+//---------------------------------------------------------
+//   UserPaletteController::removeSelection
+//---------------------------------------------------------
+
+void UserPaletteController::removeSelection(const QModelIndexList& selectedIndexes, const QModelIndex& parent)
+      {
+      if (!canEdit(parent))
+            return;
+
+      QModelIndexList removeIndices;
+      int customItemsCount = 0;
+
+      for (const QModelIndex& idx : selectedIndexes) {
+            if (idx.parent() == parent) {
+                  removeIndices.push_back(idx);
+                  const bool custom = idx.data(PaletteTreeModel::CustomRole).toBool();
+                  if (custom)
+                        ++customItemsCount;
+                  }
             }
-      return false;
+
+      queryRemove(removeIndices, customItemsCount);
       }
 
 //---------------------------------------------------------
@@ -406,6 +512,8 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
       connect(d, &PalettePropertiesDialog::changed, m, [m, srcIndex]() {
             m->itemDataChanged(srcIndex);
       });
+
+      connect(d, &QDialog::finished, []() { ensurePaletteFocused(); });
       
       d->setModal(true);
       d->setAttribute(Qt::WA_DeleteOnClose);
@@ -443,6 +551,8 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
       connect(d, &PaletteCellPropertiesDialog::changed, m, [m, srcIndex]() {
             m->itemDataChanged(srcIndex);
       });
+
+      connect(d, &QDialog::finished, []() { ensurePaletteFocused(); });
 
       d->setModal(true);
       d->setAttribute(Qt::WA_DeleteOnClose);
