@@ -37,23 +37,6 @@ function dropEventMimeData(drag) {
     return mime;
 }
 
-function removeSelectedItems(paletteModel, paletteController, selectionModel, parentIndex) {
-    function findNextSelectedIndex(selectedList) {
-        for (var i = 0; i < selectedList.length; i++) {
-            var modelIndex = selectedList[i];
-            var selParentIdx = paletteModel.parent(modelIndex);
-            if ((parentIndex || selParentIdx.valid) && selParentIdx != parentIndex)
-                continue;
-            return modelIndex;
-        }
-        return null;
-    }
-
-    var selectedIndex = findNextSelectedIndex(selectionModel.selectedIndexes);
-    while (selectedIndex) {
-        var ok = paletteController.remove(selectedIndex);
-        if (!ok)
-            return;
-        selectedIndex = findNextSelectedIndex(selectionModel.selectedIndexes);
-    }
+function removeSelectedItems(paletteController, selectionModel, parentIndex) {
+    paletteController.removeSelection(selectionModel.selectedIndexes, parentIndex);
 }

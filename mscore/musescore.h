@@ -717,6 +717,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool vRaster() const { return vRasterAction->isChecked(); }
 
       PaletteWorkspace* getPaletteWorkspace();
+      PaletteWidget* getPaletteWidget() { return paletteWidget; }
       void changeWorkspace(const QString& name);
 
       void disableCommands(bool val) { inChordEditor = val; }
