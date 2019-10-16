@@ -233,7 +233,7 @@ StyledPopup {
                             opacity: deleteButton.enabled ? 1.0 : 0.1
                         }
 
-                        onClicked: Utils.removeSelectedItems(moreElementsPopup.customPalette, moreElementsPopup.customPaletteController, customPaletteSelectionModel, moreElementsPopup.customPaletteRootIndex);
+                        onClicked: Utils.removeSelectedItems(moreElementsPopup.customPaletteController, customPaletteSelectionModel, moreElementsPopup.customPaletteRootIndex);
                     }
                 }
 
