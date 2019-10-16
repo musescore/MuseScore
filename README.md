@@ -66,13 +66,13 @@ Kept as an example of how to integrate with a complex synthesizer.
 * **thirdparty** Contains projects which are included for convenience, usually to integrate them into the build system to make them available for all supported platforms.
 
     * **thirdparty/rtf2html**
-    Used for capella import
+    Used for capella import. Clone from [rtf2html@sourceforge](https://github.com/lvu/rtf2html), code now at [rtf2html@github](https://github.com/lvu/rtf2html)
 
     * **thirdparty/dtl**
     Used for the score comparison tool. [Diff Template Library](https://github.com/cubicdaiya/dtl)
 
     * **thirdparty/ofqf**
-    OSC server interface. Based on [OSC for Qt4](http://www.arnoldarts.de/projects/ofqf/)
+    OSC server interface. Based on [OSC for Qt4](http://www.arnoldarts.de/projects/ofqf/), code now on [github](https://github.com/kampfschlaefer/ofq)
 
     * **thirdparty/singleapp**
     Clone from [Qt Single Application](https://github.com/qtproject/qt-solutions/tree/master/qtsingleapplication)
