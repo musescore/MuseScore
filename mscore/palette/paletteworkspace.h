@@ -185,6 +185,9 @@ class PaletteWorkspace : public QObject {
             PaletteIndexRole
             };
 
+   signals:
+      void userPaletteChanged();
+
    public:
       explicit PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master = nullptr, QObject* parent = nullptr);
 

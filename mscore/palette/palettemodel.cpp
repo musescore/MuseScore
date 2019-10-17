@@ -66,6 +66,32 @@ void PaletteTreeModel::onDataChanged(const QModelIndex& topLeft, const QModelInd
       }
 
 //---------------------------------------------------------
+//   PaletteTreeModel::setTreeChanged
+//---------------------------------------------------------
+
+void PaletteTreeModel::setTreeChanged()
+      {
+      _treeChanged = true;
+      if (!_treeChangedSignalBlocked)
+            emit treeChanged();
+      }
+
+//---------------------------------------------------------
+//   PaletteTreeModel::blockTreeChanged
+//---------------------------------------------------------
+
+bool PaletteTreeModel::blockTreeChanged(bool block)
+      {
+      const bool wasBlocked = _treeChangedSignalBlocked;
+      _treeChangedSignalBlocked = block;
+
+      if (wasBlocked && !block && _treeChanged)
+            emit treeChanged();
+
+      return wasBlocked;
+      }
+
+//---------------------------------------------------------
 //   PaletteTreeModel::iptrToPalettePanel
 //---------------------------------------------------------
 
