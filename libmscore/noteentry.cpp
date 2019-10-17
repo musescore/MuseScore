@@ -68,6 +68,7 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                         return nval;
                         }
                   stringData = instr->stringData();
+                  line = st->staffType(tick)->visualStringToPhys(line);
                   if (line < 0 || line >= stringData->strings()) {
                         error = true;
                         return nval;
