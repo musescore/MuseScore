@@ -382,7 +382,7 @@ void Harmony::read(XmlReader& e)
 
       // render chord from description (or _textName)
       render();
-      setXmlText(harmonyName());
+      setPlainText(harmonyName());
       }
 
 //---------------------------------------------------------
@@ -743,7 +743,7 @@ void Harmony::startEdit(EditData& ed)
       {
       if (!textList.empty()) {
             // convert chord symbol to plain text
-            setXmlText(harmonyName());
+            setPlainText(harmonyName());
             // clear rendering
             for (const TextSegment* t : textList)
                   delete t;
@@ -828,7 +828,7 @@ void Harmony::endEdit(EditData& ed)
                               //score()->undoTransposeHarmony(h, rootTpc, baseTpc);
                               h->setRootTpc(rootTpc);
                               h->setBaseTpc(baseTpc);
-                              h->setXmlText(h->harmonyName());
+                              h->setPlainText(h->harmonyName());
                               h->setHarmony(h->plainText());
                               h->triggerLayout();
                               }
@@ -1778,7 +1778,7 @@ bool Harmony::setProperty(Pid pid, const QVariant& v)
             }
       else if (TextBase::setProperty(pid, v)) {
             if (pid == Pid::TEXT)
-                  setHarmony(v.toString());
+                  setHarmony(plainText());
             render();
             return true;
             }
