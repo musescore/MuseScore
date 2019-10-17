@@ -56,6 +56,8 @@ class Workspace : public QObject {
       bool _dirty;
       bool _readOnly;
 
+      QTimer _saveTimer;
+
       bool saveComponents;
       bool saveToolbars;
       bool saveMenuBar;
@@ -67,8 +69,12 @@ class Workspace : public QObject {
       static QString makeUserWorkspacePath(const QString& name);
       static void readWorkspaceFile(const QString& path, std::function<void(XmlReader&)> readWorkspace);
 
+   private slots:
+      void ensureWorkspaceSaved();
+
    public slots:
-      void setDirty(bool val = true) { _dirty = val;    }
+      void setDirty(bool val);
+      void setDirty() { setDirty(true); }
 
    public:
       Workspace();
