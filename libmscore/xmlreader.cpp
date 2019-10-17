@@ -520,6 +520,18 @@ Tid XmlReader::addUserTextStyle(const QString& name)
             id = Tid::USER5;
       else if (userTextStyles.size() == 5)
             id = Tid::USER6;
+      else if (userTextStyles.size() == 6)
+            id = Tid::USER7;
+      else if (userTextStyles.size() == 7)
+            id = Tid::USER8;
+      else if (userTextStyles.size() == 8)
+            id = Tid::USER9;
+      else if (userTextStyles.size() == 9)
+            id = Tid::USER10;
+      else if (userTextStyles.size() == 10)
+            id = Tid::USER11;
+      else if (userTextStyles.size() == 11)
+            id = Tid::USER12;
       else
             qDebug("too many user defined textstyles");
       if (id != Tid::TEXT_STYLES)
