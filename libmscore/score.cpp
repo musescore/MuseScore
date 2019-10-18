@@ -3997,11 +3997,12 @@ QString Score::extractLyrics()
       for (int track = 0; track < ntracks(); track += VOICES) {
             bool found = false;
             size_t maxLyrics = 1;
+            const RepeatList& rlist = repeatList();
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
                   m->setPlaybackCount(0);
                   }
             // follow the repeat segments
-            for (const RepeatSegment* rs : repeatList()) {
+            for (const RepeatSegment* rs : rlist) {
                   Fraction startTick  = Fraction::fromTicks(rs->tick);
                   Fraction endTick    = startTick + Fraction::fromTicks(rs->len());
                   for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
