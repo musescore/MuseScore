@@ -390,11 +390,18 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
             return;
 
       PaletteTreeModel* m = _userPalette;
-      bool paletteChangedState = m->paletteTreeChanged();
       PalettePropertiesDialog* d = new PalettePropertiesDialog(p, mscore);
-      connect(d, &QDialog::rejected, m, [m, srcIndex, paletteChangedState]() {
+
+      const bool treeChangedWasBlocked = m->blockTreeChanged(true);
+      const bool paletteChangedState = m->paletteTreeChanged();
+
+      connect(d, &QDialog::accepted, m, [m, treeChangedWasBlocked]() {
+            m->blockTreeChanged(treeChangedWasBlocked);
+      });
+      connect(d, &QDialog::rejected, m, [m, srcIndex, paletteChangedState, treeChangedWasBlocked]() {
             m->itemDataChanged(srcIndex);
             paletteChangedState ? m->setTreeChanged() : m->setTreeUnchanged();
+            m->blockTreeChanged(treeChangedWasBlocked);
       });
       connect(d, &PalettePropertiesDialog::changed, m, [m, srcIndex]() {
             m->itemDataChanged(srcIndex);
@@ -421,10 +428,17 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
 
       PaletteCellPropertiesDialog* d = new PaletteCellPropertiesDialog(cell.get(), mscore);
       PaletteTreeModel* m = _userPalette;
-      bool paletteChangedState = m->paletteTreeChanged();
-      connect(d, &QDialog::rejected, m, [m, srcIndex, paletteChangedState]() {
+
+      const bool treeChangedWasBlocked = m->blockTreeChanged(true);
+      const bool paletteChangedState = m->paletteTreeChanged();
+
+      connect(d, &QDialog::accepted, m, [m, treeChangedWasBlocked]() {
+            m->blockTreeChanged(treeChangedWasBlocked);
+      });
+      connect(d, &QDialog::rejected, m, [m, srcIndex, paletteChangedState, treeChangedWasBlocked]() {
             m->itemDataChanged(srcIndex);
             paletteChangedState ? m->setTreeChanged() : m->setTreeUnchanged();
+            m->blockTreeChanged(treeChangedWasBlocked);
       });
       connect(d, &PaletteCellPropertiesDialog::changed, m, [m, srcIndex]() {
             m->itemDataChanged(srcIndex);
@@ -464,7 +478,10 @@ void UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
 
 PaletteWorkspace::PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master, QObject* parent)
    : QObject(parent), userPalette(user), masterPalette(master), defaultPalette(nullptr)
-      {}
+      {
+      if (userPalette)
+            connect(userPalette, &PaletteTreeModel::treeChanged, this, &PaletteWorkspace::userPaletteChanged);
+      }
 
 //---------------------------------------------------------
 //   PaletteWorkspace::masterPaletteModel
@@ -806,10 +823,15 @@ bool PaletteWorkspace::loadPalette(const QModelIndex& index)
 
 void PaletteWorkspace::setUserPaletteTree(std::unique_ptr<PaletteTree> tree)
       {
-      if (userPalette)
+      if (userPalette) {
+            disconnect(userPalette, &PaletteTreeModel::treeChanged, this, &PaletteWorkspace::userPaletteChanged);
             userPalette->setPaletteTree(std::move(tree));
-      else
+            connect(userPalette, &PaletteTreeModel::treeChanged, this, &PaletteWorkspace::userPaletteChanged);
+            }
+      else {
             userPalette = new PaletteTreeModel(std::move(tree), /* parent */ this);
+            connect(userPalette, &PaletteTreeModel::treeChanged, this, &PaletteWorkspace::userPaletteChanged);
+            }
       }
 
 void PaletteWorkspace::setDefaultPaletteTree(std::unique_ptr<PaletteTree> tree)

@@ -5445,6 +5445,9 @@ PaletteWorkspace* MuseScore::getPaletteWorkspace()
             paletteWorkspace = new PaletteWorkspace(emptyModel, masterPaletteModel, /* parent */ this);
             emptyModel->setParent(paletteWorkspace);
             masterPaletteModel->setParent(paletteWorkspace);
+
+            if (Workspace::currentWorkspace)
+                  connect(paletteWorkspace, &PaletteWorkspace::userPaletteChanged, Workspace::currentWorkspace, QOverload<>::of(&Workspace::setDirty), Qt::UniqueConnection);
             }
 
       return paletteWorkspace;
