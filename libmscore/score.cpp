@@ -2908,7 +2908,9 @@ void Score::padToggle(Pad n)
             if (canAdjustLength) {
                   // Change length from last to first chord/rest
                   std::sort(crs.begin(), crs.end(), [](const ChordRest* cr1, const ChordRest* cr2) {
-                        return cr2->track() < cr1->track() || cr2->isBefore(cr1);
+                        if (cr2->track() == cr1->track())
+                              return cr2->isBefore(cr1);
+                        return cr2->track() < cr1->track();
                         });
                   }
             else
