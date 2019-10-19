@@ -634,17 +634,17 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
       bool useLiteral = false;
       if (ss.endsWith(' '))
             useLiteral = true;
-      QString s = ss.simplified();
 
       if (_harmonyType == HarmonyType::ROMAN) {
-            _userName = s;
-            _textName = s;
+            _userName = ss;
+            _textName = ss;
             *root = Tpc::TPC_INVALID;
             *base = Tpc::TPC_INVALID;
             return 0;
             }
 
       // pre-process for parentheses
+      QString s = ss.simplified();
       if ((_leftParen = s.startsWith('(')))
             s.remove(0,1);
       if ((_rightParen = (s.endsWith(')') && s.count('(') < s.count(')'))))
@@ -789,22 +789,50 @@ bool Harmony::edit(EditData& ed)
 
 void Harmony::endEdit(EditData& ed)
       {
-      // render to layout as chord symbol
-      setHarmony(plainText());
+      // complete editing: generate xml text, set Pid::TEXT, perform initial layout
+      // if text has changed, this also triggers setHarmony() which renders chord symbol
+      // but any rendering or layout performed here is tenative,
+      // we may still need to substitute special characters,
+      // and that cannot be until after editing is completed
+      TextBase::endEdit(ed);
+
+      // get plain text
+      QString s = plainText();
+
+      // if user explicitly added symbols to the text,
+      // convert them back to their respective replacement texts
+      if (harmonyType() != HarmonyType::ROMAN) {
+            s.replace("\u1d12b", "bb"); // double-flat
+            s.replace("\u266d",  "b");  // flat
+            s.replace("\ue260",  "b");  // flat
+            // do not replace natural sign
+            // (right now adding the symbol explicitly is the only way to force a natural sign to appear at all)
+            //s.replace("\u266e",  "n");  // natural, if one day we support that too
+            //s.replace("\ue261",  "n");  // natural, if one day we support that too
+            s.replace("\u266f",  "#");  // sharp
+            s.replace("\ue262",  "#");  // sharp
+            s.replace("\u1d12a", "x");  // double-sharp
+            s.replace("\u0394",  "^");  // &Delta;
+            s.replace("\u00d0",  "o");  // &deg;
+            s.replace("\u00f8",  "0");  // &oslash;
+            s.replace("\u00d8",  "0");  // &Oslash;
+            }
+      else {
+            s.replace("\ue260",  "\u266d");     // flat
+            s.replace("\ue261",  "\u266e");     // natural
+            s.replace("\ue262",  "\u266f");     // sharp
+            }
+
+      // render and layout chord symbol
+      // (needs to be done here if text hasn't changed, or redone if replacemens were performed above)
+      score()->startCmd();
+      setHarmony(s);
+      layout1();
+      triggerLayout();
+      score()->endCmd();
+
       // disable spell check
       showSpell = false;
-
-      _userName.replace("\u1d12b", "bb"); // double-flat
-      _userName.replace("\u266d",  "b");  // flat
-      //_userName.replace("\u266e",  "n");  // natural, if one day we support that too
-      _userName.replace("\u266f",  "#");  // sharp
-      _userName.replace("\u1d12a", "x");  // double-sharp
-      _userName.replace("\u0394",  "t");  // &Delta;
-      _userName.replace("\u00d0",  "o");  // &deg;
-      _userName.replace("\u00f8",  "0");  // &oslash;
-      _userName.replace("\u00d8",  "0");  // &Oslash;
-
-      TextBase::endEdit(ed);  // layout happens here
 
       if (links()) {
             for (ScoreElement* e : *links()) {
@@ -1731,7 +1759,18 @@ QString Harmony::screenReaderInfo() const
 
 bool Harmony::acceptDrop(EditData& data) const
       {
-      return data.dropElement->isFretDiagram();
+      Element* e = data.dropElement;
+      if (e->isFretDiagram()) {
+            return true;
+            }
+      else if (e->isSymbol() || e->isFSymbol()) {
+            // symbols can be added in edit mode
+            if (data.getData(this))
+                  return true;
+            else
+                  return false;
+            }
+      return false;
       }
 
 //---------------------------------------------------------
@@ -1746,6 +1785,11 @@ Element* Harmony::drop(EditData& data)
             fd->setParent(parent());
             fd->setTrack(track());
             score()->undoAddElement(fd);
+            }
+      else if (e->isSymbol() || e->isFSymbol()) {
+            TextBase::drop(data);
+            layout1();
+            e = 0;      // cannot select
             }
       else {
             qWarning("Harmony: cannot drop <%s>\n", e->name());
