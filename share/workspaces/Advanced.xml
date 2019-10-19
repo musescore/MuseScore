@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.00">
   <Workspace>
+    <source>Advanced</source>
     <PaletteBox>
       <Palette name="Clefs">
         <type>Clef</type>
