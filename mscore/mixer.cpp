@@ -482,8 +482,13 @@ void Mixer::notifyTrackSelected(MixerTrack* track)
 
 void MuseScore::showMixer(bool visible)
       {
-
       QAction* toggleMixerAction = getAction("toggle-mixer");
+
+      if (!synti) {
+            toggleMixerAction->setChecked(false);
+            return;
+            }
+
       if (mixer == 0) {
             mixer = new Mixer(this);
             mscore->stackUnder(mixer);
