@@ -1403,8 +1403,7 @@ QVariant Staff::propertyDefault(Pid id) const
 void Staff::localSpatiumChanged(double oldVal, double newVal, Fraction tick)
       {
       Fraction etick;
-      auto i = _staffTypeList.find(tick.ticks());
-      ++i;
+      auto i = _staffTypeList.upper_bound(tick.ticks());
       if (i == _staffTypeList.end())
             etick = score()->lastSegment()->tick();
       else
