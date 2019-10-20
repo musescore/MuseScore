@@ -279,12 +279,9 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       QPixmap* fgPixmap = _sv->fgPixmap();
       if (fgPixmap == 0 || fgPixmap->isNull())
             painter.fillRect(bg, preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
-      else {
-            painter.setMatrixEnabled(false);
+      else
             painter.drawTiledPixmap(bg, *fgPixmap, bg.topLeft()
                - QPoint(lrint(_sv->matrix().dx()), lrint(_sv->matrix().dy())));
-            painter.setMatrixEnabled(true);
-            }
 
       painter.setClipRect(_rect);
       painter.setClipping(true);
