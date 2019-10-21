@@ -76,7 +76,7 @@ void WorkspaceComboBox::updateWorkspaces()
             return;
 
       clear();
-      const QList<Workspace*> pl = Workspace::workspaces();
+      const QList<Workspace*> pl = WorkspacesManager::workspaces();
       int idx = 0;
       int curIdx = -1;
       for (Workspace* p : pl) {
@@ -103,8 +103,8 @@ void WorkspaceComboBox::workspaceSelected(int idx)
       if (idx < 0)
             return;
 
-      Workspace* w = Workspace::workspaces().at(idx);
-      if (w != Workspace::currentWorkspace) {
+      Workspace* w = WorkspacesManager::workspaces().at(idx);
+      if (w != WorkspacesManager::currentWorkspace()) {
             blockUpdateWorkspaces = true;
             _mscore->changeWorkspace(w);
             blockUpdateWorkspaces = false;

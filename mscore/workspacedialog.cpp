@@ -37,7 +37,7 @@ void MuseScore::createNewWorkspace()
 
 void MuseScore::editWorkspace()
       {
-      if (!Workspace::currentWorkspace && !Workspace::currentWorkspace->readOnly())
+      if (!WorkspacesManager::currentWorkspace() && !WorkspacesManager::currentWorkspace()->readOnly())
             return;
       if (!_workspaceDialog)
             _workspaceDialog = new WorkspaceDialog();
@@ -73,11 +73,11 @@ void WorkspaceDialog::display()
       {
       // TODO: clear search box?
       if (editMode) {
-            componentsCheck->setChecked(Workspace::currentWorkspace->getSaveComponents());
-            toolbarsCheck->setChecked(Workspace::currentWorkspace->getSaveToolbars());
-            menubarCheck->setChecked(Workspace::currentWorkspace->getSaveMenuBar());
+            componentsCheck->setChecked(WorkspacesManager::currentWorkspace()->getSaveComponents());
+            toolbarsCheck->setChecked(WorkspacesManager::currentWorkspace()->getSaveToolbars());
+            menubarCheck->setChecked(WorkspacesManager::currentWorkspace()->getSaveMenuBar());
             prefsCheck->setChecked(preferences.getUseLocalPreferences());
-            nameLineEdit->setText(Workspace::currentWorkspace->name());
+            nameLineEdit->setText(WorkspacesManager::currentWorkspace()->name());
             setWindowTitle(tr("Edit Workspace"));
             }
       else {
@@ -103,10 +103,10 @@ void WorkspaceDialog::accepted()
       s = s.replace( QRegExp( "[" + QRegExp::escape( "\\/:*?\"<>|" ) + "]" ), "_" ); //FAT/NTFS special chars
 
       for (;;) {
-            if (editMode && s == Workspace::currentWorkspace->name())
+            if (editMode && s == WorkspacesManager::currentWorkspace()->name())
                   break;
             bool notFound = true;
-            for (Workspace* p : Workspace::workspaces()) {
+            for (Workspace* p : WorkspacesManager::workspaces()) {
                   if ((qApp->translate("Ms::Workspace", p->name().toUtf8()).toLower() == s.toLower())) {
                         notFound = false;
                         break;
@@ -126,22 +126,22 @@ void WorkspaceDialog::accepted()
             }
 
       if (!editMode) {
-            if (Workspace::currentWorkspace->dirty())
-                  Workspace::currentWorkspace->save();
-            Workspace::currentWorkspace = Workspace::createNewWorkspace(s);
+            if (WorkspacesManager::currentWorkspace()->dirty())
+                  WorkspacesManager::currentWorkspace()->save();
+            WorkspacesManager::setCurrentWorkspace(WorkspacesManager::createNewWorkspace(s));
             preferences.updateLocalPreferences();
             }
 
-      Workspace::currentWorkspace->setSaveComponents(componentsCheck->isChecked());
-      Workspace::currentWorkspace->setSaveToolbars(toolbarsCheck->isChecked());
-      Workspace::currentWorkspace->setSaveMenuBar(menubarCheck->isChecked());
+      WorkspacesManager::currentWorkspace()->setSaveComponents(componentsCheck->isChecked());
+      WorkspacesManager::currentWorkspace()->setSaveToolbars(toolbarsCheck->isChecked());
+      WorkspacesManager::currentWorkspace()->setSaveMenuBar(menubarCheck->isChecked());
       preferences.setUseLocalPreferences(prefsCheck->isChecked());
-      Workspace::currentWorkspace->save();
+      WorkspacesManager::currentWorkspace()->save();
 
-      if (editMode && Workspace::currentWorkspace->name() != s)
-            Workspace::currentWorkspace->rename(s);
+      if (editMode && WorkspacesManager::currentWorkspace()->name() != s)
+            WorkspacesManager::currentWorkspace()->rename(s);
 
-      preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
+      preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->name());
       emit mscore->workspacesChanged();
       close();
       }

@@ -76,8 +76,8 @@ ToolbarEditor::ToolbarEditor(QWidget* parent)
 
 void ToolbarEditor::init()
       {
-      QString name = Workspace::currentWorkspace->name();
-      bool writable = !Workspace::currentWorkspace->readOnly();
+      QString name = WorkspacesManager::currentWorkspace()->name();
+      bool writable = !WorkspacesManager::currentWorkspace()->readOnly();
       if (!writable) {
             name += " " + tr("(not changeable)");
             }
@@ -100,7 +100,7 @@ void ToolbarEditor::init()
 
 void ToolbarEditor::accepted()
       {
-      if (Workspace::currentWorkspace->readOnly())
+      if (WorkspacesManager::currentWorkspace()->readOnly())
             return;
       // Updates the toolbars
       mscore->setNoteInputMenuEntries(*(new_toolbars->at(0)));
@@ -109,7 +109,7 @@ void ToolbarEditor::accepted()
       mscore->populateNoteInputMenu();
       mscore->populateFileOperations();
       mscore->populatePlaybackControls();
-      Workspace::currentWorkspace->setDirty(true);
+      WorkspacesManager::currentWorkspace()->setDirty(true);
       }
 
 //---------------------------------------------------------

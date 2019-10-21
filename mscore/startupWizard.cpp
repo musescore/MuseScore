@@ -146,7 +146,7 @@ StartupWizardPage3::StartupWizardPage3(QWidget* parent)
       setTitle(tr("Workspace"));
       QLabel* label = new QLabel(tr("Choose your workspace"), this);
       QStringList workspaceList;
-      for (auto workspace : Workspace::workspaces())
+      for (auto workspace : WorkspacesManager::workspaces())
             workspaceList.append(qApp->translate("workspace", workspace->name().toUtf8().constData()));
       _workspaces = new QComboBox(this);
       _workspaces->addItems(workspaceList);
