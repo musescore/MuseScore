@@ -214,9 +214,8 @@ void MuseScore::changeWorkspace(Workspace* p, bool first)
                   disconnect(getPaletteWorkspace(), &PaletteWorkspace::userPaletteChanged, WorkspacesManager::currentWorkspace(), QOverload<>::of(&Workspace::setDirty));
             }
 
-
-      p->read();
       WorkspacesManager::setCurrentWorkspace(p);
+      p->read();
       if (!first) {
             updateIcons();
             preferencesChanged(true);
