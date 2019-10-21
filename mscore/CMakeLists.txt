@@ -644,7 +644,11 @@ else (MINGW)
            PROPERTIES
               LINK_FLAGS "-stdlib=libc++"
            )
-        xcode_pch(mscoreapp all)
+        xcode_pch(mscore all)
+        install (TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
+        install (FILES data/mscore.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
+        install (FILES data/musescoreDocument.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
+        install (FILES data/musicxmlDocument.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
       else (APPLE)
         #### PACKAGING for Linux and BSD based systems (more in top-level CMakeLists.txt) ####
       endif (APPLE)
