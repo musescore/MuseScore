@@ -522,15 +522,9 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
       playId->setEnabled(!noSeq && seq && seq->isRunning());
 
       // change workspace
-      if (!fromWorkspace && preferences.getString(PREF_APP_WORKSPACE) != Workspace::currentWorkspace->name()) {
-            Workspace* workspace = 0;
-            for (Workspace* w: Workspace::workspaces()) {
-                  if (w->name() == preferences.getString(PREF_APP_WORKSPACE)) {
-                        workspace = w;
-                        break;
-                        }
-                  }
-
+      if (!fromWorkspace && preferences.getString(PREF_APP_WORKSPACE) != WorkspacesManager::currentWorkspace()->name()) {
+            Workspace* workspace = WorkspacesManager::find(preferences.getString(PREF_APP_WORKSPACE));
+            
             if (workspace)
                   mscore->changeWorkspace(workspace);
             }
@@ -821,9 +815,9 @@ bool MuseScore::importExtension(QString path)
       if (workspacesDir.exists() && !MScore::noGui) {
             auto wsList = workspacesDir.entryInfoList(QStringList("*.workspace"), QDir::Files);
             if (!wsList.isEmpty()) {
-                  Workspace::refreshWorkspaces();
+                  WorkspacesManager::refreshWorkspaces();
                   emit workspacesChanged();
-                  changeWorkspace(Workspace::workspaces().last());
+                  changeWorkspace(WorkspacesManager::workspaces().last());
                   }
             }
       return true;
@@ -887,21 +881,18 @@ bool MuseScore::uninstallExtension(QString extensionId)
       mscore->reloadInstrumentTemplates();
       mscore->updateInstrumentDialog();
       if (refreshWorkspaces) {
-            const auto& curWorkspaceName = Workspace::currentWorkspace->name();
-            Workspace::refreshWorkspaces();
+            const auto curWorkspaceName = WorkspacesManager::currentWorkspace()->name();
+            WorkspacesManager::refreshWorkspaces();
             emit workspacesChanged();
-            auto ws = Workspace::workspaces();
+            auto ws = WorkspacesManager::workspaces();
             //If current worksapce is alive, do nothing
             //Select first available workspace in the list otherwise
-            bool curWorkspaceDisappeared = true;
-            for (auto workspace : ws) {
-                  if (workspace->name() == curWorkspaceName) {
-                        curWorkspaceDisappeared = false;
-                        break;
-                        }
-                  }
+            bool curWorkspaceDisappeared = false;
+            if (WorkspacesManager::find(curWorkspaceName))
+                  curWorkspaceDisappeared = true;
+            
             if (curWorkspaceDisappeared)
-                  changeWorkspace(Workspace::workspaces().last());
+                  changeWorkspace(WorkspacesManager::workspaces().last());
             }
       return true;
       }
@@ -2029,7 +2020,7 @@ void MuseScore::retranslate()
       showMidiImportButton->setText(tr("Show MIDI import panel"));
 
       Shortcut::retranslate();
-      Workspace::retranslate();
+      WorkspacesManager::retranslateAll();
 
       if (paletteWorkspace)
           paletteWorkspace->retranslate();
@@ -4462,7 +4453,7 @@ void MuseScore::writeSettings()
       settings.setValue("splitter", splitter->saveState());
       settings.endGroup();
 
-      Workspace::currentWorkspace->save();
+      WorkspacesManager::currentWorkspace()->save();
       if (keyEditor && keyEditor->dirty())
             keyEditor->save();
       if (chordStyleEditor)
@@ -5446,8 +5437,8 @@ PaletteWorkspace* MuseScore::getPaletteWorkspace()
             emptyModel->setParent(paletteWorkspace);
             masterPaletteModel->setParent(paletteWorkspace);
 
-            if (Workspace::currentWorkspace)
-                  connect(paletteWorkspace, &PaletteWorkspace::userPaletteChanged, Workspace::currentWorkspace, QOverload<>::of(&Workspace::setDirty), Qt::UniqueConnection);
+            if (WorkspacesManager::currentWorkspace())
+                  connect(paletteWorkspace, &PaletteWorkspace::userPaletteChanged, WorkspacesManager::currentWorkspace(), QOverload<>::of(&Workspace::setDirty), Qt::UniqueConnection);
             }
 
       return paletteWorkspace;
@@ -7661,7 +7652,7 @@ int main(int argc, char* av[])
 #ifndef Q_OS_MAC
             qApp->setWindowIcon(*icons[int(Icons::window_ICON)]);
 #endif
-            Workspace::initWorkspace();
+            WorkspacesManager::initCurrentWorkspace();
             }
 
       mscore = new MuseScore();
@@ -7690,10 +7681,10 @@ int main(int argc, char* av[])
                   setMscoreLocale(sw->language());
                   Workspace::writeGlobalToolBar();
                   Workspace::writeGlobalGUIState();
-                  for (auto ws : Workspace::workspaces()) {
-                        if (ws->name().compare(sw->workspace()) == 0)
-                              mscore->changeWorkspace(ws, true);
-                        }
+                  Workspace* targetWorkspace = WorkspacesManager::find(sw->workspace());
+                  if (targetWorkspace)
+                        mscore->changeWorkspace(targetWorkspace, true);
+                  
                   preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, sw->showTours());
                   delete sw;
 
