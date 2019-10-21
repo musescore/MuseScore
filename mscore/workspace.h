@@ -126,7 +126,7 @@ class WorkspacesManager {
       static void retranslate(QList<Workspace*>& workspacesList);
       static void retranslateAll();
       
-      static Workspace* find(const QString& name) {
+      static Workspace* findByName(const QString& name) {
             for (auto w : m_workspaces) {
                   if (w->name() == name)
                         return w;
@@ -134,8 +134,16 @@ class WorkspacesManager {
             return nullptr;
             }
       
+      static Workspace* findByTranslatableName(const QString& name) {
+            for (auto w : m_workspaces) {
+                  if (w->translatableName() == name)
+                        return w;
+                  }
+            return nullptr;
+            }
+      
       static void remove(const QString& name) {
-            m_workspaces.removeOne(find(name));
+            m_workspaces.removeOne(findByName(name));
             }
       
       static const QList<Workspace*>& workspaces() {
@@ -143,6 +151,8 @@ class WorkspacesManager {
                   initWorkspaces();
             return m_workspaces;
             }
+      
+      static const QList<Workspace*>& visibleWorkspaces() { return m_visibleWorkspaces; }
       
       //replace with `const Workspace*` in future
       static Workspace* currentWorkspace() { return m_currentWorkspace; }
@@ -152,6 +162,7 @@ class WorkspacesManager {
       
    private:
       static QList<Workspace*> m_workspaces;
+      static QList<Workspace*> m_visibleWorkspaces;
       static Workspace* m_currentWorkspace;
       static bool isWorkspacesListDirty;
       };

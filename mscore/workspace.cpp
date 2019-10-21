@@ -35,6 +35,7 @@ namespace Ms {
 bool WorkspacesManager::isWorkspacesListDirty = true;
 Workspace* WorkspacesManager::m_currentWorkspace = nullptr;
 QList<Workspace*> WorkspacesManager::m_workspaces {};
+QList<Workspace*> WorkspacesManager::m_visibleWorkspaces {};
 
 QList<QPair<QAction*, QString>> Workspace::actionToStringList {};
 QList<QPair<QMenu*  , QString>> Workspace::menuToStringList   {};
@@ -154,7 +155,7 @@ void MuseScore::deleteWorkspace()
       if (!a)
             return;
       
-      Workspace* workspace = WorkspacesManager::find(a->text());
+      Workspace* workspace = WorkspacesManager::findByName(a->text());
       if (!workspace)
             return;
 
@@ -257,7 +258,7 @@ void MuseScore::updateIcons()
 void WorkspacesManager::initCurrentWorkspace()
       {
       initWorkspaces();
-      m_currentWorkspace = find(preferences.getString(PREF_APP_WORKSPACE));
+      m_currentWorkspace = findByName(preferences.getString(PREF_APP_WORKSPACE));
       Q_ASSERT(!workspaces().empty());
       if (m_currentWorkspace == 0)
             m_currentWorkspace = workspaces().at(0);
@@ -1104,10 +1105,6 @@ static QStringList findWorkspaceFiles()
       return workspaces;
       }
 
-//---------------------------------------------------------
-//   workspaces
-//---------------------------------------------------------
-
 void WorkspacesManager::initWorkspaces()
       {
       if (!isWorkspacesListDirty)
@@ -1156,16 +1153,16 @@ void WorkspacesManager::initWorkspaces()
             m_workspaces.removeOne(old);
 
       // Delete default workspaces if there are corresponding user-edited ones
+      m_visibleWorkspaces = m_workspaces;
       for (Workspace* ew : editedWorkpaces) {
             const QString uneditedName = defaultWorkspaceTranslatableName(ew->translatableName());
             if (uneditedName.isEmpty())
                   continue;
 
-            for (auto it = m_workspaces.begin(); it != m_workspaces.end(); ++it) {
+            for (auto it = m_visibleWorkspaces.begin(); it != m_visibleWorkspaces.end(); ++it) {
                   Workspace* w = *it;
                   if (w->translatableName() == uneditedName) {
-                        m_workspaces.erase(it);
-                        delete w;
+                        m_visibleWorkspaces.erase(it);
                         break;
                         }
                   }
@@ -1208,12 +1205,11 @@ const Workspace* Workspace::sourceWorkspace() const
       if (translatableName() == sourceName || name() == sourceName)
             return this;
 
-      for (const Workspace* w : WorkspacesManager::workspaces()) {
-            if (w->translatableName() == sourceName || w->name() == sourceName)
-                  return w;
-            }
-
-      return WorkspacesManager::workspaces()[0];
+      Workspace* sourceWorkspace = WorkspacesManager::findByName(sourceName);
+      if (!sourceWorkspace)
+            sourceWorkspace = WorkspacesManager::findByTranslatableName(sourceName);
+      
+      return !!sourceWorkspace ? sourceWorkspace : WorkspacesManager::workspaces()[0];
       }
 
 void WorkspacesManager::retranslate(QList<Workspace*>& workspacesList)
