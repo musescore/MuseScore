@@ -313,7 +313,7 @@ void MuseScore::showPalette(bool visible)
       {
       QAction* a = getAction("toggle-palette");
       if (!paletteWidget) {
-            Workspace::currentWorkspace->read();
+            WorkspacesManager::currentWorkspace()->read();
             preferencesChanged();
             updateIcons();
 

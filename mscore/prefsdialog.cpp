@@ -1129,9 +1129,9 @@ void PreferenceDialog::apply()
             MScore::defaultStyleForPartsHasChanged();
             }
       
-      Workspace::retranslate();
-      preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
-      mscore->changeWorkspace(Workspace::currentWorkspace);
+      WorkspacesManager::retranslateAll();
+      preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->name());
+      mscore->changeWorkspace(WorkspacesManager::currentWorkspace());
       emit mscore->workspacesChanged();
       
       emit preferencesChanged();
