@@ -523,7 +523,7 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
 
       // change workspace
       if (!fromWorkspace && preferences.getString(PREF_APP_WORKSPACE) != WorkspacesManager::currentWorkspace()->name()) {
-            Workspace* workspace = WorkspacesManager::find(preferences.getString(PREF_APP_WORKSPACE));
+            Workspace* workspace = WorkspacesManager::findByName(preferences.getString(PREF_APP_WORKSPACE));
             
             if (workspace)
                   mscore->changeWorkspace(workspace);
@@ -888,7 +888,7 @@ bool MuseScore::uninstallExtension(QString extensionId)
             //If current worksapce is alive, do nothing
             //Select first available workspace in the list otherwise
             bool curWorkspaceDisappeared = false;
-            if (WorkspacesManager::find(curWorkspaceName))
+            if (WorkspacesManager::findByName(curWorkspaceName))
                   curWorkspaceDisappeared = true;
             
             if (curWorkspaceDisappeared)
@@ -7681,7 +7681,7 @@ int main(int argc, char* av[])
                   setMscoreLocale(sw->language());
                   Workspace::writeGlobalToolBar();
                   Workspace::writeGlobalGUIState();
-                  Workspace* targetWorkspace = WorkspacesManager::find(sw->workspace());
+                  Workspace* targetWorkspace = WorkspacesManager::findByName(sw->workspace());
                   if (targetWorkspace)
                         mscore->changeWorkspace(targetWorkspace, true);
                   
