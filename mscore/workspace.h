@@ -147,12 +147,16 @@ class WorkspacesManager {
             }
       
       static const QList<Workspace*>& workspaces() {
-            if (isWorkspacesListDirty)
+            if (isWorkspacesListDirty || m_workspaces.isEmpty())
                   initWorkspaces();
             return m_workspaces;
             }
       
-      static const QList<Workspace*>& visibleWorkspaces() { return m_visibleWorkspaces; }
+      static const QList<Workspace*>& visibleWorkspaces() {
+            if (isWorkspacesListDirty || m_visibleWorkspaces.isEmpty())
+                  initWorkspaces();
+            return m_visibleWorkspaces;
+      }
       
       //replace with `const Workspace*` in future
       static Workspace* currentWorkspace() { return m_currentWorkspace; }
