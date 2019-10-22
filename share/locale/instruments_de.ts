@@ -1363,7 +1363,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="723"/>
         <source>Timpani</source>
-        <translation>Pauke</translation>
+        <translation>Pauken</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="727"/>

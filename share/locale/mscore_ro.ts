@@ -4967,7 +4967,7 @@ space unit</extracomment>
 <context>
     <name>GreendotButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5696"/>
+        <location filename="../../mscore/musescore.cpp" line="5713"/>
         <source>Record</source>
         <translation>înregistrază</translation>
     </message>
@@ -10524,7 +10524,7 @@ Doriți să localizați %2 acum?</translation>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="196"/>
         <location filename="../../mscore/masterpalette.cpp" line="229"/>
-        <location filename="../../mscore/musescore.cpp" line="6077"/>
+        <location filename="../../mscore/musescore.cpp" line="6094"/>
         <source>Symbols</source>
         <translation>Simboluri</translation>
     </message>
@@ -11080,28 +11080,28 @@ tuplet would cross measure</source>
 <context>
     <name>Ms::AboutBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4727"/>
+        <location filename="../../mscore/musescore.cpp" line="4741"/>
         <source>Unstable Prerelease for Version: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4730"/>
+        <location filename="../../mscore/musescore.cpp" line="4744"/>
         <source>Version: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4733"/>
+        <location filename="../../mscore/musescore.cpp" line="4747"/>
         <source>Revision: %1</source>
         <translation>Revizie: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4738"/>
+        <location filename="../../mscore/musescore.cpp" line="4752"/>
         <source>Visit %1www.musescore.org%2 for new versions and more information.
 Support MuseScore with your %3donation%4.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4745"/>
+        <location filename="../../mscore/musescore.cpp" line="4759"/>
         <source>Copyright &amp;copy; 1999-2019 Werner Schweer and Others.
 Published under the GNU General Public License.</source>
         <translation type="unfinished"/>
@@ -11110,7 +11110,7 @@ Published under the GNU General Public License.</source>
 <context>
     <name>Ms::AboutMusicXMLBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4782"/>
+        <location filename="../../mscore/musescore.cpp" line="4796"/>
         <source>MusicXML is an open file format for exchanging digital sheet music,
 supported by many applications.
 Copyright © 2004-2018 the Contributors to the MusicXML
@@ -12113,87 +12113,87 @@ Sound: %5</source>
     <name>Ms::MuseScore</name>
     <message>
         <location filename="../../mscore/exportaudio.cpp" line="296"/>
-        <location filename="../../mscore/musescore.cpp" line="6943"/>
+        <location filename="../../mscore/musescore.cpp" line="6960"/>
         <source>Cancel</source>
         <translation>Renunţă</translation>
     </message>
     <message>
         <location filename="../../mscore/exportaudio.cpp" line="297"/>
-        <location filename="../../mscore/musescore.cpp" line="6944"/>
+        <location filename="../../mscore/musescore.cpp" line="6961"/>
         <source>Exporting…</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6875"/>
-        <location filename="../../mscore/musescore.cpp" line="6887"/>
+        <location filename="../../mscore/musescore.cpp" line="6892"/>
+        <location filename="../../mscore/musescore.cpp" line="6904"/>
         <source>Error Opening LAME library</source>
         <translation>Eroare în deschiderea librăriei LAME</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6876"/>
+        <location filename="../../mscore/musescore.cpp" line="6893"/>
         <source>Could not open MP3 encoding library!</source>
         <translation>Nu se poate deschide librăria de codificare MP3!</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6888"/>
+        <location filename="../../mscore/musescore.cpp" line="6905"/>
         <source>Not a valid or supported MP3 encoding library!</source>
         <translation>Librărie de encodare MP3 invalidă sau nesuportată! </translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6842"/>
-        <location filename="../../mscore/musescore.cpp" line="6912"/>
-        <location filename="../../mscore/musescore.cpp" line="7069"/>
+        <location filename="../../mscore/musescore.cpp" line="6859"/>
+        <location filename="../../mscore/musescore.cpp" line="6929"/>
+        <location filename="../../mscore/musescore.cpp" line="7086"/>
         <source>Encoding Error</source>
         <translation>Eroare de encodare</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2496"/>
+        <location filename="../../mscore/musescore.cpp" line="2510"/>
         <source>Reset the positions of all elements?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2498"/>
+        <location filename="../../mscore/musescore.cpp" line="2512"/>
         <source>To best take advantage of automatic placement in MuseScore 3 when importing &apos;%1&apos; from MuseScore %2, it is recommended to reset the positions of all elements.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4307"/>
+        <location filename="../../mscore/musescore.cpp" line="4321"/>
         <source>Insert mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4321"/>
+        <location filename="../../mscore/musescore.cpp" line="4335"/>
         <source>Drumset input mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5800"/>
+        <location filename="../../mscore/musescore.cpp" line="5817"/>
         <source>Invalid Command</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5801"/>
+        <location filename="../../mscore/musescore.cpp" line="5818"/>
         <source>Command %1 not valid in current state</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6913"/>
+        <location filename="../../mscore/musescore.cpp" line="6930"/>
         <source>Unable to initialize MP3 stream</source>
         <translation>Nu se poate inițializa stream-ul MP3</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6843"/>
+        <location filename="../../mscore/musescore.cpp" line="6860"/>
         <source>Unable to open target file for writing</source>
         <translation>Nu s-a putut deschide fișierul destinație pentru scriere</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7070"/>
+        <location filename="../../mscore/musescore.cpp" line="7087"/>
         <source>Error %1 returned from MP3 encoder</source>
         <translation>Eroare %1 returnată de encoder-ul de MP3</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="248"/>
-        <location filename="../../mscore/musescore.cpp" line="5178"/>
+        <location filename="../../mscore/musescore.cpp" line="5192"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
@@ -12302,7 +12302,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1017"/>
         <location filename="../../mscore/file.cpp" line="1044"/>
-        <location filename="../../mscore/musescore.cpp" line="6229"/>
+        <location filename="../../mscore/musescore.cpp" line="6246"/>
         <source>Load Style</source>
         <translation>Încarcă Stil</translation>
     </message>
@@ -12315,7 +12315,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1024"/>
         <location filename="../../mscore/file.cpp" line="1061"/>
         <location filename="../../mscore/file.cpp" line="1144"/>
-        <location filename="../../mscore/musescore.cpp" line="6220"/>
+        <location filename="../../mscore/musescore.cpp" line="6237"/>
         <source>Save Style</source>
         <translation>Salvează Stil</translation>
     </message>
@@ -12639,27 +12639,27 @@ Doriți să-l înlocuiți?
         <translation>Manual</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2053"/>
+        <location filename="../../mscore/musescore.cpp" line="2067"/>
         <source>&amp;Add</source>
         <translation>&amp;Adaugă</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2054"/>
+        <location filename="../../mscore/musescore.cpp" line="2068"/>
         <source>&amp;Measures</source>
         <translation>&amp;Măsuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2055"/>
+        <location filename="../../mscore/musescore.cpp" line="2069"/>
         <source>&amp;Frames</source>
         <translation>Cadre</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2056"/>
+        <location filename="../../mscore/musescore.cpp" line="2070"/>
         <source>&amp;Text</source>
         <translation>&amp;Text</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2057"/>
+        <location filename="../../mscore/musescore.cpp" line="2071"/>
         <source>&amp;Lines</source>
         <translation>&amp;Linii</translation>
     </message>
@@ -12671,248 +12671,248 @@ Please select a measure and try again</source>
 vă rugăm selectați o măsură și reluaţi operaţia</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2003"/>
+        <location filename="../../mscore/musescore.cpp" line="2017"/>
         <source>Measure:Beat:Tick</source>
         <translation>Măsură:Bătaie:Tick</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1073"/>
+        <location filename="../../mscore/musescore.cpp" line="1064"/>
         <source>Switch layer</source>
         <translation>Inversează straturi</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1078"/>
+        <location filename="../../mscore/musescore.cpp" line="1069"/>
         <source>Switch play mode</source>
         <translation>Comută modul de redare</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2029"/>
+        <location filename="../../mscore/musescore.cpp" line="2043"/>
         <source>Show MIDI import panel</source>
         <translation>Afișează panoul de import MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2016"/>
+        <location filename="../../mscore/musescore.cpp" line="2030"/>
         <source>File Operations</source>
         <translation>Operaţii Fișiere</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="960"/>
-        <location filename="../../mscore/musescore.cpp" line="2024"/>
+        <location filename="../../mscore/musescore.cpp" line="951"/>
+        <location filename="../../mscore/musescore.cpp" line="2038"/>
         <source>View Mode</source>
         <translation>Mod vizualizare</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="961"/>
-        <location filename="../../mscore/musescore.cpp" line="2025"/>
+        <location filename="../../mscore/musescore.cpp" line="952"/>
+        <location filename="../../mscore/musescore.cpp" line="2039"/>
         <source>Page View</source>
         <translation>Vizualizare în pagină</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="962"/>
-        <location filename="../../mscore/musescore.cpp" line="2026"/>
+        <location filename="../../mscore/musescore.cpp" line="953"/>
+        <location filename="../../mscore/musescore.cpp" line="2040"/>
         <source>Continuous View</source>
         <translation>Vizualizare continuă</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2017"/>
+        <location filename="../../mscore/musescore.cpp" line="2031"/>
         <source>Playback Controls</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2018"/>
+        <location filename="../../mscore/musescore.cpp" line="2032"/>
         <source>Concert Pitch</source>
         <translation>Înălţimea Reală (acolo unde sună)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2019"/>
+        <location filename="../../mscore/musescore.cpp" line="2033"/>
         <source>Image Capture</source>
         <translation>Captură Imagine</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2020"/>
+        <location filename="../../mscore/musescore.cpp" line="2034"/>
         <source>Note Input</source>
         <translation>Introducere note</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="574"/>
+        <location filename="../../mscore/musescore.cpp" line="568"/>
         <source>Note Entry Methods</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2047"/>
+        <location filename="../../mscore/musescore.cpp" line="2061"/>
         <source>&amp;File</source>
         <translation>&amp;Fișier</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2048"/>
+        <location filename="../../mscore/musescore.cpp" line="2062"/>
         <source>Open &amp;Recent</source>
         <translation>Deschise &amp;Recent</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2049"/>
+        <location filename="../../mscore/musescore.cpp" line="2063"/>
         <source>&amp;Edit</source>
         <translation>Modificar&amp;e</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2065"/>
+        <location filename="../../mscore/musescore.cpp" line="2079"/>
         <source>&amp;Measure</source>
         <translation>&amp;Măsură</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2063"/>
+        <location filename="../../mscore/musescore.cpp" line="2077"/>
         <source>&amp;Tools</source>
         <translation>Unel&amp;te</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2064"/>
+        <location filename="../../mscore/musescore.cpp" line="2078"/>
         <source>&amp;Voices</source>
         <translation>&amp;Voce</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2052"/>
+        <location filename="../../mscore/musescore.cpp" line="2066"/>
         <source>W&amp;orkspaces</source>
         <translation>Spații de lucru</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2004"/>
+        <location filename="../../mscore/musescore.cpp" line="2018"/>
         <source>&amp;Preferences…</source>
         <translation>&amp;Preferinţe…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2050"/>
+        <location filename="../../mscore/musescore.cpp" line="2064"/>
         <source>&amp;View</source>
         <translation>&amp;Vizualizare</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2051"/>
+        <location filename="../../mscore/musescore.cpp" line="2065"/>
         <source>&amp;Toolbars</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2060"/>
+        <location filename="../../mscore/musescore.cpp" line="2074"/>
         <source>T&amp;uplets</source>
         <translation>Divizi&amp;uni excepționale</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2067"/>
+        <location filename="../../mscore/musescore.cpp" line="2081"/>
         <source>&amp;Plugins</source>
         <translation>&amp;Plugin-uri</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2072"/>
+        <location filename="../../mscore/musescore.cpp" line="2086"/>
         <source>&amp;Help</source>
         <translation>A&amp;jutor</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2008"/>
+        <location filename="../../mscore/musescore.cpp" line="2022"/>
         <source>&amp;Online Handbook</source>
         <translation>Ghid de utilizare &amp;Online</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2005"/>
+        <location filename="../../mscore/musescore.cpp" line="2019"/>
         <source>&amp;About…</source>
         <translation>De&amp;spre…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="733"/>
+        <location filename="../../mscore/musescore.cpp" line="727"/>
         <source>Please wait, unpacking extension…</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="812"/>
+        <location filename="../../mscore/musescore.cpp" line="806"/>
         <source>Please wait, loading soundfonts…</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="963"/>
-        <location filename="../../mscore/musescore.cpp" line="2027"/>
+        <location filename="../../mscore/musescore.cpp" line="954"/>
+        <location filename="../../mscore/musescore.cpp" line="2041"/>
         <source>Single Page</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1076"/>
+        <location filename="../../mscore/musescore.cpp" line="1067"/>
         <source>Synthesizer</source>
         <translation>Sintetizator</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1077"/>
+        <location filename="../../mscore/musescore.cpp" line="1068"/>
         <source>Audio track</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1667"/>
-        <location filename="../../mscore/musescore.cpp" line="2062"/>
+        <location filename="../../mscore/musescore.cpp" line="1658"/>
+        <location filename="../../mscore/musescore.cpp" line="2076"/>
         <source>&amp;Stretch</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2058"/>
+        <location filename="../../mscore/musescore.cpp" line="2072"/>
         <source>N&amp;otes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2059"/>
+        <location filename="../../mscore/musescore.cpp" line="2073"/>
         <source>&amp;Intervals</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2061"/>
+        <location filename="../../mscore/musescore.cpp" line="2075"/>
         <source>F&amp;ormat</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2073"/>
+        <location filename="../../mscore/musescore.cpp" line="2087"/>
         <source>&amp;Tours</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2006"/>
+        <location filename="../../mscore/musescore.cpp" line="2020"/>
         <source>About &amp;Qt…</source>
         <translation>Despre &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2007"/>
+        <location filename="../../mscore/musescore.cpp" line="2021"/>
         <source>About &amp;MusicXML…</source>
         <translation>Despre &amp;MusicXML</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2010"/>
+        <location filename="../../mscore/musescore.cpp" line="2024"/>
         <source>Check for &amp;Update</source>
         <translation>Verificare pentru Act&amp;ualizări</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2011"/>
+        <location filename="../../mscore/musescore.cpp" line="2025"/>
         <source>Ask for Help</source>
         <translation>Cereți Ajutor</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2012"/>
+        <location filename="../../mscore/musescore.cpp" line="2026"/>
         <source>Report a Bug</source>
         <translation>Raportează o problemă</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2014"/>
+        <location filename="../../mscore/musescore.cpp" line="2028"/>
         <source>Revert to Factory Settings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2013"/>
-        <location filename="../../mscore/musescore.cpp" line="2021"/>
+        <location filename="../../mscore/musescore.cpp" line="2027"/>
+        <location filename="../../mscore/musescore.cpp" line="2035"/>
         <source>Feedback</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2022"/>
+        <location filename="../../mscore/musescore.cpp" line="2036"/>
         <source>Workspaces</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2226"/>
+        <location filename="../../mscore/musescore.cpp" line="2240"/>
         <source>Are you sure?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2227"/>
+        <location filename="../../mscore/musescore.cpp" line="2241"/>
         <source>This will reset all your preferences.
 Custom palettes, custom shortcuts, and the list of recent scores will be deleted. MuseScore will restart with its default settings.
 Reverting will not remove any scores from your computer.
@@ -12920,95 +12920,95 @@ Are you sure you want to proceed?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2454"/>
+        <location filename="../../mscore/musescore.cpp" line="2468"/>
         <source>Clear Recent Files</source>
         <translation>Elimină Fișierele Recente</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4026"/>
+        <location filename="../../mscore/musescore.cpp" line="4040"/>
         <source>System</source>
         <extracomment>The default language of the operating system. NOT a music system.</extracomment>
         <translation>Sistem</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4034"/>
+        <location filename="../../mscore/musescore.cpp" line="4048"/>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
         <translation>Eroare la citirea fișierului de traducere %s la linia %d coloana %d: %s
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4273"/>
+        <location filename="../../mscore/musescore.cpp" line="4287"/>
         <source>No score</source>
         <translation>Lipsă partitură</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4287"/>
+        <location filename="../../mscore/musescore.cpp" line="4301"/>
         <source>Repitch input mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4292"/>
+        <location filename="../../mscore/musescore.cpp" line="4306"/>
         <source>Rhythm input mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4297"/>
+        <location filename="../../mscore/musescore.cpp" line="4311"/>
         <source>Realtime (automatic) note input mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4302"/>
+        <location filename="../../mscore/musescore.cpp" line="4316"/>
         <source>Realtime (manual) note input mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4312"/>
+        <location filename="../../mscore/musescore.cpp" line="4326"/>
         <source>Steptime note input mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4329"/>
+        <location filename="../../mscore/musescore.cpp" line="4343"/>
         <source>TAB input mode</source>
         <translation>Mod introducere TAB</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4332"/>
+        <location filename="../../mscore/musescore.cpp" line="4346"/>
         <source>Edit mode</source>
         <translation>mod editare</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4335"/>
+        <location filename="../../mscore/musescore.cpp" line="4349"/>
         <source>Text edit mode</source>
         <translation>Mod editare text</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4338"/>
+        <location filename="../../mscore/musescore.cpp" line="4352"/>
         <source>Lyrics edit mode</source>
         <translation>Mod editare versuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4341"/>
+        <location filename="../../mscore/musescore.cpp" line="4355"/>
         <source>Chord symbol/figured bass edit mode</source>
         <translation>Mod editare Simbol Acord/Bass cifrat</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4344"/>
+        <location filename="../../mscore/musescore.cpp" line="4358"/>
         <source>Play</source>
         <translation>Redare</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4347"/>
+        <location filename="../../mscore/musescore.cpp" line="4361"/>
         <source>Image capture mode</source>
         <translation>Mod Captură Imagine</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4351"/>
+        <location filename="../../mscore/musescore.cpp" line="4365"/>
         <source>Score locked</source>
         <translation>Partitură blocată</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5179"/>
+        <location filename="../../mscore/musescore.cpp" line="5193"/>
         <source>The previous session quit unexpectedly.
 
 Restore session?</source>
@@ -13017,22 +13017,22 @@ Restore session?</source>
 Restaurez sesiunea?</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6230"/>
+        <location filename="../../mscore/musescore.cpp" line="6247"/>
         <source>MuseScore may not be able to load this style file: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6518"/>
+        <location filename="../../mscore/musescore.cpp" line="6535"/>
         <source>Warning</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6519"/>
+        <location filename="../../mscore/musescore.cpp" line="6536"/>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation>Nu se poate crea diviziunea excepțională: Durata notei este prea scurtă</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6677"/>
+        <location filename="../../mscore/musescore.cpp" line="6694"/>
         <source>Go To: </source>
         <translation>Mergi La: </translation>
     </message>
@@ -13052,22 +13052,22 @@ Restaurez sesiunea?</translation>
         <translation>Această partitură nu poate fi salvata online. Reparați măsurile corupte și încercați din nou.</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="84"/>
+        <location filename="../../mscore/workspace.cpp" line="127"/>
         <source>New…</source>
         <translation>Crează…</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="88"/>
+        <location filename="../../mscore/workspace.cpp" line="131"/>
         <source>Edit</source>
         <translation>Modifică</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="93"/>
+        <location filename="../../mscore/workspace.cpp" line="136"/>
         <source>Delete</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="98"/>
+        <location filename="../../mscore/workspace.cpp" line="141"/>
         <source>Undo Changes</source>
         <translation>Anulează Schimbările</translation>
     </message>
@@ -13276,17 +13276,17 @@ connection enabled</source>
 <context>
     <name>Ms::PaletteElementEditor</name>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="60"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="61"/>
         <source>Create Key Signature</source>
         <translation>Definește Armură</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="62"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="63"/>
         <source>Create Time Signature</source>
         <translation>Crează Metru Măsură</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="77"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="78"/>
         <source>The palette was hidden or changed</source>
         <translation type="unfinished"/>
     </message>
@@ -13307,12 +13307,12 @@ connection enabled</source>
 <context>
     <name>Ms::PaletteWorkspace</name>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="681"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="797"/>
         <source>Do you want to permanently delete this custom palette?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="705"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="821"/>
         <source>Do you want to restore this palette to its default state? All changes to this palette will be lost.</source>
         <translation type="unfinished"/>
     </message>
@@ -13914,12 +13914,12 @@ This plugin requires an open score to run.
 <context>
     <name>Ms::QmlPluginEngine</name>
     <message>
-        <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="76"/>
+        <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="78"/>
         <source>Plugin Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="76"/>
+        <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="78"/>
         <source>Score update recursion limit reached (%1)</source>
         <translation type="unfinished"/>
     </message>
@@ -14450,7 +14450,7 @@ Please select a range of measures to join and try again</source>
 Selectați mai multe măsuri consecutive pt. a le uni și încercați din nou</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4207"/>
+        <location filename="../../mscore/scoreview.cpp" line="4209"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -14459,7 +14459,7 @@ Vă rugăm folosiți dialogul de instrumente pentru
 a crea mai întâi niște portative</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4289"/>
+        <location filename="../../mscore/scoreview.cpp" line="4291"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Nu este selectat nicio măsură:
@@ -14482,12 +14482,12 @@ vă rugăm selectași o măsură și reluaţi operaţia</translation>
 <context>
     <name>Ms::SelectionListWidget</name>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="60"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="61"/>
         <source>Selection filter</source>
         <translation>Filtru selecție</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="61"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="62"/>
         <source>Use Tab and Backtab (Shift+Tab) to move through the check boxes</source>
         <translation type="unfinished"/>
     </message>
@@ -14495,7 +14495,7 @@ vă rugăm selectași o măsură și reluaţi operaţia</translation>
 <context>
     <name>Ms::SelectionWindow</name>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="108"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="109"/>
         <source>Selection Filter</source>
         <translation>Filtru Selecție</translation>
     </message>
@@ -14960,28 +14960,43 @@ vă rugăm selectași o măsură și reluaţi operaţia</translation>
 <context>
     <name>Ms::UserPaletteController</name>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="300"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="301"/>
         <source>Delete permanently</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="301"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="302"/>
         <source>Hide</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="336"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="348"/>
         <source>Do you want to hide this custom palette cell or permanently delete it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="341"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="348"/>
+        <source>Do you want to hide these custom palette cells or permanently delete them?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="357"/>
         <source>Do you want to permanently delete this custom palette cell?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="354"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="357"/>
+        <source>Do you want to permanently delete these custom palette cells?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="377"/>
         <source>Do you want to hide this custom palette or permanently delete it?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="377"/>
+        <source>Do you want to hide these custom palettes or permanently delete them?</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -15021,12 +15036,28 @@ vă rugăm selectași o măsură și reluaţi operaţia</translation>
 <context>
     <name>Ms::Workspace</name>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="44"/>
+        <location filename="../../mscore/workspace.cpp" line="45"/>
         <source>Advanced</source>
         <translation>Avansat</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="45"/>
+        <location filename="../../mscore/workspace.cpp" line="49"/>
+        <source>Basic edited</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/workspace.cpp" line="50"/>
+        <source>Advanced edited</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/workspace.cpp" line="1034"/>
+        <source>%1 edited</source>
+        <extracomment>Name of the edited read-only workspace, %1 is replaced with the old workspace name</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/workspace.cpp" line="44"/>
         <source>Basic</source>
         <translation>De bază</translation>
     </message>
@@ -15526,7 +15557,7 @@ alegeți un nume diferit:</translation>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
         <location filename="../../mscore/menus.cpp" line="551"/>
-        <location filename="../../mscore/musescore.cpp" line="6073"/>
+        <location filename="../../mscore/musescore.cpp" line="6090"/>
         <source>Key Signatures</source>
         <translation>Armuri</translation>
     </message>
@@ -15995,7 +16026,7 @@ alegeți un nume diferit:</translation>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
         <location filename="../../mscore/menus.cpp" line="1663"/>
-        <location filename="../../mscore/musescore.cpp" line="6075"/>
+        <location filename="../../mscore/musescore.cpp" line="6092"/>
         <source>Time Signatures</source>
         <translation>Metru</translation>
     </message>
@@ -16005,7 +16036,7 @@ alegeți un nume diferit:</translation>
         <translation>Diagramă de Acord</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1401"/>
+        <location filename="../../mscore/palette.cpp" line="1403"/>
         <location filename="../../mscore/palette/palettetree.cpp" line="472"/>
         <source>Writing Palette File
 %1
@@ -16015,7 +16046,7 @@ failed: </source>
 a eșuat:</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1402"/>
+        <location filename="../../mscore/palette.cpp" line="1404"/>
         <location filename="../../mscore/palette/palettetree.cpp" line="473"/>
         <source>Writing Palette File</source>
         <translation type="unfinished"/>
@@ -16026,28 +16057,28 @@ a eșuat:</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/Palette.qml" line="256"/>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="265"/>
         <source>Drag and drop any element here
 (Use %1+Shift to add custom element from the score)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/Palette.qml" line="257"/>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="266"/>
         <source>No elements</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/Palette.qml" line="495"/>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="512"/>
         <source>Delete</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/Palette.qml" line="500"/>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="517"/>
         <source>Properties…</source>
         <translation>Proprietăţi…</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette/palettemodel.cpp" line="725"/>
+        <location filename="../../mscore/palette/palettemodel.cpp" line="751"/>
         <source>Custom</source>
         <translation>Personalizat</translation>
     </message>
@@ -16162,27 +16193,27 @@ a eșuat:</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="116"/>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="117"/>
         <source>Add</source>
         <translation>Adăugă</translation>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="118"/>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="119"/>
         <source>Add %1 palette</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="141"/>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="142"/>
         <source>%1 Added!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="141"/>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="142"/>
         <source>%1 removed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="160"/>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="161"/>
         <source>Create custom palette</source>
         <translation type="unfinished"/>
     </message>
@@ -18984,7 +19015,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../mscore/capella.cpp" line="2711"/>
         <location filename="../../mscore/importmidi/importmidi.cpp" line="1203"/>
         <location filename="../../mscore/instrdialog.cpp" line="141"/>
-        <location filename="../../mscore/musescore.cpp" line="4039"/>
+        <location filename="../../mscore/musescore.cpp" line="4053"/>
         <source>Quit</source>
         <translation>Închide programul</translation>
     </message>
@@ -19036,75 +19067,75 @@ Doriți să-l suprascrieți?</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="629"/>
-        <location filename="../../mscore/musescore.cpp" line="634"/>
-        <location filename="../../mscore/musescore.cpp" line="664"/>
-        <location filename="../../mscore/musescore.cpp" line="669"/>
-        <location filename="../../mscore/musescore.cpp" line="674"/>
-        <location filename="../../mscore/musescore.cpp" line="689"/>
-        <location filename="../../mscore/musescore.cpp" line="708"/>
-        <location filename="../../mscore/musescore.cpp" line="719"/>
-        <location filename="../../mscore/musescore.cpp" line="752"/>
+        <location filename="../../mscore/musescore.cpp" line="623"/>
+        <location filename="../../mscore/musescore.cpp" line="628"/>
+        <location filename="../../mscore/musescore.cpp" line="658"/>
+        <location filename="../../mscore/musescore.cpp" line="663"/>
+        <location filename="../../mscore/musescore.cpp" line="668"/>
+        <location filename="../../mscore/musescore.cpp" line="683"/>
+        <location filename="../../mscore/musescore.cpp" line="702"/>
+        <location filename="../../mscore/musescore.cpp" line="713"/>
+        <location filename="../../mscore/musescore.cpp" line="746"/>
         <source>Import Extension File</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="629"/>
+        <location filename="../../mscore/musescore.cpp" line="623"/>
         <source>Cannot import extension on read-only storage: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="634"/>
+        <location filename="../../mscore/musescore.cpp" line="628"/>
         <source>Cannot import extension: storage %1 is full</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="664"/>
+        <location filename="../../mscore/musescore.cpp" line="658"/>
         <source>Corrupted extension: no metadata.json</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="669"/>
+        <location filename="../../mscore/musescore.cpp" line="663"/>
         <source>Corrupted extension: unsupported directories in root directory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="674"/>
+        <location filename="../../mscore/musescore.cpp" line="668"/>
         <source>Corrupted extension: unsupported files in root directory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="689"/>
+        <location filename="../../mscore/musescore.cpp" line="683"/>
         <source>Corrupted extension: corrupted metadata.json</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="708"/>
+        <location filename="../../mscore/musescore.cpp" line="702"/>
         <source>A newer version is already installed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="719"/>
+        <location filename="../../mscore/musescore.cpp" line="713"/>
         <source>Error while deleting previous version of the extension: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="752"/>
+        <location filename="../../mscore/musescore.cpp" line="746"/>
         <source>Unable to extract files from the extension</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4037"/>
+        <location filename="../../mscore/musescore.cpp" line="4051"/>
         <source>Load Languages Failed:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="126"/>
+        <location filename="../../mscore/workspace.cpp" line="164"/>
         <source>Are you sure?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="127"/>
+        <location filename="../../mscore/workspace.cpp" line="165"/>
         <source>Do you really want to delete the &apos;%1&apos; workspace?</source>
         <translation type="unfinished"/>
     </message>
@@ -19161,7 +19192,7 @@ Doriți să-l suprascrieți?</translation>
 <context>
     <name>RecordButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5685"/>
+        <location filename="../../mscore/musescore.cpp" line="5702"/>
         <source>Record</source>
         <translation>înregistrază</translation>
     </message>
@@ -21427,7 +21458,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
 <context>
     <name>Workspace</name>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="233"/>
+        <location filename="../../mscore/workspace.cpp" line="273"/>
         <source>Writing Workspace File
 %1
 failed: </source>
@@ -21436,7 +21467,7 @@ failed: </source>
 a eșuat:</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="234"/>
+        <location filename="../../mscore/workspace.cpp" line="274"/>
         <source>Writing Workspace File</source>
         <translation type="unfinished"/>
     </message>
@@ -28798,29 +28829,39 @@ Măsura nu este vidă.</translation>
 <context>
     <name>selectionfilter</name>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="32"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="33"/>
         <source>All</source>
         <translation>Toate</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="33"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="34"/>
         <source>Voice 1</source>
         <translation>Vocea 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="34"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="35"/>
         <source>Voice 2</source>
         <translation>Vocea 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="35"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="36"/>
         <source>Voice 3</source>
         <translation>Vocea 3</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="36"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="37"/>
         <source>Voice 4</source>
         <translation>Vocea 4</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectionwindow.cpp" line="38"/>
+        <source>Dynamics &amp; Hairpins</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/selectionwindow.cpp" line="39"/>
+        <source>Fingerings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="40"/>
@@ -28828,27 +28869,17 @@ Măsura nu este vidă.</translation>
         <translation>Versuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="39"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="41"/>
         <source>Chord Symbols</source>
         <translation>Simboluri acord</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="37"/>
-        <source>Dynamics &amp; Hairpins</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="38"/>
-        <source>Fingerings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="41"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="42"/>
         <source>Other Text</source>
         <translation>Alt text</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="42"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="43"/>
         <source>Articulations &amp; Ornaments</source>
         <translation>Articulații și Ornamente</translation>
     </message>
@@ -28859,51 +28890,51 @@ Măsura nu este vidă.</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="45"/>
-        <source>Ottavas</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="52"/>
-        <source>Tremolos</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="43"/>
         <source>Figured Bass</source>
         <translation>Bass Cifrat</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="46"/>
+        <source>Ottavas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/selectionwindow.cpp" line="53"/>
+        <source>Tremolos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/selectionwindow.cpp" line="47"/>
         <source>Pedal Lines</source>
         <translation>Linii Pedală</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="47"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="48"/>
         <source>Other Lines</source>
         <translation>Alte linii</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="48"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="49"/>
         <source>Arpeggios</source>
         <translation>Arpegii</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="49"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="50"/>
         <source>Glissandi</source>
         <translation>Glisando</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="50"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="51"/>
         <source>Fretboard Diagrams</source>
         <translation>Diagrame de acord</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="51"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="52"/>
         <source>Breath Marks</source>
         <translation>Marcaje Respirații</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="53"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="54"/>
         <source>Grace Notes</source>
         <translation>Apogiaturi</translation>
     </message>

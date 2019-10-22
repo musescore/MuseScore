@@ -6279,7 +6279,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1262"/>
         <source>Bass</source>
         <comment>Acoustic Bass</comment>
-        <translation>男低音</translation>
+        <translation>原音貝斯</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1263"/>

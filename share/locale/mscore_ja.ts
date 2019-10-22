@@ -4967,7 +4967,7 @@ space unit</extracomment>
 <context>
     <name>GreendotButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5696"/>
+        <location filename="../../mscore/musescore.cpp" line="5713"/>
         <source>Record</source>
         <translation>録音</translation>
     </message>
@@ -10524,7 +10524,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="196"/>
         <location filename="../../mscore/masterpalette.cpp" line="229"/>
-        <location filename="../../mscore/musescore.cpp" line="6077"/>
+        <location filename="../../mscore/musescore.cpp" line="6094"/>
         <source>Symbols</source>
         <translation>記号</translation>
     </message>
@@ -11081,29 +11081,29 @@ tuplet would cross measure</source>
 <context>
     <name>Ms::AboutBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4727"/>
+        <location filename="../../mscore/musescore.cpp" line="4741"/>
         <source>Unstable Prerelease for Version: %1</source>
         <translation>不安定なプレリリースバージョン: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4730"/>
+        <location filename="../../mscore/musescore.cpp" line="4744"/>
         <source>Version: %1</source>
         <translation>バージョン: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4733"/>
+        <location filename="../../mscore/musescore.cpp" line="4747"/>
         <source>Revision: %1</source>
         <translation>リビジョン: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4738"/>
+        <location filename="../../mscore/musescore.cpp" line="4752"/>
         <source>Visit %1www.musescore.org%2 for new versions and more information.
 Support MuseScore with your %3donation%4.</source>
         <translation>%1www.musescore.org%2 で新バージョンなどの情報を得ることができます。
 あなたの %3寄付%4 により MuseScore を援助することができます。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4745"/>
+        <location filename="../../mscore/musescore.cpp" line="4759"/>
         <source>Copyright &amp;copy; 1999-2019 Werner Schweer and Others.
 Published under the GNU General Public License.</source>
         <translation>Copyright &amp;copy; 1999-2019 Werner Schweer and Others.
@@ -11113,7 +11113,7 @@ Published under the GNU General Public License.</translation>
 <context>
     <name>Ms::AboutMusicXMLBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4782"/>
+        <location filename="../../mscore/musescore.cpp" line="4796"/>
         <source>MusicXML is an open file format for exchanging digital sheet music,
 supported by many applications.
 Copyright © 2004-2018 the Contributors to the MusicXML
@@ -12137,87 +12137,87 @@ Sound: %5</source>
     <name>Ms::MuseScore</name>
     <message>
         <location filename="../../mscore/exportaudio.cpp" line="296"/>
-        <location filename="../../mscore/musescore.cpp" line="6943"/>
+        <location filename="../../mscore/musescore.cpp" line="6960"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
         <location filename="../../mscore/exportaudio.cpp" line="297"/>
-        <location filename="../../mscore/musescore.cpp" line="6944"/>
+        <location filename="../../mscore/musescore.cpp" line="6961"/>
         <source>Exporting…</source>
         <translation>エクスポート中…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6875"/>
-        <location filename="../../mscore/musescore.cpp" line="6887"/>
+        <location filename="../../mscore/musescore.cpp" line="6892"/>
+        <location filename="../../mscore/musescore.cpp" line="6904"/>
         <source>Error Opening LAME library</source>
         <translation>LAMEライブラリの開始中にエラーが発生しました</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6876"/>
+        <location filename="../../mscore/musescore.cpp" line="6893"/>
         <source>Could not open MP3 encoding library!</source>
         <translation>MP3エンコードライブラリを開くことができませんでした！</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6888"/>
+        <location filename="../../mscore/musescore.cpp" line="6905"/>
         <source>Not a valid or supported MP3 encoding library!</source>
         <translation>MP3エンコードライブラリはサポートされていないか無効です</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6842"/>
-        <location filename="../../mscore/musescore.cpp" line="6912"/>
-        <location filename="../../mscore/musescore.cpp" line="7069"/>
+        <location filename="../../mscore/musescore.cpp" line="6859"/>
+        <location filename="../../mscore/musescore.cpp" line="6929"/>
+        <location filename="../../mscore/musescore.cpp" line="7086"/>
         <source>Encoding Error</source>
         <translation>エンコードエラー</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2496"/>
+        <location filename="../../mscore/musescore.cpp" line="2510"/>
         <source>Reset the positions of all elements?</source>
         <translation>全ての要素の位置をリセットしますか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2498"/>
+        <location filename="../../mscore/musescore.cpp" line="2512"/>
         <source>To best take advantage of automatic placement in MuseScore 3 when importing &apos;%1&apos; from MuseScore %2, it is recommended to reset the positions of all elements.</source>
         <translation>MuseScore %2 から &apos;%1&apos; をインポートする際に MuseScore 3 の自動配置機能を最大に利用するよう、すべての要素の位置をリセットすることをお推めします。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4307"/>
+        <location filename="../../mscore/musescore.cpp" line="4321"/>
         <source>Insert mode</source>
         <translation>挿入モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4321"/>
+        <location filename="../../mscore/musescore.cpp" line="4335"/>
         <source>Drumset input mode</source>
         <translation>ドラムセット 入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5800"/>
+        <location filename="../../mscore/musescore.cpp" line="5817"/>
         <source>Invalid Command</source>
         <translation>無効なコマンド</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5801"/>
+        <location filename="../../mscore/musescore.cpp" line="5818"/>
         <source>Command %1 not valid in current state</source>
         <translation>コマンド %1 は現在の状態では無効です</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6913"/>
+        <location filename="../../mscore/musescore.cpp" line="6930"/>
         <source>Unable to initialize MP3 stream</source>
         <translation>MP3ストリームを初期化できません</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6843"/>
+        <location filename="../../mscore/musescore.cpp" line="6860"/>
         <source>Unable to open target file for writing</source>
         <translation>書き込みを行うファイルが開けません</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="7070"/>
+        <location filename="../../mscore/musescore.cpp" line="7087"/>
         <source>Error %1 returned from MP3 encoder</source>
         <translation>MP3エンコーダーからエラー %1 が返されました</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="248"/>
-        <location filename="../../mscore/musescore.cpp" line="5178"/>
+        <location filename="../../mscore/musescore.cpp" line="5192"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
@@ -12326,7 +12326,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1017"/>
         <location filename="../../mscore/file.cpp" line="1044"/>
-        <location filename="../../mscore/musescore.cpp" line="6229"/>
+        <location filename="../../mscore/musescore.cpp" line="6246"/>
         <source>Load Style</source>
         <translation>スタイルの読み込み</translation>
     </message>
@@ -12339,7 +12339,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1024"/>
         <location filename="../../mscore/file.cpp" line="1061"/>
         <location filename="../../mscore/file.cpp" line="1144"/>
-        <location filename="../../mscore/musescore.cpp" line="6220"/>
+        <location filename="../../mscore/musescore.cpp" line="6237"/>
         <source>Save Style</source>
         <translation>スタイルの保存</translation>
     </message>
@@ -12663,27 +12663,27 @@ Do you want to replace it?
         <translation>マニュアル</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2053"/>
+        <location filename="../../mscore/musescore.cpp" line="2067"/>
         <source>&amp;Add</source>
         <translation>追加(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2054"/>
+        <location filename="../../mscore/musescore.cpp" line="2068"/>
         <source>&amp;Measures</source>
         <translation>小節</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2055"/>
+        <location filename="../../mscore/musescore.cpp" line="2069"/>
         <source>&amp;Frames</source>
         <translation>フレーム(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2056"/>
+        <location filename="../../mscore/musescore.cpp" line="2070"/>
         <source>&amp;Text</source>
         <translation>テキスト(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2057"/>
+        <location filename="../../mscore/musescore.cpp" line="2071"/>
         <source>&amp;Lines</source>
         <translation>線記号(&amp;L)</translation>
     </message>
@@ -12695,248 +12695,248 @@ Please select a measure and try again</source>
 小節を選択してからもう一度やり直してください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2003"/>
+        <location filename="../../mscore/musescore.cpp" line="2017"/>
         <source>Measure:Beat:Tick</source>
         <translation>小節:拍:ティック</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1073"/>
+        <location filename="../../mscore/musescore.cpp" line="1064"/>
         <source>Switch layer</source>
         <translation>レイヤー 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1078"/>
+        <location filename="../../mscore/musescore.cpp" line="1069"/>
         <source>Switch play mode</source>
         <translation>再生モード 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2029"/>
+        <location filename="../../mscore/musescore.cpp" line="2043"/>
         <source>Show MIDI import panel</source>
         <translation>MIDI インポートパネルを表示する</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2016"/>
+        <location filename="../../mscore/musescore.cpp" line="2030"/>
         <source>File Operations</source>
         <translation>ファイル操作</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="960"/>
-        <location filename="../../mscore/musescore.cpp" line="2024"/>
+        <location filename="../../mscore/musescore.cpp" line="951"/>
+        <location filename="../../mscore/musescore.cpp" line="2038"/>
         <source>View Mode</source>
         <translation>表示モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="961"/>
-        <location filename="../../mscore/musescore.cpp" line="2025"/>
+        <location filename="../../mscore/musescore.cpp" line="952"/>
+        <location filename="../../mscore/musescore.cpp" line="2039"/>
         <source>Page View</source>
         <translation>ページビュー</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="962"/>
-        <location filename="../../mscore/musescore.cpp" line="2026"/>
+        <location filename="../../mscore/musescore.cpp" line="953"/>
+        <location filename="../../mscore/musescore.cpp" line="2040"/>
         <source>Continuous View</source>
         <translation>連続ビュー</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2017"/>
+        <location filename="../../mscore/musescore.cpp" line="2031"/>
         <source>Playback Controls</source>
         <translation>再生コントロール</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2018"/>
+        <location filename="../../mscore/musescore.cpp" line="2032"/>
         <source>Concert Pitch</source>
         <translation>合奏調 (実音)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2019"/>
+        <location filename="../../mscore/musescore.cpp" line="2033"/>
         <source>Image Capture</source>
         <translation>イメージ キャプチャ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2020"/>
+        <location filename="../../mscore/musescore.cpp" line="2034"/>
         <source>Note Input</source>
         <translation>音符入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="574"/>
+        <location filename="../../mscore/musescore.cpp" line="568"/>
         <source>Note Entry Methods</source>
         <translation>ノートエントリーメソッド</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2047"/>
+        <location filename="../../mscore/musescore.cpp" line="2061"/>
         <source>&amp;File</source>
         <translation>ファイル(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2048"/>
+        <location filename="../../mscore/musescore.cpp" line="2062"/>
         <source>Open &amp;Recent</source>
         <translation>最近開いたファイル(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2049"/>
+        <location filename="../../mscore/musescore.cpp" line="2063"/>
         <source>&amp;Edit</source>
         <translation>編集(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2065"/>
+        <location filename="../../mscore/musescore.cpp" line="2079"/>
         <source>&amp;Measure</source>
         <translation>小節(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2063"/>
+        <location filename="../../mscore/musescore.cpp" line="2077"/>
         <source>&amp;Tools</source>
         <translation>ツール(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2064"/>
+        <location filename="../../mscore/musescore.cpp" line="2078"/>
         <source>&amp;Voices</source>
         <translation>声部</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2052"/>
+        <location filename="../../mscore/musescore.cpp" line="2066"/>
         <source>W&amp;orkspaces</source>
         <translation>ワークスペース(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2004"/>
+        <location filename="../../mscore/musescore.cpp" line="2018"/>
         <source>&amp;Preferences…</source>
         <translation>環境設定…(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2050"/>
+        <location filename="../../mscore/musescore.cpp" line="2064"/>
         <source>&amp;View</source>
         <translation>表示(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2051"/>
+        <location filename="../../mscore/musescore.cpp" line="2065"/>
         <source>&amp;Toolbars</source>
         <translation>ツールバー(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2060"/>
+        <location filename="../../mscore/musescore.cpp" line="2074"/>
         <source>T&amp;uplets</source>
         <translation>連符(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2067"/>
+        <location filename="../../mscore/musescore.cpp" line="2081"/>
         <source>&amp;Plugins</source>
         <translation>プラグイン(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2072"/>
+        <location filename="../../mscore/musescore.cpp" line="2086"/>
         <source>&amp;Help</source>
         <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2008"/>
+        <location filename="../../mscore/musescore.cpp" line="2022"/>
         <source>&amp;Online Handbook</source>
         <translation>オンラインハンドブック(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2005"/>
+        <location filename="../../mscore/musescore.cpp" line="2019"/>
         <source>&amp;About…</source>
         <translation>MuseScoreについて…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="733"/>
+        <location filename="../../mscore/musescore.cpp" line="727"/>
         <source>Please wait, unpacking extension…</source>
         <translation>拡張機能を開いています…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="812"/>
+        <location filename="../../mscore/musescore.cpp" line="806"/>
         <source>Please wait, loading soundfonts…</source>
         <translation>サウンドフォントを読み込んでいます…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="963"/>
-        <location filename="../../mscore/musescore.cpp" line="2027"/>
+        <location filename="../../mscore/musescore.cpp" line="954"/>
+        <location filename="../../mscore/musescore.cpp" line="2041"/>
         <source>Single Page</source>
         <translation>単一ページ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1076"/>
+        <location filename="../../mscore/musescore.cpp" line="1067"/>
         <source>Synthesizer</source>
         <translation>シンセサイザー</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1077"/>
+        <location filename="../../mscore/musescore.cpp" line="1068"/>
         <source>Audio track</source>
         <translation>オーディオトラック</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1667"/>
-        <location filename="../../mscore/musescore.cpp" line="2062"/>
+        <location filename="../../mscore/musescore.cpp" line="1658"/>
+        <location filename="../../mscore/musescore.cpp" line="2076"/>
         <source>&amp;Stretch</source>
         <translation>&amp;間隔</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2058"/>
+        <location filename="../../mscore/musescore.cpp" line="2072"/>
         <source>N&amp;otes</source>
         <translation>音符(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2059"/>
+        <location filename="../../mscore/musescore.cpp" line="2073"/>
         <source>&amp;Intervals</source>
         <translation>音程(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2061"/>
+        <location filename="../../mscore/musescore.cpp" line="2075"/>
         <source>F&amp;ormat</source>
         <translation>フォーマット(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2073"/>
+        <location filename="../../mscore/musescore.cpp" line="2087"/>
         <source>&amp;Tours</source>
         <translation>ツアー(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2006"/>
+        <location filename="../../mscore/musescore.cpp" line="2020"/>
         <source>About &amp;Qt…</source>
         <translation>Qtについて…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2007"/>
+        <location filename="../../mscore/musescore.cpp" line="2021"/>
         <source>About &amp;MusicXML…</source>
         <translation>MusicXMLについて…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2010"/>
+        <location filename="../../mscore/musescore.cpp" line="2024"/>
         <source>Check for &amp;Update</source>
         <translation>更新の確認(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2011"/>
+        <location filename="../../mscore/musescore.cpp" line="2025"/>
         <source>Ask for Help</source>
         <translation>手助けを求める</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2012"/>
+        <location filename="../../mscore/musescore.cpp" line="2026"/>
         <source>Report a Bug</source>
         <translation>バグの報告</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2014"/>
+        <location filename="../../mscore/musescore.cpp" line="2028"/>
         <source>Revert to Factory Settings</source>
         <translation>初期設定に戻す</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2013"/>
-        <location filename="../../mscore/musescore.cpp" line="2021"/>
+        <location filename="../../mscore/musescore.cpp" line="2027"/>
+        <location filename="../../mscore/musescore.cpp" line="2035"/>
         <source>Feedback</source>
         <translation>フィードバック</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2022"/>
+        <location filename="../../mscore/musescore.cpp" line="2036"/>
         <source>Workspaces</source>
         <translation>ワークスペース</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2226"/>
+        <location filename="../../mscore/musescore.cpp" line="2240"/>
         <source>Are you sure?</source>
         <translation>よろしいですか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2227"/>
+        <location filename="../../mscore/musescore.cpp" line="2241"/>
         <source>This will reset all your preferences.
 Custom palettes, custom shortcuts, and the list of recent scores will be deleted. MuseScore will restart with its default settings.
 Reverting will not remove any scores from your computer.
@@ -12946,95 +12946,95 @@ Are you sure you want to proceed?</source>
 続行しますか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2454"/>
+        <location filename="../../mscore/musescore.cpp" line="2468"/>
         <source>Clear Recent Files</source>
         <translation>最近開いたファイルの履歴をクリア</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4026"/>
+        <location filename="../../mscore/musescore.cpp" line="4040"/>
         <source>System</source>
         <extracomment>The default language of the operating system. NOT a music system.</extracomment>
         <translation>システム言語</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4034"/>
+        <location filename="../../mscore/musescore.cpp" line="4048"/>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
         <translation>言語ファイル %s の読み込みエラー箇所 %d行目 %d列目: %s
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4273"/>
+        <location filename="../../mscore/musescore.cpp" line="4287"/>
         <source>No score</source>
         <translation>スコア無し</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4287"/>
+        <location filename="../../mscore/musescore.cpp" line="4301"/>
         <source>Repitch input mode</source>
         <translation>リピッチ 入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4292"/>
+        <location filename="../../mscore/musescore.cpp" line="4306"/>
         <source>Rhythm input mode</source>
         <translation>リズム 入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4297"/>
+        <location filename="../../mscore/musescore.cpp" line="4311"/>
         <source>Realtime (automatic) note input mode</source>
         <translation>リアルタイム(自動) 音符入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4302"/>
+        <location filename="../../mscore/musescore.cpp" line="4316"/>
         <source>Realtime (manual) note input mode</source>
         <translation>リアルタイム(手動) 音符入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4312"/>
+        <location filename="../../mscore/musescore.cpp" line="4326"/>
         <source>Steptime note input mode</source>
         <translation>ステップタイム 音符入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4329"/>
+        <location filename="../../mscore/musescore.cpp" line="4343"/>
         <source>TAB input mode</source>
         <translation>タブ譜 入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4332"/>
+        <location filename="../../mscore/musescore.cpp" line="4346"/>
         <source>Edit mode</source>
         <translation>編集モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4335"/>
+        <location filename="../../mscore/musescore.cpp" line="4349"/>
         <source>Text edit mode</source>
         <translation>テキスト編集モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4338"/>
+        <location filename="../../mscore/musescore.cpp" line="4352"/>
         <source>Lyrics edit mode</source>
         <translation>歌詞編集モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4341"/>
+        <location filename="../../mscore/musescore.cpp" line="4355"/>
         <source>Chord symbol/figured bass edit mode</source>
         <translation>コード記号 / 通奏低音の編集モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4344"/>
+        <location filename="../../mscore/musescore.cpp" line="4358"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4347"/>
+        <location filename="../../mscore/musescore.cpp" line="4361"/>
         <source>Image capture mode</source>
         <translation>イメージ キャプチャ モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4351"/>
+        <location filename="../../mscore/musescore.cpp" line="4365"/>
         <source>Score locked</source>
         <translation>スコアのロック</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5179"/>
+        <location filename="../../mscore/musescore.cpp" line="5193"/>
         <source>The previous session quit unexpectedly.
 
 Restore session?</source>
@@ -13043,22 +13043,22 @@ Restore session?</source>
 状態を元に戻しますか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6230"/>
+        <location filename="../../mscore/musescore.cpp" line="6247"/>
         <source>MuseScore may not be able to load this style file: %1</source>
         <translation>MuseScore は このスタイルのファイルを読み込めないかもしれません: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6518"/>
+        <location filename="../../mscore/musescore.cpp" line="6535"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6519"/>
+        <location filename="../../mscore/musescore.cpp" line="6536"/>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation>この連符を作成できません:音価が短すぎます</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6677"/>
+        <location filename="../../mscore/musescore.cpp" line="6694"/>
         <source>Go To: </source>
         <translation>移動先の小節番号:</translation>
     </message>
@@ -13078,22 +13078,22 @@ Restore session?</source>
         <translation>このスコアはオンライン保存できません。エラーがある小節を修正してからもう一度実行してください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="84"/>
+        <location filename="../../mscore/workspace.cpp" line="127"/>
         <source>New…</source>
         <translation>新規…</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="88"/>
+        <location filename="../../mscore/workspace.cpp" line="131"/>
         <source>Edit</source>
         <translation>編集</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="93"/>
+        <location filename="../../mscore/workspace.cpp" line="136"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="98"/>
+        <location filename="../../mscore/workspace.cpp" line="141"/>
         <source>Undo Changes</source>
         <translation>変更を元に戻す</translation>
     </message>
@@ -13303,17 +13303,17 @@ connection enabled</source>
 <context>
     <name>Ms::PaletteElementEditor</name>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="60"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="61"/>
         <source>Create Key Signature</source>
         <translation>調号作成</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="62"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="63"/>
         <source>Create Time Signature</source>
         <translation>拍子記号を作成します</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="77"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="78"/>
         <source>The palette was hidden or changed</source>
         <translation type="unfinished"/>
     </message>
@@ -13334,12 +13334,12 @@ connection enabled</source>
 <context>
     <name>Ms::PaletteWorkspace</name>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="681"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="797"/>
         <source>Do you want to permanently delete this custom palette?</source>
         <translation>このカスタムパレットを完全に削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="705"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="821"/>
         <source>Do you want to restore this palette to its default state? All changes to this palette will be lost.</source>
         <translation>このパレットを初期設定に戻しますか？変更した内容は全て失われます。</translation>
     </message>
@@ -13956,12 +13956,12 @@ This plugin requires an open score to run.
 <context>
     <name>Ms::QmlPluginEngine</name>
     <message>
-        <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="76"/>
+        <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="78"/>
         <source>Plugin Error</source>
         <translation>プラグインエラー</translation>
     </message>
     <message>
-        <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="76"/>
+        <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="78"/>
         <source>Score update recursion limit reached (%1)</source>
         <translation type="unfinished"/>
     </message>
@@ -14493,7 +14493,7 @@ Please select a range of measures to join and try again</source>
 結合する小節の範囲を選択してからもう一度やり直してください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4207"/>
+        <location filename="../../mscore/scoreview.cpp" line="4209"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -14501,7 +14501,7 @@ first create some staves</source>
 楽器ダイアログを使い、先にいくつかの譜表を作成してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4289"/>
+        <location filename="../../mscore/scoreview.cpp" line="4291"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>小節が選択されていません:
@@ -14524,12 +14524,12 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::SelectionListWidget</name>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="60"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="61"/>
         <source>Selection filter</source>
         <translation>選択フィルター</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="61"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="62"/>
         <source>Use Tab and Backtab (Shift+Tab) to move through the check boxes</source>
         <translation>チェックボックスの移動にTabキーとバックTab (Shift+Tab) を使用する</translation>
     </message>
@@ -14537,7 +14537,7 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::SelectionWindow</name>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="108"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="109"/>
         <source>Selection Filter</source>
         <translation>選択フィルター</translation>
     </message>
@@ -15005,31 +15005,46 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::UserPaletteController</name>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="300"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="301"/>
         <source>Delete permanently</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="301"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="302"/>
         <source>Hide</source>
         <translation>隠す</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="336"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="348"/>
         <source>Do you want to hide this custom palette cell or permanently delete it?</source>
         <translation>このカスタムパレットセルを隠しますか？
 それとも完全に削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="341"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="348"/>
+        <source>Do you want to hide these custom palette cells or permanently delete them?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="357"/>
         <source>Do you want to permanently delete this custom palette cell?</source>
         <translation>このカスタムパレットのセルを完全に削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette/paletteworkspace.cpp" line="354"/>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="357"/>
+        <source>Do you want to permanently delete these custom palette cells?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="377"/>
         <source>Do you want to hide this custom palette or permanently delete it?</source>
         <translation>このカスタムパレットを隠しますか？
 または完全に削除しますか？</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/palette/paletteworkspace.cpp" line="377"/>
+        <source>Do you want to hide these custom palettes or permanently delete them?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -15068,12 +15083,28 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::Workspace</name>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="44"/>
+        <location filename="../../mscore/workspace.cpp" line="45"/>
         <source>Advanced</source>
         <translation>アドバンス</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="45"/>
+        <location filename="../../mscore/workspace.cpp" line="49"/>
+        <source>Basic edited</source>
+        <translation>基本 編集済み</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/workspace.cpp" line="50"/>
+        <source>Advanced edited</source>
+        <translation>アドバンス 編集済み</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/workspace.cpp" line="1034"/>
+        <source>%1 edited</source>
+        <extracomment>Name of the edited read-only workspace, %1 is replaced with the old workspace name</extracomment>
+        <translation>%1 編集済み</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/workspace.cpp" line="44"/>
         <source>Basic</source>
         <translation>基本</translation>
     </message>
@@ -15573,7 +15604,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
         <location filename="../../mscore/menus.cpp" line="551"/>
-        <location filename="../../mscore/musescore.cpp" line="6073"/>
+        <location filename="../../mscore/musescore.cpp" line="6090"/>
         <source>Key Signatures</source>
         <translation>調号</translation>
     </message>
@@ -16042,7 +16073,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
         <location filename="../../mscore/menus.cpp" line="1663"/>
-        <location filename="../../mscore/musescore.cpp" line="6075"/>
+        <location filename="../../mscore/musescore.cpp" line="6092"/>
         <source>Time Signatures</source>
         <translation>拍子記号</translation>
     </message>
@@ -16052,7 +16083,7 @@ please choose a different name:</source>
         <translation>フレットボード ダイアグラム</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1401"/>
+        <location filename="../../mscore/palette.cpp" line="1403"/>
         <location filename="../../mscore/palette/palettetree.cpp" line="472"/>
         <source>Writing Palette File
 %1
@@ -16062,7 +16093,7 @@ failed: </source>
 失敗:</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1402"/>
+        <location filename="../../mscore/palette.cpp" line="1404"/>
         <location filename="../../mscore/palette/palettetree.cpp" line="473"/>
         <source>Writing Palette File</source>
         <translation>パレットファイルの書き込み中</translation>
@@ -16073,29 +16104,29 @@ failed: </source>
         <translation>さらに表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/Palette.qml" line="256"/>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="265"/>
         <source>Drag and drop any element here
 (Use %1+Shift to add custom element from the score)</source>
         <translation>ここに要素をドラッグしてください
 (%1+Shift でカスタマイズした要素をスコアから追加できます)</translation>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/Palette.qml" line="257"/>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="266"/>
         <source>No elements</source>
         <translation>要素なし</translation>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/Palette.qml" line="495"/>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="512"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/Palette.qml" line="500"/>
+        <location filename="../../mscore/qml/palettes/Palette.qml" line="517"/>
         <source>Properties…</source>
         <translation>プロパティ…</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette/palettemodel.cpp" line="725"/>
+        <location filename="../../mscore/palette/palettemodel.cpp" line="751"/>
         <source>Custom</source>
         <translation>ユーザー定義</translation>
     </message>
@@ -16207,30 +16238,30 @@ failed: </source>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="55"/>
         <source>All palettes were added</source>
-        <translation type="unfinished"/>
+        <translation>全てのパレットを追加</translation>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="116"/>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="117"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="118"/>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="119"/>
         <source>Add %1 palette</source>
         <translation>%1 パレットを追加</translation>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="141"/>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="142"/>
         <source>%1 Added!</source>
         <translation>%1 追加済み</translation>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="141"/>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="142"/>
         <source>%1 removed</source>
         <translation>%1を削除</translation>
     </message>
     <message>
-        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="160"/>
+        <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="161"/>
         <source>Create custom palette</source>
         <translation>カスタムパレットを作成</translation>
     </message>
@@ -17113,7 +17144,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1036"/>
         <source>Use the same color in palettes</source>
-        <translation type="unfinished"/>
+        <translation>同じ色をパレットに使用</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1052"/>
@@ -19050,7 +19081,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../mscore/capella.cpp" line="2711"/>
         <location filename="../../mscore/importmidi/importmidi.cpp" line="1203"/>
         <location filename="../../mscore/instrdialog.cpp" line="141"/>
-        <location filename="../../mscore/musescore.cpp" line="4039"/>
+        <location filename="../../mscore/musescore.cpp" line="4053"/>
         <source>Quit</source>
         <translation>中止</translation>
     </message>
@@ -19102,75 +19133,75 @@ Do you want to overwrite it?</source>
         <translation>スタイルの読み込み失敗</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="629"/>
-        <location filename="../../mscore/musescore.cpp" line="634"/>
-        <location filename="../../mscore/musescore.cpp" line="664"/>
-        <location filename="../../mscore/musescore.cpp" line="669"/>
-        <location filename="../../mscore/musescore.cpp" line="674"/>
-        <location filename="../../mscore/musescore.cpp" line="689"/>
-        <location filename="../../mscore/musescore.cpp" line="708"/>
-        <location filename="../../mscore/musescore.cpp" line="719"/>
-        <location filename="../../mscore/musescore.cpp" line="752"/>
+        <location filename="../../mscore/musescore.cpp" line="623"/>
+        <location filename="../../mscore/musescore.cpp" line="628"/>
+        <location filename="../../mscore/musescore.cpp" line="658"/>
+        <location filename="../../mscore/musescore.cpp" line="663"/>
+        <location filename="../../mscore/musescore.cpp" line="668"/>
+        <location filename="../../mscore/musescore.cpp" line="683"/>
+        <location filename="../../mscore/musescore.cpp" line="702"/>
+        <location filename="../../mscore/musescore.cpp" line="713"/>
+        <location filename="../../mscore/musescore.cpp" line="746"/>
         <source>Import Extension File</source>
         <translation>拡張機能ファイルのインポート</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="629"/>
+        <location filename="../../mscore/musescore.cpp" line="623"/>
         <source>Cannot import extension on read-only storage: %1</source>
         <translation>読み取り専用のストレージ上には拡張機能をインポートすることができません: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="634"/>
+        <location filename="../../mscore/musescore.cpp" line="628"/>
         <source>Cannot import extension: storage %1 is full</source>
         <translation>拡張機能をインポートできません: ストレージ %1 に十分な空き容量がありません。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="664"/>
+        <location filename="../../mscore/musescore.cpp" line="658"/>
         <source>Corrupted extension: no metadata.json</source>
         <translation>拡張機能が破損しています: metadata.json がありません。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="669"/>
+        <location filename="../../mscore/musescore.cpp" line="663"/>
         <source>Corrupted extension: unsupported directories in root directory</source>
         <translation>拡張機能が破損しています: ルートディレクトリのサポートされていないディレクトリです。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="674"/>
+        <location filename="../../mscore/musescore.cpp" line="668"/>
         <source>Corrupted extension: unsupported files in root directory</source>
         <translation>拡張機能が破損しています: ルートディレクトリのサポートされていないファイルです。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="689"/>
+        <location filename="../../mscore/musescore.cpp" line="683"/>
         <source>Corrupted extension: corrupted metadata.json</source>
         <translation>拡張機能が破損しています: metadata.json が破損しています。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="708"/>
+        <location filename="../../mscore/musescore.cpp" line="702"/>
         <source>A newer version is already installed</source>
         <translation>既に新しいバージョンがインストールされています。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="719"/>
+        <location filename="../../mscore/musescore.cpp" line="713"/>
         <source>Error while deleting previous version of the extension: %1</source>
         <translation>以前のバージョンを削除中にエラーが発生しました：%1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="752"/>
+        <location filename="../../mscore/musescore.cpp" line="746"/>
         <source>Unable to extract files from the extension</source>
         <translation>拡張機能からファイルを抽出できません</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4037"/>
+        <location filename="../../mscore/musescore.cpp" line="4051"/>
         <source>Load Languages Failed:</source>
         <translation>言語設定の読み込み失敗:</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="126"/>
+        <location filename="../../mscore/workspace.cpp" line="164"/>
         <source>Are you sure?</source>
         <translation>よろしいですか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="127"/>
+        <location filename="../../mscore/workspace.cpp" line="165"/>
         <source>Do you really want to delete the &apos;%1&apos; workspace?</source>
         <translation>本当にこのワークスペース &apos;%1&apos; を削除しますか？</translation>
     </message>
@@ -19227,7 +19258,7 @@ Do you want to overwrite it?</source>
 <context>
     <name>RecordButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5685"/>
+        <location filename="../../mscore/musescore.cpp" line="5702"/>
         <source>Record</source>
         <translation>録音</translation>
     </message>
@@ -21496,7 +21527,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
 <context>
     <name>Workspace</name>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="233"/>
+        <location filename="../../mscore/workspace.cpp" line="273"/>
         <source>Writing Workspace File
 %1
 failed: </source>
@@ -21505,7 +21536,7 @@ failed: </source>
 失敗: </translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="234"/>
+        <location filename="../../mscore/workspace.cpp" line="274"/>
         <source>Writing Workspace File</source>
         <translation>ワークスペースファイルを書き込み中</translation>
     </message>
@@ -28868,29 +28899,39 @@ Measure is not empty</source>
 <context>
     <name>selectionfilter</name>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="32"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="33"/>
         <source>All</source>
         <translation>すべて</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="33"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="34"/>
         <source>Voice 1</source>
         <translation>声部 １</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="34"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="35"/>
         <source>Voice 2</source>
         <translation>声部 ２</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="35"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="36"/>
         <source>Voice 3</source>
         <translation>声部 ３</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="36"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="37"/>
         <source>Voice 4</source>
         <translation>声部 ４</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectionwindow.cpp" line="38"/>
+        <source>Dynamics &amp; Hairpins</source>
+        <translation>ダイナミクス &amp; ヘアピン</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectionwindow.cpp" line="39"/>
+        <source>Fingerings</source>
+        <translation>フィンガリング</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="40"/>
@@ -28898,27 +28939,17 @@ Measure is not empty</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="39"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="41"/>
         <source>Chord Symbols</source>
         <translation>コード記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="37"/>
-        <source>Dynamics &amp; Hairpins</source>
-        <translation>ダイナミクス &amp; ヘアピン</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="38"/>
-        <source>Fingerings</source>
-        <translation>フィンガリング</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="41"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="42"/>
         <source>Other Text</source>
         <translation>その他の文字</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="42"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="43"/>
         <source>Articulations &amp; Ornaments</source>
         <translation>アーティキュレーションと装飾</translation>
     </message>
@@ -28929,51 +28960,51 @@ Measure is not empty</source>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="45"/>
-        <source>Ottavas</source>
-        <translation>オッターヴァ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="52"/>
-        <source>Tremolos</source>
-        <translation>トレモロ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="43"/>
         <source>Figured Bass</source>
         <translation>通奏低音</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="46"/>
+        <source>Ottavas</source>
+        <translation>オッターヴァ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectionwindow.cpp" line="53"/>
+        <source>Tremolos</source>
+        <translation>トレモロ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectionwindow.cpp" line="47"/>
         <source>Pedal Lines</source>
         <translation>ペダル線</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="47"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="48"/>
         <source>Other Lines</source>
         <translation>その他の線</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="48"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="49"/>
         <source>Arpeggios</source>
         <translation>アルペジオ</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="49"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="50"/>
         <source>Glissandi</source>
         <translation>グリッサンド</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="50"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="51"/>
         <source>Fretboard Diagrams</source>
         <translation>フレットボードダイアグラム</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="51"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="52"/>
         <source>Breath Marks</source>
         <translation>ブレス記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="53"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="54"/>
         <source>Grace Notes</source>
         <translation>装飾音符</translation>
     </message>
