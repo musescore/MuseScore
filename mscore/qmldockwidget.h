@@ -143,6 +143,8 @@ class QmlDockWidget : public QDockWidget
       QQmlContext* rootContext() { return getView()->rootContext(); }
       QQuickItem* rootObject() { return getView()->rootObject(); }
 
+      const QQuickView* view() const { return _view; }
+
       void changeEvent(QEvent* evt) override;
       void resizeEvent(QResizeEvent* evt) override;
 
