@@ -134,6 +134,7 @@ public:
 
       SysStaff* insertStaff(int);
       void removeStaff(int);
+      void adjustStavesNumber(int);
 
       int y2staff(qreal y) const;
       void setInstrumentNames(bool longName, Fraction tick = {0,1});
