@@ -289,17 +289,6 @@ bool UserPaletteController::move(const QModelIndex& sourceParent, int sourceRow,
       }
 
 //---------------------------------------------------------
-//   ensurePaletteFocused
-//---------------------------------------------------------
-
-static void ensurePaletteFocused()
-      {
-      PaletteWidget* p = mscore->getPaletteWidget();
-      if (p)
-            p->ensureQmlViewFocused();
-      }
-
-//---------------------------------------------------------
 //   UserPaletteController::showHideOrDeleteDialog
 //---------------------------------------------------------
 
@@ -315,8 +304,6 @@ void UserPaletteController::showHideOrDeleteDialog(const QString& question, std:
       msg->setDefaultButton(hideButton);
 
       connect(msg, &QDialog::finished, this, [=]() {
-            ensurePaletteFocused();
-
             RemoveAction action = RemoveAction::NoAction;
 
             const QAbstractButton* btn = msg->clickedButton();
@@ -373,8 +360,6 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
                      );
 
                   connect(msg, &QDialog::finished, this, [=]() {
-                        ensurePaletteFocused();
-
                         const auto result = msg->standardButton(msg->clickedButton());
                         if (result == QMessageBox::Yes)
                               remove(removeIndices, RemoveAction::DeletePermanently);
@@ -512,8 +497,6 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
       connect(d, &PalettePropertiesDialog::changed, m, [m, srcIndex]() {
             m->itemDataChanged(srcIndex);
       });
-
-      connect(d, &QDialog::finished, []() { ensurePaletteFocused(); });
       
       d->setModal(true);
       d->setAttribute(Qt::WA_DeleteOnClose);
@@ -551,8 +534,6 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
       connect(d, &PaletteCellPropertiesDialog::changed, m, [m, srcIndex]() {
             m->itemDataChanged(srcIndex);
       });
-
-      connect(d, &QDialog::finished, []() { ensurePaletteFocused(); });
 
       d->setModal(true);
       d->setAttribute(Qt::WA_DeleteOnClose);

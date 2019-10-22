@@ -1955,6 +1955,8 @@ MuseScore::MuseScore()
 
       if (!converterMode && !pluginMode)
             _loginManager = new LoginManager(getAction(saveOnlineMenuItem), this);
+
+      connect(qApp, &QGuiApplication::focusWindowChanged, this, &MuseScore::onFocusWindowChanged);
       }
 
 MuseScore::~MuseScore()
@@ -1969,6 +1971,27 @@ MuseScore::~MuseScore()
       // be deleted before paletteWorkspace.
       delete paletteWidget;
       paletteWidget = nullptr;
+      }
+
+//---------------------------------------------------------
+//   onFocusWindowChanged
+//---------------------------------------------------------
+
+void MuseScore::onFocusWindowChanged(QWindow* w)
+      {
+      const QWindow* mscoreWindow = windowHandle();
+
+      if (!QApplication::focusWidget() && _lastFocusWindow
+         && ((!w && _lastFocusWindow != mscoreWindow) || (w == mscoreWindow && _lastFocusWindowIsQQuickView))) {
+            // Switch to temporary window to work around inability to return focus to QML-based windows
+            QWidget* tmpContainer = createWindowContainer(new QWindow, this);
+            tmpContainer->show();
+            tmpContainer->setFocus();
+            tmpContainer->deleteLater();
+            }
+
+      _lastFocusWindow = w;
+      _lastFocusWindowIsQQuickView = qobject_cast<QQuickView*>(_lastFocusWindow);
       }
 
 //---------------------------------------------------------
