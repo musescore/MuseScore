@@ -116,7 +116,7 @@ GridView {
                 return implicitWidth;
 
             // align to the left border of some palette cell
-            const addition = (parent.width - implicitWidth) % cellWidth - 1; // -1 allows to fit into a cell if palette grid is visible
+            var addition = (parent.width - implicitWidth) % cellWidth - 1; // -1 allows to fit into a cell if palette grid is visible
             if (addition < 0)
                 addition += cellWidth;
 
