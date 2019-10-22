@@ -145,9 +145,11 @@ void WorkspaceDialog::accepted()
       if (editMode && newWorkspace->name() != s)
             newWorkspace->rename(s);
 
-      mscore->changeWorkspace(newWorkspace);
-      
-      preferences.updateLocalPreferences();
+      if (!editMode) {
+            mscore->changeWorkspace(newWorkspace);
+            preferences.updateLocalPreferences();
+            }
+            
       preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->name());
       emit mscore->workspacesChanged();
       close();

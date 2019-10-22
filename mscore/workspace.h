@@ -95,6 +95,7 @@ class Workspace : public QObject {
 
       const Workspace* sourceWorkspace() const;
       void setSourceWorkspaceName(const QString& sourceWorkspaceName) { _sourceWorkspaceName = sourceWorkspaceName; }
+      QString sourceWorkspaceName() { return _sourceWorkspaceName; }
 
       std::unique_ptr<PaletteTree> getPaletteTree() const;
 
@@ -164,6 +165,7 @@ class WorkspacesManager {
       static void initCurrentWorkspace();
       static bool isDefaultWorkspace(Workspace* workspace);
       static bool isDefaultEditedWorkspace(Workspace* workspace);
+      static QString defaultWorkspaceTranslatableName(const QString& editedWorkspaceName);
       
    public:
       static std::vector<QString> defaultWorkspaces;
