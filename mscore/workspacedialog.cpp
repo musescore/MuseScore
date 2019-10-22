@@ -125,22 +125,31 @@ void WorkspaceDialog::accepted()
                   break;
             }
 
+      Workspace* newWorkspace = editMode ? WorkspacesManager::currentWorkspace() : WorkspacesManager::createNewWorkspace(s);
       if (!editMode) {
+            //save current workspace
             if (WorkspacesManager::currentWorkspace()->dirty())
                   WorkspacesManager::currentWorkspace()->save();
-            WorkspacesManager::setCurrentWorkspace(WorkspacesManager::createNewWorkspace(s));
-            preferences.updateLocalPreferences();
             }
 
-      WorkspacesManager::currentWorkspace()->setSaveComponents(componentsCheck->isChecked());
-      WorkspacesManager::currentWorkspace()->setSaveToolbars(toolbarsCheck->isChecked());
-      WorkspacesManager::currentWorkspace()->setSaveMenuBar(menubarCheck->isChecked());
+      //update workspace properties with the dialog values
+      newWorkspace->setSaveComponents(componentsCheck->isChecked());
+      newWorkspace->setSaveToolbars(toolbarsCheck->isChecked());
+      newWorkspace->setSaveMenuBar(menubarCheck->isChecked());
       preferences.setUseLocalPreferences(prefsCheck->isChecked());
-      WorkspacesManager::currentWorkspace()->save();
+      
+      //save newly created/edited workspace
+      newWorkspace->save();
 
-      if (editMode && WorkspacesManager::currentWorkspace()->name() != s)
-            WorkspacesManager::currentWorkspace()->rename(s);
+      //rename if we edit name of the existing workspace
+      if (editMode && newWorkspace->name() != s)
+            newWorkspace->rename(s);
 
+      if (!editMode) {
+            mscore->changeWorkspace(newWorkspace);
+            preferences.updateLocalPreferences();
+            }
+            
       preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->name());
       emit mscore->workspacesChanged();
       close();
