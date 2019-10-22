@@ -568,7 +568,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void oscAction();
 #endif
       void deleteWorkspace();
-      void undoWorkspace();
+      void resetWorkspace();
       void showWorkspaceMenu();
       void switchLayer(const QString&);
       void switchPlayMode(int);
