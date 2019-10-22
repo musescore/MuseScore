@@ -91,8 +91,11 @@ class Workspace : public QObject {
       void read();
       bool readOnly() const          { return _readOnly;  }
       void setReadOnly(bool val)     { _readOnly = val;   }
+      void reset();
 
       const Workspace* sourceWorkspace() const;
+      void setSourceWorkspaceName(const QString& sourceWorkspaceName) { _sourceWorkspaceName = sourceWorkspaceName; }
+      QString sourceWorkspaceName() { return _sourceWorkspaceName; }
 
       std::unique_ptr<PaletteTree> getPaletteTree() const;
 
@@ -142,10 +145,7 @@ class WorkspacesManager {
             return nullptr;
             }
       
-      static void remove(const QString& name) {
-            m_workspaces.removeOne(findByName(name));
-            }
-      
+      static void remove(Workspace* workspace);
       static const QList<Workspace*>& workspaces() {
             if (isWorkspacesListDirty || m_workspaces.isEmpty())
                   initWorkspaces();
@@ -156,13 +156,20 @@ class WorkspacesManager {
             if (isWorkspacesListDirty || m_visibleWorkspaces.isEmpty())
                   initWorkspaces();
             return m_visibleWorkspaces;
-      }
+            }
       
       //replace with `const Workspace*` in future
       static Workspace* currentWorkspace() { return m_currentWorkspace; }
       static void setCurrentWorkspace(Workspace* currWorkspace) { m_currentWorkspace = currWorkspace; }
       
       static void initCurrentWorkspace();
+      static bool isDefaultWorkspace(Workspace* workspace);
+      static bool isDefaultEditedWorkspace(Workspace* workspace);
+      static QString defaultWorkspaceTranslatableName(const QString& editedWorkspaceName);
+      
+   public:
+      static std::vector<QString> defaultWorkspaces;
+      static std::vector<QString> defaultEditedWorkspaces;
       
    private:
       static QList<Workspace*> m_workspaces;
