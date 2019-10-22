@@ -220,12 +220,11 @@ void MuseScore::changeWorkspace(const QString& name)
 
 void MuseScore::changeWorkspace(Workspace* p, bool first)
       {
-      if (!first) {
+      if (!first)
             WorkspacesManager::currentWorkspace()->save();
-            if (WorkspacesManager::currentWorkspace())
-                  disconnect(getPaletteWorkspace(), &PaletteWorkspace::userPaletteChanged, WorkspacesManager::currentWorkspace(), QOverload<>::of(&Workspace::setDirty));
-            }
 
+      if (WorkspacesManager::currentWorkspace())
+            disconnect(getPaletteWorkspace(), &PaletteWorkspace::userPaletteChanged, WorkspacesManager::currentWorkspace(), QOverload<>::of(&Workspace::setDirty));
 
       p->read();
       WorkspacesManager::setCurrentWorkspace(p);
@@ -1195,22 +1194,6 @@ void WorkspacesManager::initWorkspaces()
       for (Workspace* old : oldWorkspaces)
             m_workspaces.removeOne(old);
 
-      // Delete default workspaces if there are corresponding user-edited ones
-      m_visibleWorkspaces = m_workspaces;
-      for (Workspace* ew : editedWorkpaces) {
-            const QString uneditedName = defaultWorkspaceTranslatableName(ew->translatableName());
-            if (uneditedName.isEmpty())
-                  continue;
-
-            for (auto it = m_visibleWorkspaces.begin(); it != m_visibleWorkspaces.end(); ++it) {
-                  Workspace* w = *it;
-                  if (w->translatableName() == uneditedName) {
-                        m_visibleWorkspaces.erase(it);
-                        break;
-                        }
-                  }
-            }
-
       if (m_workspaces.empty())
             qFatal("No workspaces found");
 
@@ -1227,7 +1210,25 @@ void WorkspacesManager::initWorkspaces()
                   break;
                   }
             }
+      
       retranslate(m_workspaces);
+      
+      // Delete default workspaces if there are corresponding user-edited ones
+      m_visibleWorkspaces = m_workspaces;
+      for (Workspace* ew : editedWorkpaces) {
+            const QString uneditedName = defaultWorkspaceTranslatableName(ew->translatableName());
+            if (uneditedName.isEmpty())
+                  continue;
+
+            for (auto it = m_visibleWorkspaces.begin(); it != m_visibleWorkspaces.end(); ++it) {
+                  Workspace* w = *it;
+                  if (w->translatableName() == uneditedName) {
+                        m_visibleWorkspaces.erase(it);
+                        break;
+                        }
+                  }
+            }
+      
       isWorkspacesListDirty = false;
       }
 
@@ -1285,6 +1286,7 @@ Workspace* WorkspacesManager::createNewWorkspace(const QString& name)
       w->setSourceWorkspaceName(WorkspacesManager::currentWorkspace()->sourceWorkspace()->translatableName());
 
       m_workspaces.append(w);
+      m_visibleWorkspaces.append(w);
       return w;
       }
 
