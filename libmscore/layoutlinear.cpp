@@ -75,8 +75,7 @@ void Score::resetSystems(bool layoutAll, LayoutContext& lc)
             System* system = new System(this);
             _systems.push_back(system);
             page->appendSystem(system);
-            for (int i = 0; i < nstaves(); ++i)
-                  system->insertStaff(i);
+            system->adjustStavesNumber(nstaves());
             }
       else {
             if (pages().isEmpty())
@@ -84,6 +83,7 @@ void Score::resetSystems(bool layoutAll, LayoutContext& lc)
             page = pages().front();
             System* system = systems().front();
             system->clear();
+            system->adjustStavesNumber(nstaves());
             }
       lc.page = page;
       }

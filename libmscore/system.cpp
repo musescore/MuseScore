@@ -180,6 +180,19 @@ void System::removeStaff(int idx)
       }
 
 //---------------------------------------------------------
+//   adjustStavesNumber
+//---------------------------------------------------------
+
+void System::adjustStavesNumber(int nstaves)
+      {
+      for (int i = _staves.size(); i < nstaves; ++i)
+            insertStaff(i);
+      const int dn = _staves.size() - nstaves;
+      for (int i = 0; i < dn; ++i)
+            removeStaff(_staves.size() - 1);
+      }
+
+//---------------------------------------------------------
 //   layoutSystem
 ///   Layout the System
 //---------------------------------------------------------
