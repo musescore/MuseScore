@@ -74,7 +74,7 @@ static QString editedWorkspaceTranslatableName(const QString& oldWorkspaceTransl
 //   editedWorkspaceName
 //---------------------------------------------------------
 
-static QString defaultWorkspaceTranslatableName(const QString& editedWorkspaceName)
+QString WorkspacesManager::defaultWorkspaceTranslatableName(const QString& editedWorkspaceName)
       {
       const auto it = std::find(WorkspacesManager::defaultEditedWorkspaces.begin(), WorkspacesManager::defaultEditedWorkspaces.end(), editedWorkspaceName);
 
@@ -94,19 +94,13 @@ void MuseScore::resetWorkspace()
       {
       //if currentWorkspace is the `edited` Basic or Advanced one, remove the edited and show the source one
       if (WorkspacesManager::isDefaultEditedWorkspace(WorkspacesManager::currentWorkspace())) {
-            //Basic edited
             const QString& currWorkspaceName = WorkspacesManager::currentWorkspace()->translatableName();
-            if (currWorkspaceName == WorkspacesManager::defaultEditedWorkspaces[0]) {
-                  WorkspacesManager::remove(WorkspacesManager::currentWorkspace());
-                  changeWorkspace(WorkspacesManager::findByTranslatableName(WorkspacesManager::defaultWorkspaces[0]));
-                  }
-            //Advanced edited
-            else if (currWorkspaceName == WorkspacesManager::defaultEditedWorkspaces[1]) {
-                  WorkspacesManager::remove(WorkspacesManager::currentWorkspace());
-                  changeWorkspace(WorkspacesManager::findByTranslatableName(WorkspacesManager::defaultWorkspaces[1]));
-                  }
-            else
-                  Q_ASSERT(0 && "Current workspace is the default one, but not the one of the Basic/Advanced");
+            const QString& defaultWorkspaceName = WorkspacesManager::defaultWorkspaceTranslatableName(currWorkspaceName);
+            Q_ASSERT(!defaultWorkspaceName.isEmpty());
+            Workspace* defaultWorkspace = WorkspacesManager::findByTranslatableName(defaultWorkspaceName);
+            Workspace* currWorkspace = WorkspacesManager::currentWorkspace();
+            changeWorkspace(defaultWorkspace);
+            WorkspacesManager::remove(currWorkspace);
             }
       //else if currentWorkspace is a custom workspace, reset all palettes, toolbars, menus and GUI to the values defined in the source workspace
       else
@@ -130,7 +124,7 @@ void MuseScore::showWorkspaceMenu()
             }
       menuWorkspaces->clear();
 
-      for (Workspace* p : WorkspacesManager::workspaces()) {
+      for (Workspace* p : WorkspacesManager::visibleWorkspaces()) {
             QAction* a = workspaces->addAction(qApp->translate("Ms::Workspace", p->name().toUtf8()));
             a->setCheckable(true);
             a->setData(p->path());
@@ -291,6 +285,7 @@ void WorkspacesManager::remove(Workspace* workspace)
       delete workspace;
       isWorkspacesListDirty = true;
       initWorkspaces();
+      emit mscore->workspacesChanged();
       }
 
 //---------------------------------------------------------
@@ -703,6 +698,7 @@ void Workspace::reset()
       preferences.updateLocalPreferences();
       const Workspace* srcWorkspace = sourceWorkspace();
       WorkspacesManager::readWorkspaceFile(srcWorkspace->path(), [this](XmlReader& e) { read(e); });
+      save();
       }
 
 std::unique_ptr<PaletteTree> Workspace::getPaletteTree() const
@@ -1086,6 +1082,7 @@ void Workspace::ensureWorkspaceSaved()
             _readOnly = !fi.isWritable();
             Q_ASSERT(!_readOnly);
 
+            WorkspacesManager::refreshWorkspaces();
             preferences.setPreference(PREF_APP_WORKSPACE, name());
             emit mscore->workspacesChanged();
             }
@@ -1283,7 +1280,7 @@ Workspace* WorkspacesManager::createNewWorkspace(const QString& name)
       w->setDirty(false);
       w->setReadOnly(false);
       w->write();
-      w->setSourceWorkspaceName(WorkspacesManager::currentWorkspace()->sourceWorkspace()->translatableName());
+      w->setSourceWorkspaceName(WorkspacesManager::currentWorkspace()->sourceWorkspaceName());
 
       m_workspaces.append(w);
       m_visibleWorkspaces.append(w);
