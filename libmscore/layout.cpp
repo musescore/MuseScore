@@ -1781,11 +1781,7 @@ System* Score::getNextSystem(LayoutContext& lc)
       _systems.append(system);
       if (!isVBox) {
             int nstaves = Score::nstaves();
-            for (int i = system->staves()->size(); i < nstaves; ++i)
-                  system->insertStaff(i);
-            int dn = system->staves()->size() - nstaves;
-            for (int i = 0; i < dn; ++i)
-                  system->removeStaff(system->staves()->size()-1);
+            system->adjustStavesNumber(nstaves);
             }
       return system;
       }
