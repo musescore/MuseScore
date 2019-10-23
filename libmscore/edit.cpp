@@ -771,8 +771,8 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         }
                   }
             int n = nstaves();
-            for (int si = 0; si < n; ++si) {
-                  TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
+            for (int track = 0; track < n * VOICES; ++track) {
+                  TimeSig* nsig = toTimeSig(seg->element(track));
                   nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
                   nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
                   nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
@@ -845,12 +845,12 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         startStaffIdx = 0;
                         endStaffIdx   = score->nstaves();
                         }
-                  for (int si = startStaffIdx; si < endStaffIdx; ++si) {
-                        TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
+                  for (int track = startStaffIdx * VOICES; track < endStaffIdx * VOICES; ++track) {
+                        TimeSig* nsig = toTimeSig(seg->element(track));
                         if (nsig == 0) {
                               nsig = new TimeSig(*ts);
                               nsig->setScore(score);
-                              nsig->setTrack(si * VOICES);
+                              nsig->setTrack(track);
                               nsig->setParent(seg);
                               undoAddElement(nsig);
                               if (score->excerpt()) {
@@ -930,17 +930,17 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
             // (if we fixed it to work for delete, it would fail for add)
             // so we will fix measure rest durations here
             // TODO: fix rewriteMeasures() to get this right
-            for (int i = 0; i < nstaves(); ++i) {
-                  TimeSig* tsig = staff(i)->timeSig(tick);
+            for (int track = 0; track < nstaves() * VOICES; ++track) {
+                  TimeSig* tsig = staff(int(track / 4))->timeSig(tick);
                   if (tsig && tsig->isLocal()) {
                         for (Measure* nm = m; nm; nm = nm->nextMeasure()) {
                               // stop when time signature changes
-                              if (staff(i)->timeSig(nm->tick()) != tsig)
+                              if (staff(int(track / 4))->timeSig(nm->tick()) != tsig)
                                     break;
                               // fix measure rest duration
-                              ChordRest* cr = nm->findChordRest(nm->tick(), i * VOICES);
+                              ChordRest* cr = nm->findChordRest(nm->tick(), track);
                               if (cr && cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE)
-                                    cr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(nm->stretchedLen(staff(i))));
+                                    cr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(nm->stretchedLen(staff(int(track / 4)))));
                                     //cr->setTicks(nm->stretchedLen(staff(i)));
                               }
                         }
@@ -2074,9 +2074,9 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
                   Segment* s = mAfterSel->findSegment(SegmentType::TimeSig, mAfterSel->tick());
                   if (!s && changed) {
                         Segment* ns = mAfterSel->undoGetSegment(SegmentType::TimeSig, mAfterSel->tick());
-                        for (int staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
+                        for (int track = 0; track < score->nstaves() * VOICES; ++track) {
                               TimeSig* nts = new TimeSig(score);
-                              nts->setTrack(staffIdx * VOICES);
+                              nts->setTrack(track);
                               nts->setParent(ns);
                               nts->setSig(lastDeletedSig->sig(), lastDeletedSig->timeSigType());
                               score->undoAddElement(nts);
