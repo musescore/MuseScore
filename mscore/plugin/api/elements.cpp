@@ -252,14 +252,18 @@ Element* wrap(Ms::Element* e, Ownership own)
       {
       using Ms::ElementType;
       switch(e->type()) {
-            case ElementType::NOTE:
-                  return wrap<Note>(toNote(e), own);
             case ElementType::CHORD:
                   return wrap<Chord>(toChord(e), own);
-            case ElementType::SEGMENT:
-                  return wrap<Segment>(toSegment(e), own);
+            case ElementType::IMAGE:
+                  return wrap<Image>(toImage(e), own);
             case ElementType::MEASURE:
                   return wrap<Measure>(toMeasure(e), own);
+            case ElementType::NOTE:
+                  return wrap<Note>(toNote(e), own);
+            case ElementType::SEGMENT:
+                  return wrap<Segment>(toSegment(e), own);
+            case ElementType::SYMBOL:
+                  return wrap<Symbol>(toSymbol(e), own);
             default:
                   break;
             }

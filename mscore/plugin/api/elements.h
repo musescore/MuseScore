@@ -14,19 +14,21 @@
 #define __PLUGIN_API_ELEMENTS_H__
 
 #include "scoreelement.h"
+#include "libmscore/accidental.h"
 #include "libmscore/element.h"
 #include "libmscore/chord.h"
+#include "libmscore/image.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/measure.h"
+#include "libmscore/musescoreCore.h"
 #include "libmscore/note.h"
 #include "libmscore/notedot.h"
-#include "libmscore/segment.h"
-#include "libmscore/accidental.h"
-#include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/symbol.h"
+#include "libmscore/types.h"
 #include "libmscore/undo.h"
 #include "playevent.h"
-#include "libmscore/types.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -662,6 +664,72 @@ class Measure : public Element {
       Measure* nextMeasure() { return wrap<Measure>(measure()->nextMeasure(), Ownership::SCORE); }
 
       QQmlListProperty<Element> elements() { return wrapContainerProperty<Element>(this, measure()->el()); }
+      /// \endcond
+      };
+
+//---------------------------------------------------------
+//   BSymbol
+//    BSymbol wrapper
+//---------------------------------------------------------
+
+class BSymbol : public Element {
+      /// \since MuseScore 3.3.1
+      Q_OBJECT
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  elements          READ elements)
+
+   public:
+      /// \cond MS_INTERNAL
+      BSymbol(Ms::BSymbol* o = nullptr, Ownership own = Ownership::PLUGIN)
+         : Element(o, own) {}
+
+      Ms::BSymbol* bsymbol() { return toBSymbol(e); }
+      const Ms::BSymbol* bsymbol() const { return toBSymbol(e); }
+
+      QQmlListProperty<Element> elements() { return wrapContainerProperty<Element>(this, bsymbol()->leafs());   }
+      /// \endcond
+      };
+
+//---------------------------------------------------------
+//   Image
+//    Image wrapper
+//---------------------------------------------------------
+
+class Image : public BSymbol {
+      /// \since MuseScore 3.3.1
+      Q_OBJECT
+      Q_PROPERTY(QString id   READ id)
+
+   public:
+      /// \cond MS_INTERNAL
+      Image(Ms::Image* o = nullptr, Ownership own = Ownership::PLUGIN)
+         : BSymbol(o, own) {}
+
+      Ms::Image* image()             { return toImage(e); }
+      const Ms::Image* image() const { return toImage(e); }
+
+      QString id() const             { return image()->id(); }
+      /// \endcond
+      };
+
+//---------------------------------------------------------
+//   Symbol
+//    Symbol wrapper
+//---------------------------------------------------------
+
+class Symbol : public BSymbol {
+      /// \since MuseScore 3.3.1
+      Q_OBJECT
+      Q_PROPERTY(QString id  READ id)
+
+   public:
+      /// \cond MS_INTERNAL
+      Symbol(Ms::Symbol* o = nullptr, Ownership own = Ownership::PLUGIN)
+         : BSymbol(o, own) {}
+
+      Ms::Symbol* symbol()             { return toSymbol(e); }
+      const Ms::Symbol* symbol() const { return toSymbol(e); }
+
+      QString id() const               { return symbol()->symName(); }
       /// \endcond
       };
 

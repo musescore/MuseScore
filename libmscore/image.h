@@ -91,6 +91,7 @@ class Image final : public BSymbol {
       Grip initialEditModeGrip() const override { return Grip(1); }
       Grip defaultGrip() const override { return Grip(1); } // TODO
       std::vector<QPointF> gripsPositions(const EditData&) const override;
+      QString id() const;
       };
 
 

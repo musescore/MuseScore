@@ -495,6 +495,21 @@ void Image::layout()
       }
 
 //---------------------------------------------------------
+//   id
+//
+//    returns a string identifying the image: either the file name proper,
+//    if _linkPath is not empty, or the _storePath otherwise
+//---------------------------------------------------------
+
+QString Image::id() const
+      {
+      // we cannot use _linkIsValid, as it is set to true only for the
+      // first occurrence of an image and false for any other occurrence
+      QString path = !_linkPath.isEmpty() ? _linkPath : _storePath;
+      return QFileInfo(path).baseName();
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
