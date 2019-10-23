@@ -45,6 +45,63 @@ ResourceManager::ResourceManager(QWidget *parent) :
       MuseScore::restoreGeometry(this);
       }
 
+//---------------------------------------------------------
+//   ExtensionFileSize
+//---------------------------------------------------------
+
+ExtensionFileSize::ExtensionFileSize(const int i)
+      : QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(i))
+      , _size(i)
+      {}
+
+bool ExtensionFileSize::operator<(const QTableWidgetItem& nextItem) const
+      {
+      QString currentText = text();
+      QString nextText = nextItem.text();
+
+      QChar currentSizeType = currentText[currentText.size() - 2];
+      QChar nextSizeType = nextText[currentText.size() - 2];
+
+      // the integer before unit
+      int currentInt = currentText.split(QRegularExpression("\\s+"))[0].toInt();
+      int nextInt = nextText.split(QRegularExpression("\\s+"))[0].toInt();
+
+      return int2size(currentSizeType, currentInt) < int2size(nextSizeType, nextInt);
+      }
+
+//---------------------------------------------------------
+//   int2size
+//---------------------------------------------------------
+
+int ExtensionFileSize::int2size(QChar sizeType, int i)
+      {
+      if (sizeType == QChar(' ')) // the size is written as bytes
+            return i;
+      else if (sizeType == QChar('K')) // the size is written as kilobytes, and so on
+            return i * 0x400;
+      else if (sizeType == QChar('M'))
+            return i * 0x100000;
+      else if (sizeType == QChar('G'))
+            return i * 0x40000000;
+      else if (sizeType == QChar('T'))
+            return i * 0x10000000000;
+      }
+
+//---------------------------------------------------------
+//   LanguageFileSize
+//---------------------------------------------------------
+
+LanguageFileSize::LanguageFileSize(const double d)
+      : QTableWidgetItem(ResourceManager::tr("%1 KB").arg(d))
+      , _size(d)
+      {}
+
+bool LanguageFileSize::operator<(const QTableWidgetItem& nextItem) const
+      {
+      QString nextText = nextItem.text();
+      double nextSize = nextText.remove(QChar(' ')).remove(QChar('K')).remove(QChar('B')).toDouble();
+      return getSize() < nextSize;
+      }
 
 //---------------------------------------------------------
 //   selectLanguagesTab
@@ -111,7 +168,7 @@ void ResourceManager::displayExtensions()
 
             extensionsTable->setItem(row, col++, new QTableWidgetItem(name));
             extensionsTable->setItem(row, col++, new QTableWidgetItem(version));
-            extensionsTable->setItem(row, col++, new QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(fileSize)));
+            extensionsTable->setItem(row, col++, new ExtensionFileSize(fileSize));
             buttonInstall = new QPushButton(tr("Install"));
             buttonUninstall = new QPushButton(tr("Uninstall"));
 
@@ -184,7 +241,7 @@ void ResourceManager::displayLanguages()
       QStringList langs = result.object().keys();
       QString lang = mscore->getLocaleISOCode();
       int index = langs.indexOf(lang);
-      if (index < 0 &&  lang.size() > 2) {
+      if (index < 0 && lang.size() > 2) {
             lang = lang.left(2);
             index = langs.indexOf(lang);
             }
@@ -199,17 +256,17 @@ void ResourceManager::displayLanguages()
             QJsonObject value = result.object().value(key).toObject();
             col = 0;
             QString test = value.value("file_name").toString();
-            if(test.length() == 0)
+            if (test.length() == 0)
                   continue;
 
             QString filename = value.value("file_name").toString();
             QString name = value.value("name").toString();
-            QString fileSize = value.value("file_size").toString();
+            double fileSize = value.value("file_size").toString().toDouble();
             QString hashValue = value.value("hash").toString();
 
             languagesTable->setItem(row, col++, new QTableWidgetItem(name));
             languagesTable->setItem(row, col++, new QTableWidgetItem(filename));
-            languagesTable->setItem(row, col++, new QTableWidgetItem(tr("%1 kB").arg(fileSize)));
+            languagesTable->setItem(row, col++, new LanguageFileSize(fileSize));
             updateButtons[row] = new QPushButton(tr("Update"));
 
             temp = updateButtons[row];
