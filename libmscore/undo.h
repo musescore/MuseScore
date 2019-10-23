@@ -477,20 +477,6 @@ class ChangeInstrumentLong : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   MoveElement
-//---------------------------------------------------------
-
-class MoveElement : public UndoCommand {
-      Element* element;
-      QPointF offset;
-      void flip(EditData*) override;
-
-   public:
-      MoveElement(Element*, const QPointF&);
-      UNDO_NAME("MoveElement")
-      };
-
-//---------------------------------------------------------
 //   ChangeBracketType
 //---------------------------------------------------------
 
@@ -778,24 +764,6 @@ class InsertMeasures : public InsertRemoveMeasures {
       };
 
 //---------------------------------------------------------
-//   ChangeImage
-//---------------------------------------------------------
-
-class ChangeImage : public UndoCommand {
-      Image* image;
-      bool lockAspectRatio;
-      bool autoScale;
-      int z;
-
-      void flip(EditData*) override;
-
-   public:
-      ChangeImage(Image* i, bool l, bool a, int _z)
-         : image(i), lockAspectRatio(l), autoScale(a), z(_z) {}
-      UNDO_NAME("ChangeImage")
-      };
-
-//---------------------------------------------------------
 //   AddExcerpt
 //---------------------------------------------------------
 
@@ -983,7 +951,7 @@ class ChangeClefType : public UndoCommand {
 //---------------------------------------------------------
 //   MoveStaff
 //---------------------------------------------------------
-
+#if 0 // commented out in mscore/instrwidget.cpp, not used anywhere else
 class MoveStaff : public UndoCommand {
       Staff* staff;
       Part* part;
@@ -995,22 +963,7 @@ class MoveStaff : public UndoCommand {
       MoveStaff(Staff* s, Part* p, int idx) : staff(s), part(p), rstaff(idx) {}
       UNDO_NAME("MoveStaff")
       };
-
-//---------------------------------------------------------
-//   ChangeStaffUserDist
-//---------------------------------------------------------
-
-class ChangeStaffUserDist : public UndoCommand {
-      Staff* staff;
-      qreal dist;
-
-      void flip(EditData*) override;
-
-   public:
-      ChangeStaffUserDist(Staff* s, qreal d)
-         : staff(s), dist(d) {}
-      UNDO_NAME("ChangeStaffUserDist")
-      };
+#endif
 
 //---------------------------------------------------------
 //   ChangeProperty
@@ -1064,22 +1017,6 @@ class ChangeMetaText : public UndoCommand {
    public:
       ChangeMetaText(Score* s, const QString& i, const QString& t) : score(s), id(i), text(t) {}
       UNDO_NAME("ChangeMetaText")
-      };
-
-//---------------------------------------------------------
-//   ChangeEventList
-//---------------------------------------------------------
-
-class ChangeEventList : public UndoCommand {
-      Chord* chord;
-      QList<NoteEventList> events;
-      PlayEventType eventListType;
-
-      void flip(EditData*) override;
-
-   public:
-      ChangeEventList(Chord* c, const QList<NoteEventList> l);
-      UNDO_NAME("ChangeEventList")
       };
 
 //---------------------------------------------------------
@@ -1321,21 +1258,6 @@ class ChangeDrumset : public UndoCommand {
    public:
       ChangeDrumset(Instrument* i, const Drumset* d) : instrument(i), drumset(*d) {}
       UNDO_NAME("ChangeDrumset")
-      };
-
-//---------------------------------------------------------
-//   ChangeGap
-//---------------------------------------------------------
-
-class ChangeGap : public UndoCommand {
-      Rest* rest;
-      bool v;
-
-      void flip(EditData*) override;
-
-   public:
-      ChangeGap(Rest* r, bool v) : rest(r), v(v) {}
-      UNDO_NAME("ChangeGap")
       };
 
 //---------------------------------------------------------
