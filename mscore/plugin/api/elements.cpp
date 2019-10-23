@@ -42,6 +42,18 @@ void Element::setOffsetY(qreal offY)
       }
 
 //---------------------------------------------------------
+//   Element::bbox
+//   return the element bbox in spatium units, rather than in raster units as stored internally
+//---------------------------------------------------------
+
+QRectF Element::bbox() const
+      {
+      QRectF bbox       = element()->bbox();
+      qreal  spatium    = element()->spatium();
+      return QRectF(bbox.x() / spatium, bbox.y() / spatium, bbox.width() / spatium, bbox.height() / spatium);
+      }
+
+//---------------------------------------------------------
 //   Segment::elementAt
 //---------------------------------------------------------
 
