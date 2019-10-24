@@ -681,8 +681,6 @@ void Selection::updateState()
             if (e->track() >= 0)
                   _currentTrack = e->track();
             }
-      if (!_score->noteEntryMode())
-             _score->inputState().update(e);
       }
 
 //---------------------------------------------------------

@@ -25,6 +25,7 @@ class ChordRest;
 class Drumset;
 class Segment;
 class Score;
+class Selection;
 
 //---------------------------------------------------------
 //   NoteEntryMethod
@@ -51,6 +52,7 @@ class InputState {
       Beam::Mode _beamMode       { Beam::Mode::AUTO };
       bool _noteEntryMode      { false };
       NoteEntryMethod _noteEntryMethod { NoteEntryMethod::STEPTIME };
+      AccidentalType _accidentalType { AccidentalType::NONE };
       Slur* _slur              { 0     };
       bool _insertMode         { false };
 
@@ -63,7 +65,7 @@ class InputState {
 
       void setDuration(const TDuration& d) { _duration = d;          }
       TDuration duration() const           { return _duration;       }
-      void setDots(int n)                  { _duration.setDots(n);   }
+      void setDots(int n);
       Fraction ticks() const               { return _duration.ticks(); }
 
       Segment* segment() const            { return _segment;        }
@@ -103,13 +105,16 @@ class InputState {
       void setNoteEntryMethod(NoteEntryMethod m)            { _noteEntryMethod = m; }
       bool usingNoteEntryMethod(NoteEntryMethod m) const    { return m == noteEntryMethod(); }
 
+      AccidentalType accidentalType() const                 { return _accidentalType; }
+      void setAccidentalType(AccidentalType val)            { _accidentalType = val;  }
+
       Slur* slur() const                  { return _slur; }
       void setSlur(Slur* s)               { _slur = s; }
 
       bool insertMode() const             { return _insertMode; }
       void setInsertMode(bool val)        { _insertMode = val; }
 
-      void update(Element* e);
+      void update(Selection& selection);
       void moveInputPos(Element* e);
       void moveToNextInputPos();
       bool endOfScore() const;

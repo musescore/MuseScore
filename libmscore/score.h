@@ -461,7 +461,7 @@ class Score : public QObject, public ScoreElement {
       ChordRest* nextTrack(ChordRest* cr);
       ChordRest* prevTrack(ChordRest* cr);
 
-      void padToggle(Pad n);
+      void padToggle(Pad n, const EditData& ed);
       void addTempo();
       void addMetronome();
 
@@ -523,8 +523,8 @@ class Score : public QObject, public ScoreElement {
       void cmdPitchDown();
       void cmdPitchUpOctave();
       void cmdPitchDownOctave();
-      void cmdPadNoteIncreaseTAB();
-      void cmdPadNoteDecreaseTAB();
+      void cmdPadNoteIncreaseTAB(const EditData& ed);
+      void cmdPadNoteDecreaseTAB(const EditData& ed);
       void cmdToggleMmrest();
       void cmdToggleHideEmpty();
       void cmdSetVisible();
@@ -643,7 +643,7 @@ class Score : public QObject, public ScoreElement {
 
       Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
-      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = Direction::AUTO, bool rhythmic = false);
+      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = Direction::AUTO, bool forceAccidental = false, bool rhythmic = false);
       void changeCRlen(ChordRest* cr, const TDuration&);
       void changeCRlen(ChordRest* cr, const Fraction&, bool fillWithRest=true);
       void createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& tick);
@@ -666,6 +666,7 @@ class Score : public QObject, public ScoreElement {
       // undo/redo ops
       void addArticulation(SymId);
       bool addArticulation(Element*, Articulation* atr);
+      void toggleAccidental(AccidentalType, const EditData& ed);
       void changeAccidental(AccidentalType);
       void changeAccidental(Note* oNote, Ms::AccidentalType);
 
@@ -676,7 +677,7 @@ class Score : public QObject, public ScoreElement {
       void addPitch(int pitch, bool addFlag, bool insert);
       Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
       Note* addMidiPitch(int pitch, bool addFlag);
-      Note* addNote(Chord*, NoteVal& noteVal);
+      Note* addNote(Chord*, NoteVal& noteVal, bool forceAccidental = false);
 
       NoteVal noteValForPosition(Position pos, bool &error);
 
