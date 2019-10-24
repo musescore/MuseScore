@@ -2580,6 +2580,7 @@ void ScoreView::startNoteEntry()
             // no selection
             // choose page in current view (favor top left quadrant if possible)
             // select first (top/left) chordrest of that page in current view
+            // or, CR at last selected position if that is in view
             Page* p = nullptr;
             QList<QPointF> points;
             points.append(toLogical(QPoint(width() * 0.25, height() * 0.25)));
@@ -2601,9 +2602,11 @@ void ScoreView::startNoteEntry()
                   QRectF intersect = viewRect & pageRect;
                   intersect.translate(-p->x(), -p->y());
                   QList<Element*> el = p->items(intersect);
+                  ChordRest* lastSelected = score()->selection().currentCR();
                   for (Element* e : el) {
                         // loop through visible elements
                         // looking for the CR in voice 1 with earliest tick and highest staff position
+                        // but stop we find the last selected CR
                         ElementType et = e->type();
                         if (et == ElementType::NOTE || et == ElementType::REST) {
                               if (e->voice())
@@ -2616,6 +2619,10 @@ void ScoreView::startNoteEntry()
                                     }
                               else {
                                     cr = static_cast<ChordRest*>(e);
+                                    }
+                              if (cr == lastSelected) {
+                                    topLeft = cr;
+                                    break;
                                     }
                               // compare ticks rather than x position
                               // to make sure we favor earlier rather than later systems
@@ -2659,9 +2666,7 @@ void ScoreView::startNoteEntry()
             // if no note/rest is selected, start with voice 0
             int track = is.track() == -1 ? 0 : (is.track() / VOICES) * VOICES;
             // try to find an appropriate measure to start in
-            while (el && el->type() != ElementType::MEASURE)
-                  el = el->parent();
-            Fraction tick = el ? static_cast<Measure*>(el)->tick() : Fraction(0,1);
+            Fraction tick = el ? el->tick() : Fraction(0,1);
             el = _score->searchNote(tick, track);
             if (!el)
                   el = _score->searchNote(Fraction(0,1), track);
