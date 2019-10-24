@@ -711,7 +711,7 @@ bool FiguredBassItem::setProperty(Pid propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
-      score()->setLayoutAll();
+      triggerLayoutAll();
       return true;
       }
 

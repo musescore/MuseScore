@@ -257,6 +257,13 @@ class CmdState {
       UpdateMode _updateMode { UpdateMode::DoNothing };
       Fraction _startTick {-1, 1};            // start tick for mode LayoutTick
       Fraction _endTick   {-1, 1};              // end tick for mode LayoutTick
+      int _startStaff = -1;
+      int _endStaff = -1;
+      const Element* _el = nullptr;
+      bool _oneElement = true;
+      bool _elIsMeasureBase = false;
+
+      bool _locked = false;
 
    public:
       LayoutFlags layoutFlags;
@@ -272,8 +279,16 @@ class CmdState {
       bool updateAll() const   { return int(_updateMode) >= int(UpdateMode::UpdateAll); }
       bool updateRange() const { return _updateMode == UpdateMode::Update; }
       void setTick(const Fraction& t);
+      void setStaff(int staff);
+      void setElement(const Element* e);
       Fraction startTick() const { return _startTick; }
       Fraction endTick() const   { return _endTick; }
+      int startStaff() const { return _startStaff; }
+      int endStaff() const { return _endStaff; }
+      const Element* element() const { return _oneElement ? _el : nullptr; }
+
+      void lock() { _locked = true; }
+      void unlock() { _locked = false; }
 #ifndef NDEBUG
       void dump();
 #endif
@@ -709,8 +724,9 @@ class Score : public QObject, public ScoreElement {
       void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);
 
       virtual inline void setUpdateAll();
-      virtual inline void setLayoutAll();
-      virtual inline void setLayout(const Fraction& f);
+      inline void setLayoutAll(int staff = -1, const Element* e = nullptr);
+      inline void setLayout(const Fraction& tick, int staff, const Element* e = nullptr);
+      inline void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const Element* e = nullptr);
       virtual inline CmdState& cmdState();
       virtual inline const CmdState& cmdState() const;
       virtual inline void addLayoutFlags(LayoutFlags);
@@ -1271,8 +1287,10 @@ class MasterScore : public Score {
       void addMovement(MasterScore* score);
 
       virtual void setUpdateAll() override;
-      virtual void setLayoutAll() override;
-      virtual void setLayout(const Fraction&) override;
+
+      void setLayoutAll(int staff = -1, const Element* e = nullptr);
+      void setLayout(const Fraction& tick, int staff, const Element* e = nullptr);
+      void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const Element* e = nullptr);
 
       virtual CmdState& cmdState() override                           { return _cmdState;                     }
       const CmdState& cmdState() const override                       { return _cmdState;                     }
@@ -1380,8 +1398,10 @@ inline QQueue<MidiInputEvent>* Score::midiInputQueue()          { return _master
 inline std::list<MidiInputEvent>* Score::activeMidiPitches()    { return _masterScore->activeMidiPitches(); }
 
 inline void Score::setUpdateAll()                      { _masterScore->setUpdateAll();          }
-inline void Score::setLayoutAll()                      { _masterScore->setLayoutAll();          }
-inline void Score::setLayout(const Fraction& f)        { _masterScore->setLayout(f);         }
+
+inline void Score::setLayoutAll(int staff, const Element* e) { _masterScore->setLayoutAll(staff, e); }
+inline void Score::setLayout(const Fraction& tick, int staff, const Element* e) { _masterScore->setLayout(tick, staff, e); }
+inline void Score::setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const Element* e) { _masterScore->setLayout(tick1, tick2, staff1, staff2, e); }
 
 inline CmdState& Score::cmdState()                     { return _masterScore->cmdState();        }
 inline const CmdState& Score::cmdState() const         { return _masterScore->cmdState();        }
