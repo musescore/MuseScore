@@ -2403,10 +2403,7 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      if (!_elements.empty()) {
-            score()->setLayout(_elements.front()->tick());
-            score()->setLayout(_elements.back()->tick());
-            }
+      triggerLayout();
       setGenerated(false);
       return true;
       }

@@ -613,12 +613,12 @@ void AddElement::endUndoRedo(bool isUndo) const
                   undoAddTuplet(toChordRest(element));
             }
       else if (element->isClef()) {
-            element->score()->setLayout(element->tick());
-            element->score()->setLayout(element->staff()->nextClefTick(element->tick()));
+            element->triggerLayout();
+            element->score()->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
             }
       else if (element->isKeySig()) {
-            element->score()->setLayout(element->tick());
-            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()));
+            element->triggerLayout();
+            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
             }
       }
 
@@ -744,9 +744,9 @@ void RemoveElement::undo(EditData*)
             undoAddTuplet(toChordRest(element));
             }
       else if (element->isClef())
-            element->score()->setLayout(element->staff()->nextClefTick(element->tick()));
+            element->score()->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
       else if (element->isKeySig())
-            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()));
+            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
       }
 
 //---------------------------------------------------------
@@ -767,9 +767,9 @@ void RemoveElement::redo(EditData*)
                   }
             }
       else if (element->isClef())
-            element->score()->setLayout(element->staff()->nextClefTick(element->tick()));
+            element->score()->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
       else if (element->isKeySig())
-            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()));
+            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
       }
 
 //---------------------------------------------------------
@@ -961,7 +961,7 @@ void ChangePitch::flip(EditData*)
       tpc1  = f_tpc1;
       tpc2  = f_tpc2;
 
-      note->score()->setLayout(note->tick());
+      note->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -1003,7 +1003,7 @@ void ChangeFretting::flip(EditData*)
       fret  = f_fret;
       tpc1  = f_tpc1;
       tpc2  = f_tpc2;
-      note->score()->setLayout(note->tick());
+      note->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -1143,8 +1143,8 @@ void ChangeKeySig::flip(EditData*)
       showCourtesy = curShowCourtesy;
       ks           = curKey;
       evtInStaff   = curEvtInStaff;
-      keysig->score()->setLayout(tick);
-      keysig->score()->setLayout(keysig->staff()->nextKeyTick(tick));
+      keysig->triggerLayout();
+      keysig->score()->setLayout(keysig->staff()->nextKeyTick(tick), keysig->staffIdx());
       }
 
 //---------------------------------------------------------
@@ -1414,7 +1414,7 @@ void ChangeStaff::flip(EditData*)
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure())
                   m->staffLines(staffIdx)->setVisible(!staff->invisible());
             }
-      staff->score()->setLayoutAll();
+      staff->triggerLayout();
       staff->masterScore()->rebuildMidiMapping();
       staff->score()->setPlaylistDirty();
       }
@@ -1431,8 +1431,7 @@ void ChangeStaffType::flip(EditData*)
 
       staffType = st;
 
-      Score* score = staff->score();
-      score->setLayoutAll();
+      staff->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -1954,7 +1953,7 @@ void ChangeInstrument::flip(EditData*)
       is->masterScore()->rebuildMidiMapping();
       is->masterScore()->updateChannel();
       is->score()->setInstrumentsChanged(true);
-      is->score()->setLayoutAll();
+      is->triggerLayoutAll();
 
       // remember original instrument
       instrument = oi;
@@ -1973,8 +1972,8 @@ void SwapCR::flip(EditData*)
       Element* cr = s1->element(track);
       s1->setElement(track, s2->element(track));
       s2->setElement(track, cr);
-      cr1->score()->setLayout(s1->tick());
-      cr1->score()->setLayout(s2->tick());
+      cr1->score()->setLayout(s1->tick(), cr1->staffIdx(), cr1);
+      cr1->score()->setLayout(s2->tick(), cr1->staffIdx(), cr1);
       }
 
 //---------------------------------------------------------
@@ -2003,7 +2002,7 @@ void ChangeClefType::flip(EditData*)
       clef->staff()->setClef(clef);
       Segment* segment = clef->segment();
       updateNoteLines(segment, clef->track());
-      clef->score()->setLayoutAll();      // TODO: reduce layout to clef range
+      clef->triggerLayoutAll();      // TODO: reduce layout to clef range
 
       concertClef     = ocl;
       transposingClef = otc;
@@ -2079,26 +2078,26 @@ void AddBracket::redo(EditData*)
       {
       staff->setBracketType(level, type);
       staff->setBracketSpan(level, span);
-      staff->score()->setLayoutAll();
+      staff->triggerLayout();
       }
 
 void AddBracket::undo(EditData*)
       {
       staff->setBracketType(level, BracketType::NO_BRACKET);
-      staff->score()->setLayoutAll();
+      staff->triggerLayout();
       }
 
 void RemoveBracket::redo(EditData*)
       {
       staff->setBracketType(level, BracketType::NO_BRACKET);
-      staff->score()->setLayoutAll();
+      staff->triggerLayout();
       }
 
 void RemoveBracket::undo(EditData*)
       {
       staff->setBracketType(level, type);
       staff->setBracketSpan(level, span);
-      staff->score()->setLayoutAll();
+      staff->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -2143,8 +2142,7 @@ void ChangeSpannerElements::flip(EditData*)
             }
       startElement = oldStartElement;
       endElement   = oldEndElement;
-      spanner->score()->setLayout(spanner->tick());
-      spanner->score()->setLayout(spanner->tick2());
+      spanner->triggerLayout();
       }
 
 //---------------------------------------------------------

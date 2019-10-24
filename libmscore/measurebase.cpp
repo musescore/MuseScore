@@ -143,7 +143,7 @@ void MeasureBase::add(Element* e)
                         setSectionBreak(true);
                         setNoBreak(false);
       //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
-                        score()->setLayoutAll();
+                        triggerLayoutAll();
                         break;
                   case LayoutBreak::NOBREAK:
                         setPageBreak(false);
@@ -153,8 +153,8 @@ void MeasureBase::add(Element* e)
                         break;
                   }
             if (next())
-                  score()->setLayout(next()->endTick());
-//            score()->setLayoutAll();     // TODO
+                  next()->triggerLayout();
+//            triggerLayoutAll();     // TODO
             }
       triggerLayout();
       _el.push_back(e);
@@ -179,7 +179,7 @@ void MeasureBase::remove(Element* el)
                   case LayoutBreak::SECTION:
                         setSectionBreak(false);
                         score()->setPause(endTick(), 0);
-                        score()->setLayoutAll();
+                        triggerLayoutAll();
                         break;
                   case LayoutBreak::NOBREAK:
                         setNoBreak(false);
@@ -302,6 +302,16 @@ void MeasureBase::layout()
       }
 
 //---------------------------------------------------------
+//   triggerLayout
+//---------------------------------------------------------
+
+void MeasureBase::triggerLayout() const
+      {
+      if (prev() || next()) // avoid triggering layout before getting added to a score
+            score()->setLayout(tick(), -1, this);
+      }
+
+//---------------------------------------------------------
 //   first
 //---------------------------------------------------------
 
@@ -368,7 +378,7 @@ bool MeasureBase::setProperty(Pid id, const QVariant& value)
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayoutAll();
       score()->setPlaylistDirty();
       return true;
       }

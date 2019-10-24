@@ -62,6 +62,20 @@ int Staff::idx() const
       }
 
 //---------------------------------------------------------
+//   triggerLayout
+//---------------------------------------------------------
+
+void Staff::triggerLayout()
+      {
+      score()->setLayoutAll(idx());
+      }
+
+void Staff::triggerLayout(const Fraction& tick)
+      {
+      score()->setLayout(tick, idx());
+      }
+
+//---------------------------------------------------------
 //   fillBrackets
 //    make sure index idx is valid
 //---------------------------------------------------------
@@ -990,17 +1004,17 @@ StaffType* Staff::staffType(const Fraction& tick)
 
 void Staff::staffTypeListChanged(const Fraction& tick)
       {
-      score()->setLayout(tick);
+      triggerLayout(tick);
       auto i = _staffTypeList.find(tick.ticks());
       if (i == _staffTypeList.end()) {
-            score()->setLayoutAll();
+            triggerLayout();
             }
       else {
             ++i;
             if (i != _staffTypeList.end())
-                  score()->setLayout(Fraction::fromTicks(i->first));
+                  triggerLayout(Fraction::fromTicks(i->first));
             else if (score()->lastMeasure())
-                  score()->setLayout(score()->lastMeasure()->endTick());
+                  triggerLayout(score()->lastMeasure()->endTick());
             }
       }
 
@@ -1361,7 +1375,7 @@ bool Staff::setProperty(Pid id, const QVariant& v)
                   qDebug("unhandled id <%s>", propertyName(id));
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayout();
       return true;
       }
 

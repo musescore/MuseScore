@@ -3094,7 +3094,7 @@ bool Measure::setProperty(Pid propertyId, const QVariant& value)
             default:
                   return MeasureBase::setProperty(propertyId, value);
             }
-      score()->setLayout(tick());
+      triggerLayout();
       return true;
       }
 
@@ -3488,8 +3488,8 @@ bool Measure::endBarLineVisible() const
 
 void Measure::triggerLayout() const
       {
-      score()->setLayout(tick());
-      score()->setLayout(endTick());
+      if (prev() || next()) // avoid triggering layout before getting added to a score
+            score()->setLayout(tick(), endTick(), 0, score()->nstaves() - 1, this);
       }
 
 //---------------------------------------------------------

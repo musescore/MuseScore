@@ -297,7 +297,7 @@ void Bracket::updateGrips(EditData& ed) const
 void Bracket::endEdit(EditData& ed)
       {
 //      endEditDrag(ed);
-      score()->setLayoutAll();
+      triggerLayoutAll();
       score()->update();
       ed.element = 0;         // score layout invalidates element
       }
