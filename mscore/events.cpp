@@ -1000,8 +1000,11 @@ void ScoreView::changeState(ViewState s)
       //
       switch (s) {
             case ViewState::NORMAL:
-                  if (state == ViewState::EDIT)
+                  if (state == ViewState::EDIT) {
+                        _blockShowEdit = true;  // otherwise may jump on clicking outside the text element being edited
                         endEdit();
+                        _blockShowEdit = false;
+                        }
                   setCursor(QCursor(Qt::ArrowCursor));
                   break;
             case ViewState::DRAG:
