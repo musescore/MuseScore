@@ -71,6 +71,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/spanner.h"
 #include "libmscore/staff.h"
+#include "libmscore/stafflines.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/sticking.h"
@@ -3240,7 +3241,7 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
             return;
 
       QPointF p(el->canvasPos());
-      QRectF r(imatrix.mapRect(geometry()));
+      QRectF r(canvasViewport());
       QRectF mRect(m->canvasBoundingRect());
       QRectF sysRect;
       if (staffIdx == -1)
@@ -4800,5 +4801,89 @@ bool ScoreView::fotoMode() const
                   return true;
             }
       return false;
+      }
+
+
+//---------------------------------------------------------
+//   needViewportMove
+//---------------------------------------------------------
+
+static bool needViewportMove(Score* cs, ScoreView* cv)
+      {
+      if (!cs || !cv)
+            return false;
+
+      const CmdState& state = cs->cmdState();
+
+      qDebug() << "asdf" << state.startTick() << state.endTick() << state.startStaff() << state.endStaff() << (state.element() ? state.element()->name() : "no_element");
+
+      if (state.startTick() < Fraction(0, 1))
+            return false;
+
+      const QRectF viewport = cv->canvasViewport(); // TODO: margins for intersection check?
+
+      const Element* editElement = state.element();
+      if (editElement && editElement->bbox().isValid())
+            return !viewport.intersects(editElement->canvasBoundingRect());
+
+      if (state.startTick().isZero() && state.endTick() == cs->endTick())
+            return false; // TODO: adjust staff perhaps?
+
+      // Is any part of the range visible?
+      Measure* mStart = cs->tick2measureMM(state.startTick());
+      Measure* mEnd = cs->tick2measureMM(state.endTick());
+      mEnd = mEnd ? mEnd->nextMeasureMM() : nullptr;
+
+      const int startStaff = state.startStaff() == -1 ? 0 : state.startStaff();
+      const int endStaff = state.endStaff() == -1 ? (cs->nstaves() - 1) : state.endStaff();
+
+      for (Measure* m = mStart; m && m != mEnd; m = m->nextMeasureMM()) {
+            for (int st = startStaff; st <= endStaff; ++st) {
+                  const StaffLines* l = m->staffLines(st);
+                  if (l) {
+                        const QRectF r = l->bbox().translated(l->canvasPos());
+//                         qDebug() << "viewport" << viewport << "lines" << l->canvasPos() << l->bbox() << p;
+                        if (viewport.intersects(r))
+                              return false;
+                        }
+                  }
+            }
+
+      // maybe viewport is at least near the desired position?
+      const QPointF p = viewport.center();
+      int staffIdx = 0;
+      const Measure* m = cs->pos2measure(p, &staffIdx, nullptr, nullptr, nullptr);
+      if (m && m->tick() >= state.startTick() && m->tick() <= state.endTick())
+            return false;
+
+      return true;
+      }
+
+//---------------------------------------------------------
+//   moveViewportToLastEdit
+//---------------------------------------------------------
+
+void ScoreView::moveViewportToLastEdit()
+      {
+      if (_blockShowEdit)
+            return;
+
+      Score* s = score();
+
+      if (!needViewportMove(s, this))
+            return;
+
+      const CmdState& state = s->cmdState();
+      const Element* editElement = state.element();
+      const MeasureBase* mb = nullptr;
+      if (editElement)
+            mb = editElement->findMeasureBase();
+      if (!mb)
+            mb = s->tick2measureMM(state.startTick());
+
+      const Element* viewportElement = (editElement && editElement->bbox().isValid() && !mb->isMeasure()) ? editElement : mb;
+
+      const int staff = state.startStaff(); // TODO: choose the closest staff to the current viewport?
+      adjustCanvasPosition(viewportElement, /* playback */ false, staff);
       }
 }

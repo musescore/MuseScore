@@ -4921,8 +4921,6 @@ void MuseScore::undoRedo(bool undo)
       cv->startUndoRedo(undo);
       updateInputState(cs);
       endCmd();
-      if (_inspector)
-            _inspector->update();
       if (pianorollEditor)
             pianorollEditor->update();
       }
@@ -5950,6 +5948,10 @@ void MuseScore::endCmd()
                   SelState ss = cs->selection().state();
                   selectionChanged(ss);
                   }
+
+            if (cv)
+                  cv->moveViewportToLastEdit();
+
             getAction("concert-pitch")->setChecked(cs->styleB(Sid::concertPitch));
 
             if (e == 0 && cs->noteEntryMode())
