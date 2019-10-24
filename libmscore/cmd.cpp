@@ -152,7 +152,7 @@ void Score::undoRedo(bool undo, EditData* ed)
             undoStack()->undo(ed);
       else
             undoStack()->redo(ed);
-      update();
+      update(false);
       masterScore()->setPlaylistDirty();  // TODO: flag all individual operations
       updateSelection();
       }
@@ -176,7 +176,7 @@ void Score::endCmd(bool rollback)
       if (rollback)
             undoStack()->current()->unwind();
 
-      update();
+      update(false);
 
       if (MScore::debugMode)
             qDebug("===endCmd() %d", undoStack()->current()->childCount());
@@ -210,7 +210,7 @@ void CmdState::dump()
 //    layout & update
 //---------------------------------------------------------
 
-void Score::update()
+void Score::update(bool resetCmdState)
       {
       bool updateAll = false;
       for (MasterScore* ms : *movements()) {
@@ -249,7 +249,8 @@ void Score::update()
                         emit s->playlistChanged();
                   masterScore()->setPlaylistClean();
                   }
-            cs.reset();
+            if (resetCmdState)
+                  cs.reset();
             }
       if (_selection.isRange())
             _selection.updateSelectedElements();
