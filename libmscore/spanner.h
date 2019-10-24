@@ -62,6 +62,7 @@ class SpannerSegment : public Element {
       virtual SpannerSegment* clone() const = 0;
 
       virtual qreal mag() const override;
+      virtual Fraction tick() const override;
 
       Spanner* spanner() const              { return _spanner;            }
       Spanner* setSpanner(Spanner* val)     { return _spanner = val;      }
