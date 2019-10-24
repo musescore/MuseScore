@@ -512,6 +512,8 @@ class Score : public QObject, public ScoreElement {
       void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd, const SelectionFilter& filter);
       ChordRest* deleteRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd, const SelectionFilter& filter);
 
+      void update(bool resetCmdState);
+
    protected:
       int _fileDivision; ///< division of current loading *.msc file
       LayoutMode _layoutMode { LayoutMode::PAGE };
@@ -700,7 +702,7 @@ class Score : public QObject, public ScoreElement {
 
       void startCmd();                          // start undoable command
       void endCmd(bool rollback = false);       // end undoable command
-      void update();
+      void update() { update(true); }
       void undoRedo(bool undo, EditData*);
 
       void cmdRemoveTimeSig(TimeSig*);
@@ -710,6 +712,7 @@ class Score : public QObject, public ScoreElement {
       virtual inline void setLayoutAll();
       virtual inline void setLayout(const Fraction& f);
       virtual inline CmdState& cmdState();
+      virtual inline const CmdState& cmdState() const;
       virtual inline void addLayoutFlags(LayoutFlags);
       virtual inline void setInstrumentsChanged(bool);
       void addRefresh(const QRectF&);
@@ -1272,6 +1275,7 @@ class MasterScore : public Score {
       virtual void setLayout(const Fraction&) override;
 
       virtual CmdState& cmdState() override                           { return _cmdState;                     }
+      const CmdState& cmdState() const override                       { return _cmdState;                     }
       virtual void addLayoutFlags(LayoutFlags val) override           { _cmdState.layoutFlags |= val;         }
       virtual void setInstrumentsChanged(bool val) override           { _cmdState._instrumentsChanged = val;  }
 
@@ -1380,6 +1384,7 @@ inline void Score::setLayoutAll()                      { _masterScore->setLayout
 inline void Score::setLayout(const Fraction& f)        { _masterScore->setLayout(f);         }
 
 inline CmdState& Score::cmdState()                     { return _masterScore->cmdState();        }
+inline const CmdState& Score::cmdState() const         { return _masterScore->cmdState();        }
 inline void Score::addLayoutFlags(LayoutFlags f)       { _masterScore->addLayoutFlags(f);        }
 inline void Score::setInstrumentsChanged(bool v)       { _masterScore->setInstrumentsChanged(v); }
 inline Movements* Score::movements()                   { return _masterScore->movements();       }
