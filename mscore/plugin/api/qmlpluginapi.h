@@ -168,6 +168,8 @@ class PluginAPI : public Ms::QmlPlugin {
        * - \p selectionChanged
        * - \p excerptsChanged
        * - \p instrumentsChanged
+       * - \p startLayoutTick
+       * - \p endLayoutTick
        *
        * If a plugin modifies score in this handler, then it should:
        * 1. enclose all modifications within Score::startCmd() / Score::endCmd()
