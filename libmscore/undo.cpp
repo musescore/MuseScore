@@ -401,52 +401,76 @@ void UndoStack::redo(EditData* ed)
 //   UndoMacro
 //---------------------------------------------------------
 
-Element* UndoMacro::selectedElement(const Selection& sel)
+void UndoMacro::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
       {
-      if (sel.isSingle()) {
-            Element* e = sel.element();
-            Q_ASSERT(e); // otherwise it shouldn't be "single" selection
-            if (e->isNote() || e->isChordRest() || (e->isTextBase() && !e->isInstrumentName()) || e->isFretDiagram())
-                  return e;
+      info.staffStart = info.staffEnd = -1;
+      info.elements.clear();
+
+      if (sel.isList()) {
+            for (Element* e : sel.elements()) {
+                  if (e->isNote() || e->isChordRest() || (e->isTextBase() && !e->isInstrumentName()) || e->isFretDiagram())
+                        info.elements.push_back(e);
+                  else {
+                        // don't remember selection we are unable to restore
+                        info.elements.clear();
+                        return;
+                        }
+                  }
             }
-      return nullptr;
+      else if (sel.isRange()) {
+            info.staffStart = sel.staffStart();
+            info.staffEnd = sel.staffEnd();
+            info.tickStart = sel.tickStart();
+            info.tickEnd = sel.tickEnd();
+            }
+      }
+
+void UndoMacro::applySelectionInfo(const SelectionInfo& info, Selection& sel)
+      {
+      if (!info.elements.empty()) {
+            for (Element* e : info.elements)
+                  sel.add(e);
+            }
+      else if (info.staffStart != -1) {
+            sel.setRangeTicks(info.tickStart, info.tickEnd, info.staffStart, info.staffEnd);
+            }
       }
 
 UndoMacro::UndoMacro(Score* s)
-   : undoInputState(s->inputState()),
-   undoSelectedElement(selectedElement(s->selection())), score(s)
+   : undoInputState(s->inputState()), score(s)
       {
+      fillSelectionInfo(undoSelectionInfo, s->selection());
       }
 
 void UndoMacro::undo(EditData* ed)
       {
       redoInputState = score->inputState();
-      redoSelectedElement = selectedElement(score->selection());
+      fillSelectionInfo(redoSelectionInfo, score->selection());
       score->deselectAll();
 
       // Undo for child commands.
       UndoCommand::undo(ed);
 
       score->setInputState(undoInputState);
-      if (undoSelectedElement) {
+      if (undoSelectionInfo.isValid()) {
             score->deselectAll();
-            score->selection().add(undoSelectedElement);
+            applySelectionInfo(undoSelectionInfo, score->selection());
             }
       }
 
 void UndoMacro::redo(EditData* ed)
       {
       undoInputState = score->inputState();
-      undoSelectedElement = selectedElement(score->selection());
+      fillSelectionInfo(undoSelectionInfo, score->selection());
       score->deselectAll();
 
       // Redo for child commands.
       UndoCommand::redo(ed);
 
       score->setInputState(redoInputState);
-      if (redoSelectedElement) {
+      if (redoSelectionInfo.isValid()) {
             score->deselectAll();
-            score->selection().add(redoSelectedElement);
+            applySelectionInfo(redoSelectionInfo, score->selection());
             }
       }
 
