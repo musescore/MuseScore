@@ -679,7 +679,7 @@ class Score : public QObject, public ScoreElement {
       Note* addMidiPitch(int pitch, bool addFlag);
       Note* addNote(Chord*, NoteVal& noteVal, bool forceAccidental = false);
 
-      NoteVal noteValForPosition(Position pos, bool &error);
+      NoteVal noteValForPosition(Position pos, AccidentalType at, bool &error);
 
       void deleteItem(Element*);
       void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure);

@@ -2908,7 +2908,7 @@ void Score::cmdSlashFill()
                         p.line = line;
                         p.fret = FRET_NONE;
                         _is.setRest(false);     // needed for tab
-                        nv = noteValForPosition(p, error);
+                        nv = noteValForPosition(p, AccidentalType::NONE, error);
                         }
                   if (error)
                         continue;
@@ -3526,10 +3526,14 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
                   ClefType clef = staff(pos.staffIdx)->clef(seg->tick());
                   pos.line      = relStep(step, clef);
                   bool error;
-                  NoteVal nval = noteValForPosition(pos, error);
+                  NoteVal nval = noteValForPosition(pos, _is.accidentalType(), error);
                   if (error)
                         return;
-                  bool forceAccidental = _is.accidentalType() != AccidentalType::NONE;
+                  bool forceAccidental = false;
+                  if (_is.accidentalType() != AccidentalType::NONE) {
+                        NoteVal nval2 = noteValForPosition(pos, AccidentalType::NONE, error);
+                        forceAccidental = (nval.pitch == nval2.pitch);
+                        }
                   addNote(chord, nval, forceAccidental);
                   _is.setAccidentalType(AccidentalType::NONE);
                   return;
