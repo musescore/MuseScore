@@ -77,6 +77,11 @@ qreal SpannerSegment::mag() const
       return staff() ? staff()->mag(spanner()->tick()) : 1.0;
       }
 
+Fraction SpannerSegment::tick() const
+      {
+      return _spanner ? _spanner->tick() : Fraction(0, 1);
+      }
+
 //---------------------------------------------------------
 //   setSystem
 //---------------------------------------------------------
