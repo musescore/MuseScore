@@ -2,4 +2,5 @@
 /*
 */
 IDI_ICON1   ICON  DISCARDABLE "mscore.ico"
-IDI_ICON2   ICON  DISCARDABLE "mscorefile.ico"
+IDI_ICON2   ICON  DISCARDABLE "msczfile.ico"
+IDI_ICON3   ICON  DISCARDABLE "mscxfile.ico"
