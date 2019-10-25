@@ -1802,23 +1802,6 @@ void InsertRemoveMeasures::removeMeasures()
       }
 
 //---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeImage::flip(EditData*)
-      {
-      bool _lockAspectRatio = image->lockAspectRatio();
-      bool _autoScale       = image->autoScale();
-      int  _z               = image->z();
-      image->setLockAspectRatio(lockAspectRatio);
-      image->setAutoScale(autoScale);
-      image->setZ(z);
-      lockAspectRatio = _lockAspectRatio;
-      autoScale       = _autoScale;
-      z               = _z;
-      }
-
-//---------------------------------------------------------
 //   AddExcerpt::undo
 //---------------------------------------------------------
 
@@ -2031,7 +2014,7 @@ void ChangeClefType::flip(EditData*)
 //---------------------------------------------------------
 //   flip
 //---------------------------------------------------------
-
+#if 0 // MoveStaff is commented out in mscore/instrwidget.cpp, not used anywhere else
 void MoveStaff::flip(EditData*)
       {
       Part* oldPart = staff->part();
@@ -2042,18 +2025,7 @@ void MoveStaff::flip(EditData*)
       rstaff = idx;
       staff->score()->setLayoutAll();
       }
-
-//---------------------------------------------------------
-//   ChangeStaffUserDist::flip
-//---------------------------------------------------------
-
-void ChangeStaffUserDist::flip(EditData*)
-      {
-      qreal v = staff->userDist();
-      staff->setUserDist(dist);
-      dist = v;
-      staff->score()->setLayoutAll();
-      }
+#endif
 
 //---------------------------------------------------------
 //   ChangeProperty::flip
@@ -2092,32 +2064,6 @@ void ChangeMetaText::flip(EditData*)
       QString s = score->metaTag(id);
       score->setMetaTag(id, text);
       text = s;
-      }
-
-//---------------------------------------------------------
-//   ChangeEventList
-//---------------------------------------------------------
-
-ChangeEventList::ChangeEventList(Chord* c, const QList<NoteEventList> l)
-   : chord(c), events(l)
-      {
-      eventListType = PlayEventType::User;
-      }
-
-//---------------------------------------------------------
-//   ChangeEventList::flip
-//---------------------------------------------------------
-
-void ChangeEventList::flip(EditData*)
-      {
-      size_t n = chord->notes().size();
-      for (size_t i = 0; i < n; ++i) {
-            Note* note = chord->notes()[i];
-            note->playEvents().swap(events[int(i)]);
-            }
-      PlayEventType t = chord->playEventType();
-      chord->setPlayEventType(eventListType);
-      eventListType = t;
       }
 
 //---------------------------------------------------------
@@ -2371,16 +2317,6 @@ void ChangeDrumset::flip(EditData*)
       Drumset d = *instrument->drumset();
       instrument->setDrumset(&drumset);
       drumset = d;
-      }
-
-//---------------------------------------------------------
-//   ChangeGap
-//---------------------------------------------------------
-
-void ChangeGap::flip(EditData*)
-      {
-      rest->setGap(v);
-      v = !v;
       }
 
 //---------------------------------------------------------
