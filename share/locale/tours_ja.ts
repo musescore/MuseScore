@@ -110,15 +110,6 @@
 詳細は &quot; 次へ &quot; をクリックしてください。</translation>
     </message>
     <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation>キーボードのPgUp、PgDn、Home、Endなどのナビゲーションキーは、他のアプリケーションと同じように機能します。
-ページ間の移動などで使えます。
-キーボードの種類によってはFnキーを押しながら上/下/左/右キーを押すことで同様の機能を持つものがあります。</translation>
-    </message>
-    <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
         <translation>拡張ナビゲーションツールとして、表示メニューの中にタイムラインとナビゲータというものもあります。</translation>
@@ -216,39 +207,6 @@
 詳細は &quot; 次へ &quot; をクリックしてください。</translation>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation>単一選択をするには、選択したい要素をクリックします。
-選択されていることを示すために強調表示されます。
-左右の方向キーを使うと選択状態を次や前の音符と休符に移動できます。
- 備考：方向キーと一緒にAltキー（MacではOption）を押すと、他の要素も移動できます。
-このモードでは上下にある音符であっても順番に選択状態が移動します。</translation>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation>範囲選択では、ある地点から別の地点までの（譜表をまたぐ場合であっても）すべてが含まれます。
-選択範囲は青い長方形で囲まれて示されます。
-範囲を選択するには、選択する最初の音符、休符、または小節をクリックし、Shiftキーを押しながら最後をクリックします。
- Shiftキーを押しながら方向キーを動かして範囲選択を拡張することもできます。</translation>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation>選択するもう1つの方法は、Shiftキーを押しながらドラッグします。
-選択範囲に音符が含まれている場合は、自動的に範囲選択として作動します。
-それ以外の場合は、リスト選択として作動します。</translation>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>最後に、選択フィルタ（&quot; 表示 &quot;メニューにある）を使用すると、範囲選択から特定の種類の要素を除外できます。</translation>
@@ -265,6 +223,13 @@
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
         <comment>navigate-tour</comment>
         <translation>一番手早い上下スクロールの方法は、マウス・ホイールやそれと同等の例えば2本指スワイプなどタッチ・ジェスチャーです。左右スクロールには、&quot;Shift&quot;キーを押しながらマウス・ホイールやタッチ・ジェスチャーを使います。</translation>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
+        <comment>navigate-tour</comment>
+        <translation>キーボードのPgUp、PgDn、Home、Endなどのナビゲーションキーは、他のアプリケーションと同じように機能します。ページ間の移動などで使えます。キーボードの種類によってはFnキーを押しながら上/下/左/右キーを押すことで同様の機能を持つものがあります。</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
@@ -298,6 +263,15 @@
         <translation>3連符など連符を作るには、その連符全体の長さを選択してから、&quot;Ctrl+（連符の）数字&quot; キーを押すか、メニューの 追加 &gt; 連符 を利用します。</translation>
     </message>
     <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation>単一の選択をするには、選択したい要素をクリックします。強調表示され選択されていることを示します。左右の方向キーを使って選択範囲を次や前の音符・休符に移動できます。 備考：方向キーと一緒にAltキー（MacではOption）を押すと他の要素にも移動でき、上下の譜表にも移動できます。</translation>
+    </message>
+    <message>
         <source>A list selection is a combination of single selections.
     Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
@@ -309,21 +283,30 @@
 表示されるポップアップ・メニューの &quot;選択&quot; オプションの中で選んでゆきます。</translation>
     </message>
     <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation>範囲の選択では、あるところから別のところまで、譜表をまたぐ場合であっても、全てが含まれます。選択範囲は青い長方形で囲まれて示されます。範囲を選択するには、選択する最初の音符、休符、または小節をクリックし、Shiftキーを押しながら最後をクリックします。 Shiftキーを押しながら方向キーを動かして範囲選択を拡張することもできます。</translation>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation>もう1つの選択方法は、Shiftキーを押しながらのドラッグです。選択範囲に音符が含まれている場合は自動的に範囲選択となり、それ以外の場合は、リスト選択なります。</translation>
+    </message>
+    <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation>線パレットの大部分の要素は開始エレメントから終了エレメントまでの範囲に渡ります。
-
-範囲を編集するには，線をダブルクリックし (すると自動的に終了部分のハンドルを選択します）、そして:
-
-- ハンドルを前に移動するには Shift-Right を押します。
-
-- ハンドルを後ろに移動するには Shift-Left を押します。</translation>
+        <translation>線パレットの要素の大部分は、開始する要素から終了する要素までの範囲に渡ります。範囲を編集するには，線をダブルクリックし (すると自動的に終了のハンドルを選択します）、そして:- ハンドルを先に移動するには Shift+右方向キー を押します。- ハンドルを後に移動するには Shift+左方向キー を押します。</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
