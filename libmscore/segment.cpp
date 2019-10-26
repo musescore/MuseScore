@@ -716,7 +716,7 @@ void Segment::remove(Element* el)
                   qFatal("Segment::remove() unknown %s", el->name());
 
             }
-      score()->setLayout(tick());
+      triggerLayout();
       checkEmpty();
       }
 
@@ -821,7 +821,7 @@ void Segment::swapElements(int i1, int i2)
             _elist[i1]->setTrack(i1);
       if (_elist[i2])
             _elist[i2]->setTrack(i2);
-      score()->setLayout(tick());
+      triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -910,7 +910,7 @@ bool Segment::setProperty(Pid propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
-      score()->setLayout(tick());
+      triggerLayout();
       return true;
       }
 

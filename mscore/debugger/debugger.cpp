@@ -203,7 +203,7 @@ void Debugger::layout()
       {
       if (!curElement)
             return;
-      curElement->score()->setLayoutAll();
+      curElement->triggerLayoutAll();
       curElement->score()->update();
       mscore->endCmd();
       }
@@ -1108,7 +1108,7 @@ void ChordDebug::upChanged(bool val)
 void ChordDebug::beamModeChanged(int n)
       {
       ((Chord*)element())->setBeamMode(Beam::Mode(n));
-      element()->score()->setLayoutAll();
+      element()->triggerLayoutAll();
       }
 
 //---------------------------------------------------------

@@ -143,6 +143,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       // it is inactive. Set this flag to true to change this behaviour.
       bool _moveWhenInactive = false;
 
+      bool _blockShowEdit = false;
+
       virtual void paintEvent(QPaintEvent*);
       void paint(const QRect&, QPainter&);
 
@@ -360,6 +362,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       QRectF toLogical(const QRectF& r) const    { return imatrix.mapRect(r); }
       QRect toPhysical(const QRectF& r) const    { return _matrix.mapRect(r).toRect(); }
 
+      QRectF canvasViewport() const { return toLogical(geometry()); }
+
       bool searchMeasure(int i);
       bool searchPage(int i);
       bool searchRehearsalMark(const QString& s);
@@ -397,6 +401,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void setCursor(const QCursor& c) { QWidget::setCursor(c); }
       virtual QCursor cursor() const { return QWidget::cursor(); }
       void loopUpdate(bool val)   {  loopToggled(val); }
+
+      void moveViewportToLastEdit();
 
       void updateShadowNotes();
 

@@ -263,6 +263,9 @@ class Staff final : public ScoreElement {
       void dumpKeys(const char*) const {}
       void dumpTimeSigs(const char*) const {}
 #endif
+
+      void triggerLayout();
+      void triggerLayout(const Fraction& tick);
       };
 
 }     // namespace Ms

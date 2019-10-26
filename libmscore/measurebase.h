@@ -127,6 +127,8 @@ class MeasureBase : public Element {
 
       Fraction endTick() const             { return _tick + _len; }
 
+      void triggerLayout() const override;
+
       qreal pause() const;
 
       virtual QVariant getProperty(Pid) const override;

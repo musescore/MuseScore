@@ -87,6 +87,13 @@ void CmdState::reset()
       _updateMode         = UpdateMode::DoNothing;
       _startTick          = Fraction(-1,1);
       _endTick            = Fraction(-1,1);
+
+      _startStaff = -1;
+      _endStaff = -1;
+      _el = nullptr;
+      _oneElement = true;
+      _elIsMeasureBase = false;
+      _locked = false;
       }
 
 //---------------------------------------------------------
@@ -95,11 +102,54 @@ void CmdState::reset()
 
 void CmdState::setTick(const Fraction& t)
       {
+      if (_locked)
+            return;
+
       if (_startTick == Fraction(-1,1) || t < _startTick)
             _startTick = t;
       if (_endTick == Fraction(-1,1) || t > _endTick)
             _endTick = t;
       setUpdateMode(UpdateMode::Layout);
+      }
+
+//---------------------------------------------------------
+//   setStaff
+//---------------------------------------------------------
+
+void CmdState::setStaff(int st)
+      {
+      if (_locked || st == -1)
+            return;
+
+      if (_startStaff == -1 || st < _startStaff)
+            _startStaff = st;
+      if (_endStaff == -1 || st > _endStaff)
+            _endStaff = st;
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void CmdState::setElement(const Element* e)
+      {
+      if (!e || _el == e || _locked)
+            return;
+
+      // prefer measures and frames as edit targets
+      const bool oldIsMeasureBase = _elIsMeasureBase;
+      const bool newIsMeasureBase = e->isMeasureBase();
+      if (newIsMeasureBase && !oldIsMeasureBase) {
+            _oneElement = true;
+            return;
+            }
+      else if (oldIsMeasureBase && !newIsMeasureBase)
+            return; // don't remember the new element
+      else
+            _oneElement = !_el;
+
+      _el = e;
+      _elIsMeasureBase = newIsMeasureBase;
       }
 
 //---------------------------------------------------------
@@ -152,7 +202,7 @@ void Score::undoRedo(bool undo, EditData* ed)
             undoStack()->undo(ed);
       else
             undoStack()->redo(ed);
-      update();
+      update(false);
       masterScore()->setPlaylistDirty();  // TODO: flag all individual operations
       updateSelection();
       }
@@ -176,7 +226,7 @@ void Score::endCmd(bool rollback)
       if (rollback)
             undoStack()->current()->unwind();
 
-      update();
+      update(false);
 
       if (MScore::debugMode)
             qDebug("===endCmd() %d", undoStack()->current()->childCount());
@@ -210,16 +260,18 @@ void CmdState::dump()
 //    layout & update
 //---------------------------------------------------------
 
-void Score::update()
+void Score::update(bool resetCmdState)
       {
       bool updateAll = false;
       for (MasterScore* ms : *movements()) {
             CmdState& cs = ms->cmdState();
             ms->deletePostponed();
             if (cs.layoutRange()) {
+                  cs.lock();
                   for (Score* s : ms->scoreList())
                         s->doLayoutRange(cs.startTick(), cs.endTick());
                   updateAll = true;
+                  cs.unlock();
                   }
             }
 
@@ -249,7 +301,8 @@ void Score::update()
                         emit s->playlistChanged();
                   masterScore()->setPlaylistClean();
                   }
-            cs.reset();
+            if (resetCmdState)
+                  cs.reset();
             }
       if (_selection.isRange())
             _selection.updateSelectedElements();

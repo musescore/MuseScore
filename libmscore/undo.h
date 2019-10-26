@@ -121,13 +121,25 @@ class UndoCommand {
 //---------------------------------------------------------
 
 class UndoMacro : public UndoCommand {
+      struct SelectionInfo {
+            std::vector<Element*> elements;
+            Fraction tickStart;
+            Fraction tickEnd;
+            int staffStart = -1;
+            int staffEnd = -1;
+
+            bool isValid() const { return !elements.empty() || staffStart != -1; }
+            };
+
       InputState undoInputState;
       InputState redoInputState;
-      Element* undoSelectedElement = nullptr;
-      Element* redoSelectedElement = nullptr;
+      SelectionInfo undoSelectionInfo;
+      SelectionInfo redoSelectionInfo;
+
       Score* score;
 
-      static Element* selectedElement(const Selection&);
+      static void fillSelectionInfo(SelectionInfo&, const Selection&);
+      static void applySelectionInfo(const SelectionInfo&, Selection&);
 
    public:
       UndoMacro(Score* s);
