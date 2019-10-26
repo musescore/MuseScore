@@ -33,9 +33,9 @@ namespace Ms {
 
 ///
 /// \brief Function to synthesize audio and output it into a generic QIODevice
-/// \param The score to output
-/// \param The output device
-/// \param An optional callback function that will be notified with the progress in range [0, 1]
+/// \param score The score to output
+/// \param device The output device
+/// \param updateProgress An optional callback function that will be notified with the progress in range [0, 1]
 /// \return True on success, false otherwise.
 ///
 /// If the callback function is non zero an returns false the export will be canceled.
@@ -53,9 +53,15 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
     }
 
     EventMap events;
-    score->renderMidi(&events, synthesizerState());
-    if(events.size() == 0)
-          return false;
+    // In non-GUI mode current synthesizer settings won't
+    // allow single note dynamics. See issue #289947.
+    const bool useCurrentSynthesizerState = !MScore::noGui;
+
+    if (useCurrentSynthesizerState) {
+          score->renderMidi(&events, synthesizerState());
+          if (events.empty())
+                return false;
+          }
 
     MasterSynthesizer* synth = synthesizerFactory();
     synth->init();
@@ -70,6 +76,16 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
           bool r = synth->setState(mscore->synthesizerState());
           if (!r)
                 synth->init();
+          }
+
+    if (!useCurrentSynthesizerState) {
+          score->masterScore()->rebuildAndUpdateExpressive(synth->synthesizer("Fluid"));
+          score->renderMidi(&events, score->synthesizerState());
+          if (synti)
+                score->masterScore()->rebuildAndUpdateExpressive(synti->synthesizer("Fluid"));
+
+          if (events.empty())
+                return false;
           }
 
     int oldSampleRate  = MScore::sampleRate;
