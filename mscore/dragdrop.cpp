@@ -371,6 +371,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   break;
             case ElementType::IMAGE:
             case ElementType::SYMBOL:
+            case ElementType::FSYMBOL:
             case ElementType::DYNAMIC:
             case ElementType::KEYSIG:
             case ElementType::CLEF:
@@ -465,6 +466,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                         }
                         break;
                   case ElementType::SYMBOL:
+                  case ElementType::FSYMBOL:
                   case ElementType::IMAGE:
                         applyUserOffset = true;
                         // fall-thru
