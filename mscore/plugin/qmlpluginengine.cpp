@@ -61,9 +61,8 @@ void QmlPluginEngine::beginEndCmd(MuseScore* ms)
       endCmdInfo["excerptsChanged"] = !cs || cs->masterScore()->excerptsChanged();
       endCmdInfo["instrumentsChanged"] = !cs || cs->masterScore()->instrumentsChanged();
 
-      // TODO: gather the information on which part of a score has changed?
-//       endCmdInfo["startLayoutTick"] = cs ? cs->cmdState().startTick().ticks() : -1;
-//       endCmdInfo["endLayoutTick"] = cs ? cs->cmdState().endTick().ticks() : -1;
+      endCmdInfo["startLayoutTick"] = cs ? cs->cmdState().startTick().ticks() : -1;
+      endCmdInfo["endLayoutTick"] = cs ? cs->cmdState().endTick().ticks() : -1;
 #endif
       }
 

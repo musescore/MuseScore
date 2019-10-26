@@ -282,7 +282,7 @@ void MeasureProperties::apply()
             }
 
       if (propertiesChanged) {
-            score->setLayout(m->tick());
+            m->triggerLayout();
             }
 
       score->select(m, SelectType::SINGLE, 0);

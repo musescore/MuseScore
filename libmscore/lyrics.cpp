@@ -486,7 +486,7 @@ Element* Lyrics::drop(EditData& data)
 void Lyrics::endEdit(EditData& ed)
       {
       TextBase::endEdit(ed);
-      score()->setLayoutAll();
+      triggerLayoutAll();
       }
 
 //---------------------------------------------------------

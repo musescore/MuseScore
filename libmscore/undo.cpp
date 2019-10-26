@@ -401,52 +401,76 @@ void UndoStack::redo(EditData* ed)
 //   UndoMacro
 //---------------------------------------------------------
 
-Element* UndoMacro::selectedElement(const Selection& sel)
+void UndoMacro::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
       {
-      if (sel.isSingle()) {
-            Element* e = sel.element();
-            Q_ASSERT(e); // otherwise it shouldn't be "single" selection
-            if (e->isNote() || e->isChordRest() || (e->isTextBase() && !e->isInstrumentName()) || e->isFretDiagram())
-                  return e;
+      info.staffStart = info.staffEnd = -1;
+      info.elements.clear();
+
+      if (sel.isList()) {
+            for (Element* e : sel.elements()) {
+                  if (e->isNote() || e->isChordRest() || (e->isTextBase() && !e->isInstrumentName()) || e->isFretDiagram())
+                        info.elements.push_back(e);
+                  else {
+                        // don't remember selection we are unable to restore
+                        info.elements.clear();
+                        return;
+                        }
+                  }
             }
-      return nullptr;
+      else if (sel.isRange()) {
+            info.staffStart = sel.staffStart();
+            info.staffEnd = sel.staffEnd();
+            info.tickStart = sel.tickStart();
+            info.tickEnd = sel.tickEnd();
+            }
+      }
+
+void UndoMacro::applySelectionInfo(const SelectionInfo& info, Selection& sel)
+      {
+      if (!info.elements.empty()) {
+            for (Element* e : info.elements)
+                  sel.add(e);
+            }
+      else if (info.staffStart != -1) {
+            sel.setRangeTicks(info.tickStart, info.tickEnd, info.staffStart, info.staffEnd);
+            }
       }
 
 UndoMacro::UndoMacro(Score* s)
-   : undoInputState(s->inputState()),
-   undoSelectedElement(selectedElement(s->selection())), score(s)
+   : undoInputState(s->inputState()), score(s)
       {
+      fillSelectionInfo(undoSelectionInfo, s->selection());
       }
 
 void UndoMacro::undo(EditData* ed)
       {
       redoInputState = score->inputState();
-      redoSelectedElement = selectedElement(score->selection());
+      fillSelectionInfo(redoSelectionInfo, score->selection());
       score->deselectAll();
 
       // Undo for child commands.
       UndoCommand::undo(ed);
 
       score->setInputState(undoInputState);
-      if (undoSelectedElement) {
+      if (undoSelectionInfo.isValid()) {
             score->deselectAll();
-            score->selection().add(undoSelectedElement);
+            applySelectionInfo(undoSelectionInfo, score->selection());
             }
       }
 
 void UndoMacro::redo(EditData* ed)
       {
       undoInputState = score->inputState();
-      undoSelectedElement = selectedElement(score->selection());
+      fillSelectionInfo(undoSelectionInfo, score->selection());
       score->deselectAll();
 
       // Redo for child commands.
       UndoCommand::redo(ed);
 
       score->setInputState(redoInputState);
-      if (redoSelectedElement) {
+      if (redoSelectionInfo.isValid()) {
             score->deselectAll();
-            score->selection().add(redoSelectedElement);
+            applySelectionInfo(redoSelectionInfo, score->selection());
             }
       }
 
@@ -613,12 +637,12 @@ void AddElement::endUndoRedo(bool isUndo) const
                   undoAddTuplet(toChordRest(element));
             }
       else if (element->isClef()) {
-            element->score()->setLayout(element->tick());
-            element->score()->setLayout(element->staff()->nextClefTick(element->tick()));
+            element->triggerLayout();
+            element->score()->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
             }
       else if (element->isKeySig()) {
-            element->score()->setLayout(element->tick());
-            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()));
+            element->triggerLayout();
+            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
             }
       }
 
@@ -744,9 +768,9 @@ void RemoveElement::undo(EditData*)
             undoAddTuplet(toChordRest(element));
             }
       else if (element->isClef())
-            element->score()->setLayout(element->staff()->nextClefTick(element->tick()));
+            element->score()->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
       else if (element->isKeySig())
-            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()));
+            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
       }
 
 //---------------------------------------------------------
@@ -767,9 +791,9 @@ void RemoveElement::redo(EditData*)
                   }
             }
       else if (element->isClef())
-            element->score()->setLayout(element->staff()->nextClefTick(element->tick()));
+            element->score()->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
       else if (element->isKeySig())
-            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()));
+            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
       }
 
 //---------------------------------------------------------
@@ -961,7 +985,7 @@ void ChangePitch::flip(EditData*)
       tpc1  = f_tpc1;
       tpc2  = f_tpc2;
 
-      note->score()->setLayout(note->tick());
+      note->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -1003,7 +1027,7 @@ void ChangeFretting::flip(EditData*)
       fret  = f_fret;
       tpc1  = f_tpc1;
       tpc2  = f_tpc2;
-      note->score()->setLayout(note->tick());
+      note->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -1143,8 +1167,8 @@ void ChangeKeySig::flip(EditData*)
       showCourtesy = curShowCourtesy;
       ks           = curKey;
       evtInStaff   = curEvtInStaff;
-      keysig->score()->setLayout(tick);
-      keysig->score()->setLayout(keysig->staff()->nextKeyTick(tick));
+      keysig->triggerLayout();
+      keysig->score()->setLayout(keysig->staff()->nextKeyTick(tick), keysig->staffIdx());
       }
 
 //---------------------------------------------------------
@@ -1414,7 +1438,7 @@ void ChangeStaff::flip(EditData*)
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure())
                   m->staffLines(staffIdx)->setVisible(!staff->invisible());
             }
-      staff->score()->setLayoutAll();
+      staff->triggerLayout();
       staff->masterScore()->rebuildMidiMapping();
       staff->score()->setPlaylistDirty();
       }
@@ -1431,8 +1455,7 @@ void ChangeStaffType::flip(EditData*)
 
       staffType = st;
 
-      Score* score = staff->score();
-      score->setLayoutAll();
+      staff->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -1954,7 +1977,7 @@ void ChangeInstrument::flip(EditData*)
       is->masterScore()->rebuildMidiMapping();
       is->masterScore()->updateChannel();
       is->score()->setInstrumentsChanged(true);
-      is->score()->setLayoutAll();
+      is->triggerLayoutAll();
 
       // remember original instrument
       instrument = oi;
@@ -1973,8 +1996,8 @@ void SwapCR::flip(EditData*)
       Element* cr = s1->element(track);
       s1->setElement(track, s2->element(track));
       s2->setElement(track, cr);
-      cr1->score()->setLayout(s1->tick());
-      cr1->score()->setLayout(s2->tick());
+      cr1->score()->setLayout(s1->tick(), cr1->staffIdx(), cr1);
+      cr1->score()->setLayout(s2->tick(), cr1->staffIdx(), cr1);
       }
 
 //---------------------------------------------------------
@@ -2003,7 +2026,7 @@ void ChangeClefType::flip(EditData*)
       clef->staff()->setClef(clef);
       Segment* segment = clef->segment();
       updateNoteLines(segment, clef->track());
-      clef->score()->setLayoutAll();      // TODO: reduce layout to clef range
+      clef->triggerLayoutAll();      // TODO: reduce layout to clef range
 
       concertClef     = ocl;
       transposingClef = otc;
@@ -2079,26 +2102,26 @@ void AddBracket::redo(EditData*)
       {
       staff->setBracketType(level, type);
       staff->setBracketSpan(level, span);
-      staff->score()->setLayoutAll();
+      staff->triggerLayout();
       }
 
 void AddBracket::undo(EditData*)
       {
       staff->setBracketType(level, BracketType::NO_BRACKET);
-      staff->score()->setLayoutAll();
+      staff->triggerLayout();
       }
 
 void RemoveBracket::redo(EditData*)
       {
       staff->setBracketType(level, BracketType::NO_BRACKET);
-      staff->score()->setLayoutAll();
+      staff->triggerLayout();
       }
 
 void RemoveBracket::undo(EditData*)
       {
       staff->setBracketType(level, type);
       staff->setBracketSpan(level, span);
-      staff->score()->setLayoutAll();
+      staff->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -2143,8 +2166,7 @@ void ChangeSpannerElements::flip(EditData*)
             }
       startElement = oldStartElement;
       endElement   = oldEndElement;
-      spanner->score()->setLayout(spanner->tick());
-      spanner->score()->setLayout(spanner->tick2());
+      spanner->triggerLayout();
       }
 
 //---------------------------------------------------------

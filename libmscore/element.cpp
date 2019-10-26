@@ -1809,7 +1809,17 @@ bool Element::isUserModified() const
 void Element::triggerLayout() const
       {
       if (parent())
-            score()->setLayout(tick());
+            score()->setLayout(tick(), staffIdx(), this);
+      }
+
+//---------------------------------------------------------
+//   triggerLayoutAll
+//---------------------------------------------------------
+
+void Element::triggerLayoutAll() const
+      {
+      if (parent())
+            score()->setLayoutAll(staffIdx(), this);
       }
 
 //---------------------------------------------------------

@@ -491,7 +491,7 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll();      // TODO
+      triggerLayoutAll();      // TODO
       setGenerated(false);
       return true;
       }

@@ -237,7 +237,7 @@ bool SlurTieSegment::setProperty(Pid propertyId, const QVariant& v)
             default:
                   return SpannerSegment::setProperty(propertyId, v);
             }
-      score()->setLayoutAll();
+      triggerLayoutAll();
       return true;
       }
 
@@ -511,7 +511,7 @@ bool SlurTie::setProperty(Pid propertyId, const QVariant& v)
             default:
                   return Spanner::setProperty(propertyId, v);
             }
-      score()->setLayoutAll();
+      triggerLayoutAll();
       return true;
       }
 
