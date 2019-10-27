@@ -4532,16 +4532,16 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                   if (track == wtrack) {
                         switch (e->type()) {
                               case ElementType::HAIRPIN:
-                                    exp->hairpin(static_cast<const Hairpin*>(e), sstaff, seg->tick());
+                                    exp->hairpin(toHairpin(e), sstaff, seg->tick());
                                     break;
                               case ElementType::OTTAVA:
-                                    exp->ottava(static_cast<const Ottava*>(e), sstaff, seg->tick());
+                                    exp->ottava(toOttava(e), sstaff, seg->tick());
                                     break;
                               case ElementType::PEDAL:
-                                    exp->pedal(static_cast<const Pedal*>(e), sstaff, seg->tick());
+                                    exp->pedal(toPedal(e), sstaff, seg->tick());
                                     break;
                               case ElementType::TEXTLINE:
-                                    exp->textLine(static_cast<const TextLine*>(e), sstaff, seg->tick());
+                                    exp->textLine(toTextLine(e), sstaff, seg->tick());
                                     break;
                               case ElementType::TRILL:
                                     // ignore (written as <note><notations><ornaments><wavy-line>)
@@ -4568,28 +4568,28 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
 // note that more than one voice may contains notes ending at tick2,
 // remember which spanners have already been stopped (the "stopped" set)
 
-static void spannerStop(ExportMusicXml* exp, int strack, const Fraction& tick2, int sstaff, QSet<const Spanner*>& stopped)
+static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fraction& tick2, int sstaff, QSet<const Spanner*>& stopped)
       {
       for (auto it : exp->score()->spanner()) {
             Spanner* e = it.second;
 
-            if (e->tick2() != tick2 || e->track() != strack)
+            if (e->tick2() != tick2 || e->track() < strack || e->track() >= etrack)
                   continue;
 
             if (!stopped.contains(e)) {
                   stopped.insert(e);
                   switch (e->type()) {
                         case ElementType::HAIRPIN:
-                              exp->hairpin(static_cast<const Hairpin*>(e), sstaff, Fraction(-1,1));
+                              exp->hairpin(toHairpin(e), sstaff, Fraction(-1,1));
                               break;
                         case ElementType::OTTAVA:
-                              exp->ottava(static_cast<const Ottava*>(e), sstaff, Fraction(-1,1));
+                              exp->ottava(toOttava(e), sstaff, Fraction(-1,1));
                               break;
                         case ElementType::PEDAL:
-                              exp->pedal(static_cast<const Pedal*>(e), sstaff, Fraction(-1,1));
+                              exp->pedal(toPedal(e), sstaff, Fraction(-1,1));
                               break;
                         case ElementType::TEXTLINE:
-                              exp->textLine(static_cast<const TextLine*>(e), sstaff, Fraction(-1,1));
+                              exp->textLine(toTextLine(e), sstaff, Fraction(-1,1));
                               break;
                         case ElementType::TRILL:
                               // ignore (written as <note><notations><ornaments><wavy-line>
@@ -5701,8 +5701,10 @@ void ExportMusicXml::write(QIODevice* dev)
 
                               // handle annotations and spanners (directions attached to this note or rest)
                               if (el->isChordRest()) {
-                                    int spannerStaff = (st / VOICES) * VOICES;
-                                    spannerStop(this, spannerStaff, _tick, sstaff, spannersStopped);
+                                    const int spannerStaff = st / VOICES;
+                                    const int starttrack = spannerStaff * VOICES;
+                                    const int endtrack = (spannerStaff + 1) * VOICES;
+                                    spannerStop(this, starttrack, endtrack, _tick, sstaff, spannersStopped);
                                     }
 
                               } // for (Segment* seg = ...
