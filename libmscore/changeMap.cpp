@@ -12,10 +12,10 @@
 
 /**
  \file
- Implementation of class VeloList.
+ Implementation of class ChangeMap.
 */
 
-#include "velo.h"
+#include "changeMap.h"
 
 namespace Ms {
 
@@ -25,9 +25,9 @@ namespace Ms {
 ///   You can see these graphically at: https://www.desmos.com/calculator/kk89ficmjk
 //---------------------------------------------------------
 
-int VeloList::interpolateVelocity(VeloEvent& event, Fraction& tick)
+int ChangeMap::interpolate(ChangeEvent& event, Fraction& tick)
       {
-      Q_ASSERT(event.type == VeloType::RAMP);
+      Q_ASSERT(event.type == ChangeEventType::RAMP);
 
       // Prevent zero-division error
       if (event.cachedStart == event.cachedEnd || event.tick == event.etick) {
@@ -40,7 +40,7 @@ int VeloList::interpolateVelocity(VeloEvent& event, Fraction& tick)
 
       std::function<int(int)> valueFunction;
       switch (event.method) {
-            case VeloChangeMethod::EXPONENTIAL:
+            case ChangeMethod::EXPONENTIAL:
                   // Due to the nth-root, exponential functions do not flip with negative values, and cause errors,
                   // so treat it as a piecewise function.
                   if (exprDiff > 0) {
@@ -61,7 +61,7 @@ int VeloList::interpolateVelocity(VeloEvent& event, Fraction& tick)
                         }
                   break;
             // Uses sin x transformed, which _does_ flip with negative numbers
-            case VeloChangeMethod::EASE_IN_OUT:
+            case ChangeMethod::EASE_IN_OUT:
                   valueFunction = [&](int ct) { return int(
                         (double(exprDiff) / 2.0) * (
                               sin(
@@ -72,7 +72,7 @@ int VeloList::interpolateVelocity(VeloEvent& event, Fraction& tick)
                               )
                         ); };
                   break;
-            case VeloChangeMethod::EASE_IN:
+            case ChangeMethod::EASE_IN:
                   valueFunction = [&](int ct) { return int(
                         double(exprDiff) * (
                               sin(
@@ -83,7 +83,7 @@ int VeloList::interpolateVelocity(VeloEvent& event, Fraction& tick)
                               )
                         ); };
                   break;
-            case VeloChangeMethod::EASE_OUT:
+            case ChangeMethod::EASE_OUT:
                   valueFunction = [&](int ct) { return int(
                         double(exprDiff) * sin(
                               double(ct) * (
@@ -92,7 +92,7 @@ int VeloList::interpolateVelocity(VeloEvent& event, Fraction& tick)
                               )
                         ); };
                   break;
-            case VeloChangeMethod::NORMAL:
+            case ChangeMethod::NORMAL:
             default:
                   valueFunction = [&](int ct) { return int(
                         double(exprDiff) * (double(ct) / double(exprTicks))
@@ -104,25 +104,26 @@ int VeloList::interpolateVelocity(VeloEvent& event, Fraction& tick)
       }
 
 //---------------------------------------------------------
-//   velo
-//    return velocity at tick position
+//   val
+///   return value at tick position. Do not confuse with
+///   `value`, which is a method of QMultiMap.
 //---------------------------------------------------------
 
-int VeloList::velo(Fraction tick)
+int ChangeMap::val(Fraction tick)
       {
       if (!cleanedUp)
             cleanup();
 
       auto eventIter = upperBound(tick);
       if (eventIter == begin()) {
-            return DEFAULT_VELOCITY;
+            return DEFAULT_VALUE;
             }
 
       eventIter--;
       bool foundRamp = false;
-      VeloEvent& rampFound = eventIter.value();       // only used to init
+      ChangeEvent& rampFound = eventIter.value();       // only used to init
       for (auto& event : values(eventIter.key())) {
-            if (event.type == VeloType::RAMP) {
+            if (event.type == ChangeEventType::RAMP) {
                   foundRamp = true;
                   rampFound = event;
                   }
@@ -138,7 +139,7 @@ int VeloList::velo(Fraction tick)
             }
       else {
             // Do some maths!
-            return interpolateVelocity(eventIter.value(), tick);
+            return interpolate(eventIter.value(), tick);
             }
       }
 
@@ -146,24 +147,23 @@ int VeloList::velo(Fraction tick)
 //   addFixed
 //---------------------------------------------------------
 
-void VeloList::addFixed(Fraction tick, int velocity)
+void ChangeMap::addFixed(Fraction tick, int value)
       {
-      insert(tick, VeloEvent(tick, velocity));
+      insert(tick, ChangeEvent(tick, value));
       cleanedUp = false;
       }
 
 //---------------------------------------------------------
 //   addRamp
-///   the direction of the ramp *must* be explicitly passed, and the user-defined velocity change,
-///   if any, must always be positive.
-///   A `velChange` of 0 means that the change in velocity should be calculated from the next fixed
+///   A `change` of 0 means that the change in velocity should be calculated from the next fixed
 ///   velocity event.
 //---------------------------------------------------------
 
-void VeloList::addRamp(Fraction stick, Fraction etick, int velChange, VeloChangeMethod method, VeloDirection direction)
+void ChangeMap::addRamp(Fraction stick, Fraction etick, int change, ChangeMethod method, ChangeDirection direction)
       {
-      int sign = direction == VeloDirection::CRESCENDO ? +1 : -1;
-      insert(stick, VeloEvent(stick, etick, sign * velChange, method, direction));
+      change = abs(change);
+      change *= (direction == ChangeDirection::INCREASING) ? 1 : -1;
+      insert(stick, ChangeEvent(stick, etick, change, method, direction));
       cleanedUp = false;
       }
 
@@ -171,23 +171,23 @@ void VeloList::addRamp(Fraction stick, Fraction etick, int velChange, VeloChange
 //   cleanup
 //---------------------------------------------------------
 
-void VeloList::cleanup()
+void ChangeMap::cleanup()
       {
       //
       // Stage 0: put the ramps in size order if they start at the same point
       //
       for (auto& tick : uniqueKeys()) {
             // `events` will contain all the ramps at this tick
-            std::vector<VeloEvent> events;
+            std::vector<ChangeEvent> events;
             for (auto& event : values(tick)) {
-                  if (event.type == VeloType::FIX)
+                  if (event.type == ChangeEventType::FIX)
                         continue;
                   events.push_back(event);
                   }
 
             if (int(events.size()) > 1) {
-                  // new order is a map of the NEGATIVE length of a hairpin to a copy of its event
-                  QMultiMap<Fraction, VeloEvent> newOrder;
+                  // new order is a map of the NEGATIVE length of a ramp to a copy of its event
+                  QMultiMap<Fraction, ChangeEvent> newOrder;
                   for (auto& event : events) {
                         newOrder.insert(event.tick - event.etick, event);
                         // And clear out the events at this tick
@@ -195,7 +195,7 @@ void VeloList::cleanup()
                         }
 
                   // newOrder's values are implicitally ordered by the key, which is the
-                  // NEGATIVE length of the hairpin.
+                  // NEGATIVE length of the ramp.
                   for (auto& event : newOrder.values()) {
                         insert(tick, event);
                         }
@@ -212,14 +212,14 @@ void VeloList::cleanup()
 
       // Keep a record of the endpoints
       std::vector<std::pair<Fraction, Fraction>> endPoints;
-      std::vector<bool> startsInHairpin;
+      std::vector<bool> startsInRamp;
 
-      for (VeloEvent& event : values()) {
-            // Reset if we've left the hairpin we were in
+      for (ChangeEvent& event : values()) {
+            // Reset if we've left the ramp we were in
             if (currentRampEnd < event.tick)
                   inRamp = false;
 
-            if (event.type == VeloType::RAMP) {
+            if (event.type == ChangeEventType::RAMP) {
                   if (inRamp) {
                         if (event.etick <= currentRampEnd) {
                               // delete, this event is enveloped
@@ -230,19 +230,19 @@ void VeloList::cleanup()
                         else {
                               currentRampStart = event.tick;
                               currentRampEnd = event.etick;
-                              startsInHairpin.push_back(true);
+                              startsInRamp.push_back(true);
                               }
                         }
                   else {
                         currentRampStart = event.tick;
                         currentRampEnd = event.etick;
                         inRamp = true;
-                        startsInHairpin.push_back(false);
+                        startsInRamp.push_back(false);
                         }
 
                   endPoints.push_back(std::make_pair(event.tick, event.etick));
                   }
-            else if (event.type == VeloType::FIX) {
+            else if (event.type == ChangeEventType::FIX) {
                   if (inRamp) {
                         if (event.tick != currentRampStart && event.tick != currentRampEnd && lastFix != event.tick) {
                               // delete, this event is enveloped or at the same point as another fix
@@ -260,19 +260,19 @@ void VeloList::cleanup()
       //
       int j = -1;
       for (auto& event : values()) {
-            if (event.type != VeloType::RAMP)
+            if (event.type != ChangeEventType::RAMP)
                   continue;
 
             j++;
-            if (!startsInHairpin[j])
+            if (!startsInRamp[j])
                   continue;
 
             // Take a copy of the event...
-            auto tempEvent = event;
+            auto tempChangeEvent = event;
             remove(event.tick, event);
-            tempEvent.tick = endPoints[j-1].second;
+            tempChangeEvent.tick = endPoints[j-1].second;
             // ...and move it to its new tick position
-            insert(tempEvent.tick, tempEvent);
+            insert(tempChangeEvent.tick, tempChangeEvent);
             }
 
       //
@@ -280,15 +280,15 @@ void VeloList::cleanup()
       //
       for (auto i = begin(); i != end(); i++) {
             auto& event = i.value();
-            if (event.type != VeloType::RAMP)
+            if (event.type != ChangeEventType::RAMP)
                   continue;
 
             // Phase 1: cache a start value for the ramp
             // Try and get a fix at the tick of this ramp
             bool foundFix = false;
-            for (auto& currentEvent : values(event.tick)) {
-                  if (currentEvent.type == VeloType::FIX) {
-                        event.cachedStart = currentEvent.value;
+            for (auto& currentChangeEvent : values(event.tick)) {
+                  if (currentChangeEvent.type == ChangeEventType::FIX) {
+                        event.cachedStart = currentChangeEvent.value;
                         foundFix = true;
                         break;
                         }
@@ -299,44 +299,44 @@ void VeloList::cleanup()
             //  - the value if it's a fix
             if (!foundFix) {
                   if (i != begin()) {
-                        auto prevEventIter = i;
-                        prevEventIter--;
+                        auto prevChangeEventIter = i;
+                        prevChangeEventIter--;
 
                         // Look for a ramp first
                         bool foundRamp = false;
-                        for (auto& prevEvent : values(prevEventIter.key())) {
-                              if (prevEvent.type == VeloType::RAMP) {
-                                    event.cachedStart = prevEvent.cachedEnd;
+                        for (auto& prevChangeEvent : values(prevChangeEventIter.key())) {
+                              if (prevChangeEvent.type == ChangeEventType::RAMP) {
+                                    event.cachedStart = prevChangeEvent.cachedEnd;
                                     foundRamp = true;
                                     break;
                                     }
                               }
 
                         if (!foundRamp) {
-                              // prevEventIter must point to a fix in this case
-                              event.cachedStart = prevEventIter.value().value;
+                              // prevChangeEventIter must point to a fix in this case
+                              event.cachedStart = prevChangeEventIter.value().value;
                               }
                         }
                   else {
-                        event.cachedStart = DEFAULT_VELOCITY;
+                        event.cachedStart = DEFAULT_VALUE;
                         }
                   }
 
             // Phase 2: cache an end value for the ramp
             // If there's no set velocity change:
             if (event.value == 0) {
-                  auto nextEventIter = upperBound(event.tick);
+                  auto nextChangeEventIter = upperBound(event.tick);
 
                   // If this is the last event, there is no change
-                  if (nextEventIter == end()) {
+                  if (nextChangeEventIter == end()) {
                         event.cachedEnd = event.cachedStart;
                         }
                   else {
                         // Search for a fixed event at the next event point
                         bool foundFix = false;
-                        for (auto& nextEvent : values(nextEventIter.key())) {
-                              if (nextEvent.type == VeloType::FIX) {
-                                    event.cachedEnd = nextEvent.value;
+                        for (auto& nextChangeEvent : values(nextChangeEventIter.key())) {
+                              if (nextChangeEvent.type == ChangeEventType::FIX) {
+                                    event.cachedEnd = nextChangeEvent.value;
                                     foundFix = true;
                                     break;
                                     }
@@ -344,7 +344,7 @@ void VeloList::cleanup()
 
                         // We haven't found a fix, so there must be a ramp. What does the user want?
                         // A good guess would to be to interpolate, but that might get complex, so just ignore
-                        // this hairpin and set the ending to be the same as the start.
+                        // this ramp and set the ending to be the same as the start.
                         // TODO: implementing some form of smart interpolation would be nice.
                         if (!foundFix) {
                               event.cachedEnd = event.cachedStart;
@@ -356,8 +356,8 @@ void VeloList::cleanup()
                   }
 
             // And finally... if something's wrong, make it not wrong
-            if ((event.cachedStart > event.cachedEnd && event.direction == VeloDirection::CRESCENDO) ||
-                (event.cachedStart < event.cachedEnd && event.direction == VeloDirection::DIMINUENDO)) {
+            if ((event.cachedStart > event.cachedEnd && event.direction == ChangeDirection::INCREASING) ||
+                (event.cachedStart < event.cachedEnd && event.direction == ChangeDirection::DECREASING)) {
                   event.cachedEnd = event.cachedStart;
                   }
             }
@@ -370,7 +370,7 @@ void VeloList::cleanup()
 ///   returns a list of changes in a range, and their start and end points
 //---------------------------------------------------------
 
-std::vector<std::pair<Fraction, Fraction>> VeloList::changesInRange(Fraction stick, Fraction etick)
+std::vector<std::pair<Fraction, Fraction>> ChangeMap::changesInRange(Fraction stick, Fraction etick)
       {
       if (!cleanedUp)
             cleanup();
@@ -384,20 +384,20 @@ std::vector<std::pair<Fraction, Fraction>> VeloList::changesInRange(Fraction sti
                   break;
 
             auto& event = iter.value();
-            if (event.type == VeloType::FIX)
+            if (event.type == ChangeEventType::FIX)
                   tempChanges.push_back(std::make_pair(event.tick, event.tick));
-            else if (event.type == VeloType::RAMP) {
+            else if (event.type == ChangeEventType::RAMP) {
                   Fraction useEtick = event.etick > etick ? etick : event.etick;
                   tempChanges.push_back(std::make_pair(event.tick, useEtick));
                   }
             }
 
-      // And also go back one and try to find hairpin coming into this range
+      // And also go back one and try to find ramp coming into this range
       auto iter = lowerBound(stick);
       if (iter != begin()) {
             iter--;
             auto& event = iter.value();
-            if (event.type == VeloType::RAMP) {
+            if (event.type == ChangeEventType::RAMP) {
                   if (event.etick > stick) {
                         tempChanges.push_back(std::make_pair(stick, event.etick));
                         }
@@ -407,40 +407,78 @@ std::vector<std::pair<Fraction, Fraction>> VeloList::changesInRange(Fraction sti
       }
 
 //---------------------------------------------------------
+//   changeMethodTable
+//---------------------------------------------------------
+
+const std::vector<ChangeMap::ChangeMethodItem> ChangeMap::changeMethodTable {
+      { ChangeMethod::NORMAL,           "normal"      },
+      { ChangeMethod::EASE_IN,          "ease-in"     },
+      { ChangeMethod::EASE_OUT,         "ease-out"    },
+      { ChangeMethod::EASE_IN_OUT,      "ease-in-out" },
+      { ChangeMethod::EXPONENTIAL,      "exponential" },
+      };
+
+//---------------------------------------------------------
+//   changeMethodToName
+//---------------------------------------------------------
+
+QString ChangeMap::changeMethodToName(ChangeMethod method)
+      {
+      for (auto i : ChangeMap::changeMethodTable) {
+            if (i.method == method)
+                  return i.name;
+            }
+      qFatal("Unrecognised change method!");
+      return "none"; // silence a compiler warning
+      }
+
+//---------------------------------------------------------
+//   nameToChangeMethod
+//---------------------------------------------------------
+
+ChangeMethod ChangeMap::nameToChangeMethod(QString name)
+      {
+      for (auto i : ChangeMap::changeMethodTable) {
+            if (i.name == name)
+                  return i.method;
+            }
+      return ChangeMethod::NORMAL;   // default
+      }
+
+//---------------------------------------------------------
 //   dump
 //---------------------------------------------------------
 
-void VeloList::dump()
+void ChangeMap::dump()
       {
-      qDebug("\n\n=== VeloList: dump ===");
+      qDebug("\n\n=== ChangeMap: dump ===");
       for (auto& event : values()) {
-            if (event.type == VeloType::FIX) {
+            if (event.type == ChangeEventType::FIX) {
                   qDebug().nospace() << "===" << event.tick.ticks() << " : FIX " << event.value;
                   }
-            else if (event.type == VeloType::RAMP) {
-                  qDebug().nospace() << "===" << event.tick.ticks() << " to " << event.etick.ticks() << " : RAMP diff " << event.value << " " << Hairpin::veloChangeMethodToName(event.method) << " (" << event.cachedStart << ", " << event.cachedEnd << ")";
+            else if (event.type == ChangeEventType::RAMP) {
+                  qDebug().nospace() << "===" << event.tick.ticks() << " to " << event.etick.ticks() << " : RAMP diff " << event.value << " " /*<< Hairpin::veloChangeMethodToName(event.method)*/ << " (" << event.cachedStart << ", " << event.cachedEnd << ")";
                   }
             }
-      qDebug("=== VeloList: dump end ===\n\n");
+      qDebug("=== ChangeMap: dump end ===\n\n");
       }
 
 //---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
 
-bool VeloEvent::operator==(const VeloEvent& event) const
+bool ChangeEvent::operator==(const ChangeEvent& event) const
       {
       return (
             tick == event.tick &&
             value == event.value &&
             type == event.type &&
             etick == event.etick &&
-            method == event.method &&
-            direction == event.direction
+            method == event.method
       );
       }
 
-bool VeloEvent::operator!=(const VeloEvent& event) const
+bool ChangeEvent::operator!=(const ChangeEvent& event) const
       {
       return !(operator==(event));
       }
