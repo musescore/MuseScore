@@ -14,6 +14,7 @@
 #include "inspectorTextLine.h"
 #include "inspectorHairpin.h"
 #include "libmscore/hairpin.h"
+#include "libmscore/changeMap.h"
 
 namespace Ms {
 
@@ -34,11 +35,11 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
       h.hairpinType->addItem(tr("Decrescendo Line"),    int(HairpinType::DECRESC_LINE));
 
       h.veloChangeMethod->clear();
-      h.veloChangeMethod->addItem(tr("Default (linear)"),   int(VeloChangeMethod::NORMAL));
-      h.veloChangeMethod->addItem(tr("Ease-in and out"),    int(VeloChangeMethod::EASE_IN_OUT));
-      h.veloChangeMethod->addItem(tr("Ease-in"),            int(VeloChangeMethod::EASE_IN));
-      h.veloChangeMethod->addItem(tr("Ease-out"),           int(VeloChangeMethod::EASE_OUT));
-      h.veloChangeMethod->addItem(tr("Exponential"),        int(VeloChangeMethod::EXPONENTIAL));
+      h.veloChangeMethod->addItem(tr("Default (linear)"),   int(ChangeMethod::NORMAL));
+      h.veloChangeMethod->addItem(tr("Ease-in and out"),    int(ChangeMethod::EASE_IN_OUT));
+      h.veloChangeMethod->addItem(tr("Ease-in"),            int(ChangeMethod::EASE_IN));
+      h.veloChangeMethod->addItem(tr("Ease-out"),           int(ChangeMethod::EASE_OUT));
+      h.veloChangeMethod->addItem(tr("Exponential"),        int(ChangeMethod::EXPONENTIAL));
 
       const std::vector<InspectorItem> il = {
             { Pid::HAIRPIN_CIRCLEDTIP,   0, h.hairpinCircledTip,   h.resetHairpinCircledTip },

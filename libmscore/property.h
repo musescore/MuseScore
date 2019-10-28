@@ -169,8 +169,9 @@ enum class Pid {
       VELO_CHANGE_SPEED,
       DYNAMIC_TYPE,
       DYNAMIC_RANGE,
-      SINGLE_NOTE_DYNAMICS,
 //100
+      SINGLE_NOTE_DYNAMICS,
+      CHANGE_METHOD,
       PLACEMENT,
       VELOCITY,
       JUMP_TO,
