@@ -4823,7 +4823,7 @@ static bool needViewportMove(Score* cs, ScoreView* cv)
       const QRectF viewport = cv->canvasViewport(); // TODO: margins for intersection check?
 
       const Element* editElement = state.element();
-      if (editElement && editElement->bbox().isValid())
+      if (editElement && editElement->bbox().isValid() && !editElement->isSpanner())
             return !viewport.intersects(editElement->canvasBoundingRect());
 
       if (state.startTick().isZero() && state.endTick() == cs->endTick())
