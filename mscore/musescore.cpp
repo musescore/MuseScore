@@ -7242,44 +7242,9 @@ void MuseScore::updateUiStyleAndTheme()
       genIcons();
       Shortcut::refreshIcons();
       }
-}
 
-using namespace Ms;
-
-//---------------------------------------------------------
-//   main
-//---------------------------------------------------------
-
-int main(int argc, char* av[])
+MuseScoreApplication* MuseScoreApplication::initApplication(int argc, char** argv)
       {
-#ifndef NDEBUG
-      qSetMessagePattern("%{file}:%{function}: %{message}");
-      Ms::checkStyles();
-#endif
-
-      QApplication::setDesktopSettingsAware(true);
-#ifdef Q_OS_LINUX
-      QGuiApplication::setDesktopFileName("mscore");
-#endif
-      QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-      QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#if defined(QT_DEBUG) && defined(Q_OS_WIN)
-      qInstallMessageHandler(mscoreMessageHandler);
-#endif
-
-#ifdef Q_OS_WIN
-      if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
-            // Set custom OpenGL buglist to work around rendering issues
-            // on Windows 7 (#296682). This should also prevent crashes
-            // happening for some Intel GPUs due to outdated buglist in Qt 5.9.
-            qputenv("QT_OPENGL_BUGLIST", ":/data/win_opengl_buglist.json");
-            }
-#endif
-
-      qRegisterMetaTypeStreamOperators<SessionStart>("SessionStart");
-      qRegisterMetaTypeStreamOperators<MusicxmlExportBreaks>("MusicxmlExportBreaks");
-      qRegisterMetaTypeStreamOperators<MuseScoreStyleType>("MuseScoreStyleType");
-
       QFile f(":/revision.h");
       f.open(QIODevice::ReadOnly);
       revision = QString(f.readAll()).trimmed();
@@ -7296,7 +7261,7 @@ int main(int argc, char* av[])
             appName  = "MuseScore3";
             }
 
-      MuseScoreApplication* app = new MuseScoreApplication(appName2, argc, av);
+      MuseScoreApplication* app = new MuseScoreApplication(appName2, argc, argv);
       QCoreApplication::setApplicationName(appName);
 
       QCoreApplication::setOrganizationName("MuseScore");
@@ -7313,17 +7278,13 @@ int main(int argc, char* av[])
       }
 #endif
 
-      QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
-      QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
-      QAccessible::installFactory(Awl::AccessibleAbstractSlider::AbstractSliderFactory);
+      return app;
+      }
 
-      Q_INIT_RESOURCE(zita);
-
-#ifndef Q_OS_MAC
-      QSettings::setDefaultFormat(QSettings::IniFormat);
-#endif
-
+MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandLineArguments(MuseScoreApplication* app)
+      {
       QCommandLineParser parser;
+      CommandLineParseResult parseResult;
 
       parser.addHelpOption(); // -?, -h, --help
       parser.addVersionOption(); // -v, --version
@@ -7375,7 +7336,8 @@ int main(int argc, char* av[])
     //if (parser.isSet("v")) parser.showVersion(); // a) needs Qt >= 5.4 , b) instead we use addVersionOption()
       if (parser.isSet("long-version")) {
             printVersion("MuseScore");
-            return EXIT_SUCCESS;
+            parseResult.exit = true;
+            return parseResult;
             }
       MScore::debugMode = parser.isSet("d");
       MScore::noHorizontalStretch = MScore::noVerticalStretch = parser.isSet("L");
@@ -7546,10 +7508,7 @@ int main(int argc, char* av[])
 
       QStringList argv = parser.positionalArguments();
 
-      mscoreGlobalShare = getSharePath();
-      iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
-
-      if (!converterMode && !pluginMode) {
+      if (app && !converterMode && !pluginMode) {
             if (!argv.isEmpty()) {
                   int ok = true;
                   for (const QString& message : argv) {
@@ -7560,12 +7519,16 @@ int main(int argc, char* av[])
                               }
 
                         }
-                  if (ok)
-                        return 0;
+                  if (ok) {
+                        parseResult.exit = true;
+                        return parseResult;
+                        }
                   }
             else
-                  if (app->sendMessage(QString("")))
-                      return 0;
+                  if (app->sendMessage(QString(""))) {
+                        parseResult.exit = true;
+                        return parseResult;
+                        }
             }
       if (rawDiffMode || diffMode) {
             if (argv.size() != 2)
@@ -7573,6 +7536,83 @@ int main(int argc, char* av[])
             }
       if (scriptTestMode && argv.empty())
             qFatal("Please specify scripts to execute");
+
+      parseResult.argv = argv;
+      return parseResult;
+      }
+}
+
+using namespace Ms;
+
+//---------------------------------------------------------
+//   main
+//---------------------------------------------------------
+
+int main(int argc, char* av[])
+      {
+#ifndef NDEBUG
+      qSetMessagePattern("%{file}:%{function}: %{message}");
+      Ms::checkStyles();
+#endif
+
+      QApplication::setDesktopSettingsAware(true);
+#ifdef Q_OS_LINUX
+      QGuiApplication::setDesktopFileName("mscore");
+#endif
+      QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+      QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#if defined(QT_DEBUG) && defined(Q_OS_WIN)
+      qInstallMessageHandler(mscoreMessageHandler);
+#endif
+
+#ifdef Q_OS_WIN
+      if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
+            // Set custom OpenGL buglist to work around rendering issues
+            // on Windows 7 (#296682). This should also prevent crashes
+            // happening for some Intel GPUs due to outdated buglist in Qt 5.9.
+            qputenv("QT_OPENGL_BUGLIST", ":/data/win_opengl_buglist.json");
+            }
+#endif
+
+      qRegisterMetaTypeStreamOperators<SessionStart>("SessionStart");
+      qRegisterMetaTypeStreamOperators<MusicxmlExportBreaks>("MusicxmlExportBreaks");
+      qRegisterMetaTypeStreamOperators<MuseScoreStyleType>("MuseScoreStyleType");
+
+      MuseScoreApplication* app = MuseScoreApplication::initApplication(argc, av);
+
+      QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
+      QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
+      QAccessible::installFactory(Awl::AccessibleAbstractSlider::AbstractSliderFactory);
+
+      Q_INIT_RESOURCE(zita);
+
+#ifndef Q_OS_MAC
+      QSettings::setDefaultFormat(QSettings::IniFormat);
+#endif
+
+      const auto cmdLineParseResult = MuseScoreApplication::parseCommandLineArguments(app);
+
+      if (cmdLineParseResult.exit)
+            return 0;
+
+      MuseScore::init(cmdLineParseResult.argv);
+
+      if (MScore::noGui) {
+#ifdef Q_OS_MAC
+            // see issue #28706: Hangup in converter mode with MusicXML source
+            qApp->processEvents();
+#endif
+            const bool ok = processNonGui(cmdLineParseResult.argv);
+            return ok ? EXIT_SUCCESS : EXIT_FAILURE;
+            }
+
+      return qApp->exec();
+      }
+
+void MuseScore::init(const QStringList& argv)
+      {
+      mscoreGlobalShare = getSharePath();
+      iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
 
       if (dataPath.isEmpty())
             dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
@@ -7788,16 +7828,12 @@ int main(int argc, char* av[])
 
       QApplication::instance()->installEventFilter(mscore);
 
-      mscore->setRevision(revision);
+      mscore->setRevision(Ms::revision);
       int files = 0;
       bool restoredSession = false;
-      if (MScore::noGui) {
-#ifdef Q_OS_MAC
-            // see issue #28706: Hangup in converter mode with MusicXML source
-            qApp->processEvents();
-#endif
-            exit(processNonGui(argv) ? 0 : EXIT_FAILURE);
-            }
+
+      if (MScore::noGui)
+            return;
       else {
             mscore->readSettings();
             QObject::connect(qApp, SIGNAL(messageReceived(const QString&)),
@@ -7889,8 +7925,6 @@ int main(int argc, char* av[])
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())
             mscore->showSynthControl(true);
-
-      return qApp->exec();
       }
 
 //---------------------------------------------------------

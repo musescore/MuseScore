@@ -218,6 +218,13 @@ class MuseScoreApplication : public QtSingleApplication {
          : QtSingleApplication(id, argc, argv) {
             };
       virtual bool event(QEvent *ev) override;
+
+      struct CommandLineParseResult {
+            QStringList argv;
+            bool exit = false;
+            };
+      static CommandLineParseResult parseCommandLineArguments(MuseScoreApplication* app);
+      static MuseScoreApplication* initApplication(int argc, char** argv);
       };
 
 
@@ -941,6 +948,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       ScriptRecorder* getScriptRecorder();
       bool runTestScripts(const QStringList& scripts);
+
+      static void init(const QStringList& argv);
       };
 
 extern MuseScore* mscore;
