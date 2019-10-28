@@ -1033,8 +1033,19 @@ void Spanner::setTicks(const Fraction& f)
 
 void Spanner::triggerLayout() const
       {
+      // Spanners do not have parent even when added to a score, so can't check parent here
       const int tr2 = track2() == -1 ? track() : track2();
       score()->setLayout(_tick, _tick + _ticks, staffIdx(), track2staff(tr2), this);
+      }
+
+void Spanner::triggerLayoutAll() const
+      {
+      // Spanners do not have parent even when added to a score, so can't check parent here
+      score()->setLayoutAll(staffIdx(), this);
+
+      const int tr2 = track2();
+      if (tr2 != -1 && tr2 != track())
+            score()->setLayoutAll(track2staff(tr2), this);
       }
 
 //---------------------------------------------------------
