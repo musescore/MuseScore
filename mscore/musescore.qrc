@@ -183,5 +183,6 @@
         <file>data/icons/mixer-slider-handle-vertical.svg</file>
         <file>data/icons/triangleDown.svg</file>
         <file>data/icons/triangleUp.svg</file>
+        <file>data/icons/arrowsMoveToTop.svg</file>
     </qresource>
 </RCC>
