@@ -1200,7 +1200,7 @@ static void setSLinePlacement(SLine* sli, const QString placement)
 
 static void handleSpannerStart(SLine* new_sp, int track, QString& placement, const Fraction& tick, MusicXmlSpannerMap& spanners)
       {
-      //qDebug("handleSpannerStart(sp %p, track %d, tick %d)", new_sp, track, tick);
+      //qDebug("handleSpannerStart(sp %p, track %d, tick %s (%d))", new_sp, track, qPrintable(tick.print()), tick.ticks());
       new_sp->setTrack(track);
       setSLinePlacement(new_sp, placement);
       spanners[new_sp] = QPair<int, int>(tick.ticks(), -1);
@@ -1212,7 +1212,7 @@ static void handleSpannerStart(SLine* new_sp, int track, QString& placement, con
 
 static void handleSpannerStop(SLine* cur_sp, int track2, const Fraction& tick, MusicXmlSpannerMap& spanners)
       {
-      //qDebug("handleSpannerStop(sp %p, track2 %d, tick %d)", cur_sp, track2, tick);
+      //qDebug("handleSpannerStop(sp %p, track2 %d, tick %s (%d))", cur_sp, track2, qPrintable(tick.print()), tick.ticks());
       if (!cur_sp)
             return;
 
