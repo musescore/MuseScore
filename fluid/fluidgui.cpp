@@ -111,6 +111,7 @@ FluidGui::FluidGui(Synthesizer* s)
    : SynthesizerGui(s)
       {
       setupUi(this);
+      connect(soundFontTop,    SIGNAL(clicked()), SLOT(soundFontTopClicked()));
       connect(soundFontUp,     SIGNAL(clicked()), SLOT(soundFontUpClicked()));
       connect(soundFontDown,   SIGNAL(clicked()), SLOT(soundFontDownClicked()));
       connect(soundFontAdd,    SIGNAL(clicked()), SLOT(soundFontAddClicked()));
@@ -126,6 +127,7 @@ FluidGui::FluidGui(Synthesizer* s)
       
       soundFontUp->setIcon(*icons[int(Icons::arrowUp_ICON)]);
       soundFontDown->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+      soundFontTop->setIcon(*icons[int(Ms::Icons::arrowsMoveToTop_ICON)]);
       
       //update sfs
       QStringList sfonts = fluid()->soundFonts();
@@ -158,7 +160,7 @@ void FluidGui::moveSoundfontInTheList(int currentIdx, int targetIdx)
       for (auto sfName : sfonts)
             fluid()->removeSoundFont(sfName);
       
-      sfonts.swap(currentIdx, targetIdx);
+      sfonts.move(currentIdx, targetIdx);
       fluid()->loadSoundFonts(sfonts);
       sfonts = fluid()->soundFonts();
       soundFonts->clear();
@@ -166,6 +168,15 @@ void FluidGui::moveSoundfontInTheList(int currentIdx, int targetIdx)
       soundFonts->setCurrentRow(targetIdx);
       emit sfChanged();
       }
+
+void FluidGui::soundFontTopClicked()
+       {
+       int row = soundFonts->currentRow();
+       if (row <= 0)
+             return;
+       
+       moveSoundfontInTheList(row, 0);
+       }
 
 //---------------------------------------------------------
 //   soundFontUpClicked
@@ -220,6 +231,7 @@ void FluidGui::updateUpDownButtons()
       int rows = soundFonts->count();
       int row = soundFonts->currentRow();
       soundFontUp->setEnabled(row > 0);
+      soundFontTop->setEnabled(row > 0);
       soundFontDown->setEnabled((row != -1) && (row < (rows-1)));
       soundFontDelete->setEnabled(row != -1);
       }
