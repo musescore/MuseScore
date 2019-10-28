@@ -38,7 +38,7 @@
 #include "measure.h"
 #include "tempo.h"
 #include "repeatlist.h"
-#include "velo.h"
+#include "changeMap.h"
 #include "dynamic.h"
 #include "navigate.h"
 #include "pedal.h"
@@ -321,12 +321,12 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
                               break;
                         case DynamicsRenderMethod::SEG_START:
                         default:
-                              velo = staff->velocities().velo(Fraction::fromTicks(on));
+                              velo = staff->velocities().val(Fraction::fromTicks(on));
                               break;
                         }
                   }
             else {
-                  velo = staff->velocities().velo(Fraction::fromTicks(on));
+                  velo = staff->velocities().val(Fraction::fromTicks(on));
                   }
 
             velo *= velocityMultiplier;
@@ -336,7 +336,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
       // Single-note dynamics
       // Find any changes, and apply events
       if (config.useSND) {
-            VeloList& veloEvents = staff->velocities();
+            ChangeMap& veloEvents = staff->velocities();
             Fraction stick = chord->tick();
             Fraction etick = stick + chord->ticks();
             auto changes = veloEvents.changesInRange(stick, etick);
@@ -344,7 +344,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
                   int lastVal = -1;
                   int endPoint = change.second.ticks();
                   for (int t = change.first.ticks(); t <= endPoint; t++) {
-                        int velo = veloEvents.velo(Fraction::fromTicks(t));
+                        int velo = veloEvents.val(Fraction::fromTicks(t));
                         if (velo == lastVal)
                               continue;
                         lastVal = velo;
@@ -694,12 +694,14 @@ void Score::updateHairpin(Hairpin* h)
       Fraction tick  = h->tick();
       Fraction tick2 = h->tick2();
       int veloChange  = h->veloChange();
-      VeloChangeMethod method = h->veloChangeMethod();
+      ChangeMethod method = h->veloChangeMethod();
 
+      // Make the change negative when the hairpin is a diminuendo
       HairpinType htype = h->hairpinType();
-      VeloDirection direction = VeloDirection::CRESCENDO;
+      ChangeDirection direction = ChangeDirection::INCREASING;
       if (htype == HairpinType::DECRESC_HAIRPIN || htype == HairpinType::DECRESC_LINE) {
-            direction = VeloDirection::DIMINUENDO;
+            veloChange *= -1;
+            direction = ChangeDirection::DECREASING;
             }
 
       switch (h->dynRange()) {
@@ -733,12 +735,12 @@ void Score::updateVelo()
             return;
 
       for (Staff* st : _staves) {
-            VeloList& velo = st->velocities();
+            ChangeMap& velo = st->velocities();
             velo.clear();
             }
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             Staff* st      = staff(staffIdx);
-            VeloList& velo = st->velocities();
+            ChangeMap& velo = st->velocities();
             Part* prt      = st->part();
             int partStaves = prt->nstaves();
             int partStaff  = Score::staffIdx(prt);
@@ -761,6 +763,10 @@ void Score::updateVelo()
 
                         // If a dynamic has 'velocity change' update its ending
                         int change = d->changeInVelocity();
+                        ChangeDirection direction = ChangeDirection::INCREASING;
+                        if (change < 0) {
+                              direction = ChangeDirection::DECREASING;
+                              }
 
                         int dStaffIdx = d->staffIdx();
                         switch(d->dynRange()) {
@@ -769,35 +775,32 @@ void Score::updateVelo()
                                           velo.addFixed(tick, v);
                                           if (change != 0) {
                                                 Fraction etick = tick + d->velocityChangeLength();
-                                                VeloChangeMethod method = VeloChangeMethod::NORMAL;
-                                                VeloDirection direction = change > 0 ? VeloDirection::CRESCENDO : VeloDirection::DIMINUENDO;
-                                                velo.addRamp(tick, etick, abs(change), method, direction);
+                                                ChangeMethod method = ChangeMethod::NORMAL;
+                                                velo.addRamp(tick, etick, change, method, direction);
                                                 }
                                           }
                                     break;
                               case Dynamic::Range::PART:
                                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff+partStaves) {
                                           for (int i = partStaff; i < partStaff+partStaves; ++i) {
-                                                VeloList& stVelo = staff(i)->velocities();
+                                                ChangeMap& stVelo = staff(i)->velocities();
                                                 stVelo.addFixed(tick, v);
                                                 if (change != 0) {
                                                       Fraction etick = tick + d->velocityChangeLength();
-                                                      VeloChangeMethod method = VeloChangeMethod::NORMAL;
-                                                      VeloDirection direction = change > 0 ? VeloDirection::CRESCENDO : VeloDirection::DIMINUENDO;
-                                                      stVelo.addRamp(tick, etick, abs(change), method, direction);
+                                                      ChangeMethod method = ChangeMethod::NORMAL;
+                                                      stVelo.addRamp(tick, etick, change, method, direction);
                                                       }
                                                 }
                                           }
                                     break;
                               case Dynamic::Range::SYSTEM:
                                     for (int i = 0; i < nstaves(); ++i) {
-                                          VeloList& stVelo = staff(i)->velocities();
+                                          ChangeMap& stVelo = staff(i)->velocities();
                                           stVelo.addFixed(tick, v);
                                           if (change != 0) {
                                                 Fraction etick = tick + d->velocityChangeLength();
-                                                VeloChangeMethod method = VeloChangeMethod::NORMAL;
-                                                VeloDirection direction = change > 0 ? VeloDirection::CRESCENDO : VeloDirection::DIMINUENDO;
-                                                stVelo.addRamp(tick, etick, abs(change), method, direction);
+                                                ChangeMethod method = ChangeMethod::NORMAL;
+                                                stVelo.addRamp(tick, etick, change, method, direction);
                                                 }
                                           }
                                     break;
