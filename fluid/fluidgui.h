@@ -64,6 +64,7 @@ class FluidGui : public Ms::SynthesizerGui, Ui::FluidGui {
       void moveSoundfontInTheList(int currentIdx, int targetIdx);
 
    private slots:
+      void soundFontTopClicked();
       void soundFontUpClicked();
       void soundFontDownClicked();
       void soundFontAddClicked();
