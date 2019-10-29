@@ -96,6 +96,7 @@ ZerberusGui::ZerberusGui(Ms::Synthesizer* s)
    : SynthesizerGui(s)
       {
       setupUi(this);
+      connect(soundFontTop,    SIGNAL(clicked()), SLOT(soundFontTopClicked()));
       connect(soundFontUp,     SIGNAL(clicked()), SLOT(soundFontUpClicked()));
       connect(soundFontDown,   SIGNAL(clicked()), SLOT(soundFontDownClicked()));
       connect(soundFontAdd, SIGNAL(clicked()), SLOT(soundFontAddClicked()));
@@ -110,6 +111,7 @@ ZerberusGui::ZerberusGui(Ms::Synthesizer* s)
       
       soundFontUp->setIcon(*Ms::icons[int(Ms::Icons::arrowUp_ICON)]);
       soundFontDown->setIcon(*Ms::icons[int(Ms::Icons::arrowDown_ICON)]);
+      soundFontTop->setIcon(*Ms::icons[int(Ms::Icons::arrowsMoveToTop_ICON)]);
       
       updateButtons();
       }
@@ -121,13 +123,22 @@ ZerberusGui::ZerberusGui(Ms::Synthesizer* s)
 void ZerberusGui::moveSoundfontInTheList(int currentIdx, int targetIdx)
       {
       QStringList sfonts = zerberus()->soundFonts();
-      sfonts.swap(currentIdx, targetIdx);
+      sfonts.move(currentIdx, targetIdx);
       zerberus()->removeSoundFonts(zerberus()->soundFonts());
       
       loadSoundFontsAsync(sfonts);
       files->setCurrentRow(targetIdx);
       emit sfChanged();
       }
+
+void ZerberusGui::soundFontTopClicked()
+       {
+       int row = files->currentRow();
+       if (row <= 0)
+             return;
+       
+       moveSoundfontInTheList(row, 0);
+       }
 
 //---------------------------------------------------------
 //   soundFontUpClicked
@@ -297,10 +308,12 @@ void ZerberusGui::updateProgress()
 
 void ZerberusGui::updateButtons()
       {
+      int rows = zerberus()->soundFonts().count();
       int row = files->currentRow();
+      soundFontTop->setEnabled(row > 0);
+      soundFontUp->setEnabled(row > 0);
+      soundFontDown->setEnabled((row != -1) && (row < (rows-1)));
       soundFontDelete->setEnabled(row != -1);
-      soundFontUp->setEnabled(row != -1);
-      soundFontDown->setEnabled(row != -1);
       }
 
 //---------------------------------------------------------
