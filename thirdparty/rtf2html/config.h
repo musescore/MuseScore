@@ -49,8 +49,50 @@
 /* Define to 1 for release version */
 #define NDEBUG 1
 
+/* Name of package */
+#define PACKAGE "rtf2html"
+
+/* Define to the address where bug reports for this package should be sent. */
+#define PACKAGE_BUGREPORT "vlavrinenko@users.sourceforge.net"
+
+/* Define to the full name of this package. */
+#define PACKAGE_NAME "rtf2html"
+
+/* Define to the full name and version of this package. */
+#define PACKAGE_STRING "rtf2html 0.2.0"
+
+/* Define to the one symbol short name of this package. */
+#define PACKAGE_TARNAME "rtf2html"
+
+/* Define to the version of this package. */
+#define PACKAGE_VERSION "0.2.0"
+
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
+/* Version number of package */
+#define VERSION "0.2.0"
+
+/* Define to 1 for debug version */
+/* #undef _DEBUG */
+
 /* Define to 1 for release version */
 #define _NDEBUG 1
+
+/* Define to 1 to use STLPort debug facilities */
+/* #undef _STLP_DEBUG */
+
+/* Define to 1 if you link STLPort statically */
+/* #undef _STLP_USE_STATIC_LIB */
+
+/* Define to 1 for debug version */
+/* #undef __DEBUG__ */
+
+/* Define to empty if `const' does not conform to ANSI C. */
+/* #undef const */
+
+/* Define to `__inline__' or `__inline' if that's what the C compiler
+   calls it, or to nothing if 'inline' is not supported under any name.  */
+#ifndef __cplusplus
+/* #undef inline */
+#endif
