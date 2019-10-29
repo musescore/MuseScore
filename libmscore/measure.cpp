@@ -1002,7 +1002,8 @@ void Measure::remove(Element* e)
                         // st currently points to an list element that is about to be removed
                         // make a copy now to use on undo/redo
                         StaffType* st = new StaffType(*stc->staffType());
-                        staff->removeStaffType(tick());
+                        if (!tick().isZero())
+                              staff->removeStaffType(tick());
                         stc->setStaffType(st);
                         }
                   MeasureBase::remove(e);
