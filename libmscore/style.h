@@ -369,6 +369,7 @@ enum class Sid {
       minMMRestWidth,
       hideEmptyStaves,
       dontHideStavesInFirstSystem,
+      singleStaveBracketStaveCount,
       hideInstrumentNameIfOneInstrument,
       gateTime,
       tenutoGateTime,

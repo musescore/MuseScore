@@ -32,6 +32,48 @@
    <string>Style</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_39">
+   <item row="1" column="0">
+    <layout class="QHBoxLayout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="buttonTogglePagelist">
+       <property name="maximumSize">
+        <size>
+         <width>20</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
@@ -481,17 +523,86 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="hideEmptyStaves">
-             <property name="text">
+            <widget class="QGroupBox" name="hideEmptyStaves">
+             <property name="title">
               <string>Hide empty staves within systems</string>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="dontHideStavesInFirstSystem">
-             <property name="text">
-              <string>Don't hide empty staves in first system</string>
+             <property name="checkable">
+              <bool>true</bool>
              </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_46">
+              <item row="0" column="0">
+               <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                 <widget class="QCheckBox" name="dontHideStavesInFirstSystem">
+                  <property name="text">
+                   <string>Don't hide empty staves in first system</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_3">
+                  <item>
+                   <widget class="QLabel" name="label_92">
+                    <property name="text">
+                     <string>Show single-stave bracket if the total amount of staves exceeds:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>singleStaveBracketStaveCount</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="singleStaveBracketStaveCount">
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="value">
+                     <number>2</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QToolButton" name="resetSingleStaveBracketStaveCount">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Show brackets which span to staves no fewer than' value</string>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="musescore.qrc">
+                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_15">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
             </widget>
            </item>
            <item>
@@ -507,22 +618,6 @@
               <string>Hide instrument name if there is only 1 instrument</string>
              </property>
             </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_10">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Preferred</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>10</width>
-               <height>10</height>
-              </size>
-             </property>
-            </spacer>
            </item>
            <item>
             <widget class="QGroupBox" name="swingSettings">
@@ -730,19 +825,6 @@
            </item>
           </layout>
          </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
@@ -9354,7 +9436,7 @@
               <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="extensionAdjust">
                 <property name="minimum">
-                 <double>-99.99</double>
+                 <double>-99.989999999999995</double>
                 </property>
                </widget>
               </item>
@@ -9388,7 +9470,7 @@
               <item row="1" column="4">
                <widget class="QDoubleSpinBox" name="modifierAdjust">
                 <property name="minimum">
-                 <double>-99.99</double>
+                 <double>-99.989999999999995</double>
                 </property>
                </widget>
               </item>
@@ -10201,8 +10283,7 @@
                   <number>0</number>
                  </property>
                  <item row="0" column="1">
-                  <widget class="Awl::ColorLabel" name="textStyleFrameForeground">
-                  </widget>
+                  <widget class="Awl::ColorLabel" name="textStyleFrameForeground"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="label_205">
@@ -10287,8 +10368,7 @@
                   <widget class="QDoubleSpinBox" name="textStyleFramePadding"/>
                  </item>
                  <item row="1" column="1">
-                  <widget class="Awl::ColorLabel" name="textStyleFrameBackground">
-                  </widget>
+                  <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
                  </item>
                  <item row="3" column="2">
                   <widget class="QToolButton" name="resetTextStyleFramePadding">
@@ -10348,8 +10428,7 @@
             </widget>
            </item>
            <item row="6" column="1">
-            <widget class="Awl::ColorLabel" name="textStyleColor">
-            </widget>
+            <widget class="Awl::ColorLabel" name="textStyleColor"/>
            </item>
            <item row="7" column="1">
             <widget class="Ms::OffsetSelect" name="textStyleOffset" native="true"/>
@@ -10463,48 +10542,6 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="0">
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="buttonTogglePagelist">
-       <property name="maximumSize">
-        <size>
-         <width>20</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -10545,6 +10582,8 @@
   <tabstop>resetMinMMRestWidth</tabstop>
   <tabstop>hideEmptyStaves</tabstop>
   <tabstop>dontHideStavesInFirstSystem</tabstop>
+  <tabstop>singleStaveBracketStaveCount</tabstop>
+  <tabstop>resetSingleStaveBracketStaveCount</tabstop>
   <tabstop>crossMeasureValues</tabstop>
   <tabstop>hideInstrumentNameIfOneInstrument</tabstop>
   <tabstop>SwingOff</tabstop>
