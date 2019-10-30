@@ -4636,12 +4636,15 @@ void MasterScore::setLayoutAll(int staff, const Element* e)
       _cmdState.setTick(Fraction(0,1));
       _cmdState.setTick(measures()->last() ? measures()->last()->endTick() : Fraction(0,1));
 
-      const int startStaff = staff == -1 ? 0 : staff;
-      const int endStaff = staff == -1 ? (nstaves() - 1) : staff;
-      _cmdState.setStaff(startStaff);
-      _cmdState.setStaff(endStaff);
+      if (e && e->score() == this) {
+            // TODO: map staff number properly
+            const int startStaff = staff == -1 ? 0 : staff;
+            const int endStaff = staff == -1 ? (nstaves() - 1) : staff;
+            _cmdState.setStaff(startStaff);
+            _cmdState.setStaff(endStaff);
 
-      _cmdState.setElement(e);
+            _cmdState.setElement(e);
+            }
       }
 
 //---------------------------------------------------------
@@ -4653,9 +4656,11 @@ void MasterScore::setLayout(const Fraction& t, int staff, const Element* e)
       if (t >= Fraction(0,1))
             _cmdState.setTick(t);
 
-      // TODO: handle staff == -1
-      _cmdState.setStaff(staff);
-      _cmdState.setElement(e);
+      if (e && e->score() == this) {
+            // TODO: map staff number properly
+            _cmdState.setStaff(staff);
+            _cmdState.setElement(e);
+            }
       }
 
 void MasterScore::setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const Element* e)
@@ -4665,11 +4670,13 @@ void MasterScore::setLayout(const Fraction& tick1, const Fraction& tick2, int st
       if (tick2 >= Fraction(0,1))
             _cmdState.setTick(tick2);
 
-      // TODO: handle staff == -1
-      _cmdState.setStaff(staff1);
-      _cmdState.setStaff(staff2);
+      if (e && e->score() == this) {
+            // TODO: map staff number properly
+            _cmdState.setStaff(staff1);
+            _cmdState.setStaff(staff2);
 
-      _cmdState.setElement(e);
+            _cmdState.setElement(e);
+            }
       }
 
 //---------------------------------------------------------
