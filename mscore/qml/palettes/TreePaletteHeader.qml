@@ -51,6 +51,7 @@ Item {
         z: 1000
         width: height
         visible: !paletteHeader.unresolved // TODO: make a separate palette placeholder component
+        activeFocusOnTab: false // same focus object as parent palette
         text: paletteHeader.expanded ? qsTr("Collapse") : qsTr("Expand")
 
         padding: 0
@@ -116,13 +117,15 @@ Item {
         height: parent.height
         anchors.right: parent.right
 
+        activeFocusOnTab: parent.parent.parent === paletteTree.currentTreeItem
+
         padding: 4
 
         contentItem: StyledIcon {
             source: "icons/more.png"
         }
 
-        Accessible.name: qsTr("Palette menu")
+        text: qsTr("Palette menu") // used by screen readers (they ignore Accessible.name for buttons)
 
         onClicked: {
             paletteHeaderMenu.x = paletteHeaderMenuButton.x + paletteHeaderMenuButton.width - paletteHeaderMenu.width;
