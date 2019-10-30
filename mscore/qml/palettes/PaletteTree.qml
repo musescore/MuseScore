@@ -26,6 +26,7 @@ import "utils.js" as Utils
 
 ListView {
     id: paletteTree
+    Accessible.role: Accessible.Tree // makes NVDA say "TreeView"
 
     keyNavigationEnabled: true
     activeFocusOnTab: true
@@ -39,6 +40,8 @@ ListView {
     preferredHighlightBegin: Math.min(48, Math.floor(0.1 * height))
     preferredHighlightEnd: Math.ceil(height - preferredHighlightBegin)
     highlightRangeMode: itemDragged ? ListView.ApplyRange : ListView.NoHighlightRange
+
+    property Item currentTreeItem: currentItem // most recently focussed item at any level of the tree
 
     property string filter: ""
     onFilterChanged: {
@@ -186,6 +189,11 @@ ListView {
             property int rowIndex: index
             property var modelIndex: paletteTree.model.modelIndex(index, 0)
 
+            onActiveFocusChanged: {
+                if (activeFocus)
+                    paletteTree.currentTreeItem = this;
+            }
+
             Component.onCompleted: {
                 const w = paletteHeader.implicitWidth + leftPadding + rightPadding;
                 paletteTree.implicitWidth = Math.max(paletteTree.implicitWidth, w);
@@ -236,23 +244,35 @@ ListView {
             property size cellSize: model.gridSize
             property bool drawGrid: model.drawGrid
 
-            activeFocusOnTab: true
+            activeFocusOnTab: this === paletteTree.currentTreeItem
 
             function hidePalette() {
                 paletteTree.expandedPopupIndex = null;
                 paletteTree.paletteController.remove(modelIndex);
             }
 
-            Keys.onRightPressed: {
-                if (expanded)
-                    mainPalette.focus = true;
-                else
-                    toggleExpand();
-            }
-            Keys.onLeftPressed: {
-                if (expanded && !mainPalette.focus)
-                    toggleExpand();
-                focus = true;
+            Keys.onPressed: {
+                switch (event.key) {
+                    case Qt.Key_Right:
+                        if (expanded)
+                            mainPalette.focus = true;
+                        else
+                            toggleExpand();
+                        break;
+                    case Qt.Key_Left:
+                        if (expanded && !mainPalette.focus)
+                            toggleExpand();
+                        focus = true;
+                        break;
+                    case Qt.Key_Space:
+                    case Qt.Key_Enter:
+                    case Qt.Key_Return:
+                        toggleExpand();
+                        break;
+                    default:
+                        return; // don't accept event
+                }
+                event.accepted = true;
             }
 
             text: model.display
