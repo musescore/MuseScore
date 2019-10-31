@@ -5,7 +5,7 @@
 //  jackWeakAPI based on code from Stéphane Letz (Grame)
 //  partly based on Julien Pommier (PianoTeq : http://www.pianoteq.com/) code.
 //
-//  Copyright (C) 2002-2007 Werner Schweer and others
+//  Copyright (C) 2002-2019 Werner Schweer and others
 //  Copyright (C) 2009 Grame
 
 //  This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,6 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-
 #if (defined (_MSCVER) || defined (_MSC_VER))
    // Include stdint.h and #define _STDINT_H to prevent <systemdeps.h> from redefining types
    // #undef UNICODE to force LoadLibrary to use the char-based implementation instead of the wchar_t one.
@@ -30,6 +29,7 @@
    #define _STDINT_H 1  
 #endif
 #include <jack/jack.h>
+#include <jack/session.h>
 #include <jack/thread.h>
 #include <jack/midiport.h>
 #include <math.h>
@@ -41,6 +41,8 @@ typedef pthread_t jack_native_thread_t;
 #include <stdlib.h>
 #include <iostream>
 
+using std::cerr;
+
 /* dynamically load libjack and forward all registered calls to libjack
    (similar to what relaytool is trying to do, but more portably..)
 */
@@ -48,22 +50,19 @@ typedef pthread_t jack_native_thread_t;
 typedef void (*print_function)(const char *);
 typedef void *(*thread_routine)(void*);
 
-using std::cerr;
-
-int libjack_is_present = 0;     // public symbol, similar to what relaytool does.
+static int libjack_is_present = 0;     // public symbol, similar to what relaytool does.
 
 #ifdef WIN32
-HMODULE libjack_handle = 0;
+static HMODULE libjack_handle = 0;
 #else
 static void *libjack_handle = 0;
 #endif
-
-
+#ifndef WIN32
 // Since MSVC does not support the __attribute(constructor)__ extension, an alternative through
 //   static object construction is implemented. 
 //   See https://stackoverflow.com/questions/1113409/attribute-constructor-equivalent-in-vc for a similar
 //   approach.
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
+//#if (!defined (_MSCVER) && !defined (_MSC_VER))
 static void __attribute__((constructor)) tryload_libjack()
 #else
 static int tryload_libjack();
@@ -74,16 +73,27 @@ static int tryload_libjack()
     if (getenv("SKIP_LIBJACK") == 0) { // just in case libjack is causing troubles..
     #ifdef __APPLE__
         libjack_handle = dlopen("libjack.0.dylib", RTLD_LAZY);
+        if (!libjack_handle) {
+            qDebug("dlopen error : %s ", dlerror());
+        }
+        libjack_handle = dlopen("/usr/local/lib/libjack.0.dylib", RTLD_LAZY);
+        if (!libjack_handle) {
+            qDebug("dlopen error : %s ", dlerror());
+        }
     #elif defined(WIN32)
         // Force char implementation of library instead of possibly wchar_t implementation to be called.
-        libjack_handle = LoadLibraryA("libjack.dll");
+        #ifdef _WIN64
+            libjack_handle = LoadLibraryA("libjack64.dll");
+        #else
+            libjack_handle = LoadLibraryA("libjack.dll");
+        #endif
     #else
         libjack_handle = dlopen("libjack.so.0", RTLD_LAZY);
     #endif
-
     }
     libjack_is_present = (libjack_handle != 0);
-#if (defined (_MSCVER) || defined (_MSC_VER))
+#ifdef WIN32
+//#if  (defined (_MSCVER) || defined (_MSC_VER))
     return 1;
 #endif
 }
@@ -197,6 +207,9 @@ DECL_FUNCTION(int, jack_set_graph_order_callback, (jack_client_t *client,
 DECL_FUNCTION(int, jack_set_xrun_callback, (jack_client_t *client,
                                             JackXRunCallback xrun_callback,
                                             void *arg), (client, xrun_callback, arg));
+//DECL_FUNCTION(int, jack_set_latency_callback, (jack_client_t *client,
+//                                            JackLatencyCallback latency_callback,
+//                                            void *arg), (client, latency_callback, arg));
 DECL_FUNCTION(int, jack_activate, (jack_client_t *client), (client));
 DECL_FUNCTION(int, jack_deactivate, (jack_client_t *client), (client));
 DECL_FUNCTION_NULL(jack_port_t *, jack_port_register, (jack_client_t *client, const char *port_name, const char *port_type,
@@ -220,9 +233,12 @@ DECL_FUNCTION(jack_nframes_t, jack_port_get_latency, (jack_port_t *port), (port)
 DECL_FUNCTION(jack_nframes_t, jack_port_get_total_latency ,(jack_client_t * client, jack_port_t *port), (client, port));
 DECL_VOID_FUNCTION(jack_port_set_latency, (jack_port_t * port, jack_nframes_t frames), (port, frames));
 DECL_FUNCTION(int, jack_recompute_total_latency, (jack_client_t* client, jack_port_t* port), (client, port));
+//DECL_VOID_FUNCTION(jack_port_get_latency_range, (jack_port_t *port, jack_latency_callback_mode_t mode, jack_latency_range_t *range), (port, mode, range));
+//DECL_VOID_FUNCTION(jack_port_set_latency_range, (jack_port_t *port, jack_latency_callback_mode_t mode, jack_latency_range_t *range), (port, mode, range));
 DECL_FUNCTION(int, jack_recompute_total_latencies, (jack_client_t* client),(client));
 
 DECL_FUNCTION(int, jack_port_set_name, (jack_port_t *port, const char *port_name), (port, port_name));
+//DECL_FUNCTION(int, jack_port_rename, (jack_client_t *client, jack_port_t *port, const char *port_name), (client, port, port_name));
 DECL_FUNCTION(int, jack_port_set_alias, (jack_port_t *port, const char *alias), (port, alias));
 DECL_FUNCTION(int, jack_port_unset_alias, (jack_port_t *port, const char *alias), (port, alias));
 DECL_FUNCTION(int, jack_port_get_aliases, (const jack_port_t *port, char* const aliases[2]), (port,aliases));
@@ -235,6 +251,7 @@ DECL_FUNCTION(int, jack_disconnect, (jack_client_t * client, const char *source_
 DECL_FUNCTION(int, jack_port_disconnect, (jack_client_t * client, jack_port_t * port), (client, port));
 DECL_FUNCTION(int, jack_port_name_size,(),());
 DECL_FUNCTION(int, jack_port_type_size,(),());
+//DECL_FUNCTION(size_t, jack_port_type_get_buffer_size, (jack_client_t *client, const char* port_type), (client, port_type));
 
 DECL_FUNCTION(jack_nframes_t, jack_get_sample_rate, (jack_client_t *client), (client));
 DECL_FUNCTION(jack_nframes_t, jack_get_buffer_size, (jack_client_t *client), (client));
@@ -272,8 +289,8 @@ DECL_FUNCTION(jack_nframes_t, jack_get_current_transport_frame, (const jack_clie
 DECL_FUNCTION(int, jack_transport_reposition, (jack_client_t *client, const jack_position_t *pos), (client, pos));
 DECL_VOID_FUNCTION(jack_transport_start, (jack_client_t *client), (client));
 DECL_VOID_FUNCTION(jack_transport_stop, (jack_client_t *client), (client));
-// DECL_VOID_FUNCTION(jack_get_transport_info, (jack_client_t *client, jack_transport_info_t *tinfo), (client,tinfo));
-// DECL_VOID_FUNCTION(jack_set_transport_info, (jack_client_t *client, jack_transport_info_t *tinfo), (client,tinfo));
+//DECL_VOID_FUNCTION(jack_get_transport_info, (jack_client_t *client, jack_transport_info_t *tinfo), (client,tinfo));
+//DECL_VOID_FUNCTION(jack_set_transport_info, (jack_client_t *client, jack_transport_info_t *tinfo), (client,tinfo));
 
 DECL_FUNCTION(int, jack_client_real_time_priority, (jack_client_t* client), (client));
 DECL_FUNCTION(int, jack_client_max_real_time_priority, (jack_client_t* client), (client));
@@ -281,7 +298,7 @@ DECL_FUNCTION(int, jack_acquire_real_time_scheduling, (jack_native_thread_t thre
 DECL_FUNCTION(int, jack_client_create_thread, (jack_client_t* client,
                                       jack_native_thread_t *thread,
                                       int priority,
-                                      int realtime, // boolean
+                                      int realtime, 	// boolean
                                       thread_routine routine,
                                       void *arg), (client, thread, priority, realtime, routine, arg));
 DECL_FUNCTION(int, jack_drop_real_time_scheduling, (jack_native_thread_t thread), (thread));
@@ -302,6 +319,18 @@ DECL_FUNCTION(jack_intclient_t, jack_internal_client_load, (jack_client_t *clien
 */
 DECL_FUNCTION(jack_status_t, jack_internal_client_unload, (jack_client_t *client, jack_intclient_t intclient), (client, intclient));
 DECL_VOID_FUNCTION(jack_free, (void* ptr), (ptr));
+
+// session
+//DECL_FUNCTION(int, jack_set_session_callback, (jack_client_t* ext_client, JackSessionCallback session_callback, void* arg), (ext_client, session_callback, arg));
+//DECL_FUNCTION(jack_session_command_t*, jack_session_notify, (jack_client_t* ext_client, const char* target, jack_session_event_type_t ev_type, const char* path), (ext_client, target, ev_type, path));
+//DECL_FUNCTION(int, jack_session_reply, (jack_client_t* ext_client, jack_session_event_t *event), (ext_client, event));
+//DECL_VOID_FUNCTION(jack_session_event_free, (jack_session_event_t* ev), (ev));
+//DECL_FUNCTION(char*, jack_client_get_uuid, (jack_client_t* ext_client),(ext_client));
+//DECL_FUNCTION(char*, jack_get_uuid_for_client_name, (jack_client_t* ext_client, const char* client_name),(ext_client, client_name));
+//DECL_FUNCTION(char*, jack_get_client_name_by_uuid, (jack_client_t* ext_client, const char* client_uuid),(ext_client, client_uuid));
+//DECL_FUNCTION(int, jack_reserve_client_name, (jack_client_t* ext_client, const char* name, const char* uuid),(ext_client, name, uuid));
+//DECL_VOID_FUNCTION(jack_session_commands_free, (jack_session_command_t *cmds),(cmds));
+//DECL_FUNCTION(int, jack_client_has_session_callback, (jack_client_t *client, const char* client_name),(client, client_name));
 
 // MIDI
 
