@@ -39,11 +39,13 @@ class Excerpt : public QObject {
     /** The title of this part */
     Q_PROPERTY(QString               title     READ title)
 
-    /// \cond MS_INTERNAL
  protected:
+    /// \cond MS_INTERNAL
     Ms::Excerpt* const e;
+    /// \endcond
 
  public:
+    /// \cond MS_INTERNAL
     Excerpt(Ms::Excerpt* _e = nullptr)
        : QObject(), e(_e) {}
     Excerpt(const Excerpt&) = delete;

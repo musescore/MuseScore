@@ -55,11 +55,13 @@ class ScoreElement : public QObject {
 
       Ownership _ownership;
 
-      /// \cond MS_INTERNAL
    protected:
+      /// \cond MS_INTERNAL
       Ms::ScoreElement* const e;
+      /// \endcond
 
    public:
+      /// \cond MS_INTERNAL
       ScoreElement(Ms::ScoreElement* _e = nullptr, Ownership own = Ownership::PLUGIN)
          : QObject(), _ownership(own), e(_e) {}
       ScoreElement(const ScoreElement&) = delete;
