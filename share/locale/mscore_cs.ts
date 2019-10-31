@@ -2536,7 +2536,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1266"/>
         <source>Last system fill threshold:</source>
-        <translation>Míra naplnění posledního systému:</translation>
+        <translation>Hranice pro naplnění posledního systému:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1309"/>
@@ -3317,7 +3317,7 @@ předznamenání</translation>
     <message>
         <location filename="../../mscore/editstyle.ui" line="268"/>
         <source>MuseScore will change the style to suit the font better</source>
-        <translation>MuseScore změní styl, aby lépe vyhovoval písmu</translation>
+        <translation>MuseScore změní styl tak, aby lépe vyhovoval písmu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="271"/>

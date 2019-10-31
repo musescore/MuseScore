@@ -305,7 +305,9 @@
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Outra maneira de fazer seleções é segurar a tecla &quot;Shift&quot; enquanto arrasta.
+    Se sua seleção incluir notas, ela será automaticamente feita como uma seleção de intervalo;
+    caso contrário, será feita como uma seleção de lista.</translation>
     </message>
     <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
@@ -316,7 +318,13 @@
 
     - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>A maioria dos elementos na paleta de linhas abrangem uma extensão de um elemento inicial até um final.
+
+    Para editar sua extensão, duplo clique na linha (o que automaticamente seleciona seus limites) e:
+
+    - Pressione &quot;Shift-Direita&quot; para mover o limite para frente.
+
+    - Pressione &quot;Shift-Esquerda&quot; para mover o limite para trás.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>

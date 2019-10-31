@@ -1923,7 +1923,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="999"/>
         <source>Harpsichord</source>
-        <translation>拨弦琴</translation>
+        <translation>羽管键琴</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1001"/>
@@ -2014,12 +2014,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="55"/>
         <source>Concert Band</source>
-        <translation>管乐团</translation>
+        <translation>管乐队</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="56"/>
         <source>Marching Band</source>
-        <translation>游行乐队</translation>
+        <translation>行进乐队</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="57"/>
@@ -2049,7 +2049,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="62"/>
         <source>Winds</source>
-        <translation> 管乐器</translation>
+        <translation>木管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="63"/>
@@ -2072,7 +2072,7 @@
         <location filename="../instruments/instrumentsxml.h" line="67"/>
         <source>D♭ Picc.</source>
         <comment>D♭ Piccolo</comment>
-        <translation>降D调短笛</translation>
+        <translation>D♭ Picc.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="69"/>
@@ -2143,7 +2143,7 @@
         <location filename="../instruments/instrumentsxml.h" line="89"/>
         <source>Trv.</source>
         <comment>Traverso</comment>
-        <translation>特拉维索长笛</translation>
+        <translation>Trv.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
@@ -2402,13 +2402,13 @@
         <location filename="../instruments/instrumentsxml.h" line="177"/>
         <source>Tin Wh.</source>
         <comment>Tin Whistle</comment>
-        <translation>孔哨</translation>
+        <translation>Tin Wh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="179"/>
         <source>B♭ Tin Wh.</source>
         <comment>B♭ Tin Whistle</comment>
-        <translation>降B调孔哨</translation>
+        <translation>B♭ Tin Wh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="180"/>
@@ -3767,7 +3767,7 @@
         <location filename="../instruments/instrumentsxml.h" line="651"/>
         <source>A. Sack.</source>
         <comment>Alto Sackbut</comment>
-        <translation>中音萨克布号</translation>
+        <translation>A. Sack.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="652"/>
@@ -3778,7 +3778,7 @@
         <location filename="../instruments/instrumentsxml.h" line="653"/>
         <source>T. Sack.</source>
         <comment>Tenor Sackbut</comment>
-        <translation>次中音萨克布号</translation>
+        <translation>T. Sack.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="654"/>
@@ -3789,7 +3789,7 @@
         <location filename="../instruments/instrumentsxml.h" line="655"/>
         <source>B. Sack.</source>
         <comment>Bass Sackbut</comment>
-        <translation>低音萨克布号</translation>
+        <translation>B. Sack.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="657"/>
@@ -3912,7 +3912,7 @@
         <location filename="../instruments/instrumentsxml.h" line="705"/>
         <source>B♭ Sphn.</source>
         <comment>B♭ Sousaphone</comment>
-        <translation>B♭ 苏萨大号</translation>
+        <translation>B♭ Sphn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="707"/>
@@ -3976,13 +3976,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="725"/>
         <source>Roto-Toms</source>
-        <translation>定音鼓和手鼓</translation>
+        <translation>旋转鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="726"/>
         <source>Roto</source>
         <comment>Roto-Toms</comment>
-        <translation>定音鼓</translation>
+        <translation>Roto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="728"/>
@@ -4179,12 +4179,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="789"/>
         <source>Marimba (Grand Staff)</source>
-        <translation>马林巴琴 (大谱表)</translation>
+        <translation>马林巴琴（大谱表）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="792"/>
         <source>Marimba (Single Staff)</source>
-        <translation>马林巴琴 (单谱表)</translation>
+        <translation>马林巴琴（单谱表）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="794"/>
@@ -4201,7 +4201,7 @@
         <location filename="../instruments/instrumentsxml.h" line="796"/>
         <source>Cb. Mrm.</source>
         <comment>Contrabass Marimba</comment>
-        <translation>倍低音马林巴琴</translation>
+        <translation>Cb. Mrm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="798"/>

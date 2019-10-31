@@ -2657,12 +2657,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2251"/>
         <source>Brace thickness:</source>
-        <translation>ブレイス括弧の太さ:</translation>
+        <translation>波括弧の太さ:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2277"/>
         <source>Brace distance:</source>
-        <translation>ブレイス括弧の距離:</translation>
+        <translation>波括弧の距離:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="101"/>
@@ -4315,12 +4315,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4831"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
-        <translation>括弧鈎高さの値をリセット</translation>
+        <translation>&quot;括弧のかぎの高さ&quot;をリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4845"/>
         <source>Bracket hook height:</source>
-        <translation>括弧のフックの高さ:</translation>
+        <translation>括弧のかぎの高さ:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4899"/>
@@ -15718,7 +15718,7 @@ please choose a different name:</source>
         <location filename="../../mscore/menus.cpp" line="1591"/>
         <location filename="../../mscore/menus.cpp" line="1593"/>
         <source>Swing</source>
-        <translation>スウィング</translation>
+        <translation>Swing</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1596"/>
@@ -15733,7 +15733,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="1601"/>
         <source>pizz.</source>
-        <translation>ピチカート</translation>
+        <translation>pizz.</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1603"/>
@@ -15743,7 +15743,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="1606"/>
         <source>arco</source>
-        <translation>アルコ</translation>
+        <translation>arco</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1608"/>
@@ -15878,12 +15878,12 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="1102"/>
         <source>Bracket</source>
-        <translation>括弧</translation>
+        <translation>角括弧</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1103"/>
         <source>Brace</source>
-        <translation>括弧 (ブレイス)</translation>
+        <translation>波括弧</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1104"/>
@@ -15894,7 +15894,7 @@ please choose a different name:</source>
         <location filename="../../mscore/menus.cpp" line="1617"/>
         <source>mute</source>
         <extracomment>For brass instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
-        <translation>ミュート</translation>
+        <translation>mute</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1620"/>
@@ -15906,7 +15906,7 @@ please choose a different name:</source>
         <location filename="../../mscore/menus.cpp" line="1624"/>
         <source>open</source>
         <extracomment>For brass instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
-        <translation>オープン</translation>
+        <translation>open</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1627"/>

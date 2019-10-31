@@ -13096,7 +13096,7 @@ Laai sessie terug?</translation>
     <message>
         <location filename="../../mscore/workspace.cpp" line="150"/>
         <source>Reset workspace</source>
-        <translation type="unfinished"/>
+        <translation>Stel werkruimte terug</translation>
     </message>
 </context>
 <context>

@@ -230,7 +230,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="110"/>
         <source>MIDI Action</source>
-        <translation>Midi Action</translation>
+        <translation>MIDI műveletek</translation>
     </message>
 </context>
 <context>
@@ -3793,12 +3793,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9313"/>
         <source>Modifier scaling:</source>
-        <translation type="unfinished"/>
+        <translation>Módosító jel nagyítása:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9333"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Módosító jel nagyítása&quot; visszaállítás</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9347"/>
@@ -3813,12 +3813,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9381"/>
         <source>Modifier vertical offset:</source>
-        <translation type="unfinished"/>
+        <translation>Módosító jel függőleges eltolás:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9401"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Módosító jel függőleges eltolás&quot; visszaállítása</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9730"/>
@@ -6543,7 +6543,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="136"/>
         <source>Fret number:</source>
-        <translation>Bund Szám:</translation>
+        <translation>Érintő szám:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="146"/>
@@ -7372,17 +7372,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="84"/>
         <source>Key signature mode:</source>
-        <translation type="unfinished"/>
+        <translation>Előjegyzés mód:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="91"/>
         <source>Key signature mode</source>
-        <translation type="unfinished"/>
+        <translation>Előjegyzés mód</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="148"/>
         <source>Reset &apos;Key signature mode&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Előjegyzés mód&quot; érték visszaállítása</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="165"/>
@@ -9629,7 +9629,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="408"/>
         <source>Reset &apos;Follow staff size&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Kottasor-méret követése&quot; visszaállítása</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="73"/>
@@ -10938,7 +10938,7 @@ az n-ola kilógna az ütemből</translation>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="469"/>
         <source>Sound name</source>
-        <translation type="unfinished"/>
+        <translation>Hang neve</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="484"/>
@@ -11017,7 +11017,7 @@ az n-ola kilógna az ütemből</translation>
     <message>
         <location filename="../../mscore/qml/palettes/MoreElementsPopup.qml" line="64"/>
         <source>Add to %1</source>
-        <translation type="unfinished"/>
+        <translation>Hozzáadás ehhez: %1</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/MoreElementsPopup.qml" line="208"/>
@@ -11027,12 +11027,12 @@ az n-ola kilógna az ütemből</translation>
     <message>
         <location filename="../../mscore/qml/palettes/MoreElementsPopup.qml" line="215"/>
         <source>Delete element(s)</source>
-        <translation type="unfinished"/>
+        <translation>Elem(ek) törlése</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/MoreElementsPopup.qml" line="272"/>
         <source>Drag items to the palette or directly on your score</source>
-        <translation type="unfinished"/>
+        <translation>Húzza az elemeket a palettára vagy közvetlenül a kottára</translation>
     </message>
 </context>
 <context>
@@ -11125,8 +11125,8 @@ A human-readable summary is available:
 %2</source>
         <translation>A MusicXML egy számos alkalmazás által támogatott nyílt fájlformátum digitális kották megosztásához.
 Copyright © 2004-2018 MusicXML munkatársak
-Specifkáció, kiadja a W3C Music Notation Community
-Group, licensz: W3C Community Contributor License Agreement
+Specifikáció, kiadja a W3C Music Notation Community
+Group, licenc: W3C Community Contributor License Agreement
 (CLA):
 %1
 Olvasható összefoglalás:
@@ -12079,12 +12079,17 @@ Channel: %3
 Bank: %4
 Program: %5
 Sound: %6</source>
-        <translation type="unfinished"/>
+        <translation>Szólamnév: %1
+Hangszer: %2
+Csatorna: %3
+Bank: %4
+Program: %5
+Hangszín: %6</translation>
     </message>
     <message>
         <location filename="../../mscore/mixertrackchannel.cpp" line="170"/>
         <source>~no sound~</source>
-        <translation type="unfinished"/>
+        <translation>~nincs hang~</translation>
     </message>
     <message>
         <location filename="../../mscore/mixertrackchannel.cpp" line="202"/>
@@ -12115,12 +12120,16 @@ Primary Instrument: %2
 Bank: %3
 Program: %4
 Sound: %5</source>
-        <translation type="unfinished"/>
+        <translation>Szólamnév: %1
+Elsődleges hangszer: %2
+Bank: %3
+Program: %4
+Hangszín: %5</translation>
     </message>
     <message>
         <location filename="../../mscore/mixertrackpart.cpp" line="188"/>
         <source>~no sound~</source>
-        <translation type="unfinished"/>
+        <translation>~nincs hang~</translation>
     </message>
 </context>
 <context>
@@ -13086,7 +13095,7 @@ Helyreállítsa a munkamenetet?</translation>
     <message>
         <location filename="../../mscore/workspace.cpp" line="150"/>
         <source>Reset workspace</source>
-        <translation type="unfinished"/>
+        <translation>Munkaterület visszaállítása</translation>
     </message>
 </context>
 <context>
@@ -13284,12 +13293,12 @@ internetkapcsolat szükséges.</translation>
     <message>
         <location filename="../../mscore/palette/palettecelldialog.cpp" line="123"/>
         <source>The palette cell properties have been modified.</source>
-        <translation type="unfinished"/>
+        <translation>A palettacella tulajdonságai módosultak.</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/palettecelldialog.cpp" line="124"/>
         <source>Do you want to save your changes?</source>
-        <translation type="unfinished"/>
+        <translation>Szeretnéd bezárás előtt menteni?</translation>
     </message>
 </context>
 <context>
@@ -13307,7 +13316,7 @@ internetkapcsolat szükséges.</translation>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="78"/>
         <source>The palette was hidden or changed</source>
-        <translation type="unfinished"/>
+        <translation>A paletta elrejtésre került vagy módosult</translation>
     </message>
 </context>
 <context>
@@ -13315,12 +13324,12 @@ internetkapcsolat szükséges.</translation>
     <message>
         <location filename="../../mscore/palette/palettedialog.cpp" line="146"/>
         <source>The palette properties have been modified.</source>
-        <translation type="unfinished"/>
+        <translation>A paletta tulajdonságai módosultak</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/palettedialog.cpp" line="147"/>
         <source>Do you want to save your changes?</source>
-        <translation type="unfinished"/>
+        <translation>Szeretnéd bezárás előtt menteni?</translation>
     </message>
 </context>
 <context>
@@ -13328,12 +13337,12 @@ internetkapcsolat szükséges.</translation>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="797"/>
         <source>Do you want to permanently delete this custom palette?</source>
-        <translation type="unfinished"/>
+        <translation>Véglegesen törölni kívánja ezt a testreszabott palettát?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="821"/>
         <source>Do you want to restore this palette to its default state? All changes to this palette will be lost.</source>
-        <translation type="unfinished"/>
+        <translation>Visszaállítja a palettát alapállapotra? Ha igen, a palettán végrehajtott valamennyi módosítás elvész.</translation>
     </message>
 </context>
 <context>
@@ -13949,12 +13958,12 @@ Ennek a pluginnek a futtatásához megnyitott kottára van szükség.</translati
     <message>
         <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="78"/>
         <source>Plugin Error</source>
-        <translation type="unfinished"/>
+        <translation>Bővítményhiba</translation>
     </message>
     <message>
         <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="78"/>
         <source>Score update recursion limit reached (%1)</source>
-        <translation type="unfinished"/>
+        <translation>Elértük a kotta frissítésének rekurziós korlátját (%1)</translation>
     </message>
 </context>
 <context>
@@ -14120,7 +14129,7 @@ nem sikerült: %2</translation>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="180"/>
         <source>Unnamed</source>
-        <translation type="unfinished"/>
+        <translation>Névtelen</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="226"/>
@@ -14137,22 +14146,22 @@ nem sikerült: %2</translation>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="303"/>
         <source> flat</source>
-        <translation type="unfinished"/>
+        <translation> bé</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="304"/>
         <source> sharp</source>
-        <translation type="unfinished"/>
+        <translation> kereszt</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="305"/>
         <source> double flat</source>
-        <translation type="unfinished"/>
+        <translation> duplabé</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="306"/>
         <source> double sharp</source>
-        <translation type="unfinished"/>
+        <translation> duplakereszt</translation>
     </message>
 </context>
 <context>
@@ -15000,42 +15009,42 @@ Szeretné most megtekinteni ezeket az útmutatókat?</translation>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="301"/>
         <source>Delete permanently</source>
-        <translation type="unfinished"/>
+        <translation>Végleges törlés</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="302"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Elrejtés</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="348"/>
         <source>Do you want to hide this custom palette cell or permanently delete it?</source>
-        <translation type="unfinished"/>
+        <translation>Elrejti vagy véglegesen törli ezt a testreszabott palettacellát?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="348"/>
         <source>Do you want to hide these custom palette cells or permanently delete them?</source>
-        <translation type="unfinished"/>
+        <translation>Elrejti vagy véglegesen törli ezeket a testreszabott palettacellákat?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="357"/>
         <source>Do you want to permanently delete this custom palette cell?</source>
-        <translation type="unfinished"/>
+        <translation>Véglegesen törölni kívánja ezt a testreszabott palettacellát?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="357"/>
         <source>Do you want to permanently delete these custom palette cells?</source>
-        <translation type="unfinished"/>
+        <translation>Véglegesen törölni kívánja ezeket a testreszabott palettacellákat?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="377"/>
         <source>Do you want to hide this custom palette or permanently delete it?</source>
-        <translation type="unfinished"/>
+        <translation>Elrejti vagy véglegesen törli ezt a testreszabott palettát?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="377"/>
         <source>Do you want to hide these custom palettes or permanently delete them?</source>
-        <translation type="unfinished"/>
+        <translation>Elrejti vagy véglegesen törli ezeket a testreszabott palettákat?</translation>
     </message>
 </context>
 <context>
@@ -15729,7 +15738,7 @@ válassz egy másik nevet:</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="1603"/>
         <source>Pizzicato</source>
-        <translation type="unfinished"/>
+        <translation>Pizzicato</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1606"/>
@@ -15739,7 +15748,7 @@ válassz egy másik nevet:</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="1608"/>
         <source>Arco</source>
-        <translation type="unfinished"/>
+        <translation>Arco</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1611"/>
@@ -16097,12 +16106,13 @@ paletta-fájl írása sikertelen:</translation>
         <location filename="../../mscore/qml/palettes/Palette.qml" line="265"/>
         <source>Drag and drop any element here
 (Use %1+Shift to add custom element from the score)</source>
-        <translation type="unfinished"/>
+        <translation>Húzza ide az elemeket.
+(A %1+Shift lenyomásával a kotta bármely elemét hozzáadhatja.)</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/Palette.qml" line="266"/>
         <source>No elements</source>
-        <translation type="unfinished"/>
+        <translation>Nincsenek elemek</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/Palette.qml" line="512"/>
@@ -16222,12 +16232,12 @@ paletta-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="41"/>
         <source>More palettes</source>
-        <translation type="unfinished"/>
+        <translation>Több paletta</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="55"/>
         <source>All palettes were added</source>
-        <translation type="unfinished"/>
+        <translation>Minden palettát hozzáadott</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="117"/>
@@ -16237,22 +16247,22 @@ paletta-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="119"/>
         <source>Add %1 palette</source>
-        <translation type="unfinished"/>
+        <translation>%1 paletta hozzáadása</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="142"/>
         <source>%1 Added!</source>
-        <translation type="unfinished"/>
+        <translation>%1 Hozzáadva!</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="142"/>
         <source>%1 removed</source>
-        <translation type="unfinished"/>
+        <translation>%1 eltávolítva</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="161"/>
         <source>Create custom palette</source>
-        <translation type="unfinished"/>
+        <translation>Testreszabott paletta létrehozása</translation>
     </message>
 </context>
 <context>
@@ -16260,7 +16270,7 @@ paletta-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="41"/>
         <source>Add palettes</source>
-        <translation type="unfinished"/>
+        <translation>Paletták hozzáadása</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="50"/>
@@ -16270,7 +16280,7 @@ paletta-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="83"/>
         <source>Clear search text</source>
-        <translation type="unfinished"/>
+        <translation>Keresőszöveg törlése</translation>
     </message>
 </context>
 <context>
@@ -17133,7 +17143,7 @@ Ez az összes bővítményt újra beolvassa, és életbe lépteti a változások
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1036"/>
         <source>Use the same color in palettes</source>
-        <translation type="unfinished"/>
+        <translation>Azonos szín használata a palettákon</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1052"/>
@@ -17738,7 +17748,7 @@ A késleltetés állítása lehetővé teszi, hogy a MIDI eszközt szinkronizál
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2843"/>
         <source>MIDI Output Latency</source>
-        <translation>MIDI kimenet késleltétése</translation>
+        <translation>MIDI kimenet késleltetése</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2846"/>
@@ -18825,7 +18835,7 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../libmscore/note.cpp" line="2758"/>
         <source>%1; String %2; Fret %3</source>
-        <translation type="unfinished"/>
+        <translation>%1; Húr: %2; Érintő: %3</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="2761"/>
@@ -18845,7 +18855,7 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../libmscore/note.cpp" line="2781"/>
         <source>%1 String %2 Fret %3</source>
-        <translation type="unfinished"/>
+        <translation>%1; Húr: %2; Érintő: %3</translation>
     </message>
     <message>
         <location filename="../../libmscore/read206.cpp" line="3815"/>
@@ -19908,7 +19918,7 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../mscore/stafftext.ui" line="315"/>
         <source>MIDI Action</source>
-        <translation>Midi Action</translation>
+        <translation>MIDI műveletek</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="345"/>
@@ -20263,22 +20273,22 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="383"/>
         <source>Switch all sounds:</source>
-        <translation type="unfinished"/>
+        <translation>Minden hangszín váltása:</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="403"/>
         <source>Switch all sounds to expressive</source>
-        <translation type="unfinished"/>
+        <translation>Minden hangszín legyen kifejező</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="413"/>
         <source>Switch all sounds to non-expressive</source>
-        <translation type="unfinished"/>
+        <translation>Egyik hangszín se legyen kifejező</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="423"/>
         <source>Reset all sounds to defaults</source>
-        <translation type="unfinished"/>
+        <translation>Minden hangszín legyen alapértelmezett</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="406"/>
@@ -21263,32 +21273,32 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="54"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>Összecsukás</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="54"/>
         <source>Expand</source>
-        <translation type="unfinished"/>
+        <translation>Kibontás</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="93"/>
         <source>Remove element</source>
-        <translation type="unfinished"/>
+        <translation>Elem eltávolítása</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="125"/>
         <source>Palette menu</source>
-        <translation type="unfinished"/>
+        <translation>Palettamenü</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="154"/>
         <source>Hide/Delete Palette</source>
-        <translation type="unfinished"/>
+        <translation>Paletta elrejtése/törlése</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="154"/>
         <source>Hide Palette</source>
-        <translation type="unfinished"/>
+        <translation>Paletta elrejtése</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="158"/>
@@ -21303,7 +21313,7 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="170"/>
         <source>Reset Palette</source>
-        <translation type="unfinished"/>
+        <translation>Paletta visszaállítása</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="174"/>
@@ -21499,7 +21509,7 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="152"/>
         <source>Upload score audio using current synthesizer settings</source>
-        <translation type="unfinished"/>
+        <translation>Kotta hanganyagának feltöltése a jelenlegi szintetizátor-beállítások használatával</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="164"/>
@@ -23885,12 +23895,12 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1123"/>
         <source>Screen: Previous</source>
-        <translation type="unfinished"/>
+        <translation>Képernyő: Előző</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1129"/>
         <source>Screen: Next</source>
-        <translation type="unfinished"/>
+        <translation>Képernyő: Következő</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1186"/>
@@ -24193,7 +24203,7 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1962"/>
         <source>Toggle &apos;Workspaces&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>A &quot;Munkaterületek&quot; eszköztár ki/bekapcsolása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1968"/>
@@ -29906,7 +29916,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3345"/>
         <source>C clef</source>
-        <translation type="unfinished"/>
+        <translation>C-kulcs</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3353"/>
@@ -29941,17 +29951,17 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3490"/>
         <source>Forte</source>
-        <translation type="unfinished"/>
+        <translation>Forte</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3500"/>
         <source>Mezzo</source>
-        <translation type="unfinished"/>
+        <translation>Mezzo</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3501"/>
         <source>Niente</source>
-        <translation type="unfinished"/>
+        <translation>Niente</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3509"/>
@@ -29961,12 +29971,12 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3510"/>
         <source>Rinforzando</source>
-        <translation type="unfinished"/>
+        <translation>Rinforzando</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3513"/>
         <source>Sforzando</source>
-        <translation type="unfinished"/>
+        <translation>Sforzando</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3520"/>
@@ -29976,7 +29986,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3586"/>
         <source>F clef</source>
-        <translation type="unfinished"/>
+        <translation>F-kulcs</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3596"/>
@@ -30051,7 +30061,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3744"/>
         <source>G clef</source>
-        <translation type="unfinished"/>
+        <translation>G-kulcs</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3770"/>
@@ -30111,37 +30121,37 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4170"/>
         <source>128th note (semihemidemisemiquaver) stem up</source>
-        <translation type="unfinished"/>
+        <translation>128-ad hangjegy szára felfelé</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4172"/>
         <source>16th note (semiquaver) stem up</source>
-        <translation type="unfinished"/>
+        <translation>16-od hangjegy szára felfelé</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4176"/>
         <source>32nd note (demisemiquaver) stem up</source>
-        <translation type="unfinished"/>
+        <translation>32-ed hangjegy szára felfelé</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4180"/>
         <source>64th note (hemidemisemiquaver) stem up</source>
-        <translation type="unfinished"/>
+        <translation>64-ed hangjegy szára felfelé</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4182"/>
         <source>Eighth note (quaver) stem up</source>
-        <translation type="unfinished"/>
+        <translation>Nyolcad hangjegy szára felfelé</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4186"/>
         <source>Half note (minim) stem up</source>
-        <translation type="unfinished"/>
+        <translation>Fél hangjegy szára felfelé</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4188"/>
         <source>Quarter note (crotchet) stem up</source>
-        <translation type="unfinished"/>
+        <translation>Negyed hangjegy szára felfelé</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4189"/>
@@ -30201,57 +30211,57 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4906"/>
         <source>Repeat last bar</source>
-        <translation type="unfinished"/>
+        <translation>Utolsó ütem ismétlése</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4907"/>
         <source>Repeat last two bars</source>
-        <translation type="unfinished"/>
+        <translation>Utolsó két ütem ismétlése</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4908"/>
         <source>Repeat last four bars</source>
-        <translation type="unfinished"/>
+        <translation>Utolsó négy ütem ismétlése</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4915"/>
         <source>128th (semihemidemisemiquaver) rest</source>
-        <translation type="unfinished"/>
+        <translation>128-ad szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4916"/>
         <source>16th (semiquaver) rest</source>
-        <translation type="unfinished"/>
+        <translation>Tizenhatod szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4918"/>
         <source>32nd (demisemiquaver) rest</source>
-        <translation type="unfinished"/>
+        <translation>32-ed szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4920"/>
         <source>64th (hemidemisemiquaver) rest</source>
-        <translation type="unfinished"/>
+        <translation>64-ed szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4921"/>
         <source>Eighth (quaver) rest</source>
-        <translation type="unfinished"/>
+        <translation>Nyolcad szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4929"/>
         <source>Half rest on leger line</source>
-        <translation type="unfinished"/>
+        <translation>Fél értékű szünet a pótvonalon</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4932"/>
         <source>Quarter (crotchet) rest</source>
-        <translation type="unfinished"/>
+        <translation>Negyed értékű szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4936"/>
         <source>Whole rest on leger line</source>
-        <translation type="unfinished"/>
+        <translation>Egész értékű szünet a pótvonalon</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4945"/>
@@ -30341,7 +30351,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5313"/>
         <source>Space</source>
-        <translation type="unfinished"/>
+        <translation>Helyköz</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5303"/>

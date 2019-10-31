@@ -25,7 +25,7 @@
     <message>
         <location filename="../../aeolus/aeolus_gui.ui" line="22"/>
         <source>Azimuth</source>
-        <translation>Azimuth</translation>
+        <translation>Azimut</translation>
     </message>
     <message>
         <location filename="../../aeolus/aeolus_gui.ui" line="29"/>
@@ -352,7 +352,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="73"/>
         <source>Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Forhold</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="88"/>
@@ -368,7 +368,7 @@
         <location filename="../../effects/compressor/compressor_gui.ui" line="118"/>
         <location filename="../../effects/compressor/compressor_gui.ui" line="400"/>
         <source>RMS</source>
-        <translation type="unfinished"/>
+        <translation>effektverdi</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="128"/>
@@ -403,7 +403,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="312"/>
         <source>Ratio (1:n)</source>
-        <translation type="unfinished"/>
+        <translation>Forhold (1:n)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="315"/>
@@ -4366,7 +4366,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4980"/>
         <source>Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Forhold</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4993"/>
@@ -9542,7 +9542,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="155"/>
         <source>Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Forhold</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="287"/>
@@ -11355,7 +11355,7 @@ feilet: %2</translation>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="389"/>
         <source>Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Forhold</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="390"/>
@@ -21409,7 +21409,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="174"/>
         <source>Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Forhold</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="181"/>

@@ -223,42 +223,44 @@ Du kan også sette standardstiler ved å bruke Format &gt; Stil...</translation>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Den raskeste måten å rulle opp og ned er å bruke rullehjulet på musa di eller tilsvarende (for eksempel to-finger sveip). For å rulle horisontalt, hold &quot;shift&quot;-tasten mens du ruller.</translation>
     </message>
     <message>
         <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Navigasjonstaster på tastaturet ditt, så sp, &quot;PgUp&quot;. &quot;PgDn&quot;, &quot;Home&quot; og &quot;End&quot; virker akkurat som i andre programmer for å forflytte deg mellom sider. Tastaturer som mangler disse tastene har ofte andre alternativer, som &quot;Fn+Opp/Ned/Høyre/Venstre&quot;.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Du kan flytte partituret ved å klikke i et tomt område og trekke i partituret. 
+Du kan også velge områder ved å holde &quot;Shift&quot; mens du trekker.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>For å skrive inn en note med den valgte noteverdien, tast inn notenavnet eller klikk i staven.
+Trykk &quot;Ctrl+Opp/Ned&quot; (i mac OS: &quot;Cmnd+Opp/Ned&quot;) for å skifte oktav.</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>For å legge et tilfeldig fortegn til en note, trykk &quot;Opp&quot; eller &quot;Ned&quot; for å heve eller senke tonehøyden, eller klikk et av disse symbolene</translation>
     </message>
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>For å legge til en note i en akkord, press &quot;Shift&quot; mens du taster inn notenavnet eller klikker på staven.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>For å lage en triol eller en annen ol, velg noteverdien som representerer den totale verdien av olen, og trykk så &quot;Cntrl+tall&quot; eller bruk Legg til &gt; Oler.</translation>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.

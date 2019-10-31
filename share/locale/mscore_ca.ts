@@ -109,7 +109,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="64"/>
         <source>Move current score up in list</source>
-        <translation>Moure partitura actual amunt a llista</translation>
+        <translation>Moure la partitura actual amunt de la llista</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="97"/>
@@ -12416,23 +12416,23 @@ abans de tancar?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1430"/>
         <source>Load Plugin</source>
-        <translation>Carrega connector</translation>
+        <translation>Carregar complement</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1431"/>
         <source>MuseScore Plugin</source>
-        <translation>Connector MuseScore</translation>
+        <translation>Complement de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1434"/>
         <location filename="../../mscore/file.cpp" line="1484"/>
         <source>Save Plugin</source>
-        <translation>Desa connector</translation>
+        <translation>Desar complement</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1435"/>
         <source>MuseScore Plugin File</source>
-        <translation>Fitxer de connector de MuseScore</translation>
+        <translation>Fitxer de complement de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1513"/>
@@ -12820,7 +12820,7 @@ Selecciona un compàs i torna a intentar-ho</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2081"/>
         <source>&amp;Plugins</source>
-        <translation>&amp;Connectors</translation>
+        <translation>&amp;Complements</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2086"/>
@@ -13096,7 +13096,7 @@ Restaurar sessió?</translation>
     <message>
         <location filename="../../mscore/workspace.cpp" line="150"/>
         <source>Reset workspace</source>
-        <translation type="unfinished"/>
+        <translation>Reiniciar l&apos;espai de treball</translation>
     </message>
 </context>
 <context>
@@ -13241,7 +13241,7 @@ a internet habilitada</translation>
     <message>
         <location filename="../../effects/noeffect/noeffect.cpp" line="41"/>
         <source>No Plugin</source>
-        <translation>Sense connector</translation>
+        <translation>Sense complement</translation>
     </message>
 </context>
 <context>
@@ -13566,7 +13566,7 @@ a internet habilitada</translation>
         <location filename="../../mscore/plugin/pluginCreator.cpp" line="505"/>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
-        <translation>Plugin &quot;%1&quot; té canvis.
+        <translation>El complement &quot;%1&quot; té canvis.
 ¿Desar abans de tancar?</translation>
     </message>
     <message>
@@ -13593,7 +13593,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/plugin/pluginCreator.cpp" line="317"/>
         <source>Plugin Details:</source>
-        <translation>Detalls del connector:</translation>
+        <translation>Detalls del complement:</translation>
     </message>
     <message>
         <location filename="../../mscore/plugin/pluginCreator.cpp" line="318"/>
@@ -13622,7 +13622,7 @@ Save before closing?</source>
 This plugin requires an open score to run.
 </source>
         <translation>No es pot obrir la partitura.
-Aquest connector requereix obrir una partitura per funcionar.
+Aquest complement requereix una partitura oberta per funcionar.
 </translation>
     </message>
     <message>
@@ -13633,7 +13633,7 @@ Aquest connector requereix obrir una partitura per funcionar.
     <message>
         <location filename="../../mscore/plugin/pluginCreator.cpp" line="468"/>
         <source>Save Plugin</source>
-        <translation>Desa connector</translation>
+        <translation>Desar complement</translation>
     </message>
     <message>
         <location filename="../../mscore/plugin/pluginCreator.cpp" line="468"/>
@@ -13661,7 +13661,7 @@ Aquest connector requereix obrir una partitura per funcionar.
     <message>
         <location filename="../../mscore/plugin/pluginManager.cpp" line="358"/>
         <source>Plugins reloaded.</source>
-        <translation>S&apos;han tornat a carregar els connectors.</translation>
+        <translation>S&apos;han tornat a carregar els complements.</translation>
     </message>
 </context>
 <context>
@@ -13903,7 +13903,7 @@ Aquest connector requereix obrir una partitura per funcionar.
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1299"/>
         <source>Choose Plugin Folder</source>
-        <translation>Trieu la carpeta dels connectors</translation>
+        <translation>Trieu la carpeta dels complements</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1315"/>
@@ -13960,12 +13960,12 @@ Aquest connector requereix obrir una partitura per funcionar.
     <message>
         <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="78"/>
         <source>Plugin Error</source>
-        <translation type="unfinished"/>
+        <translation>Error en complement</translation>
     </message>
     <message>
         <location filename="../../mscore/plugin/qmlpluginengine.cpp" line="78"/>
         <source>Score update recursion limit reached (%1)</source>
-        <translation type="unfinished"/>
+        <translation>S&apos;ha arribat al límit de recursió d&apos;actualització de la partitura (%1)</translation>
     </message>
 </context>
 <context>
@@ -15020,32 +15020,32 @@ Voleu veure aquestes guies?</translation>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="348"/>
         <source>Do you want to hide this custom palette cell or permanently delete it?</source>
-        <translation type="unfinished"/>
+        <translation>¿Voleu amagar aquesta cel·la de paleta personalitzada o suprimir-la de manera permanent?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="348"/>
         <source>Do you want to hide these custom palette cells or permanently delete them?</source>
-        <translation type="unfinished"/>
+        <translation>¿Voleu amagar aquestes cel·les de paleta personalitzada o suprimir-les de manera permanent?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="357"/>
         <source>Do you want to permanently delete this custom palette cell?</source>
-        <translation type="unfinished"/>
+        <translation>¿Voleu suprimir aquesta cel·la de paleta personalitzada de manera permanent?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="357"/>
         <source>Do you want to permanently delete these custom palette cells?</source>
-        <translation type="unfinished"/>
+        <translation>¿Voleu suprimir aquestes cel·les de paleta personalitzada de manera permanent?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="377"/>
         <source>Do you want to hide this custom palette or permanently delete it?</source>
-        <translation type="unfinished"/>
+        <translation>¿Voleu amagar aquesta paleta personalitzada o suprimir-la de manera permanent?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="377"/>
         <source>Do you want to hide these custom palettes or permanently delete them?</source>
-        <translation type="unfinished"/>
+        <translation>¿Voleu amagar aquestes paletes personalitzades o suprimir-les de manera permanent?</translation>
     </message>
 </context>
 <context>
@@ -15091,18 +15091,18 @@ Voleu veure aquestes guies?</translation>
     <message>
         <location filename="../../mscore/workspace.cpp" line="49"/>
         <source>Basic edited</source>
-        <translation type="unfinished"/>
+        <translation>Espai bàsic editat</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="50"/>
         <source>Advanced edited</source>
-        <translation type="unfinished"/>
+        <translation>Espai avançat editat</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="1072"/>
         <source>%1 edited</source>
         <extracomment>Name of the edited read-only workspace, %1 is replaced with the old workspace name</extracomment>
-        <translation type="unfinished"/>
+        <translation>Espai %1 editat</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="44"/>
@@ -15115,7 +15115,7 @@ Voleu veure aquestes guies?</translation>
     <message>
         <location filename="../../mscore/workspacecombobox.cpp" line="65"/>
         <source>Select workspace</source>
-        <translation>Selecciona espai de treball</translation>
+        <translation>Seleccionar espai de treball</translation>
     </message>
 </context>
 <context>
@@ -16108,7 +16108,8 @@ error:</translation>
         <location filename="../../mscore/qml/palettes/Palette.qml" line="265"/>
         <source>Drag and drop any element here
 (Use %1+Shift to add custom element from the score)</source>
-        <translation type="unfinished"/>
+        <translation>Arrossegar qualsevol element aquí
+(Fer servir %1+Maj per afegir un element personalitzat des de la partitura)</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/Palette.qml" line="266"/>
@@ -16627,12 +16628,12 @@ volum</translation>
     <message>
         <location filename="../../mscore/plugin/pluginCreator.ui" line="171"/>
         <source>Close Plugin Creator</source>
-        <translation>Tanca el creador de connectors</translation>
+        <translation>Tancar el creador de complements</translation>
     </message>
     <message>
         <location filename="../../mscore/plugin/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
-        <translation>Recarregar l&apos;actual connector original</translation>
+        <translation>Recarregar l&apos;actual complement original</translation>
     </message>
 </context>
 <context>
@@ -16640,7 +16641,7 @@ volum</translation>
     <message>
         <location filename="../../mscore/plugin/pluginManager.ui" line="17"/>
         <source>Plugin Manager</source>
-        <translation>Administrador de connectors</translation>
+        <translation>Administrador de complements</translation>
     </message>
     <message>
         <location filename="../../mscore/plugin/pluginManager.ui" line="47"/>
@@ -16676,13 +16677,13 @@ volum</translation>
         <location filename="../../mscore/plugin/pluginManager.ui" line="131"/>
         <source>Reload all plugins.
 This will re-evaluate all plugins, picking up any changes that may have occurred.</source>
-        <translation>Torna a carregar tots els connectors.
-Això revaluarà tots els connectors, recollint els canvis que s&apos;hagin produït.</translation>
+        <translation>Torna a carregar tots els complements.
+Això revaluarà tots els complements, recollint els canvis que s&apos;hagin produït.</translation>
     </message>
     <message>
         <location filename="../../mscore/plugin/pluginManager.ui" line="135"/>
         <source>Reload Plugins</source>
-        <translation>Recarregar els connectors</translation>
+        <translation>Recarregar els complements</translation>
     </message>
 </context>
 <context>
@@ -16866,7 +16867,7 @@ Això revaluarà tots els connectors, recollint els canvis que s&apos;hagin prod
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="498"/>
         <source>Plugins:</source>
-        <translation>Connectors:</translation>
+        <translation>Complements:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="508"/>
@@ -16881,12 +16882,12 @@ Això revaluarà tots els connectors, recollint els canvis que s&apos;hagin prod
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="518"/>
         <source>Plugin folder</source>
-        <translation>Carpeta dels connectors</translation>
+        <translation>Carpeta dels complements</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="521"/>
         <source>Insert path to plugin folder</source>
-        <translation>Inserir ruta de carpeta de connectors</translation>
+        <translation>Inserir ruta de carpeta de complements</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="528"/>
@@ -16902,7 +16903,7 @@ Això revaluarà tots els connectors, recollint els canvis que s&apos;hagin prod
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="541"/>
         <source>Choose plugin folder</source>
-        <translation>Trieu la carpeta dels connectors</translation>
+        <translation>Trieu la carpeta dels complements</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="558"/>
@@ -17016,7 +17017,7 @@ Això revaluarà tots els connectors, recollint els canvis que s&apos;hagin prod
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="544"/>
         <source>Opens a dialog for selecting the plugin folder</source>
-        <translation>Obre una caixa de diàleg per seleccionar la carpeta de connectors</translation>
+        <translation>Obre una caixa de diàleg per seleccionar la carpeta de complements</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="594"/>
@@ -18322,7 +18323,7 @@ L&apos;ajustament de la latència pot ajudar a sincronitzar el maquinari MIDI am
 This plugin requires an open score to run.
 </source>
         <translation>No es pot obrir la partitura.
-Aquest connector requereix obrir una partitura per funcionar.
+Aquest complement requereix una partitura oberta per funcionar.
 </translation>
     </message>
 </context>
@@ -18838,7 +18839,7 @@ Visita la %1pàgina web de MuseScore %2 per obtenir la darrera versió.</transla
     <message>
         <location filename="../../libmscore/note.cpp" line="2758"/>
         <source>%1; String %2; Fret %3</source>
-        <translation type="unfinished"/>
+        <translation>%1; Corda %2; Trast %3</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="2761"/>
@@ -18858,7 +18859,7 @@ Visita la %1pàgina web de MuseScore %2 per obtenir la darrera versió.</transla
     <message>
         <location filename="../../libmscore/note.cpp" line="2781"/>
         <source>%1 String %2 Fret %3</source>
-        <translation type="unfinished"/>
+        <translation>%1; Corda %2; Trast %3</translation>
     </message>
     <message>
         <location filename="../../libmscore/read206.cpp" line="3815"/>
@@ -21512,7 +21513,7 @@ Nota: &quot;Ctrl+Maj+1&quot; és una combinació de tecles.</translation>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="152"/>
         <source>Upload score audio using current synthesizer settings</source>
-        <translation type="unfinished"/>
+        <translation>Carregar l&apos;àudio de la partitura fent servir la configuració actual de sintetitzador</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="164"/>
@@ -21532,14 +21533,14 @@ Nota: &quot;Ctrl+Maj+1&quot; és una combinació de tecles.</translation>
         <source>Writing Workspace File
 %1
 failed: </source>
-        <translation>Escriure fitxer Espai de treball
+        <translation>L&apos;escriptura del fitxer d&apos;espai de treball
 %1
-error:</translation>
+ha fallat:</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="298"/>
         <source>Writing Workspace File</source>
-        <translation>Escriure fitxer Espai de treball</translation>
+        <translation>Escrivint fitxer d&apos;espai de treball</translation>
     </message>
 </context>
 <context>
@@ -25078,22 +25079,22 @@ error:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2888"/>
         <source>Plugin Creator…</source>
-        <translation>Creador de connectors…</translation>
+        <translation>Creador de complements…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2889"/>
         <source>Plugin creator</source>
-        <translation>Creador de connectors</translation>
+        <translation>Creador de complements</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2898"/>
         <source>Plugin Manager…</source>
-        <translation>Administrador de connectors…</translation>
+        <translation>Administrador de complements…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2899"/>
         <source>Plugin manager</source>
-        <translation>Administrador de connectors</translation>
+        <translation>Administrador de complements</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2908"/>
@@ -28897,7 +28898,7 @@ El compàs no és buit</translation>
     <message>
         <location filename="../../mscore/preferences.cpp" line="90"/>
         <source>Plugins</source>
-        <translation>Connectors</translation>
+        <translation>Complements</translation>
     </message>
 </context>
 <context>

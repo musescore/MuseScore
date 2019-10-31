@@ -53,14 +53,14 @@ A fő három eszköztár a Fájlművelet, a Lejátszásvezérlők és a Hangjegy
         <source>There are different workspaces available with different sets of palettes.
     The &quot;Advanced&quot; workspace contains more items than the &quot;Basic&quot; workspace.</source>
         <comment>show-palette</comment>
-        <translation>Különböző munkaterületek vannak, különbözö paletta-összeállítással.
+        <translation>Különböző munkaterületek vannak, különböző paletta-összeállítással.
 A „Haladó” munkaterületen több elem található, mint az „Egyszerű” munkaterületen.</translation>
     </message>
     <message>
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation>A palettáról úgy tud a kottába írni egy elemet, hogy kijelöl valamit (elemet vagy hosszab szakaszt) a kottában és duplán kattint a palettaelemen.
+        <translation>A palettáról úgy tud a kottába írni egy elemet, hogy kijelöl valamit (elemet vagy hosszabb szakaszt) a kottában és duplán kattint a palettaelemen.
 Ezen kívül be is húzhatja a palettáról a kottába a megfelelő elemhez a palettaelemet.</translation>
     </message>
     <message>
@@ -206,7 +206,7 @@ Nyomja meg a „Tovább” gombot, ha többet szeretne tudni.</translation>
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation>Végül a Kijelölésszűrő (amelyet a Nézet menüben talál) lehetővé teszi, hogy a tartománykijelölésből kivegyen adott típusú elmeket.</translation>
+        <translation>Végül a Kijelölésszűrő (amelyet a Nézet menüben talál) lehetővé teszi, hogy a tartománykijelölésből kivegyen adott típusú elemeket.</translation>
     </message>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
@@ -229,7 +229,8 @@ A vízszintes görgetéshez a „Shift” billentyű megnyomása mellett haszná
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>A „PgUp”, „PgDown”, „Home” és „End&quot; billentyűk az oldalak közötti váltáshoz a más alkalmazásokban megszokott módon működnek.
+Néhány billentyűzeten nincsenek ilyen gombok, olyankor például a „Fn+fel/le/bal/jobb” kombináció használható.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
@@ -269,7 +270,11 @@ illetve kattintson valamelyik megfelelő ikonra.</translation>
     Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
     and also move up and down from staff to staff.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Egyszeres kijelöléshez kattintson az elemre, amelyet ki szeretne jelölni.
+Színes kiemelés mutatja, hogy ki van jelölve.
+A bal és jobb kurzorgombbal tudja változtatni, hogy melyik hangjegy vagy szünet legyen kijelölve.
+Tipp: ha a kurzorgombok használata közben nyomva tartja az „Alt” (macOS-en „Option”) billentyűt, akkor a többi elemen is végig tud menni,
+illetve föl és le tud mozogni a kottasorok között.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -288,14 +293,19 @@ majd a „Kijelölés” opciók közül választ a megjelenő felugró menüben
     To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
     You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>A tartománykijelölés mindent tartalmaz a kotta egy pontjától számítva egy másikig egy vagy több kottasoron keresztül.
+A kijelölést egy kék téglalap jelöli, amely lefedi az egész tartományt.
+Tartomány kijelöléséhez kattintson az első hangjegyre, szünetre vagy ütemre, majd „Shift”+kattintás az utolsóra.
+A „Shift”+kurzorbillentyűk használatával bővíteni tudja a kijelölést.</translation>
     </message>
     <message>
         <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Másik lehetőség a kijelölésre, ha a lenyomott egérgomb mellett a „Shift” billentyűt is nyomva tartja mozgatja az egeret.
+Ha a kijelölésben hangjegyek is vannak, automatikusan tartomány kijelölés lesz;
+egyébként többszörös kijelölés.</translation>
     </message>
     <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
@@ -306,12 +316,18 @@ majd a „Kijelölés” opciók közül választ a megjelenő felugró menüben
 
     - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>A legtöbb zenei elem a „vonalak” palettán az első kijelölt hangtól az utolsó kijelölt hangig tart.
+
+Ha meg szeretnéd változtatni a tartományt, akkor kattints kétszer a vonalra (ami automatikusan kijelöli a vonal végét) és:
+
+-Nyomd le a „Shift+jobbra nyíl” gombokat, hogy jobbra told a vonal végét.
+
+-Nyomd le a „Shift+balra nyíl” gombokat, hogy balra told a vonal végét.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
         <comment>spanner-drop-apply</comment>
-        <translation>Alternatívaként először  kiválaszthat egy elemet a kottában, majd duplán kattintva egy sorelemre a palettában, az új elemet hozzáadja a kiválasztott részes.</translation>
+        <translation>Alternatívaként először kiválaszthat egy elemet a kottában, majd duplán kattintva egy sorelemre a palettában, az új elemet hozzáadja a kiválasztott részhez.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.

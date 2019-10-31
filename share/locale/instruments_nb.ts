@@ -4236,13 +4236,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="807"/>
         <source>Carillon</source>
-        <translation type="unfinished"/>
+        <translation>Klokkespill</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="808"/>
         <source>Car.</source>
         <comment>Carillon</comment>
-        <translation type="unfinished"/>
+        <translation>Kl.sp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="809"/>
@@ -6124,7 +6124,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1187"/>
         <source>overdriven</source>
-        <translation type="unfinished"/>
+        <translation>overstyrt</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1192"/>

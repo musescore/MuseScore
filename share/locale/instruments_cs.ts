@@ -3258,7 +3258,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="452"/>
         <source>Horn in E</source>
-        <translation type="unfinished"/>
+        <translation>E lesní roh</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="453"/>
@@ -3276,7 +3276,7 @@
         <location filename="../instruments/instrumentsxml.h" line="457"/>
         <source>D Hn.</source>
         <comment>Horn in D</comment>
-        <translation type="unfinished"/>
+        <translation>D les. r.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="459"/>
@@ -3288,7 +3288,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="462"/>
         <source>Horn in C (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>C lesní roh (houslový klíč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="464"/>
@@ -4236,13 +4236,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="807"/>
         <source>Carillon</source>
-        <translation type="unfinished"/>
+        <translation>Carillon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="808"/>
         <source>Car.</source>
         <comment>Carillon</comment>
-        <translation type="unfinished"/>
+        <translation>Car.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="809"/>

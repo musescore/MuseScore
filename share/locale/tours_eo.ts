@@ -4,7 +4,7 @@
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Estu bonvena al MuseScore! Ĉi tiun mallonga &quot;tour&quot; gvidos vin ĉe la interfaco por uzantoj de MuseScore.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
@@ -37,7 +37,7 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Por skribi notojn kun malsimilaj ritmoj en sama mesuro, uzu multiplajn voĉojn.</translation>
     </message>
     <message>
         <source>These are the toolbars.

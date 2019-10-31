@@ -13096,7 +13096,7 @@ Restore session?</source>
     <message>
         <location filename="../../mscore/workspace.cpp" line="150"/>
         <source>Reset workspace</source>
-        <translation type="unfinished"/>
+        <translation>Сбросить рабочее пространство</translation>
     </message>
 </context>
 <context>
@@ -15023,7 +15023,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="348"/>
         <source>Do you want to hide these custom palette cells or permanently delete them?</source>
-        <translation type="unfinished"/>
+        <translation>Хотите ли вы спрятать эти нестандартные ячейки палитры или удалить их навсегда?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="357"/>
@@ -15033,7 +15033,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="357"/>
         <source>Do you want to permanently delete these custom palette cells?</source>
-        <translation type="unfinished"/>
+        <translation>Вы действительно хотите удалить эти нестандартные ячейки палитры навсегда?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="377"/>
@@ -15043,7 +15043,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="377"/>
         <source>Do you want to hide these custom palettes or permanently delete them?</source>
-        <translation type="unfinished"/>
+        <translation>Хотите ли вы спрятать эти нестандартные палитры или удалить их навсегда?</translation>
     </message>
 </context>
 <context>
@@ -15084,23 +15084,23 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/workspace.cpp" line="45"/>
         <source>Advanced</source>
-        <translation>Дополнительно</translation>
+        <translation>Расширенный</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="49"/>
         <source>Basic edited</source>
-        <translation type="unfinished"/>
+        <translation>Базовый измененный</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="50"/>
         <source>Advanced edited</source>
-        <translation type="unfinished"/>
+        <translation>Расширенный измененный</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="1072"/>
         <source>%1 edited</source>
         <extracomment>Name of the edited read-only workspace, %1 is replaced with the old workspace name</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1 измененный</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="44"/>
@@ -18114,7 +18114,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4086"/>
         <source>Advanced</source>
-        <translation>Дополнительно</translation>
+        <translation>Расширенные настройки</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4096"/>

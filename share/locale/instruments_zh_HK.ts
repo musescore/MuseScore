@@ -1923,7 +1923,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="999"/>
         <source>Harpsichord</source>
-        <translation>撥弦琴</translation>
+        <translation>羽管鍵琴</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1001"/>

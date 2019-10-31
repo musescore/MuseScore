@@ -1664,12 +1664,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="452"/>
         <source>Amateur:</source>
-        <translation>业余的：</translation>
+        <translation>业余：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="518"/>
         <source>Professional:</source>
-        <translation>专业的：</translation>
+        <translation>专业：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="582"/>
@@ -1694,7 +1694,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="621"/>
         <source>Interval</source>
-        <translation>间距</translation>
+        <translation>音程</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="625"/>
@@ -1900,7 +1900,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="121"/>
         <source>Do not hide if system is empty</source>
-        <translation>不隐藏空谱表组</translation>
+        <translation>即使谱表组为空也不隐藏</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="88"/>
@@ -2541,7 +2541,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1309"/>
         <source>Create key signature for all systems</source>
-        <translation>为所有谱表创建拍号</translation>
+        <translation>为所有谱表组创建调号</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1316"/>
@@ -4294,7 +4294,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2566"/>
         <source>Before key signature if changing to fewer ♯ or ♭</source>
-        <translation>♯ 或 ♭ 数量减少时出现，置于调号后</translation>
+        <translation>♯ 或 ♭ 数量减少时出现，置于调号前</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2573"/>
@@ -4884,12 +4884,12 @@ space unit</extracomment>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="47"/>
         <source>Move SoundFont up</source>
-        <translation>向上移动SoundFont</translation>
+        <translation>向上移动音色库</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="73"/>
         <source>Move SoundFont down</source>
-        <translation>向下移动SoundFont</translation>
+        <translation>向下移动音色库</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="109"/>
@@ -4920,12 +4920,12 @@ space unit</extracomment>
     <message>
         <location filename="../../fluid/fluidgui.cpp" line="291"/>
         <source>SoundFont %1 already loaded</source>
-        <translation>音色库（SoundFont）%1 已经载入</translation>
+        <translation>音色库 %1 已经载入</translation>
     </message>
     <message>
         <location filename="../../fluid/fluidgui.cpp" line="326"/>
         <source>Cannot load SoundFont %1</source>
-        <translation>无法载入音色库（SoundFont） %1 </translation>
+        <translation>无法载入音色库 %1 </translation>
     </message>
 </context>
 <context>
@@ -5053,7 +5053,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="57"/>
         <source>Accidental</source>
-        <translation>临时记号</translation>
+        <translation>临时升降号</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="88"/>
@@ -5141,37 +5141,37 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="517"/>
         <source>Do</source>
-        <translation>哆</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="522"/>
         <source>Re</source>
-        <translation>唻</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="527"/>
         <source>Mi</source>
-        <translation>咪</translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="532"/>
         <source>Fa</source>
-        <translation>发</translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="537"/>
         <source>Sol</source>
-        <translation>嗦</translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="542"/>
         <source>La</source>
-        <translation>啦</translation>
+        <translation>La</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="547"/>
         <source>Ti</source>
-        <translation>唏</translation>
+        <translation>Ti</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="552"/>
@@ -5258,7 +5258,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="298"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="684"/>
         <source>D♭</source>
-        <translation>D♭♭</translation>
+        <translation>D♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="303"/>
@@ -5408,7 +5408,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="423"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="809"/>
         <source>B♭</source>
-        <translation>B</translation>
+        <translation>B♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="428"/>
@@ -5544,12 +5544,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="89"/>
         <source>Stretch:</source>
-        <translation> 琶音速率 (0.5为音符时值一半)：</translation>
+        <translation>琶音速率（0.5为音符时值一半）：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="108"/>
         <source>Stretch</source>
-        <translation>琶音速率 (0.5为音符时值一半)</translation>
+        <translation>琶音速率（0.5为音符时值一半）</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="121"/>
