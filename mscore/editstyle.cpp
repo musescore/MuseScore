@@ -1424,9 +1424,12 @@ void EditStyle::textStyleChanged(int row)
                         resetTextStyleOffset->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
                         break;
 
-                  case Pid::SIZE_SPATIUM_DEPENDENT:
-                        textStyleSpatiumDependent->setChecked(cs->styleV(a.sid).toBool());
-                        resetTextStyleSpatiumDependent->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                  case Pid::SIZE_SPATIUM_DEPENDENT: {
+                        QVariant val = cs->styleV(a.sid);
+                        textStyleSpatiumDependent->setChecked(val.toBool());
+                        resetTextStyleSpatiumDependent->setEnabled(val != MScore::defaultStyle().value(a.sid));
+                        textStyleOffset->setSuffix(val.toBool() ? tr("sp") : tr("mm"));
+                        }
                         break;
 
                   case Pid::FRAME_TYPE:
