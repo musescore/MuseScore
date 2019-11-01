@@ -2249,7 +2249,7 @@ int LayoutContext::adjustMeasureNo(MeasureBase* m)
       m->setNo(measureNo);
       if (!m->irregular())          // don’t count measure
             ++measureNo;
-      if (m->sectionBreak())
+      if (m->sectionBreakElement() && m->sectionBreakElement()->startWithMeasureOne())
             measureNo = 0;
       return measureNo;
       }
@@ -4429,7 +4429,8 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
                   lc.tick      = Fraction(0,1);
                   }
             else {
-                  if (lc.nextMeasure->prevMeasure()->sectionBreak())
+                  LayoutBreak* sectionBreak = lc.nextMeasure->prevMeasure()->sectionBreakElement();
+                  if (sectionBreak && sectionBreak->startWithMeasureOne())
                         lc.measureNo = 0;
                   else
                         lc.measureNo = lc.nextMeasure->prevMeasure()->no() + 1; // will be adjusted later with respect
