@@ -512,7 +512,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                         continue;
                   qreal stretch = 0.0;
                   for (Element* e : segment.annotations()) {
-                        if (e->isFermata())
+                        if (e->isFermata() && toFermata(e)->play())
                               stretch = qMax(stretch, toFermata(e)->timeStretch());
                         else if (e->isTempoText()) {
                               TempoText* tt = toTempoText(e);
