@@ -849,7 +849,11 @@ void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
       QPoint gp          = ev->globalPos();
       editData.startMove = toLogical(ev->pos());
       editData.buttons   = Qt::NoButton;
-      Element* e         = elementNear(editData.startMove);
+      Element* e         = nullptr;
+      if (ev->reason() == QContextMenuEvent::Keyboard)
+            e = score()->selection().element();
+      else
+            e = elementNear(editData.startMove);
       if (e) {
             if (!e->selected()) {
                   // bool control = (ev->modifiers() & Qt::ControlModifier) ? true : false;
@@ -863,8 +867,19 @@ void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
             }
       else {
             int staffIdx;
-            Measure* m = _score->pos2measure(editData.startMove, &staffIdx, 0, 0, 0);
-            if (m && m->staffLines(staffIdx)->canvasBoundingRect().contains(editData.startMove))
+            Measure* m = nullptr;
+            if (ev->reason() == QContextMenuEvent::Keyboard) {
+                  // find measure based on selection
+                  m = score()->selection().findMeasure();
+                  }
+            else {
+                  // find nearest measure based on mouse pointer location
+                  m = _score->pos2measure(editData.startMove, &staffIdx, 0, 0, 0);
+                  // but only use it if mouse pointer is within the staff
+                  if (m && !m->staffLines(staffIdx)->canvasBoundingRect().contains(editData.startMove))
+                        m = nullptr;
+                  }
+            if (m)
                   measurePopup(ev, m);
             else {
                   QMenu* popup = new QMenu();
