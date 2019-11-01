@@ -2043,8 +2043,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         Element* el = Element::name2Element(tag, m->score());
                         el->setTrack(e.track());
                         el->read(e);
-                        segment = m->getSegment(SegmentType::ChordRest, e.tick());
-                        segment->add(el);
+                        m->add(el);
                         }
                   }
             else if (tag == "stretch") {
