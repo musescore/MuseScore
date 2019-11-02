@@ -4805,6 +4805,25 @@ bool ScoreView::fotoMode() const
       return false;
       }
 
+//---------------------------------------------------------
+//   visibleElementInScore
+//---------------------------------------------------------
+
+static const Element* visibleElementInScore(const Element* orig, const Score* s)
+      {
+      if (!orig)
+            return nullptr;
+      if (orig->score() == s && orig->bbox().isValid())
+            return orig;
+
+      for (const ScoreElement* se : orig->linkList()) {
+            const Element* e = toElement(se);
+            if (e->score() == s && e->bbox().isValid()) // bbox check to ensure the element is indeed visible
+                  return e;
+            }
+
+      return nullptr;
+      }
 
 //---------------------------------------------------------
 //   needViewportMove
@@ -4824,7 +4843,7 @@ static bool needViewportMove(Score* cs, ScoreView* cv)
 
       const QRectF viewport = cv->canvasViewport(); // TODO: margins for intersection check?
 
-      const Element* editElement = state.element();
+      const Element* editElement = visibleElementInScore(state.element(), cs);
       if (editElement && editElement->bbox().isValid() && !editElement->isSpanner())
             return !viewport.intersects(editElement->canvasBoundingRect());
 
@@ -4836,8 +4855,9 @@ static bool needViewportMove(Score* cs, ScoreView* cv)
       Measure* mEnd = cs->tick2measureMM(state.endTick());
       mEnd = mEnd ? mEnd->nextMeasureMM() : nullptr;
 
-      const int startStaff = state.startStaff() == -1 ? 0 : state.startStaff();
-      const int endStaff = state.endStaff() == -1 ? (cs->nstaves() - 1) : state.endStaff();
+      const bool isExcerpt = !cs->isMaster();
+      const int startStaff = (isExcerpt || state.startStaff() == -1) ? 0 : state.startStaff();
+      const int endStaff = (isExcerpt || state.endStaff() == -1) ? (cs->nstaves() - 1) : state.endStaff();
 
       for (Measure* m = mStart; m && m != mEnd; m = m->nextMeasureMM()) {
             for (int st = startStaff; st <= endStaff; ++st) {
@@ -4876,7 +4896,8 @@ void ScoreView::moveViewportToLastEdit()
             return;
 
       const CmdState& state = s->cmdState();
-      const Element* editElement = state.element();
+      const Element* editElement = visibleElementInScore(state.element(), s);
+
       const MeasureBase* mb = nullptr;
       if (editElement)
             mb = editElement->findMeasureBase();
@@ -4885,7 +4906,7 @@ void ScoreView::moveViewportToLastEdit()
 
       const Element* viewportElement = (editElement && editElement->bbox().isValid() && !mb->isMeasure()) ? editElement : mb;
 
-      const int staff = state.startStaff(); // TODO: choose the closest staff to the current viewport?
+      const int staff = s->isMaster() ? state.startStaff() : -1; // TODO: choose the closest staff to the current viewport?
       adjustCanvasPosition(viewportElement, /* playback */ false, staff);
       }
 }

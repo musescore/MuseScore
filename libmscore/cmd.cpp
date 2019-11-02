@@ -2583,7 +2583,8 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
 
 void Score::cmdAddGrace (NoteType graceType, int duration)
       {
-      for (Element* e : selection().elements()) {
+      const QList<Element*> copyOfElements = selection().elements();
+      for (Element* e : copyOfElements) {
             if (e->type() == ElementType::NOTE) {
                   Note* n = toNote(e);
                   setGraceNote(n->chord(), n->pitch(), graceType, duration);
