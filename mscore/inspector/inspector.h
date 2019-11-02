@@ -140,6 +140,7 @@ class InspectorArticulation : public InspectorElementBase {
 
    public:
       InspectorArticulation(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -152,6 +153,7 @@ class InspectorFermata : public InspectorElementBase {
 
    public:
       InspectorFermata(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------

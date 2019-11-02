@@ -31,6 +31,7 @@ class InspectorTrill : public InspectorElementBase {
 
    public:
       InspectorTrill(QWidget* parent);
+      virtual void setElement() override;
       };
 
 
