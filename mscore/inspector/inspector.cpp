@@ -70,6 +70,8 @@
 #include "libmscore/breath.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/accidental.h"
+#include "libmscore/articulation.h"
+#include "libmscore/fermata.h"
 
 namespace Ms {
 
@@ -560,6 +562,18 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorArticulation::setElement()
+      {
+      InspectorElementBase::setElement();
+      if (!ar.playArticulation->isChecked()) {
+            ar.gridWidget->setEnabled(false);
+            }
+      }
+
+//---------------------------------------------------------
 //   InspectorFermata
 //---------------------------------------------------------
 
@@ -575,6 +589,20 @@ InspectorFermata::InspectorFermata(QWidget* parent)
             };
       const std::vector<InspectorPanel> ppList = { { f.title, f.panel } };
       mapSignals(iiList, ppList);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorFermata::setElement()
+      {
+      InspectorElementBase::setElement();
+      if (!f.playArticulation->isChecked()) {
+            f.label_2->setEnabled(false);
+            f.timeStretch->setEnabled(false);
+            f.resetTimeStretch->setEnabled(false);
+            }
       }
 
 //---------------------------------------------------------
