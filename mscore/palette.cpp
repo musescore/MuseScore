@@ -491,7 +491,6 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
 //             element = cell->element.get();
       if (element == 0)
             return false;
-      
       if (element->isSpanner())
             TourHandler::startTour("spanner-drop-apply");
 
@@ -570,6 +569,39 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                   spanner->read(e);
                   spanner->styleChanged();
                   score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
+                  }
+            else if (element->isDynamic() || element->isStaffText() || element->isTempoText() || element->isSystemText()) {
+                  using staffSegment = QPair<Segment*, int>;
+                  QSet<Segment*> segmentSet;
+                  QSet<staffSegment> staffSet;
+                  for (Element* e : sel.elements()) {
+                        Segment* seg = nullptr;
+                        if (e->isNote()) {
+                              seg = toNote(e)->chord()->segment();
+                              }
+                        else if (e->isChordRest()) {
+                              seg = toChordRest(e)->segment();
+                              }
+                        else {
+                              applyDrop(score, viewer, e, element, modifiers);
+                              continue;
+                              }
+                        if (element->isTempoText() || element->isSystemText()) {
+                              // Only one Tempo Text per segment.
+                              if (!segmentSet.contains(seg)) {
+                                    applyDrop(score, viewer, e->isChord() ? toChord(e)->upNote() : e, element, modifiers);
+                                    segmentSet.insert(seg);
+                                    }
+                              }
+                        else {
+                              // Only one Dynamic or Staff Text per staff per segment.
+                              staffSegment key {seg, e->staffIdx()};
+                              if (!staffSet.contains(key)) {
+                                    applyDrop(score, viewer, e->isChord() ? toChord(e)->upNote() : e, element, modifiers);
+                                    staffSet.insert(key);
+                                    }
+                              }
+                        }
                   }
             else {
                   for (Element* e : sel.elements())
@@ -713,6 +745,38 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                         spanner->setScore(score);
                         spanner->styleChanged();
                         score->cmdAddSpanner(spanner, i, startSegment, endSegment);
+                        }
+                  }
+            else if (element->isDynamic() || element->isStaffText() || element->isTempoText() || element->isSystemText()) {
+                  int track1 = sel.staffStart() * VOICES;
+                  int track2 = sel.staffEnd() * VOICES;
+                  Segment* startSegment = sel.startSegment();
+                  Segment* endSegment = sel.endSegment(); //keep it, it could change during the loop
+                  for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
+                        QSet<Staff*> set;
+                        for (int track = track1; track < track2; ++track) {
+                              Element* e = s->element(track);
+                              if (e == 0 || !score->selectionFilter().canSelect(e) || !score->selectionFilter().canSelectVoice(track))
+                                    continue;
+                              if (e->isChordRest()) {
+                                    if (!set.contains(e->staff())) {
+                                          applyDrop(score, viewer,e->isChord() ? toChord(e)->upNote() : e, element, modifiers);
+                                          if (element->isTempoText() || element->isSystemText()) {
+                                                // Only one Tempo Text per segment.
+                                                break;
+                                                }
+                                          else {
+                                                // Only one Dymanic or Staff Text per segment per track.
+                                                set.insert(e->staff());
+                                                }
+                                          }
+                                    }
+                              else {
+                                    // do not apply articulation to barline in a range selection
+                                    if (!e->isBarLine() || !element->isArticulation())
+                                          applyDrop(score, viewer, e, element, modifiers);
+                                    }
+                              }
                         }
                   }
             else {
@@ -1908,7 +1972,7 @@ void Palette::dropEvent(QDropEvent* event)
             event->ignore();
             return;
             }
-      
+
       if (e->isFretDiagram()) {
             name = toFretDiagram(e)->harmonyText();
             }
