@@ -420,7 +420,9 @@ enum class Tid {
       USER4,
       USER5,
       USER6,
-      TEXT_STYLES
+      // special, no-contents, styles used while importing older scores
+      TEXT_STYLES,           // used for user-defined styles
+      IGNORED_STYLES         // used for styles no longer relevant (mainly Figured bass text style)
       ///.\}
       };
 
