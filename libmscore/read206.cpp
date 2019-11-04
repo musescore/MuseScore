@@ -609,7 +609,8 @@ void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Si
             { "Header",                  Tid::HEADER },
             { "Footer",                  Tid::FOOTER },
             { "Instrument Change",       Tid::INSTRUMENT_CHANGE },
-            { "Figured Bass",            Tid::TEXT_STYLES },            // invalid
+            { "Repeat Text",             Tid::IGNORED_STYLES, },     // Repeat Text style no longer exists
+            { "Figured Bass",            Tid::IGNORED_STYLES, },     // F.B. data are in style properties
             { "Volta",                   Tid::VOLTA },
             };
       Tid ss = Tid::TEXT_STYLES;
@@ -619,6 +620,9 @@ void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Si
                   break;
                   }
             }
+
+      if (ss == Tid::IGNORED_STYLES)
+            return;
 
       bool isExcessStyle = false;
       if (ss == Tid::TEXT_STYLES) {
