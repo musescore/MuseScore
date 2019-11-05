@@ -275,7 +275,7 @@ bool MuseScore::checkDirty(MasterScore* s)
 
 void MuseScore::openFiles(bool switchTab, bool singleFile)
       {
-      QString allExt = "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb";
+      QString allExt = "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz, *.mscx,";
 #ifdef AVSOMR
       allExt += " *.msmr"; // omr project with omr data and musicxml or score
 #endif
@@ -291,7 +291,8 @@ void MuseScore::openFiles(bool switchTab, bool singleFile)
              << tr("Overture / Score Writer Files (experimental)") + " (*.ove *.scw)"
              << tr("Bagpipe Music Writer Files (experimental)") + " (*.bww)"
              << tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
-             << tr("Power Tab Editor Files (experimental)") + " (*.ptb)";
+             << tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
+             << tr("MuseScore Backup Files") + " (*.mscz, *.mscx,)";
 
       doLoadFiles(filter, switchTab, singleFile);
       }
@@ -434,11 +435,16 @@ bool MuseScore::saveFile(MasterScore* score)
       if (score == 0)
             return false;
       if (score->created()) {
-            QString fn = score->masterScore()->fileInfo()->fileName();
+            QString fileBaseName = score->masterScore()->fileInfo()->completeBaseName();
+            QString fileName = score->masterScore()->fileInfo()->fileName();
+            // is backup file
+            if (fileBaseName.startsWith(".")
+               && (fileName.endsWith(".mscz,") || fileName.endsWith(".mscx,")))
+                  fileBaseName.remove(0, 1); // remove the "." at the beginning of file name
             Text* t = score->getText(Tid::TITLE);
             if (t)
-                  fn = t->plainText();
-            QString name = createDefaultFileName(fn);
+                  fileBaseName = t->plainText();
+            QString name = createDefaultFileName(fileBaseName);
             QString msczType = tr("MuseScore 3 File") + " (*.mscz)";
             QString mscxType = tr("Uncompressed MuseScore 3 File") + " (*.mscx)";     // for debugging purposes
 
@@ -467,10 +473,10 @@ bool MuseScore::saveFile(MasterScore* score)
             }
 #endif
 
-            fn = mscore->getSaveScoreName(tr("Save Score"), fname, filter);
-            if (fn.isEmpty())
+            fileBaseName = mscore->getSaveScoreName(tr("Save Score"), fname, filter);
+            if (fileBaseName.isEmpty())
                   return false;
-            score->masterScore()->fileInfo()->setFile(fn);
+            score->masterScore()->fileInfo()->setFile(fileBaseName);
 
             mscore->lastSaveDirectory = score->masterScore()->fileInfo()->absolutePath();
 
@@ -2309,10 +2315,21 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
       if (synti)
             score->setSynthesizerState(synti->state());
 
-      if (suffix == "mscz" || suffix == "mscx") {
+      auto read = [](MasterScore* score, const QString& name, bool ignoreVersionError, bool imported = false)->Score::FileError {
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);
-            if (score && score->masterScore()->fileInfo()->path().startsWith(":/"))
+            if (imported || (score && score->masterScore()->fileInfo()->path().startsWith(":/")))
                   score->setCreated(true);
+            score->setAutosaveDirty(!imported);
+            return rv;
+            };
+
+      if (suffix == "mscz" || suffix == "mscx") {
+            Score::FileError rv = read(score, name, ignoreVersionError);
+            if (rv != Score::FileError::FILE_NO_ERROR)
+                  return rv;
+            }
+      else if (suffix == "mscz," || suffix == "mscx,") {
+            Score::FileError rv = read(score, name, ignoreVersionError, true);
             if (rv != Score::FileError::FILE_NO_ERROR)
                   return rv;
             }
@@ -2321,9 +2338,9 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             return Score::FileError::FILE_IGNORE_ERROR;
             }
       else if (suffix == "muxt") {
-           importExtension(name);
-           return Score::FileError::FILE_IGNORE_ERROR;
-           }
+            importExtension(name);
+            return Score::FileError::FILE_IGNORE_ERROR;
+            }
       else {
             // typedef Score::FileError (*ImportFunction)(MasterScore*, const QString&);
             struct ImportDef {
@@ -2357,10 +2374,10 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                   { "gp",   &importGTP                },
                   { "ptb",  &importGTP                },
 #ifdef AVSOMR
-                  { "msmr", &importMSMR                },
-                  { "pdf",  &loadAndImportMSMR         },
-                  { "png",  &loadAndImportMSMR         },
-                  { "jpg",  &loadAndImportMSMR         },
+                  { "msmr", &importMSMR               },
+                  { "pdf",  &loadAndImportMSMR        },
+                  { "png",  &loadAndImportMSMR        },
+                  { "jpg",  &loadAndImportMSMR        },
 #endif
                   };
 
@@ -2452,20 +2469,27 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy)
       if (saveDirectory.isEmpty())
             saveDirectory = preferences.getString(PREF_APP_PATHS_MYSCORES);
 
+      QString fileBaseName = cs_->masterScore()->fileInfo()->completeBaseName();
+      QString fileName = cs_->masterScore()->fileInfo()->fileName();
+      // is backup file
+      if (fileBaseName.startsWith(".")
+         && (fileName.endsWith(".mscz,") || fileName.endsWith(".mscx,")))
+            fileBaseName.remove(0, 1); // remove the "." at the beginning of file name
+
       QString name;
 #ifdef Q_OS_WIN
       if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
             if (!cs_->isMaster())
-                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs_->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(cs->title()));
+                  name = QString("%1/%2-%3").arg(saveDirectory).arg(fileBaseName).arg(createDefaultFileName(cs->title()));
             else
-                  name = QString("%1/%2").arg(saveDirectory).arg(cs_->masterScore()->fileInfo()->completeBaseName());
+                  name = QString("%1/%2").arg(saveDirectory).arg(fileBaseName);
             }
       else
 #endif
       if (!cs_->isMaster())
-            name = QString("%1/%2-%3.mscz").arg(saveDirectory).arg(cs_->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(cs->title()));
+            name = QString("%1/%2-%3.mscz").arg(saveDirectory).arg(fileBaseName).arg(createDefaultFileName(cs->title()));
       else
-            name = QString("%1/%2.mscz").arg(saveDirectory).arg(cs_->masterScore()->fileInfo()->completeBaseName());
+            name = QString("%1/%2.mscz").arg(saveDirectory).arg(fileBaseName);
 
       QString filter = fl.join(";;");
       QString fn     = mscore->getSaveScoreName(saveDialogTitle, name, filter);
