@@ -3569,8 +3569,10 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
 #endif
       qreal oldWidth = width();
 
-      if (nm && nm->repeatStart() && !isLastMeasureInSystem && !repeatEnd()) {
-            // no barline, use StartBarLine of next measure
+      if (nm && nm->repeatStart() && !repeatEnd() && !isLastMeasureInSystem && next() == nm) {
+            // we may skip barline at end of a measure immediately before a start repeat:
+            // next measure is repeat start, this measure is not a repeat end,
+            // this is not last measure of system, no intervening frame
             if (!seg)
                   return 0.0;
             seg->setEnabled(false);
