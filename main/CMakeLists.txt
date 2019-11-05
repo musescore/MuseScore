@@ -133,13 +133,9 @@ if (MINGW)
             ${DEPENDENCIES_DIR}/libssl-1_1-x64.dll
             DESTINATION bin)
       endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.12.4")
-      install( FILES
-         ${DEPENDENCIES_DIR}/portaudio.dll RENAME libportaudio-x86_64-w64-mingw32.static.dll
-         DESTINATION bin)
    else (BUILD_64)
       install( FILES
          ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
-         ${DEPENDENCIES_DIR}/portaudio.dll
          DESTINATION bin)
       if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.12.4")
          install( FILES
@@ -156,6 +152,7 @@ if (MINGW)
       ${DEPENDENCIES_DIR}/libsndfile-1.dll
       ${DEPENDENCIES_DIR}/libvorbis.dll
       ${DEPENDENCIES_DIR}/libvorbisfile.dll
+	  ${DEPENDENCIES_DIR}/portaudio.dll
       ${QT_INSTALL_BINS}/libEGL.dll
       ${QT_INSTALL_BINS}/libGLESv2.dll
       ${QT_INSTALL_BINS}/opengl32sw.dll
