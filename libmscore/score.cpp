@@ -316,6 +316,8 @@ Score::Score(MasterScore* parent, const MStyle& s)
 
 Score::~Score()
       {
+      Score::validScores.erase(this);
+
       foreach(MuseScoreView* v, viewer)
             v->removeScore();
       // deselectAll();
@@ -335,7 +337,6 @@ Score::~Score()
 
       qDeleteAll(_parts);
       qDeleteAll(_staves);
-      Score::validScores.erase(this);
 //      qDeleteAll(_pages);         // TODO: check
       _masterScore = 0;
 
@@ -384,6 +385,7 @@ void Score::onElementDestruction(Element* e)
             return;
             }
       score->selection().remove(e);
+      score->cmdState().unsetElement(e);
       for (MuseScoreView* v : score->viewer)
             v->onElementDestruction(e);
       }

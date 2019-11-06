@@ -281,6 +281,7 @@ class CmdState {
       void setTick(const Fraction& t);
       void setStaff(int staff);
       void setElement(const Element* e);
+      void unsetElement(const Element* e);
       Fraction startTick() const { return _startTick; }
       Fraction endTick() const   { return _endTick; }
       int startStaff() const { return _startStaff; }
