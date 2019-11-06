@@ -98,7 +98,7 @@ class Element : public Ms::PluginAPI::ScoreElement {
        * element. You can use this value to accurately position other elements 
        * related to the same parent.
        *
-       * This value is in spatium units for compatiblity with Element.offsetX.
+       * This value is in spatium units for compatibility with Element.offsetX.
        * \since MuseScore 3.3
        */
       Q_PROPERTY(qreal posX READ posX)
@@ -110,10 +110,18 @@ class Element : public Ms::PluginAPI::ScoreElement {
        * element. You can use this value to accurately position other elements 
        * related to the same parent.
        *
-       * This value is in spatium units for compatiblity with Element.offsetY.
+       * This value is in spatium units for compatibility with Element.offsetY.
        * \since MuseScore 3.3
        */
       Q_PROPERTY(qreal posY READ posY)
+
+      /**
+       * Bounding box of this element.
+       *
+       * This value is in spatium units for compatibility with other Element positioning properties.
+       * \since MuseScore 3.3.1
+       */
+      Q_PROPERTY(QRectF bbox READ bbox)
 
       API_PROPERTY( subtype,                 SUBTYPE                   )
       API_PROPERTY_READ_ONLY_T( bool, selected, SELECTED               )
@@ -356,6 +364,8 @@ class Element : public Ms::PluginAPI::ScoreElement {
       qreal posY() const { return element()->pos().y() / element()->spatium(); }
 
       Ms::PluginAPI::Element* parent() const { return wrap(element()->parent()); }
+
+      QRectF bbox() const;
 
    public:
       /// \cond MS_INTERNAL
