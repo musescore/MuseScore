@@ -1987,7 +1987,11 @@ void MuseScore::onFocusWindowChanged(QWindow* w)
             QWidget* tmpContainer = createWindowContainer(new QWindow, this);
             tmpContainer->show();
             tmpContainer->setFocus();
-            tmpContainer->deleteLater();
+
+            QTimer::singleShot(0, [this, tmpContainer]() {
+                  focusScoreView();
+                  tmpContainer->deleteLater();
+                  });
             }
 
       _lastFocusWindow = w;
