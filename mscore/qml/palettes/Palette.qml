@@ -33,7 +33,6 @@ GridView {
     interactive: height < contentHeight // TODO: check if it helps on Mac
 
     keyNavigationEnabled: true
-    activeFocusOnTab: true
 
     property size cellSize
     property bool drawGrid: false
@@ -104,6 +103,7 @@ GridView {
     StyledButton {
         id: moreButton
         visible: showMoreButton
+        activeFocusOnTab: parent.currentItem === paletteTree.currentTreeItem
 
         background: Rectangle {
             color: moreButton.down ? globalStyle.button : mscore.paletteBackground
@@ -346,6 +346,11 @@ GridView {
             property var modelIndex: paletteView.model.modelIndex(index)
             property var parentModelIndex: paletteView.paletteRootIndex
 
+            onActiveFocusChanged: {
+                if (activeFocus)
+                    paletteTree.currentTreeItem = this;
+            }
+
             opacity: enabled ? 1.0 : 0.3
 
             readonly property bool dragged: Drag.active && !dragDropReorderTimer.running
@@ -360,7 +365,7 @@ GridView {
             width: paletteView.cellWidth
             height: paletteView.cellHeight
 
-            activeFocusOnTab: true
+            activeFocusOnTab: this === paletteTree.currentTreeItem
 
             contentItem: QmlIconView {
                 id: icon

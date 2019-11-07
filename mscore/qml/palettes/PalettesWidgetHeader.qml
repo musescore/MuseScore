@@ -60,6 +60,7 @@ Item {
             border.color: "#aeaeae"
         }
 
+        KeyNavigation.tab: paletteTree.currentTreeItem
         KeyNavigation.up: paletteTree
         KeyNavigation.down: paletteTree
         Keys.onDownPressed: paletteTree.focusFirstItem();
