@@ -5122,13 +5122,13 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
 
                         // Do the same for other note-anchored spanners (e.g. glissandi).
                         // Delay actual removing to avoid modifying lists inside loops over them.
-                        for (Spanner* s : n->spannerBack()) {
-                              if (s->tick() < startTick)
-                                    spannersToRemove.insert(s);
+                        for (Spanner* sb : n->spannerBack()) {
+                              if (sb->tick() < startTick)
+                                    spannersToRemove.insert(sb);
                               }
-                        for (Spanner* s : n->spannerFor()) {
-                              if (s->tick2() >= endTick)
-                                    spannersToRemove.insert(s);
+                        for (Spanner* sf : n->spannerFor()) {
+                              if (sf->tick2() >= endTick)
+                                    spannersToRemove.insert(sf);
                               }
                         }
                   }
