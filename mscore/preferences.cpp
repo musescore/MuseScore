@@ -48,13 +48,6 @@ void Preferences::init(bool storeInMemoryOnly)
       bool checkExtensionsUpdateStartup = false;
 #endif
 
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-      // use system native file dialogs
-      // Qt file dialog is very slow on Windows and Mac
-      bool nativeDialogs           = true;
-#else
-      bool nativeDialogs           = false;    // don't use system native file dialogs
-#endif
       bool defaultUsePortAudio = false;
       bool defaultUsePulseAudio = false;
       bool defaultUseJackAudio = false;
@@ -174,7 +167,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_APP_RASTER_HORIZONTAL,                        new IntPreference(2)},
             {PREF_UI_APP_RASTER_VERTICAL,                          new IntPreference(2)},
             {PREF_UI_APP_SHOWSTATUSBAR,                            new BoolPreference(true)},
-            {PREF_UI_APP_USENATIVEDIALOGS,                         new BoolPreference(nativeDialogs)},
+            {PREF_UI_APP_USENATIVEDIALOGS,                         new BoolPreference(true)},
             {PREF_UI_PIANO_HIGHLIGHTCOLOR,                         new ColorPreference(QColor("#1259d0"))},
             {PREF_UI_SCORE_NOTE_DROPCOLOR,                         new ColorPreference(QColor("#1778db"))},
             {PREF_UI_SCORE_DEFAULTCOLOR,                           new ColorPreference(QColor("#000000"))},
