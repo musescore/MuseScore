@@ -150,6 +150,7 @@ void PaletteWidget::activateSearchBox()
 void PaletteWidget::applyCurrentPaletteElement()
       {
       const bool invoked = QMetaObject::invokeMethod(rootObject(), "applyCurrentPaletteElement");
+      Q_UNUSED(invoked);
       Q_ASSERT(invoked);
       }
 
