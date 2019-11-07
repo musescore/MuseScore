@@ -299,7 +299,10 @@ void Inspector::update(Score* s)
                               ie = new InspectorFretDiagram(this);
                               break;
                         case ElementType::LAYOUT_BREAK:
-                              ie = new InspectorBreak(this);
+                              if (toLayoutBreak(element())->layoutBreakType() == LayoutBreak::Type::SECTION)
+                                    ie = new InspectorSectionBreak(this);
+                              else
+                                    ie = new InspectorBreak(this);
                               break;
                         case ElementType::BEND:
                               ie = new InspectorBend(this);
@@ -436,6 +439,23 @@ InspectorBreak::InspectorBreak(QWidget* parent)
       iList = {         // currently empty
             };
 
+      mapSignals();
+      }
+
+//---------------------------------------------------------
+//   InspectorSectionBreak
+//---------------------------------------------------------
+
+InspectorSectionBreak::InspectorSectionBreak(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      scb.setupUi(addWidget());
+
+      iList = {
+            { Pid::PAUSE,                   0, scb.pause,               scb.resetPause               },
+            { Pid::START_WITH_LONG_NAMES,   0, scb.startWithLongNames,  scb.resetStartWithLongNames  },
+            { Pid::START_WITH_MEASURE_ONE,  0, scb.startWithMeasureOne, scb.resetStartWithMeasureOne }
+            };
       mapSignals();
       }
 
