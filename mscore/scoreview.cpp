@@ -4890,23 +4890,23 @@ void ScoreView::moveViewportToLastEdit()
       if (_blockShowEdit)
             return;
 
-      Score* s = score();
+      Score* sc = score();
 
-      if (!needViewportMove(s, this))
+      if (!needViewportMove(sc, this))
             return;
 
-      const CmdState& state = s->cmdState();
-      const Element* editElement = visibleElementInScore(state.element(), s);
+      const CmdState& st = sc->cmdState();
+      const Element* editElement = visibleElementInScore(st.element(), sc);
 
       const MeasureBase* mb = nullptr;
       if (editElement)
             mb = editElement->findMeasureBase();
       if (!mb)
-            mb = s->tick2measureMM(state.startTick());
+            mb = sc->tick2measureMM(st.startTick());
 
       const Element* viewportElement = (editElement && editElement->bbox().isValid() && !mb->isMeasure()) ? editElement : mb;
 
-      const int staff = s->isMaster() ? state.startStaff() : -1; // TODO: choose the closest staff to the current viewport?
+      const int staff = sc->isMaster() ? st.startStaff() : -1; // TODO: choose the closest staff to the current viewport?
       adjustCanvasPosition(viewportElement, /* playback */ false, staff);
       }
 }
