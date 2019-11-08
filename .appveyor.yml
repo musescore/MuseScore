@@ -13,8 +13,8 @@ branches:
 # build cache to preserve files/folders between builds
 cache:
   - dependencies.7z
-  - qt5125_msvc2017_64.7z # if not using AppVeyor's built-in Qt in before_build.bat
-  - qt5125_msvc2017_32.7z # if not using AppVeyor's built-in Qt in before_build.bat
+  - qt598_msvc2017_64.7z # if not using AppVeyor's built-in Qt in before_build.bat
+  - qt598_msvc2015.7z # if not using AppVeyor's built-in Qt in before_build.bat
   - C:\Program Files (x86)\Jack
   - C:\MuseScore\build.release\thirdparty
   - C:\ccache
