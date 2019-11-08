@@ -48,6 +48,7 @@ apt_packages_standard=(
 # MuseScore compiles without these but won't run without them
 apt_packages_runtime=(
   # Alphabetical order please!
+  libdbus-1-3
   libegl1-mesa-dev
   libodbc1
   libpq-dev
@@ -55,6 +56,7 @@ apt_packages_runtime=(
   libxcursor-dev
   libxi-dev
   libxkbcommon-x11-0
+  libxrandr2
   libxtst-dev
   )
 
@@ -82,7 +84,7 @@ export CC="/usr/bin/gcc-${gcc_version}"
 export CXX="/usr/bin/g++-${gcc_version}"
 
 # Get newer Qt (only used cached version if it is the same)
-qt_version="5124"
+qt_version="598"
 qt_dir="qt/${qt_version}"
 if [[ ! -d "${qt_dir}" ]]; then
   mkdir -p "${qt_dir}"
@@ -196,8 +198,28 @@ prefix="$(cat build.release/PREFIX.txt)" # MuseScore was installed here
 cd "$(dirname "${prefix}")"
 appdir="$(basename "${prefix}")" # directory that will become the AppImage
 
+# Remove Qt plugins for MySQL and PostgreSQL to prevent
+# linuxdeploy-plugin-qt from failing due to missing dependencies.
+# SQLite plugin alone should be enough for our AppImage.
+# rm -f ${qt_path}/plugins/sqldrivers/libqsql{mysql,psql}.so
+qt_sql_drivers_path="${qt_path}/plugins/sqldrivers"
+qt_sql_drivers_tmp="/tmp/qtsqldrivers"
+mkdir -p "$qt_sql_drivers_tmp"
+mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
+mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so"
+
+# Colon-separated list of root directories containing QML files.
+# Needed for linuxdeploy-plugin-qt to scan for QML imports.
+export QML_SOURCES_PATHS=/MuseScore/mscore/qml/palettes
+
 linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
+
+unset QML_SOURCES_PATHS
+
+# In case this container is reused multiple times, return the moved libraries back
+mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
+mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so"
 
 ##########################################################################
 # BUNDLE REMAINING DEPENDENCIES MANUALLY
