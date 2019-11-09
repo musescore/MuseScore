@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Push AppImages and related metadata to Bintray (https://bintray.com/docs/api/)
-# Adapted from: https://github.com/probonopd/AppImages/blob/master/bintray.sh
+# Upload files to Bintray (https://bintray.com/docs/api/)
+# Inspired by: https://github.com/probonopd/AppImages/blob/master/bintray.sh
 
 # The MIT License (MIT)
 #
-# Copyright (c) 2004-15 Simon Peter
+# Copyright (c) 2019 Peter Jonas
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,302 +25,111 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-trap 'exit 1' ERR
+set -e # exit on error
+set +x # protect secrets
 
-which curl || exit 1
-which bsdtar || exit 1 # https://github.com/libarchive/libarchive/wiki/ManPageBsdtar1 ; isoinfo cannot read zisofs
-which grep || exit 1
-which zsyncmake || exit 1
+files=("$@") # args
 
-# Do not upload artifacts generated as part of a pull request
-if [ $(env | grep TRAVIS_PULL_REQUEST ) ] ; then
-  if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then
-    echo "Not uploading AppImage since this is a pull request."
-    exit 0
-  fi
+if ((${#files[@]} <= 0)); then
+  echo "$0: No files specified to upload" >&2
+  exit 1
 fi
 
-BINTRAY_USER="${BINTRAY_USER:?Environment variable missing/empty!}" # env
-BINTRAY_API_KEY="${BINTRAY_API_KEY:?Environment variable missing/empty!}" # env
-
-BINTRAY_REPO_OWNER="${BINTRAY_REPO_OWNER:-$BINTRAY_USER}" # env, or use BINTRAY_USER as default
-[ "${BINTRAY_REPO_OWNER}" == "musescore" ] && TRUSTED="true" || TRUSTED="false"
-
-WEBSITE_URL="http://musescore.org"
-ISSUE_TRACKER_URL="https://musescore.org/project/issues"
-GITHUB_REPO="musescore/MuseScore"
-VCS_URL="https://github.com/${GITHUB_REPO}.git" # Mandatory for packages in free Bintray repos
-LICENSE="GPL-2.0"
-
-API="https://api.bintray.com"
-
-FILE="$1"
-[ -f "$FILE" ] || { echo "$0: Please provide a valid path to a file" >&2 ; exit 1 ;}
-
-# GENERAL NAMING SCHEME FOR APPIMAGES:
-# File: <appName>-<version>-<arch>.AppImage
-#
-# MUSESCORE NAMING SCHEME:
-# File:    MuseScore-X.Y.Z-<arch>.AppImage (e.g. MuseScore-2.0.3-x86_64)
-# Version: X.Y.Z
-# Package: MuseScore-Linux-<arch>
-#
-# NIGHTLY NAMING SCHEME: (For developer builds replace "Nightly" with "Dev")
-# File:    MuseScoreNightly-<datetime>-<branch>-<commit>-<arch>.AppImage
-#    (e.g. MuseScoreNightly-201601151332-master-f53w6dg-x86_64.AppImage)
-# Version: <datetime>-<branch>-<commit> (e.g. 201601151332-master-f53w6dg)
-# Package: MuseScoreNightly-<branch>-<arch> (e.g. MuseScoreNightly-master-x86_64)
-
-# Read app name from file name (get characters before first dash)
-APPNAME="$(basename "$FILE" | sed -r 's|^([^-]*)-.*$|\1|')"
-
-# Read version from the file name (get characters between first and last dash)
-VERSION="$(basename "$FILE" | sed -r 's|^[^-]*-(.*)-[^-]*$|\1|')"
-
-# Read architecture from file name (characters between last dash and .AppImage)
-ARCH="$(basename "$FILE" | sed -r 's|^.*-([^-]*)\.AppImage$|\1|')"
-
-case "${ARCH}" in
-  x86_64|amd64 )
-    SYSTEM="${ARCH} (64-bit Intel/AMD)"
-    ;;
-  i686|i386|i[345678]86 )
-    SYSTEM="${ARCH} (32-bit Intel/AMD)"
-    ;;
-  armel )
-    SYSTEM="${ARCH} (old 32-bit ARM)"
-    ;;
-  armhf )
-    SYSTEM="${ARCH} (new 32-bit ARM)"
-    ;;
-  aarch64 )
-    SYSTEM="${ARCH} (64-bit ARM)"
-    ;;
-  * )
-    echo "Error: unrecognised architecture '${ARCH}'" >&2
+for file in "${files[@]}"; do
+  if [[ ! -r "${file}" ]]; then
+    echo "$0: File is invalid or lacks read permission '${file}'" >&2
     exit 1
-    ;;
-esac
-
-FILE_UPLOAD_PATH="$(basename "${FILE}")"
-
-if [ "${APPNAME}" == "MuseScore" ]; then
-  # Upload a new version but don't publish it (invisible until published)
-  url_query="" # Don't publish, don't overwrite existing files with same name
-  PCK_NAME="$APPNAME-Linux-$ARCH"
-  BINTRAY_REPO="${BINTRAY_REPO:-MuseScore}" # env, or use "MuseScore"
-  LABELS="[\"music\", \"audio\", \"MIDI\", \"AppImage\"]"
-  [ "${TRUSTED}" == "true" ] && MATURITY="Official" || MATURITY="Stable"
-else
-  # Upload and publish a new development/nightly build (visible to users immediately)
-  url_query="publish=1&override=1" # Automatically publish, overwrite exiting
-
-  # Get Git branch from $VERSION (get characters between first and last dash)
-  BRANCH="$(echo $VERSION | sed -r 's|^[^-]*-(.*)-[^-]*$|\1|')"
-
-  # Get Git commit from $VERSION (get characters after last dash)
-  COMMIT="$(echo $VERSION | sed -r 's|^.*-([^-]*)$|\1|')"
-
-  PCK_NAME="$APPNAME-$BRANCH-$ARCH"
-  BINTRAY_REPO="${BINTRAY_REPO:-MuseScoreDevelopment}" # env, or use "MuseScoreDevelopment"
-  LABELS="unofficial"
-
-  if [ "${APPNAME}" == "MuseScoreNightly" ]; then
-    BINTRAY_REPO="nightlies-linux" # nightlies use a different repo
-    LABELS="nightly"
   fi
+done
 
-  LABELS="[\"${LABELS}\", \"unstable\", \"testing\"]"
-  [ "${TRUSTED}" == "true" ] && MATURITY="Development" || MATURITY="Experimental"
-fi
+env_error_msg="Required environment variable is empty or unset."
 
-CURL="curl -u${BINTRAY_USER}:${BINTRAY_API_KEY} -H Content-Type:application/json -H Accept:application/json"
+# You need a user account on Bintray and an API key before you can upload.
+BINTRAY_USER="${BINTRAY_USER:?${env_error_msg}}" # env
+BINTRAY_API_KEY="${BINTRAY_API_KEY:?${env_error_msg}}" # env
 
-#exit 0
+# You must also create a repository (type = "generic") or be given write
+# access to one owned by another Bintray user or organisation you belong to.
+BINTRAY_REPO="${BINTRAY_REPO:-MuseScore}" # env, or use "MuseScore" if empty or unset
+BINTRAY_REPO_OWNER="${BINTRAY_REPO_OWNER:-$BINTRAY_USER}" # env, or use $BINTRAY_USER
 
-# Get metadata from the desktop file inside the AppImage
-DESKTOP=$(bsdtar -tf "${FILE}" | grep ^./[^/]*.desktop$ | head -n 1)
-# Extract the description from the desktop file
+# Files within a repository are grouped by package and by version. These will
+# be created for you automatically based on the names you provide here.
+BINTRAY_PACKAGE="${BINTRAY_PACKAGE:?${env_error_msg}}" # env
+BINTRAY_VERSION="${BINTRAY_VERSION:?${env_error_msg}}" # env
 
-echo "* DESKTOP $DESKTOP"
+api="https://api.bintray.com"
+repo_slug="${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}"
+package_slug="${repo_slug}/${BINTRAY_PACKAGE}"
+version_slug="${package_slug}/${BINTRAY_VERSION}"
 
-#PCK_NAME=$(bsdtar -f "${FILE}" -O -x ./"${DESKTOP}" | grep -e "^Name=" | head -n 1 | sed s/Name=//g | cut -d " " -f 1 | xargs)
-#if [ "$PCK_NAME" == "" ] ; then
-#  bsdtar -f "${FILE}" -O -x ./"${DESKTOP}"
-#  echo "PCK_NAME missing in ${DESKTOP}, exiting"
-#  exit 1
-#else
-#  echo "* PCK_NAME $PCK_NAME"
-#fi
+function my_curl()
+{
+  local curl_basic_args=(
+    -u "${BINTRAY_USER}:${BINTRAY_API_KEY}"
+    -H "Content-Type:application/json"
+    -H "Accept:application/json"
+    )
+  curl "${curl_basic_args[@]}" "$@" | jq . # `jq` pretty-prints JSON
+}
 
-if [ "${APPNAME}" == "MuseScore" ]; then
-  # Get description from desktop file (source file: build/Linux+BSD/mscore.desktop.in)
-  DESCRIPTION="$(bsdtar -f "${FILE}" -O -x ./"${DESKTOP}" | grep -e "^Comment=" | sed s/Comment=//g)!"
-else
-  # Use custom description for nightly/development builds
-  DESCRIPTION="Automated builds of the $BRANCH development branch. FOR TESTING PURPOSES ONLY!"
-fi
-# Add installation instructions to the description (same for all types of build)
-DESCRIPTION="${APPNAME} Portable AppImages for $SYSTEM Linux systems.
+# File uploads will fail unless the package already exists on Bintray.
+# Create one now. (We assume the repository already exists.)
+echo "$0: Creating package '${BINTRAY_PACKAGE}'..." >&2
 
-${DESCRIPTION}
+my_curl -X "POST" -d "@-" "${api}/packages/${repo_slug}" <<EOF
+{
+  "name": "${BINTRAY_PACKAGE}",
+  "desc": "Unofficial MuseScore builds. Use at your own risk!",
+  "labels": ["music", "audio", "midi", "musicxml"],
+  "licenses": ["GPL-2.0"],
+  "vcs_url": "https://github.com/musescore/MuseScore",
+  "website_url": "https://musescore.org/",
+  "issue_tracker_url": "https://musescore.org/en/project/issues/musescore",
+  "github_repo": "musescore/MuseScore",
+  "github_release_notes_file": "README.md",
+  "public_download_numbers": false,
+  "maturity": "Experimental"
+}
+EOF
 
-Simply download the .AppImage file, give it execute permission, and then run it!
-More instructions at https://musescore.org/handbook/install-linux"
+# Bintray creates versions automatically when you upload a file, but we'll do
+# it ourselves so that we can give the version a meaningful description.
+echo "$0: Creating version '${BINTRAY_VERSION}'..." >&2
 
-ICONNAME=$(bsdtar -f "${FILE}" -O -x "${DESKTOP}" | grep -e "^Icon=" | sed s/Icon=//g)
+BINTRAY_VERSION_DESCRIPTION="${BINTRAY_VERSION_DESCRIPTION:-$(git show -s --format='%h - %B')}" # env, or use commit message
+BINTRAY_VERSION_VCS_TAG="${BINTRAY_VERSION_VCS_TAG:-$(git rev-parse --short HEAD)}" # env, or use commit SHA
 
-# Look for .DirIcon first
-ICONFILE=$(bsdtar -tf "${FILE}" | grep /.DirIcon$ | head -n 1 )
+# note: description is piped through `jq` to escape any JSON-unsafe characters
+my_curl -X "POST" -d "@-" "${api}/packages/${package_slug}/versions" <<EOF
+{
+  "name": "${BINTRAY_VERSION}",
+  "released": "$(date --utc --iso-8601=ns)",
+  "desc": $(jq . -asR <<<"${BINTRAY_VERSION_DESCRIPTION}"),
+  "vcs_tag": "${BINTRAY_VERSION_VCS_TAG}"
+}
+EOF
 
-# Look for svg next
-if [ "$ICONFILE" == "" ] ; then
- ICONFILE=$(bsdtar -tf "${FILE}" | grep ${ICONNAME}.svg$ | head -n 1 )
-fi
+# Upload smallest file first to save time if it fails.
+# Sort array by filesize, largest first (`ls` has no smallest first option).
+readarray -t files < <(ls -S "${files[@]}")
 
-# If there is no svg, then look for pngs in usr/share/icons and pick the largest
-if [ "$ICONFILE" == "" ] ; then
-  ICONFILE=$(bsdtar -tf "${FILE}" | grep usr/share/icons.*${ICONNAME}.png$ | sort -V | tail -n 1 )
-fi
-
-# If there is still no icon, then take any png
-if [ "$ICONFILE" == "" ] ; then
-  ICONFILE=$(bsdtar -tf "${FILE}" | grep ${ICONNAME}.png$ | head -n 1 )
-fi
-
-if [ ! "$ICONFILE" == "" ] ; then
-  echo "* ICONFILE $ICONFILE"
-  bsdtar -f "${FILE}" -O -x "${ICONFILE}" > /tmp/_tmp_icon
-  echo "xdg-open /tmp/_tmp_icon"
-fi
-
-# Check if there is appstream data and use it
-APPDATANAME=$(echo ${DESKTOP} | sed 's/.desktop/.appdata.xml/g' | sed 's|./||'  )
-APPDATAFILE=$(bsdtar -tf "${FILE}" | grep ${APPDATANAME}$ | head -n 1 || true)
-APPDATA=$(bsdtar -f "${FILE}" -O -x "${APPDATAFILE}" || true)
-if [ "$APPDATA" == "" ] ; then
-  echo "* APPDATA missing"
-else
-  echo "* APPDATA found"
-  DESCRIPTION=$(echo $APPDATA | grep -o -e "<description.*description>" | sed -e 's/<[^>]*>//g')
-  WEBSITE_URL=$(echo $APPDATA | grep "homepage" | head -n 1 | cut -d ">" -f 2 | cut -d "<" -f 1)
-fi
-
-if [ "$DESCRIPTION" == "" ] ; then
-  bsdtar -f "${FILE}" -O -x ./"${DESKTOP}"
-  echo "DESCRIPTION missing and no Comment= in ${DESKTOP}, exiting"
-  exit 1
-else
-  echo "* DESCRIPTION $DESCRIPTION"
-fi
-
-if [ "$VERSION" == "" ] ; then
-  echo "* VERSION missing, exiting"
-  exit 1
-else
-  echo "* VERSION $VERSION"
-fi
-
-# exit 0
-##########
-
-echo ""
-echo "Creating package ${PCK_NAME}..."
-  data="{
-    \"name\": \"${PCK_NAME}\",
-    \"desc\": \"${DESCRIPTION}\",
-    \"desc_url\": \"auto\",
-    \"website_url\": [\"${WEBSITE_URL}\"],
-    \"vcs_url\": [\"${VCS_URL}\"],
-    \"issue_tracker_url\": [\"${ISSUE_TRACKER_URL}\"],
-    \"licenses\": [\"${LICENSE}\"],
-    \"labels\": ${LABELS},
-    \"maturity\": \"${MATURITY}\"
-    }"
-  ATTRIBUTES="[
-    {\"name\": \"Platform\", \"values\": [\"Linux\"], \"type\": \"string\"},
-    {\"name\": \"Architecture\", \"values\": [\"${SYSTEM}\"], \"type\": \"string\"}
-    ]"
-${CURL} -X POST -d "${data}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO} && new_package="true"
-if [ "$new_package" == "true" ]; then
-  # Only set package attributes if a new package was created
-  echo ""
-  echo "Setting attributes for package ${PCK_NAME}..."
-  ${CURL} -X POST -d "${ATTRIBUTES}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/attributes
-fi
-
-echo ""
-
-if [ $(which zsyncmake) ] ; then
-  echo ""
-  echo "Embedding update information into ${FILE}..."
-  # Clear ISO 9660 Volume Descriptor #1 field "Application Used"
-  # (contents not defined by ISO 9660) and write URL there
-  dd if=/dev/zero of="${FILE}" bs=1 seek=33651 count=512 conv=notrunc
-  # Example for next line: Subsurface-_latestVersion-x86_64.AppImage
-  NAMELATESTVERSION=$(echo "${FILE_UPLOAD_PATH}" | sed -e "s|${VERSION}|_latestVersion|g")
-  # Example for next line: bintray-zsync|probono|AppImages|Subsurface|Subsurface-_latestVersion-x86_64.AppImage.zsync
-  LINE="bintray-zsync|${BINTRAY_REPO_OWNER}|${BINTRAY_REPO}|${PCK_NAME}|${NAMELATESTVERSION}.zsync"
-  echo "${LINE}" | dd of="${FILE}" bs=1 seek=33651 count=512 conv=notrunc
-  echo ""
-  echo "Uploading zsync file for ${FILE}..."
-  # Workaround for:
-  # https://github.com/probonopd/zsync-curl/issues/1
-  zsyncmake -u "http://dl.bintray.com/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${FILE_UPLOAD_PATH}" ${FILE} -o ${FILE}.zsync
-  ${CURL} -T ${FILE}.zsync "${API}/content/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/${VERSION}/${FILE_UPLOAD_PATH}.zsync?${url_query}"
-else
-  echo "zsyncmake not found, skipping zsync file generation and upload"
-fi
-
-echo ""
-echo "Uploading ${FILE}..."
-${CURL} -T ${FILE} "${API}/content/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/${VERSION}/${FILE_UPLOAD_PATH}?${url_query}" \
-  || { echo "$0: Error: AppImage upload failed!" >&2 ; exit 1 ;}
-
-# Update version information *after* AppImage upload (don't want to create an empty version if upload fails)
-echo ""
-echo "Updating version information for ${VERSION}..."
-    data="{
-    \"desc\": \"${DESCRIPTION}\",
-    \"vcs_tag\": \"${COMMIT:-v$VERSION}\"
-    }"
-${CURL} -X PATCH -d "${data}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/versions/${VERSION}
-echo ""
-echo "Setting attributes for package ${PCK_NAME}..."
-${CURL} -X POST -d "${ATTRIBUTES}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/versions/${VERSION}/attributes
-
-if [ "${APPNAME}" != "MuseScore" ]; then
-  echo ""
-
-  if [ $(env | grep TRAVIS_JOB_ID ) ]; then
-  echo "Adding Travis CI log to release notes..."
-  BUILD_LOG="https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true"
-      data='{
-    "bintray": {
-      "syntax": "markdown",
-      "content": "'${BUILD_LOG}'"
-    }
-  }'
-  ${CURL} -X POST -d "${data}" ${API}/packages/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}/versions/${VERSION}/release_notes
-  echo ""
+# Upload in reverse order
+counter=0
+for (( i=${#files[@]}-1 ; i>=0 ; i-- )) ; do
+  ((++counter))
+  file="${files[i]}"
+  echo "$0: Uploading file ${counter} of ${#files[@]}: '${file}'..." >&2
+  filename="$(basename "${file}")"
+  result="$(my_curl -T "${file}" "${api}/content/${version_slug}/${filename}")"
+  jq . <<<"${result}" # print the result
+  upload_successful="$(jq <<<"${result}" '.message == "success"')"
+  if [[ "${upload_successful}" != "true" ]]; then
+    echo "$0: Upload failed. No files will be published." >&2
+    exit 1 # Cancel upload of other files and don't publish anything
   fi
+done
 
-  # Delete older versions of non-release packages (nightlies and dev. builds)
-  HERE="$(dirname "$(readlink -f "${0}")")"
-  "${HERE}/bintray-tidy.sh" archive "${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/${PCK_NAME}"
-fi
-
-
-
-# Seemingly this works only after the second time running this script - thus disabling for now (FIXME)
-# echo ""
-# echo "Adding ${FILE} to download list..."
-# sleep 5 # Seemingly needed
-#     data="{
-#     \"list_in_downloads\": true
-#     }"
-# ${CURL} -X PUT -d "${data}" ${API}/file_metadata/${BINTRAY_REPO_OWNER}/${BINTRAY_REPO}/"${FILE_UPLOAD_PATH}"
-# echo "TODO: Remove earlier versions of the same architecture from the download list"
-
-# echo ""
-# echo "TODO: Uploading screenshot for ${FILE}..."
+# Upload successful, so now we make files visible to other users
+echo "$0: Publishing uploaded files..." >&2
+my_curl -X POST "${api}/content/${version_slug}/publish"

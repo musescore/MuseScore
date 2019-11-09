@@ -164,9 +164,7 @@ portable: install
 	&& cp "share/applications/$${dsktp}" "$${dsktp}" \
 	&& cp "share/icons/hicolor/scalable/apps/$${icon}" "$${icon}" \
 	&& <"$${build_dir}/$${mani}" >"$${mani}" \
-	   sed -rn 's/.*(share\/)(man|mime|icons|applications)(.*)/\1\2\3/p' \
-	&& "$${build_dir}/../build/Linux+BSD/portable/copy-libs" . \
-	;  ./AppRun check-depends | tee "$${build_dir}/dependencies.txt"
+	   sed -rn 's/.*(share\/)(man|mime|icons|applications)(.*)/\1\2\3/p'
 
 installdebug: debug
 	cd build.debug \

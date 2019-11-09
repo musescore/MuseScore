@@ -740,7 +740,7 @@ else (MINGW)
    if ( NOT MSVC )
 ## install qwebengine core
       if (NOT APPLE AND USE_WEBENGINE)
-         install(FILES
+         install(PROGRAMS
             ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess
             DESTINATION bin
             )
