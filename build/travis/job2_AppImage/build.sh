@@ -52,8 +52,7 @@ then # Build is marked UNSTABLE inside CMakeLists.txt
                         BUILD_NUMBER='${TRAVIS_BUILD_NUMBER}' \
                         LABEL='Portable Nightly Build'"
     cp -f build/travis/resources/splash-nightly.png mscore/data/splash.png
-    update_info="" # automatic updates disabled for nightlies as it requires
-    # changes on the server. See https://github.com/musescore/MuseScore/pull/4757.
+    update_info="zsync|http://ftp.osuosl.org/pub/musescore-nightlies/linux/${TARGET_ARCH}/MuseScoreNightly-${branch}-${TARGET_ARCH}.AppImage.zsync"
   else
     # This is someone developing on their own fork
     export BINTRAY_VERSION="${date}-${branch}-${revision}"
@@ -129,11 +128,7 @@ if [ "${upload}" ]; then
   else
     if [[ "${TRAVIS_REPO_SLUG}" == "musescore/MuseScore" ]]; then
       # this is an official build (stable or nightly)
-      ./build/travis/job2_AppImage/osuosl.sh build.release/MuseScore*.AppImage
-      if [[ -f build.release/MuseScore*.AppImage.zsync ]]; then
-        # upload zsync delta for automatic updates
-        ./build/travis/job2_AppImage/osuosl.sh build.release/MuseScore*.AppImage.zsync
-      fi
+      ./build/travis/job2_AppImage/osuosl.sh build.release/MuseScore*.AppImage # just the AppImage
     else
       # This is a developer building on their personal fork
       ./build/travis/job2_AppImage/bintray.sh build.release/MuseScore*.AppImage* # both AppImage and zsync

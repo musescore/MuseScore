@@ -57,8 +57,19 @@ case "${ARCH}" in
     ;;
 esac
 
-# transfer file
-scp -C -i $SSH_INDENTITY $FILE musescore-nightlies@ftp-osl.osuosl.org:ftp/linux/$ARCH_NAME/$FILE_UPLOAD_PATH
+OSUOSL_SLUG="musescore-nightlies@ftp-osl.osuosl.org"
 
-# delete old files
-ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/linux/$ARCH_NAME; ls MuseScoreNightly* -t | tail -n +41 | xargs -r rm"
+# transfer file
+scp -C -i "${SSH_INDENTITY}" "${FILE}"       "${OSUOSL_SLUG}:ftp/linux/${ARCH_NAME}/${FILE_UPLOAD_PATH}"
+scp -C -i "${SSH_INDENTITY}" "${FILE}.zsync" "${OSUOSL_SLUG}:ftp/linux/${ARCH_NAME}/${FILE_UPLOAD_PATH}.zsync"
+
+if [[ "$FILE_UPLOAD_PATH" == MuseScoreNightly* ]]; then
+  # delete old nightlies and create latest symlink to uploaded file
+  ssh -i "${SSH_INDENTITY}" "${OSUOSL_SLUG}" <<EOF
+cd ~/ftp/linux/${ARCH_NAME}
+ls -t MuseScoreNightly*.AppImage       | tail -n +41 | xargs -r rm
+ls -t MuseScoreNightly*.AppImage.zsync | tail -n +41 | xargs -r rm
+ln -sf "${FILE_UPLOAD_PATH}"       "MuseScoreNightly-${TRAVIS_BRANCH}-${ARCH}.AppImage"
+ln -sf "${FILE_UPLOAD_PATH}.zsync" "MuseScoreNightly-${TRAVIS_BRANCH}-${ARCH}.AppImage.zsync"
+EOF
+fi
