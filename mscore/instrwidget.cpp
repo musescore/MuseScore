@@ -485,6 +485,25 @@ void InstrumentsWidget::genPartList(Score* cs)
       }
 
 //---------------------------------------------------------
+//   updatePartIdx
+//---------------------------------------------------------
+
+void InstrumentsWidget::updatePartIdx()
+      {
+      for (int i = 0; i < partiturList->topLevelItemCount(); ++i) {
+            PartListItem* tli = static_cast<PartListItem*>(partiturList->topLevelItem(i));
+            int partIdx = -1;
+            for (int j = 0; j < tli->childCount(); ++j) {
+                  StaffListItem* sli = static_cast<StaffListItem*>(tli->child(j));
+                  if (!sli->isHidden()) {
+                        partIdx++;
+                        sli->setPartIdx(partIdx);
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   on_instrumentList_itemSelectionChanged
 //---------------------------------------------------------
 
@@ -638,6 +657,7 @@ void InstrumentsWidget::on_removeButton_clicked()
                   }
             static_cast<PartListItem*>(parent)->updateClefs();
             partiturList->setCurrentItem(parent);
+            updatePartIdx();
             }
       else {
             if (partiturList->topLevelItemCount() == 1) {
@@ -763,6 +783,7 @@ void InstrumentsWidget::on_upButton_clicked()
                         }
                   }
             }
+      updatePartIdx();
       }
 
 //---------------------------------------------------------
@@ -854,6 +875,7 @@ void InstrumentsWidget::on_downButton_clicked()
                         }
                   }
             }
+      updatePartIdx();
       }
 
 //---------------------------------------------------------
@@ -893,6 +915,7 @@ StaffListItem* InstrumentsWidget::on_addStaffButton_clicked()
       partiturList->clearSelection();           // should not be necessary
       partiturList->setCurrentItem(nsli);
       pli->updateClefs();
+      updatePartIdx();
       return nsli;
       }
 
