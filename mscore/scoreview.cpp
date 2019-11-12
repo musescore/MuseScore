@@ -4836,8 +4836,6 @@ static bool needViewportMove(Score* cs, ScoreView* cv)
 
       const CmdState& state = cs->cmdState();
 
-      qDebug() << "asdf" << state.startTick() << state.endTick() << state.startStaff() << state.endStaff() << (state.element() ? state.element()->name() : "no_element");
-
       if (state.startTick() < Fraction(0, 1))
             return false;
 
@@ -4864,7 +4862,6 @@ static bool needViewportMove(Score* cs, ScoreView* cv)
                   const StaffLines* l = m->staffLines(st);
                   if (l) {
                         const QRectF r = l->bbox().translated(l->canvasPos());
-//                         qDebug() << "viewport" << viewport << "lines" << l->canvasPos() << l->bbox() << p;
                         if (viewport.intersects(r))
                               return false;
                         }
