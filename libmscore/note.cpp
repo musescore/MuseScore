@@ -1671,7 +1671,7 @@ Element* Note::drop(EditData& data)
                   return 0;
 
             case ElementType::SLUR:
-                  data.view->cmdAddSlur(chord(), nullptr);
+                  data.view->cmdAddSlur(chord(), nullptr, toSlur(e));
                   delete e;
                   return 0;
 
