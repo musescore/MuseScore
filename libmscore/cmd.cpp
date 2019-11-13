@@ -277,11 +277,9 @@ void Score::update(bool resetCmdState)
             CmdState& cs = ms->cmdState();
             ms->deletePostponed();
             if (cs.layoutRange()) {
-                  cs.lock();
                   for (Score* s : ms->scoreList())
                         s->doLayoutRange(cs.startTick(), cs.endTick());
                   updateAll = true;
-                  cs.unlock();
                   }
             }
 
