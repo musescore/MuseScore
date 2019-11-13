@@ -14,11 +14,11 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-import QtQuick 2.0
+import QtQuick 2.2
 import MuseScore 3.0
 
 MuseScore {
-   version: "3.3"
+   version: "3.4"
    description: qsTr("This plugin names notes as per your language setting")
    menuPath: "Plugins.Notes." + qsTr("Note Names")
 
@@ -133,10 +133,7 @@ MuseScore {
             // Y position the note name with a small nudge upward.
             text.offsetY = cursor.element.posY - 0.3
             switch (cursor.voice) {
-               case 0: text.offsetY =  1; break;
-               case 1: text.offsetY = 10; break;
-               case 2: text.offsetY = -1; break;
-               case 3: text.offsetY = 12; break;
+               case 1: case 3: text.placement = Placement.BELOW; break;
             }
 
             // If we consume a STAFF_TEXT we must manufacture a new one.
@@ -216,10 +213,7 @@ MuseScore {
                   // Y position the note name over the chord
                   text.offsetY = cursor.element.posY
                   switch (cursor.voice) {
-                     case 0: text.offsetY =  1; break;
-                     case 1: text.offsetY = 10; break;
-                     case 2: text.offsetY = -1; break;
-                     case 3: text.offsetY = 12; break;
+                     case 1: case 3: text.placement = Placement.BELOW; break;
                   }
 
                   text = newElement(Element.STAFF_TEXT) // Make another STAFF_TEXT object
