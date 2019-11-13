@@ -1000,6 +1000,7 @@ else (MINGW)
             ${QT_INSTALL_BINS}/opengl32sw.dll
             ${QT_INSTALL_BINS}/Qt5Positioning.dll
             ${QT_INSTALL_BINS}/Qt5WebChannel.dll
+            ${QT_INSTALL_BINS}/Qt5QuickTemplates2.dll
             ${PROJECT_SOURCE_DIR}/build/qt.conf
             DESTINATION bin)
 
