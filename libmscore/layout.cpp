@@ -4335,11 +4335,24 @@ void Score::doLayout()
       }
 
 //---------------------------------------------------------
+//   CmdStateLocker
+//---------------------------------------------------------
+
+class CmdStateLocker {
+      Score* score;
+   public:
+      CmdStateLocker(Score* s) : score(s) { score->cmdState().lock(); }
+      ~CmdStateLocker() { score->cmdState().unlock(); }
+      };
+
+//---------------------------------------------------------
 //   doLayoutRange
 //---------------------------------------------------------
 
 void Score::doLayoutRange(const Fraction& st, const Fraction& et)
       {
+      CmdStateLocker cmdStateLocker(this);
+
       Fraction stick(st);
       Fraction etick(et);
       Q_ASSERT(!(stick == Fraction(-1,1) && etick == Fraction(-1,1)));
