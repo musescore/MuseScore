@@ -212,11 +212,11 @@ void PaletteCell::write(XmlWriter& xml) const
       // using attributes for `custom` and `visible`
       // properties instead of nested tags for pre-3.3
       // version compatibility
-      xml.stag(QString("Cell%1%2%3%4")
-         .arg(!name.isEmpty() ? QString(" name=\"%1\"").arg(XmlWriter::xmlString(name)) : "")
-         .arg(custom ? " custom=\"1\"" : "")
-         .arg(!visible ? " visible=\"0\"" : "")
-         .arg(untranslatedElement ? " trElement=\"1\"" : "")
+      xml.stag(QString("Cell")
+         + (!name.isEmpty() ? " name=\"" + XmlWriter::xmlString(name) + "\"" : "")
+         + (custom ? " custom=\"1\"" : "")
+         + (!visible ? " visible=\"0\"" : "")
+         + (untranslatedElement ? " trElement=\"1\"" : "")
          );
 
       if (drawStaff)
