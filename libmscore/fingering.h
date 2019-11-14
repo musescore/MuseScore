@@ -40,6 +40,8 @@ class Fingering final : public TextBase {
       virtual QVariant propertyDefault(Pid id) const override;
 
       virtual QString accessibleInfo() const override;
+
+      virtual Sid getPropertyStyle(Pid id) const override;
       };
 
 

@@ -261,5 +261,15 @@ QVariant Fingering::propertyDefault(Pid id) const
             }
       }
 
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid Fingering::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::PLACEMENT)
+            return Sid::NOSTYLE;
+      return TextBase::getPropertyStyle(pid);
+      }
 }
 
