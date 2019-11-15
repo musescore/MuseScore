@@ -7735,7 +7735,7 @@ int main(int argc, char* av[])
                   setMscoreLocale(sw->language());
                   Workspace::writeGlobalToolBar();
                   Workspace::writeGlobalGUIState();
-                  Workspace* targetWorkspace = WorkspacesManager::findByName(sw->workspace());
+                  Workspace* targetWorkspace = WorkspacesManager::visibleWorkspaces()[0];
                   if (targetWorkspace)
                         mscore->changeWorkspace(targetWorkspace, true);
                   
