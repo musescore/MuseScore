@@ -519,8 +519,15 @@ GridView {
                 }
             }
 //                             Drag.hotSpot: Qt.point(64, 0) // TODO
-        }
-    }
+
+            Connections {
+                // force not hiding palette cell if it is being dragged to a score
+                enabled: paletteCell.paletteDrag
+                target: mscore
+                onElementDraggedToScoreView: paletteCell.paletteDrag = false
+            }
+        } // end ItemDelegate
+    } // end DelegateModel
 
     Menu {
         id: contextMenu

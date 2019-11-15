@@ -935,6 +935,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void focusScoreView();
 
+      void notifyElementDraggedToScoreView();
+
       ScriptRecorder* getScriptRecorder();
       bool runTestScripts(const QStringList& scripts);
       };
