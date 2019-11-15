@@ -749,6 +749,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
             for (int i = 0; i < count; ++i) {
                   std::unique_ptr<PalettePanel> p(new PalettePanel(PalettePanel::Type::Custom));
                   p->setName(QT_TRANSLATE_NOOP("Palette", "Custom"));
+                  p->setGrid(QSize(48, 48));
                   p->setExpanded(true);
                   palettes().insert(palettes().begin() + row, std::move(p));
                   }
