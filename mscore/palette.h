@@ -132,7 +132,7 @@ class Palette : public QWidget {
       void nextPaletteElement();
       void prevPaletteElement();
       void applyPaletteElement();
-      static void applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers = 0);
+      static bool applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers = 0);
       PaletteCell* append(Element*, const QString& name, QString tag = QString(),
          qreal mag = 1.0);
       PaletteCell* add(int idx, Element*, const QString& name,
