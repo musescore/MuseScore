@@ -596,6 +596,16 @@ void MuseScore::populateNoteInputMenu()
       }
 
 //---------------------------------------------------------
+//   notifyElementDraggedToScoreView
+//---------------------------------------------------------
+
+void MuseScore::notifyElementDraggedToScoreView()
+      {
+      if (paletteWidget)
+            paletteWidget->notifyElementDraggedToScoreView();
+      }
+
+//---------------------------------------------------------
 //   onLongOperationFinished
 //---------------------------------------------------------
 
