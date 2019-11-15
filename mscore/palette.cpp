@@ -477,20 +477,20 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 //   applyPaletteElement
 //---------------------------------------------------------
 
-void Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers)
+bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers)
       {
       Score* score = mscore->currentScore();
       if (score == 0)
-            return;
+            return false;
       const Selection sel = score->selection(); // make a copy of selection state before applying the operation.
       if (sel.isNone())
-            return;
+            return false;
 
 //       Element* element = 0;
 //       if (cell)
 //             element = cell->element.get();
       if (element == 0)
-            return;
+            return false;
       
       if (element->isSpanner())
             TourHandler::startTour("spanner-drop-apply");
@@ -753,6 +753,7 @@ void Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
             viewer->setFocus();
       viewer->setDropTarget(0);
 //      mscore->endCmd();
+      return true;
       }
 
 //---------------------------------------------------------

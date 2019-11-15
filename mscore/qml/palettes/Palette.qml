@@ -408,6 +408,11 @@ GridView {
             //Accessible.description: model.accessibleText
 
             onClicked: {
+                if (paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, mscore.keyboardModifiers())) {
+                    paletteView.selectionModel.setCurrentIndex(paletteCell.modelIndex, ItemSelectionModel.Current);
+                    return;
+                }
+
                 forceActiveFocus();
 
                 paletteView.currentIndex = index;
