@@ -301,6 +301,7 @@ void ScoreAccessibility::makeReadable(QString& s)
       {
       static std::vector<std::pair<QString, QString>> unicodeReplacements {
             { "♭", tr(" flat") },
+            { "♮", tr(" natural") },
             { "♯", tr(" sharp") },
             { "𝄫", tr(" double flat") },
             { "𝄪", tr(" double sharp") },
