@@ -18,6 +18,14 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   sectionBreakStyle
+//---------------------------------------------------------
+
+static const ElementStyle sectionBreakStyle {
+      { Sid::SectionPause, Pid::PAUSE }
+      };
+
+//---------------------------------------------------------
 //   LayoutBreak
 //---------------------------------------------------------
 
@@ -29,6 +37,7 @@ LayoutBreak::LayoutBreak(Score* score)
       _startWithLongNames  = true;
       _startWithMeasureOne = true;
       lw                   = spatium() * 0.3;
+      initElementStyle(&sectionBreakStyle);
       }
 
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
