@@ -14,11 +14,11 @@
         <file>qml/palettes/StyledToolButton.qml</file>
         <file>qml/palettes/TreePaletteHeader.qml</file>
         <file>qml/palettes/utils.js</file>
-        <file>qml/palettes/icons/arrow_drop_down.png</file>
-        <file>qml/palettes/icons/arrow_right_black.png</file>
+        <file>qml/palettes/icons/arrow_down.svg</file>
+        <file>qml/palettes/icons/arrow_right.svg</file>
         <file>qml/palettes/icons/clear.png</file>
         <file>qml/palettes/icons/delete.png</file>
-        <file>qml/palettes/icons/more.png</file>
+        <file>qml/palettes/icons/menu_dots.svg</file>
         <file>qml/palettes/icons/search.png</file>
     </qresource>
 </RCC>

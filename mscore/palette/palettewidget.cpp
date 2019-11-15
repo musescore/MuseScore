@@ -165,7 +165,7 @@ void PaletteWidget::showEvent(QShowEvent* evt)
             wasShown = true;
             if (mscoreFirstStart) {
                   // set default width for palettes
-                  mscore->resizeDocks({ this }, { initialViewSize().width() }, Qt::Horizontal);
+                  mscore->resizeDocks({ this }, { int(200 * guiScaling) }, Qt::Horizontal);
                   }
             }
       }

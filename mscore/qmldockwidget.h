@@ -20,6 +20,8 @@
 #ifndef __QMLDOCKWIDGET_H__
 #define __QMLDOCKWIDGET_H__
 
+#include "libmscore/mscore.h"
+
 namespace Ms {
 
 #ifndef NDEBUG
@@ -105,6 +107,17 @@ class QmlStyle : public QObject
       COLOR_PROPERTY(highlightedText, QPalette::HighlightedText)
 
 #undef COLOR_PROPERTY
+
+#define COLOR_PROPERTY_EXPR(name, expr) \
+      Q_PROPERTY(QColor name READ get_##name CONSTANT) \
+      QColor get_##name() const { return expr; }
+
+      COLOR_PROPERTY_EXPR(voice1Color, MScore::selectColor[0]);
+      COLOR_PROPERTY_EXPR(voice2Color, MScore::selectColor[1]);
+      COLOR_PROPERTY_EXPR(voice3Color, MScore::selectColor[2]);
+      COLOR_PROPERTY_EXPR(voice4Color, MScore::selectColor[3]);
+
+#undef COLOR_PROPERTY_EXPR
 
       Q_PROPERTY(QFont font READ font CONSTANT)
 
