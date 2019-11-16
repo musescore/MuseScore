@@ -162,6 +162,7 @@ Box* System::vbox() const
 SysStaff* System::insertStaff(int idx)
       {
       SysStaff* staff = new SysStaff;
+      staff->idx = idx;
       if (idx) {
             // HACK: guess position
             staff->bbox().setY(_staves[idx-1]->y() + 6 * spatium());
