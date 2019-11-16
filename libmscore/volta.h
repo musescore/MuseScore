@@ -75,11 +75,12 @@ class Volta final : public TextLineBase {
 
       QList<int> endings() const           { return _endings; }
       QList<int>& endings()                { return _endings; }
-      void setEndings(const QList<int>& l) { _endings = l;    }
+      void setEndings(const QList<int>& l);
       void setText(const QString& s);
       QString text() const;
 
       bool hasEnding(int repeat) const;
+      int firstEnding() const;
       int lastEnding() const;
       void setVoltaType(Volta::Type);     // deprecated
       Type voltaType() const;             // deprecated

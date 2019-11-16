@@ -471,8 +471,10 @@ enum class Tid {
 ///   Align
 ///   Because the Align enum has Top = 0 and Left = 0,
 ///   align() & Align::Top will always return false.
-///   @warning Do not use if (align() & Align::Top) { doSomething() }
+///   @warning Do not use if (align() & Align::Top) { doSomething(); }
 ///   because doSomething() will never be executed!
+///   use this instead:
+///   `if ((static_cast<char>(align()) & static_cast<char>(Align::VMASK)) == Align::Top) { doSomething(); }`
 ///   Same applies to Align::Left.
 //---------------------------------------------------------
 

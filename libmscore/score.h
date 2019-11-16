@@ -939,7 +939,7 @@ class Score : public QObject, public ScoreElement {
       void addLyrics(const Fraction& tick, int staffIdx, const QString&);
 
       void updateSwing();
-      void createPlayEvents(Measure* start = nullptr, Measure* end = nullptr);
+      void createPlayEvents(Measure const * start = nullptr, Measure const * const end = nullptr);
 
       void updateCapo();
       void updateVelo();
