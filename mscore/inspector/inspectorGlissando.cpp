@@ -51,7 +51,7 @@ void InspectorGlissando::setElement()
       {
       InspectorElementBase::setElement();
       if (!g.playGlissando->isChecked()) {
-            g.label_2->setEnabled(false);
+            g.labelGlissandoStyle->setEnabled(false);
             g.glissandoStyle->setEnabled(false);
             g.resetGlissandoStyle->setEnabled(false);
             }

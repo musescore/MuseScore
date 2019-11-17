@@ -599,7 +599,7 @@ void InspectorFermata::setElement()
       {
       InspectorElementBase::setElement();
       if (!f.playArticulation->isChecked()) {
-            f.label_2->setEnabled(false);
+            f.labelTimeStretch->setEnabled(false);
             f.timeStretch->setEnabled(false);
             f.resetTimeStretch->setEnabled(false);
             }

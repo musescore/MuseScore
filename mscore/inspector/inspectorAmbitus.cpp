@@ -124,7 +124,7 @@ void InspectorAmbitus::setElement()
       {
       InspectorElementBase::setElement();
       if (!r.hasLine->isChecked()) {
-            r.label_10->setEnabled(false);
+            r.labelLineWidth->setEnabled(false);
             r.lineWidth->setEnabled(false);
             r.resetLineWidth->setEnabled(false);
             }
