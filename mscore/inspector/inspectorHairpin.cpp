@@ -98,7 +98,7 @@ void InspectorHairpin::setElement()
       InspectorTextLineBase::setElement();
       updateLineType();
       if (!h.singleNoteDynamics->isChecked()) {
-            h.label_7->setEnabled(false);
+            h.labelVeloChangeMethod->setEnabled(false);
             h.veloChangeMethod->setEnabled(false);
             h.resetVeloChangeMethod->setEnabled(false);
             }

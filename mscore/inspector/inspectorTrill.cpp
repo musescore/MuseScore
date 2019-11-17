@@ -47,7 +47,7 @@ void InspectorTrill::setElement()
       {
       InspectorElementBase::setElement();
       if (!t.playArticulation->isChecked()) {
-            t.label_3->setEnabled(false);
+            t.labelOrnamentStyle->setEnabled(false);
             t.ornamentStyle->setEnabled(false);
             t.resetOrnamentStyle->setEnabled(false);
             }
