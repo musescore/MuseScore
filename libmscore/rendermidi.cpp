@@ -507,8 +507,10 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
                   int channel = instr->channel(chord->upNote()->subchannel())->channel();
                   events->registerChannel(channel);
 
-                  for (Articulation* a : chord->articulations())
-                        instr->updateVelocity(&velocity,channel, a->articulationName());
+                  for (Articulation* a : chord->articulations()) {
+                        if (a->playArticulation())
+                              instr->updateVelocity(&velocity,channel, a->articulationName());
+                        }
 
                   if ( !graceNotesMerged(chord))
                       for (Chord* c : chord->graceNotesBefore())
@@ -879,6 +881,8 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                         if (singleNoteDynamics || hasArticulations || hasChangingDynamic) {
                               if (chord != 0 && hasArticulations) {
                                     for (Articulation* a : chord->articulations()) {
+                                          if (!a->playArticulation())
+                                                continue;
                                           if (velocityMiddle == -1)
                                                 velocityMiddle = velocityStart;
                                           instr->updateVelocity(&velocityStart, channel, a->articulationName());
@@ -939,8 +943,10 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                         } // if instr->singleNoteDynamics()
                   else {
                         if (chord != 0) {
-                              for (Articulation* a : chord->articulations())
-                                    instr->updateVelocity(&velocity, channel, a->articulationName());
+                              for (Articulation* a : chord->articulations()) {
+                                    if (a->playArticulation())
+                                          instr->updateVelocity(&velocity, channel, a->articulationName());
+                                    }
                               }
                         // Add a single expression value to match the velocity, since this instrument should
                         // not use single note dynamics.
