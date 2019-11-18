@@ -2028,6 +2028,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                         if (!nks) {
                               nks = ks->generated() ? ks->clone() : toKeySig(ks->linkedClone());
                               nks->setParent(ns);
+                              nks->setGenerated(true);
                               undo(new AddElement(nks));
                               }
                         else {
