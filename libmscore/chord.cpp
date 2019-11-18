@@ -502,7 +502,7 @@ void Chord::add(Element* e)
 
                   for (unsigned idx = 0; idx < _notes.size(); ++idx) {
                         if (note->pitch() <= _notes[idx]->pitch()) {
-                              if (note->pitch() == _notes[idx]->pitch() && note->line() > _notes[idx]->line())
+                              if (note->pitch() == _notes[idx]->pitch() && note->line() >= _notes[idx]->line())
                                     _notes.insert(_notes.begin()+idx+1, note);
                               else
                                     _notes.insert(_notes.begin()+idx, note);
@@ -2532,13 +2532,17 @@ void Chord::layoutArpeggio2()
 //   findNote
 //---------------------------------------------------------
 
-Note* Chord::findNote(int pitch) const
+Note* Chord::findNote(int pitch, int skip) const
       {
       size_t ns = _notes.size();
       for (size_t i = 0; i < ns; ++i) {
             Note* n = _notes.at(i);
-            if (n->pitch() == pitch)
-                  return n;
+            if (n->pitch() == pitch) {
+                  if (skip == 0)
+                        return n;
+                  else
+                        --skip;
+                  }
             }
       return 0;
       }
