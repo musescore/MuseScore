@@ -106,6 +106,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       else {
             Q_ASSERT_X(false, "EditStaffType::EditStaffType", "Error in opening sample tab file for preview");
             }
+      tabPreview->adjustSize();
 
       setValues();
 
