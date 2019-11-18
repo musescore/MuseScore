@@ -261,7 +261,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                   case EditableRole:
                         return pp->editable();
                   case GridSizeRole:
-                        return pp->gridSize();
+                        return pp->gridSize() * guiScaling * preferences.getDouble(PREF_APP_PALETTESCALE);
                   case DrawGridRole:
                         return pp->drawGrid();
                   case PaletteExpandedRole:
@@ -289,7 +289,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                         qreal extraMag = 1.0;
                         if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer()))
                               extraMag = pp->mag();
-                        return QIcon(new PaletteCellIconEngine(cell, extraMag));
+                        return QIcon(new PaletteCellIconEngine(cell, extraMag * guiScaling * preferences.getDouble(PREF_APP_PALETTESCALE)));
                         }
                   case PaletteCellRole:
                         return QVariant::fromValue(cell.get());

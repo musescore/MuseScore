@@ -81,7 +81,7 @@ static bool needsStaff(Element* e)
 Palette::Palette(QWidget* parent)
    : QWidget(parent)
       {
-      extraMag      = 1.0;
+      extraMag      = 1.0 * guiScaling;
       currentIdx    = -1;
       dragIdx       = -1;
       selectedIdx   = -1;
@@ -234,7 +234,7 @@ void Palette::setReadOnly(bool val)
 
 void Palette::setMag(qreal val)
       {
-      extraMag = val;
+      extraMag = val * guiScaling;
       }
 
 //---------------------------------------------------------
@@ -323,8 +323,8 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
 
 void Palette::setGrid(int hh, int vv)
       {
-      hgrid = hh;
-      vgrid = vv;
+      hgrid = hh * guiScaling;
+      vgrid = vv * guiScaling;
       QSize s(hgrid, vgrid);
       setSizeIncrement(s);
       setBaseSize(s);
@@ -1271,9 +1271,9 @@ bool Palette::event(QEvent* ev)
 void Palette::write(XmlWriter& xml) const
       {
       xml.stag(QString("Palette name=\"%1\"").arg(XmlWriter::xmlString(_name)));
-      xml.tag("gridWidth", hgrid);
-      xml.tag("gridHeight", vgrid);
-      xml.tag("mag", extraMag);
+      xml.tag("gridWidth", hgrid / guiScaling);
+      xml.tag("gridHeight", vgrid / guiScaling);
+      xml.tag("mag", extraMag / guiScaling);
       if (_drawGrid)
             xml.tag("grid", _drawGrid);
 
@@ -1485,11 +1485,11 @@ void Palette::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& t(e.name());
             if (t == "gridWidth")
-                  hgrid = e.readDouble();
+                  hgrid = e.readDouble() * guiScaling;
             else if (t == "gridHeight")
-                  vgrid = e.readDouble();
+                  vgrid = e.readDouble() * guiScaling;
             else if (t == "mag")
-                  extraMag = e.readDouble();
+                  extraMag = e.readDouble() * guiScaling;
             else if (t == "grid")
                   _drawGrid = e.readInt();
             else if (t == "moreElements")
@@ -1640,11 +1640,11 @@ PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
       palette = p;
 
       name->setText(palette->name());
-      cellWidth->setValue(palette->gridWidth());
-      cellHeight->setValue(palette->gridHeight());
+      cellWidth->setValue(palette->gridWidth() / guiScaling);
+      cellHeight->setValue(palette->gridHeight() / guiScaling);
       showGrid->setChecked(palette->drawGrid());
       elementOffset->setValue(palette->yOffset());
-      mag->setValue(palette->mag());
+      mag->setValue(palette->mag() / guiScaling);
 
       MuseScore::restoreGeometry(this);
       }
