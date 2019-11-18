@@ -3442,8 +3442,11 @@ void ScoreView::addSlur()
       InputState& is = _score->inputState();
       if (noteEntryMode() && is.slur()) {
             const std::vector<SpannerSegment*>& el = is.slur()->spannerSegments();
-            if (!el.empty())
+            if (!el.empty()) {
                   el.front()->setSelected(false);
+                  // Now make sure that the slur segment is redrawn so that it does not *look* selected
+                  update();
+                  }
             is.setSlur(nullptr);
             return;
             }

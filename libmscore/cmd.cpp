@@ -783,6 +783,11 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
             connectTies();
       if (nr) {
             if (_is.slur() && nr->type() == ElementType::NOTE) {
+                  // If the start element was the same as the end element when the slur was created,
+                  // the end grip of the front slur segment was given an x-offset of 3.0 * spatium().
+                  // Now that the slur is about to be given a new end element, this should be reset.
+                  if (_is.slur()->endElement() == _is.slur()->startElement())
+                        _is.slur()->frontSegment()->reset();
                   //
                   // extend slur
                   //
