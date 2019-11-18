@@ -3615,6 +3615,7 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
             else
                   putNote(pos, !addFlag);
             }
+      _is.setAccidentalType(AccidentalType::NONE);
       }
 
 //---------------------------------------------------------
