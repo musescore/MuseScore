@@ -901,7 +901,7 @@ void TabDurationSymbol::layout()
       qreal xpos, ypos;             // position coords
 
       _beamGrid = TabBeamGrid::NONE;
-      Chord* chord = toChord(parent());
+      Chord* chord = parent() && parent()->isChord() ? toChord(parent()) : nullptr;
       // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
       if (!chord || !chord->isChord() ||
             (chord->beamMode() != Beam::Mode::BEGIN && chord->beamMode() != Beam::Mode::MID &&
