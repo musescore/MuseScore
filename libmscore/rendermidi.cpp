@@ -139,7 +139,7 @@ void Score::updateCapo()
                   Staff* staff = st->staff();
                   if (st->capo() == 0)
                         continue;
-                  staff->insertIntoCapoList(s->tick(),st->capo());
+                  staff->insertIntoCapoList(s->tick(), st->capo());
                   }
             }
       }
@@ -475,7 +475,7 @@ static int getControllerFromCC(int cc)
 
 //---------------------------------------------------------
 //   collectMeasureEventsSimple
-//    the original, velocity-only method of collecting events.
+///   the original, velocity-only method of collecting events.
 //---------------------------------------------------------
 
 static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staff, int tickOffset)
@@ -510,7 +510,7 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
                   for (Articulation* a : chord->articulations())
                         instr->updateVelocity(&velocity,channel, a->articulationName());
 
-                  if ( !graceNotesMerged(chord))
+                  if (!graceNotesMerged(chord))
                       for (Chord* c : chord->graceNotesBefore())
                           for (const Note* note : c->notes())
                               collectNote(events, channel, note, velocity, tickOffset, staffIdx);
@@ -518,7 +518,7 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
                   for (const Note* note : chord->notes())
                         collectNote(events, channel, note, velocity, tickOffset, staffIdx);
 
-                  if ( !graceNotesMerged(chord))
+                  if (!graceNotesMerged(chord))
                       for (Chord* c : chord->graceNotesAfter())
                           for (const Note* note : c->notes())
                               collectNote(events, channel, note, velocity, tickOffset, staffIdx);
@@ -528,7 +528,7 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
 
 //---------------------------------------------------------
 //   changeCCBetween
-//    since we're adding events, pass ticks as ints rather than fractions
+///   since we're adding events, pass ticks as ints rather than fractions
 //---------------------------------------------------------
 
 static void changeCCBetween(std::map<int, NPlayEvent>& tempEvents, int stick, int etick, int startExpr, int endExpr, int channel, int controller, VeloChangeMethod changeMethod, int tickOffset, int originatingStaff)
@@ -666,12 +666,12 @@ static void changeCCBetween(std::map<int, NPlayEvent>& tempEvents, int stick, in
 
 //---------------------------------------------------------
 //   collectMeasureEventsDefault
-//    this uses only CC events to control note velocity, and sets the
-//    note-on velocity to always be 127 (max). This is the method that allows
-//    single note dynamics, but only works if the soundfont supports it.
-//    Method is one of:
-//          FIXED_MAX - default: velocity is fixed at 127
-//          SEG_START - note-on velocity is the same as the start velocity of the seg
+///   this uses only CC events to control note velocity, and sets the
+///   note-on velocity to always be 127 (max). This is the method that allows
+///   single note dynamics, but only works if the soundfont supports it.
+///   Method is one of:
+///         FIXED_MAX - default: velocity is fixed at 127
+///         SEG_START - note-on velocity is the same as the start velocity of the seg
 //---------------------------------------------------------
 
 static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* staff, StaffRenderData& renderData, int tickOffset, DynamicsRenderMethod method, int cc)
@@ -983,7 +983,7 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
 
 //---------------------------------------------------------
 //   collectMeasureEvents
-//    redirects to the correct function based on the passed method
+///   redirects to the correct function based on the passed method
 //---------------------------------------------------------
 
 static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, StaffRenderData& renderData, int tickOffset, DynamicsRenderMethod method, int cc)
@@ -1129,7 +1129,7 @@ void Score::removeHairpin(Hairpin* h)
 
 //---------------------------------------------------------
 //   updateVelo
-//    calculate velocity for all notes
+///   calculate velocity for all notes
 //---------------------------------------------------------
 
 void Score::updateVelo()
@@ -1365,7 +1365,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
                   else
                         event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0);
                   event.setOriginatingStaff(pe.second.second);
-                  events->insert(std::pair<int,NPlayEvent>(pe.first, event));
+                  events->insert(std::pair<int, NPlayEvent>(pe.first, event));
                   }
             }
       }
@@ -1385,20 +1385,20 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
          || pt == ElementType::VBOX || pt == ElementType::HBOX
          || pt == ElementType::FBOX || pt == ElementType::TBOX) {
             Fraction offset = cm->timesig() - cm->ticks();
-            if (offset > Fraction(0,1)) {
+            if (offset > Fraction(0, 1)) {
                   tick += offset;
                   }
             }
 
       int swingBeat           = swingUnit * 2;
       qreal ticksDuration     = (qreal)chord->actualTicks().ticks();
-      qreal swingTickAdjust   = ((qreal)swingBeat) * (((qreal)(swingRatio-50))/100.0);
+      qreal swingTickAdjust   = ((qreal)swingBeat) * (((qreal)(swingRatio-50)) / 100.0);
       qreal swingActualAdjust = (swingTickAdjust/ticksDuration) * 1000.0;
-      ChordRest *ncr          = nextChordRest(chord);
+      ChordRest* ncr          = nextChordRest(chord);
 
       //Check the position of the chord to apply changes accordingly
       if (tick.ticks() % swingBeat == swingUnit) {
-            if (!isSubdivided(chord,swingUnit)) {
+            if (!isSubdivided(chord, swingUnit)) {
                   ontime = ontime + swingActualAdjust;
                   }
             }
@@ -1410,7 +1410,7 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
 
 //---------------------------------------------------------
 //   isSubdivided
-//   Check for subdivided beat
+///   Check for subdivided beat
 //---------------------------------------------------------
 
 bool Score::isSubdivided(ChordRest* chord, int swingUnit)
@@ -1516,7 +1516,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
                               // reuse note 0 of first chord
                               int p1 = chord->notes()[0]->pitch();
                               int p2 = c2->notes()[k]->pitch();
-                              int dpitch = p2-p1;
+                              int dpitch = p2 - p1;
                               for (int i = 0; i < n; ++i)
                                     events->append(NoteEvent(dpitch, l * i * 2 + l, l));
                               }
@@ -1555,7 +1555,7 @@ void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
       int notes = int(chord->notes().size());
       int l = 64;
       while (l && (l * notes > chord->upNote()->playTicks()))
-            l = 2*l / 3;
+            l = 2 * l / 3;
       int start, end, step;
       bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN && chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN_STRAIGHT;
       if (up) {
@@ -1584,24 +1584,24 @@ void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
 
 //---------------------------------------------------------
 //   convertLine
-// find the line in clefF corresponding to lineL2 in clefR
+///   find the line in clefF corresponding to lineL2 in clefR
 //---------------------------------------------------------
 
-int convertLine (int lineL2, ClefType clefL, ClefType clefR) {
+int convertLine(int lineL2, ClefType clefL, ClefType clefR) {
       int lineR2 = lineL2;
       int goalpitch = line2pitch(lineL2, clefL, Key::C);
       int p;
-      while ( (p = line2pitch(lineR2, clefR, Key::C)) > goalpitch && p < 127)
+      while ((p = line2pitch(lineR2, clefR, Key::C)) > goalpitch && p < 127)
             lineR2++;
-      while ( (p = line2pitch(lineR2, clefR, Key::C)) < goalpitch &&  p > 0)
+      while ((p = line2pitch(lineR2, clefR, Key::C)) < goalpitch && p > 0)
             lineR2--;
       return lineR2;
       }
 
 //---------------------------------------------------------
 //   convertLine
-// find the line in clef for NoteL corresponding to lineL2 in clef for noteR
-// for example middle C is line 10 in Treble clef, but is line -2 in Bass clef.
+///   find the line in clef for NoteL corresponding to lineL2 in clef for noteR
+///   for example middle C is line 10 in Treble clef, but is line -2 in Bass clef.
 //---------------------------------------------------------
 
 int convertLine(int lineL2, Note *noteL, Note *noteR)
@@ -1613,27 +1613,27 @@ int convertLine(int lineL2, Note *noteL, Note *noteR)
 
 //---------------------------------------------------------
 //   articulationExcursion -- an articulation such as a trill, or modant consists of several notes
-// played in succession.  The pitch offsets of each such note in the sequence can be represented either
-// as a number of steps in the diatonic scale, or in half steps as on a piano keyboard.
-// this function, articulationExcursion, takes deltastep indicating the number of steps in the
-// diatonic scale, and calculates (and returns) the number of half steps, taking several things into account.
-// E.g., the key signature, a trill from e to f, is to be understood as a trill between E and F# if we are
-// in the key of G.
-// E.g., if previously (looking backward in time) in the same measure there is another note on the same
-// staff line/space, and that note has an accidental (sharp,flat,natural,etc), then we want to match that
-// tone exactly.
-// E.g., If there are multiple notes on the same line/space, then we only consider the most
-// recent one, but avoid looking forward in time after the current note.
-// E.g., Also if there is an accidental     // on a note one (or more) octaves above or below we
-// observe its accidental as well.
-// E.g., Still another case is that if two staffs are involved (such as a glissando between two
-// notes on different staffs) then we have to search both staffs for the most recent accidental.
-//
-// noteL is the note to measure the deltastep from, i.e., ornaments are w.r.t. this note
-// noteR is the note to search backward from to find accidentals.
-//    for ornament calculation noteL and noteR are the same, but for glissando they are
-//     the start end end note of glissando.
-// deltastep is the desired number of diatonic steps between the base note and this articulation step.
+///   played in succession.  The pitch offsets of each such note in the sequence can be represented either
+///   as a number of steps in the diatonic scale, or in half steps as on a piano keyboard.
+///   this function, articulationExcursion, takes deltastep indicating the number of steps in the
+///   diatonic scale, and calculates (and returns) the number of half steps, taking several things into account.
+///   E.g., the key signature, a trill from e to f, is to be understood as a trill between E and F# if we are
+///   in the key of G.
+///   E.g., if previously (looking backward in time) in the same measure there is another note on the same
+///   staff line/space, and that note has an accidental (sharp,flat,natural,etc), then we want to match that
+///   tone exactly.
+///   E.g., If there are multiple notes on the same line/space, then we only consider the most
+///   recent one, but avoid looking forward in time after the current note.
+///   E.g., Also if there is an accidental     // on a note one (or more) octaves above or below we
+///   observe its accidental as well.
+///   E.g., Still another case is that if two staffs are involved (such as a glissando between two
+///   notes on different staffs) then we have to search both staffs for the most recent accidental.
+///
+///   noteL is the note to measure the deltastep from, i.e., ornaments are w.r.t. this note
+///   noteR is the note to search backward from to find accidentals.
+///   for ornament calculation noteL and noteR are the same, but for glissando they are
+///   the start end end note of glissando.
+///   deltastep is the desired number of diatonic steps between the base note and this articulation step.
 //---------------------------------------------------------
 
 int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
@@ -1645,8 +1645,8 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       int epitchL = noteL->epitch();
       Fraction tickL = chordL->tick();
       // we canot use staffL = chord->staff() because that won't correspond to the noteL->line()
-      //   in the case the user has pressed Shift-Cmd->Up or Shift-Cmd-Down.
-      //   Therefore we have to take staffMove() into account using vStaffIdx().
+      //  in the case the user has pressed Shift-Cmd->Up or Shift-Cmd-Down.
+      //  Therefore we have to take staffMove() into account using vStaffIdx().
       Staff * staffL = noteL->score()->staff(chordL->vStaffIdx());
       ClefType clefL = staffL->clef(tickL);
       // line represents the ledger line of the staff.  0 is the top line, 1, is the space between the top 2 lines,
@@ -1703,9 +1703,9 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       }
 
 //---------------------------------------------------------
-// totalTiedNoteTicks
-//      return the total of the actualTicks of the given note plus
-//      the chain of zero or more notes tied to it to the right.
+//   totalTiedNoteTicks
+///   return the total of the actualTicks of the given note plus
+///   the chain of zero or more notes tied to it to the right.
 //---------------------------------------------------------
 
 int totalTiedNoteTicks(Note* note)
@@ -1720,11 +1720,11 @@ int totalTiedNoteTicks(Note* note)
 
 //---------------------------------------------------------
 //   renderNoteArticulation
-// prefix, vector of int, normally something like {0,-1,0,1} modeling the prefix of tremblement relative to the base note
-// body, vector of int, normally something like {0,-1,0,1} modeling the possibly repeated tremblement relative to the base note
-// tickspernote, number of ticks, either _16h or _32nd, i.e., MScore::division/4 or MScore::division/8
-// repeatp, true means repeat the body as many times as possible to fill the time slice.
-// sustainp, true means the last note of the body is sustained to fill remaining time slice
+///   prefix, vector of int, normally something like {0,-1,0,1} modeling the prefix of tremblement relative to the base note
+///   body, vector of int, normally something like {0,-1,0,1} modeling the possibly repeated tremblement relative to the base note
+///   tickspernote, number of ticks, either _16h or _32nd, i.e., MScore::division/4 or MScore::division/8
+///   repeatp, true means repeat the body as many times as possible to fill the time slice.
+///   sustainp, true means the last note of the body is sustained to fill remaining time slice
 //---------------------------------------------------------
 
 bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, int requestedTicksPerNote,
@@ -1787,29 +1787,29 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
                   ticksPerNote = minTicksPerNote;
             }
       // calculate whether to shorten the duration value.
-      if ( ticksPerNote*(gnb + p + b + s + gna) <= maxticks )
+      if (ticksPerNote * (gnb + p + b + s + gna) <= maxticks)
             ; // plenty of space to play the notes without changing the requested trill note duration
-      else if ( ticksPerNote == minTicksPerNote )
+      else if (ticksPerNote == minTicksPerNote)
             return false; // the ornament is impossible to implement respecting the minimum duration and all the notes it contains
       else {
             ticksPerNote = maxticks / (gnb + p + b + s + gna);  // integer division ignoring remainder
-            if ( slowestFreq <= 0 )
+            if (slowestFreq <= 0)
                   ;
-            else if ( ticksPerNote < minTicksPerNote )
+            else if (ticksPerNote < minTicksPerNote)
                   return false;
             }
 
-      int millespernote = space * ticksPerNote  / maxticks;  // rescale duration into per mille
+      int millespernote = space * ticksPerNote / maxticks;  // rescale duration into per mille
 
       // local function:
-      // look ahead in the given vector to see if the current note is the same pitch as the next note or next several notes.
-      // If so, increment the duration by the appropriate note duration, and increment the index, j, to the next note index
-      // of a different pitch.
-      // The total duration of the tied note is returned, and the index is modified.
-      auto tieForward = [millespernote] (int & j, const vector<int> & vec) {
+      //  look ahead in the given vector to see if the current note is the same pitch as the next note or next several notes.
+      //  If so, increment the duration by the appropriate note duration, and increment the index, j, to the next note index
+      //  of a different pitch.
+      //  The total duration of the tied note is returned, and the index is modified.
+      auto tieForward = [millespernote] (int& j, const vector<int>& vec) {
             int size = int(vec.size());
             int duration = millespernote;
-            while ( j < size-1 && vec[j] == vec[j+1] ) {
+            while ((j < size - 1) && (vec[j] == vec[j + 1])) {
                   duration += millespernote;
                   j++;
                   }
@@ -1817,31 +1817,31 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
             };
 
       // local function:
-      //   append a NoteEvent either by calculating an articulationExcursion or by
-      //   the given chromatic relative pitch.
-      //   RETURNS the new ontime value.  The caller is expected to assign this value.
-      auto makeEvent = [note,chord,chromatic,events] (int pitch, int ontime, int duration) {
-            events->append( NoteEvent(chromatic ? pitch : articulationExcursion(note,note,pitch),
+      //  append a NoteEvent either by calculating an articulationExcursion or by
+      //  the given chromatic relative pitch.
+      //  RETURNS the new ontime value. The caller is expected to assign this value.
+      auto makeEvent = [note, chord, chromatic, events] (int pitch, int ontime, int duration) {
+            events->append(NoteEvent(chromatic ? pitch : articulationExcursion(note, note, pitch),
                ontime/chord->actualTicks().ticks(),
                duration/chord->actualTicks().ticks()));
             return ontime + duration;
             };
 
       // local function:
-      //    Given a chord from a grace note, (normally the chord contains a single note) and create
-      //    a NoteEvent as if the grace note were part of the articulation (such as trill).  This
-      //    local function works for the graceNotesBefore() and also graceNotesAfter().
-      //    If the grace note has play=false, then it will sound as a rest, but the other grace
-      //    notes will still play.  This means graceExtend simply omits the call to append( NoteEvent(...))
-      //    but still updates ontime +=millespernote.
-      //    RETURNS the new value of ontime, so caller must make an assignment to the return value.
-      auto graceExtend = [millespernote,chord,events] (int notePitch, QVector<Chord*> graceNotes, int ontime) {
+      //  Given a chord from a grace note, (normally the chord contains a single note) and create
+      //  a NoteEvent as if the grace note were part of the articulation (such as trill).  This
+      //  local function works for the graceNotesBefore() and also graceNotesAfter().
+      //  If the grace note has play = false, then it will sound as a rest, but the other grace
+      //  notes will still play.  This means graceExtend simply omits the call to append(NoteEvent(...))
+      //  but still updates ontime += millespernote.
+      //  RETURNS the new value of ontime, so caller must make an assignment to the return value.
+      auto graceExtend = [millespernote, chord, events] (int notePitch, QVector<Chord*> graceNotes, int ontime) {
             for (Chord* c : graceNotes) {
                   for (Note* n : c->notes()) {
                         // NoteEvent takes relative pitch as first argument.
                         // The pitch is relative to the pitch of the note, the event is rendering
                         if (n->play())
-                              events->append( NoteEvent(n->pitch() - notePitch,
+                              events->append(NoteEvent(n->pitch() - notePitch,
                                  ontime/chord->actualTicks().ticks(),
                                  millespernote/chord->actualTicks().ticks()));
                         }
@@ -1851,33 +1851,33 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
             };
 
       // calculate the number of times to repeat the body, and sustain the last note of the body
-      // 1000 = P + numrepeat*B+sustain + S
+      // 1000 = P + numrepeat * B+sustain + S
       if (repeatp)
-            numrepeat = (space - millespernote*(gnb + p + s + gna)) / (millespernote * b);
+            numrepeat = (space - millespernote * (gnb + p + s + gna)) / (millespernote * b);
       if (sustainp)
-            sustain   = space - millespernote*(gnb + p + numrepeat * b + s + gna);
+            sustain   = space - millespernote * (gnb + p + numrepeat * b + s + gna);
       // render the graceNotesBefore
-      ontime = graceExtend(note->pitch(),note->chord()->graceNotesBefore(), ontime);
+      ontime = graceExtend(note->pitch(), note->chord()->graceNotesBefore(), ontime);
 
       // render the prefix
-      for (int j=0; j < p; j++)
-            ontime = makeEvent(prefix[j], ontime, tieForward(j,prefix));
+      for (int j = 0; j < p; j++)
+            ontime = makeEvent(prefix[j], ontime, tieForward(j, prefix));
 
       if (b > 0) {
             // render the body, but not the final repetition
-            for (int r = 0; r < numrepeat-1; r++) {
-                  for (int j=0; j < b; j++)
+            for (int r = 0; r < numrepeat - 1; r++) {
+                  for (int j = 0; j < b; j++)
                         ontime = makeEvent(body[j], ontime, millespernote);
                   }
-            // render the final repetition of body, but not the final note of the repition
+            // render the final repetition of body, but not the final note of the repetition
             for (int j = 0; j < b - 1; j++)
                   ontime = makeEvent(body[j], ontime, millespernote);
             // render the final note of the final repeat of body
-            ontime = makeEvent(body[b-1], ontime, millespernote+sustain);
+            ontime = makeEvent(body[b - 1], ontime, millespernote + sustain);
             }
       // render the suffix
       for (int j = 0; j < s; j++)
-            ontime = makeEvent(suffix[j], ontime, tieForward(j,suffix));
+            ontime = makeEvent(suffix[j], ontime, tieForward(j, suffix));
       // render graceNotesAfter
       graceExtend(note->pitch(), note->chord()->graceNotesAfter(), ontime);
       return true;
@@ -1928,27 +1928,27 @@ int _16th = MScore::division / 4;
 int _32nd = _16th / 2;
 
 vector<OrnamentExcursion> excursions = {
-      //  articulation type            set of  duration       body         repeatp      suffix
-      //                               styles          prefix                    sustainp
-      { SymId::ornamentTurn,                any, _32nd, {},    {1,0,-1,0},   false, true, {}}
-      ,{SymId::ornamentTurnInverted,        any, _32nd, {},    {-1,0,1,0},   false, true, {}}
-      ,{SymId::ornamentTrill,           baroque, _32nd, {1,0}, {1,0},        true,  true, {}}
-      ,{SymId::ornamentTrill,          defstyle, _32nd, {0,1}, {0,1},        true,  true, {}}
-      ,{SymId::brassMuteClosed,         baroque, _32nd, {0,-1},{0, -1},      true,  true, {}}
-      ,{SymId::ornamentMordentInverted,     any, _32nd, {},    {0,-1,0},     false, true, {}}
-      ,{SymId::ornamentMordent,        defstyle, _32nd, {},    {0,1,0},      false, true, {}} // inverted mordent
-      ,{SymId::ornamentMordent,         baroque, _32nd, {1,0,1},{0},         false, true, {}} // short trill
-      ,{SymId::ornamentTremblement,         any, _32nd, {1,0}, {1,0},        false, true, {}}
-      ,{SymId::ornamentPrallMordent,        any, _32nd, {},    {1,0,-1,0},   false, true, {}}
-      ,{SymId::ornamentLinePrall,           any, _32nd, {2,2,2},{1,0},       true,  true, {}}
-      ,{SymId::ornamentUpPrall,             any, _16th, {-1,0},{1,0},        true,  true, {1,0}} // p 144 Ex 152 [1]
-      ,{SymId::ornamentUpMordent,           any, _16th, {-1,0},{1,0},        true,  true, {-1,0}} // p 144 Ex 152 [1]
+      // articulation type                       duration      body          repeatp      suffix
+      //                          set of styles         prefix                      sustainp
+      { SymId::ornamentTurn,                any, _32nd, {},        {1, 0, -1, 0},   false, true, {}      },
+      { SymId::ornamentTurnInverted,        any, _32nd, {},        {-1, 0, 1, 0},   false, true, {}      },
+      { SymId::ornamentTrill,           baroque, _32nd, {1, 0},    {1, 0},          true,  true, {}      },
+      { SymId::ornamentTrill,          defstyle, _32nd, {0, 1},    {0, 1},          true,  true, {}      },
+      { SymId::brassMuteClosed,         baroque, _32nd, {0, -1},   {0, -1},         true,  true, {}      },
+      { SymId::ornamentMordentInverted,     any, _32nd, {},        {0, -1, 0},      false, true, {}      },
+      { SymId::ornamentMordent,        defstyle, _32nd, {},        {0, 1, 0},       false, true, {}      }, // inverted mordent
+      { SymId::ornamentMordent,         baroque, _32nd, {1, 0, 1}, {0},             false, true, {}      }, // short trill
+      { SymId::ornamentTremblement,         any, _32nd, {1, 0},    {1, 0},          false, true, {}      },
+      { SymId::ornamentPrallMordent,        any, _32nd, {},        {1, 0, -1, 0},   false, true, {}      },
+      { SymId::ornamentLinePrall,           any, _32nd, {2, 2, 2}, {1, 0},          true,  true, {}      },
+      { SymId::ornamentUpPrall,             any, _16th, {-1, 0},   {1, 0},          true,  true, {1, 0}  }, // p 144 Ex 152 [1]
+      { SymId::ornamentUpMordent,           any, _16th, {-1, 0},   {1, 0},          true,  true, {-1, 0} }, // p 144 Ex 152 [1]
 
-      ,{SymId::ornamentPrecompMordentUpperPrefix, any, _16th, {1,1,1,0}, {1,0},    true,  true, {}} // p136 Cadence Appuyee [1] [2]
-      ,{SymId::ornamentDownMordent,         any, _16th, {1,1,1,0}, {1,0},    true,  true, {-1, 0}} // p136 Cadence Appuyee + mordent [1] [2]
-      ,{SymId::ornamentPrallUp,             any, _16th, {1,0}, {1,0},        true,  true, {-1,0}} // p136 Double Cadence [1]
-      ,{SymId::ornamentPrallDown,           any, _16th, {1,0}, {1,0},        true,  true, {-1,0,0,0}} // p144 ex 153 [1]
-      ,{SymId::ornamentPrecompSlide,        any, _32nd, {},    {0},          false, true, {}}
+      { SymId::ornamentPrecompMordentUpperPrefix, any, _16th, {1, 1, 1, 0}, {1, 0},    true,  true, {}      }, // p136 Cadence Appuyee [1] [2]
+      { SymId::ornamentDownMordent,         any, _16th, {1, 1, 1, 0}, {1, 0},    true,  true, {-1, 0}       }, // p136 Cadence Appuyee + mordent [1] [2]
+      { SymId::ornamentPrallUp,             any, _16th, {1, 0},       {1, 0},    true,  true, {-1, 0}       }, // p136 Double Cadence [1]
+      { SymId::ornamentPrallDown,           any, _16th, {1, 0},       {1, 0},    true,  true, {-1, 0, 0, 0} }, // p144 ex 153 [1]
+      { SymId::ornamentPrecompSlide,        any, _32nd, {},           {0},       false, true, {}            }
 
       // [1] Some of the articulations/ornaments in the excursions table above come from
       // Baroque Music, Style and Performance A Handbook, by Robert Donington,(c) 1982
@@ -1962,14 +1962,14 @@ vector<OrnamentExcursion> excursions = {
 //   renderNoteArticulation
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, SymId articulationType, MScore::OrnamentStyle ornamentStyle)
+bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, SymId articulationType, MScore::OrnamentStyle ornamentStyle)
       {
       if (!note->staff()->isPitchedStaff(note->tick())) // not enough info in tab staff
             return false;
 
       vector<int> emptypattern = {};
       for (auto& oe : excursions) {
-            if (oe.atype == articulationType && ( 0 == oe.ostyles.size()
+            if (oe.atype == articulationType && (0 == oe.ostyles.size()
                   || oe.ostyles.end() != oe.ostyles.find(ornamentStyle))) {
                      return renderNoteArticulation(events, note, chromatic, oe.duration,
                                                    oe.prefix, oe.body, oe.repeatp, oe.sustainp, oe.suffix);
@@ -1982,13 +1982,13 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
 //   renderNoteArticulation
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, Trill::Type trillType, MScore::OrnamentStyle ornamentStyle)
+bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, Trill::Type trillType, MScore::OrnamentStyle ornamentStyle)
       {
       map<Trill::Type,SymId> articulationMap = {
-            {Trill::Type::TRILL_LINE,      SymId::ornamentTrill      }
-           ,{Trill::Type::UPPRALL_LINE,    SymId::ornamentUpPrall    }
-           ,{Trill::Type::DOWNPRALL_LINE,  SymId::ornamentPrecompMordentUpperPrefix  }
-           ,{Trill::Type::PRALLPRALL_LINE, SymId::ornamentTrill      }
+            {Trill::Type::TRILL_LINE,      SymId::ornamentTrill      },
+            {Trill::Type::UPPRALL_LINE,    SymId::ornamentUpPrall    },
+            {Trill::Type::DOWNPRALL_LINE,  SymId::ornamentPrecompMordentUpperPrefix  },
+            {Trill::Type::PRALLPRALL_LINE, SymId::ornamentTrill      }
             };
       auto it = articulationMap.find(trillType);
       if (it == articulationMap.cend())
@@ -1999,10 +1999,10 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
 
 //---------------------------------------------------------
 //   noteHasGlissando
-// true if note is the end of a glissando
+///   true if note is the end of a glissando
 //---------------------------------------------------------
 
-bool noteHasGlissando(Note *note)
+bool noteHasGlissando(Note* note)
       {
       for (Spanner* spanner : note->spannerFor()) {
             if ((spanner->type() == ElementType::GLISSANDO)
@@ -2017,25 +2017,25 @@ bool noteHasGlissando(Note *note)
 //   renderGlissando
 //---------------------------------------------------------
 
-void renderGlissando(NoteEventList* events, Note *notestart)
+void renderGlissando(NoteEventList* events, Note* notestart)
       {
       vector<int> empty = {};
       int Cnote = 60; // pitch of middle C
       int pitchstart = notestart->ppitch();
       int linestart = notestart->line();
 
-      set<int> blacknotes = {  1,  3,    6, 8, 10};
-      set<int> whitenotes = {0,  2, 4, 5, 7,  9, 11};
+      set<int> blacknotes = {  1,  3,     6,  8,  10};
+      set<int> whitenotes = {0,  2,  4, 5,  7,  9,  11};
 
       for (Spanner* spanner : notestart->spannerFor()) {
             if (spanner->type() == ElementType::GLISSANDO) {
-                  Glissando *glissando = toGlissando(spanner);
+                  Glissando* glissando = toGlissando(spanner);
                   GlissandoStyle glissandoStyle = glissando->glissandoStyle();
                   Element* ee = spanner->endElement();
                   // only consider glissando connected to NOTE.
                   if (glissando->playGlissando() && ElementType::NOTE == ee->type()) {
                         vector<int> body;
-                        Note *noteend  = toNote(ee);
+                        Note* noteend  = toNote(ee);
                         int pitchend   = noteend->ppitch();
                         bool direction = pitchend >  pitchstart;
                         if (pitchend == pitchstart)
@@ -2079,24 +2079,22 @@ void renderGlissando(NoteEventList* events, Note *notestart)
             }
       }
 
-
-
 //---------------------------------------------------------
-// findFirstTrill
-//  search the spanners in the score, finding the first one
-//  which overlaps this chord and is of type ElementType::TRILL
+//   findFirstTrill
+///   search the spanners in the score, finding the first one
+///   which overlaps this chord and is of type ElementType::TRILL
 //---------------------------------------------------------
 
-Trill* findFirstTrill(Chord *chord)
+Trill* findFirstTrill(Chord* chord)
       {
-      auto spanners = chord->score()->spannerMap().findOverlapping(1+chord->tick().ticks(),
+      auto spanners = chord->score()->spannerMap().findOverlapping(1 + chord->tick().ticks(),
          chord->tick().ticks() + chord->actualTicks().ticks() - 1);
       for (auto i : spanners) {
             if (i.value->type() != ElementType::TRILL)
                   continue;
             if (i.value->track() != chord->track())
                   continue;
-            Trill *trill = toTrill (i.value);
+            Trill* trill = toTrill (i.value);
             if (trill->playArticulation() == false)
                   continue;
             return trill;
@@ -2104,11 +2102,14 @@ Trill* findFirstTrill(Chord *chord)
       return nullptr;
       }
 
-// In the case that graceNotesBefore or graceNotesAfter are attached to a note
-// with an articulation such as a trill, then the grace notes are/will-be/have-been
-// already merged into the articulation.
-// So this predicate, graceNotesMerged, checks for this condition to avoid calling
-// functions which would re-emit the grace notes by a different algorithm.
+//---------------------------------------------------------
+//   graceNotesMerged
+///   In the case that graceNotesBefore or graceNotesAfter are attached to a note
+///   with an articulation such as a trill, then the grace notes are/will-be/have-been
+///   already merged into the articulation.
+///   So this predicate, graceNotesMerged, checks for this condition to avoid calling
+///   functions which would re-emit the grace notes by a different algorithm.
+//---------------------------------------------------------
 
 bool graceNotesMerged(Chord* chord)
       {
@@ -2125,7 +2126,7 @@ bool graceNotesMerged(Chord* chord)
 //   renderChordArticulation
 //---------------------------------------------------------
 
-void renderChordArticulation(Chord* chord, QList<NoteEventList> & ell, int & gateTime)
+void renderChordArticulation(Chord* chord, QList<NoteEventList>& ell, int& gateTime)
       {
       Segment* seg = chord->segment();
       Instrument* instr = chord->part()->instrument(seg->tick());
@@ -2133,12 +2134,12 @@ void renderChordArticulation(Chord* chord, QList<NoteEventList> & ell, int & gat
 
       for (unsigned k = 0; k < chord->notes().size(); ++k) {
             NoteEventList* events = &ell[k];
-            Note *note = chord->notes()[k];
-            Trill *trill;
+            Note* note = chord->notes()[k];
+            Trill* trill;
 
             if (noteHasGlissando(note))
                   renderGlissando(events, note);
-            else if (chord->staff()->isPitchedStaff(chord->tick())  && (trill = findFirstTrill(chord)) != nullptr) {
+            else if (chord->staff()->isPitchedStaff(chord->tick()) && (trill = findFirstTrill(chord)) != nullptr) {
                   renderNoteArticulation(events, note, false, trill->trillType(), trill->ornamentStyle());
                   }
             else {
@@ -2175,9 +2176,9 @@ static bool shouldRenderNote(Note* n)
 
 //---------------------------------------------------------
 //   renderChord
-//    ontime and trailtime in 1/1000 of duration
-//    ontime signifies how much gap to leave, i.e., how late the note should start because of graceNotesBefore which have already been rendered
-//    trailtime signifies how much gap to leave after the note to allow for graceNotesAfter to be rendered
+///   ontime and trailtime in 1/1000 of duration
+///   ontime signifies how much gap to leave, i.e., how late the note should start because of graceNotesBefore which have already been rendered
+///   trailtime signifies how much gap to leave after the note to allow for graceNotesAfter to be rendered
 //---------------------------------------------------------
 
 static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, int trailtime)
@@ -2225,10 +2226,10 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, 
 
 //---------------------------------------------------------
 //   createGraceNotesPlayEvent
-// as a side effect of createGraceNotesPlayEvents, ontime and trailtime (passed by ref)
-// are modified.  ontime reflects the time needed to play the grace-notes-before, and
-// trailtime reflects the time for the grace-notes-after.  These are used by the caller
-// to effect the on/off time of the main note
+///   as a side effect of createGraceNotesPlayEvents, ontime and trailtime (passed by ref)
+///   are modified.  ontime reflects the time needed to play the grace-notes-before, and
+///   trailtime reflects the time for the grace-notes-after.  These are used by the caller
+///   to effect the on/off time of the main note
 //---------------------------------------------------------
 
 void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& ontime, int& trailtime)
@@ -2274,7 +2275,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
             //  - the grace note duration as notated does not matter
             //
             Chord* graceChord = gnb[0];
-            if (graceChord->noteType() ==  NoteType::ACCIACCATURA) {
+            if (graceChord->noteType() == NoteType::ACCIACCATURA) {
                   int graceTimeMS = 65 * nb;     // value determined empirically (TODO: make instrument-specific, like articulations)
                   // 1000 occurs below as a unit for ontime
                   ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
@@ -2333,7 +2334,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 
 //---------------------------------------------------------
 //   createPlayEvents
-//    create default play events
+///   create default play events
 //---------------------------------------------------------
 
 void Score::createPlayEvents(Chord* chord)
@@ -2466,7 +2467,7 @@ void MidiRenderer::renderMetronome(EventMap* events, Measure* m, const Fraction&
 
 //---------------------------------------------------------
 //   renderMidi
-//    export score to event list
+///   export score to event list
 //---------------------------------------------------------
 
 void Score::renderMidi(EventMap* events, const SynthesizerState& synthState)
