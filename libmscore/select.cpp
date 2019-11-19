@@ -371,7 +371,7 @@ bool SelectionFilter::canSelect(const Element* e) const
       {
       if (e->isDynamic() || e->isHairpin())
           return isFiltered(SelectionFilterType::DYNAMIC);
-      if (e->isArticulation() || e->isTrill() || e->isVibrato())
+      if (e->isArticulation() || e->isTrill() || e->isVibrato() || e->isFermata())
           return isFiltered(SelectionFilterType::ARTICULATION);
       if (e->type() == ElementType::LYRICS)
           return isFiltered(SelectionFilterType::LYRICS);
