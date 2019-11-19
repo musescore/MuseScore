@@ -31,6 +31,7 @@ GridView {
     clip: true
 
     interactive: height < contentHeight // TODO: check if it helps on Mac
+    boundsBehavior: Flickable.StopAtBounds
 
     keyNavigationEnabled: true
 
