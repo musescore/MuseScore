@@ -95,18 +95,13 @@
         <duration>4</duration>
         <voice>1</voice>
         </note>
-      <backup>
-        <duration>3</duration>
-        </backup>
       <direction placement="above">
         <direction-type>
           <words font-weight="bold" font-size="12">Andante</words>
           </direction-type>
+        <offset>-3</offset>
         <sound tempo="91.9998"/>
         </direction>
-      <forward>
-        <duration>3</duration>
-        </forward>
       </measure>
     <measure number="3">
       <note>
@@ -114,17 +109,12 @@
         <duration>4</duration>
         <voice>1</voice>
         </note>
-      <backup>
-        <duration>2</duration>
-        </backup>
       <direction placement="above">
         <direction-type>
           <rehearsal font-weight="bold" font-size="14">A</rehearsal>
           </direction-type>
+        <offset>-2</offset>
         </direction>
-      <forward>
-        <duration>2</duration>
-        </forward>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
         </barline>
