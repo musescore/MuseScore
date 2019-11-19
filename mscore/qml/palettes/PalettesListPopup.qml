@@ -82,6 +82,8 @@ StyledPopup {
             readonly property int availableHeight: palettesListPopup.maxHeight - header.height - createCustomPaletteButton.height - topSeparator.height
             height: Math.min(availableHeight, contentHeight)
 
+            boundsBehavior: Flickable.StopAtBounds
+
             ScrollBar.vertical: ScrollBar {}
 
             spacing: 8

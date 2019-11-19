@@ -152,6 +152,7 @@ ListView {
         Component.onCompleted: contentItem.color = Qt.binding(function() { return scrollbar.pressed ? baseColor : "#bdbebf"; })
     }
 
+    boundsBehavior: Flickable.StopAtBounds
     maximumFlickVelocity: 1500
 
     PlaceholderManager {
