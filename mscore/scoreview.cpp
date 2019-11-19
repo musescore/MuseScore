@@ -2969,7 +2969,7 @@ void ScoreView::screenNext()
       qreal y { yoffset() };
       if (score()->layoutMode() == LayoutMode::LINE) {
             x -= width() * scrollStep;
-            MeasureBase* lm = score()->last();
+            MeasureBase* lm = score()->lastMeasureMM();
             // Vertical frames aren't laid out in continuous view
             while (lm->isVBoxBase())
                   lm = lm->prev();
@@ -2979,7 +2979,7 @@ void ScoreView::screenNext()
             }
       else {
             y -= height() * scrollStep;
-            MeasureBase* lm { score()->last() };
+            MeasureBase* lm { score()->lastMeasureMM() };
             qreal ly { (lm->canvasPos().y() + lm->height()) * mag() - height() * scrollStep };
             // Special case to jump to top of next page in horizontal view.
             if (score()->layoutMode() == LayoutMode::PAGE && !MScore::verticalOrientation()
@@ -3049,7 +3049,7 @@ void ScoreView::screenPrev()
                   // The condition prevents jumping to the bottom of the
                   // first page after reaching the top
                   if (x < thinPadding + (page->width() + thickPadding) * mag()) {
-                        MeasureBase* lm { score()->last() };
+                        MeasureBase* lm { score()->lastMeasureMM() };
                         y = -(lm->canvasPos().y() + lm->height()) * mag() + height() * scrollStep;
                         }
                   if (x > thinPadding)
@@ -3083,7 +3083,7 @@ void ScoreView::pageEnd()
       {
       if (score()->pages().empty())
             return;
-      MeasureBase* lm = score()->last();
+      MeasureBase* lm = score()->lastMeasureMM();
       if (score()->layoutMode() == LayoutMode::LINE) {
             // Vertical frames aren't laid out in continuous view
             while (lm->isVBoxBase())
@@ -3097,7 +3097,7 @@ void ScoreView::pageEnd()
                   for (int i { 0 }; i < score()->npages() - 1; ++i)
                         lx += score()->pages().at(i)->width() * mag();
                   }
-            if (lm->system()->page()->width() * mag() > width())
+            if (lm->system() && lm->system()->page()->width() * mag() > width())
                   lx = (lm->canvasPos().x() + lm->width()) * mag() - width() * scrollStep;
 
             qreal ly { (lm->canvasPos().y() + lm->height()) * mag() - height() * scrollStep };
@@ -4209,7 +4209,7 @@ MeasureBase* ScoreView::appendMeasure(ElementType type)
       {
       _score->startCmd();
       _score->insertMeasure(type, 0);
-      MeasureBase* mb = _score->last();
+      MeasureBase* mb = _score->lastMeasureMM();
       _score->endCmd();
       return mb;
       }
