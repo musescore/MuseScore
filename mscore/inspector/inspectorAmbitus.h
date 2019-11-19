@@ -32,6 +32,7 @@ class InspectorAmbitus : public InspectorElementBase {
 
    public:
       InspectorAmbitus(QWidget* parent);
+      virtual void setElement() override;
 
    protected slots:
       void updateRange();

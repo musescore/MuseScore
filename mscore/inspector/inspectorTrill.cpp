@@ -39,5 +39,18 @@ InspectorTrill::InspectorTrill(QWidget* parent)
       mapSignals(iiList, ppList);
       }
 
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorTrill::setElement()
+      {
+      InspectorElementBase::setElement();
+      if (!t.playArticulation->isChecked()) {
+            t.labelOrnamentStyle->setEnabled(false);
+            t.ornamentStyle->setEnabled(false);
+            t.resetOrnamentStyle->setEnabled(false);
+            }
+      }
 }
 
