@@ -3330,8 +3330,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   beam->setParent(0);
                   e.addBeam(beam);
                   }
-            else if (tag == "Segment")
-                  segment->read(e);
+            else if (tag == "Segment") {
+                  if (segment) segment->read(e);
+                  else e.unknown();
+                  }
             else if (tag == "MeasureNumber") {
                   MeasureNumber* noText = new MeasureNumber(score);
                   readText206(e, noText, m);
