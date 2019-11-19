@@ -3011,8 +3011,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
-                  if (e.tick().isZero()) {
-                        if (score->staff(staffIdx)->clef(Fraction(0,1)) != clef->clefType())
+                  if (e.tick().isZero() && !segment) { // if the clef is not the first segment, then it shouldn't be removed
+                        if (score->staff(staffIdx)->clef(Fraction(0, 1)) != clef->clefType())
                               score->staff(staffIdx)->setDefaultClefType(clef->clefType());
                         if (clef->links() && clef->links()->size() == 1) {
                               e.linkIds().remove(clef->links()->lid());
