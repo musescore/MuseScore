@@ -87,14 +87,30 @@ NoteGroups::NoteGroups(QWidget* parent)
             };
 
       iconPalette->setName(QT_TRANSLATE_NOOP("Palette", "Beam Properties"));
+      iconPalette->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+      //iconPalette->setMag(.5);
       iconPalette->setGrid(27, 40);
-      iconPalette->setMag(.5);
+      iconPalette->setMinimumWidth(27 * 4 * Palette::guiMag() + 1);     // enough room for all icons, with roundoff
       iconPalette->setDrawGrid(true);
       populateIconPalette(iconPalette, bpa);
       iconPalette->setReadOnly(true);
-      //iconPalette->adjustSize();
+      iconPalette->setFixedHeight(iconPalette->heightForWidth(iconPalette->width()));
+      iconPalette->updateGeometry();
       //groupBox->adjustSize();
-
+      //adjustSize();
+#if 0
+      iconPalette->adjustSize();
+      groupBox->adjustSize();
+      //adjustSize();
+      iconPalette->setFixedHeight(heightForWidth(iconPalette->width()));
+      iconPalette->updateGeometry();
+      iconPalette->emitChanged();
+      //iconPalette->adjustSize();
+      groupBox->adjustSize();
+      groupBox->updateGeometry();
+      adjustSize();
+      updateGeometry();
+#endif
       connect(resetGroups, SIGNAL(clicked()), SLOT(resetClicked()));
       connect(view8,  SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));
       connect(view16, SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));

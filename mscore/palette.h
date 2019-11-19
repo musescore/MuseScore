@@ -161,8 +161,8 @@ class Palette : public QWidget {
       void setMag(qreal val);
       qreal mag() const              { return extraMag;    }
       void setYOffset(qreal val)     { _yOffset = val;     }
-      qreal yOffset() const          { return _yOffset;        }
-      int columns() const            { return width() / hgrid; }
+      qreal yOffset() const          { return _yOffset;    }
+      int columns() const;
       int rows() const;
       int size() const               { return filterActive ? dragCells.size() : cells.size(); }
       PaletteCell* cellAt(int index) const { return ccp()->value(index); }
@@ -175,6 +175,10 @@ class Palette : public QWidget {
       void setMoreElements(bool val);
       bool filter(const QString& text);
       void setShowContextMenu(bool val) { _showContextMenu = val; }
+
+      static qreal guiMag();
+      int gridWidthM() const  { return hgrid * guiMag(); }
+      int gridHeightM() const { return vgrid * guiMag(); }
 
       int getCurrentIdx() { return currentIdx; }
       void setCurrentIdx(int i) { currentIdx = i; }
