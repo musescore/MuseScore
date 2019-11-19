@@ -328,7 +328,7 @@ private:
 class MusicXMLParserDirection {
 public:
       MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
-      void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners);
+      void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions, MusicXmlSpannerMap& spanners);
 
 private:
       QXmlStreamReader& _e;
@@ -357,6 +357,7 @@ private:
       double _tpoMetro;                 // tempo according to metronome
       double _tpoSound;                 // tempo according to sound
       QList<Element*> _elems;
+      Fraction _offset;
 
       void directionType(QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
       void bracket(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
