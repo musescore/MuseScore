@@ -30,6 +30,7 @@ class InspectorGlissando : public InspectorElementBase {
 
    public:
       InspectorGlissando(QWidget* parent);
+      virtual void setElement() override;
       };
 
 
