@@ -2162,7 +2162,7 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, int track1, int
       for (int track = track1; track < track2; ++track) {
             if (!filter.canSelectVoice(track))
                   continue;
-            for (Segment* s = s1; s != s2; s = s->next1()) {
+            for (Segment* s = s1; s && s != s2; s = s->next1()) {
                   const auto annotations = s->annotations(); // make a copy since we alter the list
                   for (Element* annotation : annotations) {
                         // skip if not included in selection (eg, filter)
