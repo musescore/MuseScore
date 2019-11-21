@@ -1023,7 +1023,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   MScore::setError(NO_DEST);
                   return;
                   }
-            else if (cr->tuplet()) {
+            else if (cr->tuplet() && cr->tick() != cr->topTuplet()->tick()) {
                   MScore::setError(DEST_TUPLET);
                   return;
                   }
@@ -1054,10 +1054,6 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   }
             if (cr == 0) {
                   MScore::setError(NO_DEST);
-                  return;
-                  }
-            else if (cr->tuplet()) {
-                  MScore::setError(DEST_TUPLET);
                   return;
                   }
             else {
