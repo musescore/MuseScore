@@ -2903,8 +2903,13 @@ void Score::padToggle(Pad n, const EditData& ed)
                         cr = m->findChordRest(m->tick(), 0);
                   }
 
-            if (cr)
+            if (cr) {
                   crs.push_back(cr);
+                  }
+            else {
+                  ed.view->startNoteEntryMode();
+                  deselect(e);
+                  }
             }
       else if (selection().isNone() && n != Pad::REST) {
             TDuration td = _is.duration();
