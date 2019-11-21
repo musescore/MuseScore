@@ -40,6 +40,7 @@ class Element;
 class Note;
 class Tuplet;
 class BarLine;
+class Fraction;
 
 enum class ClefType : signed char;
 
@@ -86,7 +87,7 @@ extern int step2pitch(int step);
 
 extern Segment* skipTuplet(Tuplet* tuplet);
 extern std::vector<SymId> toTimeSigString(const QString&);
-
+extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
 
 }     // namespace Ms
 #endif

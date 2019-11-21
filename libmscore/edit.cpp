@@ -299,12 +299,13 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
                   if (f < l)
                         l = f;
                   }
-            else if (measure->tick() < tick)
-                  f = measure->tick() + measure->ticks() - tick;
-            else
-                  f = measure->ticks();
-            f *= staff->timeStretch(tick);
-            f.reduce();
+            else {
+                  if (measure->tick() < tick)
+                        f = measure->tick() + measure->ticks() - tick;
+                  else
+                        f = measure->ticks();
+                  f *= staff->timeStretch(tick);
+                  }
 
             if (f > l)
                   f = l;
