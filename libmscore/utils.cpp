@@ -1036,5 +1036,17 @@ std::vector<SymId> toTimeSigString(const QString& s)
       return d;
       }
 
+//---------------------------------------------------------
+//   actualTicks
+//---------------------------------------------------------
+
+Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch)
+      {
+      Fraction f = duration / timeStretch;
+      for (Tuplet* t = tuplet; t; t = t->tuplet())
+            f /= t->ratio();
+      return f;
+      }
+
 }
 
