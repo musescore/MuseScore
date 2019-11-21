@@ -3735,8 +3735,10 @@ void ScoreView::cloneElement(Element* e)
             e = toSpannerSegment(e)->spanner();
       mimeData->setData(mimeSymbolFormat, e->mimeData(QPointF()));
       drag->setMimeData(mimeData);
-      drag->setPixmap(QPixmap());
-      drag->start(Qt::CopyAction);
+      static QPixmap pixmap = QPixmap(2, 2);    // null or 1x1 crashes on Linux under ChromeOS?!
+      pixmap.fill(Qt::white);
+      drag->setPixmap(pixmap);
+      drag->exec(Qt::CopyAction);
       }
 
 //---------------------------------------------------------
