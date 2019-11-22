@@ -139,6 +139,7 @@ void Note::add(Ms::PluginAPI::Element* wrapped)
 void Note::addInternal(Ms::Note* note, Ms::Element* s)
       {
       // Provide parentage for element.
+      s->setScore(note->score());
       s->setParent(note);
       s->setTrack(note->track());
 
@@ -211,6 +212,7 @@ void Chord::add(Ms::PluginAPI::Element* wrapped)
 void Chord::addInternal(Ms::Chord* chord, Ms::Element* s)
       {
       // Provide parentage for element.
+      s->setScore(chord->score());
       s->setParent(chord);
       // If a note, ensure the element has proper Tpc values. (Will crash otherwise)
       if (s->isNote()) {
