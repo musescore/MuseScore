@@ -145,6 +145,21 @@ void MuseScore::updateInputState(Score* score)
       getAction("voice-3")->setChecked(voice == 2);
       getAction("voice-4")->setChecked(voice == 3);
 
+      QAction* tieAction = getAction("tie");
+      if (is.noteEntryMode())
+            tieAction->setChecked(false);
+      else {
+            const std::vector<Note*> cmdTieNotes = Score::cmdTieNoteList(score->selection(), false);
+            bool onlyTiedNotes = !cmdTieNotes.empty();
+            for (Note* n : cmdTieNotes) {
+                  if (!n->tieFor()) {
+                        onlyTiedNotes = false;
+                        break;
+                        }
+                  }
+            tieAction->setChecked(onlyTiedNotes);
+            }
+
       getAction("acciaccatura")->setChecked(is.noteType() == NoteType::ACCIACCATURA);
       getAction("appoggiatura")->setChecked(is.noteType() == NoteType::APPOGGIATURA);
       getAction("grace4")->setChecked(is.noteType()  == NoteType::GRACE4);

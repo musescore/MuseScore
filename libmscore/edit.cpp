@@ -1204,26 +1204,34 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
       }
 
 //---------------------------------------------------------
+//   cmdTieNoteList
+//---------------------------------------------------------
+
+std::vector<Note*> Score::cmdTieNoteList(const Selection& selection, bool noteEntryMode)
+      {
+      Element* el = selection.element();
+      if (Note* n = InputState::note(el)) {
+            if (noteEntryMode)
+                  return n->chord()->notes();
+            else
+                  return { n };
+            }
+      else {
+            ChordRest* cr = InputState::chordRest(el);
+            if (cr && cr->isChord())
+                  return toChord(cr)->notes();
+            }
+      return selection.noteList();
+      }
+
+//---------------------------------------------------------
 //   cmdAddTie
 //---------------------------------------------------------
 
 void Score::cmdAddTie(bool addToChord)
       {
-      std::vector<Note*> noteList;
-      Element* el = selection().element();
-      if (el && el->isNote()) {
-            Note* n = toNote(el);
-            if (noteEntryMode())
-                  noteList = n->chord()->notes();
-            else
-                  noteList.push_back(n);
-            }
-      else if (el && el->isStem()) {
-            Chord* chord = toStem(el)->chord();
-            noteList = chord->notes();
-            }
-      else
-            noteList = selection().noteList();
+      const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
+
       if (noteList.empty()) {
             qDebug("no notes selected");
             return;
@@ -1324,6 +1332,66 @@ tie->setTicks(note2->chord()->segment()->tick() - note->chord()->segment()->tick
             nextInputPos(lastAddedChord, false);
       endCmd();
       }
+
+//---------------------------------------------------------
+//   cmdRemoveTie
+//---------------------------------------------------------
+
+void Score::cmdToggleTie()
+      {
+      const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
+
+      if (noteList.empty()) {
+            qDebug("no notes selected");
+            return;
+            }
+
+      bool canAddTies = false;
+      const size_t notes = noteList.size();
+      std::vector<Note*> tieNoteList(notes);
+
+      for (size_t i = 0; i < notes; ++i) {
+            Note* n = noteList[i];
+            if (n->tieFor()) {
+                  tieNoteList[i] = nullptr;
+                  }
+            else {
+                  Note* tieNote = searchTieNote(n);
+                  tieNoteList[i] = tieNote;
+                  if (tieNote)
+                        canAddTies = true;
+                  }
+            }
+
+      startCmd();
+
+      if (canAddTies) {
+            for (size_t i = 0; i < notes; ++i) {
+                  Note* note2 = tieNoteList[i];
+                  if (note2) {
+                        Note* note = noteList[i];
+
+                        Tie* tie = new Tie(this);
+                        tie->setStartNote(note);
+                        tie->setEndNote(note2);
+                        tie->setTrack(note->track());
+                        tie->setTick(note->chord()->segment()->tick());
+                        tie->setTicks(note2->chord()->segment()->tick() - note->chord()->segment()->tick());
+                        undoAddElement(tie);
+                        }
+                  }
+            }
+      else {
+            for (Note* n : noteList) {
+                  Tie* tie = n->tieFor();
+                  if (tie)
+                        undoRemoveElement(tie);
+                  }
+            }
+
+      endCmd();
+      }
+
 
 //---------------------------------------------------------
 //   cmdAddOttava
