@@ -177,6 +177,7 @@ void Cursor::add(Element* wrapped)
             }
 
       wrapped->setOwnership(Ownership::SCORE);
+      s->setScore(_score);
       s->setTrack(_track);
       s->setParent(_segment);
 
