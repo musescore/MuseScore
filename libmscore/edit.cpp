@@ -784,8 +784,8 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             for (int si = 0; si < n; ++si) {
                   TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
                   nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
-                  nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
                   nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
+                  nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
                   nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
                   nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
                   nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
