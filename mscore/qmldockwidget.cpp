@@ -163,6 +163,18 @@ QmlStyle::QmlStyle(QPalette p, QObject* parent)
       }
 
 //---------------------------------------------------------
+//   QmlStyle::setShadowOverlay
+//---------------------------------------------------------
+
+void QmlStyle::setShadowOverlay(bool val)
+      {
+      if (val != _shadowOverlay) {
+            _shadowOverlay = val;
+            emit shadowOverlayChanged();
+            }
+      }
+
+//---------------------------------------------------------
 //   QmlDockWidget
 //---------------------------------------------------------
 

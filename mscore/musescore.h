@@ -109,6 +109,7 @@ class PalettePanel;
 struct PaletteTree;
 class PaletteWidget;
 class PaletteWorkspace;
+class QmlDockWidget;
 
 struct PluginDescription;
 enum class SelState : char;
@@ -723,6 +724,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       PaletteWorkspace* getPaletteWorkspace();
       PaletteWidget* getPaletteWidget() { return paletteWidget; }
+      std::vector<QmlDockWidget*> qmlDockWidgets();
       void changeWorkspace(const QString& name);
 
       void disableCommands(bool val) { inChordEditor = val; }
