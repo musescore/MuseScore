@@ -44,7 +44,6 @@
     <Text>The main menu contains most other commands.
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: "Ctrl"+clicking) within the score view.</Text>
     <Widget>menubar</Widget>
-    <Widget>File</Widget>
     </Message>
   <Message>
     <Text>That's the end of this tour!

@@ -5479,6 +5479,15 @@ PaletteWorkspace* MuseScore::getPaletteWorkspace()
       }
 
 //---------------------------------------------------------
+//   qmlDockWidgets
+//---------------------------------------------------------
+
+std::vector<QmlDockWidget*> MuseScore::qmlDockWidgets()
+      {
+      return { paletteWidget };
+      }
+
+//---------------------------------------------------------
 //   midiNoteReceived
 //---------------------------------------------------------
 
@@ -7831,6 +7840,8 @@ int main(int argc, char* av[])
       if (mscore->hasToCheckForExtensionsUpdate())
             mscore->checkForExtensionsUpdate();
 
+      if (QWidget* menubar = mscore->menuWidget())
+            TourHandler::addWidgetToTour("welcome", menubar, "menubar");
 
       if (!scoresOnCommandline && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER) && (!restoredSession || mscore->scores().size() == 0)) {
 #ifdef Q_OS_MAC
