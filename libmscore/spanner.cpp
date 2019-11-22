@@ -797,7 +797,7 @@ ChordRest* Spanner::endCR()
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
       if ((!_endElement || _endElement->score() != score())) {
             Segment* s  = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
-            const int tr2 = (track2() == -1) ? track() : track2();
+            const int tr2 = effectiveTrack2();
             _endElement = s ? toChordRest(s->element(tr2)) : nullptr;
             }
       return toChordRest(_endElement);
@@ -1034,7 +1034,7 @@ void Spanner::setTicks(const Fraction& f)
 void Spanner::triggerLayout() const
       {
       // Spanners do not have parent even when added to a score, so can't check parent here
-      const int tr2 = track2() == -1 ? track() : track2();
+      const int tr2 = effectiveTrack2();
       score()->setLayout(_tick, _tick + _ticks, staffIdx(), track2staff(tr2), this);
       }
 

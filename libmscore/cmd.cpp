@@ -118,6 +118,7 @@ void CmdState::setTick(const Fraction& t)
 
 void CmdState::setStaff(int st)
       {
+      Q_ASSERT(st > -2);
       if (_locked || st == -1)
             return;
 
