@@ -459,7 +459,7 @@
   <tabstop>effectB</tabstop>
   <tabstop>masterTuning</tabstop>
   <tabstop>changeTuningButton</tabstop>
-  <tabstop>gain</tabstop>
+  <tabstop>gainSlider</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>loadButton</tabstop>
   <tabstop>storeButton</tabstop>

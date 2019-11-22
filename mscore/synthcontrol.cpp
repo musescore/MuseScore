@@ -116,6 +116,7 @@ SynthControl::SynthControl(QWidget* parent)
 // synthesizer has signalled a gain change - update the slider
 void SynthControl::setGain(float val)
       {
+      Q_UNUSED(val);
       gainSlider->setValue(synti->gainAsDecibels());
       }
 
