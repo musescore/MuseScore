@@ -281,6 +281,10 @@
     <seq>Alt+Left</seq>
     </SC>
   <SC>
+    <key>palette-search</key>
+    <seq>Ctrl+F9</seq>
+    </SC>
+  <SC>
     <key>move-up</key>
     <seq>Ctrl+Shift+Up</seq>
     </SC>
