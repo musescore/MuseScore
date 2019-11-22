@@ -3437,7 +3437,7 @@ void ScoreView::startUndoRedo(bool undo)
 //    command invoked, or icon double clicked
 //---------------------------------------------------------
 
-void ScoreView::addSlur()
+void ScoreView::addSlur(const Slur* slurTemplate)
       {
       InputState& is = _score->inputState();
       if (noteEntryMode() && is.slur()) {
@@ -3475,7 +3475,7 @@ void ScoreView::addSlur()
                               cr2 = cr;
                         }
                   if (cr1 && (cr1 != cr2))
-                        cmdAddSlur(cr1, cr2);
+                        cmdAddSlur(cr1, cr2, slurTemplate);
                   }
             }
       else {
@@ -3495,7 +3495,7 @@ void ScoreView::addSlur()
             if (cr1 == cr2)
                   cr2 = 0;
             if (cr1)
-                  cmdAddSlur(cr1, cr2);
+                  cmdAddSlur(cr1, cr2, slurTemplate);
             }
       }
 
@@ -3503,7 +3503,7 @@ void ScoreView::addSlur()
 //   cmdAddSlur
 //---------------------------------------------------------
 
-void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2)
+void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2, const Slur* slurTemplate)
       {
       bool startEditMode = false;
       if (cr2 == 0) {
@@ -3515,7 +3515,8 @@ void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2)
 
       _score->startCmd();
 
-      Slur* slur = new Slur(cr1->score());
+      Slur* slur = slurTemplate ? slurTemplate->clone() : new Slur(cr1->score());
+      slur->setScore(cr1->score());
       slur->setTick(cr1->tick());
       slur->setTick2(cr2->tick());
       slur->setTrack(cr1->track());
