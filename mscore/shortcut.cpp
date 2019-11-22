@@ -1553,7 +1553,9 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Tie"),
          QT_TRANSLATE_NOOP("action","Note duration: Tie"),
          QT_TRANSLATE_NOOP("action","Tie"),
-         Icons::tie_ICON
+         Icons::tie_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
          },
       {
          MsWidget::SCORE_TAB,

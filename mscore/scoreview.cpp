@@ -2164,8 +2164,12 @@ void ScoreView::cmd(const char* s)
                   }
             }
       else if (cmd == "tie") {
-            _score->cmdAddTie();
-            moveCursor();
+            if (noteEntryMode()) {
+                  _score->cmdAddTie();
+                  moveCursor();
+                  }
+            else
+                  _score->cmdToggleTie();
             }
       else if (cmd == "chord-tie") {
             _score->cmdAddTie(true);

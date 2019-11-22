@@ -593,6 +593,8 @@ class Score : public QObject, public ScoreElement {
 
       void cmdRemovePart(Part*);
       void cmdAddTie(bool addToChord = false);
+      void cmdToggleTie();
+      static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
       void cmdAddOttava(OttavaType);
       void cmdAddStretch(qreal);
       void cmdResetNoteAndRestGroupings();
