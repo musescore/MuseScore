@@ -486,11 +486,21 @@ class Note : public Element {
       Ms::AccidentalType accidentalType() { return note()->accidentalType(); }
       void setAccidentalType(Ms::AccidentalType t) { note()->setAccidentalType(t); }
       Ms::NoteType noteType() { return note()->noteType(); }
+
+      static void addInternal(Ms::Note* note, Ms::Element* el);
+      static bool isChildAllowed(Ms::ElementType elementType);
       /// \endcond
 
       /// Creates a PlayEvent object for use in Javascript.
       /// \since MuseScore 3.3
       Q_INVOKABLE Ms::PluginAPI::PlayEvent* createPlayEvent() { return playEventWrap(new NoteEvent(), nullptr); }
+
+      /// Add to a note's elements.
+      /// \since MuseScore 3.3.3
+      Q_INVOKABLE void add(Ms::PluginAPI::Element* wrapped);
+      /// Remove a note's element.
+      /// \since MuseScore 3.3.3
+      Q_INVOKABLE void remove(Ms::PluginAPI::Element* wrapped);
       };
 
 //---------------------------------------------------------
