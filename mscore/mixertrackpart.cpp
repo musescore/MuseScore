@@ -115,6 +115,7 @@ MixerTrackPart::MixerTrackPart(QWidget *parent, MixerTrackItemPtr mti, bool expa
       volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
       volumeSlider->setMaxValue(127);
       volumeSlider->setMinValue(0);
+      volumeSlider->setDoubleClickValue(Channel::defaultVolume);
       volumeSlider->setNumMajorTicks(10);
       volumeSlider->setNumMinorTicks(4);
 
