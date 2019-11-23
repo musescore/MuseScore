@@ -617,12 +617,14 @@ bool MuseScore::importExtension(QString path)
             totalZipSize += fi.size;
 
       // check if extension path is writable and has enough space
-      QStorageInfo storage = QStorageInfo(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
-      if (storage.isReadOnly()) {
+      const QString extensionsPath = preferences.getString(PREF_APP_PATHS_MYEXTENSIONS);
+      const QFileInfo extensionsDirInfo(extensionsPath);
+      if (!extensionsDirInfo.isWritable()) {
             if (!MScore::noGui)
-                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Cannot import extension on read-only storage: %1").arg(storage.displayName()));
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Cannot import extension on read-only storage: %1").arg(extensionsPath)); // TODO: on read-only *directory*
             return false;
             }
+      QStorageInfo storage = QStorageInfo(extensionsPath);
       if (totalZipSize >= storage.bytesAvailable()) {
             if (!MScore::noGui)
                   QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Cannot import extension: storage %1 is full").arg(storage.displayName()));
