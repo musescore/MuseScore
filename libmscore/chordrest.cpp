@@ -535,6 +535,7 @@ Element* ChordRest::drop(EditData& data)
             case ElementType::TEXT:
             case ElementType::STAFF_TEXT:
             case ElementType::SYSTEM_TEXT:
+            case ElementType::STICKING:
             case ElementType::STAFF_STATE:
             case ElementType::INSTRUMENT_CHANGE:
                   if (e->isInstrumentChange() && part()->instruments()->find(tick().ticks()) != part()->instruments()->end()) {
