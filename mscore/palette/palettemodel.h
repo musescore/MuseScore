@@ -170,7 +170,7 @@ class PaletteTreeModel : public QAbstractItemModel {
       PaletteCellPtr findCell(const QModelIndex& index);
       bool insertPalettePanel(std::unique_ptr<PalettePanel> pp, int row, const QModelIndex& parent = QModelIndex());
 
-      void updateCellsState(const Selection&, bool deactivateAll);
+      void updateCellsState(const Selection&);
       void retranslate();
       };
 
