@@ -792,13 +792,21 @@ bool PaletteTreeModel::insertPalettePanel(std::unique_ptr<PalettePanel> pp, int 
 //   PaletteTreeModel::updateCellsState
 //---------------------------------------------------------
 
-void PaletteTreeModel::updateCellsState(const Selection& sel, bool deactivateAll)
+void PaletteTreeModel::updateCellsState(const Selection& sel)
       {
-      const ChordRest* cr = sel.cr();
-      const IconType beamIconType = cr ? Beam::iconType(cr->beamMode()) : IconType::NONE;
+      const ChordRest* cr = sel.firstChordRest();
+      const Beam::Mode bm = cr ? cr->beamMode() : Beam::Mode::NONE;
+      const IconType beamIconType = Beam::iconType(bm);
+      bool deactivateAll = !cr;
 
-      if (!sel.isSingle() || !cr)
-            deactivateAll = true;
+      for (Element* e : sel.elements()) {
+            if (e->isNote())
+                  e = e->parent();
+            if (e->isChordRest()) {
+                  if (toChordRest(e)->beamMode() != bm)
+                        deactivateAll = true;
+                  }
+            }
 
       const size_t npalettes = palettes().size();
       for (size_t row = 0; row < npalettes; ++row) {
