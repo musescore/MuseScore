@@ -1629,6 +1629,7 @@ bool Note::acceptDrop(EditData& data) const
          || (type == ElementType::HAIRPIN)
          || (type == ElementType::STAFF_TEXT)
          || (type == ElementType::SYSTEM_TEXT)
+         || (type == ElementType::STICKING)
          || (type == ElementType::TEMPO_TEXT)
          || (type == ElementType::BEND)
          || (type == ElementType::TREMOLOBAR)
