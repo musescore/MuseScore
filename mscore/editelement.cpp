@@ -86,6 +86,8 @@ void ScoreView::updateGrips()
 
 void ScoreView::startEditMode(Element* e)
       {
+      if (score()->selection().elements().size() != 1)
+            score()->select(e);
       if (!e || !e->isEditable()) {
             qDebug("The element cannot be edited");
             return;

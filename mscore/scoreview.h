@@ -123,6 +123,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       bool tripleClickPending = false;
       bool popupActive = false;
+      bool modifySelection = false;
+      Element* elementToSelect = nullptr;
 
       // Loop In/Out marks in the score
       PositionCursor* _curLoopIn;
@@ -422,7 +424,6 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       virtual const QRect geometry() const override { return QWidget::geometry(); }
 
-      bool clickOffElement;
       void updateGrips();
       bool moveWhenInactive() const { return _moveWhenInactive; }
       bool moveWhenInactive(bool move) { bool m = _moveWhenInactive; _moveWhenInactive = move; return m; }
