@@ -2446,7 +2446,8 @@ void Score::createBeams(Measure* measure)
                   Fraction nextTick = a1->tick() + a1->actualTicks();
                   Measure* m = (nextTick >= measure->endTick() ? measure->nextMeasure() : measure);
                   ChordRest* nextCR = (m ? m->findChordRest(nextTick, track) : nullptr);
-                  if (!nextCR || !beamModeMid(nextCR->beamMode()))
+                  Beam* b = a1->beam();
+                  if (!(b && b->elements().startsWith(a1) && nextCR && beamModeMid(nextCR->beamMode())))
                         a1->removeDeleteBeam(false);
                   }
             }
