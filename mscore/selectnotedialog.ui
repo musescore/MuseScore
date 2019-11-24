@@ -48,14 +48,14 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="1" colspan="2">
+        <item row="8" column="1" colspan="2">
          <widget class="QCheckBox" name="sameSystem">
           <property name="text">
            <string>Same system</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
+        <item row="8" column="0">
          <widget class="QCheckBox" name="sameVoice">
           <property name="text">
            <string>Same voice</string>
@@ -63,18 +63,32 @@
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLabel" name="duration">
+         <widget class="QLabel" name="durationType">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QCheckBox" name="sameDuration">
+         <widget class="QCheckBox" name="sameDurationType">
           <property name="text">
-           <string>Same duration:</string>
+           <string>Same note type:</string>
           </property>
          </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLabel" name="durationTicks">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+          <widget class="QCheckBox" name="sameDurationTicks">
+            <property name="text">
+              <string>Same duration:</string>
+            </property>
+          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QCheckBox" name="samePitch">
@@ -83,7 +97,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
+        <item row="7" column="1">
          <widget class="QCheckBox" name="inSelection">
           <property name="text">
            <string>In selection</string>
@@ -97,7 +111,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="7" column="0">
          <widget class="QCheckBox" name="sameStaff">
           <property name="text">
            <string>Same staff</string>
@@ -118,14 +132,14 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
+        <item row="6" column="0">
          <widget class="QCheckBox" name="sameName">
           <property name="text">
            <string>Same note name:</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="1">
+        <item row="6" column="1">
          <widget class="QLabel" name="name">
           <property name="text">
            <string/>
@@ -217,7 +231,8 @@
   <tabstop>samePitch</tabstop>
   <tabstop>sameString</tabstop>
   <tabstop>sameType</tabstop>
-  <tabstop>sameDuration</tabstop>
+  <tabstop>sameDurationType</tabstop>
+  <tabstop>sameDurationTicks</tabstop>
   <tabstop>sameName</tabstop>
   <tabstop>sameStaff</tabstop>
   <tabstop>inSelection</tabstop>

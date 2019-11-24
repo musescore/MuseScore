@@ -55,7 +55,8 @@ struct NotePattern {
       int string = STRING_NONE;
       int tpc = Tpc::TPC_INVALID;;
       NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
-      TDuration duration = TDuration();
+      TDuration durationType = TDuration();
+      Fraction durationTicks;
       NoteType type = NoteType::INVALID;
       int staffStart;
       int staffEnd; // exclusive
