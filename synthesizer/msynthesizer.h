@@ -47,7 +47,7 @@ class MasterSynthesizer : public QObject {
    public:
       static const int MAX_BUFFERSIZE = 8192;
       static const int MAX_EFFECTS = 2;
-      static constexpr float defaultGain = 0.1;  // -20dB
+      static constexpr float defaultGain = 0.1f;  // -20dB
 
    private:
       std::atomic<bool> lock1      { false };

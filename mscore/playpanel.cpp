@@ -251,6 +251,7 @@ void PlayPanel::setRelTempo(qreal val)
 
 void PlayPanel::setGain(float gain)  // respond to gainChanged() SIGNAL from MasterSynthesizer
       {
+      Q_UNUSED(gain);
       const QSignalBlocker blockVolumeSpinBoxSignals(volSpinBox);
       volumeSlider->setValue(synti->gainAsDecibels());
       volLabel();
