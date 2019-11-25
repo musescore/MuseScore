@@ -14,17 +14,18 @@ rm bottles/freetype*
 
 brew update
 
-ln -s /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib /usr/local/lib/
-ln -s /usr/local/opt/openssl/lib/libcrypto.1.1.dylib /usr/local/lib/
-ln -s /usr/local/opt/openssl/lib/libssl.1.0.0.dylib /usr/local/lib/
-ln -s /usr/local/opt/openssl/lib/libssl.1.1.dylib /usr/local/lib/
-
 # additional dependencies
 brew install jack lame
 brew upgrade cmake
 
 #brew install libogg libvorbis flac libsndfile portaudio
 cmake --version
+
+#hack to fix wget not properly working with openssl@1.1
+brew uninstall --force openssl@1.1
+brew install openssl@1.1
+brew uninstall wget
+brew install wget
 
 #install Qt from S3 storage
 wget --no-check-certificate -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
