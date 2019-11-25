@@ -5,6 +5,8 @@ if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
   exit 0
 fi
 
+brew upgrade wget
+
 # install dependencies
 wget -c --no-check-certificate -nv -O bottles.zip https://musescore.org/sites/musescore.org/files/bottles-MuseScore-3.0.zip
 unzip bottles.zip
@@ -79,7 +81,7 @@ rvm uninstall 2.0.0-p643
 rvm uninstall 2.0.0
 rvm get head
 
-wget --no-check-certificate -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
+wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
 mkdir -p $QT_MACOS
 unzip -qq qt5.zip -d $QT_MACOS
 rm qt5.zip
