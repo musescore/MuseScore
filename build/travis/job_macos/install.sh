@@ -29,6 +29,9 @@ mkdir -p ~/Library/Frameworks
 mv Sparkle-${SPARKLE_VERSION}/Sparkle.framework ~/Library/Frameworks/
 rm -rf Sparkle-${SPARKLE_VERSION}
 
+#install macOS dependencies
+wget -c --no-check-certificate -nv -O musescore_dependencies_macos.zip  http://utils.musescore.org.s3.amazonaws.com/musescore_dependencies_macos.zip
+
 brew update
 
 # additional dependencies
