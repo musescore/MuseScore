@@ -18,6 +18,15 @@ mkdir -p $QT_MACOS
 unzip -qq qt5.zip -d $QT_MACOS
 rm qt5.zip
 
+brew update
+
+# additional dependencies
+brew install jack lame
+brew upgrade cmake
+brew install openssl@1.1
+#brew install libogg libvorbis flac libsndfile portaudio
+cmake --version
+
 #install sparkle
 export SPARKLE_VERSION=1.20.0
 mkdir Sparkle-${SPARKLE_VERSION}
@@ -28,17 +37,6 @@ cd ..
 mkdir -p ~/Library/Frameworks
 mv Sparkle-${SPARKLE_VERSION}/Sparkle.framework ~/Library/Frameworks/
 rm -rf Sparkle-${SPARKLE_VERSION}
-
-#install macOS dependencies
-wget -c --no-check-certificate -nv -O musescore_dependencies_macos.zip  http://utils.musescore.org.s3.amazonaws.com/musescore_dependencies_macos.zip
-
-brew update
-
-# additional dependencies
-brew install jack lame
-brew upgrade cmake
-#brew install libogg libvorbis flac libsndfile portaudio
-cmake --version
 
 BREW_CELLAR=$(brew --cellar)
 BREW_PREFIX=$(brew --prefix)
