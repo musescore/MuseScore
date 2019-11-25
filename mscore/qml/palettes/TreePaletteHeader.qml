@@ -27,6 +27,7 @@ Item {
     id: paletteHeader
 
     property bool expanded: false
+    property bool hovered: false
     property string text: ""
     property bool hidePaletteElementVisible
     property bool editingEnabled: true
@@ -54,10 +55,10 @@ Item {
         activeFocusOnTab: false // same focus object as parent palette
         text: paletteHeader.expanded ? qsTr("Collapse") : qsTr("Expand")
 
-        padding: 0
+        padding: 4
 
         contentItem: StyledIcon {
-            source: paletteHeader.expanded ? "icons/arrow_drop_down.png" : "icons/arrow_right_black.png"
+            source: paletteHeader.expanded ? "icons/arrow_down.svg" : "icons/arrow_right.svg"
         }
 
         onClicked: paletteHeader.toggleExpandRequested()
@@ -69,7 +70,7 @@ Item {
         horizontalAlignment: Text.AlignHLeft
         anchors {
             left: paletteExpandArrow.right; leftMargin: 4;
-            right: deleteButton.visible ? deleteButton.left : paletteHeaderMenuButton.left
+            right: deleteButton.visible ? deleteButton.left : (paletteHeaderMenuButton.visible ? paletteHeaderMenuButton.left : parent.right)
         }
         text: paletteHeader.text
         font: globalStyle.font
@@ -117,12 +118,14 @@ Item {
         height: parent.height
         anchors.right: parent.right
 
+        visible: paletteHeader.expanded || paletteHeader.hovered || paletteHeaderMenu.visible
+
         activeFocusOnTab: parent.parent.parent === paletteTree.currentTreeItem
 
         padding: 4
 
         contentItem: StyledIcon {
-            source: "icons/more.png"
+            source: "icons/menu_dots.svg"
         }
 
         text: qsTr("Palette menu") // used by screen readers (they ignore Accessible.name for buttons)

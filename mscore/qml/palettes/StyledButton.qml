@@ -40,12 +40,13 @@ Button {
     }
 
     background: Rectangle {
-        visible: !button.flat || button.down || button.visualFocus
+        visible: !button.flat || button.hovered || button.down || button.visualFocus
         color: button.highlighted || button.visualFocus
-            ? (button.down ? globalStyle.button : Qt.lighter(globalStyle.button, 1.2))
-            : (button.down ? Qt.darker(globalStyle.button, 1.2) : globalStyle.button)
+            ? (button.down || button.hovered ? globalStyle.button : Qt.lighter(globalStyle.button, 1.2))
+            : (button.down || button.hovered ? Qt.darker(globalStyle.button, 1.2) : globalStyle.button)
+        opacity: button.hovered && !button.down ? 0.5 : 1.0
         border {
-            color: "#aeaeae"
+            color: button.hovered && !button.down ? globalStyle.text : "#aeaeae"
             width: 1
         }
     }

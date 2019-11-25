@@ -118,6 +118,10 @@ class InputState {
       void moveInputPos(Element* e);
       void moveToNextInputPos();
       bool endOfScore() const;
+
+      // TODO: unify with Selection::cr()?
+      static Note* note(Element*);
+      static ChordRest* chordRest(Element*);
       };
 
 

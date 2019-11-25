@@ -31,6 +31,7 @@ GridView {
     clip: true
 
     interactive: height < contentHeight // TODO: check if it helps on Mac
+    boundsBehavior: Flickable.StopAtBounds
 
     keyNavigationEnabled: true
 
@@ -92,6 +93,9 @@ GridView {
     cellWidth: stretchWidth ? Math.floor(Utils.stretched(cellDefaultWidth, width)) : cellDefaultWidth
     cellHeight: cellSize.height
 
+    readonly property real ncolumns: Math.floor(width / cellWidth);
+    readonly property real lastColumnCellWidth : cellWidth + (width % cellWidth) // width of last cell in a row: might be stretched to avoid a gap at row end
+
     signal moreButtonClicked()
 
     MouseArea {
@@ -105,10 +109,16 @@ GridView {
         visible: showMoreButton
         activeFocusOnTab: parent.currentItem === paletteTree.currentTreeItem
 
-        background: Rectangle {
-            color: moreButton.down ? globalStyle.button : mscore.paletteBackground
-        }
+        highlighted: visualFocus || hovered
 
+        background: Rectangle {
+            color: mscore.paletteBackground
+            Rectangle {
+                anchors.fill: parent
+                color: globalStyle.voice1Color
+                opacity: moreButton.down ? 0.4 : (moreButton.highlighted ? 0.2 : 0.0)
+            }
+        }
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         width: {
@@ -360,7 +370,7 @@ GridView {
 
             property bool selected: (paletteView.selectionModel && paletteView.selectionModel.hasSelection) ? paletteView.isSelected(modelIndex) : false // hasSelection is to trigger property bindings if selection changes, see https://doc.qt.io/qt-5/qml-qtqml-models-itemselectionmodel.html#hasSelection-prop
 
-            highlighted: activeFocus
+            highlighted: activeFocus || hovered || !!model.cellActive
 
             width: paletteView.cellWidth
             height: paletteView.cellHeight
@@ -372,8 +382,14 @@ GridView {
                 visible: !parent.paletteDrag || parent.dragCopy
                 anchors.fill: parent
                 icon: model.decoration
-                selected: paletteCell.selected
-                active: !!model.cellActive
+                selected: false // TODO: remove properties?
+                active: false // TODO: remove properties?
+            }
+
+            background: Rectangle {
+                color: globalStyle.voice1Color
+                opacity: paletteCell.selected ? 0.5 : (paletteCell.highlighted ? 0.2 : 0.0)
+                width: ((paletteCell.rowIndex + 1) % paletteView.ncolumns) ? paletteView.cellWidth : paletteView.lastColumnCellWidth
             }
 
             readonly property var toolTip: model.toolTip
@@ -504,8 +520,15 @@ GridView {
                 }
             }
 //                             Drag.hotSpot: Qt.point(64, 0) // TODO
-        }
-    }
+
+            Connections {
+                // force not hiding palette cell if it is being dragged to a score
+                enabled: paletteCell.paletteDrag
+                target: mscore
+                onElementDraggedToScoreView: paletteCell.paletteDrag = false
+            }
+        } // end ItemDelegate
+    } // end DelegateModel
 
     Menu {
         id: contextMenu

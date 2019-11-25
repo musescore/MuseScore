@@ -56,17 +56,6 @@ class StartupWizardPage2 : public QWizardPage {
       void setCurrentLayout(QString langCode);
       };
 
-class StartupWizardPage3 : public QWizardPage {
-      Q_OBJECT
-
-      QComboBox* _workspaces;
-
-   public:
-      StartupWizardPage3(QWidget* parent = 0);
-      QString workspace()   { return _workspaces->currentText(); }
-      void init();
-      };
-
 class StartupWizardPage4 : public QWizardPage {
       Q_OBJECT
 
@@ -93,7 +82,6 @@ class StartupWizard : public QWizard {
       StartupWizardIntroPage* p0;
       StartupWizardPage1* p1;
       StartupWizardPage2* p2;
-      StartupWizardPage3* p3;
       StartupWizardPage4* p4;
       StartupWizardFinalPage* p5;
 
@@ -102,7 +90,6 @@ class StartupWizard : public QWizard {
       static void autoSelectShortcuts(QString keyboardLayout);
       QString keyboardLayout()      { return p2->keyboardLayout(); }
       QString language()     { return p1->language(); }
-      QString workspace()    { return p3->workspace(); }
       bool showTours()       { return p4->showTours(); }
 
    private slots:
