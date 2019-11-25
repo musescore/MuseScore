@@ -79,7 +79,7 @@ rvm uninstall 2.0.0-p643
 rvm uninstall 2.0.0
 rvm get head
 
-wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
+wget --no-check-certificate -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
 mkdir -p $QT_MACOS
 unzip -qq qt5.zip -d $QT_MACOS
 rm qt5.zip
