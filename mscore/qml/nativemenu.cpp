@@ -53,15 +53,30 @@ QMenu* QmlNativeMenu::createMenu() const
       }
 
 //---------------------------------------------------------
+//   QmlNativeMenu::showMenu
+//---------------------------------------------------------
+
+void QmlNativeMenu::showMenu(QPoint p)
+      {
+      _visible = true;
+      emit visibleChanged();
+
+      QMenu* menu = createMenu();
+      menu->exec(p);
+      menu->deleteLater();
+
+      _visible = false;
+      emit visibleChanged();
+      }
+
+//---------------------------------------------------------
 //   QmlNativeMenu::open
 //---------------------------------------------------------
 
 void QmlNativeMenu::open()
       {
-      QMenu* menu = createMenu();
       const QPoint globalPos = parentItem()->mapToGlobal(pos).toPoint();
-      menu->exec(globalPos);
-      menu->deleteLater();
+      showMenu(globalPos);
       }
 
 //---------------------------------------------------------
@@ -70,9 +85,7 @@ void QmlNativeMenu::open()
 
 void QmlNativeMenu::popup()
       {
-      QMenu* menu = createMenu();
-      menu->exec(QCursor::pos());
-      menu->deleteLater();
+      showMenu(QCursor::pos());
       }
 
 } // namespace Ms

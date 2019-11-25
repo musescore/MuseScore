@@ -2887,16 +2887,17 @@ void Score::padToggle(Pad n, const EditData& ed)
       std::vector<ChordRest*> crs;
 
       if (selection().isSingle()) {
-            // do not allow to add a dot on a full measure rest
             Element* e = selection().element();
-            if (e && e->isRest()) {
-                  Rest* r = toRest(e);
+            ChordRest* cr = InputState::chordRest(e);
+
+            // do not allow to add a dot on a full measure rest
+            if (cr && cr->isRest()) {
+                  Rest* r = toRest(cr);
                   if (r->isFullMeasureRest())
                         _is.setDots(0);
                   }
 
             // on measure rest, select the first actual rest
-            ChordRest* cr = selection().cr();
             if (cr && cr->isRest() && cr->measure()->isMMRest()) {
                   Measure* m = cr->measure()->mmRestFirst();
                   if (m)
@@ -2921,15 +2922,14 @@ void Score::padToggle(Pad n, const EditData& ed)
             const auto elements = selection().uniqueElements();
             bool canAdjustLength = true;
             for (Element* e : elements) {
-                  if (!e)
+                  ChordRest* cr = InputState::chordRest(e);
+                  if (!cr)
                         continue;
-                  if (e->isNote())
-                        e = e->parent();
-                  if (!e->isChordRest() || e->isRepeatMeasure() || (e->isRest() && toRest(e)->measure() && toRest(e)->measure()->isMMRest())) {
+                  if (cr->isRepeatMeasure() || (cr->isRest() && toRest(cr)->measure() && toRest(cr)->measure()->isMMRest())) {
                         canAdjustLength = false;
                         break;
                         }
-                  crs.push_back(toChordRest(e));
+                  crs.push_back(cr);
                   }
 
             if (canAdjustLength) {
@@ -2939,6 +2939,8 @@ void Score::padToggle(Pad n, const EditData& ed)
                               return cr2->isBefore(cr1);
                         return cr2->track() < cr1->track();
                         });
+                  // Remove duplicates from the list
+                  crs.erase(std::unique(crs.begin(), crs.end()), crs.end());
                   }
             else
                   crs.clear();
