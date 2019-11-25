@@ -24,7 +24,7 @@ cmake --version
 #hack to fix wget not properly working with openssl@1.1
 brew uninstall wget
 brew install wget
-brew uninstall python2
+brew uninstall --ignore-dependencies python2
 brew install python2
 
 #install Qt from S3 storage
