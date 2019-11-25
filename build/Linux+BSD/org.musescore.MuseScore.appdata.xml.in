@@ -311,9 +311,9 @@
         <ul>
           <li>Fix #270496: Add missing elements to incomplete tuplets when reading from a file</li>
           <li>Fix #272042: Saved preferences override command line options</li>
-          <li>Debian fix: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=898757. Fix crash when starting with piano open.</li>
+          <li>Fix Debian#898757: Fix crash when starting with piano open.</li>
           <li>Allow path to be relative to stored album file</li>
-          <li>Fix #273660 : MIDI Keyboard Not Responded when Pressed Before Opening a Score</li>
+          <li>Fix #273660: MIDI Keyboard Not Responded when Pressed Before Opening a Score</li>
         </ul>
       </description>
     </release>
