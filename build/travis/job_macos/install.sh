@@ -13,11 +13,11 @@ unzip bottles.zip
 rm bottles/freetype*
 
 brew update
-brew uninstall openssl@1.1
-brew install openssl@1.1
 
-#to have openssl@1.1 working
-echo 'export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"' >> ~/.bash_profile
+ln -s /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib /usr/local/lib/
+ln -s /usr/local/opt/openssl/lib/libcrypto.1.1.dylib /usr/local/lib/
+ln -s /usr/local/opt/openssl/lib/libssl.1.0.0.dylib /usr/local/lib/
+ln -s /usr/local/opt/openssl/lib/libssl.1.1.dylib /usr/local/lib/
 
 # additional dependencies
 brew install jack lame
