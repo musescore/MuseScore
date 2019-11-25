@@ -12,13 +12,8 @@ unzip bottles.zip
 # we don't use freetype
 rm bottles/freetype*
 
-#install Qt from S3 storage
-wget --no-check-certificate -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
-mkdir -p $QT_MACOS
-unzip -qq qt5.zip -d $QT_MACOS
-rm qt5.zip
-
 brew update
+brew uninstall openssl@1.1
 brew install openssl@1.1
 
 #to have openssl@1.1 working
@@ -30,6 +25,12 @@ brew upgrade cmake
 
 #brew install libogg libvorbis flac libsndfile portaudio
 cmake --version
+
+#install Qt from S3 storage
+wget --no-check-certificate -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
+mkdir -p $QT_MACOS
+unzip -qq qt5.zip -d $QT_MACOS
+rm qt5.zip
 
 #install sparkle
 export SPARKLE_VERSION=1.20.0
