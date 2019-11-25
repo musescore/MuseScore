@@ -19,11 +19,15 @@ unzip -qq qt5.zip -d $QT_MACOS
 rm qt5.zip
 
 brew update
+brew install openssl@1.1
+
+#to have openssl@1.1 working
+echo 'export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"' >> ~/.bash_profile
 
 # additional dependencies
 brew install jack lame
 brew upgrade cmake
-brew install openssl@1.1
+
 #brew install libogg libvorbis flac libsndfile portaudio
 cmake --version
 
