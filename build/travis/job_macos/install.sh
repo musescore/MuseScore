@@ -12,6 +12,23 @@ unzip bottles.zip
 # we don't use freetype
 rm bottles/freetype*
 
+#install Qt from S3 storage
+wget --no-check-certificate -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
+mkdir -p $QT_MACOS
+unzip -qq qt5.zip -d $QT_MACOS
+rm qt5.zip
+
+#install sparkle
+export SPARKLE_VERSION=1.20.0
+mkdir Sparkle-${SPARKLE_VERSION}
+cd Sparkle-${SPARKLE_VERSION}
+wget -nv https://github.com/sparkle-project/Sparkle/releases/download/${SPARKLE_VERSION}/Sparkle-${SPARKLE_VERSION}.tar.bz2
+tar jxf Sparkle-${SPARKLE_VERSION}.tar.bz2
+cd ..
+mkdir -p ~/Library/Frameworks
+mv Sparkle-${SPARKLE_VERSION}/Sparkle.framework ~/Library/Frameworks/
+rm -rf Sparkle-${SPARKLE_VERSION}
+
 brew update
 
 # additional dependencies
@@ -78,22 +95,6 @@ rvm uninstall 2.0.0-p648
 rvm uninstall 2.0.0-p643
 rvm uninstall 2.0.0
 rvm get head
-
-wget --no-check-certificate -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
-mkdir -p $QT_MACOS
-unzip -qq qt5.zip -d $QT_MACOS
-rm qt5.zip
-
-#install sparkle
-export SPARKLE_VERSION=1.20.0
-mkdir Sparkle-${SPARKLE_VERSION}
-cd Sparkle-${SPARKLE_VERSION}
-wget -nv https://github.com/sparkle-project/Sparkle/releases/download/${SPARKLE_VERSION}/Sparkle-${SPARKLE_VERSION}.tar.bz2
-tar jxf Sparkle-${SPARKLE_VERSION}.tar.bz2
-cd ..
-mkdir -p ~/Library/Frameworks
-mv Sparkle-${SPARKLE_VERSION}/Sparkle.framework ~/Library/Frameworks/
-rm -rf Sparkle-${SPARKLE_VERSION}
 
 #install signing certificate
 if [ -n "$CERTIFICATE_OSX_PASSWORD" ]
