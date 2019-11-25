@@ -9,22 +9,6 @@ fi
 wget -c --no-check-certificate -nv -O bottles.zip https://musescore.org/sites/musescore.org/files/bottles-MuseScore-3.0.zip
 unzip bottles.zip
 
-wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
-mkdir -p $QT_MACOS
-unzip -qq qt5.zip -d $QT_MACOS
-rm qt5.zip
-
-#install sparkle
-export SPARKLE_VERSION=1.20.0
-mkdir Sparkle-${SPARKLE_VERSION}
-cd Sparkle-${SPARKLE_VERSION}
-wget -nv https://github.com/sparkle-project/Sparkle/releases/download/${SPARKLE_VERSION}/Sparkle-${SPARKLE_VERSION}.tar.bz2
-tar jxf Sparkle-${SPARKLE_VERSION}.tar.bz2
-cd ..
-mkdir -p ~/Library/Frameworks
-mv Sparkle-${SPARKLE_VERSION}/Sparkle.framework ~/Library/Frameworks/
-rm -rf Sparkle-${SPARKLE_VERSION}
-
 # we don't use freetype
 rm bottles/freetype*
 
@@ -35,6 +19,12 @@ brew install jack lame
 brew upgrade cmake
 #brew install libogg libvorbis flac libsndfile portaudio
 cmake --version
+
+#hack to fix macOS build
+brew uninstall wget
+brew install wget
+brew uninstall --ignore-dependencies python2
+brew install python2
 
 BREW_CELLAR=$(brew --cellar)
 BREW_PREFIX=$(brew --prefix)
@@ -94,6 +84,22 @@ rvm uninstall 2.0.0-p648
 rvm uninstall 2.0.0-p643
 rvm uninstall 2.0.0
 rvm get head
+
+wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
+mkdir -p $QT_MACOS
+unzip -qq qt5.zip -d $QT_MACOS
+rm qt5.zip
+
+#install sparkle
+export SPARKLE_VERSION=1.20.0
+mkdir Sparkle-${SPARKLE_VERSION}
+cd Sparkle-${SPARKLE_VERSION}
+wget -nv https://github.com/sparkle-project/Sparkle/releases/download/${SPARKLE_VERSION}/Sparkle-${SPARKLE_VERSION}.tar.bz2
+tar jxf Sparkle-${SPARKLE_VERSION}.tar.bz2
+cd ..
+mkdir -p ~/Library/Frameworks
+mv Sparkle-${SPARKLE_VERSION}/Sparkle.framework ~/Library/Frameworks/
+rm -rf Sparkle-${SPARKLE_VERSION}
 
 #install signing certificate
 if [ -n "$CERTIFICATE_OSX_PASSWORD" ]
