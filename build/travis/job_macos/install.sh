@@ -22,10 +22,10 @@ brew upgrade cmake
 cmake --version
 
 #hack to fix wget not properly working with openssl@1.1
-brew uninstall --force openssl@1.1
-brew install openssl@1.1
 brew uninstall wget
 brew install wget
+brew uninstall python2
+brew install python2
 
 #install Qt from S3 storage
 wget --no-check-certificate -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
