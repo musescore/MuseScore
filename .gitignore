@@ -30,6 +30,7 @@ mscore/revision.h
 .DS_Store
 CMakeLists.txt.user.*
 *.qmlc
+*.jsc
 vtest/html
 thirdparty/mupdf-qt
 vtest/LOG
