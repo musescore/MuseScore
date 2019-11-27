@@ -37,6 +37,7 @@ Part::Part(Score* s)
       _color = DEFAULT_COLOR;
       _show  = true;
       _instruments.setInstrument(new Instrument, -1);   // default instrument
+      _preferSharpFlat = PreferSharpFlat::DEFAULT;
       }
 
 //---------------------------------------------------------
@@ -109,7 +110,7 @@ bool Part::readProperties(XmlReader& e)
       else if (tag == "Instrument") {
             Instrument* instr = new Instrument;
             instr->read(e, this);
-            setInstrument(instr, Fraction(-1,1));
+            setInstrument(instr, Fraction(-1, 1));
             }
       else if (tag == "name")
             instrument()->setLongName(e.readElementText());
@@ -121,6 +122,8 @@ bool Part::readProperties(XmlReader& e)
             _partName = e.readElementText();
       else if (tag == "show")
             _show = e.readInt();
+      else if (tag == "preferSharpFlat")
+            _preferSharpFlat = PreferSharpFlat(e.readInt());
       else
             return false;
       return true;
@@ -154,6 +157,8 @@ void Part::write(XmlWriter& xml) const
       xml.tag("trackName", _partName);
       if (_color != DEFAULT_COLOR)
             xml.tag("color", _color);
+      if (_preferSharpFlat != PreferSharpFlat::DEFAULT)
+            xml.tag("preferSharpFlat", int(_preferSharpFlat));
       instrument()->write(xml, this);
       xml.etag();
       }

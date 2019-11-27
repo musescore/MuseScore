@@ -660,7 +660,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                                                 Interval v = staff->part()->instrument(tick1)->transpose();
                                                 if (!v.isZero()) {
                                                       Key k = okeysig->key();
-                                                      okeysig->setKey(transposeKey(k, v));
+                                                      okeysig->setKey(transposeKey(k, v, okeysig->part()->preferSharpFlat()));
                                                       }
                                                 }
                                           oelement = okeysig;

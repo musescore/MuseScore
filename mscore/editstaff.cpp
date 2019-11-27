@@ -73,6 +73,8 @@ EditStaff::EditStaff(Staff* s, const Fraction& tick, QWidget* parent)
       connect(nextButton,           SIGNAL(clicked()),            SLOT(gotoNextStaff()));
       connect(previousButton,       SIGNAL(clicked()),            SLOT(gotoPreviousStaff()));
 
+      connect(iList,                SIGNAL(currentIndexChanged(int)),  SLOT(transpositionChanged()));
+
       nextButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
       previousButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
       minPitchASelect->setIcon(*icons[int(Icons::edit_ICON)]);
@@ -198,6 +200,11 @@ void EditStaff::updateInstrument()
       int numStr = instrument.stringData() ? instrument.stringData()->strings() : 0;
       stringDataFrame->setVisible(numStr > 0);
       numOfStrings->setText(QString::number(numStr));
+
+      // show transp_PreferSharpFlat if instrument isn't non-transposing or octave-transposing
+      bool showPreferSharpFlat = (iList->currentIndex() != 0) && (iList->currentIndex() != 25);
+      transp_PreferSharpFlat->setVisible(showPreferSharpFlat);
+      preferSharpFlat->setCurrentIndex(int(orgStaff->part()->preferSharpFlat()));
       }
 
 //---------------------------------------------------------
@@ -330,6 +337,13 @@ void EditStaff::apply()
             interval.flip();
       instrument.setTranspose(interval);
 
+      bool preferSharpFlatChanged = (part->preferSharpFlat() != PreferSharpFlat(preferSharpFlat->currentIndex()));
+      // instrument becomes non/octave-transposing, preferSharpFlat isn't useful anymore
+      if ((iList->currentIndex() == 0) || (iList->currentIndex() == 25))
+            part->setPreferSharpFlat(PreferSharpFlat::DEFAULT);
+      else
+            part->setPreferSharpFlat(PreferSharpFlat(preferSharpFlat->currentIndex()));
+
       instrument.setMinPitchA(_minPitchA);
       instrument.setMaxPitchA(_maxPitchA);
       instrument.setMinPitchP(_minPitchP);
@@ -354,7 +368,7 @@ void EditStaff::apply()
       if (instrumentFieldChanged && _tickStart == Fraction(-1, 1))
             clefType = instrument.clefType(orgStaff->rstaff());
 
-      if (instrumentFieldChanged || part->partName() != newPartName) {
+      if (instrumentFieldChanged || part->partName() != newPartName || preferSharpFlatChanged) {
             // instrument has changed
             Interval v1 = instrument.transpose();
             Interval v2 = part->instrument(_tickStart)->transpose();
@@ -378,7 +392,7 @@ void EditStaff::apply()
                   }
             emit instrumentChanged();
 
-            if (v1 != v2)
+            if ((v1 != v2) || preferSharpFlatChanged)
                   score->transpositionChanged(part, v2, _tickStart, _tickEnd);
             }
       orgStaff->undoChangeProperty(Pid::MAG, mag->value() / 100.0);
@@ -407,7 +421,7 @@ void EditStaff::apply()
       }
 
 //---------------------------------------------------------
-//   <Pitch>Clicked
+//   Slots
 //---------------------------------------------------------
 
 void EditStaff::minPitchAClicked()
@@ -454,18 +468,10 @@ void EditStaff::maxPitchPClicked()
             }
       }
 
-//---------------------------------------------------------
-//   StaffType props slots
-//---------------------------------------------------------
-
 void EditStaff::lineDistanceChanged()
       {
       staff->staffType(Fraction(0,1))->setLineDistance(Spatium(lineDistance->value()));
       }
-
-//---------------------------------------------------------
-//   numOfLinesChanged
-//---------------------------------------------------------
 
 void EditStaff::numOfLinesChanged()
       {
@@ -485,6 +491,16 @@ void EditStaff::showTimeSigChanged()
 void EditStaff::showBarlinesChanged()
       {
       staff->staffType(Fraction(0,1))->setShowBarlines(showBarlines->checkState() == Qt::Checked);
+      }
+
+void EditStaff::transpositionChanged()
+      {
+      // non-transposing or octave-transposing instrument
+      // don't show transp_preferSharpFlat
+      if ((iList->currentIndex() == 0) || (iList->currentIndex() == 25))
+            transp_PreferSharpFlat->setVisible(false);
+      else
+            transp_PreferSharpFlat->setVisible(true);
       }
 
 //---------------------------------------------------------
