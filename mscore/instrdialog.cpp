@@ -198,6 +198,7 @@ void MuseScore::updateInstrumentDialog()
       if (instrList)
             instrList->buildInstrumentsList();
       }
+
 //---------------------------------------------------------
 //   editInstrList
 //---------------------------------------------------------
