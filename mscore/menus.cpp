@@ -1597,12 +1597,12 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
       sp->append(stxt, QT_TRANSLATE_NOOP("Palette", "System text"))->setElementTranslated(true);
 
       if (!defaultPalettePanel) {
-            StaffText* pz = new StaffText(gscore);
+            StaffText* pz = new StaffText(gscore, Tid::EXPRESSION);
             pz->setXmlText(QT_TRANSLATE_NOOP("Palette", "pizz."));
             pz->setChannelName(0, "pizzicato");
             sp->append(pz, QT_TRANSLATE_NOOP("Palette", "Pizzicato"))->setElementTranslated(true);
 
-            StaffText* ar = new StaffText(gscore);
+            StaffText* ar = new StaffText(gscore, Tid::EXPRESSION);
             ar->setXmlText(QT_TRANSLATE_NOOP("Palette", "arco"));
             ar->setChannelName(0, "arco");
             sp->append(ar, QT_TRANSLATE_NOOP("Palette", "Arco"))->setElementTranslated(true);
@@ -1612,14 +1612,14 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
             tm->setChannelName(0, "tremolo");
             sp->append(tm, QT_TRANSLATE_NOOP("Palette", "Tremolo"))->setElementTranslated(true);
 
-            StaffText* mu = new StaffText(gscore);
+            StaffText* mu = new StaffText(gscore, Tid::EXPRESSION);
             /*: For brass instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music) */
             mu->setXmlText(QT_TRANSLATE_NOOP("Palette", "mute"));
             mu->setChannelName(0, "mute");
             /*: For brass instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music) */
             sp->append(mu, QT_TRANSLATE_NOOP("Palette", "Mute"))->setElementTranslated(true);
 
-            StaffText* no = new StaffText(gscore);
+            StaffText* no = new StaffText(gscore, Tid::EXPRESSION);
             /*: For brass instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music) */
             no->setXmlText(QT_TRANSLATE_NOOP("Palette", "open"));
             no->setChannelName(0, "open");
