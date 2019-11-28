@@ -7268,12 +7268,7 @@ int main(int argc, char* av[])
 #endif
 
 #ifdef Q_OS_WIN
-      if (QSysInfo::WindowsVersion <= QSysInfo::WV_WINDOWS7) {
-            // Force using ANGLE OpenGL implementation unless user didn't
-            // request otherwise. See issue #296682.
-            if (!qEnvironmentVariableIsSet("QT_OPENGL"))
-                  QApplication::setAttribute(Qt::AA_UseOpenGLES);
-            }
+      qputenv("QT_OPENGL_BUGLIST", ":/data/win_opengl_buglist.json");
 #endif
 
       qRegisterMetaTypeStreamOperators<SessionStart>("SessionStart");
