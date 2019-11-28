@@ -1,5 +1,5 @@
 {
-    "name": "MuseScore GPU driver blacklist - based on Qt built-in GPU driver blacklist for Qt 5.12.5",
+    "name": "MuseScore GPU driver blacklist - based on Qt built-in GPU driver blacklist for Qt 5.12.6",
     "version": "5.6",
     "entries": [
         {
@@ -159,10 +159,7 @@
             "description": "Desktop OpenGL on Windows 7 often leads to bad QtQuick rendering (MuseScore issue #296682)",
             "os": {
                 "type": "win",
-                "release": {
-                    "op": "=",
-                    "value": "7"
-                }
+                "release": [ "7" ]
             },
             "features": [
                 "disable_desktopgl"
