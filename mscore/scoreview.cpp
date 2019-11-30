@@ -4906,8 +4906,21 @@ void ScoreView::moveViewportToLastEdit()
       const Element* editElement = visibleElementInScore(st.element(), sc);
 
       const MeasureBase* mb = nullptr;
-      if (editElement)
-            mb = editElement->findMeasureBase();
+      if (editElement) {
+            if (editElement->isSpannerSegment()) {
+                  const SpannerSegment* s = toSpannerSegment(editElement);
+                  Fraction tick = s->tick();
+                  if (System* sys = s->system()) {
+                        Measure* fm = sys->firstMeasure();
+                        if (fm)
+                              tick = std::max(tick, fm->tick());
+                        }
+                  mb = sc->tick2measureMM(tick);
+                  }
+            else {
+                  mb = editElement->findMeasureBase();
+                  }
+            }
       if (!mb)
             mb = sc->tick2measureMM(st.startTick());
 
