@@ -630,14 +630,14 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                         // found composer
                         addText2(vbox, score, w->words,
                                  Tid::COMPOSER, Align::RIGHT | Align::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
+                                 (miny - w->defaultY) * score->spatium() / 10);
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
                         // found poet/lyricist
                         addText2(vbox, score, w->words,
                                  Tid::POET, Align::LEFT | Align::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
+                                 (miny - w->defaultY) * score->spatium() / 10);
                         }
                   // save others (in the middle column) to be handled later
                   else {
@@ -680,7 +680,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("title='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      Tid::TITLE, Align::HCENTER | Align::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
+                     (maxy - w->defaultY) * score->spatium() / 10);
             }
 
       // add remaining credit-words as subtitles
@@ -689,7 +689,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("subtitle='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      Tid::SUBTITLE, Align::HCENTER | Align::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
+                     (maxy - w->defaultY) * score->spatium() / 10);
             }
 
       // use metadata if no workable credit-words found
