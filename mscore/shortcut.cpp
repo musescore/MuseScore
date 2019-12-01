@@ -3711,6 +3711,13 @@ Shortcut Shortcut::_sc[] = {
          Qt::ApplicationShortcut
          },
       {
+         MsWidget::SCORE_TAB,
+         STATE_NOTE_ENTRY,
+         "apply-input-state",
+         QT_TRANSLATE_NOOP("action","Apply Input State"),
+         QT_TRANSLATE_NOOP("action","Apply input state")
+         },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "leave-feedback",
