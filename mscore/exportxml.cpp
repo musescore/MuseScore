@@ -1196,10 +1196,9 @@ void ExportMusicXml::credits(XmlWriter& xml)
       const double bm = getTenthsFromInches(_score->styleD(Sid::pageOddBottomMargin));
       //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
-      // write the credits
-      const MeasureBase* measure = _score->measures()->first();
-      if (measure) {
-            for (const Element* element : measure->el()) {
+      // write the credits (found in the header, i.e. everything before the first measure)
+      for (auto mb = _score->measures()->first(); mb && !mb->isMeasure(); mb = mb->next()) {
+            for (const Element* element : mb->el()) {
                   if (element->isText()) {
                         const Text* text = toText(element);
                         const double ph = getTenthsFromDots(parentHeight(text));
