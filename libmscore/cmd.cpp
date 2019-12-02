@@ -1564,12 +1564,17 @@ void Score::upDown(bool up, UpDownMode mode)
 
             if ((oNote->pitch() != newPitch) || (oNote->tpc1() != newTpc1) || oNote->tpc2() != newTpc2) {
                   // remove accidental if present to make sure
-                  // user added accidentals are removed here.
-                  auto l = oNote->linkList();
-                  for (ScoreElement* e : l) {
-                        Note* ln = toNote(e);
-                        if (ln->accidental())
-                              undo(new RemoveElement(ln->accidental()));
+                  // user added accidentals are removed here
+                  // unless it's an octave change
+                  // in this case courtesy accidentals are preserved
+                  // because they're now harder to be re-entered due to the revised note-input workflow
+                  if (mode != UpDownMode::OCTAVE) {
+                        auto l = oNote->linkList();
+                        for (ScoreElement* e : l) {
+                              Note* ln = toNote(e);
+                              if (ln->accidental())
+                                    undo(new RemoveElement(ln->accidental()));
+                              }
                         }
                   undoChangePitch(oNote, newPitch, newTpc1, newTpc2);
                   }
