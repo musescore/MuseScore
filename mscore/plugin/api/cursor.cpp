@@ -119,6 +119,24 @@ void Cursor::rewind(RewindMode mode)
       }
 
 //---------------------------------------------------------
+//   prev
+///   Move the cursor to the previous segment.
+///   \return \p false if the beginning of the score is
+///   reached, \p true otherwise.
+///   \since MuseScore 3.3.4
+//---------------------------------------------------------
+
+bool Cursor::prev()
+      {
+      if (!_segment)
+            return false;
+      prevInTrack();
+      _score->inputState().setTrack(_track);
+      _score->inputState().setSegment(_segment);
+      return _segment != 0;
+      }
+
+//---------------------------------------------------------
 //   next
 ///   Move the cursor to the next segment.
 ///   \return \p false if the end of the score is reached,
@@ -455,6 +473,19 @@ int Cursor::staffIdx() const
 int Cursor::voice() const
       {
       return _track % VOICES;
+      }
+
+//---------------------------------------------------------
+//   prevInTrack
+//    go to first segment before _segment which has notes / rests in _track
+//---------------------------------------------------------
+
+void Cursor::prevInTrack()
+      {
+      if (_segment)
+            _segment = _segment->prev1(_filter);
+      while (_segment && !_segment->element(_track))
+            _segment = _segment->prev1(_filter);
       }
 
 //---------------------------------------------------------
