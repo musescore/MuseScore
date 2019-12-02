@@ -7267,6 +7267,15 @@ int main(int argc, char* av[])
       qInstallMessageHandler(mscoreMessageHandler);
 #endif
 
+#ifdef Q_OS_WIN
+      if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
+            // Set custom OpenGL buglist to work around rendering issues
+            // on Windows 7 (#296682). This should also prevent crashes
+            // happening for some Intel GPUs due to outdated buglist in Qt 5.9.
+            qputenv("QT_OPENGL_BUGLIST", ":/data/win_opengl_buglist.json");
+            }
+#endif
+
       qRegisterMetaTypeStreamOperators<SessionStart>("SessionStart");
       qRegisterMetaTypeStreamOperators<MusicxmlExportBreaks>("MusicxmlExportBreaks");
       qRegisterMetaTypeStreamOperators<MuseScoreStyleType>("MuseScoreStyleType");
