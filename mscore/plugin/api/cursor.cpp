@@ -314,9 +314,12 @@ void Cursor::add(Element* wrapped)
 ///   \details The duration of the added note equals to
 ///   what has been set by the previous setDuration() call.
 ///   \param pitch MIDI pitch of the added note.
+///   \param addToChord add note to the current chord
+///   instead of replacing it. This parameter is available
+///   since MuseScore 3.3.4.
 //---------------------------------------------------------
 
-void Cursor::addNote(int pitch)
+void Cursor::addNote(int pitch, bool addToChord)
       {
       if (!pitchIsValid(pitch)) {
             qWarning("Cursor::addNote: invalid pitch: %d", pitch);
@@ -325,7 +328,7 @@ void Cursor::addNote(int pitch)
       if (!_score->inputState().duration().isValid())
             setDuration(1, 4);
       NoteVal nval(pitch);
-      _score->addPitch(nval, false);
+      _score->addPitch(nval, addToChord);
       _segment = _score->inputState().segment();
       }
 
