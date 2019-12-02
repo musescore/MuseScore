@@ -4369,7 +4369,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
             }
 //      if (!_systems.isEmpty())
 //            return;
-      bool layoutAll = stick <= Fraction(0,1) && (etick < Fraction(0,1) || etick >= last()->endTick());
+      bool layoutAll = stick <= Fraction(0,1) && (etick < Fraction(0,1) || etick >= masterScore()->last()->endTick());
       if (stick < Fraction(0,1))
             stick = Fraction(0,1);
       if (etick < Fraction(0,1))
