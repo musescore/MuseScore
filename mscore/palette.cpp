@@ -238,6 +238,21 @@ void Palette::setMag(qreal val)
       }
 
 //---------------------------------------------------------
+//   guiMag
+//---------------------------------------------------------
+
+qreal Palette::guiMag()
+      {
+      qreal pref = preferences.getDouble(PREF_APP_PALETTESCALE);
+      if (guiScaling <= 1.0)                    // low DPI: target is 100% life size
+            return pref * guiScaling;
+      else if (guiScaling > 1.33)               // high DPI: target is 75% life size
+            return pref * guiScaling * 0.75;
+      else                                      // medium high DPI: no target, scaling dependent on resolution
+            return pref;                        // (will be 75-100% range)
+      }
+
+//---------------------------------------------------------
 //   contextMenuEvent
 //---------------------------------------------------------
 
@@ -326,6 +341,7 @@ void Palette::setGrid(int hh, int vv)
       hgrid = hh;
       vgrid = vv;
       QSize s(hgrid, vgrid);
+      s *= guiMag();
       setSizeIncrement(s);
       setBaseSize(s);
       setMinimumSize(s);
@@ -806,15 +822,17 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
 
 int Palette::idx(const QPoint& p) const
       {
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
       if (columns() == 0)
             return -1;
-      int rightBorder = width() % hgrid;
-      int hhgrid      = hgrid + (rightBorder / columns());
+      int rightBorder = width() % hgridM;
+      int hhgrid      = hgridM + (rightBorder / columns());
 
       int x = p.x();
       int y = p.y();
 
-      int row = y / vgrid;
+      int row = y / vgridM;
       int col = x / hhgrid;
 
       int nc = columns();
@@ -834,15 +852,17 @@ int Palette::idx(const QPoint& p) const
 
 int Palette::idx2(const QPoint& p) const
       {
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
       if (columns() == 0)
             return -1;
-      int rightBorder = width() % hgrid;
-      int hhgrid      = hgrid + (rightBorder / columns());
+      int rightBorder = width() % hgridM;
+      int hhgrid      = hgridM + (rightBorder / columns());
 
       int x = p.x();
       int y = p.y();
 
-      int row = y / vgrid;
+      int row = y / vgridM;
       int col = x / hhgrid;
 
       int nc = columns();
@@ -861,17 +881,19 @@ int Palette::idx2(const QPoint& p) const
 
 QRect Palette::idxRect(int i) const
       {
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
       if (i == -1)
             return QRect();
      if (columns() == 0)
             return QRect();
 
-      int rightBorder = width() % hgrid;
-      int hhgrid = hgrid + (rightBorder / columns());
+      int rightBorder = width() % hgridM;
+      int hhgrid = hgridM + (rightBorder / columns());
 
       int cc = i % columns();
       int cr = i / columns();
-      return QRect(cc * hhgrid, cr * vgrid, hhgrid, vgrid);
+      return QRect(cc * hhgrid, cr * vgridM, hhgrid, vgridM);
       }
 
 //---------------------------------------------------------
@@ -1031,8 +1053,9 @@ static void paintPaletteElement(void* data, Element* e)
 void Palette::paintEvent(QPaintEvent* /*event*/)
       {
       qreal _spatium = gscore->spatium();
-//      qreal mag      = PALETTE_SPATIUM * extraMag * guiScaling / _spatium;
-      qreal mag      = PALETTE_SPATIUM * extraMag / _spatium;
+      qreal magS     = PALETTE_SPATIUM * extraMag * guiMag();
+      qreal mag      = magS / _spatium;
+//      qreal mag      = PALETTE_SPATIUM * extraMag / _spatium;
       gscore->setSpatium(SPATIUM20);
 
       QPainter p(this);
@@ -1050,25 +1073,28 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
       //
       // draw grid
       //
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
+
       if (columns() == 0)
             return;
-      int rightBorder = width() % hgrid;
-      int hhgrid = hgrid + (rightBorder / columns());
+      int rightBorder = width() % hgridM;
+      int hhgrid = hgridM + (rightBorder / columns());
 
       if (_drawGrid) {
             p.setPen(Qt::gray);
             for (int row = 1; row < rows(); ++row) {
                   int x2 = row < rows()-1 ? columns() * hhgrid : width();
-                  int y  = row * vgrid;
+                  int y  = row * vgridM;
                   p.drawLine(0, y, x2, y);
                   }
             for (int column = 1; column < columns(); ++column) {
                   int x = hhgrid * column;
-                  p.drawLine(x, 0, x, rows() * vgrid);
+                  p.drawLine(x, 0, x, rows() * vgridM);
                   }
             }
 
-      qreal dy = lrint(2 * PALETTE_SPATIUM * extraMag);
+      qreal dy = lrint(2 * magS);
 
       //
       // draw symbols
@@ -1076,7 +1102,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
       // QPen pen(palette().color(QPalette::Normal, QPalette::Text));
       QPen pen(Qt::black);
-      pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * PALETTE_SPATIUM * extraMag);
+      pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * magS);
 
       for (int idx = 0; idx < ccp()->size(); ++idx) {
             int yoffset  = gscore->spatium() * _yOffset;
@@ -1119,17 +1145,17 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
             qreal cellMag = cc->mag * mag;
             if (el->isIcon()) {
-                  toIcon(el)->setExtent((hhgrid < vgrid ? hhgrid : vgrid) - 4);
+                  toIcon(el)->setExtent((hhgrid < vgridM ? hhgrid : vgridM) - 4);
                   cellMag = 1.0;
                   }
             el->layout();
 
             if (drawStaff) {
-                  qreal y = r.y() + vgrid * .5 - dy + _yOffset * _spatium * cellMag;
+                  qreal y = r.y() + vgridM * .5 - dy + _yOffset * _spatium * cellMag;
                   qreal x = r.x() + 3;
                   qreal w = hhgrid - 6;
                   for (int i = 0; i < 5; ++i) {
-                        qreal yy = y + PALETTE_SPATIUM * i * extraMag;
+                        qreal yy = y + i * magS;
                         p.drawLine(QLineF(x, yy, x + w, yy));
                         }
                   }
@@ -1137,7 +1163,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             p.scale(cellMag, cellMag);
 
             double gw = hhgrid / cellMag;
-            double gh = vgrid / cellMag;
+            double gh = vgridM / cellMag;
             double gx = column * gw + cc->xoffset * _spatium;
             double gy = row    * gh + cc->yoffset * _spatium;
 
@@ -1181,7 +1207,10 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 QPixmap Palette::pixmap(int paletteIdx) const
       {
       qreal _spatium = gscore->spatium();
-      qreal mag      = PALETTE_SPATIUM * extraMag / _spatium;
+      qreal magS     = PALETTE_SPATIUM * extraMag * guiMag();
+      qreal mag      = magS / _spatium;
+//      qreal guiMag = guiScaling * preferences.getDouble(PREF_APP_PALETTESCALE);
+//      qreal mag      = PALETTE_SPATIUM * extraMag * guiMag / _spatium;
       PaletteCell* c = cellAt(paletteIdx);
       if (!c || !c->element)
             return QPixmap();
@@ -1234,19 +1263,21 @@ QPixmap Palette::pixmap(int paletteIdx) const
 
 bool Palette::event(QEvent* ev)
       {
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
       // disable mouse hover when keyboard navigation is enabled
       if (filterActive && (ev->type() == QEvent::MouseMove || ev->type() == QEvent::ToolTip
           || ev->type() == QEvent::WindowDeactivate)) {
             return true;
             }
       else if (columns() && (ev->type() == QEvent::ToolTip)) {
-            int rightBorder = width() % hgrid;
-            int hhgrid = hgrid + (rightBorder / columns());
+            int rightBorder = width() % hgridM;
+            int hhgrid = hgridM + (rightBorder / columns());
             QHelpEvent* he = (QHelpEvent*)ev;
             int x = he->pos().x();
             int y = he->pos().y();
 
-            int row = y / vgrid;
+            int row = y / vgridM;
             int col = x / hhgrid;
 
             if (row < 0 || row >= rows())
@@ -1564,6 +1595,15 @@ void Palette::clear()
       }
 
 //---------------------------------------------------------
+//   columns
+//---------------------------------------------------------
+
+int Palette::columns() const
+      {
+      return width() / gridWidthM();
+      }
+
+//---------------------------------------------------------
 //   rows
 //---------------------------------------------------------
 
@@ -1581,7 +1621,9 @@ int Palette::rows() const
 
 int Palette::heightForWidth(int w) const
       {
-      int c = w / hgrid;
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
+      int c = w / hgridM;
       if (c <= 0)
             c = 1;
       int s = size();
@@ -1590,9 +1632,9 @@ int Palette::heightForWidth(int w) const
       int rows = (s + c - 1) / c;
       if (rows <= 0)
             rows = 1;
-      qreal mag = PALETTE_SPATIUM * extraMag;
-      int h = lrint(_yOffset * 2 * mag);
-      return rows * vgrid + h;
+      qreal magS = PALETTE_SPATIUM * extraMag * guiMag();
+      int h = lrint(_yOffset * 2 * magS);
+      return rows * vgridM + h;
       }
 
 //---------------------------------------------------------
@@ -1602,7 +1644,8 @@ int Palette::heightForWidth(int w) const
 QSize Palette::sizeHint() const
       {
       int h = heightForWidth(width());
-      return QSize((width() / hgrid) * hgrid, h);
+      int hgridM = gridWidthM();
+      return QSize((width() / hgridM) * hgridM, h);
       }
 
 //---------------------------------------------------------
