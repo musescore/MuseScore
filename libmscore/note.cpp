@@ -3127,10 +3127,7 @@ std::vector<Note*> Note::tiedNotes() const
 int Note::unisonIndex() const
       {
       int index = 0;
-      auto notes = chord()->notes();
-      size_t ns = notes.size();
-      for (size_t i = 0; i < ns; ++i) {
-            Note* n = notes.at(i);
+      for (Note* n : chord()->notes()) {
             if (n->pitch() == pitch()) {
                   if (n == this)
                         return index;
