@@ -2958,12 +2958,37 @@ QVector<Chord*> Chord::graceNotesAfter() const
 //   sortNotes
 //---------------------------------------------------------
 
+static bool noteIsBefore(const Note* n1, const Note* n2)
+      {
+      const int l1 = n1->line();
+      const int l2 = n2->line();
+      if (l1 != l2)
+            return l1 > l2;
+
+      const int p1 = n1->pitch();
+      const int p2 = n2->pitch();
+      if (p1 != p2)
+            return p1 < p2;
+
+      if (n1->tieBack()) {
+            if (n2->tieBack()) {
+                  const Note* sn1 = n1->tieBack()->startNote();
+                  const Note* sn2 = n2->tieBack()->startNote();
+                  if (sn1->chord() == sn2->chord())
+                        return sn1->unisonIndex() < sn2->unisonIndex();
+                  return sn1->chord()->isBefore(sn2->chord());
+                  }
+            else
+                  return true; // place tied notes before
+            }
+
+      return false;
+      }
+
 void Chord::sortNotes()
       {
-      std::sort(notes().begin(), notes().end(),
-         [](const Note* a,const Note* b)->bool { return b->line() < a->line(); }
-         );
-     }
+      std::sort(notes().begin(), notes().end(), noteIsBefore);
+      }
 
 //---------------------------------------------------------
 //   nextTiedChord
