@@ -19,16 +19,16 @@
 #include "libmscore/instrtemplate.h"
 #include "omr/omr.h"
 #include "testutils.h"
+#include "mscore/musescore.h"
 #include "mscore/preferences.h"
 #include "libmscore/page.h"
 #include "synthesizer/msynthesizer.h"
 #include "libmscore/musescoreCore.h"
 #include "mscore/shortcut.h"
-#include "mscore/importmidi/importmidi_operations.h"
 #include "libmscore/xml.h"
 #include "libmscore/excerpt.h"
 
-inline void initMyResources() {
+static void initMyResources() {
       Q_INIT_RESOURCE(mtest);
       Q_INIT_RESOURCE(musescorefonts_MScore);
       Q_INIT_RESOURCE(musescorefonts_Gootville);
@@ -36,35 +36,9 @@ inline void initMyResources() {
       Q_INIT_RESOURCE(musescorefonts_MuseJazz);
       Q_INIT_RESOURCE(musescorefonts_FreeSerif);
       Q_INIT_RESOURCE(musescorefonts_Free);
-}
-
-extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
-
-Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
-// Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtDebugMsg)
+      }
 
 namespace Ms {
-
-#ifdef OMR
-extern Score::FileError importPdf(MasterScore*, const QString&);
-#endif
-
-extern Score::FileError importBB(MasterScore*, const QString&);
-extern Score::FileError importCapella(MasterScore*, const QString&);
-extern Score::FileError importCapXml(MasterScore*, const QString&);
-extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
-extern Score::FileError importMusicXml(MasterScore*, const QString&);
-extern Score::FileError importGTP(MasterScore*, const QString&);
-extern bool saveXml(Score*, const QString&);
-bool debugMode = false;
-QString revision;
-bool enableTestMode;
-
-MasterScore* score;
-MasterSynthesizer* synti;
-QString dataPath;
-QIcon* icons[0];
-QString mscoreGlobalShare;
 
 //---------------------------------------------------------
 //   writeReadElement
