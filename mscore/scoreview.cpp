@@ -4926,7 +4926,7 @@ void ScoreView::moveViewportToLastEdit()
 
       const Element* viewportElement = (editElement && editElement->bbox().isValid() && !mb->isMeasure()) ? editElement : mb;
 
-      const int staff = sc->isMaster() ? st.startStaff() : -1; // TODO: choose the closest staff to the current viewport?
+      const int staff = sc->isMaster() && mb->isMeasure() ? st.startStaff() : -1; // TODO: choose the closest staff to the current viewport?
       adjustCanvasPosition(viewportElement, /* playback */ false, staff);
       }
 }
