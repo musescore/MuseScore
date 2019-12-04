@@ -22,20 +22,19 @@
 
 #include "config.h"
 #include "globals.h"
-#include "ui_measuresdialog.h"
-#include "ui_insertmeasuresdialog.h"
-#include "ui_aboutbox.h"
-#include "ui_aboutmusicxmlbox.h"
 #include "singleapp/src/QtSingleApplication"
 #include "updatechecker.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
-#include "newwizard.h"
 
 namespace Ms {
 
 class UploadScoreDialog;
 class LoginManager;
+class AboutBoxDialog;
+class AboutMusicXMLBoxDialog;
+class InsertMeasuresDialog;
+class MeasuresDialog;
 class Shortcut;
 class ScoreView;
 class Element;
@@ -117,6 +116,7 @@ enum class IconType : signed char;
 enum class MagIdx : char;
 
 extern QString mscoreGlobalShare;
+extern QString revision;
 static const int PROJECT_LIST_LEN = 6;
 extern const char* voiceActions[];
 extern bool mscoreFirstStart;
@@ -151,63 +151,6 @@ struct LanguageItem {
       };
 
 //---------------------------------------------------------
-//   AboutBoxDialog
-//---------------------------------------------------------
-
-class AboutBoxDialog : public QDialog, Ui::AboutBox {
-      Q_OBJECT
-
-   public:
-      AboutBoxDialog();
-
-   private slots:
-      void copyRevisionToClipboard();
-      };
-
-//---------------------------------------------------------
-//   AboutMusicXMLBoxDialog
-//---------------------------------------------------------
-
-class AboutMusicXMLBoxDialog : public QDialog, Ui::AboutMusicXMLBox {
-      Q_OBJECT
-
-   public:
-      AboutMusicXMLBoxDialog();
-      };
-
-//---------------------------------------------------------
-//   InsertMeasuresDialog
-//   Added by DK, 05.08.07
-//---------------------------------------------------------
-
-class InsertMeasuresDialog : public QDialog, public Ui::InsertMeasuresDialogBase {
-      Q_OBJECT
-
-      virtual void hideEvent(QHideEvent*);
-
-   private slots:
-      virtual void accept();
-
-   public:
-      InsertMeasuresDialog(QWidget* parent = 0);
-      };
-
-//---------------------------------------------------------
-//   MeasuresDialog
-//---------------------------------------------------------
-
-class MeasuresDialog : public QDialog, public Ui::MeasuresDialogBase {
-      Q_OBJECT
-
-   private slots:
-      virtual void accept();
-
-   public:
-      MeasuresDialog(QWidget* parent = 0);
-      };
-
-
-//---------------------------------------------------------
 //   MuseScoreApplication (mac only)
 //---------------------------------------------------------
 
@@ -224,7 +167,7 @@ class MuseScoreApplication : public QtSingleApplication {
             bool exit = false;
             };
       static CommandLineParseResult parseCommandLineArguments(MuseScoreApplication* app);
-      static MuseScoreApplication* initApplication(int argc, char** argv);
+      static MuseScoreApplication* initApplication(int& argc, char** argv);
       };
 
 
@@ -984,6 +927,7 @@ extern Score::FileError importCapella(MasterScore*, const QString& name);
 extern Score::FileError importCapXml(MasterScore*, const QString& name);
 extern Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionError);
 
+int runApplication(int& argc, char** argv);
 } // namespace Ms
 
 extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
