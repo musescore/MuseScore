@@ -260,10 +260,13 @@ class CmdState {
       int _startStaff = -1;
       int _endStaff = -1;
       const Element* _el = nullptr;
+      const MeasureBase* _mb = nullptr;
       bool _oneElement = true;
-      bool _elIsMeasureBase = false;
+      bool _oneMeasureBase = true;
 
       bool _locked = false;
+
+      void setMeasureBase(const MeasureBase* mb);
 
    public:
       LayoutFlags layoutFlags;
@@ -286,7 +289,7 @@ class CmdState {
       Fraction endTick() const   { return _endTick; }
       int startStaff() const { return _startStaff; }
       int endStaff() const { return _endStaff; }
-      const Element* element() const { return _oneElement ? _el : nullptr; }
+      const Element* element() const;
 
       void lock() { _locked = true; }
       void unlock() { _locked = false; }
