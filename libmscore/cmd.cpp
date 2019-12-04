@@ -541,15 +541,28 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
             int npitch;
             int ntpc1;
             int ntpc2;
-            if (abs(valTmp) != 7) {
+            bool accidental = _is.noteEntryMode() && _is.accidentalType() != AccidentalType::NONE;
+            bool forceAccidental = false;
+            if (abs(valTmp) != 7 || accidental) {
                   int line      = on->line() - valTmp;
                   Fraction tick      = chord->tick();
                   Staff* estaff = staff(on->staffIdx() + chord->staffMove());
                   ClefType clef = estaff->clef(tick);
                   Key key       = estaff->key(tick);
-                  npitch        = line2pitch(line, clef, key);
+                  int ntpc;
+                  if (accidental) {
+                        AccidentalVal acci = Accidental::subtype2value(_is.accidentalType());
+                        int step = absStep(line, clef);
+                        int octave = step / 7;
+                        npitch = step2pitch(step) + octave * 12 + int(acci);
+                        forceAccidental = (npitch == line2pitch(line, clef, key));
+                        ntpc = step2tpc(step % 7, acci);
+                        }
+                  else {
+                        npitch = line2pitch(line, clef, key);
+                        ntpc = pitch2tpc(npitch, key, Prefer::NEAREST);
+                        }
 
-                  int ntpc   = pitch2tpc(npitch, key, Prefer::NEAREST);
                   Interval v = on->part()->instrument(tick)->transpose();
                   if (v.isZero())
                         ntpc1 = ntpc2 = ntpc;
@@ -582,10 +595,19 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
             note->setPitch(npitch, ntpc1, ntpc2);
 
             undoAddElement(note);
+            if (forceAccidental) {
+                  Accidental* a = new Accidental(this);
+                  a->setAccidentalType(_is.accidentalType());
+                  a->setRole(AccidentalRole::USER);
+                  a->setParent(note);
+                  undoAddElement(a);
+                  }
             setPlayNote(true);
 
             select(note, SelectType::SINGLE, 0);
             }
+      if (_is.noteEntryMode())
+            _is.setAccidentalType(AccidentalType::NONE);
       _is.moveToNextInputPos();
       endCmd();
       }
@@ -744,7 +766,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                         chord->add(note);
                         note->setNval(nval, tick);
                         if (forceAccidental) {
-                              int tpc = styleB(Sid::concertPitch) ? nval.tpc2 : nval.tpc1;
+                              int tpc = styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
                               AccidentalVal alter = tpc2alter(tpc);
                               AccidentalType at = Accidental::value2subtype(alter);
                               Accidental* a = new Accidental(this);
