@@ -92,7 +92,8 @@ void CmdState::reset()
       _endStaff = -1;
       _el = nullptr;
       _oneElement = true;
-      _elIsMeasureBase = false;
+      _mb = nullptr;
+      _oneMeasureBase = true;
       _locked = false;
       }
 
@@ -129,6 +130,19 @@ void CmdState::setStaff(int st)
       }
 
 //---------------------------------------------------------
+//   setMeasureBase
+//---------------------------------------------------------
+
+void CmdState::setMeasureBase(const MeasureBase* mb)
+      {
+      if (!mb || _mb == mb || _locked)
+            return;
+
+      _oneMeasureBase = !_mb;
+      _mb = mb;
+      }
+
+//---------------------------------------------------------
 //   setElement
 //---------------------------------------------------------
 
@@ -137,20 +151,11 @@ void CmdState::setElement(const Element* e)
       if (!e || _el == e || _locked)
             return;
 
-      // prefer measures and frames as edit targets
-      const bool oldIsMeasureBase = _elIsMeasureBase;
-      const bool newIsMeasureBase = e->isMeasureBase();
-      if (newIsMeasureBase && !oldIsMeasureBase) {
-            _oneElement = true;
-            return;
-            }
-      else if (oldIsMeasureBase && !newIsMeasureBase)
-            return; // don't remember the new element
-      else
-            _oneElement = !_el;
-
+      _oneElement = !_el;
       _el = e;
-      _elIsMeasureBase = newIsMeasureBase;
+
+      if (_oneMeasureBase)
+            setMeasureBase(e->findMeasureBase());
       }
 
 //---------------------------------------------------------
@@ -161,6 +166,21 @@ void CmdState::unsetElement(const Element* e)
       {
       if (_el == e)
             _el = nullptr;
+      if (_mb == e)
+            _mb = nullptr;
+      }
+
+//---------------------------------------------------------
+//   element
+//---------------------------------------------------------
+
+const Element* CmdState::element() const
+      {
+      if (_oneElement)
+            return _el;
+      if (_oneMeasureBase)
+            return _mb;
+      return nullptr;
       }
 
 //---------------------------------------------------------
