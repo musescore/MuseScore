@@ -20,15 +20,11 @@
 #include "qmlpluginengine.h"
 #include "api/qmlpluginapi.h"
 #include "libmscore/score.h"
-#ifndef TESTROOT
 #include "musescore.h"
-#endif
 
 namespace Ms {
 
-#ifndef TESTROOT
 static constexpr int maxCmdCount = 10; // recursion prevention
-#endif
 
 //---------------------------------------------------------
 //   QmlPluginEngine
@@ -46,9 +42,6 @@ QmlPluginEngine::QmlPluginEngine(QObject* parent)
 
 void QmlPluginEngine::beginEndCmd(MuseScore* ms)
       {
-#ifdef TESTROOT
-      Q_UNUSED(ms); // it is not yet possible to include MuseScore class to tests
-#else
       ++cmdCount;
 
       // TODO: most of plugins are never deleted so receivers usually never decrease
@@ -63,7 +56,6 @@ void QmlPluginEngine::beginEndCmd(MuseScore* ms)
 
       endCmdInfo["startLayoutTick"] = cs ? cs->cmdState().startTick().ticks() : -1;
       endCmdInfo["endLayoutTick"] = cs ? cs->cmdState().endTick().ticks() : -1;
-#endif
       }
 
 //---------------------------------------------------------
@@ -72,7 +64,6 @@ void QmlPluginEngine::beginEndCmd(MuseScore* ms)
 
 void QmlPluginEngine::endEndCmd(MuseScore*)
       {
-#ifndef TESTROOT // it is not yet possible to include MuseScore class to tests
       if (cmdCount >= maxCmdCount) {
             QMessageBox::warning(mscore, tr("Plugin Error"), tr("Score update recursion limit reached (%1)").arg(maxCmdCount));
             recursion = true;
@@ -84,6 +75,5 @@ void QmlPluginEngine::endEndCmd(MuseScore*)
       --cmdCount;
       if (!cmdCount)
             recursion = false;
-#endif
       }
 }

@@ -216,7 +216,7 @@ subdirs (
         libmscore/parts
         libmscore/measure
         libmscore/midi                 # one disabled
-#        libmscore/midimapping
+#        libmscore/midimapping # TODO: compiles but mostly fails
         libmscore/note
         libmscore/readwriteundoreset
         libmscore/remove
@@ -239,7 +239,7 @@ subdirs (
         biab
         musicxml
         guitarpro
-#        scripting            # ws:disabled during fraction integration
+        scripting
         stringutils
 #        testoves
         zerberus/comments
