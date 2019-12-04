@@ -511,7 +511,7 @@ void Score::repitchNote(const Position& p, bool replace)
             forceAccidental = (nval.pitch == nval2.pitch);
             }
       if (forceAccidental) {
-            int tpc = styleB(Sid::concertPitch) ? nval.tpc2 : nval.tpc1;
+            int tpc = styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
             AccidentalVal alter = tpc2alter(tpc);
             at = Accidental::value2subtype(alter);
             Accidental* a = new Accidental(this);
