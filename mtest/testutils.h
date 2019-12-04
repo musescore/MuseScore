@@ -48,5 +48,7 @@ class MTest {
       };
 }
 
+void initMuseScoreResources();
+
 #endif
 
