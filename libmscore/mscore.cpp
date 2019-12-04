@@ -234,6 +234,10 @@ static Spatium doubleToSpatium(double d)
 
 void MScore::init()
       {
+      static bool initDone = false;
+      if (initDone)
+            return;
+
       if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDouble))
             qFatal("registerConverter Spatium::toDouble failed");
       if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium))
@@ -378,7 +382,9 @@ void MScore::init()
 #ifdef DEBUG_SHAPES
       testShapes();
 #endif
-}
+
+      initDone = true;
+      }
 
 //---------------------------------------------------------
 //   readDefaultStyle

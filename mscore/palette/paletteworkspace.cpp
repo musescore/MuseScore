@@ -815,7 +815,10 @@ bool PaletteWorkspace::resetPalette(const QModelIndex& index)
       if (!index.isValid())
             return false;
 
-      const auto answer = QMessageBox::question(
+      const auto answer =
+         (MScore::noGui && MScore::testMode)
+         ? QMessageBox::Yes
+         : QMessageBox::question(
             nullptr,
             "",
             tr("Do you want to restore this palette to its default state? All changes to this palette will be lost."),

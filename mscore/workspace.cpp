@@ -158,18 +158,14 @@ void MuseScore::showWorkspaceMenu()
 
 void MuseScore::deleteWorkspace()
       {
-      if (!workspaces)
-            return;
-      QAction* a = workspaces->checkedAction();
-      if (!a)
-            return;
-      
-      Workspace* workspace = WorkspacesManager::findByName(a->text());
+      Workspace* workspace = WorkspacesManager::currentWorkspace();
       if (!workspace)
             return;
 
-      QMessageBox::StandardButton reply;
-      reply = QMessageBox::question(0,
+      QMessageBox::StandardButton reply =
+         (MScore::noGui && MScore::testMode)
+         ? QMessageBox::Yes
+         : QMessageBox::question(0,
                  QWidget::tr("Are you sure?"),
                  QWidget::tr("Do you really want to delete the '%1' workspace?").arg(workspace->name()),
                  QMessageBox::Yes | QMessageBox::No,
@@ -1285,6 +1281,20 @@ Workspace* WorkspacesManager::createNewWorkspace(const QString& name)
       m_workspaces.append(w);
       m_visibleWorkspaces.append(w);
       return w;
+      }
+
+//---------------------------------------------------------
+//   clearWorkspaces
+//---------------------------------------------------------
+
+void WorkspacesManager::clearWorkspaces()
+      {
+      m_currentWorkspace = nullptr;
+      for (Workspace* w : m_workspaces)
+            w->deleteLater();
+      m_workspaces.clear();
+      m_visibleWorkspaces.clear();
+      isWorkspacesListDirty = true;
       }
 
 //---------------------------------------------------------

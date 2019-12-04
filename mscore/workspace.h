@@ -166,6 +166,8 @@ class WorkspacesManager {
       static bool isDefaultWorkspace(Workspace* workspace);
       static bool isDefaultEditedWorkspace(Workspace* workspace);
       static QString defaultWorkspaceTranslatableName(const QString& editedWorkspaceName);
+
+      static void clearWorkspaces();
       
    public:
       static std::vector<QString> defaultWorkspaces;

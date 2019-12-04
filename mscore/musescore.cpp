@@ -1943,6 +1943,7 @@ MuseScore::~MuseScore()
             autoUpdater->cleanup();
 
       delete synti;
+      synti = nullptr;
 
       // A crash is possible if paletteWorkspace gets
       // deleted before paletteWidget, so force the widget
