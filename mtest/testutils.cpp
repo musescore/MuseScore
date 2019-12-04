@@ -27,6 +27,7 @@
 #include "mscore/shortcut.h"
 #include "libmscore/xml.h"
 #include "libmscore/excerpt.h"
+#include "thirdparty/qzip/qzipreader_p.h"
 
 static void initMyResources() {
       Q_INIT_RESOURCE(mtest);
@@ -156,16 +157,16 @@ bool MTest::saveScore(Score* score, const QString& name) const
 //   compareFiles
 //---------------------------------------------------------
 
-bool MTest::compareFiles(const QString& saveName, const QString& compareWith) const
+bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)
       {
       QString cmd = "diff";
       QStringList args;
       args.append("-u");
       args.append("--strip-trailing-cr");
-      args.append(root + "/" + compareWith);
-      args.append(saveName);
+      args.append(f2);
+      args.append(f1);
       QProcess p;
-qDebug() << "Running " << cmd << " with arg1: " << compareWith << " and arg2: " << saveName;
+      qDebug() << "Running " << cmd << " with arg1: " << QFileInfo(f2).fileName() << " and arg2: " << QFileInfo(f1).fileName();
       p.start(cmd, args);
       if (!p.waitForFinished() || p.exitCode()) {
             QByteArray ba = p.readAll();
@@ -174,10 +175,15 @@ qDebug() << "Running " << cmd << " with arg1: " << compareWith << " and arg2: " 
             //   qPrintable(QString(root + "/" + saveName)));
             QTextStream outputText(stdout);
             outputText << QString(ba);
-            outputText << QString("   <diff -u %1 %2 failed").arg(QString(compareWith)).arg(QString(root + "/" + saveName));
+            outputText << QString("   <diff -u %1 %2 failed").arg(f2).arg(f1);
             return false;
             }
       return true;
+      }
+
+bool MTest::compareFiles(const QString& saveName, const QString& compareWith) const
+      {
+      return compareFilesFromPaths(saveName, root + "/" + compareWith);
       }
 
 //---------------------------------------------------------
@@ -283,6 +289,37 @@ bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, co
       {
       saveMimeData(mimeData, saveName);
       return compareFiles(saveName, compareWith);
+      }
+
+//---------------------------------------------------------
+//   extractRootFile
+//---------------------------------------------------------
+
+extern QString readRootFile(MQZipReader*, QList<QString>&);
+
+void MTest::extractRootFile(const QString& zipFile, const QString& destination)
+      {
+      MQZipReader f(zipFile);
+      QList<QString> images;
+      const QString rootfile = readRootFile(&f, images);
+
+      if (rootfile.isEmpty()) {
+            qDebug("can't find rootfile in: %s", qPrintable(zipFile));
+            return;
+            }
+
+      const QByteArray ba = f.fileData(rootfile);
+
+      QFile out(destination);
+      if (!out.open(QIODevice::WriteOnly))
+            return;
+      out.write(ba);
+      out.close();
+      }
+
+QString MTest::rootPath()
+      {
+      return TESTROOT "/mtest/";
       }
 
 //---------------------------------------------------------
