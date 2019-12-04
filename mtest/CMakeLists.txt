@@ -234,6 +234,7 @@ subdirs (
         libmscore/tuplet
 #        libmscore/text        work in progress...
         libmscore/utils
+        mscore/workspaces
         importmidi
         capella
         biab

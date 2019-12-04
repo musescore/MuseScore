@@ -893,6 +893,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool runTestScripts(const QStringList& scripts);
 
       static void init(const QStringList& argv);
+
+      friend class TestWorkspaces;
       };
 
 extern MuseScore* mscore;
