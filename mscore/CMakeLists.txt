@@ -187,6 +187,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_empty.ui
       inspector/inspector_fret.ui
       inspector/inspector_break.ui
+      inspector/inspector_sectionbreak.ui
       inspector/inspector_stafftypechange.ui
       inspector/inspector_bend.ui
       inspector/inspector_arpeggio.ui
@@ -349,7 +350,7 @@ add_executable ( ${ExecutableName}
       playpanel.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h
       recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
-      sectionbreakprop.h selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h
+      selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
       startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
       templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
@@ -395,7 +396,7 @@ add_executable ( ${ExecutableName}
       stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
       articulationprop.cpp
-      fretproperties.cpp sectionbreakprop.cpp
+      fretproperties.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
       dragelement.cpp startupWizard.cpp

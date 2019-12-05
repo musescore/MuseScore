@@ -23,7 +23,6 @@
 #include "bendproperties.h"
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
-#include "sectionbreakprop.h"
 #include "stafftextproperties.h"
 #include "fretproperties.h"
 #include "selinstrument.h"
@@ -273,8 +272,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   popup->addAction(tr("Chord Articulation…"))->setData("articulation");
                   }
             }
-      else if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == LayoutBreak::Type::SECTION)
-            popup->addAction(tr("Section Break Properties…"))->setData("break-props");
       else if (e->isInstrumentChange()) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Change Instrument…"))->setData("ch-instr");
@@ -473,24 +470,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             EditStyle es(e->score(), 0);
             es.gotoElement(e);
             es.exec();
-            }
-      else if (cmd == "break-props") {
-            LayoutBreak* lb = static_cast<LayoutBreak*>(e);
-            SectionBreakProperties sbp(lb, 0);
-            if (sbp.exec()) {
-                  if (lb->pause() != sbp.pause()
-                     || lb->startWithLongNames() != sbp.startWithLongNames()
-                     || lb->startWithMeasureOne() != sbp.startWithMeasureOne()) {
-                        LayoutBreak* nlb = new LayoutBreak(*lb);
-                        nlb->setParent(lb->parent());
-                        nlb->setPause(sbp.pause());
-                        nlb->setStartWithLongNames(sbp.startWithLongNames());
-                        nlb->setStartWithMeasureOne(sbp.startWithMeasureOne());
-                        // propagate in parts
-                        lb->undoChangeProperty(Pid::PAUSE, sbp.pause());
-                        score()->undoChangeElement(lb, nlb);
-                        }
-                  }
             }
       else if (cmd == "ch-instr") {
             InstrumentChange* ic = static_cast<InstrumentChange*>(e);
