@@ -75,9 +75,7 @@ bool ExtensionFileSize::operator<(const QTableWidgetItem& nextItem) const
 
 int ExtensionFileSize::int2size(QChar sizeType, int i)
       {
-      if (sizeType == QChar(' ')) // the size is written as bytes
-            return i;
-      else if (sizeType == QChar('K')) // the size is written as kilobytes, and so on
+      if (sizeType == QChar('K')) // the size is written as kilobytes, and so on
             return i * 0x400;
       else if (sizeType == QChar('M'))
             return i * 0x100000;
@@ -85,6 +83,8 @@ int ExtensionFileSize::int2size(QChar sizeType, int i)
             return i * 0x40000000;
       else if (sizeType == QChar('T'))
             return i * 0x10000000000;
+      //else if (sizeType == QChar(' ')) // the size is written as bytes
+      return i;
       }
 
 //---------------------------------------------------------
