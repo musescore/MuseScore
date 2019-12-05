@@ -781,6 +781,7 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
                   else if (idx >= p->size())
                         idx = 0;
                   p->setSelected(idx);
+                  p->setCurrentIdx(idx);
                   // set widget name to name of selected element
                   // we could set the description, but some screen readers ignore it
                   QString name = p->cellAt(idx)->translatedName();
@@ -791,6 +792,11 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
                   p->update();
                   break;
                   }
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+                  if (!p->disableElementsApply())
+                        p->applyPaletteElement();
+                  break;
             default:
                   break;
             }

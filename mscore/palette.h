@@ -154,6 +154,7 @@ class Palette : public QWidget {
       void setSelected(int idx)      { selectedIdx = idx;  }
       bool readOnly() const          { return _readOnly;   }
       void setReadOnly(bool val);
+      bool disableElementsApply() const      { return _disableElementsApply; }
       void setDisableElementsApply(bool val) { _disableElementsApply = val; }
 
       bool systemPalette() const     { return _systemPalette; }
