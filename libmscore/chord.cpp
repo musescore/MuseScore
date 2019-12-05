@@ -273,14 +273,13 @@ Chord::Chord(const Chord& c, bool link)
             }
       if (c._tremolo) {
             Tremolo* t = new Tremolo(*(c._tremolo));
-            if (link) {
+            if (link)
                   score()->undo(new Link(t, const_cast<Tremolo*>(c._tremolo)));
-                  if (c._tremolo->twoNotes()) {
-                        if (c._tremolo->chord1() == &c)
-                              t->setChords(this, nullptr);
-                        else
-                              t->setChords(nullptr, this);
-                        }
+            if (c._tremolo->twoNotes()) {
+                  if (c._tremolo->chord1() == &c)
+                        t->setChords(this, nullptr);
+                  else
+                        t->setChords(nullptr, this);
                   }
             add(t);
             }
@@ -330,10 +329,15 @@ Chord::~Chord()
       {
       qDeleteAll(_articulations);
       delete _arpeggio;
-      if (_tremolo && _tremolo->chord1() == this) {
-            if (_tremolo->chord2())
-                  _tremolo->chord2()->setTremolo(0);
-            delete _tremolo;
+      if (_tremolo) {
+            if (_tremolo->chord1() == this) {
+                  Tremolo* tremoloPointer = _tremolo; // setTremolo(0) loses reference to the current pointer
+                  if (_tremolo->chord2())
+                        _tremolo->chord2()->setTremolo(0);
+                  delete tremoloPointer;
+                  }
+            else if (!(_tremolo->chord1())) // delete orphaned tremolo
+                  delete _tremolo;
             }
       delete _stemSlash;
       delete _stem;
