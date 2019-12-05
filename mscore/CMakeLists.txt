@@ -101,6 +101,7 @@ QT5_WRAP_UI (ui_headers
 
       importmidi/importmidi_panel.ui
 
+      palette/createPalette.ui
       scorecmp/scorecmp_tool.ui
       script/script_recorder.ui
 
@@ -473,6 +474,7 @@ add_executable ( ${ExecutableName}
       importmidi/importmidi_voice.cpp importmidi/importmidi_view.cpp importmidi/importmidi_key.cpp
       importmidi/importmidi_tempo.cpp importmidi/importmidi_instrument.cpp
       importmidi/importmidi_chordname.cpp
+      palette/createpalettedialog.cpp
       palette/palettedialog.cpp palette/palettecelldialog.cpp
       palette/palettemodel.cpp palette/palettetree.cpp palette/paletteworkspace.cpp palette/palettewidget.cpp
       scorecmp/scorecmp.cpp scorecmp/scorediffmodel.cpp scorecmp/scorelistmodel.cpp
