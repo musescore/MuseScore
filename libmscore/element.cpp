@@ -1979,6 +1979,8 @@ void Element::endDrag(EditData& ed)
       if (!isMovable())
             return;
       ElementEditData* eed = ed.getData(this);
+      if (!eed)
+            return;
       for (PropertyData pd : eed->propertyData) {
             setPropertyFlags(pd.id, pd.f); // reset initial property flags state
             PropertyFlags f = pd.f;
