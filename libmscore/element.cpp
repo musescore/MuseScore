@@ -2004,6 +2004,8 @@ void Element::endDrag(EditData& ed)
       if (!isMovable())
             return;
       ElementEditData* eed = ed.getData(this);
+      if (!eed)
+            return;
       for (PropertyData pd : eed->propertyData) {
             PropertyFlags f = propertyFlags(pd.id);
             if (f == PropertyFlags::STYLED)
