@@ -18,6 +18,14 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   sectionBreakStyle
+//---------------------------------------------------------
+
+static const ElementStyle sectionBreakStyle {
+      { Sid::SectionPause, Pid::PAUSE }
+      };
+
+//---------------------------------------------------------
 //   LayoutBreak
 //---------------------------------------------------------
 
@@ -29,6 +37,7 @@ LayoutBreak::LayoutBreak(Score* score)
       _startWithLongNames  = true;
       _startWithMeasureOne = true;
       lw                   = spatium() * 0.3;
+      initElementStyle(&sectionBreakStyle);
       }
 
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
@@ -232,11 +241,15 @@ Element* LayoutBreak::drop(EditData& data)
 
 QVariant LayoutBreak::getProperty(Pid propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case Pid::LAYOUT_BREAK:
                   return int(_layoutBreakType);
             case Pid::PAUSE:
                   return _pause;
+            case Pid::START_WITH_LONG_NAMES:
+                  return _startWithLongNames;
+            case Pid::START_WITH_MEASURE_ONE:
+                  return _startWithMeasureOne;
             default:
                   return Element::getProperty(propertyId);
             }
@@ -248,12 +261,18 @@ QVariant LayoutBreak::getProperty(Pid propertyId) const
 
 bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case Pid::LAYOUT_BREAK:
                   setLayoutBreakType(Type(v.toInt()));
                   break;
             case Pid::PAUSE:
                   setPause(v.toDouble());
+                  break;
+            case Pid::START_WITH_LONG_NAMES:
+                  setStartWithLongNames(v.toBool());
+                  break;
+            case Pid::START_WITH_MEASURE_ONE:
+                  setStartWithMeasureOne(v.toBool());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -271,11 +290,15 @@ bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
 
 QVariant LayoutBreak::propertyDefault(Pid id) const
       {
-      switch(id) {
+      switch (id) {
             case Pid::LAYOUT_BREAK:
                   return QVariant(); // LAYOUT_BREAK_LINE;
             case Pid::PAUSE:
                   return score()->styleD(Sid::SectionPause);
+            case Pid::START_WITH_LONG_NAMES:
+                  return true;
+            case Pid::START_WITH_MEASURE_ONE:
+                  return true;
             default:
                   return Element::propertyDefault(id);
             }
