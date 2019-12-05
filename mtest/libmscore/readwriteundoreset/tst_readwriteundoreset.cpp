@@ -13,6 +13,7 @@
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
 #include "libmscore/score.h"
+#include "libmscore/undo.h"
 
 #define DIR QString("libmscore/readwriteundoreset/")
 
@@ -25,14 +26,14 @@ using namespace Ms;
 class TestReadWrite : public QObject, public MTest
       {
       Q_OBJECT
-      void readwrite(const QString&);
-      void undoreset(const QString&);
-      void runtests(const QString& s) { /*readwrite(s); */undoreset(s); }
 
    private slots:
       void initTestCase();
-      void barlines()         { runtests("barlines");          }
-      void slurs()            { runtests("slurs");             }
+
+      void testReadWriteResetPositions_data();
+      void testReadWriteResetPositions();
+
+      void testMMRestLinksRecreateMMRest();
       };
 
 //---------------------------------------------------------
@@ -45,25 +46,22 @@ void TestReadWrite::initTestCase()
       }
 
 //---------------------------------------------------------
-//   readwrite
+//   testReadWriteResetPositions
 //---------------------------------------------------------
 
-void TestReadWrite::readwrite(const QString& file)
+void TestReadWrite::testReadWriteResetPositions_data()
       {
-      QString readFile(DIR   + file + ".mscx");
-      QString writeFile(file + "-readwrite-test.mscx");
+      QTest::addColumn<QString>("file");
 
-      MasterScore* score = readScore(readFile);
-      QVERIFY(score);
-      QVERIFY(saveCompareScore(score, writeFile, readFile));
+      QTest::newRow("barlines") << "barlines";
+      QTest::newRow("slurs") << "slurs";
+      QTest::newRow("mmrestBarlineTextLinks") << "mmrestBarlineTextLinks"; // see issue #296426
       }
 
-//---------------------------------------------------------
-//   undoreset
-//---------------------------------------------------------
-
-void TestReadWrite::undoreset(const QString& file)
+void TestReadWrite::testReadWriteResetPositions()
       {
+      QFETCH(QString, file);
+
       QString readFile(DIR   + file + ".mscx");
       QString writeFile(file + "-undoreset-test.mscx");
 
@@ -72,6 +70,52 @@ void TestReadWrite::undoreset(const QString& file)
       score->cmdResetAllPositions();
       score->undoRedo(/* undo */ true, nullptr);
       QVERIFY(saveCompareScore(score, writeFile, readFile));
+
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   testMMRestLinksRecreateMMRest
+///   For barlines links with MM rests a separate test is
+///   needed: in this test score, if creating MM rests from
+///   scratch, <linked> tags in BarLines may have appeared
+///   before <linkedMain> tags, so they were not able to
+///   link and prevented text elements from linking as well.
+///
+///   See issue #296426
+//---------------------------------------------------------
+
+void TestReadWrite::testMMRestLinksRecreateMMRest()
+      {
+      const QString file("mmrestBarlineTextLinks");
+
+      QString readFile(DIR + file + ".mscx");
+      QString writeFile(file + "-recreate-mmrest-test.mscx");
+      QString disableMMRestRefFile(DIR + file + "-disable-mmrest-ref.mscx");
+      QString recreateMMRestRefFile(DIR + file + "-recreate-mmrest-ref.mscx");
+
+      MasterScore* score = readScore(readFile);
+      QVERIFY(score);
+
+      // Regenerate MM rests from scratch:
+      // 1) turn MM rests off
+      score->startCmd();
+      score->undo(new ChangeStyleVal(score, Sid::createMultiMeasureRests, false));
+      score->endCmd();
+
+      // 2) save/close/reopen the score
+      QVERIFY(saveCompareScore(score, writeFile, disableMMRestRefFile));
+      delete score;
+      score = readCreatedScore(writeFile);
+
+      // 3) turn MM rests back on
+      score->startCmd();
+      score->undo(new ChangeStyleVal(score, Sid::createMultiMeasureRests, true));
+      score->endCmd();
+
+      QVERIFY(saveCompareScore(score, writeFile, recreateMMRestRefFile));
+
+      delete score;
       }
 
 QTEST_MAIN(TestReadWrite)

@@ -699,6 +699,14 @@ LinkedElements* XmlReader::getLink(bool masterScore, const Location& l, int loca
             staff *= -1;
       const int localIndex = _linksIndexer.assignLocalIndex(l) + localIndexDiff;
       QList<QPair<LinkedElements*, Location>>& staffLinks = _staffLinkedElements[staff];
+
+      if (!staffLinks.isEmpty() && staffLinks.constLast().second == l) {
+            // This element potentially affects local index for "main"
+            // elements that may go afterwards at the same tick, so
+            // append it to staffLinks as well.
+            staffLinks.push_back(staffLinks.constLast()); // nothing should reference exactly this local index, so it shouldn't matter what to append
+            }
+
       for (int i = 0; i < staffLinks.size(); ++i) {
             if (staffLinks[i].second == l) {
                   if (localIndex == 0)
