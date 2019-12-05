@@ -387,6 +387,10 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
                               return true;
                               }
                         return false;
+                  case Qt::DisplayRole:
+                        pp->setName(value.toString());
+                        emit dataChanged(index, index, { Qt::DisplayRole, Qt::AccessibleTextRole });
+                        return true;
 //                   case CustomRole:
 //                         if (value.canConvert<bool>()) {
 //                               const bool val = value.toBool();
@@ -397,9 +401,6 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
 //                               return true;
 //                               }
 //                         return false;
-//                   case Qt::DisplayRole:
-//                   case Qt::AccessibleTextRole:
-//                         return pp->name();
 //                   case gridSizeRole:
 //                         return pp->gridSize();
 //                   case drawGridRole:
