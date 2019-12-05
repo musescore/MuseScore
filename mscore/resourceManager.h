@@ -46,5 +46,28 @@ private slots:
     void uninstallExtension();
    };
 
+class ExtensionFileSize : public QTableWidgetItem
+   {
+      int _size;
+
+   public:
+      ExtensionFileSize(const int i);
+      int getSize() const { return _size; }
+      bool operator<(const QTableWidgetItem& nextItem) const;
+      static int int2size(QChar sizeType, int i);
+
+   };
+
+class LanguageFileSize : public QTableWidgetItem
+   {
+      double _size;
+
+   public:
+      LanguageFileSize(const double d);
+      double getSize() const { return _size; }
+      bool operator<(const QTableWidgetItem& nextItem) const;
+
+   };
+
 }
 #endif // RESOURCE_H
