@@ -1285,28 +1285,30 @@ qreal System::bottomDistance(int staffIdx, const SkylineLine& s) const
 //   firstVisibleSysStaff
 //---------------------------------------------------------
 
-SysStaff* System::firstVisibleSysStaff() const
+int System::firstVisibleSysStaff() const
       {
-      for (SysStaff* s : _staves) {
-            if (s->show())
-                  return s;
+      int nstaves = _staves.size();
+      for (int i = 0; i < nstaves; ++i) {
+            if (_staves[i]->show())
+                  return i;
             }
       qDebug("no sys staff");
-      return 0;
+      return -1;
       }
 
 //---------------------------------------------------------
 //   lastVisibleSysStaff
 //---------------------------------------------------------
 
-SysStaff* System::lastVisibleSysStaff() const
+int System::lastVisibleSysStaff() const
       {
-      for (int i = _staves.size() - 1; i >= 0; --i) {
+      int nstaves = _staves.size();
+      for (int i = nstaves - 1; i >= 0; --i) {
             if (_staves[i]->show())
-                  return _staves[i];
+                  return i;
             }
       qDebug("no sys staff");
-      return 0;
+      return -1;
       }
 
 //---------------------------------------------------------
@@ -1316,7 +1318,8 @@ SysStaff* System::lastVisibleSysStaff() const
 
 qreal System::minTop() const
       {
-      SysStaff* s = firstVisibleSysStaff();
+      int si = firstVisibleSysStaff();
+      SysStaff* s = si < 0 ? nullptr : staff(si);
       if (s)
             return -s->skyline().north().max();
       return 0.0;
@@ -1331,7 +1334,8 @@ qreal System::minBottom() const
       {
       if (vbox())
             return vbox()->bottomGap();
-      SysStaff* s = lastVisibleSysStaff();
+      int si = lastVisibleSysStaff();
+      SysStaff* s = si < 0 ? nullptr : staff(si);
       if (s)
             return s->skyline().south().max() - s->bbox().height();
       return 0.0;
@@ -1344,11 +1348,10 @@ qreal System::minBottom() const
 
 qreal System::spacerDistance(bool up) const
       {
-      SysStaff* ss = up ? firstVisibleSysStaff() : lastVisibleSysStaff();
-      if (!ss)
+      int staff = up ? firstVisibleSysStaff() : lastVisibleSysStaff();
+      if (staff < 0)
             return 0.0;
       qreal dist = 0.0;
-      int staff = ss->idx;
       for (MeasureBase* mb : measures()) {
             if (mb->isMeasure()) {
                   Measure* m = toMeasure(mb);
