@@ -1592,6 +1592,13 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
       stxt->setSwing(true);
       sp->append(stxt, QT_TRANSLATE_NOOP("Palette", "Swing"))->setElementTranslated(true);
 
+      stxt = new SystemText(gscore, Tid::TEMPO);
+      /*: System text to switch from swing rhythm back to straight rhythm */
+      stxt->setXmlText(QT_TRANSLATE_NOOP("Palette", "Straight"));
+      stxt->setSwing(false); // redundant, being the default anyhow, but for documentation
+      /*: System text to switch from swing rhythm back to straight rhythm */
+      sp->append(stxt, QT_TRANSLATE_NOOP("Palette", "Straight"))->setElementTranslated(true);
+
       stxt = new SystemText(gscore);
       stxt->setXmlText(QT_TRANSLATE_NOOP("Palette", "System Text"));
       sp->append(stxt, QT_TRANSLATE_NOOP("Palette", "System text"))->setElementTranslated(true);
