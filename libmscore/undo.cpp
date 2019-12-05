@@ -2430,16 +2430,40 @@ void MoveTremolo::redo(EditData*)
       oldC1 = trem->chord1();
       oldC2 = trem->chord2();
 
-      // Move tremolo
+      // Move tremolo away from old chords
       trem->chord1()->setTremolo(nullptr);
       trem->chord2()->setTremolo(nullptr);
+
+      // Delete old tremolo on c1 and c2, if present
+      if (c1->tremolo() && (c1->tremolo() != trem)) {
+            if (c2->tremolo() == c1->tremolo())
+                  c2->tremolo()->setChords(c1,c2);
+            else
+                  c1->tremolo()->setChords(c1,nullptr);
+            Tremolo* oldTremolo  = c1->tremolo();
+            c1->setTremolo(nullptr);
+            delete oldTremolo;
+            }
+      if (c2->tremolo() && (c2->tremolo() != trem)) {
+            c2->tremolo()->setChords(nullptr,c2);
+            Tremolo* oldTremolo  = c2->tremolo();
+            c2->setTremolo(nullptr);
+            delete oldTremolo;
+            }
+
+      // Move tremolo to new chords
       c1->setTremolo(trem);
       c2->setTremolo(trem);
       trem->setChords(c1, c2);
       trem->setParent(c1);
 
       // Tremolo would cross barline, so remove it
-      if (m1 != m2)
+      if (m1 != m2) {
+            score->undoRemoveElement(trem);
+            return;
+            }
+      // One of the notes crosses a barline, so remove the tremolo
+      if (c1->ticks() != c2->ticks())
             score->undoRemoveElement(trem);
       }
 
