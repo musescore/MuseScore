@@ -152,7 +152,7 @@ install: release
 #   $  make portable
 # PREFIX sets install location *and* the name of the resulting AppDir.
 # Version is appended to PREFIX in CMakeLists.txt if MSCORE_UNSTABLE=FALSE.
-portable: PREFIX=MuseScore
+portable: PREFIX=Musescore
 portable: SUFFIX=-portable
 portable: LABEL=Portable AppImage
 portable: NO_RPATH=TRUE

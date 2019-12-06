@@ -126,7 +126,7 @@ fetch-package-dependencies() {
 # BUILD MuseScore PORTABLE (Compile, not package)
 ########################################################
 build() {
-  echo "building MuseScore Portable for arch: $ARCH"
+  echo "building Musescore Portable for arch: $ARCH"
 
   cd MuseScore
 

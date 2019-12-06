@@ -279,7 +279,7 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH ON) # Call CMake with option -DCMAKE_SKIP_RPA
 set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
 
 # The MuseScore version number.
-SET(MUSESCORE_NAME "MuseScore")
+SET(MUSESCORE_NAME "Musescore")
 SET(MUSESCORE_VERSION_MAJOR  "3")
 SET(MUSESCORE_VERSION_MINOR  "4")
 SET(MUSESCORE_VERSION_PATCH  "0")
@@ -334,7 +334,7 @@ if (DOWNLOAD_SOUNDFONT)
 
     string(COMPARE LESS ${SF_VERSION_LOCAL} ${SF_VERSION_REMOTE} DO_DOWNLOAD)
     if (DO_DOWNLOAD)
-      message("Downloading version ${SF_VERSION_REMOTE} of the MuseScore SoundFont. Version is outdated ${SF_VERSION_LOCAL}.")
+      message("Downloading version ${SF_VERSION_REMOTE} of the Musescore SoundFont. Version is outdated ${SF_VERSION_LOCAL}.")
       # delete soundfont and download new version
       ## TODO check STATUS of downloads
       file (REMOVE ${SOUND_DIRECTORY}/MuseScore_General.sf3
@@ -354,7 +354,7 @@ if (DOWNLOAD_SOUNDFONT)
       file (COPY ${SF_VERSION_REMOTE_FILE} DESTINATION ${SOUND_DIRECTORY})
       file (REMOVE ${SF_VERSION_REMOTE_FILE})
     else(DO_DOWNLOAD)
-      message("MuseScore SoundFont is up to date.")
+      message("Musescore SoundFont is up to date.")
     endif(DO_DOWNLOAD)
   endif()
 endif(DOWNLOAD_SOUNDFONT)
@@ -700,7 +700,7 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     # Create symlink alias for man pages so `man musescore` = `man mscore`
     find_program( LN_EXECUTABLE ln DOC "A tool for creating symbolic link aliases (optional)." )
     if (LN_EXECUTABLE)
-        message(STATUS "Found 'ln'. Symlink aliases will be created for MuseScore executable and the man pages.")
+        message(STATUS "Found 'ln'. Symlink aliases will be created for Musescore executable and the man pages.")
         add_custom_command(
             TARGET manpages
             COMMAND echo "Creating symlink alias for man pages."
@@ -711,7 +711,7 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
      else (LN_EXECUTABLE)
          message(STATUS "'ln' not found (it is optional). No symlink aliases will be created.")
      endif (LN_EXECUTABLE)
-    # Add .MSCZ and .MSCX to MIME database (informs system that filetypes .MSCZ & .MSCX are MuseScore files)
+    # Add .MSCZ and .MSCX to MIME database (informs system that filetypes .MSCZ & .MSCX are Musescore files)
     configure_file(build/Linux+BSD/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
     install( FILES ${PROJECT_BINARY_DIR}/musescore${MSCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
     # Note: Must now run "update-mime-database" to apply changes. This is done in the Makefile.

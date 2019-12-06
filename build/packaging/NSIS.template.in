@@ -1,4 +1,4 @@
-; MuseScore: For customizing Windows installer
+; Musescore: For customizing Windows installer
 ; CPack install script designed for a nmake build
 
 ;--------------------------------
@@ -151,11 +151,11 @@ Var AR_RegFlags
 ;--- End of Add/Remove macros ---
 
 Function InstallDesktopShortcut
-  CreateShortcut "$DESKTOP\MuseScore 2.lnk" "$INSTDIR\bin\MuseScore.exe"
+  CreateShortcut "$DESKTOP\Musescore 2.lnk" "$INSTDIR\bin\Musescore.exe"
 FunctionEnd
 
 Function un.InstallDesktopShortcut
-  Delete "$DESKTOP\MuseScore 2.lnk"
+  Delete "$DESKTOP\Musescore 2.lnk"
 FunctionEnd
 
 ;--------------------------------
@@ -165,7 +165,7 @@ FunctionEnd
   !define MUI_ABORTWARNING
   !define MUI_FINISHPAGE_LINK "http://musescore.org"
   !define MUI_FINISHPAGE_LINK_LOCATION "http://musescore.org"
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\bin\MuseScore.exe"
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\bin\Musescore.exe"
   !define MUI_FINISHPAGE_SHOWREADME ""
   !define MUI_FINISHPAGE_SHOWREADME_CHECKED
   !define MUI_FINISHPAGE_SHOWREADME_TEXT $(createDesktopShortcut)
@@ -617,8 +617,8 @@ FunctionEnd
   LangString createDesktopShortcut ${LANG_ESTONIAN} "Create desktop shortcut"
   LangString createDesktopShortcut ${LANG_FARSI} "Create desktop shortcut"
   LangString createDesktopShortcut ${LANG_FINNISH} "Create desktop shortcut"
-  LangString createDesktopShortcut ${LANG_FRENCH} "Créer un raccourci sur le bureau"
-  LangString createDesktopShortcut ${LANG_GERMAN} "Desktop-Verknüpfung erstellen"
+  LangString createDesktopShortcut ${LANG_FRENCH} "Crï¿½er un raccourci sur le bureau"
+  LangString createDesktopShortcut ${LANG_GERMAN} "Desktop-Verknï¿½pfung erstellen"
   LangString createDesktopShortcut ${LANG_GREEK} "Create desktop shortcut"
   LangString createDesktopShortcut ${LANG_HEBREW} "Create desktop shortcut"
   LangString createDesktopShortcut ${LANG_HUNGARIAN} "Create desktop shortcut"

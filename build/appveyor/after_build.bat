@@ -15,7 +15,7 @@ SET DEBUG_SYMS_FILE=musescore_win%TARGET_PROCESSOR_BITS%.sym
 C:\MuseScore\breakpad_tools\dump_syms.exe %APPVEYOR_BUILD_FOLDER%\%BUILD_FOLDER%\mscore\RelWithDebInfo\MuseScore3.pdb > %DEBUG_SYMS_FILE%
 @echo off
 
-:: Test MuseScore stability
+:: Test Musescore stability
 IF "%NIGHTLY_BUILD%" == "" (
   goto :STABLE_LABEL
 ) ELSE (
@@ -84,19 +84,19 @@ goto :UPLOAD
 :UNSTABLE_LABEL
 echo "Unstable: build 7z package"
 CD C:\MuseScore
-RENAME C:\MuseScore\msvc.install_%PLATFORM%\bin\MuseScore3.exe nightly.exe
-RENAME C:\MuseScore\msvc.install_%PLATFORM% MuseScoreNightly
-XCOPY C:\MuseScore\build\appveyor\special C:\MuseScore\MuseScoreNightly\special /I /E /Y /Q
-COPY C:\MuseScore\build\appveyor\support\README.txt C:\MuseScore\MuseScoreNightly\README.txt /Y
-COPY C:\MuseScore\build\appveyor\support\nightly.bat C:\MuseScore\MuseScoreNightly\nightly.bat /Y
-COPY C:\MuseScore\mscore\revision.h C:\MuseScore\MuseScoreNightly\revision.h
+RENAME C:\MuseScore\msvc.install_%PLATFORM%\bin\Musescore3.exe nightly.exe
+RENAME C:\MuseScore\msvc.install_%PLATFORM% MusescoreNightly
+XCOPY C:\MuseScore\build\appveyor\special C:\MuseScore\MusescoreNightly\special /I /E /Y /Q
+COPY C:\MuseScore\build\appveyor\support\README.txt C:\MuseScore\MusescoreNightly\README.txt /Y
+COPY C:\MuseScore\build\appveyor\support\nightly.bat C:\MuseScore\MusescoreNightly\nightly.bat /Y
+COPY C:\MuseScore\mscore\revision.h C:\MuseScore\MusescoreNightly\revision.h
 :: get hour with a trailing 0 if necessary (add 100)
 SET hh0=%time:~0,2%
 SET /a hh1=%hh0%+100
 SET hh=%hh1:~1,2%
 SET BUILD_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%-%hh%%time:~3,2%
-SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSREVISION%-%TARGET_PROCESSOR_ARCH%.7z
-7z a C:\MuseScore\%ARTIFACT_NAME% C:\MuseScore\MuseScoreNightly
+SET ARTIFACT_NAME=MusescoreNightly-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSREVISION%-%TARGET_PROCESSOR_ARCH%.7z
+7z a C:\MuseScore\%ARTIFACT_NAME% C:\MuseScore\MusescoreNightly
 
 :: create update file for S3
 SET SHORT_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%
@@ -109,7 +109,7 @@ echo ^<version^>%MUSESCORE_VERSION%^</version^>
 echo ^<revision^>%MSREVISION%^</revision^>
 echo ^<releaseType^>nightly^</releaseType^>
 echo ^<date^>%SHORT_DATE%^</date^>
-echo ^<description^>MuseScore %MUSESCORE_VERSION% %MSREVISION%^</description^>
+echo ^<description^>Musescore %MUSESCORE_VERSION% %MSREVISION%^</description^>
 echo ^<downloadUrl^>https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%^</downloadUrl^>
 echo ^<infoUrl^>https://ftp.osuosl.org/pub/musescore-nightlies/windows/^</infoUrl^>
 echo ^</update^>
@@ -123,7 +123,7 @@ SET SSH_IDENTITY=C:\MuseScore\build\appveyor\resources\osuosl_nighlies_rsa_nopp
 SET PATH=%OLD_PATH%
 IF DEFINED ENCRYPT_SECRET_SSH (
   scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% %ARTIFACT_NAME% musescore-nightlies@ftp-osl.osuosl.org:~/ftp/windows/
-  ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/windows; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
+  ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/windows; ls MusescoreNightly* -t | tail -n +41 | xargs rm -f"
   rem create and upload index.html and RSS
   python build/appveyor/updateHTML.py %SSH_IDENTITY%
   scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% build/appveyor/web/index.html musescore-nightlies@ftp-osl.osuosl.org:ftp/windows

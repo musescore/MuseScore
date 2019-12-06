@@ -47,7 +47,7 @@ if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
 then # Build is marked UNSTABLE inside CMakeLists.txt
   if [ "${BINTRAY_REPO_OWNER}" == "musescore" ]
   then # This is a nightly build
-    makefile_overrides="PREFIX='MuseScoreNightly-$date-$branch-$revision' \
+    makefile_overrides="PREFIX='MusescoreNightly-$date-$branch-$revision' \
                         SUFFIX='-portable-nightly' \
                         BUILD_NUMBER='${TRAVIS_BUILD_NUMBER}' \
                         LABEL='Portable Nightly Build'"
@@ -57,19 +57,19 @@ then # Build is marked UNSTABLE inside CMakeLists.txt
   else
     # This is someone developing on their own fork
     export BINTRAY_VERSION="${date}-${branch}-${revision}"
-    makefile_overrides="PREFIX='MuseScoreDev-${BINTRAY_VERSION}' \
+    makefile_overrides="PREFIX='MusescoreDev-${BINTRAY_VERSION}' \
                         SUFFIX='-portable-dev' \
                         LABEL='Unofficial Developer Build'"
     export BINTRAY_USER="${BINTRAY_USER:?${env_error_msg}}" # env, otherwise appimagetool will fail
     export BINTRAY_REPO="${BINTRAY_REPO:-MuseScore}"
     export BINTRAY_REPO_OWNER="${BINTRAY_REPO_OWNER:-${BINTRAY_USER}}" # env, or use $BINTRAY_USER
     export BINTRAY_PACKAGE="${BINTRAY_PACKAGE:-MuseScoreDev-${branch}}"
-    update_info="bintray-zsync|${BINTRAY_REPO_OWNER}|${BINTRAY_REPO}|${BINTRAY_PACKAGE}|MuseScoreDev-_latestVersion-${TARGET_ARCH}.AppImage.zsync"
+    update_info="bintray-zsync|${BINTRAY_REPO_OWNER}|${BINTRAY_REPO}|${BINTRAY_PACKAGE}|MusescoreDev-_latestVersion-${TARGET_ARCH}.AppImage.zsync"
   fi
 else
   # Build is STABLE so create a stable release!
   makefile_overrides="" # use Makefile defaults
-  update_info="gh-releases-zsync|musescore|MuseScore|latest|MuseScore-*x86_64.AppImage.zsync"
+  update_info="gh-releases-zsync|musescore|Musescore|latest|Musescore-*x86_64.AppImage.zsync"
 fi
 
 # Build AppImage depending on arch specified in $1 if cross-compiling, else default build x86_64
@@ -129,14 +129,14 @@ if [ "${upload}" ]; then
   else
     if [[ "${TRAVIS_REPO_SLUG}" == "musescore/MuseScore" ]]; then
       # this is an official build (stable or nightly)
-      ./build/travis/job2_AppImage/osuosl.sh build.release/MuseScore*.AppImage
-      if [[ -f build.release/MuseScore*.AppImage.zsync ]]; then
+      ./build/travis/job2_AppImage/osuosl.sh build.release/Musescore*.AppImage
+      if [[ -f build.release/Musescore*.AppImage.zsync ]]; then
         # upload zsync delta for automatic updates
-        ./build/travis/job2_AppImage/osuosl.sh build.release/MuseScore*.AppImage.zsync
+        ./build/travis/job2_AppImage/osuosl.sh build.release/Musescore*.AppImage.zsync
       fi
     else
       # This is a developer building on their personal fork
-      ./build/travis/job2_AppImage/bintray.sh build.release/MuseScore*.AppImage* # both AppImage and zsync
+      ./build/travis/job2_AppImage/bintray.sh build.release/Musescore*.AppImage* # both AppImage and zsync
     fi
   fi
 else

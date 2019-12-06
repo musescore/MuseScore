@@ -63,7 +63,7 @@ else
   rm -rf share/sound/README*
   rm -rf share/locale/*.qm
   make zip
-  ./build/travis/job1_Tests/osuosl.sh MuseScore*.zip
+  ./build/travis/job1_Tests/osuosl.sh Musescore*.zip
 fi
 
 

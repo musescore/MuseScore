@@ -44,7 +44,7 @@ done
 libs="${APPDIR}/lib"
 export LD_LIBRARY_PATH="${APPIMAGE_LIBRARY_PATH}:${libs}:${libs}/qt5/lib:${LD_LIBRARY_PATH}${fallback_libs}"
 
-# Launch MuseScore or an accompanying script
+# Launch Musescore or an accompanying script
 case "$1" in
   -h|--help|install|uninstall|remove|man|manual|manpage|check-depends|check-dependencies )
     "${APPDIR}/bin/portable-utils" "$@"

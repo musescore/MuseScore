@@ -37,13 +37,13 @@ cp -Rf ~/Library/Frameworks/Sparkle.framework applebuild/mscore.app/Contents/Fra
 if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
 then # Build is marked UNSTABLE inside CMakeLists.txt
 build/package_mac $BRANCH-$REVISION
-PACKAGE_NAME=MuseScoreNightly
+PACKAGE_NAME=MusescoreNightly
 DMGFILE=applebuild/$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
 DMGFILENAME=$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
 mv applebuild/$PACKAGE_NAME-$BRANCH-$REVISION.dmg $DMGFILE
 else
 build/package_mac
-PACKAGE_NAME=MuseScore
+PACKAGE_NAME=Musescore
 DMGFILE=applebuild/$PACKAGE_NAME-*.dmg
 fi
 
@@ -53,7 +53,7 @@ SSH_INDENTITY=$HOME/.ssh/osuosl_nighlies_rsa
 scp -C -i $SSH_INDENTITY $DMGFILE musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
 
 # delete old files
-ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/macosx; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
+ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/macosx; ls MusescoreNightly* -t | tail -n +41 | xargs rm -f"
 
 # create and upload index.html and RSS
 python build/travis/job_macos/updateHTML.py $SSH_INDENTITY
@@ -86,7 +86,7 @@ echo "<update>
 <revision>${REVISION}</revision>
 <releaseType>nightly</releaseType>
 <date>${SHORT_DATE}</date>
-<description>MuseScore ${MUSESCORE_VERSION} ${REVISION}</description>
+<description>Musescore ${MUSESCORE_VERSION} ${REVISION}</description>
 <downloadUrl>https://ftp.osuosl.org/pub/musescore-nightlies/macosx/$DMGFILENAME</downloadUrl>
 <infoUrl>https://ftp.osuosl.org/pub/musescore-nightlies/macosx/</infoUrl>
 </update>" >> update_mac_nightly.xml
@@ -104,14 +104,14 @@ fi
 
 echo "<rss xmlns:sparkle=\"http://www.andymatuschak.org/xml-namespaces/sparkle\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2.0\">
 <channel>
-<title>MuseScore development channel</title>
+<title>Musescore development channel</title>
 <link>
 ${APPCAST_URL}
 </link>
 <description>Most recent changes with links to updates.</description>
 <language>en</language>
 <item>
-<title>MuseScore ${MUSESCORE_VERSION} ${REVISION}</title>
+<title>Musescore ${MUSESCORE_VERSION} ${REVISION}</title>
 <description>
 <![CDATA[
 ${GIT_LOG}

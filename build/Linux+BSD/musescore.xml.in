@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
   <mime-type type="application/x-musescore@MSCORE_INSTALL_SUFFIX@">@Variables_substituted_by_CMAKE_on_installation@
-    <comment>MuseScore file</comment>
+    <comment>Musescore file</comment>
     <sub-class-of type="application/zip"/>
     <glob pattern="*.mscz"/>
   </mime-type>
   <mime-type type="application/x-musescore@MSCORE_INSTALL_SUFFIX@+xml">
-    <comment>uncompressed MuseScore file</comment>
+    <comment>uncompressed Musescore file</comment>
     <sub-class-of type="application/xml"/>
     <glob pattern="*.mscx" />
   </mime-type>

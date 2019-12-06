@@ -46,7 +46,7 @@ IF NOT EXIST %TOOLS_ARCHIVE% ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-c
 START " " /wait "7z" x -y %TOOLS_ARCHIVE% > nul
 CD C:\MuseScore
 
-:: is MuseScore stable? Check here, no grep in PATH later on
+:: is Musescore stable? Check here, no grep in PATH later on
 for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set NIGHTLY_BUILD=%%i
 
 :: get revision number

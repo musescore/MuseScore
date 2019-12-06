@@ -4,7 +4,7 @@
 
 include (InstallRequiredSystemLibraries)
 
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MuseScore is a full featured WYSIWYG score editor")
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Musescore is a full featured WYSIWYG score editor")
 SET(CPACK_PACKAGE_VENDOR "Werner Schweer and Others")
 SET(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/LICENSE.GPL")
 SET(CPACK_RESOURCE_FILE_LICENSE    "${PROJECT_SOURCE_DIR}/LICENSE.GPL")
@@ -14,7 +14,7 @@ SET(CPACK_PACKAGE_VERSION_MINOR "${MUSESCORE_VERSION_MINOR}")
 SET(CPACK_PACKAGE_VERSION_PATCH "${MUSESCORE_VERSION_PATCH}")
 SET(CPACK_PACKAGE_VERSION_BUILD "${CMAKE_BUILD_NUMBER}")
 SET(CPACK_PACKAGE_VERSION "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}.${MUSESCORE_VERSION_PATCH}.${CPACK_PACKAGE_VERSION_BUILD}")
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "MuseScore ${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
+SET(CPACK_PACKAGE_INSTALL_DIRECTORY "Musescore ${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
 
 set(git_date_string "")
 if (MSCORE_UNSTABLE)
@@ -53,12 +53,12 @@ IF(MINGW OR MSVC)
     SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build/packaging\\\\FileAssociation.nsh")
 
     SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-        \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
-        \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+        \\\${registerExtension} \\\"Musescore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+        \\\${registerExtension} \\\"Compressed Musescore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
     ")
     SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
-        \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore File\\\"
-        \\\${unregisterExtension} \\\".mscz\\\" \\\"Compressed MuseScore File\\\"
+        \\\${unregisterExtension} \\\".mscx\\\" \\\"Musescore File\\\"
+        \\\${unregisterExtension} \\\".mscz\\\" \\\"Compressed Musescore File\\\"
     ")
 
     file(TO_CMAKE_PATH $ENV{PROGRAMFILES} PROGRAMFILES)
@@ -82,7 +82,7 @@ ELSE(MINGW OR MSVC)
     SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/mscore/data/mscore.bmp")
     SET(CPACK_STRIP_FILES "${MSCORE_OUTPUT_NAME}")
     SET(CPACK_SOURCE_STRIP_FILES "")
-    SET(CPACK_PACKAGE_EXECUTABLES   "mscore" "MuseScore")
+    SET(CPACK_PACKAGE_EXECUTABLES   "mscore" "Musescore")
     SET(CPACK_SOURCE_PACKAGE_FILE_NAME "mscore")
     SET(CPACK_PACKAGE_FILE_NAME     "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${MUSESCORE_VERSION_FULL}${git_date_string}")
 ENDIF(MINGW OR MSVC)

@@ -1,6 +1,6 @@
 # $1 - artifact name
 # $2 - artifact ftp path
-# $3 - MuseScore version
+# $3 - Musescore version
 # $4 - Revision hash
 
 export MSCORE_RELEASE_CHANNEL=$(grep '^[[:blank:]]*set *( *MSCORE_RELEASE_CHANNEL' CMakeLists.txt | awk -F \" '{print $2}')
@@ -14,14 +14,14 @@ echo ${MSCORE_RELEASE_CHANNEL} >> MSCORE_RELEASE_CHANNEL.txt
 #use dummy values for now
 echo "<rss xmlns:sparkle=\"http://www.andymatuschak.org/xml-namespaces/sparkle\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2.0\">
 <channel>
-<title>MuseScore development channel</title>
+<title>Musescore development channel</title>
 <link>
 ${APPCAST_URL}
 </link>
 <description>Most recent changes with links to updates.</description>
 <language>en</language>
 <item>
-<title>MuseScore $3 $4</title>
+<title>Musescore $3 $4</title>
 <description>
 <![CDATA[
 ${GIT_LOG}

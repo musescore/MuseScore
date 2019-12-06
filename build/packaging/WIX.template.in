@@ -75,8 +75,8 @@
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities" Name="ApplicationName" Value="$(var.ProdName)" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\DefaultIcon" Value="[INSTALL_ROOT]bin\$(var.ExeName),1" Type="string" />
             
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscz" Value="MuseScore.mscz" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscx" Value="MuseScore.mscx" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscz" Value="Musescore.mscz" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscx" Value="Musescore.mscx" Type="string" />
             
             <!-- TODO add more types?-->
             

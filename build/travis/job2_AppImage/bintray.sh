@@ -80,7 +80,7 @@ echo "$0: Creating package '${BINTRAY_PACKAGE}'..." >&2
 my_curl -X "POST" -d "@-" "${api}/packages/${repo_slug}" <<EOF
 {
   "name": "${BINTRAY_PACKAGE}",
-  "desc": "Unofficial MuseScore builds. Use at your own risk!",
+  "desc": "Unofficial Musescore builds. Use at your own risk!",
   "labels": ["music", "audio", "midi", "musicxml"],
   "licenses": ["GPL-2.0"],
   "vcs_url": "https://github.com/musescore/MuseScore",

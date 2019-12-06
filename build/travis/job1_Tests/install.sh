@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run this script from MuseScore's root directory
+# Run this script from Musescore's root directory
 
 set -e # exit on error
 set -x # echo commands

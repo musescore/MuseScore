@@ -20,7 +20,7 @@ def generateHTML(pathname, lines):
     li = ""
     branches = dict()
     for l in lines:
-        if l and l.startswith("MuseScore"):
+        if l and l.startswith("Musescore"):
             sA = l.split("-")
             if len(sA) > 5:
                 branch = sA[5]
@@ -59,7 +59,7 @@ def generateRSS(pathname, lines):
     li = ""
     baseUrl = 'https://ftp.osuosl.org/pub/musescore-nightlies/' + osName + '/'
     for l in lines:
-        if l and l.startswith("MuseScore"):
+        if l and l.startswith("Musescore"):
             info = l.split("-")
             if len(info) == 4:
                 date = info[1]
@@ -82,7 +82,7 @@ def generateRSS(pathname, lines):
 <title>''' + l + '''</title>
 <link>''' + baseUrl + l + '''</link>
 <pubDate>'''+formatdate(time.mktime(d.timetuple()), usegmt=True)+'''</pubDate>
-<description>Nightly Build of MuseScore, Branch: ''' + branch + ''', Revision: '''+commit + '''</description>
+<description>Nightly Build of Musescore, Branch: ''' + branch + ''', Revision: '''+commit + '''</description>
 </item>'''
 
     rssTplPath = pathname + "/web/nightly.xml.tpl"

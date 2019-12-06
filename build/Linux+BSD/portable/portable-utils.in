@@ -121,7 +121,7 @@ EOF
   echo "Resources installed to '$PWD'."
 cat <<EOF
 Step 2 of 3.
-MuseScore is at: ${APPIMAGE}
+Musescore is at: ${APPIMAGE}
 EOF
   if [ ! "$interactive" ]; then
     echo "Moving it to 'PREFIX/bin'."
@@ -131,7 +131,7 @@ EOF
   else
 cat <<EOF
 You can leave it there, but it is recommended that you move it to 'PREFIX/bin'.
-Options: move (m) or copy (c) MuseScore, do nothing (n), or show help (h)?
+Options: move (m) or copy (c) Musescore, do nothing (n), or show help (h)?
 EOF
     local answer
     while [ true ]; do
@@ -148,19 +148,19 @@ EOF
           ;;
         H|h )
 less <<EOF
-Moving or copying MuseScore to 'PREFIX/bin' has these benefits:
+Moving or copying Musescore to 'PREFIX/bin' has these benefits:
 
  1) It will have the same permissions as the resources. (I.e. it will be
     available to the same user(s) as the resources were installed for.)
 
  2) If 'PREFIX/bin' is in your PATH environment variable then you can launch
-    MuseScore by typing '$(basename ${APPIMAGE})' instead of the full path.
+    Musescore by typing '$(basename ${APPIMAGE})' instead of the full path.
     The default locations for PREFIX are in PATH on most systems.
 
 You should move rather than copy unless you want to keep another copy at the
-current location. (E.g if you're installing MuseScore from a USB stick.)
+current location. (E.g if you're installing Musescore from a USB stick.)
 
-If you choose not to move or copy MuseScore then you will still be able to
+If you choose not to move or copy Musescore then you will still be able to
 launch it by clicking on its icon or by typing the full path
 
   '${APPIMAGE}'
@@ -173,10 +173,10 @@ EOF
     done
   fi
   sed -ri "s|^Exec=[^#%]*(.*)\$|Exec=${APPIMAGE} \1|" "share/applications/mscore@MSCORE_INSTALL_SUFFIX@.desktop"
-  echo "Finished installing MuseScore to $prefix"
+  echo "Finished installing Musescore to $prefix"
 cat <<EOF
 Step 3 of 3.
-Symlinks can be created to make it easier to launch MuseScore from
+Symlinks can be created to make it easier to launch Musescore from
 the command line. (Symlinks are like shortcuts or aliases.)
 EOF
   [ "$interactive" ] && printf "Create symlinks 'mscore@MSCORE_INSTALL_SUFFIX@' and 'musescore@MSCORE_INSTALL_SUFFIX@' [Y/n]?"
@@ -187,12 +187,12 @@ EOF
   fi
   if [ ! "$(which "$(basename "${APPIMAGE}")")" ]; then
 cat <<EOF
-INFORMATION: MuseScore is not in PATH. If you want to run MuseScore from
+INFORMATION: Musescore is not in PATH. If you want to run Musescore from
 the command line you will have to type the full file path, like this:
 
   ${APPIMAGE}
 
-This does not affect you if you launch MuseScore by clicking on the icon.
+This does not affect you if you launch Musescore by clicking on the icon.
 EOF
   fi
 }
@@ -205,10 +205,10 @@ function removeResources() {
     echo -n "Remove resources from ${prefix} [Y/n]?"
   elif [ "${EUID}" == "0" ]; then
     prefix=/usr/local
-    echo -n "Running as root. Remove MuseScore resources from '$prefix' for all users [Y/n]?"
+    echo -n "Running as root. Remove Musescore resources from '$prefix' for all users [Y/n]?"
   else
     prefix=~/.local
-    echo -n "Not running as root. Remove MuseScore resources from '$prefix' for current user only [Y/n]?"
+    echo -n "Not running as root. Remove Musescore resources from '$prefix' for current user only [Y/n]?"
   fi
   readYes || return 0
   cd "$prefix" && <"${APPDIR}/install_manifest.txt" xargs rm || return 1
@@ -216,9 +216,9 @@ function removeResources() {
   rm "$(dirname "${APPIMAGE}")/musescore@MSCORE_INSTALL_SUFFIX@"
   <"${APPDIR}/install_manifest.txt" xargs "${APPDIR}/bin/rm-empty-dirs"
   updateCache $prefix
-  echo -ne "Resources removed from ${PWD}.\nRemove MuseScore itself (delete ${APPIMAGE}) [Y/n]?"
-  readYes || { echo -e "MuseScore remains at ${APPIMAGE}.\nYou may delete it yourself or install again at any time." && return 0 ; }
-  rm "${APPIMAGE}" && echo "Successfully removed MuseScore from $prefix"
+  echo -ne "Resources removed from ${PWD}.\nRemove Musescore itself (delete ${APPIMAGE}) [Y/n]?"
+  readYes || { echo -e "Musescore remains at ${APPIMAGE}.\nYou may delete it yourself or install again at any time." && return 0 ; }
+  rm "${APPIMAGE}" && echo "Successfully removed Musescore from $prefix"
   rmdir "$(dirname "${APPIMAGE}")"
   return 0
 }

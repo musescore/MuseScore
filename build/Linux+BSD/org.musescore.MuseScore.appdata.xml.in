@@ -3,13 +3,13 @@
 <component type="desktop-application">
   <id>org.musescore.MuseScore@MSCORE_INSTALL_SUFFIX@</id>
   <translation type="qt">mscore</translation>
-  <name>MuseScore</name>
+  <name>Musescore</name>
   <summary>Create, playback, and print sheet music for free</summary>
   <developer_name>MuseScore BVBA</developer_name>
   <description>
-    <p>Create, playback, and print sheet music for free. MuseScore is cross-platform, multi-lingual, open source music notation software. It features an easy to use WYSIWYG editor with audio score playback for results that look and sound beautiful. It supports unlimited staves with up to four voices each, dynamics, articulations, lyrics, chords, lead sheet notation, import/export of MIDI and MusicXML, export to PDF and WAV, plus online score sharing.</p>
-    <p>MuseScore can upload scores directly to the score sharing site musescore.com. Program support is provided on musescore.org.</p>
-    <p>Features supported by MuseScore include:</p>
+    <p>Create, playback, and print sheet music for free. Musescore is cross-platform, multi-lingual, open source music notation software. It features an easy to use WYSIWYG editor with audio score playback for results that look and sound beautiful. It supports unlimited staves with up to four voices each, dynamics, articulations, lyrics, chords, lead sheet notation, import/export of MIDI and MusicXML, export to PDF and WAV, plus online score sharing.</p>
+    <p>Musescore can upload scores directly to the score sharing site musescore.com. Program support is provided on musescore.org.</p>
+    <p>Features supported by Musescore include:</p>
     <ul>
       <li>Unlimited score length</li>
       <li>Unlimited number of staves per system</li>
@@ -32,9 +32,9 @@
       <li>Additive time signatures</li>
       <li>User-defined score styles</li>
     </ul>
-    <p>Most elements in MuseScore are laid out automatically but can also be positioned manually. The capabilities of MuseScore can be extended via plugins, and the growing repository on musescore.org contains many plugins submitted by users.</p>
-    <p>MuseScore includes a set of sounds that reproduce common instruments (as defined by General MIDI) without taking up a lot of disk space or memory, but you can also substitute any SoundFont you prefer for a wider variety of sounds or for more realism.</p>
-    <p>MuseScore can import and export MIDI and MusicXML files, and it can also import from Capella and several other programs. MuseScore can export to PDF, PNG, and other graphic formats, to WAV and other audio formats, or to Lilypond for an alternative layout and print option.</p>
+    <p>Most elements in Musescore are laid out automatically but can also be positioned manually. The capabilities of Musescore can be extended via plugins, and the growing repository on musescore.org contains many plugins submitted by users.</p>
+    <p>Musescore includes a set of sounds that reproduce common instruments (as defined by General MIDI) without taking up a lot of disk space or memory, but you can also substitute any SoundFont you prefer for a wider variety of sounds or for more realism.</p>
+    <p>Musescore can import and export MIDI and MusicXML files, and it can also import from Capella and several other programs. Musescore can export to PDF, PNG, and other graphic formats, to WAV and other audio formats, or to Lilypond for an alternative layout and print option.</p>
   </description>
   <kudos>
     <kudo>ModernToolkit</kudo>
@@ -104,17 +104,17 @@
     </release>
     <release date="2019-05-28" version="3.1">
       <description>
-        <p>MuseScore 3.1, in addition to hundreds of bug fixes, introduces some new features (including single-note dynamics) and significant improvements related to playback, automatic placement and layout, fretboard diagrams, and performance.</p>
+        <p>Musescore 3.1, in addition to hundreds of bug fixes, introduces some new features (including single-note dynamics) and significant improvements related to playback, automatic placement and layout, fretboard diagrams, and performance.</p>
       </description>
     </release>
     <release date="2019-03-12" version="3.0.5">
       <description>
-        <p>The focus of this release was performance and stability. We reached an incredible boost in optimization so MuseScore 3 is now faster than MuseScore 2, but is still powerful with the smart layout feature. The crash reporter facility introduced in MuseScore 3.0.3 lets us concentrate on fixing the most frequent crashes.</p>
+        <p>The focus of this release was performance and stability. We reached an incredible boost in optimization so Musescore 3 is now faster than Musescore 2, but is still powerful with the smart layout feature. The crash reporter facility introduced in Musescore 3.0.3 lets us concentrate on fixing the most frequent crashes.</p>
       </description>
     </release>
     <release date="2019-02-28" version="3.0.4">
       <description>
-        <p>MuseScore 3.0.3 introduced some great improvements as well as unfortunate regressions which were addressed in the MuseScore 3.0.4 release.</p>
+        <p>Musescore 3.0.3 introduced some great improvements as well as unfortunate regressions which were addressed in the Musescore 3.0.4 release.</p>
       </description>
     </release>
     <release date="2019-02-26" version="3.0.3">
@@ -124,7 +124,7 @@
     </release>
     <release date="2019-01-29" version="3.0.2">
       <description>
-        <p>The main change in this release is the reinstatement of the plugin framework, which makes the most popular plugins work in MuseScore 3. Another important improvement is the new login page which appears when you use the Save Online feature. This redesigned page allows you to use Google and Facebook to sign in and to create a new account right in the editor.</p>
+        <p>The main change in this release is the reinstatement of the plugin framework, which makes the most popular plugins work in Musescore 3. Another important improvement is the new login page which appears when you use the Save Online feature. This redesigned page allows you to use Google and Facebook to sign in and to create a new account right in the editor.</p>
       </description>
     </release>
     <release date="2019-01-15" version="3.0.1">
@@ -154,7 +154,7 @@
     </release>
     <release date="2018-12-24" version="3.0">
       <description>
-        <p>MuseScore 3.0 is packed full of new features and improvements.</p>
+        <p>Musescore 3.0 is packed full of new features and improvements.</p>
         <p>Musical notation:</p>
         <ul>
           <li>Automatic placement - potential collisions between elements are detected and resolved automatically, allowing you to easily create great-looking scores with little need for manual adjustment</li>
@@ -187,11 +187,11 @@
     </release>
     <release date="2018-07-31" version="2.3.2">
       <description>
-        <p>After the release of MuseScore 2.3.1 on July 6th 2018, we found a couple of regressions that we addressed in MuseScore 2.3.2, released on July 31st 2018. We also updated all languages to latest translations.</p>
+        <p>After the release of Musescore 2.3.1 on July 6th 2018, we found a couple of regressions that we addressed in Musescore 2.3.2, released on July 31st 2018. We also updated all languages to latest translations.</p>
         <p>Features:</p>
         <ul>
           <li>#208006: Embed MP3 support by default on macOS</li>
-          <li>Add access to MuseScore version and revision used to create a score in plugin framework</li>
+          <li>Add access to Musescore version and revision used to create a score in plugin framework</li>
         </ul>
         <p>Improvements:</p>
         <ul>
@@ -216,7 +216,7 @@
     </release>
     <release date="2018-07-06" version="2.3.1">
       <description>
-        <p>After the release of MuseScore 2.3 on June 29th 2018, we found a couple of regressions that we addressed in MuseScore 2.3.1 released on July 6th 2018. We also updated all languages to latest translations.</p>
+        <p>After the release of Musescore 2.3 on June 29th 2018, we found a couple of regressions that we addressed in Musescore 2.3.1 released on July 6th 2018. We also updated all languages to latest translations.</p>
         <p>Bug Fixes:</p>
         <ul>
           <li>Fix #273921: [Regression] Augm. dot misplaced for low stemless notes</li>
@@ -270,7 +270,7 @@
         </ul>
         <p>Crashes and corruptions fixed:</p>
         <ul>
-          <li>Fix #76751: MuseScore crashes when opening plugin manager after adding new plugin</li>
+          <li>Fix #76751: Musescore crashes when opening plugin manager after adding new plugin</li>
           <li>Fix #270850: Changes to a score cause all fermatas over a barline to be discarded</li>
           <li>Fix #271039: crash when closing score after changing tempo in play panel</li>
           <li>Fix #271161: crashes on certain tuplets due to failure to sanitize</li>
@@ -305,7 +305,7 @@
         <ul>
           <li>Fix #271707: MusicXML export: crash when exporting hairpins</li>
           <li>Fix #271840: MusicXML import: no barlines when using property</li>
-          <li>Fix #272062: Opening of some MusicXML files caused MuseScore to crash</li>
+          <li>Fix #272062: Opening of some MusicXML files caused Musescore to crash</li>
         </ul>
         <p>Miscellaneous:</p>
         <ul>

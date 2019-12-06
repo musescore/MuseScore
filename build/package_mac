@@ -1,16 +1,16 @@
 #!/bin/bash
 
 APPNAME=mscore
-LONG_NAME=MuseScore
+LONG_NAME=Musescore
 
 if [[ $1 ]]
 then
-    LONG_NAME=MuseScoreNightly
-    LONGER_NAME=MuseScoreNightly
+    LONG_NAME=MusescoreNightly
+    LONGER_NAME=MusescoreNightly
     VERSION=$1
 else
-    LONG_NAME=MuseScore
-    LONGER_NAME="MuseScore 3"
+    LONG_NAME=Musescore
+    LONGER_NAME="Musescore 3"
     VERSION=3.4.0
 fi
 
