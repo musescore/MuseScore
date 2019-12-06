@@ -7715,6 +7715,7 @@ void MuseScore::init(QStringList& argv)
             }
 
       QApplication::instance()->installEventFilter(mscore);
+      QApplication::instance()->installEventFilter(ActionEventObserver::instance());
 
       mscore->setRevision(Ms::revision);
       int files = 0;

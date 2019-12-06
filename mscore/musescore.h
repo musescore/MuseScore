@@ -26,6 +26,7 @@
 #include "updatechecker.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
+#include "actioneventobserver.h"
 
 namespace Ms {
 
