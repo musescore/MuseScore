@@ -739,6 +739,7 @@ if (NOT MSVC)
 endif (NOT MSVC)
 
 ##
+add_subdirectory(telemetry)
 add_subdirectory(global)
 add_subdirectory(thirdparty/google_analytics)
 ## Includes

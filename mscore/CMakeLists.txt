@@ -45,6 +45,8 @@ include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
+      ${PROJECT_SOURCE_DIR}/telemetry
+      ${PROJECT_SOURCE_DIR}/global
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
@@ -332,6 +334,7 @@ add_library(mscoreapp STATIC
       templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
       toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h tremolobarprop.h
       tupletdialog.h updatechecker.h uploadscoredialog.h waveview.h webpage.h workspace.h
+      modulessetup.h
 
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
       stringutils.h stringutils.cpp
@@ -380,6 +383,7 @@ add_library(mscoreapp STATIC
       masterpalette.cpp
       dragdrop.cpp
       waveview.cpp helpBrowser.cpp
+      modulessetup.cpp
       inspector/inspector.cpp
       inspector/inspectorBase.cpp
       inspector/inspectorBeam.cpp
@@ -501,6 +505,7 @@ target_link_libraries(mscoreapp
       libmscore
       qzip
       beatroot
+      telemetry
       )
 
 if (BUILD_CRASH_REPORTER)
