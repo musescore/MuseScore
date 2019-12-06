@@ -14,6 +14,7 @@
 #include "shortcut.h"
 #include "icons.h"
 #include "libmscore/xml.h"
+#include <QHash>
 
 
 namespace Ms {
@@ -4372,7 +4373,25 @@ void Shortcut::resetToDefault()
             }
       source = defaultFileName;
       dirty = true;
-      }
+}
+
+Shortcut* Shortcut::getShortcutByKeySequence(const QKeySequence &keySequence)
+{
+    for (Shortcut* shortcut : _shortcuts.values()) {
+
+        QAction* action = shortcut->action();
+
+        if (!action) {
+            continue;
+        }
+
+        if (action->shortcut() == keySequence) {
+            return shortcut;
+        }
+    }
+
+    return nullptr;
+}
 
 //---------------------------------------------------------
 //   reset
