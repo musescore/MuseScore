@@ -740,6 +740,7 @@ endif (NOT MSVC)
 
 ##
 add_subdirectory(global)
+add_subdirectory(thirdparty/google_analytics)
 ## Includes
 ##
 include_directories(
