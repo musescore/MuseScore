@@ -739,6 +739,7 @@ if (NOT MSVC)
 endif (NOT MSVC)
 
 ##
+add_subdirectory(global)
 ## Includes
 ##
 include_directories(
