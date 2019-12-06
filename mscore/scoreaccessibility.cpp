@@ -110,6 +110,8 @@ void ScoreAccessibility::clearAccessibilityInfo()
       MuseScoreView* view = static_cast<MuseScore*>(mainWindow)->currentScoreView();
       if (view)
             view->score()->setAccessibleInfo(tr("No selection"));
+      _oldBar = -1;
+      _oldStaff = -1;
       }
 
 void ScoreAccessibility::currentInfoChanged()
