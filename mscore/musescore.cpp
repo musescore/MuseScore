@@ -126,6 +126,7 @@
 #include "awl/aslider.h"
 #include "extension.h"
 #include "thirdparty/qzip/qzipreader_p.h"
+#include "widgets/telemetrypermissiondialog.h"
 #include "modulessetup.h"
 
 #include "sparkle/autoUpdater.h"
@@ -7109,6 +7110,19 @@ void MuseScore::updateUiStyleAndTheme()
       Shortcut::refreshIcons();
       }
 
+void tryToRequestTelemetryPermission()
+      {
+      QString accessRequestedAtVersion = preferences.getString(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED);
+
+      if (accessRequestedAtVersion == VERSION)
+            return;
+
+      TelemetryPermissionDialog *requestDialog = new TelemetryPermissionDialog(mscore->window());
+      requestDialog->show();
+
+      preferences.setPreference(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, VERSION);
+      }
+
 MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** argv)
       {
       QFile f(":/revision.h");
@@ -7799,6 +7813,9 @@ void MuseScore::init(QStringList& argv)
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())
             mscore->showSynthControl(true);
+
+      tryToRequestTelemetryPermission();
+
       }
 
 //---------------------------------------------------------
