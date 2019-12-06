@@ -126,6 +126,7 @@
 #include "awl/aslider.h"
 #include "extension.h"
 #include "thirdparty/qzip/qzipreader_p.h"
+#include "modulessetup.h"
 
 #include "sparkle/autoUpdater.h"
 #if defined(WIN_SPARKLE_ENABLED)
@@ -7146,8 +7147,7 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
       return app;
       }
 
-MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandLineArguments(MuseScoreApplication* app)
-      {
+      ModulesSetup::instance()->setup();
       QCommandLineParser parser;
       CommandLineParseResult parseResult;
 
