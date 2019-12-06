@@ -16,7 +16,6 @@
 #include "inspectorBase.h"
 #include "inspectorElementBase.h"
 #include "inspectorTextBase.h"
-#include "ui_inspector_bend.h"
 #include "ui_inspector_break.h"
 #include "ui_inspector_sectionbreak.h"
 #include "ui_inspector_stafftypechange.h"
@@ -299,22 +298,6 @@ class InspectorAccidental : public InspectorElementBase {
 
    public:
       InspectorAccidental(QWidget* parent);
-      };
-
-//---------------------------------------------------------
-//   InspectorBend
-//---------------------------------------------------------
-
-class InspectorBend : public InspectorElementBase {
-      Q_OBJECT
-
-      Ui::InspectorBend g;
-
-   private slots:
-      void propertiesClicked();
-
-   public:
-      InspectorBend(QWidget* parent);
       };
 
 //---------------------------------------------------------

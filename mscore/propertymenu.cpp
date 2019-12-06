@@ -20,7 +20,6 @@
 #include "libmscore/mscore.h"
 
 #include "articulationprop.h"
-#include "bendproperties.h"
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
 #include "stafftextproperties.h"
@@ -134,10 +133,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(getAction("flip"));
       else if (e->isHook())
             popup->addAction(getAction("flip"));
-      else if (e->isBend()) {
-            genPropertyMenu1(e, popup);
-            popup->addAction(tr("Bend Properties…"))->setData("b-props");
-            }
       else if (e->isTremoloBar()) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Tremolo Bar Properties…"))->setData("tr-props");
@@ -299,8 +294,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             ArticulationProperties rp(static_cast<Articulation*>(e));
             rp.exec();
             }
-      else if (cmd == "b-props")
-            editBendProperties(static_cast<Bend*>(e));
       else if (cmd == "measure-props") {
             Measure* m = 0;
             if (e->type() == ElementType::NOTE)
@@ -560,19 +553,6 @@ void ScoreView::editFretDiagram(FretDiagram* fd)
       delete nFret;
       }
 #endif
-
-//---------------------------------------------------------
-//   editBendProperties
-//---------------------------------------------------------
-
-void ScoreView::editBendProperties(Bend* bend)
-      {
-      BendProperties bp(bend, 0);
-      if (bp.exec()) {
-            for (ScoreElement* b : bend->linkList())
-                  b->score()->undo(new ChangeBend(toBend(b), bp.points()));
-            }
-      }
 
 //---------------------------------------------------------
 //   editTremoloBarProperties
