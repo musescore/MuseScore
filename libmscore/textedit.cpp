@@ -72,48 +72,61 @@ void TextBase::endEdit(EditData& ed)
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
       const QString actualText = xmlText();
       UndoStack* undo = score()->undoStack();
-      while (undo->getCurIdx() > ted->startUndoIdx)
-            undo->undo(&ed);
 
       // replace all undo/redo records collected during text editing with
       // one property change
 
+      using Filter = UndoCommand::Filter;
+      undo->mergeCommands(ted->startUndoIdx);
+      undo->last()->filterChildren(Filter::TextEdit, this);
+
+      bool newlyAdded = false;
+
       if (ted->oldXmlText.isEmpty()) {
             UndoStack* us = score()->undoStack();
-            UndoCommand* ucmd = us->last();
-            if (ucmd) {
-                  const QList<UndoCommand*>& cl = ucmd->commands();
-                  const UndoCommand* cmd = cl.back();
-                  if (strncmp(cmd->name(), "Add:", 4) == 0) {
-                        const AddElement* ae = static_cast<const AddElement*>(cmd);
-                        if (ae->getElement() == this) {
-                              if (actualText.isEmpty()) {
-                                    // we just created this empty text, rollback that operation
-                                    us->rollback();
-                                    score()->update();
-                                    ed.element = 0;
-                                    }
-                              else {
-                                    us->reopen();
-                                    // combine undo records of text creation with text editing
-                                    undoChangeProperty(Pid::TEXT, actualText);
-                                    layout1();
-                                    score()->endCmd();
-                                    }
-                              return;
-                              }
-                        }
+            UndoCommand* ucmd = us->prev();
+            if (ucmd && ucmd->hasFilteredChildren(Filter::AddElement, this)) {
+                  // We have just added this element to a score.
+                  // Combine undo records of text creation with text editing.
+                  newlyAdded = true;
+                  us->mergeCommands(ted->startUndoIdx - 1);
                   }
             }
+
       if (actualText.isEmpty()) {
             qDebug("actual text is empty");
-            score()->startCmd();
+
+            undo->reopen();
             score()->undoRemoveElement(this);
             ed.element = 0;
-            score()->endCmd();
+
+            static const std::vector<Filter> filters {
+                  Filter::AddElementLinked,
+                  Filter::RemoveElementLinked,
+                  Filter::ChangePropertyLinked,
+                  Filter::Link,
+                  };
+
+            if (newlyAdded && !undo->current()->hasUnfilteredChildren(filters, this)) {
+                  for (Filter f : filters)
+                        undo->current()->filterChildren(f, this);
+
+                  score()->endCmd();
+
+                  // Ensure that unnecessary text elements will be cleaned up
+                  MasterScore* ms = score()->masterScore();
+                  for (ScoreElement* se : linkList())
+                        ms->deleteLater(se);
+                  }
+            else {
+                  score()->endCmd();
+                  }
+
             return;
             }
-      score()->startCmd();
+
+      setXmlText(ted->oldXmlText);                    // reset text to value before editing
+      undo->reopen();
       undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
                                                       // this also changes text of linked elements
       layout1();
