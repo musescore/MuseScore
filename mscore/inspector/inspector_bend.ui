@@ -378,6 +378,11 @@
           <string>Prebend/Release</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Custom</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
