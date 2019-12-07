@@ -443,11 +443,7 @@ GridView {
                 }
             }
 
-            onDoubleClicked: {
-                const index = paletteCell.modelIndex;
-                paletteView.selectionModel.setCurrentIndex(index, ItemSelectionModel.Current);
-                paletteView.paletteController.applyPaletteElement(index, mscore.keyboardModifiers());
-            }
+            onDoubleClicked: {}
 
             MouseArea {
                 id: paletteCellDragArea
