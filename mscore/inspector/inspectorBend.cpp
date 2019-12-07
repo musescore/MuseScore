@@ -60,43 +60,53 @@ void InspectorBend::bendTypeChanged(int n)
       {
       QList<PitchValue>& points = g.bendCanvas->points();
 
-      points.clear();
       switch (n) {
          case 0:
-            points.append(PitchValue(0, 0));
-            points.append(PitchValue(15, 100));
-            points.append(PitchValue(60, 100));
+            points = BEND;
             break;
          case 1:
-            points.append(PitchValue(0, 0));
-            points.append(PitchValue(10, 100));
-            points.append(PitchValue(20, 100));
-            points.append(PitchValue(30, 0));
-            points.append(PitchValue(60, 0));
+            points = BEND_RELEASE;
             break;
          case 2:
-            points.append(PitchValue(0, 0));
-            points.append(PitchValue(10, 100));
-            points.append(PitchValue(20, 100));
-            points.append(PitchValue(30, 0));
-            points.append(PitchValue(40, 0));
-            points.append(PitchValue(50, 100));
-            points.append(PitchValue(60, 100));
+            points = BEND_RELEASE_BEND;
             break;
          case 3:
-            points.append(PitchValue(0, 100));
-            points.append(PitchValue(60, 100));
+            points = PREBEND;
             break;
          case 4:
-            points.append(PitchValue(0, 100));
-            points.append(PitchValue(15, 100));
-            points.append(PitchValue(30, 0));
-            points.append(PitchValue(60, 0));
+            points = PREBEND_RELEASE;
+            break;
+         case 5:
             break;
             }
 
       bendCanvasUpdate();
       update();
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorBend::setElement()
+      {
+      InspectorElementBase::setElement();
+
+      QList<PitchValue> points = g.bendCanvas->points();
+      if (!(g.bendType->currentIndex() == 5)) {
+            if (points == BEND)
+                  g.bendType->setCurrentIndex(0);
+            else if (points == BEND_RELEASE)
+                  g.bendType->setCurrentIndex(1);
+            else if (points == BEND_RELEASE_BEND)
+                  g.bendType->setCurrentIndex(2);
+            else if (points == PREBEND)
+                  g.bendType->setCurrentIndex(3);
+            else if (points == PREBEND_RELEASE)
+                  g.bendType->setCurrentIndex(4);
+            else
+                  g.bendType->setCurrentIndex(5);
+            }
       }
 
 //---------------------------------------------------------
