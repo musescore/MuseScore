@@ -1668,12 +1668,8 @@ void ScoreView::editSwap()
 
 void ScoreView::editPaste()
       {
-      if (editData.element) {
-            if (editData.element->isLyrics())
-                  toLyrics(editData.element)->paste(editData);
-            else if (editData.element->isTextBase())
-                  toTextBase(editData.element)->paste(editData);
-            }
+      if (textEditMode())
+            toTextBase(editData.element)->paste(editData);
       }
 
 //---------------------------------------------------------

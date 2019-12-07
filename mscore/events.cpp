@@ -42,7 +42,7 @@ bool ScoreView::event(QEvent* event)
       if (event->type() == QEvent::KeyPress && editMode()) {
             QKeyEvent* ke = static_cast<QKeyEvent*>(event);
             if (ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Backtab) {
-                  if (editData.element->isTextBase())
+                  if (textEditMode())
                         return true;
                   if (ke->key() == Qt::Key_Tab)
                         editData.element->nextGrip(editData);
@@ -410,9 +410,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       {
 
       if (tripleClickPending) {
-            if (state == ViewState::EDIT
-                && editData.element
-                && editData.element->isTextBase()) {
+            if (textEditMode()) {
                   TextBase* textBase = toTextBase(editData.element);
                   textBase->multiClickSelect(editData, MultiClick::Triple);
                   mscore->textTools()->updateTools(editData);
@@ -657,7 +655,7 @@ void ScoreView::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
       QTimer::singleShot(QApplication::doubleClickInterval(), this, SLOT(tripleClickTimeOut()));
       tripleClickPending = true;
 
-      if (state == ViewState::EDIT && editData.element->isTextBase()) {
+      if (textEditMode()) {
             // double click on a textBase element that is being edited - select word
             TextBase* textBase = toTextBase(editData.element);
             textBase->multiClickSelect(editData, MultiClick::Double);
@@ -746,9 +744,10 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
             }
 
       ScoreViewCmdContext cc(this, editData.grips);
+      const bool textEdit = textEditMode();
 
 #ifdef Q_OS_WIN // Japenese IME on Windows needs to know when Ctrl/Alt/Shift/CapsLock is pressed while in predit
-      if (editData.element->isTextBase()) {
+      if (textEdit) {
             TextBase* text = toTextBase(editData.element);
             if (text->cursor(editData)->format()->preedit() && QGuiApplication::inputMethod()->locale().script() == QLocale::JapaneseScript &&
                 ((editData.key == Qt::Key_Control || (editData.modifiers & Qt::ControlModifier)) ||
@@ -767,7 +766,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                         mscore->endCmd();
                         return;
                         }
-                  if (editData.element->isTextBase())
+                  if (textEdit)
                         mscore->textTools()->updateTools(editData);
                   return;
                   }
@@ -838,9 +837,9 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
 
 void ScoreView::keyReleaseEvent(QKeyEvent* ev)
       {
-      if (state == ViewState::EDIT) {
+      if (textEditMode()) {
             auto modifiers = Qt::ControlModifier | Qt::ShiftModifier;
-            if (editData.element->isTextBase() && ((ev->modifiers() & modifiers) == 0)) {
+            if ((ev->modifiers() & modifiers) == 0) {
                   TextBase* text = toTextBase(editData.element);
                   text->endHexState(editData);
                   ev->accept();
@@ -1095,9 +1094,7 @@ void ScoreView::changeState(ViewState s)
 
 void ScoreView::inputMethodEvent(QInputMethodEvent* event)
       {
-      if (state != ViewState::EDIT)
-            return;
-      if (editData.element->isTextBase())
+      if (textEditMode())
             toTextBase(editData.element)->inputTransition(editData, event);
       }
 
