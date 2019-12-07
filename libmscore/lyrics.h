@@ -95,7 +95,6 @@ class Lyrics final : public TextBase {
       void removeFromScore();
 
       using ScoreElement::undoChangeProperty;
-      using TextBase::paste;
       virtual void paste(EditData&) override;
 
       virtual QVariant getProperty(Pid propertyId) const override;
