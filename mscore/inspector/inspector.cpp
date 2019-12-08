@@ -598,6 +598,18 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
       {
       ar.setupUi(addWidget());
 
+      Articulation* el = toArticulation(inspector->element());
+      bool sameTypes = true;
+
+      for (const auto& ee : *inspector->el()) {
+            if (toArticulation(ee)->isOrnament() != el->isOrnament()) {
+                  sameTypes = false;
+                  break;
+                  }
+            }
+      if (sameTypes)
+            ar.title->setText(el->isOrnament() ? tr("Ornament") : tr("Articulation"));
+
       const std::vector<InspectorItem> iiList = {
             { Pid::ARTICULATION_ANCHOR, 0, ar.anchor,           ar.resetAnchor           },
             { Pid::DIRECTION,           0, ar.direction,        ar.resetDirection        },
