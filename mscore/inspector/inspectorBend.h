@@ -15,6 +15,7 @@
 
 #include "inspector.h"
 #include "ui_inspector_bend.h"
+#include "libmscore/pitchvalue.h"
 
 namespace Ms {
 
@@ -29,7 +30,7 @@ class InspectorBend : public InspectorElementBase {
 
    private slots:
       void bendTypeChanged(int);
-      void bendCanvasUpdate();
+      void updateBend();
 
    public:
       InspectorBend(QWidget* parent);

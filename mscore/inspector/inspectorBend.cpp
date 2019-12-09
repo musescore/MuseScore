@@ -40,7 +40,32 @@ InspectorBend::InspectorBend(QWidget* parent)
       Bend* b = toBend(inspector->element());
       g.bendCanvas->setPoints(b->points());
       connect(g.bendType,    SIGNAL(currentIndexChanged(int)),  SLOT(bendTypeChanged(int)));
-      connect(g.bendCanvas,  SIGNAL(bendCanvasChanged()),       SLOT(bendCanvasUpdate())  );
+      connect(g.bendCanvas,  SIGNAL(bendCanvasChanged()),       SLOT(updateBend())        );
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorBend::setElement()
+      {
+      InspectorElementBase::setElement();
+
+      QList<PitchValue> points = g.bendCanvas->points();
+      if (!(g.bendType->currentIndex() == 5)) {
+            if (points == BEND)
+                  g.bendType->setCurrentIndex(0);
+            else if (points == BEND_RELEASE)
+                  g.bendType->setCurrentIndex(1);
+            else if (points == BEND_RELEASE_BEND)
+                  g.bendType->setCurrentIndex(2);
+            else if (points == PREBEND)
+                  g.bendType->setCurrentIndex(3);
+            else if (points == PREBEND_RELEASE)
+                  g.bendType->setCurrentIndex(4);
+            else
+                  g.bendType->setCurrentIndex(5);
+            }
       }
 
 //---------------------------------------------------------
@@ -80,40 +105,15 @@ void InspectorBend::bendTypeChanged(int n)
             break;
             }
 
-      bendCanvasUpdate();
+      updateBend();
       update();
       }
 
 //---------------------------------------------------------
-//   setElement
+//   updateBend
 //---------------------------------------------------------
 
-void InspectorBend::setElement()
-      {
-      InspectorElementBase::setElement();
-
-      QList<PitchValue> points = g.bendCanvas->points();
-      if (!(g.bendType->currentIndex() == 5)) {
-            if (points == BEND)
-                  g.bendType->setCurrentIndex(0);
-            else if (points == BEND_RELEASE)
-                  g.bendType->setCurrentIndex(1);
-            else if (points == BEND_RELEASE_BEND)
-                  g.bendType->setCurrentIndex(2);
-            else if (points == PREBEND)
-                  g.bendType->setCurrentIndex(3);
-            else if (points == PREBEND_RELEASE)
-                  g.bendType->setCurrentIndex(4);
-            else
-                  g.bendType->setCurrentIndex(5);
-            }
-      }
-
-//---------------------------------------------------------
-//   bendCanvasUpdate
-//---------------------------------------------------------
-
-void InspectorBend::bendCanvasUpdate()
+void InspectorBend::updateBend()
       {
       Bend* bend = toBend(inspector->element());
       Score* sc = bend->score();
