@@ -175,6 +175,7 @@ void Inspector::update(Score* s)
             return;
       _score = s;
       bool sameTypes = true;
+      bool sameSubtypes = true;
       if (el()) {
             for (Element* ee : *el()) {
                   if (((element()->type() != ee->type()) && // different and
@@ -188,9 +189,19 @@ void Inspector::update(Score* s)
                         sameTypes = false;
                         break;
                         }
+                      // an articulation and an ornament
+                  if ((ee->isArticulation() && toArticulation(ee)->isOrnament() != toArticulation(element())->isOrnament()) ||
+                      // a slur and a tie
+                      (ee->isSlurTieSegment() && toSlurTieSegment(ee)->accessibleInfo() != toSlurTieSegment(element())->accessibleInfo()) ||
+                      // a breath and a caesura (or different breaths)
+                      (ee->isBreath() && toBreath(ee)->accessibleInfo() != toBreath(element())->accessibleInfo()) ||
+                      // a staff text and a system text
+                      ((ee->isStaffText() || ee->isSystemText())
+                          && (ee->type() != element()->type()) || (ee->isSystemText() != element()->isSystemText())))
+                        sameSubtypes = false;
                   }
             }
-      if (oe != element() || oSameTypes != sameTypes) {
+      if (oe != element() || oSameTypes != sameTypes || (sameTypes && !sameSubtypes)) {
             delete ie;
             ie  = 0;
             oe  = element();
@@ -200,7 +211,7 @@ void Inspector::update(Score* s)
             else if (!sameTypes)
                   ie = new InspectorGroupElement(this);
             else {
-                  switch(element()->type()) {
+                  switch (element()->type()) {
                         case ElementType::FBOX:
                         case ElementType::VBOX:
                               ie = new InspectorVBox(this);
@@ -1238,7 +1249,7 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent)
 //---------------------------------------------------------
 
 InspectorEmpty::InspectorEmpty(QWidget* parent)
-      :InspectorBase(parent)
+   : InspectorBase(parent)
       {
       e.setupUi(addWidget());
       }
@@ -1256,7 +1267,8 @@ QSize InspectorEmpty::sizeHint() const
 //   InspectorCaesura
 //---------------------------------------------------------
 
-InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorElementBase(parent)
+InspectorCaesura::InspectorCaesura(QWidget* parent)
+   : InspectorElementBase(parent)
       {
       c.setupUi(addWidget());
 
@@ -1282,7 +1294,8 @@ InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorElementBase(paren
 //   InspectorBracket
 //---------------------------------------------------------
 
-InspectorBracket::InspectorBracket(QWidget* parent) : InspectorBase(parent)
+InspectorBracket::InspectorBracket(QWidget* parent)
+   : InspectorBase(parent)
       {
       b.setupUi(addWidget());
 
@@ -1297,7 +1310,8 @@ InspectorBracket::InspectorBracket(QWidget* parent) : InspectorBase(parent)
 //   InspectorIname
 //---------------------------------------------------------
 
-InspectorIname::InspectorIname(QWidget* parent) : InspectorTextBase(parent)
+InspectorIname::InspectorIname(QWidget* parent)
+   : InspectorTextBase(parent)
       {
       i.setupUi(addWidget());
 
