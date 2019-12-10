@@ -193,8 +193,8 @@ void Inspector::update(Score* s)
                   if ((ee->isArticulation() && toArticulation(ee)->isOrnament() != toArticulation(element())->isOrnament()) ||
                       // a slur and a tie
                       (ee->isSlurTieSegment() && toSlurTieSegment(ee)->accessibleInfo() != toSlurTieSegment(element())->accessibleInfo()) ||
-                      // a breath and a caesura (or different breaths)
-                      (ee->isBreath() && toBreath(ee)->accessibleInfo() != toBreath(element())->accessibleInfo()) ||
+                      // a breath and a caesura
+                      (ee->isBreath() && toBreath(ee)->isCaesura() != toBreath(element())->isCaesura()) ||
                       // a staff text and a system text
                       ((ee->isStaffText() || ee->isSystemText())
                           && (ee->type() != element()->type()) || (ee->isSystemText() != element()->isSystemText())))
@@ -1275,13 +1275,13 @@ InspectorCaesura::InspectorCaesura(QWidget* parent)
       Breath* b = toBreath(inspector->element());
       bool sameTypes = true;
       for (const auto& ee : *inspector->el()) {
-            if (ee->accessibleInfo() != b->accessibleInfo()) {
+            if (toBreath(ee)->isCaesura() != b->isCaesura()) {
                   sameTypes = false;
                   break;
                   }
             }
       if (sameTypes)
-            c.title->setText(b->accessibleInfo());
+            c.title->setText(b->isCaesura() ? tr("Caesura") : tr("Breath"));
 
       const std::vector<InspectorItem> il = {
             { Pid::PAUSE,  0, c.pause,         c.resetPause         }
