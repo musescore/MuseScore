@@ -118,6 +118,7 @@ class SystemText;
 class BracketItem;
 class Spanner;
 class SpannerSegment;
+class Lasso;
 class BagpipeEmbellishment;
 class LineSegment;
 class BSymbol;
@@ -351,6 +352,7 @@ class ScoreElement {
       CONVERT(Staff,         STAFF)
       CONVERT(Part,          PART)
       CONVERT(BagpipeEmbellishment, BAGPIPE_EMBELLISHMENT)
+      CONVERT(Lasso,         LASSO)
       CONVERT(Sticking,      STICKING)
 #undef CONVERT
 
@@ -598,6 +600,7 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(BracketItem)
       CONVERT(Staff)
       CONVERT(Part)
+      CONVERT(Lasso)
       CONVERT(BagpipeEmbellishment)
       CONVERT(Sticking)
 #undef CONVERT
