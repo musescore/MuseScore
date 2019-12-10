@@ -136,10 +136,8 @@ class EditData {
       QPointF dragOffset;
       Element* element                 { 0     };
       Element* dropElement             { 0     };
-      Fraction duration                { Fraction(1,4) };
 
       EditData(MuseScoreView* v) : view(v) {}
-      void init();
       void clearData();
 
       ElementEditData* getData(const Element*) const;
@@ -495,6 +493,7 @@ class ElementEditData {
       Element* e;
       QList<PropertyData> propertyData;
 
+      virtual ~ElementEditData() = default;
       void pushProperty(Pid pid) { propertyData.push_back(PropertyData({pid, e->getProperty(pid) })); }
       };
 

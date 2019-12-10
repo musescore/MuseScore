@@ -983,7 +983,6 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   EditData ddata(view);
                   ddata.view        = view;
                   ddata.dropElement = nel;
-                  ddata.duration    = duration;
                   if (target->acceptDrop(ddata)) {
                         if (el->isNote()) {
                               // dropping a note replaces and invalidates the target,
@@ -1093,7 +1092,6 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   EditData ddata(view);
                   ddata.view       = view;
                   ddata.dropElement    = nel;
-                  // ddata.duration   = duration;
                   target->drop(ddata);
                   if (_selection.element())
                         addRefresh(_selection.element()->abbox());

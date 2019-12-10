@@ -1823,31 +1823,6 @@ void Element::triggerLayoutAll() const
       }
 
 //---------------------------------------------------------
-//   init
-//---------------------------------------------------------
-
-void EditData::init()
-      {
-      grip.clear();
-      grips     = 0;
-      curGrip   = Grip(0);
-      pos       = QPointF();
-      startMove = QPointF();
-      lastPos   = QPointF();
-      delta     = QPointF();
-      hRaster   = false;
-      vRaster   = false;
-      key       = 0;
-      modifiers = 0;
-      s.clear();
-
-      dragOffset = QPointF();
-      element    = 0;
-      duration   = Fraction(1,4);
-      clearData();
-      }
-
-//---------------------------------------------------------
 //   control
 //---------------------------------------------------------
 
