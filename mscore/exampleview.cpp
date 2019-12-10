@@ -139,11 +139,6 @@ void ExampleView::setCursor(const QCursor&)
       {
       }
 
-int ExampleView::gripCount() const
-      {
-      return 0;
-      }
-
 void ExampleView::setDropRectangle(const QRectF&)
       {
       }
