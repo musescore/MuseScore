@@ -1081,7 +1081,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       QRectF fr = imatrix.mapRect(QRectF(r));
 
       Element* editElement = 0;
-      Element* lassoToDraw = 0;
+      Lasso* lassoToDraw = 0;
       if (editData.element) {
             switch (state) {
                   case ViewState::NORMAL:
@@ -1099,8 +1099,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   case ViewState::FOTO_DRAG_EDIT:
                   case ViewState::FOTO_DRAG_OBJECT:
                   case ViewState::FOTO_LASSO:
-                        if (editData.element->_name() == "Lasso") // There is no isLasso() method
-                              lassoToDraw = editData.element;
+                        if (editData.element->isLasso())
+                              lassoToDraw = toLasso(editData.element);
                         else
                               editData.element->drawEditMode(&p, editData);
 
