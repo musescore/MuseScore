@@ -73,7 +73,6 @@ class ExampleView : public QFrame, public MuseScoreView {
       virtual void changeEditElement(Element*);
       virtual QCursor cursor() const;
       virtual void setCursor(const QCursor&);
-      virtual int gripCount() const;
       virtual void setDropRectangle(const QRectF&);
       virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
       virtual void startEdit();
