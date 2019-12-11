@@ -241,7 +241,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void endFotoDragEdit();
       QImage getRectImage(const QRectF& rect, double dpi, bool transparent, bool printMode);
 
-      virtual void startEdit();
+      void startEdit();
       void endEdit();
 
       void startDrag();
@@ -299,8 +299,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       QPixmap* fgPixmap() { return _fgPixmap; }
 
-      virtual void startEdit(Element*, Grip) override;
-      virtual void startEditMode(Element*) override;
+      void startEdit(Element*, Grip) override;
+      void startEditMode(Element*);
 
       void moveCursor(const Fraction& tick);
       Fraction cursorTick() const;

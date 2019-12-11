@@ -147,14 +147,6 @@ void ExampleView::cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/)
       {
       }
 
-void ExampleView::startEdit()
-      {
-      }
-
-void ExampleView::startEdit(Element*, Grip /*startGrip*/)
-      {
-      }
-
 Element* ExampleView::elementNear(QPointF)
       {
       return 0;
