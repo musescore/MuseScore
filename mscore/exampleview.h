@@ -75,8 +75,6 @@ class ExampleView : public QFrame, public MuseScoreView {
       virtual void setCursor(const QCursor&);
       virtual void setDropRectangle(const QRectF&);
       virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
-      virtual void startEdit();
-      virtual void startEdit(Element*, Grip);
       virtual Element* elementNear(QPointF);
       virtual void drawBackground(QPainter*, const QRectF&) const;
       void dragExampleView(QMouseEvent* ev);
