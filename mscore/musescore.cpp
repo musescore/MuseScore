@@ -6005,10 +6005,9 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (_sstate != STATE_NORMAL )
                   undoRedo(true);
 #ifdef Q_OS_MAC
-            else if (cs) {
-                  cs->startCmd();
-                  cs->cmdDeleteSelection();
-                  cs->endCmd();
+            else if (cv) {
+                  cv->cmd(getAction("delete"));
+                  return;
                   }
 #endif
             }

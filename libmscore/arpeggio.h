@@ -90,6 +90,10 @@ class Arpeggio final : public Element {
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid propertyId) const override;
       virtual Pid propertyId(const QStringRef& xmlName) const override;
+
+      // TODO: add a grip for moving the entire arpeggio
+      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+      Grip defaultGrip() const override { return Grip::START; }
       };
 
 

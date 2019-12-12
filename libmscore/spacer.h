@@ -58,6 +58,9 @@ class Spacer final : public Element {
       void setGap(qreal sp);
       qreal gap() const     { return _gap; }
 
+      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+      Grip defaultGrip() const override { return Grip::START; }
+
       QVariant getProperty(Pid propertyId) const;
       bool setProperty(Pid propertyId, const QVariant&);
       QVariant propertyDefault(Pid id) const;
