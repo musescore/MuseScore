@@ -337,6 +337,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void cmdAddHairpin(HairpinType);
       void cmdAddNoteLine();
 
+      void setEditElement(Element*);
+
       bool noteEntryMode() const { return state == ViewState::NOTE_ENTRY; }
       bool editMode() const      { return state == ViewState::EDIT; }
       bool textEditMode() const  { return editMode() && editData.element && editData.element->isTextBase(); }

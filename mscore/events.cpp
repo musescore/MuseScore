@@ -270,6 +270,10 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                   changeState(ViewState::NORMAL);
                   break;
             case ViewState::DRAG_EDIT:
+                  if (editData.element && editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit) {
+                        changeState(ViewState::NORMAL);
+                        break;
+                        }
                   changeState(ViewState::EDIT);
                   break;
             case ViewState::FOTO_DRAG:
@@ -427,8 +431,46 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       editData.buttons   = ev->buttons();
       editData.modifiers = qApp->keyboardModifiers();
 
+      bool gripFound = false;
+      if (editData.element && editData.grips && ev->button() == Qt::LeftButton) {
+            switch (state) {
+                  case ViewState::NORMAL:
+                  case ViewState::EDIT:
+                  case ViewState::FOTO:
+                        {
+                        bool gripChanged = false;
+
+                        const qreal a = editData.grip[0].width() * 0.5;
+                        for (int i = 0; i < editData.grips; ++i) {
+                              if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
+                                    editData.curGrip = Grip(i);
+                                    gripChanged = true;
+                                    break;
+                                    }
+                              }
+
+                        if (!gripChanged && editData.element->canvasBoundingRect().contains(editData.startMove)) { // TODO: check shape instead?
+                              editData.curGrip = editData.element->defaultGrip();
+                              gripChanged = true;
+                              }
+
+                        if (gripChanged) {
+                              updateGrips();
+                              score()->update();
+                              if (editData.curGrip != Grip::NO_GRIP)
+                                    gripFound = true;
+                              }
+                        }
+                        break;
+                  default:
+                        break;
+                  }
+            }
+
       switch (state) {
             case ViewState::NORMAL:
+                  if (gripFound)
+                        break;
                   if (ev->button() == Qt::RightButton)   // context menu?
                         break;
 
@@ -440,27 +482,16 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                         toTextBase(editData.element)->setPrimed(false);
                         }
 
-                  editData.element = elementNear(editData.startMove);
+                  setEditElement(elementNear(editData.startMove));
                   mousePressEventNormal(ev);
                   break;
 
             case ViewState::FOTO: {
                   if (ev->buttons() & Qt::RightButton)
                         break;
-                  editData.element = _foto;
-                  bool gripClicked = false;
-                  qreal a = editData.grip[0].width() * 0.5;
-                  for (int i = 0; i < editData.grips; ++i) {
-                        if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
-                              editData.curGrip = Grip(i);
-                              updateGrips();
-                              gripClicked = true;
-                              score()->update();
-                              break;
-                              }
-                        }
+                  setEditElement(_foto);
 
-                  if (gripClicked)
+                  if (gripFound)
                         changeState(ViewState::FOTO_DRAG_EDIT);
                   else if (_foto->canvasBoundingRect().contains(editData.startMove))
                         changeState(ViewState::FOTO_DRAG_OBJECT);
@@ -487,41 +518,20 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   break;
 
             case ViewState::EDIT: {
-                  if (editData.grips) {
-                        qreal a = editData.grip[0].width() * 0.5;
-                        bool gripFound = false;
-                        for (int i = 0; i < editData.grips; ++i) {
-                              if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
-                                    editData.curGrip = Grip(i);
-                                    updateGrips();
-                                    score()->update();
-                                    gripFound = true;
-                                    break;
-                                    }
-                              }
-                        if (!gripFound) {
-                              changeState(ViewState::NORMAL);
-                              // changeState may trigger layout and destroy some elements
-                              // so we should search elementNear after changeState.
-                              editData.element = elementNear(editData.startMove);
-                              mousePressEventNormal(ev);
-                              break;
-                              }
+                  if (gripFound)
+                        break;
+                  if (!editData.element->canvasBoundingRect().contains(editData.startMove)) {
+                        changeState(ViewState::NORMAL);
+                        // changeState may trigger layout and destroy some elements
+                        // so we should search elementNear after changeState.
+                        setEditElement(elementNear(editData.startMove));
+                        mousePressEventNormal(ev);
                         }
                   else {
-                        if (!editData.element->canvasBoundingRect().contains(editData.startMove)) {
-                              changeState(ViewState::NORMAL);
-                              // changeState may trigger layout and destroy some elements
-                              // so we should search elementNear after changeState.
-                              editData.element = elementNear(editData.startMove);
-                              mousePressEventNormal(ev);
-                              }
-                        else {
-                              editData.element->mousePress(editData);
-                              score()->update();
-                              if (editData.element->isTextBase() && mscore->textTools())
-                                    mscore->textTools()->updateTools(editData);
-                              }
+                        editData.element->mousePress(editData);
+                        score()->update();
+                        if (editData.element->isTextBase() && mscore->textTools())
+                              mscore->textTools()->updateTools(editData);
                         }
                   }
                   break;
@@ -582,12 +592,23 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
             case ViewState::NORMAL:
                   if (!drag)
                         return;
-                  if (!editData.element && (me->modifiers() & Qt::ShiftModifier))
+                  if (!editData.element && (me->modifiers() & Qt::ShiftModifier)) {
                         changeState(ViewState::LASSO);
-                  else if (editData.element && editData.element->isMovable())
-                        changeState(ViewState::DRAG_OBJECT);
-                  else
-                        changeState(ViewState::DRAG);
+                        break;
+                        }
+                  if (editData.element) {
+                        if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit) {
+                              score()->startCmd();
+                              editData.element->startEditDrag(editData);
+                              changeState(ViewState::DRAG_EDIT);
+                              break;
+                              }
+                        if (editData.element->isMovable()) {
+                              changeState(ViewState::DRAG_OBJECT);
+                              break;
+                              }
+                        }
+                  changeState(ViewState::DRAG);
                   break;
 
             case ViewState::NOTE_ENTRY: {

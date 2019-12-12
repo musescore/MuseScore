@@ -44,6 +44,8 @@ class TBox : public VBox {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       virtual QString accessibleExtraInfo() const override;
       Text* text()                        { return _text; }
+
+      EditBehavior normalModeEditBehavior() const override { return EditBehavior::SelectOnly; }
       };
 
 

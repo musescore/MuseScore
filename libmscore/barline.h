@@ -143,6 +143,9 @@ class BarLine final : public Element {
       virtual QString accessibleInfo() const override;
       virtual QString accessibleExtraInfo() const override;
 
+      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+      Grip defaultGrip() const override { return Grip::START; }
+
       static const std::vector<BarLineTableItem> barLineTable;
       };
 }     // namespace Ms

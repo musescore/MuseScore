@@ -443,8 +443,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
       recursion = false;
 
       ScoreView* cv = mscore->currentScoreView();
-      if (cv->editMode())
-            cv->updateGrips();
+      cv->updateGrips();
       }
 
 //---------------------------------------------------------
