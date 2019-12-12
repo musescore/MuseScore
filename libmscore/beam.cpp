@@ -2135,9 +2135,12 @@ void Beam::editDrag(EditData& ed)
       BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
       BeamFragment* f = fragments[bed->editFragment];
       qreal y1 = f->py1[idx];
-      qreal y2 = f->py2[idx] + dy;
+      qreal y2 = f->py2[idx];
+
       if (ed.curGrip == Grip::START)
             y1 += dy;
+      else if (ed.curGrip == Grip::END)
+            y2 += dy;
 
       qreal _spatium = spatium();
       // Because of the logic in Beam::setProperty(),
