@@ -26,9 +26,9 @@
 #define INTERFACE_ID                               \
       public:                                      \
       static const QUuid interfaceId() {           \
-          static QUuid id = QUuid::createUuid();   \
-          return id;                               \
-      }                                            \
+            static QUuid id = QUuid::createUuid(); \
+            return id;                             \
+            }                                      \
 
 class ServicesResolver {
 public:
@@ -43,12 +43,12 @@ public:
             using F = T*(*)();
 
             FunctorBasedFactory(F f) : IServiceFactory() {
-                getInstanceFunc = f;
-            }
+                  getInstanceFunc = f;
+                  }
 
             void* getInstance() override {
-                return getInstanceFunc();
-            }
+                  return getInstanceFunc();
+                  }
 
       private:
             F getInstanceFunc;
@@ -57,27 +57,27 @@ public:
       template <typename I, typename T>
       static inline void registerService(T*(*f)()) {
 
-          QUuid interfaceId = I::interfaceId();
+            QUuid interfaceId = I::interfaceId();
 
-          FunctorBasedFactory<T>* srv = new FunctorBasedFactory<T>(f);
+            FunctorBasedFactory<T>* srv = new FunctorBasedFactory<T>(f);
 
-          srvHash()->insert(interfaceId, srv);
-      }
+            srvHash()->insert(interfaceId, srv);
+            }
 
       template <typename I>
       static inline IServiceFactory* resolveServiceFactory() {
-          QUuid interfaceId = I::interfaceId();
+            QUuid interfaceId = I::interfaceId();
 
-          return srvHash()->value(interfaceId);
-      }
+            return srvHash()->value(interfaceId);
+            }
 
 private:
 
       static inline QHash<QUuid, IServiceFactory*> *srvHash() {
-          static QHash<QUuid, IServiceFactory*> serviceHash = QHash<QUuid, IServiceFactory*>();
+            static QHash<QUuid, IServiceFactory*> serviceHash = QHash<QUuid, IServiceFactory*>();
 
-          return &serviceHash;
-      }
+            return &serviceHash;
+            }
 };
 
 #endif // SERVICESRESOLVER_H

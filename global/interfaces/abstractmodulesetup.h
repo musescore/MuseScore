@@ -26,7 +26,7 @@
 class AbstractModuleSetup
       {
 public:
-      void setup(){
+      void setup() {
             registerExports();
             registerResources();
             registerQmlTypes();
@@ -35,11 +35,11 @@ public:
 protected:
       virtual QString moduleName() = 0;
 
-      virtual void registerExports(){}
+      virtual void registerExports() {}
 
-      virtual void registerResources(){}
+      virtual void registerResources() {}
 
-      virtual void registerQmlTypes(){}
+      virtual void registerQmlTypes() {}
       };
 
 #endif // IMODULESETUP_H

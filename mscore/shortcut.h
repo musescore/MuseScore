@@ -63,9 +63,6 @@ Shortcuts marked with the STATE_NEVER state should NEVER used directly as shortc
 
 #include "icons.h"
 #include "globals.h"
-#include <QKeySequence>
-#include <QAction>
-
 namespace Ms {
 
 class XmlWriter;
