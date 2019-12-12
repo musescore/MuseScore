@@ -169,6 +169,12 @@ class Element : public ScoreElement {
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
 
+   public:
+      enum class EditBehavior {
+            SelectOnly,
+            Edit,
+            };
+
   protected:
       mutable int _z;
       QColor _color;              ///< element color attribute
@@ -300,6 +306,9 @@ class Element : public ScoreElement {
       virtual bool nextGrip(EditData&) const;
       virtual bool prevGrip(EditData&) const;
       virtual QPointF gripAnchor(Grip) const     { return QPointF(); }
+
+      virtual EditBehavior normalModeEditBehavior() const { return EditBehavior::SelectOnly; }
+      virtual Grip defaultGrip() const { return Grip::NO_GRIP; }
 
       int track() const                       { return _track; }
       virtual void setTrack(int val)          { _track = val;  }

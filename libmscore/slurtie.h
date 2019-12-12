@@ -113,6 +113,9 @@ class SlurTieSegment : public SpannerSegment {
       struct UP& ups(Grip i)                         { return _ups[int(i)]; }
       virtual Shape shape() const override           { return _shape; }
 
+      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+      Grip defaultGrip() const override { return Grip::DRAG; }
+
       void writeSlur(XmlWriter& xml, int no) const;
       void read(XmlReader&);
       virtual void drawEditMode(QPainter*, EditData&) override;

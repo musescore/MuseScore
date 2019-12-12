@@ -1085,6 +1085,9 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       if (editData.element) {
             switch (state) {
                   case ViewState::NORMAL:
+                        if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit)
+                              editData.element->drawEditMode(&p, editData);
+                        break;
                   case ViewState::DRAG:
                   case ViewState::DRAG_OBJECT:
                   case ViewState::LASSO:
@@ -3520,12 +3523,12 @@ void ScoreView::addSlur(const Slur* slurTemplate)
 
 void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2, const Slur* slurTemplate)
       {
-      bool startEditMode = false;
+      bool switchToSlur = false;
       if (cr2 == 0) {
             cr2 = nextChordRest(cr1);
             if (cr2 == 0)
                   cr2 = cr1;
-            startEditMode = true;      // start slur in edit mode if last chord is not given
+            switchToSlur = true; // select slur for editing if last chord is not given
             }
 
       _score->startCmd();
@@ -3555,9 +3558,8 @@ void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2, const Slur* slurTempl
             _score->inputState().setSlur(slur);
             ss->setSelected(true);
             }
-      else if (startEditMode) {
-            editData.element = ss;
-            changeState(ViewState::EDIT);
+      else if (switchToSlur) {
+            startEditMode(ss);
             }
       }
 
@@ -3602,8 +3604,7 @@ void ScoreView::cmdAddHairpin(HairpinType type)
             const std::vector<SpannerSegment*>& el = pin->spannerSegments();
             if (!noteEntryMode()) {
                   if (!el.empty()) {
-                        editData.element = el.front();
-                        changeState(ViewState::EDIT);
+                        startEditMode(el.front());
                         }
                   }
             }
@@ -4824,6 +4825,28 @@ bool ScoreView::fotoMode() const
                   return true;
             }
       return false;
+      }
+
+//---------------------------------------------------------
+//   setEditElement
+//---------------------------------------------------------
+
+void ScoreView::setEditElement(Element* e)
+      {
+      if (editData.element == e)
+            return;
+
+      const bool normalState = (state == ViewState::NORMAL);
+
+      if (normalState && editData.element && editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit)
+            endEdit();
+
+      editData.element = e;
+
+      if (normalState && e && e->normalModeEditBehavior() == Element::EditBehavior::Edit)
+            startEdit();
+      else if (editData.grips)
+            editData.grips = 0;
       }
 
 //---------------------------------------------------------

@@ -72,6 +72,9 @@ class Stem final : public Element {
       QPointF hookPos() const;
       qreal stemLen() const;
       QPointF p2() const              { return line.p2(); }
+
+      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+      Grip defaultGrip() const override { return Grip::START; }
       };
 
 

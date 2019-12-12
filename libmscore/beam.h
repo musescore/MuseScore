@@ -157,6 +157,9 @@ class Beam final : public Element {
 
       virtual void triggerLayout() const override;
 
+      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+      Grip defaultGrip() const override { return Grip::START; }
+
       static IconType iconType(Mode);
       };
 

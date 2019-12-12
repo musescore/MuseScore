@@ -55,6 +55,9 @@ class LineSegment : public SpannerSegment {
 
       virtual Element* propertyDelegate(Pid) override;
 
+      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+      Grip defaultGrip() const override { return Grip::MIDDLE; }
+
       virtual QLineF dragAnchor() const override;
       };
 

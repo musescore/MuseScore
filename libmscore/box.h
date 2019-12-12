@@ -87,6 +87,10 @@ class Box : public MeasureBase {
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
       virtual QString accessibleExtraInfo() const override;
+
+      // TODO: add a grip for moving the entire box
+      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+      Grip defaultGrip() const override { return Grip::START; }
       };
 
 //---------------------------------------------------------

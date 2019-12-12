@@ -99,7 +99,7 @@ void ScoreView::startFotomode()
       _foto->setFlag(ElementFlag::MOVABLE, true);
       _foto->setVisible(true);
       _score->select(_foto);
-      editData.element = _foto;
+      setEditElement(_foto);
       QAction* a = getAction("fotomode");
       a->setChecked(true);
       startEdit();
@@ -166,7 +166,7 @@ void ScoreView::endFotoDrag()
       editData.grip.resize(8);
       for (int i = 0; i < 8; ++i)
             editData.grip[i] = r;
-      editData.element = _foto;
+      setEditElement(_foto);
       updateGrips();
       _score->setUpdateAll();
       _score->update();
