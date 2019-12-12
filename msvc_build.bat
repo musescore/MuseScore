@@ -31,7 +31,7 @@ REM CLEAN:
 REM    "msvc_build.bat clean" remove all files in msvc.* folders and the folders itself
 
 REM BUILD_64 and BUILD_FOR_WINSTORE are used in CMakeLists.txt
-SET BUILD_FOR_WINSTORE=OFF
+SET BUILD_FOR_WINSTORE=ON
 SET "BUILD_FOLDER=msvc.build"
 SET "INSTALL_FOLDER=msvc.install"
 
@@ -124,7 +124,9 @@ IF /I "%1"=="clean" (
    echo Building CMake configuration...
 
 IF NOT "%CRASH_LOG_SERVER_URL%" == "" (
-    SET CRASH_REPORT_URL_OPT=-DCRASH_REPORT_URL=%CRASH_LOG_SERVER_URL% -DBUILD_CRASH_REPORTER=ON
+    IF "%BUILD_FOR_WINSTORE%" == "OFF" (
+        SET CRASH_REPORT_URL_OPT=-DCRASH_REPORT_URL=%CRASH_LOG_SERVER_URL% -DBUILD_CRASH_REPORTER=ON
+        )
     )
 
 REM -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DCMAKE_BUILD_AUTOUPDATE=%BUILD_AUTOUPDATE% %CRASH_REPORT_URL_OPT% are used for CI only

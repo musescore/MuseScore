@@ -29,6 +29,7 @@
 #include "palette/paletteworkspace.h"
 #include "extension.h"
 
+extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
 
 namespace Ms {
 
@@ -680,7 +681,9 @@ void Workspace::read()
             return;
             }
       QFileInfo fi(_path);
+      ::qt_ntfs_permission_lookup++;
       _readOnly = !fi.isWritable();
+      ::qt_ntfs_permission_lookup--;
 
       preferences.updateLocalPreferences();
 
@@ -1079,7 +1082,9 @@ void Workspace::ensureWorkspaceSaved()
             write();
 
             const QFileInfo fi(_path);
+            ::qt_ntfs_permission_lookup++;
             _readOnly = !fi.isWritable();
+            ::qt_ntfs_permission_lookup--;
             Q_ASSERT(!_readOnly);
 
             WorkspacesManager::refreshWorkspaces();
@@ -1182,7 +1187,9 @@ void WorkspacesManager::initWorkspaces()
             if (translate)
                   p->setTranslatableName(name);
 
+            ::qt_ntfs_permission_lookup++;
             p->setReadOnly(!fi.isWritable());
+            ::qt_ntfs_permission_lookup--;
 
             if (isEditedDefault)
                   editedWorkpaces.push_back(p);
