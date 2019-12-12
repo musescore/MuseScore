@@ -39,32 +39,42 @@ namespace Ms {
 
 bool ScoreView::event(QEvent* event)
       {
-      if (event->type() == QEvent::KeyPress && editMode()) {
-            QKeyEvent* ke = static_cast<QKeyEvent*>(event);
-            if (ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Backtab) {
-                  if (textEditMode())
+      switch (event->type()) {
+            case QEvent::KeyPress: {
+                  QKeyEvent* ke = static_cast<QKeyEvent*>(event);
+                  const int key = ke->key();
+                  if (key != Qt::Key_Tab && key != Qt::Key_Backtab)
+                        break;
+
+                  if (textEditMode()) {
+                        // block Tab/Backtab in text editing mode
                         return true;
-                  if (ke->key() == Qt::Key_Tab)
-                        editData.element->nextGrip(editData);
-                  else
-                        editData.element->prevGrip(editData);
-                  updateGrips();
-                  _score->update();
-                  return true;
+                        }
+
+                  if (editMode() || editData.grips) {
+                        if (ke->key() == Qt::Key_Tab)
+                              editData.element->nextGrip(editData);
+                        else
+                              editData.element->prevGrip(editData);
+                        updateGrips();
+                        _score->update();
+                        return true;
+                        }
                   }
+                  break;
+            case QEvent::Gesture:
+                  return gestureEvent(static_cast<QGestureEvent*>(event));
+            case QEvent::MouseButtonPress:
+                  if (qApp->focusWidget() != this) {
+                        QMouseEvent* me = static_cast<QMouseEvent*>(event);
+                        if (me->button() == Qt::LeftButton)
+                              this->setFocus();
+                        }
+                  break;
+            default:
+                  break;
             }
-//      else if (event->type() == CloneDrag) {
-//TODO:drag            Element* e = static_cast<CloneEvent*>(event)->element();
-//            cloneElement(e);
-//            }
-      else if (event->type() == QEvent::Gesture) {
-            return gestureEvent(static_cast<QGestureEvent*>(event));
-            }
-      else if (event->type() == QEvent::MouseButtonPress && qApp->focusWidget() != this) {
-            QMouseEvent* me = static_cast<QMouseEvent*>(event);
-            if (me->button() == Qt::LeftButton)
-                  this->setFocus();
-            }
+
       return QWidget::event(event);
       }
 
