@@ -35,18 +35,14 @@ class ServiceInjector
 public:
 
       ServiceInjector() {
-           ServicesResolver::IServiceFactory* srvFactory = ServicesResolver::resolveServiceFactory<I>();
+            ServicesResolver::IServiceFactory* srvFactory = ServicesResolver::resolveServiceFactory<I>();
 
-           m_service = QSharedPointer<I>(static_cast<I*>(srvFactory->getInstance()));
-      }
+            m_service = QSharedPointer<I>(static_cast<I*>(srvFactory->getInstance()));
+            }
 
-      I* getService() {
-          return m_service.data();
-      }
+      I* getService() { return m_service.data(); }
 
-      void setService(I* service) {
-          m_service = QSharedPointer<I>(service);
-      }
+      void setService(I* service) { m_service = QSharedPointer<I>(service); }
 
 private:
       QSharedPointer<I> m_service;

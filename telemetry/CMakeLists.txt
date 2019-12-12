@@ -21,17 +21,17 @@ message("Configuring " ${DIR_NAME})
 
 find_package(Qt5 COMPONENTS Core Gui REQUIRED CONFIG)
 add_definitions(
-    ${Qt5Core_DEFINITIONS}
-    ${Qt5Gui_DEFINITIONS}
-)
+      ${Qt5Core_DEFINITIONS}
+      ${Qt5Gui_DEFINITIONS}
+      )
 include_directories(
-    ${Qt5Core_INCLUDE_DIRS}
-    ${Qt5Gui_INCLUDE_DIRS}
-    ${PROJECT_SOURCE_DIR}/thirdparty
-    ${PROJECT_SOURCE_DIR}/mscore
-    ${PROJECT_SOURCE_DIR}/global
-    ${PROJECT_BINARY_DIR}
-)
+      ${Qt5Core_INCLUDE_DIRS}
+      ${Qt5Gui_INCLUDE_DIRS}
+      ${PROJECT_SOURCE_DIR}/thirdparty
+      ${PROJECT_SOURCE_DIR}/mscore
+      ${PROJECT_SOURCE_DIR}/global
+      ${PROJECT_BINARY_DIR}
+      )
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
