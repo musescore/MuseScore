@@ -21,7 +21,6 @@
 #define SERVICESRESOLVER_H
 
 #include <QHash>
-#include <QMetaType>
 #include <QUuid>
 
 #define INTERFACE_ID                               \
@@ -36,25 +35,6 @@ public:
 
       struct IServiceFactory {
           virtual void* getInstance() = 0;
-      };
-
-      template <typename T>
-      struct MetaTypeBasedFactory : public IServiceFactory
-      {
-          MetaTypeBasedFactory(const int implTypeId) : IServiceFactory() {
-              implementationTypeId = implTypeId;
-          }
-
-          void* getInstance() override {
-              if (!QMetaType::isRegistered(implementationTypeId)) {
-                  return nullptr;
-              }
-
-              return QMetaType::create(implementationTypeId);
-          }
-
-      private:
-          int implementationTypeId = 0;
       };
 
       template <typename T>
@@ -73,17 +53,6 @@ public:
       private:
             F getInstanceFunc;
       };
-
-      template <typename I, typename T>
-      static inline void registerService() {
-          const int implementationTypeId = qMetaTypeId<T>();
-
-          QUuid interfaceId = I::interfaceId();
-
-          MetaTypeBasedFactory<T>* srv = new MetaTypeBasedFactory<T>(implementationTypeId);
-
-          srvHash()->insert(interfaceId, srv);
-      }
 
       template <typename I, typename T>
       static inline void registerService(T*(*f)()) {
