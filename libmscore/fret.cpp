@@ -371,6 +371,8 @@ void FretDiagram::draw(QPainter* painter) const
       for (auto const& i : _markers) {
             int string = i.first;
             FretItem::Marker marker = i.second;
+            if (!marker.exists())
+                  continue;
 
             QChar markerChar = FretItem::markerToChar(marker.mtype);
 
