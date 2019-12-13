@@ -42,7 +42,6 @@ void TextBase::editInsertText(TextCursor* cursor, const QString& s)
 
 void TextBase::startEdit(EditData& ed)
       {
-      ed.grips = 0;
       TextEditData* ted = new TextEditData(this);
       ted->e = this;
       ted->cursor.setRow(0);
