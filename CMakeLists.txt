@@ -151,6 +151,8 @@ option(BUILD_64 "Build 64 bit version of editor" ON)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
 option(BUILD_CRASH_REPORTER "Build with crash reporter" OFF)
 set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to send crash reports (valid if BUILD_CRASH_REPORTER is set to ON)")
+option(BUILD_TELEMETRY_MODULE "Build with telemetry module" OFF)
+set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 
 if (BUILD_CRASH_REPORTER)
       message("Crash reporter enabled")
@@ -739,9 +741,12 @@ if (NOT MSVC)
 endif (NOT MSVC)
 
 ##
-add_subdirectory(telemetry)
+if (BUILD_TELEMETRY_MODULE)
+      add_subdirectory(telemetry)
+      add_subdirectory(thirdparty/google_analytics)
+endif (BUILD_TELEMETRY_MODULE)
 add_subdirectory(global)
-add_subdirectory(thirdparty/google_analytics)
+
 ## Includes
 ##
 include_directories(

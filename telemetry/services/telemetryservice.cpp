@@ -20,6 +20,7 @@
 #include "google_analytics/ganalytics.h"
 #include "settings/types/preferencekeys.h"
 #include "telemetryservice.h"
+#include "config.h"
 
 TelemetryService::TelemetryService()
       {
@@ -30,7 +31,7 @@ void TelemetryService::sendEvent(const QString &category, const QString &action,
       if (!isTelemetryAllowed() || category.isEmpty() || action.isEmpty())
             return;
 
-      GAnalytics::instance()->sendEvent(category, action, label, value, customValues);
+      GAnalytics::instance(TELEMETRY_TRACK_ID)->sendEvent(category, action, label, value, customValues);
       }
 
 void TelemetryService::sendException(const QString &exceptionDescription, bool exceptionFatal, const QVariantMap &customValues)
@@ -38,7 +39,7 @@ void TelemetryService::sendException(const QString &exceptionDescription, bool e
       if (!isTelemetryAllowed())
             return;
 
-      GAnalytics::instance()->sendException(exceptionDescription, exceptionFatal, customValues);
+      GAnalytics::instance(TELEMETRY_TRACK_ID)->sendException(exceptionDescription, exceptionFatal, customValues);
       }
 
 void TelemetryService::startSession()
@@ -46,7 +47,7 @@ void TelemetryService::startSession()
       if (!isTelemetryAllowed())
             return;
 
-      GAnalytics::instance()->startSession();
+      GAnalytics::instance(TELEMETRY_TRACK_ID)->startSession();
       }
 
 void TelemetryService::endSession()
@@ -54,7 +55,7 @@ void TelemetryService::endSession()
       if (!isTelemetryAllowed())
             return;
 
-      GAnalytics::instance()->endSession();
+      GAnalytics::instance(TELEMETRY_TRACK_ID)->endSession();
       }
 
 bool TelemetryService::isTelemetryAllowed() const
