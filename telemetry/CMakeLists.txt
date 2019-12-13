@@ -30,6 +30,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/thirdparty
     ${PROJECT_SOURCE_DIR}/mscore
     ${PROJECT_SOURCE_DIR}/global
+    ${PROJECT_BINARY_DIR}
 )
 
 set(CMAKE_AUTOMOC ON)

@@ -126,7 +126,6 @@
 #include "awl/aslider.h"
 #include "extension.h"
 #include "thirdparty/qzip/qzipreader_p.h"
-#include "widgets/telemetrypermissiondialog.h"
 #include "modulessetup.h"
 
 #include "sparkle/autoUpdater.h"
@@ -7110,6 +7109,10 @@ void MuseScore::updateUiStyleAndTheme()
       Shortcut::refreshIcons();
       }
 
+#ifdef BUILD_TELEMETRY_MODULE
+#include "actioneventobserver.h"
+#include "widgets/telemetrypermissiondialog.h"
+
 void tryToRequestTelemetryPermission()
       {
       QString accessRequestedAtVersion = preferences.getString(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED);
@@ -7122,6 +7125,7 @@ void tryToRequestTelemetryPermission()
 
       preferences.setPreference(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, VERSION);
       }
+#endif
 
 MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** argv)
       {
@@ -7715,7 +7719,10 @@ void MuseScore::init(QStringList& argv)
             }
 
       QApplication::instance()->installEventFilter(mscore);
+
+#ifdef BUILD_TELEMETRY_MODULE
       QApplication::instance()->installEventFilter(ActionEventObserver::instance());
+#endif
 
       mscore->setRevision(Ms::revision);
       int files = 0;
@@ -7815,7 +7822,9 @@ void MuseScore::init(QStringList& argv)
       if (settings.value("synthControlVisible", false).toBool())
             mscore->showSynthControl(true);
 
+#ifdef BUILD_TELEMETRY_MODULE
       tryToRequestTelemetryPermission();
+#endif
 
       }
 

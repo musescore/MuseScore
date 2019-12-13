@@ -29,8 +29,8 @@ class GAnalytics : public QObject
     Q_PROPERTY(bool isSending READ isSending NOTIFY isSendingChanged)
 
 public:
-    static GAnalytics* instance() {
-        static GAnalytics s("UA-152796402-1");
+    static GAnalytics* instance(const QString &trackId) {
+        static GAnalytics s(trackId);
         return &s;
     }
 
