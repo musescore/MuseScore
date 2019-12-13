@@ -35,9 +35,9 @@ class ServiceInjector
 public:
 
       ServiceInjector() {
-           ServicesResolver::IServiceFactory* srvMetaData = ServicesResolver::resolveServiceFactory<I>();
+           ServicesResolver::IServiceFactory* srvFactory = ServicesResolver::resolveServiceFactory<I>();
 
-           m_service = QSharedPointer<I>(static_cast<I*>(srvMetaData->getInstance()));
+           m_service = QSharedPointer<I>(static_cast<I*>(srvFactory->getInstance()));
       }
 
       I* getService() {
