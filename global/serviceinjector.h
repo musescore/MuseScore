@@ -22,6 +22,8 @@
 
 #include <servicesresolver.h>
 
+#include <QSharedPointer>
+
 #define INJECT(INTERFACE_NAME, ALIAS)                                                                      \
       public:                                                                                              \
       INTERFACE_NAME* ALIAS() { return ServiceInjector<INTERFACE_NAME>::getService(); }                    \
@@ -35,19 +37,19 @@ public:
       ServiceInjector() {
            ServicesResolver::IServiceFactory* srvMetaData = ServicesResolver::resolveServiceFactory<I>();
 
-           m_service = static_cast<I*>(srvMetaData->getInstance());
+           m_service = QSharedPointer<I>(static_cast<I*>(srvMetaData->getInstance()));
       }
 
       I* getService() {
-          return m_service;
+          return m_service.data();
       }
 
       void setService(I* service) {
-          m_service = service;
+          m_service = QSharedPointer<I>(service);
       }
 
 private:
-      I* m_service;
+      QSharedPointer<I> m_service;
 };
 
 #endif // SERVICEINJECTOR_H
