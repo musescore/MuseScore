@@ -241,7 +241,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void endFotoDragEdit();
       QImage getRectImage(const QRectF& rect, double dpi, bool transparent, bool printMode);
 
-      void startEdit();
+      void startEdit(bool editMode = true);
       void endEdit();
 
       void startDrag();

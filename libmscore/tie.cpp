@@ -23,19 +23,6 @@ Note* Tie::editStartNote;
 Note* Tie::editEndNote;
 
 //---------------------------------------------------------
-//   updateGrips
-//    return grip rectangles in page coordinates
-//---------------------------------------------------------
-
-void TieSegment::updateGrips(EditData& ed) const
-      {
-      QPointF p(pagePos());
-      //p -= QPointF(0.0, system()->staff(staffIdx())->y());   // ??
-      for (int i = 0; i < int(Grip::GRIPS); ++i)
-            ed.grip[i].translate(_ups[i].p + _ups[i].off + p);
-      }
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 

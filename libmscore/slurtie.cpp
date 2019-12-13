@@ -93,23 +93,19 @@ void SlurTieSegment::spatiumChanged(qreal oldValue, qreal newValue)
       }
 
 //---------------------------------------------------------
-//   startEdit
+//   gripsPositions
 //---------------------------------------------------------
 
-void SlurTieSegment::startEdit(EditData& ed)
+std::vector<QPointF> SlurTieSegment::gripsPositions(const EditData&) const
       {
-      Element::startEdit(ed);
-      ed.grips   = int(Grip::GRIPS);
-      ed.curGrip = Grip::END;
-      }
+      const int ngrips = gripsCount();
+      std::vector<QPointF> grips(ngrips);
 
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
+      const QPointF p(pagePos());
+      for (int i = 0; i < ngrips; ++i)
+            grips[i] = _ups[i].p + _ups[i].off + p;
 
-void SlurTieSegment::endEdit(EditData& ed)
-      {
-      Element::endEdit(ed);
+      return grips;
       }
 
 //---------------------------------------------------------

@@ -86,7 +86,6 @@ class Bracket final : public Element {
       virtual void endEdit(EditData&) override;
       virtual void editDrag(EditData&) override;
       virtual void endEditDrag(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
 
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
@@ -97,6 +96,12 @@ class Bracket final : public Element {
 
       void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
       using ScoreElement::undoChangeProperty;
+
+      // TODO: single click behavior?
+      int gripsCount() const override { return 1; }
+      Grip initialEditModeGrip() const override { return Grip::START; }
+      Grip defaultGrip() const override { return Grip::START; }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
 
       virtual void setSelected(bool f) override;
       };

@@ -302,13 +302,16 @@ class Element : public ScoreElement {
       virtual void editCut(EditData&)            {}
       virtual void editCopy(EditData&)           {}
 
-      virtual void updateGrips(EditData&) const  {}
+      void updateGrips(EditData&) const;
       virtual bool nextGrip(EditData&) const;
       virtual bool prevGrip(EditData&) const;
       virtual QPointF gripAnchor(Grip) const     { return QPointF(); }
 
       virtual EditBehavior normalModeEditBehavior() const { return EditBehavior::SelectOnly; }
+      virtual int gripsCount() const { return 0; }
+      virtual Grip initialEditModeGrip() const { return Grip::NO_GRIP; }
       virtual Grip defaultGrip() const { return Grip::NO_GRIP; }
+      virtual std::vector<QPointF> gripsPositions(const EditData&) const { return std::vector<QPointF>(); }
 
       int track() const                       { return _track; }
       virtual void setTrack(int val)          { _track = val;  }

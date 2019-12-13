@@ -64,7 +64,6 @@ class Arpeggio final : public Element {
       virtual void draw(QPainter*) const override;
       virtual bool isEditable() const override { return true; }
       virtual void editDrag(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
       virtual bool edit(EditData&) override;
 
       virtual void read(XmlReader& e) override;
@@ -93,7 +92,10 @@ class Arpeggio final : public Element {
 
       // TODO: add a grip for moving the entire arpeggio
       EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+      int gripsCount() const override { return 2; }
+      Grip initialEditModeGrip() const override { return Grip::END; }
       Grip defaultGrip() const override { return Grip::START; }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
       };
 
 

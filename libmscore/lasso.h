@@ -29,12 +29,16 @@ class Lasso : public Element {
       virtual void draw(QPainter*) const override;
       virtual bool isEditable() const override     { return true; }
       virtual void editDrag(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
       virtual void endDrag(EditData&)              {}
 
-      virtual void startEdit(EditData&) override;
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
+
+      // TODO: single click behavior?
+      int gripsCount() const override { return 8; }
+      Grip initialEditModeGrip() const override { return Grip(7); }
+      Grip defaultGrip() const override { return Grip(7); } // TODO
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
       };
 
 

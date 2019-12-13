@@ -125,14 +125,16 @@ void ScoreView::startEdit(Element* element, Grip startGrip)
 //    enter state EDIT
 //---------------------------------------------------------
 
-void ScoreView::startEdit()
+void ScoreView::startEdit(bool editMode)
       {
       if (editData.element->isTBox())
             editData.element = toTBox(editData.element)->text();
+
+      Element* e = editData.element;
       setFocus();
-      editData.grips   = 0;
-      editData.curGrip = Grip(0);
       editData.clearData();
+      editData.grips   = e->gripsCount();
+      editData.curGrip = editMode ? e->initialEditModeGrip() : e->defaultGrip();
 
       editData.element->startEdit(editData);
       updateGrips();

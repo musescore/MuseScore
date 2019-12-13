@@ -63,18 +63,6 @@ void SlurSegment::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   updateGrips
-//    return grip rectangles in page coordinates
-//---------------------------------------------------------
-
-void SlurSegment::updateGrips(EditData& ed) const
-      {
-      QPointF p(pagePos());
-      for (int i = 0; i < ed.grips; ++i)
-            ed.grip[i].translate(_ups[i].p + _ups[i].off + p);
-      }
-
-//---------------------------------------------------------
 //   searchCR
 //---------------------------------------------------------
 
@@ -96,15 +84,6 @@ static ChordRest* searchCR(Segment* segment, int startTrack, int endTrack)
                   }
             }
       return 0;
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void SlurSegment::startEdit(EditData& ed)
-      {
-      SlurTieSegment::startEdit(ed);
       }
 
 //---------------------------------------------------------
@@ -246,15 +225,6 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
             ed.view->startEdit(newSegment, ed.curGrip);
             triggerLayout();
             }
-      }
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void SlurSegment::endEdit(EditData& ed)
-      {
-      SlurTieSegment::endEdit(ed);
       }
 
 //---------------------------------------------------------

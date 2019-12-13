@@ -116,16 +116,6 @@ void Spacer::spatiumChanged(qreal ov, qreal nv)
       _gap = (_gap / ov) * nv;
       layout0();
       }
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Spacer::startEdit(EditData& ed)
-      {
-      Element::startEdit(ed);
-      ed.grips   = 1;
-      ed.curGrip = Grip::START;
-      }
 
 //---------------------------------------------------------
 //   startEditDrag
@@ -161,10 +151,10 @@ void Spacer::editDrag(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Spacer::updateGrips(EditData& ed) const
+std::vector<QPointF> Spacer::gripsPositions(const EditData&) const
       {
       qreal _spatium = spatium();
       QPointF p;
@@ -177,7 +167,7 @@ void Spacer::updateGrips(EditData& ed) const
                   p = QPointF(_spatium * .5, 0.0);
                   break;
             }
-      ed.grip[0].translate(pagePos() + p);
+      return { pagePos() + p };
       }
 
 //---------------------------------------------------------

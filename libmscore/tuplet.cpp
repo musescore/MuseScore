@@ -931,17 +931,6 @@ bool Tuplet::isEditable() const
       }
 
 //---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Tuplet::startEdit(EditData& ed)
-      {
-      Element::startEdit(ed);
-      ed.grips   = 2;
-      ed.curGrip = Grip::END;
-      }
-
-//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
@@ -958,13 +947,13 @@ void Tuplet::editDrag(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Tuplet::updateGrips(EditData& ed) const
+std::vector<QPointF> Tuplet::gripsPositions(const EditData&) const
       {
-      ed.grip[0].translate(pagePos() + p1);
-      ed.grip[1].translate(pagePos() + p2);
+      const QPointF pp(pagePos());
+      return { pp + p1, pp + p2 };
       }
 
 //---------------------------------------------------------

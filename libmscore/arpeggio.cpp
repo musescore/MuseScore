@@ -264,15 +264,15 @@ void Arpeggio::draw(QPainter* p) const
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Arpeggio::updateGrips(EditData& ed) const
+std::vector<QPointF> Arpeggio::gripsPositions(const EditData&) const
       {
+      const QPointF pp(pagePos());
       QPointF p1(0.0, -_userLen1);
       QPointF p2(0.0, _height + _userLen2);
-      ed.grip[0].translate(pagePos() + p1);
-      ed.grip[1].translate(pagePos() + p2);
+      return { p1 + pp, p2 + pp };
       }
 
 //---------------------------------------------------------
@@ -330,8 +330,6 @@ QPointF Arpeggio::gripAnchor(Grip n) const
 void Arpeggio::startEdit(EditData& ed)
       {
       Element::startEdit(ed);
-      ed.grips   = 2;
-      ed.curGrip = Grip::END;
       ElementEditData* eed = ed.getData(this);
       eed->pushProperty(Pid::ARP_USER_LEN1);
       eed->pushProperty(Pid::ARP_USER_LEN2);

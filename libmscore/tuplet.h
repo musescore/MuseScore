@@ -75,9 +75,7 @@ class Tuplet final : public DurationElement {
       void resetNumberProperty();
 
       virtual bool isEditable() const override;
-      virtual void startEdit(EditData&) override;
       virtual void editDrag(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
 
       virtual void setSelected(bool f) override;
 
@@ -134,6 +132,12 @@ class Tuplet final : public DurationElement {
       virtual QVariant propertyDefault(Pid id) const override;
 
       virtual Shape shape() const override;
+
+      // TODO: single click behavior?
+      int gripsCount() const override { return 2; }
+      Grip initialEditModeGrip() const override { return Grip::END; }
+      Grip defaultGrip() const override { return Grip::START; }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
 
       void sanitizeTuplet();
       void addMissingElements();

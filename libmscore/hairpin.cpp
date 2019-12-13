@@ -367,10 +367,10 @@ Shape HairpinSegment::shape() const
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void HairpinSegment::updateGrips(EditData& ed) const
+std::vector<QPointF> HairpinSegment::gripsPositions(const EditData&) const
       {
       qreal _spatium = spatium();
       qreal x = pos2().x();
@@ -399,23 +399,16 @@ void HairpinSegment::updateGrips(EditData& ed) const
       gripLineAperturePoint.setY( lineApertureH );
       gripLineAperturePoint = doRotation.map(gripLineAperturePoint);
 
+      std::vector<QPointF> grips(gripsCount());
+
       // End calc position grip aperture
       QPointF pp(pagePos());
-      ed.grip[int(Grip::START)].translate(pp);
-      ed.grip[int(Grip::END)].translate(p + pp);
-      ed.grip[int(Grip::MIDDLE)].translate(p * .5 + pp);
-      ed.grip[int(Grip::APERTURE)].translate(gripLineAperturePoint + pp);
-      }
+      grips[int(Grip::START)] = pp;
+      grips[int(Grip::END)] = p + pp;
+      grips[int(Grip::MIDDLE)] = p * .5 + pp;
+      grips[int(Grip::APERTURE)] = gripLineAperturePoint + pp;
 
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void HairpinSegment::startEdit(EditData& ed)
-      {
-      ed.grips   = 4;
-      ed.curGrip = Grip::END;
-      Element::startEdit(ed);
+      return grips;
       }
 
 //---------------------------------------------------------

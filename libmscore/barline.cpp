@@ -854,17 +854,22 @@ Element* BarLine::drop(EditData& data)
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void BarLine::updateGrips(EditData& ed) const
+std::vector<QPointF> BarLine::gripsPositions(const EditData& ed) const
       {
       const BarLineEditData* bed = static_cast<const BarLineEditData*>(ed.getData(this));
 
       qreal lw = score()->styleP(Sid::barWidth) * staff()->mag(tick());
       getY();
-      ed.grip[0].translate(QPointF(lw * .5, y1 + bed->yoff1) + pagePos());
-      ed.grip[1].translate(QPointF(lw * .5, y2 + bed->yoff2) + pagePos());
+
+      const QPointF pp = pagePos();
+
+      return {
+            QPointF(lw * .5, y1 + bed->yoff1) + pp,
+            QPointF(lw * .5, y2 + bed->yoff2) + pp
+            };
       }
 
 //---------------------------------------------------------
@@ -873,9 +878,6 @@ void BarLine::updateGrips(EditData& ed) const
 
 void BarLine::startEdit(EditData& ed)
       {
-      ed.grips   = 2;
-      ed.curGrip = Grip::END;
-
       BarLineEditData* bed = new BarLineEditData();
       bed->e     = this;
       bed->yoff1 = 0;

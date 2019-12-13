@@ -342,10 +342,10 @@ void ChordLine::editDrag(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void ChordLine::updateGrips(EditData& ed) const
+std::vector<QPointF> ChordLine::gripsPositions(const EditData&) const
       {
       qreal sp = spatium();
       int n    = path.elementCount();
@@ -353,39 +353,26 @@ void ChordLine::updateGrips(EditData& ed) const
       if (_straight) {
             // limit the number of grips to one
             qreal offset = 0.5 * sp;
+            QPointF p;
 
             if (_chordLineType == ChordLineType::FALL)
-                  ed.grip[0].translate(QPointF(offset, -offset));
+                  p = QPointF(offset, -offset);
             else if (_chordLineType == ChordLineType::DOIT)
-                   ed.grip[0].translate(QPointF(offset, offset));
+                  p = QPointF(offset, offset);
             else if (_chordLineType == ChordLineType::SCOOP)
-                   ed.grip[0].translate(QPointF(-offset, offset));
+                  p = QPointF(-offset, offset);
             else if (_chordLineType == ChordLineType::PLOP)
-                   ed.grip[0].translate(QPointF(-offset, -offset));
+                  p = QPointF(-offset, -offset);
 
             // translate on the length and height - stops the grips from going past boundaries of slide
-            ed.grip[0].translate(cp + QPointF(path.elementAt(1).x * sp, path.elementAt(1).y * sp));
+            p += (cp + QPointF(path.elementAt(1).x * sp, path.elementAt(1).y * sp));
+            return { p };
             }
       else  {
+            std::vector<QPointF> grips(n);
             for (int i = 0; i < n; ++i)
-                  ed.grip[i].translate(cp + QPointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp));
-            }
-      }
-
-//---------------------------------------------------------
-//   grips
-//---------------------------------------------------------
-
-void ChordLine::startEdit(EditData& ed)
-      {
-      Element::startEdit(ed);
-      if (_straight) {
-            ed.curGrip = Grip(0);
-            ed.grips   = 1;
-            }
-      else {
-            ed.grips   = path.elementCount();
-            ed.curGrip = Grip(ed.grips-1);
+                  grips[i] = cp + QPointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp);
+            return grips;
             }
       }
 
