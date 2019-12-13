@@ -96,7 +96,7 @@ QT5_WRAP_UI (ui_headers
       transposedialog.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
       articulation.ui metaedit.ui paletteProperties.ui paletteCellProperties.ui selectdialog.ui selectnotedialog.ui
       synthcontrol.ui splitstaff.ui keyedit.ui selectinstr.ui
-      fretdprops.ui editstafftype.ui tremolobar.ui
+      editstafftype.ui tremolobar.ui
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui
       omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
@@ -315,7 +315,7 @@ add_library(mscoreapp STATIC
       editinstrument.h editpitch.h editraster.h editstaff.h
       editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
       exampleview.h excerptsdialog.h exportmidi.h exportmp3.h extension.h
-      file.h fotomode.h fretcanvas.h fretproperties.h globals.h greendotbutton.h
+      file.h fotomode.h fretcanvas.h globals.h greendotbutton.h
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h importgtp.h importmxml.h
       importmxmllogger.h importmxmlnoteduration.h importmxmlnotepitch.h importmxmlpass1.h
       importmxmlpass2.h importptb.h importxmlfirstpass.h instrdialog.h instrwidget.h jackaudio.h
@@ -377,8 +377,7 @@ add_library(mscoreapp STATIC
       stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
       articulationprop.cpp
-      bendcanvas.cpp
-      fretproperties.cpp
+      bendcanvas.cpp fretcanvas.cpp
       tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
       dragelement.cpp startupWizard.cpp
