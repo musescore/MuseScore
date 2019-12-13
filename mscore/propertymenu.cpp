@@ -23,7 +23,6 @@
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
 #include "stafftextproperties.h"
-#include "fretproperties.h"
 #include "selinstrument.h"
 #include "pianoroll.h"
 #include "editstyle.h"
@@ -271,8 +270,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Change Instrument…"))->setData("ch-instr");
             }
-//      else if (e->isFretDiagram())
-//            popup->addAction(tr("Fretboard Diagram Properties…"))->setData("fret-props");
       else if (e->isInstrumentName())
             popup->addAction(tr("Staff/Part Properties…"))->setData("staff-props");
       else
@@ -500,8 +497,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         qDebug("no template selected?");
                   }
            }
-//      else if (cmd == "fret-props")
-//            editFretDiagram(static_cast<FretDiagram*>(e));
       else if (cmd == "staff-props") {
             Fraction tick = {-1,1};
             if (e->isChordRest()) {
@@ -529,30 +524,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             e->setTag(mask);
             }
       }
-
-#if 0
-//---------------------------------------------------------
-//   editFretDiagram
-//---------------------------------------------------------
-
-void ScoreView::editFretDiagram(FretDiagram* fd)
-      {
-      FretDiagram* nFret = const_cast<FretDiagram*>(fd->clone());
-      FretDiagramProperties fp(nFret, 0);
-      int rv = fp.exec();
-      nFret->layout();
-      if (rv) {
-            for (ScoreElement* ee : fd->linkList()) {
-                  Element* e = static_cast<Element*>(ee);
-                  FretDiagram* f = static_cast<FretDiagram*>(nFret->clone());
-                  f->setScore(e->score());
-                  f->setTrack(e->track());
-                  e->score()->undoChangeElement(e, f);
-                  }
-            }
-      delete nFret;
-      }
-#endif
 
 //---------------------------------------------------------
 //   editTremoloBarProperties

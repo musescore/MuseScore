@@ -416,7 +416,6 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       virtual Element* elementNear(QPointF);
       QList<Element*> elementsNear(QPointF);
-//      void editFretDiagram(FretDiagram*);
       void editTremoloBarProperties(TremoloBar*);
       EditData& getEditData()        { return editData; }
       void changeState(ViewState);
