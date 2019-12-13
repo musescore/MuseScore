@@ -27,7 +27,7 @@ TelemetryService::TelemetryService()
 
 void TelemetryService::sendEvent(const QString &category, const QString &action, const QString &label, const QVariant &value, const QVariantMap &customValues)
       {
-      if (!isTelemetryAllowed())
+      if (!isTelemetryAllowed() || category.isEmpty() || action.isEmpty())
             return;
 
       GAnalytics::instance()->sendEvent(category, action, label, value, customValues);
