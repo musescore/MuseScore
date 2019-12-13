@@ -277,17 +277,15 @@ void Bracket::startEdit(EditData& ed)
       {
       Element::startEdit(ed);
       ay1 = pagePos().y();
-      ed.grips   = 1;
-      ed.curGrip = Grip::START;
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Bracket::updateGrips(EditData& ed) const
+std::vector<QPointF> Bracket::gripsPositions(const EditData&) const
       {
-      ed.grip[0].translate(QPointF(0.0, h2 * 2) + pagePos());
+      return { QPointF(0.0, h2 * 2) + pagePos() };
       }
 
 //---------------------------------------------------------

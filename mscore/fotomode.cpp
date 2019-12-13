@@ -31,9 +31,7 @@ namespace Ms {
 
 void FotoLasso::startEdit(EditData& ed)
       {
-      Element::startEdit(ed);
-      ed.grips   = 8;
-      ed.curGrip = Grip(0);
+      Lasso::startEdit(ed);
       QRectF view = ((ScoreView*)ed.view)->toLogical(QRect(0.0, 0.0, ed.view->geometry().width(), ed.view->geometry().height()));
       if (bbox().isEmpty() || !view.intersects(bbox())) {
             // rect not found - construct new rect with default size & relative position
@@ -53,15 +51,6 @@ void FotoLasso::startEdit(EditData& ed)
 void FotoLasso::endEdit(EditData&)
       {
       setVisible(false);
-      }
-
-//---------------------------------------------------------
-//   updateGrips
-//---------------------------------------------------------
-
-void FotoLasso::updateGrips(EditData& ed) const
-      {
-      Lasso::updateGrips(ed);
       }
 
 //---------------------------------------------------------

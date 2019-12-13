@@ -1989,6 +1989,18 @@ void Element::endDrag(EditData& ed)
       }
 
 //---------------------------------------------------------
+//   updateGrips
+//---------------------------------------------------------
+
+void Element::updateGrips(EditData& ed) const
+      {
+      const auto positions(gripsPositions(ed));
+      const int ngrips = positions.size();
+      for (int i = 0; i < ngrips; ++i)
+            ed.grip[i].translate(positions[i]);
+      }
+
+//---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
 

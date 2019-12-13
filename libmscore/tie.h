@@ -46,7 +46,6 @@ class TieSegment final : public SlurTieSegment {
       bool isEdited() const;
       virtual void editDrag(EditData&) override;
       virtual bool edit(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
 
       Tie* tie() const { return (Tie*)spanner(); }
 
