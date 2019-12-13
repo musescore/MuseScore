@@ -14,7 +14,6 @@
 #include "musescore.h"
 #include "libmscore/fret.h"
 #include "libmscore/score.h"
-#include "fretproperties.h"
 #include "scoreview.h"
 
 namespace Ms {
@@ -204,4 +203,3 @@ void InspectorFretDiagram::clearButtonClicked()
       f.diagram->clear();
       }
 }
-
