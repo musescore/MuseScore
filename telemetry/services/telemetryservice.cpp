@@ -22,12 +22,8 @@
 #include "telemetryservice.h"
 
 TelemetryService::TelemetryService()
-    {
-    }
-
-TelemetryService::TelemetryService(const TelemetryService &) : TelemetryService()
-    {
-    }
+      {
+      }
 
 void TelemetryService::sendEvent(const QString &category, const QString &action, const QString &label, const QVariant &value, const QVariantMap &customValues)
       {

@@ -27,8 +27,6 @@
 class TelemetryService : public ITelemetryService {
 public:
       TelemetryService();
-      TelemetryService(const TelemetryService&);
-      ~TelemetryService() = default;
 
       void sendEvent(const QString &category, const QString &action, const QString &label, const QVariant &value, const QVariantMap &customValues) override;
       void sendException(const QString &exceptionDescription, bool exceptionFatal, const QVariantMap &customValues) override;
@@ -40,7 +38,5 @@ private:
 
       QSettings m_settings;
       };
-
-Q_DECLARE_METATYPE(TelemetryService)
 
 #endif // TELEMETRYSERVICE_H

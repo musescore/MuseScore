@@ -32,7 +32,9 @@ TelemetrySetup::TelemetrySetup()
 
 void TelemetrySetup::registerExports()
       {
-      ServicesResolver::registerService<ITelemetryService, TelemetryService>();
+      ServicesResolver::registerService<ITelemetryService, TelemetryService>([]() -> TelemetryService* {
+            return new TelemetryService();
+            });
       }
 
 QString TelemetrySetup::moduleName()
