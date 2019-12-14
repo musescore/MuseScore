@@ -175,6 +175,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void keyReleaseEvent(QKeyEvent*) override;
       virtual void inputMethodEvent(QInputMethodEvent*) override;
 
+      bool handleArrowKeyPress(const QKeyEvent*);
+
       virtual void contextMenuEvent(QContextMenuEvent*) override;
 
       void mousePressEventNormal(QMouseEvent*);
