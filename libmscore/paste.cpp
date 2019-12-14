@@ -81,6 +81,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
       {
       Q_ASSERT(dst->isChordRestType());
 
+      std::vector<Harmony*> pastedHarmony;
       QList<Chord*> graceNotes;
       Beam* startingBeam = nullptr;
       Tuplet* tuplet = nullptr;
@@ -341,10 +342,15 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
 
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(SegmentType::ChordRest, tick);
-                              for (Element* el : seg->findAnnotations(ElementType::HARMONY, e.track(), e.track()))
-                                    undoRemoveElement(el);
+                              // remove pre-existing chords on this track
+                              // but be sure not to remove any we just added
+                              for (Element* el : seg->findAnnotations(ElementType::HARMONY, e.track(), e.track())) {
+                                    if (std::find(pastedHarmony.begin(), pastedHarmony.end(), el) == pastedHarmony.end())
+                                          undoRemoveElement(el);
+                                    }
                               harmony->setParent(seg);
                               undoAddElement(harmony);
+                              pastedHarmony.push_back(harmony);
                               }
                         else if (tag == "Dynamic"
                            || tag == "Symbol"
