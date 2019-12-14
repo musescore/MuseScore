@@ -3300,6 +3300,7 @@ bool MuseScore::runTestScripts(const QStringList& scriptFiles)
             while (!scores().empty()) {
                   closeScore(scores().back());
                   }
+            QTextStream(stdout) << "Start test: " << scriptFile << endl;
             std::unique_ptr<Script> script = Script::fromFile(scriptFile);
             const bool pass = script->execute(ctx);
             QTextStream(stdout) << "Test " << scriptFile << (pass ? " PASS" : " FAIL") << endl;
