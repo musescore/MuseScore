@@ -62,6 +62,31 @@ bool ScoreView::event(QEvent* event)
                         }
                   }
                   break;
+            case QEvent::ShortcutOverride: {
+                  QKeyEvent* ke = static_cast<QKeyEvent*>(event);
+                  switch (ke->key()) {
+                        case Qt::Key_Left:
+                        case Qt::Key_Right:
+                        case Qt::Key_Up:
+                        case Qt::Key_Down: {
+                              if (!editData.grips)
+                                    break;
+                              const auto m = ke->modifiers();
+                              // KeypadModifier is necessary on MacOS as arrow keys seem to always
+                              // trigger that modifier there. However it would probably be appropriate
+                              // to allow it on other systems too.
+                              constexpr auto allowedModifiers = Qt::ShiftModifier | Qt::KeypadModifier;
+                              if ((m & ~allowedModifiers) == 0) {
+                                    ke->accept();
+                                    return true;
+                                    }
+                              }
+                              break;
+                        default:
+                              break;
+                        }
+                  }
+                  break;
             case QEvent::Gesture:
                   return gestureEvent(static_cast<QGestureEvent*>(event));
             case QEvent::MouseButtonPress:
@@ -735,12 +760,33 @@ class ScoreViewCmdContext {
 
 void ScoreView::keyPressEvent(QKeyEvent* ev)
       {
-      if (state != ViewState::EDIT)
-            return;
-
       editData.key       = ev->key();
       editData.modifiers = ev->modifiers();
       editData.s         = ev->text();
+
+      if (state != ViewState::EDIT) {
+            const bool shiftModifier = ev->modifiers() & Qt::ShiftModifier;
+            if (editData.grips && !(shiftModifier && ev->key() == Qt::Key_Backtab)) {
+                  switch (ev->key()) {
+                        case Qt::Key_Left:
+                        case Qt::Key_Right:
+                        case Qt::Key_Up:
+                        case Qt::Key_Down:
+                              // Move focus to default grip if arrow keys are pressed and no grip is focused
+                              if (editData.grips && editData.curGrip == Grip::NO_GRIP)
+                                    editData.curGrip = editData.element->defaultGrip();
+                              break;
+                        default:
+                              break;
+                        }
+
+                  ScoreViewCmdContext ctx(this, /* updateGrips */ true);
+
+                  if (!editData.element->edit(editData))
+                        handleArrowKeyPress(ev);
+                  }
+            return;
+            }
 
       if (MScore::debugMode)
             qDebug("keyPressEvent key 0x%02x(%c) mod 0x%04x <%s> nativeKey 0x%02x scancode %d",
@@ -796,6 +842,17 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                   }
             }
 
+      const bool handled = handleArrowKeyPress(ev);
+      if (!handled)
+            ev->ignore();
+      }
+
+//---------------------------------------------------------
+//   handleArrowKeys
+//---------------------------------------------------------
+
+bool ScoreView::handleArrowKeyPress(const QKeyEvent* ev)
+      {
       QPointF delta;
       qreal _spatium = editData.element->spatium();
 
@@ -828,7 +885,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
             }
       // TODO: if raster, then xval/yval should be multiple of raster
 
-      switch (editData.key) {
+      switch (ev->key()) {
             case Qt::Key_Left:
                   delta = QPointF(-xval, 0);
                   break;
@@ -842,8 +899,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                   delta = QPointF(0, yval);
                   break;
             default:
-                  ev->ignore();
-                  return;
+                  return false;
             }
       editData.delta   = delta;
       editData.hRaster = mscore->hRaster();
@@ -853,6 +909,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
       editData.element->startEditDrag(editData);
       editData.element->editDrag(editData);
       editData.element->endEditDrag(editData);
+      return true;
       }
 
 //---------------------------------------------------------
