@@ -97,6 +97,8 @@ void ScoreView::endDrag()
             }
       setDropTarget(0); // this also resets dropAnchor
       _score->endCmd();
+      if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit && _score->selection().element() == editData.element)
+            startEdit(/* editMode */ false);
       }
 }
 
