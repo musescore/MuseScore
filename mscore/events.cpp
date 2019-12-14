@@ -448,28 +448,19 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   case ViewState::EDIT:
                   case ViewState::FOTO:
                         {
-                        bool gripChanged = false;
-
                         const qreal a = editData.grip[0].width() * 0.5;
                         for (int i = 0; i < editData.grips; ++i) {
                               if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
                                     editData.curGrip = Grip(i);
-                                    gripChanged = true;
+                                    updateGrips();
+                                    score()->update();
+                                    gripFound = true;
                                     break;
                                     }
                               }
 
-                        if (!gripChanged && editData.element->canvasBoundingRect().contains(editData.startMove)) { // TODO: check shape instead?
-                              editData.curGrip = editData.element->defaultGrip();
-                              gripChanged = true;
-                              }
-
-                        if (gripChanged) {
-                              updateGrips();
-                              score()->update();
-                              if (editData.curGrip != Grip::NO_GRIP)
-                                    gripFound = true;
-                              }
+                        if (!gripFound)
+                              editData.curGrip = Grip::NO_GRIP;
                         }
                         break;
                   default:
@@ -607,13 +598,15 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
                         break;
                         }
                   if (editData.element) {
-                        if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit) {
+                        if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit && editData.curGrip != Grip::NO_GRIP) {
                               score()->startCmd();
                               editData.element->startEditDrag(editData);
                               changeState(ViewState::DRAG_EDIT);
                               break;
                               }
                         if (editData.element->isMovable()) {
+                              if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit)
+                                    endEdit();
                               changeState(ViewState::DRAG_OBJECT);
                               break;
                               }

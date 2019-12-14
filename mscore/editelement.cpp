@@ -71,7 +71,7 @@ void ScoreView::updateGrips()
                   score()->addRefresh(grip.adjusted(-dx, -dy, dx, dy));
                   }
 
-            QPointF anchor = editData.element->gripAnchor(editData.curGrip);
+            QPointF anchor = (editData.curGrip != Grip::NO_GRIP) ? editData.element->gripAnchor(editData.curGrip) : QPointF();
             if (!anchor.isNull())
                   setDropAnchor(QLineF(anchor + pageOffset, editData.grip[int(editData.curGrip)].center()));
             else
@@ -134,7 +134,7 @@ void ScoreView::startEdit(bool editMode)
       setFocus();
       editData.clearData();
       editData.grips   = e->gripsCount();
-      editData.curGrip = editMode ? e->initialEditModeGrip() : e->defaultGrip();
+      editData.curGrip = editMode ? e->initialEditModeGrip() : Grip::NO_GRIP;
 
       editData.element->startEdit(editData);
       updateGrips();
