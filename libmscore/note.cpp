@@ -1563,6 +1563,7 @@ void Note::endDrag(EditData& ed)
       NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
       for (Note* nn : tiedNotes()) {
             for (PropertyData pd : ned->propertyData) {
+                  setPropertyFlags(pd.id, pd.f); // reset initial property flags state
                   score()->undoPropertyChanged(nn, pd.id, pd.data);
                   }
             }

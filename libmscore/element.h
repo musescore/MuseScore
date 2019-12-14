@@ -498,6 +498,7 @@ class Element : public ScoreElement {
 struct PropertyData {
       Pid id;
       QVariant data;
+      PropertyFlags f;
       };
 
 class ElementEditData {
@@ -506,7 +507,7 @@ class ElementEditData {
       QList<PropertyData> propertyData;
 
       virtual ~ElementEditData() = default;
-      void pushProperty(Pid pid) { propertyData.push_back(PropertyData({pid, e->getProperty(pid) })); }
+      void pushProperty(Pid pid) { propertyData.push_back(PropertyData({ pid, e->getProperty(pid), e->propertyFlags(pid) })); }
       };
 
 //---------------------------------------------------------
