@@ -153,7 +153,8 @@ void LyricsLine::layout()
                   }
             // Spanner::computeEndElement() will actually ignore this value and use the (earlier) lyrics()->endTick() instead
             // still, for consistency with other lines, we should set the ticks for this to the computed (later) value
-            setTicks(s->tick() - lyricsStartTick);
+            if (s)
+                  setTicks(s->tick() - lyricsStartTick);
             }
       else {                                    // dash(es)
             _nextLyrics = searchNextLyrics(lyrics()->segment(), staffIdx(), lyrics()->no(), lyrics()->placement());
