@@ -338,6 +338,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdAddNoteLine();
 
       void setEditElement(Element*);
+      void updateEditElement();
 
       bool noteEntryMode() const { return state == ViewState::NOTE_ENTRY; }
       bool editMode() const      { return state == ViewState::EDIT; }
