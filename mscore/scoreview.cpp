@@ -1775,6 +1775,7 @@ void ScoreView::cmd(const QAction* a)
       {
       const char* s = a ? a->data().toByteArray().constData() : "";
       cmd(s);
+      updateEditElement();
       }
 
 void ScoreView::cmd(const char* s)
@@ -3448,6 +3449,8 @@ void ScoreView::startUndoRedo(bool undo)
             cmd("note-input");    // enter note entry mode
       else if (!_score->noteEntryMode() && noteEntryMode())
             cmd("escape");        // leave note entry mode
+
+      updateEditElement();
       }
 
 //---------------------------------------------------------
@@ -4844,9 +4847,39 @@ void ScoreView::setEditElement(Element* e)
       editData.element = e;
 
       if (normalState && e && e->normalModeEditBehavior() == Element::EditBehavior::Edit)
-            startEdit();
-      else if (editData.grips)
+            startEdit(/* editMode */ false);
+      else if (editData.grips) {
             editData.grips = 0;
+            editData.curGrip = Grip::NO_GRIP;
+            }
+      }
+
+//---------------------------------------------------------
+//   updateEditElement
+//---------------------------------------------------------
+
+void ScoreView::updateEditElement()
+      {
+      if (state != ViewState::NORMAL)
+            return;
+
+      if (!_score) {
+            setEditElement(nullptr);
+            return;
+            }
+
+      const Selection& sel = _score->selection();
+
+      switch (sel.state()) {
+            case SelState::NONE:
+            case SelState::RANGE:
+                  setEditElement(nullptr);
+                  break;
+            case SelState::LIST:
+                  if (Element* e = sel.element())
+                        setEditElement(e);
+                  break;
+            }
       }
 
 //---------------------------------------------------------
