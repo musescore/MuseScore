@@ -3,7 +3,7 @@ cmd note-input
 cmd note-c
 cmd pitch-up-octave
 cmd escape
-palette StaffText style Staff text Staff&#032Text
+palette StaffText style Staff text Staff&#032;Text
 cmd pitch-down-octave
 cmd pitch-down-octave
 cmd escape
