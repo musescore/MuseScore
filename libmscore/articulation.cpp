@@ -522,6 +522,8 @@ Sid Articulation::getPropertyStyle(Pid id) const
                               return Sid::articulationAnchorOther;
                         }
                   }
+                  Q_ASSERT(false); // should never be reached
+                  Q_FALLTHROUGH();
             default:
                   return Sid::NOSTYLE;
             }

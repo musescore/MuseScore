@@ -4229,7 +4229,7 @@ static void repeatAtMeasureStart(XmlWriter& xml, Attributes& attr, Measure* m, i
                   case ElementType::MARKER:
                         {
                         // filter out the markers at measure Start
-                        const Marker* const mk = static_cast<const Marker* const>(e);
+                        const Marker* const mk = toMarker(e);
                         Marker::Type mtp = mk->markerType();
                         if (   mtp == Marker::Type::SEGNO
                                || mtp == Marker::Type::CODA
@@ -4272,7 +4272,7 @@ static void repeatAtMeasureStop(XmlWriter& xml, Measure* m, int strack, int etra
                   case ElementType::MARKER:
                         {
                         // filter out the markers at measure stop
-                        const Marker* const mk = static_cast<const Marker* const>(e);
+                        const Marker* const mk = toMarker(e);
                         Marker::Type mtp = mk->markerType();
                         if (mtp == Marker::Type::FINE || mtp == Marker::Type::TOCODA) {
                               directionMarker(xml, mk);
@@ -4286,7 +4286,7 @@ static void repeatAtMeasureStop(XmlWriter& xml, Measure* m, int strack, int etra
                         }
                         break;
                   case ElementType::JUMP:
-                        directionJump(xml, static_cast<const Jump* const>(e));
+                        directionJump(xml, toJump(e));
                         break;
                   default:
                         qDebug("repeatAtMeasureStop: direction type %s at tick %d not implemented",
