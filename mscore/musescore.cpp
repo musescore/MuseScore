@@ -4215,8 +4215,6 @@ void MuseScore::changeState(ScoreState val)
       if (getAction("split-measure")->isEnabled())
             getAction("split-measure")->setEnabled(cs && cs->masterScore()->excerpts().size() == 0);
 
-      //getAction("split-measure")->setEnabled(cs->masterScore()->excerpts().size() == 0);
-
       // disabling top level menu entries does not
       // work for MAC
 
