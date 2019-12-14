@@ -4354,6 +4354,7 @@ class CmdStateLocker {
 void Score::doLayoutRange(const Fraction& st, const Fraction& et)
       {
       CmdStateLocker cmdStateLocker(this);
+      LayoutContext lc(this);
 
       Fraction stick(st);
       Fraction etick(et);
@@ -4375,7 +4376,6 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
       if (etick < Fraction(0,1))
             etick = last()->endTick();
 
-      LayoutContext lc;
       lc.endTick     = etick;
       _scoreFont     = ScoreFont::fontFactory(style().value(Sid::MusicalSymbolFont).toString());
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
@@ -4412,7 +4412,6 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
             }
 
 //      qDebug("start <%s> tick %d, system %p", m->name(), m->tick(), m->system());
-      lc.score        = m->score();
 
       if (lineMode()) {
             lc.prevMeasure = 0;
@@ -4493,9 +4492,6 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
       lc.curSystem = collectSystem(lc);
 
       lc.layout();
-
-      for (MuseScoreView* v : viewer)
-            v->layoutChanged();
       }
 
 //---------------------------------------------------------
@@ -4550,5 +4546,8 @@ LayoutContext::~LayoutContext()
       {
       for (Spanner* s : processedSpanners)
             s->layoutSystemsDone();
+
+      for (MuseScoreView* v : score->getViewer())
+            v->layoutChanged();
       }
 }
