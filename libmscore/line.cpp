@@ -331,6 +331,8 @@ void LineSegment::editDrag(EditData& ed)
             case Grip::START: // Resize the begin of element (left grip)
                   setOffset(offset() + deltaResize);
                   _offset2 -= deltaResize;
+                  if (isStyled(Pid::OFFSET))
+                        setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
                   break;
             case Grip::END: // Resize the end of element (right grip)
                   _offset2 += deltaResize;
@@ -340,6 +342,8 @@ void LineSegment::editDrag(EditData& ed)
                   QPointF deltaMove(ed.delta.x(), ed.delta.y());
                   setOffset(offset() + deltaMove);
                   setOffsetChanged(true);
+                  if (isStyled(Pid::OFFSET))
+                        setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
                   }
                   break;
             default:

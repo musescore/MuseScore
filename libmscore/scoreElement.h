@@ -217,7 +217,7 @@ class ScoreElement {
       bool isStyled(Pid pid) const;
       QVariant styleValue(Pid, Sid) const;
 
-      virtual void setPropertyFlags(Pid, PropertyFlags);
+      void setPropertyFlags(Pid, PropertyFlags);
 
       virtual Sid getPropertyStyle(Pid) const;
       bool readProperty(const QStringRef&, XmlReader&, Pid);
