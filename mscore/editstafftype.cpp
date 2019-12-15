@@ -412,6 +412,7 @@ void EditStaffType::setFromDlg()
       staffType.setStemsDown(stemBelowRadio->isChecked());
       staffType.setStemsThrough(stemThroughRadio->isChecked());
       if (staffType.group() == StaffGroup::TAB) {
+            staffType.setGenKeysig(false);
             staffType.setStemless(true);                   // assume no note values
             staffType.setGenDurations(false);              //    "     "
             if (noteValuesSymb->isChecked())
