@@ -596,6 +596,13 @@ void Spanner::computeStartElement()
 
 void Spanner::computeEndElement()
       {
+      if (score()->isPalette()) {
+            // return immediately to prevent lots of
+            // "no element found" messages from appearing
+            _endElement = nullptr;
+            return;
+            }
+
       switch (_anchor) {
             case Anchor::SEGMENT: {
                   if (track2() == -1)

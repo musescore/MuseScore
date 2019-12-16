@@ -45,8 +45,16 @@ class MTest {
       bool saveCompareMimeData(QByteArray, const QString& saveName, const QString& compareWith);
       Ms::Element* writeReadElement(Ms::Element* element);
       void initMTest();
+
+   public:
+      static bool compareFilesFromPaths(const QString& f1, const QString& f2);
+      static void extractRootFile(const QString& zipFile, const QString& destination);
+
+      static QString rootPath();
       };
 }
+
+void initMuseScoreResources();
 
 #endif
 
