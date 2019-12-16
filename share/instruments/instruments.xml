@@ -3287,8 +3287,6 @@
                   <Channel name="mute">
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
-                  <genre>orchestra</genre>
-                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="a-piccolo-trumpet">
                   <longName>Piccolo Trumpet in A</longName>
@@ -3417,6 +3415,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>popular</genre>
+                  <genre>orchestra</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
