@@ -792,28 +792,27 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
       QScrollArea::keyPressEvent(event);
       }
 
-//---------------------------------------------------------
-//   mouseDoubleClickEvent
-//---------------------------------------------------------
-
-void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
+void Palette::mouseReleaseEvent(QMouseEvent *event)
       {
-      if (_disableDoubleClick)
-            return;
-      int i = idx(ev->pos());
-      if (i == -1)
-            return;
-      Score* score = mscore->currentScore();
-      if (score == 0)
-            return;
-      if (score->selection().isNone())
+      if (_disableElementsApply)
             return;
 
-      PaletteCell* cell = cellAt(i);
+      int index = idx(event->pos());
+
+      if (index == -1)
+            return;
+
+      Score* score = mscore->currentScore();
+
+      if (!score || score->selection().isNone())
+            return;
+
+      PaletteCell* cell = cellAt(index);
+
       if (!cell)
             return;
 
-      applyPaletteElement(cell->element.get(), ev->modifiers());
+      applyPaletteElement(cell->element.get(), event->modifiers());
       }
 
 //---------------------------------------------------------
