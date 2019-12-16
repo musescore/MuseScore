@@ -334,7 +334,7 @@ if (DOWNLOAD_SOUNDFONT)
 
     string(COMPARE LESS ${SF_VERSION_LOCAL} ${SF_VERSION_REMOTE} DO_DOWNLOAD)
     if (DO_DOWNLOAD)
-      message("Downloading version ${SF_VERSION_REMOTE} of the MuseScore SoundFont. Version is outdated ${SF_VERSION_LOCAL}.")
+      message("Version ${SF_VERSION_LOCAL} of the MuseScore SoundFont is outdated, downloading version ${SF_VERSION_REMOTE}.")
       # delete soundfont and download new version
       ## TODO check STATUS of downloads
       file (REMOVE ${SOUND_DIRECTORY}/MuseScore_General.sf3
