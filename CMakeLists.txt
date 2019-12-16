@@ -806,7 +806,7 @@ add_subdirectory(synthesizer)
 subdirs(
       awl bww2mxml share midi audiofile fluid libmscore
       thirdparty/rtf2html thirdparty/beatroot
-      thirdparty/qzip thirdparty/kQOAuth
+      thirdparty/qzip
       )
 
 if (BUILD_CRASH_REPORTER)
