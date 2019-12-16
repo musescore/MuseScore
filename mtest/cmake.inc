@@ -17,10 +17,15 @@ add_executable(
       ${TARGET}.cpp
       )
 
+if (MTEST_LINK_MSCOREAPP)
+      target_link_libraries(${TARGET} testutils_mscoreapp mscoreapp)
+else (MTEST_LINK_MSCOREAPP)
+      target_link_libraries(${TARGET} testutils)
+endif (MTEST_LINK_MSCOREAPP)
+
 target_link_libraries(
       ${TARGET}
       ${QT_QTTEST_LIBRARY}
-      testutils
       testResources
       libmscore
       synthesizer

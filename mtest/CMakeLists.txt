@@ -16,6 +16,7 @@ enable_testing()
 include_directories(
       ${PROJECT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
+      ${PROJECT_SOURCE_DIR}/thirdparty
       )
 
 if (USE_SYSTEM_FREETYPE)
@@ -46,8 +47,8 @@ add_library (testResources STATIC
       )
 
 set (SOURCE_LIB
-	  testutils.cpp
-      ${PROJECT_SOURCE_DIR}/libmscore/mcursor.cpp
+      testutils.cpp
+      mtestglobals.cpp
       ${PROJECT_SOURCE_DIR}/mscore/bb.cpp
       ${PROJECT_SOURCE_DIR}/mscore/capella.cpp
       ${PROJECT_SOURCE_DIR}/mscore/capxml.cpp
@@ -96,22 +97,6 @@ set (SOURCE_LIB
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlfonthandler.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlsupport.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/qml/msqmlengine.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/qmlplugin.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/qmlpluginengine.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/enums.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/qmlpluginapi.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/cursor.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/fraction.h
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/scoreelement.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/elements.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/score.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/part.h
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/excerpt.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/util.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/selection.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/tie.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/playevent.cpp
       ${PROJECT_SOURCE_DIR}/mscore/preferences.cpp
       ${PROJECT_SOURCE_DIR}/mscore/shortcut.cpp
       ${PROJECT_SOURCE_DIR}/mscore/stringutils.cpp
@@ -142,6 +127,21 @@ else (MSVC)
 	  )
 endif (MSVC)
 
+# testutils version that is linked to a full mscoreapp target
+add_library(testutils_mscoreapp STATIC
+      testutils.cpp
+      mscoreappresources.cpp
+      )
+
+if (MSVC)
+      target_sources(testutils_mscoreapp PRIVATE
+            ${_all_h_file}
+            ${PCH}
+            )
+endif (MSVC)
+
+target_link_libraries(testutils_mscoreapp mscoreapp)
+
 add_executable(
       mtest
       mtest.cpp
@@ -163,29 +163,18 @@ set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_
 string(REPLACE ";" ";-I" INC "${QT_INCLUDES}")
 
 if (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
-	set_target_properties (
-		  testutils
-		  PROPERTIES
-		  COMPILE_FLAGS "-include all.h -D TESTROOT=\\\\\"${PROJECT_SOURCE_DIR}\\\\\" -g -Wall -Wextra"
-		  )
+      set(TESTUTILS_COMPILE_FLAGS "-include all.h -D TESTROOT=\\\\\"${PROJECT_SOURCE_DIR}\\\\\" -g -Wall -Wextra")
 else (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
-	if (MSVC)
-		set_target_properties (
-		  testutils
-		  PROPERTIES
-		  COMPILE_FLAGS "${PCH_INCLUDE}  /D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\""
-		  )
-	else (MSVC)
-		set_target_properties (
-		  testutils
-		  PROPERTIES
-		  COMPILE_FLAGS "-include all.h -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
-		  )
-	endif (MSVC)
+      if (MSVC)
+            set(TESTUTILS_COMPILE_FLAGS "${PCH_INCLUDE}  /D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\"")
+      else (MSVC)
+            set(TESTUTILS_COMPILE_FLAGS "-include all.h -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra")
+      endif (MSVC)
 endif (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
 
+set_target_properties(testutils PROPERTIES COMPILE_FLAGS "${TESTUTILS_COMPILE_FLAGS}")
+set_target_properties(testutils_mscoreapp PROPERTIES COMPILE_FLAGS "${TESTUTILS_COMPILE_FLAGS}")
 
-#      COMPILE_FLAGS "-include all.h -I ${INC} -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
 
 add_custom_target(report
       COMMAND ant -f ${PROJECT_SOURCE_DIR}/mtest/build.xml -Droot.dir=${PROJECT_BINARY_DIR}/mtest report
@@ -227,7 +216,7 @@ subdirs (
         libmscore/parts
         libmscore/measure
         libmscore/midi                 # one disabled
-#        libmscore/midimapping
+#        libmscore/midimapping # TODO: compiles but mostly fails
         libmscore/note
         libmscore/readwriteundoreset
         libmscore/remove
@@ -245,12 +234,13 @@ subdirs (
         libmscore/tuplet
 #        libmscore/text        work in progress...
         libmscore/utils
+        mscore/workspaces
         importmidi
         capella
         biab
         musicxml
         guitarpro
-#        scripting            # ws:disabled during fraction integration
+        scripting
         stringutils
 #        testoves
         zerberus/comments

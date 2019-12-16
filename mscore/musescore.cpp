@@ -16,6 +16,7 @@
 #include <QStyleFactory>
 #include "config.h"
 #include "musescore.h"
+#include "musescoredialogs.h"
 #include "scoreview.h"
 #include "libmscore/style.h"
 #include "libmscore/score.h"
@@ -56,6 +57,7 @@
 #include "keyedit.h"
 #include "harmonyedit.h"
 #include "navigator.h"
+#include "newwizard.h"
 #include "timeline.h"
 #include "importmidi/importmidi_panel.h"
 #include "importmidi/importmidi_instrument.h"
@@ -290,42 +292,6 @@ void MuseScore::cmdInsertMeasures()
                   insertMeasuresDialog->show();
                   }
             }
-      }
-
-//---------------------------------------------------------
-// InsertMeasuresDialog
-//---------------------------------------------------------
-
-InsertMeasuresDialog::InsertMeasuresDialog(QWidget* parent)
-   : QDialog(parent)
-      {
-      setObjectName("InsertMeasuresDialog");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      setModal(true);
-      insmeasures->selectAll();
-      }
-
-//---------------------------------------------------------
-// Insert Measure -->   accept
-//---------------------------------------------------------
-
-void InsertMeasuresDialog::accept()
-      {
-      int n = insmeasures->value();
-      if (mscore->currentScore())
-            mscore->currentScoreView()->cmdInsertMeasures(n, ElementType::MEASURE);
-      done(1);
-      }
-
-//---------------------------------------------------------
-// InsertMeasuresDialog hideEvent
-//---------------------------------------------------------
-
-void InsertMeasuresDialog::hideEvent(QHideEvent* event)
-      {
-      MuseScore::saveGeometry(this);
-      QDialog::hideEvent(event);
       }
 
 //---------------------------------------------------------
@@ -1977,6 +1943,7 @@ MuseScore::~MuseScore()
             autoUpdater->cleanup();
 
       delete synti;
+      synti = nullptr;
 
       // A crash is possible if paletteWorkspace gets
       // deleted before paletteWidget, so force the widget
@@ -2995,31 +2962,6 @@ void MuseScore::cmdAppendMeasures()
                   measuresDialog = new MeasuresDialog;
             measuresDialog->show();
             }
-      }
-
-//---------------------------------------------------------
-//   MeasuresDialog
-//---------------------------------------------------------
-
-MeasuresDialog::MeasuresDialog(QWidget* parent)
-   : QDialog(parent)
-      {
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      setModal(true);
-      measures->selectAll();
-      }
-
-//---------------------------------------------------------
-//   accept
-//---------------------------------------------------------
-
-void MeasuresDialog::accept()
-      {
-      int n = measures->value();
-      if (mscore->currentScore())
-            mscore->currentScoreView()->cmdAppendMeasures(n, ElementType::MEASURE);
-      done(1);
       }
 
 //---------------------------------------------------------
@@ -4741,84 +4683,6 @@ void MuseScore::about()
       AboutBoxDialog ab;
       ab.show();
       ab.exec();
-      }
-
-//---------------------------------------------------------
-//   AboutBoxDialog
-//---------------------------------------------------------
-
-AboutBoxDialog::AboutBoxDialog()
-      {
-      setupUi(this);
-      museLogo->setPixmap(QPixmap(preferences.isThemeDark() ?
-            ":/data/musescore-logo-transbg-m.png" : ":/data/musescore_logo_full.png"));
-
-      if (MuseScore::unstable())
-            versionLabel->setText(tr("Unstable Prerelease for Version: %1").arg(VERSION));
-      else {
-            auto msVersion = QString(VERSION) + QString(".") + QString(BUILD_NUMBER);// +QString(" Beta");
-            versionLabel->setText(tr("Version: %1").arg(msVersion));
-      }
-
-      revisionLabel->setText(tr("Revision: %1").arg(revision));
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-      QString visitAndDonateString;
-#if !defined(FOR_WINSTORE)
-      visitAndDonateString = tr("Visit %1www.musescore.org%2 for new versions and more information.\nSupport MuseScore with your %3donation%4.")
-                                     .arg("<a href=\"https://www.musescore.org/\">")
-                                     .arg("</a>")
-                                     .arg("<a href=\"https://www.musescore.org/donate\">")
-                                     .arg("</a>");
-      visitAndDonateString += "\n\n";
-#endif
-      QString finalString = visitAndDonateString + tr("Copyright &copy; 1999-2019 Werner Schweer and Others.\nPublished under the GNU General Public License.");
-      finalString.replace("\n", "<br/>");
-      copyrightLabel->setText(QString("<span style=\"font-size:10pt;\">%1</span>").arg(finalString));
-      connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
-      copyRevisionButton->setIcon(*icons[int(Icons::copy_ICON)]);
-      }
-
-//---------------------------------------------------------
-//   copyRevisionToClipboard
-//---------------------------------------------------------
-
-void AboutBoxDialog::copyRevisionToClipboard()
-      {
-      QClipboard* cb = QApplication::clipboard();
-      QString sysinfo = "OS: ";
-      sysinfo += QSysInfo::prettyProductName();
-      sysinfo += ", Arch.: ";
-      sysinfo += QSysInfo::currentCpuArchitecture();
-      // endianness?
-      sysinfo += ", MuseScore version (";
-      sysinfo += QSysInfo::WordSize==32 ? "32" : "64";
-      auto msVersion = QString(VERSION) + QString(".") + QString(BUILD_NUMBER);
-      sysinfo += "-bit): " + msVersion + ", revision: ";
-      sysinfo += "github-musescore-musescore-";
-      sysinfo += revision;
-      cb->setText(sysinfo);
-      }
-
-//---------------------------------------------------------
-//   AboutBoxDialog
-//---------------------------------------------------------
-
-AboutMusicXMLBoxDialog::AboutMusicXMLBoxDialog()
-      {
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      label->setText(QString("<span style=\"font-size:10pt;\">%1<br/></span>")
-                     .arg(tr(   "MusicXML is an open file format for exchanging digital sheet music,\n"
-                                "supported by many applications.\n"
-                                "Copyright © 2004-2018 the Contributors to the MusicXML\n"
-                                "Specification, published by the W3C Music Notation Community\n"
-                                "Group under the W3C Community Contributor License Agreement\n"
-                                "(CLA):\n%1\n"
-                                "A human-readable summary is available:\n%2")
-                          .arg( "\n&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"https://www.w3.org/community/about/agreements/cla/\">https://www.w3.org/community/about/agreements/cla/</a>\n",
-                                "\n&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"https://www.w3.org/community/about/agreements/cla-deed/\">https://www.w3.org/community/about/agreements/cla-deed/</a>\n")
-                          .replace("\n","<br/>")));
       }
 
 //---------------------------------------------------------
@@ -7243,44 +7107,9 @@ void MuseScore::updateUiStyleAndTheme()
       genIcons();
       Shortcut::refreshIcons();
       }
-}
 
-using namespace Ms;
-
-//---------------------------------------------------------
-//   main
-//---------------------------------------------------------
-
-int main(int argc, char* av[])
+MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** argv)
       {
-#ifndef NDEBUG
-      qSetMessagePattern("%{file}:%{function}: %{message}");
-      Ms::checkStyles();
-#endif
-
-      QApplication::setDesktopSettingsAware(true);
-#ifdef Q_OS_LINUX
-      QGuiApplication::setDesktopFileName("mscore");
-#endif
-      QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-      QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#if defined(QT_DEBUG) && defined(Q_OS_WIN)
-      qInstallMessageHandler(mscoreMessageHandler);
-#endif
-
-#ifdef Q_OS_WIN
-      if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
-            // Set custom OpenGL buglist to work around rendering issues
-            // on Windows 7 (#296682). This should also prevent crashes
-            // happening for some Intel GPUs due to outdated buglist in Qt 5.9.
-            qputenv("QT_OPENGL_BUGLIST", ":/data/win_opengl_buglist.json");
-            }
-#endif
-
-      qRegisterMetaTypeStreamOperators<SessionStart>("SessionStart");
-      qRegisterMetaTypeStreamOperators<MusicxmlExportBreaks>("MusicxmlExportBreaks");
-      qRegisterMetaTypeStreamOperators<MuseScoreStyleType>("MuseScoreStyleType");
-
       QFile f(":/revision.h");
       f.open(QIODevice::ReadOnly);
       revision = QString(f.readAll()).trimmed();
@@ -7297,7 +7126,7 @@ int main(int argc, char* av[])
             appName  = "MuseScore3";
             }
 
-      MuseScoreApplication* app = new MuseScoreApplication(appName2, argc, av);
+      MuseScoreApplication* app = new MuseScoreApplication(appName2, argc, argv);
       QCoreApplication::setApplicationName(appName);
 
       QCoreApplication::setOrganizationName("MuseScore");
@@ -7314,17 +7143,13 @@ int main(int argc, char* av[])
       }
 #endif
 
-      QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
-      QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
-      QAccessible::installFactory(Awl::AccessibleAbstractSlider::AbstractSliderFactory);
+      return app;
+      }
 
-      Q_INIT_RESOURCE(zita);
-
-#ifndef Q_OS_MAC
-      QSettings::setDefaultFormat(QSettings::IniFormat);
-#endif
-
+MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandLineArguments(MuseScoreApplication* app)
+      {
       QCommandLineParser parser;
+      CommandLineParseResult parseResult;
 
       parser.addHelpOption(); // -?, -h, --help
       parser.addVersionOption(); // -v, --version
@@ -7376,7 +7201,8 @@ int main(int argc, char* av[])
     //if (parser.isSet("v")) parser.showVersion(); // a) needs Qt >= 5.4 , b) instead we use addVersionOption()
       if (parser.isSet("long-version")) {
             printVersion("MuseScore");
-            return EXIT_SUCCESS;
+            parseResult.exit = true;
+            return parseResult;
             }
       MScore::debugMode = parser.isSet("d");
       MScore::noHorizontalStretch = MScore::noVerticalStretch = parser.isSet("L");
@@ -7547,10 +7373,7 @@ int main(int argc, char* av[])
 
       QStringList argv = parser.positionalArguments();
 
-      mscoreGlobalShare = getSharePath();
-      iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
-
-      if (!converterMode && !pluginMode) {
+      if (app && !converterMode && !pluginMode) {
             if (!argv.isEmpty()) {
                   int ok = true;
                   for (const QString& message : argv) {
@@ -7561,12 +7384,16 @@ int main(int argc, char* av[])
                               }
 
                         }
-                  if (ok)
-                        return 0;
+                  if (ok) {
+                        parseResult.exit = true;
+                        return parseResult;
+                        }
                   }
             else
-                  if (app->sendMessage(QString("")))
-                      return 0;
+                  if (app->sendMessage(QString(""))) {
+                        parseResult.exit = true;
+                        return parseResult;
+                        }
             }
       if (rawDiffMode || diffMode) {
             if (argv.size() != 2)
@@ -7574,6 +7401,92 @@ int main(int argc, char* av[])
             }
       if (scriptTestMode && argv.empty())
             qFatal("Please specify scripts to execute");
+
+      parseResult.argv = argv;
+      return parseResult;
+      }
+} // namespace Ms
+
+//---------------------------------------------------------
+//   initZitaResources
+///   must be placed outside of namespace
+//---------------------------------------------------------
+
+static void initZitaResources()
+      {
+      Q_INIT_RESOURCE(zita);
+      }
+
+namespace Ms {
+//---------------------------------------------------------
+//   runApplication
+//---------------------------------------------------------
+
+int runApplication(int& argc, char** av)
+      {
+#ifndef NDEBUG
+      qSetMessagePattern("%{file}:%{function}: %{message}");
+      Ms::checkStyles();
+#endif
+
+      QApplication::setDesktopSettingsAware(true);
+#ifdef Q_OS_LINUX
+      QGuiApplication::setDesktopFileName("mscore");
+#endif
+      QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+      QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#if defined(QT_DEBUG) && defined(Q_OS_WIN)
+      qInstallMessageHandler(mscoreMessageHandler);
+#endif
+
+#ifdef Q_OS_WIN
+      if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
+            // Set custom OpenGL buglist to work around rendering issues
+            // on Windows 7 (#296682). This should also prevent crashes
+            // happening for some Intel GPUs due to outdated buglist in Qt 5.9.
+            qputenv("QT_OPENGL_BUGLIST", ":/data/win_opengl_buglist.json");
+            }
+#endif
+
+      qRegisterMetaTypeStreamOperators<SessionStart>("SessionStart");
+      qRegisterMetaTypeStreamOperators<MusicxmlExportBreaks>("MusicxmlExportBreaks");
+      qRegisterMetaTypeStreamOperators<MuseScoreStyleType>("MuseScoreStyleType");
+
+      MuseScoreApplication* app = MuseScoreApplication::initApplication(argc, av);
+
+      QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
+      QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
+      QAccessible::installFactory(Awl::AccessibleAbstractSlider::AbstractSliderFactory);
+
+      initZitaResources();
+
+#ifndef Q_OS_MAC
+      QSettings::setDefaultFormat(QSettings::IniFormat);
+#endif
+
+      const auto cmdLineParseResult = MuseScoreApplication::parseCommandLineArguments(app);
+
+      if (cmdLineParseResult.exit)
+            return 0;
+
+      MuseScore::init(cmdLineParseResult.argv);
+
+      if (MScore::noGui) {
+#ifdef Q_OS_MAC
+            // see issue #28706: Hangup in converter mode with MusicXML source
+            qApp->processEvents();
+#endif
+            const bool ok = processNonGui(cmdLineParseResult.argv);
+            return ok ? EXIT_SUCCESS : EXIT_FAILURE;
+            }
+
+      return qApp->exec();
+      }
+
+void MuseScore::init(const QStringList& argv)
+      {
+      mscoreGlobalShare = getSharePath();
+      iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
 
       if (dataPath.isEmpty())
             dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
@@ -7789,16 +7702,12 @@ int main(int argc, char* av[])
 
       QApplication::instance()->installEventFilter(mscore);
 
-      mscore->setRevision(revision);
+      mscore->setRevision(Ms::revision);
       int files = 0;
       bool restoredSession = false;
-      if (MScore::noGui) {
-#ifdef Q_OS_MAC
-            // see issue #28706: Hangup in converter mode with MusicXML source
-            qApp->processEvents();
-#endif
-            exit(processNonGui(argv) ? 0 : EXIT_FAILURE);
-            }
+
+      if (MScore::noGui)
+            return;
       else {
             mscore->readSettings();
             QObject::connect(qApp, SIGNAL(messageReceived(const QString&)),
@@ -7890,8 +7799,6 @@ int main(int argc, char* av[])
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())
             mscore->showSynthControl(true);
-
-      return qApp->exec();
       }
 
 //---------------------------------------------------------
@@ -8005,3 +7912,4 @@ void MuseScore::scoreUnrolled(MasterScore * original)
       MasterScore * score = original->unrollRepeats();
       setCurrentScoreView(appendScore(score));
       }
+} // namespace Ms
