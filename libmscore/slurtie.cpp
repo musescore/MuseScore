@@ -311,7 +311,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 
       xml.stag(this, QString("no=\"%1\"").arg(no));
 
-      qreal _spatium = spatium();
+      qreal _spatium = score()->spatium();
       if (!ups(Grip::START).off.isNull())
             xml.tag("o1", ups(Grip::START).off / _spatium);
       if (!ups(Grip::BEZIER1).off.isNull())
@@ -330,7 +330,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 
 void SlurTieSegment::read(XmlReader& e)
       {
-      qreal _spatium = spatium();
+      qreal _spatium = score()->spatium();
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "o1")
