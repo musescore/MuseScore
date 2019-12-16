@@ -526,7 +526,6 @@ target_link_libraries(mscore
       libmscore
       qzip
       beatroot
-      kqoauth
       )
 
 if (BUILD_CRASH_REPORTER)
