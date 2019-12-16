@@ -4,7 +4,7 @@
 	// List of extensions which should be recommended for users of this workspace.
 	"recommendations": [
 		"ms-vscode.cpptools",
-		"vector-of-bool.cmake-tools",
+		"ms-vscode.cmake-tools",
 		"twxs.cmake"
 	],
 }
