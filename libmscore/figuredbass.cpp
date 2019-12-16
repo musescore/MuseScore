@@ -1247,7 +1247,7 @@ void FiguredBass::draw(QPainter* painter) const
       if (!score()->printing() && score()->showUnprintable()) {
             for (qreal len : _lineLengths) {
                   if (len > 0) {
-                        painter->setPen(QPen(Qt::lightGray, 1));
+                        painter->setPen(QPen(Qt::lightGray, 3));
                         painter->drawLine(0.0, -2, len, -2);      // -2: 2 rast. un. above digits
                         }
                   }
