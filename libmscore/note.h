@@ -268,10 +268,14 @@ class Note final : public Element {
 
       QString _fretString;
 
-      virtual void startDrag(EditData&) override;
-      virtual QRectF drag(EditData&) override;
-      virtual void endDrag(EditData&) override;
-      virtual void editDrag(EditData&) override;
+      void startDrag(EditData&) override;
+      QRectF drag(EditData&ed) override;
+      void endDrag(EditData&) override;
+      void editDrag(EditData &editData) override;
+
+      void verticalDrag(EditData& ed);
+      void horizontalDrag(EditData& ed);
+
       void addSpanner(Spanner*);
       void removeSpanner(Spanner*);
       int concertPitchIdx() const;
@@ -279,7 +283,7 @@ class Note final : public Element {
       bool isNoteName() const;
       SymId noteHead() const;
 
-   public:
+public:
       Note(Score* s = 0);
       Note(const Note&, bool link = false);
       ~Note();
@@ -493,7 +497,7 @@ class Note final : public Element {
       void setOnTimeType(int v)  { _onTimeType = v; }
       int offTimeType() const    { return _offTimeType; }
       int onTimeType() const     { return _onTimeType; }
-      };
+    };
 
 }     // namespace Ms
 #endif
