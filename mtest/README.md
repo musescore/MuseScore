@@ -1,5 +1,6 @@
-Building & running the tests
-==================
+# Automated tests
+
+## Building & running the tests
 
 To build all tests:
 
@@ -20,8 +21,7 @@ To see how the CI environment is doing it check `.travis.yml` and `build/run_tes
 
 **Note: You need to have `diff` in your path. For Windows, get a copy of [diffutils for Windows](http://gnuwin32.sourceforge.net/packages/diffutils.htm "diffutils for Windows").**
 
-Test case conventions
-====================
+## Test case conventions
 
 Tests are grouped in directories by feature (like libmscore or mxl). 
 In these directories, each subdirectory represents a test suite for a particular sub feature.
@@ -32,11 +32,9 @@ Test suite CPP files contain one slot per test case. Each file should be called 
 
 To create reference or original files, MuseScore can be run with the `-t` command line argument and it will save all the files in the session in test mode. Such files do not contain platform or version information and do contain extra data for tracing (for example, they contains pixel level position for beams).
 
-How to write a test case
-===============
+## How to write a test case
 
-Import test
-----------------
+### Import test
 
 * Open a short file containing an individual case in one of the formats supported by MuseScore
 * Save in MuseScore format
@@ -44,19 +42,18 @@ Import test
 
 At first the test will fail because there is no reference file. Open the file created by the test case in MuseScore and try to edit it to be sure it's valid. If the file is valid, save it (without version number) as a reference file.
 
-Object read write
-----------------
+### Object read write
 
-Create a test case for all elements and all properties in each element. See `libmscore/note`
+Create a test case for all elements and all properties in each element. See `libmscore/note`.
 
 * Create an object
 * Set a property
 * Write and read the object
 * Check if the property has the right value
 
-Action tests
-----------------
-See `libmscore/join` or `libmscore/split` for example 
+### Action tests
+
+See `libmscore/join` or `libmscore/split` for example.
 
 * Read a score file
 * Apply an action
@@ -65,10 +62,9 @@ See `libmscore/join` or `libmscore/split` for example
 * (Undo the action)
 * (Compare with original file)
 
-Compatibility tests
-----------------
+### Compatibility tests
 
-Most of them are in `mtest/libmscore/compat`
+Most of them are in `mtest/libmscore/compat`.
 
 * Read a score file from an older version of MuseScore
 * Write the file
