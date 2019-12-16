@@ -369,6 +369,8 @@ void Palette::mousePressEvent(QMouseEvent* ev)
       dragStartPosition = ev->pos();
       dragIdx           = idx(dragStartPosition);
 
+      pressedIndex = dragIdx;
+
 /*
       // Take out of edit mode to prevent crashes when adding
       // elements from palette
@@ -389,6 +391,8 @@ void Palette::mousePressEvent(QMouseEvent* ev)
       PaletteCell* cell = cellAt(dragIdx);
       if (cell && (cell->tag == "ShowMore"))
             emit displayMore(_name);
+
+      update();
       }
 
 //---------------------------------------------------------
@@ -794,6 +798,10 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
 
 void Palette::mouseReleaseEvent(QMouseEvent *event)
       {
+      pressedIndex = -1;
+
+      update();
+
       if (_disableElementsApply)
             return;
 
@@ -1109,14 +1117,20 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             QRect rShift = r.translated(0, yoffset);
             p.setPen(pen);
             QColor c(MScore::selectColor[0]);
+
             if (idx == selectedIdx) {
-                  c.setAlpha(100);
+                  c.setAlphaF(0.5);
+                  p.fillRect(r, c);
+                  }
+            else if (idx == pressedIndex) {
+                  c.setAlphaF(0.75);
                   p.fillRect(r, c);
                   }
             else if (idx == currentIdx) {
-                  c.setAlpha(50);
+                  c.setAlphaF(0.2);
                   p.fillRect(r, c);
                   }
+
             if (ccp()->at(idx) == 0)
                   continue;
             PaletteCell* cc = ccp()->at(idx);      // current cell
