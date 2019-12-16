@@ -744,7 +744,7 @@ endif (NOT MSVC)
 subdirs(
       awl bww2mxml share midi audiofile fluid libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/beatroot
-      thirdparty/qzip
+      thirdparty/qzip thirdparty/kQOAuth
       )
 
 if (BUILD_CRASH_REPORTER)
