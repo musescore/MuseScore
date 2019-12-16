@@ -79,6 +79,7 @@ class Palette : public QWidget {
       int hgrid;
       int vgrid;
       int currentIdx;
+      int pressedIndex = -1;
       int dragIdx;
       int selectedIdx;
       QPoint dragStartPosition;
