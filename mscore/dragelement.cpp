@@ -53,6 +53,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       else if (qApp->keyboardModifiers() == Qt::ControlModifier)
             pt.setY(editData.element->offset().y());
 
+      editData.lastPos = editData.pos;
       editData.hRaster = mscore->hRaster();
       editData.vRaster = mscore->vRaster();
       editData.delta   = pt;
