@@ -1156,6 +1156,9 @@ void BarLine::endEditDrag(EditData& ed)
             staff()->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_FROM, newSpanFrom);
             staff()->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_TO,   newSpanTo);
             }
+
+      bed->yoff1 = 0.0;
+      bed->yoff2 = 0.0;
       }
 
 //---------------------------------------------------------
