@@ -349,7 +349,7 @@ static void clearHttpCacheOnRenderFinish(QWebEngineView* webView)
       QWebEnginePage* page = webView->page();
       QWebEngineProfile* profile = page->profile();
 
-      // workaround for the crashes sometimes happend in Chromium on macOS with Qt 5.12
+      // workaround for the crashes sometimes happening in Chromium on macOS with Qt 5.12
       QObject::connect(webView, &QWebEngineView::renderProcessTerminated, webView, [profile, webView](QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
             {
             qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;

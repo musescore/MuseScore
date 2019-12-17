@@ -1144,7 +1144,7 @@ Element* Segment::lastElement(int staff)
 //   getElement
 //   protected because it is used by the firstElement and
 //   lastElement functions when segment types that have
-//   just one elemnt to avoid duplicated code
+//   just one element to avoid duplicated code
 //
 //   Use firstElement, or lastElement instead of this
 //---------------------------------------------------------

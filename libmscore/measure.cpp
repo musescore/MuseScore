@@ -3473,7 +3473,7 @@ BarLineType Measure::endBarLineType() const
 
 //---------------------------------------------------------
 //   endBarLineType
-//    Assume all barlines have same visiblity if there is more
+//    Assume all barlines have same visibility if there is more
 //    than one.
 //---------------------------------------------------------
 

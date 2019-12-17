@@ -42,7 +42,7 @@ public:
       virtual QString name() = 0;
       virtual int maxRange() = 0;
       virtual int minRange() = 0;
-      virtual int divisionGap() = 0;  //Vertical guide line seperation gap
+      virtual int divisionGap() = 0;  //Vertical guide line separation gap
       virtual bool isPerEvent() = 0;
       virtual int value(Staff* staff, Note* note, NoteEvent* evt) = 0;
       virtual void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) = 0;

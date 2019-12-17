@@ -492,7 +492,7 @@ public:
       virtual void setFileStream(unsigned char* buffer, unsigned int size) = 0;
       virtual void setOve(OveSong* ove) = 0;
 
-      // read stream, set readed data to setOve(ove)
+      // read stream, set read data to setOve(ove)
       virtual bool load() = 0;
 
       virtual void release() = 0;
