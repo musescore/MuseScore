@@ -415,3 +415,13 @@ Changelog
 
 29 April 2018 (Daniel Spreadbury) Bravura 1.272
 – Improved 'Large, narrow sans serif time signatures' stylistic set (ss04) glyphs to make the forms more condensed
+
+29 January 2019 (Daniel Spreadbury) Bravura 1.276 / Bravura Text 1.277
+– Fixed the scale factor for optical variants for chord symbol accidentals
+
+31 August 2019 (Daniel Spreadbury) Bravura 1.31 / Bravura Text 1.31
+– New fingeringQLower (U+ED8E) and fingeringSLower (U+ED8F) glyphs in the 'Fingering supplement' range
+
+6 December 2019 (Daniel Spreadbury) Bravura 1.32
+– Reduced height of accidentalBracketLeft (U+E26C) and accidentalBracketRight (U+E26D)
+– Corrected registration of a number of glyphs in the 'Extended Helmholtz-Ellis Just Intonation accidentals' range (U+E2DF, U+E2E6, U+E2E7, U+E2E8, U+E2E9, U+E2F7, U+E2F8, U+E2EB).
