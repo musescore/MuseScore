@@ -892,7 +892,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScriptRecorder* getScriptRecorder();
       bool runTestScripts(const QStringList& scripts);
 
-      static void init(const QStringList& argv);
+      static void init(QStringList& argv);
 
       friend class TestWorkspaces;
       };

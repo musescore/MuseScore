@@ -55,12 +55,12 @@ if (MSCORE_OUTPUT_NAME)
       )
 endif (MSCORE_OUTPUT_NAME)
 
-target_include_directories(${ExecutableName} PRIVATE
+target_include_directories(mscore PRIVATE
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
       )
 
-target_link_libraries(${ExecutableName} mscoreapp)
+target_link_libraries(mscore mscoreapp)
 
 
 if (APPLE)
@@ -242,6 +242,7 @@ else (MINGW)
            PROPERTIES
               LINK_FLAGS "-stdlib=libc++"
            )
+        xcode_pch(mscore all)
         install (TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
         install (FILES "${PROJECT_SOURCE_DIR}/mscore/data/mscore.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
         install (FILES "${PROJECT_SOURCE_DIR}/mscore/data/musescoreDocument.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})

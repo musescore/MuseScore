@@ -7464,7 +7464,7 @@ int runApplication(int& argc, char** av)
       QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
 
-      const auto cmdLineParseResult = MuseScoreApplication::parseCommandLineArguments(app);
+      auto cmdLineParseResult = MuseScoreApplication::parseCommandLineArguments(app);
 
       if (cmdLineParseResult.exit)
             return 0;
@@ -7483,7 +7483,7 @@ int runApplication(int& argc, char** av)
       return qApp->exec();
       }
 
-void MuseScore::init(const QStringList& argv)
+void MuseScore::init(QStringList& argv)
       {
       mscoreGlobalShare = getSharePath();
       iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
@@ -7723,7 +7723,7 @@ void MuseScore::init(const QStringList& argv)
 #ifdef Q_OS_MAC
             // app->paths contains files requested to be loaded by OS X
             // append these to argv and update file count
-            foreach(const QString& name, app->paths) {
+            foreach(const QString& name, static_cast<MuseScoreApplication*>(qApp)->paths) {
                   if (!name.isEmpty()) {
                         argv << name;
                         ++files;
