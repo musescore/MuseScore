@@ -672,9 +672,9 @@ static void readFingering114(XmlReader& e, Fingering* fing)
             else if (tag == "frame") {
                   auto frame = e.readInt();
                   if (frame)
-                        if (isStringNumber) //default value is circle for stringnumber, square is setted in tag circle
+                        if (isStringNumber) //default value is circle for stringnumber, square is set in tag circle
                               fing->setFrameType(FrameType::CIRCLE);
-                        else //default value is square for stringnumber, circle is setted in tag circle
+                        else //default value is square for stringnumber, circle is set in tag circle
                               fing->setFrameType(FrameType::SQUARE);
                   else
                         fing->setFrameType(FrameType::NO_FRAME);

@@ -70,7 +70,7 @@ VERSION_PATCH=$(grep 'SET(MUSESCORE_VERSION_PATCH' CMakeLists.txt | cut -d \" -f
 BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
 MUSESCORE_VERSION=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${BUILD_NUMBER}
 SHORT_DATE="$(date -u +%Y-%m-%d)"
-#date -R is not supporte !?
+#date -R is not supported !?
 RSS_DATE="$(LANG=C date +'%a, %d %b %Y %H:%M:%S %z')"
 FILESIZE="$(wc -c $DMGFILE | awk '{print $1}')"
 APPCAST_URL=$(defaults read `pwd`/applebuild/mscore.app/Contents/Info.plist SUFeedURL)

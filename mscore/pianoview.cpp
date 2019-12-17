@@ -709,7 +709,7 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
 
                         }
                   else if (bnShift && !bnCtrl) {
-                        //Append a pitch to our curent chord/rest
+                        //Append a pitch to our current chord/rest
                         int voice = score->inputState().voice();
 
                         //Find best chord to add to

@@ -4066,7 +4066,7 @@ void Score::undoExchangeVoice(Measure* measure, int srcVoice, int dstVoice, int 
                               for (int testTrack : testTracks) {
                                     if (staffTrack <= testTrack && testTrack < staffTrack + VOICES && dstTrackList.contains(testTrack)) {
                                           hasVoice = true;
-                                          // voice is simply exchangable now (deal directly)
+                                          // voice is simply exchangeable now (deal directly)
                                           undo(new ExchangeVoice(measure2, srcTrack2, testTrack, staffTrack / 4));
                                           }
                                     }

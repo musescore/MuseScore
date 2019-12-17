@@ -68,9 +68,9 @@ class Pos {
       void snap(int);
       void upSnap(int);
       void downSnap(int);
-      Pos snaped(int) const;
-      Pos upSnaped(int) const;
-      Pos downSnaped(int) const;
+      Pos snapped(int) const;
+      Pos upSnapped(int) const;
+      Pos downSnapped(int) const;
 
       void invalidSn()  { sn = -1; }
 

@@ -385,7 +385,7 @@ a local coordinate system starting with zero. The draw position of an element is
 sum of Element->_pos + Element->_offset.
 
 For some element types _offset is styled. The style value gives the default position of an
-element. Each element can separatly moved by the user by changing the _offset value.
+element. Each element can separately moved by the user by changing the _offset value.
 
 If an element is "autoplaced" then Element->_pos is changed to move the element to a position without
 colliding with other element.

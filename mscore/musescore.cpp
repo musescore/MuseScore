@@ -1062,7 +1062,7 @@ MuseScore::MuseScore()
       ScoreAccessibility::createInstance(this);
 
       // otherwise unused actions:
-      //   must be added somewere to work
+      //   must be added somewhere to work
       QActionGroup* ag = Shortcut::getActionGroupForWidget(MsWidget::MAIN_WINDOW);
       ag->setParent(this);
       addActions(ag->actions());

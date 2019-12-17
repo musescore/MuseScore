@@ -1656,7 +1656,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       Chord *chordR = noteR->chord();
       int epitchL = noteL->epitch();
       Fraction tickL = chordL->tick();
-      // we canot use staffL = chord->staff() because that won't correspond to the noteL->line()
+      // we cannot use staffL = chord->staff() because that won't correspond to the noteL->line()
       //   in the case the user has pressed Shift-Cmd->Up or Shift-Cmd-Down.
       //   Therefore we have to take staffMove() into account using vStaffIdx().
       Staff * staffL = noteL->score()->staff(chordL->vStaffIdx());

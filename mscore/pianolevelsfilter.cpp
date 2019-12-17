@@ -72,7 +72,7 @@ void PianoLevelFilterLen::setValue(Staff* staff, Note* note, NoteEvent* evt, int
 
 int PianoLevelFilterVeloOffset::value(Staff* staff, Note* note, NoteEvent* /*evt*/)
       {
-      //Change velocity to equivilent in new metric
+      //Change velocity to equivalent in new metric
       switch (Note::ValueType(note->veloType())) {
             case Note::ValueType::USER_VAL: {
                   int dynamicsVel = staff->velocities().velo(note->tick().ticks());
@@ -120,7 +120,7 @@ void PianoLevelFilterVeloOffset::setValue(Staff* staff, Note* note, NoteEvent* /
 
 int PianoLevelFilterVeloUser::value(Staff* staff, Note* note, NoteEvent* /*evt*/)
       {
-      //Change velocity to equivilent in new metric
+      //Change velocity to equivalent in new metric
       switch (Note::ValueType(note->veloType())) {
             case Note::ValueType::USER_VAL:
                   return note->veloOffset();

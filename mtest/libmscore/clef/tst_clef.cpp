@@ -78,7 +78,7 @@ void TestClef::clef2()
 
 //---------------------------------------------------------
 //   clef3
-//    change the first clef of a score by changing the first measure's cleff
+//    change the first clef of a score by changing the first measure's clef
 //---------------------------------------------------------
 
 void TestClef::clef3()

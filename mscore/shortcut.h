@@ -28,7 +28,7 @@ The Shortcut class describes the basic configurable shortcut element.
       user customizations or from a resource (<= mscore/data/shortcuts.xml), if there are
       no customizations.
       Later during startup, QAction's are derived from each of its elements and pooled
-      in a single QActionGroup during MuseScore::MuseScore() costructor (mscore/musescore.cpp)
+      in a single QActionGroup during MuseScore::MuseScore() constructor (mscore/musescore.cpp)
 
 ShortcutFlags:
       To be documented

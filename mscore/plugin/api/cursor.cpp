@@ -75,7 +75,7 @@ void Cursor::setScore(Score* s)
 ///   Rewind cursor to a certain position.
 ///   \param mode Determines the position where to move
 ///   this cursor. See Cursor::RewindMode to see the list of
-///   avaliable rewind modes.
+///   available rewind modes.
 ///   \note In MuseScore 2.X, this function took an integer
 ///   value (0, 1 or 2) as its parameter. For compatibility
 ///   reasons, the old values are still working, but it is

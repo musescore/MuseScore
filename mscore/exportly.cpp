@@ -2445,7 +2445,7 @@ int ExportLy::findSlur(const Slur* s) const
 }
 
 //---------------------------------------------------------
-//   doSlurStart. Find start of slur connecte to chord.
+//   doSlurStart. Find start of slur connected to chord.
 //---------------------------------------------------------
 
 void ExportLy::doSlurStart(Chord* chord, bool nextisrest)

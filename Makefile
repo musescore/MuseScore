@@ -117,7 +117,7 @@ win32:
             make install;                              \
             make package;                              \
          else                                          \
-            echo "build directory win32build does alread exist, please remove first"; \
+            echo "build directory win32build does already exist, please remove first"; \
          fi
 
 #
@@ -207,7 +207,7 @@ unix:
             make -j${CPUS} -f Makefile;            \
             make package;                          \
          else                                      \
-            echo "build directory linux does alread exist, please remove first";  \
+            echo "build directory linux does already exist, please remove first";  \
          fi
 
 zip:

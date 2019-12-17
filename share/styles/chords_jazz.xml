@@ -146,7 +146,7 @@
 
     </font>
 
-  <font class="modifer" family="MuseJazz Text">
+  <font class="modifier" family="MuseJazz Text">
     <mag>0.75</mag>
 
     <sym value="(" name="s("/>

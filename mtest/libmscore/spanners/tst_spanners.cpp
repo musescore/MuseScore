@@ -556,7 +556,7 @@ void TestSpanners::spanners12()
 #if 0
 //---------------------------------------------------------
 ///  spanners13
-///   Drop a line break at a bar line inthe middle of a LyricsLine and check LyricsLineSegments are correct
+///   Drop a line break at a bar line in the middle of a LyricsLine and check LyricsLineSegments are correct
 //
 //---------------------------------------------------------
 

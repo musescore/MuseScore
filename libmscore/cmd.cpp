@@ -847,7 +847,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
       Q_ASSERT(_sd.numerator());
 
       Measure* measure = segment->measure();
-      Fraction akkumulated;
+      Fraction accumulated;
       Fraction sd = _sd;
 
       //
@@ -872,7 +872,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   Fraction td(tick2 - seg->tick());
                   if (td > sd)
                         td = sd;
-                  akkumulated += td;
+                  accumulated += td;
                   sd -= td;
                   if (sd.isZero())
                         break;
@@ -884,7 +884,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   Fraction td(seg->tick() - nextTick);
                   if (td > sd)
                         td = sd;
-                  akkumulated += td;
+                  accumulated += td;
                   sd -= td;
                   if (sd.isZero())
                         break;
@@ -948,7 +948,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   //
                   // we removed too much
                   //
-                  akkumulated = _sd;
+                  accumulated = _sd;
                   Fraction rd = td - sd;
 
                   std::vector<TDuration> dList = toDurationList(rd, false);
@@ -986,7 +986,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                         }
                   break;
                   }
-            akkumulated += td;
+            accumulated += td;
             sd          -= td;
             if (sd.isZero())
                   break;
@@ -997,13 +997,13 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 // once the statement below is removed, these two lines do nothing
 //      if (td > sd)
 //            td = sd;
-// ???  akkumulated should already contain the total value of the created gap: line 749, 811 or 838
+// ???  accumulated should already contain the total value of the created gap: line 749, 811 or 838
 //      this line creates a qreal-sized gap if the needed gap crosses a measure boundary
 //      by adding again the duration already added in line 838
-//      akkumulated += td;
+//      accumulated += td;
 
       const Fraction t1 = firstSegmentEnd;
-      const Fraction t2 = firstSegment->tick() + akkumulated;
+      const Fraction t2 = firstSegment->tick() + accumulated;
       if (t1 < t2) {
             Segment* s1 = tick2rightSegment(t1);
             Segment* s2 = tick2rightSegment(t2);
@@ -1014,7 +1014,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
             deleteSpannersFromRange(t1, t2, track, track + 1, filter);
             }
 
-      return akkumulated;
+      return accumulated;
       }
 
 //---------------------------------------------------------

@@ -186,7 +186,7 @@ mkdir -p ${VOLUME}/Pictures
 cp  ${BACKGROUND} ${VOLUME}/Pictures/background.tiff
 
 echo "symlink application"
-# nssymlink applicatio
+# nssymlink application
 ln -s /Applications/ ${VOLUME}/Applications
 set_bundle_display_options ${VOLUME}
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures

@@ -93,7 +93,7 @@
         },
         {
            "id": 8,
-           "description": "Standard VGA: Insufficent support for OpenGL, D3D9 and D3D11",
+           "description": "Standard VGA: Insufficient support for OpenGL, D3D9 and D3D11",
            "vendor_id": "0x0000",
            "device_id": ["0x0000"],
            "os": {

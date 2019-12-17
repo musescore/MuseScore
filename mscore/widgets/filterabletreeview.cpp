@@ -27,7 +27,7 @@ FilterableTreeViewTemplate<T>::FilterableTreeViewTemplate(QWidget* parent)
       FilterableTreeViewTemplate<T>::connect(this, &FilterableTreeViewTemplate<T>::activated, this, &FilterableTreeViewTemplate<T>::toggleExpanded);
       }
 
-// to avoid linker errors, we must explicity instantiate constructors for the types we need
+// to avoid linker errors, we must explicitly instantiate constructors for the types we need
 template FilterableTreeViewTemplate<QTreeView>::FilterableTreeViewTemplate(QWidget* parent);
 template FilterableTreeViewTemplate<QTreeWidget>::FilterableTreeViewTemplate(QWidget* parent);
 

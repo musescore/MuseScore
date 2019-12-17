@@ -586,17 +586,17 @@ void Pos::downSnap(int raster)
       setTick(sig->raster1(tick(), raster));
       }
 
-Pos Pos::snaped(int raster) const
+Pos Pos::snapped(int raster) const
       {
       return Pos(tempo, sig, sig->raster(tick(), raster));
       }
 
-Pos Pos::upSnaped(int raster) const
+Pos Pos::upSnapped(int raster) const
       {
       return Pos(tempo, sig, sig->raster2(tick(), raster));
       }
 
-Pos Pos::downSnaped(int raster) const
+Pos Pos::downSnapped(int raster) const
       {
       return Pos(tempo, sig, sig->raster1(tick(), raster));
       }

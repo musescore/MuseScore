@@ -791,7 +791,7 @@ void Harmony::endEdit(EditData& ed)
       {
       // complete editing: generate xml text, set Pid::TEXT, perform initial layout
       // if text has changed, this also triggers setHarmony() which renders chord symbol
-      // but any rendering or layout performed here is tenative,
+      // but any rendering or layout performed here is tentative,
       // we may still need to substitute special characters,
       // and that cannot be until after editing is completed
       TextBase::endEdit(ed);

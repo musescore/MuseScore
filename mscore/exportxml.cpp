@@ -5454,7 +5454,7 @@ static void annotationsWithoutNote(ExportMusicXml* exp, const int strack, const 
 //---------------------------------------------------------
 
 /**
- State handler used to calculate measure number including implict flag.
+ State handler used to calculate measure number including implicit flag.
  To be called once at the start of each measure in a part.
  */
 
@@ -5496,7 +5496,7 @@ void MeasureNumberStateHandler::updateForMeasure(const Measure* const m)
                   init();
             }
 
-      // update measure numers and cache result
+      // update measure numbers and cache result
       _cachedAttributes = " number=";
       if ((_irregularMeasureNo + _measureNo) == 2 && m->irregular()) {
             _cachedAttributes += "\"0\" implicit=\"yes\"";

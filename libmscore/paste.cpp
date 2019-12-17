@@ -470,7 +470,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
             int endStaff = dstStaff + staves;
             if (endStaff > nstaves())
                   endStaff = nstaves();
-            //check and add truly invisible rests insted of gaps
+            //check and add truly invisible rests instead of gaps
             //TODO: look if this could be done different
             Measure* dstM = tick2measure(dstTick);
             Measure* endM = tick2measure(dstTick + tickLen);

@@ -1305,7 +1305,7 @@ void GuitarPro::readChord(Segment* seg, int track, int numStrings, QString name,
             for (int i = 0; i < (gpHeader ? 7 : 6); ++i) {
                   int currentFret =  readInt();
                   // read the frets and add them to the fretboard
-                  // substract 1 extra from numStrings as we count from 0
+                  // subtract 1 extra from numStrings as we count from 0
                   if (i > numStrings - 1) {
                         }
                   else if (currentFret > 0) {

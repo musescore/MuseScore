@@ -4011,7 +4011,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             }
 
       //-------------------------------------------------------------
-      // layout Voltas for current sytem
+      // layout Voltas for current system
       //-------------------------------------------------------------
 
       processLines(system, voltas, false);

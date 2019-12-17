@@ -45,7 +45,7 @@ class TestBwwIO : public QObject, public MTest
 
       // The list of BWW regression tests
       // Currently failing tests are commented out and annotated with the failure reason
-      // To extract the list in a shell scipt use:
+      // To extract the list in a shell script use:
       // cat tst_bww_io.cpp | grep "{ <test>" | awk -F\" '{print $2}'
       // where <test> is bwwIoTest or bwwIoTestRef
 
