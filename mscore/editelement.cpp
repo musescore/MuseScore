@@ -227,10 +227,10 @@ void ScoreView::endDragEdit()
       _score->addRefresh(editData.element->canvasBoundingRect());
 
       editData.element->endEditDrag(editData);
+      score()->endCmd();            // calls update()
       updateGrips();
       _score->addRefresh(editData.element->canvasBoundingRect());
       setDropTarget(0);
-      score()->endCmd();            // calls update()
       _score->rebuildBspTree();
       }
 }
