@@ -1506,14 +1506,16 @@ public:
 
         normalizedVector.normalize();
 
-        qreal radians = normalizedVector.x() / (qSqrt(qPow(normalizedVector.x(), 2) + qPow(normalizedVector.y(), 2)));
+        float radians = QVector2D::dotProduct(normalizedVector, QVector2D(1, 0));
 
-        qreal degrees = qRadiansToDegrees(radians);
+        qreal degrees = (qAcos(radians) * 180.0) / M_PI;
 
-        if (degrees > MODE_TRANSITION_LIMIT_DEGREES) {
-            return NoteEditData::EditMode_AddSpacing;
-        } else {
+        qDebug() << "YOPTA DEGREES " << degrees;
+
+        if (degrees >= MODE_TRANSITION_LIMIT_DEGREES) {
             return NoteEditData::EditMode_ChangePitch;
+        } else {
+            return NoteEditData::EditMode_AddSpacing;
         }
     }
 };
