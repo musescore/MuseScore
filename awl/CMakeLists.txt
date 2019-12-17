@@ -103,7 +103,7 @@ if (NOT MSVC)
          "-fPIC -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SHARED -DQT_NO_DEBUG -include ${PROJECT_SOURCE_DIR}/all.h"
       )
 else (NOT MSVC)
-   # x86 archictecture does not support position-independent code, the -fPIC option is not relevant for this processor.
+   # x86 architecture does not support position-independent code, the -fPIC option is not relevant for this processor.
    set_target_properties (
       awlplugin
       PROPERTIES

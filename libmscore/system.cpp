@@ -1180,7 +1180,7 @@ Element* System::prevSegmentElement()
                   return score()->firstElement();
 
             if (seg->segmentType() == SegmentType::EndBarLine)
-                  score()->inputState().setTrack((score()->staves().size() - 1) * VOICES); //corection
+                  score()->inputState().setTrack((score()->staves().size() - 1) * VOICES); //correction
 
             re = seg->lastElement(score()->staves().size() - 1);
             }

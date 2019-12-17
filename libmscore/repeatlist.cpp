@@ -580,9 +580,9 @@ void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* cons
                                     push_back(rs);
                                     rs = nullptr;
                                     // now jump
-                                    // basically, replay the score from jumpToMeasure all the way up the to last occurence of playUntilMeasure
-                                    // this replay lookup uses mostly indexes over iterators as push_back of new segments might invalidate an interator
-                                    // step 1: find the last occurence of playUntilMeasure
+                                    // basically, replay the score from jumpToMeasure all the way up the to last occurrence of playUntilMeasure
+                                    // this replay lookup uses mostly indexes over iterators as push_back of new segments might invalidate an iterator
+                                    // step 1: find the last occurrence of playUntilMeasure
                                     Measure* copyUntilMeasure = playUntilMeasure; // assume we can rewind back to the playUntilMeasure
                                     int copyUntilIdx = this->size() - 1; // assume we will find the copyUntilMeasure in the (currently) last repeatSegment
                                     int playUntilIdx = this->size();
@@ -605,7 +605,7 @@ void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* cons
                                     Measure * copyFromMeasure = jumpToMeasure;
                                     if (jump->playRepeats()) {
                                           // we want to replay as much from the score as possible
-                                          // => find most recent occurence of first playBack of jumpToMeasure #270332
+                                          // => find most recent occurrence of first playBack of jumpToMeasure #270332
                                           for (int jumpToIdx = playUntilIdx; jumpToIdx >= 0; --jumpToIdx) {
                                                 if (this->at(jumpToIdx)->playbackCount(jumpToMeasure) == 1) {
                                                       copyFromIdx = jumpToIdx;
@@ -613,7 +613,7 @@ void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* cons
                                                       }
                                                 }
                                           }
-                                    else { // no repeats upon jumping => find final occurence of jumpToMeasure
+                                    else { // no repeats upon jumping => find final occurrence of jumpToMeasure
                                           int jumpToIdx = this->size();
                                           do {
                                                 --jumpToIdx;
@@ -654,7 +654,7 @@ void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* cons
                                                       while (   ((referenceIt != referenceSegment->measureList.cend()) && !forwardToMoreRecentPlaythrough)
                                                              && ((idx != copyUntilIdx) || (referenceIt->first->no() <= copyUntilMeasure->no()))
                                                              ) {
-                                                            // find most recent occurence of this measure
+                                                            // find most recent occurrence of this measure
                                                             auto mostRecentRepeatSegmentIdx = copyUntilIdx; // look backwards to find to most recent first
                                                             while ((mostRecentRepeatSegmentIdx > idx) && !forwardToMoreRecentPlaythrough) {
                                                                   RepeatSegment * mostRecentSegment = this->at(mostRecentRepeatSegmentIdx);

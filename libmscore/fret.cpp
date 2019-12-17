@@ -508,7 +508,7 @@ qreal FretDiagram::centerX() const
 //---------------------------------------------------------
 //   write
 //    NOTICE: if you are looking to change how fret diagrams are
-//    written, edit the writeNew function. writeOld is purely compatability.
+//    written, edit the writeNew function. writeOld is purely compatibility.
 //---------------------------------------------------------
 
 static const std::array<Pid, 7> pids { {
@@ -538,7 +538,7 @@ void FretDiagram::write(XmlWriter& xml) const
 
       // Lowercase f indicates new writing format
       // TODO: in the next score format version (4) use only write new + props and discard
-      // the compatability writing.
+      // the compatibility writing.
       xml.stag("fretDiagram");
       writeNew(xml);
       xml.etag();
@@ -550,7 +550,7 @@ void FretDiagram::write(XmlWriter& xml) const
 //---------------------------------------------------------
 //   writeOld
 //    This is the old method of writing. This is for backwards
-//    compatability with < 3.1 versions.
+//    compatibility with < 3.1 versions.
 //---------------------------------------------------------
 
 void FretDiagram::writeOld(XmlWriter& xml) const
@@ -718,7 +718,7 @@ void FretDiagram::read(XmlReader& e)
             else if (tag == "showNut")
                   readProperty(e, Pid::FRET_NUT);
 
-            // Then read the rest if there is no new format diagram (compatability read)
+            // Then read the rest if there is no new format diagram (compatibility read)
             else if (tag == "strings")
                   readProperty(e, Pid::FRET_STRINGS);
             else if (tag == "frets")

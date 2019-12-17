@@ -75,7 +75,7 @@ Startcenter::Startcenter(QWidget* parent)
 
             horizontalLayout->addWidget(_webView);
             
-            //workaround for the crashes sometimes happend in Chromium on macOS with Qt 5.12
+            //workaround for the crashes sometimes happening in Chromium on macOS with Qt 5.12
             connect(_webView, &QWebEngineView::renderProcessTerminated, this, [this, profile, connectPageUrl](QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
                     {
                     qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;
