@@ -678,13 +678,27 @@ void ScoreView::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
       }
 
 //---------------------------------------------------------
-//   CmdContext
+//   ScoreViewCmdContext
 //---------------------------------------------------------
 
-struct CmdContext {
+class ScoreViewCmdContext {
       Score* s;
-      CmdContext(Score* _s) : s(_s) { s->startCmd(); }
-      ~CmdContext()                 { s->endCmd();   }
+      ScoreView* view;
+      bool _updateGrips = false;
+
+   public:
+      ScoreViewCmdContext(ScoreView* v, bool updateGrips)
+         : s(v->score()), view(v), _updateGrips(updateGrips)
+            {
+            s->startCmd();
+            }
+
+      ~ScoreViewCmdContext()
+            {
+            s->endCmd();
+            if (_updateGrips)
+                  view->updateGrips();
+            }
       };
 
 //---------------------------------------------------------
@@ -725,7 +739,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                   return;
             }
 
-      CmdContext cc(_score);
+      ScoreViewCmdContext cc(this, editData.grips);
 
 #ifdef Q_OS_WIN // Japenese IME on Windows needs to know when Contrl/Alt/Shift/CapsLock is pressed while in predit
       if (editData.element->isTextBase()) {
@@ -749,8 +763,6 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                         }
                   if (editData.element->isTextBase())
                         mscore->textTools()->updateTools(editData);
-                  else
-                        updateGrips();
                   return;
                   }
             }
@@ -812,7 +824,6 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
       editData.element->startEditDrag(editData);
       editData.element->editDrag(editData);
       editData.element->endEditDrag(editData);
-      updateGrips();
       }
 
 //---------------------------------------------------------
