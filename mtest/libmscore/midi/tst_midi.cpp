@@ -141,6 +141,7 @@ void TestMidi::events_data()
       QTest::newRow("testPausesRepeats") <<  "testPausesRepeats";
       QTest::newRow("testPausesTempoTimesigChange") <<  "testPausesTempoTimesigChange";
       QTest::newRow("testGuitarTrem") <<  "testGuitarTrem";
+      QTest::newRow("testPlayArticulation") << "testPlayArticulation";
       }
 
 //---------------------------------------------------------
