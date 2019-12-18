@@ -91,7 +91,8 @@ void TestWorkspaces::initTestCase()
 void TestWorkspaces::initMuseScore()
       {
       Ms::dataPath = tmpDataDir->path();
-      MuseScore::init(QStringList());
+      QStringList temp;
+      MuseScore::init(temp);
       WorkspacesManager::initCurrentWorkspace();
       WorkspacesManager::currentWorkspace()->read();
       qApp->processEvents();
