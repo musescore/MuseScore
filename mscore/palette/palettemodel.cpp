@@ -1008,17 +1008,23 @@ bool FilterPaletteTreeModel::filterAcceptsRow(int sourceRow, const QModelIndex& 
       }
 
 //---------------------------------------------------------
-//   ChildFilterProxyModel::filterAcceptsRow
+//   PaletteCellFilterProxyModel::filterAcceptsRow
 //---------------------------------------------------------
 
-bool ChildFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+bool PaletteCellFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
       {
       const QAbstractItemModel* model = sourceModel();
       const QModelIndex rowIndex = model->index(sourceRow, 0, sourceParent);
       const int rowCount = model->rowCount(rowIndex);
 
-      if (rowCount == 0)
-            return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+      if (rowCount == 0) {
+            if (QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent))
+                  return true;
+            // accept row if its parent is accepted by filter: necessary to be able to search by palette name
+            if (sourceParent.isValid() && QSortFilterProxyModel::filterAcceptsRow(sourceParent.row(), sourceParent.parent()))
+                  return true;
+            return false;
+            }
 
       for (int i = 0; i < rowCount; ++i) {
             if (filterAcceptsRow(i, rowIndex))

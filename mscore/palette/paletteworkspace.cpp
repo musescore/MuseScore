@@ -605,7 +605,7 @@ QAbstractItemModel* PaletteWorkspace::mainPaletteModel()
             visFilterModel->setSourceModel(userPalette);
 
             // Wrap it into another proxy model to enable filtering by palette cell name
-            QSortFilterProxyModel* textFilterModel = new ChildFilterProxyModel(this);
+            QSortFilterProxyModel* textFilterModel = new PaletteCellFilterProxyModel(this);
             textFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
             textFilterModel->setSourceModel(visFilterModel);
             visFilterModel->setParent(textFilterModel);
