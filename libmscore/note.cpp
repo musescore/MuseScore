@@ -2384,13 +2384,11 @@ void Note::verticalDrag(EditData &ed)
             return;
 
       NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this));
-      ned->line = _line;
-      ned->string = _string;
 
       qreal _spatium      = spatium();
       bool tab            = st->isTabStaff();
       qreal step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
-      int lineOffset      = lrint(ned->delta.y() / step);
+      int lineOffset      = lrint(ed.delta.y() / step);
 
       if (tab) {
             const StringData* strData = staff()->part()->instrument()->stringData();
