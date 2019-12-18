@@ -869,10 +869,16 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                                     singleNoteDynamics = false;
                               }
 
-                        // Check for articulations
+                        // Check for articulations to be rendered for playback
                         bool hasArticulations = false;
-                        if (chord)
-                              hasArticulations = chord->articulations().count() > 0;
+                        if (chord) {
+                              for (const Articulation* a : chord->articulations()) {
+                                    if (a->playArticulation()) {
+                                          hasArticulations = true;
+                                          break;
+                                          }
+                                    }
+                              }
 
                         //
                         // Add CC events
