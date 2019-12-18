@@ -194,14 +194,13 @@ class FilterPaletteTreeModel : public QSortFilterProxyModel {
       };
 
 //---------------------------------------------------------
-//   ChildFilterProxyModel
-///   Filters model's items that do not have own children.
+//   PaletteCellFilterProxyModel
 //---------------------------------------------------------
 
-class ChildFilterProxyModel : public QSortFilterProxyModel {
+class PaletteCellFilterProxyModel : public QSortFilterProxyModel {
       Q_OBJECT
    public:
-      ChildFilterProxyModel(QObject* parent = nullptr) : QSortFilterProxyModel(parent) {}
+      PaletteCellFilterProxyModel(QObject* parent = nullptr) : QSortFilterProxyModel(parent) {}
 
       bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
       };
