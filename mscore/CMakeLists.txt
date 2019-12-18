@@ -229,13 +229,6 @@ endif (APPLE)
 
 
 set (AUDIO "")
-if (MINGW)
-      set (resource_file ${PROJECT_BINARY_DIR}/resfile.o)
-endif (MINGW)
-if (MSVC)
-      # MSVC recognizes a *.rc file and will invoke the resource compiler to link it
-      set (resource_file ${PROJECT_SOURCE_DIR}/mscore/data/mscore.rc)
-endif ( MSVC )
 if ( NOT MINGW AND NOT MSVC )
       if (USE_ALSA)
             set (AUDIO ${AUDIO} alsa.cpp)
@@ -307,7 +300,6 @@ add_library(mscoreapp STATIC
       ${ui_headers}
       ${_all_h_file}
       ${PCH}
-      ${resource_file}
       ${INCS}
 
       abstractdialog.h accessibletoolbutton.h albummanager.h

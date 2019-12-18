@@ -17,6 +17,14 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+if (MINGW)
+      set (resource_file ${PROJECT_BINARY_DIR}/resfile.o)
+endif (MINGW)
+if (MSVC)
+      # MSVC recognizes a *.rc file and will invoke the resource compiler to link it
+      set (resource_file ${PROJECT_SOURCE_DIR}/mscore/data/mscore.rc)
+endif ( MSVC )
+
 if (APPLE)
       set (ExecutableName mscore MACOSX_BUNDLE)
       set (MACOSX_BUNDLE_ICON_FILE      mscore.icns)
@@ -35,6 +43,7 @@ else (APPLE)
 endif (APPLE)
 
 add_executable(${ExecutableName}
+      ${resource_file}
       main.cpp
       )
 
