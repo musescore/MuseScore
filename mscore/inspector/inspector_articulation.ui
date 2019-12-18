@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>284</width>
-    <height>180</height>
+    <width>363</width>
+    <height>226</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -323,6 +323,13 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <widget class="QPushButton" name="properties">
+     <property name="text">
+      <string>Properties</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -337,6 +344,10 @@
   <tabstop>title</tabstop>
   <tabstop>direction</tabstop>
   <tabstop>anchor</tabstop>
+  <tabstop>playArticulation</tabstop>
+  <tabstop>timeStretch</tabstop>
+  <tabstop>ornamentStyle</tabstop>
+  <tabstop>properties</tabstop>
  </tabstops>
  <resources/>
  <connections>

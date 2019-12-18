@@ -47,6 +47,9 @@ class Tuplet;
 class FretDiagram;
 class Bend;
 class TremoloBar;
+class TimeSig;
+class StaffTextBase;
+class Articulation;
 
 #ifdef Q_OS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
@@ -421,6 +424,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual Element* elementNear(QPointF);
       QList<Element*> elementsNear(QPointF);
       void editTremoloBarProperties(TremoloBar*);
+      void editArticulationProperties(Articulation*);
+      void editTimeSigProperties(TimeSig*);
+      void editStaffTextProperties(StaffTextBase*);
       EditData& getEditData()        { return editData; }
       void changeState(ViewState);
 

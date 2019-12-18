@@ -160,7 +160,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
       else if (e->isTimeSig()) {
             genPropertyMenu1(e, popup);
-            TimeSig* ts = static_cast<TimeSig*>(e);
+            TimeSig* ts = toTimeSig(e);
             int _track = ts->track();
             // if the time sig. is not generated (= not courtesy) and is in track 0
             // add the specific menu item
@@ -288,8 +288,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
 void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       {
       if (cmd == "a-props") {
-            ArticulationProperties rp(static_cast<Articulation*>(e));
-            rp.exec();
+            editArticulationProperties(toArticulation(e));
             }
       else if (cmd == "measure-props") {
             Measure* m = 0;
@@ -303,7 +302,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   }
             }
       else if (cmd == "picture") {
-            mscore->addImage(score(), static_cast<HBox*>(e));
+            mscore->addImage(score(), toHBox(e));
             }
       else if (cmd == "frame-text") {
             Text* t = new Text(score(), Tid::FRAME);
@@ -357,29 +356,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             startEditMode(s);
             }
       else if (cmd == "tr-props")
-            editTremoloBarProperties(static_cast<TremoloBar*>(e));
+            editTremoloBarProperties(toTremoloBar(e));
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
             ts->undoChangeProperty(Pid::SHOW_COURTESY, !ts->showCourtesySig());
             }
       else if (cmd == "ts-props") {
-            TimeSig* ts = static_cast<TimeSig*>(e);
-            TimeSig* r = new TimeSig(*ts);
-            TimeSigProperties tsp(r);
-
-            if (tsp.exec()) {
-                  ts->undoChangeProperty(Pid::SHOW_COURTESY,      r->showCourtesySig());
-                  ts->undoChangeProperty(Pid::NUMERATOR_STRING,   r->numeratorString());
-                  ts->undoChangeProperty(Pid::DENOMINATOR_STRING, r->denominatorString());
-                  ts->undoChangeProperty(Pid::TIMESIG_TYPE,       int(r->timeSigType()));
-                  ts->undoChangeProperty(Pid::GROUPS,        QVariant::fromValue<Groups>(r->groups()));
-
-                  if (r->sig() != ts->sig()) {
-                        score()->cmdAddTimeSig(ts->measure(), ts->staffIdx(), r, true);
-                        r = 0;
-                        }
-                  }
-            delete r;
+            editTimeSigProperties(toTimeSig(e));
             }
       else if (cmd == "smallNote")
             e->undoChangeProperty(Pid::SMALL, !static_cast<Note*>(e)->small());
@@ -392,17 +375,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   otherClef->undoChangeProperty(Pid::SHOW_COURTESY, show);
             }
       else if (cmd == "st-props") {
-            StaffTextProperties rp(toStaffTextBase(e));
-            if (rp.exec()) {
-                  Score* score = e->score();
-                  StaffTextBase* nt = toStaffTextBase(rp.staffTextBase()->clone());
-                  nt->setScore(score);
-                  score->undoChangeElement(e, nt);
-                  score->masterScore()->updateChannel();
-                  score->updateCapo();
-                  score->updateSwing();
-                  score->setPlaylistDirty();
-                  }
+            editStaffTextProperties(toStaffTextBase(e));
             }
 #if 0
       else if (cmd == "text-style") {
@@ -537,4 +510,58 @@ void ScoreView::editTremoloBarProperties(TremoloBar* tb)
                   score()->undo(new ChangeTremoloBar(static_cast<TremoloBar*>(b), bp.points()));
             }
       }
+
+//---------------------------------------------------------
+//   editArticulationProperties
+//---------------------------------------------------------
+
+void ScoreView::editArticulationProperties(Articulation* ar)
+      {
+      ArticulationProperties rp(ar);
+      rp.exec();
+      }
+
+//---------------------------------------------------------
+//   editTimeSigProperties
+//---------------------------------------------------------
+
+void ScoreView::editTimeSigProperties(TimeSig* ts)
+      {
+      TimeSig* r = new TimeSig(*ts);
+      TimeSigProperties tsp(r);
+
+      if (tsp.exec()) {
+            ts->undoChangeProperty(Pid::SHOW_COURTESY, r->showCourtesySig());
+            ts->undoChangeProperty(Pid::NUMERATOR_STRING, r->numeratorString());
+            ts->undoChangeProperty(Pid::DENOMINATOR_STRING, r->denominatorString());
+            ts->undoChangeProperty(Pid::TIMESIG_TYPE, int(r->timeSigType()));
+            ts->undoChangeProperty(Pid::GROUPS, QVariant::fromValue<Groups>(r->groups()));
+
+            if (r->sig() != ts->sig()) {
+                  score()->cmdAddTimeSig(ts->measure(), ts->staffIdx(), r, true);
+                  r = 0;
+                  }
+            }
+      delete r;
+      }
+
+//---------------------------------------------------------
+//   editStaffTextProperties
+//---------------------------------------------------------
+
+void ScoreView::editStaffTextProperties(StaffTextBase* st)
+      {
+      StaffTextProperties rp(st);
+      if (rp.exec()) {
+            Score* score = st->score();
+            StaffTextBase* nt = toStaffTextBase(rp.staffTextBase()->clone());
+            nt->setScore(score);
+            score->undoChangeElement(st, nt);
+            score->masterScore()->updateChannel();
+            score->updateCapo();
+            score->updateSwing();
+            score->setPlaylistDirty();
+            }
+      }
+
 }
