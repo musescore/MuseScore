@@ -84,12 +84,9 @@ endif (APPLE)
 
 
 if (MINGW)
-   set (QT_WRC_EXECUTABLE        ${PROJECT_SOURCE_DIR}/build/wrc.bat)
-   set (QT_WINE_EXECUTABLE       ${PROJECT_SOURCE_DIR}/build/wine.bat)
    add_custom_command(
       OUTPUT ${PROJECT_BINARY_DIR}/resfile.o
-      COMMAND ${QT_WRC_EXECUTABLE} -i mscore.rc -o ${PROJECT_BINARY_DIR}/mscore.res
-      COMMAND ${QT_WINE_EXECUTABLE} /home/ws/.wine/drive_c/MingW/bin/windres.exe ${PROJECT_BINARY_DIR}/mscore.res -o ${PROJECT_BINARY_DIR}/resfile.o
+      COMMAND ${CMAKE_RC_COMPILER} -i mscore.rc -o ${PROJECT_BINARY_DIR}/resfile.o
       DEPENDS ${PROJECT_SOURCE_DIR}/mscore/data/mscore.rc
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/mscore/data
       )
@@ -128,7 +125,7 @@ if (MINGW)
    endforeach (QtLibrary ${QT_LIBRARIES})
    list(REMOVE_DUPLICATES QtInstallLibraries)
 
-   target_link_libraries(mscore ${QT_LIBRARIES})
+   # target_link_libraries(mscore ${QT_LIBRARIES})
 
    install( TARGETS mscore RUNTIME DESTINATION bin )
 
