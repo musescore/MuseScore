@@ -151,6 +151,9 @@ class InspectorArticulation : public InspectorElementBase {
       Q_OBJECT
       Ui::InspectorArticulation ar;
 
+   private slots:
+      void propertiesClicked();
+
    public:
       InspectorArticulation(QWidget* parent);
       virtual void setElement() override;
@@ -234,7 +237,6 @@ class InspectorClef : public InspectorElementBase {
 //   InspectorStem
 //---------------------------------------------------------
 
-
 class InspectorStem : public InspectorElementBase {
       Q_OBJECT
 
@@ -254,6 +256,9 @@ class InspectorTimeSig : public InspectorElementBase {
 
       Ui::InspectorSegment s;
       Ui::InspectorTimeSig t;
+
+   private slots:
+      void propertiesClicked();
 
    public:
       InspectorTimeSig(QWidget* parent);
@@ -384,8 +389,12 @@ class InspectorStaffText : public InspectorTextBase {
 
       Ui::InspectorStaffText s;
 
+   private slots:
+      void propertiesClicked();
+
    public:
       InspectorStaffText(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------

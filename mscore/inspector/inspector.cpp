@@ -60,6 +60,7 @@
 #include "libmscore/hook.h"
 #include "libmscore/stem.h"
 #include "libmscore/keysig.h"
+#include "libmscore/timesig.h"
 #include "libmscore/barline.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
@@ -72,6 +73,7 @@
 #include "libmscore/accidental.h"
 #include "libmscore/articulation.h"
 #include "libmscore/fermata.h"
+#include "libmscore/stafftextbase.h"
 
 namespace Ms {
 
@@ -579,6 +581,21 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
             };
       const std::vector<InspectorPanel> ppList = { { ar.title, ar.panel } };
       mapSignals(iiList, ppList);
+      connect(ar.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
+      }
+
+//---------------------------------------------------------
+//   propertiesClicked
+//---------------------------------------------------------
+
+void InspectorArticulation::propertiesClicked()
+      {
+      Articulation* a = toArticulation(inspector->element());
+      Score* score = a->score();
+      score->startCmd();
+      mscore->currentScoreView()->editArticulationProperties(a);
+      a->triggerLayoutAll();
+      score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -819,9 +836,26 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
             { t.title, t.panel }
             };
       mapSignals(iiList, ppList);
+      connect(t.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }
 
-//   InspectorTimeSig::setElement
+//---------------------------------------------------------
+//   propertiesClicked
+//---------------------------------------------------------
+
+void InspectorTimeSig::propertiesClicked()
+      {
+      TimeSig* ts = toTimeSig(inspector->element());
+      Score* score = ts->score();
+      score->startCmd();
+      mscore->currentScoreView()->editTimeSigProperties(ts);
+      ts->triggerLayoutAll();
+      score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
 
 void InspectorTimeSig::setElement()
       {
@@ -864,6 +898,10 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
       k.keysigMode->addItem(tr("Locrian"),    int(KeyMode::LOCRIAN));
       mapSignals(iiList, ppList);
       }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
 
 void InspectorKeySig::setElement()
       {
@@ -1038,6 +1076,10 @@ void InspectorClef::setElement()
       InspectorElementBase::setElement();
       }
 
+//---------------------------------------------------------
+//   valueChanged
+//---------------------------------------------------------
+
 void InspectorClef::valueChanged(int idx)
       {
       // copy into 'other clef' the ShowCouretsy ser of this clef
@@ -1166,6 +1208,31 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       populatePlacement(s.placement);
       populateStyle(s.style);
       mapSignals(il, ppList);
+      connect(s.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
+      }
+
+//---------------------------------------------------------
+//   propertiesClicked
+//---------------------------------------------------------
+
+void InspectorStaffText::propertiesClicked()
+      {
+      StaffTextBase* st = toStaffTextBase(inspector->element());
+      Score* score = st->score();
+      score->startCmd();
+      mscore->currentScoreView()->editStaffTextProperties(st);
+      st->triggerLayoutAll();
+      score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorStaffText::setElement()
+      {
+      InspectorElementBase::setElement();
+      s.properties->setVisible(inspector->element()->isStaffText());
       }
 
 //---------------------------------------------------------
