@@ -297,10 +297,10 @@ void MScore::init()
             _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
-      selectColor[1].setNamedColor("#0065BF");   
-      selectColor[2].setNamedColor("#007F00");   
-      selectColor[3].setNamedColor("#C53F00");   
-      selectColor[4].setNamedColor("#C31989");   
+      selectColor[0].setNamedColor("#0065BF");   //blue
+      selectColor[1].setNamedColor("#007F00");   //green
+      selectColor[2].setNamedColor("#C53F00");   //orange
+      selectColor[3].setNamedColor("#C31989");   //purple
 
       defaultColor        = Qt::black;
       dropColor           = QColor("#1778db");

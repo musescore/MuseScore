@@ -324,7 +324,7 @@ class MScore {
       static bool verticalOrientation()            { return _verticalOrientation; }
       static void setVerticalOrientation(bool val) { _verticalOrientation = val;  }
 
-      static QColor selectColor[4];
+      static QColor selectColor[VOICES];
       static QColor defaultColor;
       static QColor dropColor;
       static QColor layoutBreakColor;
