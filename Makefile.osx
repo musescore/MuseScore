@@ -52,7 +52,7 @@ debug:
 xcode:
 	mkdir build.xcode;              \
     cd build.xcode;                                  \
-    cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/mscore/Debug -DCMAKE_BUILD_TYPE=DEBUG \
+    cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/main/Debug -DCMAKE_BUILD_TYPE=DEBUG \
           -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"  \
           .. -G Xcode;                         \
     xcodebuild -project ${XCODEPROJ} -target lrelease;
