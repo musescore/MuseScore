@@ -458,8 +458,11 @@ void HBox::layout()
             setPos(x, y);
             bbox().setRect(0.0, 0.0, w, h);
             }
-      else {
+      else if (system()) {
             bbox().setRect(0.0, 0.0, point(boxWidth()), system()->height());
+            }
+      else {
+            bbox().setRect(0.0, 0.0, 50, 50);
             }
       Box::layout();
       }
