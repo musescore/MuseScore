@@ -19,7 +19,7 @@
 
 namespace Ms {
       QString iconPath = QString(":/data/icons/");
-      QColor  MScore::selectColor[4];
+      QColor  MScore::selectColor[VOICES];
 
       void MScore::init()
             {

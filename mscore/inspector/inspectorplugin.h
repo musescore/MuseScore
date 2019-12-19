@@ -14,10 +14,11 @@
 #define __INSPECTORPLUGIN_H__
 
 #include <QtUiPlugin/QDesignerCustomWidgetInterface>
+#include "libmscore/mscore.h"
 
 namespace Ms {
       struct MScore {
-            static QColor selectColor[4];
+            static QColor selectColor[VOICES];
             static void init();
             };
 
