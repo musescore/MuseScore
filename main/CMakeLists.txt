@@ -42,6 +42,11 @@ else (APPLE)
       set (ExecutableName mscore)
 endif (APPLE)
 
+include_directories(
+      ${PROJECT_SOURCE_DIR}/global
+      ${PROJECT_BINARY_DIR}
+      )
+
 add_executable(${ExecutableName}
       ${resource_file}
       main.cpp
@@ -69,7 +74,7 @@ target_include_directories(mscore PRIVATE
       ${PROJECT_SOURCE_DIR}/thirdparty
       )
 
-target_link_libraries(mscore mscoreapp)
+target_link_libraries(mscore mscoreapp global)
 
 
 if (APPLE)

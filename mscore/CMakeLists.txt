@@ -337,7 +337,6 @@ add_library(mscoreapp STATIC
       templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
       toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h tremolobarprop.h
       tupletdialog.h updatechecker.h uploadscoredialog.h waveview.h webpage.h workspace.h
-      modulessetup.h
 
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
       stringutils.h stringutils.cpp
@@ -386,7 +385,6 @@ add_library(mscoreapp STATIC
       masterpalette.cpp
       dragdrop.cpp
       waveview.cpp helpBrowser.cpp
-      modulessetup.cpp
       inspector/inspector.cpp
       inspector/inspectorBase.cpp
       inspector/inspectorBeam.cpp
@@ -508,8 +506,6 @@ target_link_libraries(mscoreapp
       libmscore
       qzip
       beatroot
-      kqoauth
-      telemetry
       )
 
 if (BUILD_CRASH_REPORTER)
@@ -517,9 +513,9 @@ if (BUILD_CRASH_REPORTER)
 endif (BUILD_CRASH_REPORTER)
 
 if (BUILD_TELEMETRY_MODULE)
-    target_link_libraries(mscore telemetry)
+    target_link_libraries(mscoreapp telemetry)
 endif (BUILD_TELEMETRY_MODULE)
-add_dependencies(mscore workspaces)
+add_dependencies(mscoreapp workspaces)
 
 if (USE_SYSTEM_FREETYPE)
       target_link_libraries(mscoreapp ${FREETYPE_LIBRARIES})

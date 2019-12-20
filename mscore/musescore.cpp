@@ -126,7 +126,6 @@
 #include "awl/aslider.h"
 #include "extension.h"
 #include "thirdparty/qzip/qzipreader_p.h"
-#include "modulessetup.h"
 
 #include "sparkle/autoUpdater.h"
 #if defined(WIN_SPARKLE_ENABLED)
@@ -159,6 +158,11 @@ extern Ms::Synthesizer* createZerberus();
 
 #ifdef BUILD_CRASH_REPORTER
 #include "thirdparty/libcrashreporter-qt/src/libcrashreporter-handler/Handler.h"
+#endif
+
+#ifdef BUILD_TELEMETRY_MODULE
+#include "actioneventobserver.h"
+#include "widgets/telemetrypermissiondialog.h"
 #endif
 
 namespace Ms {
@@ -7044,6 +7048,22 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
 #endif
       }
 
+#ifdef BUILD_TELEMETRY_MODULE
+
+void tryToRequestTelemetryPermission()
+      {
+      QString accessRequestedAtVersion = preferences.getString(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED);
+
+      if (accessRequestedAtVersion == VERSION)
+            return;
+
+      TelemetryPermissionDialog *requestDialog = new TelemetryPermissionDialog(mscore->window());
+      requestDialog->show();
+
+      preferences.setPreference(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, VERSION);
+      }
+#endif
+
 void MuseScore::updateUiStyleAndTheme()
       {
       // set UI Theme
@@ -7109,24 +7129,6 @@ void MuseScore::updateUiStyleAndTheme()
       Shortcut::refreshIcons();
       }
 
-#ifdef BUILD_TELEMETRY_MODULE
-#include "actioneventobserver.h"
-#include "widgets/telemetrypermissiondialog.h"
-
-void tryToRequestTelemetryPermission()
-      {
-      QString accessRequestedAtVersion = preferences.getString(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED);
-
-      if (accessRequestedAtVersion == VERSION)
-            return;
-
-      TelemetryPermissionDialog *requestDialog = new TelemetryPermissionDialog(mscore->window());
-      requestDialog->show();
-
-      preferences.setPreference(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, VERSION);
-      }
-#endif
-
 MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** argv)
       {
       QFile f(":/revision.h");
@@ -7165,7 +7167,8 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
       return app;
       }
 
-      ModulesSetup::instance()->setup();
+MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandLineArguments(MuseScoreApplication* app)
+      {
       QCommandLineParser parser;
       CommandLineParseResult parseResult;
 
@@ -7498,6 +7501,10 @@ int runApplication(int& argc, char** av)
             return ok ? EXIT_SUCCESS : EXIT_FAILURE;
             }
 
+#ifdef BUILD_TELEMETRY_MODULE
+      tryToRequestTelemetryPermission();
+#endif
+
       return qApp->exec();
       }
 
@@ -7821,11 +7828,6 @@ void MuseScore::init(QStringList& argv)
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())
             mscore->showSynthControl(true);
-
-#ifdef BUILD_TELEMETRY_MODULE
-      tryToRequestTelemetryPermission();
-#endif
-
       }
 
 //---------------------------------------------------------

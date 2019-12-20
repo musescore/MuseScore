@@ -741,11 +741,6 @@ if (NOT MSVC)
 endif (NOT MSVC)
 
 ##
-if (BUILD_TELEMETRY_MODULE)
-      add_subdirectory(telemetry)
-      add_subdirectory(thirdparty/google_analytics)
-endif (BUILD_TELEMETRY_MODULE)
-add_subdirectory(global)
 
 ## Includes
 ##
@@ -787,6 +782,12 @@ if (OMR)
  endif (NOT USE_SYSTEM_POPPLER)
 endif (OMR)
 
+if (BUILD_TELEMETRY_MODULE)
+      add_subdirectory(telemetry)
+      add_subdirectory(thirdparty/google_analytics)
+endif (BUILD_TELEMETRY_MODULE)
+add_subdirectory(global)
+
 add_subdirectory(mscore)
 add_subdirectory(main)
 
@@ -811,6 +812,7 @@ configure_file (
 ##
 add_subdirectory(effects)
 add_subdirectory(synthesizer)
+
 subdirs(
       awl bww2mxml share midi audiofile fluid libmscore
       thirdparty/rtf2html thirdparty/beatroot
