@@ -149,6 +149,8 @@ private slots:
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void slurs() { mxmlIoTest("testSlurs"); }
       void slurs2() { mxmlIoTest("testSlurs2"); }
+      void sound1() { mxmlIoTestRef("testSound1"); }
+      void sound2() { mxmlIoTestRef("testSound2"); }
       void specialCharacters() { mxmlIoTest("testSpecialCharacters"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
@@ -159,6 +161,12 @@ private slots:
       void tablature3() { mxmlIoTest("testTablature3"); }
       void tablature4() { mxmlIoTest("testTablature4"); }
       void tablature5() { mxmlIoTestRef("testTablature5"); }
+      void tboxAboveBelow1() { mxmlMscxExportTestRef("testTboxAboveBelow1"); }
+      void tboxAboveBelow2() { mxmlMscxExportTestRef("testTboxAboveBelow2"); }
+      void tboxAboveBelow3() { mxmlMscxExportTestRef("testTboxAboveBelow3"); }
+      void tboxMultiPage1() { mxmlMscxExportTestRef("testTboxMultiPage1"); }
+      void tboxVbox1() { mxmlMscxExportTestRef("testTboxVbox1"); }
+      void tboxWords1() { mxmlMscxExportTestRef("testTboxWords1"); }
       void tempo1() { mxmlIoTest("testTempo1"); }
       void tempo2() { mxmlIoTestRef("testTempo2"); }
       void tempo3() { mxmlIoTestRef("testTempo3"); }
@@ -187,8 +195,6 @@ private slots:
       void wedge3() { mxmlIoTest("testWedge3"); }
       void words1() { mxmlIoTest("testWords1"); }
       void words2() { mxmlIoTest("testWords2"); }
-      void sound1() { mxmlIoTestRef("testSound1"); }
-      void sound2() { mxmlIoTestRef("testSound2"); }
       };
 
 //---------------------------------------------------------
