@@ -982,6 +982,19 @@ bool Segment::hasElements() const
       }
 
 //---------------------------------------------------------
+//   hasElements
+///  return true if an annotation of type type or and element is found in the track range
+//---------------------------------------------------------
+
+bool Segment::hasElements(int minTrack, int maxTrack) const
+      {
+      for (int curTrack = minTrack; curTrack <= maxTrack; curTrack++)
+            if (element(curTrack))
+                  return true;
+      return false;
+      }
+
+//---------------------------------------------------------
 //   hasAnnotationOrElement
 ///  return true if an annotation of type type or and element is found in the track range
 //---------------------------------------------------------
@@ -991,10 +1004,7 @@ bool Segment::hasAnnotationOrElement(ElementType type, int minTrack, int maxTrac
       for (const Element* e : _annotations)
             if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack)
                   return true;
-      for (int curTrack = minTrack; curTrack <= maxTrack; curTrack++)
-            if (element(curTrack))
-                  return true;
-      return false;
+      return hasElements(minTrack, maxTrack);
       }
 
 //---------------------------------------------------------
