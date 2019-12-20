@@ -4374,6 +4374,23 @@ void Shortcut::resetToDefault()
       dirty = true;
       }
 
+Shortcut* Shortcut::getShortcutByKeySequence(const QKeySequence &keySequence)
+      {
+      for (Shortcut* shortcut : _shortcuts.values()) {
+
+            QAction* action = shortcut->action();
+
+            if (!action)
+                  continue;
+
+
+            if (action->shortcut() == keySequence)
+                  return shortcut;
+            }
+
+      return nullptr;
+      }
+
 //---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
