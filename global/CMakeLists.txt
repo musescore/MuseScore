@@ -25,6 +25,7 @@ add_definitions(
 )
 include_directories(
     ${Qt5Core_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/telemetry
 )
 
 set(CMAKE_AUTOMOC ON)

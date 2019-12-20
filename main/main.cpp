@@ -19,6 +19,8 @@
 
 #include "mscore/musescore.h"
 
+#include "modulessetup.h"
+
 static void initResources()
       {
 #ifdef Q_OS_MAC
@@ -43,5 +45,8 @@ static void initResources()
 int main(int argc, char** argv)
       {
       initResources();
+
+      ModulesSetup::instance()->setup();
+
       return Ms::runApplication(argc, argv);
       }

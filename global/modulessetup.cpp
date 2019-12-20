@@ -1,4 +1,5 @@
 #include "modulessetup.h"
+#include "config.h"
 
 #ifdef BUILD_TELEMETRY_MODULE
 #include "telemetrysetup.h"
