@@ -825,6 +825,56 @@ int System::y2staff(qreal y) const
       }
 
 //---------------------------------------------------------
+//   searchStaff
+///   Finds a staff which y position is most close to the
+///   given \p y.
+///   \param y The y coordinate in system coordinates.
+///   \param preferredStaff If not -1, will give more space
+///   to a staff with the given number when searching it by
+///   coordinate.
+///   \returns Number of the found staff.
+//---------------------------------------------------------
+
+int System::searchStaff(qreal y, int preferredStaff /* = -1 */) const
+      {
+      int i = 0;
+      const int nstaves = score()->nstaves();
+      for (; i < nstaves;) {
+            SysStaff* stff = staff(i);
+            if (!stff->show() || !score()->staff(i)->show()) {
+                  ++i;
+                  continue;
+                  }
+            int ni = i;
+            for (;;) {
+                  ++ni;
+                  if (ni == nstaves || (staff(ni)->show() && score()->staff(ni)->show()))
+                        break;
+                  }
+
+            qreal sy2;
+            if (ni != nstaves) {
+                  SysStaff* nstaff = staff(ni);
+                  qreal s1y2       = stff->bbox().y() + stff->bbox().height();
+                  if (i == preferredStaff)
+                        sy2 = s1y2 + (nstaff->bbox().y() - s1y2);
+                  else if (ni == preferredStaff)
+                        sy2 = s1y2;
+                  else
+                        sy2 = s1y2 + (nstaff->bbox().y() - s1y2) * .5;
+                  }
+            else
+                  sy2 = page()->height() - pos().y();
+            if (y > sy2) {
+                  i   = ni;
+                  continue;
+                  }
+            break;
+            }
+      return i;
+      }
+
+//---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
