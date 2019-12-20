@@ -579,34 +579,7 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
       System* s = m->system();
       qreal y   = p.y() - s->canvasPos().y();
 
-      int i = 0;
-      for (; i < nstaves();) {
-            SysStaff* stff = s->staff(i);
-            if (!stff->show() || !staff(i)->show()) {
-                  ++i;
-                  continue;
-                  }
-            int ni = i;
-            for (;;) {
-                  ++ni;
-                  if (ni == nstaves() || (s->staff(ni)->show() && staff(ni)->show()))
-                        break;
-                  }
-
-            qreal sy2;
-            if (ni != nstaves()) {
-                  SysStaff* nstaff = s->staff(ni);
-                  qreal s1y2 = stff->bbox().y() + stff->bbox().height();
-                  sy2 = s1y2 + (nstaff->bbox().y() - s1y2)/2;
-                  }
-            else
-                  sy2 = s->page()->height() - s->pos().y();   // s->height();
-            if (y > sy2) {
-                  i   = ni;
-                  continue;
-                  }
-            break;
-            }
+      const int i = s->searchStaff(y);
 
       // search for segment + offset
       QPointF pppp = p - m->canvasPos();
@@ -662,39 +635,7 @@ void Score::dragPosition(const QPointF& p, int* rst, Segment** seg) const
       System* s = m->system();
       qreal y   = p.y() - s->canvasPos().y();
 
-      int i;
-      for (i = 0; i < nstaves();) {
-            SysStaff* stff = s->staff(i);
-            if (!stff->show() || !staff(i)->show()) {
-                  ++i;
-                  continue;
-                  }
-            int ni = i;
-            for (;;) {
-                  ++ni;
-                  if (ni == nstaves() || (s->staff(ni)->show() && staff(ni)->show()))
-                        break;
-                  }
-
-            qreal sy2;
-            if (ni != nstaves()) {
-                  SysStaff* nstaff = s->staff(ni);
-                  qreal s1y2       = stff->bbox().y() + stff->bbox().height();
-                  if (i == *rst)
-                        sy2 = s1y2 + (nstaff->bbox().y() - s1y2);
-                  else if (ni == *rst)
-                        sy2 = s1y2;
-                  else
-                        sy2 = s1y2 + (nstaff->bbox().y() - s1y2) * .5;
-                  }
-            else
-                  sy2 = s->page()->height() - s->pos().y();
-            if (y > sy2) {
-                  i   = ni;
-                  continue;
-                  }
-            break;
-            }
+      const int i = s->searchStaff(y, *rst);
 
       // search for segment + offset
       QPointF pppp = p - m->canvasPos();
