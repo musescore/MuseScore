@@ -84,6 +84,9 @@
 #include <QtGlobal>
 #include <QtDebug>
 #include <QSharedData>
+#include <QHash>
+#include <QKeySequence>
+#include <QAction>
 
 #include <QAtomicInt>
 #include <QErrorMessage>

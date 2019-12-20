@@ -45,8 +45,13 @@ include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
+      ${PROJECT_SOURCE_DIR}/global
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
+
+if (BUILD_TELEMETRY_MODULE)
+      include_directories(${PROJECT_SOURCE_DIR}/telemetry)
+endif (BUILD_TELEMETRY_MODULE)
 
 if (SCRIPT_INTERFACE)
       set (SCRIPT_FILES
@@ -507,6 +512,9 @@ if (BUILD_CRASH_REPORTER)
       target_link_libraries(mscoreapp crashreporter-handler)
 endif (BUILD_CRASH_REPORTER)
 
+if (BUILD_TELEMETRY_MODULE)
+    target_link_libraries(mscoreapp telemetry)
+endif (BUILD_TELEMETRY_MODULE)
 add_dependencies(mscoreapp workspaces)
 
 if (USE_SYSTEM_FREETYPE)

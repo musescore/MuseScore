@@ -160,6 +160,11 @@ extern Ms::Synthesizer* createZerberus();
 #include "thirdparty/libcrashreporter-qt/src/libcrashreporter-handler/Handler.h"
 #endif
 
+#ifdef BUILD_TELEMETRY_MODULE
+#include "actioneventobserver.h"
+#include "widgets/telemetrypermissiondialog.h"
+#endif
+
 namespace Ms {
 
 MuseScore* mscore;
@@ -7043,6 +7048,22 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
 #endif
       }
 
+#ifdef BUILD_TELEMETRY_MODULE
+
+void tryToRequestTelemetryPermission()
+      {
+      QString accessRequestedAtVersion = preferences.getString(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED);
+
+      if (accessRequestedAtVersion == VERSION)
+            return;
+
+      TelemetryPermissionDialog *requestDialog = new TelemetryPermissionDialog(mscore->window());
+      requestDialog->show();
+
+      preferences.setPreference(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, VERSION);
+      }
+#endif
+
 void MuseScore::updateUiStyleAndTheme()
       {
       // set UI Theme
@@ -7480,6 +7501,10 @@ int runApplication(int& argc, char** av)
             return ok ? EXIT_SUCCESS : EXIT_FAILURE;
             }
 
+#ifdef BUILD_TELEMETRY_MODULE
+      tryToRequestTelemetryPermission();
+#endif
+
       return qApp->exec();
       }
 
@@ -7701,6 +7726,10 @@ void MuseScore::init(QStringList& argv)
             }
 
       QApplication::instance()->installEventFilter(mscore);
+
+#ifdef BUILD_TELEMETRY_MODULE
+      QApplication::instance()->installEventFilter(ActionEventObserver::instance());
+#endif
 
       mscore->setRevision(Ms::revision);
       int files = 0;
