@@ -553,19 +553,6 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
       }
 
 //---------------------------------------------------------
-//   validSegment
-//---------------------------------------------------------
-
-static bool validSegment(Segment* s, int startTrack, int endTrack)
-      {
-      for (int track = startTrack; track < endTrack; ++track) {
-            if (s->element(track))
-                  return true;
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
 //   pos2measure
 //     Return measure for canvas relative position \a p.
 //---------------------------------------------------------
@@ -589,31 +576,24 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
 //      int etrack = staff(i)->part()->nstaves() * VOICES + strack;
       int etrack = VOICES + strack;
 
-      SysStaff* sstaff = m->system()->staff(i);
-      SegmentType st = SegmentType::ChordRest;
-      for (Segment* segment = m->first(st); segment; segment = segment->next(st)) {
-            if (!validSegment(segment, strack, etrack))
-                  continue;
-            Segment* ns = segment->next(st);
-            for (; ns; ns = ns->next(st)) {
-                  if (validSegment(ns, strack, etrack))
-                        break;
+      constexpr SegmentType st = SegmentType::ChordRest;
+      Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack);
+      if (segment) {
+            SysStaff* sstaff = m->system()->staff(i);
+            *rst = i;
+            if (pitch) {
+                  Staff* s1 = _staves[i];
+                  Fraction tick  = segment->tick();
+                  ClefType clef = s1->clef(tick);
+                  *pitch = y2pitch(pppp.y() - sstaff->bbox().y(), clef, s1->spatium(tick));
                   }
-            if (!ns || (pppp.x() < (segment->x() + (ns->x() - segment->x())/2.0))) {
-                  *rst = i;
-                  if (pitch) {
-                        Staff* s1 = _staves[i];
-                        Fraction tick  = segment->tick();
-                        ClefType clef = s1->clef(tick);
-                        *pitch = y2pitch(pppp.y() - sstaff->bbox().y(), clef, s1->spatium(tick));
-                        }
-                  if (offset)
-                        *offset = pppp - QPointF(segment->x(), sstaff->bbox().y());
-                  if (seg)
-                        *seg = segment;
-                  return m;
-                  }
+            if (offset)
+                  *offset = pppp - QPointF(segment->x(), sstaff->bbox().y());
+            if (seg)
+                  *seg = segment;
+            return m;
             }
+
       return 0;
       }
 
@@ -644,42 +624,14 @@ void Score::dragPosition(const QPointF& p, int* rst, Segment** seg) const
             return;
       int etrack = staff(i)->part()->nstaves() * VOICES + strack;
 
-      SegmentType st = SegmentType::ChordRest;
-      for (Segment* segment = m->first(st); segment; segment = segment->next(st)) {
-            if (!validSegment(segment, strack, etrack))
-                  continue;
-            Segment* ns = segment->next(st);
-            for (; ns; ns = ns->next(st)) {
-                  if (validSegment(ns, strack, etrack))
-                        break;
-                  }
-            if (!ns) {
-                  *rst = i;
-                  *seg = segment;
-                  return;
-                  }
-            if (*seg == segment) {
-                  if (pppp.x() < (segment->x() + (ns->x() - segment->x()))) {
-                        *rst = i;
-                        *seg = segment;
-                        return;
-                        }
-                  }
-            else if (*seg == ns) {
-                  if (pppp.x() <= segment->x()) {
-                        *rst = i;
-                        *seg = segment;
-                        return;
-                        }
-                  }
-            else {
-                  if (pppp.x() < (segment->x() + (ns->x() - segment->x())/2.0)) {
-                        *rst = i;
-                        *seg = segment;
-                        return;
-                        }
-                  }
+      constexpr SegmentType st = SegmentType::ChordRest;
+      Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack, *seg);
+      if (segment) {
+            *rst = i;
+            *seg = segment;
+            return;
             }
+
       return;
       }
 
