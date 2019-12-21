@@ -30,29 +30,38 @@
             return id;                             \
             }                                      \
 
+//---------------------------------------------------------
+//   ServicesResolver
+//---------------------------------------------------------
+
 class ServicesResolver {
-public:
+   public:
+
+      //---------------------------------------------------
+      //   IServiceFactory
+      //---------------------------------------------------
 
       struct IServiceFactory {
-          virtual void* getInstance() = 0;
-      };
+            virtual void* getInstance() = 0;
+            };
+
+      //---------------------------------------------------
+      //   FunctorBasedFactory
+      //---------------------------------------------------
 
       template <typename T>
-      struct FunctorBasedFactory : public IServiceFactory
-      {
+      struct FunctorBasedFactory : public IServiceFactory {
             using F = T*(*)();
-
             FunctorBasedFactory(F f) : IServiceFactory() {
                   getInstanceFunc = f;
                   }
-
             void* getInstance() override {
                   return getInstanceFunc();
                   }
 
       private:
             F getInstanceFunc;
-      };
+            };
 
       template <typename I, typename T>
       static inline void registerService(T*(*f)()) {
@@ -71,13 +80,12 @@ public:
             return srvHash()->value(interfaceId);
             }
 
-private:
-
+   private:
       static inline QHash<QUuid, IServiceFactory*> *srvHash() {
             static QHash<QUuid, IServiceFactory*> serviceHash = QHash<QUuid, IServiceFactory*>();
 
             return &serviceHash;
             }
-};
+      };
 
 #endif // SERVICESRESOLVER_H

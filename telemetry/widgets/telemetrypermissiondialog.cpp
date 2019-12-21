@@ -21,6 +21,10 @@
 
 #include <QQuickItem>
 
+//---------------------------------------------------------
+//   TelemetryPermissionDialog
+//---------------------------------------------------------
+
 TelemetryPermissionDialog::TelemetryPermissionDialog(QWidget* parentWidget) : QQuickView()
       {
       setMinimumWidth(500);

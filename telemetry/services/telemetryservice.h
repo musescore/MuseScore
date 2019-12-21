@@ -24,8 +24,12 @@
 
 #include <QSettings>
 
+//---------------------------------------------------------
+//   TelemetryService
+//---------------------------------------------------------
+
 class TelemetryService : public ITelemetryService {
-public:
+   public:
       TelemetryService();
 
       void sendEvent(const QString &category, const QString &action, const QString &label, const QVariant &value, const QVariantMap &customValues) override;
@@ -33,7 +37,7 @@ public:
       void startSession() override;
       void endSession() override;
 
-private:
+   private:
       bool isTelemetryAllowed() const;
 
       QSettings m_settings;
