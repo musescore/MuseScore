@@ -55,7 +55,7 @@ Rectangle {
             color: "#00447a"
             font.pixelSize: 28
 
-            text: qsTr("Help us improve Musescore")
+            text: qsTr("Help us improve MuseScore")
         }
 
         Column {
