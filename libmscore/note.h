@@ -40,6 +40,7 @@ class Accidental;
 class NoteDot;
 class Spanner;
 class StaffType;
+class NoteEditData;
 enum class SymId;
 enum class AccidentalType : char;
 
@@ -282,6 +283,8 @@ class Note final : public Element {
       void updateRelLine(int relLine, bool undoable);
       bool isNoteName() const;
       SymId noteHead() const;
+
+      void normalizeLeftDragDelta(Segment* seg, EditData &ed, NoteEditData* ned);
 
 public:
       Note(Score* s = 0);

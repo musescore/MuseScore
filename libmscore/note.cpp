@@ -1496,7 +1496,7 @@ public:
     EditMode mode = EditMode_Undefined;
     QPointF delta;
 
-    static constexpr double MODE_TRANSITION_LIMIT_DEGREES = 15.0;
+    static constexpr double MODE_TRANSITION_LIMIT_DEGREES = 25.0;
 
     static inline EditMode editModeByDragDirection(const qreal& deltaX, const qreal& deltaY) {
         qreal x = qAbs(deltaX);
@@ -1510,7 +1510,7 @@ public:
 
         qreal degrees = (qAcos(radians) * 180.0) / M_PI;
 
-        qDebug() << "YOPTA DEGREES " << degrees;
+        qDebug() << "NOTE DRAG DEGREES " << degrees;
 
         if (degrees >= MODE_TRANSITION_LIMIT_DEGREES) {
             return NoteEditData::EditMode_ChangePitch;
@@ -2424,6 +2424,35 @@ void Note::verticalDrag(EditData &ed)
             }
       }
 
+void Note::normalizeLeftDragDelta(Segment* seg, EditData &ed, NoteEditData* ned)
+      {
+      Segment* previous = seg->prev();
+
+      if (previous) {
+
+            qreal minDist = previous->minHorizontalCollidingDistance(seg);
+
+            qreal diff = (ed.pos.x()) - (previous->pageX() + minDist);
+
+            qreal distanceBetweenSegments = (previous->pageX() + minDist) - seg->pageX();
+
+            if (diff < 0)
+                  ned->delta.setX(distanceBetweenSegments);
+            }
+      else {
+            Measure* measure = seg->measure();
+
+            qreal minDist = score()->styleP(Sid::barNoteDistance);
+
+            qreal diff = (ed.pos.x()) - (measure->pageX() + minDist);
+
+            qreal distanceBetweenSegments = (measure->pageX() + minDist) - seg->pageX();
+
+            if (diff < 0)
+                  ned->delta.setX(distanceBetweenSegments);
+            }
+      }
+
 void Note::horizontalDrag(EditData &ed)
       {
       Chord* ch = chord();
@@ -2436,9 +2465,18 @@ void Note::horizontalDrag(EditData &ed)
       if (seg &&
           (((ed.buttons & Qt::LeftButton) && !(ed.modifiers & Qt::ControlModifier))
            || (ed.modifiers & Qt::ShiftModifier))) {
-            const Spatium deltaSp = Spatium(ned->delta.x() / spatium());
-            seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
+
+            if (ed.delta.x() < 0)
+                  normalizeLeftDragDelta(seg, ed, ned);
             }
+
+      const Spatium deltaSp = Spatium(ned->delta.x() / spatium());
+
+      if (seg->extraLeadingSpace() + deltaSp < Spatium(0)) {
+          return;
+      }
+
+      seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
 
       triggerLayout();
       }
