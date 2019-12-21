@@ -27,10 +27,17 @@
 #include <QToolButton>
 #include "shortcut.h"
 
+//---------------------------------------------------------
+//   ActionEventObserver
+//---------------------------------------------------------
+
 ActionEventObserver::ActionEventObserver(QObject *parent) : QObject(parent)
       {
-
       }
+
+//---------------------------------------------------------
+//   extractActionData
+//---------------------------------------------------------
 
 QPair<QString, QString> ActionEventObserver::extractActionData(QObject* watched)
       {
@@ -64,8 +71,11 @@ QPair<QString, QString> ActionEventObserver::extractActionData(QObject* watched)
       result.second = actionKey;
 
       return result;
-
       }
+
+//---------------------------------------------------------
+//   eventFilter
+//---------------------------------------------------------
 
 bool ActionEventObserver::eventFilter(QObject *watched, QEvent *event)
       {

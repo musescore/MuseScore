@@ -4374,6 +4374,10 @@ void Shortcut::resetToDefault()
       dirty = true;
       }
 
+//---------------------------------------------------------
+//   getShortcutByKeySequence
+//---------------------------------------------------------
+
 Shortcut* Shortcut::getShortcutByKeySequence(const QKeySequence &keySequence)
       {
       for (Shortcut* shortcut : _shortcuts.values()) {
@@ -4439,6 +4443,10 @@ QString Shortcut::keySeqToString(const QKeySequence& keySeq, QKeySequence::Seque
             }
       return s;
       }
+
+//---------------------------------------------------------
+//   keySeqFromString
+//---------------------------------------------------------
 
 QKeySequence Shortcut::keySeqFromString(const QString& str, QKeySequence::SequenceFormat fmt)
       {

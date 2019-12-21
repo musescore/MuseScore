@@ -29,11 +29,13 @@
       INTERFACE_NAME* ALIAS() { return ServiceInjector<INTERFACE_NAME>::getService(); }                    \
       void set##ALIAS(INTERFACE_NAME* impl) { ServiceInjector<INTERFACE_NAME>::setService(impl); }         \
 
-template <typename I>
-class ServiceInjector
-{
-public:
+//---------------------------------------------------------
+//   ServiceInjector
+//---------------------------------------------------------
 
+template <typename I>
+class ServiceInjector {
+   public:
       ServiceInjector() {
             ServicesResolver::IServiceFactory* srvFactory = ServicesResolver::resolveServiceFactory<I>();
 
@@ -44,8 +46,8 @@ public:
 
       void setService(I* service) { m_service = QSharedPointer<I>(service); }
 
-private:
+   private:
       QSharedPointer<I> m_service;
-};
+      };
 
 #endif // SERVICEINJECTOR_H

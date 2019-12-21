@@ -26,9 +26,17 @@
 
 #include "models/telemetrypermissionmodel.h"
 
+//---------------------------------------------------------
+//   TelemetrySetup
+//---------------------------------------------------------
+
 TelemetrySetup::TelemetrySetup()
       {
       }
+
+//---------------------------------------------------------
+//   registerExports
+//---------------------------------------------------------
 
 void TelemetrySetup::registerExports()
       {
@@ -37,15 +45,27 @@ void TelemetrySetup::registerExports()
             });
       }
 
+//---------------------------------------------------------
+//   moduleName
+//---------------------------------------------------------
+
 QString TelemetrySetup::moduleName()
       {
       return QStringLiteral("telemetry");
       }
 
+//---------------------------------------------------------
+//   registerResources
+//---------------------------------------------------------
+
 void TelemetrySetup::registerResources()
       {
       Q_INIT_RESOURCE(telemetry_resources);
       }
+
+//---------------------------------------------------------
+//   registerQmlTypes
+//---------------------------------------------------------
 
 void TelemetrySetup::registerQmlTypes()
       {

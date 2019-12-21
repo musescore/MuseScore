@@ -27,13 +27,16 @@
 
 #include "interfaces/itelemetryservice.h"
 
-class ActionEventObserver : public QObject, public ServiceInjector<ITelemetryService>
-      {
+//---------------------------------------------------------
+//   ActionEventObserver
+//---------------------------------------------------------
+
+class ActionEventObserver : public QObject, public ServiceInjector<ITelemetryService> {
       Q_OBJECT
 
       INJECT(ITelemetryService, telemetryService)
 
-public:
+   public:
       static ActionEventObserver* instance()
             {
             static ActionEventObserver s;
@@ -42,11 +45,11 @@ public:
 
       bool eventFilter(QObject *watched, QEvent *event) override;
 
-private:
+   private:
       Q_DISABLE_COPY(ActionEventObserver)
-
+      
       explicit ActionEventObserver(QObject* parent = nullptr);
       QPair<QString, QString> extractActionData(QObject *watched);
-    };
+      };
 
 #endif // MENUBAR_H

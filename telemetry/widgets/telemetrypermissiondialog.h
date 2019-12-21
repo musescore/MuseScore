@@ -24,10 +24,14 @@
 #include <QQmlEngine>
 #include <QWidget>
 
-class TelemetryPermissionDialog : public QQuickView
-      {
+//---------------------------------------------------------
+//   TelemetryPermissionDialog
+//---------------------------------------------------------
+
+class TelemetryPermissionDialog : public QQuickView {
       Q_OBJECT
-public:
+
+   public:
       explicit TelemetryPermissionDialog(QWidget* parentWidget = nullptr);
       };
 

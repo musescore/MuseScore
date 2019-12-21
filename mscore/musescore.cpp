@@ -7050,6 +7050,10 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
 
 #ifndef TELEMETRY_DISABLED
 
+//---------------------------------------------------------
+//   tryToRequestTelemetryPermission
+//---------------------------------------------------------
+
 void tryToRequestTelemetryPermission()
       {
       QString accessRequestedAtVersion = preferences.getString(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED);
@@ -7064,12 +7068,16 @@ void tryToRequestTelemetryPermission()
       }
 #endif
 
+//---------------------------------------------------------
+//   updateUiStyleAndTheme
+//---------------------------------------------------------
+
 void MuseScore::updateUiStyleAndTheme()
       {
       // set UI Theme
       QApplication::setStyle(QStyleFactory::create("Fusion"));
 
-      QString wd      = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
+      QString wd = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
       // set UI Color Palette
       QPalette p(QApplication::palette());
       QString jsonPaletteFilename = preferences.isThemeDark() ? "palette_dark_fusion.json" : "palette_light_fusion.json";;
@@ -7111,12 +7119,13 @@ void MuseScore::updateUiStyleAndTheme()
             css.replace("$buttonHighlightDisabledOn", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_ON).name().toLatin1());
             css.replace("$buttonHighlightEnabledOff", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_OFF).name().toLatin1());
             css.replace("$buttonHighlightEnabledOn", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON).name().toLatin1());
-      } else {
+            }
+      else {
             css.replace("$buttonHighlightDisabledOff", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_OFF).name().toLatin1());
             css.replace("$buttonHighlightDisabledOn", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_ON).name().toLatin1());
             css.replace("$buttonHighlightEnabledOff", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF).name().toLatin1());
             css.replace("$buttonHighlightEnabledOn", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON).name().toLatin1());
-      }
+            }
 
       qApp->setStyleSheet(css);
 
@@ -7128,6 +7137,10 @@ void MuseScore::updateUiStyleAndTheme()
       genIcons();
       Shortcut::refreshIcons();
       }
+
+//---------------------------------------------------------
+//   initApplication
+//---------------------------------------------------------
 
 MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** argv)
       {
@@ -7166,6 +7179,10 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
 
       return app;
       }
+
+//---------------------------------------------------------
+//   parseCommandLineArguments
+//---------------------------------------------------------
 
 MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandLineArguments(MuseScoreApplication* app)
       {
@@ -7507,6 +7524,10 @@ int runApplication(int& argc, char** av)
 
       return qApp->exec();
       }
+
+//---------------------------------------------------------
+//   init
+//---------------------------------------------------------
 
 void MuseScore::init(QStringList& argv)
       {

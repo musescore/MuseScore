@@ -23,16 +23,19 @@
 #include <QString>
 #include <QtQml/qqml.h>
 
-class AbstractModuleSetup
-      {
-public:
+//---------------------------------------------------------
+//   AbstractModuleSetup
+//---------------------------------------------------------
+
+class AbstractModuleSetup {
+   public:
       void setup() {
             registerExports();
             registerResources();
             registerQmlTypes();
             }
 
-protected:
+   protected:
       virtual QString moduleName() = 0;
 
       virtual void registerExports() {}

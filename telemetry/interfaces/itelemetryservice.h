@@ -25,9 +25,12 @@
 #include <QVariantMap>
 #include "servicesresolver.h"
 
-class ITelemetryService
-      {
-public:
+//---------------------------------------------------------
+//   ITelemetryService
+//---------------------------------------------------------
+
+class ITelemetryService {
+   public:
       INTERFACE_ID
 
       virtual ~ITelemetryService() = default;

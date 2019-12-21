@@ -24,18 +24,21 @@
 #include <QSettings>
 #include <QString>
 
-class TelemetryPermissionModel : public QObject
-      {
-      Q_OBJECT
+//---------------------------------------------------------
+//   TelemetryPermissionModel
+//---------------------------------------------------------
 
-public:
+class TelemetryPermissionModel : public QObject {
+      Q_OBJECT
+      
+   public:
       explicit TelemetryPermissionModel(QObject *parent = nullptr);
 
       Q_INVOKABLE void accept();
       Q_INVOKABLE void reject();
       Q_INVOKABLE void openLink(const QString &link);
 
-private:
+   private:
       QSettings m_settings;
       };
 

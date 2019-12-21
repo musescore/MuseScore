@@ -22,12 +22,15 @@
 
 #include "interfaces/abstractmodulesetup.h"
 
-class TelemetrySetup : public AbstractModuleSetup
-      {
-public:
+//---------------------------------------------------------
+//   TelemetrySetup
+//---------------------------------------------------------
+
+class TelemetrySetup : public AbstractModuleSetup {
+   public:
       TelemetrySetup();
 
-protected:
+   protected:
       void registerExports() override;
 
       QString moduleName() override;
