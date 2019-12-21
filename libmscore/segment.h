@@ -54,8 +54,8 @@ class Segment final : public Element {
       Spatium _extraLeadingSpace;
       qreal _stretch;
 
-      Segment* _next;                     // linked list of segments inside a measure
-      Segment* _prev;
+      Segment* _next = nullptr;                     // linked list of segments inside a measure
+      Segment* _prev = nullptr;
 
       std::vector<Element*> _annotations;
       std::vector<Element*> _elist;       // Element storage, size = staves * VOICES.
