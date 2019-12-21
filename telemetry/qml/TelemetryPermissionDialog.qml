@@ -75,7 +75,7 @@ Rectangle {
 
                 lineHeight: 1.5
 
-                text: qsTr("We'd like to collect anonymous telemetry to help us prioritize improvements. " +
+                text: qsTr("We'd like to collect anonymous telemetry data to help us prioritize improvements. " +
                            "This includes how often you use certain features, statistics " +
                            "on preferred file formats, crashes, number of instruments per score, etc.")
             }
@@ -99,7 +99,7 @@ Rectangle {
             TextLabel {
                 id: questionLabel
 
-                text: qsTr("Are you happy for Musescore to send us anonymous reports?")
+                text: qsTr("Are you happy for MuseScore to send us anonymous reports?")
             }
         }
 
