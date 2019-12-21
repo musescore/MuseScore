@@ -60,9 +60,9 @@ void TelemetryService::endSession()
 
 bool TelemetryService::isTelemetryAllowed() const
       {
-#ifdef MSCORE_UNSTABLE
-      return false;
-#else
+#ifndef TELEMETRY_DISABLED
       return m_settings.value(PREF_APP_TELEMETRY_ALLOWED, false).toBool();
+#else
+      return false;
 #endif
       }

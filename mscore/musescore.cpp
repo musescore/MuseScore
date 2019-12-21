@@ -160,7 +160,7 @@ extern Ms::Synthesizer* createZerberus();
 #include "thirdparty/libcrashreporter-qt/src/libcrashreporter-handler/Handler.h"
 #endif
 
-#ifdef BUILD_TELEMETRY_MODULE
+#ifndef TELEMETRY_DISABLED
 #include "actioneventobserver.h"
 #include "widgets/telemetrypermissiondialog.h"
 #endif
@@ -7048,7 +7048,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
 #endif
       }
 
-#ifdef BUILD_TELEMETRY_MODULE
+#ifndef TELEMETRY_DISABLED
 
 void tryToRequestTelemetryPermission()
       {
@@ -7501,7 +7501,7 @@ int runApplication(int& argc, char** av)
             return ok ? EXIT_SUCCESS : EXIT_FAILURE;
             }
 
-#ifdef BUILD_TELEMETRY_MODULE
+#ifndef TELEMETRY_DISABLED
       tryToRequestTelemetryPermission();
 #endif
 
@@ -7727,7 +7727,7 @@ void MuseScore::init(QStringList& argv)
 
       QApplication::instance()->installEventFilter(mscore);
 
-#ifdef BUILD_TELEMETRY_MODULE
+#ifndef TELEMETRY_DISABLED
       QApplication::instance()->installEventFilter(ActionEventObserver::instance());
 #endif
 

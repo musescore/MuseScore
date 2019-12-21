@@ -154,6 +154,10 @@ set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to sen
 option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 
+if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
+    add_definitions(-DTELEMETRY_DISABLED)
+endif(MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
+
 if (BUILD_CRASH_REPORTER)
       message("Crash reporter enabled")
 endif(BUILD_CRASH_REPORTER)
