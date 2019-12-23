@@ -387,9 +387,39 @@ GridView {
             }
 
             background: Rectangle {
+                id: cellBackground
+
                 color: globalStyle.voice1Color
-                opacity: paletteCell.selected ? 0.5 : (paletteCell.highlighted ? 0.2 : 0.0)
+                opacity: 0.0
                 width: ((paletteCell.rowIndex + 1) % paletteView.ncolumns) ? paletteView.cellWidth : paletteView.lastColumnCellWidth
+
+                onStateChanged: {
+                    console.debug("STATE CHANGED " + state)
+                }
+
+                states: [
+
+                    State {
+                        name: "SELECTED"
+                        when: paletteCell.selected
+
+                        PropertyChanges { target: cellBackground; opacity: 0.5 }
+                    },
+
+                    State {
+                        name: "PRESSED"
+                        when: paletteCellDragArea.pressed
+
+                        PropertyChanges { target: cellBackground; opacity: 0.75 }
+                    },
+
+                    State {
+                        name: "HOVERED"
+                        when: paletteCell.highlighted && !paletteCell.selected
+
+                        PropertyChanges { target: cellBackground; opacity: 0.2 }
+                    }
+                ]
             }
 
             readonly property var toolTip: model.toolTip
