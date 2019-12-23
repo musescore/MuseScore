@@ -34,10 +34,11 @@ TelemetryPermissionDialog::TelemetryPermissionDialog(QWidget* parentWidget) : QQ
       setSource(url);
 
       setModality(Qt::ApplicationModal);
-      setResizeMode(QQuickView::SizeRootObjectToView);
+      setResizeMode(QQuickView::SizeViewToRootObject);
       setTitle("");
 
       QObject* rootItem = qobject_cast<QObject*>(rootObject());
+      rootObject()->setWidth(minimumWidth());
 
       connect(rootItem, SIGNAL(closeRequested()), this, SLOT(close()));
       }

@@ -25,6 +25,8 @@ Rectangle {
 
     signal closeRequested()
 
+    height: childrenRect.height
+
     color: globalStyle.window
 
     TelemetryPermissionModel {
@@ -34,16 +36,16 @@ Rectangle {
     Column {
         id: contentWrapper
 
-        anchors {
-            top: root.top
-            topMargin: 36
-            bottom: root.bottom
-            bottomMargin: 0
-        }
-
         width: root.width
 
         spacing: 36
+
+        Item {
+            id: topSpacer
+
+            height: 1
+            width: parent.width
+        }
 
         Text {
             id: titleLabel
@@ -173,6 +175,13 @@ Rectangle {
                     }
                 }
             }
+        }
+
+        Item {
+            id: bottomSpacer
+
+            height: 1
+            width: parent.width
         }
     }
 }
