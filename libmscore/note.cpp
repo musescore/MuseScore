@@ -1485,40 +1485,40 @@ int Note::transposition() const
 class NoteEditData : public ElementEditData {
 public:
 
-    enum EditMode {
-        EditMode_ChangePitch = 0,
-        EditMode_AddSpacing,
-        EditMode_Undefined,
-    };
+      enum EditMode {
+            EditMode_ChangePitch = 0,
+            EditMode_AddSpacing,
+            EditMode_Undefined,
+            };
 
-    int line = 0;
-    int string = 0;
-    EditMode mode = EditMode_Undefined;
-    QPointF delta;
+      int line = 0;
+      int string = 0;
+      EditMode mode = EditMode_Undefined;
+      QPointF delta;
 
-    static constexpr double MODE_TRANSITION_LIMIT_DEGREES = 25.0;
+      static constexpr double MODE_TRANSITION_LIMIT_DEGREES = 15.0;
 
-    static inline EditMode editModeByDragDirection(const qreal& deltaX, const qreal& deltaY) {
-        qreal x = qAbs(deltaX);
-        qreal y = qAbs(deltaY);
+      static inline EditMode editModeByDragDirection(const qreal& deltaX, const qreal& deltaY)
+            {
+            qreal x = qAbs(deltaX);
+            qreal y = qAbs(deltaY);
 
-        QVector2D normalizedVector(x, y);
+            QVector2D normalizedVector(x, y);
 
-        normalizedVector.normalize();
+            normalizedVector.normalize();
 
-        float radians = QVector2D::dotProduct(normalizedVector, QVector2D(1, 0));
+            float radians = QVector2D::dotProduct(normalizedVector, QVector2D(1, 0));
 
-        qreal degrees = (qAcos(radians) * 180.0) / M_PI;
+            qreal degrees = (qAcos(radians) * 180.0) / M_PI;
 
-        qDebug() << "NOTE DRAG DEGREES " << degrees;
+            qDebug() << "NOTE DRAG DEGREES " << degrees;
 
-        if (degrees >= MODE_TRANSITION_LIMIT_DEGREES) {
-            return NoteEditData::EditMode_ChangePitch;
-        } else {
-            return NoteEditData::EditMode_AddSpacing;
-        }
-    }
-};
+            if (degrees >= MODE_TRANSITION_LIMIT_DEGREES)
+                  return NoteEditData::EditMode_ChangePitch;
+            else
+                  return NoteEditData::EditMode_AddSpacing;
+            }
+      };
 
 //---------------------------------------------------------
 //   acceptDrop
