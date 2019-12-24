@@ -865,6 +865,10 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
       mapSignals(iiList, ppList);
       }
 
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
 void InspectorKeySig::setElement()
       {
       InspectorElementBase::setElement();
