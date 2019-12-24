@@ -128,7 +128,7 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
 
       // Draw barres
       p.setPen(pen);
-      for (auto const& i : diagram->barres()) {            
+      for (auto const& i : diagram->barres()) {
             int fret        = i.first;
             int startString = i.second.startString;
             int endString   = i.second.endString;
@@ -137,7 +137,7 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
             qreal newX2 = endString == -1 ? x2 : stringDist * endString;
 
             qreal y    = fretDist * (fret - 1) + fretDist * .5;
-            pen.setWidthF(dotd * diagram->score()->styleD(Sid::barreLineWidth));      // don¡¯t use style barreLineWidth - why not?
+            pen.setWidthF(dotd * diagram->score()->styleD(Sid::barreLineWidth));      // don't use style barreLineWidth - why not?
             pen.setCapStyle(Qt::RoundCap);
             p.setPen(pen);
             p.drawLine(QLineF(x1, y, newX2, y));
@@ -199,7 +199,7 @@ void FretCanvas::paintDotSymbol(QPainter& p, QPen& pen, qreal x, qreal y, qreal 
             case FretDotType::TRIANGLE:
                   p.drawLine(QLineF(x, y + dotd, x + .5 * dotd, y));
                   p.drawLine(QLineF(x + .5 * dotd, y, x + dotd, y + dotd));
-                  p.drawLine(QLineF(x + dotd, y + dotd, x, y + dotd));                                    
+                  p.drawLine(QLineF(x + dotd, y + dotd, x, y + dotd));
                   break;
             case FretDotType::NORMAL:
             default:
@@ -282,7 +282,7 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
                         if (_automaticDotType && haveCtrl && diagram->dot(string)[0].exists()) {
                               dtype = FretDotType::TRIANGLE;
 
-                              std::vector<FretDotType> dtypes { 
+                              std::vector<FretDotType> dtypes {
                                     FretDotType::NORMAL,
                                     FretDotType::CROSS,
                                     FretDotType::SQUARE,
