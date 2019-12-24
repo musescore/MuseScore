@@ -22,9 +22,17 @@
 #include "telemetryservice.h"
 #include "config.h"
 
+//---------------------------------------------------------
+//   TelemetryService
+//---------------------------------------------------------
+
 TelemetryService::TelemetryService()
       {
       }
+
+//---------------------------------------------------------
+//   sendEvent
+//---------------------------------------------------------
 
 void TelemetryService::sendEvent(const QString &category, const QString &action, const QString &label, const QVariant &value, const QVariantMap &customValues)
       {
@@ -34,6 +42,10 @@ void TelemetryService::sendEvent(const QString &category, const QString &action,
       GAnalytics::instance(TELEMETRY_TRACK_ID)->sendEvent(category, action, label, value, customValues);
       }
 
+//---------------------------------------------------------
+//   sendException
+//---------------------------------------------------------
+
 void TelemetryService::sendException(const QString &exceptionDescription, bool exceptionFatal, const QVariantMap &customValues)
       {
       if (!isTelemetryAllowed())
@@ -41,6 +53,10 @@ void TelemetryService::sendException(const QString &exceptionDescription, bool e
 
       GAnalytics::instance(TELEMETRY_TRACK_ID)->sendException(exceptionDescription, exceptionFatal, customValues);
       }
+
+//---------------------------------------------------------
+//   startSession
+//---------------------------------------------------------
 
 void TelemetryService::startSession()
       {
@@ -50,6 +66,10 @@ void TelemetryService::startSession()
       GAnalytics::instance(TELEMETRY_TRACK_ID)->startSession();
       }
 
+//---------------------------------------------------------
+//   endSession
+//---------------------------------------------------------
+
 void TelemetryService::endSession()
       {
       if (!isTelemetryAllowed())
@@ -57,6 +77,10 @@ void TelemetryService::endSession()
 
       GAnalytics::instance(TELEMETRY_TRACK_ID)->endSession();
       }
+
+//---------------------------------------------------------
+//   isTelemetryAllowed
+//---------------------------------------------------------
 
 bool TelemetryService::isTelemetryAllowed() const
       {
