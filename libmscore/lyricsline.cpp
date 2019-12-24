@@ -25,10 +25,6 @@
 
 namespace Ms {
 
-// metrics for dashes and melisma; all in sp. units:
-static constexpr qreal  LYRICS_DASH_Y_POS_RATIO             = 0.67;     // the fraction of lyrics font x-height to
-                                                                        //    raise the dashes above text base line;
-
 //---------------------------------------------------------
 //   searchNextLyrics
 //---------------------------------------------------------
@@ -157,7 +153,8 @@ void LyricsLine::layout()
                   }
             // Spanner::computeEndElement() will actually ignore this value and use the (earlier) lyrics()->endTick() instead
             // still, for consistency with other lines, we should set the ticks for this to the computed (later) value
-            setTicks(s->tick() - lyricsStartTick);
+            if (s)
+                  setTicks(s->tick() - lyricsStartTick);
             }
       else {                                    // dash(es)
             _nextLyrics = searchNextLyrics(lyrics()->segment(), staffIdx(), lyrics()->no(), lyrics()->placement());
@@ -316,7 +313,7 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayoutAll();
       return true;
       }
 

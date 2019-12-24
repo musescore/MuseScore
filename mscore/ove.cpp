@@ -592,7 +592,6 @@ int OveSong::getPartBarCount() const {
       }
 
 QPair<int, int> OveSong::trackToPartStaff(int track) const {
-      QPair<int, int> partStaff;
       int i;
       int staffCount = 0;
 

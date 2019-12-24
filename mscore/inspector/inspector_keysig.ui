@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>157</width>
-    <height>79</height>
+    <width>200</width>
+    <height>81</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -77,33 +77,96 @@
        <number>3</number>
       </property>
       <item row="0" column="0">
-       <widget class="QCheckBox" name="showCourtesy">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="focusPolicy">
-         <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="text">
-         <string>Show courtesy</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="Ms::ResetButton" name="resetShowCourtesy" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Show courtesy' value</string>
-        </property>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="1" column="0">
+         <widget class="QLabel" name="keysigModeLabel">
+          <property name="text">
+           <string>Key signature mode:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="keysigMode">
+          <property name="accessibleName">
+           <string>Key signature mode</string>
+          </property>
+          <item>
+           <property name="text">
+            <string notr="true">Unknown</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">None</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">Major</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">Minor</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">Dorian</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">Lydian</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">Mixolydian</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">Aeolian</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">Ionian</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">Locrian</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="Ms::ResetButton" name="resetKeysigMode" native="true">
+          <property name="accessibleName">
+           <string>Reset 'Key signature mode' value</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="Ms::ResetButton" name="resetShowCourtesy" native="true">
+          <property name="accessibleName">
+           <string>Reset 'Show courtesy' value</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QCheckBox" name="showCourtesy">
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
+          <property name="text">
+           <string>Show courtesy</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -121,6 +184,7 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>showCourtesy</tabstop>
+  <tabstop>keysigMode</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -26,6 +26,7 @@
 #include "libmscore/range.h"
 #include "musescore.h"
 #include "timeline.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -46,6 +47,9 @@ MeasureProperties::MeasureProperties(Measure* _m, QWidget* parent)
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(bboxClicked(QAbstractButton*)));
       connect(nextButton, SIGNAL(clicked()), SLOT(gotoNextMeasure()));
       connect(previousButton, SIGNAL(clicked()), SLOT(gotoPreviousMeasure()));
+
+      nextButton->setIcon(*icons[int(Icons::goNext_ICON)]);
+      previousButton->setIcon(*icons[int(Icons::goPrevious_ICON)]);
 
       nextButton->setEnabled(_m->nextMeasure() != 0);
       previousButton->setEnabled(_m->prevMeasure() != 0);
@@ -158,7 +162,7 @@ void MeasureProperties::setMeasure(Measure* _m)
 
             item = new QTableWidgetItem(tr("stemless"));
             item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-            item->setCheckState(m->slashStyle(staffIdx) ? Qt::Checked : Qt::Unchecked);
+            item->setCheckState(m->stemless(staffIdx) ? Qt::Checked : Qt::Unchecked);
             staves->setItem(staffIdx, 2, item);
             }
       }
@@ -200,10 +204,10 @@ bool MeasureProperties::visible(int staffIdx)
       }
 
 //---------------------------------------------------------
-//   slashStyle
+//   stemless
 //---------------------------------------------------------
 
-bool MeasureProperties::slashStyle(int staffIdx)
+bool MeasureProperties::stemless(int staffIdx)
       {
       QTableWidgetItem* item = staves->item(staffIdx, 2);
       return item->checkState() == Qt::Checked;
@@ -247,8 +251,8 @@ void MeasureProperties::apply()
       bool propertiesChanged = false;
       for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             bool v = visible(staffIdx);
-            bool s = slashStyle(staffIdx);
-            if (m->visible(staffIdx) != v || m->slashStyle(staffIdx) != s) {
+            bool s = stemless(staffIdx);
+            if (m->visible(staffIdx) != v || m->stemless(staffIdx) != s) {
                   score->undo(new ChangeMStaffProperties(m, staffIdx, v, s));
                   propertiesChanged = true;
                   }
@@ -278,7 +282,7 @@ void MeasureProperties::apply()
             }
 
       if (propertiesChanged) {
-            score->setLayout(m->tick());
+            m->triggerLayout();
             }
 
       score->select(m, SelectType::SINGLE, 0);

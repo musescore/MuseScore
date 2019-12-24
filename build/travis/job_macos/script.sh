@@ -19,8 +19,6 @@ if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
 then
 cp -f build/travis/resources/splash-nightly.png  mscore/data/splash.png
 cp -f build/travis/resources/mscore-nightly.icns mscore/data/mscore.icns
-#else
-#python build/add-mc-keys.py $MC_CONSUMER_KEY $MC_CONSUMER_SECRET
 fi
 
 make -f Makefile.osx ci BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
@@ -132,7 +130,7 @@ export ARTIFACTS_REGION=us-east-1
 export ARTIFACTS_BUCKET=sparkle.musescore.org
 export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
 export ARTIFACTS_PERMISSIONS=public-read
-export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/macos"
+export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/prebuild/macos"
 export ARTIFACTS_PATHS=appcast.xml
 artifacts upload
 

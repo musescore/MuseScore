@@ -56,8 +56,6 @@ double panToUserRange(char v) { return (v / 128.0) * 360.0; }
 double chorusToUserRange(char v) { return v * 100.0 / 128.0; }
 double reverbToUserRange(char v) { return v * 100.0 / 128.0; }
 
-const float minDecibels = -3;
-
 //0 to 100
 char userRangeToVolume(double v) { return (char)qBound(0, (int)(v / 100.0 * 128.0), 127); }
 //-180 to 180
@@ -72,7 +70,7 @@ char userRangeToReverb(double v) { return (char)qBound(0, (int)(v / 100.0 * 128.
 //---------------------------------------------------------
 
 Mixer::Mixer(QWidget* parent)
-    : QDockWidget("Mixer", parent),
+    : QDockWidget(qApp->translate("Mixer", "Mixer"), parent),
       showDetails(true),
       trackHolder(nullptr)
       {
@@ -97,18 +95,21 @@ Mixer::Mixer(QWidget* parent)
       detailsArea->setLayout(detailsLayout);
 
       //Range in decibels
-      masterSlider->setMaxValue(0);
+      float minDecibels = synti->minGainAsDecibels;
+      float maxDecibels = synti->maxGainAsDecibels;
+      float currentDecibels = synti->gainAsDecibels();
+      masterSlider->setMaxValue(maxDecibels);
       masterSlider->setMinValue(minDecibels);
       masterSlider->setNumMinorTicks(4);
       masterSlider->setNumMajorTicks(3);
       masterSlider->setHilightColor(QColor(51, 153, 255));
-      float decibels = qBound(minDecibels, log10(synti->gain()), 0.0f);
-      masterSlider->setValue(decibels);
+      masterSlider->setValue(currentDecibels);
+      masterSlider->setDoubleClickValue(synti->defaultGainAsDecibels);
 
-      masterSpin->setMaximum(0);
+      masterSpin->setMaximum(maxDecibels);
       masterSpin->setMinimum(minDecibels);
-      masterSpin->setSingleStep(.1);
-      masterSpin->setValue(decibels);
+      masterSpin->setSingleStep(1);
+      masterSpin->setValue(currentDecibels);
 
 
       QIcon iconSliderHead;
@@ -144,7 +145,7 @@ void Mixer::showDetailsToggled(bool shown)
 
 void Mixer::synthGainChanged(float)
       {
-      float decibels = qBound(minDecibels, log10f(synti->gain()), 0.0f);
+      float decibels = synti->gainAsDecibels();
 
       masterSlider->blockSignals(true);
       masterSlider->setValue(decibels);
@@ -182,8 +183,7 @@ void Mixer::keepScrollPosition()
 
 void Mixer::masterVolumeChanged(double decibels)
       {
-      float gain = qBound(0.0f, powf(10, (float)decibels), 1.0f);
-      synti->setGain(gain);
+      synti->setGainAsDecibels(decibels);
 
       masterSlider->blockSignals(true);
       masterSlider->setValue(decibels);
@@ -221,7 +221,7 @@ void Mixer::on_partOnlyCheckBox_toggled(bool checked)
 
 void Mixer::retranslate(bool firstTime)
       {
-      setWindowTitle(tr("Mixer"));
+      setWindowTitle(qApp->translate("Mixer", "Mixer"));
       if (!firstTime) {
             for (int i = 0; i < trackAreaLayout->count(); i++) {
                   PartEdit* p = getPartAtIndex(i);
@@ -482,8 +482,13 @@ void Mixer::notifyTrackSelected(MixerTrack* track)
 
 void MuseScore::showMixer(bool visible)
       {
-
       QAction* toggleMixerAction = getAction("toggle-mixer");
+
+      if (!synti) {
+            toggleMixerAction->setChecked(false);
+            return;
+            }
+
       if (mixer == 0) {
             mixer = new Mixer(this);
             mscore->stackUnder(mixer);

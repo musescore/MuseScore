@@ -145,6 +145,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::repeatBarlineDotSeparation, false, repeatBarlineDotSeparation, resetRepeatBarlineDotSeparation },
 
       { Sid::barGraceDistance,        false, barGraceDistance,        resetBarGraceDistance },
+      { Sid::chordExtensionMag,       false, extensionMag,            resetExtensionMag },
+      { Sid::chordExtensionAdjust,    false, extensionAdjust,         resetExtensionAdjust },
+      { Sid::chordModifierMag,        false, modifierMag,             resetModifierMag },
+      { Sid::chordModifierAdjust,     false, modifierAdjust,          resetModifierAdjust },
       { Sid::useStandardNoteNames,    false, useStandardNoteNames,    0 },
       { Sid::useGermanNoteNames,      false, useGermanNoteNames,      0 },
       { Sid::useFullGermanNoteNames,  false, useFullGermanNoteNames,  0 },
@@ -382,12 +386,12 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       tupletNumberType->clear();
       tupletNumberType->addItem(tr("Number"), int(TupletNumberType::SHOW_NUMBER));
       tupletNumberType->addItem(tr("Ratio"), int(TupletNumberType::SHOW_RELATION));
-      tupletNumberType->addItem(tr("None"), int(TupletNumberType::NO_TEXT));
+      tupletNumberType->addItem(tr("None", "no tuplet number type"), int(TupletNumberType::NO_TEXT));
 
       tupletBracketType->clear();
       tupletBracketType->addItem(tr("Automatic"), int(TupletBracketType::AUTO_BRACKET));
       tupletBracketType->addItem(tr("Bracket"), int(TupletBracketType::SHOW_BRACKET));
-      tupletBracketType->addItem(tr("None"), int(TupletBracketType::SHOW_NO_BRACKET));
+      tupletBracketType->addItem(tr("None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
 
       pageList->setCurrentRow(0);
       accidentalsGroup->setVisible(false); // disable, not yet implemented
@@ -487,6 +491,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(chordDescriptionFile,&QLineEdit::editingFinished,       [=]() { setChordStyle(true); });
       //chordDescriptionFile->setEnabled(false);
 
+      chordDescriptionFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+
       connect(SwingOff,            SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
       connect(swingEighth,         SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
       connect(swingSixteenth,      SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
@@ -561,8 +567,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             }
 
       textStyleFrameType->clear();
-      textStyleFrameType->addItem(tr("None"), int(FrameType::NO_FRAME));
-      textStyleFrameType->addItem(tr("Square"), int(FrameType::SQUARE));
+      textStyleFrameType->addItem(tr("None", "no frame for text"), int(FrameType::NO_FRAME));
+      textStyleFrameType->addItem(tr("Rectangle"), int(FrameType::SQUARE));
       textStyleFrameType->addItem(tr("Circle"), int(FrameType::CIRCLE));
 
       resetTextStyleName->setIcon(*icons[int(Icons::reset_ICON)]);
@@ -670,6 +676,92 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             this->setMinimumSize(scr.width() / 2, scr.height() / 2);
       hasShown = false;
       MuseScore::restoreGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   PAGES
+///   This is a map of element type to pages, to allow the creation of a 'Style...'
+///   menu for every possible element on the score.
+//---------------------------------------------------------
+
+const std::map<ElementType, EditStylePage> EditStyle::PAGES = {
+      { ElementType::SCORE,               &EditStyle::PageScore    },
+      { ElementType::PAGE,                &EditStyle::PagePage     },
+      { ElementType::MEASURE_NUMBER,      &EditStyle::PageSizes    },
+      { ElementType::BRACKET,             &EditStyle::PageSystem   },
+      { ElementType::BRACKET_ITEM,        &EditStyle::PageSystem   },
+      { ElementType::CLEF,                &EditStyle::PageClefs    },
+      { ElementType::KEYSIG,              &EditStyle::PageAccidentals },
+      { ElementType::MEASURE,             &EditStyle::PageMeasure  },
+      { ElementType::REST,                &EditStyle::PageMeasure  },
+      { ElementType::BAR_LINE,            &EditStyle::PageBarlines },
+      { ElementType::NOTE,                &EditStyle::PageNotes    },
+      { ElementType::CHORD,               &EditStyle::PageNotes    },
+      { ElementType::ACCIDENTAL,          &EditStyle::PageNotes    },
+      { ElementType::STEM,                &EditStyle::PageNotes    },
+      { ElementType::STEM_SLASH,          &EditStyle::PageNotes    },
+      { ElementType::LEDGER_LINE,         &EditStyle::PageNotes    },
+      { ElementType::BEAM,                &EditStyle::PageBeams    },
+      { ElementType::TUPLET,              &EditStyle::PageTuplets  },
+      { ElementType::ARPEGGIO,            &EditStyle::PageArpeggios },
+      { ElementType::SLUR,                &EditStyle::PageSlursTies },
+      { ElementType::SLUR_SEGMENT,        &EditStyle::PageSlursTies },
+      { ElementType::TIE,                 &EditStyle::PageSlursTies },
+      { ElementType::TIE_SEGMENT,         &EditStyle::PageSlursTies },
+      { ElementType::HAIRPIN,             &EditStyle::PageHairpins },
+      { ElementType::HAIRPIN_SEGMENT,     &EditStyle::PageHairpins },
+      { ElementType::VOLTA,               &EditStyle::PageVolta    },
+      { ElementType::VOLTA_SEGMENT,       &EditStyle::PageVolta    },
+      { ElementType::OTTAVA,              &EditStyle::PageOttava   },
+      { ElementType::OTTAVA_SEGMENT,      &EditStyle::PageOttava   },
+      { ElementType::PEDAL,               &EditStyle::PagePedal    },
+      { ElementType::PEDAL_SEGMENT,       &EditStyle::PagePedal    },
+      { ElementType::TRILL,               &EditStyle::PageTrill    },
+      { ElementType::TRILL_SEGMENT,       &EditStyle::PageTrill    },
+      { ElementType::VIBRATO,             &EditStyle::PageVibrato  },
+      { ElementType::VIBRATO_SEGMENT,     &EditStyle::PageVibrato  },
+      { ElementType::BEND,                &EditStyle::PageBend     },
+      { ElementType::TEXTLINE,            &EditStyle::PageTextLine },
+      { ElementType::TEXTLINE_SEGMENT,    &EditStyle::PageTextLine },
+      { ElementType::ARTICULATION,        &EditStyle::PageArticulationsOrnaments },
+      { ElementType::FERMATA,             &EditStyle::PageFermatas },
+      { ElementType::STAFF_TEXT,          &EditStyle::PageStaffText },
+      { ElementType::TEMPO_TEXT,          &EditStyle::PageTempoText },
+      { ElementType::LYRICS,              &EditStyle::PageLyrics   },
+      { ElementType::LYRICSLINE,          &EditStyle::PageLyrics   },
+      { ElementType::LYRICSLINE_SEGMENT,  &EditStyle::PageLyrics   },
+      { ElementType::DYNAMIC,             &EditStyle::PageDynamics },
+      { ElementType::REHEARSAL_MARK,      &EditStyle::PageRehearsalMarks },
+      { ElementType::FIGURED_BASS,        &EditStyle::PageFiguredBass },
+      { ElementType::HARMONY,             &EditStyle::PageChordSymbols },
+      { ElementType::FRET_DIAGRAM,        &EditStyle::PageFretboardDiagrams },
+      };
+
+//---------------------------------------------------------
+//   gotoElement
+///   switch the page to the one related to the element `e`
+//---------------------------------------------------------
+
+void EditStyle::gotoElement(Element* e)
+      {
+      const ElementType& t = e->type();
+      const auto i = PAGES.find(t);
+      if (i != PAGES.cend()) {
+            QWidget* page = this->*(i->second);
+            setPage(pageStack->indexOf(page));
+            }
+      }
+
+//---------------------------------------------------------
+//   elementHasPage
+///   check if an element has a style page related to it
+//---------------------------------------------------------
+
+bool EditStyle::elementHasPage(Element* e)
+      {
+      const ElementType& t = e->type();
+      const auto i = PAGES.find(t);
+      return i != PAGES.cend();
       }
 
 //---------------------------------------------------------
@@ -988,6 +1080,7 @@ void EditStyle::setValues()
             chordsCustom->setChecked(true);
             chordDescriptionGroup->setEnabled(true);
             }
+      //formattingGroup->setEnabled(lstyle.chordList()->autoAdjust());
 
       dontHideStavesInFirstSystem->setEnabled(hideEmptyStaves->isChecked());
 
@@ -1112,6 +1205,7 @@ void EditStyle::setChordStyle(bool checked)
             cs->undo(new ChangeStyleVal(cs, Sid::chordDescriptionFile, file));
             cs->update();
             }
+      //formattingGroup->setEnabled(cs->style().chordList()->autoAdjust());
       }
 
 //---------------------------------------------------------

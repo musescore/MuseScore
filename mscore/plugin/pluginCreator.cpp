@@ -342,7 +342,7 @@ void PluginCreator::runClicked()
             item->setParentItem(view->contentItem());
 
             if (item->pluginType() == "dock") {
-                  dock = new QDockWidget("Plugin", 0);
+                  dock = new QDockWidget(view->title(), 0);
                   dock->setAttribute(Qt::WA_DeleteOnClose);
                   dock->setWidget(QWidget::createWindowContainer(view));
                   dock->widget()->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -363,6 +363,7 @@ void PluginCreator::runClicked()
             }
 
       connect(qml,  SIGNAL(quit()), SLOT(closePlugin()));
+      connect(qml, &QmlPluginEngine::endCmd, item, &QmlPlugin::endCmd);
 
       if (mscore->currentScore() && item->pluginType() != "dock")
             mscore->currentScore()->startCmd();

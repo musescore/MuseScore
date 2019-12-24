@@ -800,7 +800,9 @@ QString Rest::accessibleInfo() const
 
 QString Rest::screenReaderInfo() const
       {
-      QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      Measure* m = measure();
+      bool voices = m ? m->hasVoices(staffIdx()) : false;
+      QString voice = voices ? QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1)) : "";
       return QString("%1 %2 %3").arg(Element::accessibleInfo()).arg(durationUserName()).arg(voice);
       }
 
@@ -958,11 +960,11 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
       switch (propertyId) {
             case Pid::GAP:
                   _gap = v.toBool();
-                  score()->setLayout(tick());
+                  triggerLayout();
                   break;
             case Pid::VISIBLE:
                   setVisible(v.toBool());
-                  score()->setLayout(tick());
+                  triggerLayout();
                   break;
             case Pid::OFFSET:
                   score()->addRefresh(canvasBoundingRect());
@@ -971,7 +973,7 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
                   score()->addRefresh(canvasBoundingRect());
                   if (measure() && durationType().type() == TDuration::DurationType::V_MEASURE)
                          measure()->triggerLayout();
-                  score()->setLayout(tick());
+                  triggerLayout();
                   break;
             default:
                   return ChordRest::setProperty(propertyId, v);

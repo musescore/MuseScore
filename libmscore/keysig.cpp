@@ -382,9 +382,16 @@ void KeySig::write(XmlWriter& xml) const
             xml.tag("accidental", int(_sig.key()));
             }
       switch (_sig.mode()) {
-            case KeyMode::NONE:     xml.tag("mode", "none"); break;
-            case KeyMode::MAJOR:    xml.tag("mode", "major"); break;
-            case KeyMode::MINOR:    xml.tag("mode", "minor"); break;
+            case KeyMode::NONE:       xml.tag("mode", "none"); break;
+            case KeyMode::MAJOR:      xml.tag("mode", "major"); break;
+            case KeyMode::MINOR:      xml.tag("mode", "minor"); break;
+            case KeyMode::DORIAN:     xml.tag("mode", "dorian"); break;
+            case KeyMode::PHRYGIAN:   xml.tag("mode", "phrygian"); break;
+            case KeyMode::LYDIAN:     xml.tag("mode", "lydian"); break;
+            case KeyMode::MIXOLYDIAN: xml.tag("mode", "mixolydian"); break;
+            case KeyMode::AEOLIAN:    xml.tag("mode", "aeolian"); break;
+            case KeyMode::IONIAN:     xml.tag("mode", "ionian"); break;
+            case KeyMode::LOCRIAN:    xml.tag("mode", "locrian"); break;
             case KeyMode::UNKNOWN:
             default:
                   ;
@@ -450,6 +457,20 @@ void KeySig::read(XmlReader& e)
                         _sig.setMode(KeyMode::MAJOR);
                   else if (m == "minor")
                         _sig.setMode(KeyMode::MINOR);
+                  else if (m == "dorian")
+                        _sig.setMode(KeyMode::DORIAN);
+                  else if (m == "phrygian")
+                        _sig.setMode(KeyMode::PHRYGIAN);
+                  else if (m == "lydian")
+                        _sig.setMode(KeyMode::LYDIAN);
+                  else if (m == "mixolydian")
+                        _sig.setMode(KeyMode::MIXOLYDIAN);
+                  else if (m == "aeolian")
+                        _sig.setMode(KeyMode::AEOLIAN);
+                  else if (m == "ionian")
+                        _sig.setMode(KeyMode::IONIAN);
+                  else if (m == "locrian")
+                        _sig.setMode(KeyMode::LOCRIAN);
                   else
                         _sig.setMode(KeyMode::UNKNOWN);
                   }
@@ -551,6 +572,15 @@ void KeySig::undoSetShowCourtesy(bool v)
       }
 
 //---------------------------------------------------------
+//   undoSetMode
+//---------------------------------------------------------
+
+void KeySig::undoSetMode(KeyMode v)
+      {
+      undoChangeProperty(Pid::KEYSIG_MODE, int(v));
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -559,6 +589,7 @@ QVariant KeySig::getProperty(Pid propertyId) const
       switch (propertyId) {
             case Pid::KEY:           return int(key());
             case Pid::SHOW_COURTESY: return int(showCourtesy());
+            case Pid::KEYSIG_MODE:   return int(mode());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -581,12 +612,17 @@ bool KeySig::setProperty(Pid propertyId, const QVariant& v)
                         return false;
                   setShowCourtesy(v.toBool());
                   break;
+            case Pid::KEYSIG_MODE:
+                  if (generated())
+                        return false;
+                  setMode(KeyMode(v.toInt()));
+                  break;
             default:
                   if (!Element::setProperty(propertyId, v))
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayoutAll();
       setGenerated(false);
       return true;
       }
@@ -600,6 +636,7 @@ QVariant KeySig::propertyDefault(Pid id) const
       switch (id) {
             case Pid::KEY:               return int(Key::INVALID);
             case Pid::SHOW_COURTESY:     return true;
+            case Pid::KEYSIG_MODE:       return int(KeyMode::UNKNOWN);
             default:
                   return Element::propertyDefault(id);
             }

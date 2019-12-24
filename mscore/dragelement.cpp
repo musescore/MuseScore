@@ -58,8 +58,15 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       editData.delta   = pt;
       editData.pos     = toLogical(ev->pos());
 
-      for (Element* e : _score->selection().elements())
+      const Selection& sel = _score->selection();
+      const bool filterType = sel.isRange();
+      const ElementType type = editData.element->type();
+
+      for (Element* e : sel.elements()) {
+            if (filterType && type != e->type())
+                  continue;
             _score->addRefresh(e->drag(editData));
+            }
 
       Element* e = _score->getSelectedElement();
       if (e) {

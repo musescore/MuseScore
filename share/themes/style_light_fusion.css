@@ -1,5 +1,9 @@
 *:disabled {
- color: gray
+ color: gray;
+}
+
+QMenu::disabled {
+ background-color: palette(base);
 }
 
 QGroupBox {

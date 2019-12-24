@@ -5,7 +5,7 @@ if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
   exit 0
 fi
 
-wget -nv http://utils.musescore.org.s3.amazonaws.com/qt5121_mac.zip
+wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt5124_mac.zip
 mkdir -p $QT_MACOS
-unzip -qq qt5121_mac.zip -d $QT_MACOS
-rm qt5121_mac.zip
+unzip -qq qt5.zip -d $QT_MACOS
+rm qt5.zip

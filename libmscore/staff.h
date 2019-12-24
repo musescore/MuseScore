@@ -162,7 +162,7 @@ class Staff final : public ScoreElement {
       void removeKey(const Fraction&);
 
       bool show() const;
-      bool slashStyle(const Fraction&) const;
+      bool stemless(const Fraction&) const;
       bool invisible() const         { return _invisible;   }
       void setInvisible(bool val)    { _invisible = val;    }
       bool cutaway() const           { return _cutaway;     }
@@ -263,6 +263,9 @@ class Staff final : public ScoreElement {
       void dumpKeys(const char*) const {}
       void dumpTimeSigs(const char*) const {}
 #endif
+
+      void triggerLayout();
+      void triggerLayout(const Fraction& tick);
       };
 
 }     // namespace Ms

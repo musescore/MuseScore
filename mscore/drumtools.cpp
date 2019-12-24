@@ -49,7 +49,7 @@ DrumTools::DrumTools(QWidget* parent)
 
       QWidget* w = new QWidget(this);
       w->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-      w->setMaximumHeight(100);
+      w->setMaximumHeight(100 * Palette::guiMag());
       QHBoxLayout* layout = new QHBoxLayout;
       w->setLayout(layout);
 

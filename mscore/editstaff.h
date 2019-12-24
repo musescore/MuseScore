@@ -46,7 +46,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
 
       virtual void hideEvent(QHideEvent*);
       void apply();
-      void setStaff(Staff*);
+      void setStaff(Staff*, const Fraction& tick);
       void updateInterval(const Interval&);
       void updateStaffType();
       void updateInstrument();

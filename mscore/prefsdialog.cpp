@@ -26,7 +26,6 @@
 #include "pa.h"
 #include "shortcut.h"
 #include "workspace.h"
-#include "palettebox.h"
 
 #ifdef USE_PORTMIDI
 #include "pm.h"
@@ -149,14 +148,24 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(fgWallpaperSelect,  SIGNAL(clicked()), SLOT(selectFgWallpaper()));
       connect(bgWallpaperSelect,  SIGNAL(clicked()), SLOT(selectBgWallpaper()));
 
+      bgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      fgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+
       connect(myScoresButton, SIGNAL(clicked()), SLOT(selectScoresDirectory()));
       connect(myStylesButton, SIGNAL(clicked()), SLOT(selectStylesDirectory()));
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
-      connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
-       connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
+      connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
+      connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
 
+      myScoresButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myStylesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myTemplatesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myPluginsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      mySoundfontsButton->setIcon(*icons[int(Icons::edit_ICON)]);
+      myImagesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myExtensionsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
@@ -166,6 +175,13 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(instrumentList1Button,  SIGNAL(clicked()), SLOT(selectInstrumentList1()));
       connect(instrumentList2Button,  SIGNAL(clicked()), SLOT(selectInstrumentList2()));
       connect(startWithButton,        SIGNAL(clicked()), SLOT(selectStartWith()));
+
+      defaultStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      partStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      styleFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      instrumentList1Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      instrumentList2Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      startWithButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       connect(shortcutList,   SIGNAL(itemActivated(QTreeWidgetItem*, int)), SLOT(defineShortcutClicked()));
       connect(resetShortcut,  SIGNAL(clicked()), SLOT(resetShortcutClicked()));
@@ -839,8 +855,10 @@ void PreferenceDialog::updateFgView(bool useColor)
       {
       fgColorButton->setChecked(useColor);
       fgWallpaperButton->setChecked(!useColor);
+      fgUseColorInPalettes->setChecked(preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES));
       fgWallpaper->setEnabled(!useColor);
       fgWallpaperSelect->setEnabled(!useColor);
+      fgUseColorInPalettes->setEnabled(useColor);
 
       if (useColor) {
             fgColorLabel->setColor(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
@@ -950,6 +968,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_UI_CANVAS_BG_USECOLOR, bgColorButton->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_BG_COLOR, bgColorLabel->color());
       preferences.setPreference(PREF_UI_CANVAS_FG_USECOLOR, fgColorButton->isChecked());
+      preferences.setPreference(PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES, fgUseColorInPalettes->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_FG_COLOR, fgColorLabel->color());
       preferences.setPreference(PREF_UI_CANVAS_BG_WALLPAPER, bgWallpaper->text());
       preferences.setPreference(PREF_UI_CANVAS_FG_WALLPAPER, fgWallpaper->text());
@@ -1110,10 +1129,10 @@ void PreferenceDialog::apply()
             MScore::defaultStyleForPartsHasChanged();
             }
       
-      Workspace::retranslate();
-      preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
-      mscore->changeWorkspace(Workspace::currentWorkspace);
-      mscore->getPaletteBox()->updateWorkspaces();
+      WorkspacesManager::retranslateAll();
+      preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->name());
+      mscore->changeWorkspace(WorkspacesManager::currentWorkspace());
+      emit mscore->workspacesChanged();
       
       emit preferencesChanged();
       preferences.save();

@@ -2122,25 +2122,33 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
             return false;
       Score* firstScore = cs_[0];
 
-      QPdfWriter pdfWriter(saveName);
-      pdfWriter.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
-
+      QPrinter printer;
+      printer.setOutputFileName(saveName);
+      printer.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
       QSizeF size(firstScore->styleD(Sid::pageWidth), firstScore->styleD(Sid::pageHeight));
-      QPageSize ps(QPageSize::id(size, QPageSize::Inch));
-      pdfWriter.setPageSize(ps);
-      pdfWriter.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
-      pdfWriter.setCreator("MuseScore Version: " VERSION);
-      if (!pdfWriter.setPageMargins(QMarginsF()))
+      QPageSize ps(QPageSize::id(size, QPageSize::Inch, QPageSize::FuzzyOrientationMatch));
+      printer.setPageSize(ps);
+      printer.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
+      printer.setFullPage(true);
+      printer.setColorMode(QPrinter::Color);
+#if defined(Q_OS_MAC)
+      printer.setOutputFormat(QPrinter::NativeFormat);
+#else
+      printer.setOutputFormat(QPrinter::PdfFormat);
+#endif
+      
+      printer.setCreator("MuseScore Version: " VERSION);
+      if (!printer.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
 
       QString title = firstScore->metaTag("workTitle");
       if (title.isEmpty()) // workTitle unset?
             title = firstScore->title(); // fall back to (master)score's tab title
       title += " - " + tr("Score and Parts");
-      pdfWriter.setTitle(title); // set PDF's meta data for Title
+      printer.setDocName(title); // set PDF's meta data for Title
 
       QPainter p;
-      if (!p.begin(&pdfWriter))
+      if (!p.begin(&printer))
             return false;
 
       p.setRenderHint(QPainter::Antialiasing, true);
@@ -2162,19 +2170,19 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
             MScore::pdfPrinting = true;
 
             QSizeF size1(s->styleD(Sid::pageWidth), s->styleD(Sid::pageHeight));
-            QPageSize ps1(QPageSize::id(size1, QPageSize::Inch));
-            pdfWriter.setPageSize(ps1);
-            pdfWriter.setPageOrientation(size1.width() > size1.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
-            p.setViewport(QRect(0.0, 0.0, size1.width() * pdfWriter.logicalDpiX(),
-               size1.height() * pdfWriter.logicalDpiY()));
+            QPageSize ps1(QPageSize::id(size1, QPageSize::Inch, QPageSize::FuzzyOrientationMatch));
+            printer.setPageSize(ps1);
+            printer.setPageOrientation(size1.width() > size1.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
+            p.setViewport(QRect(0.0, 0.0, size1.width() * printer.logicalDpiX(),
+               size1.height() * printer.logicalDpiY()));
             p.setWindow(QRect(0.0, 0.0, size1.width() * DPI, size1.height() * DPI));
 
-            MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
+            MScore::pixelRatio = DPI / printer.logicalDpiX();
             const QList<Page*> pl = s->pages();
             int pages    = pl.size();
             for (int n = 0; n < pages; ++n) {
                   if (!firstPage)
-                        pdfWriter.newPage();
+                        printer.newPage();
                   firstPage = false;
                   s->print(&p, n);
                   }
@@ -3049,40 +3057,36 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
       QString title;
       Text* t = score->getText(Tid::TITLE);
       if (t)
-            title = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+            title = t->plainText();
       if (title.isEmpty())
             title = score->metaTag("workTitle");
       if (title.isEmpty())
             title = score->title();
-      title = title.simplified();
       json.insert("title", title);
 
       // subtitle
       QString subtitle;
       t = score->getText(Tid::SUBTITLE);
       if (t)
-            subtitle = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
-      subtitle = subtitle.simplified();
+            subtitle = t->plainText();
       json.insert("subtitle", subtitle);
 
       // composer
       QString composer;
       t = score->getText(Tid::COMPOSER);
       if (t)
-            composer = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+            composer = t->plainText();
       if (composer.isEmpty())
             composer = score->metaTag("composer");
-      composer = composer.simplified();
       json.insert("composer", composer);
 
       // poet
       QString poet;
       t = score->getText(Tid::POET);
       if (t)
-            poet = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+            poet = t->plainText();
       if (poet.isEmpty())
             poet = score->metaTag("lyricist");
-      poet = poet.simplified();
       json.insert("poet", poet);
 
       json.insert("mscoreVersion", score->mscoreVersion());
@@ -3368,6 +3372,32 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       jsonWriter.addValue(doc.toJson(QJsonDocument::Compact), true, true);
 
       return res;
+      }
+
+//---------------------------------------------------------
+//   exportScoreMetadata
+//---------------------------------------------------------
+
+bool MuseScore::exportScoreMetadata(const QString& inFilePath, const QString& outFilePath)
+      {
+      std::unique_ptr<MasterScore> score(mscore->readScore(inFilePath));
+      if (!score)
+            return false;
+
+      score->switchToPageMode();
+
+      //// JSON specification ///////////////////////////
+      //jsonForMedia["metadata"] = mdJson;
+      ///////////////////////////////////////////////////
+
+      CustomJsonWriter jsonWriter(outFilePath);
+
+      //export metadata
+      QJsonDocument doc(mscore->saveMetadataJSON(score.get()));
+      jsonWriter.addKey("metadata");
+      jsonWriter.addValue(doc.toJson(QJsonDocument::Compact), true, true);
+
+      return true;
       }
 
 }

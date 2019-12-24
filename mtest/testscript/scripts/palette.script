@@ -66,7 +66,7 @@ palette RehearsalMark
 cmd escape
 cmd note-input
 cmd next-measure
-palette Tempo style Tempo text <sym>metNote8thUp</sym>&#032=&#03280
+palette Tempo style Tempo text <sym>metNote8thUp</sym>&#032;=&#032;80
 cmd escape
 cmd note-input
 cmd next-measure
@@ -75,7 +75,7 @@ cmd escape
 cmd note-input
 cmd next-measure
 cmd note-f
-palette Fingering style String&#032Number text 3
+palette Fingering style String&#032;Number text 3
 cmd escape
 cmd note-input
 cmd next-measure

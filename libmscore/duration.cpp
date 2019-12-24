@@ -148,8 +148,7 @@ bool DurationElement::setProperty(Pid propertyId, const QVariant& v)
             case Pid::DURATION: {
                   Fraction f(v.value<Fraction>());
                   setTicks(f);
-                  // TODO: do we really need to re-layout all here?
-                  score()->setLayoutAll();
+                  triggerLayout();
                   }
                   break;
             default:

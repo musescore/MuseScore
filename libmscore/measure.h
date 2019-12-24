@@ -123,7 +123,7 @@ class Measure final : public MeasureBase {
       Spacer* vspacerDown(int staffIdx) const;
       Spacer* vspacerUp(int staffIdx) const;
       void setStaffVisible(int staffIdx, bool visible);
-      void setStaffSlashStyle(int staffIdx, bool slashStyle);
+      void setStaffStemless(int staffIdx, bool stemless);
       bool corrupted(int staffIdx) const;
       void setCorrupted(int staffIdx, bool val);
       void setNoText(int staffIdx, MeasureNumber*);
@@ -194,6 +194,7 @@ class Measure final : public MeasureBase {
       Segment* undoGetSegment(SegmentType st, const Fraction& f)       { return undoGetSegmentR(st, f - tick()); }
       Segment* getSegment(SegmentType st,     const Fraction& f)       { return getSegmentR(st, f - tick()); }
 
+      void connectTremolo();
 
       qreal createEndBarLines(bool);
       void barLinesSetSpan(Segment*);
@@ -214,7 +215,7 @@ class Measure final : public MeasureBase {
       bool isFullMeasureRest() const;
       bool isRepeatMeasure(const Staff* staff) const;
       bool visible(int staffIdx) const;
-      bool slashStyle(int staffIdx) const;
+      bool stemless(int staffIdx) const;
       bool isFinalMeasureOfSection() const;
       bool isAnacrusis() const;
 

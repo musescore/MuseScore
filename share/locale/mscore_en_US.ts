@@ -1674,7 +1674,6 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="579"/>
         <source>Transpose written pitches to sound:</source>
-        <translation>Transposition against concert/sounding pitch:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="596"/>
@@ -3203,7 +3202,6 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9490"/>
         <source>Barré line thickness:</source>
-        <translation>Barre line thickness:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9567"/>
@@ -3715,11 +3713,10 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3398"/>
         <source>System header with time signature distance:</source>
-        <translation>System header to time signature distance:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3427"/>
-        <source>Reset &apos;System header to time signature distance&apos; value</source>
+        <source>Reset &apos;System header with time signature distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -4036,7 +4033,6 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5914"/>
         <source>Reset &apos;Default position&apos; value</source>
-        <translation>Reset &apos;Position&apos; value</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5891"/>
@@ -4056,7 +4052,6 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="6255"/>
         <location filename="../../mscore/editstyle.ui" line="8782"/>
         <source>Reset &apos;Position Above&apos; value</source>
-        <translation>Reset &apos;Position above&apos; value</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6024"/>
@@ -4073,7 +4068,6 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="7730"/>
         <location filename="../../mscore/editstyle.ui" line="8752"/>
         <source>Reset &apos;Position Below&apos; value</source>
-        <translation>Reset &apos;Position below&apos; value</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6213"/>
@@ -4463,7 +4457,6 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9487"/>
         <source>Barré line thickness</source>
-        <translation>Barre line thickness</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9500"/>
@@ -4593,7 +4586,6 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9988"/>
         <source>Reset &apos;Foreground&apos; value</source>
-        <translation>Reset &apos;Border&apos; value</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9971"/>
@@ -4608,12 +4600,10 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10046"/>
         <source>Reset &apos;Text margin&apos; value</source>
-        <translation>Reset &apos;Margin&apos; value</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10080"/>
         <source>Reset &apos;Border radius&apos; value</source>
-        <translation>Reset &apos;Corner radius&apos; value</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9918"/>
@@ -4623,7 +4613,6 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9766"/>
         <source>Reset &apos;Size changes with staff space setting&apos; value</source>
-        <translation>Reset &apos;Follow staff size&apos; value</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7141"/>
@@ -6874,7 +6863,6 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="235"/>
         <source>Reset &apos;Create system headers&apos; value</source>
-        <translation>Reset &apos;Create system header&apos; value</translation>
     </message>
 </context>
 <context>
@@ -7159,7 +7147,6 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="164"/>
         <source>Reset &apos;Size in spatium units&apos; value</source>
-        <translation>Reset &apos;Size in staff space units&apos; value</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="177"/>
@@ -23206,7 +23193,6 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="280"/>
         <source>Enter notes in step-time</source>
-        <translation>Enter notes in Step-time</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="312"/>

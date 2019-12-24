@@ -14,20 +14,23 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-import QtQuick 2.0
+import QtQuick 2.2
 import MuseScore 3.0
 
 MuseScore {
-   version: "3.0"
+   version: "3.4"
    description: qsTr("This plugin names notes as per your language setting")
-   menuPath: "Plugins.Notes." + qsTr("Note Names") // this does not work, why?
+   menuPath: "Plugins.Notes." + qsTr("Note Names")
 
-   function nameChord (notes, text) {
+   // Small note name size is fraction of the full font size.
+   property var fontSizeMini: 0.7;
+
+   function nameChord (notes, text, fontSize) {
       for (var i = 0; i < notes.length; i++) {
-         var sep = ","; // change to "\n" if you want them vertically
+         var sep = "\n";   // change to "," if you want them horizontally (anybody?)
          if ( i > 0 )
             text.text = sep + text.text; // any but top note
-
+         text.fontSize = fontSize
          if (typeof notes[i].tpc === "undefined") // like for grace notes ?!?
             return
          switch (notes[i].tpc) {
@@ -109,9 +112,35 @@ MuseScore {
                case 25: text.text = qsTranslate("accidental", "Sori") + text.text; break;
                case 26: text.text = qsTranslate("accidental", "Koron") + text.text; break;
                default: text.text = qsTr("?") + text.text; break;
-            } // end switch userAccidental
-         } // end if courtesy- and microtonal accidentals
-      } // end for note
+            }  // end switch userAccidental
+         }  // end if courtesy- and microtonal accidentals
+      }  // end for note
+   }
+
+   function renderGraceNoteNames (cursor, list, text, fontSize) {
+      if (list.length > 0) {     // Check for existence.
+         // Now render grace note's names...
+         for (var chordNum = 0; chordNum < list.length; chordNum++) {
+            // iterate through all grace chords
+            var chord = list[chordNum];
+            // Set note test, grace notes are shown a bit smaller
+            nameChord(chord.notes, text, fontSize)
+            // Important: Set element's spatial attributes *after* adding it to the score.
+            // otherwise they have no effect.
+            cursor.add(text)
+            // X position the note name over the grace chord
+            text.offsetX = chord.posX
+            // Y position the note name with a small nudge upward.
+            text.offsetY = cursor.element.posY - 0.3
+            switch (cursor.voice) {
+               case 1: case 3: text.placement = Placement.BELOW; break;
+            }
+
+            // If we consume a STAFF_TEXT we must manufacture a new one.
+            text = newElement(Element.STAFF_TEXT);    // Make another STAFF_TEXT
+         }
+      }
+      return text
    }
 
    onRun: {
@@ -149,43 +178,48 @@ MuseScore {
 
             if (fullScore)  // no selection
                cursor.rewind(0); // beginning of score
-
             while (cursor.segment && (fullScore || cursor.tick < endTick)) {
                if (cursor.element && cursor.element.type === Element.CHORD) {
-                  var text = newElement(Element.STAFF_TEXT);
+                  var text = newElement(Element.STAFF_TEXT);      // Make a STAFF_TEXT
 
+                  // First...we need to scan grace notes for existence and break them
+                  // into their appropriate lists with the correct ordering of notes.
+                  var leadingLifo = new Array();   // List for leading grace notes
+                  var trailingFifo = new Array();  // List for trailing grace notes
                   var graceChords = cursor.element.graceNotes;
-                  for (var i = 0; i < graceChords.length; i++) {
-                     // iterate through all grace chords
-                     var graceNotes = graceChords[i].notes;
-                     nameChord(graceNotes, text);
-                     // there seems to be no way of knowing the exact horizontal pos.
-                     // of a grace note, so we have to guess:
-                     text.offsetX = -2.5 * (graceChords.length - i);
-                     switch (voice) {
-                        case 0: text.offsetY =  1; break;
-                        case 1: text.offsetY = 10; break;
-                        case 2: text.offsetY = -1; break;
-                        case 3: text.offsetY = 12; break;
+                  // Build separate lists of leading and trailing grace note chords.
+                  if (graceChords.length > 0) {
+                     for (var chordNum = 0; chordNum < graceChords.length; chordNum++) {
+                        var noteType = graceChords[chordNum].notes[0].noteType
+                        if (noteType == NoteType.GRACE8_AFTER || noteType == NoteType.GRACE16_AFTER ||
+                              noteType == NoteType.GRACE32_AFTER) {
+                           trailingFifo.unshift(graceChords[chordNum])
+                        } else {
+                           leadingLifo.push(graceChords[chordNum])
+                        }
                      }
-
-                     cursor.add(text);
-                     // new text for next element
-                     text = newElement(Element.STAFF_TEXT);
                   }
 
+                  // Next process the leading grace notes, should they exist...
+                  text = renderGraceNoteNames(cursor, leadingLifo, text, text.fontSize * fontSizeMini)
+
+                  // Now handle the note names on the main chord...
                   var notes = cursor.element.notes;
-                  nameChord(notes, text);
-
-                  switch (voice) {
-                     case 0: text.offsetY =  1; break;
-                     case 1: text.offsetY = 10; break;
-                     case 2: text.offsetY = -1; break;
-                     case 3: text.offsetY = 12; break;
-                  }
-                  if ((voice == 0) && (notes[0].pitch > 83))
-                     text.offsetX = 1;
+                  nameChord(notes, text, text.fontSize);
                   cursor.add(text);
+
+                  // X position the note name over the chord
+                  text.offsetX = cursor.element.posX
+                  // Y position the note name over the chord
+                  text.offsetY = cursor.element.posY
+                  switch (cursor.voice) {
+                     case 1: case 3: text.placement = Placement.BELOW; break;
+                  }
+
+                  text = newElement(Element.STAFF_TEXT) // Make another STAFF_TEXT object
+
+                  // Finally process trailing grace notes if they exist...
+                  text = renderGraceNoteNames(cursor, trailingFifo, text, text.fontSize * fontSizeMini)
                } // end if CHORD
                cursor.next();
             } // end while segment

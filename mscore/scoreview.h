@@ -19,6 +19,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/mscoreview.h"
 #include "libmscore/pos.h"
+#include "libmscore/harmony.h"
 
 namespace Ms {
 
@@ -122,6 +123,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       bool tripleClickPending = false;
       bool popupActive = false;
+      bool modifySelection = false;
+      Element* elementToSelect = nullptr;
 
       // Loop In/Out marks in the score
       PositionCursor* _curLoopIn;
@@ -141,6 +144,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       // By default when the view will prevent viewpoint changes if
       // it is inactive. Set this flag to true to change this behaviour.
       bool _moveWhenInactive = false;
+
+      bool _blockShowEdit = false;
 
       virtual void paintEvent(QPaintEvent*);
       void paint(const QRect&, QPainter&);
@@ -201,8 +206,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void figuredBassEndEdit();
       void realtimeAdvance(bool allowRests);
       void cmdAddFret(int fret);
-      void cmdAddChordName();
-      void cmdAddText(Tid tid);
+      void cmdAddChordName(HarmonyType ht);
+      void cmdAddText(Tid tid, Tid customTid = Tid::DEFAULT);
       void cmdEnterRest(const TDuration&);
       void cmdEnterRest();
       void cmdTuplet(int n, ChordRest*);
@@ -327,8 +332,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void doDragEdit(QMouseEvent* ev);
       bool testElementDragTransition(QMouseEvent* ev);
       bool fotoEditElementDragTransition(QMouseEvent* ev);
-      void addSlur();
-      virtual void cmdAddSlur(ChordRest*, ChordRest*) override;
+      void addSlur(const Slur* slurTemplate = nullptr);
+      void cmdAddSlur(ChordRest*, ChordRest*, const Slur*) override;
       virtual void cmdAddHairpin(HairpinType);
       void cmdAddNoteLine();
 
@@ -348,6 +353,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       qreal yoffset() const;
       void setOffset(qreal x, qreal y);
       QSizeF fsize() const;
+      void screenNext();
+      void screenPrev();
       void pageNext();
       void pagePrev();
       void pageTop();
@@ -356,6 +363,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       QPointF toPhysical(const QPointF& p) const {return _matrix.map(p); }
       QRectF toLogical(const QRectF& r) const    { return imatrix.mapRect(r); }
       QRect toPhysical(const QRectF& r) const    { return _matrix.mapRect(r).toRect(); }
+
+      QRectF canvasViewport() const { return toLogical(geometry()); }
 
       bool searchMeasure(int i);
       bool searchPage(int i);
@@ -395,6 +404,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual QCursor cursor() const { return QWidget::cursor(); }
       void loopUpdate(bool val)   {  loopToggled(val); }
 
+      void moveViewportToLastEdit();
+
       void updateShadowNotes();
 
       OmrView* omrView() const        { return _omrView; }
@@ -413,7 +424,6 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       virtual const QRect geometry() const override { return QWidget::geometry(); }
 
-      bool clickOffElement;
       void updateGrips();
       bool moveWhenInactive() const { return _moveWhenInactive; }
       bool moveWhenInactive(bool move) { bool m = _moveWhenInactive; _moveWhenInactive = move; return m; }

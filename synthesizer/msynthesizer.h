@@ -33,16 +33,21 @@ class Xml;
 class MasterSynthesizer : public QObject {
       Q_OBJECT
 
-      float _gain             { 0.1f  };     // -20dB
+      float _gain             { defaultGain };
       float _boost            { 10.0  };     // +20dB
       double _masterTuning    { 440.0 };
 
       int _dynamicsMethod     { 1 };      // Default dynamics method
       int _ccToUse            { 1 };      // CC2
 
+      static constexpr double MUTE = 0.00;            // for gain to decibels conversion
+      static constexpr double MAX = 10.00;            // for gain to decibels conversion
+      static constexpr double N = 20.0;               // for gain to decibels conversion
+
    public:
       static const int MAX_BUFFERSIZE = 8192;
       static const int MAX_EFFECTS = 2;
+      static constexpr float defaultGain = 0.1f;  // -20dB
 
    private:
       std::atomic<bool> lock1      { false };
@@ -56,6 +61,7 @@ class MasterSynthesizer : public QObject {
       float effect1Buffer[MAX_BUFFERSIZE];
       float effect2Buffer[MAX_BUFFERSIZE];
       int indexOfEffect(int ab, const QString& name);
+      float convertGainToDecibels(float gain) const;
 
    public slots:
       void sfChanged() { emit soundFontChanged(); }
@@ -104,6 +110,12 @@ class MasterSynthesizer : public QObject {
       int indexOfEffect(int ab);
 
       float gain() const     { return _gain; }
+      float gainAsDecibels() const;
+      float defaultGainAsDecibels;
+      float minGainAsDecibels = -80;
+      float maxGainAsDecibels = 0;
+
+      void setGainAsDecibels(float decibelValue);
       float boost() const    { return _boost; }
       void setBoost(float v) { _boost = v; }
 

@@ -17,6 +17,7 @@ namespace Ms {
 
 class Element;
 class Score;
+class Slur;
 class Note;
 class Page;
 class ChordRest;
@@ -57,7 +58,7 @@ class MuseScoreView {
       virtual void setCursor(const QCursor&) {};
       virtual int gripCount() const { return 0; }
       virtual void setDropRectangle(const QRectF&) {};
-      virtual void cmdAddSlur(ChordRest*, ChordRest*) {};
+      virtual void cmdAddSlur(ChordRest*, ChordRest*, const Slur* /* slurTemplate */) {};
       virtual void startEdit() {};
       virtual void startEditMode(Element*) {};
       virtual void startEdit(Element*, Grip /*startGrip*/) {};

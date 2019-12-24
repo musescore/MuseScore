@@ -16,6 +16,7 @@
 #include "xml.h"
 #include "bracket.h"
 #include "bracketItem.h"
+#include "measure.h"
 #include "spanner.h"
 #include "musescoreCore.h"
 
@@ -656,10 +657,48 @@ ScoreElement* LinkedElements::mainElement()
                   // or two elements from excerpt.
                   Element* e1 = toElement(s1);
                   Element* e2 = toElement(s2);
-                  if (e1->track() < e2->track())
-                        return true;
-                  if (e1->track() == e2->track() && e1->tick() < e2->tick())
-                        return true;
+                  const int tr1 = e1->track();
+                  const int tr2 = e2->track();
+                  if (tr1 == tr2) {
+                        const Fraction tick1 = e1->tick();
+                        const Fraction tick2 = e2->tick();
+                        if (tick1 == tick2) {
+                              Measure* m1 = e1->findMeasure();
+                              Measure* m2 = e2->findMeasure();
+                              if (!m1 || !m2)
+                                    return false;
+
+                              // MM rests are written to MSCX in the following order:
+                              // 1) first measure of MM rest (m->hasMMRest() == true);
+                              // 2) MM rest itself (m->isMMRest() == true);
+                              // 3) other measures of MM rest (m->hasMMRest() == false).
+                              //
+                              // As mainElement() must find the first element that
+                              // is going to be written to a file, MM rest writing
+                              // order should also be considered.
+
+                              if (m1->isMMRest() == m2->isMMRest()) {
+                                    // no difference if both are MM rests or both are usual measures
+                                    return false;
+                                    }
+
+                              // MM rests may be generated but not written (e.g. if
+                              // saving a file right after disabling MM rests)
+                              const bool mmRestsWritten = e1->score()->styleB(Sid::createMultiMeasureRests);
+
+                              if (m1->isMMRest()) {
+                                    // m1 is earlier if m2 is *not* the first MM rest measure
+                                    return mmRestsWritten && !m2->hasMMRest();
+                                    }
+                              if (m2->isMMRest()) {
+                                    // m1 is earlier if it *is* the first MM rest measure
+                                    return !mmRestsWritten || m1->hasMMRest();
+                                    }
+                              return false;
+                              }
+                        return tick1 < tick2;
+                        }
+                  return tr1 < tr2;
                   }
             return false;
             });

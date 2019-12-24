@@ -234,6 +234,14 @@ const char* Accidental::subtype2name(AccidentalType st)
       }
 
 //---------------------------------------------------------
+//   subtype2symbol
+//---------------------------------------------------------
+
+SymId Accidental::subtype2symbol(AccidentalType st)
+      {
+      return accList[int(st)].sym;
+      }
+//---------------------------------------------------------
 //   name2subtype
 //---------------------------------------------------------
 

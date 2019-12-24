@@ -60,6 +60,7 @@ private slots:
       void arpGliss3() { mxmlIoTest("testArpGliss3"); }
       void barStyles() { mxmlIoTest("testBarStyles"); }
       void barStyles2() { mxmlIoTest("testBarStyles2"); }
+      void barStyles3() { mxmlIoTest("testBarStyles3"); }
       void chordDiagrams1() { mxmlIoTest("testChordDiagrams1"); }
       void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
       void clefs1() { mxmlIoTest("testClefs1"); }
@@ -171,6 +172,8 @@ private slots:
       void tuplets3() { mxmlIoTestRef("testTuplets3"); }
       void tuplets4() { mxmlIoTest("testTuplets4"); }
       void tuplets5() { mxmlIoTestRef("testTuplets5"); }
+      void tuplets6() { mxmlIoTestRef("testTuplets6"); }
+      void tuplets7() { mxmlIoTest("testTuplets7"); }
       void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); }
       void unusualDurations() { mxmlIoTestRef("testUnusualDurations"); }
       void virtualInstruments() { mxmlIoTestRef("testVirtualInstruments"); }
@@ -181,6 +184,7 @@ private slots:
       void volta1() { mxmlIoTest("testVolta1"); }
       void wedge1() { mxmlIoTest("testWedge1"); }
       void wedge2() { mxmlIoTest("testWedge2"); }
+      void wedge3() { mxmlIoTest("testWedge3"); }
       void words1() { mxmlIoTest("testWords1"); }
       void words2() { mxmlIoTest("testWords2"); }
       void sound1() { mxmlIoTestRef("testSound1"); }

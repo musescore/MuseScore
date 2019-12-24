@@ -52,6 +52,7 @@ class Marker final : public TextBase {
 
       virtual Marker* clone() const override    { return new Marker(*this); }
       virtual ElementType type() const override { return ElementType::MARKER; }
+      virtual int subtype() const override      { return int(_markerType); }
 
       Measure* measure() const         { return (Measure*)parent(); }
 

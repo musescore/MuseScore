@@ -14,7 +14,6 @@
 #define __QMLPLUGINAPI_H__
 
 #include "config.h"
-
 #include "../qmlplugin.h"
 #include "enums.h"
 #include "libmscore/mscore.h"
@@ -123,6 +122,15 @@ class PluginAPI : public Ms::QmlPlugin {
       /// \note In MuseScore 2.X this enumeration was available as
       /// TextStyleType (TextStyleType.TITLE etc.)
       DECLARE_API_ENUM( Tid,              tidEnum                 )
+      /// Contains Ms::Align enumeration values
+      /// \since MuseScore 3.3
+      DECLARE_API_ENUM( Align,            alignEnum               )
+      /// Contains Ms::NoteType enumeration values
+      /// \since MuseScore 3.2.1
+      DECLARE_API_ENUM( NoteType,         noteTypeEnum            )
+      /// Contains Ms::PlayEventType enumeration values
+      /// \since MuseScore 3.3
+      DECLARE_API_ENUM( PlayEventType,    playEventTypeEnum       )
       /// Contains Ms::NoteHead::Type enumeration values
       /// \note In MuseScore 2.X this enumeration was available in
       /// NoteHead class (e.g. NoteHead.HEAD_QUARTER).
@@ -148,6 +156,61 @@ class PluginAPI : public Ms::QmlPlugin {
       /// Implement \p onRun() function in your plugin to handle this signal.
       void run();
 
+      /**
+       * Notifies plugin about changes in score state.
+       * Called after each user (or plugin) action which may have changed a
+       * score. Implement \p onScoreStateChanged() function in your plugin to
+       * handle this signal.
+       *
+       * \p state variable is available within the handler with following
+       * fields:
+       *
+       * - \p selectionChanged
+       * - \p excerptsChanged
+       * - \p instrumentsChanged
+       * - \p startLayoutTick
+       * - \p endLayoutTick
+       *
+       * If a plugin modifies score in this handler, then it should:
+       * 1. enclose all modifications within Score::startCmd() / Score::endCmd()
+       * 2. take care of preventing an infinite recursion, as plugin-originated
+       *    changes will trigger this signal again after calling Score::endCmd()
+       *
+       * Example:
+       * \code
+       * import QtQuick 2.0
+       * import MuseScore 3.0
+       *
+       * MuseScore {
+       *     menuPath: "Plugins.selectionChangeExample"
+       *     pluginType: "dock"
+       *     dockArea:   "left"
+       *     implicitHeight: 75 // necessary for dock widget to appear with nonzero height
+       *     implicitWidth: 150
+       *
+       *     Text {
+       *        // A label which will display pitch of the currently selected note
+       *        id: pitchLabel
+       *        anchors.fill: parent
+       *     }
+       *
+       *     onScoreStateChanged: {
+       *         if (state.selectionChanged) {
+       *             var el = curScore ? curScore.selection.elements[0] : null;
+       *             if (el && el.type == Element.NOTE)
+       *                 pitchLabel.text = el.pitch;
+       *             else
+       *                 pitchLabel.text = "no note selected";
+       *         }
+       *     }
+       * }
+       * \endcode
+       * \warning This functionality is considered experimental.
+       * This API may change in future versions of MuseScore.
+       * \since MuseScore 3.3
+       */
+      void scoreStateChanged(const QMap<QString, QVariant>& state);
+
    public:
       /// \cond MS_INTERNAL
       PluginAPI(QQuickItem* parent = 0);
@@ -155,6 +218,7 @@ class PluginAPI : public Ms::QmlPlugin {
       static void registerQmlTypes();
 
       void runPlugin() override            { emit run();       }
+      void endCmd(const QMap<QString, QVariant>& stateInfo) override { emit scoreStateChanged(stateInfo); }
 
       Score* curScore() const;
       QQmlListProperty<Score> scores();
@@ -162,6 +226,7 @@ class PluginAPI : public Ms::QmlPlugin {
 
       Q_INVOKABLE Ms::PluginAPI::Score* newScore(const QString& name, const QString& part, int measures);
       Q_INVOKABLE Ms::PluginAPI::Element* newElement(int);
+      Q_INVOKABLE void removeElement(Ms::PluginAPI::Element* wrapped);
       Q_INVOKABLE void cmd(const QString&);
       /** \cond PLUGIN_API \private \endcond */
       Q_INVOKABLE Ms::PluginAPI::MsProcess* newQProcess();

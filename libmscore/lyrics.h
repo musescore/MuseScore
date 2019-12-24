@@ -32,7 +32,7 @@ class Lyrics final : public TextBase {
             SINGLE, BEGIN, END, MIDDLE
             ///\}
             };
-      Q_ENUM(Syllabic)
+      Q_ENUM(Syllabic);
 
       // MELISMA FIRST UNDERSCORE:
       // used as_ticks value to mark a melisma for which only the first chord has been spanned so far
@@ -139,8 +139,8 @@ class LyricsLine final : public SLine {
 
 class LyricsLineSegment final : public LineSegment {
    protected:
-      int   _numOfDashes;
-      qreal _dashLength;
+      int   _numOfDashes = 0;
+      qreal _dashLength = 0;
 
    public:
       LyricsLineSegment(Spanner*, Score*);

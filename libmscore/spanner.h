@@ -62,6 +62,7 @@ class SpannerSegment : public Element {
       virtual SpannerSegment* clone() const = 0;
 
       virtual qreal mag() const override;
+      virtual Fraction tick() const override;
 
       Spanner* spanner() const              { return _spanner;            }
       Spanner* setSpanner(Spanner* val)     { return _spanner = val;      }
@@ -138,7 +139,7 @@ class Spanner : public Element {
       enum class Anchor {
             SEGMENT, MEASURE, CHORD, NOTE
             };
-      Q_ENUM(Anchor)
+      Q_ENUM(Anchor);
    private:
 
       Element* _startElement { 0  };
@@ -194,6 +195,7 @@ class Spanner : public Element {
 
       int track2() const       { return _track2;   }
       void setTrack2(int v)    { _track2 = v;      }
+      int effectiveTrack2() const { return _track2 == -1 ? track() : _track2; }
 
       bool broken() const      { return _broken;   }
       void setBroken(bool v)   { _broken = v;      }
@@ -216,6 +218,7 @@ class Spanner : public Element {
       virtual void layoutSystemsDone();
 
       virtual void triggerLayout() const override;
+      virtual void triggerLayoutAll() const override;
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;

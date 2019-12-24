@@ -115,6 +115,10 @@
           <program value="24"/>
           <synti>Fluid</synti>
           </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          <synti>Fluid</synti>
+          </Channel>
         </Instrument>
       </Part>
     <Staff id="1">

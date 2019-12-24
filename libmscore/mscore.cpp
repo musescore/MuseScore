@@ -234,6 +234,10 @@ static Spatium doubleToSpatium(double d)
 
 void MScore::init()
       {
+      static bool initDone = false;
+      if (initDone)
+            return;
+
       if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDouble))
             qFatal("registerConverter Spatium::toDouble failed");
       if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium))
@@ -293,10 +297,10 @@ void MScore::init()
             _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
-      selectColor[1].setNamedColor("#2E86AB");   
-      selectColor[1].setNamedColor("#306B34");   
-      selectColor[2].setNamedColor("#C73E1D");   
-      selectColor[3].setNamedColor("#8D1E4B");   
+      selectColor[0].setNamedColor("#0065BF");   //blue
+      selectColor[1].setNamedColor("#007F00");   //green
+      selectColor[2].setNamedColor("#C53F00");   //orange
+      selectColor[3].setNamedColor("#C31989");   //purple
 
       defaultColor        = Qt::black;
       dropColor           = QColor("#1778db");
@@ -347,6 +351,7 @@ void MScore::init()
 #if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
       static const char* fonts[] = {
             ":/fonts/musejazz/MuseJazzText.otf",
+            ":/fonts/campania/Campania.otf",
             ":/fonts/FreeSans.ttf",
             ":/fonts/FreeSerif.ttf",
             ":/fonts/FreeSerifBold.ttf",
@@ -377,7 +382,9 @@ void MScore::init()
 #ifdef DEBUG_SHAPES
       testShapes();
 #endif
-}
+
+      initDone = true;
+      }
 
 //---------------------------------------------------------
 //   readDefaultStyle
@@ -419,7 +426,7 @@ const char* MScore::errorMessage()
             if (e.no == _error)
                   return e.txt;
             }
-      return "unknown error";
+      return QT_TRANSLATE_NOOP("error", "Unknown error");
       }
 
 //---------------------------------------------------------

@@ -66,7 +66,6 @@ class SynthControl : public QWidget, Ui::SynthControl {
       void setDirty();
 
    signals:
-      void gainChanged(float);
       void soundFontChanged();
       void closed(bool);
 

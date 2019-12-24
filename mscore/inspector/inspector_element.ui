@@ -205,12 +205,6 @@
           <property name="accessibleName">
            <string>Color</string>
           </property>
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Plain</enum>
-          </property>
          </widget>
         </item>
        </layout>
@@ -301,6 +295,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="suffix">
+         <string>sp</string>
+        </property>
         <property name="minimum">
          <double>-999.990000000000009</double>
         </property>
@@ -345,7 +342,7 @@
   </customwidget>
   <customwidget>
    <class>Awl::ColorLabel</class>
-   <extends>QFrame</extends>
+   <extends>QPushButton</extends>
    <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.00">
-  <Workspace>
+  <Workspace> 
+    <source>Basic</source>
     <PaletteBox>
       <Palette name="Clefs">
+        <type>Clef</type>
         <gridWidth>35</gridWidth>
         <gridHeight>50</gridHeight>
         <mag>0.8</mag>
@@ -38,6 +40,7 @@
           </Cell>
         </Palette>
       <Palette name="Key Signatures">
+        <type>KeySig</type>
         <gridWidth>56</gridWidth>
         <gridHeight>55</gridHeight>
         <mag>1</mag>
@@ -85,7 +88,7 @@
             <accidental>7</accidental>
             </KeySig>
           </Cell>
-        <Cell name="C♭ major / A♭ minor">
+        <Cell name="C♭ major, A♭ minor">
           <staff>1</staff>
           <KeySig>
             <accidental>-7</accidental>
@@ -135,10 +138,11 @@
           </Cell>
         </Palette>
       <Palette name="Time Signatures">
+        <type>TimeSig</type>
         <gridWidth>42</gridWidth>
         <gridHeight>38</gridHeight>
         <mag>0.8</mag>
-        <moreElements>0</moreElements>
+        <moreElements>1</moreElements>
         <Cell name="2/4">
           <staff>1</staff>
           <TimeSig>
@@ -220,6 +224,7 @@
           </Cell>
         </Palette>
       <Palette name="Accidentals">
+        <type>Accidental</type>
         <gridWidth>33</gridWidth>
         <gridHeight>36</gridHeight>
         <mag>1</mag>
@@ -245,7 +250,7 @@
             <subtype>accidentalNatural</subtype>
             </Accidental>
           </Cell>
-        <Cell name="Add brackets to element">
+        <Cell name="Add brackets to accidental">
           <Icon>
             <subtype>21</subtype>
             <action>add-brackets</action>
@@ -259,6 +264,7 @@
           </Cell>
         </Palette>
       <Palette name="Articulations">
+        <type>Articulation</type>
         <gridWidth>42</gridWidth>
         <gridHeight>25</gridHeight>
         <mag>1</mag>
@@ -301,6 +307,7 @@
           </Cell>
         </Palette>
       <Palette name="Grace Notes">
+        <type>GraceNote</type>
         <gridWidth>32</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>
@@ -332,6 +339,7 @@
           </Cell>
         </Palette>
       <Palette name="Lines">
+        <type>Line</type>
         <gridWidth>75</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.8</mag>
@@ -440,6 +448,7 @@
           </Cell>
         </Palette>
       <Palette name="Barlines">
+        <type>BarLine</type>
         <gridWidth>42</gridWidth>
         <gridHeight>38</gridHeight>
         <mag>0.8</mag>
@@ -493,24 +502,25 @@
           </Cell>
         </Palette>
       <Palette name="Text">
+        <type>Text</type>
         <gridWidth>84</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.85</mag>
         <grid>1</grid>
         <moreElements>0</moreElements>
-        <Cell name="Staff text">
+        <Cell name="Staff text" trElement="1">
           <StaffText>
             <text>Staff Text</text>
             </StaffText>
           </Cell>
-        <Cell name="Expression text">
+        <Cell name="Expression text" trElement="1">
           <StaffText>
             <placement>below</placement>
             <style>Expression</style>
             <text>Expression</text>
             </StaffText>
           </Cell>
-        <Cell name="Instrument change">
+        <Cell name="Instrument change" trElement="1">
           <InstrumentChange>
             <Instrument>
               <trackName></trackName>
@@ -530,49 +540,46 @@
             <text>B1</text>
             </RehearsalMark>
           </Cell>
-        <Cell name="Swing">
+        <Cell name="Swing" trElement="1">
           <SystemText>
             <swing unit="eighth" ratio= "60"/>
             <style>Tempo</style>
             <text>Swing</text>
             </SystemText>
           </Cell>
-        <Cell name="System text">
+        <Cell name="System text" trElement="1">
           <SystemText>
             <placement>above</placement>
             <text>System Text</text>
             </SystemText>
           </Cell>
-        <Cell name="Pizzicato">
+        <Cell name="Pizzicato" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="pizzicato"/>
-            <track>0</track>
             <text>pizz.</text>
             </StaffText>
           </Cell>
-        <Cell name="Arco">
+        <Cell name="Arco" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="arco"/>
-            <track>0</track>
             <text>arco</text>
             </StaffText>
           </Cell>
-        <Cell name="Mute">
+        <Cell name="Mute" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="mute"/>
-            <track>0</track>
             <text>mute</text>
             </StaffText>
           </Cell>
-        <Cell name="Open">
+        <Cell name="Open" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="open"/>
-            <track>0</track>
             <text>open</text>
             </StaffText>
           </Cell>
         </Palette>
       <Palette name="Tempo">
+        <type>Tempo</type>
         <gridWidth>66</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.65</mag>
@@ -612,6 +619,7 @@
           </Cell>
         </Palette>
       <Palette name="Dynamics">
+        <type>Dynamic</type>
         <gridWidth>42</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.8</mag>
@@ -666,7 +674,8 @@
             </Dynamic>
           </Cell>
         </Palette>
-      <Palette name="Repeats &amp;&amp; Jumps">
+      <Palette name="Repeats &amp; Jumps">
+        <type>Repeat</type>
         <gridWidth>75</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.65</mag>
@@ -788,7 +797,8 @@
             </BarLine>
           </Cell>
         </Palette>
-      <Palette name="Breaks &amp;&amp; Spacers">
+      <Palette name="Breaks &amp; Spacers">
+        <type>Break</type>
         <gridWidth>42</gridWidth>
         <gridHeight>36</gridHeight>
         <mag>1</mag>
@@ -835,6 +845,7 @@
           </Cell>
         </Palette>
       <Palette name="Beam Properties">
+        <type>Beam</type>
         <gridWidth>27</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>

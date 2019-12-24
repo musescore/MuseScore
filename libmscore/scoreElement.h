@@ -472,6 +472,10 @@ static inline SpannerSegment* toSpannerSegment(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isSpannerSegment());
       return (SpannerSegment*)e;
       }
+static inline const SpannerSegment* toSpannerSegment(const ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isSpannerSegment());
+      return (const SpannerSegment*)e;
+      }
 static inline BSymbol* toBSymbol(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isBSymbol());
       return (BSymbol*)e;

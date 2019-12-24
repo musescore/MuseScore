@@ -515,16 +515,7 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       {
       int type = event.type();
       if (type == ME_NOTEON) {
-            bool mute = false;
-
-            const Note* note = event.note();
-            if (note) {
-                  Staff* staff      = note->staff();
-                  Instrument* instr = staff->part()->instrument(note->chord()->tick());
-                  const Channel* a = instr->playbackChannel(note->subchannel(), cs);
-                  mute = a->mute() || a->soloMute() || !staff->playbackVoice(note->voice());
-                  }
-            if (!mute) {
+            if (!event.isMuted()) {
                   if (event.discard()) { // ignore noteoff but restrike noteon
                         if (event.velo() > 0)
                               putEvent(NPlayEvent(ME_NOTEON, event.channel(), event.pitch(), 0) ,framePos);
@@ -1150,8 +1141,7 @@ int Seq::getPlayStartUtick()
       {
       if ((mscore->loop())) {
             if (preferences.getBool(PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY)) {
-                  if (cs->selection().isRange())
-                        setLoopSelection();
+                  setLoopSelection();
                   }
             return cs->repeatList().tick2utick(cs->loopInTick().ticks());
             }
@@ -1719,8 +1709,13 @@ void Seq::setPos(POS, unsigned t)
 
 void Seq::setLoopSelection()
       {
-      cs->setLoopInTick(cs->selection().tickStart());
-      cs->setLoopOutTick(cs->selection().tickEnd());
+      const Score* score = mscore->currentScore();
+      Q_ASSERT(!score || score->masterScore() == cs);
+
+      if (score && score->selection().isRange()) {
+            cs->setLoopInTick(score->selection().tickStart());
+            cs->setLoopOutTick(score->selection().tickEnd());
+            }
       }
 
 //---------------------------------------------------------

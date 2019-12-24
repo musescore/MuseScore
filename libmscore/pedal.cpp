@@ -84,6 +84,7 @@ Pedal::Pedal(Score* s)
       initElementStyle(&pedalStyle);
       setLineVisible(true);
       resetProperty(Pid::BEGIN_TEXT);
+      resetProperty(Pid::CONTINUE_TEXT);
       resetProperty(Pid::END_TEXT);
 
       resetProperty(Pid::LINE_WIDTH);
@@ -123,6 +124,7 @@ void Pedal::write(XmlWriter& xml) const
       for (auto i : {
          Pid::END_HOOK_TYPE,
          Pid::BEGIN_TEXT,
+         Pid::CONTINUE_TEXT,
          Pid::END_TEXT,
          Pid::LINE_VISIBLE,
          Pid::BEGIN_HOOK_TYPE

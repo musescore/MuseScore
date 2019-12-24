@@ -48,15 +48,12 @@ struct LayoutContext {
       Fraction startTick;
       Fraction endTick;
 
-      LayoutContext() = default;
+      LayoutContext(Score* s) : score(s) {}
       LayoutContext(const LayoutContext&) = delete;
       LayoutContext& operator=(const LayoutContext&) = delete;
       ~LayoutContext();
 
       void layoutLinear();
-#if 0 // unused
-      void layoutMeasureLinear(MeasureBase*);
-#endif
 
       void layout();
       int adjustMeasureNo(MeasureBase*);

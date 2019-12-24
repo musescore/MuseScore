@@ -329,13 +329,13 @@
       <Measure>
         <voice>
           <Tuplet>
-            <direction>up</direction>
             <normalNotes>8</normalNotes>
             <actualNotes>9</actualNotes>
             <baseNote>16th</baseNote>
             <Number>
               <text>9</text>
               </Number>
+            <direction>up</direction>
             </Tuplet>
           <Beam>
             <l1>31</l1>

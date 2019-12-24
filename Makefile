@@ -21,8 +21,8 @@ REVISION  := `cat mscore/revision.h`
 CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
 PREFIX    = "/usr/local"
-VERSION   = "3.2b-${REVISION}"
-#VERSION = 3.1.0
+VERSION   = "3.4b-${REVISION}"
+#VERSION = 3.3.3
 BUILD_NUMBER=""
 
 # Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
@@ -164,9 +164,7 @@ portable: install
 	&& cp "share/applications/$${dsktp}" "$${dsktp}" \
 	&& cp "share/icons/hicolor/scalable/apps/$${icon}" "$${icon}" \
 	&& <"$${build_dir}/$${mani}" >"$${mani}" \
-	   sed -rn 's/.*(share\/)(man|mime|icons|applications)(.*)/\1\2\3/p' \
-	&& "$${build_dir}/../build/Linux+BSD/portable/copy-libs" . \
-	;  ./AppRun check-depends | tee "$${build_dir}/dependencies.txt"
+	   sed -rn 's/.*(share\/)(man|mime|icons|applications)(.*)/\1\2\3/p'
 
 installdebug: debug
 	cd build.debug \

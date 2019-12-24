@@ -78,6 +78,20 @@ void Sticking::layout()
       }
 
 //---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Sticking::propertyDefault(Pid id) const
+      {
+      switch(id) {
+            case Pid::SUB_STYLE:
+                  return int(Tid::STICKING);
+            default:
+                  return TextBase::propertyDefault(id);
+            }
+      }
+
+//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 

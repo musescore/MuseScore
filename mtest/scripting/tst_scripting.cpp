@@ -35,17 +35,14 @@ class TestScripting : public QObject, public MTest
 
       QmlPlugin* loadPlugin(QString path);
       void runPlugin(QmlPlugin* p, Score* cs);
-      void read1(const QString& file, const QString& script);
 
    private slots:
       void initTestCase();
       void plugins01();
       void plugins02();
-      void test1() { read1("s1", "p1"); }       // scan note rest
-#if 0
-      void test2() { read1("s2", "p2"); }       // scan segment attributes
+      void processFileWithPlugin_data();
+      void processFileWithPlugin();
       void testTextStyle();
-#endif
       };
 
 //---------------------------------------------------------
@@ -144,13 +141,25 @@ void TestScripting::plugins02()
       }
 
 //---------------------------------------------------------
-//   read1
+//   processFileWithPlugin
 //   read a score, apply script and compare script output with
 //    reference
 //---------------------------------------------------------
 
-void TestScripting::read1(const QString& file, const QString& script)
+void TestScripting::processFileWithPlugin_data()
       {
+      QTest::addColumn<QString>("file");
+      QTest::addColumn<QString>("script");
+
+      QTest::newRow("p1") << "s1" << "p1"; // scan note rest
+      QTest::newRow("p2") << "s2" << "p2"; // scan segment attributes
+      }
+
+void TestScripting::processFileWithPlugin()
+      {
+      QFETCH(QString, file);
+      QFETCH(QString, script);
+
       MasterScore* score = readScore(DIR + file + ".mscx");
       MuseScoreCore::mscoreCore->setCurrentScore(score);
 
@@ -181,8 +190,6 @@ void TestScripting::read1(const QString& file, const QString& script)
       delete score;
       }
 
-#if 0
-
 //---------------------------------------------------------
 ///   testTextStyle
 ///   Reading and writing of a text style through the plugin framework
@@ -196,13 +203,12 @@ void TestScripting::testTextStyle()
       Score* score = readScore(DIR + "testTextStyle.mscx");
       MuseScoreCore::mscoreCore->setCurrentScore(score);
       runPlugin(item, score);
-      QVERIFY(saveCompareScore(item->curScore(), "testTextStyle-test.mscx", DIR + "testTextStyle-ref.mscx"));
-//      score->undoStack()->undo();
-//      QVERIFY(saveCompareScore(item->curScore(), "testTextStyle-test2.mscx", DIR + "testTextStyle.mscx"));
+      QVERIFY(saveCompareScore(score, "testTextStyle-test.mscx", DIR + "testTextStyle-ref.mscx"));
+      score->undoRedo(/* undo */ true, /* EditData */ nullptr);
+      QVERIFY(saveCompareScore(score, "testTextStyle-test2.mscx", DIR + "testTextStyle.mscx"));
 
       delete item;
       }
-#endif
 
 QTEST_MAIN(TestScripting)
 #include "tst_scripting.moc"

@@ -21,37 +21,40 @@
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/select.h"
-#include "palettebox.h"
+#include "palette/palettewidget.h"
 #include "scoreaccessibility.h"
 
 namespace Ms {
 
+// see `SelectionFilter::canSelect()` in libmscore/select.cpp
+// and `enum class SelectionFilterType` in libmscore/select.h,
+// keep in sync with the latter!
 static const char* labels[] = {
       QT_TRANSLATE_NOOP("selectionfilter", "All"),
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 1"),
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 2"),
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 3"),
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 4"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Dynamics"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Fingering"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Dynamics & Hairpins"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Fingerings"),
       QT_TRANSLATE_NOOP("selectionfilter", "Lyrics"),
       QT_TRANSLATE_NOOP("selectionfilter", "Chord Symbols"),
       QT_TRANSLATE_NOOP("selectionfilter", "Other Text"),
       QT_TRANSLATE_NOOP("selectionfilter", "Articulations & Ornaments"),
       QT_TRANSLATE_NOOP("selectionfilter", "Slurs"),
       QT_TRANSLATE_NOOP("selectionfilter", "Figured Bass"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Ottava"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Ottavas"),
       QT_TRANSLATE_NOOP("selectionfilter", "Pedal Lines"),
       QT_TRANSLATE_NOOP("selectionfilter", "Other Lines"),
       QT_TRANSLATE_NOOP("selectionfilter", "Arpeggios"),
       QT_TRANSLATE_NOOP("selectionfilter", "Glissandi"),
       QT_TRANSLATE_NOOP("selectionfilter", "Fretboard Diagrams"),
       QT_TRANSLATE_NOOP("selectionfilter", "Breath Marks"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Tremolo"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Tremolos"),
       QT_TRANSLATE_NOOP("selectionfilter", "Grace Notes")
       };
 
-const int numLabels = sizeof(labels)/sizeof(labels[0]);
+static const size_t numLabels = sizeof(labels)/sizeof(labels[0]);
 
 SelectionListWidget::SelectionListWidget(QWidget *parent) : QListWidget(parent)
       {
@@ -62,7 +65,7 @@ SelectionListWidget::SelectionListWidget(QWidget *parent) : QListWidget(parent)
       setFocusPolicy(Qt::TabFocus);
       setTabKeyNavigation(true);
 
-      for (int row = 0; row < numLabels; row++) {
+      for (size_t row = 0; row < numLabels; row++) {
             QListWidgetItem *listItem = new QListWidgetItem(this);
             listItem->setData(Qt::UserRole, row == 0 ? QVariant(-1) : QVariant(1 << (row - 1)));
             listItem->setCheckState(Qt::Unchecked);
@@ -73,8 +76,8 @@ SelectionListWidget::SelectionListWidget(QWidget *parent) : QListWidget(parent)
 
 void SelectionListWidget::retranslate()
       {
-      for (int row = 0; row < numLabels; row++) {
-            QListWidgetItem *listItem = item(row);
+      for (size_t row = 0; row < numLabels; row++) {
+            QListWidgetItem *listItem = item(int(row));
             listItem->setText(qApp->translate("selectionfilter", labels[row]));
             listItem->setData(Qt::AccessibleTextRole, qApp->translate("selectionfilter", labels[row]));
             }
@@ -85,8 +88,7 @@ void SelectionListWidget::focusInEvent(QFocusEvent* e) {
       QListWidget::focusInEvent(e);
       }
 
-SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
-      QDockWidget(parent)
+SelectionWindow::SelectionWindow(QWidget *parent, Score* score) : QDockWidget(parent)
       {
       setObjectName("SelectionWindow");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
@@ -162,7 +164,7 @@ void SelectionWindow::changeCheckbox(QListWidgetItem* item)
             _score->selectionFilter().setFiltered(static_cast<SelectionFilterType>(type), set);
             }
       else {
-            for (int row = 1; row < numLabels; row++)
+            for (size_t row = 1; row < numLabels; row++)
                   _score->selectionFilter().setFiltered(static_cast<SelectionFilterType>(1 << (row - 1)), set);
             }
       _score->startCmd();
@@ -185,8 +187,8 @@ void MuseScore::showSelectionWindow(bool visible)
             selectionWindow = new SelectionWindow(this,this->currentScore());
             connect(selectionWindow, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             addDockWidget(Qt::LeftDockWidgetArea,selectionWindow);
-            if (paletteBox && paletteBox->isVisible()) {
-                  tabifyDockWidget(paletteBox, selectionWindow);
+            if (paletteWidget && paletteWidget->isVisible()) {
+                  tabifyDockWidget(paletteWidget, selectionWindow);
                   }
             }
       reDisplayDockWidget(selectionWindow, visible);
@@ -194,6 +196,7 @@ void MuseScore::showSelectionWindow(bool visible)
             selectionWindow->raise();
             }
       }
+
 void SelectionWindow::closeEvent(QCloseEvent* ev)
       {
       emit closed(false);

@@ -141,31 +141,6 @@ enum class SelectType : char {
       };
 
 //---------------------------------------------------------
-//   NoteType
-//---------------------------------------------------------
-
-enum class NoteType : unsigned char {
-      NORMAL        = 0,
-      ACCIACCATURA  = 0x1,
-      APPOGGIATURA  = 0x2,       // grace notes
-      GRACE4        = 0x4,
-      GRACE16       = 0x8,
-      GRACE32       = 0x10,
-      GRACE8_AFTER  = 0x20,
-      GRACE16_AFTER = 0x40,
-      GRACE32_AFTER = 0x80,
-      INVALID       = 0xFF
-      };
-// Q_ENUM_NS(NoteType);
-
-constexpr NoteType operator| (NoteType t1, NoteType t2) {
-      return static_cast<NoteType>(static_cast<int>(t1) | static_cast<int>(t2));
-      }
-constexpr bool operator& (NoteType t1, NoteType t2) {
-      return static_cast<int>(t1) & static_cast<int>(t2);
-      }
-
-//---------------------------------------------------------
 //    AccidentalVal
 //---------------------------------------------------------
 
@@ -321,8 +296,8 @@ class MScore {
    public:
       enum class DirectionH : char { /**.\{*/ AUTO, LEFT, RIGHT /**\}*/ };
       enum class OrnamentStyle : char { /**.\{*/ DEFAULT, BAROQUE /**\}*/ };
-      Q_ENUM(DirectionH)
-      Q_ENUM(OrnamentStyle)
+      Q_ENUM(DirectionH);
+      Q_ENUM(OrnamentStyle);
 
       static MsError _error;
       static std::vector<MScoreError> errorList;
@@ -349,7 +324,7 @@ class MScore {
       static bool verticalOrientation()            { return _verticalOrientation; }
       static void setVerticalOrientation(bool val) { _verticalOrientation = val;  }
 
-      static QColor selectColor[4];
+      static QColor selectColor[VOICES];
       static QColor defaultColor;
       static QColor dropColor;
       static QColor layoutBreakColor;

@@ -15,7 +15,7 @@
 #include "musescore.h"
 #include "inspector/inspector.h"
 #include "palette.h"
-#include "palettebox.h"
+#include "palette/paletteworkspace.h"
 #include "scoretab.h"
 #include "script.h"
 #include "testscript.h"
@@ -120,7 +120,7 @@ bool CommandScriptEntry::execute(ScriptContext& ctx) const
 //   serializePropertyValue
 //---------------------------------------------------------
 
-static const QString whitespaceRepr("&#032");
+static const QString whitespaceRepr("&#032;");
 
 static QString serializePropertyValue(Pid pid, const QVariant& val)
       {
@@ -150,16 +150,6 @@ static Pid deserializePropertyId(ElementType type, const QString& name)
             return Pid::END;
       return tmpEl->propertyId(QStringRef(&name));
       }
-
-//---------------------------------------------------------
-//   PaletteCellInfo
-//---------------------------------------------------------
-
-struct PaletteCellInfo {
-      Palette* palette;
-      int idx;
-      const Element* e;
-      };
 
 //---------------------------------------------------------
 //   PaletteElementScriptEntry::_pids
@@ -213,21 +203,25 @@ const std::initializer_list<Pid> PaletteElementScriptEntry::_pids {
 //   PaletteElementScriptEntry::paletteElements
 //---------------------------------------------------------
 
-static std::vector<PaletteCellInfo> getPaletteCells(ElementType elType, ScriptContext& ctx)
+static std::vector<Element*> getPaletteElements(ElementType elType, ScriptContext& ctx)
       {
-      std::vector<PaletteCellInfo> cells;
-      const PaletteBox* box = ctx.mscore()->getPaletteBox();
-      if (!box)
-            return cells;
-      for (Palette* p : box->palettes()) {
-            const int n = p->size();
+      std::vector<Element*> elements;
+
+      PaletteWorkspace* pw = ctx.mscore()->getPaletteWorkspace();
+      if (!pw)
+          return elements;
+
+      const PaletteTree* tree = pw->userPaletteModel()->paletteTree();
+
+      for (auto& p : tree->palettes) {
+            const int n = p->ncells();
             for (int i = 0; i < n; ++i) {
-                  const Element* e = p->element(i);
+                  Element* e = p->cell(i)->element.get();
                   if (e && e->type() == elType)
-                        cells.push_back({ p, i, e });
+                        elements.push_back(e);
                   }
             }
-      return cells;
+      return elements;
       }
 
 //---------------------------------------------------------
@@ -236,13 +230,13 @@ static std::vector<PaletteCellInfo> getPaletteCells(ElementType elType, ScriptCo
 
 bool PaletteElementScriptEntry::execute(ScriptContext& ctx) const
       {
-      const auto cells(getPaletteCells(_type, ctx));
+      const auto elements(getPaletteElements(_type, ctx));
 
-      for (const PaletteCellInfo& c : cells) {
+      for (Element* e : elements) {
             bool match = true;
             for (const auto& p : _props) {
                   const Pid pid = p.first;
-                  const QVariant pVal = c.e->getProperty(pid);
+                  const QVariant pVal = e->getProperty(pid);
                   if (serializePropertyValue(pid, pVal) != p.second) {
                         match = false;
                         break;
@@ -250,8 +244,7 @@ bool PaletteElementScriptEntry::execute(ScriptContext& ctx) const
                   }
 
             if (match) {
-                  c.palette->setCurrentIdx(c.idx);
-                  c.palette->applyPaletteElement();
+                  Palette::applyPaletteElement(e);
                   return true;
                   }
             }
@@ -267,24 +260,25 @@ std::unique_ptr<ScriptEntry> PaletteElementScriptEntry::fromContext(const Elemen
       {
       const ElementType type = e->type();
       std::vector<std::pair<Pid, QString>> props;
-      auto cells(getPaletteCells(type, ctx));
+      auto paletteElements(getPaletteElements(type, ctx));
 
-      if (cells.empty())
+      if (paletteElements.empty())
             return nullptr;
 
-      if (cells.size() > 1) {
+      if (paletteElements.size() > 1) {
             for (Pid pid : PaletteElementScriptEntry::_pids) {
                   const QVariant val = e->getProperty(pid);
                   bool sameValue = false;
                   if (!val.isValid())
                         continue;
-                  for (PaletteCellInfo& c : cells) {
-                        if (c.e == e || !c.e)
+                  for (auto i = paletteElements.begin(); i != paletteElements.end(); ++i) {
+                        const Element* pe = *i;
+                        if (pe == e || !pe)
                               continue;
-                        if (c.e->getProperty(pid) == val)
+                        if (pe->getProperty(pid) == val)
                               sameValue = true;
                         else
-                              c.e = nullptr; // excude it from further comparisons
+                              (*i) = nullptr; // exclude it from further comparisons
                         }
 
                   props.emplace_back(pid, serializePropertyValue(pid, val));

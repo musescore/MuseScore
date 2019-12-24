@@ -467,9 +467,9 @@ void ScoreView::fotoModeCopy(bool includeLink)
             printer.save(&buffer, "PNG");
             buffer.close();
             QString html = "<a href=\"" + url.toString() + "\"><img src=\"data:image/png," + imageData.toPercentEncoding() + "\" /></a>";
-            QMimeData *data = new QMimeData;
-            data->setHtml(html);
-            QApplication::clipboard()->setMimeData(data);
+            QMimeData *mdata = new QMimeData;
+            mdata->setHtml(html);
+            QApplication::clipboard()->setMimeData(mdata);
             // TODO: add both, with priority to html
             //QApplication::clipboard()->setImage(printer);
             }

@@ -244,6 +244,8 @@ int RepeatList::utick2tick(int tick) const
 
 int RepeatList::tick2utick(int tick) const
       {
+      if (empty())
+            return 0;
       for (const RepeatSegment* s : *this) {
             if (tick >= s->tick && tick < (s->tick + s->len() ))
                   return s->utick + (tick - s->tick);

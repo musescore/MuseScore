@@ -30,12 +30,10 @@ namespace Ms {
 #define VOICES 4
 #endif
 
-class ConnectorInfoReader;
 class XmlReader;
 class XmlWriter;
 enum class SymId;
 enum class Pid;
-enum class OffsetType : char;
 class StaffType;
 
 //---------------------------------------------------------
@@ -333,7 +331,6 @@ class Element : public ScoreElement {
       //@ Returns the human-readable name of the element type
       //@ Returns the name of the element type
       virtual Q_INVOKABLE QString _name() const { return QString(name()); }
-      void dumpQPointF(const char*) const;
 
       virtual QColor color() const             { return _color; }
       QColor curColor() const;
@@ -344,6 +341,7 @@ class Element : public ScoreElement {
       void undoSetVisible(bool v);
 
       static ElementType readType(XmlReader& node, QPointF*, Fraction*);
+      static Element* readMimeData(Score* score, const QByteArray& data, QPointF*, Fraction*);
 
       virtual QByteArray mimeData(const QPointF&) const;
 /**
@@ -384,12 +382,6 @@ class Element : public ScoreElement {
 
       bool isPrintable() const;
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
-
-      //
-      // check element for consistency; return false if element
-      // is not valid
-      //
-      virtual bool check() const { return true; }
 
       static Ms::Element* create(Ms::ElementType type, Score*);
       static Element* name2Element(const QStringRef&, Score*);
@@ -470,6 +462,7 @@ class Element : public ScoreElement {
             }
 
       virtual void triggerLayout() const;
+      virtual void triggerLayoutAll() const;
       virtual void drawEditMode(QPainter*, EditData&);
 
       void autoplaceSegmentElement(bool above, bool add);        // helper functions
@@ -478,7 +471,7 @@ class Element : public ScoreElement {
       void autoplaceMeasureElement(bool add = true) { autoplaceMeasureElement(placeAbove(), add); }
       void autoplaceCalculateOffset(QRectF& r, qreal minDistance);
       qreal rebaseOffset(bool nox = true);
-      bool rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool fix);
+      bool rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool above, bool fix);
 
       qreal styleP(Sid idx) const;
       };

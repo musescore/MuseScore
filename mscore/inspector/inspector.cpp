@@ -70,6 +70,8 @@
 #include "libmscore/breath.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/accidental.h"
+#include "libmscore/articulation.h"
+#include "libmscore/fermata.h"
 
 namespace Ms {
 
@@ -299,7 +301,10 @@ void Inspector::update(Score* s)
                               ie = new InspectorFretDiagram(this);
                               break;
                         case ElementType::LAYOUT_BREAK:
-                              ie = new InspectorBreak(this);
+                              if (toLayoutBreak(element())->layoutBreakType() == LayoutBreak::Type::SECTION)
+                                    ie = new InspectorSectionBreak(this);
+                              else
+                                    ie = new InspectorBreak(this);
                               break;
                         case ElementType::BEND:
                               ie = new InspectorBend(this);
@@ -440,6 +445,23 @@ InspectorBreak::InspectorBreak(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   InspectorSectionBreak
+//---------------------------------------------------------
+
+InspectorSectionBreak::InspectorSectionBreak(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      scb.setupUi(addWidget());
+
+      iList = {
+            { Pid::PAUSE,                   0, scb.pause,               scb.resetPause               },
+            { Pid::START_WITH_LONG_NAMES,   0, scb.startWithLongNames,  scb.resetStartWithLongNames  },
+            { Pid::START_WITH_MEASURE_ONE,  0, scb.startWithMeasureOne, scb.resetStartWithMeasureOne }
+            };
+      mapSignals();
+      }
+
+//---------------------------------------------------------
 //   InspectorStaffTypeChange
 //---------------------------------------------------------
 
@@ -457,7 +479,7 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
             { Pid::LINE_DISTANCE,          0, sl.lineDistance,    sl.resetLineDistance    },
             { Pid::STAFF_SHOW_BARLINES,    0, sl.showBarlines,    sl.resetShowBarlines    },
             { Pid::STAFF_SHOW_LEDGERLINES, 0, sl.showLedgerlines, sl.resetShowLedgerlines },
-            { Pid::STAFF_SLASH_STYLE,      0, sl.slashStyle,      sl.resetSlashStyle      },
+            { Pid::STAFF_STEMLESS,         0, sl.stemless,        sl.resetStemless        },
             { Pid::STAFF_NOTEHEAD_SCHEME,  0, sl.noteheadScheme,  sl.resetNoteheadScheme  },
             { Pid::STAFF_GEN_CLEF,         0, sl.genClefs,        sl.resetGenClefs        },
             { Pid::STAFF_GEN_TIMESIG,      0, sl.genTimesig,      sl.resetGenTimesig      },
@@ -560,6 +582,18 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorArticulation::setElement()
+      {
+      InspectorElementBase::setElement();
+      if (!ar.playArticulation->isChecked()) {
+            ar.gridWidget->setEnabled(false);
+            }
+      }
+
+//---------------------------------------------------------
 //   InspectorFermata
 //---------------------------------------------------------
 
@@ -575,6 +609,20 @@ InspectorFermata::InspectorFermata(QWidget* parent)
             };
       const std::vector<InspectorPanel> ppList = { { f.title, f.panel } };
       mapSignals(iiList, ppList);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorFermata::setElement()
+      {
+      InspectorElementBase::setElement();
+      if (!f.playArticulation->isChecked()) {
+            f.labelTimeStretch->setEnabled(false);
+            f.timeStretch->setEnabled(false);
+            f.resetTimeStretch->setEnabled(false);
+            }
       }
 
 //---------------------------------------------------------
@@ -797,11 +845,23 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
             { Pid::LEADING_SPACE,  1, s.leadingSpace,  s.resetLeadingSpace  },
             { Pid::SHOW_COURTESY,  0, k.showCourtesy,  k.resetShowCourtesy  },
 //          { Pid::SHOW_NATURALS,  0, k.showNaturals,  k.resetShowNaturals  }
+            { Pid::KEYSIG_MODE,    0, k.keysigMode,    k.resetKeysigMode    }
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel },
             { k.title, k.panel }
             };
+      k.keysigMode->clear();
+      k.keysigMode->addItem(tr("Unknown"),    int(KeyMode::UNKNOWN));
+      k.keysigMode->addItem(tr("None"),       int(KeyMode::NONE));
+      k.keysigMode->addItem(tr("Major"),      int(KeyMode::MAJOR));
+      k.keysigMode->addItem(tr("Minor"),      int(KeyMode::MINOR));
+      k.keysigMode->addItem(tr("Dorian"),     int(KeyMode::DORIAN));
+      k.keysigMode->addItem(tr("Phrygian"),   int(KeyMode::PHRYGIAN));
+      k.keysigMode->addItem(tr("Lydian"),     int(KeyMode::LYDIAN));
+      k.keysigMode->addItem(tr("Mixolydian"), int(KeyMode::MIXOLYDIAN));
+      k.keysigMode->addItem(tr("Ionian"),     int(KeyMode::IONIAN));
+      k.keysigMode->addItem(tr("Locrian"),    int(KeyMode::LOCRIAN));
       mapSignals(iiList, ppList);
       }
 
@@ -809,8 +869,11 @@ void InspectorKeySig::setElement()
       {
       InspectorElementBase::setElement();
       KeySig* ks = toKeySig(inspector->element());
-      if (ks->generated())
+      if (ks->generated()) {
             k.showCourtesy->setEnabled(false);
+            k.keysigModeLabel->setEnabled(false);
+            k.keysigMode->setEnabled(false);
+            }
       }
 
 //---------------------------------------------------------
@@ -829,7 +892,8 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
             { Pid::DIRECTION,      0, t.direction,       t.resetDirection         },
             { Pid::NUMBER_TYPE,    0, t.numberType,      t.resetNumberType        },
             { Pid::BRACKET_TYPE,   0, t.bracketType,     t.resetBracketType       },
-            { Pid::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         }
+            { Pid::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         },
+            { Pid::SIZE_SPATIUM_DEPENDENT,      0,    t.spatiumDependent,     t.resetSpatiumDependent },
             };
       const std::vector<InspectorPanel> ppList = { {t.title, t.panel} };
       mapSignals(iiList, ppList);
@@ -849,7 +913,7 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
             { Pid::ACCIDENTAL_BRACKET,  0, a.bracket,  a.resetBracket  }
             };
       a.bracket->clear();
-      a.bracket->addItem(tr("None"), int(AccidentalBracket::NONE));
+      a.bracket->addItem(tr("None", "no accidental bracket type"), int(AccidentalBracket::NONE));
       a.bracket->addItem(tr("Parenthesis"), int(AccidentalBracket::PARENTHESIS));
       a.bracket->addItem(tr("Bracket"), int(AccidentalBracket::BRACKET));
 
@@ -888,7 +952,7 @@ void InspectorBend::propertiesClicked()
       Score* score = b->score();
       score->startCmd();
       mscore->currentScoreView()->editBendProperties(b);
-      score->setLayoutAll();
+      b->triggerLayoutAll();
       score->endCmd();
       }
 
@@ -922,7 +986,7 @@ void InspectorTremoloBar::propertiesClicked()
       Score* score = b->score();
       score->startCmd();
       mscore->currentScoreView()->editTremoloBarProperties(b);
-      score->setLayoutAll();
+      b->triggerLayoutAll();
       score->endCmd();
       }
 
@@ -993,8 +1057,9 @@ InspectorStem::InspectorStem(QWidget* parent)
       s.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::LINE_WIDTH, 0, s.lineWidth,  s.resetLineWidth  },
-            { Pid::USER_LEN,   0, s.userLength, s.resetUserLength },
+            { Pid::LINE_WIDTH,     0, s.lineWidth,     s.resetLineWidth     },
+            { Pid::USER_LEN,       0, s.userLength,    s.resetUserLength    },
+            { Pid::STEM_DIRECTION, 0, s.stemDirection, s.resetStemDirection }
             };
       const std::vector<InspectorPanel> ppList = { { s.title, s.panel } };
       mapSignals(iiList, ppList);

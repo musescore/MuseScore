@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>265</width>
-    <height>279</height>
+    <height>325</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -86,7 +86,7 @@
            </size>
           </property>
           <property name="text">
-           <string notr="true" extracomment="placeholder">1212</string>
+           <string notr="true" extracomment="placeholder"> 1212</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -187,7 +187,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Time: </string>
+           <string>Time:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -215,7 +215,7 @@
            </size>
           </property>
           <property name="text">
-           <string notr="true" extracomment="placeholder">55</string>
+           <string notr="true" extracomment="placeholder"> 55</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -372,7 +372,10 @@
       <property name="topMargin">
        <number>0</number>
       </property>
-      <item row="0" column="0">
+      <property name="horizontalSpacing">
+       <number>12</number>
+      </property>
+      <item row="0" column="1">
        <widget class="QToolButton" name="rewindButton">
         <property name="text">
          <string notr="true"/>
@@ -383,7 +386,62 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="0" column="5">
+       <widget class="QToolButton" name="loopOutButton">
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="musescore.qrc">
+          <normaloff>:/data/icons/media-playback-loop-out.svg</normaloff>:/data/icons/media-playback-loop-out.svg</iconset>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QToolButton" name="loopButton">
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="musescore.qrc">
+          <normaloff>:/data/icons/media-playback-loop.svg</normaloff>:/data/icons/media-playback-loop.svg</iconset>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QToolButton" name="loopInButton">
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="musescore.qrc">
+          <normaloff>:/data/icons/media-playback-loop-in.svg</normaloff>:/data/icons/media-playback-loop-in.svg</iconset>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>5</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="2">
        <widget class="QToolButton" name="playButton">
         <property name="minimumSize">
          <size>
@@ -409,47 +467,18 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="loopInButton">
-        <property name="text">
-         <string notr="true"/>
+      <item row="0" column="6">
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="icon">
-         <iconset resource="musescore.qrc">
-          <normaloff>:/data/icons/media-playback-loop-in.svg</normaloff>:/data/icons/media-playback-loop-in.svg</iconset>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>5</width>
+          <height>20</height>
+         </size>
         </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="loopButton">
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="musescore.qrc">
-          <normaloff>:/data/icons/media-playback-loop.svg</normaloff>:/data/icons/media-playback-loop.svg</iconset>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QToolButton" name="loopOutButton">
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="musescore.qrc">
-          <normaloff>:/data/icons/media-playback-loop-out.svg</normaloff>:/data/icons/media-playback-loop-out.svg</iconset>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
+       </spacer>
       </item>
      </layout>
     </item>
@@ -768,7 +797,7 @@ volume</string>
           <property name="maximumSize">
            <size>
             <width>128</width>
-            <height>512</height>
+            <height>16777215</height>
            </size>
           </property>
           <property name="focusPolicy">
@@ -812,7 +841,7 @@ volume</string>
           <property name="maximumSize">
            <size>
             <width>128</width>
-            <height>512</height>
+            <height>16777215</height>
            </size>
           </property>
           <property name="focusPolicy">
@@ -871,7 +900,7 @@ volume</string>
           <property name="maximumSize">
            <size>
             <width>128</width>
-            <height>512</height>
+            <height>16777215</height>
            </size>
           </property>
           <property name="focusPolicy">

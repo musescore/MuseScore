@@ -1691,6 +1691,9 @@
                  <height>30</height>
                 </size>
                </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item row="0" column="2">
@@ -1711,6 +1714,9 @@
                  <height>30</height>
                 </size>
                </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item row="2" column="1">
@@ -1720,6 +1726,9 @@
                  <width>0</width>
                  <height>30</height>
                 </size>
+               </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -1754,6 +1763,9 @@
                  <height>30</height>
                 </size>
                </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item row="2" column="3">
@@ -1764,6 +1776,9 @@
                  <height>30</height>
                 </size>
                </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item row="1" column="3">
@@ -1773,6 +1788,9 @@
                  <width>0</width>
                  <height>30</height>
                 </size>
+               </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -1897,6 +1915,9 @@
                  <height>16777215</height>
                 </size>
                </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item row="1" column="2">
@@ -1912,6 +1933,9 @@
                  <width>16777215</width>
                  <height>16777215</height>
                 </size>
+               </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -1935,6 +1959,9 @@
                  <height>16777215</height>
                 </size>
                </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item row="2" column="1">
@@ -1950,6 +1977,9 @@
                  <width>16777215</width>
                  <height>16777215</height>
                 </size>
+               </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -1974,6 +2004,9 @@
                  <height>16777215</height>
                 </size>
                </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item row="2" column="3">
@@ -1989,6 +2022,9 @@
                  <width>16777215</width>
                  <height>16777215</height>
                 </size>
+               </property>
+               <property name="tabChangesFocus">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -3473,7 +3509,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'System header to time signature distance' value</string>
+                <string>Reset 'System header with time signature distance' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -4946,7 +4982,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>None</string>
+                  <string comment="no tuplet number">None</string>
                  </property>
                 </item>
                </widget>
@@ -4998,7 +5034,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>None</string>
+                  <string comment="no tuplet bracket">None</string>
                  </property>
                 </item>
                </widget>
@@ -5960,7 +5996,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Default position' value</string>
+              <string>Reset 'Position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6032,7 +6068,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Below' value</string>
+              <string>Reset 'Position below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6301,7 +6337,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Above' value</string>
+              <string>Reset 'Position above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7776,7 +7812,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Below' value</string>
+              <string>Reset 'Autoplace min. distance' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -8798,7 +8834,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Below' value</string>
+              <string>Reset 'Position below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -8828,7 +8864,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Above' value</string>
+              <string>Reset 'Position above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9232,6 +9268,164 @@
             </widget>
            </item>
            <item>
+            <widget class="QGroupBox" name="formattingGroup">
+             <property name="title">
+              <string>Formatting</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_45">
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelExtensionMag">
+                <property name="text">
+                 <string>Extension scaling:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>extensionMag</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QDoubleSpinBox" name="extensionMag">
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetExtensionMag">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Extension scaling' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLabel" name="labelModifierMag">
+                <property name="text">
+                 <string>Modifier scaling:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>modifierMag</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="QDoubleSpinBox" name="modifierMag">
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="QToolButton" name="resetModifierMag">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Modifier scaling' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="labelExtensionAdjust">
+                <property name="text">
+                 <string>Extension vertical offset:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>extensionAdjust</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QDoubleSpinBox" name="extensionAdjust">
+                <property name="minimum">
+                 <double>-99.99</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QToolButton" name="resetExtensionAdjust">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Extension vertical offset' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QLabel" name="labelModifierAdjust">
+                <property name="text">
+                 <string>Modifier vertical offset:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>modifierAdjust</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="4">
+               <widget class="QDoubleSpinBox" name="modifierAdjust">
+                <property name="minimum">
+                 <double>-99.99</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="5">
+               <widget class="QToolButton" name="resetModifierAdjust">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Modifier vertical offset' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="6">
+               <spacer name="horizontalSpacer_13">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <widget class="QGroupBox" name="groupBox_23">
              <property name="title">
               <string>Note Spelling</string>
@@ -9533,10 +9727,10 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_2">
              <property name="accessibleName">
-              <string>Barré line thickness</string>
+              <string>Barre line thickness</string>
              </property>
              <property name="text">
-              <string>Barré line thickness:</string>
+              <string>Barre line thickness:</string>
              </property>
              <property name="buddy">
               <cstring>barreLineWidth</cstring>
@@ -9812,7 +10006,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Size changes with staff space setting' value</string>
+              <string>Reset 'Follow staff size' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9956,7 +10150,23 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QComboBox" name="textStyleFrameType"/>
+               <widget class="QComboBox" name="textStyleFrameType">
+                <item>
+                 <property name="text">
+                  <string notr="true">None</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string notr="true">Rectangle</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Circle</string>
+                 </property>
+                </item>
+               </widget>
               </item>
               <item row="0" column="2">
                <widget class="QToolButton" name="resetTextStyleFrameType">
@@ -9992,9 +10202,6 @@
                  </property>
                  <item row="0" column="1">
                   <widget class="Awl::ColorLabel" name="textStyleFrameForeground">
-                   <property name="frameShape">
-                    <enum>QFrame::Box</enum>
-                   </property>
                   </widget>
                  </item>
                  <item row="2" column="0">
@@ -10034,7 +10241,7 @@
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Foreground' value</string>
+                    <string>Reset 'Border' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -10081,9 +10288,6 @@
                  </item>
                  <item row="1" column="1">
                   <widget class="Awl::ColorLabel" name="textStyleFrameBackground">
-                   <property name="frameShape">
-                    <enum>QFrame::Box</enum>
-                   </property>
                   </widget>
                  </item>
                  <item row="3" column="2">
@@ -10092,7 +10296,7 @@
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Text margin' value</string>
+                    <string>Reset 'Margin' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -10126,7 +10330,7 @@
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Border radius' value</string>
+                    <string>Reset 'Corner radius' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -10145,9 +10349,6 @@
            </item>
            <item row="6" column="1">
             <widget class="Awl::ColorLabel" name="textStyleColor">
-             <property name="frameShape">
-              <enum>QFrame::Box</enum>
-             </property>
             </widget>
            </item>
            <item row="7" column="1">
@@ -10309,7 +10510,7 @@
  <customwidgets>
   <customwidget>
    <class>Awl::ColorLabel</class>
-   <extends>QFrame</extends>
+   <extends>QPushButton</extends>
    <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>
@@ -10354,13 +10555,37 @@
   <tabstop>resetAutoplaceVerticalAlignRange</tabstop>
   <tabstop>minVerticalDistance</tabstop>
   <tabstop>resetMinVerticalDistance</tabstop>
+  <tabstop>staffUpperBorder</tabstop>
+  <tabstop>resetStaffUpperBorder</tabstop>
   <tabstop>staffLowerBorder</tabstop>
+  <tabstop>resetStaffLowerBorder</tabstop>
+  <tabstop>staffDistance</tabstop>
+  <tabstop>resetStaffDistance</tabstop>
   <tabstop>akkoladeDistance</tabstop>
+  <tabstop>resetAkkoladeDistance</tabstop>
+  <tabstop>minSystemDistance</tabstop>
+  <tabstop>resetMinSystemDistance</tabstop>
   <tabstop>maxSystemDistance</tabstop>
+  <tabstop>resetMaxSystemDistance</tabstop>
+  <tabstop>systemFrameDistance</tabstop>
+  <tabstop>resetSystemFrameDistance</tabstop>
   <tabstop>frameSystemDistance</tabstop>
+  <tabstop>resetFrameSystemDistance</tabstop>
+  <tabstop>lastSystemFillThreshold</tabstop>
+  <tabstop>resetLastSystemFillThreshold</tabstop>
   <tabstop>genClef</tabstop>
   <tabstop>genKeysig</tabstop>
   <tabstop>genCourtesyClef</tabstop>
+  <tabstop>genCourtesyTimesig</tabstop>
+  <tabstop>genCourtesyKeysig</tabstop>
+  <tabstop>smallStaffSize</tabstop>
+  <tabstop>resetSmallStaffSize</tabstop>
+  <tabstop>smallNoteSize</tabstop>
+  <tabstop>resetSmallNoteSize</tabstop>
+  <tabstop>graceNoteSize</tabstop>
+  <tabstop>resetGraceNoteSize</tabstop>
+  <tabstop>smallClefSize</tabstop>
+  <tabstop>resetSmallClefSize</tabstop>
   <tabstop>showHeader</tabstop>
   <tabstop>showHeaderFirstPage</tabstop>
   <tabstop>headerOddEven</tabstop>
@@ -10379,8 +10604,30 @@
   <tabstop>evenFooterL</tabstop>
   <tabstop>evenFooterC</tabstop>
   <tabstop>evenFooterR</tabstop>
+  <tabstop>showMeasureNumber</tabstop>
+  <tabstop>showFirstMeasureNumber</tabstop>
+  <tabstop>showAllStaffsMeasureNumber</tabstop>
+  <tabstop>showEverySystemMeasureNumber</tabstop>
+  <tabstop>showIntervalMeasureNumber</tabstop>
+  <tabstop>intervalMeasureNumber</tabstop>
+  <tabstop>bracketWidth</tabstop>
+  <tabstop>akkoladeWidth</tabstop>
+  <tabstop>bracketDistance</tabstop>
+  <tabstop>akkoladeBarDistance</tabstop>
   <tabstop>dividerLeft</tabstop>
+  <tabstop>dividerLeftSym</tabstop>
+  <tabstop>dividerLeftX</tabstop>
+  <tabstop>dividerLeftY</tabstop>
   <tabstop>dividerRight</tabstop>
+  <tabstop>dividerRightSym</tabstop>
+  <tabstop>dividerRightX</tabstop>
+  <tabstop>dividerRightY</tabstop>
+  <tabstop>clefTab1</tabstop>
+  <tabstop>clefTab2</tabstop>
+  <tabstop>accidentalTable</tabstop>
+  <tabstop>radioKeySigNatNone</tabstop>
+  <tabstop>radioKeySigNatBefore</tabstop>
+  <tabstop>radioKeySigNatAfter</tabstop>
   <tabstop>minMeasureWidth_2</tabstop>
   <tabstop>resetMinMeasureWidth</tabstop>
   <tabstop>measureSpacing</tabstop>
@@ -10423,75 +10670,41 @@
   <tabstop>resetMultiMeasureRestMargin</tabstop>
   <tabstop>staffLineWidth</tabstop>
   <tabstop>resetStaffLineWidth</tabstop>
+  <tabstop>showRepeatBarTips</tabstop>
+  <tabstop>resetShowRepeatBarTips</tabstop>
+  <tabstop>showStartBarlineSingle</tabstop>
+  <tabstop>resetShowStartBarlineSingle</tabstop>
+  <tabstop>showStartBarlineMultiple</tabstop>
+  <tabstop>resetShowStartBarlineMultiple</tabstop>
+  <tabstop>scaleBarlines</tabstop>
+  <tabstop>resetScaleBarlines</tabstop>
+  <tabstop>barWidth</tabstop>
+  <tabstop>resetBarWidth</tabstop>
+  <tabstop>endBarWidth</tabstop>
+  <tabstop>resetEndBarWidth</tabstop>
+  <tabstop>endBarDistance</tabstop>
+  <tabstop>resetEndBarDistance</tabstop>
+  <tabstop>doubleBarWidth</tabstop>
+  <tabstop>resetDoubleBarWidth</tabstop>
+  <tabstop>doubleBarDistance</tabstop>
+  <tabstop>resetDoubleBarDistance</tabstop>
+  <tabstop>repeatBarlineDotSeparation</tabstop>
+  <tabstop>resetRepeatBarlineDotSeparation</tabstop>
   <tabstop>shortenStem</tabstop>
-  <tabstop>clefTab1</tabstop>
-  <tabstop>clefTab2</tabstop>
+  <tabstop>shortStemProgression</tabstop>
+  <tabstop>shortestStem</tabstop>
+  <tabstop>accidentalNoteDistance</tabstop>
+  <tabstop>accidentalDistance</tabstop>
+  <tabstop>dotMag</tabstop>
+  <tabstop>noteDotDistance</tabstop>
+  <tabstop>dotDotDistance</tabstop>
+  <tabstop>stemWidth</tabstop>
+  <tabstop>ledgerLineWidth</tabstop>
+  <tabstop>ledgerLineLength</tabstop>
   <tabstop>beamWidth</tabstop>
+  <tabstop>beamDistance</tabstop>
   <tabstop>beamMinLen</tabstop>
   <tabstop>beamNoSlope</tabstop>
-  <tabstop>slurEndLineWidth</tabstop>
-  <tabstop>slurMidLineWidth</tabstop>
-  <tabstop>slurDottedLineWidth</tabstop>
-  <tabstop>minTieLength</tabstop>
-  <tabstop>smallStaffSize</tabstop>
-  <tabstop>smallNoteSize</tabstop>
-  <tabstop>graceNoteSize</tabstop>
-  <tabstop>smallClefSize</tabstop>
-  <tabstop>hairpinPlacement</tabstop>
-  <tabstop>resetHairpinPlacement</tabstop>
-  <tabstop>resetHairpinPosAbove</tabstop>
-  <tabstop>resetHairpinPosBelow</tabstop>
-  <tabstop>hairpinHeight</tabstop>
-  <tabstop>resetHairpinHeight</tabstop>
-  <tabstop>hairpinContinueHeight</tabstop>
-  <tabstop>resetHairpinContinueHeight</tabstop>
-  <tabstop>autoplaceHairpinDynamicsDistance</tabstop>
-  <tabstop>resetAutoplaceHairpinDynamicsDistance</tabstop>
-  <tabstop>pedalLinePlacement</tabstop>
-  <tabstop>resetPedalLinePlacement</tabstop>
-  <tabstop>resetPedalLinePosAbove</tabstop>
-  <tabstop>resetPedalLinePosBelow</tabstop>
-  <tabstop>pedalLineWidth</tabstop>
-  <tabstop>resetPedalLineWidth</tabstop>
-  <tabstop>pedalLineStyle</tabstop>
-  <tabstop>resetPedalLineStyle</tabstop>
-  <tabstop>textLinePlacement</tabstop>
-  <tabstop>resetTextLinePlacement</tabstop>
-  <tabstop>resetTextLinePosAbove</tabstop>
-  <tabstop>resetTextLinePosBelow</tabstop>
-  <tabstop>chordsStandard</tabstop>
-  <tabstop>chordsJazz</tabstop>
-  <tabstop>chordsCustom</tabstop>
-  <tabstop>chordDescriptionFile</tabstop>
-  <tabstop>chordDescriptionFileButton</tabstop>
-  <tabstop>chordsXmlFile</tabstop>
-  <tabstop>useStandardNoteNames</tabstop>
-  <tabstop>useGermanNoteNames</tabstop>
-  <tabstop>useFullGermanNoteNames</tabstop>
-  <tabstop>useSolfeggioNoteNames</tabstop>
-  <tabstop>useFrenchNoteNames</tabstop>
-  <tabstop>automaticCapitalization</tabstop>
-  <tabstop>lowerCaseMinorChords</tabstop>
-  <tabstop>lowerCaseBassNotes</tabstop>
-  <tabstop>allCapsNoteNames</tabstop>
-  <tabstop>harmonyFretDist</tabstop>
-  <tabstop>minHarmonyDistance</tabstop>
-  <tabstop>capoPosition</tabstop>
-  <tabstop>comboFBFont</tabstop>
-  <tabstop>doubleSpinFBSize</tabstop>
-  <tabstop>doubleSpinFBVertPos</tabstop>
-  <tabstop>spinFBLineHeight</tabstop>
-  <tabstop>radioFBTop</tabstop>
-  <tabstop>radioFBBottom</tabstop>
-  <tabstop>radioFBModern</tabstop>
-  <tabstop>radioFBHistoric</tabstop>
-  <tabstop>propertyDistanceHead</tabstop>
-  <tabstop>propertyDistanceStem</tabstop>
-  <tabstop>propertyDistance</tabstop>
-  <tabstop>accidentalTable</tabstop>
-  <tabstop>radioKeySigNatNone</tabstop>
-  <tabstop>radioKeySigNatBefore</tabstop>
-  <tabstop>radioKeySigNatAfter</tabstop>
   <tabstop>tupletMaxSlope</tabstop>
   <tabstop>resetTupletMaxSlope</tabstop>
   <tabstop>tupletVStemDistance</tabstop>
@@ -10509,13 +10722,110 @@
   <tabstop>resetTupletNoteRightDistance</tabstop>
   <tabstop>tupletBracketWidth</tabstop>
   <tabstop>resetTupletBracketWidth</tabstop>
+  <tabstop>tupletBracketHookHeight</tabstop>
+  <tabstop>resetTupletBracketHookHeight</tabstop>
   <tabstop>tupletDirection</tabstop>
   <tabstop>resetTupletDirection</tabstop>
+  <tabstop>tupletNumberType</tabstop>
+  <tabstop>resetTupletNumberType</tabstop>
+  <tabstop>tupletBracketType</tabstop>
+  <tabstop>resetTupletBracketType</tabstop>
+  <tabstop>arpeggioNoteDistance</tabstop>
+  <tabstop>arpeggioLineWidth</tabstop>
+  <tabstop>arpeggioHookLen</tabstop>
+  <tabstop>arpeggioHiddenInStdIfTab</tabstop>
+  <tabstop>slurEndLineWidth</tabstop>
+  <tabstop>resetSlurEndLineWidth</tabstop>
+  <tabstop>slurMidLineWidth</tabstop>
+  <tabstop>resetSlurMidLineWidth</tabstop>
+  <tabstop>slurDottedLineWidth</tabstop>
+  <tabstop>resetSlurDottedLineWidth</tabstop>
+  <tabstop>minTieLength</tabstop>
+  <tabstop>resetMinTieLength</tabstop>
+  <tabstop>slurMinDistance</tabstop>
+  <tabstop>resetSlurMinDistance</tabstop>
+  <tabstop>hairpinPlacement</tabstop>
+  <tabstop>resetHairpinPlacement</tabstop>
+  <tabstop>resetHairpinPosAbove</tabstop>
+  <tabstop>resetHairpinPosBelow</tabstop>
+  <tabstop>hairpinHeight</tabstop>
+  <tabstop>resetHairpinHeight</tabstop>
+  <tabstop>hairpinContinueHeight</tabstop>
+  <tabstop>resetHairpinContinueHeight</tabstop>
+  <tabstop>autoplaceHairpinDynamicsDistance</tabstop>
+  <tabstop>resetAutoplaceHairpinDynamicsDistance</tabstop>
+  <tabstop>hairpinLineWidth</tabstop>
+  <tabstop>resetHairpinLineWidth</tabstop>
+  <tabstop>resetVoltaPosAbove</tabstop>
+  <tabstop>voltaHook</tabstop>
+  <tabstop>resetVoltaHook</tabstop>
+  <tabstop>voltaLineWidth</tabstop>
+  <tabstop>resetVoltaLineWidth</tabstop>
+  <tabstop>voltaLineStyle</tabstop>
+  <tabstop>resetVoltaLineStyle</tabstop>
+  <tabstop>ottavaNumbersOnly</tabstop>
+  <tabstop>resetOttavaNumbersOnly</tabstop>
+  <tabstop>resetOttavaPosAbove</tabstop>
+  <tabstop>ottavaHookAbove</tabstop>
+  <tabstop>resetOttavaHookAbove</tabstop>
+  <tabstop>resetOttavaPosBelow</tabstop>
+  <tabstop>ottavaHookBelow</tabstop>
+  <tabstop>resetOttavaHookBelow</tabstop>
+  <tabstop>ottavaLineWidth</tabstop>
+  <tabstop>resetOttavaLineWidth</tabstop>
+  <tabstop>ottavaLineStyle</tabstop>
+  <tabstop>resetOttavaLineStyle</tabstop>
+  <tabstop>pedalLinePlacement</tabstop>
+  <tabstop>resetPedalLinePlacement</tabstop>
+  <tabstop>resetPedalLinePosAbove</tabstop>
+  <tabstop>resetPedalLinePosBelow</tabstop>
+  <tabstop>pedalLineWidth</tabstop>
+  <tabstop>resetPedalLineWidth</tabstop>
+  <tabstop>pedalLineStyle</tabstop>
+  <tabstop>resetPedalLineStyle</tabstop>
+  <tabstop>trillLinePlacement</tabstop>
+  <tabstop>resetTrillLinePlacement</tabstop>
+  <tabstop>resetTrillLinePosAbove</tabstop>
+  <tabstop>resetTrillLinePosBelow</tabstop>
+  <tabstop>vibratoLinePlacement</tabstop>
+  <tabstop>resetVibratoLinePlacement</tabstop>
+  <tabstop>resetVibratoLinePosAbove</tabstop>
+  <tabstop>resetVibratoLinePosBelow</tabstop>
+  <tabstop>bendLineWidth</tabstop>
+  <tabstop>resetBendLineWidth</tabstop>
+  <tabstop>bendArrowWidth</tabstop>
+  <tabstop>resetBendArrowWidth</tabstop>
+  <tabstop>textLinePlacement</tabstop>
+  <tabstop>resetTextLinePlacement</tabstop>
+  <tabstop>resetTextLinePosAbove</tabstop>
+  <tabstop>resetTextLinePosBelow</tabstop>
+  <tabstop>propertyDistanceHead</tabstop>
+  <tabstop>resetPropertyDistanceHead</tabstop>
+  <tabstop>propertyDistanceStem</tabstop>
+  <tabstop>resetPropertyDistanceStem</tabstop>
+  <tabstop>propertyDistance</tabstop>
+  <tabstop>resetPropertyDistance</tabstop>
+  <tabstop>articulationMag</tabstop>
+  <tabstop>resetArticulationMag</tabstop>
+  <tabstop>resetFermataPosAbove</tabstop>
+  <tabstop>resetFermataPosBelow</tabstop>
+  <tabstop>fermataMinDistance</tabstop>
+  <tabstop>resetFermataMinDistance</tabstop>
+  <tabstop>staffTextPlacement</tabstop>
+  <tabstop>resetStaffTextPlacement</tabstop>
+  <tabstop>resetStaffTextPosAbove</tabstop>
+  <tabstop>resetStaffTextPosBelow</tabstop>
+  <tabstop>staffTextMinDistance</tabstop>
+  <tabstop>resetStaffTextMinDistance</tabstop>
+  <tabstop>tempoTextPlacement</tabstop>
+  <tabstop>resetTempoTextPlacement</tabstop>
+  <tabstop>resetTempoTextPosAbove</tabstop>
+  <tabstop>resetTempoTextPosBelow</tabstop>
+  <tabstop>tempoTextMinDistance</tabstop>
+  <tabstop>resetTempoTextMinDistance</tabstop>
   <tabstop>lyricsPlacement</tabstop>
   <tabstop>resetLyricsPlacement</tabstop>
-  <tabstop>lyricsPosAbove</tabstop>
   <tabstop>resetLyricsPosAbove</tabstop>
-  <tabstop>lyricsPosBelow</tabstop>
   <tabstop>resetLyricsPosBelow</tabstop>
   <tabstop>lyricsLineHeight</tabstop>
   <tabstop>resetLyricsLineHeight</tabstop>
@@ -10545,11 +10855,89 @@
   <tabstop>resetLyricsLineThickness</tabstop>
   <tabstop>lyricsMelismaPad</tabstop>
   <tabstop>resetLyricsMelismaPad</tabstop>
-  <tabstop>lyricsMelismaAlign</tabstop>
   <tabstop>resetLyricsMelismaAlign</tabstop>
+  <tabstop>dynamicsPlacement</tabstop>
+  <tabstop>resetDynamicsPlacement</tabstop>
+  <tabstop>resetDynamicsPosAbove</tabstop>
+  <tabstop>resetDynamicsPosBelow</tabstop>
+  <tabstop>dynamicsMinDistance</tabstop>
+  <tabstop>resetDynamicsMinDistance</tabstop>
+  <tabstop>rehearsalMarkPlacement</tabstop>
+  <tabstop>resetRehearsalMarkPlacement</tabstop>
+  <tabstop>resetRehearsalMarkPosAbove</tabstop>
+  <tabstop>resetRehearsalMarkPosBelow</tabstop>
+  <tabstop>rehearsalMarkMinDistance</tabstop>
+  <tabstop>resetRehearsalMarkMinDistance</tabstop>
+  <tabstop>comboFBFont</tabstop>
+  <tabstop>doubleSpinFBSize</tabstop>
+  <tabstop>doubleSpinFBVertPos</tabstop>
+  <tabstop>spinFBLineHeight</tabstop>
+  <tabstop>radioFBTop</tabstop>
+  <tabstop>radioFBBottom</tabstop>
+  <tabstop>radioFBModern</tabstop>
+  <tabstop>radioFBHistoric</tabstop>
+  <tabstop>chordsStandard</tabstop>
+  <tabstop>chordsJazz</tabstop>
+  <tabstop>chordsCustom</tabstop>
+  <tabstop>chordDescriptionFile</tabstop>
+  <tabstop>chordDescriptionFileButton</tabstop>
+  <tabstop>chordsXmlFile</tabstop>
+  <tabstop>extensionMag</tabstop>
+  <tabstop>resetExtensionMag</tabstop>
+  <tabstop>extensionAdjust</tabstop>
+  <tabstop>resetExtensionAdjust</tabstop>
+  <tabstop>modifierMag</tabstop>
+  <tabstop>resetModifierMag</tabstop>
+  <tabstop>modifierAdjust</tabstop>
+  <tabstop>resetModifierAdjust</tabstop>
+  <tabstop>useStandardNoteNames</tabstop>
+  <tabstop>useGermanNoteNames</tabstop>
+  <tabstop>useFullGermanNoteNames</tabstop>
+  <tabstop>useSolfeggioNoteNames</tabstop>
+  <tabstop>useFrenchNoteNames</tabstop>
+  <tabstop>automaticCapitalization</tabstop>
+  <tabstop>lowerCaseMinorChords</tabstop>
+  <tabstop>lowerCaseBassNotes</tabstop>
+  <tabstop>allCapsNoteNames</tabstop>
+  <tabstop>harmonyFretDist</tabstop>
+  <tabstop>minHarmonyDistance</tabstop>
+  <tabstop>maxHarmonyBarDistance</tabstop>
+  <tabstop>capoPosition</tabstop>
+  <tabstop>fretY</tabstop>
+  <tabstop>fretMag</tabstop>
+  <tabstop>fretNumMag</tabstop>
+  <tabstop>radioFretNumLeft</tabstop>
+  <tabstop>radioFretNumRight</tabstop>
+  <tabstop>barreLineWidth</tabstop>
+  <tabstop>fretDotSize</tabstop>
+  <tabstop>fretStringSpacing</tabstop>
+  <tabstop>fretFretSpacing</tabstop>
+  <tabstop>textStyles</tabstop>
+  <tabstop>styleName</tabstop>
+  <tabstop>resetTextStyleName</tabstop>
+  <tabstop>textStyleFontFace</tabstop>
+  <tabstop>resetTextStyleFontFace</tabstop>
+  <tabstop>textStyleFontSize</tabstop>
+  <tabstop>resetTextStyleFontSize</tabstop>
+  <tabstop>textStyleSpatiumDependent</tabstop>
+  <tabstop>resetTextStyleSpatiumDependent</tabstop>
+  <tabstop>resetTextStyleFontStyle</tabstop>
+  <tabstop>resetTextStyleAlign</tabstop>
+  <tabstop>resetTextStyleColor</tabstop>
+  <tabstop>resetTextStyleOffset</tabstop>
+  <tabstop>textStyleFrameType</tabstop>
+  <tabstop>resetTextStyleFrameType</tabstop>
+  <tabstop>resetTextStyleFrameForeground</tabstop>
+  <tabstop>resetTextStyleFrameBackground</tabstop>
+  <tabstop>textStyleFrameBorder</tabstop>
+  <tabstop>resetTextStyleFrameBorder</tabstop>
+  <tabstop>textStyleFramePadding</tabstop>
+  <tabstop>resetTextStyleFramePadding</tabstop>
+  <tabstop>textStyleFrameBorderRadius</tabstop>
+  <tabstop>resetTextStyleFrameBorderRadius</tabstop>
+  <tabstop>buttonTogglePagelist</tabstop>
  </tabstops>
  <resources>
-  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

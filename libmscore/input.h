@@ -25,6 +25,7 @@ class ChordRest;
 class Drumset;
 class Segment;
 class Score;
+class Selection;
 
 //---------------------------------------------------------
 //   NoteEntryMethod
@@ -39,7 +40,6 @@ enum class NoteEntryMethod : char {
 //---------------------------------------------------------
 
 class InputState {
-      Score*      _score;
       TDuration   _duration    { TDuration::DurationType::V_INVALID };  // currently duration
       int         _drumNote    { -1 };
       int         _track       { 0 };
@@ -52,21 +52,20 @@ class InputState {
       Beam::Mode _beamMode       { Beam::Mode::AUTO };
       bool _noteEntryMode      { false };
       NoteEntryMethod _noteEntryMethod { NoteEntryMethod::STEPTIME };
+      AccidentalType _accidentalType { AccidentalType::NONE };
       Slur* _slur              { 0     };
       bool _insertMode         { false };
 
       Segment* nextInputPos() const;
 
    public:
-      InputState(Score* s) : _score(s) {}
-
       ChordRest* cr() const;
 
       Fraction tick() const;
 
       void setDuration(const TDuration& d) { _duration = d;          }
       TDuration duration() const           { return _duration;       }
-      void setDots(int n)                  { _duration.setDots(n);   }
+      void setDots(int n);
       Fraction ticks() const               { return _duration.ticks(); }
 
       Segment* segment() const            { return _segment;        }
@@ -106,16 +105,23 @@ class InputState {
       void setNoteEntryMethod(NoteEntryMethod m)            { _noteEntryMethod = m; }
       bool usingNoteEntryMethod(NoteEntryMethod m) const    { return m == noteEntryMethod(); }
 
+      AccidentalType accidentalType() const                 { return _accidentalType; }
+      void setAccidentalType(AccidentalType val)            { _accidentalType = val;  }
+
       Slur* slur() const                  { return _slur; }
       void setSlur(Slur* s)               { _slur = s; }
 
       bool insertMode() const             { return _insertMode; }
       void setInsertMode(bool val)        { _insertMode = val; }
 
-      void update(Element* e);
+      void update(Selection& selection);
       void moveInputPos(Element* e);
       void moveToNextInputPos();
       bool endOfScore() const;
+
+      // TODO: unify with Selection::cr()?
+      static Note* note(Element*);
+      static ChordRest* chordRest(Element*);
       };
 
 

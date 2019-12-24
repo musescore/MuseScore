@@ -113,7 +113,8 @@ void Lyrics::read(XmlReader& e)
       if (!isStyled(Pid::OFFSET) && !e.pasteMode()) {
             // fix offset for pre-3.1 scores
             // 3.0: y offset was meaningless if autoplace is set
-            if (autoplace() && score()->mscoreVersion() < "3.1") {
+            QString version = masterScore()->mscoreVersion();
+            if (autoplace() && !version.isEmpty() && version < "3.1") {
                   QPointF off = propertyDefault(Pid::OFFSET).toPointF();
                   ryoffset() = off.y();
                   }
@@ -485,7 +486,7 @@ Element* Lyrics::drop(EditData& data)
 void Lyrics::endEdit(EditData& ed)
       {
       TextBase::endEdit(ed);
-      score()->setLayoutAll();
+      triggerLayoutAll();
       }
 
 //---------------------------------------------------------

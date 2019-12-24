@@ -406,7 +406,7 @@
            <string>Show details</string>
           </property>
           <property name="text">
-           <string>+</string>
+           <string notr="true">+</string>
           </property>
           <property name="checkable">
            <bool>true</bool>

@@ -215,7 +215,7 @@
         <number>0</number>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page">
         <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0">
@@ -280,7 +280,7 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>80</height>
+             <height>150</height>
             </size>
            </property>
            <property name="title">
@@ -844,7 +844,7 @@
                       </size>
                      </property>
                      <property name="text">
-                      <string>None</string>
+                      <string comment="neither note symbols nor stems and beams">None</string>
                      </property>
                     </widget>
                    </item>
@@ -1178,7 +1178,7 @@
                       </size>
                      </property>
                      <property name="text">
-                      <string>None</string>
+                      <string comment="neither short nor slashed stem">None</string>
                      </property>
                     </widget>
                    </item>
@@ -1269,7 +1269,7 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>80</height>
+             <height>170</height>
             </size>
            </property>
            <property name="title">
@@ -1410,6 +1410,7 @@
   <tabstop>genKeysigPitched</tabstop>
   <tabstop>showLedgerLinesPitched</tabstop>
   <tabstop>stemlessPitched</tabstop>
+  <tabstop>noteHeadScheme</tabstop>
   <tabstop>genKeysigPercussion</tabstop>
   <tabstop>showLedgerLinesPercussion</tabstop>
   <tabstop>stemlessPercussion</tabstop>
@@ -1425,6 +1426,7 @@
   <tabstop>linesThroughRadio</tabstop>
   <tabstop>linesBrokenRadio</tabstop>
   <tabstop>showBackTied</tabstop>
+  <tabstop>showTabFingering</tabstop>
   <tabstop>durFontName</tabstop>
   <tabstop>durFontSize</tabstop>
   <tabstop>durY</tabstop>

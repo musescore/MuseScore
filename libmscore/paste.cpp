@@ -395,6 +395,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                               breath->setTrack(e.track());
                               Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                               Measure* m = tick2measure(tick);
+                              if (m->tick() == tick)
+                                    m = m->prevMeasure();
                               Segment* segment = m->undoGetSegment(SegmentType::Breath, tick);
                               breath->setParent(segment);
                               undoChangeElement(segment->element(e.track()), breath);
@@ -955,11 +957,12 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
       if ((_selection.isSingle() || _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
             QByteArray data(ms->data(mimeSymbolFormat));
 
-            XmlReader e(data);
             QPointF dragOffset;
             Fraction duration(1, 4);
-            ElementType type = Element::readType(e, &dragOffset, &duration);
-            e.setPasteMode(true);
+            std::unique_ptr<Element> el(Element::readMimeData(this, data, &dragOffset, &duration));
+
+            if (!el)
+                  return;
 
             QList<Element*> els;
             if (_selection.isSingle())
@@ -967,48 +970,39 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             else
                   els.append(_selection.elements());
 
-            if (type != ElementType::INVALID) {
-                  Element* el = Element::create(type, this);
-                  if (el) {
-                        el->read(e);
-                        for (Element* target : els) {
-                              el->setTrack(target->track());
-                              Element* nel = el->clone();
-                              addRefresh(target->abbox());   // layout() ?!
-                              EditData ddata(view);
-                              ddata.view        = view;
-                              ddata.dropElement = nel;
-                              ddata.duration    = duration;
-                              if (target->acceptDrop(ddata)) {
-                                    if (type == ElementType::NOTE) {
-                                          // dropping a note replaces and invalidates the target,
-                                          // so we need to deselect it
-                                          ElementType targetType = target->type();
-                                          deselect(target);
+            for (Element* target : els) {
+                  el->setTrack(target->track());
+                  Element* nel = el->clone();
+                  addRefresh(target->abbox());   // layout() ?!
+                  EditData ddata(view);
+                  ddata.view        = view;
+                  ddata.dropElement = nel;
+                  ddata.duration    = duration;
+                  if (target->acceptDrop(ddata)) {
+                        if (el->isNote()) {
+                              // dropping a note replaces and invalidates the target,
+                              // so we need to deselect it
+                              ElementType targetType = target->type();
+                              deselect(target);
 
-                                          // perform the drop
-                                          target->drop(ddata);
+                              // perform the drop
+                              target->drop(ddata);
 
-                                          // if the target is a rest rather than a note,
-                                          // a new note is generated, and nel becomes invalid as well
-                                          // (ChordRest::drop() will select it for us)
-                                          if (targetType == ElementType::NOTE)
-                                                select(nel);
-                                          }
-                                    else {
-                                          target->drop(ddata);
-                                          }
-                                    if (_selection.element())
-                                          addRefresh(_selection.element()->abbox());
-                                    }
-                              else
-                                    delete nel;
+                              // if the target is a rest rather than a note,
+                              // a new note is generated, and nel becomes invalid as well
+                              // (ChordRest::drop() will select it for us)
+                              if (targetType == ElementType::NOTE)
+                                    select(nel);
                               }
+                        else {
+                              target->drop(ddata);
+                              }
+                        if (_selection.element())
+                              addRefresh(_selection.element()->abbox());
                         }
-                  delete el;
+                  else
+                        delete nel;
                   }
-            else
-                  qDebug("cannot read type");
             }
       else if ((_selection.isRange() || _selection.isList()) && ms->hasFormat(mimeStaffListFormat)) {
             ChordRest* cr = 0;
@@ -1029,7 +1023,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   MScore::setError(NO_DEST);
                   return;
                   }
-            else if (cr->tuplet()) {
+            else if (cr->tuplet() && cr->tick() != cr->topTuplet()->tick()) {
                   MScore::setError(DEST_TUPLET);
                   return;
                   }
@@ -1060,10 +1054,6 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   }
             if (cr == 0) {
                   MScore::setError(NO_DEST);
-                  return;
-                  }
-            else if (cr->tuplet()) {
-                  MScore::setError(DEST_TUPLET);
                   return;
                   }
             else {

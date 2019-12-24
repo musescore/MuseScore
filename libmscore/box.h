@@ -42,7 +42,6 @@ class Box : public MeasureBase {
       qreal _topMargin              { 0.0   };
       qreal _bottomMargin           { 0.0   };
       bool editMode                 { false };
-      qreal dragX;                        // used during drag of hbox
 
    public:
       Box(Score*);
@@ -87,6 +86,7 @@ class Box : public MeasureBase {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
+      virtual QString accessibleExtraInfo() const override;
       };
 
 //---------------------------------------------------------

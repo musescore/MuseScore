@@ -38,6 +38,9 @@ class TestTimesig : public QObject, public MTest
       void timesig05();
       void timesig06();
       void timesig07();
+      void timesig08();
+      void timesig09();
+      void timesig10();
       void timesig_78216();
       };
 
@@ -209,6 +212,85 @@ void TestTimesig::timesig07()
       }
 
 //---------------------------------------------------------
+//   timesig08
+//    Check if a courtesy time signature is created along with
+//    a local time signature in the next system, no matter which staff the local time signature is in
+//    (in this particular case, stave no.2)
+//---------------------------------------------------------
+
+void TestTimesig::timesig08()
+      {
+      MasterScore* score = readScore(DIR + "timesig-08.mscx");
+      score->doLayout();
+
+      Measure* m1 = score->firstMeasure();
+      Segment* seg = m1->findSegment(SegmentType::TimeSigAnnounce, m1->endTick());
+      Element* el = seg->element(staff2track(1));
+
+      QVERIFY2(el, "Should be a courtesy signature in the second staff at the end of measure 1.");
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   timesig09
+//    Change timesig with tremolos on notes that end up across barlines
+//---------------------------------------------------------
+
+void TestTimesig::timesig09()
+      {
+      MasterScore* score = readScore(DIR + "timesig-09.mscx");
+      QVERIFY(score);
+      Measure* m = score->firstMeasure();
+      TimeSig* ts = new TimeSig(score);
+      ts->setSig(Fraction(9, 8), TimeSigType::NORMAL);
+
+      score->startCmd();
+      score->cmdAddTimeSig(m, 0, ts, false);
+      score->doLayout();
+      QVERIFY(saveCompareScore(score, "timesig-09-1.mscx", DIR + "timesig-09-ref.mscx"));
+      score->endCmd();
+
+      // Now undo the change
+      score->undoStack()->undo(0);
+      score->doLayout();
+      QVERIFY(saveCompareScore(score, "timesig-09-2.mscx", DIR + "timesig-09.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   timesig10
+//    Check if 4/4 is correctly changed to alla breve when commanded to do so
+//    Same for 2/2 to common time
+//---------------------------------------------------------
+
+void TestTimesig::timesig10()
+      {
+      MasterScore* score = readScore(DIR + "timesig-10.mscx");
+
+      Measure* m1 = score->firstMeasure();
+      TimeSig* ts1 = new TimeSig(score);
+      ts1->setSig(Fraction(2, 2), TimeSigType::ALLA_BREVE);
+
+      score->startCmd();
+      score->cmdAddTimeSig(m1, 0, ts1, false);
+
+      Measure* m2 = m1->nextMeasure();
+      TimeSig* ts2 = new TimeSig(score);
+      ts2->setSig(Fraction(2, 2), TimeSigType::NORMAL);
+      TimeSig* ts3 = new TimeSig(score);
+      ts3->setSig(Fraction(4, 4), TimeSigType::FOUR_FOUR);
+
+      score->cmdAddTimeSig(m2, 0, ts2, false);
+      m2 = score->firstMeasure()->nextMeasure();
+      score->cmdAddTimeSig(m2, 0, ts3, false);
+
+      score->doLayout();
+      QVERIFY(saveCompareScore(score, "timesig-10.mscx", DIR + "timesig-10-ref.mscx"));
+      score->endCmd();
+      delete score;
+      }
+
+//---------------------------------------------------------
 //   timesig_78216
 //    input score has section breaks on non-measure MeasureBase objects.
 //    should not display courtesy timesig at the end of final measure of each section (meas 1, 2, & 3), even if section break occurs on subsequent non-measure frame.
@@ -224,9 +306,10 @@ void TestTimesig::timesig_78216()
       Measure* m3 = m2->nextMeasure();
 
       // verify no timesig exists in segment of final tick of m1, m2, m3
-      QVERIFY2(m1->findSegment(SegmentType::TimeSig, m1->endTick()) == nullptr, "Should be no timesig at end of measure 1.");
-      QVERIFY2(m2->findSegment(SegmentType::TimeSig, m2->endTick()) == nullptr, "Should be no timesig at end of measure 2.");
-      QVERIFY2(m3->findSegment(SegmentType::TimeSig, m3->endTick()) == nullptr, "Should be no timesig at end of measure 3.");
+      QVERIFY2(!m1->findSegment(SegmentType::TimeSig, m1->endTick()), "Should be no timesig at the end of measure 1.");
+      QVERIFY2(!m2->findSegment(SegmentType::TimeSig, m2->endTick()), "Should be no timesig at the end of measure 2.");
+      QVERIFY2(!m3->findSegment(SegmentType::TimeSig, m3->endTick()), "Should be no timesig at the end of measure 3.");
+      delete score;
       }
 
 QTEST_MAIN(TestTimesig)

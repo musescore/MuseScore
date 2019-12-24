@@ -71,10 +71,6 @@ class SLine : public Spanner {
       qreal _dashGapLen       { 5.0   };
       bool _diagonal          { false };
 
-      PropertyFlags lineWidthStyle;
-      PropertyFlags lineStyleStyle;
-      PropertyFlags lineColorStyle;
-
    protected:
       virtual QPointF linePos(Grip, System** system) const;
 
