@@ -20,11 +20,9 @@
 #include "libmscore/mscore.h"
 
 #include "articulationprop.h"
-#include "bendproperties.h"
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
 #include "stafftextproperties.h"
-#include "fretproperties.h"
 #include "selinstrument.h"
 #include "pianoroll.h"
 #include "editstyle.h"
@@ -134,10 +132,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(getAction("flip"));
       else if (e->isHook())
             popup->addAction(getAction("flip"));
-      else if (e->isBend()) {
-            genPropertyMenu1(e, popup);
-            popup->addAction(tr("Bend Properties…"))->setData("b-props");
-            }
       else if (e->isTremoloBar()) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Tremolo Bar Properties…"))->setData("tr-props");
@@ -276,8 +270,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Change Instrument…"))->setData("ch-instr");
             }
-//      else if (e->isFretDiagram())
-//            popup->addAction(tr("Fretboard Diagram Properties…"))->setData("fret-props");
       else if (e->isInstrumentName())
             popup->addAction(tr("Staff/Part Properties…"))->setData("staff-props");
       else
@@ -299,8 +291,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             ArticulationProperties rp(static_cast<Articulation*>(e));
             rp.exec();
             }
-      else if (cmd == "b-props")
-            editBendProperties(static_cast<Bend*>(e));
       else if (cmd == "measure-props") {
             Measure* m = 0;
             if (e->type() == ElementType::NOTE)
@@ -507,8 +497,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         qDebug("no template selected?");
                   }
            }
-//      else if (cmd == "fret-props")
-//            editFretDiagram(static_cast<FretDiagram*>(e));
       else if (cmd == "staff-props") {
             Fraction tick = {-1,1};
             if (e->isChordRest()) {
@@ -534,43 +522,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             int n = cmd.mid(6).toInt();
             uint mask = 1 << n;
             e->setTag(mask);
-            }
-      }
-
-#if 0
-//---------------------------------------------------------
-//   editFretDiagram
-//---------------------------------------------------------
-
-void ScoreView::editFretDiagram(FretDiagram* fd)
-      {
-      FretDiagram* nFret = const_cast<FretDiagram*>(fd->clone());
-      FretDiagramProperties fp(nFret, 0);
-      int rv = fp.exec();
-      nFret->layout();
-      if (rv) {
-            for (ScoreElement* ee : fd->linkList()) {
-                  Element* e = static_cast<Element*>(ee);
-                  FretDiagram* f = static_cast<FretDiagram*>(nFret->clone());
-                  f->setScore(e->score());
-                  f->setTrack(e->track());
-                  e->score()->undoChangeElement(e, f);
-                  }
-            }
-      delete nFret;
-      }
-#endif
-
-//---------------------------------------------------------
-//   editBendProperties
-//---------------------------------------------------------
-
-void ScoreView::editBendProperties(Bend* bend)
-      {
-      BendProperties bp(bend, 0);
-      if (bp.exec()) {
-            for (ScoreElement* b : bend->linkList())
-                  b->score()->undo(new ChangeBend(toBend(b), bp.points()));
             }
       }
 

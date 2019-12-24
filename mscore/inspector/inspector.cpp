@@ -40,9 +40,9 @@
 #include "inspectorNoteDot.h"
 #include "inspectorInstrchange.h"
 #include "inspectorMeasureNumber.h"
+#include "inspectorBend.h"
 #include "musescore.h"
 #include "scoreview.h"
-#include "bendproperties.h"
 #include "icons.h"
 
 #include "libmscore/element.h"
@@ -64,7 +64,6 @@
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/tuplet.h"
-#include "libmscore/bend.h"
 #include "libmscore/tremolobar.h"
 #include "libmscore/slur.h"
 #include "libmscore/breath.h"
@@ -919,41 +918,6 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
 
       const std::vector<InspectorPanel> ppList = { { a.title, a.panel } };
       mapSignals(iiList, ppList);
-      }
-
-//---------------------------------------------------------
-//   InspectorBend
-//---------------------------------------------------------
-
-InspectorBend::InspectorBend(QWidget* parent)
-   : InspectorElementBase(parent)
-      {
-      g.setupUi(addWidget());
-
-      const std::vector<InspectorItem> iiList = {
-            { Pid::LINE_WIDTH,     0, g.lineWidth,   g.resetLineWidth   },
-            { Pid::PLAY,           0, g.playBend,    g.resetPlayBend    },
-            { Pid::FONT_FACE,      0, g.fontFace,    g.resetFontFace    },
-            { Pid::FONT_SIZE,      0, g.fontSize,    g.resetFontSize    },
-            { Pid::FONT_STYLE,     0, g.fontStyle,   g.resetFontStyle   },
-            };
-      const std::vector<InspectorPanel> ppList = { {g.title, g.panel} };
-      mapSignals(iiList, ppList);
-      connect(g.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
-      }
-
-//---------------------------------------------------------
-//   propertiesClicked
-//---------------------------------------------------------
-
-void InspectorBend::propertiesClicked()
-      {
-      Bend* b = toBend(inspector->element());
-      Score* score = b->score();
-      score->startCmd();
-      mscore->currentScoreView()->editBendProperties(b);
-      b->triggerLayoutAll();
-      score->endCmd();
       }
 
 //---------------------------------------------------------
