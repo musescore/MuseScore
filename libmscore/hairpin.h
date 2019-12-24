@@ -49,10 +49,8 @@ class HairpinSegment final : public TextLineBaseSegment {
       QPointF circledTip;
       qreal   circledTipRadius;
 
-      virtual void startEdit(EditData&) override;
       virtual void startEditDrag(EditData&) override;
       virtual void editDrag(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
 
       virtual void draw(QPainter*) const override;
       virtual Sid getPropertyStyle(Pid) const override;
@@ -71,6 +69,9 @@ class HairpinSegment final : public TextLineBaseSegment {
 
       virtual void layout() override;
       virtual Shape shape() const override;
+
+      int gripsCount() const override { return 4; }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
       };
 
 //---------------------------------------------------------

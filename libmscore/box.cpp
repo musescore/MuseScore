@@ -104,8 +104,6 @@ void Box::draw(QPainter* painter) const
 void Box::startEdit(EditData& ed)
       {
       Element::startEdit(ed);
-      ed.grips   = 1;
-      ed.curGrip = Grip::START;
       editMode   = true;
       }
 
@@ -171,16 +169,19 @@ void Box::endEdit(EditData&)
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Box::updateGrips(EditData& ed) const
+std::vector<QPointF> HBox::gripsPositions(const EditData&) const
       {
       QRectF r(abbox());
-      if (isHBox())
-            ed.grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
-      else if (type() == ElementType::VBOX)
-            ed.grip[0].translate(QPointF(r.x() + r.width() * .5, r.bottom()));
+      return { QPointF(r.right(), r.top() + r.height() * .5) };
+      }
+
+std::vector<QPointF> VBox::gripsPositions(const EditData&) const
+      {
+      QRectF r(abbox());
+      return { QPointF(r.x() + r.width() * .5, r.bottom()) };
       }
 
 //---------------------------------------------------------
@@ -457,8 +458,11 @@ void HBox::layout()
             setPos(x, y);
             bbox().setRect(0.0, 0.0, w, h);
             }
-      else {
+      else if (system()) {
             bbox().setRect(0.0, 0.0, point(boxWidth()), system()->height());
+            }
+      else {
+            bbox().setRect(0.0, 0.0, 50, 50);
             }
       Box::layout();
       }

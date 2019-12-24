@@ -369,6 +369,8 @@ void Palette::mousePressEvent(QMouseEvent* ev)
       dragStartPosition = ev->pos();
       dragIdx           = idx(dragStartPosition);
 
+      pressedIndex = dragIdx;
+
 /*
       // Take out of edit mode to prevent crashes when adding
       // elements from palette
@@ -389,6 +391,8 @@ void Palette::mousePressEvent(QMouseEvent* ev)
       PaletteCell* cell = cellAt(dragIdx);
       if (cell && (cell->tag == "ShowMore"))
             emit displayMore(_name);
+
+      update();
       }
 
 //---------------------------------------------------------
@@ -473,20 +477,20 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 //   applyPaletteElement
 //---------------------------------------------------------
 
-void Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers)
+bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers)
       {
       Score* score = mscore->currentScore();
       if (score == 0)
-            return;
+            return false;
       const Selection sel = score->selection(); // make a copy of selection state before applying the operation.
       if (sel.isNone())
-            return;
+            return false;
 
 //       Element* element = 0;
 //       if (cell)
 //             element = cell->element.get();
       if (element == 0)
-            return;
+            return false;
       
       if (element->isSpanner())
             TourHandler::startTour("spanner-drop-apply");
@@ -749,6 +753,7 @@ void Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
             viewer->setFocus();
       viewer->setDropTarget(0);
 //      mscore->endCmd();
+      return true;
       }
 
 //---------------------------------------------------------
@@ -792,28 +797,31 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
       QScrollArea::keyPressEvent(event);
       }
 
-//---------------------------------------------------------
-//   mouseDoubleClickEvent
-//---------------------------------------------------------
-
-void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
+void Palette::mouseReleaseEvent(QMouseEvent *event)
       {
-      if (_disableDoubleClick)
-            return;
-      int i = idx(ev->pos());
-      if (i == -1)
-            return;
-      Score* score = mscore->currentScore();
-      if (score == 0)
-            return;
-      if (score->selection().isNone())
+      pressedIndex = -1;
+
+      update();
+
+      if (_disableElementsApply)
             return;
 
-      PaletteCell* cell = cellAt(i);
+      int index = idx(event->pos());
+
+      if (index == -1)
+            return;
+
+      Score* score = mscore->currentScore();
+
+      if (!score || score->selection().isNone())
+            return;
+
+      PaletteCell* cell = cellAt(index);
+
       if (!cell)
             return;
 
-      applyPaletteElement(cell->element.get(), ev->modifiers());
+      applyPaletteElement(cell->element.get(), event->modifiers());
       }
 
 //---------------------------------------------------------
@@ -1110,14 +1118,20 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             QRect rShift = r.translated(0, yoffset);
             p.setPen(pen);
             QColor c(MScore::selectColor[0]);
+
             if (idx == selectedIdx) {
-                  c.setAlpha(100);
+                  c.setAlphaF(0.5);
+                  p.fillRect(r, c);
+                  }
+            else if (idx == pressedIndex) {
+                  c.setAlphaF(0.75);
                   p.fillRect(r, c);
                   }
             else if (idx == currentIdx) {
-                  c.setAlpha(50);
+                  c.setAlphaF(0.2);
                   p.fillRect(r, c);
                   }
+
             if (ccp()->at(idx) == 0)
                   continue;
             PaletteCell* cc = ccp()->at(idx);      // current cell

@@ -107,10 +107,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual void changeEditElement(Element*) override;
       virtual QCursor cursor() const override;
       virtual void setCursor(const QCursor&) override;
-      virtual int gripCount() const override;
       const QTransform& matrix() const;
-      virtual void startEdit() override;
-      virtual void startEdit(Element*, Grip) override;
       virtual Element* elementNear(QPointF) override;
       virtual void drawBackground(QPainter* /*p*/, const QRectF& /*r*/) const override {}
 

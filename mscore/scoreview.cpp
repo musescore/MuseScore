@@ -136,7 +136,6 @@ ScoreView::ScoreView(QWidget* parent)
       imatrix     = _matrix.inverted();
       _magIdx     = preferences.getDouble(PREF_SCORE_MAGNIFICATION) == 1.0 ? MagIdx::MAG_100 : MagIdx::MAG_FREE;
       focusFrame  = 0;
-//      dragElement = 0;
       _bgColor    = Qt::darkBlue;
       _fgColor    = Qt::white;
       _fgPixmap    = 0;
@@ -1081,10 +1080,13 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       QRectF fr = imatrix.mapRect(QRectF(r));
 
       Element* editElement = 0;
-      Element* lassoToDraw = 0;
+      Lasso* lassoToDraw = 0;
       if (editData.element) {
             switch (state) {
                   case ViewState::NORMAL:
+                        if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit)
+                              editData.element->drawEditMode(&p, editData);
+                        break;
                   case ViewState::DRAG:
                   case ViewState::DRAG_OBJECT:
                   case ViewState::LASSO:
@@ -1099,8 +1101,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   case ViewState::FOTO_DRAG_EDIT:
                   case ViewState::FOTO_DRAG_OBJECT:
                   case ViewState::FOTO_LASSO:
-                        if (editData.element->_name() == "Lasso") // There is no isLasso() method
-                              lassoToDraw = editData.element;
+                        if (editData.element->isLasso())
+                              lassoToDraw = toLasso(editData.element);
                         else
                               editData.element->drawEditMode(&p, editData);
 
@@ -1668,12 +1670,8 @@ void ScoreView::editSwap()
 
 void ScoreView::editPaste()
       {
-      if (editData.element) {
-            if (editData.element->isLyrics())
-                  toLyrics(editData.element)->paste(editData);
-            else if (editData.element->isTextBase())
-                  toTextBase(editData.element)->paste(editData);
-            }
+      if (textEditMode())
+            toTextBase(editData.element)->paste(editData);
       }
 
 //---------------------------------------------------------
@@ -1776,6 +1774,7 @@ void ScoreView::cmd(const QAction* a)
       {
       const char* s = a ? a->data().toByteArray().constData() : "";
       cmd(s);
+      updateEditElement();
       }
 
 void ScoreView::cmd(const char* s)
@@ -3449,6 +3448,8 @@ void ScoreView::startUndoRedo(bool undo)
             cmd("note-input");    // enter note entry mode
       else if (!_score->noteEntryMode() && noteEntryMode())
             cmd("escape");        // leave note entry mode
+
+      updateEditElement();
       }
 
 //---------------------------------------------------------
@@ -3524,12 +3525,12 @@ void ScoreView::addSlur(const Slur* slurTemplate)
 
 void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2, const Slur* slurTemplate)
       {
-      bool startEditMode = false;
+      bool switchToSlur = false;
       if (cr2 == 0) {
             cr2 = nextChordRest(cr1);
             if (cr2 == 0)
                   cr2 = cr1;
-            startEditMode = true;      // start slur in edit mode if last chord is not given
+            switchToSlur = true; // select slur for editing if last chord is not given
             }
 
       _score->startCmd();
@@ -3559,9 +3560,8 @@ void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2, const Slur* slurTempl
             _score->inputState().setSlur(slur);
             ss->setSelected(true);
             }
-      else if (startEditMode) {
-            editData.element = ss;
-            changeState(ViewState::EDIT);
+      else if (switchToSlur) {
+            startEditMode(ss);
             }
       }
 
@@ -3606,8 +3606,7 @@ void ScoreView::cmdAddHairpin(HairpinType type)
             const std::vector<SpannerSegment*>& el = pin->spannerSegments();
             if (!noteEntryMode()) {
                   if (!el.empty()) {
-                        editData.element = el.front();
-                        changeState(ViewState::EDIT);
+                        startEditMode(el.front());
                         }
                   }
             }
@@ -4828,6 +4827,58 @@ bool ScoreView::fotoMode() const
                   return true;
             }
       return false;
+      }
+
+//---------------------------------------------------------
+//   setEditElement
+//---------------------------------------------------------
+
+void ScoreView::setEditElement(Element* e)
+      {
+      if (editData.element == e)
+            return;
+
+      const bool normalState = (state == ViewState::NORMAL);
+
+      if (normalState && editData.element && editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit)
+            endEdit();
+
+      editData.element = e;
+
+      if (normalState && e && e->normalModeEditBehavior() == Element::EditBehavior::Edit)
+            startEdit(/* editMode */ false);
+      else if (editData.grips) {
+            editData.grips = 0;
+            editData.curGrip = Grip::NO_GRIP;
+            }
+      }
+
+//---------------------------------------------------------
+//   updateEditElement
+//---------------------------------------------------------
+
+void ScoreView::updateEditElement()
+      {
+      if (state != ViewState::NORMAL)
+            return;
+
+      if (!_score) {
+            setEditElement(nullptr);
+            return;
+            }
+
+      const Selection& sel = _score->selection();
+
+      switch (sel.state()) {
+            case SelState::NONE:
+            case SelState::RANGE:
+                  setEditElement(nullptr);
+                  break;
+            case SelState::LIST:
+                  if (Element* e = sel.element())
+                        setEditElement(e);
+                  break;
+            }
       }
 
 //---------------------------------------------------------

@@ -39,17 +39,6 @@ LineSegment::LineSegment(const LineSegment& s)
       }
 
 //---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void LineSegment::startEdit(EditData& ed)
-      {
-      ed.grips   = 3;
-      ed.curGrip = Grip::END;
-      Element::startEdit(ed);
-      }
-
-//---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
 
@@ -84,15 +73,17 @@ void LineSegment::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void LineSegment::updateGrips(EditData& ed) const
+std::vector<QPointF> LineSegment::gripsPositions(const EditData&) const
       {
+      std::vector<QPointF> grips(gripsCount());
       QPointF pp(pagePos());
-      ed.grip[int(Grip::START)].translate(pp);
-      ed.grip[int(Grip::END)].translate(pos2() + pp);
-      ed.grip[int(Grip::MIDDLE)].translate(pos2() * .5 + pp);
+      grips[int(Grip::START)] = pp;
+      grips[int(Grip::END)] = pos2() + pp;
+      grips[int(Grip::MIDDLE)] = pos2() * .5 + pp;
+      return grips;
       }
 
 //---------------------------------------------------------
@@ -340,6 +331,8 @@ void LineSegment::editDrag(EditData& ed)
             case Grip::START: // Resize the begin of element (left grip)
                   setOffset(offset() + deltaResize);
                   _offset2 -= deltaResize;
+                  if (isStyled(Pid::OFFSET))
+                        setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
                   break;
             case Grip::END: // Resize the end of element (right grip)
                   _offset2 += deltaResize;
@@ -349,6 +342,8 @@ void LineSegment::editDrag(EditData& ed)
                   QPointF deltaMove(ed.delta.x(), ed.delta.y());
                   setOffset(offset() + deltaMove);
                   setOffsetChanged(true);
+                  if (isStyled(Pid::OFFSET))
+                        setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
                   }
                   break;
             default:

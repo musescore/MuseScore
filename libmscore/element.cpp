@@ -1823,31 +1823,6 @@ void Element::triggerLayoutAll() const
       }
 
 //---------------------------------------------------------
-//   init
-//---------------------------------------------------------
-
-void EditData::init()
-      {
-      grip.clear();
-      grips     = 0;
-      curGrip   = Grip(0);
-      pos       = QPointF();
-      startMove = QPointF();
-      lastPos   = QPointF();
-      delta     = QPointF();
-      hRaster   = false;
-      vRaster   = false;
-      key       = 0;
-      modifiers = 0;
-      s.clear();
-
-      dragOffset = QPointF();
-      element    = 0;
-      duration   = Fraction(1,4);
-      clearData();
-      }
-
-//---------------------------------------------------------
 //   control
 //---------------------------------------------------------
 
@@ -2005,12 +1980,25 @@ void Element::endDrag(EditData& ed)
             return;
       ElementEditData* eed = ed.getData(this);
       for (PropertyData pd : eed->propertyData) {
-            PropertyFlags f = propertyFlags(pd.id);
+            setPropertyFlags(pd.id, pd.f); // reset initial property flags state
+            PropertyFlags f = pd.f;
             if (f == PropertyFlags::STYLED)
                   f = PropertyFlags::UNSTYLED;
             score()->undoPropertyChanged(this, pd.id, pd.data, f);
             setGenerated(false);
             }
+      }
+
+//---------------------------------------------------------
+//   updateGrips
+//---------------------------------------------------------
+
+void Element::updateGrips(EditData& ed) const
+      {
+      const auto positions(gripsPositions(ed));
+      const int ngrips = positions.size();
+      for (int i = 0; i < ngrips; ++i)
+            ed.grip[i].translate(positions[i]);
       }
 
 //---------------------------------------------------------
@@ -2078,6 +2066,7 @@ void Element::endEditDrag(EditData& ed)
       bool changed = false;
       if (eed) {
             for (PropertyData pd : eed->propertyData) {
+                  setPropertyFlags(pd.id, pd.f); // reset initial property flags state
                   if (score()->undoPropertyChanged(this, pd.id, pd.data))
                         changed = true;
                   }

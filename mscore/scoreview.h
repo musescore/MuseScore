@@ -175,6 +175,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void keyReleaseEvent(QKeyEvent*) override;
       virtual void inputMethodEvent(QInputMethodEvent*) override;
 
+      bool handleArrowKeyPress(const QKeyEvent*);
+
       virtual void contextMenuEvent(QContextMenuEvent*) override;
 
       void mousePressEventNormal(QMouseEvent*);
@@ -183,8 +185,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void adjustCursorForTextEditing(QMouseEvent*);
 
       void constraintCanvas(int *dxx, int *dyy);
-      void contextItem(Element*);
-      void lassoSelect();
 
       void setShadowNote(const QPointF&);
       void drawElements(QPainter& p,QList<Element*>& el, Element* editElement);
@@ -241,7 +241,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void endFotoDragEdit();
       QImage getRectImage(const QRectF& rect, double dpi, bool transparent, bool printMode);
 
-      virtual void startEdit();
+      void startEdit(bool editMode = true);
       void endEdit();
 
       void startDrag();
@@ -299,8 +299,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       QPixmap* fgPixmap() { return _fgPixmap; }
 
-      virtual void startEdit(Element*, Grip) override;
-      virtual void startEditMode(Element*) override;
+      void startEdit(Element*, Grip) override;
+      void startEditMode(Element*);
 
       void moveCursor(const Fraction& tick);
       Fraction cursorTick() const;
@@ -337,8 +337,12 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void cmdAddHairpin(HairpinType);
       void cmdAddNoteLine();
 
+      void setEditElement(Element*);
+      void updateEditElement();
+
       bool noteEntryMode() const { return state == ViewState::NOTE_ENTRY; }
       bool editMode() const      { return state == ViewState::EDIT; }
+      bool textEditMode() const  { return editMode() && editData.element && editData.element->isTextBase(); }
       bool fotoMode() const;
 
       virtual void setDropRectangle(const QRectF&);

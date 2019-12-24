@@ -89,7 +89,6 @@ class Beam final : public Element {
       virtual void startEdit(EditData&) override;
       virtual void endEdit(EditData&) override;
       virtual void editDrag(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
 
       virtual Fraction tick() const override;
       virtual Fraction rtick() const override;
@@ -156,6 +155,12 @@ class Beam final : public Element {
       void addSkyline(Skyline&);
 
       virtual void triggerLayout() const override;
+
+      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+      int gripsCount() const override { return 2; }
+      Grip initialEditModeGrip() const override { return Grip::END; }
+      Grip defaultGrip() const override { return Grip::START; }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
 
       static IconType iconType(Mode);
       };

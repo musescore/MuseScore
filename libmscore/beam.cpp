@@ -2135,9 +2135,12 @@ void Beam::editDrag(EditData& ed)
       BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
       BeamFragment* f = fragments[bed->editFragment];
       qreal y1 = f->py1[idx];
-      qreal y2 = f->py2[idx] + dy;
+      qreal y2 = f->py2[idx];
+
       if (ed.curGrip == Grip::START)
             y1 += dy;
+      else if (ed.curGrip == Grip::END)
+            y2 += dy;
 
       qreal _spatium = spatium();
       // Because of the logic in Beam::setProperty(),
@@ -2150,10 +2153,10 @@ void Beam::editDrag(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Beam::updateGrips(EditData& ed) const
+std::vector<QPointF> Beam::gripsPositions(const EditData& ed) const
       {
       int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
@@ -2176,8 +2179,11 @@ void Beam::updateGrips(EditData& ed) const
             }
 
       int y = pagePos().y();
-      ed.grip[0].translate(QPointF(c1->stemPosX() + c1->pageX(), f->py1[idx] + y));
-      ed.grip[1].translate(QPointF(c2->stemPosX() + c2->pageX(), f->py2[idx] + y));
+
+      return {
+            QPointF(c1->stemPosX() + c1->pageX(), f->py1[idx] + y),
+            QPointF(c2->stemPosX() + c2->pageX(), f->py2[idx] + y)
+            };
       }
 
 //---------------------------------------------------------
@@ -2218,8 +2224,6 @@ void Beam::reset()
 
 void Beam::startEdit(EditData& ed)
       {
-      ed.grips   = 2;
-      ed.curGrip = Grip::END;
       BeamEditData* bed = new BeamEditData();
       bed->e    = this;
       bed->editFragment = 0;

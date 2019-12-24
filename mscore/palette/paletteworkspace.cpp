@@ -572,11 +572,12 @@ bool UserPaletteController::canEdit(const QModelIndex& index) const
 //   UserPaletteController::applyPaletteElement
 //---------------------------------------------------------
 
-void UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
+bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
       {
       const PaletteCell* cell = model()->data(index, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
       if (cell && cell->element)
-            Palette::applyPaletteElement(cell->element.get(), modifiers);
+            return Palette::applyPaletteElement(cell->element.get(), modifiers);
+      return false;
       }
 
 //---------------------------------------------------------
