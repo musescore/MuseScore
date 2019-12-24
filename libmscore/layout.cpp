@@ -2345,8 +2345,10 @@ void Score::createBeams(Measure* measure)
                               chord->crossMeasureSetup(crossMeasure);
                         }
 
-                  // get defaults from time signature properties
-                  bm = Groups::endBeam(cr, prev);
+                  if (cr->isRest() && cr->beamMode() == Beam::Mode::AUTO)
+                        bm = Beam::Mode::NONE;           // do not beam rests set to Beam::Mode::AUTO
+                  else
+                        bm = Groups::endBeam(cr, prev);  // get defaults from time signature properties
 
                   // perform additional context-dependent checks
                   if (bm == Beam::Mode::AUTO) {
