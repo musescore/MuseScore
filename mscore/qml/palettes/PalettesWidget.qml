@@ -84,7 +84,7 @@ Item {
     }
 
     Rectangle {
-        // Shadow overlay for Tours. The ususal overlay doesn't cover palettes
+        // Shadow overlay for Tours. The usual overlay doesn't cover palettes
         // as they reside in a window container above the main MuseScore window.
         visible: globalStyle.shadowOverlay
         anchors.fill: parent

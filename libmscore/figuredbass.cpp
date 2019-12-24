@@ -202,7 +202,7 @@ int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
                   break;
             case '#':
                   if(*dest != Modifier::NONE) {
-                        if(*dest == Modifier::SHARP)    // SHARP may double a preivous SHARP
+                        if(*dest == Modifier::SHARP)    // SHARP may double a previous SHARP
                               *dest = Modifier::DOUBLESHARP;
                         else
                               return -1;              // but no other combination is acceptable

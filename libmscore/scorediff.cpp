@@ -211,7 +211,6 @@ int MscxModeDiff::adjustSemanticsMscxOneDiff(std::vector<TextDiff>& diffs, int i
       int iScore;
       switch(diff->type) {
             case DiffType::EQUAL:
-                  /* FALLTROUGH */
             case DiffType::REPLACE:
                   // TODO: split a REPLACE diff, though they should not be here
                   return index;
@@ -219,7 +218,6 @@ int MscxModeDiff::adjustSemanticsMscxOneDiff(std::vector<TextDiff>& diffs, int i
                   iScore = 1;
                   break;
             case DiffType::DELETE:
-                  /* FALLTROUGH */
             default:
                   iScore = 0;
                   break;

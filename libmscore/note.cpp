@@ -1455,7 +1455,7 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 
                         // As spanners get added after being fully read, they
                         // do not get cloned with the note when pasting to
-                        // linked staves. So add this spanner explicilty.
+                        // linked staves. So add this spanner explicitly.
                         if (pasteMode)
                               score()->undoAddElement(sp);
                         }

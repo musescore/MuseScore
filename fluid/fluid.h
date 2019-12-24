@@ -240,7 +240,7 @@ class Channel {
       /* The values of the generators, set by NRPN messages, or by
        * fluid_synth_set_gen(), are cached in the channel so they can be
        * applied to future notes. They are copied to a voice's generators
-       * in fluid_voice_init(), wihich calls fluid_gen_init().  */
+       * in fluid_voice_init(), which calls fluid_gen_init().  */
 
       float gen[GEN_LAST];
 

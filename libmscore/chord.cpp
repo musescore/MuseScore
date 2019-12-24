@@ -1243,7 +1243,7 @@ void Chord::setScore(Score* s)
 
 //-----------------------------------------------------------------------------
 //   hookAdjustment
-//    Adjustment to the length of the stem in order to accomodate hooks
+//    Adjustment to the length of the stem in order to accommodate hooks
 //    This function replaces this bit of code:
 //      switch (hookIdx) {
 //            case 3: normalStemLen += small() ? .5  : 0.75; break; //32nd notes

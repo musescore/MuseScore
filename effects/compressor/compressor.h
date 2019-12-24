@@ -67,7 +67,7 @@ class Compressor : public Effect
       unsigned int count;
       float as[A_TBL];
 
-      // The blanace between the RMS and peak envelope followers.
+      // The balance between the RMS and peak envelope followers.
       // RMS is generally better for subtle, musical compression and peak is better for heavier,
       // fast compression and percussion.
       // <range min="0" max="1"/>

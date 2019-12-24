@@ -33,7 +33,7 @@ XCOPY ccache "C:\ccache" /E /I /Y
 
 CD C:\MuseScore
 IF NOT EXIST dependencies.zip ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dependencies.7z" -O dependencies.zip )
-:: assumung dependencies.zip to contain the dependencies directory (with is subdirs)
+:: assuming dependencies.zip to contain the dependencies directory (with is subdirs)
 START " " /wait "7z" x -y dependencies.zip > nul
 :: test
 CD dependencies\include

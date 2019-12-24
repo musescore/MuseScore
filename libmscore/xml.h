@@ -203,7 +203,7 @@ class XmlReader : public QXmlStreamReader {
       Tid addUserTextStyle(const QString& name);
       Tid lookupUserTextStyle(const QString& name);
 
-      // Ownership on read ahead device is NOT transfered to XmlReader.
+      // Ownership on read ahead device is NOT transferred to XmlReader.
       void setReadAheadDevice(QIODevice* dev) { if (!dev->isSequential()) _readAheadDevice = dev; }
       bool readAheadAvailable() const { return bool(_readAheadDevice); }
       void performReadAhead(std::function<void(QIODevice&)> readAheadRoutine);

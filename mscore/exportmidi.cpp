@@ -208,7 +208,7 @@ void ExportMidi::writeHeader()
 //    export midi file
 //    return false on error
 //
-//    The 3rd and 4th versions of write create a temporary, unitialized synth state
+//    The 3rd and 4th versions of write create a temporary, uninitialized synth state
 //    so we can render the midi - it should fall back correctly to the defaults, with a warning.
 //    These should only be used for tests. When actually rendering midi as a user action,
 //    make sure to use the 1st and 2nd versions, passing the global musescore synth state

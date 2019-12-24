@@ -80,7 +80,7 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
       if (propertyType(pid) == P_TYPE::FRACTION) {
             FractionWrapper* f = val.value<FractionWrapper*>();
             if (!f) {
-                  qWarning("ScoreElement::set: trying to assing value of wrong type to fractional property");
+                  qWarning("ScoreElement::set: trying to assign value of wrong type to fractional property");
                   return;
                   }
             val = QVariant::fromValue(f->fraction());
