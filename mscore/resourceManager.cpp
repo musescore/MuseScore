@@ -50,41 +50,19 @@ ResourceManager::ResourceManager(QWidget *parent) :
 //---------------------------------------------------------
 
 ExtensionFileSize::ExtensionFileSize(const int i)
-      : QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(i))
-      , _size(i)
+   : QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(i), QTableWidgetItem::UserType)
+     , _size(i)
       {}
+
+//---------------------------------------------------------
+//   operator<
+//---------------------------------------------------------
 
 bool ExtensionFileSize::operator<(const QTableWidgetItem& nextItem) const
       {
-      QString currentText = text();
-      QString nextText = nextItem.text();
-
-      QChar currentSizeType = currentText[currentText.size() - 2];
-      QChar nextSizeType = nextText[currentText.size() - 2];
-
-      // the integer before unit
-      int currentInt = currentText.split(QRegularExpression("\\s+"))[0].toInt();
-      int nextInt = nextText.split(QRegularExpression("\\s+"))[0].toInt();
-
-      return int2size(currentSizeType, currentInt) < int2size(nextSizeType, nextInt);
-      }
-
-//---------------------------------------------------------
-//   int2size
-//---------------------------------------------------------
-
-int ExtensionFileSize::int2size(QChar sizeType, int i)
-      {
-      if (sizeType == QChar('K')) // the size is written as kilobytes, and so on
-            return i * 0x400;
-      else if (sizeType == QChar('M'))
-            return i * 0x100000;
-      else if (sizeType == QChar('G'))
-            return i * 0x40000000;
-      else if (sizeType == QChar('T'))
-            return i * 0x10000000000;
-      //else if (sizeType == QChar(' ')) // the size is written as bytes
-      return i;
+      if (nextItem.type() != type())
+            return false;
+      return getSize() < static_cast<const ExtensionFileSize&>(nextItem).getSize();
       }
 
 //---------------------------------------------------------
@@ -92,15 +70,19 @@ int ExtensionFileSize::int2size(QChar sizeType, int i)
 //---------------------------------------------------------
 
 LanguageFileSize::LanguageFileSize(const double d)
-      : QTableWidgetItem(ResourceManager::tr("%1 KB").arg(d))
-      , _size(d)
+   : QTableWidgetItem(ResourceManager::tr("%1 KB").arg(d), QTableWidgetItem::UserType)
+     , _size(d)
       {}
+
+//---------------------------------------------------------
+//   operator<
+//---------------------------------------------------------
 
 bool LanguageFileSize::operator<(const QTableWidgetItem& nextItem) const
       {
-      QString nextText = nextItem.text();
-      double nextSize = nextText.remove(QChar(' ')).remove(QChar('K')).remove(QChar('B')).toDouble();
-      return getSize() < nextSize;
+      if (nextItem.type() != type())
+            return false;
+      return getSize() < static_cast<const LanguageFileSize&>(nextItem).getSize();
       }
 
 //---------------------------------------------------------
