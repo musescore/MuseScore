@@ -2064,6 +2064,16 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
             QPointF pt = e.readPoint();
             ch->setOffset(pt * ch->spatium());
             }
+      else if (ch->isRest() && tag == "Image"){
+            if (MScore::noImages)
+                  e.skipCurrentElement();
+            else {
+                  Image *image = new Image(ch->score());
+                  image->setTrack(e.track());
+                  image->read(e);
+                  ch->add(image);
+                  }
+            }
       else if (!readDurationProperties206(e, ch))
             return false;
       return true;
