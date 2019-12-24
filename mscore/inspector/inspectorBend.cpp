@@ -17,6 +17,21 @@
 #include "libmscore/undo.h"
 
 namespace Ms {
+     
+//---------------------------------------------------------
+//   Preset bends
+//---------------------------------------------------------
+
+static const QList<PitchValue> BEND 
+   = { PitchValue(0, 0),   PitchValue(15, 100), PitchValue(60, 100) };
+static const QList<PitchValue> BEND_RELEASE
+   = { PitchValue(0, 0),   PitchValue(10, 100), PitchValue(20, 100), PitchValue(30, 0), PitchValue(60, 0) };
+static const QList<PitchValue> BEND_RELEASE_BEND
+   = { PitchValue(0, 0),   PitchValue(10, 100), PitchValue(20, 100), PitchValue(30, 0), PitchValue(40, 0), PitchValue(50, 100), PitchValue(60, 100) };
+static const QList<PitchValue> PREBEND
+   = { PitchValue(0, 100), PitchValue(60, 100) };
+static const QList<PitchValue> PREBEND_RELEASE
+   = { PitchValue(0, 100), PitchValue(15, 100), PitchValue(30, 0),   PitchValue(60, 0) };
 
 //---------------------------------------------------------
 //   InspectorBend
