@@ -98,7 +98,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_STARTUP_STARTSCORE,                          new StringPreference(":/data/My_First_Score.mscx", false)},
             {PREF_UI_APP_STARTUP_SHOWTOURS,                        new BoolPreference(true)},
             {PREF_APP_WORKSPACE,                                   new StringPreference("Basic", false)},
-            {PREF_APP_TELEMETRY_ALLOWED,                           new BoolPreference(false)},
+            {PREF_APP_TELEMETRY_ALLOWED,                           new BoolPreference(false, false)},
             {PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED,          new StringPreference("", false)},
             {PREF_EXPORT_AUDIO_NORMALIZE,                          new BoolPreference(true)},
             {PREF_EXPORT_AUDIO_SAMPLERATE,                         new IntPreference(44100, false)},

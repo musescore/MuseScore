@@ -372,6 +372,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       showSplashScreen->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN));
       showStartcenter->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER));
       showTours->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
+      collectTelemetry->setChecked(preferences.getBool(PREF_APP_TELEMETRY_ALLOWED));
 
       alsaDriver->setChecked(preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO));
       jackDriver->setChecked(preferences.getBool(PREF_IO_JACK_USEJACKAUDIO) || preferences.getBool(PREF_IO_JACK_USEJACKMIDI));
@@ -965,6 +966,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN, showSplashScreen->isChecked());
       preferences.setPreference(PREF_UI_APP_STARTUP_SHOWSTARTCENTER, showStartcenter->isChecked());
       preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, showTours->isChecked());
+      preferences.setPreference(PREF_APP_TELEMETRY_ALLOWED, collectTelemetry->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_BG_USECOLOR, bgColorButton->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_BG_COLOR, bgColorLabel->color());
       preferences.setPreference(PREF_UI_CANVAS_FG_USECOLOR, fgColorButton->isChecked());
