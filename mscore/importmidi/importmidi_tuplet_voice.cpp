@@ -856,7 +856,7 @@ void assignVoices(
       if (tupletVoiceLimit() == 1) {
             bool excluded = excludeExtraVoiceTuplets(tuplets, nonTuplets, backTiedTuplets,
                                                      chords, basicQuant, barStart, barIndex);
-            if (excluded) {         // to exlude tuplet intervals - rebuild all intervals
+            if (excluded) {         // to exclude tuplet intervals - rebuild all intervals
                   tupletIntervals.clear();
                   for (const auto &tuplet: tuplets) {
                         const int voice = tuplet.chords.begin()->second->second.voice;

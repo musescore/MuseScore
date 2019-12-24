@@ -4062,7 +4062,7 @@ QString Score::extractLyrics()
                               break;
                         }
                   }
-            // consider remaning lyrics
+            // consider remaining lyrics
             for (unsigned lyricsNumber = 0; lyricsNumber < maxLyrics; lyricsNumber++) {
                   for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
                         unsigned playCount = m->playbackCount();
@@ -4822,7 +4822,7 @@ Movements::~Movements()
 //    the undo stack do not emit a warning.
 //    Usually pushes and pops to the undo stack are only
 //    valid inside a startCmd() - endCmd(). Exceptions
-//    occure during score loading.
+//    occurred during score loading.
 //---------------------------------------------------------
 
 int ScoreLoad::_loading = 0;

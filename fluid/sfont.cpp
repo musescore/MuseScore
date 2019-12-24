@@ -1710,7 +1710,7 @@ void SFont::safe_fread(void* buf, int count)
       {
       if (f.read((char*)buf, count) != count) {
             if (f.atEnd())
-                  throw(QString("EOF while attemping to read %1 bytes").arg(count));
+                  throw(QString("EOF while attempting to read %1 bytes").arg(count));
             else
                   throw(QString("File read failed"));
             }

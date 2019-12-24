@@ -41,7 +41,7 @@ ListView {
     preferredHighlightEnd: Math.ceil(height - preferredHighlightBegin)
     highlightRangeMode: itemDragged ? ListView.ApplyRange : ListView.NoHighlightRange
 
-    property Item currentTreeItem: currentItem // most recently focussed item at any level of the tree
+    property Item currentTreeItem: currentItem // most recently focused item at any level of the tree
 
     property string filter: ""
     onFilterChanged: {

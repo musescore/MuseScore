@@ -160,7 +160,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const int track, const Fracti
                   if (par->track() == track && (no == -1 || l->no() == no)) {
                         Fraction lct = lastChordTicks(l->segment(), track, tick);
                         if (lct > Fraction(0,1)) {
-                              // set lyric tick to the total length fron the lyric note
+                              // set lyric tick to the total length from the lyric note
                               // plus all notes covered by the melisma minus the last note length
                               l->setTicks(tick - par->tick() - lct);
                               }
@@ -1755,7 +1755,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direc
             static_cast<Chord*>(cr)->setStemDirection(sd);
             cr->setBeamMode(Beam::Mode::AUTO);
             }
-      // terminate the currect beam and add to the score
+      // terminate the current beam and add to the score
       if (beam && bm == Beam::Mode::END)
             beam = 0;
       }

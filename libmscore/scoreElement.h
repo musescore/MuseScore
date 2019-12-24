@@ -354,7 +354,7 @@ class ScoreElement {
       CONVERT(Sticking,      STICKING)
 #undef CONVERT
 
-      virtual bool isElement() const { return false; } // overriden in element.h
+      virtual bool isElement() const { return false; } // overridden in element.h
       bool isChordRest() const       { return isRest() || isChord() || isRepeatMeasure(); }
       bool isDurationElement() const { return isChordRest() || isTuplet(); }
       bool isSlurTieSegment() const  { return isSlurSegment() || isTieSegment(); }
