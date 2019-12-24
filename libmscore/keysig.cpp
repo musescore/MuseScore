@@ -587,9 +587,12 @@ void KeySig::undoSetMode(KeyMode v)
 QVariant KeySig::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case Pid::KEY:           return int(key());
-            case Pid::SHOW_COURTESY: return int(showCourtesy());
-            case Pid::KEYSIG_MODE:   return int(mode());
+            case Pid::KEY:
+                  return int(key());
+            case Pid::SHOW_COURTESY:
+                  return int(showCourtesy());
+            case Pid::KEYSIG_MODE:
+                  return int(mode());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -634,9 +637,12 @@ bool KeySig::setProperty(Pid propertyId, const QVariant& v)
 QVariant KeySig::propertyDefault(Pid id) const
       {
       switch (id) {
-            case Pid::KEY:               return int(Key::INVALID);
-            case Pid::SHOW_COURTESY:     return true;
-            case Pid::KEYSIG_MODE:       return int(KeyMode::UNKNOWN);
+            case Pid::KEY:
+                  return int(Key::INVALID);
+            case Pid::SHOW_COURTESY:
+                  return true;
+            case Pid::KEYSIG_MODE:
+                  return int(KeyMode::UNKNOWN);
             default:
                   return Element::propertyDefault(id);
             }
@@ -683,6 +689,3 @@ QString KeySig::accessibleInfo() const
       }
 
 }
-
-
-
