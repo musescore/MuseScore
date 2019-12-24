@@ -117,8 +117,8 @@ ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
             instrumentList->addItem(item);
             }
 
-      connect(newButton, SIGNAL(clicked()), SLOT(newClicked()));
-      connect(newAllButton, SIGNAL(clicked()), SLOT(newAllClicked()));
+      connect(singlePartButton, SIGNAL(clicked()), SLOT(singlePartClicked()));
+      connect(allPartsButton, SIGNAL(clicked()), SLOT(allPartsClicked()));
       connect(deleteButton, SIGNAL(clicked()), SLOT(deleteClicked()));
       connect(moveUpButton, SIGNAL(clicked()), SLOT(moveUpClicked()));
       connect(moveDownButton, SIGNAL(clicked()), SLOT(moveDownClicked()));
@@ -168,10 +168,10 @@ void MuseScore::startExcerptsDialog()
       }
 
 //---------------------------------------------------------
-//   newClicked
+//   singlePartClicked
 //---------------------------------------------------------
 
-void ExcerptsDialog::newClicked()
+void ExcerptsDialog::singlePartClicked()
       {
       QString name = createName("Part");
       Excerpt* e   = new Excerpt(score);
@@ -194,10 +194,10 @@ void ExcerptsDialog::newClicked()
       }
 
 //---------------------------------------------------------
-//   newAllClicked
+//   allPartsClicked
 //---------------------------------------------------------
 
-void ExcerptsDialog::newAllClicked()
+void ExcerptsDialog::allPartsClicked()
       {
       QList<Excerpt*> excerpts = Excerpt::createAllExcerpt(score);
       ExcerptItem* ei = 0;
