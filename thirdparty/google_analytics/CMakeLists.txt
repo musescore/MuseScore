@@ -24,3 +24,9 @@ file(GLOB_RECURSE google_analytics_HEADERS RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.
 
 add_library(google_analytics ${LIBRARY_TYPE} ${google_analytics_SOURCES} ${google_analytics_HEADERS})
 target_link_libraries(google_analytics Qt5::Core Qt5::Network)
+
+if (MSVC)
+  set_target_properties( google_analytics PROPERTIES
+    COMPILE_FLAGS "/wd4458"
+  )
+endif (MSVC)
