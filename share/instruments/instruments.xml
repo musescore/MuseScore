@@ -914,20 +914,6 @@
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
             </Instrument>
-            <Instrument id="tin-whistle">
-                  <longName>Tin Whistle</longName>
-                  <shortName>Tin Wh.</shortName>
-                  <description>same as 6 hole Flageolet but metal construction</description>
-                  <musicXMLid>wind.flutes.whistle.tin</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-96</aPitchRange>
-                  <pPitchRange>72-102</pPitchRange>
-                  <Channel>
-                        <program value="78"/> <!--Whistle-->
-                  </Channel>
-                  <genre>classroom</genre>
-            </Instrument>
             <Instrument id="bflat-tin-whistle">
                   <longName>B♭ Tin Whistle</longName>
                   <shortName>B♭ Tin Wh.</shortName>
@@ -940,6 +926,20 @@
                   <Channel>
                         <program value="78"/> <!--Whistle-->
                   </Channel>
+            </Instrument>
+            <Instrument id="c-tin-whistle">
+                  <longName>C Tin Whistle</longName>
+                  <shortName>C Tin Wh.</shortName>
+                  <description>same as 6 hole Flageolet but metal construction</description>
+                  <musicXMLid>wind.flutes.whistle.tin</musicXMLid>
+                  <clef>G8va</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>72-96</aPitchRange>
+                  <pPitchRange>72-102</pPitchRange>
+                  <Channel>
+                        <program value="78"/> <!--Whistle-->
+                  </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="d-tin-whistle">
                   <longName>D Tin Whistle</longName>
