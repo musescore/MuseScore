@@ -1996,8 +1996,8 @@ void Element::endDrag(EditData& ed)
 void Element::updateGrips(EditData& ed) const
       {
       const auto positions(gripsPositions(ed));
-      const int ngrips = positions.size();
-      for (int i = 0; i < ngrips; ++i)
+      const size_t ngrips = positions.size();
+      for (int i = 0; i < int(ngrips); ++i)
             ed.grip[i].translate(positions[i]);
       }
 
