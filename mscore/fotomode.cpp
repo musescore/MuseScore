@@ -31,9 +31,7 @@ namespace Ms {
 
 void FotoLasso::startEdit(EditData& ed)
       {
-      Element::startEdit(ed);
-      ed.grips   = 8;
-      ed.curGrip = Grip(0);
+      Lasso::startEdit(ed);
       QRectF view = ((ScoreView*)ed.view)->toLogical(QRect(0.0, 0.0, ed.view->geometry().width(), ed.view->geometry().height()));
       if (bbox().isEmpty() || !view.intersects(bbox())) {
             // rect not found - construct new rect with default size & relative position
@@ -53,15 +51,6 @@ void FotoLasso::startEdit(EditData& ed)
 void FotoLasso::endEdit(EditData&)
       {
       setVisible(false);
-      }
-
-//---------------------------------------------------------
-//   updateGrips
-//---------------------------------------------------------
-
-void FotoLasso::updateGrips(EditData& ed) const
-      {
-      Lasso::updateGrips(ed);
       }
 
 //---------------------------------------------------------
@@ -99,7 +88,7 @@ void ScoreView::startFotomode()
       _foto->setFlag(ElementFlag::MOVABLE, true);
       _foto->setVisible(true);
       _score->select(_foto);
-      editData.element = _foto;
+      setEditElement(_foto);
       QAction* a = getAction("fotomode");
       a->setChecked(true);
       startEdit();
@@ -166,7 +155,7 @@ void ScoreView::endFotoDrag()
       editData.grip.resize(8);
       for (int i = 0; i < 8; ++i)
             editData.grip[i] = r;
-      editData.element = _foto;
+      setEditElement(_foto);
       updateGrips();
       _score->setUpdateAll();
       _score->update();

@@ -54,7 +54,6 @@ class Box : public MeasureBase {
       virtual void editDrag(EditData&) override;
       virtual void endEdit(EditData&) override;
 
-      virtual void updateGrips(EditData&) const override;
       virtual void layout() override;
       virtual void write(XmlWriter&) const override;
       virtual void write(XmlWriter& xml, int, bool, bool) const override { write(xml); }
@@ -87,6 +86,13 @@ class Box : public MeasureBase {
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
       virtual QString accessibleExtraInfo() const override;
+
+      // TODO: add a grip for moving the entire box
+      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+      int gripsCount() const override { return 1; }
+      Grip initialEditModeGrip() const override { return Grip::START; }
+      Grip defaultGrip() const override { return Grip::START; }
+      std::vector<QPointF> gripsPositions(const EditData&) const override { return { QPointF() }; } // overriden in descendants
       };
 
 //---------------------------------------------------------
@@ -119,6 +125,8 @@ class HBox final : public Box {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
+
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
       };
 
 //---------------------------------------------------------
@@ -135,6 +143,7 @@ class VBox : public Box {
 
       virtual void layout() override;
 
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
       };
 
 //---------------------------------------------------------

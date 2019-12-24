@@ -55,6 +55,9 @@
 #include "bagpembell.h"
 #include "hairpin.h"
 #include "textline.h"
+#include <QPointF>
+#include <QtMath>
+#include <QVector2D>
 
 namespace Ms {
 
@@ -1480,93 +1483,42 @@ int Note::transposition() const
 //---------------------------------------------------------
 
 class NoteEditData : public ElementEditData {
-   public:
-      int line;
-      int string;
+public:
+
+      enum EditMode {
+            EditMode_ChangePitch = 0,
+            EditMode_AddSpacing,
+            EditMode_Undefined,
+            };
+
+      int line = 0;
+      int string = 0;
+      EditMode mode = EditMode_Undefined;
+      QPointF delta;
+
+      static constexpr double MODE_TRANSITION_LIMIT_DEGREES = 15.0;
+
+      static inline EditMode editModeByDragDirection(const qreal& deltaX, const qreal& deltaY)
+            {
+            qreal x = qAbs(deltaX);
+            qreal y = qAbs(deltaY);
+
+            QVector2D normalizedVector(x, y);
+
+            normalizedVector.normalize();
+
+            float radians = QVector2D::dotProduct(normalizedVector, QVector2D(1, 0));
+
+            qreal degrees = (qAcos(radians) * 180.0) / M_PI;
+
+            qDebug() << "NOTE DRAG DEGREES " << degrees;
+
+            if (degrees >= MODE_TRANSITION_LIMIT_DEGREES)
+                  return NoteEditData::EditMode_ChangePitch;
+            else
+                  return NoteEditData::EditMode_AddSpacing;
+            }
       };
-
-//---------------------------------------------------------
-//   startDrag
-//---------------------------------------------------------
-
-void Note::startDrag(EditData& ed)
-      {
-      NoteEditData* ned = new NoteEditData();
-      ned->e      = this;
-      ned->line   = _line;
-      ned->string = _string;
-      ned->pushProperty(Pid::PITCH);
-      ned->pushProperty(Pid::TPC1);
-      ned->pushProperty(Pid::TPC2);
-      ned->pushProperty(Pid::FRET);
-      ned->pushProperty(Pid::STRING);
-
-      ed.addData(ned);
-      }
-
-//---------------------------------------------------------
-//   drag
-//---------------------------------------------------------
-
-QRectF Note::drag(EditData& ed)
-      {
-      Fraction _tick           = chord()->tick();
-      const Staff* stf    = staff();
-      const StaffType* st = stf->staffType(_tick);
-      if (st->isDrumStaff())
-            return QRect();
-
-      NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this));
-      qreal _spatium      = spatium();
-      bool tab            = st->isTabStaff();
-      qreal step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
-      int lineOffset      = lrint(ed.delta.y() / step);
-
-      if (tab) {
-            const StringData* strData = staff()->part()->instrument()->stringData();
-            int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
-            int nFret   = strData->fret(_pitch, nString, staff(), _tick);
-            if (nFret >= 0) {                      // no fret?
-                  if (fret() != nFret || string() != nString) {
-                        for (Note* nn : tiedNotes()) {
-                              nn->setFret(nFret);
-                              nn->setString(nString);
-                              strData->fretChords(nn->chord());
-                              nn->triggerLayout();
-                              }
-                        }
-                  }
-            }
-      else {
-            Key key = staff()->key(_tick);
-            int newPitch = line2pitch(ned->line + lineOffset, staff()->clef(_tick), key);
-            if (!concertPitch()) {
-                  Interval interval = staff()->part()->instrument(_tick)->transpose();
-                  newPitch += interval.chromatic;
-                  }
-            int newTpc1 = pitch2tpc(newPitch, key, Prefer::NEAREST);
-            int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
-            for (Note* nn : tiedNotes()) {
-                  nn->setPitch(newPitch, newTpc1, newTpc2);
-                  nn->triggerLayout();
-                  }
-            }
-      return QRectF();
-      }
-
-//---------------------------------------------------------
-//   endDrag
-//---------------------------------------------------------
-
-void Note::endDrag(EditData& ed)
-      {
-      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
-      for (Note* nn : tiedNotes()) {
-            for (PropertyData pd : ned->propertyData) {
-                  score()->undoPropertyChanged(nn, pd.id, pd.data);
-                  }
-            }
-      }
 
 //---------------------------------------------------------
 //   acceptDrop
@@ -2360,27 +2312,172 @@ int Note::customizeVelocity(int velo) const
 //   editDrag
 //---------------------------------------------------------
 
-void Note::editDrag(EditData& ed)
+void Note::startDrag(EditData& ed)
+      {
+      NoteEditData* ned = new NoteEditData();
+      ned->e      = this;
+      ned->line   = _line;
+      ned->string = _string;
+      ned->pushProperty(Pid::PITCH);
+      ned->pushProperty(Pid::TPC1);
+      ned->pushProperty(Pid::TPC2);
+      ned->pushProperty(Pid::FRET);
+      ned->pushProperty(Pid::STRING);
+
+      ed.addData(ned);
+      }
+
+QRectF Note::drag(EditData& ed)
+      {
+      NoteEditData* noteEditData = static_cast<NoteEditData*>(ed.getData(this));
+
+      QPointF delta = ed.pos - ed.lastPos;
+      noteEditData->delta = delta;
+
+      if (noteEditData->mode == NoteEditData::EditMode_Undefined) {
+            noteEditData->mode = NoteEditData::editModeByDragDirection(delta.x(), delta.y());
+            }
+
+      if (noteEditData->mode == NoteEditData::EditMode_AddSpacing)
+            horizontalDrag(ed);
+      else if (noteEditData->mode == NoteEditData::EditMode_ChangePitch)
+            verticalDrag(ed);
+
+      return QRectF();
+      }
+
+
+void Note::endDrag(EditData& ed)
+      {
+      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
+      for (Note* nn : tiedNotes()) {
+            for (PropertyData pd : ned->propertyData) {
+                  setPropertyFlags(pd.id, pd.f); // reset initial property flags state
+                  score()->undoPropertyChanged(nn, pd.id, pd.data);
+                  }
+          }
+      }
+
+void Note::editDrag(EditData& editData)
+      {
+      Chord* ch = chord();
+
+      if (ch->notes().size() == 1) {
+            // if the chord contains only this note, then move the whole chord
+            // including stem, flag etc.
+            ch->undoChangeProperty(Pid::OFFSET, ch->offset() + offset() + editData.delta);
+            setOffset(QPointF());
+            }
+      else
+            setOffset(offset() + editData.delta);
+
+      triggerLayout();
+      }
+
+void Note::verticalDrag(EditData &ed)
+      {
+      Fraction _tick           = chord()->tick();
+      const Staff* stf    = staff();
+      const StaffType* st = stf->staffType(_tick);
+
+      if (st->isDrumStaff())
+            return;
+
+      NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this));
+
+      qreal _spatium      = spatium();
+      bool tab            = st->isTabStaff();
+      qreal step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
+      int lineOffset      = lrint(ed.delta.y() / step);
+
+      if (tab) {
+            const StringData* strData = staff()->part()->instrument()->stringData();
+            int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
+            int nFret   = strData->fret(_pitch, nString, staff(), _tick);
+
+            if (nFret >= 0) {                    // no fret?
+                  if (fret() != nFret || string() != nString) {
+                        for (Note* nn : tiedNotes()) {
+                              nn->setFret(nFret);
+                              nn->setString(nString);
+                              strData->fretChords(nn->chord());
+                              nn->triggerLayout();
+                              }
+                        }
+                  }
+            }
+      else {
+            Key key = staff()->key(_tick);
+            int newPitch = line2pitch(ned->line + lineOffset, staff()->clef(_tick), key);
+
+            if (!concertPitch()) {
+                  Interval interval = staff()->part()->instrument(_tick)->transpose();
+                  newPitch += interval.chromatic;
+                  }
+
+            int newTpc1 = pitch2tpc(newPitch, key, Prefer::NEAREST);
+            int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
+            for (Note* nn : tiedNotes()) {
+                  nn->setPitch(newPitch, newTpc1, newTpc2);
+                  nn->triggerLayout();
+                  }
+            }
+      }
+
+void Note::normalizeLeftDragDelta(Segment* seg, EditData &ed, NoteEditData* ned)
+      {
+      Segment* previous = seg->prev();
+
+      if (previous) {
+
+            qreal minDist = previous->minHorizontalCollidingDistance(seg);
+
+            qreal diff = (ed.pos.x()) - (previous->pageX() + minDist);
+
+            qreal distanceBetweenSegments = (previous->pageX() + minDist) - seg->pageX();
+
+            if (diff < 0)
+                  ned->delta.setX(distanceBetweenSegments);
+            }
+      else {
+            Measure* measure = seg->measure();
+
+            qreal minDist = score()->styleP(Sid::barNoteDistance);
+
+            qreal diff = (ed.pos.x()) - (measure->pageX() + minDist);
+
+            qreal distanceBetweenSegments = (measure->pageX() + minDist) - seg->pageX();
+
+            if (diff < 0)
+                  ned->delta.setX(distanceBetweenSegments);
+            }
+      }
+
+void Note::horizontalDrag(EditData &ed)
       {
       Chord* ch = chord();
       Segment* seg = ch->segment();
+
+      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
+
       // adjust segment on plain drag or Shift+cursor,
       // adjust note/chord for Ctrl+drag or plain cursor
       if (seg &&
           (((ed.buttons & Qt::LeftButton) && !(ed.modifiers & Qt::ControlModifier))
            || (ed.modifiers & Qt::ShiftModifier))) {
-            const Spatium deltaSp = Spatium(ed.delta.x() / spatium());
-            seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
+
+            if (ed.delta.x() < 0)
+                  normalizeLeftDragDelta(seg, ed, ned);
             }
-      else if (ch->notes().size() == 1) {
-            // if the chord contains only this note, then move the whole chord
-            // including stem, flag etc.
-            ch->undoChangeProperty(Pid::OFFSET, ch->offset() + offset() + ed.delta);
-            setOffset(QPointF());
-            }
-      else {
-            setOffset(offset() + ed.delta);
-            }
+
+      const Spatium deltaSp = Spatium(ned->delta.x() / spatium());
+
+      if (seg->extraLeadingSpace() + deltaSp < Spatium(0)) {
+          return;
+      }
+
+      seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
+
       triggerLayout();
       }
 
@@ -3118,7 +3215,7 @@ std::vector<Note*> Note::tiedNotes() const
             notes.push_back(note);
             }
       return notes;
-      }
+}
 
 //---------------------------------------------------------
 //   unisonIndex

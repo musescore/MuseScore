@@ -339,7 +339,6 @@ void MTest::initMTest()
       mscore = new MScore;
       new MuseScoreCore;
       mscore->init();
-      ed.init();
 
       preferences.init(true);
 

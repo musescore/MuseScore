@@ -4215,8 +4215,6 @@ void MuseScore::changeState(ScoreState val)
       if (getAction("split-measure")->isEnabled())
             getAction("split-measure")->setEnabled(cs && cs->masterScore()->excerpts().size() == 0);
 
-      //getAction("split-measure")->setEnabled(cs->masterScore()->excerpts().size() == 0);
-
       // disabling top level menu entries does not
       // work for MAC
 
@@ -6005,10 +6003,9 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (_sstate != STATE_NORMAL )
                   undoRedo(true);
 #ifdef Q_OS_MAC
-            else if (cs) {
-                  cs->startCmd();
-                  cs->cmdDeleteSelection();
-                  cs->endCmd();
+            else if (cv) {
+                  cv->cmd(getAction("delete"));
+                  return;
                   }
 #endif
             }

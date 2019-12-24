@@ -94,8 +94,6 @@ class SlurTieSegment : public SpannerSegment {
       virtual void spatiumChanged(qreal, qreal) override;
       SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 
-      virtual void startEdit(EditData&) override;
-      virtual void endEdit(EditData&) override;
       virtual void startEditDrag(EditData& ed) override;
       virtual void endEditDrag(EditData& ed) override;
       virtual void editDrag(EditData&) override;
@@ -112,6 +110,12 @@ class SlurTieSegment : public SpannerSegment {
       const struct UP& ups(Grip i) const             { return _ups[int(i)]; }
       struct UP& ups(Grip i)                         { return _ups[int(i)]; }
       virtual Shape shape() const override           { return _shape; }
+
+      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+      int gripsCount() const override { return int(Grip::GRIPS); }
+      Grip initialEditModeGrip() const override{ return Grip::END; }
+      Grip defaultGrip() const override { return Grip::DRAG; }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
 
       void writeSlur(XmlWriter& xml, int no) const;
       void read(XmlReader&);
