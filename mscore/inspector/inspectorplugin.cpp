@@ -19,14 +19,14 @@
 
 namespace Ms {
       QString iconPath = QString(":/data/icons/");
-      QColor  MScore::selectColor[4];
+      QColor  MScore::selectColor[VOICES];
 
       void MScore::init()
             {
-            selectColor[0].setNamedColor("#1259d0");   //blue
-            selectColor[1].setNamedColor("#009234");   //green
-            selectColor[2].setNamedColor("#c04400");   //orange
-            selectColor[3].setNamedColor("#70167a");   //purple
+            selectColor[0].setNamedColor("#0065BF");   //blue
+            selectColor[1].setNamedColor("#007F00");   //green
+            selectColor[2].setNamedColor("#C53F00");   //orange
+            selectColor[3].setNamedColor("#C31989");   //purple
             }
       Preferences preferences;
 

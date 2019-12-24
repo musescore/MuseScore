@@ -96,6 +96,8 @@ MixerTrackChannel::MixerTrackChannel(QWidget *parent, MixerTrackItemPtr mti) :
       volumeSlider->setValue(chan->volume());
       volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
       volumeSlider->setMaxValue(127);
+      volumeSlider->setMinValue(0);
+      volumeSlider->setDoubleClickValue(Channel::defaultVolume);
       volumeSlider->setNumMajorTicks(10);
       volumeSlider->setNumMinorTicks(5);
 
@@ -161,13 +163,13 @@ void MixerTrackChannel::updateNameLabel()
                            "Channel: %3\n"
                            "Bank: %4\n"
                            "Program: %5\n"
-                           "Patch: %6")
+                           "Sound: %6")
                   .arg(part->partName(),
                        instr->trackName(),
                        qApp->translate("InstrumentsXML", chan->name().toUtf8().data()),
                        QString::number(chan->bank()),
                        QString::number(chan->program()),
-                       mp ? mp->name : tr("~no patch~"));
+                       mp ? mp->name : tr("~no sound~"));
 
       trackLabel->setToolTip(tooltip);
 

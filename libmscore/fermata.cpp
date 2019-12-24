@@ -79,7 +79,7 @@ bool Fermata::readProperties(XmlReader& e)
             SymId id = Sym::name2id(s);
             setSymId(id);
             }
-      else if ( tag == "play")
+      else if (tag == "play")
             setPlay(e.readBool());
       else if (tag == "timeStretch")
             _timeStretch = e.readDouble();
@@ -110,6 +110,7 @@ void Fermata::write(XmlWriter& xml) const
       xml.tag("subtype", Sym::id2name(_symId));
       writeProperty(xml, Pid::TIME_STRETCH);
       writeProperty(xml, Pid::PLAY);
+      writeProperty(xml, Pid::MIN_DISTANCE);
       if (!isStyled(Pid::OFFSET))
             writeProperty(xml, Pid::OFFSET);
       Element::writeProperties(xml);

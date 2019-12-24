@@ -15,9 +15,9 @@
     <Widget>scoreview</Widget>
     </Message>
   <Message>
-    <Text>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
+    <Text>The navigation keys on your keyboard such as "PgUp", "PgDn", "Home", and "End" function as in other applications
     to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</Text>
+    Keyboards that lack these keys often provide equivalents such as "Fn+Up/Down/Left/Right".</Text>
     <Widget>scoreview</Widget>
     </Message>
   <Message>

@@ -62,6 +62,20 @@ int Staff::idx() const
       }
 
 //---------------------------------------------------------
+//   triggerLayout
+//---------------------------------------------------------
+
+void Staff::triggerLayout()
+      {
+      score()->setLayoutAll(idx());
+      }
+
+void Staff::triggerLayout(const Fraction& tick)
+      {
+      score()->setLayout(tick, idx());
+      }
+
+//---------------------------------------------------------
 //   fillBrackets
 //    make sure index idx is valid
 //---------------------------------------------------------
@@ -918,12 +932,12 @@ int Staff::bottomLine(const Fraction& tick) const
       }
 
 //---------------------------------------------------------
-//   slashStyle
+//   stemless
 //---------------------------------------------------------
 
-bool Staff::slashStyle(const Fraction& tick) const
+bool Staff::stemless(const Fraction& tick) const
       {
-      return staffType(tick)->slashStyle();
+      return staffType(tick)->stemless();
       }
 
 //---------------------------------------------------------
@@ -932,7 +946,7 @@ bool Staff::slashStyle(const Fraction& tick) const
 
 void Staff::setSlashStyle(const Fraction& tick, bool val)
       {
-      staffType(tick)->setSlashStyle(val);
+      staffType(tick)->setStemless(val);
       }
 
 //---------------------------------------------------------
@@ -990,17 +1004,17 @@ StaffType* Staff::staffType(const Fraction& tick)
 
 void Staff::staffTypeListChanged(const Fraction& tick)
       {
-      score()->setLayout(tick);
+      triggerLayout(tick);
       auto i = _staffTypeList.find(tick.ticks());
       if (i == _staffTypeList.end()) {
-            score()->setLayoutAll();
+            triggerLayout();
             }
       else {
             ++i;
             if (i != _staffTypeList.end())
-                  score()->setLayout(Fraction::fromTicks(i->first));
-            else
-                  score()->setLayout(score()->lastMeasure()->endTick());
+                  triggerLayout(Fraction::fromTicks(i->first));
+            else if (score()->lastMeasure())
+                  triggerLayout(score()->lastMeasure()->endTick());
             }
       }
 
@@ -1361,7 +1375,7 @@ bool Staff::setProperty(Pid id, const QVariant& v)
                   qDebug("unhandled id <%s>", propertyName(id));
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayout();
       return true;
       }
 
@@ -1403,8 +1417,7 @@ QVariant Staff::propertyDefault(Pid id) const
 void Staff::localSpatiumChanged(double oldVal, double newVal, Fraction tick)
       {
       Fraction etick;
-      auto i = _staffTypeList.find(tick.ticks());
-      ++i;
+      auto i = _staffTypeList.upper_bound(tick.ticks());
       if (i == _staffTypeList.end())
             etick = score()->lastSegment()->tick();
       else

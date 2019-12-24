@@ -34,6 +34,8 @@ extern bool useFactorySettings;
 extern Palette* newAccidentalsPalette();
 extern Palette* newKeySigPalette();
 
+static const qreal editScale = 1.0;
+
 //---------------------------------------------------------
 //   KeyCanvas
 //---------------------------------------------------------
@@ -42,7 +44,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
    : QFrame(parent)
       {
       setAcceptDrops(true);
-      extraMag   = 2.0;
+      extraMag   = editScale * guiScaling;
       qreal mag  = PALETTE_SPATIUM * extraMag / gscore->spatium();
       _matrix    = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
       imatrix    = _matrix.inverted();
@@ -290,6 +292,9 @@ KeyEditor::KeyEditor(QWidget* parent)
       l->setContentsMargins(0, 0, 0, 0);
       frame_3->setLayout(l);
       sp1 = MuseScore::newAccidentalsPalette();
+      qreal adj = sp1->mag();
+      sp1->setGrid(sp1->gridWidth() * editScale / adj, sp1->gridHeight() * editScale / adj);
+      sp1->setMag(editScale);
       PaletteScrollArea* accPalette = new PaletteScrollArea(sp1);
       QSizePolicy policy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
       accPalette->setSizePolicy(policy1);
@@ -348,6 +353,7 @@ void KeyEditor::addClicked()
       ks->setKeySigEvent(e);
       sp->append(ks, "custom");
       _dirty = true;
+      emit keySigAdded(ks);
       }
 
 //---------------------------------------------------------
@@ -357,6 +363,15 @@ void KeyEditor::addClicked()
 void KeyEditor::clearClicked()
       {
       canvas->clear();
+      }
+
+//---------------------------------------------------------
+//   showKeyPalette
+//---------------------------------------------------------
+
+void KeyEditor::showKeyPalette(bool val)
+      {
+      _keyPalette->setVisible(val);
       }
 
 //---------------------------------------------------------

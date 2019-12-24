@@ -14,7 +14,6 @@
 #include "workspace.h"
 #include "preferences.h"
 #include "musescore.h"
-#include "palettebox.h"
 
 namespace Ms {
 
@@ -38,7 +37,7 @@ void MuseScore::createNewWorkspace()
 
 void MuseScore::editWorkspace()
       {
-      if (!Workspace::currentWorkspace && !Workspace::currentWorkspace->readOnly())
+      if (!WorkspacesManager::currentWorkspace() && !WorkspacesManager::currentWorkspace()->readOnly())
             return;
       if (!_workspaceDialog)
             _workspaceDialog = new WorkspaceDialog();
@@ -58,6 +57,7 @@ WorkspaceDialog::WorkspaceDialog(QWidget* parent)
       setObjectName("WorkspaceDialog");
       setupUi(this);
       retranslateUi(this);
+      setModal(true);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       MuseScore::restoreGeometry(this);
 
@@ -71,13 +71,13 @@ WorkspaceDialog::WorkspaceDialog(QWidget* parent)
 
 void WorkspaceDialog::display()
       {
-      mscore->getPaletteBox()->searchBox()->clear();
+      // TODO: clear search box?
       if (editMode) {
-            componentsCheck->setChecked(Workspace::currentWorkspace->getSaveComponents());
-            toolbarsCheck->setChecked(Workspace::currentWorkspace->getSaveToolbars());
-            menubarCheck->setChecked(Workspace::currentWorkspace->getSaveMenuBar());
+            componentsCheck->setChecked(WorkspacesManager::currentWorkspace()->getSaveComponents());
+            toolbarsCheck->setChecked(WorkspacesManager::currentWorkspace()->getSaveToolbars());
+            menubarCheck->setChecked(WorkspacesManager::currentWorkspace()->getSaveMenuBar());
             prefsCheck->setChecked(preferences.getUseLocalPreferences());
-            nameLineEdit->setText(Workspace::currentWorkspace->name());
+            nameLineEdit->setText(WorkspacesManager::currentWorkspace()->name());
             setWindowTitle(tr("Edit Workspace"));
             }
       else {
@@ -103,10 +103,10 @@ void WorkspaceDialog::accepted()
       s = s.replace( QRegExp( "[" + QRegExp::escape( "\\/:*?\"<>|" ) + "]" ), "_" ); //FAT/NTFS special chars
 
       for (;;) {
-            if (editMode && s == Workspace::currentWorkspace->name())
+            if (editMode && s == WorkspacesManager::currentWorkspace()->name())
                   break;
             bool notFound = true;
-            for (Workspace* p : Workspace::workspaces()) {
+            for (Workspace* p : WorkspacesManager::workspaces()) {
                   if ((qApp->translate("Ms::Workspace", p->name().toUtf8()).toLower() == s.toLower())) {
                         notFound = false;
                         break;
@@ -125,25 +125,33 @@ void WorkspaceDialog::accepted()
                   break;
             }
 
+      Workspace* newWorkspace = editMode ? WorkspacesManager::currentWorkspace() : WorkspacesManager::createNewWorkspace(s);
       if (!editMode) {
-            if (Workspace::currentWorkspace->dirty())
-                  Workspace::currentWorkspace->save();
-            Workspace::currentWorkspace = Workspace::createNewWorkspace(s);
-            preferences.updateLocalPreferences();
+            //save current workspace
+            if (WorkspacesManager::currentWorkspace()->dirty())
+                  WorkspacesManager::currentWorkspace()->save();
             }
 
-      Workspace::currentWorkspace->setSaveComponents(componentsCheck->isChecked());
-      Workspace::currentWorkspace->setSaveToolbars(toolbarsCheck->isChecked());
-      Workspace::currentWorkspace->setSaveMenuBar(menubarCheck->isChecked());
+      //update workspace properties with the dialog values
+      newWorkspace->setSaveComponents(componentsCheck->isChecked());
+      newWorkspace->setSaveToolbars(toolbarsCheck->isChecked());
+      newWorkspace->setSaveMenuBar(menubarCheck->isChecked());
       preferences.setUseLocalPreferences(prefsCheck->isChecked());
-      Workspace::currentWorkspace->save();
+      
+      //save newly created/edited workspace
+      newWorkspace->save();
 
-      if (editMode && Workspace::currentWorkspace->name() != s)
-            Workspace::currentWorkspace->rename(s);
+      //rename if we edit name of the existing workspace
+      if (editMode && newWorkspace->name() != s)
+            newWorkspace->rename(s);
 
-      preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
-      PaletteBox* paletteBox = mscore->getPaletteBox();
-      paletteBox->updateWorkspaces();
+      if (!editMode) {
+            mscore->changeWorkspace(newWorkspace);
+            preferences.updateLocalPreferences();
+            }
+            
+      preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->name());
+      emit mscore->workspacesChanged();
       close();
       }
 

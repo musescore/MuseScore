@@ -42,5 +42,21 @@ InspectorGlissando::InspectorGlissando(QWidget* parent)
             };
       mapSignals(iiList, ppList);
       }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorGlissando::setElement()
+      {
+      InspectorElementBase::setElement();
+      if (!g.playGlissando->isChecked()) {
+            g.labelGlissandoStyle->setEnabled(false);
+            g.glissandoStyle->setEnabled(false);
+            g.resetGlissandoStyle->setEnabled(false);
+            }
+      if (!g.showText->isChecked())
+            g.textWidget->setVisible(false);
+      }
 }
 

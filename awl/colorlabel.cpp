@@ -26,10 +26,10 @@ namespace Awl {
 //---------------------------------------------------------
 
 ColorLabel::ColorLabel(QWidget* parent)
-   : QFrame (parent)
+   : QPushButton(parent)
       {
-      _color  = Qt::blue;
-      _pixmap = 0;
+      connect(this, &QPushButton::clicked, this, &ColorLabel::colorButtonClicked);
+      setFlat(true);
       }
 
 ColorLabel::~ColorLabel()
@@ -74,20 +74,19 @@ QSize ColorLabel::sizeHint() const
 void ColorLabel::paintEvent(QPaintEvent* ev)
       {
       QPainter p(this);
-      int fw = frameWidth();
-      QRect r(frameRect().adjusted(fw, fw, -2*fw, -2*fw));
       if (_pixmap)
-            p.drawTiledPixmap(r, *_pixmap);
+            p.drawTiledPixmap(rect(), *_pixmap);
       else
-            p.fillRect(r, _color);
-      QFrame::paintEvent(ev);
+            p.fillRect(rect(), _color);
+      
+      QPushButton::paintEvent(ev);
       }
 
 //---------------------------------------------------------
 //   mousePressEvent
 //---------------------------------------------------------
 
-void ColorLabel::mousePressEvent(QMouseEvent*)
+void ColorLabel::colorButtonClicked(bool)
       {
       if (_pixmap)
             return;
@@ -103,6 +102,5 @@ void ColorLabel::mousePressEvent(QMouseEvent*)
                   }
             }
       }
-
-} // namespace Awl
-
+}
+// namespace Awl

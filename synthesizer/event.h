@@ -254,6 +254,7 @@ class NPlayEvent : public PlayEvent {
       void setOriginatingStaff(int i) { _origin = i; }
       void setDiscard(int d) { _discard = d; }
       int discard() const { return _discard; }
+      bool isMuted() const;
       };
 
 //---------------------------------------------------------

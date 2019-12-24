@@ -41,6 +41,7 @@ static const ElementStyle tupletStyle {
       { Sid::tupletFontStyle,                    Pid::FONT_STYLE              },
       { Sid::tupletAlign,                        Pid::ALIGN                   },
       { Sid::tupletMinDistance,                  Pid::MIN_DISTANCE            },
+      { Sid::tupletFontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT  },
       };
 
 //---------------------------------------------------------
@@ -150,7 +151,7 @@ Fraction Tuplet::rtick() const
 
 void Tuplet::resetNumberProperty()
       {
-      for (auto p : { Pid::FONT_FACE, Pid::FONT_STYLE, Pid::FONT_SIZE, Pid::ALIGN })
+      for (auto p : { Pid::FONT_FACE, Pid::FONT_STYLE, Pid::FONT_SIZE, Pid::ALIGN, Pid::SIZE_SPATIUM_DEPENDENT })
             _number->resetProperty(p);
       }
 
@@ -165,7 +166,7 @@ void Tuplet::layout()
             return;
             }
       // is in a TAB without stems, skip any format: tuplets are not shown
-      if (staff() && staff()->isTabStaff(tick()) && staff()->staffType(tick())->slashStyle())
+      if (staff() && staff()->isTabStaff(tick()) && staff()->staffType(tick())->stemless())
             return;
 
       //
@@ -656,7 +657,7 @@ void Tuplet::layout()
             }
       setbbox(r);
 
-      if (!cross())
+      if (outOfStaff && !cross())
             autoplaceMeasureElement(_isUp, /* add to skyline */ true);
       }
 
@@ -667,7 +668,7 @@ void Tuplet::layout()
 void Tuplet::draw(QPainter* painter) const
       {
       // if in a TAB without stems, tuplets are not shown
-      if (staff() && staff()->isTabStaff(tick()) && staff()->staffType(tick())->slashStyle())
+      if (staff() && staff()->isTabStaff(tick()) && staff()->staffType(tick())->stemless())
             return;
 
       QColor color(curColor());
@@ -754,10 +755,6 @@ void Tuplet::write(XmlWriter& xml) const
       xml.stag(this);
       Element::writeProperties(xml);
 
-      writeProperty(xml, Pid::DIRECTION);
-      writeProperty(xml, Pid::NUMBER_TYPE);
-      writeProperty(xml, Pid::BRACKET_TYPE);
-      writeProperty(xml, Pid::LINE_WIDTH);
       writeProperty(xml, Pid::NORMAL_NOTES);
       writeProperty(xml, Pid::ACTUAL_NOTES);
       writeProperty(xml, Pid::P1);
@@ -772,6 +769,9 @@ void Tuplet::write(XmlWriter& xml) const
             _number->writeProperties(xml);
             xml.etag();
             }
+
+      writeStyledProperties(xml);
+
       xml.etag();
       }
 
@@ -802,6 +802,24 @@ bool Tuplet::readProperties(XmlReader& e)
 
       if (readStyledProperty(e, tag))
             ;
+      else if (tag == "bold") { //important that these properties are read after number is created
+            bool val = e.readInt();
+            _number->setBold(val);
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "italic") {
+            bool val = e.readInt();
+            _number->setItalic(val);
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "underline") {
+            bool val = e.readInt();
+            _number->setUnderline(val);
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
       else if (tag == "normalNotes")
             _ratio.setDenominator(e.readInt());
       else if (tag == "actualNotes")
@@ -934,8 +952,9 @@ void Tuplet::editDrag(EditData& ed)
       else
             _p2 += ed.delta;
       setGenerated(false);
-      layout();
-      score()->setUpdateAll();
+      //layout();
+      //score()->setUpdateAll();
+      triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -1063,6 +1082,7 @@ QVariant Tuplet::getProperty(Pid propertyId) const
             case Pid::FONT_FACE:
             case Pid::FONT_STYLE:
             case Pid::ALIGN:
+            case Pid::SIZE_SPATIUM_DEPENDENT:
                   return _number ? _number->getProperty(propertyId) : QVariant();
             default:
                   break;
@@ -1105,6 +1125,7 @@ bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
             case Pid::FONT_FACE:
             case Pid::FONT_STYLE:
             case Pid::ALIGN:
+            case Pid::SIZE_SPATIUM_DEPENDENT:
                   if (_number)
                         _number->setProperty(propertyId, v);
                   break;
@@ -1145,6 +1166,8 @@ QVariant Tuplet::propertyDefault(Pid id) const
                   return score()->styleV(Sid::tupletFontSize);
             case Pid::FONT_STYLE:
                   return score()->styleV(Sid::tupletFontStyle);
+            case Pid::SIZE_SPATIUM_DEPENDENT:
+                  return score()->styleV(Sid::tupletFontSpatiumDependent);
             default:
                   {
                   QVariant v = ScoreElement::propertyDefault(id, Tid::DEFAULT);

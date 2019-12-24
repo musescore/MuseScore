@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "libmscore/box.h"
+#include "libmscore/chordrest.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/measure.h"
 #include "libmscore/page.h"
@@ -536,24 +537,14 @@ static void addText2(VBox* vbx, Score* s, QString strTxt, Tid stl, Align v, doub
 
 static void doCredits(Score* score, const CreditWordsList& credits, const int pageWidth, const int pageHeight)
       {
-      /*
-      qDebug("MusicXml::doCredits()");
-      qDebug("page format set (inch) w=%g h=%g tm=%g spatium=%g DPMM=%g DPI=%g",
-             pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), DPMM, DPI);
-      */
       // page width, height and odd top margin in tenths
-      const double ph  = score->styleD(Sid::pageHeight) * 10 * DPI / score->spatium();
+      const int ph  = pageHeight;
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
-      /*
-      const double pw  = pf->width() * 10 * DPI / score->spatium();
-      const double tm  = pf->oddTopMargin() * 10 * DPI / score->spatium();
-      const double tov = ph - tm;
-      qDebug("page format set (tenths) w=%g h=%g tm=%g tov=%g", pw, ph, tm, tov);
-      qDebug("page format (xml, tenths) w=%d h=%d", pageWidth, pageHeight);
-      qDebug("page format pw1=%d pw2=%d ph2=%d", pw1, pw2, ph2);
-      */
+      //qDebug("page format (xml, tenths) w=%d h=%d", pageWidth, pageHeight);
+      //qDebug("page format pw1=%d pw2=%d ph=%d ph2=%d", pw1, pw2, ph, ph2);
+
       // dump the credits
       /*
       for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
@@ -629,14 +620,14 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                         // found composer
                         addText2(vbox, score, w->words,
                                  Tid::COMPOSER, Align::RIGHT | Align::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
+                                 (miny - w->defaultY) * score->spatium() / 10);
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
                         // found poet/lyricist
                         addText2(vbox, score, w->words,
                                  Tid::POET, Align::LEFT | Align::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
+                                 (miny - w->defaultY) * score->spatium() / 10);
                         }
                   // save others (in the middle column) to be handled later
                   else {
@@ -679,7 +670,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("title='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      Tid::TITLE, Align::HCENTER | Align::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
+                     (maxy - w->defaultY) * score->spatium() / 10);
             }
 
       // add remaining credit-words as subtitles
@@ -688,7 +679,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("subtitle='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      Tid::SUBTITLE, Align::HCENTER | Align::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
+                     (maxy - w->defaultY) * score->spatium() / 10);
             }
 
       // use metadata if no workable credit-words found
@@ -1989,6 +1980,7 @@ void MusicXMLParserPass1::measure(const QString& partId,
       Fraction mTime; // current time stamp within measure
       Fraction mDura; // current total measure duration
       vod.newMeasure();
+      MxmlTupletStates tupletStates;
 
       while (_e.readNextStartElement()) {
             if (_e.name() == "attributes")
@@ -1996,14 +1988,22 @@ void MusicXMLParserPass1::measure(const QString& partId,
             else if (_e.name() == "barline")
                   _e.skipCurrentElement();  // skip but don't log
             else if (_e.name() == "note") {
+                  Fraction missingPrev;
                   Fraction dura;
+                  Fraction missingCurr;
                   // note: chord and grace note handling done in note()
-                  note(partId, cTime + mTime, dura, vod);
+                  note(partId, cTime + mTime, missingPrev, dura, missingCurr, vod, tupletStates);
+                  if (missingPrev.isValid()) {
+                        mTime += missingPrev;
+                        }
                   if (dura.isValid()) {
                         mTime += dura;
-                        if (mTime > mDura)
-                              mDura = mTime;
                         }
+                  if (missingCurr.isValid()) {
+                        mTime += missingCurr;
+                        }
+                  if (mTime > mDura)
+                        mDura = mTime;
                   }
             else if (_e.name() == "forward") {
                   Fraction dura;
@@ -2054,11 +2054,15 @@ void MusicXMLParserPass1::measure(const QString& partId,
       // measure duration fixups
       mDura.reduce();
 
-      // fix for PDFtoMusic Pro v1.3.0d Build BF4E (which sometimes generates empty measures)
+      // fix for PDFtoMusic Pro v1.3.0d Build BF4E and PlayScore / ReadScoreLib Version 3.11
+      // which sometimes generate empty measures
       // if no valid length found and length according to time signature is known,
       // use length according to time signature
       if (mDura.isZero() && _timeSigDura.isValid() && _timeSigDura > Fraction(0, 1))
             mDura = _timeSigDura;
+      // if no valid length found and time signature is unknown, use default
+      if (mDura.isZero() && !_timeSigDura.isValid())
+            mDura = Fraction(4, 4);
 
       // if necessary, round up to an integral number of 1/64s,
       // to comply with MuseScores actual measure length constraints
@@ -2474,6 +2478,389 @@ void MusicXMLParserPass1::setFirstInstr(const QString& id, const Fraction stime)
       }
 
 //---------------------------------------------------------
+//   notations
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/notations node.
+ */
+
+void MusicXMLParserPass1::notations(MxmlStartStop& tupletStartStop)
+      {
+      Q_ASSERT(_e.isStartElement() && _e.name() == "notations");
+      //_logger->logDebugTrace("MusicXMLParserPass1::note", &_e);
+
+      while (_e.readNextStartElement()) {
+            if (_e.name() == "tuplet") {
+                  QString tupletType       = _e.attributes().value("type").toString();
+
+                  // ignore possible children (currently not supported)
+                  _e.skipCurrentElement();
+
+                  if (tupletType == "start")
+                        tupletStartStop = MxmlStartStop::START;
+                  else if (tupletType == "stop")
+                        tupletStartStop = MxmlStartStop::STOP;
+                  else if (tupletType != "" && tupletType != "start" && tupletType != "stop") {
+                        _logger->logError(QString("unknown tuplet type '%1'").arg(tupletType), &_e);
+                        }
+                  }
+            else {
+                  _e.skipCurrentElement();        // skip but don't log
+                  }
+            }
+
+      Q_ASSERT(_e.isEndElement() && _e.name() == "notations");
+      }
+
+//---------------------------------------------------------
+//   smallestTypeAndCount
+//---------------------------------------------------------
+
+/**
+ Determine the smallest note type and the number of those
+ present in a ChordRest.
+ For a note without dots the type equals the note type
+ and count is one.
+ For a single dotted note the type equals half the note type
+ and count is three.
+ A double dotted note is similar.
+ Note: code assumes when duration().type() is incremented,
+ the note length is divided by two, checked by tupletAssert().
+ */
+
+static void smallestTypeAndCount(const TDuration durType, int& type, int& count)
+      {
+      type = int(durType.type());
+      count = 1;
+      switch (durType.dots()) {
+            case 0:
+                  // nothing to do
+                  break;
+            case 1:
+                  type += 1;       // next-smaller type
+                  count = 3;
+                  break;
+            case 2:
+                  type += 2;       // next-next-smaller type
+                  count = 7;
+                  break;
+            default:
+                  qDebug("smallestTypeAndCount() does not support more than 2 dots");
+            }
+      }
+
+//---------------------------------------------------------
+//   matchTypeAndCount
+//---------------------------------------------------------
+
+/**
+ Given two note types and counts, if the types are not equal,
+ make them equal by successively doubling the count of the
+ largest type.
+ */
+
+static void matchTypeAndCount(int& type1, int& count1, int& type2, int& count2)
+      {
+      while (type1 < type2) {
+            type1++;
+            count1 *= 2;
+            }
+      while (type2 < type1) {
+            type2++;
+            count2 *= 2;
+            }
+      }
+
+//---------------------------------------------------------
+//   addDurationToTuplet
+//---------------------------------------------------------
+
+/**
+ Add duration to tuplet duration
+ Determine type and number of smallest notes in the tuplet
+ */
+
+void MxmlTupletState::addDurationToTuplet(const Fraction duration, const Fraction timeMod)
+      {
+      /*
+      qDebug("1 duration %s timeMod %s -> state.tupletType %d state.tupletCount %d state.actualNotes %d state.normalNotes %d",
+             qPrintable(duration.print()),
+             qPrintable(timeMod.print()),
+             m_tupletType,
+             m_tupletCount,
+             m_actualNotes,
+             m_normalNotes
+             );
+      */
+      if (m_duration <= Fraction(0, 1)) {
+            // first note: init variables
+            m_actualNotes = timeMod.denominator();
+            m_normalNotes = timeMod.numerator();
+            smallestTypeAndCount(duration / timeMod, m_tupletType, m_tupletCount);
+            }
+      else {
+            int noteType = 0;
+            int noteCount = 0;
+            smallestTypeAndCount(duration / timeMod, noteType, noteCount);
+            // match the types
+            matchTypeAndCount(m_tupletType, m_tupletCount, noteType, noteCount);
+            m_tupletCount += noteCount;
+            }
+      m_duration += duration;
+      /*
+      qDebug("2 duration %s -> state.tupletType %d state.tupletCount %d state.actualNotes %d state.normalNotes %d",
+             qPrintable(duration.print()),
+             m_tupletType,
+             m_tupletCount,
+             m_actualNotes,
+             m_normalNotes
+             );
+      */
+      }
+
+//---------------------------------------------------------
+//   determineTupletFractionAndFullDuration
+//---------------------------------------------------------
+
+/**
+ Split duration into two factors where fullDuration is note sized
+ (i.e. the denominator is a power of 2), 1/2 < fraction <= 1/1
+ and fraction * fullDuration equals duration.
+ */
+
+void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration)
+      {
+      fraction = duration;
+      fullDuration = Fraction(1, 1);
+      // move denominator's powers of 2 from fraction to fullDuration
+      while (fraction.denominator() % 2 == 0) {
+            fraction *= 2;
+            fraction.reduce();
+            fullDuration *= Fraction(1, 2);
+            }
+      // move numerator's powers of 2 from fraction to fullDuration
+      while ( fraction.numerator() % 2 == 0) {
+            fraction *= Fraction(1, 2);
+            fraction.reduce();
+            fullDuration *= 2;
+            fullDuration.reduce();
+            }
+      // make sure 1/2 < fraction <= 1/1
+      while (fraction <= Fraction(1, 2)) {
+            fullDuration *= Fraction(1, 2);
+            fraction *= 2;
+            }
+      fullDuration.reduce();
+      fraction.reduce();
+
+      /*
+      Examples (note result when denominator is not a power of two):
+      3:2 tuplet of 1/4 results in fraction 1/1 and fullDuration 1/2
+      2:3 tuplet of 1/4 results in fraction 3/1 and fullDuration 1/4
+      4:3 tuplet of 1/4 results in fraction 3/1 and fullDuration 1/4
+      3:4 tuplet of 1/4 results in fraction 1/1 and fullDuration 1/1
+
+       Bring back fraction in 1/2 .. 1/1 range.
+       */
+
+      if (fraction > Fraction(1, 1) && fraction.denominator() == 1) {
+            fullDuration *= fraction;
+            fullDuration.reduce();
+            fraction = Fraction(1, 1);
+            }
+
+      /*
+      qDebug("duration %s fraction %s fullDuration %s",
+             qPrintable(duration.toString()),
+             qPrintable(fraction.toString()),
+             qPrintable(fullDuration.toString())
+             );
+      */
+      }
+
+//---------------------------------------------------------
+//   isTupletFilled
+//---------------------------------------------------------
+
+/**
+ Determine if the tuplet is completely filled,
+ because either (1) it is at least the same duration
+ as the specified number of the specified normal type notes
+ or (2) the duration adds up to a normal note duration.
+
+ Example (1): a 3:2 tuplet with a 1/4 and a 1/8 note
+ is filled if normal type is 1/8,
+ it is not filled if normal type is 1/4.
+
+ Example (2): a 3:2 tuplet with a 1/4 and a 1/8 note is filled.
+ */
+
+static bool isTupletFilled(const MxmlTupletState& state, const TDuration normalType, const Fraction timeMod)
+      {
+      Q_UNUSED(timeMod);
+      bool res { false };
+      const auto actualNotes = state.m_actualNotes;
+      /*
+      const auto normalNotes = state.m_normalNotes;
+      qDebug("duration %s normalType %s timeMod %s normalNotes %d actualNotes %d",
+             qPrintable(state.m_duration.toString()),
+             qPrintable(normalType.fraction().toString()),
+             qPrintable(timeMod.toString()),
+             normalNotes,
+             actualNotes
+             );
+      */
+
+      auto tupletType = state.m_tupletType;
+      auto tupletCount = state.m_tupletCount;
+
+      if (normalType.isValid()) {
+            int matchedNormalType  = int(normalType.type());
+            int matchedNormalCount = actualNotes;
+            // match the types
+            matchTypeAndCount(tupletType, tupletCount, matchedNormalType, matchedNormalCount);
+            // ... result scenario (1)
+            res = tupletCount >= matchedNormalCount;
+            /*
+            qDebug("normalType valid tupletType %d tupletCount %d matchedNormalType %d matchedNormalCount %d res %d",
+                   tupletType,
+                   tupletCount,
+                   matchedNormalType,
+                   matchedNormalCount,
+                   res
+                   );
+             */
+            }
+      else {
+            // ... result scenario (2)
+            res = tupletCount >= actualNotes;
+            /*
+            qDebug("normalType not valid tupletCount %d actualNotes %d res %d",
+                   tupletCount,
+                   actualNotes,
+                   res
+                   );
+             */
+            }
+      return res;
+      }
+
+//---------------------------------------------------------
+//   missingTupletDuration
+//---------------------------------------------------------
+
+Fraction missingTupletDuration(const Fraction duration)
+      {
+      Fraction tupletFraction;
+      Fraction tupletFullDuration;
+
+      determineTupletFractionAndFullDuration(duration, tupletFraction, tupletFullDuration);
+      auto missing = (Fraction(1, 1) - tupletFraction) * tupletFullDuration;
+
+      return missing;
+      }
+
+//---------------------------------------------------------
+//   determineTupletAction
+//---------------------------------------------------------
+
+/**
+ Update tuplet state using parse result tupletDesc.
+ Tuplets with <actual-notes> and <normal-notes> but without <tuplet>
+ are handled correctly.
+ TODO Nested tuplets are not (yet) supported.
+ */
+
+MxmlTupletFlags MxmlTupletState::determineTupletAction(const Fraction noteDuration,
+                                                       const Fraction timeMod,
+                                                       const MxmlStartStop tupletStartStop,
+                                                       const TDuration normalType,
+                                                       Fraction& missingPreviousDuration,
+                                                       Fraction& missingCurrentDuration
+                                                       )
+      {
+      const auto actualNotes = timeMod.denominator();
+      const auto normalNotes = timeMod.numerator();
+      MxmlTupletFlags res = MxmlTupletFlag::NONE;
+
+      // check for unexpected termination of previous tuplet
+      if (m_inTuplet && timeMod == Fraction(1, 1)) {
+            // recover by simply stopping the current tuplet first
+            if (!isTupletFilled(*this, normalType, timeMod)) {
+                  missingPreviousDuration = missingTupletDuration(m_duration);
+                  //qDebug("tuplet incomplete, missing %s", qPrintable(missingPreviousDuration.print()));
+                  }
+            *this = {};
+            res |= MxmlTupletFlag::STOP_PREVIOUS;
+            }
+
+      // check for obvious errors
+      if (m_inTuplet && tupletStartStop == MxmlStartStop::START) {
+            qDebug("tuplet already started");
+            // recover by simply stopping the current tuplet first
+            if (!isTupletFilled(*this, normalType, timeMod)) {
+                  missingPreviousDuration = missingTupletDuration(m_duration);
+                  //qDebug("tuplet incomplete, missing %s", qPrintable(missingPreviousDuration.print()));
+                  }
+            *this = {};
+            res |= MxmlTupletFlag::STOP_PREVIOUS;
+            }
+      if (tupletStartStop == MxmlStartStop::STOP && !m_inTuplet) {
+            qDebug("tuplet stop but no tuplet started");       // TODO
+            // recovery handled later (automatically, no special case needed)
+            }
+
+      // Tuplet are either started by the tuplet start
+      // or when the time modification is first found.
+      if (!m_inTuplet) {
+            if (tupletStartStop == MxmlStartStop::START
+                || (!m_inTuplet && (actualNotes != 1 || normalNotes != 1))) {
+                  if (tupletStartStop != MxmlStartStop::START) {
+                        m_implicit = true;
+                        }
+                  else {
+                        m_implicit = false;
+                        }
+                  // create a new tuplet
+                  m_inTuplet = true;
+                  res |= MxmlTupletFlag::START_NEW;
+                  }
+            }
+
+      // Add chord to the current tuplet.
+      // Must also check for actual/normal notes to prevent
+      // adding one chord too much if tuplet stop is missing.
+      if (m_inTuplet && !(actualNotes == 1 && normalNotes == 1)) {
+            addDurationToTuplet(noteDuration, timeMod);
+            res |= MxmlTupletFlag::ADD_CHORD;
+            }
+
+      // Tuplets are stopped by the tuplet stop
+      // or when the tuplet is filled completely
+      // (either with knowledge of the normal type
+      // or as a last resort calculated based on
+      // actual and normal notes plus total duration)
+      // or when the time-modification is not found.
+
+      if (m_inTuplet) {
+            if (tupletStartStop == MxmlStartStop::STOP
+                || (m_implicit && isTupletFilled(*this, normalType, timeMod))
+                || (actualNotes == 1 && normalNotes == 1)) {       // incorrect ??? check scenario incomplete tuplet w/o start
+                  if (actualNotes > normalNotes && !isTupletFilled(*this, normalType, timeMod)) {
+                        missingCurrentDuration = missingTupletDuration(m_duration);
+                        qDebug("current tuplet incomplete, missing %s", qPrintable(missingCurrentDuration.print()));
+                        }
+
+                  *this = {};
+                  res |= MxmlTupletFlag::STOP_CURRENT;
+                  }
+            }
+
+      return res;
+      }
+
+//---------------------------------------------------------
 //   note
 //---------------------------------------------------------
 
@@ -2483,8 +2870,11 @@ void MusicXMLParserPass1::setFirstInstr(const QString& id, const Fraction stime)
 
 void MusicXMLParserPass1::note(const QString& partId,
                                const Fraction sTime,
+                               Fraction& missingPrev,
                                Fraction& dura,
-                               VoiceOverlapDetector& vod)
+                               Fraction& missingCurr,
+                               VoiceOverlapDetector& vod,
+                               MxmlTupletStates& tupletStates)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "note");
       //_logger->logDebugTrace("MusicXMLParserPass1::note", &_e);
@@ -2504,6 +2894,7 @@ void MusicXMLParserPass1::note(const QString& partId,
       QString type;
       QString voice = "1";
       QString instrId;
+      MxmlStartStop tupletStartStop { MxmlStartStop::NONE };
 
       mxmlNoteDuration mnd(_divs, _logger);
 
@@ -2535,7 +2926,7 @@ void MusicXMLParserPass1::note(const QString& partId,
                   _e.skipCurrentElement();
                   }
             else if (_e.name() == "notations")
-                  _e.skipCurrentElement();  // skip but don't log
+                  notations(tupletStartStop);
             else if (_e.name() == "notehead")
                   _e.skipCurrentElement();  // skip but don't log
             else if (_e.name() == "pitch")
@@ -2599,8 +2990,16 @@ void MusicXMLParserPass1::note(const QString& partId,
       // don't count chord or grace note duration
       // note that this does not check the MusicXML requirement that notes in a chord
       // cannot have a duration longer than the first note in the chord
+      missingPrev.set(0, 1);
       if (chord || grace)
             dura.set(0, 1);
+
+      if (!chord && !grace) {
+            // do tuplet
+            auto timeMod = mnd.timeMod();
+            auto& tupletState = tupletStates[voice];
+            tupletState.determineTupletAction(mnd.dura(), timeMod, tupletStartStop, mnd.normalType(), missingPrev, missingCurr);
+            }
 
       // store result
       if (dura.isValid() && dura > Fraction(0, 1)) {
@@ -2611,10 +3010,11 @@ void MusicXMLParserPass1::note(const QString& partId,
                   }
             _parts[partId].voicelist[voice].incrChordRests(staff);
             // determine note length for voice overlap detection
-            // TODO
-            vod.addNote(sTime.ticks(), (sTime + dura).ticks(), voice, staff);
+            vod.addNote((sTime + missingPrev).ticks(), (sTime + missingPrev + dura).ticks(), voice, staff);
             }
 
+      if (!(_e.isEndElement() && _e.name() == "note"))
+            qDebug("name %s line %lld", qPrintable(_e.name().toString()), _e.lineNumber());
       Q_ASSERT(_e.isEndElement() && _e.name() == "note");
       }
 

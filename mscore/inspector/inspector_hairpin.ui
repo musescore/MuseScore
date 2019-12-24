@@ -292,12 +292,15 @@
        </widget>
       </item>
       <item row="11" column="0">
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="labelVeloChangeMethod">
         <property name="text">
          <string>Dynamics method:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>veloChangeMethod</cstring>
         </property>
        </widget>
       </item>
@@ -458,12 +461,22 @@
         </property>
         <item>
          <property name="text">
-          <string>Crescendo</string>
+          <string notr="true">Crescendo</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Decrescendo</string>
+          <string notr="true">Decrescendo</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Crescendo Line</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Decrescendo Line</string>
          </property>
         </item>
        </widget>

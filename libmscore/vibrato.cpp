@@ -343,7 +343,7 @@ bool Vibrato::setProperty(Pid propertyId, const QVariant& val)
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayoutAll();
       return true;
       }
 

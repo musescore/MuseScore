@@ -37,11 +37,12 @@
 #include "stafftype.h"
 #include "cleflist.h"
 #include "note.h"
+#include "chord.h"
 #include "drumset.h"
 #include "rest.h"
 #include "fret.h"
 
-Q_DECLARE_LOGGING_CATEGORY(undoRedo)
+Q_DECLARE_LOGGING_CATEGORY(undoRedo);
 
 namespace Ms {
 
@@ -120,13 +121,25 @@ class UndoCommand {
 //---------------------------------------------------------
 
 class UndoMacro : public UndoCommand {
+      struct SelectionInfo {
+            std::vector<Element*> elements;
+            Fraction tickStart;
+            Fraction tickEnd;
+            int staffStart = -1;
+            int staffEnd = -1;
+
+            bool isValid() const { return !elements.empty() || staffStart != -1; }
+            };
+
       InputState undoInputState;
       InputState redoInputState;
-      Element* undoSelectedElement = nullptr;
-      Element* redoSelectedElement = nullptr;
+      SelectionInfo undoSelectionInfo;
+      SelectionInfo redoSelectionInfo;
+
       Score* score;
 
-      static Element* selectedElement(const Selection&);
+      static void fillSelectionInfo(SelectionInfo&, const Selection&);
+      static void applySelectionInfo(const SelectionInfo&, Selection&);
 
    public:
       UndoMacro(Score* s);
@@ -476,20 +489,6 @@ class ChangeInstrumentLong : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   MoveElement
-//---------------------------------------------------------
-
-class MoveElement : public UndoCommand {
-      Element* element;
-      QPointF offset;
-      void flip(EditData*) override;
-
-   public:
-      MoveElement(Element*, const QPointF&);
-      UNDO_NAME("MoveElement")
-      };
-
-//---------------------------------------------------------
 //   ChangeBracketType
 //---------------------------------------------------------
 
@@ -722,11 +721,11 @@ class ChangeMStaffProperties : public UndoCommand {
       Measure* measure;
       int staffIdx;
       bool visible;
-      bool slashStyle;
+      bool stemless;
       void flip(EditData*) override;
 
    public:
-      ChangeMStaffProperties(Measure*, int staffIdx, bool visible, bool slashStyle);
+      ChangeMStaffProperties(Measure*, int staffIdx, bool visible, bool stemless);
       UNDO_NAME("ChangeMStaffProperties")
       };
 
@@ -774,24 +773,6 @@ class InsertMeasures : public InsertRemoveMeasures {
       virtual void redo(EditData*) override { insertMeasures(); }
       virtual void undo(EditData*) override { removeMeasures(); }
       UNDO_NAME("InsertMeasures")
-      };
-
-//---------------------------------------------------------
-//   ChangeImage
-//---------------------------------------------------------
-
-class ChangeImage : public UndoCommand {
-      Image* image;
-      bool lockAspectRatio;
-      bool autoScale;
-      int z;
-
-      void flip(EditData*) override;
-
-   public:
-      ChangeImage(Image* i, bool l, bool a, int _z)
-         : image(i), lockAspectRatio(l), autoScale(a), z(_z) {}
-      UNDO_NAME("ChangeImage")
       };
 
 //---------------------------------------------------------
@@ -899,6 +880,39 @@ class ChangeNoteEvents : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   ChangeNoteEventList
+//---------------------------------------------------------
+
+class ChangeNoteEventList : public UndoCommand {
+      Ms::Note*      note;
+      NoteEventList  newEvents;
+      PlayEventType  newPetype;
+
+      void flip(EditData*) override;
+
+   public:
+      ChangeNoteEventList(Ms::Note* n, NoteEventList& ne) :
+         note(n), newEvents(ne), newPetype(PlayEventType::User) {}
+      UNDO_NAME("ChangeNoteEventList")
+      };
+
+//---------------------------------------------------------
+//   ChangeChordPlayEventType
+//---------------------------------------------------------
+
+class ChangeChordPlayEventType : public UndoCommand {
+      Ms::Chord* chord;
+      Ms::PlayEventType petype;
+      QList<NoteEventList> events;
+
+      void flip(EditData*) override;
+
+   public:
+      ChangeChordPlayEventType(Chord* c, Ms::PlayEventType pet) : chord(c), petype(pet) { events = c->getNoteEventLists(); }
+      UNDO_NAME("ChangeChordPlayEventType")
+      };
+
+//---------------------------------------------------------
 //   ChangeInstrument
 //    change instrument in an InstrumentChange element
 //---------------------------------------------------------
@@ -949,7 +963,7 @@ class ChangeClefType : public UndoCommand {
 //---------------------------------------------------------
 //   MoveStaff
 //---------------------------------------------------------
-
+#if 0 // commented out in mscore/instrwidget.cpp, not used anywhere else
 class MoveStaff : public UndoCommand {
       Staff* staff;
       Part* part;
@@ -961,22 +975,7 @@ class MoveStaff : public UndoCommand {
       MoveStaff(Staff* s, Part* p, int idx) : staff(s), part(p), rstaff(idx) {}
       UNDO_NAME("MoveStaff")
       };
-
-//---------------------------------------------------------
-//   ChangeStaffUserDist
-//---------------------------------------------------------
-
-class ChangeStaffUserDist : public UndoCommand {
-      Staff* staff;
-      qreal dist;
-
-      void flip(EditData*) override;
-
-   public:
-      ChangeStaffUserDist(Staff* s, qreal d)
-         : staff(s), dist(d) {}
-      UNDO_NAME("ChangeStaffUserDist")
-      };
+#endif
 
 //---------------------------------------------------------
 //   ChangeProperty
@@ -1030,22 +1029,6 @@ class ChangeMetaText : public UndoCommand {
    public:
       ChangeMetaText(Score* s, const QString& i, const QString& t) : score(s), id(i), text(t) {}
       UNDO_NAME("ChangeMetaText")
-      };
-
-//---------------------------------------------------------
-//   ChangeEventList
-//---------------------------------------------------------
-
-class ChangeEventList : public UndoCommand {
-      Chord* chord;
-      QList<NoteEventList> events;
-      PlayEventType eventListType;
-
-      void flip(EditData*) override;
-
-   public:
-      ChangeEventList(Chord* c, const QList<NoteEventList> l);
-      UNDO_NAME("ChangeEventList")
       };
 
 //---------------------------------------------------------
@@ -1190,12 +1173,13 @@ class ChangeNoteEvent : public UndoCommand {
       Note* note;
       NoteEvent* oldEvent;
       NoteEvent newEvent;
+      PlayEventType  newPetype;
 
       void flip(EditData*) override;
 
    public:
       ChangeNoteEvent(Note* n, NoteEvent* oe, const NoteEvent& ne)
-         : note(n), oldEvent(oe), newEvent(ne) {}
+         : note(n), oldEvent(oe), newEvent(ne), newPetype(PlayEventType::User) {}
       UNDO_NAME("ChangeNoteEvent")
       };
 
@@ -1286,21 +1270,6 @@ class ChangeDrumset : public UndoCommand {
    public:
       ChangeDrumset(Instrument* i, const Drumset* d) : instrument(i), drumset(*d) {}
       UNDO_NAME("ChangeDrumset")
-      };
-
-//---------------------------------------------------------
-//   ChangeGap
-//---------------------------------------------------------
-
-class ChangeGap : public UndoCommand {
-      Rest* rest;
-      bool v;
-
-      void flip(EditData*) override;
-
-   public:
-      ChangeGap(Rest* r, bool v) : rest(r), v(v) {}
-      UNDO_NAME("ChangeGap")
       };
 
 //---------------------------------------------------------

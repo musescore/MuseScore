@@ -136,8 +136,8 @@ class NoteHead final : public Symbol {
             ///\}
             };
 
-      Q_ENUM(Group)
-      Q_ENUM(Type)
+      Q_ENUM(Group);
+      Q_ENUM(Type);
 
       NoteHead(Score* s = 0) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&) = delete;
@@ -212,7 +212,7 @@ class Note final : public Element {
       Q_GADGET
    public:
       enum class ValueType : char { OFFSET_VAL, USER_VAL };
-      Q_ENUM(ValueType)
+      Q_ENUM(ValueType);
 
    private:
       bool _ghost         { false };      ///< ghost note (guitar: death note)
@@ -384,6 +384,8 @@ class Note final : public Element {
       void setTieBack(Tie* t)         { _tieBack = t;    }
       Note* firstTiedNote() const;
       const Note* lastTiedNote() const;
+      Note* lastTiedNote()            { return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote()); }
+      int unisonIndex() const;
       void disconnectTiedNotes();
       void connectTiedNotes();
 

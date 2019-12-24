@@ -105,27 +105,63 @@ void TextLineBaseSegment::draw(QPainter* painter) const
       if (staff())
             textlineLineWidth *= mag();
       QPen pen(color, textlineLineWidth, tl->lineStyle());
+      QPen solidPen(color, textlineLineWidth, Qt::SolidLine);
       if (tl->lineStyle() == Qt::CustomDashLine) {
             QVector<qreal> dashes { tl->dashLineLen(), tl->dashGapLen() };
             pen.setDashPattern(dashes);
             }
-      painter->setPen(pen);
 
       if (twoLines) {   // hairpins
+            painter->setPen(pen);
             painter->drawLines(&points[0], 1);
             painter->drawLines(&points[2], 1);
             }
       else {
             int start = 0;
-            //if there is an end hook, draw it with a solid line
-            if (npoints > 1) {
+            int end = npoints;
+            //draw hooks as solid
+            painter->setPen(solidPen);
+            if (tl->beginHookType() == HookType::HOOK_90T) {
                   painter->drawLines(&points[0], 1);
-                  painter->drawLines(&points[1], 1);
-                  pen.setStyle(Qt::SolidLine);
-                  painter->setPen(pen);
-                  start = 2;
+                  start++;
                   }
-            for (int i = start; i < npoints; ++i)
+            if (tl->endHookType() == HookType::HOOK_90T) {
+                  painter->drawLines(&points[npoints-1], 1);
+                  end--;
+                  }
+            //draw rest of line as regular
+            //calculate new gap
+            if (tl->lineStyle() == Qt::CustomDashLine) {
+                  qreal adjustedLineLength = lineLength / textlineLineWidth;
+                  qreal dash = tl->dashLineLen();
+                  qreal gap = tl->dashGapLen();
+                  int numPairs;
+                  qreal newGap = 0;
+                  QVector<qreal> nDashes { dash, newGap };
+                  if (tl->beginHookType() == HookType::HOOK_45 || tl->beginHookType() == HookType::HOOK_90) {
+                        qreal absD = sqrt(QPointF::dotProduct(points[start+1]-points[start], points[start+1]-points[start])) / textlineLineWidth;
+                        numPairs = max(qreal(1), absD / (dash + gap));
+                        nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
+                        pen.setDashPattern(nDashes);
+                        painter->setPen(pen);
+                        painter->drawLine(points[start+1], points[start]);
+                        start++;
+                        }
+                  if (tl->endHookType() == HookType::HOOK_45 || tl->endHookType() == HookType::HOOK_90) {
+                        qreal absD = sqrt(QPointF::dotProduct(points[end]-points[end-1], points[end]-points[end-1])) / textlineLineWidth;
+                        numPairs = max(qreal(1), absD / (dash + gap));
+                        nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
+                        pen.setDashPattern(nDashes);
+                        painter->setPen(pen);
+                        painter->drawLines(&points[end-1], 1);
+                        end--;
+                        }
+                  numPairs = max(qreal(1), adjustedLineLength / (dash + gap));
+                  nDashes[1] = (adjustedLineLength - dash * (numPairs + 1)) / numPairs;
+                  pen.setDashPattern(nDashes);
+                  }
+            painter->setPen(pen);
+            for (int i = start; i < end; ++i)
                   painter->drawLines(&points[i], 1);
             }
       }
@@ -229,6 +265,8 @@ void TextLineBaseSegment::layout()
             npoints = 2;
             points[0] = pp1;
             points[1] = pp2;
+            lineLength = sqrt(QPointF::dotProduct(pp2-pp1, pp2-pp1));
+
             setbbox(QRectF(pp1, pp2).normalized());
             return;
             }
@@ -313,6 +351,8 @@ void TextLineBaseSegment::layout()
 
             if ((tl->beginHookType() != HookType::NONE) && (isSingleType() || isBeginType())) {
                   qreal hh = tl->beginHookHeight().val() * _spatium;
+                  if (tl->beginHookType() == HookType::HOOK_90T)
+                        points[npoints++] = QPointF(pp1.x() - beginHookWidth, pp1.y() - hh);
                   points[npoints] = QPointF(pp1.x() - beginHookWidth, pp1.y() + hh);
                   ++npoints;
                   points[npoints] = pp1;
@@ -321,6 +361,7 @@ void TextLineBaseSegment::layout()
                   points[npoints] = pp1;
                   ++npoints;
                   points[npoints] = pp2;
+                  lineLength = sqrt(QPointF::dotProduct(pp2-pp1, pp2-pp1));
                   // painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
 
                   if ((tl->endHookType() != HookType::NONE) && (isSingleType() || isEndType())) {

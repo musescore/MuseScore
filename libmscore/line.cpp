@@ -668,15 +668,15 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         while (seg && seg->segmentType() != SegmentType::EndBarLine)
                               seg = seg->prev();
                         if (!seg || !seg->enabled()) {
-                              // no end bar line; look for BeginBarLine of next measure
+                              // no end bar line; look for BeginBarLine or StartRepeatBarLine of next measure
                               Measure* nm = m->nextMeasure();
                               if (nm->system() == m->system())
-                                    seg = nm->first(SegmentType::BeginBarLine);
+                                    seg = nm->first(SegmentType::BeginBarLine|SegmentType::StartRepeatBarLine);
                               }
-                        qreal mwidth = seg ? seg->x() : m->bbox().right();
+                        qreal mwidth = seg && seg->measure() == m ? seg->x() : m->bbox().right();
                         x = m->pos().x() + mwidth;
                         // align to barline
-                        if (seg && seg->isEndBarLineType()) {
+                        if (seg && (seg->segmentType() & SegmentType::BarLineType)) {
                               Element* e = seg->element(0);
                               if (e && e->type() == ElementType::BAR_LINE) {
                                     BarLineType blt = toBarLine(e)->barLineType();
@@ -985,7 +985,8 @@ void SLine::writeProperties(XmlWriter& xml) const
       //
       bool modified = false;
       for (const SpannerSegment* seg : spannerSegments()) {
-            if (!seg->autoplace() || !seg->visible() || 
+            if (!seg->autoplace() || !seg->visible() ||
+               (seg->propertyFlags(Pid::MIN_DISTANCE) == PropertyFlags::UNSTYLED || seg->getProperty(Pid::MIN_DISTANCE) != seg->propertyDefault(Pid::MIN_DISTANCE)) ||
                (!seg->isStyled(Pid::OFFSET) && (!seg->offset().isNull() || !seg->userOff2().isNull()))) {
                   modified = true;
                   break;

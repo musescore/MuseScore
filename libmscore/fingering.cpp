@@ -112,13 +112,14 @@ void Fingering::layout()
 
             // update offset after drag
             qreal rebase = 0.0;
-            if (offsetChanged() != OffsetChange::NONE)
+            if (offsetChanged() != OffsetChange::NONE && !tight)
                   rebase = rebaseOffset();
 
             // temporarily exclude self from chord shape
             setAutoplace(false);
 
             if (layoutType() == ElementType::CHORD) {
+                  bool above = placeAbove();
                   Stem* stem = chord->stem();
                   Segment* s = chord->segment();
                   Measure* m = s->measure();
@@ -130,7 +131,7 @@ void Fingering::layout()
                   if (n->mirror())
                         rxpos() -= n->ipos().x();
                   rxpos() += headWidth * .5;
-                  if (placeAbove()) {
+                  if (above) {
                         if (tight) {
                               if (chord->stem())
                                     rxpos() -= 0.8 * sp;
@@ -160,8 +161,8 @@ void Fingering::layout()
                               if (offsetChanged() != OffsetChange::NONE) {
                                     // user moved element within the skyline
                                     // we may need to adjust minDistance, yd, and/or offset
-                                    bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
-                                    rebaseMinDistance(md, yd, sp, rebase, inStaff);
+                                    bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
+                                    rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
                                     }
                               rypos() += yd;
                               }
@@ -196,8 +197,8 @@ void Fingering::layout()
                               if (offsetChanged() != OffsetChange::NONE) {
                                     // user moved element within the skyline
                                     // we may need to adjust minDistance, yd, and/or offset
-                                    bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
-                                    rebaseMinDistance(md, yd, sp, rebase, inStaff);
+                                    bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
+                                    rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
                                     }
                               rypos() += yd;
                               }

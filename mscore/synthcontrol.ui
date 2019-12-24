@@ -92,7 +92,7 @@
    <item row="0" column="1" rowspan="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="Awl::MeterSlider" name="gain" native="true">
+      <widget class="Awl::MeterSlider" name="gainSlider" native="true">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -380,7 +380,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>Switch all patches:</string>
+             <string>Switch all sounds:</string>
             </property>
            </widget>
           </item>
@@ -400,7 +400,7 @@
           <item row="0" column="1">
            <widget class="QPushButton" name="switchExpr">
             <property name="accessibleName">
-             <string>Switch all patches to expressive</string>
+             <string>Switch all sounds to expressive</string>
             </property>
             <property name="text">
              <string>To Expressive</string>
@@ -410,7 +410,7 @@
           <item row="0" column="2">
            <widget class="QPushButton" name="switchNonExpr">
             <property name="accessibleName">
-             <string>Switch all patches to non-expressive</string>
+             <string>Switch all sounds to non-expressive</string>
             </property>
             <property name="text">
              <string>To Non-Expressive</string>
@@ -420,7 +420,7 @@
           <item row="0" column="3">
            <widget class="QPushButton" name="resetExpr">
             <property name="accessibleName">
-             <string>Reset all patches to defaults</string>
+             <string>Reset all sounds to defaults</string>
             </property>
             <property name="text">
              <string>Reset All</string>
@@ -459,7 +459,7 @@
   <tabstop>effectB</tabstop>
   <tabstop>masterTuning</tabstop>
   <tabstop>changeTuningButton</tabstop>
-  <tabstop>gain</tabstop>
+  <tabstop>gainSlider</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>loadButton</tabstop>
   <tabstop>storeButton</tabstop>

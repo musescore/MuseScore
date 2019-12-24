@@ -436,7 +436,7 @@ Channel::Channel()
       _channel  = -1;
       _program  = -1;
       _bank     = 0;
-      _volume   = 100;
+      _volume   = defaultVolume;
       _pan      = 64; // actually 63.5 for center
       _chorus   = 0;
       _reverb   = 0;
@@ -812,6 +812,10 @@ void Channel::switchExpressive(Synthesizer* synth, bool expressive, bool force /
       if ((_userBankController && !force) || !synth)
             return;
 
+      // Don't try to switch if we already have done so
+      if (expressive == _switchedToExpressive)
+            return;
+
       // Check that we're actually changing the MuseScore General soundfont
       const auto fontsInfo = synth->soundFontsInfo();
       if (fontsInfo.empty())
@@ -836,6 +840,7 @@ void Channel::switchExpressive(Synthesizer* synth, bool expressive, bool force /
                   newBankNum = 18;
             else
                   newBankNum = relativeBank + 1;
+            _switchedToExpressive = true;
             }
       else {
             int relativeBank = bank() % 129;
@@ -845,6 +850,7 @@ void Channel::switchExpressive(Synthesizer* synth, bool expressive, bool force /
                   newBankNum = 8;
             else
                   newBankNum = relativeBank - 1;
+            _switchedToExpressive = false;
             }
 
       // Floor bank num to multiple of 129 and add new num to get bank num of new patch

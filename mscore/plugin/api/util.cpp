@@ -32,10 +32,10 @@ namespace Ms {
 namespace PluginAPI {
 
 //---------------------------------------------------------
-//   MsScoreView
+//   ScoreView
 //---------------------------------------------------------
 
-MsScoreView::MsScoreView(QQuickItem* parent)
+ScoreView::ScoreView(QQuickItem* parent)
    : QQuickPaintedItem(parent)
       {
       setAcceptedMouseButtons(Qt::LeftButton);
@@ -133,10 +133,17 @@ int FileIO::modifiedTime()
 //   setScore
 //---------------------------------------------------------
 
-void MsScoreView::setScore(Ms::PluginAPI::Score* s)
+void ScoreView::setScore(Ms::PluginAPI::Score* s)
       {
+      Ms::Score* newScore = s ? s->score() : nullptr;
+      setScore(newScore);
+      }
+
+void ScoreView::setScore(Ms::Score* s)
+      {
+      MuseScoreView::setScore(s);
       _currentPage = 0;
-      score = s ? s->score() : nullptr;
+      score = s;
 
       if (score) {
             score->doLayout();
@@ -159,7 +166,7 @@ void MsScoreView::setScore(Ms::PluginAPI::Score* s)
 //   paint
 //---------------------------------------------------------
 
-void MsScoreView::paint(QPainter* p)
+void ScoreView::paint(QPainter* p)
       {
       p->setRenderHint(QPainter::Antialiasing, true);
       p->setRenderHint(QPainter::TextAntialiasing, true);
@@ -188,7 +195,7 @@ void MsScoreView::paint(QPainter* p)
 //   setCurrentPage
 //---------------------------------------------------------
 
-void MsScoreView::setCurrentPage(int n)
+void ScoreView::setCurrentPage(int n)
       {
       if (score == 0)
             return;
@@ -207,7 +214,7 @@ void MsScoreView::setCurrentPage(int n)
 //   nextPage
 //---------------------------------------------------------
 
-void MsScoreView::nextPage()
+void ScoreView::nextPage()
       {
       setCurrentPage(_currentPage + 1);
       }
@@ -216,7 +223,7 @@ void MsScoreView::nextPage()
 //   prevPage
 //---------------------------------------------------------
 
-void MsScoreView::prevPage()
+void ScoreView::prevPage()
       {
       setCurrentPage(_currentPage - 1);
       }

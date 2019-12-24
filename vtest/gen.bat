@@ -19,8 +19,8 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  emmentaler-text-1,gonville-text-1,bravura-text-1,musejazz-text-1, ^
  emmentaler-text-2,gonville-text-2,bravura-text-2,musejazz-text-2, ^
  emmentaler-text-3,gonville-text-3,bravura-text-3,musejazz-text-3, ^
- frametext,ottava, ^
- barline-1, ^
+ frametext,ottava,bend-1, ^
+ barline-1,barline-2,instrument-1,symbol-1, ^
  slurs-1,slurs-2,slurs-3,slurs-4,hairpins-1,pedal-1,line-1,line-2,line-3,line-4,line-5,line-6,gliss-1,gliss-2, ^
  chord-layout-1,chord-layout-2,chord-layout-3,chord-layout-4,chord-layout-5, ^
  chord-layout-6,chord-layout-7,chord-layout-8,chord-layout-9,chord-layout-10, ^
@@ -31,12 +31,12 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  tie-1,tie-2,tie-3,grace-1,grace-2,grace-3,grace-4, ^
  tuplets-1,tuplets-2,tuplets-3,tuplets-4,breath-1, ^
  harmony-1,harmony-2,harmony-3,harmony-4,harmony-5,harmony-6,harmony-7, ^
- harmony-8,harmony-9,harmony-10,harmony-11,harmony-12, ^
+ harmony-8,harmony-9,harmony-10,harmony-11,harmony-12,harmony-13,harmony-14, ^
  beams-1,beams-2,beams-3,beams-4,beams-5,beams-6,beams-7,beams-8,beams-9,beams-10, ^
  beams-11,beams-12,beams-13,beams-14,beams-15,beams-16,beams-17, ^
  user-offset-1,user-offset-2,chord-space-1,chord-space-2,tablature-1,image-1, ^
  lyrics-1,lyrics-2,lyrics-3,lyrics-4,lyrics-5,lyrics-6,lyrics-7,lyrics-8,voice-1,voice-2,slash-1,slash-2, ^
- system-1,system-2,system-3,system-4,system-5,system-6,system-7,hide-1,small-1,tremolo-1, ^
+ system-1,system-2,system-3,system-4,system-5,system-6,system-7,system-8,hide-1,small-1,tremolo-1, ^
  staff-1,staff-2,layout-1,layout-2,layout-3,layout-4,layout-5,layout-6,layout-7,layout-8,layout-9,layout-10, ^
  articulation-1, ^
  percussion-grace, ^

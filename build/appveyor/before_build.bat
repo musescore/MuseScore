@@ -1,22 +1,23 @@
-:: SET "QTCACHE=qt-5.12.1-msvc.7z" & :: bump version here and .appveyor.yml to trigger cache rebuild when upgrading Qt
 :: set platform-dependent variables
 IF "%PLATFORM%" == "x64" (
-  :: SET "QTURL=https://utils.musescore.org.s3.amazonaws.com/qt5120_msvc2017_64.7z"
-  :: SET "QTDIR=%cd%\qt\msvc2017_64" & :: uncomment to use our Qt
-  SET "QTDIR=C:\Qt\5.12\msvc2017_64" & :: uncomment to use AppVeyor's Qt
+  SET "QTURL=https://utils.musescore.org.s3.amazonaws.com/qt598_msvc2017_64.7z"
+  SET "QTDIR=%cd%\qt\msvc2017_64" & :: uncomment to use our Qt
+  SET "QTCACHE=qt598_msvc2017_64.7z" & :: bump version here and .appveyor.yml to trigger cache rebuild when upgrading Qt
+  :: SET "QTDIR=C:\Qt\5.12.4\msvc2017_64" & :: uncomment to use AppVeyor's Qt
   SET "TARGET_PROCESSOR_BITS=64"
   SET "TARGET_PROCESSOR_ARCH=x86_64"
 ) ELSE (
-  :: SET "QTURL=https://utils.musescore.org.s3.amazonaws.com/qt5120_msvc2017_32.7z"
-  :: SET "QTDIR=%cd%\qt\msvc2017" & :: uncomment to use our Qt
-  SET "QTDIR=C:\Qt\5.12\msvc2017" & :: uncomment to use AppVeyor's Qt
+  SET "QTURL=https://utils.musescore.org.s3.amazonaws.com/qt598_msvc2015.7z"
+  SET "QTDIR=%cd%\qt\msvc2015" & :: uncomment to use our Qt
+  SET "QTCACHE=qt598_msvc2015.7z" & :: bump version here and .appveyor.yml to trigger cache rebuild when upgrading Qt
+  :: SET "QTDIR=C:\Qt\5.12.4\msvc2017" & :: uncomment to use AppVeyor's Qt
   SET "TARGET_PROCESSOR_BITS=32"
   SET "TARGET_PROCESSOR_ARCH=x86"
 )
 
 :: Download Qt if necessary
-:: IF NOT EXIST "%QTCACHE%" ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "%QTURL%" -O "%QTCACHE%" )
-:: START " " /wait "7z" x -y "%QTCACHE%" "-oqt" & :: extract into `qt` directory
+IF NOT EXIST "%QTCACHE%" ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "%QTURL%" -O "%QTCACHE%" )
+START " " /wait "7z" x -y "%QTCACHE%" "-oqt" & :: extract into `qt` directory
 
 :: keep full PATH for later
 SET OLD_PATH=%PATH%
@@ -47,11 +48,6 @@ CD C:\MuseScore
 
 :: is MuseScore stable? Check here, no grep in PATH later on
 for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set NIGHTLY_BUILD=%%i
-
-:: add stable keys for musescore.com
-::IF "%NIGHTLY_BUILD%" == "" (
-::python build/add-mc-keys.py %MC_CONSUMER_KEY% %MC_CONSUMER_SECRET%
-::)
 
 :: get revision number
 SET "PATH=%QTDIR%\bin;%PATH%"

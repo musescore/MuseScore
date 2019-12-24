@@ -140,22 +140,6 @@ void StartupWizardPage2::setCurrentLayout(QString langCode)
       _keyLayouts->setCurrentIndex(targetIndex);
       }
 
-StartupWizardPage3::StartupWizardPage3(QWidget* parent)
-      : QWizardPage(parent)
-      {
-      setTitle(tr("Workspace"));
-      QLabel* label = new QLabel(tr("Choose your workspace"), this);
-      QStringList workspaceList;
-      for (auto workspace : Workspace::workspaces())
-            workspaceList.append(qApp->translate("workspace", workspace->name().toUtf8().constData()));
-      _workspaces = new QComboBox(this);
-      _workspaces->addItems(workspaceList);
-      QVBoxLayout* layout = new QVBoxLayout(this);
-      layout->addWidget(label);
-      layout->addWidget(_workspaces);
-      setLayout(layout);
-      }
-
 StartupWizardPage4::StartupWizardPage4(QWidget* parent)
       : QWizardPage(parent)
       {
@@ -199,14 +183,12 @@ StartupWizard::StartupWizard(QWidget* parent)
       p0 = new StartupWizardIntroPage(this);
       p1 = new StartupWizardPage1(this);
       p2 = new StartupWizardPage2(this);
-      p3 = new StartupWizardPage3(this);
       p4 = new StartupWizardPage4(this);
       p5 = new StartupWizardFinalPage(this);
 
       addPage(p0);
       addPage(p1);
       addPage(p2);
-      addPage(p3);
       addPage(p4);
       addPage(p5);
 

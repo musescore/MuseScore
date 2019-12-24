@@ -7,6 +7,8 @@ cmd pad-note-1
 cmd note-a
 cmd escape
 cmd toggle-mmrest
+cmd prev-element
+cmd prev-chord
 cmd note-input
 cmd escape
 cmd select-next-chord

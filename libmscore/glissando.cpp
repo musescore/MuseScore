@@ -637,11 +637,11 @@ bool Glissando::setProperty(Pid propertyId, const QVariant& v)
                   setShowText(v.toBool());
                   break;
             case Pid::GLISSANDO_STYLE:
-                 setGlissandoStyle(GlissandoStyle(v.toInt()));
-                 break;
+                  setGlissandoStyle(GlissandoStyle(v.toInt()));
+                  break;
             case Pid::PLAY:
-                 setPlayGlissando(v.toBool());
-                 break;
+                  setPlayGlissando(v.toBool());
+                  break;
             case Pid::FONT_FACE:
                   setFontFace(v.toString());
                   break;
@@ -649,14 +649,14 @@ bool Glissando::setProperty(Pid propertyId, const QVariant& v)
                   setFontSize(v.toReal());
                   break;
             case Pid::FONT_STYLE:
-                  setFontStyle(FontStyle(v.toBool()));
+                  setFontStyle(FontStyle(v.toInt()));
                   break;
             default:
                   if (!SLine::setProperty(propertyId, v))
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayoutAll();
       return true;
       }
 

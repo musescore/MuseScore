@@ -116,9 +116,7 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
 
       QAction* a = plugin->shortcut.action();
       pluginActions.append(a);
-      int pluginIdx = plugins.size() - 1; // plugin is already appended
-      connect(a, SIGNAL(triggered()), pluginMapper, SLOT(map()));
-      pluginMapper->setMapping(a, pluginIdx);
+      connect(a, &QAction::triggered, mscore, [_pluginPath]() { mscore->pluginTriggered(_pluginPath); });
 
       delete obj;
       }
@@ -151,9 +149,7 @@ void MuseScore::unregisterPlugin(PluginDescription* plugin)
       QAction* a = plugin->shortcut.action();
       pluginActions.removeAll(a);
 
-      disconnect(a, SIGNAL(triggered()), pluginMapper, SLOT(map()));
-      pluginMapper->removeMappings(a);
-
+      disconnect(a, 0, mscore, 0);
       }
 
 //---------------------------------------------------------
@@ -163,9 +159,6 @@ void MuseScore::unregisterPlugin(PluginDescription* plugin)
 
 void MuseScore::createMenuEntry(PluginDescription* plugin)
       {
-      if (!pluginMapper)
-            return;
-
       QString menu = plugin->menuPath;
       QStringList ml;
       QString s;
@@ -250,12 +243,21 @@ void MuseScore::createMenuEntry(PluginDescription* plugin)
             }
       }
 
+//---------------------------------------------------------
+//   addPluginMenuEntries
+//---------------------------------------------------------
+
+void MuseScore::addPluginMenuEntries()
+      {
+      for (int i = 0; i < pluginManager->pluginCount(); ++i) {
+            PluginDescription* d = pluginManager->getPluginDescription(i);
+            if (d->load)
+                  createMenuEntry(d);
+            }
+      }
 
 void MuseScore::removeMenuEntry(PluginDescription* plugin)
       {
-      if (!pluginMapper)
-            return;
-
       QString menu = plugin->menuPath;
       QStringList ml;
       QString s;
@@ -340,8 +342,6 @@ int MuseScore::pluginIdxFromPath(QString _pluginPath) {
 
 void MuseScore::loadPlugins()
       {
-      pluginMapper = new QSignalMapper(this);
-      connect(pluginMapper, SIGNAL(mapped(int)), SLOT(pluginTriggered(int)));
       for (int i = 0; i < pluginManager->pluginCount(); ++i) {
             PluginDescription* d = pluginManager->getPluginDescription(i);
             if (d->load)
@@ -368,11 +368,6 @@ bool MuseScore::loadPlugin(const QString& filename)
       {
       bool result = false;
 
-      if (!pluginMapper) {
-            pluginMapper = new QSignalMapper(this);
-            connect(pluginMapper, SIGNAL(mapped(int)), SLOT(pluginTriggered(int)));
-            }
-
       QDir pluginDir(mscoreGlobalShare + "plugins");
       if (MScore::debugMode)
             qDebug("Plugin Path <%s>", qPrintable(mscoreGlobalShare + "plugins"));
@@ -386,8 +381,8 @@ bool MuseScore::loadPlugin(const QString& filename)
                   PluginDescription* p = new PluginDescription;
                   p->path = path;
                   p->load = false;
-                  collectPluginMetaInformation(p);
-                  registerPlugin(p);
+                  if (collectPluginMetaInformation(p))
+                        registerPlugin(p);
                   result = true;
                   }
             }
@@ -400,9 +395,13 @@ bool MuseScore::loadPlugin(const QString& filename)
 
 void MuseScore::pluginTriggered(int idx)
       {
-      QString pp = plugins[idx];
+      if (plugins.size() > idx)
+            pluginTriggered(plugins[idx]);
+      }
 
-      QQmlEngine* engine = getPluginEngine();
+void MuseScore::pluginTriggered(QString pp)
+      {
+      QmlPluginEngine* engine = getPluginEngine();
 
       QQmlComponent component(engine);
       component.loadUrl(QUrl::fromLocalFile(pp));
@@ -423,11 +422,15 @@ void MuseScore::pluginTriggered(int idx)
             delete obj;
             return;
             }
-      p->setFilePath(pp.section('/', 0, -2));
 
       if (p->pluginType() == "dock" || p->pluginType() == "dialog") {
             QQuickView* view = new QQuickView(engine, 0);
             view->setSource(QUrl::fromLocalFile(pp));
+            if (QmlPlugin* viewPluginInstance = qobject_cast<QmlPlugin*>(view->rootObject())) {
+                  // a new plugin instance was created by view, use it instead.
+                  delete p;
+                  p = viewPluginInstance;
+                  }
             view->setTitle(p->menuPath().mid(p->menuPath().lastIndexOf(".") + 1));
             view->setColor(QApplication::palette().color(QPalette::Window));
             //p->setParentItem(view->contentItem());
@@ -435,7 +438,7 @@ void MuseScore::pluginTriggered(int idx)
             //view->setHeight(p->height());
             view->setResizeMode(QQuickView::SizeRootObjectToView);
             if (p->pluginType() == "dock") {
-                  QDockWidget* dock = new QDockWidget("Plugin", 0);
+                  QDockWidget* dock = new QDockWidget(view->title(), 0);
                   dock->setAttribute(Qt::WA_DeleteOnClose);
                   Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
                   if (p->dockArea() == "left")
@@ -447,6 +450,12 @@ void MuseScore::pluginTriggered(int idx)
                   QWidget* w = QWidget::createWindowContainer(view);
                   dock->setWidget(w);
                   addDockWidget(area, dock);
+                  const Qt::Orientation orientation =
+                     (area == Qt::RightDockWidgetArea || area == Qt::LeftDockWidgetArea)
+                     ? Qt::Vertical
+                     : Qt::Horizontal;
+                  const int size = (orientation == Qt::Vertical) ? view->initialSize().height() : view->initialSize().width();
+                  resizeDocks({ dock }, { size }, orientation);
                   connect(engine, SIGNAL(quit()), dock, SLOT(close()));
                   dock->show();
                   }
@@ -455,6 +464,10 @@ void MuseScore::pluginTriggered(int idx)
                   view->show();
                   }
             }
+
+      connect(engine, &QmlPluginEngine::endCmd, p, &QmlPlugin::endCmd);
+
+      p->setFilePath(pp.section('/', 0, -2));
 
       // don’t call startCmd for non modal dialog
       if (cs && p->pluginType() != "dock")
@@ -467,9 +480,11 @@ void MuseScore::pluginTriggered(int idx)
 
 //---------------------------------------------------------
 //   collectPluginMetaInformation
+///   returns false if loading a plugin for the given
+///   description has failed
 //---------------------------------------------------------
 
-void collectPluginMetaInformation(PluginDescription* d)
+bool collectPluginMetaInformation(PluginDescription* d)
       {
       qDebug("Collect meta for <%s>", qPrintable(d->path));
 
@@ -480,14 +495,16 @@ void collectPluginMetaInformation(PluginDescription* d)
             foreach(QQmlError e, component.errors()) {
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                   }
-            return;
+            return false;
             }
       QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+      const bool isQmlPlugin = bool(item);
       if (item) {
             d->version      = item->version();
             d->description  = item->description();
             }
       delete obj;
+      return isQmlPlugin;
       }
 }
 

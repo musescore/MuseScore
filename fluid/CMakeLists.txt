@@ -62,6 +62,8 @@ else (NOT MSVC)
       )
 endif (NOT MSVC)   
 
+target_link_libraries(fluid synthesizer)
+
 xcode_pch(fluid all)
 
 # Use MSVC pre-compiled headers

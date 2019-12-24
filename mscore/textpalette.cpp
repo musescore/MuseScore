@@ -36,7 +36,7 @@ namespace Ms {
 //const int fontSize   = 20;
 
 
-const QPoint rangeInfo[241] = {
+const QPoint rangeInfo[] = {
       { 0x0020, 0x007F },
       { 0x0080, 0x00FF },
       { 0x0100, 0x017F },
@@ -619,52 +619,6 @@ int unicodeAccidentals[] = { //better size and alignment, so put these first
       // 0x1d12a    // double sharp
       };
 
-SymId commonScoreSymbols[] = {
-      SymId::accidentalFlat,
-      SymId::accidentalNatural,
-      SymId::accidentalSharp,
-      SymId::accidentalDoubleFlat,
-      SymId::accidentalDoubleSharp,
-      SymId::metNoteWhole,
-      SymId::metNoteHalfUp,
-      SymId::metNoteQuarterUp,
-      SymId::metNote8thUp,
-      SymId::metNote16thUp,
-      SymId::metNote32ndUp,
-      SymId::metNote64thUp,
-      SymId::metNote128thUp,
-      SymId::metAugmentationDot,
-      SymId::restWholeLegerLine,
-      SymId::restHalfLegerLine,
-      SymId::restQuarter,
-      SymId::rest8th,
-      SymId::rest16th,
-      SymId::rest32nd,
-      SymId::rest64th,
-      SymId::rest128th,
-      SymId::segno,
-      SymId::coda,
-      SymId::segnoSerpent1,
-      SymId::codaSquare,
-      SymId::repeat1Bar,
-      SymId::repeat2Bars,
-      SymId::repeat4Bars,
-      SymId::gClef,
-      SymId::fClef,
-      SymId::cClef,
-      SymId::lyricsElisionNarrow,
-      SymId::lyricsElision,
-      SymId::lyricsElisionWide,
-      SymId::dynamicPiano,
-      SymId::dynamicMezzo,
-      SymId::dynamicForte,
-      SymId::dynamicNiente,
-      SymId::dynamicRinforzando,
-      SymId::dynamicSforzando,
-      SymId::dynamicZ,
-      SymId::space
-      };
-
 int commonTextSymbols[] = {
       0x00a9,    // &copy;
 
@@ -791,7 +745,7 @@ void TextPalette::populateCommon()
             pCommon->append(fs, QString(id));
             }
 
-      for (auto id : commonScoreSymbols) {
+      for (auto id : Sym::commonScoreSymbols) {
             Symbol* s = new Symbol(gscore);
             s->setSym(id, gscore->scoreFont());
             pCommon->append(s, Sym::id2userName(id));

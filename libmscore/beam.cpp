@@ -2056,7 +2056,6 @@ void Beam::write(XmlWriter& xml) const
 
 void Beam::read(XmlReader& e)
       {
-      QPointF p1, p2;
       qreal _spatium = spatium();
       if (score()->mscVersion() < 301)
             _id = e.intAttribute("id");
@@ -2141,8 +2140,10 @@ void Beam::editDrag(EditData& ed)
             y1 += dy;
 
       qreal _spatium = spatium();
-      undoChangeProperty(Pid::BEAM_POS, QPointF(y1 / _spatium, y2 / _spatium));
+      // Because of the logic in Beam::setProperty(),
+      // changing Pid::BEAM_POS only has an effect if Pid::USER_MODIFIED is true.
       undoChangeProperty(Pid::USER_MODIFIED, true);
+      undoChangeProperty(Pid::BEAM_POS, QPointF(y1 / _spatium, y2 / _spatium));
       undoChangeProperty(Pid::GENERATED, false);
 
       triggerLayout();
@@ -2404,10 +2405,7 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      if (!_elements.empty()) {
-            score()->setLayout(_elements.front()->tick());
-            score()->setLayout(_elements.back()->tick());
-            }
+      triggerLayout();
       setGenerated(false);
       return true;
       }
@@ -2491,5 +2489,29 @@ Fraction Beam::rtick() const
       {
       return _elements.empty() ? Fraction(0, 1) : _elements.front()->segment()->rtick();
       }
-}
 
+//---------------------------------------------------------
+//   iconType
+//---------------------------------------------------------
+
+IconType Beam::iconType(Mode mode)
+      {
+      switch (mode) {
+            case Mode::BEGIN:
+                  return IconType::SBEAM;
+            case Mode::MID:
+                  return IconType::MBEAM;
+            case Mode::NONE:
+                  return IconType::NBEAM;
+            case Mode::BEGIN32:
+                  return IconType::BEAM32;
+            case Mode::BEGIN64:
+                  return IconType::BEAM64;
+            case Mode::AUTO:
+                  return IconType::AUTOBEAM;
+            default:
+                  break;
+            }
+      return IconType::NONE;
+      }
+}

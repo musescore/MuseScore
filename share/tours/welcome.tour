@@ -34,7 +34,7 @@
     </Message>
   <Message>
     <Text>The Palettes allow you to add most other notation elements to your score.</Text>
-    <Widget>palette-box</Widget>
+    <Widget>palette-widget</Widget>
     </Message>
   <Message>
     <Text>The Inspector allows you to control various properties of the elements in your score.</Text>
@@ -44,7 +44,6 @@
     <Text>The main menu contains most other commands.
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: "Ctrl"+clicking) within the score view.</Text>
     <Widget>menubar</Widget>
-    <Widget>File</Widget>
     </Message>
   <Message>
     <Text>That's the end of this tour!

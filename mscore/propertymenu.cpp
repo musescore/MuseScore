@@ -23,7 +23,6 @@
 #include "bendproperties.h"
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
-#include "sectionbreakprop.h"
 #include "stafftextproperties.h"
 #include "fretproperties.h"
 #include "selinstrument.h"
@@ -62,6 +61,8 @@
 #include "libmscore/jump.h"
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
+#include "libmscore/iname.h"
+#include "libmscore/system.h"
 
 namespace Ms {
 
@@ -265,14 +266,12 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->insertAction(b, a);
 
             genPropertyMenu1(e, popup);
-            popup->addSeparator();
 
-            popup->addAction(tr("Style…"))->setData("style");
-            if (enableExperimental)
+            if (enableExperimental) {
+                  popup->addSeparator();
                   popup->addAction(tr("Chord Articulation…"))->setData("articulation");
+                  }
             }
-      else if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == LayoutBreak::Type::SECTION)
-            popup->addAction(tr("Section Break Properties…"))->setData("break-props");
       else if (e->isInstrumentChange()) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Change Instrument…"))->setData("ch-instr");
@@ -283,6 +282,11 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(tr("Staff/Part Properties…"))->setData("staff-props");
       else
             genPropertyMenu1(e, popup);
+
+      if (EditStyle::elementHasPage(e)) {
+            popup->addSeparator();
+            popup->addAction(tr("Style…"))->setData("style");
+            }
       }
 
 //---------------------------------------------------------
@@ -467,26 +471,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   mscore->setStyleDlg(new EditStyle { _score, mscore });
             else
                   mscore->styleDlg()->setScore(mscore->currentScore());
-            mscore->styleDlg()->setPage(EditStyle::PAGE_NOTE);
+            mscore->styleDlg()->gotoElement(e);
             mscore->styleDlg()->exec();
-            }
-      else if (cmd == "break-props") {
-            LayoutBreak* lb = static_cast<LayoutBreak*>(e);
-            SectionBreakProperties sbp(lb, 0);
-            if (sbp.exec()) {
-                  if (lb->pause() != sbp.pause()
-                     || lb->startWithLongNames() != sbp.startWithLongNames()
-                     || lb->startWithMeasureOne() != sbp.startWithMeasureOne()) {
-                        LayoutBreak* nlb = new LayoutBreak(*lb);
-                        nlb->setParent(lb->parent());
-                        nlb->setPause(sbp.pause());
-                        nlb->setStartWithLongNames(sbp.startWithLongNames());
-                        nlb->setStartWithMeasureOne(sbp.startWithMeasureOne());
-                        // propagate in parts
-                        lb->undoChangeProperty(Pid::PAUSE, sbp.pause());
-                        score()->undoChangeElement(lb, nlb);
-                        }
-                  }
             }
       else if (cmd == "ch-instr") {
             InstrumentChange* ic = static_cast<InstrumentChange*>(e);
@@ -525,12 +511,21 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
 //            editFretDiagram(static_cast<FretDiagram*>(e));
       else if (cmd == "staff-props") {
             Fraction tick = {-1,1};
-            if (e->isChordRest())
-                  tick = static_cast<ChordRest*>(e)->tick();
-            else if (e->type() == ElementType::NOTE)
-                  tick = static_cast<Note*>(e)->chord()->tick();
-            else if (e->type() == ElementType::MEASURE)
-                  tick = static_cast<Measure*>(e)->tick();
+            if (e->isChordRest()) {
+                  tick = toChordRest(e)->tick();
+                  }
+            else if (e->isNote()) {
+                  tick = toNote(e)->chord()->tick();
+                  }
+            else if (e->isMeasure()) {
+                  tick = toMeasure(e)->tick();
+                  }
+            else if (e->isInstrumentName()) {
+                  System* system = toSystem(toInstrumentName(e)->parent());
+                  Measure* m = system ? system->firstMeasure() : nullptr;
+                  if (m)
+                        tick = m->tick();
+                  }
             EditStaff editStaff(e->staff(), tick, 0);
             connect(&editStaff, SIGNAL(instrumentChanged()), mscore, SLOT(instrumentChanged()));
             editStaff.exec();

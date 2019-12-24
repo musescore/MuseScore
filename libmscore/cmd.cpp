@@ -87,6 +87,14 @@ void CmdState::reset()
       _updateMode         = UpdateMode::DoNothing;
       _startTick          = Fraction(-1,1);
       _endTick            = Fraction(-1,1);
+
+      _startStaff = -1;
+      _endStaff = -1;
+      _el = nullptr;
+      _oneElement = true;
+      _mb = nullptr;
+      _oneMeasureBase = true;
+      _locked = false;
       }
 
 //---------------------------------------------------------
@@ -95,11 +103,84 @@ void CmdState::reset()
 
 void CmdState::setTick(const Fraction& t)
       {
+      if (_locked)
+            return;
+
       if (_startTick == Fraction(-1,1) || t < _startTick)
             _startTick = t;
       if (_endTick == Fraction(-1,1) || t > _endTick)
             _endTick = t;
       setUpdateMode(UpdateMode::Layout);
+      }
+
+//---------------------------------------------------------
+//   setStaff
+//---------------------------------------------------------
+
+void CmdState::setStaff(int st)
+      {
+      Q_ASSERT(st > -2);
+      if (_locked || st == -1)
+            return;
+
+      if (_startStaff == -1 || st < _startStaff)
+            _startStaff = st;
+      if (_endStaff == -1 || st > _endStaff)
+            _endStaff = st;
+      }
+
+//---------------------------------------------------------
+//   setMeasureBase
+//---------------------------------------------------------
+
+void CmdState::setMeasureBase(const MeasureBase* mb)
+      {
+      if (!mb || _mb == mb || _locked)
+            return;
+
+      _oneMeasureBase = !_mb;
+      _mb = mb;
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void CmdState::setElement(const Element* e)
+      {
+      if (!e || _el == e || _locked)
+            return;
+
+      _oneElement = !_el;
+      _el = e;
+
+      if (_oneMeasureBase)
+            setMeasureBase(e->findMeasureBase());
+      }
+
+//---------------------------------------------------------
+//   unsetElement
+//---------------------------------------------------------
+
+void CmdState::unsetElement(const Element* e)
+      {
+      if (_el == e)
+            _el = nullptr;
+      if (_mb == e)
+            _mb = nullptr;
+      }
+
+//---------------------------------------------------------
+//   element
+//---------------------------------------------------------
+
+const Element* CmdState::element() const
+      {
+      if (_oneElement)
+            return _el;
+      if (_oneMeasureBase)
+            return _mb;
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -152,7 +233,7 @@ void Score::undoRedo(bool undo, EditData* ed)
             undoStack()->undo(ed);
       else
             undoStack()->redo(ed);
-      update();
+      update(false);
       masterScore()->setPlaylistDirty();  // TODO: flag all individual operations
       updateSelection();
       }
@@ -176,7 +257,7 @@ void Score::endCmd(bool rollback)
       if (rollback)
             undoStack()->current()->unwind();
 
-      update();
+      update(false);
 
       if (MScore::debugMode)
             qDebug("===endCmd() %d", undoStack()->current()->childCount());
@@ -210,7 +291,7 @@ void CmdState::dump()
 //    layout & update
 //---------------------------------------------------------
 
-void Score::update()
+void Score::update(bool resetCmdState)
       {
       bool updateAll = false;
       for (MasterScore* ms : *movements()) {
@@ -249,7 +330,8 @@ void Score::update()
                         emit s->playlistChanged();
                   masterScore()->setPlaylistClean();
                   }
-            cs.reset();
+            if (resetCmdState)
+                  cs.reset();
             }
       if (_selection.isRange())
             _selection.updateSelectedElements();
@@ -280,11 +362,13 @@ void Score::deletePostponed()
 //        HAIRPIN, LET_RING, VIBRATO and TEXTLINE
 //---------------------------------------------------------
 
-void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
+void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos, bool firstStaffOnly)
       {
       int staffIdx;
       Segment* segment;
       MeasureBase* mb = pos2measure(pos, &staffIdx, 0, &segment, 0);
+      if (firstStaffOnly)
+            staffIdx = 0;
       // ignore if we do not have a measure
       if (mb == 0 || mb->type() != ElementType::MEASURE) {
             qDebug("cmdAddSpanner: cannot put object here");
@@ -308,7 +392,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             Measure* m = toMeasure(mb);
             QRectF b(m->canvasBoundingRect());
 
-            if (pos.x() >= (b.x() + b.width() * .5) && m != lastMeasureMM())
+            if (pos.x() >= (b.x() + b.width() * .5) && m != lastMeasureMM() && m->nextMeasure()->system() == m->system())
                   m = m->nextMeasure();
             spanner->setTick(m->tick());
             spanner->setTick2(m->endTick());
@@ -590,7 +674,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
                         undoAddElement(tie);
                         }
                   }
-            
+
             tick += ncr->actualTicks();
             ocr = ncr;
             }
@@ -602,7 +686,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
 //    return segment of last created note/rest
 //---------------------------------------------------------
 
-Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, Direction stemDirection, bool rhythmic)
+Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, Direction stemDirection, bool forceAccidental, bool rhythmic)
       {
       Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
 
@@ -659,6 +743,15 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                         chord->setStemDirection(stemDirection);
                         chord->add(note);
                         note->setNval(nval, tick);
+                        if (forceAccidental) {
+                              int tpc = styleB(Sid::concertPitch) ? nval.tpc2 : nval.tpc1;
+                              AccidentalVal alter = tpc2alter(tpc);
+                              AccidentalType at = Accidental::value2subtype(alter);
+                              Accidental* a = new Accidental(this);
+                              a->setAccidentalType(at);
+                              a->setRole(AccidentalRole::USER);
+                              note->add(a);
+                              }
                         ncr = chord;
                         if (i+1 < n) {
                               tie = new Tie(this);
@@ -711,6 +804,11 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
             connectTies();
       if (nr) {
             if (_is.slur() && nr->type() == ElementType::NOTE) {
+                  // If the start element was the same as the end element when the slur was created,
+                  // the end grip of the front slur segment was given an x-offset of 3.0 * spatium().
+                  // Now that the slur is about to be given a new end element, this should be reset.
+                  if (_is.slur()->endElement() == _is.slur()->startElement())
+                        _is.slur()->frontSegment()->reset();
                   //
                   // extend slur
                   //
@@ -1486,12 +1584,17 @@ void Score::upDown(bool up, UpDownMode mode)
 
             if ((oNote->pitch() != newPitch) || (oNote->tpc1() != newTpc1) || oNote->tpc2() != newTpc2) {
                   // remove accidental if present to make sure
-                  // user added accidentals are removed here.
-                  auto l = oNote->linkList();
-                  for (ScoreElement* e : l) {
-                        Note* ln = toNote(e);
-                        if (ln->accidental())
-                              undo(new RemoveElement(ln->accidental()));
+                  // user added accidentals are removed here
+                  // unless it's an octave change
+                  // in this case courtesy accidentals are preserved
+                  // because they're now harder to be re-entered due to the revised note-input workflow
+                  if (mode != UpDownMode::OCTAVE) {
+                        auto l = oNote->linkList();
+                        for (ScoreElement* e : l) {
+                              Note* ln = toNote(e);
+                              if (ln->accidental())
+                                    undo(new RemoveElement(ln->accidental()));
+                              }
                         }
                   undoChangePitch(oNote, newPitch, newTpc1, newTpc2);
                   }
@@ -1567,6 +1670,29 @@ void Score::addArticulation(SymId attr)
             }
       }
 
+//---------------------------------------------------------
+//   toggleAccidental
+//---------------------------------------------------------
+
+void Score::toggleAccidental(AccidentalType at, const EditData& ed)
+      {
+      if (_is.accidentalType() == at)
+            at = AccidentalType::NONE;
+      if (noteEntryMode()) {
+            _is.setAccidentalType(at);
+            _is.setRest(false);
+            }
+      else {
+            if (selection().isNone()) {
+                  ed.view->startNoteEntryMode();
+                  _is.setAccidentalType(at);
+                  _is.setDuration(TDuration::DurationType::V_QUARTER);
+                  _is.setRest(false);
+                  }
+            else
+                  changeAccidental(at);
+            }
+      }
 //---------------------------------------------------------
 //   changeAccidental
 ///   Change accidental to subtype \a idx for all selected
@@ -2496,7 +2622,8 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
 
 void Score::cmdAddGrace (NoteType graceType, int duration)
       {
-      for (Element* e : selection().elements()) {
+      const QList<Element*> copyOfElements = selection().elements();
+      for (Element* e : copyOfElements) {
             if (e->type() == ElementType::NOTE) {
                   Note* n = toNote(e);
                   setGraceNote(n->chord(), n->pitch(), graceType, duration);
@@ -2874,7 +3001,7 @@ void Score::cmdSlashFill()
                         p.line = line;
                         p.fret = FRET_NONE;
                         _is.setRest(false);     // needed for tab
-                        nv = noteValForPosition(p, error);
+                        nv = noteValForPosition(p, AccidentalType::NONE, error);
                         }
                   if (error)
                         continue;
@@ -3153,39 +3280,39 @@ void Score::cmdPitchDownOctave()
 //   cmdPadNoteInclreaseTAB
 //---------------------------------------------------------
 
-void Score::cmdPadNoteIncreaseTAB()
+void Score::cmdPadNoteIncreaseTAB(const EditData& ed)
       {
       switch (_is.duration().type() ) {
 // cycle back from longest to shortest?
 //          case TDuration::V_LONG:
-//                padToggle(Pad::NOTE128);
+//                padToggle(Pad::NOTE128, ed);
 //                break;
             case TDuration::DurationType::V_BREVE:
-                  padToggle(Pad::NOTE00);
+                  padToggle(Pad::NOTE00, ed);
                   break;
             case TDuration::DurationType::V_WHOLE:
-                  padToggle(Pad::NOTE0);
+                  padToggle(Pad::NOTE0, ed);
                   break;
             case TDuration::DurationType::V_HALF:
-                  padToggle(Pad::NOTE1);
+                  padToggle(Pad::NOTE1, ed);
                   break;
             case TDuration::DurationType::V_QUARTER:
-                  padToggle(Pad::NOTE2);
+                  padToggle(Pad::NOTE2, ed);
                   break;
             case TDuration::DurationType::V_EIGHTH:
-                  padToggle(Pad::NOTE4);
+                  padToggle(Pad::NOTE4, ed);
                   break;
             case TDuration::DurationType::V_16TH:
-                  padToggle(Pad::NOTE8);
+                  padToggle(Pad::NOTE8, ed);
                   break;
             case TDuration::DurationType::V_32ND:
-                  padToggle(Pad::NOTE16);
+                  padToggle(Pad::NOTE16, ed);
                   break;
             case TDuration::DurationType::V_64TH:
-                  padToggle(Pad::NOTE32);
+                  padToggle(Pad::NOTE32, ed);
                   break;
             case TDuration::DurationType::V_128TH:
-                  padToggle(Pad::NOTE64);
+                  padToggle(Pad::NOTE64, ed);
                   break;
             default:
                   break;
@@ -3196,39 +3323,39 @@ void Score::cmdPadNoteIncreaseTAB()
 //   cmdPadNoteDecreaseTAB
 //---------------------------------------------------------
 
-void Score::cmdPadNoteDecreaseTAB()
+void Score::cmdPadNoteDecreaseTAB(const EditData& ed)
       {
       switch (_is.duration().type() ) {
             case TDuration::DurationType::V_LONG:
-                  padToggle(Pad::NOTE0);
+                  padToggle(Pad::NOTE0, ed);
                   break;
             case TDuration::DurationType::V_BREVE:
-                  padToggle(Pad::NOTE1);
+                  padToggle(Pad::NOTE1, ed);
                   break;
             case TDuration::DurationType::V_WHOLE:
-                  padToggle(Pad::NOTE2);
+                  padToggle(Pad::NOTE2, ed);
                   break;
             case TDuration::DurationType::V_HALF:
-                  padToggle(Pad::NOTE4);
+                  padToggle(Pad::NOTE4, ed);
                   break;
             case TDuration::DurationType::V_QUARTER:
-                  padToggle(Pad::NOTE8);
+                  padToggle(Pad::NOTE8, ed);
                   break;
             case TDuration::DurationType::V_EIGHTH:
-                  padToggle(Pad::NOTE16);
+                  padToggle(Pad::NOTE16, ed);
                   break;
             case TDuration::DurationType::V_16TH:
-                  padToggle(Pad::NOTE32);
+                  padToggle(Pad::NOTE32, ed);
                   break;
             case TDuration::DurationType::V_32ND:
-                  padToggle(Pad::NOTE64);
+                  padToggle(Pad::NOTE64, ed);
                   break;
             case TDuration::DurationType::V_64TH:
-                  padToggle(Pad::NOTE128);
+                  padToggle(Pad::NOTE128, ed);
                   break;
 // cycle back from shortest to longest?
 //          case TDuration::DurationType::V_128TH:
-//                padToggle(Pad::NOTE00);
+//                padToggle(Pad::NOTE00, ed);
 //                break;
             default:
                   break;
@@ -3492,10 +3619,16 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
                   ClefType clef = staff(pos.staffIdx)->clef(seg->tick());
                   pos.line      = relStep(step, clef);
                   bool error;
-                  NoteVal nval = noteValForPosition(pos, error);
+                  NoteVal nval = noteValForPosition(pos, _is.accidentalType(), error);
                   if (error)
                         return;
-                  addNote(chord, nval);
+                  bool forceAccidental = false;
+                  if (_is.accidentalType() != AccidentalType::NONE) {
+                        NoteVal nval2 = noteValForPosition(pos, AccidentalType::NONE, error);
+                        forceAccidental = (nval.pitch == nval2.pitch);
+                        }
+                  addNote(chord, nval, forceAccidental);
+                  _is.setAccidentalType(AccidentalType::NONE);
                   return;
                   }
             }
@@ -3513,6 +3646,7 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
             else
                   putNote(pos, !addFlag);
             }
+      _is.setAccidentalType(AccidentalType::NONE);
       }
 
 //---------------------------------------------------------
@@ -3667,26 +3801,26 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "add-down-bow",               [this]{ addArticulation(SymId::stringsDownBow);                     }},
             { "add-8va",                    [this]{ cmdAddOttava(OttavaType::OTTAVA_8VA);                       }},
             { "add-8vb",                    [this]{ cmdAddOttava(OttavaType::OTTAVA_8VB);                       }},
-            { "note-longa",                 [this]{ padToggle(Pad::NOTE00);                                     }},
-            { "note-longa-TAB",             [this]{ padToggle(Pad::NOTE00);                                     }},
-            { "note-breve",                 [this]{ padToggle(Pad::NOTE0);                                      }},
-            { "note-breve-TAB",             [this]{ padToggle(Pad::NOTE0);                                      }},
-            { "pad-note-1",                 [this]{ padToggle(Pad::NOTE1);                                      }},
-            { "pad-note-1-TAB",             [this]{ padToggle(Pad::NOTE1);                                      }},
-            { "pad-note-2",                 [this]{ padToggle(Pad::NOTE2);                                      }},
-            { "pad-note-2-TAB",             [this]{ padToggle(Pad::NOTE2);                                      }},
-            { "pad-note-4",                 [this]{ padToggle(Pad::NOTE4);                                      }},
-            { "pad-note-4-TAB",             [this]{ padToggle(Pad::NOTE4);                                      }},
-            { "pad-note-8",                 [this]{ padToggle(Pad::NOTE8);                                      }},
-            { "pad-note-8-TAB",             [this]{ padToggle(Pad::NOTE8);                                      }},
-            { "pad-note-16",                [this]{ padToggle(Pad::NOTE16);                                     }},
-            { "pad-note-16-TAB",            [this]{ padToggle(Pad::NOTE16);                                     }},
-            { "pad-note-32",                [this]{ padToggle(Pad::NOTE32);                                     }},
-            { "pad-note-32-TAB",            [this]{ padToggle(Pad::NOTE32);                                     }},
-            { "pad-note-64",                [this]{ padToggle(Pad::NOTE64);                                     }},
-            { "pad-note-64-TAB",            [this]{ padToggle(Pad::NOTE64);                                     }},
-            { "pad-note-128",               [this]{ padToggle(Pad::NOTE128);                                    }},
-            { "pad-note-128-TAB",           [this]{ padToggle(Pad::NOTE128);                                    }},
+            { "note-longa",                 [this,ed]{ padToggle(Pad::NOTE00, ed);                              }},
+            { "note-longa-TAB",             [this,ed]{ padToggle(Pad::NOTE00, ed);                              }},
+            { "note-breve",                 [this,ed]{ padToggle(Pad::NOTE0, ed);                               }},
+            { "note-breve-TAB",             [this,ed]{ padToggle(Pad::NOTE0, ed);                               }},
+            { "pad-note-1",                 [this,ed]{ padToggle(Pad::NOTE1, ed);                               }},
+            { "pad-note-1-TAB",             [this,ed]{ padToggle(Pad::NOTE1, ed);                               }},
+            { "pad-note-2",                 [this,ed]{ padToggle(Pad::NOTE2, ed);                               }},
+            { "pad-note-2-TAB",             [this,ed]{ padToggle(Pad::NOTE2, ed);                               }},
+            { "pad-note-4",                 [this,ed]{ padToggle(Pad::NOTE4, ed);                               }},
+            { "pad-note-4-TAB",             [this,ed]{ padToggle(Pad::NOTE4, ed);                               }},
+            { "pad-note-8",                 [this,ed]{ padToggle(Pad::NOTE8, ed);                               }},
+            { "pad-note-8-TAB",             [this,ed]{ padToggle(Pad::NOTE8, ed);                               }},
+            { "pad-note-16",                [this,ed]{ padToggle(Pad::NOTE16, ed);                              }},
+            { "pad-note-16-TAB",            [this,ed]{ padToggle(Pad::NOTE16, ed);                              }},
+            { "pad-note-32",                [this,ed]{ padToggle(Pad::NOTE32, ed);                              }},
+            { "pad-note-32-TAB",            [this,ed]{ padToggle(Pad::NOTE32, ed);                              }},
+            { "pad-note-64",                [this,ed]{ padToggle(Pad::NOTE64, ed);                              }},
+            { "pad-note-64-TAB",            [this,ed]{ padToggle(Pad::NOTE64, ed);                              }},
+            { "pad-note-128",               [this,ed]{ padToggle(Pad::NOTE128, ed);                             }},
+            { "pad-note-128-TAB",           [this,ed]{ padToggle(Pad::NOTE128, ed);                             }},
             { "reset-style",                [this]{ cmdResetStyle();                                            }},
             { "reset-beammode",             [this]{ cmdResetBeamMode();                                         }},
             { "reset-groupings",            [this]{ cmdResetNoteAndRestGroupings();                             }},
@@ -3698,20 +3832,21 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "voice-x23",                  [this]{ cmdExchangeVoice(1, 2);                                     }},
             { "voice-x24",                  [this]{ cmdExchangeVoice(1, 3);                                     }},
             { "voice-x34",                  [this]{ cmdExchangeVoice(2, 3);                                     }},
-            { "pad-rest",                   [this]{ padToggle(Pad::REST);                                       }},
-            { "pad-dot",                    [this]{ padToggle(Pad::DOT);                                        }},
-            { "pad-dotdot",                 [this]{ padToggle(Pad::DOTDOT);                                     }},
-            { "pad-dot3",                   [this]{ padToggle(Pad::DOT3);                                       }},
-            { "pad-dot4",                   [this]{ padToggle(Pad::DOT4);                                       }},
+            { "pad-rest",                   [this,ed]{ padToggle(Pad::REST, ed);                                }},
+            { "pad-dot",                    [this,ed]{ padToggle(Pad::DOT, ed);                                 }},
+            { "pad-dotdot",                 [this,ed]{ padToggle(Pad::DOTDOT, ed);                              }},
+            { "pad-dot3",                   [this,ed]{ padToggle(Pad::DOT3, ed);                                }},
+            { "pad-dot4",                   [this,ed]{ padToggle(Pad::DOT4, ed);                                }},
             { "beam-start",                 [this]{ cmdSetBeamMode(Beam::Mode::BEGIN);                          }},
             { "beam-mid",                   [this]{ cmdSetBeamMode(Beam::Mode::MID);                            }},
             { "no-beam",                    [this]{ cmdSetBeamMode(Beam::Mode::NONE);                           }},
-            { "beam-32",                    [this]{ cmdSetBeamMode(Beam::Mode::BEGIN32);                        }},
-            { "sharp2",                     [this]{ changeAccidental(AccidentalType::SHARP2);                   }},
-            { "sharp",                      [this]{ changeAccidental(AccidentalType::SHARP);                    }},
-            { "nat",                        [this]{ changeAccidental(AccidentalType::NATURAL);                  }},
-            { "flat",                       [this]{ changeAccidental(AccidentalType::FLAT);                     }},
-            { "flat2",                      [this]{ changeAccidental(AccidentalType::FLAT2);                    }},
+            { "beam32",                     [this]{ cmdSetBeamMode(Beam::Mode::BEGIN32);                        }},
+            { "beam64",                     [this]{ cmdSetBeamMode(Beam::Mode::BEGIN64);                        }},
+            { "sharp2",                     [this,ed]{ toggleAccidental(AccidentalType::SHARP2, ed);            }},
+            { "sharp",                      [this,ed]{ toggleAccidental(AccidentalType::SHARP, ed);             }},
+            { "nat",                        [this,ed]{ toggleAccidental(AccidentalType::NATURAL, ed);           }},
+            { "flat",                       [this,ed]{ toggleAccidental(AccidentalType::FLAT, ed);              }},
+            { "flat2",                      [this,ed]{ toggleAccidental(AccidentalType::FLAT2, ed);             }},
             { "flip",                       [this]{ cmdFlip();                                                  }},
             { "stretch+",                   [this]{ cmdAddStretch(0.1);                                         }},
             { "stretch-",                   [this]{ cmdAddStretch(-0.1);                                        }},
@@ -3745,10 +3880,10 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "time-delete",                [this]{ cmdTimeDelete();                                            }},
             { "pitch-up-octave",            [this]{ cmdPitchUpOctave();                                         }},
             { "pitch-down-octave",          [this]{ cmdPitchDownOctave();                                       }},
-            { "pad-note-increase",          [this]{ cmdPadNoteIncreaseTAB();                                    }},
-            { "pad-note-decrease",          [this]{ cmdPadNoteDecreaseTAB();                                    }},
-            { "pad-note-increase-TAB",      [this]{ cmdPadNoteIncreaseTAB();                                    }},
-            { "pad-note-decrease-TAB",      [this]{ cmdPadNoteDecreaseTAB();                                    }},
+            { "pad-note-increase",          [this,ed]{ cmdPadNoteIncreaseTAB(ed);                               }},
+            { "pad-note-decrease",          [this,ed]{ cmdPadNoteDecreaseTAB(ed);                               }},
+            { "pad-note-increase-TAB",      [this,ed]{ cmdPadNoteIncreaseTAB(ed);                               }},
+            { "pad-note-decrease-TAB",      [this,ed]{ cmdPadNoteDecreaseTAB(ed);                               }},
             { "toggle-mmrest",              [this]{ cmdToggleMmrest();                                          }},
             { "toggle-hide-empty",          [this]{ cmdToggleHideEmpty();                                       }},
             { "set-visible",                [this]{ cmdSetVisible();                                            }},
@@ -3759,7 +3894,6 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "relayout",                   [this]{ cmdRelayout();                                              }},
             { "toggle-autoplace",           [this]{ cmdToggleAutoplace(false);                                  }},
             { "autoplace-enabled",          [this]{ cmdToggleAutoplace(true);                                   }},
-            { "",                           [this]{                                                             }},
             };
 
       for (const auto& c : cmdList) {

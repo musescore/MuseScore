@@ -522,6 +522,8 @@ Sid Articulation::getPropertyStyle(Pid id) const
                               return Sid::articulationAnchorOther;
                         }
                   }
+                  Q_ASSERT(false); // should never be reached
+                  Q_FALLTHROUGH();
             default:
                   return Sid::NOSTYLE;
             }
@@ -602,6 +604,30 @@ bool Articulation::isLuteFingering() const
       }
 
 //---------------------------------------------------------
+//   isOrnament
+//---------------------------------------------------------
+
+bool Articulation::isOrnament() const
+      {
+      return _symId == SymId::ornamentTurn
+          || _symId == SymId::ornamentTurnInverted
+          || _symId == SymId::ornamentTrill
+          || _symId == SymId::brassMuteClosed
+          || _symId == SymId::ornamentMordentInverted
+          || _symId == SymId::ornamentMordent
+          || _symId == SymId::ornamentTremblement
+          || _symId == SymId::ornamentPrallMordent
+          || _symId == SymId::ornamentLinePrall
+          || _symId == SymId::ornamentUpPrall
+          || _symId == SymId::ornamentUpMordent
+          || _symId == SymId::ornamentPrecompMordentUpperPrefix
+          || _symId == SymId::ornamentDownMordent
+          || _symId == SymId::ornamentPrallUp
+          || _symId == SymId::ornamentPrallDown
+          || _symId == SymId::ornamentPrecompSlide;
+      }
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
@@ -653,7 +679,7 @@ void Articulation::doAutoplace()
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
                         //bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
-                        if (rebaseMinDistance(md, yd, sp, rebase, true))
+                        if (rebaseMinDistance(md, yd, sp, rebase, above, true))
                               r.translate(0.0, rebase);
                         }
                   rypos() += yd;

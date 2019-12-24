@@ -159,6 +159,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
       xml.tag("showUnprintable", _showUnprintable);
       xml.tag("showFrames",      _showFrames);
       xml.tag("showMargins",     _showPageborders);
+      xml.tag("markIrregularMeasures", _markIrregularMeasures, true);
 
       QMapIterator<QString, QString> i(_metaTags);
       while (i.hasNext()) {
@@ -655,12 +656,12 @@ bool Score::saveFile(QFileInfo& info)
 //   loadStyle
 //---------------------------------------------------------
 
-bool Score::loadStyle(const QString& fn, bool ignore)
+bool Score::loadStyle(const QString& fn, bool ign)
       {
       QFile f(fn);
       if (f.open(QIODevice::ReadOnly)) {
             MStyle st = style();
-            if (st.load(&f, ignore)) {
+            if (st.load(&f, ign)) {
                   undo(new ChangeStyle(this, st));
                   return true;
                   }
@@ -1121,29 +1122,29 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTi
 //---------------------------------------------------------
 
 void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
-   Segment* fs, Segment* ls, bool writeSystemElements, bool forceTimeSig)
+   Segment* sseg, Segment* eseg, bool writeSystemElements, bool forceTimeSig)
       {
       Fraction startTick = xml.curTick();
-      Fraction endTick   = ls ? ls->tick() : lastMeasure()->endTick();
+      Fraction endTick   = eseg ? eseg->tick() : lastMeasure()->endTick();
       bool clip          = xml.clipboardmode();
 
       // in clipboard mode, ls might be in an mmrest
       // since we are traversing regular measures,
       // force them out of mmRest
       if (clip) {
-            Measure* lm = ls ? ls->measure() : 0;
-            Measure* fm = fs ? fs->measure() : 0;
+            Measure* lm = eseg ? eseg->measure() : 0;
+            Measure* fm = sseg ? sseg->measure() : 0;
             if (lm && lm->isMMRest()) {
                   lm = lm->mmRestLast();
                   if (lm)
-                        ls = lm->nextMeasure() ? lm->nextMeasure()->first() : lastSegment();
+                        eseg = lm->nextMeasure() ? lm->nextMeasure()->first() : nullptr;
                   else
                         qDebug("writeSegments: no measure for end segment in mmrest");
                   }
             if (fm && fm->isMMRest()) {
                   fm = fm->mmRestFirst();
                   if (fm)
-                        fs = fm->first();
+                        sseg = fm->first();
                   }
             }
 
@@ -1153,7 +1154,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
       for (auto i = spanner().begin(); i != endIt; ++i) {
             Spanner* s = i->second;
 #else
-      auto sl = spannerMap().findOverlapping(fs->tick().ticks(), endTick.ticks());
+      auto sl = spannerMap().findOverlapping(sseg->tick().ticks(), endTick.ticks());
       for (auto i : sl) {
             Spanner* s = i.value;
 #endif
@@ -1176,7 +1177,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
             bool crWritten = false;      // for forceTimeSig
             bool keySigWritten = false;  // for forceTimeSig
 
-            for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
+            for (Segment* segment = sseg; segment && segment != eseg; segment = segment->next1()) {
                   if (!segment->enabled())
                         continue;
                   if (track == 0)
@@ -1230,8 +1231,8 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                                     }
                               if ((s->tick2() == segment->tick())
                                  && !s->isSlur()
-                                 && (s->track2() == track || (s->track2() == -1 && s->track() == track))
-                                 && (!clip || s->tick() >= fs->tick())
+                                 && (s->effectiveTrack2() == track)
+                                 && (!clip || s->tick() >= sseg->tick())
                                  ) {
                                     if (needMove) {
                                           voiceTagWritten |= writeVoiceMove(xml, segment, startTick, track, &lastTrackWritten);
@@ -1286,7 +1287,8 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                         cr->writeTupletEnd(xml);
                         }
 
-                  segment->write(xml);    // write only once
+                  if (!(e->isRest() && toRest(e)->isGap()))
+                        segment->write(xml);    // write only once
                   if (forceTimeSig) {
                         if (segment->segmentType() == SegmentType::KeySig)
                               keySigWritten = true;
@@ -1298,12 +1300,12 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                   }
 
             //write spanner ending after the last segment, on the last tick
-            if (clip || ls == 0) {
+            if (clip || eseg == 0) {
                   for (Spanner* s : spanners) {
                         if ((s->tick2() == endTick)
                           && !s->isSlur()
                           && (s->track2() == track || (s->track2() == -1 && s->track() == track))
-                          && (!clip || s->tick() >= fs->tick())
+                          && (!clip || s->tick() >= sseg->tick())
                           ) {
                               s->writeSpannerEnd(xml, lastMeasure(), track, endTick);
                               }

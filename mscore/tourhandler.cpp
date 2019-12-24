@@ -1,6 +1,7 @@
 #include "tourhandler.h"
 #include "musescore.h"
 #include "preferences.h"
+#include "qmldockwidget.h"
 
 namespace Ms {
 
@@ -469,10 +470,22 @@ void TourHandler::displayTour(Tour* tour)
                   overlay->setParent(tourWidgets.at(0)->window());
                   positionMessage(tourWidgets, mbox);
                   }
+
+            const std::vector<QmlDockWidget*> qmlDockWidgets = mscore->qmlDockWidgets();
+            if (!tourWidgets.contains(mscore)) {
+                  for (QmlDockWidget* qw : qmlDockWidgets) {
+                        if (!tourWidgets.contains(qw))
+                              qw->setShadowOverlay(true);
+                        }
+                  }
+
             overlay->show();
             mbox->exec();
             overlay->hide();
             showTours = showToursBox->isChecked();
+
+            for (QmlDockWidget* qw : qmlDockWidgets)
+                  qw->setShadowOverlay(false);
 
             // Handle the button presses
             if (mbox->clickedButton() == nextButton) {

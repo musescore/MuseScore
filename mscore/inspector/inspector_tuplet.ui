@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>279</width>
+    <width>304</width>
     <height>288</height>
    </rect>
   </property>
@@ -61,48 +61,26 @@
    <item>
     <widget class="QWidget" name="panel" native="true">
      <layout class="QGridLayout" name="gridLayout">
-      <property name="leftMargin">
-       <number>3</number>
-      </property>
-      <property name="topMargin">
-       <number>3</number>
-      </property>
-      <property name="rightMargin">
-       <number>3</number>
-      </property>
-      <property name="bottomMargin">
-       <number>3</number>
-      </property>
-      <property name="spacing">
-       <number>3</number>
-      </property>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
+      <item row="0" column="1">
+       <widget class="QLabel" name="label_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
-         <string>Bracket type:</string>
+         <string>Direction:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>bracketType</cstring>
+         <cstring>direction</cstring>
         </property>
        </widget>
       </item>
-      <item row="7" column="2">
-       <widget class="Ms::ResetButton" name="resetTupletFontStyle" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Style' values</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
+      <item row="0" column="2">
        <widget class="QComboBox" name="direction">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -130,50 +108,8 @@
         </item>
        </widget>
       </item>
-      <item row="5" column="1">
-       <widget class="QFontComboBox" name="tupletFontFace">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Font face</string>
-        </property>
-        <property name="accessibleName">
-         <string>Font face</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Direction:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>direction</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="1">
-       <widget class="Ms::FontStyleSelect" name="tupletFontStyle" native="true">
-        <property name="accessibleName">
-         <string>Style</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetBracketType" native="true">
+      <item row="0" column="3">
+       <widget class="Ms::ResetButton" name="resetDirection" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -181,11 +117,24 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Bracket type' value</string>
+         <string>Reset 'Direction' value</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Number type:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>numberType</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
        <widget class="QComboBox" name="numberType">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -208,38 +157,38 @@
         </item>
         <item>
          <property name="text">
-          <string>None</string>
+          <string comment="no tuplet number style">None</string>
          </property>
         </item>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Font:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QDoubleSpinBox" name="lineWidth">
+      <item row="1" column="3">
+       <widget class="Ms::ResetButton" name="resetNumberType" native="true">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Line thickness</string>
-        </property>
-        <property name="suffix">
-         <string>sp</string>
-        </property>
-        <property name="singleStep">
-         <double>0.100000000000000</double>
+         <string>Reset 'Number type' value</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Bracket type:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>bracketType</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
        <widget class="QComboBox" name="bracketType">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -262,25 +211,120 @@
         </item>
         <item>
          <property name="text">
-          <string>None</string>
+          <string comment="no tuplet bracket style">None</string>
          </property>
         </item>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label">
+      <item row="2" column="3">
+       <widget class="Ms::ResetButton" name="resetBracketType" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Bracket type' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Number type:</string>
+         <string>Line thickness:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>numberType</cstring>
+         <cstring>lineWidth</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QDoubleSpinBox" name="lineWidth">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Line thickness</string>
+        </property>
+        <property name="suffix">
+         <string>sp</string>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="Ms::ResetButton" name="resetLineWidth" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Line thickness' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" colspan="3">
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Font:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QFontComboBox" name="tupletFontFace">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Font face</string>
+        </property>
+        <property name="accessibleName">
+         <string>Font face</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3">
+       <widget class="Ms::ResetButton" name="resetTupletFontFace" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Font' value</string>
         </property>
        </widget>
       </item>
       <item row="6" column="1">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Size:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
        <widget class="QSpinBox" name="tupletFontSize">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -302,40 +346,7 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Style:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetNumberType" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Number type' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="Ms::ResetButton" name="resetTupletFontFace" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="2">
+      <item row="6" column="3">
        <widget class="Ms::ResetButton" name="resetTupletFontSize" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -348,8 +359,22 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetLineWidth" native="true">
+      <item row="7" column="1">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Style:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="2">
+       <widget class="Ms::FontStyleSelect" name="tupletFontStyle" native="true">
+        <property name="accessibleName">
+         <string>Style</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="3">
+       <widget class="Ms::ResetButton" name="resetTupletFontStyle" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -357,32 +382,22 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Line thickness' value</string>
+         <string>Reset 'Style' values</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label_6">
+      <item row="8" column="1" colspan="2">
+       <widget class="QCheckBox" name="spatiumDependent">
+        <property name="accessibleName">
+         <string>Follow staff size</string>
+        </property>
         <property name="text">
-         <string>Size:</string>
+         <string>Follow staff size</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Line thickness:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>lineWidth</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetDirection" native="true">
+      <item row="8" column="3">
+       <widget class="Ms::ResetButton" name="resetSpatiumDependent" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -390,14 +405,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="3">
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <string>Reset 'Follow staff size' values</string>
         </property>
        </widget>
       </item>

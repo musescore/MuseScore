@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.00">
   <Workspace>
+    <source>Advanced</source>
     <PaletteBox>
       <Palette name="Clefs">
+        <type>Clef</type>
         <gridWidth>35</gridWidth>
         <gridHeight>50</gridHeight>
         <mag>0.8</mag>
@@ -178,6 +180,7 @@
           </Cell>
         </Palette>
       <Palette name="Key Signatures">
+        <type>KeySig</type>
         <gridWidth>56</gridWidth>
         <gridHeight>55</gridHeight>
         <mag>1</mag>
@@ -225,7 +228,7 @@
             <accidental>7</accidental>
             </KeySig>
           </Cell>
-        <Cell name="C♭ major / A♭ minor">
+        <Cell name="C♭ major, A♭ minor">
           <staff>1</staff>
           <KeySig>
             <accidental>-7</accidental>
@@ -282,10 +285,11 @@
           </Cell>
         </Palette>
       <Palette name="Time Signatures">
+        <type>TimeSig</type>
         <gridWidth>42</gridWidth>
         <gridHeight>38</gridHeight>
         <mag>0.8</mag>
-        <moreElements>0</moreElements>
+        <moreElements>1</moreElements>
         <Cell name="2/4">
           <staff>1</staff>
           <TimeSig>
@@ -372,8 +376,16 @@
             <sigD>2</sigD>
             </TimeSig>
           </Cell>
+        <Cell name="3/2">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>3</sigN>
+            <sigD>2</sigD>
+            </TimeSig>
+          </Cell>
         </Palette>
       <Palette name="Brackets">
+        <type>Bracket</type>
         <gridWidth>40</gridWidth>
         <gridHeight>60</gridHeight>
         <mag>0.7</mag>
@@ -397,6 +409,7 @@
           </Cell>
         </Palette>
       <Palette name="Accidentals">
+        <type>Accidental</type>
         <gridWidth>33</gridWidth>
         <gridHeight>36</gridHeight>
         <mag>1</mag>
@@ -442,7 +455,7 @@
             <subtype>accidentalNaturalSharp</subtype>
             </Accidental>
           </Cell>
-        <Cell name="Add brackets to element">
+        <Cell name="Add brackets to accidental">
           <Icon>
             <subtype>21</subtype>
             <action>add-brackets</action>
@@ -456,6 +469,7 @@
           </Cell>
         </Palette>
       <Palette name="Articulations">
+        <type>Articulation</type>
         <gridWidth>42</gridWidth>
         <gridHeight>25</gridHeight>
         <mag>1</mag>
@@ -672,6 +686,7 @@
           </Cell>
         </Palette>
       <Palette name="Ornaments">
+        <type>Ornament</type>
         <gridWidth>42</gridWidth>
         <gridHeight>25</gridHeight>
         <mag>1</mag>
@@ -727,7 +742,7 @@
             <subtype>ornamentUpMordent</subtype>
             </Articulation>
           </Cell>
-        <Cell name="Down prall">
+        <Cell name="Down mordent">
           <Articulation>
             <subtype>ornamentDownMordent</subtype>
             </Articulation>
@@ -737,12 +752,12 @@
             <subtype>ornamentPrallDown</subtype>
             </Articulation>
           </Cell>
-        <Cell name="Down mordent">
+        <Cell name="Prall up">
           <Articulation>
             <subtype>ornamentPrallUp</subtype>
             </Articulation>
           </Cell>
-        <Cell name="Prall up">
+        <Cell name="Line prall">
           <Articulation>
             <subtype>ornamentLinePrall</subtype>
             </Articulation>
@@ -753,7 +768,8 @@
             </Articulation>
           </Cell>
         </Palette>
-      <Palette name="Breaths &amp;&amp; Pauses">
+      <Palette name="Breaths &amp; Pauses">
+        <type>Breath</type>
         <gridWidth>42</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>
@@ -805,6 +821,7 @@
           </Cell>
         </Palette>
       <Palette name="Grace Notes">
+        <type>GraceNote</type>
         <gridWidth>32</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>
@@ -860,6 +877,7 @@
           </Cell>
         </Palette>
       <Palette name="Noteheads">
+        <type>NoteHead</type>
         <gridWidth>33</gridWidth>
         <gridHeight>36</gridHeight>
         <mag>1.3</mag>
@@ -988,6 +1006,7 @@
           </Cell>
         </Palette>
       <Palette name="Lines">
+        <type>Line</type>
         <gridWidth>75</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.8</mag>
@@ -1241,7 +1260,7 @@
             <length>200</length>
             </Vibrato>
           </Cell>
-        <Cell name="tremolo sawtooth wide">
+        <Cell name="Tremolo sawtooth wide">
           <Vibrato id="34">
             <subtype>vibratoSawtoothWide</subtype>
             <ticks>0</ticks>
@@ -1256,6 +1275,7 @@
           </Cell>
         </Palette>
       <Palette name="Barlines">
+        <type>BarLine</type>
         <gridWidth>42</gridWidth>
         <gridHeight>38</gridHeight>
         <mag>0.8</mag>
@@ -1336,7 +1356,8 @@
             </BarLine>
           </Cell>
         </Palette>
-      <Palette name="Arpeggios &amp;&amp; Glissandi">
+      <Palette name="Arpeggios &amp; Glissandi">
+        <type>Arpeggio</type>
         <gridWidth>27</gridWidth>
         <gridHeight>50</gridHeight>
         <mag>1</mag>
@@ -1438,7 +1459,8 @@
             </ChordLine>
           </Cell>
         </Palette>
-      <Palette name="Tremolo">
+      <Palette name="Tremolos">
+        <type>Tremolo</type>
         <gridWidth>27</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>
@@ -1491,24 +1513,25 @@
           </Cell>
         </Palette>
       <Palette name="Text">
+        <type>Text</type>
         <gridWidth>84</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.85</mag>
         <grid>1</grid>
         <moreElements>0</moreElements>
-        <Cell name="Staff text">
+        <Cell name="Staff text" trElement="1">
           <StaffText>
             <text>Staff Text</text>
             </StaffText>
           </Cell>
-        <Cell name="Expression text">
+        <Cell name="Expression text" trElement="1">
           <StaffText>
             <placement>below</placement>
             <style>Expression</style>
             <text>Expression</text>
             </StaffText>
           </Cell>
-        <Cell name="Instrument change">
+        <Cell name="Instrument change" trElement="1">
           <InstrumentChange>
             <Instrument>
               <trackName></trackName>
@@ -1528,57 +1551,53 @@
             <text>B1</text>
             </RehearsalMark>
           </Cell>
-        <Cell name="Swing">
+        <Cell name="Swing" trElement="1">
           <SystemText>
             <swing unit="eighth" ratio= "60"/>
             <style>Tempo</style>
             <text>Swing</text>
             </SystemText>
           </Cell>
-        <Cell name="System text">
+        <Cell name="System text" trElement="1">
           <SystemText>
             <placement>above</placement>
             <text>System Text</text>
             </SystemText>
           </Cell>
-        <Cell name="Pizzicato">
+        <Cell name="Pizzicato" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="pizzicato"/>
-            <track>0</track>
             <text>pizz.</text>
             </StaffText>
           </Cell>
-        <Cell name="Arco">
+        <Cell name="Arco" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="arco"/>
-            <track>0</track>
             <text>arco</text>
             </StaffText>
           </Cell>
-        <Cell name="Tremolo">
+        <Cell name="Tremolo" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="tremolo"/>
-            <track>0</track>
             <style>Expression</style>
             <text>tremolo</text>
             </StaffText>
           </Cell>
-        <Cell name="Mute">
+        <Cell name="Mute" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="mute"/>
-            <track>0</track>
             <text>mute</text>
             </StaffText>
           </Cell>
-        <Cell name="Open">
+        <Cell name="Open" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="open"/>
-            <track>0</track>
             <text>open</text>
             </StaffText>
           </Cell>
         </Palette>
       <Palette name="Tempo">
+        <type>Tempo</type>
         <gridWidth>66</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.65</mag>
@@ -1752,6 +1771,7 @@
           </Cell>
         </Palette>
       <Palette name="Dynamics">
+        <type>Dynamic</type>
         <gridWidth>42</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.8</mag>
@@ -1897,150 +1917,151 @@
           </Cell>
         </Palette>
       <Palette name="Fingering">
+        <type>Fingering</type>
         <gridWidth>28</gridWidth>
         <gridHeight>30</gridHeight>
         <mag>1.5</mag>
         <grid>1</grid>
         <moreElements>0</moreElements>
-        <Cell name="Fingering 0">
+        <Cell name="Fingering &#37;1">
           <Fingering>
             <text>0</text>
             </Fingering>
           </Cell>
-        <Cell name="Fingering 1">
+        <Cell name="Fingering &#37;1">
           <Fingering>
             <text>1</text>
             </Fingering>
           </Cell>
-        <Cell name="Fingering 2">
+        <Cell name="Fingering &#37;1">
           <Fingering>
             <text>2</text>
             </Fingering>
           </Cell>
-        <Cell name="Fingering 3">
+        <Cell name="Fingering &#37;1">
           <Fingering>
             <text>3</text>
             </Fingering>
           </Cell>
-        <Cell name="Fingering 4">
+        <Cell name="Fingering &#37;1">
           <Fingering>
             <text>4</text>
             </Fingering>
           </Cell>
-        <Cell name="Fingering 5">
+        <Cell name="Fingering &#37;1">
           <Fingering>
             <text>5</text>
             </Fingering>
           </Cell>
-        <Cell name="RH Guitar Fingering p">
+        <Cell name="RH Guitar Fingering &#37;1">
           <Fingering>
             <style>RH Guitar Fingering</style>
             <text>p</text>
             </Fingering>
           </Cell>
-        <Cell name="RH Guitar Fingering i">
+        <Cell name="RH Guitar Fingering &#37;1">
           <Fingering>
             <style>RH Guitar Fingering</style>
             <text>i</text>
             </Fingering>
           </Cell>
-        <Cell name="RH Guitar Fingering m">
+        <Cell name="RH Guitar Fingering &#37;1">
           <Fingering>
             <style>RH Guitar Fingering</style>
             <text>m</text>
             </Fingering>
           </Cell>
-        <Cell name="RH Guitar Fingering a">
+        <Cell name="RH Guitar Fingering &#37;1">
           <Fingering>
             <style>RH Guitar Fingering</style>
             <text>a</text>
             </Fingering>
           </Cell>
-        <Cell name="RH Guitar Fingering c">
+        <Cell name="RH Guitar Fingering &#37;1">
           <Fingering>
             <style>RH Guitar Fingering</style>
             <text>c</text>
             </Fingering>
           </Cell>
-        <Cell name="LH Guitar Fingering 0">
+        <Cell name="LH Guitar Fingering &#37;1">
           <Fingering>
             <style>LH Guitar Fingering</style>
             <text>0</text>
             </Fingering>
           </Cell>
-        <Cell name="LH Guitar Fingering 1">
+        <Cell name="LH Guitar Fingering &#37;1">
           <Fingering>
             <style>LH Guitar Fingering</style>
             <text>1</text>
             </Fingering>
           </Cell>
-        <Cell name="LH Guitar Fingering 2">
+        <Cell name="LH Guitar Fingering &#37;1">
           <Fingering>
             <style>LH Guitar Fingering</style>
             <text>2</text>
             </Fingering>
           </Cell>
-        <Cell name="LH Guitar Fingering 3">
+        <Cell name="LH Guitar Fingering &#37;1">
           <Fingering>
             <style>LH Guitar Fingering</style>
             <text>3</text>
             </Fingering>
           </Cell>
-        <Cell name="LH Guitar Fingering 4">
+        <Cell name="LH Guitar Fingering &#37;1">
           <Fingering>
             <style>LH Guitar Fingering</style>
             <text>4</text>
             </Fingering>
           </Cell>
-        <Cell name="LH Guitar Fingering 5">
+        <Cell name="LH Guitar Fingering &#37;1">
           <Fingering>
             <style>LH Guitar Fingering</style>
             <text>5</text>
             </Fingering>
           </Cell>
-        <Cell name="LH Guitar Fingering T">
+        <Cell name="LH Guitar Fingering &#37;1">
           <Fingering>
             <style>LH Guitar Fingering</style>
             <text>T</text>
             </Fingering>
           </Cell>
-        <Cell name="String number 0">
+        <Cell name="String number &#37;1">
           <Fingering>
             <style>String Number</style>
             <text>0</text>
             </Fingering>
           </Cell>
-        <Cell name="String number 1">
+        <Cell name="String number &#37;1">
           <Fingering>
             <style>String Number</style>
             <text>1</text>
             </Fingering>
           </Cell>
-        <Cell name="String number 2">
+        <Cell name="String number &#37;1">
           <Fingering>
             <style>String Number</style>
             <text>2</text>
             </Fingering>
           </Cell>
-        <Cell name="String number 3">
+        <Cell name="String number &#37;1">
           <Fingering>
             <style>String Number</style>
             <text>3</text>
             </Fingering>
           </Cell>
-        <Cell name="String number 4">
+        <Cell name="String number &#37;1">
           <Fingering>
             <style>String Number</style>
             <text>4</text>
             </Fingering>
           </Cell>
-        <Cell name="String number 5">
+        <Cell name="String number &#37;1">
           <Fingering>
             <style>String Number</style>
             <text>5</text>
             </Fingering>
           </Cell>
-        <Cell name="String number 6">
+        <Cell name="String number &#37;1">
           <Fingering>
             <style>String Number</style>
             <text>6</text>
@@ -2072,7 +2093,8 @@
             </Articulation>
           </Cell>
         </Palette>
-      <Palette name="Repeats &amp;&amp; Jumps">
+      <Palette name="Repeats &amp; Jumps">
+        <type>Repeat</type>
         <gridWidth>75</gridWidth>
         <gridHeight>28</gridHeight>
         <mag>0.65</mag>
@@ -2195,6 +2217,7 @@
           </Cell>
       </Palette>
       <Palette name="Fretboard Diagrams">
+        <type>FretboardDiagram</type>
         <gridWidth>42</gridWidth>
         <gridHeight>45</gridHeight>
         <mag>1</mag>
@@ -3070,1298 +3093,8 @@
             </FretDiagram>
           </Cell>
         </Palette>
-      <Palette name="Bagpipe Embellishments">
-        <gridWidth>55</gridWidth>
-        <gridHeight>55</gridHeight>
-        <mag>0.8</mag>
-        <moreElements>0</moreElements>
-        <yoffset>2</yoffset>
-        <Cell name="Single grace low G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>0</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Single grace low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>1</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Single grace B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>2</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Single grace C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>3</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Single grace D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>4</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Single grace E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>5</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Single grace F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>6</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Single grace high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>7</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Single grace high A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>8</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>9</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>10</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>11</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>12</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>13</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>14</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>15</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>16</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>17</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>18</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>19</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>20</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>21</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>22</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>23</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>24</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>25</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>26</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>27</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>28</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>29</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>30</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>31</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>32</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>33</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>34</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>35</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>36</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>37</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double grace">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>38</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half doubling on low G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>39</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half doubling on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>40</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half doubling on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>41</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half doubling on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>42</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half doubling on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>43</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half doubling on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>44</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half doubling on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>45</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Doubling on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>46</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Doubling on high A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>47</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half strike on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>48</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half strike on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>49</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half strike on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>50</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>51</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>52</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half strike on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>53</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half strike on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>54</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half strike on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>55</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Grip">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>56</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half D throw">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>57</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Doubling on low G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>58</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Doubling on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>59</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Doubling on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>60</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Doubling on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>61</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Doubling on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>62</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Doubling on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>63</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Doubling on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>64</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb doubling on low G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>65</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb doubling on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>66</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb doubling on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>67</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb doubling on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>68</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb doubling on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>69</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb doubling on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>70</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb doubling on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>71</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>72</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>73</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>74</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>75</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>76</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>77</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>78</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double strike on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>79</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double strike on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>80</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double strike on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>81</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>82</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>83</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double strike on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>84</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double strike on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>85</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double strike on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>86</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Double strike on high A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>87</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb strike on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>88</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb strike on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>89</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb strike on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>90</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>91</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>92</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb strike on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>93</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb strike on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>94</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb strike on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>95</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Grip">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>96</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Grip">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>97</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Birl">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>98</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="D throw">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>99</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half heavy D throw">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>100</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Taorluath">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>101</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Birl">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>102</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Bubbly">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>103</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Heavy D throw">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>104</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Taorluath">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>105</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Taorluath">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>106</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half double strike on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>107</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half double strike on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>108</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half double strike on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>109</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half double strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>110</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half double strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>111</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half double strike on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>112</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half double strike on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>113</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half double strike on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>114</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half double strike on high A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>115</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half grip on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>116</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half grip on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>117</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half grip on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>118</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half grip on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>119</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half grip on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>120</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half grip on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>121</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half grip on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>122</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half grip on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>123</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half grip on high A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>124</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half pele on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>125</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half pele on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>126</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half pele on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>127</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half pele on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>128</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half pele on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>129</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half pele on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>130</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half pele on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>131</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half pele on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>132</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note grip on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>133</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note grip on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>134</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note grip on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>135</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note grip on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>136</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note grip on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>137</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note grip on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>138</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note grip on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>139</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grip on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>140</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grip on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>141</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grip on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>142</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grip on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>143</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grip on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>144</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grip on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>145</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grip on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>146</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grip on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>147</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Bubbly">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>148</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Birl">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>149</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Birl">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>150</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Pele on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>151</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Pele on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>152</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Pele on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>153</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Pele on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>154</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Pele on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>155</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Pele on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>156</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Pele on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>157</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grace note pele on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>158</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grace note pele on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>159</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grace note pele on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>160</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grace note pele on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>161</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grace note pele on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>162</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grace note pele on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>163</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grace note pele on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>164</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb grace note pele on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>165</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note double strike on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>166</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note double strike on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>167</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note double strike on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>168</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note double strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>169</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note double strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>170</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note double strike on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>171</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note double strike on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>172</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb double strike on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>173</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb double strike on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>174</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb double strike on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>175</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb double strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>176</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb double strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>177</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb double strike on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>178</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb double strike on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>179</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb double strike on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>180</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Triple strike on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>181</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Triple strike on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>182</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Triple strike on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>183</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Triple strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>184</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Triple strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>185</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Triple strike on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>186</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Triple strike on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>187</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Triple strike on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>188</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Triple strike on high A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>189</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half triple strike on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>190</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half triple strike on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>191</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half triple strike on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>192</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half triple strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>193</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half triple strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>194</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half triple strike on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>195</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half triple strike on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>196</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half triple strike on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>197</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Half triple strike on high A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>198</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note triple strike on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>199</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note triple strike on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>200</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note triple strike on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>201</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note triple strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>202</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note triple strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>203</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note triple strike on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>204</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="G grace note triple strike on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>205</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb triple strike on low A">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>206</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb triple strike on B">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>207</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb triple strike on C">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>208</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb triple strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>209</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb triple strike on D">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>210</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb triple strike on E">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>211</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb triple strike on F">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>212</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        <Cell name="Thumb triple strike on high G">
-          <staff>1</staff>
-          <BagpipeEmbellishment>
-            <subtype>213</subtype>
-            </BagpipeEmbellishment>
-          </Cell>
-        </Palette>
-      <Palette name="Breaks &amp;&amp; Spacers">
+      <Palette name="Breaks &amp; Spacers">
+        <type>Break</type>
         <gridWidth>42</gridWidth>
         <gridHeight>36</gridHeight>
         <mag>1</mag>
@@ -4407,7 +3140,8 @@
             </Spacer>
           </Cell>
         </Palette>
-      <Palette name="Frames &amp;&amp; Measures">
+      <Palette name="Frames &amp; Measures">
+        <type>Frame</type>
         <gridWidth>27</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>
@@ -4439,6 +3173,7 @@
           </Cell>
         </Palette>
       <Palette name="Beam Properties">
+        <type>Beam</type>
         <gridWidth>27</gridWidth>
         <gridHeight>40</gridHeight>
         <mag>1</mag>

@@ -2,7 +2,7 @@
 clone_folder: C:\MuseScore
 
 # set clone depth
-clone_depth: 3                      # clone entire repository history if not defined
+clone_depth: 50                      # clone entire repository history if not defined
 
 image: Visual Studio 2017
 
@@ -13,7 +13,8 @@ branches:
 # build cache to preserve files/folders between builds
 cache:
   - dependencies.7z
-  # - qt-5.12.1-msvc.7z # if not using AppVeyor's built-in Qt in before_build.bat
+  - qt598_msvc2017_64.7z # if not using AppVeyor's built-in Qt in before_build.bat
+  - qt598_msvc2015.7z # if not using AppVeyor's built-in Qt in before_build.bat
   - C:\Program Files (x86)\Jack
   - C:\MuseScore\build.release\thirdparty
   - C:\ccache
@@ -67,15 +68,3 @@ on_success:
             Push-AppveyorArtifact update_win_nightly.xml
             Push-AppveyorArtifact appcast.xml
         }
-
-# uncomment in stable release
-#  - provider: S3
-#    access_key_id:
-#      secure: k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
-#    secret_access_key:
-#      secure: IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
-#    bucket: sparkle.musescore.org
-#    folder: testing/3/win/
-#    region: us-east-1
-#    set_public: true
-#    artifact: appcast.xml

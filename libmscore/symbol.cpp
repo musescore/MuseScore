@@ -59,7 +59,6 @@ void Symbol::layout()
       // foreach(Element* e, leafs())     done in BSymbol::layout() ?
       //      e->layout();
       setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
-      QPointF o(offset());
       qreal w = width();
       QPointF p;
       if (align() & Align::BOTTOM)

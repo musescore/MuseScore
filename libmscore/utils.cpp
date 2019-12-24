@@ -173,40 +173,6 @@ Segment* Score::tick2segment(const Fraction& tick, bool first) const
       }
 
 //---------------------------------------------------------
-//   tick2segmentEnd
-//    Find a segment containing a note or rest in track ending at tick
-//    Return the segment or null
-//---------------------------------------------------------
-
-Segment* Score::tick2segmentEnd(int track, const Fraction& tick) const
-      {
-      Measure* m = tick2measure(tick);
-      if (m == 0) {
-            qDebug("tick2segment(): not found tick %d", tick.ticks());
-            return 0;
-            }
-      // loop over all segments
-      for (Segment* segment = m->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
-            ChordRest* cr = toChordRest(segment->element(track));
-            if (!cr)
-                  continue;
-            // TODO LVI: check if following is correct, see exceptions in
-            // ExportMusicXmlchord() and ExportMusicXmlrest()
-            Fraction endTick = cr->tick() + cr->actualTicks();
-            if (endTick < tick)
-                  continue; // not found yet
-            else if (endTick == tick) {
-                  return segment; // found it
-                  }
-            else {
-                  // endTick > tick (beyond the tick we are looking for)
-                  return 0;
-                  }
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   tick2leftSegment
 /// return the segment at this tick position if any or
 /// the first segment *before* this tick position
@@ -857,6 +823,7 @@ Note* searchTieNote(Note* note)
       // but err on the safe side in case there is roundoff in tick count
       Fraction endTick = chord->tick() + chord->actualTicks() - Fraction(1, 4 * 480);
 
+      int idx1 = note->unisonIndex();
       while ((seg = seg->next1(SegmentType::ChordRest))) {
             // skip ahead to end of current note duration as calculated above
             // but just in case, stop if we find element in current track
@@ -880,10 +847,17 @@ Note* searchTieNote(Note* note)
                         if (gn2)
                               return gn2;
                         }
+                  int idx2 = 0;
                   for (Note* n : c->notes()) {
                         if (n->pitch() == note->pitch()) {
-                              if (note2 == 0 || c->track() == chord->track())
-                                    note2 = n;
+                              if (idx1 == idx2) {
+                                    if (note2 == 0 || c->track() == chord->track()) {
+                                          note2 = n;
+                                          break;
+                                          }
+                                    }
+                              else
+                                    ++idx2;
                               }
                         }
                   }

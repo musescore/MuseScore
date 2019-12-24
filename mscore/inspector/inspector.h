@@ -18,6 +18,7 @@
 #include "inspectorTextBase.h"
 #include "ui_inspector_bend.h"
 #include "ui_inspector_break.h"
+#include "ui_inspector_sectionbreak.h"
 #include "ui_inspector_stafftypechange.h"
 #include "ui_inspector_vbox.h"
 #include "ui_inspector_tbox.h"
@@ -83,6 +84,18 @@ class InspectorBreak : public InspectorBase {
       };
 
 //---------------------------------------------------------
+//   InspectorSectionBreak
+//---------------------------------------------------------
+
+class InspectorSectionBreak : public InspectorBase {
+      Q_OBJECT
+      Ui::InspectorSectionBreak scb;
+
+   public:
+      InspectorSectionBreak(QWidget* parent);
+      };
+
+//---------------------------------------------------------
 //   InspectorStaffTypeChange
 //---------------------------------------------------------
 
@@ -140,6 +153,7 @@ class InspectorArticulation : public InspectorElementBase {
 
    public:
       InspectorArticulation(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -152,6 +166,7 @@ class InspectorFermata : public InspectorElementBase {
 
    public:
       InspectorFermata(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------

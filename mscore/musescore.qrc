@@ -72,6 +72,7 @@
         <file>data/icons/frame-fretboard.svg</file>
         <file>data/icons/measure.svg</file>
         <file>data/icons/object-select.svg</file>
+        <file>data/icons/mscz-icon.svg</file>
         <file>schema/musicxml.xsd</file>
         <file>schema/xlink.xsd</file>
         <file>schema/xml.xsd</file>
@@ -182,5 +183,7 @@
         <file>data/icons/mixer-slider-handle-vertical.svg</file>
         <file>data/icons/triangleDown.svg</file>
         <file>data/icons/triangleUp.svg</file>
+        <file>data/icons/arrowsMoveToTop.svg</file>
+        <file>data/win_opengl_buglist.json</file>
     </qresource>
 </RCC>

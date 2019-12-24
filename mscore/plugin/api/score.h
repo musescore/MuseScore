@@ -24,6 +24,10 @@ namespace PluginAPI {
 class Cursor;
 class Segment;
 class Measure;
+class Selection;
+class Score;
+
+extern Selection* selectionWrap(Ms::Selection* select);
 
 //---------------------------------------------------------
 //   Score
@@ -80,6 +84,8 @@ class Score : public Ms::PluginAPI::ScoreElement {
       Q_PROPERTY(QString                        mscoreVersion     READ mscoreVersion)
       /** MuseScore revision the score has been last saved with (includes autosave) (read only) */
       Q_PROPERTY(QString                        mscoreRevision    READ mscoreRevision)
+      /** Current selections for the score. \since MuseScore 3.3 */
+      Q_PROPERTY(Ms::PluginAPI::Selection*      selection         READ selection)
 
    public:
       /// \cond MS_INTERNAL
@@ -98,6 +104,8 @@ class Score : public Ms::PluginAPI::ScoreElement {
       int lyricCount() { return score()->lyricCount(); }
       QString lyricist() { return score()->metaTag("lyricist"); } // not the meanwhile obsolete "poet"
       QString title() { return score()->metaTag("workTitle"); }
+      Ms::PluginAPI::Selection* selection() { return selectionWrap(&score()->selection()); }
+
       /// \endcond
 
       /// Returns as a string the metatag named \p tag
@@ -157,6 +165,15 @@ class Score : public Ms::PluginAPI::ScoreElement {
        * made since the last startCmd() invocation.
        */
       Q_INVOKABLE void endCmd(bool rollback = false) { score()->endCmd(rollback); }
+
+      /**
+       * Create PlayEvents for all notes based on ornamentation.
+       * You need to call this if you are manipulating PlayEvent's
+       * so that all ornamentations are populated into Note's
+       * PlayEvent lists.
+       * \since 3.3
+       */
+      Q_INVOKABLE void createPlayEvents() { score()->createPlayEvents(); }
 
       /// \cond MS_INTERNAL
       QString mscoreVersion() { return score()->mscoreVersion(); }

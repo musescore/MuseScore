@@ -24,7 +24,7 @@ namespace Ms {
 void populateHookType(QComboBox* b)
       {
       b->clear();
-      b->addItem(b->QObject::tr("None"), int(HookType::NONE));
+      b->addItem(b->QObject::tr("None", "no hook type"), int(HookType::NONE));
       b->addItem(b->QObject::tr("90\u00b0"), int(HookType::HOOK_90)); // &deg;
       b->addItem(b->QObject::tr("45\u00b0"), int(HookType::HOOK_45)); // &deg;
       b->addItem(b->QObject::tr("90\u00b0 centered"), int(HookType::HOOK_90T)); // &deg;
@@ -70,9 +70,9 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
             { Pid::BEGIN_FONT_SIZE,         0, tl.beginFontSize,         tl.resetBeginFontSize         },
             { Pid::BEGIN_FONT_STYLE,        0, tl.beginFontStyle,        tl.resetBeginFontStyle        },
             { Pid::BEGIN_TEXT_OFFSET,       0, tl.beginTextOffset,       tl.resetBeginTextOffset       },
-
             { Pid::BEGIN_HOOK_TYPE,         0, tl.beginHookType,         tl.resetBeginHookType         },
             { Pid::BEGIN_HOOK_HEIGHT,       0, tl.beginHookHeight,       tl.resetBeginHookHeight       },
+
             { Pid::CONTINUE_TEXT,           0, tl.continueText,          tl.resetContinueText          },
             { Pid::CONTINUE_TEXT_PLACE,     0, tl.continueTextPlacement, tl.resetContinueTextPlacement },
             { Pid::CONTINUE_TEXT_ALIGN,     0, tl.continueTextAlign,     tl.resetContinueTextAlign     },

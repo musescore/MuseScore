@@ -142,6 +142,11 @@ void InspectorNote::setElement()
       bool nograce = !note->chord()->isGrace();
       s.leadingSpace->setEnabled(nograce);
       s.resetLeadingSpace->setEnabled(nograce && s.leadingSpace->value());
+
+      if (!n.fixed->isChecked())
+            n.fixedLine->setEnabled(false);
+      if (!n.play->isChecked())
+            n.playWidget->setVisible(false);
       }
 
 //---------------------------------------------------------

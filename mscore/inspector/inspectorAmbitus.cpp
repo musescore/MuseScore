@@ -119,6 +119,17 @@ void InspectorAmbitus::setElement()
 //      InspectorBase::setElement();
       }
 */
+
+void InspectorAmbitus::setElement()
+      {
+      InspectorElementBase::setElement();
+      if (!r.hasLine->isChecked()) {
+            r.labelLineWidth->setEnabled(false);
+            r.lineWidth->setEnabled(false);
+            r.resetLineWidth->setEnabled(false);
+            }
+      }
+
 //---------------------------------------------------------
 //   valueChanged
 //---------------------------------------------------------

@@ -103,11 +103,12 @@ void HairpinSegment::layout()
       Dynamic* ed = nullptr;
       qreal dymax = hairpin()->placeBelow() ? -10000.0 : 10000.0;
       if (autoplace() && !score()->isPalette()) {
+            Segment* start = hairpin()->startSegment();
+            Segment* end = hairpin()->endSegment();
             // Try to fit between adjacent dynamics
             qreal minDynamicsDistance = score()->styleP(Sid::autoplaceHairpinDynamicsDistance) * staff()->mag(tick());
             const System* sys = system();
             if (isSingleType() || isBeginType()) {
-                  Segment* start = hairpin()->startSegment();
                   if (start && start->system() == sys) {
                         sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
                         if (!sd) {
@@ -130,8 +131,7 @@ void HairpinSegment::layout()
                         }
                   }
             if (isSingleType() || isEndType()) {
-                  Segment* end = hairpin()->endSegment();
-                  if (end && end->tick() < sys->endTick()) {
+                  if (end && end->tick() < sys->endTick() && start != end) {
                         // checking ticks rather than systems
                         // systems may be unknown at layout stage.
                         ed = toDynamic(end->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
@@ -176,14 +176,13 @@ void HairpinSegment::layout()
             qreal h1 = hairpin()->hairpinHeight().val()     * _spatium * .5;
             qreal h2 = hairpin()->hairpinContHeight().val() * _spatium * .5;
 
-            qreal len;
             qreal x = pos2().x();
             if (!_endText->empty())
                   x -= (_endText->width() + _spatium * .5);       // 0.5 spatium distance
             if (x < _spatium)             // minimum size of hairpin
                   x = _spatium;
             qreal y = pos2().y();
-            len     = sqrt(x * x + y * y);
+            qreal len = sqrt(x * x + y * y);
             t.rotateRadians(asin(y/len));
 
             drawCircledTip   =  hairpin()->hairpinCircledTip();
@@ -275,10 +274,11 @@ void HairpinSegment::layout()
             qreal sp = spatium();
             qreal md = minDistance().val() * sp;
 
-            SkylineLine sl(!hairpin()->placeAbove());
+            bool above = spanner()->placeAbove();
+            SkylineLine sl(!above);
             Shape sh = shape();
             sl.add(sh.translated(pos()));
-            if (hairpin()->placeAbove()) {
+            if (above) {
                   d  = system()->topDistance(staffIdx(), sl);
                   if (d > -md)
                         ymax -= d + md;
@@ -300,8 +300,8 @@ void HairpinSegment::layout()
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
                         qreal adj = pos().y() + rebase;
-                        bool inStaff = spanner()->placeAbove() ? sh.bottom() + adj > 0.0 : sh.top() + adj < staff()->height();
-                        rebaseMinDistance(md, yd, sp, rebase, inStaff);
+                        bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < staff()->height();
+                        rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
                         }
                   rypos() += yd;
                   }

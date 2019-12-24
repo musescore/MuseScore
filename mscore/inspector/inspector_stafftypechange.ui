@@ -112,9 +112,9 @@
        </widget>
       </item>
       <item row="11" column="0" colspan="2">
-       <widget class="QCheckBox" name="slashStyle">
+       <widget class="QCheckBox" name="stemless">
         <property name="text">
-         <string>Slash style</string>
+         <string>Stemless</string>
         </property>
        </widget>
       </item>
@@ -287,7 +287,7 @@
        </widget>
       </item>
       <item row="11" column="2">
-       <widget class="Ms::ResetButton" name="resetSlashStyle" native="true">
+       <widget class="Ms::ResetButton" name="resetStemless" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -295,7 +295,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Slash style' value</string>
+         <string>Reset 'Stemless' value</string>
         </property>
        </widget>
       </item>
@@ -520,7 +520,7 @@
   <tabstop>stepOffset</tabstop>
   <tabstop>showBarlines</tabstop>
   <tabstop>showLedgerlines</tabstop>
-  <tabstop>slashStyle</tabstop>
+  <tabstop>stemless</tabstop>
   <tabstop>noteheadScheme</tabstop>
   <tabstop>genClefs</tabstop>
   <tabstop>genTimesig</tabstop>

@@ -35,16 +35,20 @@ namespace Ms {
 //   support enums / structs / classes
 //---------------------------------------------------------
 
-typedef QList<Chord*> GraceChordList;
-typedef QVector<FiguredBass*> FiguredBassList;
+using GraceChordList = QList<Chord*>;
+using FiguredBassList = QVector<FiguredBass*>;
+//      typedef QList<Chord*> GraceChordList;
+//      typedef QVector<FiguredBass*> FiguredBassList;
+using Tuplets = std::map<QString, Tuplet*>;
 
 //---------------------------------------------------------
 //   MxmlStartStop
 //---------------------------------------------------------
-
+/*
 enum class MxmlStartStop : char {
       START, STOP, NONE
       };
+ */
 
 //---------------------------------------------------------
 //   MusicXmlTupletDesc
@@ -68,11 +72,25 @@ struct MusicXmlTupletDesc {
 //---------------------------------------------------------
 
 struct MusicXmlSpannerDesc {
-      SLine* sp;
-      ElementType tp;
-      int nr;
-      MusicXmlSpannerDesc(SLine* _sp, ElementType _tp, int _nr) : sp(_sp), tp(_tp), nr(_nr) {}
-      MusicXmlSpannerDesc(ElementType _tp, int _nr) : sp(0), tp(_tp), nr(_nr) {}
+      SLine* _sp;
+      ElementType _tp;
+      int _nr;
+      MusicXmlSpannerDesc(SLine* sp, ElementType tp, int nr) : _sp(sp), _tp(tp), _nr(nr) {}
+      MusicXmlSpannerDesc(ElementType tp, int nr) : _sp(0), _tp(tp), _nr(nr) {}
+      };
+
+//---------------------------------------------------------
+//   NewMusicXmlSpannerDesc
+//---------------------------------------------------------
+
+struct MusicXmlExtendedSpannerDesc {
+      SLine* _sp { nullptr };
+      Fraction _tick2 { 0, 0 };
+      int _track2 {};
+      bool _isStarted { false };
+      bool _isStopped { false };
+      MusicXmlExtendedSpannerDesc() {}
+      QString toString() const;
       };
 
 //---------------------------------------------------------
@@ -143,10 +161,11 @@ class MxmlLogger;
 
 using SlurStack = std::array<SlurDesc, MAX_NUMBER_LEVEL>;
 using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
-using BracketsStack = std::array<SLine*, MAX_BRACKETS>;
-using DashesStack = std::array<SLine*, MAX_DASHES>;
-using OttavasStack = std::array<SLine*, MAX_NUMBER_LEVEL>;
-using HairpinsStack = std::array<SLine*, MAX_NUMBER_LEVEL>;
+using BracketsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
+using OttavasStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
+using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
+using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
+using SpannerSet = std::set<Spanner*>;
 
 //---------------------------------------------------------
 //   MusicXMLParserNotations
@@ -216,11 +235,12 @@ public:
 
       // part specific data interface functions
       void addSpanner(const MusicXmlSpannerDesc& desc);
-      SLine* getSpanner(const MusicXmlSpannerDesc& desc);
+      MusicXmlExtendedSpannerDesc& getSpanner(const MusicXmlSpannerDesc& desc);
       void clearSpanner(const MusicXmlSpannerDesc& desc);
 
 private:
       void initPartState(const QString& partId);
+      SpannerSet findIncompleteSpannersAtPartEnd();
       Score::FileError parse();
       void scorePartwise();
       void partList();
@@ -232,15 +252,15 @@ private:
       void attributes(const QString& partId, Measure* measure, const Fraction& tick);
       void measureStyle(Measure* measure);
       void print(Measure* measure);
-      void barline(const QString& partId, Measure* measure);
+      void barline(const QString& partId, Measure* measure, const Fraction& tick);
       void key(const QString& partId, Measure* measure, const Fraction& tick);
       void clef(const QString& partId, Measure* measure, const Fraction& tick);
       void time(const QString& partId, Measure* measure, const Fraction& tick);
       void divisions();
       void transpose(const QString& partId);
       Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,
-                 Fraction& dura, QString& currentVoice, GraceChordList& gcl, int& gac,
-                 Beam*& beam, FiguredBassList& fbl, int& alt);
+                 Fraction& missingPrev, Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac,
+                 Beam*& beam, FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
       void notePrintSpacingNo(Fraction& dura);
       FiguredBassItem* figure(const int idx, const bool paren);
       FiguredBass* figuredBass();
@@ -277,14 +297,12 @@ private:
       // or use score->sigmap() ?
       Fraction _timeSigDura;
 
-      QVector<Tuplet*> _tuplets;          ///< Current tuplet for each track in the current part
-      QVector<bool> _tuplImpls;           ///< Current tuplet implicit flag for each track in the current part
       SlurStack _slurs { {} };
       TrillStack _trills { {} };          ///< Current trills
-      BracketsStack _brackets { {} };
-      DashesStack _dashes { {} };
-      OttavasStack _ottavas { {} };       ///< Current ottavas
-      HairpinsStack _hairpins { {} };     ///< Current hairpins
+      BracketsStack _brackets;
+      OttavasStack _ottavas;              ///< Current ottavas
+      HairpinsStack _hairpins;            ///< Current hairpins
+      MusicXmlExtendedSpannerDesc _dummyNewMusicXmlSpannerDesc;
 
       Glissando* _glissandi[MAX_NUMBER_LEVEL][2];   ///< Current slides ([0]) / glissandi ([1])
 
@@ -294,7 +312,7 @@ private:
 
       MusicXmlSpannerMap _spanners;
 
-      SLine* _pedal;                              ///< Current pedal
+      MusicXmlExtendedSpannerDesc _pedal;         ///< Current pedal
       Pedal* _pedalContinue;                      ///< Current pedal type="change" requiring fixup
       Harmony* _harmony;                          ///< Current harmony
       Chord* _tremStart;                          ///< Starting chord for current tremolo

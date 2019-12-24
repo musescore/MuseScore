@@ -331,7 +331,7 @@
        <item row="2" column="0" rowspan="2">
         <widget class="QLabel" name="labelPatch">
          <property name="text">
-          <string>Patch:</string>
+          <string>Sound:</string>
          </property>
         </widget>
        </item>
@@ -466,7 +466,7 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>Patch voice</string>
+          <string>Sound name</string>
          </property>
         </widget>
        </item>
@@ -522,7 +522,7 @@
  <customwidgets>
   <customwidget>
    <class>Awl::ColorLabel</class>
-   <extends>QFrame</extends>
+   <extends>QPushButton</extends>
    <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>

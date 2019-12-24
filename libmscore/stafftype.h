@@ -187,7 +187,7 @@ class StaffType {
 
       bool _showBarlines    = true;
       bool _showLedgerLines = true;
-      bool _slashStyle      = false;      // do not show stems
+      bool _stemless        = false;      // do not show stems
 
       bool _genClef         = true;       // create clef at beginning of system
       bool _genTimesig      = true;       // whether time signature is shown or not
@@ -300,8 +300,8 @@ class StaffType {
       void write(XmlWriter& xml) const;
       void read(XmlReader&);
 
-      void setSlashStyle(bool val)             { _slashStyle = val;       }
-      bool slashStyle() const                  { return _slashStyle;      }
+      void setStemless(bool val)               { _stemless = val;       }
+      bool stemless() const                    { return _stemless;      }
       bool genTimesig() const                  { return _genTimesig;      }
       void setGenTimesig(bool val)             { _genTimesig = val;       }
       qreal doty1() const;
@@ -423,6 +423,7 @@ class TabDurationSymbol final : public Element {
       TabBeamGrid _beamGrid;        // value for special 'English' grid display
       const StaffType*  _tab;
       QString     _text;
+      bool        _repeat;
 
    public:
       TabDurationSymbol(Score* s);
@@ -440,6 +441,8 @@ class TabDurationSymbol final : public Element {
             _tab = tab;
             _text = tab->durationString(type, dots);
             }
+      bool isRepeat() const                     { return _repeat; }
+      void setRepeat(bool val)                  { _repeat = val;  }
       };
 
 }     // namespace Ms

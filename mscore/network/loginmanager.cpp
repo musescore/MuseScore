@@ -15,8 +15,6 @@
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "preferences.h"
-#include "kQOAuth/kqoauthrequest.h"
-#include "kQOAuth/kqoauthrequest_xauth.h"
 
 #ifdef USE_WEBENGINE
 #include <QWebEngineCookieStore>
@@ -123,6 +121,30 @@ ApiInfo::ApiInfo(const QByteArray _clientId, const QByteArray _apiKey)
             qWarning("apiKey: %s", apiKey.constData());
             qWarning("userAgent: %s", userAgent.constData());
             }
+      }
+
+//---------------------------------------------------------
+//   ApiInfo::getUpdateScoreInfoUrl
+//---------------------------------------------------------
+
+QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& accessToken, bool newScore, const QString& customPath)
+      {
+      QUrl url(mscoreHost);
+      url.setPath(customPath.isEmpty() ? defaultUpdateScoreInfoPath : customPath);
+
+      QUrlQuery query;
+      query.addQueryItem("id", scoreId);
+      query.addQueryItem("newScore", QString::number(newScore));
+
+#ifdef USE_WEBENGINE
+      query.addQueryItem("_token", accessToken);
+#else
+      Q_UNUSED(accessToken); // we'll be redirected to a browser, don't put access token there
+#endif
+
+      url.setQuery(query);
+
+      return url;
       }
 
 //---------------------------------------------------------
@@ -271,28 +293,6 @@ QString LoginManager::getErrorString(QNetworkReply* reply, const QJsonObject& ob
       return QString("%1 (%2)").arg(err).arg(msg);
       }
 
-//---------------------------------------------------------
-//   onAuthorizedRequestDone
-//---------------------------------------------------------
-#if 0
-void LoginManager::onAuthorizedRequestDone()
-      {
-      if (_oauthManager->lastError() == KQOAuthManager::NetworkError)
-            QMessageBox::critical(0, tr("Network error"), tr("Please check your Internet connection"));
-      else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError)
-            QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.\n"
-                                                              "%1Please upgrade first%2.")
-                                  .arg("<a href=\"https://musescore.org\">")
-                                  .arg("</a>")
-                                  .replace("\n", "<br/>"));
-      // don't do that, it will logout user if score is private and already known
-      //else if (_oauthManager->lastError() == KQOAuthManager::RequestUnauthorized){
-      //      logout();
-      //      mscore->showLoginDialog();
-      //      }
-      }
-#endif
-
 /*------- TRY LOGIN ROUTINES ----------------------------*/
 /*  Try to get user information, if error,               */
 /*  display login form until quit or successful login    */
@@ -340,6 +340,25 @@ void LoginManager::onTryLoginError(const QString& error)
 /*------- END - TRY LOGIN ROUTINES ----------------------------*/
 
 //---------------------------------------------------------
+//   clearHttpCacheOnRenderFinish
+//---------------------------------------------------------
+
+#ifdef USE_WEBENGINE
+static void clearHttpCacheOnRenderFinish(QWebEngineView* webView)
+      {
+      QWebEnginePage* page = webView->page();
+      QWebEngineProfile* profile = page->profile();
+
+      // workaround for the crashes sometimes happend in Chromium on macOS with Qt 5.12
+      QObject::connect(webView, &QWebEngineView::renderProcessTerminated, webView, [profile, webView](QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
+            {
+            qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;
+            profile->clearHttpCache();
+            webView->show();
+            });
+      }
+#endif
+//---------------------------------------------------------
 //   loginInteractive
 //---------------------------------------------------------
 
@@ -356,13 +375,7 @@ void LoginManager::loginInteractive()
       profile->setPersistentCookiesPolicy(QWebEngineProfile::NoPersistentCookies);
       profile->setRequestInterceptor(new ApiWebEngineRequestInterceptor(profile));
 
-      //workaround for the crashes sometimes happend in Chromium on macOS with Qt 5.12
-      connect(webView, &QWebEngineView::renderProcessTerminated, this, [profile, webView](QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
-              {
-              qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;
-              profile->clearHttpCache();
-              webView->show();
-              });
+      clearHttpCacheOnRenderFinish(webView);
       
       connect(page, &QWebEnginePage::loadFinished, this, [this, page, webView](bool ok) {
             if (!ok)
@@ -462,71 +475,6 @@ void LoginManager::onLoginRefreshReply(QNetworkReply* reply, int code, const QJs
       }
 
 //---------------------------------------------------------
-//   onAccessTokenReceived
-//---------------------------------------------------------
-#if 0
-void LoginManager::onAccessTokenReceived(QString token, QString tokenSecret)
-      {
-      //qDebug() << "Access token received: " << token << tokenSecret;
-      _accessToken = token;
-      _accessTokenSecret = tokenSecret;
-      disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)), this, SLOT(onAccessTokenRequestReady(QByteArray)));
-      emit loginSuccess();
-      }
-#endif
-
-//---------------------------------------------------------
-//   onAccessTokenRequestReady
-//---------------------------------------------------------
-#if 0
-void LoginManager::onAccessTokenRequestReady(QByteArray ba)
-      {
-      //qDebug() << "onAccessTokenRequestReady" << ba;
-      if (_oauthManager->lastError() == KQOAuthManager::RequestUnauthorized) { // 401/406
-
-            QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
-            QJsonArray array = jsonResponse.array();
-            QString message = tr("Unsuccessful login. Please try again.");
-            if (array.size() > 0) {
-                 QJsonObject o = array.at(0).toObject();
-                 if (o.value("code") != QJsonValue::Undefined) {
-                 	   QString code = o["code"].toString();
-                     if (code == "USER_AUTHENTICATION_FAILED") {
-                           message = tr("Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?")
-                                       .arg("<a href=\"https://musescore.com/user/password\">")
-                                       .arg("</a>");
-                           }
-                     else if (code == "USER_DENIED") {
-                           message = tr("This account has been blocked.");
-                           }
-                     else if (code == "USER_NOT_ACTIVATED") {
-                           message = tr("Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.")
-                                       .arg("<a href=\"https://musescore.com/user/resendregistrationpassword\">")
-                                       .arg("</a>");
-                           }
-                     else if (code == "USER_TIMESTAMP_EXPIRED") {
-                           message = tr("The local time on your device is not set right. Please check it and adjust. It's advised to set the time/timezone to automatic. If you still can't log in, %1contact us%2.")
-                                       .arg("<a href=\"https://musescore.com/contact?category=Login%20problems\">")
-                                       .arg("</a>");
-                           }
-                     }
-                 }
-                 emit loginError(message);
-            }
-      else if (_oauthManager->lastError() == KQOAuthManager::NetworkError) {
-            QMessageBox::critical(0, tr("Network error"), tr("Please check your Internet connection"));
-            }
-      else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError) {
-            QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.\n"
-                                                              "%1Please upgrade first%2.")
-                                  .arg("<a href=\"https://musescore.org\">")
-                                  .arg("</a>")
-                                  .replace("\n", "<br/>"));
-            }
-      }
-#endif
-
-//---------------------------------------------------------
 //   getUser
 //---------------------------------------------------------
 
@@ -560,6 +508,7 @@ void LoginManager::onGetUserReply(QNetworkReply* reply, int code, const QJsonObj
             if (user.value("name") != QJsonValue::Undefined) {
                   _userName = user.value("name").toString();
                   _uid = user.value("id").toString().toInt();
+                  _avatar = QUrl(user.value("avatar_url").toString());
                   emit getUserSuccess();
                   }
             else
@@ -671,69 +620,7 @@ void LoginManager::onGetMediaUrlReply(QNetworkReply* reply, int code, const QJso
             }
       else // TODO: handle request error properly
             qWarning("%s", getErrorString(reply, response).toUtf8().constData());
-#if 0
-      disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)),
-            this, SLOT(onGetMediaUrlRequestReady(QByteArray)));
-      QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
-      QJsonObject response = jsonResponse.object();
-      QJsonValue urlValue = response.value("url");
-      if (urlValue.isString()) {
-            _mediaUrl = response.value("url").toString();
-            QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
-            _mp3File = new QFile(mp3Path);
-            Score* score = mscore->currentScore()->masterScore();
-            int br = preferences.getInt(PREF_EXPORT_MP3_BITRATE);
-            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, 128);
-            if (mscore->saveMp3(score, mp3Path)) { // no else, error handling is done in saveMp3
-                  _uploadTryCount = 0;
-                  uploadMedia();
-                  }
-            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, br);
-            }
-#endif
       }
-
-//---------------------------------------------------------
-//   onGetUserRequestReady
-//---------------------------------------------------------
-#if 0
-void LoginManager::onGetScoreRequestReady(QByteArray ba)
-      {
-      //qDebug() << "onGetScoreRequestReady" << ba;
-      //qDebug() << _oauthManager->lastError();
-      disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)),
-            this, SLOT(onGetScoreRequestReady(QByteArray)));
-      if (_oauthManager->lastError() == KQOAuthManager::NoError) {
-            QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
-            QJsonObject score = jsonResponse.object();
-            if (score.value("user") != QJsonValue::Undefined) {
-                  QJsonObject user = score.value("user").toObject();
-                  QString title = score.value("title").toString();
-                  QString description = score.value("description").toString();
-                  QString sharing = score.value("sharing").toString();
-                  QString license = score.value("license").toString();
-                  QString tags = score.value("tags").toString();
-                  QString url = score.value("custom_url").toString();
-                  if (user.value("uid") != QJsonValue::Undefined) {
-                        int uid = user.value("uid").toString().toInt();
-                        if (uid == _uid)
-                              emit getScoreSuccess(title, description, (sharing == "private"), license, tags, url);
-                        else
-                              emit getScoreError("");
-                        }
-                  else {
-                       emit getScoreError("");
-                       }
-                  }
-            else {
-                  emit getScoreError("");
-                  }
-            }
-      else {
-            emit getScoreError("");
-            }
-      }
-#endif
 
 //---------------------------------------------------------
 //   uploadMedia
@@ -747,7 +634,7 @@ void LoginManager::uploadMedia()
             return;
             }
       if (!_mp3File->exists()) {
-            emit displaySuccess();
+            emit mediaUploadSuccess();
             return;
             }
       if (_mp3File->open(QIODevice::ReadOnly)) { // probably cancelled, no error handling
@@ -783,7 +670,7 @@ void LoginManager::mediaUploadFinished()
             _mp3File->remove();
             delete _mp3File;
             _mediaUrl = "";
-            emit displaySuccess();
+            emit mediaUploadSuccess();
             }
       else if (e == QNetworkReply::RemoteHostClosedError && _uploadTryCount < MAX_UPLOAD_TRY_COUNT) {
             uploadMedia();
@@ -814,19 +701,12 @@ void LoginManager::mediaUploadProgress(qint64 progress, qint64 total)
 //   upload
 //---------------------------------------------------------
 
-void LoginManager::upload(const QString &path, int nid, const QString &title, const QString &description, const QString& priv, const QString& license, const QString& tags, const QString& changes)
+void LoginManager::upload(const QString& path, int nid, const QString& title)
       {
-#if ! 0 // see further down
-      Q_UNUSED(changes);
-#endif
       qDebug() << "file upload" << nid;
-//       KQOAuthRequest *oauthRequest = new KQOAuthRequest(this);
-//       QUrl url(QString("https://%1/services/rest/score.json").arg(MUSESCORE_HOST));
-//       if (nid > 0)
-//             url = QUrl(QString("https://%1/services/rest/score/%2/update.json").arg(MUSESCORE_HOST).arg(nid));
 
       ApiRequest* r = new ApiRequest(this);
-      r->setPath("/score/upload")
+      r->setPath("/score/upload-light")
          .setToken(_accessToken);
 
       QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType, /* parent */ r);
@@ -843,9 +723,8 @@ void LoginManager::upload(const QString &path, int nid, const QString &title, co
 
       if (nid > 0) {
             QHttpPart idPart;
-            qDebug() << "added idPart";
             idPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
-            idPart.setBody(QString::number(nid).toLatin1()); // TODO: check
+            idPart.setBody(QString::number(nid).toLatin1());
             multiPart->append(idPart);
             }
 
@@ -854,38 +733,8 @@ void LoginManager::upload(const QString &path, int nid, const QString &title, co
       titlePart.setBody(title.toUtf8());
       multiPart->append(titlePart);
 
-      QHttpPart descriptionPart;
-      descriptionPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"description\""));
-      descriptionPart.setBody(description.toUtf8());
-      multiPart->append(descriptionPart);
-
-      QHttpPart privatePart;
-      privatePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"private\""));
-      privatePart.setBody(priv.toUtf8());
-      multiPart->append(privatePart);
-
-      QHttpPart licensePart;
-      licensePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"license\""));
-      licensePart.setBody(license.toUtf8());
-      multiPart->append(licensePart);
-
-      QHttpPart tagsPart;
-      tagsPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"tags\""));
-      tagsPart.setBody(tags.toUtf8());
-      multiPart->append(tagsPart);
-
-#if 0 // TODO: what is this and is this now supported?
-      if (nid > 0) {
-            QHttpPart changesPart;
-            changesPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"revision_log\""));
-            changesPart.setBody(changes.toUtf8());
-            multiPart->append(changesPart);
-      }
-#endif
-
       r->setMultiPartData(multiPart);
 
-      // TODO: "uri" parameter?
       if (nid > 0) // score exists, update
             r->setMethod(ApiRequest::HTTP_PUT);
       else // score doesn't exist, post a new score
@@ -906,6 +755,9 @@ void LoginManager::onUploadReply(QNetworkReply* reply, int code, const QJsonObje
       {
       qDebug() << "onUploadReply" << code << reply->errorString();
       if (code == HTTP_OK) {
+            constexpr const char* pathKey = "_webview_url";
+            _updateScoreDataPath = obj.contains(pathKey) ? obj.value(pathKey).toString() : QString();
+
             if (obj.value("permalink") != QJsonValue::Undefined) {
                   emit uploadSuccess(obj.value("permalink").toString(), obj.value("id").toString(), obj.value("vid").toString());
                   }
@@ -915,6 +767,35 @@ void LoginManager::onUploadReply(QNetworkReply* reply, int code, const QJsonObje
             }
       else
             emit uploadError(tr("Cannot upload: %1").arg(getErrorString(reply, obj)));
+      }
+
+//---------------------------------------------------------
+//   updateScoreData
+//---------------------------------------------------------
+
+void LoginManager::updateScoreData(const QString& nid, bool newScore)
+      {
+      const QUrl url(ApiInfo::getUpdateScoreInfoUrl(nid, _accessToken, newScore, _updateScoreDataPath));
+#ifdef USE_WEBENGINE
+      QWebEngineView* webView = new QWebEngineView;
+      webView->setWindowModality(Qt::ApplicationModal);
+      webView->setAttribute(Qt::WA_DeleteOnClose);
+
+      QWebEnginePage* page = webView->page();
+      QWebEngineProfile* profile = page->profile();
+
+      profile->setPersistentCookiesPolicy(QWebEngineProfile::NoPersistentCookies);
+      profile->setRequestInterceptor(new ApiWebEngineRequestInterceptor(profile));
+
+      connect(page, &QWebEnginePage::windowCloseRequested, webView, &QWebEngineView::close);
+
+      clearHttpCacheOnRenderFinish(webView);
+
+      webView->load(url);
+      webView->show();
+#else
+      QDesktopServices::openUrl(url);
+#endif
       }
 
 //---------------------------------------------------------

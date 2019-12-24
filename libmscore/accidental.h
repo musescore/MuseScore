@@ -114,6 +114,7 @@ class Accidental final : public Element {
       virtual QString propertyUserValue(Pid) const override;
 
       static AccidentalVal subtype2value(AccidentalType);             // return effective pitch offset
+      static SymId subtype2symbol(AccidentalType);
       static const char* subtype2name(AccidentalType);
       static AccidentalType value2subtype(AccidentalVal);
       static AccidentalType name2subtype(const QString&);
@@ -127,7 +128,6 @@ extern AccidentalVal sym2accidentalVal(SymId id);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::AccidentalRole);
-Q_DECLARE_METATYPE(Ms::AccidentalType);
 
 
 #endif
