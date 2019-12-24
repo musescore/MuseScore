@@ -943,7 +943,8 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   // even if there was a tuplet, we didn't remove it
                   ltuplet = 0;
                   }
-            nextTick += (tuplet ? td / tuplet->ratio() : td);
+            Fraction timeStretch = cr->staff()->timeStretch(cr->tick());
+            nextTick += actualTicks(td, tuplet, timeStretch);
             if (sd < td) {
                   //
                   // we removed too much
@@ -955,10 +956,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   if (dList.empty())
                         break;
 
-                  Fraction f = sd / cr->staff()->timeStretch(cr->tick());
-                  for (Tuplet* t = tuplet; t; t = t->tuplet())
-                        f /= t->ratio();
-                  Fraction tick  = cr->tick() + f;
+                  Fraction tick = cr->tick() + actualTicks(sd, tuplet, timeStretch);
 
                   if ((tuplet == 0) && (((measure->tick() - tick).ticks() % dList[0].ticks().ticks()) == 0)) {
                         for (TDuration d : dList) {
@@ -1259,11 +1257,12 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                               undoRemoveElement(n->tieFor());
                         }
                   }
+            Fraction timeStretch = cr->staff()->timeStretch(cr->tick());
             std::vector<TDuration> dList = toDurationList(dstF, true);
             undoChangeChordRestLen(cr, dList[0]);
             Fraction tick2 = cr->tick();
             for (unsigned i = 1; i < dList.size(); ++i) {
-                  tick2 += dList[i-1].ticks();
+                  tick2 += actualTicks(dList[i-1].ticks(), tuplet, timeStretch);
                   TDuration d = dList[i];
                   setRest(tick2, track, d.fraction(), (d.dots() > 0), tuplet);
                   }
@@ -1303,19 +1302,19 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                         undoChangeChordRestLen(cr, dList[0]);
                         Fraction tick2 = cr->tick();
                         for (unsigned i = 1; i < dList.size(); ++i) {
-                              tick2 += dList[i-1].ticks();
+                              tick2 += actualTicks(dList[i-1].ticks(), tuplet, timeStretch);
                               TDuration d = dList[i];
-                              setRest(tick2, track, d.fraction() * timeStretch, (d.dots() > 0), tuplet);
+                              setRest(tick2, track, d.fraction(), (d.dots() > 0), tuplet);
                               }
                         }
                   else {
-                        r = setRest(tick, track, f2 * timeStretch, false, tuplet);
+                        r = setRest(tick, track, f2, false, tuplet);
                         }
                   if (first) {
                         select(r, SelectType::SINGLE, 0);
                         first = false;
                         }
-                  tick += f2 * timeStretch;
+                  tick += actualTicks(f2, tuplet, timeStretch);
                   }
             else {
                   std::vector<TDuration> dList = toDurationList(f2, true);
