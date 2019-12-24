@@ -779,7 +779,7 @@
           <item row="0" column="0">
            <widget class="QCheckBox" name="collectTelemetry">
             <property name="text">
-             <string>Send anonymous telemetry to MuseScore</string>
+             <string>Send anonymous telemetry data to MuseScore</string>
             </property>
            </widget>
           </item>
