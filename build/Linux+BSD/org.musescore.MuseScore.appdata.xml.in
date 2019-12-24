@@ -82,6 +82,86 @@
     <content_attribute id="money-purchasing">mild</content_attribute>
   </content_rating>
   <releases>
+    <release date="2019-12-04" version="3.3.4">
+       <url>https://musescore.org/en/3.3.4</url>
+       <description>
+         <p>Fixes:</p>
+         <ul>
+           <li>Palette names were scrambled and nearly impossible to read (Windows 7)</li>
+           <li>Scale of palette was incorrect for high and low DPI displays</li>
+           <li>Courtesy accidentals disappeared after an octave change using Ctrl(Cmd)+Up/Down</li>
+           <li>Crash reports could not be sent</li>
+         </ul>
+       </description>
+     </release>
+     <release date="2019-11-26" version="3.3.3">
+       <url>https://musescore.org/en/3.3.3</url>
+       <description>
+         <p>Improvements:</p>
+         <ul>
+           <li>Tie button behaves as a toggle now</li>
+           <li>Enable changing notes duration if selecting note stem, hook or a range</li>
+           <li>Visual improvements for palettes</li>
+           <li>Mark notes that are out of instrument range with red or yellow color even when they are selected</li>
+           <li>Save Online is now fully synchronised with the musescore.com upload page</li>
+         </ul>
+         <p>Fixes:</p>
+         <ul>
+           <li>Export Pdf on Mac with Muse Jazz Text was garbled and unreadable if no printers were setup on a machine</li>
+           <li>Entering notes with mouse failed in Italian TAB</li>
+           <li>Scoreview jumped back to start of score during note input on (auto)save</li>
+           <li>Sticking could not be copy-pasted</li>
+           <li>Extensions could not be installed on macOS Catalina</li>
+         </ul>
+       </description>
+     </release>
+     <release date="2019-11-14" version="3.3.2">
+       <url>https://musescore.org/en/3.3.2</url>
+       <description>
+         <p>Fixes:</p>
+         <ul>
+           <li>"Save online" failed in some cases</li>
+           <li>Palettes were incorrectly placed when using multiple HighDPI monitors and scaling</li>
+           <li>Palettes disappeared on Ubuntu 18.04 in some cases</li>
+         </ul>
+       </description>
+     </release>
+     <release date="2019-10-31" version="3.3">
+       <url>https://musescore.org/en/3.3</url>
+       <description>
+         <p>New:</p>
+         <ul>
+           <li>Complete palettes redesign</li>
+           <li>Note Input workflow improvements</li>
+           <li>Native support for Roman numeral analysis and Nashville notation</li>
+         </ul>
+         <p>Improvements:</p>
+         <ul>
+           <li>Chord Symbol Formatting not only for MuseJazz has been supported</li>
+           <li>Symbols can be attached to barlines</li>
+           <li>Multiple improvements to the Plugin API</li>
+           <li>Implement changing palette and palette cell properties on fly</li>
+           <li>Current workspace is automatically saved on each action that changes the workspace</li>
+           <li>Palettes and workspaces can be reset to the default state defined by the workspace you started customisations from</li>
+           <li>Improve algorithm for determining start point for note input</li>
+           <li>Move the viewport to show actual changes in the score if they are outside of the current view</li>
+         </ul>
+         <p>Fixes:</p>
+         <ul>
+           <li>
+             <li>NVDA screen reader didn't work</li>
+             <li>Various MusicXML Import/Export fixes</li>
+             <li>Various fixes for the playback of tied notes, muted voices and notes being edited in parts</li>
+             <li>Sticking was not linked between score and parts</li>
+             <li>The presence of fretboard diagrams prevented input of chord symbols in other staves</li>
+             <li>Loop playback was set incorrectly in parts</li>
+             <li>Shortcuts navigation across the palettes was broken</li>
+             <li>Palettes and palette cells were not translated</li>
+             <li>It was impossible to enter successive sticking elements</li>
+           </li>
+         </ul>
+       </description>
+     </release>
     <release date="2019-07-08" version="3.2.3">
       <description>
         <p>This release fixes some issues with tuplets and fingering layout, MDL Articulations, plugins, and Score_and_Parts PDFs on the Macintosh.</p>
@@ -93,6 +173,7 @@
       </description>
     </release>
     <release date="2019-06-28" version="3.2.1">
+      <url>https://musescore.org/en/3.2.1</url>
       <description>
         <p>This release fixes some bugs and crashes, especially wrt. unsaved Sticking and articulations placement.</p>
       </description>
