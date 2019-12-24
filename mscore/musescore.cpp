@@ -2318,10 +2318,10 @@ void MuseScore::selectionChanged(SelState selectionState)
 //   chord rest
 //---------------------------------------------------------
 
-void MuseScore::updatePaletteBeamMode(bool unselect)
+void MuseScore::updatePaletteBeamMode()
       {
       if (paletteWorkspace)
-            paletteWorkspace->updateCellsState(cs->selection(), unselect);
+            paletteWorkspace->updateCellsState(cs->selection());
       }
 
 //---------------------------------------------------------
@@ -5857,8 +5857,7 @@ void MuseScore::endCmd()
             selectionChanged(SelState::NONE);
             }
       updateInspector();
-      if (cv)
-            updatePaletteBeamMode(cv->clickOffElement);
+      updatePaletteBeamMode();
 #ifdef SCRIPT_INTERFACE
       getPluginEngine()->endEndCmd(this);
 #endif
