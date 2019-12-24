@@ -96,7 +96,7 @@ QT5_WRAP_UI (ui_headers
       transposedialog.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
       articulation.ui metaedit.ui paletteProperties.ui paletteCellProperties.ui selectdialog.ui selectnotedialog.ui
       synthcontrol.ui splitstaff.ui keyedit.ui selectinstr.ui
-      fretdprops.ui editstafftype.ui bend.ui tremolobar.ui
+      editstafftype.ui tremolobar.ui
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui
       omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
@@ -309,13 +309,13 @@ add_library(mscoreapp STATIC
 
       abstractdialog.h accessibletoolbutton.h albummanager.h
       alsa.h alsamidi.h analyse.h articulationprop.h bb.h
-      bendcanvas.h bendproperties.h breaksdialog.h capella.h
+      bendcanvas.h breaksdialog.h capella.h
       chordview.h click.h continuouspanel.h downloadUtils.h
       driver.h drumroll.h drumtools.h drumview.h editdrumset.h
       editinstrument.h editpitch.h editraster.h editstaff.h
       editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
       exampleview.h excerptsdialog.h exportmidi.h exportmp3.h extension.h
-      file.h fotomode.h fretcanvas.h fretproperties.h globals.h greendotbutton.h
+      file.h fotomode.h fretcanvas.h globals.h greendotbutton.h
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h importgtp.h importmxml.h
       importmxmllogger.h importmxmlnoteduration.h importmxmlnotepitch.h importmxmlpass1.h
       importmxmlpass2.h importptb.h importxmlfirstpass.h instrdialog.h instrwidget.h jackaudio.h
@@ -377,8 +377,8 @@ add_library(mscoreapp STATIC
       stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
       articulationprop.cpp
-      fretproperties.cpp
-      bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
+      bendcanvas.cpp fretcanvas.cpp
+      tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
       dragelement.cpp startupWizard.cpp
       svggenerator.cpp
@@ -388,6 +388,7 @@ add_library(mscoreapp STATIC
       inspector/inspector.cpp
       inspector/inspectorBase.cpp
       inspector/inspectorBeam.cpp
+      inspector/inspectorBend.cpp
       inspector/inspectorGroupElement.cpp
       inspector/inspectorImage.cpp
       inspector/inspectorHarmony.cpp

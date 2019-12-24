@@ -1,8 +1,8 @@
 //=============================================================================
-//  MusE Score
-//  Linux Music Score Editor
+//  MuseScore
+//  Music Composition & Notation
 //
-//  Copyright (C) 2010-2011 Werner Schweer and others
+//  Copyright (C) 2010-2019 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -18,7 +18,6 @@
 //=============================================================================
 
 #include "libmscore/fret.h"
-#include "fretproperties.h"
 #include "libmscore/measure.h"
 #include "libmscore/system.h"
 #include "libmscore/score.h"
@@ -34,68 +33,16 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   FretDiagramProperties
+//   FretCanvas
 //---------------------------------------------------------
 
-FretDiagramProperties::FretDiagramProperties(FretDiagram* _fd, QWidget* parent)
-   : QDialog(parent)
+FretCanvas::FretCanvas(QWidget* parent)
+   : QFrame(parent)
       {
-      setObjectName("FretDiagramProperties");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      fd = _fd;
-      frets->setValue(fd->frets());
-      strings->setValue(fd->strings());
-      diagram->setFretDiagram(fd);
-
-      diagramScrollBar->setRange(0, fd->maxFrets());
-      diagramScrollBar->setValue(fd->fretOffset());
-
-      connect(strings, SIGNAL(valueChanged(int)), SLOT(stringsChanged(int)));
-      connect(frets,   SIGNAL(valueChanged(int)), SLOT(fretsChanged(int)));
-      connect(diagramScrollBar, SIGNAL(valueChanged(int)), SLOT(fretOffsetChanged(int)));
-
-      MuseScore::restoreGeometry(this);
-      }
-
-//---------------------------------------------------------
-//   fretsChanged
-//---------------------------------------------------------
-
-void FretDiagramProperties::fretsChanged(int val)
-      {
-      fd->setFrets(val);
-      diagram->update();
-      }
-
-//---------------------------------------------------------
-//   stringsChanged
-//---------------------------------------------------------
-
-void FretDiagramProperties::stringsChanged(int val)
-      {
-      fd->setStrings(val);
-      diagram->update();
-      }
-
-//---------------------------------------------------------
-//   hideEvent
-//---------------------------------------------------------
-
-void FretDiagramProperties::hideEvent(QHideEvent* event)
-      {
-      MuseScore::saveGeometry(this);
-      QDialog::hideEvent(event);
-      }
-
-//---------------------------------------------------------
-//   fretOffsetChanged
-//---------------------------------------------------------
-
-void FretDiagramProperties::fretOffsetChanged(int val)
-      {
-      fd->setFretOffset(val);
-      diagram->update();
+      setAcceptDrops(true);
+//      setFrameStyle(QFrame::Raised | QFrame::Panel);
+      cstring = -2;
+      cfret   = -2;
       }
 
 //---------------------------------------------------------
@@ -190,7 +137,7 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
             qreal newX2 = endString == -1 ? x2 : stringDist * endString;
 
             qreal y    = fretDist * (fret - 1) + fretDist * .5;
-            pen.setWidthF(dotd * diagram->score()->styleD(Sid::barreLineWidth));      // donâ€™t use style barreLineWidth - why not?
+            pen.setWidthF(dotd * diagram->score()->styleD(Sid::barreLineWidth));      // don¡¯t use style barreLineWidth - why not?
             pen.setCapStyle(Qt::RoundCap);
             p.setPen(pen);
             p.drawLine(QLineF(x1, y, newX2, y));
@@ -391,19 +338,6 @@ void FretCanvas::mouseMoveEvent(QMouseEvent* ev)
       }
 
 //---------------------------------------------------------
-//   FretCanvas
-//---------------------------------------------------------
-
-FretCanvas::FretCanvas(QWidget* parent)
-   : QFrame(parent)
-      {
-      setAcceptDrops(true);
-//      setFrameStyle(QFrame::Raised | QFrame::Panel);
-      cstring = -2;
-      cfret   = -2;
-      }
-
-//---------------------------------------------------------
 //   setFretDiagram
 //---------------------------------------------------------
 
@@ -424,5 +358,4 @@ void FretCanvas::clear()
       diagram->score()->endCmd();
       update();
       }
-}
-
+} // namespace Ms
