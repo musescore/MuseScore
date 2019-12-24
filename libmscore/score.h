@@ -833,6 +833,7 @@ class Score : public QObject, public ScoreElement {
       Segment* tick2segmentMM(const Fraction& tick, bool first) const;
       Segment* tick2leftSegment(const Fraction& tick, bool useMMrest = false) const;
       Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false) const;
+      Segment* tick2leftSegmentMM(const Fraction& tick) { return tick2leftSegment(tick, /* useMMRest */ true); }
       void fixTicks();
       void rebuildTempoAndTimeSigMaps(Measure* m);
       Element* nextElement();
