@@ -380,9 +380,48 @@ void LineSegment::editDrag(EditData& ed)
                   _offset2 -= deltaResize;
                   if (isStyled(Pid::OFFSET))
                         setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+                  if (line()->anchor() == Spanner::Anchor::SEGMENT && isSingleBeginType()) {
+                        int staffIndex = staffIdx();
+                        Segment* const oldFirstSeg = spanner()->startSegment();
+                        Segment* firstSeg = oldFirstSeg;
+                        score()->dragPosition(ed.pos, &staffIndex, &firstSeg);
+                        if (firstSeg != oldFirstSeg) {
+                              const Fraction deltaTick = firstSeg->tick() - oldFirstSeg->tick();
+                              spanner()->undoChangeProperty(Pid::SPANNER_TICK, firstSeg->tick());
+                              spanner()->undoChangeProperty(Pid::SPANNER_TICKS, std::max(spanner()->ticks() - deltaTick, firstSeg->ticks()));
+                              if (firstSeg->system() == oldFirstSeg->system()) {
+                                    const QPointF oldBase = oldFirstSeg->canvasPos();
+                                    const QPointF newBase = firstSeg->canvasPos();
+                                    const QPointF deltaRebase = oldBase - newBase;
+                                    setOffset(offset() + deltaRebase);
+                                    _offset2 -= deltaRebase;
+                                    }
+                              else {
+                                    line()->layout();
+                                    if (line()->frontSegment() != this)
+                                          ed.view->changeEditElement(line()->frontSegment());
+                                    }
+                              }
+                        }
                   break;
             case Grip::END: // Resize the end of element (right grip)
                   _offset2 += deltaResize;
+                  if (line()->anchor() == Spanner::Anchor::SEGMENT && isSingleEndType()) {
+                        int staffIndex = track2staff(line()->effectiveTrack2());
+                        Segment* const oldLastSeg = score()->tick2leftSegmentMM(spanner()->tick2() - Fraction::eps());
+                        Segment* lastSeg = (offset().x() + _offset2.x()) > -oldLastSeg->width() ? oldLastSeg : oldLastSeg->prev1MM(SegmentType::ChordRest);
+                        score()->dragPosition(ed.pos, &staffIndex, &lastSeg);
+                        if (lastSeg != oldLastSeg && lastSeg->tick() >= spanner()->tick()) {
+                              const Fraction endTick = lastSeg->tick() + lastSeg->ticks();
+                              spanner()->undoChangeProperty(Pid::SPANNER_TICKS, endTick - spanner()->tick());
+                              if (lastSeg->system() == oldLastSeg->system()) {
+                                    const QPointF oldBase = oldLastSeg->canvasPos() + QPointF(oldLastSeg->width(), 0);
+                                    const QPointF newBase = lastSeg->canvasPos() + QPointF(lastSeg->width(), 0);
+                                    _offset2 += oldBase - newBase;
+                                    }
+                              }
+                        // TODO: track?
+                        }
                   break;
             case Grip::MIDDLE: { // Move the element (middle grip)
                   // Only for moving, no y limitation
