@@ -1925,7 +1925,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   attributes(partId, measure, time + mTime);
             else if (_e.name() == "direction") {
                   MusicXMLParserDirection dir(_e, _score, _pass1, *this, _logger);
-                  dir.direction(partId, measure, time + mTime, _spanners);
+                  dir.direction(partId, measure, time + mTime, _divs, _spanners);
                   }
             else if (_e.name() == "figured-bass") {
                   FiguredBass* fb = figuredBass();
@@ -2301,6 +2301,25 @@ void MusicXMLParserPass2::print(Measure* measure)
       }
 
 //---------------------------------------------------------
+//   calcTicks
+//---------------------------------------------------------
+
+static Fraction calcTicks(const QString& text, int divs, MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
+      {
+      Fraction dura(0, 0);              // invalid unless set correctly
+
+      int intDura = text.toInt();
+      if (divs > 0) {
+            dura.set(intDura, 4 * divs);
+            dura.reduce();
+            }
+      else
+            logger->logError(QString("illegal or uninitialized divisions (%1)").arg(divs), xmlreader);
+
+      return dura;
+      }
+
+//---------------------------------------------------------
 //   direction
 //---------------------------------------------------------
 
@@ -2311,10 +2330,11 @@ void MusicXMLParserPass2::print(Measure* measure)
 void MusicXMLParserDirection::direction(const QString& partId,
                                         Measure* measure,
                                         const Fraction& tick,
+                                        const int divisions,
                                         MusicXmlSpannerMap& spanners)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "direction");
-      //qDebug("direction tick %d", tick);
+      //qDebug("direction tick %s", qPrintable(tick.print()));
 
       QString placement = _e.attributes().value("placement").toString();
       int track = _pass1.trackForPart(partId);
@@ -2334,6 +2354,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
       while (_e.readNextStartElement()) {
             if (_e.name() == "direction-type")
                   directionType(starts, stops);
+            else if (_e.name() == "offset")
+                  _offset = calcTicks(_e.readElementText(), divisions, _logger, &_e);
+            else if (_e.name() == "sound")
+                  sound();
             else if (_e.name() == "staff") {
                   int nstaves = _pass1.getPart(partId)->nstaves();
                   QString strStaff = _e.readElementText();
@@ -2343,8 +2367,6 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   else
                         _logger->logError(QString("invalid staff %1").arg(strStaff), &_e);
                   }
-            else if (_e.name() == "sound")
-                  sound();
             else
                   skipLogCurrElem();
             }
@@ -2399,7 +2421,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   }
 
 //TODO:ws            if (_hasDefaultY) t->textStyle().setYoff(_defaultY);
-            addElemOffset(t, track, placement, measure, tick);
+            addElemOffset(t, track, placement, measure, tick + _offset);
             }
       else if (_tpoSound > 0) {
             double tpo = _tpoSound / 60;
@@ -2408,9 +2430,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
             t->setTempo(tpo);
             t->setFollowText(true);
 
+            // TBD may want ro use tick + _offset if sound is affected
             _score->setTempo(tick, tpo);
 
-            addElemOffset(t, track, placement, measure, tick);
+            addElemOffset(t, track, placement, measure, tick + _offset);
             }
 
       // do dynamics
@@ -2427,13 +2450,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   dyn->setVelocity( dynaValue );
                   }
 //TODO:ws            if (_hasDefaultY) dyn->textStyle().setYoff(_defaultY);
-            addElemOffset(dyn, track, placement, measure, tick);
+            addElemOffset(dyn, track, placement, measure, tick + _offset);
             }
 
       // handle the elems
       foreach( auto elem, _elems) {
             // TODO (?) if (_hasDefaultY) elem->setYoff(_defaultY);
-            addElemOffset(elem, track, placement, measure, tick);
+            addElemOffset(elem, track, placement, measure, tick + _offset);
             }
 
       // handle the spanner stops first
@@ -2458,6 +2481,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
 
       // then handle the spanner starts
+      // TBD handle offset ?
       foreach (auto desc, starts) {
             auto& spdesc = _pass2.getSpanner({ desc._tp, desc._nr });
             if (spdesc._isStarted) {
@@ -4632,23 +4656,6 @@ void MusicXMLParserPass2::notePrintSpacingNo(Fraction& dura)
       }
 
 //---------------------------------------------------------
-//   calcTicks
-//---------------------------------------------------------
-
-static Fraction calcTicks(const QString& text, int divs)
-      {
-      Fraction dura(0, 0);        // invalid unless set correctly
-
-      int intDura = text.toInt();
-      if (divs > 0)
-            dura.set(intDura, 4 * divs);
-      else
-            qDebug("illegal or uninitialized divisions (%d)", divs);       // TODO
-
-      return dura;
-      }
-
-//---------------------------------------------------------
 //   duration
 //---------------------------------------------------------
 
@@ -4661,15 +4668,9 @@ void MusicXMLParserPass2::duration(Fraction& dura)
       Q_ASSERT(_e.isStartElement() && _e.name() == "duration");
 
       dura.set(0, 0);        // invalid unless set correctly
-      int intDura = _e.readElementText().toInt();
-      if (intDura > 0) {
-            if (_divs > 0) {
-                  dura.set(intDura, 4 * _divs);
-                  dura.reduce(); // prevent overflow in later Fraction operations
-                  }
-            else
-                  _logger->logError(QString("illegal or uninitialized divisions (%1)").arg(_divs), &_e);
-            }
+      const auto elementText = _e.readElementText();
+      if (elementText.toInt() > 0)
+            dura = calcTicks(elementText, _divs, _logger, &_e);
       else
             _logger->logError(QString("illegal duration %1").arg(dura.print()), &_e);
       //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
@@ -5052,7 +5053,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
             else if (_e.name() == "level")
                   skipLogCurrElem();
             else if (_e.name() == "offset")
-                  offset = calcTicks(_e.readElementText(), _divs);
+                  offset = calcTicks(_e.readElementText(), _divs, _logger, &_e);
             else if (_e.name() == "staff") {
                   int nstaves = _pass1.getPart(partId)->nstaves();
                   QString strStaff = _e.readElementText();
@@ -6235,7 +6236,7 @@ MusicXMLParserDirection::MusicXMLParserDirection(QXmlStreamReader& e,
                                                  MxmlLogger* logger)
       : _e(e), _score(score), _pass1(pass1), _pass2(pass2), _logger(logger),
       _hasDefaultY(false), _defaultY(0.0), _coda(false), _segno(false),
-      _tpoMetro(0), _tpoSound(0)
+      _tpoMetro(0), _tpoSound(0), _offset(0, 1)
       {
       // nothing
       }
