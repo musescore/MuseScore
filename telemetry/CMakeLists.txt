@@ -45,3 +45,9 @@ qt5_add_resources(RCC_SOURCES telemetry_resources.qrc)
 
 add_library(telemetry ${LIBRARY_TYPE} ${telemetry_SOURCES} ${telemetry_HEADERS} ${RCC_SOURCES})
 target_link_libraries(telemetry global google_analytics)
+
+if (MSVC)
+  set_target_properties( telemetry PROPERTIES
+    COMPILE_FLAGS "/wd4127"
+  )
+endif (MSVC)
