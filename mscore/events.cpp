@@ -280,9 +280,9 @@ bool ScoreView::startTextEditingOnMouseRelease(QMouseEvent* mouseEvent)
             // mouse up INSIDE textBase - set priming
             textBase->setPrimed(true);
             return false;
-      }
+            }
 
-      //mouse up INSIDE primed textBase - start editing
+      // mouse up INSIDE primed textBase - start editing
       startEditMode(textBase);
       setCursor(QCursor(Qt::IBeamCursor));
       textBase->setPrimed(false);
@@ -471,8 +471,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
             switch (state) {
                   case ViewState::NORMAL:
                   case ViewState::EDIT:
-                  case ViewState::FOTO:
-                        {
+                  case ViewState::FOTO: {
                         const qreal a = editData.grip[0].width() * 0.5;
                         for (int i = 0; i < editData.grips; ++i) {
                               if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
@@ -494,7 +493,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
             }
 
       switch (state) {
-            case ViewState::NORMAL:
+            case ViewState::NORMAL: {
                   if (gripFound)
                         break;
                   if (ev->button() == Qt::RightButton)   // context menu?
@@ -510,6 +509,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
 
                   setEditElement(elementNear(editData.startMove));
                   mousePressEventNormal(ev);
+                  }
                   break;
 
             case ViewState::FOTO: {
@@ -690,7 +690,11 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
       update();
       }
 
-void ScoreView:: tripleClickTimeOut()
+//---------------------------------------------------------
+//   tripleClickTimeOut
+//---------------------------------------------------------
+
+void ScoreView::tripleClickTimeOut()
       {
       tripleClickPending = false;
       }
@@ -829,7 +833,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
             }
 #endif
 
-      if (!( (editData.modifiers & Qt::ShiftModifier) && (editData.key == Qt::Key_Backtab) )) {
+      if (!((editData.modifiers & Qt::ShiftModifier) && (editData.key == Qt::Key_Backtab))) {
             if (editData.element->edit(editData)) {
                   if (state != ViewState::EDIT) {
                         // textTab or other function may have terminated edit mode
@@ -848,7 +852,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
       }
 
 //---------------------------------------------------------
-//   handleArrowKeys
+//   handleArrowKeysPress
 //---------------------------------------------------------
 
 bool ScoreView::handleArrowKeyPress(const QKeyEvent* ev)

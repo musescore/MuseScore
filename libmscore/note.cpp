@@ -1483,8 +1483,7 @@ int Note::transposition() const
 //---------------------------------------------------------
 
 class NoteEditData : public ElementEditData {
-public:
-
+   public:
       enum EditMode {
             EditMode_ChangePitch = 0,
             EditMode_AddSpacing,
@@ -2310,7 +2309,7 @@ int Note::customizeVelocity(int velo) const
       }
 
 //---------------------------------------------------------
-//   editDrag
+//   startDrag
 //---------------------------------------------------------
 
 void Note::startDrag(EditData& ed)
@@ -2327,6 +2326,10 @@ void Note::startDrag(EditData& ed)
 
       ed.addData(ned);
       }
+
+//---------------------------------------------------------
+//   drag
+//---------------------------------------------------------
 
 QRectF Note::drag(EditData& ed)
       {
@@ -2347,6 +2350,9 @@ QRectF Note::drag(EditData& ed)
       return QRectF();
       }
 
+//---------------------------------------------------------
+//   endDrag
+//---------------------------------------------------------
 
 void Note::endDrag(EditData& ed)
       {
@@ -2358,6 +2364,10 @@ void Note::endDrag(EditData& ed)
                   }
           }
       }
+
+//---------------------------------------------------------
+//   editDrag
+//---------------------------------------------------------
 
 void Note::editDrag(EditData& editData)
       {
@@ -2374,6 +2384,10 @@ void Note::editDrag(EditData& editData)
 
       triggerLayout();
       }
+
+//---------------------------------------------------------
+//   verticalDrag
+//---------------------------------------------------------
 
 void Note::verticalDrag(EditData &ed)
       {
@@ -2425,6 +2439,10 @@ void Note::verticalDrag(EditData &ed)
             }
       }
 
+//---------------------------------------------------------
+//   normalizeLeftDragDelta
+//---------------------------------------------------------
+
 void Note::normalizeLeftDragDelta(Segment* seg, EditData &ed, NoteEditData* ned)
       {
       Segment* previous = seg->prev();
@@ -2453,6 +2471,10 @@ void Note::normalizeLeftDragDelta(Segment* seg, EditData &ed, NoteEditData* ned)
                   ned->delta.setX(distanceBetweenSegments);
             }
       }
+
+//---------------------------------------------------------
+//   horizontalDrag
+//---------------------------------------------------------
 
 void Note::horizontalDrag(EditData &ed)
       {
@@ -3216,7 +3238,7 @@ std::vector<Note*> Note::tiedNotes() const
             notes.push_back(note);
             }
       return notes;
-}
+      }
 
 //---------------------------------------------------------
 //   unisonIndex
