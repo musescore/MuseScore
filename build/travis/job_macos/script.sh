@@ -21,7 +21,7 @@ cp -f build/travis/resources/splash-nightly.png  mscore/data/splash.png
 cp -f build/travis/resources/mscore-nightly.icns mscore/data/mscore.icns
 fi
 
-make -f Makefile.osx ci BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
+make -f Makefile.osx ci BUILD_NUMBER=${TRAVIS_BUILD_NUMBER} TELEMETRY_TRACK_ID=${TELEMETRY_TRACK_ID}
 
 
 mkdir -p applebuild/mscore.app/Contents/Resources/Frameworks

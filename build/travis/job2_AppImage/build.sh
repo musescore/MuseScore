@@ -68,7 +68,7 @@ then # Build is marked UNSTABLE inside CMakeLists.txt
   fi
 else
   # Build is STABLE so create a stable release!
-  makefile_overrides="" # use Makefile defaults
+  makefile_overrides="TELEMETRY_TRACK_ID=${TELEMETRY_TRACK_ID}" # use Makefile defaults for other parameters
   update_info="gh-releases-zsync|musescore|MuseScore|latest|MuseScore-*x86_64.AppImage.zsync"
 fi
 
