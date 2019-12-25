@@ -79,3 +79,7 @@ This documentation corresponds to the plugins API for MuseScore 3.X version.
 To see the information on its difference from MuseScore 2 plugins API as well
 as some instructions on adapting MuseScore 2 plugins code to work with
 MuseScore 3, please refer to the \ref plugin2to3 page.
+
+## Internationalization
+For the questions related to making a plugin translatable to different languages
+please refer to \ref i18n page.

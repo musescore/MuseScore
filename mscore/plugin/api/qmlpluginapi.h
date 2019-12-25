@@ -67,7 +67,10 @@ class PluginAPI : public Ms::QmlPlugin {
       Q_PROPERTY(QString dockArea        READ dockArea WRITE setDockArea)
       /** Whether the plugin requires an existing score to run, default is `true` */
       Q_PROPERTY(bool requiresScore      READ requiresScore WRITE setRequiresScore)
-      /** Number of MIDI ticks for 1/4 note (read only) */
+      /**
+       * \brief Number of MIDI ticks for 1/4 note (read only)
+       * \see \ref ticklength
+       */
       Q_PROPERTY(int division            READ division)
       /** Complete version number of MuseScore in the form: MMmmuu (read only) */
       Q_PROPERTY(int mscoreVersion       READ mscoreVersion       CONSTANT)
