@@ -136,10 +136,19 @@ endif (OMR)
 
 if (APPLE)
       file(GLOB_RECURSE INCS "*.h")
-      set(COCOABRIDGE "macos/cocoabridge.mm")
+      set(COCOABRIDGE "cocoabridge")
       if (SPARKLE_FOUND)
             set(MAC_SPARKLE_FILES "macos/SparkleAutoUpdater.mm")
       endif(SPARKLE_FOUND)
+      add_library (
+         cocoabridge STATIC
+         macos/cocoabridge.mm
+         )
+      set_target_properties (
+         cocoabridge
+         PROPERTIES
+         COMPILE_FLAGS "-g -Wall -Wextra -Winvalid-pch  -include ${PROJECT_SOURCE_DIR}/all.h"
+         )
 else (APPLE)
       set(INCS "")
       set(COCOABRIDGE "")
@@ -274,7 +283,6 @@ add_library(mscoreapp STATIC
       ${MSCORE_MIXER_SRC}
       ${PIANOROLL_SRC}
       ${WIDGETS_SOURCE_FILES}
-      ${COCOABRIDGE}
       ${OMR_FILES}
       ${PLUGIN_SRC}
       ${MAC_SPARKLE_FILES}
@@ -297,6 +305,7 @@ target_link_libraries(mscoreapp
       libmscore
       qzip
       importexport
+      ${COCOABRIDGE}
       )
 
 if (BUILD_CRASH_REPORTER)

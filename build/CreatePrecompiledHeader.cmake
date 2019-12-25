@@ -5,10 +5,21 @@ macro( precompiled_header includes header_name build_pch)
         string( TOUPPER "CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}" flags_for_build_name )
         set( compile_flags "${CMAKE_CXX_FLAGS} ${${flags_for_build_name}}" )
 
-        # Add all the Qt include directories
-        foreach( item ${${includes}} )
-            list( APPEND compile_flags "-I${item}" )
-        endforeach()
+        if (APPLE)
+            # Add the Qt lib folder to the search path for framework include files
+            list( APPEND compile_flags "-F${QT_INSTALL_LIBS}" )
+            # Add only the right directories to the include search path
+            foreach( item ${${includes}} )
+                if (NOT "${item}" MATCHES "framework$")
+                    list( APPEND compile_flags "-I${item}" )
+                endif (NOT "${item}" MATCHES "framework$")
+            endforeach()
+        else (APPLE)
+            # Add all the Qt include directories
+            foreach( item ${${includes}} )
+                list( APPEND compile_flags "-I${item}" )
+            endforeach()
+        endif (APPLE)
 
         # Get the list of all build-independent preprocessor definitions
         get_directory_property( defines_global COMPILE_DEFINITIONS )
@@ -25,6 +36,10 @@ macro( precompiled_header includes header_name build_pch)
         endforeach()
 
         list( APPEND compile_flags ${all_define_flags} )
+
+        if (APPLE)
+            list( APPEND compile_flags "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+        endif (APPLE)
 
         # Prepare the compile flags var for passing to GCC
         separate_arguments( compile_flags )

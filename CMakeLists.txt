@@ -280,7 +280,11 @@ if (NOT MSVC)
 endif (NOT MSVC)
 
 if (APPLE)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -stdlib=libc++ -Wno-inconsistent-missing-override -Wno-deprecated-register")
+   if (XCODE)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -stdlib=libc++ -Wno-inconsistent-missing-override -Wno-deprecated-register")
+   else (XCODE)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -fPIC -stdlib=libc++ -Wno-inconsistent-missing-override -Wno-deprecated-register")
+   endif (XCODE)
    # This is necessary for genManual to be executed during the build phase,
    # it needs to be able to get the Qt libs.
    # TODO: is it still needed? genManual is removed.
@@ -856,12 +860,12 @@ if (BUILD_CRASH_REPORTER)
 endif (BUILD_CRASH_REPORTER)
 
 string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
-if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
+if (XCODE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 # With xcode, we need to have all the targets in the same project
 add_subdirectory(mtest)
-else(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
+else(XCODE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
-endif(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
+endif(XCODE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
 add_subdirectory(rdoc EXCLUDE_FROM_ALL)
 add_subdirectory(miditools EXCLUDE_FROM_ALL)

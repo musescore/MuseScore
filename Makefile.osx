@@ -23,7 +23,7 @@ PREFIX=../applebuild
 TELEMETRY_TRACK_ID=""
 MUSESCORE_BUILD_CONFIG="dev"
 MUSESCORE_REVISION=""
-
+CPUS = `sysctl -n hw.logicalcpu`
 XCODEPROJ = mscore.xcodeproj
 
 # Use xcpretty if installed
@@ -108,3 +108,38 @@ clean:
 	-rm -rf build.release build.debug build.xcode
 	-rm -rf applebuild
 
+release-cl:
+	@echo "Make release"; \
+    mkdir build.release; \
+    cd build.release; \
+    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+          -DCMAKE_BUILD_TYPE=RELEASE \
+          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
+          -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
+          -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
+          -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
+          -DBUILD_PCH="ON"  \
+          .. -G "Unix Makefiles"; \
+    make lrelease; \
+    $(FORMATTER_START) make -j ${CPUS} $(FORMATTER_END); \
+
+debug-cl:
+	mkdir build.debug; \
+    cd build.debug; \
+    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+          -DCMAKE_BUILD_TYPE=DEBUG \
+          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
+          -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
+          -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
+          -DBUILD_PCH="ON" \
+          .. -G "Unix Makefiles"; \
+    make lrelease; \
+    $(FORMATTER_START) make -j ${CPUS} $(FORMATTER_END); \
+
+install-cl:
+	cd build.release;   \
+	$(FORMATTER_START) make install $(FORMATTER_END);
+
+installdebug-cl:
+	cd build.debug; \
+	$(FORMATTER_START) make install $(FORMATTER_END);
