@@ -2099,7 +2099,8 @@ void Note::updateAccidental(AccidentalState* as)
             // ultimetely, they should probably get their own state
             // for now, at least change state to natural, so subsequent notes playback as might be expected
             // this is an incompatible change, but better to break it for 2.0 than wait until later
-            as->setAccidentalVal(relLine, AccidentalVal::NATURAL, _tieBack != 0 && _accidental == 0);
+            AccidentalVal accVal = Accidental::subtype2value(_accidental->accidentalType());
+            as->setAccidentalVal(relLine, accVal, _tieBack != 0 && _accidental == 0);
             }
 
       updateRelLine(relLine, true);
