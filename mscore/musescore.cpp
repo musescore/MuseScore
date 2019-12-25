@@ -2320,7 +2320,7 @@ void MuseScore::selectionChanged(SelState selectionState)
 
 void MuseScore::updatePaletteBeamMode()
       {
-      if (paletteWorkspace)
+      if (paletteWorkspace && cs)
             paletteWorkspace->updateCellsState(cs->selection());
       }
 
