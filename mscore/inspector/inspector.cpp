@@ -192,7 +192,7 @@ void Inspector::update(Score* s)
                       // an articulation and an ornament
                   if ((ee->isArticulation() && toArticulation(ee)->isOrnament() != toArticulation(element())->isOrnament()) ||
                       // a slur and a tie
-                      (ee->isSlurTieSegment() && toSlurTieSegment(ee)->accessibleInfo() != toSlurTieSegment(element())->accessibleInfo()) ||
+                      (ee->isSlurTieSegment() && toSlurTieSegment(ee)->isSlurSegment() != toSlurTieSegment(element())->isSlurSegment()) ||
                       // a breath and a caesura
                       (ee->isBreath() && toBreath(ee)->isCaesura() != toBreath(element())->isCaesura()) ||
                       // a staff text and a system text
@@ -1228,13 +1228,13 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent)
       bool sameTypes = true;
 
       for (const auto& ee : *inspector->el()) {
-            if (ee->accessibleInfo() != el->accessibleInfo()) {
+            if (ee->isSlurSegment() != el->isSlurSegment()) {
                   sameTypes = false;
                   break;
                   }
             }
       if (sameTypes)
-            s.title->setText(el->accessibleInfo());
+            s.title->setText(el->isSlurSegment() ? tr("Slur") : tr("Tie"));
 
       const std::vector<InspectorItem> iiList = {
             { Pid::LINE_TYPE,       0, s.lineType,      s.resetLineType      },
