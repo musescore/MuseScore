@@ -361,7 +361,7 @@ Element* Palette::element(int idx)
       }
 
 //---------------------------------------------------------
-//   contentsMousePressEvent
+//   mousePressEvent
 //---------------------------------------------------------
 
 void Palette::mousePressEvent(QMouseEvent* ev)
@@ -803,6 +803,10 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
       QScrollArea::keyPressEvent(event);
       }
 
+//---------------------------------------------------------
+//   mouseReleaseEvent
+//---------------------------------------------------------
+
 void Palette::mouseReleaseEvent(QMouseEvent *event)
       {
       pressedIndex = -1;
@@ -927,6 +931,7 @@ void Palette::leaveEvent(QEvent*)
 //---------------------------------------------------------
 //   nextPaletteElement
 //---------------------------------------------------------
+
 void Palette::nextPaletteElement()
       {
       int i = currentIdx;
