@@ -20,18 +20,24 @@
 #include "telemetrypermissiondialog.h"
 
 #include <QQuickItem>
+#include <QApplication>
+#include <QDesktopWidget>
 
 //---------------------------------------------------------
 //   TelemetryPermissionDialog
 //---------------------------------------------------------
 
-TelemetryPermissionDialog::TelemetryPermissionDialog(QWidget* parentWidget) : QQuickView()
+TelemetryPermissionDialog::TelemetryPermissionDialog() : QQuickView()
       {
       setMinimumWidth(500);
       setMinimumHeight(460);
 
-      if (parentWidget)
-            setPosition(parentWidget->pos());
+      setFlags(Qt::CustomizeWindowHint); ///@note Hidding a native frame with 'X' close button
+
+      QRect desktopRect = QApplication::desktop()->availableGeometry();
+      QPoint center = desktopRect.center();
+
+      setPosition(center.x() - minimumWidth() * 0.5, center.y() - minimumHeight() * 0.5);
 
       QUrl url = QUrl(QStringLiteral("qrc:/qml/TelemetryPermissionDialog.qml"));
 
@@ -45,4 +51,5 @@ TelemetryPermissionDialog::TelemetryPermissionDialog(QWidget* parentWidget) : QQ
       rootObject()->setWidth(minimumWidth());
 
       connect(rootItem, SIGNAL(closeRequested()), this, SLOT(close()));
+      connect(rootItem, SIGNAL(closeRequested()), this, SIGNAL(closeRequested()));
       }

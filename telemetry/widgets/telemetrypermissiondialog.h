@@ -32,7 +32,10 @@ class TelemetryPermissionDialog : public QQuickView {
       Q_OBJECT
 
    public:
-      explicit TelemetryPermissionDialog(QWidget* parentWidget = nullptr);
+      explicit TelemetryPermissionDialog();
+
+   signals:
+      void closeRequested();
       };
 
 #endif // TELEMETRYPERMISSIONDIALOG_H
