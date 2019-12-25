@@ -72,6 +72,8 @@
 #include "libmscore/accidental.h"
 #include "libmscore/articulation.h"
 #include "libmscore/fermata.h"
+#include "libmscore/stafftypechange.h"
+#include "libmscore/mscore.h"
 #include "libmscore/stafftextbase.h"
 
 namespace Ms {
@@ -500,6 +502,31 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
             sl.noteheadScheme->addItem(StaffType::scheme2userName(i), int(i));
             }
       mapSignals();
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorStaffTypeChange::setElement()
+      {
+      InspectorBase::setElement();
+      bool hasTabStaff = false;
+      bool hasNonTabStaff = false;
+      for (Element* el : *(inspector->el())) {
+            StaffTypeChange* stc = toStaffTypeChange(el);
+            // tab staff shouldn't have key signature
+            if (stc->staffType()->group() == StaffGroup::TAB) {
+                  hasTabStaff = true;
+                  sl.genKeysig->setEnabled(false);
+                  sl.resetGenKeysig->setEnabled(false);
+                  }
+            else {
+                  hasNonTabStaff = true;
+                  }
+            }
+      if (hasTabStaff && !hasNonTabStaff)
+            sl.genKeysig->setChecked(false);
       }
 
 //---------------------------------------------------------
