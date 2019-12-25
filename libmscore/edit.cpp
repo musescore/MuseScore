@@ -377,7 +377,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal, bool forceAccidental)
       note->setNval(noteVal);
       undoAddElement(note);
       if (forceAccidental) {
-            int tpc = styleB(Sid::concertPitch) ? noteVal.tpc2 : noteVal.tpc1;
+            int tpc = styleB(Sid::concertPitch) ? noteVal.tpc1 : noteVal.tpc2;
             AccidentalVal alter = tpc2alter(tpc);
             AccidentalType at = Accidental::value2subtype(alter);
             Accidental* a = new Accidental(this);
