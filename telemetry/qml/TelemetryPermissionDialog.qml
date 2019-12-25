@@ -94,14 +94,14 @@ Rectangle {
 
                 lineHeight: 1.5
 
-                text: qsTr("<b>We <u>do not</u> track personal data or sensitive information, such as " +
-                           "location, source code, file names or music</b>")
+                text: "<b>" + qsTr("We <u>do not</u> collect any personal data or sensitive information, such as " +
+                           "location, source code, file names, or music") + "</b>"
             }
 
             TextLabel {
                 id: questionLabel
 
-                text: qsTr("Are you happy for MuseScore to send us anonymous reports?")
+                text: qsTr("Do you allow MuseScore to send us anonymous reports?")
             }
         }
 
@@ -138,7 +138,7 @@ Rectangle {
                         horizontalCenter: parent.horizontalCenter
                     }
 
-                    text: qsTr("(You can change this behaviour in 'Preferences')")
+                    text: qsTr("(You can change this behaviour any time in 'Preferences… > General > Telemetry')")
                 }
             }
 
@@ -168,7 +168,7 @@ Rectangle {
                         horizontalCenter: parent.horizontalCenter
                     }
 
-                    text: qsTr("For more information, please take a look at our <a href=\"https://musescore.com/legal/privacy\">Privacy Policy</a>")
+                    text: qsTr("For more information, please take a look at our %1Privacy Policy%2").arg("<a href=\"https://musescore.com/legal/privacy\">").arg("</a>")
 
                     onLinkActivated: {
                         permissionModel.openLink(link)
