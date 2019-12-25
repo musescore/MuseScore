@@ -51,4 +51,5 @@ TelemetryPermissionDialog::TelemetryPermissionDialog() : QQuickView()
       rootObject()->setWidth(minimumWidth());
 
       connect(rootItem, SIGNAL(closeRequested()), this, SLOT(close()));
+      connect(rootItem, SIGNAL(closeRequested()), this, SIGNAL(closeRequested()));
       }
