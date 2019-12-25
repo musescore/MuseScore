@@ -500,7 +500,7 @@ public:
       void setOnTimeType(int v)  { _onTimeType = v; }
       int offTimeType() const    { return _offTimeType; }
       int onTimeType() const     { return _onTimeType; }
-    };
+      };
 
 }     // namespace Ms
 #endif
