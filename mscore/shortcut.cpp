@@ -4388,8 +4388,10 @@ Shortcut* Shortcut::getShortcutByKeySequence(const QKeySequence &keySequence)
                   continue;
 
 
-            if (action->shortcut() == keySequence)
-                  return shortcut;
+            for (const QKeySequence& _keySequence : action->shortcuts()) {
+                  if (action->shortcut() == _keySequence)
+                        return shortcut;
+                  }
             }
 
       return nullptr;
