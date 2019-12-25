@@ -792,6 +792,10 @@ WARN_LOGFILE           =
 
 INPUT                  = doc/plugins.md \
                          doc/plugins2to3.md \
+                         doc/i18n.md \
+                         doc/pitch.md \
+                         doc/ticklength.md \
+                         doc/tpc.md \
                          mscore/plugin/api \
                          libmscore/types.h \
                          libmscore/note.h \
