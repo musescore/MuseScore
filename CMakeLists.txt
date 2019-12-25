@@ -155,7 +155,16 @@ option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 
 if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
-    add_definitions(-DTELEMETRY_DISABLED)
+      message("Telemetry feature is disabled")
+      message("Build is stable = ${MSCORE_UNSTABLE}")
+
+      if (TELEMETRY_TRACK_ID STREQUAL "")
+            message("Telemetry track id is empty")
+      else(TELEMETRY_TRACK_ID STREQUAL "")
+            message("Telemetry track id isn't empty")
+      endif(TELEMETRY_TRACK_ID STREQUAL "")
+
+      add_definitions(-DTELEMETRY_DISABLED)
 endif(MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
 
 if (BUILD_CRASH_REPORTER)
