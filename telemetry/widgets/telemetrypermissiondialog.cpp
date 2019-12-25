@@ -25,13 +25,13 @@
 //   TelemetryPermissionDialog
 //---------------------------------------------------------
 
-TelemetryPermissionDialog::TelemetryPermissionDialog(QWidget* parentWidget) : QQuickView()
+TelemetryPermissionDialog::TelemetryPermissionDialog() : QQuickView()
       {
       setMinimumWidth(500);
       setMinimumHeight(460);
 
-      if (parentWidget)
-            setPosition(parentWidget->pos());
+      setFlags(Qt::CustomizeWindowHint); ///@note Hidding a native frame with 'X' close button
+
 
       QUrl url = QUrl(QStringLiteral("qrc:/qml/TelemetryPermissionDialog.qml"));
 
