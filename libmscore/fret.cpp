@@ -1346,6 +1346,17 @@ QVariant FretDiagram::propertyDefault(Pid pid) const
       return Element::propertyDefault(pid);
       }
 
+//---------------------------------------------------------
+//   endEditDrag
+//---------------------------------------------------------
+
+void FretDiagram::endEditDrag(EditData& editData)
+      {
+      Element::endEditDrag(editData);
+
+      triggerLayout();
+      }
+
 
 //---------------------------------------------------------
 //   markerToChar
