@@ -7060,8 +7060,16 @@ void tryToRequestTelemetryPermission()
       if (accessRequestedAtVersion == VERSION)
             return;
 
-      TelemetryPermissionDialog *requestDialog = new TelemetryPermissionDialog(mscore->window());
+      QEventLoop eventLoop;
+
+      TelemetryPermissionDialog *requestDialog = new TelemetryPermissionDialog();
+      QObject::connect(requestDialog, &TelemetryPermissionDialog::closeRequested, [&eventLoop] () {
+            eventLoop.quit();
+            });
+
       requestDialog->show();
+      eventLoop.exec();
+      requestDialog->deleteLater();
 
       preferences.setPreference(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, VERSION);
       }
@@ -7517,10 +7525,6 @@ int runApplication(int& argc, char** av)
             return ok ? EXIT_SUCCESS : EXIT_FAILURE;
             }
 
-#ifndef TELEMETRY_DISABLED
-      tryToRequestTelemetryPermission();
-#endif
-
       return qApp->exec();
       }
 
@@ -7699,6 +7703,10 @@ void MuseScore::init(QStringList& argv)
       ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
       gscore->setScoreFont(scoreFont);
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);
+
+#ifndef TELEMETRY_DISABLED
+      tryToRequestTelemetryPermission();
+#endif
 
       //read languages list
       mscore->readLanguages(mscoreGlobalShare + "locale/languages.xml");
