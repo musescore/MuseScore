@@ -25,6 +25,8 @@ VERSION   = "3.4b-${REVISION}"
 #VERSION = 3.3.3
 BUILD_NUMBER=""
 
+TELEMETRY_TRACK_ID=""
+
 # Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
 SUFFIX=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"
 LABEL=""# E.g.: LABEL="Development Build" --> "MuseScore 2" becomes "MuseScore 2 Development Build"
@@ -56,6 +58,7 @@ release:
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"      \
   	  -DMUSESCORE_LABEL="${LABEL}"             \
   	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"   \
+  	  -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}" \
   	  -DBUILD_JACK="${BUILD_JACK}"             \
