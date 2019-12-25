@@ -393,10 +393,6 @@ GridView {
                 opacity: 0.0
                 width: ((paletteCell.rowIndex + 1) % paletteView.ncolumns) ? paletteView.cellWidth : paletteView.lastColumnCellWidth
 
-                onStateChanged: {
-                    console.debug("STATE CHANGED " + state)
-                }
-
                 states: [
 
                     State {
