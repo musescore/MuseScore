@@ -223,6 +223,7 @@ class FretDiagram final : public Element {
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
 
+      void endEditDrag(EditData& editData) override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
       virtual QVariant getProperty(Pid propertyId) const override;
