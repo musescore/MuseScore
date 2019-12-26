@@ -4,32 +4,32 @@
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Vælkomin í MuseScore! Fylg við hesum stutta rundtúrurin gjøgnum tólborið í MuseScore.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Stýringsamboðið til endurspæl loyvir tær at spæla/steðga nótablaðnum, og stýra ymisk viðurskifti viðv. spæli.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Amboðsbjálkin til nóta inntøku loyvir tær at seta nótar og íhald á nótablaðið.</translation>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Palettirnar loyva tær at seta onnur tekin á nótablaðið.</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>Hvør palettin fevnir um ymisk tekin, sum kunnu setast inn á nótablaðið.</translation>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>Vælkomin til palettirnar, har til ber at leggja ymisk tekin inn á nótablaðið. Trýst &quot;Víðari&quot; og lær meira.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -37,72 +37,76 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Nýt fleiri røddir, um tú skriva nótar í fleiri løgum við ymsum rútmum í somu taktina.
+Hvør nótalinja kann fevna um í mesta lagi 4 røddir.
+Rødd 1 er sjálvsett, og eigur at vera nýtt fyrst á hvørjari nótalinju.
+Trýst at eina av hesum ímyndum, um tú skrivar við aðrari rødd.</translation>
     </message>
     <message>
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Hetta eru amboðsbjálkarnir.
+Høvuðsamboðini eru: Fílu atgerðir, endurspæl og nóta inntøka.</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
     The &quot;Advanced&quot; workspace contains more items than the &quot;Basic&quot; workspace.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>Ymisk arbeiðsøkir eru tøk, við ymsum bólkum av palettum.
+&quot;Framkomna&quot; arbeiðsøki inniheldur fleiri lutir í mun til &quot;einfalda&quot; arbeiðsøki.</translation>
     </message>
     <message>
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>Vel fyrst eitt øki ella ein lut á nótablaðnum. Trýst síðani tvær ferðir á lutin í palettini, fyri at seta inn í valda øki.
+Til ber eisini at hála lutin úr palettini, og seta inn á nótablaðið.</translation>
     </message>
     <message>
         <source>You have toggled multimeasure rests in this score.
     This combines multiple measures of rests into a single multimeasure rest.
     To toggle this setting again, press the shortcut &quot;M&quot;.</source>
         <comment>mmrest</comment>
-        <translation type="unfinished"/>
+        <translation>Tú kanst sláa fleirtakta íhald til og frá á nótablaðnum.
+Hetta setur saman fleiri taktir við íhaldi í eina fleirtakta íhalds takt.
+Brúka sniðvegin &quot;M&quot; fyri at sløkkja og tendra hesa funku.</translation>
     </message>
     <message>
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Vælkomin til nótainnritan, har til ber at seta inn nótar og íhald á nótablaðið.
+Trýst &quot;Víðari&quot; og lær meira.</translation>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Trýst á &quot;nótainntøku&quot; merkið, ella trýst á sniðvegin &quot;N&quot;, og nótainntøkan er sett í gongd.</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Vel eitt tíðarbil við at trýsta á hesi merki, ella trýst á sniðvegirnir &quot;1&quot; - &quot;9&quot;.
+Um økingarprikkur skal við: trýst á hóskandi merki, ella trýst á sniðvegin &quot;.&quot;.</translation>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Trýst á sniðvegin &quot;0&quot;,  um tú ynskir at seta íhald inn í staðin fyri valda nótan.</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Vel nótavirði at leingja við, og trýst &quot;+&quot; ella trýst á hendan knøttin, fyri at leingja nótavirði við bindiboga.</translation>
     </message>
     <message>
         <source>MuseScore provides many ways to navigate through your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>MuseScore útvegar fleiri hættir at leita í nótablaðnum.
+Trýst &quot;Víðari&quot; og lær meira.</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -186,30 +190,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation type="unfinished"/>
@@ -224,6 +204,13 @@
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
+        <comment>navigate-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
         <translation type="unfinished"/>
     </message>
@@ -256,6 +243,15 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>A list selection is a combination of single selections.
     Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
@@ -264,13 +260,28 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
         <translation type="unfinished"/>
     </message>
