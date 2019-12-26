@@ -225,6 +225,10 @@ mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so
 # BUNDLE REMAINING DEPENDENCIES MANUALLY
 ##########################################################################
 
+# Manually bundle printsupport plugin, see issue #297719
+mkdir -p "${appdir}/plugins/printsupport/"
+cp -L "${QT_PLUGIN_PATH}/printsupport/libcupsprintersupport.so" "${appdir}/plugins/printsupport/libcupsprintersupport.so"
+
 function find_library()
 {
   # Print full path to a library or return exit status 1 if not found
