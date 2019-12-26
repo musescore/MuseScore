@@ -375,7 +375,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="359"/>
         <source>The distance from the threshold where the knee curve starts.</source>
-        <translation>到阈值的距离，在这个阈值处曲线开始转折。</translation>
+        <translation>到阈值的距离，曲线于该阈值处开始转折。</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="403"/>
@@ -390,7 +390,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="435"/>
         <source>Controls the final gain after compression, in dB.</source>
-        <translation>控制补偿输入信号的增益（分贝）。</translation>
+        <translation>控制压缩后的最终增益（分贝）。</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="470"/>
@@ -519,7 +519,7 @@
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="161"/>
         <source>Gathering debug information...</source>
-        <translation>正在收集问题信息…</translation>
+        <translation>正在收集问题排查信息…</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="260"/>
@@ -2196,7 +2196,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1332"/>
         <source>&lt; Reset to Template</source>
-        <translation>&lt; 重置为模板样式</translation>
+        <translation>&lt; 重置为模版样式</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1355"/>
@@ -2249,7 +2249,7 @@
     <message>
         <location filename="../../mscore/editstringdata.ui" line="106"/>
         <source>Number of frets:</source>
-        <translation>音品数量：</translation>
+        <translation>音品数：</translation>
     </message>
 </context>
 <context>
@@ -3055,22 +3055,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4658"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
-        <translation>重置“与最末音符符头的间距”</translation>
+        <translation>重置“与最末音符符头的间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4763"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
-        <translation>重置“与最末音符符干的间距”</translation>
+        <translation>重置“与最末音符符干的间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4681"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
-        <translation>重置“与首音符符头的间距”</translation>
+        <translation>重置“与首音符符头的间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4704"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
-        <translation>重置“与首音符符干的间距”</translation>
+        <translation>重置“与首音符符干的间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9198"/>
@@ -3451,7 +3451,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="399"/>
         <source>Reset &apos;Minimum width of measure&apos; value</source>
-        <translation>重置“小节最小宽度”</translation>
+        <translation>重置“小节最小宽度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="486"/>
@@ -3471,12 +3471,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="655"/>
         <source>Reset &apos;Vertical align range&apos; value</source>
-        <translation>重置“垂直排列区域”</translation>
+        <translation>重置“垂直排列区域”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1049"/>
         <source>Reset &apos;Max. system distance&apos; value</source>
-        <translation>重置“最大谱表组间距”</translation>
+        <translation>重置“最大谱表组间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1007"/>
@@ -3486,37 +3486,37 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="990"/>
         <source>Reset &apos;Min. system distance&apos; value</source>
-        <translation>重置“最小谱表组间距”</translation>
+        <translation>重置“最小谱表组间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1066"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
-        <translation>重置“垂直占位框底边距”</translation>
+        <translation>重置“垂直占位框底边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="866"/>
         <source>Reset &apos;Grand staff distance&apos; value</source>
-        <translation>重置“大谱表间距”</translation>
+        <translation>重置“大谱表间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="849"/>
         <source>Reset &apos;Music bottom margin&apos; value</source>
-        <translation>重置“乐谱底边距”</translation>
+        <translation>重置“乐谱底边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="832"/>
         <source>Reset &apos;Staff distance&apos; value</source>
-        <translation>重置“谱表间距”</translation>
+        <translation>重置“谱表间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="899"/>
         <source>Reset &apos;Music top margin&apos; value</source>
-        <translation>重置“乐谱上边距”</translation>
+        <translation>重置“乐谱上边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="957"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
-        <translation>重置“垂直占位框顶部边距”</translation>
+        <translation>重置“垂直占位框顶部边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9043"/>
@@ -3527,7 +3527,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10087"/>
         <source>Reset &apos;Font face&apos; value</source>
-        <translation>重置“字体”</translation>
+        <translation>重置“字体”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9999"/>
@@ -3537,7 +3537,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10043"/>
         <source>Reset &apos;Font size&apos; value</source>
-        <translation>重置“字体”大小</translation>
+        <translation>重置“字体”值大小</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4793"/>
@@ -3565,7 +3565,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10363"/>
         <source>Reset &apos;Align&apos; values</source>
-        <translation>重置“对齐”</translation>
+        <translation>重置“对齐”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8236"/>
@@ -3576,7 +3576,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10026"/>
         <source>Reset &apos;Font style&apos; values</source>
-        <translation>重置“字体样式”</translation>
+        <translation>重置“字体样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2657"/>
@@ -3591,17 +3591,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="704"/>
         <source>Reset &apos;Min. vertical distance&apos; value</source>
-        <translation>重置“最小垂距”</translation>
+        <translation>重置“最小垂距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2670"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation>重置“谱线粗细”</translation>
+        <translation>重置“谱线粗细”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2687"/>
         <source>Reset &apos;Multimeasure rest margin&apos; value</source>
-        <translation>重置“长休止符边距”</translation>
+        <translation>重置“长休止符边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2718"/>
@@ -3611,42 +3611,42 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2731"/>
         <source>Reset &apos;Time signature left margin&apos; value</source>
-        <translation>重置“拍号左边距”</translation>
+        <translation>重置“拍号左边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2748"/>
         <source>Reset &apos;Clef left margin&apos; value</source>
-        <translation>重置“谱号左边距”</translation>
+        <translation>重置“谱号左边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2765"/>
         <source>Reset &apos;Minimum note distance&apos; value</source>
-        <translation>重置“最小音符间距”</translation>
+        <translation>重置“最小音符间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2782"/>
         <source>Reset &apos;Note to barline distance&apos; value</source>
-        <translation>重置“音符-小节线间距”</translation>
+        <translation>重置“音符-小节线间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2799"/>
         <source>Reset &apos;Key to barline distance&apos; value</source>
-        <translation>重置“调号-小节线间距”</translation>
+        <translation>重置“调号-小节线间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2816"/>
         <source>Reset &apos;Clef to time signature distance&apos; value</source>
-        <translation>重置“谱号-拍号间距”</translation>
+        <translation>重置“谱号-拍号间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2843"/>
         <source>Reset &apos;Clef to key distance&apos; value</source>
-        <translation>重置“谱号-调号间距”</translation>
+        <translation>重置“谱号-调号间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2860"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
-        <translation>重置“调号-拍号间距”</translation>
+        <translation>重置“调号-拍号间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2874"/>
@@ -3661,7 +3661,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2897"/>
         <source>Reset &apos;System header distance&apos; value</source>
-        <translation>重置“谱表组前导间距”</translation>
+        <translation>重置“谱表组前导间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2940"/>
@@ -3671,32 +3671,32 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2985"/>
         <source>Reset &apos;Barline to accidental distance&apos; value</source>
-        <translation>重置“小节线-临时记号间距”</translation>
+        <translation>重置“小节线-临时记号间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3002"/>
         <source>Reset &apos;Clef to barline distance&apos; value</source>
-        <translation>重置“谱号-小节线间距”</translation>
+        <translation>重置“谱号-小节线间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3019"/>
         <source>Reset &apos;Key signature left margin&apos; value</source>
-        <translation>重置“调号左边距”</translation>
+        <translation>重置“调号左边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3052"/>
         <source>Reset &apos;Minimum measure width&apos; value</source>
-        <translation>重置“最小小节宽度”</translation>
+        <translation>重置“最小小节宽度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3069"/>
         <source>Reset &apos;Barline to grace note distance&apos; value</source>
-        <translation>重置“小节线-倚音距离”</translation>
+        <translation>重置“小节线-倚音距离”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3128"/>
         <source>Reset &apos;Note left margin&apos; value</source>
-        <translation>重置“音符左边距”</translation>
+        <translation>重置“音符左边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3334"/>
@@ -3706,7 +3706,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3469"/>
         <source>Reset &apos;Spacing&apos; value</source>
-        <translation>重置“间距”</translation>
+        <translation>重置“间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3483"/>
@@ -3716,7 +3716,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3512"/>
         <source>Reset &apos;System header with time signature distance&apos; value</source>
-        <translation>重置“谱组前导-拍号间距”</translation>
+        <translation>重置“谱组前导-拍号间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3532"/>
@@ -3726,7 +3726,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3555"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
-        <translation>重置“拍号-小节线间距”</translation>
+        <translation>重置“拍号-小节线间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4985"/>
@@ -3743,7 +3743,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5999"/>
         <source>Reset &apos;Position&apos; value</source>
-        <translation>重置“位置”</translation>
+        <translation>重置“位置”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9273"/>
@@ -3758,7 +3758,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9299"/>
         <source>Reset &apos;Extension scaling&apos; value</source>
-        <translation>重置“上标大小”</translation>
+        <translation>重置“上标大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9313"/>
@@ -3768,7 +3768,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9333"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
-        <translation>重置“调整级数”</translation>
+        <translation>重置“调整级数”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9347"/>
@@ -3778,7 +3778,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9367"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
-        <translation>重置“扩展垂直偏移量”</translation>
+        <translation>重置“扩展垂直偏移量”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9381"/>
@@ -3788,7 +3788,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9401"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
-        <translation>重置“修改垂直偏移量”</translation>
+        <translation>重置“修改垂直偏移量”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9730"/>
@@ -3803,12 +3803,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10009"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
-        <translation>重置“跟随谱表大小”</translation>
+        <translation>重置“跟随谱表大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10104"/>
         <source>Reset &apos;Offset&apos; values</source>
-        <translation>重置“偏移量”</translation>
+        <translation>重置“偏移量”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10128"/>
@@ -3838,7 +3838,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10299"/>
         <source>Reset &apos;Margin&apos; value</source>
-        <translation>重置“外边距”</translation>
+        <translation>重置“外边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10323"/>
@@ -3848,7 +3848,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10333"/>
         <source>Reset &apos;Corner radius&apos; value</source>
-        <translation>重置“圆角半径”</translation>
+        <translation>重置“圆角半径”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10377"/>
@@ -3858,22 +3858,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3747"/>
         <source>Reset &apos;Repeat barline to dots distance&apos; value</source>
-        <translation>重置“重复小节线-反复点间距”</translation>
+        <translation>重置“重复小节线-反复点间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3812"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
-        <translation>重置“双小节线间距”</translation>
+        <translation>重置“双小节线间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3873"/>
         <source>Reset &apos;Double barline thickness&apos; value</source>
-        <translation>重置“双小节线粗细”</translation>
+        <translation>重置“双小节线粗细”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3771"/>
         <source>Reset &apos;Thick barline distance&apos; value</source>
-        <translation>重置“粗小节线间距”</translation>
+        <translation>重置“粗小节线间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3795"/>
@@ -3893,7 +3893,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3911"/>
         <source>Reset &apos;Thick barline thickness&apos; value</source>
-        <translation>重置“粗小节线宽度”</translation>
+        <translation>重置“粗小节线宽度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3894"/>
@@ -3903,27 +3903,27 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3636"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
-        <translation>重置“细小节线宽度”</translation>
+        <translation>重置“细小节线宽度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3846"/>
         <source>Reset &apos;Scale barlines to staff size&apos; value</source>
-        <translation>重置“使小节线缩放至谱表大小”</translation>
+        <translation>重置“使小节线缩放至谱表大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3677"/>
         <source>Reset &apos;Barline at start of multiple staves&apos; value</source>
-        <translation>重置“多谱表初始小节线”</translation>
+        <translation>重置“多谱表初始小节线”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3829"/>
         <source>Reset &apos;Barline at start of single staff&apos; value</source>
-        <translation>重置“单谱表初始小节线”</translation>
+        <translation>重置“单谱表初始小节线”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3653"/>
         <source>Reset &apos;Show repeat barline tips (&quot;winged&quot; repeats)&apos; value</source>
-        <translation>重置“显示反复小节线的提示 （&quot;winged&quot; 反复）”</translation>
+        <translation>重置“显示反复小节线的提示 （&quot;winged&quot; 反复）”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4191"/>
@@ -3967,42 +3967,42 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5410"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
-        <translation>重置“谱线端点粗细”</translation>
+        <translation>重置“谱线端点粗细”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5427"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
-        <translation>重置“连音线中部粗细”</translation>
+        <translation>重置“连音线中部粗细”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5444"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
-        <translation>重置“虚线粗细”</translation>
+        <translation>重置“虚线粗细”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5461"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
-        <translation>重置“最小延音线长度”</translation>
+        <translation>重置“最小延音线长度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1407"/>
         <source>Reset &apos;Small staff size&apos; value</source>
-        <translation>重置“缩小化谱表大小”</translation>
+        <translation>重置“缩小化谱表大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1551"/>
         <source>Reset &apos;Small note size&apos; value</source>
-        <translation>重置“缩小化音符大小”</translation>
+        <translation>重置“缩小化音符大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1568"/>
         <source>Reset &apos;Grace note size&apos; value</source>
-        <translation>重置“装饰音大小”</translation>
+        <translation>重置“装饰音大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1585"/>
         <source>Reset &apos;Small clef size&apos; value</source>
-        <translation>重置“缩小化谱号大小”</translation>
+        <translation>重置“缩小化谱号大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5534"/>
@@ -4063,7 +4063,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5649"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
-        <translation>重置“自动布局渐变记号距离”</translation>
+        <translation>重置“自动布局渐变记号距离”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5663"/>
@@ -4091,7 +4091,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="8706"/>
         <location filename="../../mscore/editstyle.ui" line="8820"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5710"/>
@@ -4131,7 +4131,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="6231"/>
         <location filename="../../mscore/editstyle.ui" line="6254"/>
         <source>Reset &apos;Hook height&apos; value</source>
-        <translation>重置“符尾高度”</translation>
+        <translation>重置“符尾高度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5946"/>
@@ -4148,7 +4148,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6317"/>
         <source>Reset &apos;Numbers only&apos; value</source>
-        <translation>重置“仅限数字”</translation>
+        <translation>重置“仅限数字”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6298"/>
@@ -4168,7 +4168,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6915"/>
         <source>Reset &apos;Arrow width&apos; value</source>
-        <translation>重置“箭头宽度”</translation>
+        <translation>重置“箭头宽度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6929"/>
@@ -4285,7 +4285,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4831"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
-        <translation>重置“连谱号高度”</translation>
+        <translation>重置“连谱号高度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4845"/>
@@ -4295,7 +4295,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4899"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
-        <translation>重置“连谱号粗细”</translation>
+        <translation>重置“连谱号粗细”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4916"/>
@@ -4346,7 +4346,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5012"/>
         <source>Reset &apos;Bracket type&apos; value</source>
-        <translation>重置“连谱号类型”</translation>
+        <translation>重置“连谱号类型”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5032"/>
@@ -4361,22 +4361,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5064"/>
         <source>Reset &apos;Number type&apos; value</source>
-        <translation>重置“数字类型”</translation>
+        <translation>重置“数字类型”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7183"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
-        <translation>重置“符头间距”</translation>
+        <translation>重置“符头间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7266"/>
         <source>Reset &apos;Stem distance&apos; value</source>
-        <translation>重置“符干间距”</translation>
+        <translation>重置“符干间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7204"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
-        <translation>重置“奏法记号间距”</translation>
+        <translation>重置“奏法记号间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1648"/>
@@ -4408,7 +4408,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2704"/>
         <source>Reset &apos;Clef/Key right margin&apos; value</source>
-        <translation>重置“谱/调号右边距”</translation>
+        <translation>重置“谱/调号右边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4295"/>
@@ -4418,7 +4418,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7215"/>
         <source>Reset &apos;Articulation size&apos; value</source>
-        <translation> 重置“奏法记号大小”</translation>
+        <translation> 重置“奏法记号大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7855"/>
@@ -4453,27 +4453,27 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7962"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
-        <translation>重置“最短延伸线长度”</translation>
+        <translation>重置“最短延伸线长度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7979"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
-        <translation>重置“最大延伸线长度”</translation>
+        <translation>重置“最大延伸线长度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7996"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
-        <translation>重置“最大延伸线距离”</translation>
+        <translation>重置“最大延伸线距离”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8013"/>
         <source>Reset &apos;Always force dash&apos; value</source>
-        <translation>重置“总是强制启用延伸线”</translation>
+        <translation>重置“总是强制启用延伸线”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8030"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
-        <translation>重置“延伸线粗细”</translation>
+        <translation>重置“延伸线粗细”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8060"/>
@@ -4483,7 +4483,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8086"/>
         <source>Reset &apos;Dash pad&apos; value</source>
-        <translation>重置“虚线外距”</translation>
+        <translation>重置“虚线外距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8100"/>
@@ -4493,7 +4493,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8113"/>
         <source>Reset &apos;Dash Y position ratio&apos; value</source>
-        <translation>重置“歌词延线垂直位置比例”</translation>
+        <translation>重置“歌词延线垂直位置比例”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8130"/>
@@ -4503,7 +4503,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8142"/>
         <source>Reset &apos;Melisma pad&apos; value</source>
-        <translation>重置“花音线外距”</translation>
+        <translation>重置“花音线外距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8156"/>
@@ -4518,12 +4518,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8173"/>
         <source>Reset &apos;Melisma thickness&apos; value</source>
-        <translation>重置“花音线粗细”</translation>
+        <translation>重置“花音线粗细”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8206"/>
         <source>Reset &apos;Align&apos; value</source>
-        <translation>重置“对齐方式”</translation>
+        <translation>重置“对齐方式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8294"/>
@@ -4533,7 +4533,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8547"/>
         <source>Reset &apos;Min. distance&apos; value</source>
-        <translation>重置“最小距离”</translation>
+        <translation>重置“最小距离”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9743"/>
@@ -4613,7 +4613,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8475"/>
         <source>Reset &apos;Line height&apos; value</source>
-        <translation>重置“线条高度”</translation>
+        <translation>重置“线条高度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8402"/>
@@ -4623,7 +4623,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8333"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
-        <translation>重置“最小上边距”</translation>
+        <translation>重置“最小上边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8462"/>
@@ -4633,7 +4633,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8415"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
-        <translation>重置“最小下边距”</translation>
+        <translation>重置“最小下边距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8489"/>
@@ -4643,12 +4643,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8382"/>
         <source>Reset &apos;Align verse number&apos; value</source>
-        <translation>重置“对齐诗歌行数”</translation>
+        <translation>重置“对齐诗歌行数”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10060"/>
         <source>Reset &apos;Name&apos; value</source>
-        <translation>重置“名称”</translation>
+        <translation>重置“名称”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10148"/>
@@ -4663,18 +4663,18 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10227"/>
         <source>Reset &apos;Background&apos; value</source>
-        <translation>重置“背景”</translation>
+        <translation>重置“背景”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10244"/>
         <location filename="../../mscore/editstyle.ui" line="10275"/>
         <source>Reset &apos;Border&apos; value</source>
-        <translation>重置“边框”</translation>
+        <translation>重置“边框”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10177"/>
         <source>Reset &apos;Frame&apos; value</source>
-        <translation>重置“占位框”</translation>
+        <translation>重置“占位框”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7226"/>
@@ -4726,7 +4726,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4503"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
-        <translation>重置“符头垂距”</translation>
+        <translation>重置“符头垂距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4461"/>
@@ -4736,7 +4736,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4402"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
-        <translation>重置“最大斜度”</translation>
+        <translation>重置“最大斜度”值</translation>
     </message>
 </context>
 <context>
@@ -4776,7 +4776,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="177"/>
         <source>New part for single instrument</source>
-        <translation>为单个乐器新建分谱</translation>
+        <translation>为每个选中的分谱/乐器新建单独分谱</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="180"/>
@@ -5040,7 +5040,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="137"/>
         <source>Reset &apos;Bracket type&apos; value</source>
-        <translation>重置“连谱号类型”</translation>
+        <translation>重置“连谱号类型”值</translation>
     </message>
 </context>
 <context>
@@ -5173,7 +5173,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="225"/>
         <source>Reset &apos;Has line&apos; value</source>
-        <translation>重置“拥有线条”</translation>
+        <translation>重置“拥有线条”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="250"/>
@@ -5579,7 +5579,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="126"/>
         <source>Reset &apos;Anchor&apos; value</source>
-        <translation>重置“锚点”</translation>
+        <translation>重置“锚点”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="165"/>
@@ -5614,7 +5614,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="244"/>
         <source>Reset &apos;Time stretch&apos; value</source>
-        <translation>重置“时长”</translation>
+        <translation>重置“时长”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="277"/>
@@ -5629,7 +5629,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="316"/>
         <source>Reset &apos;Ornament style&apos; value</source>
-        <translation>重置“装饰音样式”</translation>
+        <translation>重置“装饰音样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="329"/>
@@ -5697,22 +5697,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="88"/>
         <source>Reset &apos;Style&apos; value</source>
-        <translation>重置“样式”</translation>
+        <translation>重置“样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="101"/>
         <source>Reset &apos;Span to next staff&apos; value</source>
-        <translation>重置“延伸至下一个谱表”</translation>
+        <translation>重置“延伸至下一个谱表”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="114"/>
         <source>Reset &apos;Span to&apos; value</source>
-        <translation>重置“延伸目标”</translation>
+        <translation>重置“延伸目标”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="127"/>
         <source>Reset &apos;Span from&apos; value</source>
-        <translation>重置“延伸来源”</translation>
+        <translation>重置“延伸来源”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="175"/>
@@ -5815,7 +5815,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="246"/>
         <source>Reset &apos;Local relayout&apos; value</source>
-        <translation>重置“局部排版调整”</translation>
+        <translation>重置“局部排版调整”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="259"/>
@@ -5825,22 +5825,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="272"/>
         <source>Reset &apos;Grow left&apos; value</source>
-        <translation>重置“符杠左端膨胀”</translation>
+        <translation>重置“符杠左端膨胀”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="285"/>
         <source>Reset &apos;Grow right&apos; value</source>
-        <translation>重置“符杠右端膨胀”</translation>
+        <translation>重置“符杠右端膨胀”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="298"/>
         <source>Reset &apos;Force horizontal&apos; value</source>
-        <translation>重置“强制水平”</translation>
+        <translation>重置“强制水平”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="311"/>
         <source>Reset &apos;Custom position&apos; value</source>
-        <translation>重置“自定义位置”</translation>
+        <translation>重置“自定义位置”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="92"/>
@@ -5979,12 +5979,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="146"/>
         <source>Reset &apos;Size&apos; value</source>
-        <translation>重置“大小”</translation>
+        <translation>重置“大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="330"/>
         <source>Reset &apos;Font&apos; value</source>
-        <translation>重置“字体”</translation>
+        <translation>重置“字体”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="114"/>
@@ -5994,7 +5994,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="317"/>
         <source>Reset &apos;Style&apos; values</source>
-        <translation>重置“样式”</translation>
+        <translation>重置“样式”值</translation>
     </message>
 </context>
 <context>
@@ -6022,7 +6022,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bracket.ui" line="111"/>
         <source>Reset &apos;Column&apos; value</source>
-        <translation>重置“栏数”</translation>
+        <translation>重置“栏数”值</translation>
     </message>
 </context>
 <context>
@@ -6064,7 +6064,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="126"/>
         <source>Reset &apos;Pause&apos; value</source>
-        <translation>重置“暂停”</translation>
+        <translation>重置“暂停”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="88"/>
@@ -6117,7 +6117,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="148"/>
         <source>Reset &apos;Stem direction&apos; value</source>
-        <translation>重置“符干方向”</translation>
+        <translation>重置“符干方向”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="179"/>
@@ -6127,7 +6127,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="217"/>
         <source>Reset &apos;Offset&apos; values</source>
-        <translation>重置“偏移量”</translation>
+        <translation>重置“偏移量”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="232"/>
@@ -6170,7 +6170,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="107"/>
         <source>Reset &apos;Show courtesy&apos; value</source>
-        <translation>重置“显示提示性谱号属性”</translation>
+        <translation>重置“显示提示性谱号属性”值</translation>
     </message>
 </context>
 <context>
@@ -6223,7 +6223,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="88"/>
         <source>Reset &apos;Change speed&apos; value</source>
-        <translation>重置“速度变化”</translation>
+        <translation>重置“速度变化”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="108"/>
@@ -6233,7 +6233,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="127"/>
         <source>Reset &apos;Style&apos; value</source>
-        <translation>重置“样式”</translation>
+        <translation>重置“样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="140"/>
@@ -6268,7 +6268,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="232"/>
         <source>Reset &apos;Dynamic range&apos; value</source>
-        <translation>重置“有效区域”</translation>
+        <translation>重置“有效区域”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="239"/>
@@ -6298,7 +6298,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="326"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
 </context>
 <context>
@@ -6331,17 +6331,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="221"/>
         <source>Reset &apos;Color&apos; values</source>
-        <translation>重置“颜色”</translation>
+        <translation>重置“颜色”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="234"/>
         <source>Reset &apos;Offset&apos; values</source>
-        <translation>重置“偏移量”</translation>
+        <translation>重置“偏移量”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="260"/>
         <source>Reset &apos;Stacking order (Z)&apos; value</source>
-        <translation>重置“堆叠次序 (Z)”</translation>
+        <translation>重置“堆叠次序 (Z)”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="273"/>
@@ -6351,7 +6351,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="286"/>
         <source>Reset &apos;Automatic placement&apos; value</source>
-        <translation>重置“自动布局”</translation>
+        <translation>重置“自动布局”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="299"/>
@@ -6361,7 +6361,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="321"/>
         <source>Reset &apos;Minimum distance&apos; value</source>
-        <translation>重置“最小距离”</translation>
+        <translation>重置“最小距离”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="247"/>
@@ -6422,12 +6422,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="104"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="117"/>
         <source>Reset &apos;Time stretch&apos; value</source>
-        <translation>重置“时长”</translation>
+        <translation>重置“时长”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="137"/>
@@ -6495,7 +6495,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fingering.ui" line="114"/>
         <source>Reset &apos;Style&apos; value</source>
-        <translation>重置“样式”</translation>
+        <translation>重置“样式”值</translation>
     </message>
 </context>
 <context>
@@ -6546,22 +6546,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="146"/>
         <source>Reset &apos;Fret number&apos; value</source>
-        <translation>重置“品格数”</translation>
+        <translation>重置“品格数”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="153"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="176"/>
         <source>Reset &apos;Frets&apos; value</source>
-        <translation>重置“品格”</translation>
+        <translation>重置“品格”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="183"/>
         <source>Reset &apos;Show nut&apos; value</source>
-        <translation>重置“上弦枕显示状态”</translation>
+        <translation>重置“上弦枕显示状态”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="190"/>
@@ -6581,7 +6581,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="250"/>
         <source>Reset &apos;Strings&apos; value</source>
-        <translation>重置“弦”</translation>
+        <translation>重置“弦”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="257"/>
@@ -6591,7 +6591,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="267"/>
         <source>Reset &apos;Scale&apos; value</source>
-        <translation>重置“缩放大小”</translation>
+        <translation>重置“缩放大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="280"/>
@@ -6704,7 +6704,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="216"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation>重置“类型”的值</translation>
+        <translation>重置“类型”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="264"/>
@@ -6729,7 +6729,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="95"/>
         <source>Reset &apos;Show text&apos; value</source>
-        <translation>重置“显示文字属性”</translation>
+        <translation>重置“显示文字属性”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="121"/>
@@ -6739,7 +6739,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="170"/>
         <source>Reset &apos;Play style&apos; value</source>
-        <translation>重置“播放样式”</translation>
+        <translation>重置“播放样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="183"/>
@@ -6759,7 +6759,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="313"/>
         <source>Reset &apos;Size&apos; value</source>
-        <translation>重置“大小”</translation>
+        <translation>重置“大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="320"/>
@@ -6774,7 +6774,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="362"/>
         <source>Reset &apos;Font&apos; value</source>
-        <translation>重置“字体”</translation>
+        <translation>重置“字体”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="369"/>
@@ -6784,7 +6784,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="382"/>
         <source>Reset &apos;Style&apos; values</source>
-        <translation>重置“样式”</translation>
+        <translation>重置“样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="280"/>
@@ -6958,7 +6958,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="235"/>
         <source>Reset &apos;Create system header&apos; value</source>
-        <translation>重置“谱表组前导”</translation>
+        <translation>重置“谱表组前导”值</translation>
     </message>
 </context>
 <context>
@@ -6976,7 +6976,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="91"/>
         <source>Reset &apos;Use single note dynamics&apos; value</source>
-        <translation>重置“单音符力度调节”</translation>
+        <translation>重置“单音符力度调节”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="104"/>
@@ -6991,17 +6991,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="135"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="148"/>
         <source>Reset &apos;Dynamics method&apos; value</source>
-        <translation>重置“力度变化方式”</translation>
+        <translation>重置“力度变化方式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="212"/>
         <source>Reset &apos;Dynamic range&apos; value</source>
-        <translation>重置“有效区域”</translation>
+        <translation>重置“有效区域”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="235"/>
@@ -7031,7 +7031,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="390"/>
         <source>Reset &apos;Circled tip&apos; value</source>
-        <translation>重置“圆形尖端式样”</translation>
+        <translation>重置“圆形尖端式样”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="460"/>
@@ -7175,12 +7175,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_harmony.ui" line="150"/>
         <source>Reset &apos;Style&apos; value</source>
-        <translation>重置“样式”</translation>
+        <translation>重置“样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_harmony.ui" line="163"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
 </context>
 <context>
@@ -7223,12 +7223,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="138"/>
         <source>Reset &apos;Scale to frame size&apos; value</source>
-        <translation>重置“缩放至占位框大小”</translation>
+        <translation>重置“缩放至占位框大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="151"/>
         <source>Reset &apos;Size&apos; values</source>
-        <translation>重置“大小”</translation>
+        <translation>重置“大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="164"/>
@@ -7238,7 +7238,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="177"/>
         <source>Reset &apos;Lock aspect ratio&apos; value</source>
-        <translation>重置“宽高比限制”</translation>
+        <translation>重置“宽高比限制”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="105"/>
@@ -7271,7 +7271,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_iname.ui" line="117"/>
         <source>Reset &apos;Layout position&apos; value</source>
-        <translation>重置“版面布局”</translation>
+        <translation>重置“版面布局”值</translation>
     </message>
 </context>
 <context>
@@ -7299,7 +7299,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_instrchange.ui" line="124"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
 </context>
 <context>
@@ -7380,7 +7380,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="99"/>
         <source>Reset &apos;Show courtesy&apos; value</source>
-        <translation>重置“显示提示性调号”属性</translation>
+        <translation>重置“显示提示性调号”值属性</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="106"/>
@@ -7461,7 +7461,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="124"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
 </context>
 <context>
@@ -7540,17 +7540,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="283"/>
         <source>Reset &apos;Line visible&apos; value</source>
-        <translation>重置“线条可见属性”</translation>
+        <translation>重置“线条可见属性”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="296"/>
         <source>Reset &apos;Allow diagonal&apos; value</source>
-        <translation>重置“允许倾斜”</translation>
+        <translation>重置“允许倾斜”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="309"/>
         <source>Reset &apos;Color&apos; values</source>
-        <translation>重置“颜色”</translation>
+        <translation>重置“颜色”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="322"/>
@@ -7565,12 +7565,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="348"/>
         <source>Reset &apos;Dash line length&apos; value</source>
-        <translation>重置“延伸虚线长度”</translation>
+        <translation>重置“延伸虚线长度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="361"/>
         <source>Reset &apos;Dash gap width&apos; value</source>
-        <translation>重置“延伸虚线间距”</translation>
+        <translation>重置“延伸虚线间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="153"/>
@@ -7653,17 +7653,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="179"/>
         <source>Reset &apos;Verse&apos; value</source>
-        <translation>重置“诗节”</translation>
+        <translation>重置“诗节”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="192"/>
         <source>Reset &apos;Style&apos; value</source>
-        <translation>重置“样式”</translation>
+        <translation>重置“样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="205"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
 </context>
 <context>
@@ -7784,7 +7784,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="434"/>
         <source>Reset &apos;Velocity type&apos; value</source>
-        <translation>重置“力度类型”</translation>
+        <translation>重置“力度类型”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="476"/>
@@ -7794,7 +7794,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="517"/>
         <source>Reset &apos;Tuning&apos; value</source>
-        <translation>重置“调律”</translation>
+        <translation>重置“调律”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="590"/>
@@ -7804,7 +7804,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="603"/>
         <source>Reset &apos;Fix to line&apos; value</source>
-        <translation>重置“吸附谱线”</translation>
+        <translation>重置“吸附谱线”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="616"/>
@@ -7814,7 +7814,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="637"/>
         <source>Reset &apos;Line&apos; value</source>
-        <translation>重置“线条属性”</translation>
+        <translation>重置“线条属性”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="447"/>
@@ -8075,12 +8075,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="190"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="203"/>
         <source>Reset &apos;Numbers only&apos; value</source>
-        <translation>重置“仅限数字”</translation>
+        <translation>重置“仅限数字”值</translation>
     </message>
 </context>
 <context>
@@ -8118,7 +8118,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_palmmute.ui" line="124"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
 </context>
 <context>
@@ -8156,7 +8156,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_pedal.ui" line="124"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
 </context>
 <context>
@@ -8207,7 +8207,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="114"/>
         <source>Reset &apos;Start new section with long instrument names&apos; value</source>
-        <translation>重设“使新分段以长乐器名开头”</translation>
+        <translation>重设“使新分段以长乐器名开头”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="127"/>
@@ -8217,7 +8217,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="140"/>
         <source>Reset &apos;Start new section with measure number one&apos; value</source>
-        <translation>重设“在新的分段处重置为第一小节”</translation>
+        <translation>重设“在新的分段处重置为第一小节”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="153"/>
@@ -8232,7 +8232,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="169"/>
         <source>Reset &apos;Pause&apos; value</source>
-        <translation>重置“暂停”</translation>
+        <translation>重置“暂停”值</translation>
     </message>
 </context>
 <context>
@@ -8250,7 +8250,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="88"/>
         <source>Reset &apos;Leading space&apos; value</source>
-        <translation>重置“前缀空间”</translation>
+        <translation>重置“前缀空间”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="114"/>
@@ -8339,7 +8339,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="175"/>
         <source>Reset &apos;Line type&apos; value</source>
-        <translation>重置“线条类型”</translation>
+        <translation>重置“线条类型”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="188"/>
@@ -8391,7 +8391,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftext.ui" line="97"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftext.ui" line="133"/>
@@ -8401,7 +8401,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftext.ui" line="149"/>
         <source>Reset &apos;Style&apos; value</source>
-        <translation>重置“样式”</translation>
+        <translation>重置“样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftext.ui" line="168"/>
@@ -8439,7 +8439,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="110"/>
         <source>Reset &apos;Show ledger lines&apos; value</source>
-        <translation>重置“加线显示状态”</translation>
+        <translation>重置“加线显示状态”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="117"/>
@@ -8449,12 +8449,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="130"/>
         <source>Reset &apos;Notehead scheme&apos; value</source>
-        <translation>重置“符头方案”</translation>
+        <translation>重置“符头方案”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="179"/>
         <source>Reset &apos;Generate key signatures&apos; value</source>
-        <translation>重置“生成调号”</translation>
+        <translation>重置“生成调号”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="202"/>
@@ -8469,12 +8469,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="246"/>
         <source>Reset &apos;Show barlines&apos; value</source>
-        <translation>重置“小节线显示状态”</translation>
+        <translation>重置“小节线显示状态”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="285"/>
         <source>Reset &apos;Step offset&apos; value</source>
-        <translation>重置“音级偏移”</translation>
+        <translation>重置“音级偏移”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="312"/>
@@ -8515,7 +8515,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="328"/>
         <source>Reset &apos;Lines&apos; value</source>
-        <translation>重置“线条”</translation>
+        <translation>重置“线条”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="335"/>
@@ -8530,7 +8530,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="406"/>
         <source>Reset &apos;Scale&apos; value</source>
-        <translation>重置“缩放大小”</translation>
+        <translation>重置“缩放大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="419"/>
@@ -8540,17 +8540,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="446"/>
         <source>Reset &apos;Generate clefs&apos; value</source>
-        <translation>重置“生成谱号”</translation>
+        <translation>重置“生成谱号”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="466"/>
         <source>Reset &apos;Generate time signatures&apos; value</source>
-        <translation>重置“生成拍号”</translation>
+        <translation>重置“生成拍号”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="479"/>
         <source>Reset &apos;Line distance&apos; value</source>
-        <translation>重置“线条间距”</translation>
+        <translation>重置“线条间距”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="486"/>
@@ -8668,12 +8668,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="149"/>
         <source>Reset &apos;Stem direction&apos; value</source>
-        <translation>重置“符干方向”</translation>
+        <translation>重置“符干方向”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="162"/>
         <source>Reset &apos;Length change&apos; value</source>
-        <translation>重置“长度变化”</translation>
+        <translation>重置“长度变化”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="101"/>
@@ -8855,7 +8855,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="201"/>
         <source>Reset &apos;Follow text&apos; value</source>
-        <translation>重置“根据文本设置的速度”</translation>
+        <translation>重置“根据文本设置的速度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="214"/>
@@ -8865,12 +8865,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="227"/>
         <source>Reset &apos;Style&apos; value</source>
-        <translation>重置“样式”</translation>
+        <translation>重置“样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="240"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
 </context>
 <context>
@@ -8909,7 +8909,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_text.ui" line="185"/>
         <location filename="../../mscore/inspector/inspector_text.ui" line="550"/>
         <source>Reset &apos;Style&apos; values</source>
-        <translation>重置“样式”</translation>
+        <translation>重置“样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="211"/>
@@ -8934,7 +8934,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="292"/>
         <source>Reset &apos;Border color&apos; values</source>
-        <translation>重置“边框颜色”</translation>
+        <translation>重置“边框颜色”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="299"/>
@@ -8944,12 +8944,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="315"/>
         <source>Reset &apos;Width&apos; value</source>
-        <translation>重置“宽度”</translation>
+        <translation>重置“宽度”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="328"/>
         <source>Reset &apos;Corner radius&apos; value</source>
-        <translation>重置“圆角半径”</translation>
+        <translation>重置“圆角半径”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="335"/>
@@ -8959,12 +8959,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="351"/>
         <source>Reset &apos;Thickness&apos; value</source>
-        <translation>重置“粗细”</translation>
+        <translation>重置“粗细”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="364"/>
         <source>Reset &apos;Highlight color&apos; values</source>
-        <translation>重置“突出颜色”</translation>
+        <translation>重置“突出颜色”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="377"/>
@@ -8989,7 +8989,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="454"/>
         <source>Reset &apos;Font face&apos; value</source>
-        <translation>重置“字体”</translation>
+        <translation>重置“字体”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="467"/>
@@ -8999,7 +8999,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="505"/>
         <source>Reset &apos;Alignment&apos; values</source>
-        <translation>重置“对齐方式”</translation>
+        <translation>重置“对齐方式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="524"/>
@@ -9009,7 +9009,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="537"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
-        <translation>重置“跟随谱表大小”</translation>
+        <translation>重置“跟随谱表大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="163"/>
@@ -9080,7 +9080,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="124"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
 </context>
 <context>
@@ -9142,12 +9142,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1041"/>
         <source>Reset &apos;End hook&apos; value</source>
-        <translation>重置“末端符尾”</translation>
+        <translation>重置“末端符尾”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1054"/>
         <source>Reset &apos;Begin hook&apos; value</source>
-        <translation>重置“首端符尾”</translation>
+        <translation>重置“首端符尾”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1108"/>
@@ -9186,7 +9186,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="618"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="867"/>
         <source>Reset &apos;Text&apos; value</source>
-        <translation>重置“文字”</translation>
+        <translation>重置“文字”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="160"/>
@@ -9200,21 +9200,21 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="676"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="792"/>
         <source>Reset &apos;Font style&apos; values</source>
-        <translation>重置“字体样式”</translation>
+        <translation>重置“字体样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="186"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="569"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="854"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="199"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="605"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="828"/>
         <source>Reset &apos;Offset&apos; values</source>
-        <translation>重置“偏移量”</translation>
+        <translation>重置“偏移量”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="212"/>
@@ -9242,14 +9242,14 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="631"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="874"/>
         <source>Reset &apos;Font face&apos; value</source>
-        <translation>重置“字体”</translation>
+        <translation>重置“字体”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="276"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="701"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="974"/>
         <source>Reset &apos;Font size&apos; value</source>
-        <translation>重置“字体大小”</translation>
+        <translation>重置“字体大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="296"/>
@@ -9263,7 +9263,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="494"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="841"/>
         <source>Reset &apos;Alignment&apos; values</source>
-        <translation>重置“对齐方式”</translation>
+        <translation>重置“对齐方式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="352"/>
@@ -9336,12 +9336,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="124"/>
         <source>Reset &apos;Show courtesy&apos; value</source>
-        <translation>重置“显示提示性拍号属性”</translation>
+        <translation>重置“显示提示性拍号属性”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="137"/>
         <source>Reset &apos;Scale&apos; values</source>
-        <translation>重置“缩放”</translation>
+        <translation>重置“缩放”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="147"/>
@@ -9389,7 +9389,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="118"/>
         <source>Reset &apos;Tremolo range&apos; value</source>
-        <translation>重置“震音域”</translation>
+        <translation>重置“震音域”值</translation>
     </message>
 </context>
 <context>
@@ -9442,7 +9442,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolobar.ui" line="209"/>
         <source>Reset &apos;Scale&apos; value</source>
-        <translation>重置“缩放大小”</translation>
+        <translation>重置“缩放大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolobar.ui" line="222"/>
@@ -9470,7 +9470,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="144"/>
         <source>Reset &apos;Ornament style&apos; value</source>
-        <translation>重置“装饰音样式”</translation>
+        <translation>重置“装饰音样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="157"/>
@@ -9485,7 +9485,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="193"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="213"/>
@@ -9578,7 +9578,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="385"/>
         <source>Reset &apos;Style&apos; values</source>
-        <translation>重置“样式”</translation>
+        <translation>重置“样式”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="372"/>
@@ -9588,7 +9588,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="228"/>
         <source>Reset &apos;Bracket type&apos; value</source>
-        <translation>重置“连谱号类型”</translation>
+        <translation>重置“连谱号类型”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="146"/>
@@ -9628,17 +9628,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="174"/>
         <source>Reset &apos;Number type&apos; value</source>
-        <translation>重置“数字类型”</translation>
+        <translation>重置“数字类型”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="316"/>
         <source>Reset &apos;Font&apos; value</source>
-        <translation>重置“字体”</translation>
+        <translation>重置“字体”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="358"/>
         <source>Reset &apos;Size&apos; value</source>
-        <translation>重置“大小”</translation>
+        <translation>重置“大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="273"/>
@@ -9690,7 +9690,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="408"/>
         <source>Reset &apos;Follow staff size&apos; values</source>
-        <translation>重置“跟随谱表大小”</translation>
+        <translation>重置“跟随谱表大小”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="73"/>
@@ -9942,17 +9942,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="177"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation>重置“类型”的值</translation>
+        <translation>重置“类型”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="190"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>重置“方向”</translation>
+        <translation>重置“方向”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="203"/>
         <source>Reset &apos;Play&apos; value</source>
-        <translation>重置播放音量</translation>
+        <translation>重置“播放”值</translation>
     </message>
 </context>
 <context>
@@ -11604,13 +11604,13 @@ failed: %2</source>
 <context>
     <name>Ms::Inspector</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="123"/>
-        <location filename="../../mscore/inspector/inspector.cpp" line="132"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="125"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="134"/>
         <source>Inspector</source>
         <translation>元素检视器</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="133"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="135"/>
         <source>Inspector Subwindow</source>
         <translation>检视器子窗口</translation>
     </message>
@@ -11618,18 +11618,18 @@ failed: %2</source>
 <context>
     <name>Ms::InspectorAccidental</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="953"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="980"/>
         <source>None</source>
         <comment>no accidental bracket type</comment>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="954"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="981"/>
         <source>Parenthesis</source>
         <translation>圆括号</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="955"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="982"/>
         <source>Bracket</source>
         <translation>括号</translation>
     </message>
@@ -11721,52 +11721,52 @@ failed: %2</source>
 <context>
     <name>Ms::InspectorKeySig</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="888"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="915"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="889"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="916"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="890"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="917"/>
         <source>Major</source>
         <translation>大调</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="891"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="918"/>
         <source>Minor</source>
         <translation>小调</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="892"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="919"/>
         <source>Dorian</source>
         <translation>多利亚调式</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="893"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="920"/>
         <source>Phrygian</source>
         <translation>弗利几亚调式</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="894"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="921"/>
         <source>Lydian</source>
         <translation>吕底亚语</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="895"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="922"/>
         <source>Mixolydian</source>
         <translation>混合利底亚调式</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="896"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="923"/>
         <source>Ionian</source>
         <translation>伊奥尼亚调式</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="897"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="924"/>
         <source>Locrian</source>
         <translation>洛克利亚调式</translation>
     </message>
@@ -11783,32 +11783,32 @@ failed: %2</source>
 <context>
     <name>Ms::InspectorRest</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="683"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="710"/>
         <source>Select</source>
         <translation>选择</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="698"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="725"/>
         <source>Dot 1</source>
         <translation>附点1</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="701"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="728"/>
         <source>Dot 2</source>
         <translation>附点2</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="704"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="731"/>
         <source>Dot 3</source>
         <translation>附点3</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="711"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="738"/>
         <source>Dot 4</source>
         <translation>附点4</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="714"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="741"/>
         <source>Tuplet</source>
         <translation>连音</translation>
     </message>
@@ -18502,7 +18502,7 @@ failed: %2</source>
         <translation>无效</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1214"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1218"/>
         <source>Cannot open tablature font description:
 %1
 %2</source>
@@ -18511,97 +18511,97 @@ failed: %2</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1402"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1406"/>
         <source>Standard</source>
         <translation>普通</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1404"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1408"/>
         <source>Perc. 1 line</source>
         <translation>单线鼓谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1405"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1409"/>
         <source>Perc. 3 lines</source>
         <translation>三线鼓谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1406"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1410"/>
         <source>Perc. 5 lines</source>
         <translation>五线鼓谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1411"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1415"/>
         <source>Tab. 6-str. simple</source>
         <translation>六弦简易指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1412"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1416"/>
         <source>Tab. 6-str. common</source>
         <translation>六弦常用指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1413"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1417"/>
         <source>Tab. 6-str. full</source>
         <translation>六弦完整指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1414"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1418"/>
         <source>Tab. 4-str. simple</source>
         <translation>四弦简易指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1415"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1419"/>
         <source>Tab. 4-str. common</source>
         <translation>四弦常用指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1416"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1420"/>
         <source>Tab. 4-str. full</source>
         <translation>四弦完整指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1417"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1421"/>
         <source>Tab. 5-str. simple</source>
         <translation>五弦简易指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1418"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1422"/>
         <source>Tab. 5-str. common</source>
         <translation>五弦常用指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1419"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1423"/>
         <source>Tab. 5-str. full</source>
         <translation>五弦完整指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1420"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1424"/>
         <source>Tab. ukulele</source>
         <translation>尤克里里指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1421"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1425"/>
         <source>Tab. balalaika</source>
         <translation>巴拉莱卡琴指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1424"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1428"/>
         <source>Tab. 6-str. Italian</source>
         <translation>意大利六弦指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1425"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1429"/>
         <source>Tab. 6-str. French</source>
         <translation>法国六弦指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1426"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1430"/>
         <source>Tab. 7-str. common</source>
         <translation>七弦常用指法谱</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1427"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1431"/>
         <source>Tab. 8-str. common</source>
         <translation>八弦常用指法谱</translation>
     </message>
@@ -19029,13 +19029,13 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>%1/%2拍</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1081"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1108"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="41"/>
         <source>Above</source>
         <translation>上方</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1082"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1109"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="42"/>
         <source>Below</source>
         <translation>下方</translation>
@@ -23991,7 +23991,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="747"/>
         <source>Reset all style values to default</source>
-        <translation>重置所有谱面样式为默认样式</translation>
+        <translation>将所有谱面样式重置回默认样式</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="924"/>
@@ -28951,47 +28951,47 @@ Measure is not empty</source>
 <context>
     <name>noteheadschemes</name>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1359"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1363"/>
         <source>Normal</source>
         <translation>普通</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1360"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1364"/>
         <source>Pitch Names</source>
         <translation>音高名</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1361"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1365"/>
         <source>German Pitch Names</source>
         <translation>德文音高名</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1362"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1366"/>
         <source>Solfège Movable Do</source>
         <translation>首调唱名</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1363"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1367"/>
         <source>Solfège Fixed Do</source>
         <translation>固定调唱名</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1364"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1368"/>
         <source>4-shape (Walker)</source>
         <translation>4形（Walker）</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1365"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1369"/>
         <source>7-shape (Aikin)</source>
         <translation>7形（Aikin）</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1366"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1370"/>
         <source>7-shape (Funk)</source>
         <translation>7形（Funk）</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1367"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1371"/>
         <source>7-shape (Walker)</source>
         <translation>7形（Walker）</translation>
     </message>
@@ -30321,12 +30321,12 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4906"/>
         <source>Repeat last bar</source>
-        <translation>重复最后一节</translation>
+        <translation>重复最末小节</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4907"/>
         <source>Repeat last two bars</source>
-        <translation>重复末尾两小节</translation>
+        <translation>重复最后两小节</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4908"/>
@@ -30361,7 +30361,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4929"/>
         <source>Half rest on leger line</source>
-        <translation>二分休止符</translation>
+        <translation>加线上的二分休止符</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4932"/>

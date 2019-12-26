@@ -4776,7 +4776,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="177"/>
         <source>New part for single instrument</source>
-        <translation>Nouvelle partie pour un seul instrument</translation>
+        <translation>Nouvelle partie pour les voix / instrument(s) sélectionnés</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="180"/>
@@ -11606,13 +11606,13 @@ a échoué : %2</translation>
 <context>
     <name>Ms::Inspector</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="123"/>
-        <location filename="../../mscore/inspector/inspector.cpp" line="132"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="125"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="134"/>
         <source>Inspector</source>
         <translation>Inspecteur</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="133"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="135"/>
         <source>Inspector Subwindow</source>
         <translation>Sous-fenêtre de l&apos;inspecteur</translation>
     </message>
@@ -11620,18 +11620,18 @@ a échoué : %2</translation>
 <context>
     <name>Ms::InspectorAccidental</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="953"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="980"/>
         <source>None</source>
         <comment>no accidental bracket type</comment>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="954"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="981"/>
         <source>Parenthesis</source>
         <translation>Parenthèses</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="955"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="982"/>
         <source>Bracket</source>
         <translation>Crochet</translation>
     </message>
@@ -11723,52 +11723,52 @@ a échoué : %2</translation>
 <context>
     <name>Ms::InspectorKeySig</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="888"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="915"/>
         <source>Unknown</source>
         <translation>Inconnu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="889"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="916"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="890"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="917"/>
         <source>Major</source>
         <translation>Majeur</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="891"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="918"/>
         <source>Minor</source>
         <translation>Mineur</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="892"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="919"/>
         <source>Dorian</source>
         <translation>Dorien</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="893"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="920"/>
         <source>Phrygian</source>
         <translation>Phrygien</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="894"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="921"/>
         <source>Lydian</source>
         <translation>Lydien</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="895"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="922"/>
         <source>Mixolydian</source>
         <translation>Mixolydien</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="896"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="923"/>
         <source>Ionian</source>
         <translation>Ionien</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="897"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="924"/>
         <source>Locrian</source>
         <translation>Locrien</translation>
     </message>
@@ -11785,32 +11785,32 @@ a échoué : %2</translation>
 <context>
     <name>Ms::InspectorRest</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="683"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="710"/>
         <source>Select</source>
         <translation>Sélection</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="698"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="725"/>
         <source>Dot 1</source>
         <translation>Point 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="701"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="728"/>
         <source>Dot 2</source>
         <translation>Point 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="704"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="731"/>
         <source>Dot 3</source>
         <translation>Point 3</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="711"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="738"/>
         <source>Dot 4</source>
         <translation>Point 4</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="714"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="741"/>
         <source>Tuplet</source>
         <translation>Division irrégulière</translation>
     </message>
@@ -18507,7 +18507,7 @@ a échoué : %2</translation>
         <translation>Invalide</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1214"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1218"/>
         <source>Cannot open tablature font description:
 %1
 %2</source>
@@ -18516,97 +18516,97 @@ a échoué : %2</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1402"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1406"/>
         <source>Standard</source>
         <translation>Standard</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1404"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1408"/>
         <source>Perc. 1 line</source>
         <translation>Percu. 1 ligne</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1405"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1409"/>
         <source>Perc. 3 lines</source>
         <translation>Percu. 3 lignes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1406"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1410"/>
         <source>Perc. 5 lines</source>
         <translation>Percu. 5 lignes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1411"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1415"/>
         <source>Tab. 6-str. simple</source>
         <translation>Tab. simple, 6 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1412"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1416"/>
         <source>Tab. 6-str. common</source>
         <translation>Tab. courante, 6 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1413"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1417"/>
         <source>Tab. 6-str. full</source>
         <translation>Tab. complète, 6 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1414"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1418"/>
         <source>Tab. 4-str. simple</source>
         <translation>Tab. simple, 4 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1415"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1419"/>
         <source>Tab. 4-str. common</source>
         <translation>Tab. courante, 4 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1416"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1420"/>
         <source>Tab. 4-str. full</source>
         <translation>Tab. complète, 4 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1417"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1421"/>
         <source>Tab. 5-str. simple</source>
         <translation>Tab. simple, 5 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1418"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1422"/>
         <source>Tab. 5-str. common</source>
         <translation>Tab. courante, 5 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1419"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1423"/>
         <source>Tab. 5-str. full</source>
         <translation>Tab. complète, 5 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1420"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1424"/>
         <source>Tab. ukulele</source>
         <translation>Tab. ukulélé</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1421"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1425"/>
         <source>Tab. balalaika</source>
         <translation>Tab. balalaïka</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1424"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1428"/>
         <source>Tab. 6-str. Italian</source>
         <translation>Tab. italienne, 6 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1425"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1429"/>
         <source>Tab. 6-str. French</source>
         <translation>Tab. française, 6 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1426"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1430"/>
         <source>Tab. 7-str. common</source>
         <translation>Tab. courante, 7 cordes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1427"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1431"/>
         <source>Tab. 8-str. common</source>
         <translation>Tab. courante, 8 cordes</translation>
     </message>
@@ -19035,13 +19035,13 @@ Allez sur le %1site de MuseScore%2 pour télécharger la dernière version.</tra
         <translation>mesure en %1/%2</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1081"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1108"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="41"/>
         <source>Above</source>
         <translation>Au-dessus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1082"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1109"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="42"/>
         <source>Below</source>
         <translation>Au-dessous</translation>
@@ -28957,47 +28957,47 @@ La mesure n&apos;est pas vide</translation>
 <context>
     <name>noteheadschemes</name>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1359"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1363"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1360"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1364"/>
         <source>Pitch Names</source>
         <translation>Noms des notes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1361"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1365"/>
         <source>German Pitch Names</source>
         <translation>Noms allemands des notes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1362"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1366"/>
         <source>Solfège Movable Do</source>
         <translation>Solmisation relative</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1363"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1367"/>
         <source>Solfège Fixed Do</source>
         <translation>Solmisation absolue</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1364"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1368"/>
         <source>4-shape (Walker)</source>
         <translation>En forme de 4 (Walker)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1365"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1369"/>
         <source>7-shape (Aikin)</source>
         <translation>En forme de 7 (Aikin)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1366"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1370"/>
         <source>7-shape (Funk)</source>
         <translation>En forme de 7 (Funk)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1367"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1371"/>
         <source>7-shape (Walker)</source>
         <translation>En forme de 7 (Walker)</translation>
     </message>
@@ -30327,17 +30327,17 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4906"/>
         <source>Repeat last bar</source>
-        <translation>Répéter la dernière mesure</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4907"/>
         <source>Repeat last two bars</source>
-        <translation>Répéter les 2 dernières mesures</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4908"/>
         <source>Repeat last four bars</source>
-        <translation>Répéter les 4 dernières mesures</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4915"/>
@@ -30367,7 +30367,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4929"/>
         <source>Half rest on leger line</source>
-        <translation>Demi-pause sur ligne supplémentaire</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4932"/>
@@ -30377,7 +30377,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4936"/>
         <source>Whole rest on leger line</source>
-        <translation>Pause sur ligne supplémentaire</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4945"/>
