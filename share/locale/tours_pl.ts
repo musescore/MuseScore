@@ -109,14 +109,6 @@
     Kliknij &quot;Dalej&quot;, aby dowiedzieć się więcej.</translation>
     </message>
     <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation>Klawisze takie jak PgUp, PgDn, Home i End działają tak, jak w innych aplikacjach, umożliwiając przechodzenie między stronami.
-    Klawiatury, które nie mają tych klawiszy, często posiadają klawisz funkcyjny Fn+Góra/Dół/Lewo/Prawo.</translation>
-    </message>
-    <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
         <translation>Dodatkowe narzędzia nawigacyjne to Oś czasu i Nawigator. Oba znajdziesz w menu Widok.</translation>
@@ -212,37 +204,6 @@
     Kliknij &quot;Dalej&quot;, aby dowiedzieć się więcej.</translation>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation>Aby dokonać pojedynczego zaznaczenia, kliknij element, który chcesz zaznaczyć.
-    Zostaje on podświetlony, aby wskazać, że został zaznaczony.
-    Możesz użyć lewego i prawego klawisza kursora, aby przesunąć zaznaczenie przez nuty i resztę partytury.
-    Wskazówka: Jeśli wciśniesz klawisz Alt (Option na macOS) wraz z klawiszami kursora, możesz poruszać się również po innych elementach, a także przechodzić w górę i w dół od pięciolinii do pięciolinii.</translation>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation>Zakres zaznaczenia obejmuje wszystko, od jednego punktu do drugiego, na pojedynczej lub kilku pięcioliniach.
-    Wskazuje go niebieski prostokąt obejmujący cały zakres.
-    Aby dokonać zaznaczenia zakresu, kliknij pierwszą nutę, pauzę lub takt, które chcesz zaznaczyć, wciśnij i przytrzymaj Shift+kliknij ostatnią.
-    Możesz również rozszerzyć zakres zaznaczenia, przytrzymując klawisz Shift podczas przesuwania kursora.</translation>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation>Innym sposobem zaznaczania jest przytrzymanie klawisza Shift podczas przeciągania.
-    Jeśli Twoje zaznaczenie zawiera nuty, zostanie automatycznie wybrane jako zakres zaznaczenia; w przeciwnym razie zostanie wybrane jako lista zaznaczenia.</translation>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Na koniec &quot;Filtr zaznaczenia&quot; (znajdziesz go w menu Widok) - pozwala wykluczyć elementy danego typu z zakresu zaznaczenia.</translation>
@@ -261,37 +222,57 @@
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
         <comment>navigate-tour</comment>
         <translation>Najszybszym sposobem przewijania w górę lub w dół jest użycie rolki myszki lub podobnego gestu dotykowego (na przykład przesunięcia dwoma palcami).
-    Aby przewijać w poziomie, przytrzymaj Shift podczas używania rolki myszki lub gestu dotykowego.</translation>
+    Aby przewijać w poziomie, przytrzymaj &quot;Shift&quot; podczas używania rolki myszki lub gestu dotykowego.</translation>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
+        <comment>navigate-tour</comment>
+        <translation>Klawisze takie jak &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot; i &quot;End&quot; działają tak, jak w innych aplikacjach, umożliwiając przechodzenie między stronami.
+    Klawiatury, które nie mają tych klawiszy, często posiadają klawisz funkcyjny &quot;Fn+Góra/Dół/Lewo/Prawo&quot;.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
         <comment>navigate-tour</comment>
         <translation>Możesz przesuwać na krótkich odległościach, klikając pusty obszar strony i przeciągając.
-    Przy okazji możesz również wybrać obszary, przytrzymując klawisz Shift podczas przeciągania.</translation>
+    Przy okazji możesz również wybrać obszary, przytrzymując klawisz &quot;Shift&quot; odczas przeciągania.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
         <translation>Aby wprowadzić nutę, wybierz jej długość, wprowadź jej nazwę klawiszem litery lub kliknij na pięciolinię.
-    Wciśnij Ctrl+Góra/Dół (macOS: Cmd+Góra/Dół), aby zmienić oktawę.</translation>
+    Wciśnij &quot;Ctrl+Góra/Dół&quot; (macOS: &quot;Cmd+Góra/Dół&quot;), aby zmienić oktawę.</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation>Aby dodać znak chromatyczny do nuty, wciśnij klawisz Góra lub Dół, aby podnieść lub obniżyć jej wysokość lub kliknij jedną z tych ikon.</translation>
+        <translation>Aby dodać znak chromatyczny do nuty, wciśnij klawisz &quot;Góra&quot; lub &quot;Dół&quot;, aby podnieść lub obniżyć jej wysokość lub kliknij jedną z tych ikon.</translation>
     </message>
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation>Aby dodać nutę do akordu, podczas wprowadzania jej nazwy klawiszem litery, wciśnij klawisz Shift lub kliknij na pięciolinię.</translation>
+        <translation>Aby dodać nutę do akordu, podczas wprowadzania jej nazwy klawiszem litery, wciśnij klawisz &quot;Shift&quot; lub kliknij na pięciolinię.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation>Aby utworzyć triolę lub inną grupę niemiarową, wybierz jej długość, a następnie wciśnij Ctrl+numer lub użyj: Dodaj &gt; Grupy niemiarowe.</translation>
+        <translation>Aby utworzyć triolę lub inną grupę niemiarową, wybierz jej długość, a następnie wciśnij &quot;Ctrl+numer&quot; lub użyj: Dodaj &gt; Grupy niemiarowe.</translation>
+    </message>
+    <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation>Aby dokonać pojedynczego zaznaczenia, kliknij element, który chcesz zaznaczyć.
+    Zostaje on podświetlony, aby wskazać, że został zaznaczony.
+    Możesz użyć lewego i prawego klawisza kursora, aby przesunąć zaznaczenie przez nuty i resztę partytury.
+    Wskazówka: Jeśli wciśniesz klawisz &quot;Alt&quot; (&quot;Option&quot; na macOS) wraz z klawiszami kursora, możesz poruszać się również po innych elementach, a także przechodzić w górę i w dół od pięciolinii do pięciolinii.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -300,25 +281,44 @@
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
         <translation>Lista zaznaczenia jest kombinacją pojedynczych zaznaczeń.
-    Wciśnij Ctrl (macOS: Cmd) podczas klikania, aby dodać lub usunąć elementy do listy zaznaczenia.
-    Możesz również szybko zaznaczyć podobne elementy, klikając je prawym przyciskiem myszki (macOS: Ctrl+kliknięcie), a następnie wybierając jedną z opcji &quot;Zaznacz&quot; z rozwijanego menu podręcznego.</translation>
+    Wciśnij &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) podczas klikania, aby dodać lub usunąć elementy do listy zaznaczenia.
+    Możesz również szybko zaznaczyć podobne elementy, klikając je prawym przyciskiem myszki (macOS: &quot;Ctrl&quot;+kliknięcie), a następnie wybierając jedną z opcji &quot;Zaznacz&quot; z rozwijanego menu podręcznego.</translation>
+    </message>
+    <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation>Zakres zaznaczenia obejmuje wszystko, od jednego punktu do drugiego, na pojedynczej lub kilku pięcioliniach.
+    Wskazuje go niebieski prostokąt obejmujący cały zakres.
+    Aby dokonać zaznaczenia zakresu, kliknij pierwszą nutę, pauzę lub takt, które chcesz zaznaczyć, wciśnij i przytrzymaj &quot;Shift&quot;+kliknij ostatnią.
+    Możesz również rozszerzyć zakres zaznaczenia, przytrzymując klawisz &quot;Shift&quot; podczas przesuwania kursora.</translation>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation>Innym sposobem zaznaczania jest przytrzymanie klawisza &quot;Shift&quot; podczas przeciągania.
+    Jeśli Twoje zaznaczenie zawiera nuty, zostanie automatycznie wybrane jako zakres zaznaczenia; w przeciwnym razie zostanie wybrane jako lista zaznaczenia.</translation>
     </message>
     <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
         <translation>Większość elementów w palecie linii obejmuje zakres od elementu początkowego do elementu końcowego.
 
     Aby edytować ten zakres, kliknij dwukrotnie linię (która automatycznie wybiera uchwyt końcowy) i:
 
-    - Wciśnij Shift+Prawo, aby przesunąć ten uchwyt do przodu.
+    - Wciśnij &quot;Shift+Prawo&quot;, aby przesunąć ten uchwyt do przodu.
 
-    - Wciśnij Shift+Lewo, aby przesunąć ten uchwyt do tyłu.</translation>
+    - Wciśnij &quot;Shift+Lewo&quot;, aby przesunąć ten uchwyt do tyłu.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
@@ -331,7 +331,7 @@
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
         <translation>To jest widok partytury, w którym możesz ją wyświetlać i edytować.
-    Użyj rolki myszki lub touchpada, aby przewijać (z Shiftem, aby przewijać w poziomie).
+    Użyj rolki myszki lub touchpada, aby przewijać (z &quot;Shift&quot;, aby przewijać w poziomie).
     Jeśli masz otwartych kilka partytur, możesz przełączać się między nimi za pomocą zakładek u góry widoku partytury.</translation>
     </message>
     <message>
@@ -348,7 +348,7 @@
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
         <comment>welcome</comment>
         <translation>Menu główne zawiera większość poleceń.
-    Ponadto do wielu z nich można uzyskać dostęp za pomocą skrótów klawiszowych lub klikając prawym przyciskiem myszki (macOS: Ctrl+kliknięcie) w widoku partytury.</translation>
+    Ponadto do wielu z nich można uzyskać dostęp za pomocą skrótów klawiszowych lub klikając prawym przyciskiem myszki (macOS: &quot;Ctrl&quot;+kliknięcie) w widoku partytury.</translation>
     </message>
     <message>
         <source>That's the end of this tour!

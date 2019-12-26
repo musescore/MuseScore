@@ -109,15 +109,6 @@ Pulse &quot;Siguiente&quot; para saber más.</translation>
  Haga clic para saber mas.</translation>
     </message>
     <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation>Las teclas de navegación de su teclado, Repag, Avpag, Inicio y Fin, funcionan como en cualquier otra aplicación
- para moverse entre las paginas.
- Los teclados que no tengan estas teclas suelen tener teclas equivalentes que las reemplazan.</translation>
-    </message>
-    <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
         <translation>Las herramientas de navegación adicionales incluyendo, Linea de tiempo y Navegador, se encuentran en el menú &quot;Ver&quot;.</translation>
@@ -215,39 +206,6 @@ Pulse &quot;Siguiente&quot; para saber más.</translation>
   Haga clic en &quot;Siguiente&quot; para conocer mas.</translation>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation>Para hacer una selección individual, haga clic en el elemento que desea seleccionar.
-  Este se resaltara para indicar que esta seleccionado.
-  Puede usar los cursores de izquierda y derecha para mover la selección entre notas y silencios de la partitura.
-  Tip: si mantiene presionada la tecla Alt (Option para macOS) mientras usa las flechas del teclado puede moverse entre otros elementos,
-  y también moverse hacia arriba o abajo de pentagrama en pentagrama.</translation>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation>Una selección de rango incluye todo desde un punto hasta otro entre uno o mas pentagramas.
-  Esta indicado por un rectángulo azul que abarca el rango completo.
-  Para hacer una selección de rango, haga clic en la primera nota, silencio o compás que quiera seleccionar, después haga Shift+clic en el ultimo.
-  También puede extender el rango de la selección manteniendo Shift mientras usa las flechas del teclado.</translation>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation>Otra manera de hacer selecciones es mantener Shift mientras arrastra con el mouse.
-  Si la selección incluye notas, estas automáticamente formaran una selección de rango;
-  sino formaran una selección de lista.</translation>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Finalmente, el &quot;Filtro de Selección&quot; (que se encuentra en menú &quot;Ver&quot;) permite excluir elementos de un tipo especifico de una selección de rango.</translation>
@@ -267,6 +225,15 @@ Pulse &quot;Siguiente&quot; para saber más.</translation>
         <comment>navigate-tour</comment>
         <translation>La manera mas rápida de deslizar arriba y abajo es usando la rueda del mouse o el gesto equivalente (por ejemplo, deslizar con 2 dedos).
    Para deslizar horizontalmente, mantenga &quot;Shift&quot; mientras usa la rueda del mouse o el gesto táctil.</translation>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
+        <comment>navigate-tour</comment>
+        <translation>Las teclas de navegación de su teclado, Repag, Avpag, Inicio y Fin, funcionan como en cualquier otra aplicación
+ para moverse entre las paginas.
+ Los teclados que no tengan estas teclas suelen tener teclas equivalentes que las reemplazan.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
@@ -300,6 +267,19 @@ Pulse &quot;Siguiente&quot; para saber más.</translation>
         <translation>Para crear un tresillo u otro valor irregular, seleccione la duración que represente la duración total del valor irregular, luego presione &quot;Ctrl+numero&quot; o use Agregar &gt; Valor irregular.</translation>
     </message>
     <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation>Para hacer una selección individual, haga clic en el elemento que desea seleccionar.
+  Este se resaltara para indicar que esta seleccionado.
+  Puede usar los cursores de izquierda y derecha para mover la selección entre notas y silencios de la partitura.
+  Tip: si mantiene presionada la tecla Alt (Option para macOS) mientras usa las flechas del teclado puede moverse entre otros elementos,
+  y también moverse hacia arriba o abajo de pentagrama en pentagrama.</translation>
+    </message>
+    <message>
         <source>A list selection is a combination of single selections.
     Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
@@ -311,15 +291,41 @@ Pulse &quot;Siguiente&quot; para saber más.</translation>
 y luego eligiendo uno de las opciones &quot;Seleccionar&quot; del menú desplegable.</translation>
     </message>
     <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation>Una selección de rango incluye todo desde un punto hasta otro entre uno o mas pentagramas.
+  Esta indicado por un rectángulo azul que abarca el rango completo.
+  Para hacer una selección de rango, haga clic en la primera nota, silencio o compás que quiera seleccionar, después haga Shift+clic en el ultimo.
+  También puede extender el rango de la selección manteniendo Shift mientras usa las flechas del teclado.</translation>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation>Otra manera de hacer selecciones es mantener Shift mientras arrastra con el mouse.
+  Si la selección incluye notas, estas automáticamente formaran una selección de rango;
+  sino formaran una selección de lista.</translation>
+    </message>
+    <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation>La mayoría de los elementos on las lineas de la paleta tienen una gama de un elemento initial hasta un elemento final. Para editar su gama, doble clic the linea (que automaticatente selecionna su ... ) and : pulse Mayus-Derecha para mover este handle forward. Pulse Mayus-Izquierda para mover este handler backward. </translation>
+        <translation>La mayoría de los elementos en las lineas de la paleta tienen una gama de un elemento initial hasta un elemento final.
+
+Para editar su gama, doble clic the linea (que automaticatente selecionna su ... ) and:
+
+ pulse Mayus-Derecha para mover este handle forward. 
+
+Pulse Mayus-Izquierda para mover este handler backward. </translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>

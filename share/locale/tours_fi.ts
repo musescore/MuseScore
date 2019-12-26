@@ -109,15 +109,6 @@
  Klikkaa &quot;Seuraava&quot; opetellaksesi lisää.</translation>
     </message>
     <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation>Navigointinäppäimet näppäimistölläsi, kuten PgUp, PgDn, Home, ja End mahdollistavat kuin muissakin ohjelmissa
-    siirtymisen sivujen välillä.
-    Näppäimistöt, joissa ei ole kyseisiä näppäimiä, tarjoavat usein vastaavia, kuten Fn+Ylös/Alas/Vasen/Oikea.</translation>
-    </message>
-    <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
         <translation>Lisänavigointityökaluihin kuuluu Aikajana ja Navigaattori, jotka löytyvät Näytä-valikosta.</translation>
@@ -216,35 +207,6 @@ Alla oleva osa sisältää rivin kullekin instrumentille
     Klikkaa &quot;Seuraava&quot; opetellaksesi lisää.</translation>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation>Yksittäiseen valintaan, klikkaa elementtiä, jonka haluat valita.
-Se näkyy korostettuna osoittamaan, että se on valittu
-Voit käyttää vasenta ja oikeaa kohdistinpainiketta siirtääksesi valinnan 
-nuottien ja taukojen läpi.
- Vinkki: jos painat Alt-näppäintä (Option macOS:llä) ja kohdistinpainikkeita, voit siirtyä myös muiden elementtien läpi, 
- ja myös siirtyä ylös ja alas viivastosta toiseen.</translation>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Lopuksi, Valintasuodin (Näytä-valikossa) sallii sinun erottaa tietyntyyppiset elementit valinta-alueesta.</translation>
@@ -254,47 +216,93 @@ nuottien ja taukojen läpi.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
     You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Jos olet muokannut arvoa, voit klikata &quot;Palauta&quot;-painiketta palauttaaksesi sen oletukseen.
+    Jos arvo on tyyliasetuksen hallitsema, voit klikata &quot;Aseta tyyliksi&quot;-painiketta asettaaksesi nykyisen arvon uudeksi oletustyyliksi.
+    Voit myös säätää oletustyylejä menemällä kohteeseen Muotoilu &gt; Tyyli....</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Nopein tapa rullata ylös ja alas on käyttää hiiren rullaasi tai vastaavaa kosketuselettä (esim. kahdella sormella pyyhkäisy).
+    Vieritääksesi vaakatasoon, pidä vaihtonäppäintä pohjassa samalla, kun käytät hiiren rullaa tai kosketuselettä.</translation>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
+        <comment>navigate-tour</comment>
+        <translation>Navigointinäppäimet näppäimistölläsi, kuten &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, ja &quot;End&quot; mahdollistavat kuin muissakin ohjelmissa
+    siirtymisen sivujen välillä.
+    Näppäimistöt, joissa ei ole kyseisiä näppäimiä, tarjoavat usein vastaavia, kuten &quot;Fn+Ylös/Alas/Vasen/Oikea&quot;.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Voit siirtää pisteet lyhyillä matkoilla klikkaamalla tyhjää kohtaa sivulla ja raahaamalla.
+ Muuten, voit myös valita alueet pitämällä pohjassa Shift-painiketta raahatessa.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Syöttääksesi nuotin valitsemallesi kestolle, kirjoita vastaava kirjain tai klikkaa viivastoon.
+ Paina &quot;Ctrl+Ylös/Alas&quot; (macOS: &quot;Cmd+Ylös/Alas&quot;) vaihtaaksesi oktaavia.</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Lisätäksesi etumerkin nuottiin, paina ylös- tai alas-nuolinäppäintä korottaaksesi tai alentaaksesi sen sävelkorkeutta,
+    tai klikkaa yhtä näistä kuvakkeista.</translation>
     </message>
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Lisätäksesi nuotin sointuun, paina vaihtonäppäintä samalla, kun kirjoitat nuotin kirjaimen, tai klikkaa viivastoon.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Luodaksesi triolin tai muun poikkeusjaon, valitse kesto, joka vastaa poikkeusjaon kokonaiskestoa, sen jälkeen paina &quot;Ctrl+numero&quot; tai mene kohtaan Luo &gt; Tupletit.</translation>
+    </message>
+    <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation>Yksittäiseen valintaan, klikkaa elementtiä, jonka haluat valita.
+    Se näkyy korostettuna osoittamaan, että se on valittu.
+    Voit käyttää vasenta ja oikeaa kohdistinpainiketta siirtääksesi valinnan nuottien ja taukojen läpi.
+    Vinkki: jos painat Alt-näppäintä (&quot;Option&quot; macOS:llä) ja kohdistinpainikkeita, voit siirtyä myös muiden elementtien läpi, 
+     ja myös siirtyä ylös ja alas viivastosta toiseen.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
     Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
+        <comment>select-tour</comment>
+        <translation>Luettelovalinta on yksittäisten valintojen yhdistelmä.
+    Paina &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;), kun haluat lisätä tai poistaa elementtejä luettelon valintaan.
+    Voit myös valita nopeasti samanlaisia ​​elementtejä napsauttamalla hiiren kakkospainikkeella (macOS: &quot;Ctrl + klikkaus&quot;)
+    ja valitse sitten jokin &quot;Valitse&quot; -vaihtoehdoista tuloksena olevasta ponnahdusvalikosta.</translation>
+    </message>
+    <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
         <translation type="unfinished"/>
     </message>
@@ -303,23 +311,31 @@ nuottien ja taukojen läpi.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Useimmat elementit viivapaletissa ulottuvat koko alueen yli ensimmäisestä elementistä viimeiseen.
+
+    Muokataksesi sen aluetta, tuplakilkkaa viivaa (mikä automaattisesti valitsee sen päätöskahvan) ja:
+
+    - Paina &quot;Vaihto+Oikea nuolinäppäin&quot; siirtääksesi kahvaa eteenpäin.
+
+    - Paina Vaihto+Vasen nuolinäppäin&quot; siirtääksesi kahvaa taaksepäin.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Vaihtoehtoisesti voit lisätä viiva-elementin valitun alueen yli ensin valitsemalla alueen partituurista, minkä jälkeen tuplaklikkaamalla viiva-elementtiä paletissa.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with &quot;Shift&quot; to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Tämä on partituurinäkymä, jossa voit tarkastella ja muokata partituuriasi.
+    Käytä hiiren rullaa tai kosketuslevyä rullataksesi (vaihtonäppäimen kanssa vaakasuunnassa).
+    Jos sinulla on avattuna useita partituureja, voit vaihtaa niiden välillä käyttämällä hyväksi välilehtiä partituurinäkymän yläosassa.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
@@ -334,7 +350,8 @@ nuottien ja taukojen läpi.
         <source>The main menu contains most other commands.
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Päävalikko sisältää useimmat muut komennot.
+    Lisäksi moniin komentoihin pääsee käsiksi pikanäppäimillä tai napsauttamalla hiiren kakkospainiketta (macOS: &quot;Ctrl&quot;+klikkaus) partituurinäkymän sisällä.</translation>
     </message>
     <message>
         <source>That's the end of this tour!

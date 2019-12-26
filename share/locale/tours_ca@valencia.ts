@@ -108,15 +108,6 @@ Per a incloure un punt, feu clic sobre la icona corresponent o premeu la drecera
 Feu clic sobre &quot;Següent&quot; per saber-ne més</translation>
     </message>
     <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation>Les tecles de navegació del teclat com Re pàg, Av pàg, Inici i Fi funcionen com en qualsevol altra aplicació
-per a moure&apos;s entre pàgines.
-Els teclats que no tinguen aquestes tecles acostumen tindre tecles equivalents com Fn+Amunt/Avall/Dreta/Esquerra.</translation>
-    </message>
-    <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
         <translation>Les eines addicionals de navegació inclouen la Línia de temps i el Navegador, que trobareu en el menú Visualització. </translation>
@@ -214,39 +205,6 @@ Les caselles amb una vora fina blava representen compassos que es visualitzen ac
 Feu clic sobre &quot;Següent&quot; per saber-ne més.</translation>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation>Per a una selecció individual, feu clic sobre l&apos;element que voleu seleccionar.
-Aquest es ressaltarà per a indicar que està seleccionat.
-Podeu utilitzar els cursors dreta i esquerra per a moure la selecció entre notes i silencis de partitura.
-Consell: si premeu la tecla Alt (Opció per a macOs) mentre utilitzeu les fletxes del teclat podeu desplaçar-vos també entre altres elements,
-i també desplaçar-vos cap amunt o cap avall de pentagrama en pentagrama.</translation>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation>Una selecció de rang inclou tot des d&apos;un punt en el temps fis a altre entre un o més pentagrames.
-Açò està indicat per un rectangle blau que abasta el rang complet.
-Per a fer una selecció de rang, feu clic en la primera nota, silenci o compàs que vulgueu seleccionar, després premeu Maj.+clic.
-També podeu estendre el rang de la selecció prement Maj. mentre moveu el cursor.</translation>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation>Altra manera realitzar la selecció consisteix en prémer Maj. mentre s&apos;arrossega el ratolí.
-Si la selecció inclou notes, formaran una selecció de rang automàticament;
-si no formaran una selecció de llista.</translation>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Finalment, el &quot;Filtre de selecció&quot; ( que es troba al menú Visualitza) us permet excloure elements d&apos;un tipus específic d&apos;una selecció de rang.</translation>
@@ -264,35 +222,61 @@ També podeu establir els valors d&apos;estil per defecte utilitzant Format &gt;
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>La manera més ràpida de desplaçar-se verticalment és utilitzar la roda del ratolí  o amb un gest tàctil equivalent ( per exemple, arrossegar dos dits).
+Per a desplaçar-se horitzontalment, premeu  «Maj» mentre utilitzeu la roda del ratolí o el gest tàctil.</translation>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
+        <comment>navigate-tour</comment>
+        <translation>Les tecles de navegació del teclat com «Re pàg», «Av pàg», «Inici» i «Fi» funcionen com en qualsevol altra aplicació
+per a moure&apos;s entre pàgines.
+Els teclats que no tinguen aquestes tecles acostumen tindre tecles equivalents com «Fn+Amunt/Avall/Dreta/Esquerra».</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Podeu desplaçar la partitura en distàncies curtes fent clic en una àrea en blanc de la pàgina i arrossegant-la.
+De fet, també podeu seleccionar seccions si preu «Maj» mentre les arrossegueu.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Per a introduir una nota de la duració seleccionada, escriviu la lletra que identifique la nota o feu clic sobre el pentagrama .
+Premeu «Ctr+Amunt/Avall» (macOs: «Cmd+Amunt/Avall») per a canviar l&apos;octava.</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Per a afegir una alteració a una nota, premeu  «Amunt» o «Aval»l per a elevar o baixar l&apos;altura
+ o premeu sobre una d&apos;aquestes icones.</translation>
     </message>
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Per a afegir una nota a un acord, premeu «Maj» mentre escriviu la lletra que la identifique, o feu clic sobre el pentagrama.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Per a crear un treset o altre grup artificial, seleccioneu la duració que ocupa el total del grup irregular, després premeu «Ctrl+número» o utilitzeu Afig &gt; Grup artificial.</translation>
+    </message>
+    <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation>Per a una selecció individual, feu clic sobre l&apos;element que vulgueu seleccionar.
+Aquest es ressaltarà per a indicar que està seleccionat.
+Podeu utilitzar els cursors dreta i esquerra per a moure la selecció entre notes i silencis de partitura.
+Consell: si premeu la tecla «Alt» («Opció» per a macOs) mentre utilitzeu les fletxes del teclat podeu desplaçar-vos també entre altres elements,
+i també desplaçar-vos cap amunt o cap avall de pentagrama en pentagrama.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -300,30 +284,61 @@ També podeu establir els valors d&apos;estil per defecte utilitzant Format &gt;
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Una selecció de llista és una combinació de seleccions individuals.
+Premeu «Ctr» (macOs: «Cmd») mentre feu clic per a afegir o eliminar elements de la selecció de la llista.
+També podeu seleccionar ràpidament elements semblants en clicar amb el botó dret del ratolí (macOs: «Ctr+ clic»).
+i després escollint una de les opcions de &quot;Selecciona&quot; del menú emergent.</translation>
+    </message>
+    <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation>Una selecció de rang inclou tot des d&apos;un punt en el temps fins a altre entre un o més pentagrames.
+Açò està indicat per un rectangle blau que abasta el rang complet.
+Per a fer una selecció de rang, feu clic en la primera nota, silenci o compàs que vulgueu seleccionar, després premeu «Maj»+clic.
+També podeu estendre el rang de la selecció prement «Maj» mentre moveu el cursor.</translation>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation>Altra manera realitzar la selecció consisteix en prémer «Maj» mentre s&apos;arrossega el ratolí.
+Si la selecció inclou notes, formaran una selecció de rang automàticament;
+si no formaran una selecció de llista.</translation>
     </message>
     <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>La majoria dels elements de la paleta de línies abasten un rang des d&apos;un element d&apos;inici fins a un element final.
+
+    Per a editar el seu rang, feu doble clic en la línia (que selecciona automàticament la seua ansa final) i:
+
+    - Premeu «Maj+Dreta» per a  moure aquesta ansa cap a davant.
+
+    - Premeu «Maj+Esquerra» per a moure aquesta ansa cap a darrere.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Com alternativa, primer seleccioneu un rang d’elements de la partitura i, a continuació, feu doble clic en un dels elements de la paleta que l&apos;afegirà a la selecció.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with &quot;Shift&quot; to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Aquesta és la vista de la partitura en què es pot visualitzar i editar-la.
+Utilitzeu la roda del ratolí o el ratolí tàctil per a desplaçar la partitura verticalment (amb «Maj» per a desplaçar-la horitzontalment).
+Si teniu obertes diverses partitures, podeu alternar-les utilitzant les pestanyes de la part superior de la vista de la partitura.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
@@ -338,7 +353,8 @@ Els controls a la dreta d&apos;aquesta barra d&apos;eines controlen la visualitz
         <source>The main menu contains most other commands.
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>El menú principal conté quasi tota la resta de les ordres.
+A més, moltes ordres són accessibles mitjançant de teclat o prement el botó dret (macOs: «Ctrl»+clic) dins de la vista de la partitura.</translation>
     </message>
     <message>
         <source>That's the end of this tour!

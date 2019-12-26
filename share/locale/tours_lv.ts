@@ -4,12 +4,12 @@
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Sveicināti MuseScore! Šī nelielā tūre Jums parādīs MuseScore lietotāja darbavirsmu.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Atskaņošanas palete ļauj jums atskaņot un apturēt notis, kā arī kontrolēt dažādus atskaņojuma aspektus.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
@@ -98,13 +98,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
         <translation type="unfinished"/>
@@ -186,30 +179,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation type="unfinished"/>
@@ -224,6 +193,13 @@
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
+        <comment>navigate-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
         <translation type="unfinished"/>
     </message>
@@ -256,6 +232,15 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>A list selection is a combination of single selections.
     Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
@@ -264,13 +249,28 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
         <translation type="unfinished"/>
     </message>
@@ -305,7 +305,10 @@
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Tūre pabeigta!
+    Kamēr lietojat MuseScore, vairākas citas tūres parādīsies, lai paskaidrotu MuseScore funkcionalitāti.
+    Lai tās izslēgtu, spiediet &quot;Continue showing tours&quot; pirms šī loga aizvēršanas.
+    To Jūs varat izdarī arī Help &gt; Tours.</translation>
     </message>
 </context>
 </TS>

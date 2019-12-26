@@ -109,15 +109,6 @@
     Chcete-li se dozvědět více, klepněte na „Další”.</translation>
     </message>
     <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation>Další klávesy na vaší klávesnici, jako jsou PgUp, PgDn, Home a End, stejně jako v jiných programech slouží
-    k pohybu mezi stránkami.
-    Klávesnice bez těchto kláves často poskytují jejich obdobu, např. Fn + šipka nahoru/dolů/vlevo/vpravo.</translation>
-    </message>
-    <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
         <translation>Dalšími nástroji jsou Časová osa a Miniatury. Oba se nachází v nabídce Zobrazení.</translation>
@@ -215,39 +206,6 @@
     Chcete-li se dozvědět více, klepněte na „Další”.</translation>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation>Pro vytvoření jednoduchého výběru klepněte na prvek, který chcete vybrat.
-    Bude zvýrazněn, což naznačí, že je vybrán.
-    Pro rozšíření výběru na ostatní noty a pomlky v notovém zápisu můžete použít klávesy šipek vlevo a vpravo.
-    Rada: pokud zároveň s klávesami šipek stisknete klávesu Alt (u systému macOS je to &quot;Option&quot;), můžete se navíc pohybovat přes další prvky
-    a také nahoru a dolů z osnovy do osnovy.</translation>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation>Rozsah výběru zahrnuje vše od jednoho časového bodu po další přes jednu nebo více osnov.
-    Je naznačen modrým obdélníkem pokrývajícím celý rozsah.
-    Pro vybrání rozsahu klepněte na první notu, pomlku nebo takt, který chcete vybrat, a potom Shift+klepnutí na poslední.
-    Rozsah výběru také můžete rozšířit. Podržte klávesu Shift a pohybujte ukazovátkem.</translation>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation>Dalším způsobem, jak provádět výběry, je podržet během tažení Shift.
-    Pokud výběr zahrnuje noty, udělá se automaticky jako výběr rozsahu;
-    jinak bude proveden jako výběr prvků (seznamu jednotlivých prvků).</translation>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>A konečně filtr výběru (v nabídce Zobrazení) umožňuje vyloučení prvků daného typu z rozsahu výběru.</translation>
@@ -269,6 +227,15 @@
    Pro vodorovný posun podržte klávesu Shift za současného točení kolečkem myši nebo provedení dotykového gesta.</translation>
     </message>
     <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
+        <comment>navigate-tour</comment>
+        <translation>Další klávesy na vaší klávesnici, jako jsou PgUp, PgDn, Home a End, stejně jako v jiných programech slouží
+    k pohybu mezi stránkami.
+    Klávesnice bez těchto kláves často poskytují jejich obdobu, např. Fn+šipka nahoru/dolů/vlevo/vpravo.</translation>
+    </message>
+    <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
         <comment>navigate-tour</comment>
@@ -280,7 +247,7 @@
     Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
         <translation>Pro zápis noty o vybrané délce napište její název nebo klepněte do notové osnovy.
-    Pro změnu oktávové polohy stiskněte Ctrl+šipka nahoru/dolů (macOS: Cmd+Nahoru/Dolů).</translation>
+    Pro změnu oktávové polohy stiskněte Ctrl+šipka nahoru/dolů (macOS: Cmd+šipka nahoru/dolů).</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
@@ -300,6 +267,19 @@
         <translation>Pro vytvoření trioly nebo jiné nepravidelné rytmické skupiny vyberte délku noty představující celkovou délku nepravidelné rytmické skupiny, a poté stiskněte Ctrl+číslo nebo použijte Přidat → Nepravidelná rytmická skupina.</translation>
     </message>
     <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation>Pro vytvoření jednoduchého výběru klepněte na prvek, který chcete vybrat.
+    Bude zvýrazněn, což naznačí, že je vybrán.
+    Pro rozšíření výběru na ostatní noty a pomlky v notovém zápisu můžete použít klávesy šipek vlevo a vpravo.
+    Rada: pokud zároveň s klávesami šipek stisknete klávesu Alt (u systému macOS je to &quot;Option&quot;), můžete se navíc pohybovat přes další prvky
+    a také nahoru a dolů z osnovy do osnovy.</translation>
+    </message>
+    <message>
         <source>A list selection is a combination of single selections.
     Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
@@ -310,21 +290,41 @@
     Podobné prvky můžete také rychle vybrat klepnutím pravým tlačítkem myši (macOS: Ctrl+klepnutí) na jeden, a potom zvolením volby Vybrat ve výsledné vyskakovací nabídce.</translation>
     </message>
     <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation>Rozsah výběru zahrnuje vše od jednoho časového bodu po další přes jednu nebo více osnov.
+    Je naznačen modrým obdélníkem pokrývajícím celý rozsah.
+    Pro vybrání rozsahu klepněte na první notu, pomlku nebo takt, který chcete vybrat, a potom Shift+klepnutí na poslední.
+    Rozsah výběru také můžete rozšířit. Podržte klávesu Shift a pohybujte ukazovátkem.</translation>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation>Dalším způsobem, jak provádět výběry, je podržet během tažení Shift.
+    Pokud výběr zahrnuje noty, udělá se automaticky jako výběr rozsahu;
+    jinak bude proveden jako výběr prvků (seznamu jednotlivých prvků).</translation>
+    </message>
+    <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
         <translation>Většina prvků na paletě s linkami pokrývá rozsah od počátečního prvku po koncový prvek.
 
     Pro upravení jejího rozsahu na linku dvakrát klepněte (což automaticky povede k vybrání jejího koncového úchopu) a:
 
-    - Stiskněte Shift-šipka vpravo pro posunutí tohoto úchopu dopředu.
+    - Stiskněte Shift+šipka vpravo pro posunutí tohoto úchopu dopředu.
 
-    - Stiskněte Shift-šipka vlevo pro posunutí tohoto úchopu dozadu.</translation>
+    - Stiskněte Shift+šipka vlevo pro posunutí tohoto úchopu dozadu.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>

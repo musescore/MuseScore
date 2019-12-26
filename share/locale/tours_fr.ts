@@ -108,15 +108,6 @@ Pour ajouter un point de prolongation, cliquez sur l&apos;icône correspondante 
 Cliquez sur suivant pour en savoir plus.</translation>
     </message>
     <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation>Les touches de navigations de votre clavier, comme PgUp, PgDn, Début, et Fin fonctionnent comme dans les autres applications
-pour vous déplacer entre les pages.
-Les claviers ne disposant pas de ces touches offrent souvent des équivalents comme Fn + Haut / Bas / Gauche / Droite.</translation>
-    </message>
-    <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
         <translation>Les autres outils de navigation inclus la Timeline et le Navigateur, que vous trouverez tous les deux dans le menu Affichage.</translation>
@@ -213,39 +204,6 @@ Les cases avec une ligne autour représentent les mesures actuellement affichée
 Cliquez sur &quot;Suivant&quot; pour en apprendre plus.</translation>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation>Pour effectuer une sélection unique, cliquez sur l&apos;élément que vous souhaitez sélectionner.
-Il est mis en surbrillance pour indiquer qu&apos;il est sélectionné.
-Vous pouvez utiliser les touches de curseur gauche et droite pour déplacer la sélection dans les notes et les silences de votre partition.
-Conseil : si vous appuyez sur la touche Alt (Option sur macOS) en même temps que les touches de curseur, vous pouvez également vous déplacer parmi d&apos;autres éléments,
-ainsi que de haut en bas de portée en portée.</translation>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation>Une sélection de plage inclut tout d&apos;un point dans le temps à une ou plusieurs portées.
-Elle est indiquée par un rectangle bleu englobant toute la plage.
-Pour effectuer une sélection de plage, cliquez sur la première note ou silence ou sur la mesure souhaitée, puis maintenez Maj appuyé et cliquez sur le dernier élément.
- Vous pouvez également élargir les sélections de plage en maintenant la touche Maj appuyée tout en déplaçant le curseur.</translation>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation>Une autre façon de faire une sélection consiste à maintenir la touche Maj appuyée tout en faisant glisser le curseur. 
-Si votre sélection comprend des notes, elle sera automatiquement effectuée en tant que sélection de plage ; 
-sinon, elle sera effectuée en tant que sélection de liste.</translation>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Enfin, le filtre de sélection (situé dans le menu Affichage) vous permet d’exclure des éléments d’un type donné de la sélection d’une plage.</translation>
@@ -265,6 +223,15 @@ Vous pouvez également définir le style par défaut via le menu Format &gt; Sty
         <comment>navigate-tour</comment>
         <translation>Le moyen le plus rapide de faire défiler la partition de haut en bas est d&apos;utiliser la molette de la souris ou un geste tactile équivalent (par exemple, un balayage à deux doigts).
 Pour faire défiler horizontalement, maintenez &quot;Maj&quot; tout en utilisant la molette de la souris ou un geste tactile.</translation>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
+        <comment>navigate-tour</comment>
+        <translation>Les touches de navigations de votre clavier, comme &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Début&quot;, et &quot;Fin&quot; fonctionnent comme dans les autres applications
+pour vous déplacer entre les pages.
+Les claviers ne disposant pas de ces touches offrent souvent des équivalents comme &quot;Fn + Haut / Bas / Gauche / Droite&quot;.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
@@ -298,6 +265,19 @@ ou cliquez sur l&apos;une des icônes appropriées.</translation>
         <translation>Pour créer un triolet ou une autre division irrégulière, sélectionnez la durée totale de cette division irrégulière puis appuyez sur Ctrl + nombre ou utilisez le menu Ajouter &gt; Divisions irrégulières.</translation>
     </message>
     <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation>Pour effectuer une sélection unique, cliquez sur l&apos;élément que vous souhaitez sélectionner.
+Il est mis en surbrillance pour indiquer qu&apos;il est sélectionné.
+Vous pouvez utiliser les touches de curseur gauche et droite pour déplacer la sélection dans les notes et les silences de votre partition.
+Conseil : si vous appuyez sur la touche &quot;Alt&quot; (&quot;Option&quot; sur macOS) en même temps que les touches de curseur, vous pouvez également vous déplacer parmi d&apos;autres éléments,
+ainsi que de haut en bas de portée en portée.</translation>
+    </message>
+    <message>
         <source>A list selection is a combination of single selections.
     Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
@@ -309,21 +289,41 @@ Vous pouvez également sélectionner rapidement des éléments similaires en cli
 puis en choisissant l&apos;une des options &quot;Sélectionner&quot; dans le menu contextuel résultant.</translation>
     </message>
     <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation>Une sélection de plage inclut tout d&apos;un point dans le temps à une ou plusieurs portées.
+Elle est indiquée par un rectangle bleu englobant toute la plage.
+Pour effectuer une sélection de plage, cliquez sur la première note ou silence ou sur la mesure souhaitée, puis maintenez &quot;Maj&quot; appuyé et cliquez sur le dernier élément.
+ Vous pouvez également élargir les sélections de plage en maintenant la touche &quot;Maj&quot; appuyée tout en déplaçant le curseur.</translation>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation>Une autre façon de faire une sélection consiste à maintenir la touche &quot;Maj&quot; appuyée tout en faisant glisser le curseur. 
+Si votre sélection comprend des notes, elle sera automatiquement effectuée en tant que sélection de plage ; 
+sinon, elle sera effectuée en tant que sélection de liste.</translation>
+    </message>
+    <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
         <translation>La plupart des éléments de la palette de lignes sont étendus d&apos;un élément de début à un élément de fin.
 
 Pour éditer son étendue, double cliquez sur la ligne (La poignée de fin sera automatiquement sélectionnée) et :
 
-- Cliquez sur Maj flèche droite pour déplacer la poignée vers l&apos;avant.
+- Cliquez sur &quot;Maj flèche droite&quot; pour déplacer la poignée vers l&apos;avant.
 
-- Cliquez sur Maj flèche gauche pour déplacer la poignée vers l’arrière.</translation>
+- Cliquez sur &quot;Maj flèche gauche&quot; pour déplacer la poignée vers l’arrière.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
