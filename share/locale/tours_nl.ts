@@ -109,15 +109,6 @@
  Klik op &quot;Volgende&quot; om hier meer over te weten te komen.</translation>
     </message>
     <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation>De navigatie toetsen op uw toetsenbord zoals pagina-omhoog, pagina-omlaag, home en einde functioneren zoals deze doen in andere applicaties
- om te wisselen tussen pagina&apos;s.
- Toetsenborden waarbij deze toetsen ontbreken hebben vaak equivalente toetsen zoals Fn+pijl-omhoog/pijl-omlaag/pijl-links/pijl-rechts.</translation>
-    </message>
-    <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
         <translation>Extra navigatie hulpmiddelen zijn de tijdslijn en navigator, beide te vinden in het weergave menu.</translation>
@@ -214,36 +205,6 @@ zoals het verplaatsen van tempo aanduidingen boven andere tekst of het inkorten 
  Klik op &quot;Volgende&quot; om hier meer over te weten te komen.</translation>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation>Om een enkele selectie te maken klikt u op het element dat u wilt selecteren.
- Het element licht op om aan te geven dat het geselecteerd is.
- U kunt de cursor naar links en rechts gebruiken om de selectie te verplaatsen tussen de noten en rusten in de partituur.</translation>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation>Een bereik selectie omvat alles vanaf een bepaald punt in de tijd tot een ander punt over één of meerdere notenbalken.
- Dit wordt weergegeven middels een blauwe rechthoek die het gehele bereik omvat.
- Om een bereik te selecteren klikt u op de eerste noot, rust of maat die u wilt selecteren en vervolgens houdt u de Shift ingedrukt en klikt u op het laatste element.
- U kunt de bereik selectie ook uitbreiden door de Shift in te drukken en de cursor te verplaatsen.</translation>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation>Een andere manier om een selectie te maken is door de Shift ingedrukt te houden tijdens het slepen.
- Indien de selectie noten bevat dan wordt dit automatisch een bereik selectie, anders wordt het een lijst selectie.</translation>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Als laatste is er het selectiefilter (te vinden in het Weergave menu) waarmee u elementen van een bepaald type kunt uitsluiten van een bereik selectie.</translation>
@@ -263,6 +224,15 @@ zoals het verplaatsen van tempo aanduidingen boven andere tekst of het inkorten 
         <comment>navigate-tour</comment>
         <translation>De snelste manier om naar boven en beneden te scrollen is door gebruik te maken van het muiswiel of de equivalente beweging op het touchpad (bijvoorbeeld met twee vingers schuiven).
 Om horizontaal te scrollen houdt u de &quot;shift&quot; ingedrukt terwijl u het muiswiel of het touchpad gebruikt.</translation>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
+        <comment>navigate-tour</comment>
+        <translation>De navigatie toetsen op uw toetsenbord zoals &quot;pagina-omhoog&quot;, &quot;pagina-omlaag&quot;, &quot;home&quot; en &quot;einde&quot; functioneren zoals deze doen in andere applicaties
+ om te wisselen tussen pagina&apos;s.
+ Toetsenborden waarbij deze toetsen ontbreken hebben vaak equivalente toetsen zoals &quot;Fn+pijl-omhoog/pijl-omlaag/pijl-links/pijl-rechts&quot;.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
@@ -296,6 +266,19 @@ Om horizontaal te scrollen houdt u de &quot;shift&quot; ingedrukt terwijl u het 
         <translation>Om een triool of ander antimetrisch figuur te maken selecteert u de duur die overeenkomt met de totale lengte van het figuur en drukt u &quot;Ctrl+getal&quot; of gebruik Voeg toe / Antimetrische figuren. </translation>
     </message>
     <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation>Om een enkele selectie te maken klikt u op het element dat u wilt selecteren.
+ Het element licht op om aan te geven dat het geselecteerd is.
+ U kunt de cursor naar links en rechts gebruiken om de selectie te verplaatsen tussen de noten en rusten in de partituur. Tip: indien u de &quot;Alt&quot; (&quot;Option&quot; voor macOS) indrukt bij het gebruik van de pijltjes toetsen dan kun je ook andere element kiezen
+ en ook naar boven en beneden van de ene notenbalk naar de andere.
+</translation>
+    </message>
+    <message>
         <source>A list selection is a combination of single selections.
     Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
@@ -307,21 +290,40 @@ Om horizontaal te scrollen houdt u de &quot;shift&quot; ingedrukt terwijl u het 
  en vervolgens te kiezen voor één van de mogelijkheden in de &quot;Selecteer&quot; optie in het weergegeven menu.</translation>
     </message>
     <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation>Een bereik selectie omvat alles vanaf een bepaald punt in de tijd tot een ander punt over één of meerdere notenbalken.
+ Dit wordt weergegeven middels een blauwe rechthoek die het gehele bereik omvat.
+ Om een bereik te selecteren klikt u op de eerste noot, rust of maat die u wilt selecteren en vervolgens houdt u de &quot;Shift&quot; ingedrukt en klikt u op het laatste element.
+ U kunt de bereik selectie ook uitbreiden door de &quot;Shift&quot; in te drukken en de cursor te verplaatsen.</translation>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation>Een andere manier om een selectie te maken is door de &quot;Shift&quot; ingedrukt te houden tijdens het slepen.
+ Indien de selectie noten bevat dan wordt dit automatisch een bereik selectie, anders wordt het een lijst selectie.</translation>
+    </message>
+    <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
         <translation>De meeste elementen in het lijnen palet omspannen een bereik van een start element tot aan een einde element.
 
 Het bereik kan worden bewerkt door te dubbelklikken op de lijn (hiermee wordt automatisch het eind punt geselecteerd) en vervolgens:
 
-    - Gebruik de shift + pijl naar rechts om het punt naar achteren te verplaatsen.
+    - Gebruik de &quot;shift + pijl naar rechts&quot; om het punt naar achteren te verplaatsen.
 
-    - Gebruik de shift + pijl naar links om het punt naar voren te verplaatsen.</translation>
+    - Gebruik de &quot;shift + pijl naar links&quot; om het punt naar voren te verplaatsen.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
