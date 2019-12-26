@@ -104,6 +104,7 @@ class InspectorStaffTypeChange : public InspectorBase {
 
    public:
       InspectorStaffTypeChange(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------

@@ -87,6 +87,7 @@ StaffType::StaffType(StaffGroup sg, const QString& xml, const QString& name, int
       setShowBarlines(showBarLines);
       setStemless(stemless);
       setGenTimesig(genTimesig);
+      setGenKeysig(sg != StaffGroup::TAB);
       setDurationFontName(durFontName);
       setDurationFontSize(durFontSize);
       setDurationFontUserY(durFontUserY);
@@ -273,6 +274,9 @@ void StaffType::read(XmlReader& e)
             _group = StaffGroup::STANDARD;
             }
 
+      if (_group == StaffGroup::TAB)
+            setGenKeysig(false);
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")
@@ -314,7 +318,7 @@ void StaffType::read(XmlReader& e)
                   setDurationFontSize(e.readDouble());
             else if (tag == "durationFontY")
                   setDurationFontUserY(e.readDouble());
-           else if (tag == "fretFontName")
+            else if (tag == "fretFontName")
                   setFretFontName(e.readElementText());
             else if (tag == "fretFontSize")
                   setFretFontSize(e.readDouble());

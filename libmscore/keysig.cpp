@@ -101,7 +101,7 @@ void KeySig::layout()
             }
 
       _sig.keySymbols().clear();
-      if (staff() && !staff()->genKeySig())     // no key sigs on TAB staves
+      if (staff() && !staff()->staffType(tick())->genKeysig())
             return;
 
       // determine current clef for this staff
