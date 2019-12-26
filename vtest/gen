@@ -1,10 +1,10 @@
 #!/bin/sh
 
 if [ "`uname`" = 'Darwin' ]; then
-      MSCORE=../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+      MSCORE=../../build.xcode/main/Debug/mscore.app/Contents/MacOS/mscore
       BROWSER=open
 else
-      MSCORE=../../build.debug/mscore/mscore
+      MSCORE=../../build.debug/main/mscore
       BROWSER=firefox
 fi
 
