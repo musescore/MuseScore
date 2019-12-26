@@ -157,9 +157,9 @@ class Beam final : public Element {
       virtual void triggerLayout() const override;
 
       EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
-      int gripsCount() const override { return 2; }
+      int gripsCount() const override { return 3; }
       Grip initialEditModeGrip() const override { return Grip::END; }
-      Grip defaultGrip() const override { return Grip::START; }
+      Grip defaultGrip() const override { return Grip::MIDDLE; }
       std::vector<QPointF> gripsPositions(const EditData&) const override;
 
       static IconType iconType(Mode);
