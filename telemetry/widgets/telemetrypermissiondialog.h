@@ -32,7 +32,7 @@ class TelemetryPermissionDialog : public QQuickView {
       Q_OBJECT
 
    public:
-      explicit TelemetryPermissionDialog();
+      explicit TelemetryPermissionDialog(QQmlEngine* engine);
 
    signals:
       void closeRequested();

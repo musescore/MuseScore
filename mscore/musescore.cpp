@@ -7062,7 +7062,7 @@ void tryToRequestTelemetryPermission()
 
       QEventLoop eventLoop;
 
-      TelemetryPermissionDialog *requestDialog = new TelemetryPermissionDialog();
+      TelemetryPermissionDialog *requestDialog = new TelemetryPermissionDialog(mscore->getQmlUiEngine());
       QObject::connect(requestDialog, &TelemetryPermissionDialog::closeRequested, [&eventLoop] () {
             eventLoop.quit();
             });
