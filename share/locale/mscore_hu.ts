@@ -519,7 +519,7 @@
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="161"/>
         <source>Gathering debug information...</source>
-        <translation>Hibakeresési információk összegyűjtése...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="260"/>
@@ -11605,13 +11605,13 @@ nem sikerült: %2</translation>
 <context>
     <name>Ms::Inspector</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="123"/>
-        <location filename="../../mscore/inspector/inspector.cpp" line="132"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="125"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="134"/>
         <source>Inspector</source>
         <translation>Vizsgáló</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="133"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="135"/>
         <source>Inspector Subwindow</source>
         <translation>Vizsgáló ablakrész</translation>
     </message>
@@ -11619,18 +11619,18 @@ nem sikerült: %2</translation>
 <context>
     <name>Ms::InspectorAccidental</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="953"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="980"/>
         <source>None</source>
         <comment>no accidental bracket type</comment>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="954"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="981"/>
         <source>Parenthesis</source>
         <translation>Zárójel</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="955"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="982"/>
         <source>Bracket</source>
         <translation>Klammer</translation>
     </message>
@@ -11722,52 +11722,52 @@ nem sikerült: %2</translation>
 <context>
     <name>Ms::InspectorKeySig</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="888"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="915"/>
         <source>Unknown</source>
         <translation>Ismeretlen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="889"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="916"/>
         <source>None</source>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="890"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="917"/>
         <source>Major</source>
         <translation>Dúr</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="891"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="918"/>
         <source>Minor</source>
         <translation>Moll</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="892"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="919"/>
         <source>Dorian</source>
         <translation>Dór</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="893"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="920"/>
         <source>Phrygian</source>
         <translation>Fríg</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="894"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="921"/>
         <source>Lydian</source>
         <translation>Lüd</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="895"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="922"/>
         <source>Mixolydian</source>
         <translation>Mixolíd</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="896"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="923"/>
         <source>Ionian</source>
         <translation>Ión</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="897"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="924"/>
         <source>Locrian</source>
         <translation>Lokriszi</translation>
     </message>
@@ -11784,32 +11784,32 @@ nem sikerült: %2</translation>
 <context>
     <name>Ms::InspectorRest</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="683"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="710"/>
         <source>Select</source>
         <translation>Kijelöl</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="698"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="725"/>
         <source>Dot 1</source>
         <translation>1. pont</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="701"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="728"/>
         <source>Dot 2</source>
         <translation>2. pont</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="704"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="731"/>
         <source>Dot 3</source>
         <translation>3. pont</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="711"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="738"/>
         <source>Dot 4</source>
         <translation>4. pont</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="714"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="741"/>
         <source>Tuplet</source>
         <translation>N-ola</translation>
     </message>
@@ -18503,7 +18503,7 @@ sikertelen: %2</translation>
         <translation>érvénytelen</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1214"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1218"/>
         <source>Cannot open tablature font description:
 %1
 %2</source>
@@ -18512,97 +18512,97 @@ sikertelen: %2</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1402"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1406"/>
         <source>Standard</source>
         <translation>Normál</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1404"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1408"/>
         <source>Perc. 1 line</source>
         <translation>Ütős 1 vonal</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1405"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1409"/>
         <source>Perc. 3 lines</source>
         <translation>Ütős 3 soros</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1406"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1410"/>
         <source>Perc. 5 lines</source>
         <translation>Ütős 5 soros</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1411"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1415"/>
         <source>Tab. 6-str. simple</source>
         <translation>Tab. 6 húr egyszerű</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1412"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1416"/>
         <source>Tab. 6-str. common</source>
         <translation>Tab. 6 húr szokásos</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1413"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1417"/>
         <source>Tab. 6-str. full</source>
         <translation>Tab. 6 húr teljes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1414"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1418"/>
         <source>Tab. 4-str. simple</source>
         <translation>Tab. 4 húr egyszerű</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1415"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1419"/>
         <source>Tab. 4-str. common</source>
         <translation>Tab. 4 húr szokásos</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1416"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1420"/>
         <source>Tab. 4-str. full</source>
         <translation>Tab. 4 húr teljes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1417"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1421"/>
         <source>Tab. 5-str. simple</source>
         <translation>Tab. 5 húr egyszerű</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1418"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1422"/>
         <source>Tab. 5-str. common</source>
         <translation>Tab. 5 húr szokásos</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1419"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1423"/>
         <source>Tab. 5-str. full</source>
         <translation>Tab. 5 húr teljes</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1420"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1424"/>
         <source>Tab. ukulele</source>
         <translation>Tab. ukulele</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1421"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1425"/>
         <source>Tab. balalaika</source>
         <translation>Tab. balalajka</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1424"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1428"/>
         <source>Tab. 6-str. Italian</source>
         <translation>Tab. 6 húr olasz</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1425"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1429"/>
         <source>Tab. 6-str. French</source>
         <translation>Tab. 6 húr francia</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1426"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1430"/>
         <source>Tab. 7-str. common</source>
         <translation>Tab. 7 húr szokásos</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1427"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1431"/>
         <source>Tab. 8-str. common</source>
         <translation>Tab. 8 húr szokásos</translation>
     </message>
@@ -19030,13 +19030,13 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
         <translation>%1/%2 ütem</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1081"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1108"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="41"/>
         <source>Above</source>
         <translation>Felül</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1082"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1109"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="42"/>
         <source>Below</source>
         <translation>Alul</translation>
@@ -28952,47 +28952,47 @@ az ütem nem üres</translation>
 <context>
     <name>noteheadschemes</name>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1359"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1363"/>
         <source>Normal</source>
         <translation>Normál</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1360"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1364"/>
         <source>Pitch Names</source>
         <translation>Hangelnevezések</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1361"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1365"/>
         <source>German Pitch Names</source>
         <translation>Német (magyar) hangelnevezések</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1362"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1366"/>
         <source>Solfège Movable Do</source>
         <translation>Relatív szolmizáció</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1363"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1367"/>
         <source>Solfège Fixed Do</source>
         <translation>Abszolút szolmizációs hangnevek</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1364"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1368"/>
         <source>4-shape (Walker)</source>
         <translation>4-alakzatos (walker)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1365"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1369"/>
         <source>7-shape (Aikin)</source>
         <translation>7-alakzatos (Aikin)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1366"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1370"/>
         <source>7-shape (Funk)</source>
         <translation>7-alakzatos (Funk)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1367"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1371"/>
         <source>7-shape (Walker)</source>
         <translation>7-alakzatos (Walker)</translation>
     </message>
@@ -30322,17 +30322,17 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4906"/>
         <source>Repeat last bar</source>
-        <translation>Utolsó ütem ismétlése</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4907"/>
         <source>Repeat last two bars</source>
-        <translation>Utolsó két ütem ismétlése</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4908"/>
         <source>Repeat last four bars</source>
-        <translation>Utolsó négy ütem ismétlése</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4915"/>
@@ -30362,7 +30362,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4929"/>
         <source>Half rest on leger line</source>
-        <translation>Fél szünet a pótvonalon</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4932"/>
@@ -30372,7 +30372,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4936"/>
         <source>Whole rest on leger line</source>
-        <translation>Egész szünet a pótvonalon</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4945"/>
