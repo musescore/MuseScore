@@ -253,8 +253,10 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
       if (const PalettePanel* pp = findPalettePanel(index)) {
             switch (role) {
                   case Qt::DisplayRole:
-                  case Qt::AccessibleTextRole:
                         return pp->translatedName();
+                  case Qt::ToolTipRole:
+                  case Qt::AccessibleTextRole:
+                        return QString("%1 palette").arg(pp->translatedName());
                   case VisibleRole:
                         return pp->visible();
                   case CustomRole:
