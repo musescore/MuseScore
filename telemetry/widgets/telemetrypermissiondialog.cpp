@@ -27,7 +27,7 @@
 //   TelemetryPermissionDialog
 //---------------------------------------------------------
 
-TelemetryPermissionDialog::TelemetryPermissionDialog() : QQuickView()
+TelemetryPermissionDialog::TelemetryPermissionDialog(QQmlEngine* engine) : QQuickView(engine, nullptr)
       {
       setMinimumWidth(500);
       setMinimumHeight(460);
@@ -47,9 +47,8 @@ TelemetryPermissionDialog::TelemetryPermissionDialog() : QQuickView()
       setResizeMode(QQuickView::SizeViewToRootObject);
       setTitle("");
 
-      QObject* rootItem = qobject_cast<QObject*>(rootObject());
       rootObject()->setWidth(minimumWidth());
 
-      connect(rootItem, SIGNAL(closeRequested()), this, SLOT(close()));
-      connect(rootItem, SIGNAL(closeRequested()), this, SIGNAL(closeRequested()));
+      connect(rootObject(), SIGNAL(closeRequested()), this, SLOT(close()));
+      connect(rootObject(), SIGNAL(closeRequested()), this, SIGNAL(closeRequested()));
       }
