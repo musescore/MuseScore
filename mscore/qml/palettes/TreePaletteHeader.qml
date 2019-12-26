@@ -47,6 +47,12 @@ Item {
     implicitHeight: paletteExpandArrow.height
     implicitWidth: paletteExpandArrow.implicitWidth + textItem.implicitWidth + paletteHeaderMenuButton.implicitWidth + 8 // 8 for margins
 
+    function showPaletteMenu() {
+        paletteHeaderMenu.x = paletteHeaderMenuButton.x + paletteHeaderMenuButton.width - paletteHeaderMenu.width;
+        paletteHeaderMenu.y = paletteHeaderMenuButton.y;
+        paletteHeaderMenu.open();
+    }
+
     StyledToolButton {
         id: paletteExpandArrow
         z: 1000
@@ -94,6 +100,10 @@ Item {
 //         icon.source: "icons/delete.png"
         text: qsTr("Remove element")
         visible: paletteHeader.hidePaletteElementVisible && paletteHeader.editingEnabled
+        activeFocusOnTab: mainPalette.currentItem === paletteTree.currentTreeItem
+
+        KeyNavigation.backtab: mainPalette.currentItem
+        KeyNavigation.tab: focusBreaker
 
         onHoveredChanged: {
             if (hovered) {
@@ -130,12 +140,7 @@ Item {
 
         text: qsTr("Palette menu") // used by screen readers (they ignore Accessible.name for buttons)
 
-        onClicked: {
-            paletteHeaderMenu.x = paletteHeaderMenuButton.x + paletteHeaderMenuButton.width - paletteHeaderMenu.width;
-            paletteHeaderMenu.y = paletteHeaderMenuButton.y;
-//             paletteHeaderMenu.y = paletteHeaderMenuButton.y + paletteHeaderMenuButton.height;
-            paletteHeaderMenu.open();
-        }
+        onClicked: showPaletteMenu()
     }
 
     MouseArea {

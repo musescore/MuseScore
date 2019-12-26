@@ -33,8 +33,6 @@ GridView {
     interactive: height < contentHeight // TODO: check if it helps on Mac
     boundsBehavior: Flickable.StopAtBounds
 
-    keyNavigationEnabled: true
-
     property size cellSize
     property bool drawGrid: false
     property bool showMoreButton: false
@@ -107,7 +105,7 @@ GridView {
     StyledButton {
         id: moreButton
         visible: showMoreButton
-        activeFocusOnTab: parent.currentItem === paletteTree.currentTreeItem
+        activeFocusOnTab: this === paletteTree.currentTreeItem
 
         highlighted: visualFocus || hovered
 
@@ -118,7 +116,19 @@ GridView {
                 color: globalStyle.voice1Color
                 opacity: moreButton.down ? 0.4 : (moreButton.highlighted ? 0.2 : 0.0)
             }
+            border.color: moreButton.activeFocus ? "lightblue" : "transparent" // show current item
+            border.width: 2
         }
+
+        onActiveFocusChanged: {
+            if (activeFocus) {
+                paletteTree.currentTreeItem = this;
+
+                if (mscore.keyboardModifiers() === Qt.NoModifier)
+                    paletteView.selectionModel.clearSelection();
+            }
+        }
+
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         width: {
@@ -139,6 +149,29 @@ GridView {
         visualFocusTextColor: "darkblue"
 
         onClicked: paletteView.moreButtonClicked()
+
+        Keys.onPressed: {
+            switch (event.key) {
+                case Qt.Key_Up:
+                    focusPreviousItem();
+                    break;
+                case Qt.Key_Down:
+                    paletteTree.focusNextItem(false);
+                    break;
+                default:
+                    return; // don't accept event
+            }
+            event.accepted = true;
+        }
+
+        function focusPreviousItem() {
+            if (paletteView.count == 0) {
+                paletteTree.currentItem.forceActiveFocus();
+            } else {
+                paletteView.currentIndex = paletteView.count - 1
+                paletteView.currentItem.forceActiveFocus();
+            }
+        }
     }
 
     PlaceholderManager {
@@ -334,14 +367,101 @@ GridView {
         Utils.removeSelectedItems(paletteController, selectionModel, paletteRootIndex);
     }
 
-    Keys.onDeletePressed: {
-        removeSelectedCells();
-    }
-    Keys.onPressed: {
-        if (event.key == Qt.Key_Backspace) {
-            removeSelectedCells();
-            event.accepted = true;
+    function focusNextItem(flags) {
+        if (flags === undefined)
+            flags = ItemSelectionModel.ClearAndSelect;
+
+        if (currentIndex == count - 1) {
+            if (moreButton.visible)
+                moreButton.forceActiveFocus();
+            else
+                paletteTree.focusNextItem(false);
+        } else {
+            currentIndex++; // next grid item
         }
+    }
+
+    function focusPreviousItem(flags) {
+        if (flags === undefined)
+            flags = ItemSelectionModel.ClearAndSelect;
+
+        if (currentIndex == 0)
+            paletteTree.currentItem.forceActiveFocus();
+        else
+            currentIndex--; // previous grid item
+    }
+
+    function focusFirstItem() {
+        if (count == 0 && moreButton.visible) {
+            moreButton.forceActiveFocus();
+        } else {
+            currentIndex = 0;
+            currentItem.forceActiveFocus();
+        }
+    }
+
+    function focusLastItem() {
+        if (moreButton.visible) {
+            moreButton.forceActiveFocus();
+        } else {
+            currentIndex = count - 1;
+            currentItem.forceActiveFocus();
+        }
+    }
+
+    function focusNextMatchingItem(str) {
+        const nextIndex = (currentIndex === count - 1) ? 0 : currentIndex + 1;
+        const modelIndex = paletteModel.index(nextIndex, 0, paletteRootIndex);
+        const matchedIndexList = paletteModel.match(modelIndex, Qt.DisplayRole, str);
+        if (matchedIndexList.length) {
+            currentIndex = matchedIndexList[0].row;
+            currentItem.forceActiveFocus();
+        }
+    }
+
+    function updateSelection(itemPressed) {
+        if (itemPressed === undefined)
+            itemPressed = false; // reason function was called
+
+        const modifiers = mscore.keyboardModifiers();
+        const shiftHeld = modifiers & Qt.ShiftModifier;
+        const ctrlHeld = modifiers & Qt.ControlModifier;
+        const herePreviously = selectionModel.currentIndex.parent === paletteRootIndex;
+
+        if (!ctrlHeld || !herePreviously)
+            selectionModel.clearSelection();
+
+        if (shiftHeld && herePreviously)
+            selectionModel.selectRange(currentItem.modelIndex);
+        else if (ctrlHeld)
+            selectionModel.setCurrentIndex(currentItem.modelIndex, itemPressed ? ItemSelectionModel.Toggle : ItemSelectionModel.NoUpdate);
+        else
+            selectionModel.setCurrentIndex(currentItem.modelIndex, ItemSelectionModel.Select);
+    }
+
+    Keys.onPressed: {
+        switch (event.key) {
+            case Qt.Key_Up:
+                focusPreviousItem();
+                break;
+            case Qt.Key_Down:
+                focusNextItem();
+                break;
+            case Qt.Key_Left:
+                paletteTree.currentItem.forceActiveFocus();
+                break;
+            case Qt.Key_Right:
+                if (moreButton.visible)
+                    moreButton.forceActiveFocus();
+                break;
+            case Qt.Key_Backspace:
+            case Qt.Key_Delete:
+                removeSelectedCells();
+                break;
+            default:
+                return; // don't accept event
+        }
+        event.accepted = true;
     }
 
     model: DelegateModel {
@@ -357,8 +477,10 @@ GridView {
             property var parentModelIndex: paletteView.paletteRootIndex
 
             onActiveFocusChanged: {
-                if (activeFocus)
+                if (activeFocus) {
                     paletteTree.currentTreeItem = this;
+                    paletteView.updateSelection(false);
+                }
             }
 
             opacity: enabled ? 1.0 : 0.3
@@ -370,7 +492,7 @@ GridView {
 
             property bool selected: (paletteView.selectionModel && paletteView.selectionModel.hasSelection) ? paletteView.isSelected(modelIndex) : false // hasSelection is to trigger property bindings if selection changes, see https://doc.qt.io/qt-5/qml-qtqml-models-itemselectionmodel.html#hasSelection-prop
 
-            highlighted: activeFocus || hovered || !!model.cellActive
+            highlighted: visualFocus || hovered || !!model.cellActive
 
             width: paletteView.cellWidth
             height: paletteView.cellHeight
@@ -387,36 +509,48 @@ GridView {
             }
 
             background: Rectangle {
-                id: cellBackground
-
-                color: globalStyle.voice1Color
-                opacity: 0.0
+                color: "transparent"
+                border.color: paletteCell.activeFocus ? "lightblue" : "transparent" // show current item
+                border.width: 2
                 width: ((paletteCell.rowIndex + 1) % paletteView.ncolumns) ? paletteView.cellWidth : paletteView.lastColumnCellWidth
 
-                states: [
-
-                    State {
-                        name: "SELECTED"
-                        when: paletteCell.selected
-
-                        PropertyChanges { target: cellBackground; opacity: 0.5 }
-                    },
-
-                    State {
-                        name: "PRESSED"
-                        when: paletteCellDragArea.pressed
-
-                        PropertyChanges { target: cellBackground; opacity: 0.75 }
-                    },
-
-                    State {
-                        name: "HOVERED"
-                        when: paletteCell.highlighted && !paletteCell.selected
-
-                        PropertyChanges { target: cellBackground; opacity: 0.2 }
-                    }
-                ]
+                Rectangle {
+                    id: cellBackground
+                    anchors.fill: parent
+                    color: globalStyle.voice1Color
+                    opacity: 0.0
+                }
             }
+
+            onStateChanged: {
+                console.debug("STATE CHANGED " + state)
+            }
+
+            states: [
+                // Note: if "when" is true for multiple states then
+                // the first state listed here takes precendence.
+
+                State {
+                    name: "PRESSED"
+                    when: leftClickArea.pressed
+
+                    PropertyChanges { target: cellBackground; opacity: 0.75 }
+                },
+
+                State {
+                    name: "SELECTED"
+                    when: selected
+
+                    PropertyChanges { target: cellBackground; opacity: 0.5 }
+                },
+
+                State {
+                    name: "HOVERED"
+                    when: highlighted
+
+                    PropertyChanges { target: cellBackground; opacity: 0.2 }
+                }
+            ]
 
             readonly property var toolTip: model.toolTip
 
@@ -428,74 +562,59 @@ GridView {
                     mscore.tooltip.item = null;
             }
 
-            text: model.accessibleText
-            // TODO: these may be needed for support of other screenreaders
-            //Accessible.name: model.accessibleText
-            //Accessible.description: model.accessibleText
+            text: model.accessibleText; // Accessible.name is ignored for some reason
+            Accessible.selectable: true;
+            Accessible.selected: selected;
 
-            onClicked: {
-                if (paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, mscore.keyboardModifiers())) {
-                    paletteView.selectionModel.setCurrentIndex(paletteCell.modelIndex, ItemSelectionModel.Current);
-                    return;
+            Keys.onPressed: {
+                const shiftHeld = event.modifiers & Qt.ShiftModifier;
+                const ctrlHeld = event.modifiers & Qt.ControlModifier;
+                switch (event.key) {
+                    case Qt.Key_Space:
+                        paletteView.updateSelection(true);
+                        break;
+                    case Qt.Key_Enter:
+                    case Qt.Key_Return:
+                        paletteView.selectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.ClearAndSelect);
+                        paletteView.paletteController.applyPaletteElement(modelIndex, mscore.keyboardModifiers());
+                        break;
+                    case Qt.Key_F10:
+                        if (!shiftHeld)
+                            return;
+                        // fallthrough
+                    case Qt.Key_Menu:
+                        showCellMenu();
+                        break;
+                    default:
+                        if (event.modifiers === Qt.NoModifier && event.text.match(/\w/) !== null)
+                            paletteView.focusNextMatchingItem(event.text);
+                        else
+                            return; // don't accept event
                 }
-
-                forceActiveFocus();
-
-                paletteView.currentIndex = index;
-
-                const selection = paletteView.selectionModel;
-
-                if (selection) {
-                    const modifiers = mscore.keyboardModifiers();
-                    const rootIndex = paletteView.paletteRootIndex;
-
-                    if (selection.currentIndex.parent != rootIndex)
-                        selection.clearSelection();
-
-                    if (modifiers & Qt.ShiftModifier && selection.currentIndex.parent == rootIndex) {
-                        const model = paletteView.paletteModel;
-                        const firstRow = selection.currentIndex.row;
-                        const lastRow = paletteCell.rowIndex;
-                        const step = firstRow < lastRow ? 1 : -1;
-                        const endRow = lastRow + step;
-                        for (var row = firstRow; row != endRow; row += step) {
-                            const idx = model.index(row, 0, rootIndex);
-                            selection.select(idx, ItemSelectionModel.Select);
-                        }
-                        // update current index
-                        selection.setCurrentIndex(idx, ItemSelectionModel.Current);
-
-                    } else {
-                        var cmd = selected ? ItemSelectionModel.Toggle : ItemSelectionModel.ClearAndSelect;
-                        if (modifiers & Qt.ControlModifier)
-                            cmd = ItemSelectionModel.Toggle;
-                        selection.setCurrentIndex(modelIndex, cmd);
-                    }
-                }
+                event.accepted = true;
             }
 
-            onDoubleClicked: {}
-
             MouseArea {
-                id: paletteCellDragArea
+                id: leftClickArea
                 anchors.fill: parent
                 drag.target: this
 
-                onPressed: icon.grabToImage(function(result) {
-                    parent.Drag.imageSource = result.url
-                    dragDropReorderTimer.restart();
-                })
+                onPressed: {
+                    paletteView.currentIndex = paletteCell.rowIndex;
+                    paletteCell.forceActiveFocus();
+                    paletteView.updateSelection(true);
+                    paletteCell.beginDrag();
+                }
 
-                onClicked: parent.onClicked(mouse)
-                onDoubleClicked: parent.onDoubleClicked(mouse)
-            }
+                onClicked: {
+                    if (paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, mscore.keyboardModifiers()))
+                        paletteView.selectionModel.setCurrentIndex(paletteCell.modelIndex, ItemSelectionModel.Current);
+                }
 
-            Keys.onPressed: {
-                if (event.key == Qt.Key_Enter || event.key == Qt.Key_Return) {
+                onDoubleClicked: {
                     const index = paletteCell.modelIndex;
                     paletteView.selectionModel.setCurrentIndex(index, ItemSelectionModel.Current);
-                    paletteView.paletteController.applyPaletteElement(index, mscore.keyboardModifiers());
-                    event.accepted = true;
+                    paletteView.paletteController.applyPaletteElement(index, mouse.modifiers);
                 }
             }
 
@@ -504,14 +623,10 @@ GridView {
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton
 
-                onClicked: {
-                    contextMenu.modelIndex = paletteCell.modelIndex;
-                    contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex);
-                    contextMenu.popup();
-                }
+                onClicked: showCellMenu(true)
             }
 
-            Drag.active: paletteCellDragArea.drag.active
+            Drag.active: leftClickArea.drag.active
             Drag.dragType: Drag.Automatic
             Drag.supportedActions: Qt.CopyAction | (model.editable ? Qt.MoveAction : 0)
             Drag.mimeData: Drag.active ? mimeData : {}
@@ -547,6 +662,27 @@ GridView {
                 }
             }
 //                             Drag.hotSpot: Qt.point(64, 0) // TODO
+
+            function beginDrag() {
+                icon.grabToImage(function(result) {
+                        Drag.imageSource = result.url
+                        dragDropReorderTimer.restart();
+                    })
+            }
+
+            function showCellMenu(useCursorPos) {
+                if (useCursorPos === undefined)
+                    useCursorPos = false;
+                contextMenu.modelIndex = modelIndex;
+                contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex);
+                if (useCursorPos)
+                    contextMenu.popup();
+                else {
+                    contextMenu.x = x + width;
+                    contextMenu.y = y;
+                    contextMenu.open();
+                }
+            }
 
             Connections {
                 // force not hiding palette cell if it is being dragged to a score
