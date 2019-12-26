@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>198</width>
-    <height>104</height>
+    <height>143</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -182,6 +182,13 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <widget class="QPushButton" name="properties">
+     <property name="text">
+      <string>Properties</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -196,6 +203,7 @@
   <tabstop>title</tabstop>
   <tabstop>style</tabstop>
   <tabstop>placement</tabstop>
+  <tabstop>properties</tabstop>
  </tabstops>
  <resources/>
  <connections/>
