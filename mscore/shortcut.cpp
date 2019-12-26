@@ -4378,7 +4378,7 @@ void Shortcut::resetToDefault()
 //   getShortcutByKeySequence
 //---------------------------------------------------------
 
-Shortcut* Shortcut::getShortcutByKeySequence(const QKeySequence &keySequence)
+Shortcut* Shortcut::getShortcutByKeySequence(const QKeySequence& keySequence)
       {
       for (Shortcut* shortcut : _shortcuts.values()) {
 
@@ -4389,7 +4389,7 @@ Shortcut* Shortcut::getShortcutByKeySequence(const QKeySequence &keySequence)
 
 
             for (const QKeySequence& _keySequence : action->shortcuts()) {
-                  if (action->shortcut() == _keySequence)
+                  if (_keySequence == keySequence)
                         return shortcut;
                   }
             }
