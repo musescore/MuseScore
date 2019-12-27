@@ -242,6 +242,8 @@ void ScoreView::focusInEvent(QFocusEvent* event)
                   }
             focusFrame->setWidget(static_cast<QWidget*>(this));
             }
+      if (state == ViewState::NORMAL)
+            updateEditElement();
       QWidget::focusInEvent(event);
       }
 
@@ -251,6 +253,8 @@ void ScoreView::focusInEvent(QFocusEvent* event)
 
 void ScoreView::focusOutEvent(QFocusEvent* event)
       {
+      if (state == ViewState::NORMAL)
+            setEditElement(nullptr);
       if (focusFrame)
             focusFrame->setWidget(0);
       QWidget::focusOutEvent(event);
