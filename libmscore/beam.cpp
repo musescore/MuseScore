@@ -2141,6 +2141,10 @@ void Beam::editDrag(EditData& ed)
             y1 += dy;
       else if (ed.curGrip == Grip::END)
             y2 += dy;
+      else if (ed.curGrip == Grip::MIDDLE) {
+            y1 += dy;
+            y2 += dy;
+            }
 
       qreal _spatium = spatium();
       // Because of the logic in Beam::setProperty(),
@@ -2180,9 +2184,13 @@ std::vector<QPointF> Beam::gripsPositions(const EditData& ed) const
 
       int y = pagePos().y();
 
+      qreal middleX = (c1->stemPosX() + c1->pageX() + c2->stemPosX() + c2->pageX()) / 2;
+      qreal middleY = (f->py1[idx] + y + f->py2[idx] + y) / 2;
+
       return {
             QPointF(c1->stemPosX() + c1->pageX(), f->py1[idx] + y),
-            QPointF(c2->stemPosX() + c2->pageX(), f->py2[idx] + y)
+            QPointF(c2->stemPosX() + c2->pageX(), f->py2[idx] + y),
+            QPointF(middleX, middleY)
             };
       }
 
