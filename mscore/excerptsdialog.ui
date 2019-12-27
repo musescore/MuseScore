@@ -174,7 +174,7 @@
          <item>
           <widget class="QPushButton" name="singlePartButton">
            <property name="toolTip">
-            <string>New part for single instrument</string>
+            <string>New single part for selected voice(s)/instrument(s)</string>
            </property>
            <property name="text">
             <string>Single Part</string>
