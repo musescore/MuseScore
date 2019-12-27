@@ -215,11 +215,11 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
             editData.hRaster = false;
             editData.vRaster = false;
             editData.element->editDrag(editData);
-            updateGrips();
             }
       QRectF r(editData.element->canvasBoundingRect());
       _score->addRefresh(r);
       _score->update();
+      updateGrips();
       }
 
 //---------------------------------------------------------
