@@ -2274,7 +2274,6 @@ void ScoreView::cmd(const char* s)
       else if (cmd == "reset") {
             if (editMode()) {
                   editData.element->reset();
-                  updateGrips();
                   _score->update();
                   }
             else {
@@ -2289,6 +2288,7 @@ void ScoreView::cmd(const char* s)
                         }
                   _score->endCmd();
                   }
+            updateGrips();
             }
 #ifdef OMR
       else if (cmd == "show-omr") {
