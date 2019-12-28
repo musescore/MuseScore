@@ -4378,15 +4378,16 @@ void Shortcut::resetToDefault()
 //   getShortcutByKeySequence
 //---------------------------------------------------------
 
-Shortcut* Shortcut::getShortcutByKeySequence(const QKeySequence& keySequence)
+Shortcut* Shortcut::getShortcutByKeySequence(const QKeySequence& keySequence, const ScoreState state)
       {
       for (Shortcut* shortcut : _shortcuts.values()) {
+            if (shortcut->state() != state)
+                  continue;
 
             QAction* action = shortcut->action();
 
             if (!action)
                   continue;
-
 
             for (const QKeySequence& _keySequence : action->shortcuts()) {
                   if (_keySequence == keySequence)

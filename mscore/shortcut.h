@@ -176,7 +176,7 @@ class Shortcut {
       static void resetToDefault();
       static bool dirty;
       static bool customSource() { return source != defaultFileName; }
-      static Shortcut* getShortcutByKeySequence(const QKeySequence &keySequence);
+      static Shortcut* getShortcutByKeySequence(const QKeySequence &keySequence, const ScoreState state);
       static Shortcut* getShortcut(const char* key);
       static const QHash<QByteArray, Shortcut*>& shortcuts() { return _shortcuts; }
       static QActionGroup* getActionGroupForWidget(MsWidget w);

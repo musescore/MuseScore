@@ -471,6 +471,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void windowSplit(bool);
       void musescoreWindowWasShown();
       void workspacesChanged();
+      void scoreStateChanged(ScoreState state);
 
    private slots:
       void cmd(QAction* a, const QString& cmd);
