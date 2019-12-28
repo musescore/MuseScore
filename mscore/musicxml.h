@@ -127,12 +127,5 @@ private:
 typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
 typedef QMap<SLine*, QPair<int, int> > MusicXmlSpannerMap;
 
-enum {
-      NoSystem          = 0,
-      TopSystem         = 1,
-      NewSystem         = 2,
-      NewPage           = 3
-      };
-
 } // namespace Ms
 #endif
