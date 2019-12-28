@@ -27,7 +27,7 @@ enum class ChangeMethod : signed char {
       EXPONENTIAL,
       EASE_IN,
       EASE_OUT,
-      EASE_IN_OUT       // and shake it all about
+      EASE_IN_OUT      // and shake it all about
       };
 
 enum class ChangeDirection : signed char {
@@ -40,28 +40,25 @@ enum class ChangeDirection : signed char {
 ///   item in ChangeMap
 //---------------------------------------------------------
 
-enum class ChangeEventType : char { FIX, RAMP };
+enum class ChangeEventType : char { FIX, RAMP, INVALID };
 
 class ChangeEvent {
-      // Despite storing the tick as the key of the ChangeEvent in the ChangeMap, we also store it here.
-      // Since we're not going to be changing it (well, not much, anyway), this is good because it provides
-      // multiple ways to access the tick. Keeping it in sync isn't much trouble.
-      Fraction tick;
       int value;
       ChangeEventType type;
-      Fraction etick;
+      Fraction length;
       ChangeMethod method;
       ChangeDirection direction;
       int cachedStart   { -1 };
       int cachedEnd     { -1 };
 
    public:
-      ChangeEvent(Fraction t, int vel) : tick(t), value(vel), type(ChangeEventType::FIX) {}
+      ChangeEvent() : value(0), type(ChangeEventType::INVALID) {}
+      ChangeEvent(int vel) : value(vel), type(ChangeEventType::FIX) {}
       ChangeEvent(Fraction s, Fraction e, int diff, ChangeMethod m, ChangeDirection d)
-            : tick(s), value(diff), type(ChangeEventType::RAMP), etick(e), method(m), direction(d) {}
+            : value(diff), type(ChangeEventType::RAMP), length(e - s), method(m), direction(d) {}
 
       bool operator==(const ChangeEvent& event) const;
-      bool operator!=(const ChangeEvent& event) const;
+      bool operator!=(const ChangeEvent& event) const { return !(operator==(event)); }
 
       friend class ChangeMap;
       };
@@ -91,7 +88,7 @@ class ChangeMap : public QMultiMap<Fraction, ChangeEvent> {
 
       void dump();
 
-      static int interpolate(ChangeEvent& event, Fraction& tick);
+      static int interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& tick);
       static QString changeMethodToName(ChangeMethod method);
       static ChangeMethod nameToChangeMethod(QString name);
 
