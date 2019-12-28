@@ -95,10 +95,15 @@ bool ActionEventObserver::eventFilter(QObject *watched, QEvent *event)
       else if (event->type() == QEvent::Shortcut) {
             QShortcutEvent* shortCutEvent = static_cast<QShortcutEvent*>(event);
 
-            Ms::Shortcut* shortcut = Ms::Shortcut::getShortcutByKeySequence(shortCutEvent->key());
+            Ms::Shortcut* shortcut = Ms::Shortcut::getShortcutByKeySequence(shortCutEvent->key(), m_scoreState);
 
             telemetryService()->sendEvent("shortcut", shortcut->key());
             }
 
       return false;
+      }
+
+void ActionEventObserver::setScoreState(const Ms::ScoreState state)
+      {
+      m_scoreState = state;
       }

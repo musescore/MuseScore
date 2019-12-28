@@ -4353,6 +4353,8 @@ void MuseScore::changeState(ScoreState val)
       a->setChecked(noteEntry);
       _sstate = val;
 
+      emit scoreStateChanged(_sstate);
+
       Element* e = cv && (_sstate & STATE_ALLTEXTUAL_EDIT || _sstate == STATE_EDIT) ? cv->getEditElement() : 0;
       if (!e) {
             textTools()->hide();
@@ -7772,6 +7774,8 @@ void MuseScore::init(QStringList& argv)
 
 #ifndef TELEMETRY_DISABLED
       QApplication::instance()->installEventFilter(ActionEventObserver::instance());
+      ActionEventObserver::instance()->setScoreState(mscore->state());
+      QObject::connect(mscore, &MuseScore::scoreStateChanged, ActionEventObserver::instance(), &ActionEventObserver::setScoreState);
 #endif
 
       mscore->setRevision(Ms::revision);
