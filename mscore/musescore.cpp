@@ -2266,21 +2266,30 @@ void MuseScore::aboutMusicXML()
 
 void MuseScore::selectScore(QAction* action)
       {
-      QString a = action->data().toString();
-      if (!a.isEmpty()) {
-            if (a == "clear-recent") {
-                  _recentScores.clear();
-                  if (startcenter)
-                        startcenter->updateRecentScores();
-                  }
-            else {
-                  MasterScore* score = readScore(a);
+      QVariant actionData = action->data();
+
+      if (!actionData.isValid())
+            return;
+
+      switch (actionData.type()) {
+            case QVariant::String:
+                  if (actionData.toString() == "clear-recent") {
+                        _recentScores.clear();
+
+                        if (startcenter)
+                              startcenter->updateRecentScores();
+                        }
+                  break;
+            case QVariant::Map:
+                  QVariantMap pathMap = actionData.toMap();
+
+                  MasterScore* score = readScore(pathMap.value("filePath").toString());
                   if (score) {
                         setCurrentScoreView(appendScore(score));
                         addRecentScore(score);
                         writeSessionFile(false);
                         }
-                  }
+                  break;
             }
       }
 
@@ -2446,9 +2455,15 @@ void MuseScore::openRecentMenu()
       bool one = false;
       for (const QFileInfo& fi : recentScores()) {
             QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show filename only
-            QString dta(fi.canonicalFilePath());
-            action->setData(dta);
-            action->setToolTip(dta);
+
+            QString filePath = fi.canonicalFilePath();
+
+            QVariantMap actionData;
+            actionData.insert("actionName", "open-recent");
+            actionData.insert("filePath", filePath);
+
+            action->setData(actionData);
+            action->setToolTip(filePath);
             one = true;
             }
       if (one) {
