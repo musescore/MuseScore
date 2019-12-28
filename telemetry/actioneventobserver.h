@@ -24,6 +24,7 @@
 #include <QAction>
 #include <QPair>
 #include "serviceinjector.h"
+#include "globals.h"
 
 #include "interfaces/itelemetryservice.h"
 
@@ -45,11 +46,16 @@ class ActionEventObserver : public QObject, public ServiceInjector<ITelemetrySer
 
       bool eventFilter(QObject *watched, QEvent *event) override;
 
+   public slots:
+      void setScoreState(const Ms::ScoreState state);
+
    private:
       Q_DISABLE_COPY(ActionEventObserver)
       
       explicit ActionEventObserver(QObject* parent = nullptr);
       QPair<QString, QString> extractActionData(QObject *watched);
+
+      Ms::ScoreState m_scoreState;
       };
 
 #endif // MENUBAR_H
