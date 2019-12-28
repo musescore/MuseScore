@@ -156,7 +156,7 @@ set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 
 if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
       message("Telemetry feature is disabled")
-      message("Build is stable = ${MSCORE_UNSTABLE}")
+      message("Build is unstable = ${MSCORE_UNSTABLE}")
 
       if (TELEMETRY_TRACK_ID STREQUAL "")
             message("Telemetry track id is empty")
