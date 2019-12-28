@@ -6226,6 +6226,25 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   cv->setMag(MagIdx::MAG_100, 1.0);
             setMag(1.0);
             }
+      else if (cmd == "zoom-page-width") {
+            if (cv) {
+                  MagIdx currentMagIdx = cv->magIdx();
+                  if (currentMagIdx != MagIdx::MAG_PAGE_WIDTH) {
+                        // Save current zoom state for toggle
+                        cv->previousMagIdx(currentMagIdx);
+                        // Update zoom drop-down list
+                        mag->setMagIdx(MagIdx::MAG_PAGE_WIDTH);
+                        // Update the actual score's zoom-level
+                        mag->magChanged(MagIdx::MAG_PAGE_WIDTH);
+                        }
+                  // If current zoom-level is page-width,
+                  // switch to previous zoom-level
+                  else {
+                        mag->setMagIdx(cv->previousMagIdx());
+                        mag->magChanged(cv->previousMagIdx());
+                        }
+                  }
+            }
       else if (cmd == "midi-on")
             midiinToggled(a->isChecked());
       else if (cmd == "undo")

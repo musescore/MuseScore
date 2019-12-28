@@ -21,6 +21,7 @@
 #include "libmscore/mscoreview.h"
 #include "libmscore/pos.h"
 #include "libmscore/harmony.h"
+#include "mscore/magbox.h"
 
 namespace Ms {
 
@@ -148,6 +149,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       QTransform _matrix, imatrix;
       MagIdx _magIdx;
+      MagIdx _previousMagIdx { MagIdx::MAG_PAGE_WIDTH };          // for magnification zoom-level toggling
 
       QFocusFrame* focusFrame;
 
@@ -368,6 +370,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void removeScore()  { _score = 0; }
 
       void setMag(qreal m);
+
       bool navigatorVisible() const;
       void cmd(const QAction*);
       void cmd(const char*);
@@ -473,6 +476,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       FotoLasso* fotoLasso() const    { return _foto;    }
       Element* getEditElement();
       void onElementDestruction(Element*) override;
+
+      MagIdx previousMagIdx() const    { return _previousMagIdx; }
+      void previousMagIdx(MagIdx id)   { _previousMagIdx = id;   }
 
       virtual Element* elementNear(QPointF);
       QList<Element*> elementsNear(QPointF);

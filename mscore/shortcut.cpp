@@ -2677,6 +2677,13 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Zoom to 100%")
          },
       {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
+         "zoom-page-width",
+         QT_TRANSLATE_NOOP("action","Zoom to Page Width or Previous Magnification Level"),
+         QT_TRANSLATE_NOOP("action","Zoom to page-width / previous magnification level")
+         },
+      {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "mirror-note",
