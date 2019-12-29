@@ -30,13 +30,13 @@ int ChangeMap::interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& ti
       Q_ASSERT(event.type == ChangeEventType::RAMP);
 
       // Prevent zero-division error
-      if (event.cachedStart == event.cachedEnd || event.length.isZero()) {
-            return event.cachedStart;
+      if (event.cachedStartVal == event.cachedEndVal || event.length.isZero()) {
+            return event.cachedStartVal;
             }
 
       // Ticks to change expression over
       int exprTicks = event.length.ticks();
-      int exprDiff = event.cachedEnd - event.cachedStart;
+      int exprDiff = event.cachedEndVal - event.cachedStartVal;
 
       std::function<int(int)> valueFunction;
       switch (event.method) {
@@ -100,7 +100,7 @@ int ChangeMap::interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& ti
                   break;
             }
 
-      return event.cachedStart + valueFunction(tick.ticks() - eventTick.ticks());
+      return event.cachedStartVal + valueFunction(tick.ticks() - eventTick.ticks());
       }
 
 //---------------------------------------------------------
@@ -136,7 +136,7 @@ int ChangeMap::val(Fraction tick)
             }
 
       if (tick >= (rampFoundStartTick + rampFound.length)) {
-            return rampFound.cachedEnd;
+            return rampFound.cachedEndVal;
             }
       else {
             // Do some maths!
@@ -169,53 +169,51 @@ void ChangeMap::addRamp(Fraction stick, Fraction etick, int change, ChangeMethod
       }
 
 //---------------------------------------------------------
-//   cleanup
+//   cleanupStage0
+///   put the ramps in size order if they start at the same point
 //---------------------------------------------------------
 
-void ChangeMap::cleanup()
+void ChangeMap::cleanupStage0()
       {
-      //
-      // Stage 0: put the ramps in size order if they start at the same point
-      //
       for (auto& tick : uniqueKeys()) {
-            // `events` will contain all the ramps at this tick
-            std::vector<ChangeEvent> events;
+            // rampEvents will contain all the ramps at this tick
+            std::vector<ChangeEvent> rampEvents;
             for (auto& event : values(tick)) {
                   if (event.type == ChangeEventType::FIX)
                         continue;
-                  events.push_back(event);
+                  rampEvents.push_back(event);
                   }
 
-            if (int(events.size()) > 1) {
-                  // new order is a map of the NEGATIVE length of a ramp to a copy of its event
-                  QMultiMap<Fraction, ChangeEvent> newOrder;
-                  for (auto& event : events) {
-                        newOrder.insert(-event.length, event);
-                        // And clear out the events at this tick
-                        remove(tick, event);
-                        }
-
-                  // newOrder's values are implicitally ordered by the key, which is the
-                  // NEGATIVE length of the ramp.
-                  for (auto& event : newOrder.values()) {
+            if (int(rampEvents.size()) > 1) {
+                  // Sort rampEvents so that the longest ramps come first -
+                  // this is important for when we remove ramps/fixes enclosed wihtin other
+                  // ramps during stage 1.
+                  std::sort(rampEvents.begin(), rampEvents.end(), ChangeMap::compareRampEvents);
+                  for (auto& event : rampEvents) {
                         insert(tick, event);
                         }
                   }
             }
+      }
 
-      //
-      // Stage 1: remove any ramps or fixes that are completely enclosed within other ramps
-      //
+//---------------------------------------------------------
+//   cleanupStage1
+///   remove any ramps or fixes that are completely enclosed within other ramps
+//---------------------------------------------------------
+
+void ChangeMap::cleanupStage1()
+      {
       Fraction currentRampStart = Fraction(-1, 1);    // start point of ramp we're in
       Fraction currentRampEnd = Fraction(-1, 1);      // end point of ramp we're in
       Fraction lastFix = Fraction(-1, 1);             // the position of the last fix event
       bool inRamp = false;                            // whether we're in a ramp or not
 
       // Keep a record of the endpoints
-      std::vector<std::pair<Fraction, Fraction>> endPoints;
+      EndPointsVector endPoints;
       std::vector<bool> startsInRamp;
 
-      for (auto i = begin(); i != end(); i++) {
+      auto i = begin();
+      while (i != end()) {
             Fraction tick = i.key();
             ChangeEvent& event = i.value();
             Fraction etick = tick + event.length;
@@ -228,7 +226,7 @@ void ChangeMap::cleanup()
                   if (inRamp) {
                         if (etick <= currentRampEnd) {
                               // delete, this event is enveloped
-                              remove(tick, event);
+                              i = erase(i);
                               // don't add to the end points
                               continue;
                               }
@@ -251,19 +249,27 @@ void ChangeMap::cleanup()
                   if (inRamp) {
                         if (tick != currentRampStart && tick != currentRampEnd && lastFix != tick) {
                               // delete, this event is enveloped or at the same point as another fix
-                              remove(tick, event);
+                              i = erase(i);
                               continue;
                               }
                         }
 
                   lastFix = tick;
                   }
+
+            i++;
             }
 
-      //
-      // Stage 2: readjust lengths of any colliding ramps:
-      //
+      cleanupStage2(startsInRamp, endPoints);
+      }
 
+//---------------------------------------------------------
+//   cleanupStage2
+///   readjust lengths of any colliding ramps
+//---------------------------------------------------------
+
+void ChangeMap::cleanupStage2(std::vector<bool>& startsInRamp, EndPointsVector& endPoints)
+      {
       // moveTo stores the events that need to be moved to a Fraction position
       std::map<Fraction, ChangeEvent> moveTo;
       auto i = begin();
@@ -284,6 +290,7 @@ void ChangeMap::cleanup()
 
             // Take a copy of the event and remove it
             Fraction newTick = endPoints[j-1].second;
+            event.length -= (newTick - tick);
             moveTo[newTick] = event;
             i = erase(i);
             }
@@ -292,10 +299,15 @@ void ChangeMap::cleanup()
       for (auto i = moveTo.begin(); i != moveTo.end(); i++) {
             insert(i->first, i->second);
             }
+      }
 
-      //
-      // Stage 3: cache start and end values for each ramp
-      //
+//---------------------------------------------------------
+//   cleanupStage3
+///   cache start and end values for each ramp
+//---------------------------------------------------------
+
+void ChangeMap::cleanupStage3()
+      {
       for (auto i = begin(); i != end(); i++) {
             Fraction tick = i.key();
             auto& event = i.value();
@@ -307,7 +319,7 @@ void ChangeMap::cleanup()
             bool foundFix = false;
             for (auto& currentChangeEvent : values(tick)) {
                   if (currentChangeEvent.type == ChangeEventType::FIX) {
-                        event.cachedStart = currentChangeEvent.value;
+                        event.cachedStartVal = currentChangeEvent.value;
                         foundFix = true;
                         break;
                         }
@@ -325,7 +337,7 @@ void ChangeMap::cleanup()
                         bool foundRamp = false;
                         for (auto& prevChangeEvent : values(prevChangeEventIter.key())) {
                               if (prevChangeEvent.type == ChangeEventType::RAMP) {
-                                    event.cachedStart = prevChangeEvent.cachedEnd;
+                                    event.cachedStartVal = prevChangeEvent.cachedEndVal;
                                     foundRamp = true;
                                     break;
                                     }
@@ -333,29 +345,35 @@ void ChangeMap::cleanup()
 
                         if (!foundRamp) {
                               // prevChangeEventIter must point to a fix in this case
-                              event.cachedStart = prevChangeEventIter.value().value;
+                              event.cachedStartVal = prevChangeEventIter.value().value;
                               }
                         }
                   else {
-                        event.cachedStart = DEFAULT_VALUE;
+                        event.cachedStartVal = DEFAULT_VALUE;
                         }
                   }
 
             // Phase 2: cache an end value for the ramp
             // If there's no set velocity change:
             if (event.value == 0) {
-                  auto nextChangeEventIter = upperBound(tick);
+                  auto nextChangeEventIter = i;
+                  nextChangeEventIter++;
+                  // There's a chance that the next event is a fix at the same tick as the
+                  // start of the current ramp. If so, get the next event, which is assured
+                  // to be a different (larger) tick
+                  if (nextChangeEventIter != end() && nextChangeEventIter.key() == tick)
+                        nextChangeEventIter++;
 
                   // If this is the last event, there is no change
                   if (nextChangeEventIter == end()) {
-                        event.cachedEnd = event.cachedStart;
+                        event.cachedEndVal = event.cachedStartVal;
                         }
                   else {
                         // Search for a fixed event at the next event point
                         bool foundFix = false;
                         for (auto& nextChangeEvent : values(nextChangeEventIter.key())) {
                               if (nextChangeEvent.type == ChangeEventType::FIX) {
-                                    event.cachedEnd = nextChangeEvent.value;
+                                    event.cachedEndVal = nextChangeEvent.value;
                                     foundFix = true;
                                     break;
                                     }
@@ -366,22 +384,42 @@ void ChangeMap::cleanup()
                         // this ramp and set the ending to be the same as the start.
                         // TODO: implementing some form of smart interpolation would be nice.
                         if (!foundFix) {
-                              event.cachedEnd = event.cachedStart;
+                              event.cachedEndVal = event.cachedStartVal;
                               }
                         }
                   }
             else {
-                  event.cachedEnd = event.cachedStart + event.value;
+                  event.cachedEndVal = event.cachedStartVal + event.value;
                   }
 
             // And finally... if something's wrong, make it not wrong
-            if ((event.cachedStart > event.cachedEnd && event.direction == ChangeDirection::INCREASING) ||
-                (event.cachedStart < event.cachedEnd && event.direction == ChangeDirection::DECREASING)) {
-                  event.cachedEnd = event.cachedStart;
+            if ((event.cachedStartVal > event.cachedEndVal && event.direction == ChangeDirection::INCREASING) ||
+                (event.cachedStartVal < event.cachedEndVal && event.direction == ChangeDirection::DECREASING)) {
+                  event.cachedEndVal = event.cachedStartVal;
                   }
             }
 
+      }
+
+//---------------------------------------------------------
+//   cleanup
+//---------------------------------------------------------
+
+void ChangeMap::cleanup()
+      {
+      if (cleanedUp)
+            return;
+
+      // qDebug() << "Before cleanup:";
+      // dump();
+
+      cleanupStage0();
+      cleanupStage1();
+      cleanupStage3();
       cleanedUp = true;
+
+      // qDebug() << "After cleanup:";
+      // dump();
       }
 
 //---------------------------------------------------------
@@ -481,7 +519,10 @@ void ChangeMap::dump()
                   qDebug().nospace() << "===" << tick.ticks() << " : FIX " << event.value;
                   }
             else if (event.type == ChangeEventType::RAMP) {
-                  qDebug().nospace() << "===" << tick.ticks() << " to " << (tick + event.length).ticks() << " : RAMP diff " << event.value << " " << ChangeMap::changeMethodToName(event.method) << " (" << event.cachedStart << ", " << event.cachedEnd << ")";
+                  qDebug().nospace() << "===" << tick.ticks() << " to " << (tick + event.length).ticks() << " : RAMP diff " << event.value << " " << ChangeMap::changeMethodToName(event.method) << " (" << event.cachedStartVal << ", " << event.cachedEndVal << ")";
+                  }
+            else if (event.type == ChangeEventType::INVALID) {
+                  qDebug().nospace() << "===" << tick.ticks() << " : INVALID value" << event.value;
                   }
             }
       qDebug("=== ChangeMap: dump end ===\n\n");
