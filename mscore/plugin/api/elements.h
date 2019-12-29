@@ -223,6 +223,10 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( veloChangeMethod,        VELO_CHANGE_METHOD        )
       API_PROPERTY( veloChangeSpeed,         VELO_CHANGE_SPEED         )
       API_PROPERTY( dynamicRange,            DYNAMIC_RANGE             )
+      /**
+       *    The way a ramp interpolates between values.
+       *    \since MuseScore 3.5
+       */
       API_PROPERTY( changeMethod,            CHANGE_METHOD             )
       API_PROPERTY( placement,               PLACEMENT                 )
       API_PROPERTY( velocity,                VELOCITY                  )

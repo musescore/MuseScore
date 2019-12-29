@@ -48,8 +48,8 @@ class ChangeEvent {
       Fraction length;
       ChangeMethod method;
       ChangeDirection direction;
-      int cachedStart   { -1 };
-      int cachedEnd     { -1 };
+      int cachedStartVal   { -1 };
+      int cachedEndVal     { -1 };
 
    public:
       ChangeEvent() : value(0), type(ChangeEventType::INVALID) {}
@@ -68,6 +68,8 @@ class ChangeEvent {
 ///  List of changes in a value.
 //---------------------------------------------------------
 
+typedef std::vector<std::pair<Fraction, Fraction>> EndPointsVector;
+
 class ChangeMap : public QMultiMap<Fraction, ChangeEvent> {
       bool cleanedUp    { false };
       static const int DEFAULT_VALUE  { 80 };   // TODO
@@ -76,6 +78,13 @@ class ChangeMap : public QMultiMap<Fraction, ChangeEvent> {
             ChangeMethod method;
             const char* name;
             };
+
+      static bool compareRampEvents(ChangeEvent& a, ChangeEvent& b)     { return a.length > b.length; }
+
+      void cleanupStage0();
+      void cleanupStage1();
+      void cleanupStage2(std::vector<bool>& startsInRamp, EndPointsVector& endPoints);
+      void cleanupStage3();
 
    public:
       ChangeMap() {}

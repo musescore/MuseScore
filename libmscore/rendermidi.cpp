@@ -2154,12 +2154,12 @@ void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Synth
                   if (event.channel() == lastChannel &&
                       event.controller() == lastController &&
                       event.value() == lastValue) {
+                        i = events->erase(i);
+                        }
+                  else {
                         lastChannel = event.channel();
                         lastController = event.controller();
                         lastValue = event.value();
-                        events->erase(i);
-                        }
-                  else {
                         i++;
                         }
                   }
