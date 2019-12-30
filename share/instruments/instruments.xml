@@ -15,6 +15,9 @@
       <Genre id="orchestra">
             <name>Orchestra</name>
       </Genre>
+      <Genre id="brassband">
+            <name>Brass Band</name>
+      </Genre>
       <Genre id="concertband">
             <name>Concert Band</name>
       </Genre>
@@ -2980,6 +2983,7 @@
                   <Channel>
                         <program value="60"/> <!--French Horn-->
                   </Channel>
+                  <genre>brassband</genre>
             </Instrument>
             <Instrument id="d-horn">
                   <longName>Horn in D</longName>
@@ -3073,6 +3077,7 @@
                   <Channel name="mute">
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
+                  <genre>brassband</genre>
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="c-cornet">
@@ -3110,6 +3115,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>brassband</genre>
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="a-cornet">
@@ -3208,6 +3214,25 @@
                   </Channel>
                   <genre>concertband</genre>
             </Instrument>
+            <Instrument id="bb-baritone-horn-treble">
+                  <!-- same as baritone-horn-treble but with "brass band" name -->
+                  <trackName>B♭ Baritone (Treble Clef)</trackName>
+                  <longName>B♭ Baritone</longName>
+                  <shortName>B♭ Bar.</shortName>
+                  <description>B♭ Baritone</description>
+                  <musicXMLid>brass.baritone-horn</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-67</aPitchRange>
+                  <pPitchRange>40-70</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-14</transposeChromatic>
+                  <Channel>
+                        <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <genre>brassband</genre>
+            </Instrument>
             <Instrument id="posthorn">
                   <longName>Posthorn</longName>
                   <shortName>Psthn.</shortName>
@@ -3287,6 +3312,8 @@
                   <Channel name="mute">
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="a-piccolo-trumpet">
                   <longName>Piccolo Trumpet in A</longName>
@@ -3772,6 +3799,7 @@
                         <program value="59"/>
                   </Channel>
                   <genre>jazz</genre>
+                  <genre>brassband</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
@@ -4113,6 +4141,7 @@
                   <Channel>
                         <program value="57"/> <!--Trombone-->
                   </Channel>
+                  <genre>brassband</genre>
             </Instrument>
             <Instrument id="soprano-trombone">
                   <longName>Soprano Trombone</longName>
@@ -4168,6 +4197,7 @@
                   </Channel>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>brassband</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
@@ -4229,6 +4259,7 @@
                   <Channel>
                         <program value="58"/> <!--Tuba-->
                   </Channel>
+                  <genre>brassband</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
@@ -4293,6 +4324,7 @@
                   <Channel>
                         <program value="58"/> <!--Tuba-->
                   </Channel>
+                  <genre>brassband</genre>
             </Instrument>
             <Instrument id="c-tuba">
                   <longName>C Tuba</longName>
@@ -4337,6 +4369,7 @@
                   <Channel>
                         <program value="58"/> <!--Tuba-->
                   </Channel>
+                  <genre>brassband</genre>
             </Instrument>
             <Instrument id="bass-f-tuba">
                   <longName>Bass Tuba in F</longName>
