@@ -2200,25 +2200,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                   clef->read(e);
                   clef->setGenerated(false);
 
-                  // there may be more than one clef segment for same tick position
-                  // the first clef may be missing and is added later in layout
-
-                  bool header;
-                  if (e.tick() != tick())
-                        header = false;
-                  else if (!segment)
-                        header = true;
-                  else {
-                        header = true;
-                        for (Segment* s = _segments.first(); s && s->rtick().isZero(); s = s->next()) {
-                              if (s->isKeySigType() || s->isTimeSigType()) {
-                                    // hack: there may be other segment types which should
-                                    // generate a clef at current position
-                                    header = false;
-                                    break;
-                                    }
-                              }
-                        }
+                  bool header = e.tick().isZero() && !segment;
                   segment = getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, e.tick());
                   segment->add(clef);
                   }

@@ -33,6 +33,7 @@ class TestClef : public QObject, public MTest
       void clef1();
       void clef2();
       void clef3();
+      void clef4();
       };
 
 //---------------------------------------------------------
@@ -89,6 +90,21 @@ void TestClef::clef3()
 
       score->doLayout();
       QVERIFY(saveCompareScore(score, "clef-3.mscx", DIR + "clef-3-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   clef4
+//    clef added to the first tick chord/rest in a measure shouldn't become header clef
+//---------------------------------------------------------
+
+void TestClef::clef4()
+      {
+      MasterScore* score = readScore(DIR + "clef-4.mscx");
+      Measure* m2 = score->firstMeasure()->nextMeasure();
+      Segment* seg = m2->findSegment(SegmentType::Clef, m2->tick());
+
+      QVERIFY2(seg, "There should be a non-header clef.");
       delete score;
       }
 
