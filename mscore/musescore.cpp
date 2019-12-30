@@ -2272,7 +2272,7 @@ void MuseScore::selectScore(QAction* action)
             return;
 
       switch (actionData.type()) {
-            case QVariant::String:
+            case QVariant::String: {
                   if (actionData.toString() == "clear-recent") {
                         _recentScores.clear();
 
@@ -2280,7 +2280,8 @@ void MuseScore::selectScore(QAction* action)
                               startcenter->updateRecentScores();
                         }
                   break;
-            case QVariant::Map:
+                  }
+            case QVariant::Map: {
                   QVariantMap pathMap = actionData.toMap();
 
                   MasterScore* score = readScore(pathMap.value("filePath").toString());
@@ -2290,6 +2291,9 @@ void MuseScore::selectScore(QAction* action)
                         writeSessionFile(false);
                         }
                   break;
+                  }
+            default:
+                  return;
             }
       }
 
