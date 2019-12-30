@@ -72,6 +72,7 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       PluginDescription* getPluginDescription(int idx) {return &_pluginList[idx];}
       };
 
+extern bool collectPluginMetaInformation(PluginDescription*);
 
 } // namespace Ms
 #endif

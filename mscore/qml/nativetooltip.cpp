@@ -18,7 +18,6 @@
 //=============================================================================
 
 #include "nativetooltip.h"
-#include "musescore.h"
 
 namespace Ms {
 

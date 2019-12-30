@@ -11,9 +11,7 @@
 //=============================================================================
 
 #include "inspectorFingering.h"
-#include "musescore.h"
 #include "libmscore/fingering.h"
-#include "libmscore/score.h"
 
 namespace Ms {
 
