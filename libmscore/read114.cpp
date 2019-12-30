@@ -1805,25 +1805,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         staff->clefList().insert(std::pair<int,ClefType>(e.tick().ticks(), ClefType::G));
                         }
 
-                  // there may be more than one clef segment for same tick position
-                  // the first clef may be missing and is added later in layout
-
-                  bool header;
-                  if (e.tick() != m->tick())
-                        header = false;
-                  else if (!segment)
-                        header = true;
-                  else {
-                        header = true;
-                        for (Segment* s = m->segments().first(); s && s->rtick().isZero(); s = s->next()) {
-                              if (s->isKeySigType() || s->isTimeSigType()) {
-                                    // hack: there may be other segment types which should
-                                    // generate a clef at current position
-                                    header = false;
-                                    break;
-                                    }
-                              }
-                        }
+                  bool header = e.tick().isZero() && !segment;
                   segment = m->getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, e.tick());
                   segment->add(clef);
                   }
