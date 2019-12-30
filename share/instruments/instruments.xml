@@ -15,9 +15,6 @@
       <Genre id="orchestra">
             <name>Orchestra</name>
       </Genre>
-      <Genre id="brassquintet">
-            <name>Brass Quintet</name>
-      </Genre>
       <Genre id="brassband">
             <name>Brass Band</name>
       </Genre>
@@ -2881,7 +2878,6 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
-                  <genre>brassquintet</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
@@ -2987,7 +2983,6 @@
                   <Channel>
                         <program value="60"/> <!--French Horn-->
                   </Channel>
-                  <genre>brassquintet</genre>
                   <genre>brassband</genre>
             </Instrument>
             <Instrument id="d-horn">
@@ -3217,7 +3212,6 @@
                   <Channel>
                         <program value="60"/> <!--French Horn-->
                   </Channel>
-                  <genre>brassquintet</genre>
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="bb-baritone-horn-treble">
@@ -3427,7 +3421,6 @@
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>orchestra</genre>
-                  <genre>brassquintet</genre>
             </Instrument>
             <Instrument id="bb-trumpet">
                   <longName>B♭ Trumpet</longName>
@@ -3450,7 +3443,6 @@
                   <genre>jazz</genre>
                   <genre>popular</genre>
                   <genre>orchestra</genre>
-                  <genre>brassquintet</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
@@ -4130,7 +4122,6 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
                   <genre>popular</genre>
-                  <genre>brassquintet</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
@@ -4150,7 +4141,6 @@
                   <Channel>
                         <program value="57"/> <!--Trombone-->
                   </Channel>
-                  <genre>brassquintet</genre>
                   <genre>brassband</genre>
             </Instrument>
             <Instrument id="soprano-trombone">
@@ -4288,7 +4278,6 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
-                  <genre>brassquintet</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
@@ -4335,7 +4324,6 @@
                   <Channel>
                         <program value="58"/> <!--Tuba-->
                   </Channel>
-                  <genre>brassquintet</genre>
                   <genre>brassband</genre>
             </Instrument>
             <Instrument id="c-tuba">
@@ -4381,7 +4369,6 @@
                   <Channel>
                         <program value="58"/> <!--Tuba-->
                   </Channel>
-                  <genre>brassquintet</genre>
                   <genre>brassband</genre>
             </Instrument>
             <Instrument id="bass-f-tuba">
