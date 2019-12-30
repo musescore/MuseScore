@@ -620,13 +620,9 @@ void Score::transposeSemitone(int step)
 
       const int interval = intervalListArray[keyType][step > 0 ? 0 : 1];
 
-      cmdSelectAll();
       if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false)) {
             qDebug("Score::transposeSemitone: failed");
             // TODO: set error message
-            }
-      else {
-            deselectAll();
             }
       }
 
