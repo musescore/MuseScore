@@ -36,6 +36,7 @@ class TestCompat206 : public QObject, public MTest
       void breath()           { compat("breath");           }
       void clefs()            { compat("clefs");            }
       void headerClef()       { compat("header-clef");      }
+      void headerClef2()      { compat("header-clef-2");    }
       void drumset()          { compat("drumset");          }
       void markers()          { compat("markers");          }
       void noteheads()        { compat("noteheads");        }

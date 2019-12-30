@@ -153,10 +153,6 @@
         </VBox>
       <Measure number="1">
         <stretch>0.9</stretch>
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <StaffText>
           <lid>2</lid>
           <pos x="-0.529167" y="-4"/>

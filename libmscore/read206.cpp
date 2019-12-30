@@ -3011,60 +3011,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
-                  if (e.tick().isZero() && !segment) { // if the clef is not the first segment, then it shouldn't be removed
-                        if (score->staff(staffIdx)->clef(Fraction(0, 1)) != clef->clefType())
-                              score->staff(staffIdx)->setDefaultClefType(clef->clefType());
-                        if (clef->links() && clef->links()->size() == 1) {
-                              e.linkIds().remove(clef->links()->lid());
-                              qDebug("remove link %d", clef->links()->lid());
-                              }
-                        delete clef;
-                        continue;
-                        }
-                  // there may be more than one clef segment for same tick position
-                  if (!segment) {
-                        // this is the first segment of measure
-                        segment = m->getSegment(SegmentType::Clef, e.tick());
-                        }
-                  else {
-                        bool firstSegment = false;
-                        // the first clef may be missing and is added later in layout
-                        for (Segment* s = m->segments().first(); s && s->tick() == e.tick(); s = s->next()) {
-                              if (s->segmentType() == SegmentType::Clef
-                                    // hack: there may be other segment types which should
-                                    // generate a clef at current position
-                                 || s->segmentType() == SegmentType::StartRepeatBarLine
-                                 ) {
-                                    firstSegment = true;
-                                    break;
-                                    }
-                              }
-                        if (firstSegment) {
-                              Segment* ns = 0;
-                              if (segment->next()) {
-                                    ns = segment->next();
-                                    while (ns && ns->tick() < e.tick())
-                                          ns = ns->next();
-                                    }
-                              segment = 0;
-                              for (Segment* s = ns; s && s->tick() == e.tick(); s = s->next()) {
-                                    if (s->segmentType() == SegmentType::Clef) {
-                                          segment = s;
-                                          break;
-                                          }
-                                    }
-                              if (!segment) {
-                                    segment = new Segment(m, SegmentType::Clef, e.tick() - m->tick());
-                                    m->segments().insert(segment, ns);
-                                    }
-                              }
-                        else {
-                              // this is the first clef: move to left
-                              segment = m->getSegment(SegmentType::Clef, e.tick());
-                              }
-                        }
-                  if (e.tick() != m->tick())
-                        clef->setSmall(true);         // TODO: layout does this ?
+
+                  bool header = e.tick().isZero() && !segment;
+                  segment = m->getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, e.tick());
                   segment->add(clef);
                   }
             else if (tag == "TimeSig") {
