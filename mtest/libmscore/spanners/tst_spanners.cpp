@@ -54,6 +54,7 @@ class TestSpanners : public QObject, public MTest
 //      void spanners13();            // drop a line break at the middle of a LyricsLine and check LyricsLineSegments
       void spanners14();            // creating part from an existing grand staff containing a cross staff glissando
       void spanners15();            // change the color & min distance of a line and save it
+      void spanners16();            // read lines with manual adjustments on a small staff and save
       };
 
 //---------------------------------------------------------
@@ -556,7 +557,7 @@ void TestSpanners::spanners12()
 #if 0
 //---------------------------------------------------------
 ///  spanners13
-///   Drop a line break at a bar line inthe middle of a LyricsLine and check LyricsLineSegments are correct
+///   Drop a line break at a bar line in the middle of a LyricsLine and check LyricsLineSegments are correct
 //
 //---------------------------------------------------------
 
@@ -644,6 +645,20 @@ void TestSpanners::spanners15()
             }
 
       QVERIFY(saveCompareScore(score, "linecolor01.mscx", DIR + "linecolor01-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///  spanners16
+///   read manually adjusted lines on a small staff and save
+//---------------------------------------------------------
+
+void TestSpanners::spanners16()
+      {
+      MasterScore* score = readScore(DIR + "smallstaff01.mscx");
+      QVERIFY(score);
+
+      QVERIFY(saveCompareScore(score, "smallstaff01.mscx", DIR + "smallstaff01-ref.mscx"));
       delete score;
       }
 

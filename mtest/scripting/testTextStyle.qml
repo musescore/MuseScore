@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import MuseScore 1.0
+import MuseScore 3.0
 
 MuseScore {
       onRun: {
@@ -7,11 +7,11 @@ MuseScore {
             while (seg) {
                   for (var i = seg.annotations.length; i--; ) {
                         if (seg.annotations[i].type === Element.STAFF_TEXT) {
-                              if (seg.annotations[i].textStyleType === TextStyleType.SYSTEM) {
-                                    seg.annotations[i].textStyleType = TextStyleType.FIGURED_BASS;
+                              if (seg.annotations[i].subStyle === Tid.SYSTEM) {
+                                    seg.annotations[i].subStyle = Tid.FIGURED_BASS;
                               }
-                              else if (seg.annotations[i].textStyleType === TextStyleType.EXPRESSION) {
-                                    seg.annotations[i].textStyleType = TextStyleType.STRING_NUMBER;
+                              else if (seg.annotations[i].subStyle === Tid.EXPRESSION) {
+                                    seg.annotations[i].subStyle = Tid.STRING_NUMBER;
                               }
                         }
                   }

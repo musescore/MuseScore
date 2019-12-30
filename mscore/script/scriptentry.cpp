@@ -120,7 +120,7 @@ bool CommandScriptEntry::execute(ScriptContext& ctx) const
 //   serializePropertyValue
 //---------------------------------------------------------
 
-static const QString whitespaceRepr("&#032");
+static const QString whitespaceRepr("&#032;");
 
 static QString serializePropertyValue(Pid pid, const QVariant& val)
       {

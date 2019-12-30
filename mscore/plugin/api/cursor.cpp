@@ -75,7 +75,7 @@ void Cursor::setScore(Score* s)
 ///   Rewind cursor to a certain position.
 ///   \param mode Determines the position where to move
 ///   this cursor. See Cursor::RewindMode to see the list of
-///   avaliable rewind modes.
+///   available rewind modes.
 ///   \note In MuseScore 2.X, this function took an integer
 ///   value (0, 1 or 2) as its parameter. For compatibility
 ///   reasons, the old values are still working, but it is
@@ -116,6 +116,24 @@ void Cursor::rewind(RewindMode mode)
             }
       _score->inputState().setTrack(_track);
       _score->inputState().setSegment(_segment);
+      }
+
+//---------------------------------------------------------
+//   prev
+///   Move the cursor to the previous segment.
+///   \return \p false if the beginning of the score is
+///   reached, \p true otherwise.
+///   \since MuseScore 3.3.4
+//---------------------------------------------------------
+
+bool Cursor::prev()
+      {
+      if (!_segment)
+            return false;
+      prevInTrack();
+      _score->inputState().setTrack(_track);
+      _score->inputState().setSegment(_segment);
+      return _segment != 0;
       }
 
 //---------------------------------------------------------
@@ -172,11 +190,12 @@ void Cursor::add(Element* wrapped)
 
       // Ensure that the object has the expected ownership
       if (wrapped->ownership() == Ownership::SCORE) {
-            qWarning("Chord::add: Cannot add this element. The element is already part of the score.");
+            qWarning("Cursor::add: Cannot add this element. The element is already part of the score.");
             return;        // Don't allow operation.
             }
 
       wrapped->setOwnership(Ownership::SCORE);
+      s->setScore(_score);
       s->setTrack(_track);
       s->setParent(_segment);
 
@@ -197,6 +216,7 @@ void Cursor::add(Element* wrapped)
             }
       else {
             switch (s->type()) {
+                  // To be added at measure level
                   case ElementType::MEASURE_NUMBER:
                   case ElementType::SPACER:
                   case ElementType::JUMP:
@@ -210,6 +230,7 @@ void Cursor::add(Element* wrapped)
                         break;
                         }
 
+                  // To be added at chord level
                   case ElementType::NOTE:
                   case ElementType::ARPEGGIO:
                   case ElementType::TREMOLO:
@@ -221,8 +242,10 @@ void Cursor::add(Element* wrapped)
                               Chord::addInternal(toChord(curElement), s);
                               }
                         break;
+                        break;
                         }
 
+                  // To be added at chord/rest level
                   case ElementType::LYRICS: {
                         Ms::Element* curElement = currentElement();
                         if (curElement->isChordRest()) {
@@ -232,7 +255,53 @@ void Cursor::add(Element* wrapped)
                         break;
                         }
 
-                  default:
+                  // To be added to a note
+                  case ElementType::SYMBOL:
+                  case ElementType::FINGERING:
+                  case ElementType::BEND:
+                  case ElementType::NOTEHEAD: {
+                        Ms::Element* curElement = currentElement();
+                        if (curElement->isChord()) {
+                              Ms::Chord* chord = toChord(curElement);
+                              Ms::Note* note = nullptr;
+                              if (chord->notes().size() > 0) {
+                                    // Get first note from chord to add element
+                                    note = chord->notes().front();
+                                    }
+                              if (note) {
+                                    Note::addInternal(note, s);
+                                    }
+                              }
+                        break;
+                        }
+
+                  // To be added to a segment (clef subtype)
+                  case ElementType::CLEF:
+                  case ElementType::AMBITUS: {
+                        Ms::Element* parent = nullptr;
+                        // Find backwards first measure containing a clef
+                        for (Ms::Measure* m = _segment->measure(); m != 0; m = m->prevMeasure()) {
+                              Ms::Segment* seg = m->findSegment(SegmentType::Clef | SegmentType::HeaderClef, m->tick());
+                                    if (seg != 0) {
+                                          parent = m->undoGetSegmentR(s->isAmbitus() ? SegmentType::Ambitus : seg->segmentType(), Fraction(0,1));
+                                          break;
+                                          }
+                              }
+                        if (parent && parent->isSegment()) {
+                              if (s->isClef()) {
+                                    Ms::Clef* clef = toClef(s);
+                                    if (clef->clefType() == Ms::ClefType::INVALID) {
+                                          clef->setClefType(Ms::ClefType::G);
+                                          }
+                                    }
+                              s->setParent(parent);
+                              s->setTrack(_track);
+                              _score->undoAddElement(s);
+                              }
+                        break;
+                        }
+
+                  default: // All others will be added to the current segment
                         _score->undoAddElement(s);
                         break;
                   }
@@ -245,9 +314,12 @@ void Cursor::add(Element* wrapped)
 ///   \details The duration of the added note equals to
 ///   what has been set by the previous setDuration() call.
 ///   \param pitch MIDI pitch of the added note.
+///   \param addToChord add note to the current chord
+///   instead of replacing it. This parameter is available
+///   since MuseScore 3.3.4.
 //---------------------------------------------------------
 
-void Cursor::addNote(int pitch)
+void Cursor::addNote(int pitch, bool addToChord)
       {
       if (!pitchIsValid(pitch)) {
             qWarning("Cursor::addNote: invalid pitch: %d", pitch);
@@ -256,7 +328,8 @@ void Cursor::addNote(int pitch)
       if (!_score->inputState().duration().isValid())
             setDuration(1, 4);
       NoteVal nval(pitch);
-      _score->addPitch(nval, false);
+      _score->addPitch(nval, addToChord);
+      _segment = _score->inputState().segment();
       }
 
 //---------------------------------------------------------
@@ -403,6 +476,19 @@ int Cursor::staffIdx() const
 int Cursor::voice() const
       {
       return _track % VOICES;
+      }
+
+//---------------------------------------------------------
+//   prevInTrack
+//    go to first segment before _segment which has notes / rests in _track
+//---------------------------------------------------------
+
+void Cursor::prevInTrack()
+      {
+      if (_segment)
+            _segment = _segment->prev1(_filter);
+      while (_segment && !_segment->element(_track))
+            _segment = _segment->prev1(_filter);
       }
 
 //---------------------------------------------------------

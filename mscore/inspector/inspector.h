@@ -16,8 +16,8 @@
 #include "inspectorBase.h"
 #include "inspectorElementBase.h"
 #include "inspectorTextBase.h"
-#include "ui_inspector_bend.h"
 #include "ui_inspector_break.h"
+#include "ui_inspector_sectionbreak.h"
 #include "ui_inspector_stafftypechange.h"
 #include "ui_inspector_vbox.h"
 #include "ui_inspector_tbox.h"
@@ -83,6 +83,18 @@ class InspectorBreak : public InspectorBase {
       };
 
 //---------------------------------------------------------
+//   InspectorSectionBreak
+//---------------------------------------------------------
+
+class InspectorSectionBreak : public InspectorBase {
+      Q_OBJECT
+      Ui::InspectorSectionBreak scb;
+
+   public:
+      InspectorSectionBreak(QWidget* parent);
+      };
+
+//---------------------------------------------------------
 //   InspectorStaffTypeChange
 //---------------------------------------------------------
 
@@ -92,6 +104,7 @@ class InspectorStaffTypeChange : public InspectorBase {
 
    public:
       InspectorStaffTypeChange(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -138,8 +151,12 @@ class InspectorArticulation : public InspectorElementBase {
       Q_OBJECT
       Ui::InspectorArticulation ar;
 
+   private slots:
+      void propertiesClicked();
+
    public:
       InspectorArticulation(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -152,6 +169,7 @@ class InspectorFermata : public InspectorElementBase {
 
    public:
       InspectorFermata(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -219,7 +237,6 @@ class InspectorClef : public InspectorElementBase {
 //   InspectorStem
 //---------------------------------------------------------
 
-
 class InspectorStem : public InspectorElementBase {
       Q_OBJECT
 
@@ -239,6 +256,9 @@ class InspectorTimeSig : public InspectorElementBase {
 
       Ui::InspectorSegment s;
       Ui::InspectorTimeSig t;
+
+   private slots:
+      void propertiesClicked();
 
    public:
       InspectorTimeSig(QWidget* parent);
@@ -284,22 +304,6 @@ class InspectorAccidental : public InspectorElementBase {
 
    public:
       InspectorAccidental(QWidget* parent);
-      };
-
-//---------------------------------------------------------
-//   InspectorBend
-//---------------------------------------------------------
-
-class InspectorBend : public InspectorElementBase {
-      Q_OBJECT
-
-      Ui::InspectorBend g;
-
-   private slots:
-      void propertiesClicked();
-
-   public:
-      InspectorBend(QWidget* parent);
       };
 
 //---------------------------------------------------------
@@ -369,8 +373,12 @@ class InspectorStaffText : public InspectorTextBase {
 
       Ui::InspectorStaffText s;
 
+   private slots:
+      void propertiesClicked();
+
    public:
       InspectorStaffText(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------

@@ -81,6 +81,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
       {
       Q_ASSERT(dst->isChordRestType());
 
+      std::vector<Harmony*> pastedHarmony;
       QList<Chord*> graceNotes;
       Beam* startingBeam = nullptr;
       Tuplet* tuplet = nullptr;
@@ -341,10 +342,15 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
 
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(SegmentType::ChordRest, tick);
-                              for (Element* el : seg->findAnnotations(ElementType::HARMONY, e.track(), e.track()))
-                                    undoRemoveElement(el);
+                              // remove pre-existing chords on this track
+                              // but be sure not to remove any we just added
+                              for (Element* el : seg->findAnnotations(ElementType::HARMONY, e.track(), e.track())) {
+                                    if (std::find(pastedHarmony.begin(), pastedHarmony.end(), el) == pastedHarmony.end())
+                                          undoRemoveElement(el);
+                                    }
                               harmony->setParent(seg);
                               undoAddElement(harmony);
+                              pastedHarmony.push_back(harmony);
                               }
                         else if (tag == "Dynamic"
                            || tag == "Symbol"
@@ -470,7 +476,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
             int endStaff = dstStaff + staves;
             if (endStaff > nstaves())
                   endStaff = nstaves();
-            //check and add truly invisible rests insted of gaps
+            //check and add truly invisible rests instead of gaps
             //TODO: look if this could be done different
             Measure* dstM = tick2measure(dstTick);
             Measure* endM = tick2measure(dstTick + tickLen);
@@ -977,7 +983,6 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   EditData ddata(view);
                   ddata.view        = view;
                   ddata.dropElement = nel;
-                  ddata.duration    = duration;
                   if (target->acceptDrop(ddata)) {
                         if (el->isNote()) {
                               // dropping a note replaces and invalidates the target,
@@ -1023,7 +1028,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   MScore::setError(NO_DEST);
                   return;
                   }
-            else if (cr->tuplet()) {
+            else if (cr->tuplet() && cr->tick() != cr->topTuplet()->tick()) {
                   MScore::setError(DEST_TUPLET);
                   return;
                   }
@@ -1054,10 +1059,6 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   }
             if (cr == 0) {
                   MScore::setError(NO_DEST);
-                  return;
-                  }
-            else if (cr->tuplet()) {
-                  MScore::setError(DEST_TUPLET);
                   return;
                   }
             else {
@@ -1091,7 +1092,6 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   EditData ddata(view);
                   ddata.view       = view;
                   ddata.dropElement    = nel;
-                  // ddata.duration   = duration;
                   target->drop(ddata);
                   if (_selection.element())
                         addRefresh(_selection.element()->abbox());

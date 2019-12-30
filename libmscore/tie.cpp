@@ -23,19 +23,6 @@ Note* Tie::editStartNote;
 Note* Tie::editEndNote;
 
 //---------------------------------------------------------
-//   updateGrips
-//    return grip rectangles in page coordinates
-//---------------------------------------------------------
-
-void TieSegment::updateGrips(EditData& ed) const
-      {
-      QPointF p(pagePos());
-      //p -= QPointF(0.0, system()->staff(staffIdx())->y());   // ??
-      for (int i = 0; i < int(Grip::GRIPS); ++i)
-            ed.grip[i].translate(_ups[i].p + _ups[i].off + p);
-      }
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -444,7 +431,7 @@ void Tie::slurPos(SlurPos* sp)
       // Outside: Tab: uses font size and may be asymmetric placed above/below line (frets ON or ABOVE line)
       //          Std: assumes notehead is 1 sp high, 1/2 sp above and 1/2 below line; add 1/4 sp to it
       // Inside:  Tab: 1/2 of Outside offset
-      //          Std: use a fixed pecentage of note width
+      //          Std: use a fixed percentage of note width
       qreal yOffOutside = useTablature
             ? (_up ? stt->fretBoxY() : stt->fretBoxY() + stt->fretBoxH()) * magS()
             : 0.75 * _spatium * __up;

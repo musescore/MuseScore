@@ -149,12 +149,12 @@
        <item>
         <layout class="QVBoxLayout" name="buttons">
          <item>
-          <widget class="QPushButton" name="newAllButton">
+          <widget class="QPushButton" name="allPartsButton">
            <property name="toolTip">
-            <string>Generate new part for each instrument</string>
+            <string>New part for each instrument</string>
            </property>
            <property name="text">
-            <string>Generate</string>
+            <string>All Parts</string>
            </property>
           </widget>
          </item>
@@ -172,9 +172,12 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="newButton">
+          <widget class="QPushButton" name="singlePartButton">
+           <property name="toolTip">
+            <string>New single part for selected voice(s)/instrument(s)</string>
+           </property>
            <property name="text">
-            <string>New</string>
+            <string>Single Part</string>
            </property>
           </widget>
          </item>
@@ -389,8 +392,8 @@
   <tabstop>excerptList</tabstop>
   <tabstop>moveUpButton</tabstop>
   <tabstop>moveDownButton</tabstop>
-  <tabstop>newAllButton</tabstop>
-  <tabstop>newButton</tabstop>
+  <tabstop>allPartsButton</tabstop>
+  <tabstop>singlePartButton</tabstop>
   <tabstop>deleteButton</tabstop>
   <tabstop>title</tabstop>
   <tabstop>instrumentList</tabstop>

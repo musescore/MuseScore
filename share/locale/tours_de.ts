@@ -9,7 +9,7 @@
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation>Mit der Werkzeugleiste &quot;Wiedergabe&quot; können Sie die Wiedergabe Ihrer Partitur steuern und verschiedene Einstellungen zur Wiedergabe vornehmen. </translation>
+        <translation>Mit der Werkzeugleiste &quot;Wiedergabe&quot; kann man die Wiedergabe der Partitur steuern und verschiedene Einstellungen zur Wiedergabe vornehmen. </translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
@@ -60,7 +60,7 @@ Der Arbeitsplatz &quot;Erweitert&quot; enthält mehr Optionen, als der Arbeitspl
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation>Um etwas aus einer Palette in eine Notendatei einzufügen, wählen Sie zuerst ein Element oder einen Bereich in Ihrer Partitur, dann doppelklicken Sie auf das Objekt in der Palette, um es zu dem gewählten Element hinzuzufügen.
+        <translation>Um etwas aus einer Palette in eine Partitur einzufügen, wählen Sie zuerst ein Element oder einen Bereich in Ihrer Partitur, dann doppelklicken Sie auf das Objekt in der Palette, um es zu dem gewählten Element hinzuzufügen.
 Ein Objekt aus der Palette kann auch mittels &quot;Drag&amp;Drop&quot; zu einem Element in Ihrer Partitur hinzugefügt werden.</translation>
     </message>
     <message>
@@ -105,15 +105,6 @@ Für eine Punktierung der Note klicken Sie auf das entsprechende Symbol oder dr�
         <comment>navigate-tour</comment>
         <translation>MuseScore bietet mehrere Möglichkeiten durch Ihre Partitur zu navigieren.
  Klicken Sie auf &quot;Weiter&quot;, um mehr zu erfahren.</translation>
-    </message>
-    <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation>Die Navigationstasten auf Ihrer Tastatur wie Bild rauf, Bild runter, Pos 1 und Ende funktionieren so wie in anderen Anwendungen auch,
-    um sich zwischen Seiten zu bewegen.
-    Tastaturen, denen diese Tasten fehlen, bieten meistens Alternativen wie &quot;Fn&quot;+&quot;Hoch/Runter/Links/Rechts&quot;.</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -161,7 +152,7 @@ Für eine Punktierung der Note klicken Sie auf das entsprechende Symbol oder dr�
     In many cases, this means that no further adjustments will be required at all.</source>
         <comment>autoplace-tour</comment>
         <translation>Autoplatzierung setzt die meisten Elemente nach den allgemeinen üblichen Regeln der Musiknotation,
-    wie durch verschieben der Tempo Markierungen über anderen Text oder das verkürzen von (De-)Crescendo Gabeln, um Dynamikbezeichnungen aus dem Wege zu gehen.
+    wie durch verschieben der Tempo Markierungen über anderen Text oder das verkürzen von Crescendo/Diminuendo Gabeln, um Dynamikbezeichnungen aus dem Wege zu gehen.
     In vielen Fällen bedeutet dies, dass keine weiteren Justierungen mehr nötig sind.</translation>
     </message>
     <message>
@@ -213,39 +204,6 @@ Sie können an eine beliebige Stelle klicken, um an die entsprechende Position i
     Klicken Sie auf &quot;Weiter&quot;, um mehr zu erfahren.</translation>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation>Um ein einzelnes Element auszuwählen, klicken Sie es an.
-    Es wird hervorgehoben, um anzuzeigen, dass es aus ausgewählt ist.
-    Sie können die &quot;Links&quot; und &quot;Rechts&quot; Pfeiltasten verwenden, um eine andere Note oder Pause Ihrer Partitur auszuwählen.
-    Tipp: Wenn Sie die &quot;Alt&quot; Taste (&quot;Option&quot; bei macOS) zusammen mit den Pfeiltasten drücken können Sie ebenfalls andere Elemente auswählen,
-    und dabei auch auf und ab von Notenzeile zu Notenzeile gehen.</translation>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation>Eine Bereichsauswahl schließt alles zwischen einem Punkt und einen anderen ein, über eine oder mehrere Notenzeilen.
-    Er wird durch ein blaues Rechteck angezeigt welches den gesamten Bereich überspannt.
-    Für eine Bereichsauswahl klicken Sie auf die erste Note, Pause oder Takt der in der Auswahl sein soll und dann &quot;Umschalt&quot;+klick auf die Letzte.
-    Sie können den Bereich auch mit den &quot;Recht/Links&quot; Tasten verändern, indem Sie gleichzeitig &quot;Umschalt&quot; gedrückt halten.</translation>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation>Eine andere Art der Auswahl ist es bei gedrückter &quot;Umschalt&quot; Taste zu ziehen.
-    Wenn diese Auswahl Noten enthält, wird es eine Bereichsauswahl,
-    sonst eine Listenauswahl.</translation>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Schließlich erlaubt der Auswahlfilter (zu finden im Menü &quot;Ansicht&quot;) es, bestimmte Elemente von der Bereichsauswahl auszuschießen.</translation>
@@ -265,6 +223,15 @@ Sie können an eine beliebige Stelle klicken, um an die entsprechende Position i
         <comment>navigate-tour</comment>
         <translation>Die schnellste Art nach oben oder und zu scrollen, ist es das Mausrad oder die entsprechende Geste zu verwenden (zum Beispiel 2-Finger wischen).
     Um horizontal zu scrollen, zusätzlich zum Mausrad bzw. der Geste &quot;Umschalt&quot; drücken.</translation>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
+        <comment>navigate-tour</comment>
+        <translation>Die Navigationstasten auf Ihrer Tastatur wie &quot;Bild rauf&quot;, &quot;Bild runter&quot;, &quot;Pos 1&quot; und &quot;Ende&quot; funktionieren so wie in anderen Anwendungen auch,
+    um sich zwischen Seiten zu bewegen.
+    Tastaturen, denen diese Tasten fehlen, bieten meistens Alternativen wie &quot;Fn&quot;+&quot;Hoch/Runter/Links/Rechts&quot;.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
@@ -298,6 +265,19 @@ oder klicken auf eines der Symbole.</translation>
         <translation>Um eine Triole oder andere N-Tole zu erstellen, wählen Sie den Notenwert der Gesamtdauer und drücken anschließend &quot;Strg&quot;+Zahl oder das Menü &quot;Hinzufügen &gt; N-Tole&quot;.</translation>
     </message>
     <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
+        <translation>Um ein einzelnes Element auszuwählen, klicken Sie es an.
+    Es wird hervorgehoben, um anzuzeigen, dass es aus ausgewählt ist.
+    Sie können die &quot;Links&quot; und &quot;Rechts&quot; Pfeiltasten verwenden, um eine andere Note oder Pause Ihrer Partitur auszuwählen.
+    Tipp: Wenn Sie die &quot;Alt&quot; Taste (&quot;Option&quot; bei macOS) zusammen mit den Pfeiltasten drücken können Sie ebenfalls andere Elemente auswählen,
+    und dabei auch auf und ab von Notenzeile zu Notenzeile gehen.</translation>
+    </message>
+    <message>
         <source>A list selection is a combination of single selections.
     Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
@@ -309,13 +289,33 @@ oder klicken auf eines der Symbole.</translation>
     und dann auf eine der &quot;Auswahl&quot; Optionen des Kontextmenüs.</translation>
     </message>
     <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation>Eine Bereichsauswahl schließt alles zwischen einem Punkt und einen anderen ein, über eine oder mehrere Notenzeilen.
+    Er wird durch ein blaues Rechteck angezeigt welches den gesamten Bereich überspannt.
+    Für eine Bereichsauswahl klicken Sie auf die erste Note, Pause oder Takt der in der Auswahl sein soll und dann &quot;Umschalt&quot;+klick auf die Letzte.
+    Sie können den Bereich auch mit den &quot;Recht/Links&quot; Tasten verändern, indem Sie gleichzeitig &quot;Umschalt&quot; gedrückt halten.</translation>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation>Eine andere Art der Auswahl ist es bei gedrückter &quot;Umschalt&quot; Taste zu ziehen.
+    Wenn diese Auswahl Noten enthält, wird es eine Bereichsauswahl,
+    sonst eine Listenauswahl.</translation>
+    </message>
+    <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
         <translation>Die meisten Elemente der Linienpalette überspannen einen Bereich von einen Startelement zu einem Endelement.
 

@@ -48,13 +48,6 @@ void Preferences::init(bool storeInMemoryOnly)
       bool checkExtensionsUpdateStartup = false;
 #endif
 
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-      // use system native file dialogs
-      // Qt file dialog is very slow on Windows and Mac
-      bool nativeDialogs           = true;
-#else
-      bool nativeDialogs           = false;    // don't use system native file dialogs
-#endif
       bool defaultUsePortAudio = false;
       bool defaultUsePulseAudio = false;
       bool defaultUseJackAudio = false;
@@ -99,18 +92,21 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_PLAYBACK_PLAYREPEATS,                        new BoolPreference(true)},
             {PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY,              new BoolPreference(true)},
             {PREF_APP_USESINGLEPALETTE,                            new BoolPreference(false)},
+            {PREF_APP_PALETTESCALE,                                new DoublePreference(1.0)},
             {PREF_APP_STARTUP_FIRSTSTART,                          new BoolPreference(true)},
             {PREF_APP_STARTUP_SESSIONSTART,                        new EnumPreference(QVariant::fromValue(SessionStart::SCORE), false)},
             {PREF_APP_STARTUP_STARTSCORE,                          new StringPreference(":/data/My_First_Score.mscx", false)},
             {PREF_UI_APP_STARTUP_SHOWTOURS,                        new BoolPreference(true)},
             {PREF_APP_WORKSPACE,                                   new StringPreference("Basic", false)},
+            {PREF_APP_TELEMETRY_ALLOWED,                           new BoolPreference(false, false)},
+            {PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED,          new StringPreference("", false)},
             {PREF_EXPORT_AUDIO_NORMALIZE,                          new BoolPreference(true)},
             {PREF_EXPORT_AUDIO_SAMPLERATE,                         new IntPreference(44100, false)},
             {PREF_EXPORT_MP3_BITRATE,                              new IntPreference(128, false)},
             {PREF_EXPORT_MUSICXML_EXPORTBREAKS,                    new EnumPreference(QVariant::fromValue(MusicxmlExportBreaks::ALL), false)},
             {PREF_EXPORT_MUSICXML_EXPORTLAYOUT,                    new BoolPreference(true, false)},
             {PREF_EXPORT_PDF_DPI,                                  new IntPreference(300, false)},
-            {PREF_EXPORT_PNG_RESOLUTION,                           new DoublePreference(300.0, false)},
+            {PREF_EXPORT_PNG_RESOLUTION,                           new DoublePreference(DPI, false)},
             {PREF_EXPORT_PNG_USETRANSPARENCY,                      new BoolPreference(true, false)},
             {PREF_IMPORT_GUITARPRO_CHARSET,                        new StringPreference("UTF-8", false)},
             {PREF_IMPORT_MUSICXML_IMPORTBREAKS,                    new BoolPreference(true, false)},
@@ -174,16 +170,16 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_APP_RASTER_HORIZONTAL,                        new IntPreference(2)},
             {PREF_UI_APP_RASTER_VERTICAL,                          new IntPreference(2)},
             {PREF_UI_APP_SHOWSTATUSBAR,                            new BoolPreference(true)},
-            {PREF_UI_APP_USENATIVEDIALOGS,                         new BoolPreference(nativeDialogs)},
-            {PREF_UI_PIANO_HIGHLIGHTCOLOR,                         new ColorPreference(QColor("#1259d0"))},
-            {PREF_UI_SCORE_NOTE_DROPCOLOR,                         new ColorPreference(QColor("#1778db"))},
+            {PREF_UI_APP_USENATIVEDIALOGS,                         new BoolPreference(true)},
+            {PREF_UI_PIANO_HIGHLIGHTCOLOR,                         new ColorPreference(QColor("#0065BF"))},
+            {PREF_UI_SCORE_NOTE_DROPCOLOR,                         new ColorPreference(QColor("#0065BF"))},
             {PREF_UI_SCORE_DEFAULTCOLOR,                           new ColorPreference(QColor("#000000"))},
             {PREF_UI_SCORE_FRAMEMARGINCOLOR,                       new ColorPreference(QColor("#A0A0A4"))},
             {PREF_UI_SCORE_LAYOUTBREAKCOLOR,                       new ColorPreference(QColor("#A0A0A4"))},
-            {PREF_UI_SCORE_VOICE1_COLOR,                           new ColorPreference(QColor("#2E86AB"))},
-            {PREF_UI_SCORE_VOICE2_COLOR,                           new ColorPreference(QColor("#306B34"))},
-            {PREF_UI_SCORE_VOICE3_COLOR,                           new ColorPreference(QColor("#C73E1D"))},
-            {PREF_UI_SCORE_VOICE4_COLOR,                           new ColorPreference(QColor("#8D1E4B"))},
+            {PREF_UI_SCORE_VOICE1_COLOR,                           new ColorPreference(QColor("#0065BF"))},
+            {PREF_UI_SCORE_VOICE2_COLOR,                           new ColorPreference(QColor("#007F00"))},
+            {PREF_UI_SCORE_VOICE3_COLOR,                           new ColorPreference(QColor("#C53F00"))},
+            {PREF_UI_SCORE_VOICE4_COLOR,                           new ColorPreference(QColor("#C31989"))},
             {PREF_UI_THEME_ICONWIDTH,                              new IntPreference(28, false)},
             {PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)},
             {PREF_UI_THEME_FONTFAMILY,                             new StringPreference(QApplication::font().family(), false) },
@@ -204,14 +200,16 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_PIANOROLL_LIGHT_BG_KEY_BLACK_COLOR,           new ColorPreference(QColor("#e6e6e6"))},
             {PREF_UI_PIANOROLL_LIGHT_BG_GRIDLINE_COLOR,            new ColorPreference(QColor("#a2a2a6"))},
             {PREF_UI_PIANOROLL_LIGHT_BG_TEXT_COLOR,                new ColorPreference(QColor("#111111"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_ON,      new ColorPreference(QColor("#205E78"))},
+            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_ON,      new ColorPreference(QColor("#7F7F7F"))},
             {PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_OFF,     new ColorPreference(QColor("#a0a0a0"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_ON,     new ColorPreference(QColor("#69A1B9"))},
+            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_ON,     new ColorPreference(QColor("#7F7F7F"))},
             {PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_OFF,    new ColorPreference(QColor("#a0a0a0"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON,       new ColorPreference(QColor("#43C1F7"))},
+            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON,       new ColorPreference(QColor("#36B2FF"))},
             {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_OFF,      new ColorPreference(QColor("#eff0f1"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON,      new ColorPreference(QColor("#205E78"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF,     new ColorPreference(QColor("#3b3f45"))}
+            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON,      new ColorPreference(QColor("#0065BF"))},
+            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF,     new ColorPreference(QColor("#3b3f45"))},
+            {PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_LIGHT,            new ColorPreference(QColor("#0066BF"))},
+            {PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK,             new ColorPreference(QColor("#36B2FF"))}
       });
 
       _initialized = true;

@@ -26,6 +26,7 @@ import "utils.js" as Utils
 
 ListView {
     id: paletteTree
+    Accessible.role: Accessible.Tree // makes NVDA say "TreeView"
 
     keyNavigationEnabled: true
     activeFocusOnTab: true
@@ -39,6 +40,8 @@ ListView {
     preferredHighlightBegin: Math.min(48, Math.floor(0.1 * height))
     preferredHighlightEnd: Math.ceil(height - preferredHighlightBegin)
     highlightRangeMode: itemDragged ? ListView.ApplyRange : ListView.NoHighlightRange
+
+    property Item currentTreeItem: currentItem // most recently focused item at any level of the tree
 
     property string filter: ""
     onFilterChanged: {
@@ -149,6 +152,7 @@ ListView {
         Component.onCompleted: contentItem.color = Qt.binding(function() { return scrollbar.pressed ? baseColor : "#bdbebf"; })
     }
 
+    boundsBehavior: Flickable.StopAtBounds
     maximumFlickVelocity: 1500
 
     PlaceholderManager {
@@ -175,6 +179,9 @@ ListView {
             currentItem.forceActiveFocus();
     }
 
+    // set highlight color for selected palette depending on using light or dark mode
+    readonly property color highlightColor: globalStyle.window.hsvValue > 0.5 ? globalStyle.button : "#33EFF0F1"
+
     model: DelegateModel {
         id: paletteTreeDelegateModel
         model: paletteTree.paletteModel
@@ -185,6 +192,11 @@ ListView {
             bottomPadding: expanded ? 4 : 0
             property int rowIndex: index
             property var modelIndex: paletteTree.model.modelIndex(index, 0)
+
+            onActiveFocusChanged: {
+                if (activeFocus)
+                    paletteTree.currentTreeItem = this;
+            }
 
             Component.onCompleted: {
                 const w = paletteHeader.implicitWidth + leftPadding + rightPadding;
@@ -222,7 +234,7 @@ ListView {
             background: Rectangle {
                 visible: !control.Drag.active
                 z: -1
-                color: control.selected ? globalStyle.highlight: (control.highlighted ? Qt.lighter(globalStyle.button, 1.2) : (control.down ? globalStyle.button : "transparent"))
+                color: control.selected ? paletteTree.highlightColor : (control.highlighted ? Qt.lighter(globalStyle.button, 1.2) : (control.down ? globalStyle.button : "transparent"))
             }
 
             highlighted: (activeFocus && !selected) || DelegateModel.isUnresolved
@@ -236,23 +248,35 @@ ListView {
             property size cellSize: model.gridSize
             property bool drawGrid: model.drawGrid
 
-            activeFocusOnTab: true
+            activeFocusOnTab: this === paletteTree.currentTreeItem
 
             function hidePalette() {
                 paletteTree.expandedPopupIndex = null;
                 paletteTree.paletteController.remove(modelIndex);
             }
 
-            Keys.onRightPressed: {
-                if (expanded)
-                    mainPalette.focus = true;
-                else
-                    toggleExpand();
-            }
-            Keys.onLeftPressed: {
-                if (expanded && !mainPalette.focus)
-                    toggleExpand();
-                focus = true;
+            Keys.onPressed: {
+                switch (event.key) {
+                    case Qt.Key_Right:
+                        if (expanded)
+                            mainPalette.focus = true;
+                        else
+                            toggleExpand();
+                        break;
+                    case Qt.Key_Left:
+                        if (expanded && !mainPalette.focus)
+                            toggleExpand();
+                        focus = true;
+                        break;
+                    case Qt.Key_Space:
+                    case Qt.Key_Enter:
+                    case Qt.Key_Return:
+                        toggleExpand();
+                        break;
+                    default:
+                        return; // don't accept event
+                }
+                event.accepted = true;
             }
 
             text: model.display
@@ -351,6 +375,7 @@ ListView {
                     width: parent.width
                     opacity: enabled ? 1 : 0.3
                     expanded: control.expanded
+                    hovered: control.hovered
                     text: control.text
                     hidePaletteElementVisible: {
                         return !control.selected && control.expanded

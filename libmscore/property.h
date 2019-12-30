@@ -341,6 +341,9 @@ enum class Pid {
       TREMOLO_PLACEMENT,
       HARMONY_TYPE,
 
+      START_WITH_LONG_NAMES,
+      START_WITH_MEASURE_ONE,
+
       END
       };
 

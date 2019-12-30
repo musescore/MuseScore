@@ -417,14 +417,16 @@ void Image::endEditDrag(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Image::updateGrips(EditData& ed) const
+std::vector<QPointF> Image::gripsPositions(const EditData&) const
       {
       QRectF r(pageBoundingRect());
-      ed.grip[0].translate(QPointF(r.x() + r.width(), r.y() + r.height() * .5));
-      ed.grip[1].translate(QPointF(r.x() + r.width() * .5, r.y() + r.height()));
+      return {
+            QPointF(r.x() + r.width(), r.y() + r.height() * .5),
+            QPointF(r.x() + r.width() * .5, r.y() + r.height())
+            };
       }
 
 //---------------------------------------------------------
@@ -566,17 +568,5 @@ QVariant Image::propertyDefault(Pid id) const
                   return Element::propertyDefault(id);
             }
       }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Image::startEdit(EditData& ed)
-      {
-      Element::startEdit(ed);
-      ed.grips   = 2;
-      ed.curGrip = Grip(1);
-      }
-
 }
 

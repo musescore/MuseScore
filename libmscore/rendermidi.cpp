@@ -507,8 +507,10 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
                   int channel = instr->channel(chord->upNote()->subchannel())->channel();
                   events->registerChannel(channel);
 
-                  for (Articulation* a : chord->articulations())
-                        instr->updateVelocity(&velocity,channel, a->articulationName());
+                  for (Articulation* a : chord->articulations()) {
+                        if (a->playArticulation())
+                              instr->updateVelocity(&velocity,channel, a->articulationName());
+                        }
 
                   if ( !graceNotesMerged(chord))
                       for (Chord* c : chord->graceNotesBefore())
@@ -867,10 +869,16 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                                     singleNoteDynamics = false;
                               }
 
-                        // Check for articulations
+                        // Check for articulations to be rendered for playback
                         bool hasArticulations = false;
-                        if (chord)
-                              hasArticulations = chord->articulations().count() > 0;
+                        if (chord) {
+                              for (const Articulation* a : chord->articulations()) {
+                                    if (a->playArticulation()) {
+                                          hasArticulations = true;
+                                          break;
+                                          }
+                                    }
+                              }
 
                         //
                         // Add CC events
@@ -879,6 +887,8 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                         if (singleNoteDynamics || hasArticulations || hasChangingDynamic) {
                               if (chord != 0 && hasArticulations) {
                                     for (Articulation* a : chord->articulations()) {
+                                          if (!a->playArticulation())
+                                                continue;
                                           if (velocityMiddle == -1)
                                                 velocityMiddle = velocityStart;
                                           instr->updateVelocity(&velocityStart, channel, a->articulationName());
@@ -939,8 +949,10 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                         } // if instr->singleNoteDynamics()
                   else {
                         if (chord != 0) {
-                              for (Articulation* a : chord->articulations())
-                                    instr->updateVelocity(&velocity, channel, a->articulationName());
+                              for (Articulation* a : chord->articulations()) {
+                                    if (a->playArticulation())
+                                          instr->updateVelocity(&velocity, channel, a->articulationName());
+                                    }
                               }
                         // Add a single expression value to match the velocity, since this instrument should
                         // not use single note dynamics.
@@ -1644,7 +1656,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       Chord *chordR = noteR->chord();
       int epitchL = noteL->epitch();
       Fraction tickL = chordL->tick();
-      // we canot use staffL = chord->staff() because that won't correspond to the noteL->line()
+      // we cannot use staffL = chord->staff() because that won't correspond to the noteL->line()
       //   in the case the user has pressed Shift-Cmd->Up or Shift-Cmd-Down.
       //   Therefore we have to take staffMove() into account using vStaffIdx().
       Staff * staffL = noteL->score()->staff(chordL->vStaffIdx());

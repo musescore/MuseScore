@@ -39,32 +39,67 @@ namespace Ms {
 
 bool ScoreView::event(QEvent* event)
       {
-      if (event->type() == QEvent::KeyPress && editMode()) {
-            QKeyEvent* ke = static_cast<QKeyEvent*>(event);
-            if (ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Backtab) {
-                  if (editData.element->isTextBase())
+      switch (event->type()) {
+            case QEvent::KeyPress: {
+                  QKeyEvent* ke = static_cast<QKeyEvent*>(event);
+                  const int key = ke->key();
+                  if (key != Qt::Key_Tab && key != Qt::Key_Backtab)
+                        break;
+
+                  if (textEditMode()) {
+                        // block Tab/Backtab in text editing mode
                         return true;
-                  if (ke->key() == Qt::Key_Tab)
-                        editData.element->nextGrip(editData);
-                  else
-                        editData.element->prevGrip(editData);
-                  updateGrips();
-                  _score->update();
-                  return true;
+                        }
+
+                  if (editMode() || editData.grips) {
+                        if (ke->key() == Qt::Key_Tab)
+                              editData.element->nextGrip(editData);
+                        else
+                              editData.element->prevGrip(editData);
+                        updateGrips();
+                        _score->update();
+                        return true;
+                        }
                   }
+                  break;
+            case QEvent::ShortcutOverride: {
+                  QKeyEvent* ke = static_cast<QKeyEvent*>(event);
+                  switch (ke->key()) {
+                        case Qt::Key_Left:
+                        case Qt::Key_Right:
+                        case Qt::Key_Up:
+                        case Qt::Key_Down: {
+                              if (!editData.grips)
+                                    break;
+                              const auto m = ke->modifiers();
+                              // KeypadModifier is necessary on MacOS as arrow keys seem to always
+                              // trigger that modifier there. However it would probably be appropriate
+                              // to allow it on other systems too.
+                              constexpr auto allowedModifiers = Qt::ShiftModifier | Qt::KeypadModifier;
+                              if ((m & ~allowedModifiers) == 0) {
+                                    ke->accept();
+                                    return true;
+                                    }
+                              }
+                              break;
+                        default:
+                              break;
+                        }
+                  }
+                  break;
+            case QEvent::Gesture:
+                  return gestureEvent(static_cast<QGestureEvent*>(event));
+            case QEvent::MouseButtonPress:
+                  if (qApp->focusWidget() != this) {
+                        QMouseEvent* me = static_cast<QMouseEvent*>(event);
+                        if (me->button() == Qt::LeftButton)
+                              this->setFocus();
+                        }
+                  break;
+            default:
+                  break;
             }
-//      else if (event->type() == CloneDrag) {
-//TODO:drag            Element* e = static_cast<CloneEvent*>(event)->element();
-//            cloneElement(e);
-//            }
-      else if (event->type() == QEvent::Gesture) {
-            return gestureEvent(static_cast<QGestureEvent*>(event));
-            }
-      else if (event->type() == QEvent::MouseButtonPress && qApp->focusWidget() != this) {
-            QMouseEvent* me = static_cast<QMouseEvent*>(event);
-            if (me->button() == Qt::LeftButton)
-                  this->setFocus();
-            }
+
       return QWidget::event(event);
       }
 
@@ -207,6 +242,8 @@ void ScoreView::focusInEvent(QFocusEvent* event)
                   }
             focusFrame->setWidget(static_cast<QWidget*>(this));
             }
+      if (state == ViewState::NORMAL)
+            updateEditElement();
       QWidget::focusInEvent(event);
       }
 
@@ -216,6 +253,8 @@ void ScoreView::focusInEvent(QFocusEvent* event)
 
 void ScoreView::focusOutEvent(QFocusEvent* event)
       {
+      if (state == ViewState::NORMAL)
+            setEditElement(nullptr);
       if (focusFrame)
             focusFrame->setWidget(0);
       QWidget::focusOutEvent(event);
@@ -245,9 +284,9 @@ bool ScoreView::startTextEditingOnMouseRelease(QMouseEvent* mouseEvent)
             // mouse up INSIDE textBase - set priming
             textBase->setPrimed(true);
             return false;
-      }
+            }
 
-      //mouse up INSIDE primed textBase - start editing
+      // mouse up INSIDE primed textBase - start editing
       startEditMode(textBase);
       setCursor(QCursor(Qt::IBeamCursor));
       textBase->setPrimed(false);
@@ -270,6 +309,10 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                   changeState(ViewState::NORMAL);
                   break;
             case ViewState::DRAG_EDIT:
+                  if (editData.element && editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit) {
+                        changeState(ViewState::NORMAL);
+                        break;
+                        }
                   changeState(ViewState::EDIT);
                   break;
             case ViewState::FOTO_DRAG:
@@ -281,11 +324,14 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                   if (startTextEditingOnMouseRelease(mouseEvent))
                         break;
 
-                  if (editData.startMove == editData.pos && clickOffElement) {
-                        _score->deselectAll();
+                  if (modifySelection) {
+                        _score->select(elementToSelect);
+                        modifySelection = false;
+                        elementToSelect = nullptr;
                         _score->update();
                         mscore->endCmd();
                         }
+                  break;
             case ViewState::EDIT:
             case ViewState::NOTE_ENTRY:
             case ViewState::PLAY:
@@ -306,6 +352,8 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 void ScoreView::mousePressEventNormal(QMouseEvent* ev)
       {
       _score->masterScore()->cmdState().reset();      // DEBUG: should not be necessary
+      modifySelection = false;
+      elementToSelect = nullptr;
 
       Qt::KeyboardModifiers keyState = ev->modifiers();
       SelectType st = SelectType::SINGLE;
@@ -354,8 +402,14 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                                     }
                               }
                         }
-                  if (e)
-                        e->score()->select(e, st, -1);
+                  if (e) {
+                        if (!e->selected())
+                              e->score()->select(e, st, -1);
+                        else if (st != SelectType::ADD) {
+                              modifySelection = true;
+                              elementToSelect = e;
+                              }
+                        }
                   }
             if (e && e->isNote()) {
                   e->score()->updateCapo();
@@ -365,7 +419,6 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                   _score = e->score();
                   _score->setUpdateAll();
                   }
-            clickOffElement = false;
             }
       else {
             // special case: check if measure is selected
@@ -381,17 +434,12 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                         //TourHandler::startTour("select-tour");
                         _score->select(m, st, staffIdx);
                         _score->setUpdateAll();
-                        clickOffElement = false;
                         }
-                  else if (st == SelectType::ADD)
-                        clickOffElement = false;
-                  else
-                        clickOffElement = true;
+                  else if (st != SelectType::ADD)
+                        modifySelection = true;
                   }
-            else if (st == SelectType::ADD)
-                  clickOffElement = false;
-            else
-                  clickOffElement = true;
+            else if (st != SelectType::ADD)
+                  modifySelection = true;
             }
       _score->update();
       mscore->endCmd();
@@ -405,9 +453,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       {
 
       if (tripleClickPending) {
-            if (state == ViewState::EDIT
-                && editData.element
-                && editData.element->isTextBase()) {
+            if (textEditMode()) {
                   TextBase* textBase = toTextBase(editData.element);
                   textBase->multiClickSelect(editData, MultiClick::Triple);
                   mscore->textTools()->updateTools(editData);
@@ -424,8 +470,36 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       editData.buttons   = ev->buttons();
       editData.modifiers = qApp->keyboardModifiers();
 
+      bool gripFound = false;
+      if (editData.element && editData.grips && ev->button() == Qt::LeftButton) {
+            switch (state) {
+                  case ViewState::NORMAL:
+                  case ViewState::EDIT:
+                  case ViewState::FOTO: {
+                        const qreal a = editData.grip[0].width() * 0.5;
+                        for (int i = 0; i < editData.grips; ++i) {
+                              if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
+                                    editData.curGrip = Grip(i);
+                                    updateGrips();
+                                    score()->update();
+                                    gripFound = true;
+                                    break;
+                                    }
+                              }
+
+                        if (!gripFound)
+                              editData.curGrip = Grip::NO_GRIP;
+                        }
+                        break;
+                  default:
+                        break;
+                  }
+            }
+
       switch (state) {
-            case ViewState::NORMAL:
+            case ViewState::NORMAL: {
+                  if (gripFound)
+                        break;
                   if (ev->button() == Qt::RightButton)   // context menu?
                         break;
 
@@ -437,27 +511,17 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                         toTextBase(editData.element)->setPrimed(false);
                         }
 
-                  editData.element = elementNear(editData.startMove);
+                  setEditElement(elementNear(editData.startMove));
                   mousePressEventNormal(ev);
+                  }
                   break;
 
             case ViewState::FOTO: {
                   if (ev->buttons() & Qt::RightButton)
                         break;
-                  editData.element = _foto;
-                  bool gripClicked = false;
-                  qreal a = editData.grip[0].width() * 0.5;
-                  for (int i = 0; i < editData.grips; ++i) {
-                        if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
-                              editData.curGrip = Grip(i);
-                              updateGrips();
-                              gripClicked = true;
-                              score()->update();
-                              break;
-                              }
-                        }
+                  setEditElement(_foto);
 
-                  if (gripClicked)
+                  if (gripFound)
                         changeState(ViewState::FOTO_DRAG_EDIT);
                   else if (_foto->canvasBoundingRect().contains(editData.startMove))
                         changeState(ViewState::FOTO_DRAG_OBJECT);
@@ -484,41 +548,20 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   break;
 
             case ViewState::EDIT: {
-                  if (editData.grips) {
-                        qreal a = editData.grip[0].width() * 0.5;
-                        bool gripFound = false;
-                        for (int i = 0; i < editData.grips; ++i) {
-                              if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
-                                    editData.curGrip = Grip(i);
-                                    updateGrips();
-                                    score()->update();
-                                    gripFound = true;
-                                    break;
-                                    }
-                              }
-                        if (!gripFound) {
-                              changeState(ViewState::NORMAL);
-                              // changeState may trigger layout and destroy some elements
-                              // so we should search elementNear after changeState.
-                              editData.element = elementNear(editData.startMove);
-                              mousePressEventNormal(ev);
-                              break;
-                              }
+                  if (gripFound)
+                        break;
+                  if (!editData.element->canvasBoundingRect().contains(editData.startMove)) {
+                        changeState(ViewState::NORMAL);
+                        // changeState may trigger layout and destroy some elements
+                        // so we should search elementNear after changeState.
+                        setEditElement(elementNear(editData.startMove));
+                        mousePressEventNormal(ev);
                         }
                   else {
-                        if (!editData.element->canvasBoundingRect().contains(editData.startMove)) {
-                              changeState(ViewState::NORMAL);
-                              // changeState may trigger layout and destroy some elements
-                              // so we should search elementNear after changeState.
-                              editData.element = elementNear(editData.startMove);
-                              mousePressEventNormal(ev);
-                              }
-                        else {
-                              editData.element->mousePress(editData);
-                              score()->update();
-                              if (editData.element->isTextBase() && mscore->textTools())
-                                    mscore->textTools()->updateTools(editData);
-                              }
+                        editData.element->mousePress(editData);
+                        score()->update();
+                        if (editData.element->isTextBase() && mscore->textTools())
+                              mscore->textTools()->updateTools(editData);
                         }
                   }
                   break;
@@ -566,6 +609,7 @@ void ScoreView::adjustCursorForTextEditing(QMouseEvent* mouseEvent)
 
 void ScoreView::mouseMoveEvent(QMouseEvent* me)
       {
+      modifySelection = false;
       adjustCursorForTextEditing(me);
 
       if (state != ViewState::NOTE_ENTRY && editData.buttons == Qt::NoButton)
@@ -578,12 +622,25 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
             case ViewState::NORMAL:
                   if (!drag)
                         return;
-                  if (!editData.element && (me->modifiers() & Qt::ShiftModifier))
+                  if (!editData.element && (me->modifiers() & Qt::ShiftModifier)) {
                         changeState(ViewState::LASSO);
-                  else if (editData.element && editData.element->isMovable())
-                        changeState(ViewState::DRAG_OBJECT);
-                  else
-                        changeState(ViewState::DRAG);
+                        break;
+                        }
+                  if (editData.element) {
+                        if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit && editData.curGrip != Grip::NO_GRIP) {
+                              score()->startCmd();
+                              editData.element->startEditDrag(editData);
+                              changeState(ViewState::DRAG_EDIT);
+                              break;
+                              }
+                        if (editData.element->isMovable()) {
+                              if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit)
+                                    endEdit();
+                              changeState(ViewState::DRAG_OBJECT);
+                              break;
+                              }
+                        }
+                  changeState(ViewState::DRAG);
                   break;
 
             case ViewState::NOTE_ENTRY: {
@@ -637,7 +694,11 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
       update();
       }
 
-void ScoreView:: tripleClickTimeOut()
+//---------------------------------------------------------
+//   tripleClickTimeOut
+//---------------------------------------------------------
+
+void ScoreView::tripleClickTimeOut()
       {
       tripleClickPending = false;
       }
@@ -651,7 +712,7 @@ void ScoreView::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
       QTimer::singleShot(QApplication::doubleClickInterval(), this, SLOT(tripleClickTimeOut()));
       tripleClickPending = true;
 
-      if (state == ViewState::EDIT && editData.element->isTextBase()) {
+      if (textEditMode()) {
             // double click on a textBase element that is being edited - select word
             TextBase* textBase = toTextBase(editData.element);
             textBase->multiClickSelect(editData, MultiClick::Double);
@@ -678,13 +739,27 @@ void ScoreView::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
       }
 
 //---------------------------------------------------------
-//   CmdContext
+//   ScoreViewCmdContext
 //---------------------------------------------------------
 
-struct CmdContext {
+class ScoreViewCmdContext {
       Score* s;
-      CmdContext(Score* _s) : s(_s) { s->startCmd(); }
-      ~CmdContext()                 { s->endCmd();   }
+      ScoreView* view;
+      bool _updateGrips = false;
+
+   public:
+      ScoreViewCmdContext(ScoreView* v, bool updateGrips)
+         : s(v->score()), view(v), _updateGrips(updateGrips)
+            {
+            s->startCmd();
+            }
+
+      ~ScoreViewCmdContext()
+            {
+            s->endCmd();
+            if (_updateGrips)
+                  view->updateGrips();
+            }
       };
 
 //---------------------------------------------------------
@@ -693,12 +768,33 @@ struct CmdContext {
 
 void ScoreView::keyPressEvent(QKeyEvent* ev)
       {
-      if (state != ViewState::EDIT)
-            return;
-
       editData.key       = ev->key();
       editData.modifiers = ev->modifiers();
       editData.s         = ev->text();
+
+      if (state != ViewState::EDIT) {
+            const bool shiftModifier = ev->modifiers() & Qt::ShiftModifier;
+            if (editData.grips && !(shiftModifier && ev->key() == Qt::Key_Backtab)) {
+                  switch (ev->key()) {
+                        case Qt::Key_Left:
+                        case Qt::Key_Right:
+                        case Qt::Key_Up:
+                        case Qt::Key_Down:
+                              // Move focus to default grip if arrow keys are pressed and no grip is focused
+                              if (editData.grips && editData.curGrip == Grip::NO_GRIP)
+                                    editData.curGrip = editData.element->defaultGrip();
+                              break;
+                        default:
+                              break;
+                        }
+
+                  ScoreViewCmdContext ctx(this, /* updateGrips */ true);
+
+                  if (!editData.element->edit(editData))
+                        handleArrowKeyPress(ev);
+                  }
+            return;
+            }
 
       if (MScore::debugMode)
             qDebug("keyPressEvent key 0x%02x(%c) mod 0x%04x <%s> nativeKey 0x%02x scancode %d",
@@ -725,10 +821,11 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                   return;
             }
 
-      CmdContext cc(_score);
+      ScoreViewCmdContext cc(this, editData.grips);
+      const bool textEdit = textEditMode();
 
-#ifdef Q_OS_WIN // Japenese IME on Windows needs to know when Contrl/Alt/Shift/CapsLock is pressed while in predit
-      if (editData.element->isTextBase()) {
+#ifdef Q_OS_WIN // Japenese IME on Windows needs to know when Ctrl/Alt/Shift/CapsLock is pressed while in predit
+      if (textEdit) {
             TextBase* text = toTextBase(editData.element);
             if (text->cursor(editData)->format()->preedit() && QGuiApplication::inputMethod()->locale().script() == QLocale::JapaneseScript &&
                 ((editData.key == Qt::Key_Control || (editData.modifiers & Qt::ControlModifier)) ||
@@ -740,21 +837,30 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
             }
 #endif
 
-      if (!( (editData.modifiers & Qt::ShiftModifier) && (editData.key == Qt::Key_Backtab) )) {
+      if (!((editData.modifiers & Qt::ShiftModifier) && (editData.key == Qt::Key_Backtab))) {
             if (editData.element->edit(editData)) {
                   if (state != ViewState::EDIT) {
                         // textTab or other function may have terminated edit mode
                         mscore->endCmd();
                         return;
                         }
-                  if (editData.element->isTextBase())
+                  if (textEdit)
                         mscore->textTools()->updateTools(editData);
-                  else
-                        updateGrips();
                   return;
                   }
             }
 
+      const bool handled = handleArrowKeyPress(ev);
+      if (!handled)
+            ev->ignore();
+      }
+
+//---------------------------------------------------------
+//   handleArrowKeysPress
+//---------------------------------------------------------
+
+bool ScoreView::handleArrowKeyPress(const QKeyEvent* ev)
+      {
       QPointF delta;
       qreal _spatium = editData.element->spatium();
 
@@ -787,7 +893,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
             }
       // TODO: if raster, then xval/yval should be multiple of raster
 
-      switch (editData.key) {
+      switch (ev->key()) {
             case Qt::Key_Left:
                   delta = QPointF(-xval, 0);
                   break;
@@ -801,8 +907,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                   delta = QPointF(0, yval);
                   break;
             default:
-                  ev->ignore();
-                  return;
+                  return false;
             }
       editData.delta   = delta;
       editData.hRaster = mscore->hRaster();
@@ -812,7 +917,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
       editData.element->startEditDrag(editData);
       editData.element->editDrag(editData);
       editData.element->endEditDrag(editData);
-      updateGrips();
+      return true;
       }
 
 //---------------------------------------------------------
@@ -821,9 +926,9 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
 
 void ScoreView::keyReleaseEvent(QKeyEvent* ev)
       {
-      if (state == ViewState::EDIT) {
+      if (textEditMode()) {
             auto modifiers = Qt::ControlModifier | Qt::ShiftModifier;
-            if (editData.element->isTextBase() && ((ev->modifiers() & modifiers) == 0)) {
+            if ((ev->modifiers() & modifiers) == 0) {
                   TextBase* text = toTextBase(editData.element);
                   text->endHexState(editData);
                   ev->accept();
@@ -849,7 +954,11 @@ void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
       QPoint gp          = ev->globalPos();
       editData.startMove = toLogical(ev->pos());
       editData.buttons   = Qt::NoButton;
-      Element* e         = elementNear(editData.startMove);
+      Element* e         = nullptr;
+      if (ev->reason() == QContextMenuEvent::Keyboard)
+            e = score()->selection().element();
+      else
+            e = elementNear(editData.startMove);
       if (e) {
             if (!e->selected()) {
                   // bool control = (ev->modifiers() & Qt::ControlModifier) ? true : false;
@@ -863,8 +972,19 @@ void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
             }
       else {
             int staffIdx;
-            Measure* m = _score->pos2measure(editData.startMove, &staffIdx, 0, 0, 0);
-            if (m && m->staffLines(staffIdx)->canvasBoundingRect().contains(editData.startMove))
+            Measure* m = nullptr;
+            if (ev->reason() == QContextMenuEvent::Keyboard) {
+                  // find measure based on selection
+                  m = score()->selection().findMeasure();
+                  }
+            else {
+                  // find nearest measure based on mouse pointer location
+                  m = _score->pos2measure(editData.startMove, &staffIdx, 0, 0, 0);
+                  // but only use it if mouse pointer is within the staff
+                  if (m && !m->staffLines(staffIdx)->canvasBoundingRect().contains(editData.startMove))
+                        m = nullptr;
+                  }
+            if (m)
                   measurePopup(ev, m);
             else {
                   QMenu* popup = new QMenu();
@@ -1036,9 +1156,8 @@ void ScoreView::changeState(ViewState s)
                         startEdit();
                   break;
             case ViewState::EDIT:
-                  if ( !((mscoreState() & STATE_ALLTEXTUAL_EDIT) && state == ViewState::DRAG_EDIT) ) {
+                  if (state != ViewState::DRAG_EDIT)
                         startEdit();
-                        }
                   break;
             case ViewState::LASSO:
                   break;
@@ -1064,9 +1183,7 @@ void ScoreView::changeState(ViewState s)
 
 void ScoreView::inputMethodEvent(QInputMethodEvent* event)
       {
-      if (state != ViewState::EDIT)
-            return;
-      if (editData.element->isTextBase())
+      if (textEditMode())
             toTextBase(editData.element)->inputTransition(editData, event);
       }
 

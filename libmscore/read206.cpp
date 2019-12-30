@@ -609,7 +609,8 @@ void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Si
             { "Header",                  Tid::HEADER },
             { "Footer",                  Tid::FOOTER },
             { "Instrument Change",       Tid::INSTRUMENT_CHANGE },
-            { "Figured Bass",            Tid::TEXT_STYLES },            // invalid
+            { "Repeat Text",             Tid::IGNORED_STYLES, },     // Repeat Text style no longer exists
+            { "Figured Bass",            Tid::IGNORED_STYLES, },     // F.B. data are in style properties
             { "Volta",                   Tid::VOLTA },
             };
       Tid ss = Tid::TEXT_STYLES;
@@ -619,6 +620,9 @@ void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Si
                   break;
                   }
             }
+
+      if (ss == Tid::IGNORED_STYLES)
+            return;
 
       bool isExcessStyle = false;
       if (ss == Tid::TEXT_STYLES) {
@@ -2060,6 +2064,16 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
             QPointF pt = e.readPoint();
             ch->setOffset(pt * ch->spatium());
             }
+      else if (ch->isRest() && tag == "Image"){
+            if (MScore::noImages)
+                  e.skipCurrentElement();
+            else {
+                  Image *image = new Image(ch->score());
+                  image->setTrack(e.track());
+                  image->read(e);
+                  ch->add(image);
+                  }
+            }
       else if (!readDurationProperties206(e, ch))
             return false;
       return true;
@@ -3326,8 +3340,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   beam->setParent(0);
                   e.addBeam(beam);
                   }
-            else if (tag == "Segment")
-                  segment->read(e);
+            else if (tag == "Segment") {
+                  if (segment) segment->read(e);
+                  else e.unknown();
+                  }
             else if (tag == "MeasureNumber") {
                   MeasureNumber* noText = new MeasureNumber(score);
                   readText206(e, noText, m);

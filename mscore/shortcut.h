@@ -28,7 +28,7 @@ The Shortcut class describes the basic configurable shortcut element.
       user customizations or from a resource (<= mscore/data/shortcuts.xml), if there are
       no customizations.
       Later during startup, QAction's are derived from each of its elements and pooled
-      in a single QActionGroup during MuseScore::MuseScore() costructor (mscore/musescore.cpp)
+      in a single QActionGroup during MuseScore::MuseScore() constructor (mscore/musescore.cpp)
 
 ShortcutFlags:
       To be documented
@@ -63,7 +63,6 @@ Shortcuts marked with the STATE_NEVER state should NEVER used directly as shortc
 
 #include "icons.h"
 #include "globals.h"
-
 namespace Ms {
 
 class XmlWriter;
@@ -176,6 +175,7 @@ class Shortcut {
       static void resetToDefault();
       static bool dirty;
       static bool customSource() { return source != defaultFileName; }
+      static Shortcut* getShortcutByKeySequence(const QKeySequence &keySequence);
       static Shortcut* getShortcut(const char* key);
       static const QHash<QByteArray, Shortcut*>& shortcuts() { return _shortcuts; }
       static QActionGroup* getActionGroupForWidget(MsWidget w);

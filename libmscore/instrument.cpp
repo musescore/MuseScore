@@ -436,7 +436,7 @@ Channel::Channel()
       _channel  = -1;
       _program  = -1;
       _bank     = 0;
-      _volume   = 100;
+      _volume   = defaultVolume;
       _pan      = 64; // actually 63.5 for center
       _chorus   = 0;
       _reverb   = 0;

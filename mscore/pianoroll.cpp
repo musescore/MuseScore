@@ -503,7 +503,7 @@ void PianorollEditor::veloTypeChanged(int val)
       int newVelocity = note->veloOffset();
       int dynamicsVel = staff->velocities().velo(note->tick().ticks());
 
-      //Change velocity to equivilent in new metric
+      //Change velocity to equivalent in new metric
       switch (Note::ValueType(val)) {
             case Note::ValueType::USER_VAL:
                   newVelocity = (int)(dynamicsVel * (1 + newVelocity / 100.0));
@@ -674,15 +674,6 @@ void PianorollEditor::setCursor(const QCursor&)
       }
 
 //---------------------------------------------------------
-//   gripCount
-//---------------------------------------------------------
-
-int PianorollEditor::gripCount() const
-      {
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   matrix
 //---------------------------------------------------------
 
@@ -690,22 +681,6 @@ const QTransform& PianorollEditor::matrix() const
       {
       static QTransform t;
       return t;
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void PianorollEditor::startEdit()
-      {
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void PianorollEditor::startEdit(Element*, Grip)
-      {
       }
 
 //---------------------------------------------------------

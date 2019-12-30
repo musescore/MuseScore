@@ -238,6 +238,21 @@ void Palette::setMag(qreal val)
       }
 
 //---------------------------------------------------------
+//   guiMag
+//---------------------------------------------------------
+
+qreal Palette::guiMag()
+      {
+      qreal pref = preferences.getDouble(PREF_APP_PALETTESCALE);
+      if (guiScaling <= 1.0)                    // low DPI: target is 100% life size
+            return pref * guiScaling;
+      else if (guiScaling > 1.33)               // high DPI: target is 75% life size
+            return pref * guiScaling * 0.75;
+      else                                      // medium high DPI: no target, scaling dependent on resolution
+            return pref;                        // (will be 75-100% range)
+      }
+
+//---------------------------------------------------------
 //   contextMenuEvent
 //---------------------------------------------------------
 
@@ -326,6 +341,7 @@ void Palette::setGrid(int hh, int vv)
       hgrid = hh;
       vgrid = vv;
       QSize s(hgrid, vgrid);
+      s *= guiMag();
       setSizeIncrement(s);
       setBaseSize(s);
       setMinimumSize(s);
@@ -345,13 +361,15 @@ Element* Palette::element(int idx)
       }
 
 //---------------------------------------------------------
-//   contentsMousePressEvent
+//   mousePressEvent
 //---------------------------------------------------------
 
 void Palette::mousePressEvent(QMouseEvent* ev)
       {
       dragStartPosition = ev->pos();
       dragIdx           = idx(dragStartPosition);
+
+      pressedIndex = dragIdx;
 
 /*
       // Take out of edit mode to prevent crashes when adding
@@ -373,6 +391,8 @@ void Palette::mousePressEvent(QMouseEvent* ev)
       PaletteCell* cell = cellAt(dragIdx);
       if (cell && (cell->tag == "ShowMore"))
             emit displayMore(_name);
+
+      update();
       }
 
 //---------------------------------------------------------
@@ -457,20 +477,20 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 //   applyPaletteElement
 //---------------------------------------------------------
 
-void Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers)
+bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers)
       {
       Score* score = mscore->currentScore();
       if (score == 0)
-            return;
+            return false;
       const Selection sel = score->selection(); // make a copy of selection state before applying the operation.
       if (sel.isNone())
-            return;
+            return false;
 
 //       Element* element = 0;
 //       if (cell)
 //             element = cell->element.get();
       if (element == 0)
-            return;
+            return false;
 
       if (element->isSpanner())
             TourHandler::startTour("spanner-drop-apply");
@@ -530,7 +550,7 @@ void Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                   score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
                   }
             else if (element->isSlur() && addSingle) {
-                  viewer->addSlur();
+                  viewer->addSlur(toSlur(element));
                   }
             else if (element->isSLine() && !element->isGlissando() && addSingle) {
                   Segment* startSegment = cr1->segment();
@@ -715,7 +735,7 @@ void Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                         }
                   }
             else if (element->isSlur()) {
-                  viewer->addSlur();
+                  viewer->addSlur(toSlur(element));
                   }
             else if (element->isSLine() && element->type() != ElementType::GLISSANDO) {
                   Segment* startSegment = sel.startSegment();
@@ -798,6 +818,7 @@ void Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
             viewer->setFocus();
       viewer->setDropTarget(0);
 //      mscore->endCmd();
+      return true;
       }
 
 //---------------------------------------------------------
@@ -825,6 +846,7 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
                   else if (idx >= p->size())
                         idx = 0;
                   p->setSelected(idx);
+                  p->setCurrentIdx(idx);
                   // set widget name to name of selected element
                   // we could set the description, but some screen readers ignore it
                   QString name = p->cellAt(idx)->translatedName();
@@ -835,6 +857,11 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
                   p->update();
                   break;
                   }
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+                  if (!p->disableElementsApply())
+                        p->applyPaletteElement();
+                  break;
             default:
                   break;
             }
@@ -842,27 +869,34 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
       }
 
 //---------------------------------------------------------
-//   mouseDoubleClickEvent
+//   mouseReleaseEvent
 //---------------------------------------------------------
 
-void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
+void Palette::mouseReleaseEvent(QMouseEvent *event)
       {
-      if (_disableDoubleClick)
-            return;
-      int i = idx(ev->pos());
-      if (i == -1)
-            return;
-      Score* score = mscore->currentScore();
-      if (score == 0)
-            return;
-      if (score->selection().isNone())
+      pressedIndex = -1;
+
+      update();
+
+      if (_disableElementsApply)
             return;
 
-      PaletteCell* cell = cellAt(i);
+      int index = idx(event->pos());
+
+      if (index == -1)
+            return;
+
+      Score* score = mscore->currentScore();
+
+      if (!score || score->selection().isNone())
+            return;
+
+      PaletteCell* cell = cellAt(index);
+
       if (!cell)
             return;
 
-      applyPaletteElement(cell->element.get(), ev->modifiers());
+      applyPaletteElement(cell->element.get(), event->modifiers());
       }
 
 //---------------------------------------------------------
@@ -871,15 +905,17 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
 
 int Palette::idx(const QPoint& p) const
       {
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
       if (columns() == 0)
             return -1;
-      int rightBorder = width() % hgrid;
-      int hhgrid      = hgrid + (rightBorder / columns());
+      int rightBorder = width() % hgridM;
+      int hhgrid      = hgridM + (rightBorder / columns());
 
       int x = p.x();
       int y = p.y();
 
-      int row = y / vgrid;
+      int row = y / vgridM;
       int col = x / hhgrid;
 
       int nc = columns();
@@ -899,15 +935,17 @@ int Palette::idx(const QPoint& p) const
 
 int Palette::idx2(const QPoint& p) const
       {
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
       if (columns() == 0)
             return -1;
-      int rightBorder = width() % hgrid;
-      int hhgrid      = hgrid + (rightBorder / columns());
+      int rightBorder = width() % hgridM;
+      int hhgrid      = hgridM + (rightBorder / columns());
 
       int x = p.x();
       int y = p.y();
 
-      int row = y / vgrid;
+      int row = y / vgridM;
       int col = x / hhgrid;
 
       int nc = columns();
@@ -926,17 +964,19 @@ int Palette::idx2(const QPoint& p) const
 
 QRect Palette::idxRect(int i) const
       {
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
       if (i == -1)
             return QRect();
      if (columns() == 0)
             return QRect();
 
-      int rightBorder = width() % hgrid;
-      int hhgrid = hgrid + (rightBorder / columns());
+      int rightBorder = width() % hgridM;
+      int hhgrid = hgridM + (rightBorder / columns());
 
       int cc = i % columns();
       int cr = i / columns();
-      return QRect(cc * hhgrid, cr * vgrid, hhgrid, vgrid);
+      return QRect(cc * hhgrid, cr * vgridM, hhgrid, vgridM);
       }
 
 //---------------------------------------------------------
@@ -956,6 +996,7 @@ void Palette::leaveEvent(QEvent*)
 //---------------------------------------------------------
 //   nextPaletteElement
 //---------------------------------------------------------
+
 void Palette::nextPaletteElement()
       {
       int i = currentIdx;
@@ -1096,8 +1137,9 @@ static void paintPaletteElement(void* data, Element* e)
 void Palette::paintEvent(QPaintEvent* /*event*/)
       {
       qreal _spatium = gscore->spatium();
-//      qreal mag      = PALETTE_SPATIUM * extraMag * guiScaling / _spatium;
-      qreal mag      = PALETTE_SPATIUM * extraMag / _spatium;
+      qreal magS     = PALETTE_SPATIUM * extraMag * guiMag();
+      qreal mag      = magS / _spatium;
+//      qreal mag      = PALETTE_SPATIUM * extraMag / _spatium;
       gscore->setSpatium(SPATIUM20);
 
       QPainter p(this);
@@ -1115,25 +1157,28 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
       //
       // draw grid
       //
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
+
       if (columns() == 0)
             return;
-      int rightBorder = width() % hgrid;
-      int hhgrid = hgrid + (rightBorder / columns());
+      int rightBorder = width() % hgridM;
+      int hhgrid = hgridM + (rightBorder / columns());
 
       if (_drawGrid) {
             p.setPen(Qt::gray);
             for (int row = 1; row < rows(); ++row) {
                   int x2 = row < rows()-1 ? columns() * hhgrid : width();
-                  int y  = row * vgrid;
+                  int y  = row * vgridM;
                   p.drawLine(0, y, x2, y);
                   }
             for (int column = 1; column < columns(); ++column) {
                   int x = hhgrid * column;
-                  p.drawLine(x, 0, x, rows() * vgrid);
+                  p.drawLine(x, 0, x, rows() * vgridM);
                   }
             }
 
-      qreal dy = lrint(2 * PALETTE_SPATIUM * extraMag);
+      qreal dy = lrint(2 * magS);
 
       //
       // draw symbols
@@ -1141,7 +1186,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
       // QPen pen(palette().color(QPalette::Normal, QPalette::Text));
       QPen pen(Qt::black);
-      pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * PALETTE_SPATIUM * extraMag);
+      pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * magS);
 
       for (int idx = 0; idx < ccp()->size(); ++idx) {
             int yoffset  = gscore->spatium() * _yOffset;
@@ -1149,14 +1194,20 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             QRect rShift = r.translated(0, yoffset);
             p.setPen(pen);
             QColor c(MScore::selectColor[0]);
+
             if (idx == selectedIdx) {
-                  c.setAlpha(100);
+                  c.setAlphaF(0.5);
+                  p.fillRect(r, c);
+                  }
+            else if (idx == pressedIndex) {
+                  c.setAlphaF(0.75);
                   p.fillRect(r, c);
                   }
             else if (idx == currentIdx) {
-                  c.setAlpha(50);
+                  c.setAlphaF(0.2);
                   p.fillRect(r, c);
                   }
+
             if (ccp()->at(idx) == 0)
                   continue;
             PaletteCell* cc = ccp()->at(idx);      // current cell
@@ -1184,17 +1235,17 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
             qreal cellMag = cc->mag * mag;
             if (el->isIcon()) {
-                  toIcon(el)->setExtent((hhgrid < vgrid ? hhgrid : vgrid) - 4);
+                  toIcon(el)->setExtent((hhgrid < vgridM ? hhgrid : vgridM) - 4);
                   cellMag = 1.0;
                   }
             el->layout();
 
             if (drawStaff) {
-                  qreal y = r.y() + vgrid * .5 - dy + _yOffset * _spatium * cellMag;
+                  qreal y = r.y() + vgridM * .5 - dy + _yOffset * _spatium * cellMag;
                   qreal x = r.x() + 3;
                   qreal w = hhgrid - 6;
                   for (int i = 0; i < 5; ++i) {
-                        qreal yy = y + PALETTE_SPATIUM * i * extraMag;
+                        qreal yy = y + i * magS;
                         p.drawLine(QLineF(x, yy, x + w, yy));
                         }
                   }
@@ -1202,7 +1253,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             p.scale(cellMag, cellMag);
 
             double gw = hhgrid / cellMag;
-            double gh = vgrid / cellMag;
+            double gh = vgridM / cellMag;
             double gx = column * gw + cc->xoffset * _spatium;
             double gy = row    * gh + cc->yoffset * _spatium;
 
@@ -1246,7 +1297,10 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 QPixmap Palette::pixmap(int paletteIdx) const
       {
       qreal _spatium = gscore->spatium();
-      qreal mag      = PALETTE_SPATIUM * extraMag / _spatium;
+      qreal magS     = PALETTE_SPATIUM * extraMag * guiMag();
+      qreal mag      = magS / _spatium;
+//      qreal guiMag = guiScaling * preferences.getDouble(PREF_APP_PALETTESCALE);
+//      qreal mag      = PALETTE_SPATIUM * extraMag * guiMag / _spatium;
       PaletteCell* c = cellAt(paletteIdx);
       if (!c || !c->element)
             return QPixmap();
@@ -1299,19 +1353,21 @@ QPixmap Palette::pixmap(int paletteIdx) const
 
 bool Palette::event(QEvent* ev)
       {
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
       // disable mouse hover when keyboard navigation is enabled
       if (filterActive && (ev->type() == QEvent::MouseMove || ev->type() == QEvent::ToolTip
           || ev->type() == QEvent::WindowDeactivate)) {
             return true;
             }
       else if (columns() && (ev->type() == QEvent::ToolTip)) {
-            int rightBorder = width() % hgrid;
-            int hhgrid = hgrid + (rightBorder / columns());
+            int rightBorder = width() % hgridM;
+            int hhgrid = hgridM + (rightBorder / columns());
             QHelpEvent* he = (QHelpEvent*)ev;
             int x = he->pos().x();
             int y = he->pos().y();
 
-            int row = y / vgrid;
+            int row = y / vgridM;
             int col = x / hhgrid;
 
             if (row < 0 || row >= rows())
@@ -1629,6 +1685,15 @@ void Palette::clear()
       }
 
 //---------------------------------------------------------
+//   columns
+//---------------------------------------------------------
+
+int Palette::columns() const
+      {
+      return width() / gridWidthM();
+      }
+
+//---------------------------------------------------------
 //   rows
 //---------------------------------------------------------
 
@@ -1646,7 +1711,9 @@ int Palette::rows() const
 
 int Palette::heightForWidth(int w) const
       {
-      int c = w / hgrid;
+      int hgridM = gridWidthM();
+      int vgridM = gridHeightM();
+      int c = w / hgridM;
       if (c <= 0)
             c = 1;
       int s = size();
@@ -1655,9 +1722,9 @@ int Palette::heightForWidth(int w) const
       int rows = (s + c - 1) / c;
       if (rows <= 0)
             rows = 1;
-      qreal mag = PALETTE_SPATIUM * extraMag;
-      int h = lrint(_yOffset * 2 * mag);
-      return rows * vgrid + h;
+      qreal magS = PALETTE_SPATIUM * extraMag * guiMag();
+      int h = lrint(_yOffset * 2 * magS);
+      return rows * vgridM + h;
       }
 
 //---------------------------------------------------------
@@ -1667,7 +1734,8 @@ int Palette::heightForWidth(int w) const
 QSize Palette::sizeHint() const
       {
       int h = heightForWidth(width());
-      return QSize((width() / hgrid) * hgrid, h);
+      int hgridM = gridWidthM();
+      return QSize((width() / hgridM) * hgridM, h);
       }
 
 //---------------------------------------------------------

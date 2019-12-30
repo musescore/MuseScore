@@ -823,6 +823,7 @@ Note* searchTieNote(Note* note)
       // but err on the safe side in case there is roundoff in tick count
       Fraction endTick = chord->tick() + chord->actualTicks() - Fraction(1, 4 * 480);
 
+      int idx1 = note->unisonIndex();
       while ((seg = seg->next1(SegmentType::ChordRest))) {
             // skip ahead to end of current note duration as calculated above
             // but just in case, stop if we find element in current track
@@ -846,10 +847,17 @@ Note* searchTieNote(Note* note)
                         if (gn2)
                               return gn2;
                         }
+                  int idx2 = 0;
                   for (Note* n : c->notes()) {
                         if (n->pitch() == note->pitch()) {
-                              if (note2 == 0 || c->track() == chord->track())
-                                    note2 = n;
+                              if (idx1 == idx2) {
+                                    if (note2 == 0 || c->track() == chord->track()) {
+                                          note2 = n;
+                                          break;
+                                          }
+                                    }
+                              else
+                                    ++idx2;
                               }
                         }
                   }
@@ -1032,6 +1040,18 @@ std::vector<SymId> toTimeSigString(const QString& s)
                   }
             }
       return d;
+      }
+
+//---------------------------------------------------------
+//   actualTicks
+//---------------------------------------------------------
+
+Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch)
+      {
+      Fraction f = duration / timeStretch;
+      for (Tuplet* t = tuplet; t; t = t->tuplet())
+            f /= t->ratio();
+      return f;
       }
 
 }

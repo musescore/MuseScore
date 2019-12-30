@@ -53,6 +53,14 @@
     <seq>Ctrl+V</seq>
     </SC>
   <SC>
+    <key>paste-half</key>
+    <seq>Ctrl+Shift+Q</seq>
+    </SC>
+  <SC>
+    <key>paste-double</key>
+    <seq>Ctrl+Shift+W</seq>
+    </SC>
+  <SC>
     <key>swap</key>
     <seq>Ctrl+Shift+X</seq>
     </SC>
@@ -170,6 +178,10 @@
     <seq>Shift+G</seq>
     </SC>
   <SC>
+    <key>chord-tie</key>
+    <seq>Alt++</seq>
+    </SC>
+  <SC>
     <key>insert-a</key>
     <seq>Ctrl+Shift+A</seq>
     </SC>
@@ -269,6 +281,22 @@
   <SC>
     <key>prev-segment-element</key>
     <seq>Ctrl+Alt+Shift+Left</seq>
+    </SC>
+  <SC>
+    <key>next-element</key>
+    <seq>Alt+Right</seq>
+    </SC>
+  <SC>
+    <key>prev-element</key>
+    <seq>Alt+Left</seq>
+    </SC>
+  <SC>
+    <key>palette-search</key>
+    <seq>Ctrl+F9</seq>
+    </SC>
+  <SC>
+    <key>get-location</key>
+    <seq>Shift+L</seq>
     </SC>
   <SC>
     <key>move-up</key>
@@ -1037,5 +1065,9 @@
   <SC>
     <key>toggle-insert-mode</key>
     <seq>Ctrl+I</seq>
+    </SC>
+  <SC>
+    <key>toggle-autoplace</key>
+    <seq>=</seq>
     </SC>
   </Shortcuts>

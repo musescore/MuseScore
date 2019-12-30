@@ -118,6 +118,7 @@ class SystemText;
 class BracketItem;
 class Spanner;
 class SpannerSegment;
+class Lasso;
 class BagpipeEmbellishment;
 class LineSegment;
 class BSymbol;
@@ -216,7 +217,7 @@ class ScoreElement {
       bool isStyled(Pid pid) const;
       QVariant styleValue(Pid, Sid) const;
 
-      virtual void setPropertyFlags(Pid, PropertyFlags);
+      void setPropertyFlags(Pid, PropertyFlags);
 
       virtual Sid getPropertyStyle(Pid) const;
       bool readProperty(const QStringRef&, XmlReader&, Pid);
@@ -351,10 +352,11 @@ class ScoreElement {
       CONVERT(Staff,         STAFF)
       CONVERT(Part,          PART)
       CONVERT(BagpipeEmbellishment, BAGPIPE_EMBELLISHMENT)
+      CONVERT(Lasso,         LASSO)
       CONVERT(Sticking,      STICKING)
 #undef CONVERT
 
-      virtual bool isElement() const { return false; } // overriden in element.h
+      virtual bool isElement() const { return false; } // overridden in element.h
       bool isChordRest() const       { return isRest() || isChord() || isRepeatMeasure(); }
       bool isDurationElement() const { return isChordRest() || isTuplet(); }
       bool isSlurTieSegment() const  { return isSlurSegment() || isTieSegment(); }
@@ -471,6 +473,10 @@ static inline Box* toBox(ScoreElement* e) {
 static inline SpannerSegment* toSpannerSegment(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isSpannerSegment());
       return (SpannerSegment*)e;
+      }
+static inline const SpannerSegment* toSpannerSegment(const ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isSpannerSegment());
+      return (const SpannerSegment*)e;
       }
 static inline BSymbol* toBSymbol(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isBSymbol());
@@ -594,6 +600,7 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(BracketItem)
       CONVERT(Staff)
       CONVERT(Part)
+      CONVERT(Lasso)
       CONVERT(BagpipeEmbellishment)
       CONVERT(Sticking)
 #undef CONVERT

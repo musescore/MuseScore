@@ -24,6 +24,7 @@
 #include "libmscore/icon.h"
 #include "libmscore/select.h"
 #include "palettetree.h"
+#include "palette.h"
 #include "preferences.h"
 #include "scoreaccessibility.h"
 
@@ -261,7 +262,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                   case EditableRole:
                         return pp->editable();
                   case GridSizeRole:
-                        return pp->gridSize();
+                        return pp->gridSize() * Palette::guiMag();
                   case DrawGridRole:
                         return pp->drawGrid();
                   case PaletteExpandedRole:
@@ -289,7 +290,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                         qreal extraMag = 1.0;
                         if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer()))
                               extraMag = pp->mag();
-                        return QIcon(new PaletteCellIconEngine(cell, extraMag));
+                        return QIcon(new PaletteCellIconEngine(cell, extraMag * Palette::guiMag()));
                         }
                   case PaletteCellRole:
                         return QVariant::fromValue(cell.get());
@@ -386,6 +387,10 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
                               return true;
                               }
                         return false;
+                  case Qt::DisplayRole:
+                        pp->setName(value.toString());
+                        emit dataChanged(index, index, { Qt::DisplayRole, Qt::AccessibleTextRole });
+                        return true;
 //                   case CustomRole:
 //                         if (value.canConvert<bool>()) {
 //                               const bool val = value.toBool();
@@ -396,9 +401,6 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
 //                               return true;
 //                               }
 //                         return false;
-//                   case Qt::DisplayRole:
-//                   case Qt::AccessibleTextRole:
-//                         return pp->name();
 //                   case gridSizeRole:
 //                         return pp->gridSize();
 //                   case drawGridRole:
@@ -749,6 +751,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
             for (int i = 0; i < count; ++i) {
                   std::unique_ptr<PalettePanel> p(new PalettePanel(PalettePanel::Type::Custom));
                   p->setName(QT_TRANSLATE_NOOP("Palette", "Custom"));
+                  p->setGrid(QSize(48, 48));
                   p->setExpanded(true);
                   palettes().insert(palettes().begin() + row, std::move(p));
                   }
@@ -789,13 +792,21 @@ bool PaletteTreeModel::insertPalettePanel(std::unique_ptr<PalettePanel> pp, int 
 //   PaletteTreeModel::updateCellsState
 //---------------------------------------------------------
 
-void PaletteTreeModel::updateCellsState(const Selection& sel, bool deactivateAll)
+void PaletteTreeModel::updateCellsState(const Selection& sel)
       {
-      const ChordRest* cr = sel.cr();
-      const IconType beamIconType = cr ? Beam::iconType(cr->beamMode()) : IconType::NONE;
+      const ChordRest* cr = sel.firstChordRest();
+      const Beam::Mode bm = cr ? cr->beamMode() : Beam::Mode::NONE;
+      const IconType beamIconType = Beam::iconType(bm);
+      bool deactivateAll = !cr;
 
-      if (!sel.isSingle() || !cr)
-            deactivateAll = true;
+      for (Element* e : sel.elements()) {
+            if (e->isNote())
+                  e = e->parent();
+            if (e->isChordRest()) {
+                  if (toChordRest(e)->beamMode() != bm)
+                        deactivateAll = true;
+                  }
+            }
 
       const size_t npalettes = palettes().size();
       for (size_t row = 0; row < npalettes; ++row) {
@@ -1005,17 +1016,23 @@ bool FilterPaletteTreeModel::filterAcceptsRow(int sourceRow, const QModelIndex& 
       }
 
 //---------------------------------------------------------
-//   ChildFilterProxyModel::filterAcceptsRow
+//   PaletteCellFilterProxyModel::filterAcceptsRow
 //---------------------------------------------------------
 
-bool ChildFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+bool PaletteCellFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
       {
       const QAbstractItemModel* model = sourceModel();
       const QModelIndex rowIndex = model->index(sourceRow, 0, sourceParent);
       const int rowCount = model->rowCount(rowIndex);
 
-      if (rowCount == 0)
-            return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+      if (rowCount == 0) {
+            if (QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent))
+                  return true;
+            // accept row if its parent is accepted by filter: necessary to be able to search by palette name
+            if (sourceParent.isValid() && QSortFilterProxyModel::filterAcceptsRow(sourceParent.row(), sourceParent.parent()))
+                  return true;
+            return false;
+            }
 
       for (int i = 0; i < rowCount; ++i) {
             if (filterAcceptsRow(i, rowIndex))

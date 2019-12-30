@@ -135,8 +135,6 @@ Segment::Segment(Measure* m, SegmentType st, const Fraction& t)
 Segment::Segment(const Segment& s)
    : Element(s)
       {
-      _next               = 0;
-      _prev               = 0;
       _segmentType        = s._segmentType;
       _tick               = s._tick;
       _extraLeadingSpace  = s._extraLeadingSpace;
@@ -205,8 +203,6 @@ void Segment::init()
       _elist.assign(tracks, 0);
       _dotPosX.assign(staves, 0.0);
       _shapes.assign(staves, Shape());
-      _prev = 0;
-      _next = 0;
       }
 
 //---------------------------------------------------------
@@ -1144,7 +1140,7 @@ Element* Segment::lastElement(int staff)
 //   getElement
 //   protected because it is used by the firstElement and
 //   lastElement functions when segment types that have
-//   just one elemnt to avoid duplicated code
+//   just one element to avoid duplicated code
 //
 //   Use firstElement, or lastElement instead of this
 //---------------------------------------------------------

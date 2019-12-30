@@ -24,7 +24,7 @@
 #include "seq.h"
 #include "musescore.h"
 #include "libmscore/measure.h"
-
+#include "synthesizer/msynthesizer.h"
 
 
 namespace Ms {
@@ -57,9 +57,13 @@ PlayPanel::PlayPanel(QWidget* parent)
       loopOutButton->setDefaultAction(getAction("loop-out"));
       enablePlay = new EnablePlayForWidget(this);
 
-      volLabel();
-      volSpinBox->setRange(-80,0);
-      volSpinBox->setValue(-40.0);
+      float minDecibels = synti->minGainAsDecibels;
+      float maxDecibels = synti->maxGainAsDecibels;
+      volSpinBox->setRange(minDecibels, maxDecibels);
+
+      volumeSlider->setLog(false);
+      volumeSlider->setRange(minDecibels, maxDecibels);
+      volumeSlider->setDclickValue1(synti->defaultGainAsDecibels);
 
       tempoSlider->setDclickValue1(100.0);
       tempoSlider->setDclickValue2(100.0);
@@ -68,6 +72,9 @@ PlayPanel::PlayPanel(QWidget* parent)
       mgainSlider->setDclickValue1(seq->metronomeGain() - 10.75f);
       mgainSlider->setDclickValue2(seq->metronomeGain() - 10.75f);
 
+      volumeSlider->setDclickValue1(synti->defaultGainAsDecibels); // double click restores -40dB default
+      volumeSlider->setDclickValue2(synti->defaultGainAsDecibels);
+
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(mgainSlider,  SIGNAL(valueChanged(double,int)), SLOT(metronomeGainChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
@@ -75,8 +82,11 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(tempoSlider,  SIGNAL(sliderPressed(int)),       SLOT(tempoSliderPressed(int)));
       connect(tempoSlider,  SIGNAL(sliderReleased(int)),      SLOT(tempoSliderReleased(int)));
       connect(relTempoBox,  SIGNAL(valueChanged(double)),     SLOT(relTempoChanged()));
-      connect(volSpinBox,  SIGNAL(valueChanged(double)),     SLOT(volSpinBoxEdited()));
-      connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));                
+      connect(volSpinBox,   SIGNAL(valueChanged(double)),     SLOT(volSpinBoxEdited()));
+      connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));
+
+      volLabel();
+      volSpinBoxEdited();     //update spinbox and, as a side effect, the slider with current gain value
       }
 
 PlayPanel::~PlayPanel()
@@ -239,9 +249,12 @@ void PlayPanel::setRelTempo(qreal val)
 //   setGain
 //---------------------------------------------------------
 
-void PlayPanel::setGain(float val)
+void PlayPanel::setGain(float gain)  // respond to gainChanged() SIGNAL from MasterSynthesizer
       {
-      volumeSlider->setValue(val);
+      Q_UNUSED(gain);
+      const QSignalBlocker blockVolumeSpinBoxSignals(volSpinBox);
+      volumeSlider->setValue(synti->gainAsDecibels());
+      volLabel();
       }
 
 
@@ -249,11 +262,9 @@ void PlayPanel::setGain(float val)
 //   volumeChanged
 //---------------------------------------------------------
 
-void PlayPanel::volumeChanged(double val, int)
+void PlayPanel::volumeChanged(double decibels, int)
       {
-      emit gainChange(val);
-      vol = val;
-      volLabel();
+      synti->setGainAsDecibels(decibels);
       }
 
 //---------------------------------------------------------
@@ -371,23 +382,15 @@ void PlayPanel::tempoSliderPressed(int)
       
 void PlayPanel::volLabel()
       {
-      if (vol == MUTE)
-            vol = -80.0;
-      else
-            vol = ((N * std::log10(vol)) - N);
-      volSpinBox->setValue(vol);
+      volSpinBox->setValue(synti->gainAsDecibels());
       volSpinBox->setSuffix(" dB");
       }
 
 
 void PlayPanel::volSpinBoxEdited()
       {
-     svol = volSpinBox->value();
-      if (svol == -80 )
-            svol = MUTE;
-      else
-            svol = pow(10, ((svol + N) / N ));
-      volumeChanged(svol, 1);
+      synti->setGainAsDecibels(volSpinBox->value());
+      volLabel();
       }
 
 

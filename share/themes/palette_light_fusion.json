@@ -4,12 +4,12 @@
 "Base":          "#f9f9f9",
 "AlternateBase": "#eeeeee",
 "Text":          "#333333",
-"Button":        "#c9c9c9",
+"Button":        "#DBDBDB",
 "ButtonText":    "#333333",
 "BrightText":    "#000000",
 "ToolTipBase":   "#fefac2",
 "ToolTipText":   "#000000",
 "Link":          "#3a80c6",
 "LinkVisited":   "#3a80c6",
-"Highlight":     "#88bff6"
+"Highlight":     "#88BFF6"
 }

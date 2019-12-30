@@ -151,6 +151,25 @@ option(BUILD_64 "Build 64 bit version of editor" ON)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
 option(BUILD_CRASH_REPORTER "Build with crash reporter" OFF)
 set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to send crash reports (valid if BUILD_CRASH_REPORTER is set to ON)")
+option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
+set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
+
+if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
+      message("Telemetry feature is disabled")
+      message("Build is stable = ${MSCORE_UNSTABLE}")
+
+      if (TELEMETRY_TRACK_ID STREQUAL "")
+            message("Telemetry track id is empty")
+      else(TELEMETRY_TRACK_ID STREQUAL "")
+            message("Telemetry track id isn't empty")
+      endif(TELEMETRY_TRACK_ID STREQUAL "")
+
+      add_definitions(-DTELEMETRY_DISABLED)
+endif(MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
+
+if (BUILD_CRASH_REPORTER)
+      message("Crash reporter enabled")
+endif(BUILD_CRASH_REPORTER)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
@@ -277,8 +296,8 @@ set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
 # The MuseScore version number.
 SET(MUSESCORE_NAME "MuseScore")
 SET(MUSESCORE_VERSION_MAJOR  "3")
-SET(MUSESCORE_VERSION_MINOR  "3")
-SET(MUSESCORE_VERSION_PATCH  "1")
+SET(MUSESCORE_VERSION_MINOR  "4")
+SET(MUSESCORE_VERSION_PATCH  "0")
 SET(MUSESCORE_VERSION_LABEL  "")
 SET(MUSESCORE_VERSION       "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
 SET(MUSESCORE_NAME_VERSION "${MUSESCORE_NAME} ${MUSESCORE_VERSION_MAJOR}")
@@ -330,7 +349,7 @@ if (DOWNLOAD_SOUNDFONT)
 
     string(COMPARE LESS ${SF_VERSION_LOCAL} ${SF_VERSION_REMOTE} DO_DOWNLOAD)
     if (DO_DOWNLOAD)
-      message("Downloading version ${SF_VERSION_REMOTE} of the MuseScore SoundFont. Version is outdated ${SF_VERSION_LOCAL}.")
+      message("Version ${SF_VERSION_LOCAL} of the MuseScore SoundFont is outdated, downloading version ${SF_VERSION_REMOTE}.")
       # delete soundfont and download new version
       ## TODO check STATUS of downloads
       file (REMOVE ${SOUND_DIRECTORY}/MuseScore_General.sf3
@@ -643,7 +662,7 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
                        build/rm-empty-dirs              DESTINATION bin COMPONENT portable ${SCRIPT_PERMS})
       install(FILES    build/Linux+BSD/portable/qt.conf DESTINATION bin COMPONENT portable)
     else (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
-      set(MAN_PORTABLE .\\\") # comment out lines in man page that are only relevent to the portable version
+      set(MAN_PORTABLE .\\\") # comment out lines in man page that are only relevant to the portable version
     endif (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
     # Install desktop file (perform variable substitution first)
     configure_file(build/Linux+BSD/mscore.desktop.in mscore${MSCORE_INSTALL_SUFFIX}.desktop)
@@ -735,12 +754,82 @@ if (NOT MSVC)
 endif (NOT MSVC)
 
 ##
+
+## Includes
+##
+include_directories(
+   ${PROJECT_SOURCE_DIR}
+   ${PROJECT_BINARY_DIR}
+   ${ALSA_INCDIR}
+   ${JACK_INCDIR}
+   ${PORTAUDIO_INCDIR}
+   ${OGG_INCDIR}
+   ${VORBIS_INCDIR}
+   ${SNDFILE_INCDIR}
+   ${LAME_INCLUDE_DIR}
+)
+
+if (MSVC)
+   include_directories(${PROJECT_SOURCE_DIR}/dependencies)
+   include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
+   include_directories(${PROJECT_SOURCE_DIR}/dependencies/include/vorbis)
+   include_directories(${SNDFILE_INCLUDE_DIR})
+   include_directories(${VORBIS_INCLUDE_DIR})
+   include_directories(${PORTAUDIO_INCLUDE_DIR})
+   include_directories(${OGG_INCLUDE_DIR})
+endif (MSVC)
+
+if (USE_SYSTEM_FREETYPE)
+      include_directories(${FREETYPE_INCLUDE_DIRS})
+else (USE_SYSTEM_FREETYPE)
+      include_directories(${PROJECT_SOURCE_DIR}/thirdparty/freetype/include)
+endif (USE_SYSTEM_FREETYPE)
+
+if (OMR)
+ if (NOT USE_SYSTEM_POPPLER)
+   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler)
+   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
+ else (NOT USE_SYSTEM_POPPLER)
+   include_directories(/usr/include/poppler)
+   include_directories(/usr/include/poppler/qt5)
+ endif (NOT USE_SYSTEM_POPPLER)
+endif (OMR)
+
+if (BUILD_TELEMETRY_MODULE)
+      add_subdirectory(telemetry)
+      add_subdirectory(thirdparty/google_analytics)
+endif (BUILD_TELEMETRY_MODULE)
+add_subdirectory(global)
+
+add_subdirectory(mscore)
+add_subdirectory(main)
+
+if (BUILD_CRASH_REPORTER)
+      set (CRASHREPORTER_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}-crash-reporter")
+      add_subdirectory(crashreporter)
+      add_dependencies(mscore mscore-crash-reporter)
+      set (CRASHREPORTER_EXECUTABLE "${CRASHREPORTER_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
+      set (MSCORE_EXECUTABLE "${MSCORE_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
+endif (BUILD_CRASH_REPORTER)
+
+##
+## produce config.h file
+##
+configure_file (
+      ${PROJECT_SOURCE_DIR}/build/config.h.in
+      ${PROJECT_BINARY_DIR}/config.h
+      )
+
+##
 ## Add subdirs
 ##
+add_subdirectory(effects)
+add_subdirectory(synthesizer)
+
 subdirs(
-      awl bww2mxml share midi audiofile fluid libmscore synthesizer
-      effects thirdparty/rtf2html thirdparty/beatroot
-      thirdparty/qzip thirdparty/kQOAuth
+      awl bww2mxml share midi audiofile fluid libmscore
+      thirdparty/rtf2html thirdparty/beatroot
+      thirdparty/qzip
       )
 
 if (BUILD_CRASH_REPORTER)
@@ -788,65 +877,6 @@ endif (OSC)
 if (NOT USE_SYSTEM_FREETYPE)
       subdirs (thirdparty/freetype)
 endif (NOT USE_SYSTEM_FREETYPE)
-
-##
-## Includes
-##
-include_directories(
-   ${PROJECT_SOURCE_DIR}
-   ${PROJECT_BINARY_DIR}
-   ${ALSA_INCDIR}
-   ${JACK_INCDIR}
-   ${PORTAUDIO_INCDIR}
-   ${OGG_INCDIR}
-   ${VORBIS_INCDIR}
-   ${SNDFILE_INCDIR}
-   ${LAME_INCLUDE_DIR}
-)
-
-if (MSVC)
-   include_directories(${PROJECT_SOURCE_DIR}/dependencies)
-   include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
-   include_directories(${PROJECT_SOURCE_DIR}/dependencies/include/vorbis)
-   include_directories(${SNDFILE_INCLUDE_DIR})
-   include_directories(${VORBIS_INCLUDE_DIR})
-   include_directories(${PORTAUDIO_INCLUDE_DIR})
-   include_directories(${OGG_INCLUDE_DIR})
-endif (MSVC)
-
-if (USE_SYSTEM_FREETYPE)
-      include_directories(${FREETYPE_INCLUDE_DIRS})
-else (USE_SYSTEM_FREETYPE)
-      include_directories(${PROJECT_SOURCE_DIR}/thirdparty/freetype/include)
-endif (USE_SYSTEM_FREETYPE)
-
-if (OMR)
- if (NOT USE_SYSTEM_POPPLER)
-   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler)
-   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
- else (NOT USE_SYSTEM_POPPLER)
-   include_directories(/usr/include/poppler)
-   include_directories(/usr/include/poppler/qt5)
- endif (NOT USE_SYSTEM_POPPLER)
-endif (OMR)
-
-add_subdirectory(mscore)
-
-if (BUILD_CRASH_REPORTER)
-      set (CRASHREPORTER_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}-crash-reporter")
-      add_subdirectory(crashreporter)
-      add_dependencies(mscore mscore-crash-reporter)
-      set (CRASHREPORTER_EXECUTABLE "${CRASHREPORTER_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
-      set (MSCORE_EXECUTABLE "${MSCORE_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
-endif (BUILD_CRASH_REPORTER)
-
-##
-## produce config.h file
-##
-configure_file (
-      ${PROJECT_SOURCE_DIR}/build/config.h.in
-      ${PROJECT_BINARY_DIR}/config.h
-      )
 
 ##
 ##  Include packaging

@@ -232,7 +232,7 @@ int GuitarPro6::readBit(QByteArray* buffer)
       // calculate the bit which we want to read
       int bit = ((((*buffer)[byteIndex] & 0xff) >> byteOffset) & 0x01);
 
-      // increment our curent position so we know this bit has been read
+      // increment our current position so we know this bit has been read
       position++;
       return bit;       // return the bit we calculated
       }
@@ -1221,7 +1221,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                                 int musescoreString = staff->part()->instrument()->stringData()->strings() - 1 - stringNum.toInt();
                                                 auto pitch          = staff->part()->instrument()->stringData()->getPitch(musescoreString, fretNumber, nullptr, Fraction(0,1));
                                                 note->setFret(fretNumber);
-                                                // we need to turn this string number for GP to the the correct string number for musescore
+                                                // we need to turn this string number for GP to the correct string number for musescore
                                                 note->setString(musescoreString);
                                                 note->setPitch(pitch);
                                                 }
@@ -2541,7 +2541,7 @@ void GuitarPro6::readGpif(QByteArray* data)
             Measure* measure = toMeasure(score->measure(iter->first));
             if (measure)
                   setTempo(iter->second.first, measure);
-#if 0 // TODO-ws   whats is linearTemp ?
+#if 0 // TODO-ws   what's linearTemp ?
             if (linearTemp != -1) {
                   auto siter = iter;
                   siter--;

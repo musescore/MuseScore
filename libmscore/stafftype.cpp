@@ -87,6 +87,7 @@ StaffType::StaffType(StaffGroup sg, const QString& xml, const QString& name, int
       setShowBarlines(showBarLines);
       setStemless(stemless);
       setGenTimesig(genTimesig);
+      setGenKeysig(sg != StaffGroup::TAB);
       setDurationFontName(durFontName);
       setDurationFontSize(durFontSize);
       setDurationFontUserY(durFontUserY);
@@ -273,6 +274,9 @@ void StaffType::read(XmlReader& e)
             _group = StaffGroup::STANDARD;
             }
 
+      if (_group == StaffGroup::TAB)
+            setGenKeysig(false);
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")
@@ -314,7 +318,7 @@ void StaffType::read(XmlReader& e)
                   setDurationFontSize(e.readDouble());
             else if (tag == "durationFontY")
                   setDurationFontUserY(e.readDouble());
-           else if (tag == "fretFontName")
+            else if (tag == "fretFontName")
                   setFretFontName(e.readElementText());
             else if (tag == "fretFontSize")
                   setFretFontSize(e.readDouble());
@@ -901,7 +905,7 @@ void TabDurationSymbol::layout()
       qreal xpos, ypos;             // position coords
 
       _beamGrid = TabBeamGrid::NONE;
-      Chord* chord = toChord(parent());
+      Chord* chord = parent() && parent()->isChord() ? toChord(parent()) : nullptr;
       // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
       if (!chord || !chord->isChord() ||
             (chord->beamMode() != Beam::Mode::BEGIN && chord->beamMode() != Beam::Mode::MID &&

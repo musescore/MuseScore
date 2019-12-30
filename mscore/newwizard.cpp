@@ -387,7 +387,7 @@ NewWizardKeysigPage::NewWizardKeysigPage(QWidget* parent)
       sp->setMoreElements(false);
       sp->setShowContextMenu(false);
       sp->setSelectable(true);
-      sp->setDisableDoubleClick(true);
+      sp->setDisableElementsApply(true);
       int keysigCMajorIdx = 14;
       sp->setSelected(keysigCMajorIdx);
       PaletteScrollArea* sa = new PaletteScrollArea(sp);

@@ -43,7 +43,6 @@ class Stem final : public Element {
 
       virtual void startEdit(EditData&) override;
       virtual void editDrag(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader& e) override;
       virtual bool readProperties(XmlReader&) override;
@@ -72,6 +71,12 @@ class Stem final : public Element {
       QPointF hookPos() const;
       qreal stemLen() const;
       QPointF p2() const              { return line.p2(); }
+
+      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+      int gripsCount() const override { return 1; }
+      Grip initialEditModeGrip() const override { return Grip::START; }
+      Grip defaultGrip() const override { return Grip::START; }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
       };
 
 

@@ -537,24 +537,14 @@ static void addText2(VBox* vbx, Score* s, QString strTxt, Tid stl, Align v, doub
 
 static void doCredits(Score* score, const CreditWordsList& credits, const int pageWidth, const int pageHeight)
       {
-      /*
-      qDebug("MusicXml::doCredits()");
-      qDebug("page format set (inch) w=%g h=%g tm=%g spatium=%g DPMM=%g DPI=%g",
-             pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), DPMM, DPI);
-      */
       // page width, height and odd top margin in tenths
-      const double ph  = score->styleD(Sid::pageHeight) * 10 * DPI / score->spatium();
+      const int ph  = pageHeight;
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
-      /*
-      const double pw  = pf->width() * 10 * DPI / score->spatium();
-      const double tm  = pf->oddTopMargin() * 10 * DPI / score->spatium();
-      const double tov = ph - tm;
-      qDebug("page format set (tenths) w=%g h=%g tm=%g tov=%g", pw, ph, tm, tov);
-      qDebug("page format (xml, tenths) w=%d h=%d", pageWidth, pageHeight);
-      qDebug("page format pw1=%d pw2=%d ph2=%d", pw1, pw2, ph2);
-      */
+      //qDebug("page format (xml, tenths) w=%d h=%d", pageWidth, pageHeight);
+      //qDebug("page format pw1=%d pw2=%d ph=%d ph2=%d", pw1, pw2, ph, ph2);
+
       // dump the credits
       /*
       for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
@@ -630,14 +620,14 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                         // found composer
                         addText2(vbox, score, w->words,
                                  Tid::COMPOSER, Align::RIGHT | Align::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
+                                 (miny - w->defaultY) * score->spatium() / 10);
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
                         // found poet/lyricist
                         addText2(vbox, score, w->words,
                                  Tid::POET, Align::LEFT | Align::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
+                                 (miny - w->defaultY) * score->spatium() / 10);
                         }
                   // save others (in the middle column) to be handled later
                   else {
@@ -680,7 +670,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("title='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      Tid::TITLE, Align::HCENTER | Align::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
+                     (maxy - w->defaultY) * score->spatium() / 10);
             }
 
       // add remaining credit-words as subtitles
@@ -689,7 +679,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("subtitle='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      Tid::SUBTITLE, Align::HCENTER | Align::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
+                     (maxy - w->defaultY) * score->spatium() / 10);
             }
 
       // use metadata if no workable credit-words found

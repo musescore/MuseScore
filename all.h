@@ -84,9 +84,13 @@
 #include <QtGlobal>
 #include <QtDebug>
 #include <QSharedData>
+#include <QHash>
+#include <QKeySequence>
+#include <QAction>
 
 #include <QAtomicInt>
 #include <QErrorMessage>
+#include <QEventLoop>
 
 #include <QPainterPath>
 #include <QPixmap>
@@ -96,6 +100,7 @@
 #include <QFontDatabase>
 #include <QProcess>
 #include <QDesktopServices>
+#include <QDesktopWidget>
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 #include <QTextCursor>

@@ -513,12 +513,12 @@ PalettePanel* MuseScore::newDynamicsPalettePanel(bool defaultPalettePanel)
             "pppppp", "ppppp", "pppp",
             "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
             "ffff", "fffff", "ffffff",
-            "fp", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
+            "fp", "pf", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
             "rfz", "rf", "fz", "m", "r", "s", "z", "n"
             };
       static const std::vector<const char*> arrayDefault = {
             "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
-            "fp", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
+            "fp", "pf", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
             "rfz", "rf", "fz", "m", "r", "s", "z", "n"
             };
 
@@ -1592,6 +1592,13 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
       stxt->setSwing(true);
       sp->append(stxt, QT_TRANSLATE_NOOP("Palette", "Swing"))->setElementTranslated(true);
 
+      stxt = new SystemText(gscore, Tid::TEMPO);
+      /*: System text to switch from swing rhythm back to straight rhythm */
+      stxt->setXmlText(QT_TRANSLATE_NOOP("Palette", "Straight"));
+      stxt->setSwing(false); // redundant, being the default anyhow, but for documentation
+      /*: System text to switch from swing rhythm back to straight rhythm */
+      sp->append(stxt, QT_TRANSLATE_NOOP("Palette", "Straight"))->setElementTranslated(true);
+
       stxt = new SystemText(gscore);
       stxt->setXmlText(QT_TRANSLATE_NOOP("Palette", "System Text"));
       sp->append(stxt, QT_TRANSLATE_NOOP("Palette", "System text"))->setElementTranslated(true);
@@ -1656,7 +1663,10 @@ PalettePanel* MuseScore::newTimePalettePanel()
             { 9,  8, TimeSigType::NORMAL, "9/8" },
             { 12, 8, TimeSigType::NORMAL, "12/8" },
             { 4,  4, TimeSigType::FOUR_FOUR,  QT_TRANSLATE_NOOP("Palette", "4/4 common time") },
-            { 2,  2, TimeSigType::ALLA_BREVE, QT_TRANSLATE_NOOP("Palette", "2/2 alla breve") }
+            { 2,  2, TimeSigType::ALLA_BREVE, QT_TRANSLATE_NOOP("Palette", "2/2 alla breve") },
+            { 2,  2, TimeSigType::NORMAL, "2/2" },
+            { 3,  2, TimeSigType::NORMAL, "3/2" },
+            { 4,  2, TimeSigType::NORMAL, "4/2" },
             };
 
       PalettePanel* sp = new PalettePanel(PalettePanel::Type::TimeSig);

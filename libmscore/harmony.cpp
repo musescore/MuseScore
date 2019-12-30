@@ -791,7 +791,7 @@ void Harmony::endEdit(EditData& ed)
       {
       // complete editing: generate xml text, set Pid::TEXT, perform initial layout
       // if text has changed, this also triggers setHarmony() which renders chord symbol
-      // but any rendering or layout performed here is tenative,
+      // but any rendering or layout performed here is tentative,
       // we may still need to substitute special characters,
       // and that cannot be until after editing is completed
       TextBase::endEdit(ed);
@@ -1727,9 +1727,59 @@ QString Harmony::accessibleInfo() const
 
 QString Harmony::screenReaderInfo() const
       {
-      QString rez = Element::accessibleInfo();
-      if (_rootTpc != Tpc::TPC_INVALID)
-            rez = QString("%1 %2").arg(rez).arg(tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+      QString rez = userName();
+
+      switch (_harmonyType) {
+            case HarmonyType::ROMAN: {
+                  QString aux = _textName;
+                  bool hasUpper = aux.contains('I') || aux.contains('V');
+                  bool hasLower = aux.contains('i') || aux.contains('v');
+                  if (hasLower && !hasUpper)
+                        rez = QString("%1 %2").arg(rez).arg(QObject::tr("lower case"));
+                  aux = aux.toLower();
+                  static std::vector<std::pair<QString, QString>> rnaReplacements {
+                        { "vii", "7" },
+                        { "vi", "6" },
+                        { "iv", "4" },
+                        { "v", "5" },
+                        { "iii", "3" },
+                        { "ii", "2" },
+                        { "i", "1" },
+                        };
+                  static std::vector<std::pair<QString, QString>> symbolReplacements {
+                        { "b", "♭" },
+                        { "h", "♮" },
+                        { "#", "♯" },
+                        { "bb", "𝄫" },
+                        { "##", "𝄪" },
+                        // TODO: use SMuFL glyphs and translate
+                        //{ "o", ""},
+                        //{ "0", ""},
+                        //{ "\+", ""},
+                        //{ "\^", ""},
+                        };
+                  for (auto const &r : rnaReplacements)
+                        aux.replace(r.first, r.second);
+                  for (auto const &r : symbolReplacements) {
+                        // only replace when not preceded by backslash
+                        QString s = "(?<!\\\\)" + r.first;
+                        QRegularExpression re(s);
+                        aux.replace(re, r.second);
+                        }
+                  // construct string one character at a time
+                  for (auto c : aux)
+                        rez = QString("%1 %2").arg(rez).arg(c);
+                  }
+                  return rez;
+            case HarmonyType::NASHVILLE:
+                  if (!_function.isEmpty())
+                        rez = QString("%1 %2").arg(rez).arg(_function);
+                  break;
+            case HarmonyType::STANDARD:
+            default:
+                  if (_rootTpc != Tpc::TPC_INVALID)
+                        rez = QString("%1 %2").arg(rez).arg(tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+            }
 
       if (const_cast<Harmony*>(this)->parsedForm() && !hTextName().isEmpty()) {
             QString aux = const_cast<Harmony*>(this)->parsedForm()->handle();
@@ -1737,7 +1787,7 @@ QString Harmony::screenReaderInfo() const
             QString extension = "";
 
             foreach (QString s, aux.split(">", QString::SkipEmptyParts)) {
-                  if(!s.contains("blues"))
+                  if (!s.contains("blues"))
                         s.replace("b", QObject::tr("♭"));
                   extension += s + " ";
                   }

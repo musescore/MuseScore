@@ -53,7 +53,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
             chord->setStemDirection(Direction::UP);
             chords->push_back(chord);
             }
-      c.score()->style().set(Sid::pageOddTopMargin, 16.0/INCH);
+      //c.score()->style().set(Sid::pageOddTopMargin, 16.0/INCH);
       c.score()->style().set(Sid::pageOddLeftMargin, 0.0);
 
       c.score()->parts().front()->setLongName("");
@@ -87,11 +87,15 @@ NoteGroups::NoteGroups(QWidget* parent)
             };
 
       iconPalette->setName(QT_TRANSLATE_NOOP("Palette", "Beam Properties"));
+      iconPalette->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+      //iconPalette->setMag(.5);
       iconPalette->setGrid(27, 40);
-      iconPalette->setMag(.5);
+      iconPalette->setMinimumWidth(27 * 4 * Palette::guiMag() + 1);     // enough room for all icons, with roundoff
       iconPalette->setDrawGrid(true);
       populateIconPalette(iconPalette, bpa);
       iconPalette->setReadOnly(true);
+      iconPalette->setFixedHeight(iconPalette->heightForWidth(iconPalette->width()));
+      iconPalette->updateGeometry();
 
       connect(resetGroups, SIGNAL(clicked()), SLOT(resetClicked()));
       connect(view8,  SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));

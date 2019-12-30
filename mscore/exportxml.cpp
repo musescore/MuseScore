@@ -99,6 +99,7 @@
 #include "libmscore/textline.h"
 #include "libmscore/fermata.h"
 #include "musicxmlfonthandler.h"
+#include "libmscore/textframe.h"
 
 namespace Ms {
 
@@ -334,6 +335,7 @@ public:
       Score* score() const { return _score; };
       double getTenthsFromInches(double) const;
       double getTenthsFromDots(double) const;
+      Fraction tick() const { return _tick; }
       };
 
 //---------------------------------------------------------
@@ -1196,10 +1198,9 @@ void ExportMusicXml::credits(XmlWriter& xml)
       const double bm = getTenthsFromInches(_score->styleD(Sid::pageOddBottomMargin));
       //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
-      // write the credits
-      const MeasureBase* measure = _score->measures()->first();
-      if (measure) {
-            for (const Element* element : measure->el()) {
+      // write the credits (found in the header, i.e. everything before the first measure)
+      for (auto mb = _score->measures()->first(); mb && !mb->isMeasure(); mb = mb->next()) {
+            for (const Element* element : mb->el()) {
                   if (element->isText()) {
                         const Text* text = toText(element);
                         const double ph = getTenthsFromDots(parentHeight(text));
@@ -1625,19 +1626,28 @@ void ExportMusicXml::barlineRight(Measure* m)
       }
 
 //---------------------------------------------------------
+//   calculateTimeDeltaInDivisions
+//---------------------------------------------------------
+
+static int calculateTimeDeltaInDivisions(const Fraction& t1, const Fraction& t2, const int divisions)
+      {
+      return (t1 - t2).ticks() / divisions;
+      }
+
+//---------------------------------------------------------
 //   moveToTick
 //---------------------------------------------------------
 
 void ExportMusicXml::moveToTick(const Fraction& t)
       {
-      // qDebug("ExportMusicXml::moveToTick(t=%d) tick=%d", t, tick);
+      //qDebug("ExportMusicXml::moveToTick(t=%s) _tick=%s", qPrintable(t.print()), qPrintable(_tick.print()));
       if (t < _tick) {
 #ifdef DEBUG_TICK
             qDebug(" -> backup");
 #endif
             _attr.doAttr(_xml, false);
             _xml.stag("backup");
-            _xml.tag("duration", (_tick - t).ticks() / div);
+            _xml.tag("duration", calculateTimeDeltaInDivisions(_tick, t, div));
             _xml.etag();
             }
       else if (t > _tick) {
@@ -1646,7 +1656,7 @@ void ExportMusicXml::moveToTick(const Fraction& t)
 #endif
             _attr.doAttr(_xml, false);
             _xml.stag("forward");
-            _xml.tag("duration", (t - _tick).ticks() / div);
+            _xml.tag("duration", calculateTimeDeltaInDivisions(t, _tick, div));
             _xml.etag();
             }
       _tick = t;
@@ -3374,7 +3384,7 @@ static void beatUnit(XmlWriter& xml, const TDuration dur)
             }
       }
 
-static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text)
+static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, const int offset)
       {
       //qDebug("wordsMetrome('%s')", qPrintable(text->xmlText()));
       const QList<TextFragment> list = text->fragmentList();
@@ -3442,21 +3452,24 @@ static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text)
             mttm.writeTextFragments(text->fragmentList(), xml);
             xml.etag();
             }
+
+      if (offset)
+            xml.tag("offset", offset);
       }
 
 void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       {
+      const auto offset = calculateTimeDeltaInDivisions(text->tick(), tick(), div);
       /*
-      qDebug("ExportMusicXml::tempoText(TempoText='%s')", qPrintable(text->xmlText()));
+      qDebug("tick %s text->tick %s offset %d xmlText='%s')",
+             qPrintable(tick().print()),
+             qPrintable(text->tick().print()),
+             offset,
+             qPrintable(text->xmlText()));
       */
       _attr.doAttr(_xml, false);
       _xml.stag(QString("direction placement=\"%1\"").arg((text->placement() ==Placement::BELOW ) ? "below" : "above"));
-      wordsMetrome(_xml, _score, text);
-      /*
-      int offs = text->mxmlOff();
-      if (offs)
-            xml.tag("offset", offs);
-      */
+      wordsMetrome(_xml, _score, text, offset);
       if (staff)
             _xml.tag("staff", staff);
       _xml.tagE(QString("sound tempo=\"%1\"").arg(QString::number(text->tempo()*60.0)));
@@ -3469,8 +3482,12 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
 
 void ExportMusicXml::words(TextBase const* const text, int staff)
       {
+      const auto offset = calculateTimeDeltaInDivisions(text->tick(), tick(), div);
       /*
-      qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f xmlText='%s' plainText='%s'",
+      qDebug("tick %s text->tick %s offset %d userOff.x=%f userOff.y=%f xmlText='%s' plainText='%s'",
+             qPrintable(tick().print()),
+             qPrintable(text->tick().print()),
+             offset,
              text->offset().x(), text->offset().y(),
              qPrintable(text->xmlText()),
              qPrintable(text->plainText()));
@@ -3483,7 +3500,7 @@ void ExportMusicXml::words(TextBase const* const text, int staff)
             }
 
       directionTag(_xml, _attr, text);
-      wordsMetrome(_xml, _score, text);
+      wordsMetrome(_xml, _score, text, offset);
       directionETag(_xml, staff);
       }
 
@@ -3513,6 +3530,9 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       MScoreTextToMXML mttm("rehearsal", attr, defFmt, mtf);
       mttm.writeTextFragments(rmk->fragmentList(), _xml);
       _xml.etag();
+      const auto offset = calculateTimeDeltaInDivisions(rmk->tick(), tick(), div);
+      if (offset)
+            _xml.tag("offset", offset);
       directionETag(_xml, staff);
       }
 
@@ -3966,11 +3986,10 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
 
       _xml.etag();
 
-      /*
-      int offs = dyn->mxmlOff();
-      if (offs)
-            xml.tag("offset", offs);
-      */
+      const auto offset = calculateTimeDeltaInDivisions(dyn->tick(), tick(), div);
+      if (offset)
+            _xml.tag("offset", offset);
+
       if (staff)
             _xml.tag("staff", staff);
 
@@ -4004,6 +4023,9 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
       _xml.stag("direction-type");
       _xml.tagE(mxmlName);
       _xml.etag();
+      const auto offset = calculateTimeDeltaInDivisions(sym->tick(), tick(), div);
+      if (offset)
+            _xml.tag("offset", offset);
       directionETag(_xml, staff);
       }
 
@@ -4230,7 +4252,7 @@ static void repeatAtMeasureStart(XmlWriter& xml, Attributes& attr, Measure* m, i
                   case ElementType::MARKER:
                         {
                         // filter out the markers at measure Start
-                        const Marker* const mk = static_cast<const Marker* const>(e);
+                        const Marker* const mk = toMarker(e);
                         Marker::Type mtp = mk->markerType();
                         if (   mtp == Marker::Type::SEGNO
                                || mtp == Marker::Type::CODA
@@ -4273,7 +4295,7 @@ static void repeatAtMeasureStop(XmlWriter& xml, Measure* m, int strack, int etra
                   case ElementType::MARKER:
                         {
                         // filter out the markers at measure stop
-                        const Marker* const mk = static_cast<const Marker* const>(e);
+                        const Marker* const mk = toMarker(e);
                         Marker::Type mtp = mk->markerType();
                         if (mtp == Marker::Type::FINE || mtp == Marker::Type::TOCODA) {
                               directionMarker(xml, mk);
@@ -4287,7 +4309,7 @@ static void repeatAtMeasureStop(XmlWriter& xml, Measure* m, int strack, int etra
                         }
                         break;
                   case ElementType::JUMP:
-                        directionJump(xml, static_cast<const Jump* const>(e));
+                        directionJump(xml, toJump(e));
                         break;
                   default:
                         qDebug("repeatAtMeasureStop: direction type %s at tick %d not implemented",
@@ -4398,6 +4420,10 @@ static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
 //---------------------------------------------------------
 //  annotations
 //---------------------------------------------------------
+
+/*
+ * Write annotations that are attached to chords or rests
+ */
 
 // In MuseScore, Element::FRET_DIAGRAM and Element::HARMONY are separate annotations,
 // in MusicXML they are combined in the harmony element. This means they have to be matched.
@@ -5439,10 +5465,8 @@ static void annotationsWithoutNote(ExportMusicXml* exp, const int strack, const 
                   for (const auto element : segment->annotations()) {
                         if (!element->isFiguredBass() && !element->isHarmony()) {       // handled elsewhere
                               const auto wtrack = findTrackForAnnotations(element->track(), segment); // track to write annotation
-                              if (strack <= element->track() && element->track() < (strack + VOICES * staves) && wtrack < 0) {
-                                    exp->moveToTick(element->tick());
+                              if (strack <= element->track() && element->track() < (strack + VOICES * staves) && wtrack < 0)
                                     commonAnnotations(exp, element, staves > 1 ? 1 : 0);
-                                    }
                               }
                         }
                   }
@@ -5455,7 +5479,7 @@ static void annotationsWithoutNote(ExportMusicXml* exp, const int strack, const 
 //---------------------------------------------------------
 
 /**
- State handler used to calculate measure number including implict flag.
+ State handler used to calculate measure number including implicit flag.
  To be called once at the start of each measure in a part.
  */
 
@@ -5497,7 +5521,7 @@ void MeasureNumberStateHandler::updateForMeasure(const Measure* const m)
                   init();
             }
 
-      // update measure numers and cache result
+      // update measure numbers and cache result
       _cachedAttributes = " number=";
       if ((_irregularMeasureNo + _measureNo) == 2 && m->irregular()) {
             _cachedAttributes += "\"0\" implicit=\"yes\"";

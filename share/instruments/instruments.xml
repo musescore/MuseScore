@@ -2878,10 +2878,10 @@
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
-            <Instrument id="high-c-horn">
-                  <longName>High C Horn</longName>
-                  <shortName>H. C Hn.</shortName>
-                  <description>High C Horn</description>
+            <Instrument id="c-horn-alto">
+                  <longName>Horn in C alto</longName>
+                  <shortName>C Hn.</shortName>
+                  <description>Horn in C alto</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -2891,10 +2891,10 @@
                         <program value="60"/> <!--French Horn-->
                   </Channel>
             </Instrument>
-            <Instrument id="high-bb-horn">
-                  <longName>Horn in B♭</longName>
+            <Instrument id="bb-horn-alto">
+                  <longName>Horn in B♭ alto</longName>
                   <shortName>B♭ Hn.</shortName>
-                  <description>High B♭ Horn</description>
+                  <description>Horn in B♭ alto</description>
                   <musicXMLid>brass.french-horn</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -2996,10 +2996,27 @@
                         <program value="60"/> <!--French Horn-->
                   </Channel>
             </Instrument>
-            <Instrument id="low-c-horn">
+            <Instrument id="c-horn">
                   <longName>Horn in C</longName>
                   <shortName>C Hn.</shortName>
-                  <description>Low C Horn</description>
+                  <description>Horn in C</description>
+                  <musicXMLid>brass.natural-horn</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>34-67</aPitchRange>
+                  <pPitchRange>30-72</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
+                  <Channel>
+                        <program value="60"/> <!--French Horn-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="c-horn-bass">
+                  <trackName>Horn in C (Bass Clef)</trackName>
+                  <longName>Horn in C</longName>
+                  <shortName>C Hn.</shortName>
+                  <description>Horn in C</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
@@ -3009,19 +3026,17 @@
                         <program value="60"/> <!--French Horn-->
                   </Channel>
             </Instrument>
-            <Instrument id="low-c-horn-treble">
-                  <trackName>Horn in C (Treble Clef)</trackName>
-                  <longName>Horn in C</longName>
-                  <shortName>C Hn.</shortName>
-                  <description>Low C Horn</description>
+            <Instrument id="bb-horn-basso">
+                  <longName>Horn in B♭ basso</longName>
+                  <shortName>B♭ Hn.</shortName>
+                  <description>Horn in B♭ basso</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
-                  <transposingClef>G</transposingClef>
-                  <concertClef>F</concertClef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>34-67</aPitchRange>
-                  <pPitchRange>30-72</pPitchRange>
-                  <transposeDiatonic>-7</transposeDiatonic>
-                  <transposeChromatic>-12</transposeChromatic>
+                  <aPitchRange>32-65</aPitchRange>
+                  <pPitchRange>28-70</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-14</transposeChromatic>
                   <Channel>
                         <program value="60"/> <!--French Horn-->
                   </Channel>
@@ -3037,21 +3052,6 @@
                   <pPitchRange>29-77</pPitchRange>
                   <transposeDiatonic>-4</transposeDiatonic>
                   <transposeChromatic>-7</transposeChromatic>
-                  <Channel>
-                        <program value="60"/> <!--French Horn-->
-                  </Channel>
-            </Instrument>
-            <Instrument id="low-bb-horn">
-                  <longName>Horn in B♭ basso</longName>
-                  <shortName>B♭ ba Hn.</shortName>
-                  <description>Low B♭ Horn</description>
-                  <musicXMLid>brass.natural-horn</musicXMLid>
-                  <clef>F</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>32-65</aPitchRange>
-                  <pPitchRange>28-70</pPitchRange>
-                  <transposeDiatonic>-1</transposeDiatonic>
-                  <transposeChromatic>-2</transposeChromatic>
                   <Channel>
                         <program value="60"/> <!--French Horn-->
                   </Channel>
@@ -3287,8 +3287,6 @@
                   <Channel name="mute">
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
-                  <genre>orchestra</genre>
-                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="a-piccolo-trumpet">
                   <longName>Piccolo Trumpet in A</longName>
@@ -3417,6 +3415,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>popular</genre>
+                  <genre>orchestra</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>

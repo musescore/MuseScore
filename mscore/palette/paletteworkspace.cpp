@@ -22,6 +22,7 @@
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
 
+#include "createpalettedialog.h"
 #include "keyedit.h"
 #include "musescore.h"
 #include "palette.h" // applyPaletteElement
@@ -267,9 +268,24 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
 
 bool UserPaletteController::insertNewItem(const QModelIndex& parent, int row)
       {
-      if (canEdit(parent))
-            return model()->insertRow(row, parent);
-      return false;
+      if (!canEdit(parent))
+            return false;
+
+      const bool newItemIsPalette = !parent.isValid();
+
+      if (newItemIsPalette) {
+            CreatePaletteDialog dlg(mscore);
+            const int result = dlg.exec();
+            if (result == QDialog::Rejected || dlg.paletteName().isEmpty())
+                  return false;
+
+            if (!model()->insertRow(row, parent))
+                  return false;
+            model()->setData(model()->index(row, 0, parent), dlg.paletteName(), Qt::DisplayRole);
+            return true;
+            }
+
+      return model()->insertRow(row, parent);
       }
 
 //---------------------------------------------------------
@@ -556,11 +572,12 @@ bool UserPaletteController::canEdit(const QModelIndex& index) const
 //   UserPaletteController::applyPaletteElement
 //---------------------------------------------------------
 
-void UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
+bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
       {
       const PaletteCell* cell = model()->data(index, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
       if (cell && cell->element)
-            Palette::applyPaletteElement(cell->element.get(), modifiers);
+            return Palette::applyPaletteElement(cell->element.get(), modifiers);
+      return false;
       }
 
 //---------------------------------------------------------
@@ -589,7 +606,7 @@ QAbstractItemModel* PaletteWorkspace::mainPaletteModel()
             visFilterModel->setSourceModel(userPalette);
 
             // Wrap it into another proxy model to enable filtering by palette cell name
-            QSortFilterProxyModel* textFilterModel = new ChildFilterProxyModel(this);
+            QSortFilterProxyModel* textFilterModel = new PaletteCellFilterProxyModel(this);
             textFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
             textFilterModel->setSourceModel(visFilterModel);
             visFilterModel->setParent(textFilterModel);
@@ -815,7 +832,10 @@ bool PaletteWorkspace::resetPalette(const QModelIndex& index)
       if (!index.isValid())
             return false;
 
-      const auto answer = QMessageBox::question(
+      const auto answer =
+         (MScore::noGui && MScore::testMode)
+         ? QMessageBox::Yes
+         : QMessageBox::question(
             nullptr,
             "",
             tr("Do you want to restore this palette to its default state? All changes to this palette will be lost."),

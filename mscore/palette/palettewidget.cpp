@@ -150,7 +150,17 @@ void PaletteWidget::activateSearchBox()
 void PaletteWidget::applyCurrentPaletteElement()
       {
       const bool invoked = QMetaObject::invokeMethod(rootObject(), "applyCurrentPaletteElement");
+      Q_UNUSED(invoked);
       Q_ASSERT(invoked);
+      }
+
+//---------------------------------------------------------
+//   PaletteWidget::notifyElementDraggedToScoreView
+//---------------------------------------------------------
+
+void PaletteWidget::notifyElementDraggedToScoreView()
+      {
+      qmlInterface->notifyElementDraggedToScoreView();
       }
 
 //---------------------------------------------------------
@@ -164,7 +174,7 @@ void PaletteWidget::showEvent(QShowEvent* evt)
             wasShown = true;
             if (mscoreFirstStart) {
                   // set default width for palettes
-                  mscore->resizeDocks({ this }, { initialViewSize().width() }, Qt::Horizontal);
+                  mscore->resizeDocks({ this }, { int(200 * guiScaling) }, Qt::Horizontal);
                   }
             }
       }

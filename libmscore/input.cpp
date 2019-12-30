@@ -14,6 +14,8 @@
 #include "segment.h"
 #include "part.h"
 #include "staff.h"
+#include "stem.h"
+#include "hook.h"
 #include "score.h"
 #include "chord.h"
 #include "rest.h"
@@ -79,6 +81,34 @@ void InputState::setDots(int n)
       }
 
 //---------------------------------------------------------
+//   note
+//---------------------------------------------------------
+
+Note* InputState::note(Element* e)
+      {
+      return e && e->isNote() ? toNote(e) : nullptr;
+      }
+
+//---------------------------------------------------------
+//   chordRest
+//---------------------------------------------------------
+
+ChordRest* InputState::chordRest(Element* e)
+      {
+      if (!e)
+            return nullptr;
+      if (e->isChordRest())
+            return toChordRest(e);
+      if (e->isNote())
+            return toNote(e)->chord();
+      if (e->isStem())
+            return toStem(e)->chord();
+      if (e->isHook())
+            return toHook(e)->chord();
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   update
 //---------------------------------------------------------
 
@@ -93,9 +123,7 @@ void InputState::update(Selection& selection)
       bool differentDurations = false;
       bool chordsAndRests = false;
       for (Element* e : selection.elements()) {
-            ChordRest* cr = nullptr;
-            if (e->isNote()) {
-                  Note* n = toNote(e);
+            if (Note* n = note(e)) {
                   if (n1) {
                         if (n->accidentalType() != n1->accidentalType()) {
                               setAccidentalType(AccidentalType::NONE);
@@ -106,11 +134,9 @@ void InputState::update(Selection& selection)
                         setAccidentalType(n->accidentalType());
                         n1 = n;
                         }
-                  cr = toChordRest(n->chord());
                   }
-            else if (e->isChordRest())
-                  cr = toChordRest(e);
-            if (cr) {
+
+            if (ChordRest* cr = chordRest(e)) {
                   if (cr1) {
                         if (cr->durationType() != cr1->durationType()) {
                               setDuration(TDuration::DurationType::V_INVALID);
@@ -127,37 +153,31 @@ void InputState::update(Selection& selection)
                         cr1 = cr;
                         }
                   }
+
             if (differentAccidentals && differentDurations && chordsAndRests)
                   break;
             }
+
       Element* e = selection.element();
       if (e == 0)
             return;
-      if (e && e->isChord())
-            e = toChord(e)->upNote();
+
+      ChordRest* cr = chordRest(e);
+      Note* n = note(e);
+      if (!n && cr && cr->isChord())
+            n = toChord(cr)->upNote();
+
+      if (cr) {
+            setTrack(cr->track());
+            setNoteType(n ? n->noteType() : NoteType::NORMAL);
+            setBeamMode(cr->beamMode());
+            }
 
       setDrumNote(-1);
-      if (e->isNote()) {
-            Note* note    = toNote(e);
-            Chord* chord  = note->chord();
-            setTrack(note->track());
-            setNoteType(note->noteType());
-            setBeamMode(chord->beamMode());
-            }
-      else if (e->isRest() || e->isRepeatMeasure()) {
-            Rest* rest = toRest(e);
-            setTrack(rest->track());
-            setBeamMode(rest->beamMode());
-            setNoteType(NoteType::NORMAL);
-            }
-      if (e->isNote() || e->isRest()) {
-            const Instrument* instr = e->part()->instrument();
-            if (instr->useDrumset()) {
-                  if (e->isNote())
-                        setDrumNote(toNote(e)->pitch());
-                  else
-                        setDrumNote(-1);
-                  }
+      if (n) {
+            const Instrument* instr = n->part()->instrument();
+            if (instr->useDrumset())
+                  setDrumNote(n->pitch());
             }
       }
 

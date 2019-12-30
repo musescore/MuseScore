@@ -141,6 +141,7 @@ void TestMidi::events_data()
       QTest::newRow("testPausesRepeats") <<  "testPausesRepeats";
       QTest::newRow("testPausesTempoTimesigChange") <<  "testPausesTempoTimesigChange";
       QTest::newRow("testGuitarTrem") <<  "testGuitarTrem";
+      QTest::newRow("testPlayArticulation") << "testPlayArticulation";
       }
 
 //---------------------------------------------------------
@@ -540,7 +541,7 @@ void TestMidi::events()
 
       MasterScore* score = readScore(readFile);
       EventMap events;
-      // a temporary, unitialized synth state so we can render the midi - should fall back correctly
+      // a temporary, uninitialized synth state so we can render the midi - should fall back correctly
       SynthesizerState ss;
       score->renderMidi(&events, ss);
       qDebug() << "Opened score " << readFile;

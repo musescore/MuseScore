@@ -27,12 +27,13 @@
 #include "jackaudio.h"
 #include "musescore.h"
 #include "libmscore/mscore.h"
+#include "libmscore/sig.h"
 #include "preferences.h"
 // #include "msynth/synti.h"
 #include "seq.h"
 #include "libmscore/score.h"
 #include "libmscore/repeatlist.h"
-#include "mscore/playpanel.h"
+#include "playpanel.h"
 #include <jack/midiport.h>
 
 // Prevent killing sequencer with wrong data

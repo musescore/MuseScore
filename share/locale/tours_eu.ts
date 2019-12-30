@@ -109,14 +109,6 @@ Puntu bat gehitzeko, dagokion ikonoa ala &quot;.&quot; laster-tekla sakatu.</tra
 Gehiago jakiteko, &quot;Hurrengoa&quot; sakatu.</translation>
     </message>
     <message>
-        <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
-    to move between pages.
-    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
-        <comment>navigate-tour</comment>
-        <translation>Zure teklatuko nabigazio-teklak; OrrGora, OrrBeh, Hasi eta Buka, beste edozein aplikaziotan bezala funtzionatzen dute orrialdeen artean mugitzeko.
-Tekla hauek ez dituzten teklatuak Fn+Gora/Behera/Eskuin/Ezker bezalako baliokideak dituzte.</translation>
-    </message>
-    <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
         <translation>Beste nabigazio tresnak &apos;Denbora-lerroa&apos; eta &apos;Nabigatzailea&apos; barne, &apos;Ikusi&apos; menuan daude.</translation>
@@ -214,38 +206,6 @@ Marra urdin mehe batez nabarenduta dauden kaxek unean ikusgai dauden konpasak ir
 Gehiago jakiteko, &quot;Hurrengoa&quot; sakatu.</translation>
     </message>
     <message>
-        <source>To make a single selection, click the element you want to select.
-    It becomes highlighted to indicate that it is selected.
-    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
-    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
-    and also move up and down from staff to staff.</source>
-        <comment>select-tour</comment>
-        <translation>Hautapen bakarra egiteko, hautatu nahi duuzn elementua sakatu.
-Hautatuta dagoela adierazteko nabarmentzen da.
-Hautapena partituraren noten eta isiluneen zehar mugitzeko, ezker eta eskuin gezi-teklak erabil ditzakezu.
-Aholkua: gezi-teklekin Alt tekla (Option macOS-en) sakatzen baduzu, beste elementu batzuen zehar mugitu ahalko zara,
-eta pentagramatik pentagramara gora eta behera ere.</translation>
-    </message>
-    <message>
-        <source>A range selection includes everything from one point in time to another across one or more staves.
-    It is indicated by a blue rectangle encompassing the entire range.
-    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
-    You can also extend range selections by holding the Shift key while moving the cursor.</source>
-        <comment>select-tour</comment>
-        <translation>Hein hautapen batek denboran puntu batetik bestera dagoen guztia hartzen du barnean, pentagrama bakar baten edo gehiagoren zehar.
-Hein osoa hartzen duen laukizuzen urdin batek adierazten du.
-Hein hautapen bat egiteko, hautatu nahi duzun lehenengo nota, isilunea edo konpasa sakatu, ondoren Maius+klikatu azkena.
-Hein-hautapenen tamaina aldatzeko, ezker eta eskuin gezi-teklak sakatu Maius tekla sakatuta dagoen bitartean.</translation>
-    </message>
-    <message>
-        <source>Another way to make selections is to hold Shift while dragging.
-    If your selection includes notes, it will automatically be made as a range selection;
-    otherwise it will be made as a list selection.</source>
-        <comment>select-tour</comment>
-        <translation>Hautapenak egiteko beste bide bat sagua eraman bitartean Maius sakatuta mantentzea da.
-Hautapenak notak baditu, automatikoki hein hautapena egingo da; bestela, zerrenda hautapena.</translation>
-    </message>
-    <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Azkenik, hautapen iragazkiaren bidez (&apos;Ikusi&apos; menuan dagoena) mota zehatz bateko elementuak hein hautapen batetik kanpo utz ditzakezu.</translation>
@@ -255,11 +215,21 @@ Hautapenak notak baditu, automatikoki hein hautapena egingo da; bestela, zerrend
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
     You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Balio bat aldatu baduzu, &apos;Berrezarri&apos; botoia saka dezakezu lehenetsira berrezartzeko.
+Balioa estilo ezarpen batek kontrolatzen badu, &apos;Estilo bezala ezarri&apos; botoia sakatuz uneko balioa estiloaren lehenetsi bezala ezar dezakezu.
+Estiloaren balio lehenetsiak Formatua / Estiloa erabiliz ere ezar ditzakezu.</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
+        <comment>navigate-tour</comment>
+        <translation>Bertikalki mugitzeko biderik azkarrena saguaren gurpila edo bere ukipen-keinu baliokidea (adibidez, bi hatzamar arrastatzea) erabiltzea da.
+Horizontalki mugitzeko, gauza bera egin Maius sakatuta mantendu bitartean.</translation>
+    </message>
+    <message>
+        <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
         <translation type="unfinished"/>
     </message>
@@ -267,13 +237,14 @@ Hautapenak notak baditu, automatikoki hein hautapena egingo da; bestela, zerrend
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Mugitu dezakezu partitura distantzia txikietan; horretarako, klik egin hutsik dagoen zonalde batean orrialdean eta hedatu.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Hautatutako iraupena duen nota bat sartzeko, idatzi bere izenaren letra edo klik egin pentagraman.
+   Oktaba aldatzeko sakatu &quot;Ctrl+Gora/Behera&quot; (macOS:&quot;Cmd+Gora/Behera&quot; </translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
@@ -284,11 +255,20 @@ Hautapenak notak baditu, automatikoki hein hautapena egingo da; bestela, zerrend
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Nota bat akorde bati gehitzeko, &quot;Shift&quot; sakatu dagokion letra idazten duzun bitartean; era berean, pentagraman klik egin dezakezu.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</source>
+        <comment>select-tour</comment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -300,13 +280,28 @@ Hautapenak notak baditu, automatikoki hein hautapena egingo da; bestela, zerrend
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
+    You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
+        <comment>select-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</source>
+        <comment>select-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
 
     To edit its range, double-click the line (which automatically selects its end handle) and:
 
-    - Press Shift-Right to move that handle forward.
+    - Press &quot;Shift+Right&quot; to move that handle forward.
 
-    - Press Shift-Left to move that handle backward.</source>
+    - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
         <translation type="unfinished"/>
     </message>
@@ -341,7 +336,10 @@ Hautapenak notak baditu, automatikoki hein hautapena egingo da; bestela, zerrend
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Hau da tour honen bukaera!
+MuseScore erabili ahala, tour gehiago agerturko dira aplikazioaren ezaugarriak azaltzeko.
+Tour hauek desgaitzeko, desmarkatu &quot;Jarraitu tourrak erakusten&quot; aukera  leiho hau itxi baino lehenago.
+Era berean, gaitu/desgaitu dezakezu eta leheneratu tourrak Laguntza&gt;Tourrak aukeran.</translation>
     </message>
 </context>
 </TS>

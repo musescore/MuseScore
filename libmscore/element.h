@@ -136,10 +136,8 @@ class EditData {
       QPointF dragOffset;
       Element* element                 { 0     };
       Element* dropElement             { 0     };
-      Fraction duration                { Fraction(1,4) };
 
       EditData(MuseScoreView* v) : view(v) {}
-      void init();
       void clearData();
 
       ElementEditData* getData(const Element*) const;
@@ -170,6 +168,12 @@ class Element : public ScoreElement {
       mutable ElementFlags _flags;
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
+
+   public:
+      enum class EditBehavior {
+            SelectOnly,
+            Edit,
+            };
 
   protected:
       mutable int _z;
@@ -298,10 +302,16 @@ class Element : public ScoreElement {
       virtual void editCut(EditData&)            {}
       virtual void editCopy(EditData&)           {}
 
-      virtual void updateGrips(EditData&) const  {}
+      void updateGrips(EditData&) const;
       virtual bool nextGrip(EditData&) const;
       virtual bool prevGrip(EditData&) const;
       virtual QPointF gripAnchor(Grip) const     { return QPointF(); }
+
+      virtual EditBehavior normalModeEditBehavior() const { return EditBehavior::SelectOnly; }
+      virtual int gripsCount() const { return 0; }
+      virtual Grip initialEditModeGrip() const { return Grip::NO_GRIP; }
+      virtual Grip defaultGrip() const { return Grip::NO_GRIP; }
+      virtual std::vector<QPointF> gripsPositions(const EditData&) const { return std::vector<QPointF>(); }
 
       int track() const                       { return _track; }
       virtual void setTrack(int val)          { _track = val;  }
@@ -488,6 +498,7 @@ class Element : public ScoreElement {
 struct PropertyData {
       Pid id;
       QVariant data;
+      PropertyFlags f;
       };
 
 class ElementEditData {
@@ -495,7 +506,8 @@ class ElementEditData {
       Element* e;
       QList<PropertyData> propertyData;
 
-      void pushProperty(Pid pid) { propertyData.push_back(PropertyData({pid, e->getProperty(pid) })); }
+      virtual ~ElementEditData() = default;
+      void pushProperty(Pid pid) { propertyData.push_back(PropertyData({ pid, e->getProperty(pid), e->propertyFlags(pid) })); }
       };
 
 //---------------------------------------------------------

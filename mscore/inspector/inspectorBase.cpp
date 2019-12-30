@@ -328,7 +328,7 @@ void InspectorBase::setElement()
 void InspectorBase::checkDifferentValues(const InspectorItem& ii)
       {
       bool valuesAreDifferent = false;
-      QColor c(Ms::preferences.getColor(preferences.isThemeDark() ? PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON : PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON));
+      QColor c(Ms::preferences.getColor(preferences.isThemeDark() ? PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK : PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_LIGHT));
 
       if (inspector->el()->size() > 1) {
             Pid id      = ii.t;
@@ -443,8 +443,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
       recursion = false;
 
       ScoreView* cv = mscore->currentScoreView();
-      if (cv->editMode())
-            cv->updateGrips();
+      cv->updateGrips();
       }
 
 //---------------------------------------------------------

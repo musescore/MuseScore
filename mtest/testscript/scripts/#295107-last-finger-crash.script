@@ -8,7 +8,7 @@ cmd note-c
 cmd note-c
 cmd escape
 cmd prev-chord
-palette Fingering style String&#032Number text 3
+palette Fingering style String&#032;Number text 3
 cmd edit-element
 cmd next-element
 cmd next-element

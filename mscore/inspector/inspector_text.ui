@@ -434,6 +434,9 @@
            <property name="accessibleName">
             <string>Corner radius</string>
            </property>
+           <property name="maximum">
+            <number>9999</number>
+           </property>
           </widget>
          </item>
         </layout>

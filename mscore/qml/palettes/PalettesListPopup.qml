@@ -36,11 +36,24 @@ StyledPopup {
         id: column
         width: parent.width
 
+        spacing: 4
+
         Text {
             id: header
             text: qsTr("More palettes")
             font: globalStyle.font
             color: globalStyle.windowText
+        }
+
+        StyledButton {
+            id: createCustomPaletteButton
+            width: parent.width
+    //         iconSource: "icons/add.png"
+            text: qsTr("Create custom palette")
+            onClicked: {
+                addCustomPaletteRequested();
+                palettesListPopup.close();
+            }
         }
 
         ToolSeparator {
@@ -66,8 +79,10 @@ StyledPopup {
             property var extraPalettesModel: null // keeping a separate variable for a model prevents it from being deleted by QML
             model: extraPalettesModel
 
-            readonly property int availableHeight: palettesListPopup.maxHeight - header.height - createCustomPaletteButton.height - topSeparator.height - bottomSeparator.height
+            readonly property int availableHeight: palettesListPopup.maxHeight - header.height - createCustomPaletteButton.height - topSeparator.height
             height: Math.min(availableHeight, contentHeight)
+
+            boundsBehavior: Flickable.StopAtBounds
 
             ScrollBar.vertical: ScrollBar {}
 
@@ -145,23 +160,6 @@ StyledPopup {
                         elide: Text.ElideMiddle
                     }
                 }
-            }
-        }
-
-        ToolSeparator {
-            id: bottomSeparator
-            orientation: Qt.Horizontal
-            width: parent.width
-        }
-
-        StyledButton {
-            id: createCustomPaletteButton
-            width: parent.width
-    //         iconSource: "icons/add.png"
-            text: qsTr("Create custom palette")
-            onClicked: {
-                addCustomPaletteRequested();
-                palettesListPopup.close();
             }
         }
     }

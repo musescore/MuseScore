@@ -20,6 +20,8 @@
 #ifndef __QMLDOCKWIDGET_H__
 #define __QMLDOCKWIDGET_H__
 
+#include "libmscore/mscore.h"
+
 namespace Ms {
 
 #ifndef NDEBUG
@@ -84,6 +86,7 @@ class QmlStyle : public QObject
 
       QPalette _palette;
       QFont _font;
+      bool _shadowOverlay = false;
 
 #define COLOR_PROPERTY(name, role) \
       Q_PROPERTY(QColor name READ get_##name CONSTANT) \
@@ -104,14 +107,34 @@ class QmlStyle : public QObject
       COLOR_PROPERTY(highlight, QPalette::Highlight)
       COLOR_PROPERTY(highlightedText, QPalette::HighlightedText)
 
+      COLOR_PROPERTY(shadow, QPalette::Shadow)
+
 #undef COLOR_PROPERTY
 
+#define COLOR_PROPERTY_EXPR(name, expr) \
+      Q_PROPERTY(QColor name READ get_##name CONSTANT) \
+      QColor get_##name() const { return expr; }
+
+      COLOR_PROPERTY_EXPR(voice1Color, MScore::selectColor[0]);
+      COLOR_PROPERTY_EXPR(voice2Color, MScore::selectColor[1]);
+      COLOR_PROPERTY_EXPR(voice3Color, MScore::selectColor[2]);
+      COLOR_PROPERTY_EXPR(voice4Color, MScore::selectColor[3]);
+
+#undef COLOR_PROPERTY_EXPR
+
       Q_PROPERTY(QFont font READ font CONSTANT)
+      Q_PROPERTY(bool shadowOverlay READ shadowOverlay NOTIFY shadowOverlayChanged)
 
       QFont font() const { return _font; }
 
-  public:
+   signals:
+      void shadowOverlayChanged();
+
+   public:
       QmlStyle(QPalette, QObject* parent = nullptr);
+
+      bool shadowOverlay() const { return _shadowOverlay; }
+      void setShadowOverlay(bool);
       };
 
 //---------------------------------------------------------
@@ -149,6 +172,8 @@ class QmlDockWidget : public QDockWidget
       void resizeEvent(QResizeEvent* evt) override;
 
       void ensureQmlViewFocused();
+
+      void setShadowOverlay(bool val) { qmlStyle->setShadowOverlay(val); }
       };
 
 }

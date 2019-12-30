@@ -29,6 +29,11 @@
 #include "palette/paletteworkspace.h"
 #include "extension.h"
 
+#if defined(FOR_WINSTORE)  // or even just Q_OS_WIN ?
+extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+#else
+int qt_ntfs_permission_lookup;
+#endif
 
 namespace Ms {
 
@@ -158,18 +163,14 @@ void MuseScore::showWorkspaceMenu()
 
 void MuseScore::deleteWorkspace()
       {
-      if (!workspaces)
-            return;
-      QAction* a = workspaces->checkedAction();
-      if (!a)
-            return;
-      
-      Workspace* workspace = WorkspacesManager::findByName(a->text());
+      Workspace* workspace = WorkspacesManager::currentWorkspace();
       if (!workspace)
             return;
 
-      QMessageBox::StandardButton reply;
-      reply = QMessageBox::question(0,
+      QMessageBox::StandardButton reply =
+         (MScore::noGui && MScore::testMode)
+         ? QMessageBox::Yes
+         : QMessageBox::question(0,
                  QWidget::tr("Are you sure?"),
                  QWidget::tr("Do you really want to delete the '%1' workspace?").arg(workspace->name()),
                  QMessageBox::Yes | QMessageBox::No,
@@ -680,7 +681,9 @@ void Workspace::read()
             return;
             }
       QFileInfo fi(_path);
+      qt_ntfs_permission_lookup++;
       _readOnly = !fi.isWritable();
+      qt_ntfs_permission_lookup--;
 
       preferences.updateLocalPreferences();
 
@@ -1079,7 +1082,9 @@ void Workspace::ensureWorkspaceSaved()
             write();
 
             const QFileInfo fi(_path);
+            qt_ntfs_permission_lookup++;
             _readOnly = !fi.isWritable();
+            qt_ntfs_permission_lookup--;
             Q_ASSERT(!_readOnly);
 
             WorkspacesManager::refreshWorkspaces();
@@ -1182,7 +1187,9 @@ void WorkspacesManager::initWorkspaces()
             if (translate)
                   p->setTranslatableName(name);
 
+            qt_ntfs_permission_lookup++;
             p->setReadOnly(!fi.isWritable());
+            qt_ntfs_permission_lookup--;
 
             if (isEditedDefault)
                   editedWorkpaces.push_back(p);
@@ -1285,6 +1292,20 @@ Workspace* WorkspacesManager::createNewWorkspace(const QString& name)
       m_workspaces.append(w);
       m_visibleWorkspaces.append(w);
       return w;
+      }
+
+//---------------------------------------------------------
+//   clearWorkspaces
+//---------------------------------------------------------
+
+void WorkspacesManager::clearWorkspaces()
+      {
+      m_currentWorkspace = nullptr;
+      for (Workspace* w : m_workspaces)
+            w->deleteLater();
+      m_workspaces.clear();
+      m_visibleWorkspaces.clear();
+      isWorkspacesListDirty = true;
       }
 
 //---------------------------------------------------------

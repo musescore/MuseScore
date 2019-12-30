@@ -92,7 +92,7 @@
    <item row="0" column="1" rowspan="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="Awl::MeterSlider" name="gain" native="true">
+      <widget class="Awl::MeterSlider" name="gainSlider" native="true">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -459,7 +459,7 @@
   <tabstop>effectB</tabstop>
   <tabstop>masterTuning</tabstop>
   <tabstop>changeTuningButton</tabstop>
-  <tabstop>gain</tabstop>
+  <tabstop>gainSlider</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>loadButton</tabstop>
   <tabstop>storeButton</tabstop>

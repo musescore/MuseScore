@@ -79,6 +79,7 @@ class Palette : public QWidget {
       int hgrid;
       int vgrid;
       int currentIdx;
+      int pressedIndex = -1;
       int dragIdx;
       int selectedIdx;
       QPoint dragStartPosition;
@@ -86,7 +87,7 @@ class Palette : public QWidget {
       qreal extraMag;
       bool _drawGrid;
       bool _selectable;
-      bool _disableDoubleClick { false };
+      bool _disableElementsApply { false };
       bool _readOnly;
       bool _systemPalette;
       qreal _yOffset;                // in spatium units of "gscore"
@@ -97,7 +98,7 @@ class Palette : public QWidget {
 
       virtual void paintEvent(QPaintEvent*) override;
       virtual void mousePressEvent(QMouseEvent*) override;
-      virtual void mouseDoubleClickEvent(QMouseEvent*) override;
+      void mouseReleaseEvent(QMouseEvent* event) override;
       virtual void mouseMoveEvent(QMouseEvent*) override;
       virtual void leaveEvent(QEvent*) override;
       virtual bool event(QEvent*) override;
@@ -131,7 +132,7 @@ class Palette : public QWidget {
       void nextPaletteElement();
       void prevPaletteElement();
       void applyPaletteElement();
-      static void applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers = 0);
+      static bool applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers = 0);
       PaletteCell* append(Element*, const QString& name, QString tag = QString(),
          qreal mag = 1.0);
       PaletteCell* add(int idx, Element*, const QString& name,
@@ -153,7 +154,8 @@ class Palette : public QWidget {
       void setSelected(int idx)      { selectedIdx = idx;  }
       bool readOnly() const          { return _readOnly;   }
       void setReadOnly(bool val);
-      void setDisableDoubleClick(bool val) { _disableDoubleClick = val; }
+      bool disableElementsApply() const      { return _disableElementsApply; }
+      void setDisableElementsApply(bool val) { _disableElementsApply = val; }
 
       bool systemPalette() const     { return _systemPalette; }
       void setSystemPalette(bool val);
@@ -161,8 +163,8 @@ class Palette : public QWidget {
       void setMag(qreal val);
       qreal mag() const              { return extraMag;    }
       void setYOffset(qreal val)     { _yOffset = val;     }
-      qreal yOffset() const          { return _yOffset;        }
-      int columns() const            { return width() / hgrid; }
+      qreal yOffset() const          { return _yOffset;    }
+      int columns() const;
       int rows() const;
       int size() const               { return filterActive ? dragCells.size() : cells.size(); }
       PaletteCell* cellAt(int index) const { return ccp()->value(index); }
@@ -175,6 +177,10 @@ class Palette : public QWidget {
       void setMoreElements(bool val);
       bool filter(const QString& text);
       void setShowContextMenu(bool val) { _showContextMenu = val; }
+
+      static qreal guiMag();
+      int gridWidthM() const  { return hgrid * guiMag(); }
+      int gridHeightM() const { return vgrid * guiMag(); }
 
       int getCurrentIdx() { return currentIdx; }
       void setCurrentIdx(int i) { currentIdx = i; }

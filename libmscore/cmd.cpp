@@ -92,7 +92,8 @@ void CmdState::reset()
       _endStaff = -1;
       _el = nullptr;
       _oneElement = true;
-      _elIsMeasureBase = false;
+      _mb = nullptr;
+      _oneMeasureBase = true;
       _locked = false;
       }
 
@@ -118,6 +119,7 @@ void CmdState::setTick(const Fraction& t)
 
 void CmdState::setStaff(int st)
       {
+      Q_ASSERT(st > -2);
       if (_locked || st == -1)
             return;
 
@@ -125,6 +127,19 @@ void CmdState::setStaff(int st)
             _startStaff = st;
       if (_endStaff == -1 || st > _endStaff)
             _endStaff = st;
+      }
+
+//---------------------------------------------------------
+//   setMeasureBase
+//---------------------------------------------------------
+
+void CmdState::setMeasureBase(const MeasureBase* mb)
+      {
+      if (!mb || _mb == mb || _locked)
+            return;
+
+      _oneMeasureBase = !_mb;
+      _mb = mb;
       }
 
 //---------------------------------------------------------
@@ -136,20 +151,36 @@ void CmdState::setElement(const Element* e)
       if (!e || _el == e || _locked)
             return;
 
-      // prefer measures and frames as edit targets
-      const bool oldIsMeasureBase = _elIsMeasureBase;
-      const bool newIsMeasureBase = e->isMeasureBase();
-      if (newIsMeasureBase && !oldIsMeasureBase) {
-            _oneElement = true;
-            return;
-            }
-      else if (oldIsMeasureBase && !newIsMeasureBase)
-            return; // don't remember the new element
-      else
-            _oneElement = !_el;
-
+      _oneElement = !_el;
       _el = e;
-      _elIsMeasureBase = newIsMeasureBase;
+
+      if (_oneMeasureBase)
+            setMeasureBase(e->findMeasureBase());
+      }
+
+//---------------------------------------------------------
+//   unsetElement
+//---------------------------------------------------------
+
+void CmdState::unsetElement(const Element* e)
+      {
+      if (_el == e)
+            _el = nullptr;
+      if (_mb == e)
+            _mb = nullptr;
+      }
+
+//---------------------------------------------------------
+//   element
+//---------------------------------------------------------
+
+const Element* CmdState::element() const
+      {
+      if (_oneElement)
+            return _el;
+      if (_oneMeasureBase)
+            return _mb;
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -267,11 +298,9 @@ void Score::update(bool resetCmdState)
             CmdState& cs = ms->cmdState();
             ms->deletePostponed();
             if (cs.layoutRange()) {
-                  cs.lock();
                   for (Score* s : ms->scoreList())
                         s->doLayoutRange(cs.startTick(), cs.endTick());
                   updateAll = true;
-                  cs.unlock();
                   }
             }
 
@@ -512,15 +541,28 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
             int npitch;
             int ntpc1;
             int ntpc2;
-            if (abs(valTmp) != 7) {
+            bool accidental = _is.noteEntryMode() && _is.accidentalType() != AccidentalType::NONE;
+            bool forceAccidental = false;
+            if (abs(valTmp) != 7 || accidental) {
                   int line      = on->line() - valTmp;
                   Fraction tick      = chord->tick();
                   Staff* estaff = staff(on->staffIdx() + chord->staffMove());
                   ClefType clef = estaff->clef(tick);
                   Key key       = estaff->key(tick);
-                  npitch        = line2pitch(line, clef, key);
+                  int ntpc;
+                  if (accidental) {
+                        AccidentalVal acci = Accidental::subtype2value(_is.accidentalType());
+                        int step = absStep(line, clef);
+                        int octave = step / 7;
+                        npitch = step2pitch(step) + octave * 12 + int(acci);
+                        forceAccidental = (npitch == line2pitch(line, clef, key));
+                        ntpc = step2tpc(step % 7, acci);
+                        }
+                  else {
+                        npitch = line2pitch(line, clef, key);
+                        ntpc = pitch2tpc(npitch, key, Prefer::NEAREST);
+                        }
 
-                  int ntpc   = pitch2tpc(npitch, key, Prefer::NEAREST);
                   Interval v = on->part()->instrument(tick)->transpose();
                   if (v.isZero())
                         ntpc1 = ntpc2 = ntpc;
@@ -553,10 +595,19 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
             note->setPitch(npitch, ntpc1, ntpc2);
 
             undoAddElement(note);
+            if (forceAccidental) {
+                  Accidental* a = new Accidental(this);
+                  a->setAccidentalType(_is.accidentalType());
+                  a->setRole(AccidentalRole::USER);
+                  a->setParent(note);
+                  undoAddElement(a);
+                  }
             setPlayNote(true);
 
             select(note, SelectType::SINGLE, 0);
             }
+      if (_is.noteEntryMode())
+            _is.setAccidentalType(AccidentalType::NONE);
       _is.moveToNextInputPos();
       endCmd();
       }
@@ -715,7 +766,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                         chord->add(note);
                         note->setNval(nval, tick);
                         if (forceAccidental) {
-                              int tpc = styleB(Sid::concertPitch) ? nval.tpc2 : nval.tpc1;
+                              int tpc = styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
                               AccidentalVal alter = tpc2alter(tpc);
                               AccidentalType at = Accidental::value2subtype(alter);
                               Accidental* a = new Accidental(this);
@@ -775,6 +826,11 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
             connectTies();
       if (nr) {
             if (_is.slur() && nr->type() == ElementType::NOTE) {
+                  // If the start element was the same as the end element when the slur was created,
+                  // the end grip of the front slur segment was given an x-offset of 3.0 * spatium().
+                  // Now that the slur is about to be given a new end element, this should be reset.
+                  if (_is.slur()->endElement() == _is.slur()->startElement())
+                        _is.slur()->frontSegment()->reset();
                   //
                   // extend slur
                   //
@@ -813,7 +869,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
       Q_ASSERT(_sd.numerator());
 
       Measure* measure = segment->measure();
-      Fraction akkumulated;
+      Fraction accumulated;
       Fraction sd = _sd;
 
       //
@@ -838,7 +894,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   Fraction td(tick2 - seg->tick());
                   if (td > sd)
                         td = sd;
-                  akkumulated += td;
+                  accumulated += td;
                   sd -= td;
                   if (sd.isZero())
                         break;
@@ -850,7 +906,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   Fraction td(seg->tick() - nextTick);
                   if (td > sd)
                         td = sd;
-                  akkumulated += td;
+                  accumulated += td;
                   sd -= td;
                   if (sd.isZero())
                         break;
@@ -909,22 +965,20 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   // even if there was a tuplet, we didn't remove it
                   ltuplet = 0;
                   }
-            nextTick += (tuplet ? td / tuplet->ratio() : td);
+            Fraction timeStretch = cr->staff()->timeStretch(cr->tick());
+            nextTick += actualTicks(td, tuplet, timeStretch);
             if (sd < td) {
                   //
                   // we removed too much
                   //
-                  akkumulated = _sd;
+                  accumulated = _sd;
                   Fraction rd = td - sd;
 
                   std::vector<TDuration> dList = toDurationList(rd, false);
                   if (dList.empty())
                         break;
 
-                  Fraction f = sd / cr->staff()->timeStretch(cr->tick());
-                  for (Tuplet* t = tuplet; t; t = t->tuplet())
-                        f /= t->ratio();
-                  Fraction tick  = cr->tick() + f;
+                  Fraction tick = cr->tick() + actualTicks(sd, tuplet, timeStretch);
 
                   if ((tuplet == 0) && (((measure->tick() - tick).ticks() % dList[0].ticks().ticks()) == 0)) {
                         for (TDuration d : dList) {
@@ -952,7 +1006,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                         }
                   break;
                   }
-            akkumulated += td;
+            accumulated += td;
             sd          -= td;
             if (sd.isZero())
                   break;
@@ -963,13 +1017,13 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 // once the statement below is removed, these two lines do nothing
 //      if (td > sd)
 //            td = sd;
-// ???  akkumulated should already contain the total value of the created gap: line 749, 811 or 838
+// ???  accumulated should already contain the total value of the created gap: line 749, 811 or 838
 //      this line creates a qreal-sized gap if the needed gap crosses a measure boundary
 //      by adding again the duration already added in line 838
-//      akkumulated += td;
+//      accumulated += td;
 
       const Fraction t1 = firstSegmentEnd;
-      const Fraction t2 = firstSegment->tick() + akkumulated;
+      const Fraction t2 = firstSegment->tick() + accumulated;
       if (t1 < t2) {
             Segment* s1 = tick2rightSegment(t1);
             Segment* s2 = tick2rightSegment(t2);
@@ -980,7 +1034,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
             deleteSpannersFromRange(t1, t2, track, track + 1, filter);
             }
 
-      return akkumulated;
+      return accumulated;
       }
 
 //---------------------------------------------------------
@@ -1225,11 +1279,12 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                               undoRemoveElement(n->tieFor());
                         }
                   }
+            Fraction timeStretch = cr->staff()->timeStretch(cr->tick());
             std::vector<TDuration> dList = toDurationList(dstF, true);
             undoChangeChordRestLen(cr, dList[0]);
             Fraction tick2 = cr->tick();
             for (unsigned i = 1; i < dList.size(); ++i) {
-                  tick2 += dList[i-1].ticks();
+                  tick2 += actualTicks(dList[i-1].ticks(), tuplet, timeStretch);
                   TDuration d = dList[i];
                   setRest(tick2, track, d.fraction(), (d.dots() > 0), tuplet);
                   }
@@ -1269,19 +1324,19 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                         undoChangeChordRestLen(cr, dList[0]);
                         Fraction tick2 = cr->tick();
                         for (unsigned i = 1; i < dList.size(); ++i) {
-                              tick2 += dList[i-1].ticks();
+                              tick2 += actualTicks(dList[i-1].ticks(), tuplet, timeStretch);
                               TDuration d = dList[i];
-                              setRest(tick2, track, d.fraction() * timeStretch, (d.dots() > 0), tuplet);
+                              setRest(tick2, track, d.fraction(), (d.dots() > 0), tuplet);
                               }
                         }
                   else {
-                        r = setRest(tick, track, f2 * timeStretch, false, tuplet);
+                        r = setRest(tick, track, f2, false, tuplet);
                         }
                   if (first) {
                         select(r, SelectType::SINGLE, 0);
                         first = false;
                         }
-                  tick += f2 * timeStretch;
+                  tick += actualTicks(f2, tuplet, timeStretch);
                   }
             else {
                   std::vector<TDuration> dList = toDurationList(f2, true);
@@ -1550,12 +1605,17 @@ void Score::upDown(bool up, UpDownMode mode)
 
             if ((oNote->pitch() != newPitch) || (oNote->tpc1() != newTpc1) || oNote->tpc2() != newTpc2) {
                   // remove accidental if present to make sure
-                  // user added accidentals are removed here.
-                  auto l = oNote->linkList();
-                  for (ScoreElement* e : l) {
-                        Note* ln = toNote(e);
-                        if (ln->accidental())
-                              undo(new RemoveElement(ln->accidental()));
+                  // user added accidentals are removed here
+                  // unless it's an octave change
+                  // in this case courtesy accidentals are preserved
+                  // because they're now harder to be re-entered due to the revised note-input workflow
+                  if (mode != UpDownMode::OCTAVE) {
+                        auto l = oNote->linkList();
+                        for (ScoreElement* e : l) {
+                              Note* ln = toNote(e);
+                              if (ln->accidental())
+                                    undo(new RemoveElement(ln->accidental()));
+                              }
                         }
                   undoChangePitch(oNote, newPitch, newTpc1, newTpc2);
                   }
@@ -3607,6 +3667,7 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
             else
                   putNote(pos, !addFlag);
             }
+      _is.setAccidentalType(AccidentalType::NONE);
       }
 
 //---------------------------------------------------------
@@ -3647,7 +3708,7 @@ void Score::cmdAddFret(int fret)
       Position pos;
       pos.segment   = is.segment();
       pos.staffIdx  = is.track() / VOICES;
-      pos.line      = is.string();
+      pos.line      = is.cr()->staff()->staffType(is.tick())->physStringToVisual(is.string());
       pos.fret      = fret;
       putNote(pos, false);
       }

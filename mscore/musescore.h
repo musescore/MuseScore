@@ -22,20 +22,19 @@
 
 #include "config.h"
 #include "globals.h"
-#include "ui_measuresdialog.h"
-#include "ui_insertmeasuresdialog.h"
-#include "ui_aboutbox.h"
-#include "ui_aboutmusicxmlbox.h"
 #include "singleapp/src/QtSingleApplication"
 #include "updatechecker.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
-#include "newwizard.h"
 
 namespace Ms {
 
 class UploadScoreDialog;
 class LoginManager;
+class AboutBoxDialog;
+class AboutMusicXMLBoxDialog;
+class InsertMeasuresDialog;
+class MeasuresDialog;
 class Shortcut;
 class ScoreView;
 class Element;
@@ -104,11 +103,13 @@ class HelpBrowser;
 class ToolbarEditor;
 class TourHandler;
 class GeneralAutoUpdater;
+class EditStyle;
 
 class PalettePanel;
 struct PaletteTree;
 class PaletteWidget;
 class PaletteWorkspace;
+class QmlDockWidget;
 
 struct PluginDescription;
 enum class SelState : char;
@@ -116,6 +117,7 @@ enum class IconType : signed char;
 enum class MagIdx : char;
 
 extern QString mscoreGlobalShare;
+extern QString revision;
 static const int PROJECT_LIST_LEN = 6;
 extern const char* voiceActions[];
 extern bool mscoreFirstStart;
@@ -150,63 +152,6 @@ struct LanguageItem {
       };
 
 //---------------------------------------------------------
-//   AboutBoxDialog
-//---------------------------------------------------------
-
-class AboutBoxDialog : public QDialog, Ui::AboutBox {
-      Q_OBJECT
-
-   public:
-      AboutBoxDialog();
-
-   private slots:
-      void copyRevisionToClipboard();
-      };
-
-//---------------------------------------------------------
-//   AboutMusicXMLBoxDialog
-//---------------------------------------------------------
-
-class AboutMusicXMLBoxDialog : public QDialog, Ui::AboutMusicXMLBox {
-      Q_OBJECT
-
-   public:
-      AboutMusicXMLBoxDialog();
-      };
-
-//---------------------------------------------------------
-//   InsertMeasuresDialog
-//   Added by DK, 05.08.07
-//---------------------------------------------------------
-
-class InsertMeasuresDialog : public QDialog, public Ui::InsertMeasuresDialogBase {
-      Q_OBJECT
-
-      virtual void hideEvent(QHideEvent*);
-
-   private slots:
-      virtual void accept();
-
-   public:
-      InsertMeasuresDialog(QWidget* parent = 0);
-      };
-
-//---------------------------------------------------------
-//   MeasuresDialog
-//---------------------------------------------------------
-
-class MeasuresDialog : public QDialog, public Ui::MeasuresDialogBase {
-      Q_OBJECT
-
-   private slots:
-      virtual void accept();
-
-   public:
-      MeasuresDialog(QWidget* parent = 0);
-      };
-
-
-//---------------------------------------------------------
 //   MuseScoreApplication (mac only)
 //---------------------------------------------------------
 
@@ -217,6 +162,13 @@ class MuseScoreApplication : public QtSingleApplication {
          : QtSingleApplication(id, argc, argv) {
             };
       virtual bool event(QEvent *ev) override;
+
+      struct CommandLineParseResult {
+            QStringList argv;
+            bool exit = false;
+            };
+      static CommandLineParseResult parseCommandLineArguments(MuseScoreApplication* app);
+      static MuseScoreApplication* initApplication(int& argc, char** argv);
       };
 
 
@@ -408,7 +360,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFileDialog* saveDrumsetDialog     { 0 };
       QFileDialog* savePluginDialog      { 0 };
 
-      WorkspaceDialog* _workspaceDialog   { 0 };
+      WorkspaceDialog* _workspaceDialog  { 0 };
+
+      EditStyle* _styleDlg                { nullptr };
 
       QDialog* editRasterDialog          { 0 };
 
@@ -644,12 +598,14 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showPluginManager();
 
 //      void updateTabNames();
-      void updatePaletteBeamMode(bool unselect = false);
+      void updatePaletteBeamMode();
       QProgressBar* showProgressBar();
       void hideProgressBar();
       void addRecentScore(Score*);
       QFileDialog* saveAsDialog();
       QFileDialog* saveCopyDialog();
+      EditStyle* styleDlg() { return _styleDlg; }
+      void setStyleDlg(EditStyle* es) { _styleDlg = es; }
 
       QString lastSaveCopyDirectory;
       QString lastSaveCopyFormat;
@@ -723,6 +679,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       PaletteWorkspace* getPaletteWorkspace();
       PaletteWidget* getPaletteWidget() { return paletteWidget; }
+      std::vector<QmlDockWidget*> qmlDockWidgets();
       void changeWorkspace(const QString& name);
 
       void disableCommands(bool val) { inChordEditor = val; }
@@ -935,8 +892,14 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void focusScoreView();
 
+      void notifyElementDraggedToScoreView();
+
       ScriptRecorder* getScriptRecorder();
       bool runTestScripts(const QStringList& scripts);
+
+      static void init(QStringList& argv);
+
+      friend class TestWorkspaces;
       };
 
 extern MuseScore* mscore;
@@ -971,6 +934,7 @@ extern Score::FileError importCapella(MasterScore*, const QString& name);
 extern Score::FileError importCapXml(MasterScore*, const QString& name);
 extern Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionError);
 
+int runApplication(int& argc, char** argv);
 } // namespace Ms
 
 extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);

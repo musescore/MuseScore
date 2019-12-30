@@ -918,6 +918,17 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CMD
          },
       {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_TEXT_EDIT | STATE_HARMONY_FIGBASS_EDIT,
+         "get-location",
+         QT_TRANSLATE_NOOP("action","Get Location"),
+         QT_TRANSLATE_NOOP("action","Accessibility: Get location"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "palette-search",
@@ -1553,7 +1564,9 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Tie"),
          QT_TRANSLATE_NOOP("action","Note duration: Tie"),
          QT_TRANSLATE_NOOP("action","Tie"),
-         Icons::tie_ICON
+         Icons::tie_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
          },
       {
          MsWidget::SCORE_TAB,
@@ -4362,6 +4375,29 @@ void Shortcut::resetToDefault()
       }
 
 //---------------------------------------------------------
+//   getShortcutByKeySequence
+//---------------------------------------------------------
+
+Shortcut* Shortcut::getShortcutByKeySequence(const QKeySequence& keySequence)
+      {
+      for (Shortcut* shortcut : _shortcuts.values()) {
+
+            QAction* action = shortcut->action();
+
+            if (!action)
+                  continue;
+
+
+            for (const QKeySequence& _keySequence : action->shortcuts()) {
+                  if (_keySequence == keySequence)
+                        return shortcut;
+                  }
+            }
+
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
 
@@ -4409,6 +4445,10 @@ QString Shortcut::keySeqToString(const QKeySequence& keySeq, QKeySequence::Seque
             }
       return s;
       }
+
+//---------------------------------------------------------
+//   keySeqFromString
+//---------------------------------------------------------
 
 QKeySequence Shortcut::keySeqFromString(const QString& str, QKeySequence::SequenceFormat fmt)
       {

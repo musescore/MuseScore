@@ -52,6 +52,7 @@ class PaletteQmlInterface : public QObject
       void paletteWorkspaceChanged();
       void paletteBackgroundChanged();
       void paletteSearchRequested();
+      void elementDraggedToScoreView();
 
    public:
       PaletteQmlInterface(PaletteWorkspace* workspace, QmlNativeToolTip* t, bool enabled, QObject* parent = nullptr);
@@ -65,6 +66,8 @@ class PaletteQmlInterface : public QObject
 
       bool palettesEnabled() const { return _palettesEnabled; }
       void setPalettesEnabled(bool val);
+
+      void notifyElementDraggedToScoreView() { emit elementDraggedToScoreView(); }
 
       void requestPaletteSearch() { emit paletteSearchRequested(); }
 
@@ -98,6 +101,7 @@ class PaletteWidget : public QmlDockWidget
 
       void activateSearchBox();
       void applyCurrentPaletteElement();
+      void notifyElementDraggedToScoreView();
 
       void showEvent(QShowEvent* event) override;
       void changeEvent(QEvent* evt) override;

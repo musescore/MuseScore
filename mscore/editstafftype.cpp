@@ -106,6 +106,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       else {
             Q_ASSERT_X(false, "EditStaffType::EditStaffType", "Error in opening sample tab file for preview");
             }
+      tabPreview->adjustSize();
 
       setValues();
 
@@ -411,6 +412,7 @@ void EditStaffType::setFromDlg()
       staffType.setStemsDown(stemBelowRadio->isChecked());
       staffType.setStemsThrough(stemThroughRadio->isChecked());
       if (staffType.group() == StaffGroup::TAB) {
+            staffType.setGenKeysig(false);
             staffType.setStemless(true);                   // assume no note values
             staffType.setGenDurations(false);              //    "     "
             if (noteValuesSymb->isChecked())

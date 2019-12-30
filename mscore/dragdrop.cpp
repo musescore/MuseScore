@@ -223,6 +223,8 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             if (event->dropAction() == Qt::CopyAction)
                   event->accept();
 
+            mscore->notifyElementDraggedToScoreView();
+
             QByteArray a = dta->data(mimeSymbolFormat);
 
             if (MScore::debugMode)

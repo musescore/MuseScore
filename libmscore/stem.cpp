@@ -252,12 +252,12 @@ bool Stem::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Stem::updateGrips(EditData& ed) const
+std::vector<QPointF> Stem::gripsPositions(const EditData&) const
       {
-      ed.grip[0].translate(pagePos() + line.p2());
+      return { pagePos() + line.p2() };
       }
 
 //---------------------------------------------------------
@@ -267,8 +267,6 @@ void Stem::updateGrips(EditData& ed) const
 void Stem::startEdit(EditData& ed)
       {
       Element::startEdit(ed);
-      ed.grips   = 1;
-      ed.curGrip = Grip::START;
       ElementEditData* eed = ed.getData(this);
       eed->pushProperty(Pid::USER_LEN);
       }

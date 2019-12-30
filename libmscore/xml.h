@@ -203,7 +203,7 @@ class XmlReader : public QXmlStreamReader {
       Tid addUserTextStyle(const QString& name);
       Tid lookupUserTextStyle(const QString& name);
 
-      // Ownership on read ahead device is NOT transfered to XmlReader.
+      // Ownership on read ahead device is NOT transferred to XmlReader.
       void setReadAheadDevice(QIODevice* dev) { if (!dev->isSequential()) _readAheadDevice = dev; }
       bool readAheadAvailable() const { return bool(_readAheadDevice); }
       void performReadAhead(std::function<void(QIODevice&)> readAheadRoutine);
@@ -272,7 +272,7 @@ class XmlWriter : public QTextStream {
 
       int assignLocalIndex(const Location& mainElementLocation);
       void setLidLocalIndex(int lid, int localIndex) { _lidLocalIndices.insert(lid, localIndex); }
-      int lidLocalIndex(int lid) const { return _lidLocalIndices[lid]; }
+      int lidLocalIndex(int lid) const { Q_ASSERT(_lidLocalIndices.contains(lid)); return _lidLocalIndices[lid]; }
 
       const std::vector<std::pair<const ScoreElement*, QString>>& elements() const { return _elements; }
       void setRecordElements(bool record) { _recordElements = record; }

@@ -72,11 +72,25 @@ struct MusicXmlTupletDesc {
 //---------------------------------------------------------
 
 struct MusicXmlSpannerDesc {
-      SLine* sp;
-      ElementType tp;
-      int nr;
-      MusicXmlSpannerDesc(SLine* _sp, ElementType _tp, int _nr) : sp(_sp), tp(_tp), nr(_nr) {}
-      MusicXmlSpannerDesc(ElementType _tp, int _nr) : sp(0), tp(_tp), nr(_nr) {}
+      SLine* _sp;
+      ElementType _tp;
+      int _nr;
+      MusicXmlSpannerDesc(SLine* sp, ElementType tp, int nr) : _sp(sp), _tp(tp), _nr(nr) {}
+      MusicXmlSpannerDesc(ElementType tp, int nr) : _sp(0), _tp(tp), _nr(nr) {}
+      };
+
+//---------------------------------------------------------
+//   NewMusicXmlSpannerDesc
+//---------------------------------------------------------
+
+struct MusicXmlExtendedSpannerDesc {
+      SLine* _sp { nullptr };
+      Fraction _tick2 { 0, 0 };
+      int _track2 {};
+      bool _isStarted { false };
+      bool _isStopped { false };
+      MusicXmlExtendedSpannerDesc() {}
+      QString toString() const;
       };
 
 //---------------------------------------------------------
@@ -147,10 +161,11 @@ class MxmlLogger;
 
 using SlurStack = std::array<SlurDesc, MAX_NUMBER_LEVEL>;
 using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
-using BracketsStack = std::array<SLine*, MAX_BRACKETS>;
-using DashesStack = std::array<SLine*, MAX_DASHES>;
-using OttavasStack = std::array<SLine*, MAX_NUMBER_LEVEL>;
-using HairpinsStack = std::array<SLine*, MAX_NUMBER_LEVEL>;
+using BracketsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
+using OttavasStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
+using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
+using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
+using SpannerSet = std::set<Spanner*>;
 
 //---------------------------------------------------------
 //   MusicXMLParserNotations
@@ -220,11 +235,12 @@ public:
 
       // part specific data interface functions
       void addSpanner(const MusicXmlSpannerDesc& desc);
-      SLine* getSpanner(const MusicXmlSpannerDesc& desc);
+      MusicXmlExtendedSpannerDesc& getSpanner(const MusicXmlSpannerDesc& desc);
       void clearSpanner(const MusicXmlSpannerDesc& desc);
 
 private:
       void initPartState(const QString& partId);
+      SpannerSet findIncompleteSpannersAtPartEnd();
       Score::FileError parse();
       void scorePartwise();
       void partList();
@@ -283,10 +299,10 @@ private:
 
       SlurStack _slurs { {} };
       TrillStack _trills { {} };          ///< Current trills
-      BracketsStack _brackets { {} };
-      DashesStack _dashes { {} };
-      OttavasStack _ottavas { {} };       ///< Current ottavas
-      HairpinsStack _hairpins { {} };     ///< Current hairpins
+      BracketsStack _brackets;
+      OttavasStack _ottavas;              ///< Current ottavas
+      HairpinsStack _hairpins;            ///< Current hairpins
+      MusicXmlExtendedSpannerDesc _dummyNewMusicXmlSpannerDesc;
 
       Glissando* _glissandi[MAX_NUMBER_LEVEL][2];   ///< Current slides ([0]) / glissandi ([1])
 
@@ -296,7 +312,7 @@ private:
 
       MusicXmlSpannerMap _spanners;
 
-      SLine* _pedal;                              ///< Current pedal
+      MusicXmlExtendedSpannerDesc _pedal;         ///< Current pedal
       Pedal* _pedalContinue;                      ///< Current pedal type="change" requiring fixup
       Harmony* _harmony;                          ///< Current harmony
       Chord* _tremStart;                          ///< Starting chord for current tremolo
@@ -312,7 +328,7 @@ private:
 class MusicXMLParserDirection {
 public:
       MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
-      void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners);
+      void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions, MusicXmlSpannerMap& spanners);
 
 private:
       QXmlStreamReader& _e;
@@ -341,6 +357,7 @@ private:
       double _tpoMetro;                 // tempo according to metronome
       double _tpoSound;                 // tempo according to sound
       QList<Element*> _elems;
+      Fraction _offset;
 
       void directionType(QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
       void bracket(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);

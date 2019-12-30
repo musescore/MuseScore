@@ -18,10 +18,11 @@
 #=============================================================================
 
 REVISION  = `cat mscore/revision.h`
-VERSION   = "3.3b-${REVISION}"
-#VERSION = 3.3.1
+VERSION   = "3.4b-${REVISION}"
+#VERSION = 3.3.3
 BUILD_NUMBER = ""
 PREFIX=../applebuild
+TELEMETRY_TRACK_ID=""
 
 XCODEPROJ = mscore.xcodeproj
 
@@ -35,7 +36,7 @@ release:
 	mkdir build.release;                               \
     cd build.release;                                  \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
-          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"  \
+          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
           .. -G Xcode; 			       \
     xcodebuild -project ${XCODEPROJ} -target lrelease;                            \
 		$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD $(FORMATTER_END);    \
@@ -52,7 +53,7 @@ debug:
 xcode:
 	mkdir build.xcode;              \
     cd build.xcode;                                  \
-    cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/mscore/Debug -DCMAKE_BUILD_TYPE=DEBUG \
+    cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/main/Debug -DCMAKE_BUILD_TYPE=DEBUG \
           -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"  \
           .. -G Xcode;                         \
     xcodebuild -project ${XCODEPROJ} -target lrelease;
@@ -84,7 +85,7 @@ ci: revision
 	mkdir build.release;     \
     cd build.release;            \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
-          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" -DBUILD_AUTOUPDATE=ON  \
+          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" -DBUILD_AUTOUPDATE=ON -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
           .. -G Xcode;                                                  \
     xcodebuild -project ${XCODEPROJ} -target lrelease;                  \
     $(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target install $(FORMATTER_END);

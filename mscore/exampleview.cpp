@@ -139,24 +139,11 @@ void ExampleView::setCursor(const QCursor&)
       {
       }
 
-int ExampleView::gripCount() const
-      {
-      return 0;
-      }
-
 void ExampleView::setDropRectangle(const QRectF&)
       {
       }
 
 void ExampleView::cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/)
-      {
-      }
-
-void ExampleView::startEdit()
-      {
-      }
-
-void ExampleView::startEdit(Element*, Grip /*startGrip*/)
       {
       }
 
@@ -475,7 +462,7 @@ void ExampleView::constraintCanvas (int* dxx)
 
       Q_ASSERT(_score->pages().front()->system(0)); // should exist if doLayout ran
 
-      // form rectangle bounding the the system with a spatium margin and translate relative to view space
+      // form rectangle bounding the system with a spatium margin and translate relative to view space
       qreal xstart = _score->pages().front()->system(0)->bbox().left() - SPATIUM20;
       qreal xend = _score->pages().front()->system(0)->bbox().right() + 2.0 * SPATIUM20;
       QRectF systemScaledViewRect(xstart * _matrix.m11(), 0, xend * _matrix.m11(), 0);
