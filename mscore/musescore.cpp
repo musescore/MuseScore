@@ -4013,7 +4013,7 @@ bool MuseScore::readLanguages(const QString& path)
                 QMessageBox::warning(0,
                    QWidget::tr("Load Languages Failed:"),
                    error,
-                   QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+                   QString(), QWidget::tr("Quit"), QString(), 0, 1);
                 return false;
                 }
 
@@ -6753,7 +6753,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                   QMessageBox::warning(0,
                                        tr("Encoding Error"),
                                        tr("Unable to open target file for writing"),
-                                       QString::null, QString::null);
+                                       QString(), QString());
                   }
             return false;
             }
@@ -6792,7 +6792,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                   QMessageBox::warning(0,
                                tr("Error Opening LAME library"),
                                tr("Could not open MP3 encoding library!"),
-                               QString::null, QString::null);
+                               QString(), QString());
             qDebug("Could not open MP3 encoding library!");
             return false;
             }
@@ -6804,7 +6804,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                   QMessageBox::warning(0,
                                tr("Error Opening LAME library"),
                                tr("Not a valid or supported MP3 encoding library!"),
-                               QString::null, QString::null);
+                               QString(), QString());
             qDebug("Not a valid or supported MP3 encoding library!");
             return false;
             }
@@ -6829,7 +6829,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
             if (!MScore::noGui) {
                   QMessageBox::warning(0, tr("Encoding Error"),
                      tr("Unable to initialize MP3 stream"),
-                     QString::null, QString::null);
+                     QString(), QString());
                   }
             qDebug("Unable to initialize MP3 stream");
             MScore::sampleRate = oldSampleRate;
@@ -6996,7 +6996,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                                     QMessageBox::warning(0,
                                        tr("Encoding Error"),
                                        tr("Error %1 returned from MP3 encoder").arg(bytes),
-                                       QString::null, QString::null);
+                                       QString(), QString());
                               break;
                               }
                         else

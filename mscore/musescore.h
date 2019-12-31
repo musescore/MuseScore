@@ -142,7 +142,7 @@ struct LanguageItem {
       LanguageItem(const QString k, const QString n) {
             key = k;
             name = n;
-            handbook = QString::null;
+            handbook = QString();
             }
       LanguageItem(const QString k, const QString n, const QString h) {
             key = k;

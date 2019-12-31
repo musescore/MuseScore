@@ -2708,7 +2708,7 @@ Score::FileError importCapella(MasterScore* score, const QString& name)
                   QMessageBox::warning(0,
                      QWidget::tr("Import Capella"),
                      QWidget::tr("Load failed: %1").arg(cf.error(errNo)),
-                     QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+                     QString(), QWidget::tr("Quit"), QString(), 0, 1);
                   }
             fp.close();
             // avoid another error message box

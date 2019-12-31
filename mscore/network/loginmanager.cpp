@@ -680,7 +680,7 @@ void LoginManager::mediaUploadFinished()
             QMessageBox::warning(0,
                      tr("Upload Error"),
                      tr("Sorry, MuseScore couldn't upload the audio file. Error %1").arg(e),
-                     QString::null, QString::null);
+                     QString(), QString());
             }
       }
 

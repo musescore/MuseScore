@@ -138,7 +138,7 @@ void InstrumentsDialog::on_loadButton_clicked()
             QMessageBox::warning(0,
                QWidget::tr("Load Style Failed"),
                QString(strerror(errno)),
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+               QString(), QWidget::tr("Quit"), QString(), 0, 1);
             return;
             }
       instrumentsWidget->buildTemplateList();
