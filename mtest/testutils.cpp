@@ -125,7 +125,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
 #endif
       else if (csl == "xml" || csl == "musicxml")
             rv = importMusicXml(score, name);
-      else if (csl == "gp3" || csl == "gp4" || csl == "gp5" || csl == "gpx")
+      else if (csl == "gp3" || csl == "gp4" || csl == "gp5" || csl == "gpx" || csl == "ptb")
             rv = importGTP(score, name);
       else
             rv = Score::FileError::FILE_UNKNOWN_TYPE;
