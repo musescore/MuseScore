@@ -4368,6 +4368,8 @@ void Score::cmd(const QAction* a, EditData& ed)
         { "add-audio",                  [](Score* cs, EditData&) { cs->addAudioTrack(); } },
         { "transpose-up",               [](Score* cs, EditData&) { cs->transposeSemitone(1); } },
         { "transpose-down",             [](Score* cs, EditData&) { cs->transposeSemitone(-1); } },
+        { "pitch-up-diatonic-alterations",   [](Score* cs, EditData&) { cs->transposeDiatonicAlterations(TransposeDirection::UP); } },
+        { "pitch-down-diatonic-alterations", [](Score* cs, EditData&) { cs->transposeDiatonicAlterations(TransposeDirection::DOWN); } },
         { "delete",                     [](Score* cs, EditData&) { cs->cmdDeleteSelection(); } },
         { "full-measure-rest",          [](Score* cs, EditData&) { cs->cmdFullMeasureRest(); } },
         { "toggle-insert-mode",         [](Score* cs, EditData&) { cs->_is.setInsertMode(!cs->_is.insertMode()); } },

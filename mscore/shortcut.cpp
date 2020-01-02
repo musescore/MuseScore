@@ -792,6 +792,17 @@ Shortcut Shortcut::_sc[] = {
     {
         MsWidget::SCORE_TAB,
         STATE_NORMAL | STATE_NOTE_ENTRY,
+        "pitch-up-diatonic-alterations",
+        QT_TRANSLATE_NOOP("action","Diatonic Up (Keep Degree Alterations)"),
+        QT_TRANSLATE_NOOP("action","Diatonic pitch up (Keep degree alterations)"),
+        0,
+        Icons::Invalid_ICON,
+        Qt::WindowShortcut,
+        ShortcutFlags::A_CMD
+    },
+    {
+        MsWidget::SCORE_TAB,
+        STATE_NORMAL | STATE_NOTE_ENTRY,
         "pitch-up-octave",
         QT_TRANSLATE_NOOP("action","Up Octave"),
         QT_TRANSLATE_NOOP("action","Pitch up octave"),
@@ -846,6 +857,17 @@ Shortcut Shortcut::_sc[] = {
         "pitch-down-diatonic",
         QT_TRANSLATE_NOOP("action","Diatonic Down"),
         QT_TRANSLATE_NOOP("action","Diatonic pitch down"),
+        0,
+        Icons::Invalid_ICON,
+        Qt::WindowShortcut,
+        ShortcutFlags::A_CMD
+    },
+    {
+        MsWidget::SCORE_TAB,
+        STATE_NORMAL | STATE_NOTE_ENTRY,
+        "pitch-down-diatonic-alterations",
+        QT_TRANSLATE_NOOP("action","Diatonic Down (Keep Degree Alterations)"),
+        QT_TRANSLATE_NOOP("action","Diatonic pitch down (Keep degree alterations)"),
         0,
         Icons::Invalid_ICON,
         Qt::WindowShortcut,
