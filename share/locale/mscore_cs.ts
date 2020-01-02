@@ -10574,7 +10574,7 @@ předtaktí</translation>
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
-        <translation>MuseScore nepodporuje vyvedení do MP3 přímo, ale používá volně dostupnou knihovnu LAME. Musíte samostatně získat %1 (podrobnosti najdete v příručce) a poté zadat umístění souboru pro MuseScore.
+        <translation>MuseScore nepodporuje export do MP3 přímo, ale používá volně dostupnou knihovnu LAME. Musíte samostatně získat %1 (podrobnosti najdete v příručce) a poté zadat umístění souboru pro MuseScore.
 Tento krok stačí provést jen jednou.
 
 Chcete %2 najít nyní?</translation>
@@ -12179,7 +12179,7 @@ Zvuk nástroje: %5</translation>
         <location filename="../../mscore/exportaudio.cpp" line="313"/>
         <location filename="../../mscore/musescore.cpp" line="6872"/>
         <source>Exporting…</source>
-        <translation>Vyvádí se…</translation>
+        <translation>Exportuje se…</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="6793"/>
@@ -12554,7 +12554,7 @@ do notového zápisu &quot;%1&quot;?</translation>
         <location filename="../../mscore/file.cpp" line="1692"/>
         <location filename="../../mscore/file.cpp" line="1742"/>
         <source>Export</source>
-        <translation>Vyvedení</translation>
+        <translation>Export</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1742"/>
@@ -12569,7 +12569,7 @@ do notového zápisu &quot;%1&quot;?</translation>
         <location filename="../../mscore/file.cpp" line="1817"/>
         <location filename="../../mscore/file.cpp" line="1884"/>
         <source>Export Parts</source>
-        <translation>Vyvést party</translation>
+        <translation>Exportovat party</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1824"/>
@@ -12624,7 +12624,7 @@ Chcete jej nahradit?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1884"/>
         <source>Parts were successfully exported</source>
-        <translation>Party byly úspěšně vyvedeny</translation>
+        <translation>Party byly úspěšně exportovány</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1936"/>
@@ -18206,7 +18206,7 @@ Nastavení latence na hodnotu větší než nula může ovladači pomoci nepřes
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3476"/>
         <source>Export</source>
-        <translation>Vyvedení</translation>
+        <translation>Export</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3501"/>
@@ -18234,27 +18234,27 @@ Nastavení latence na hodnotu větší než nula může ovladači pomoci nepřes
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3578"/>
         <source>Export RPNs</source>
-        <translation>Vyvést RPNs</translation>
+        <translation>Exportovat RPNs</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3603"/>
         <source>Export layout</source>
-        <translation>Vyvést rozvržení notového zápisu</translation>
+        <translation>Exportovat rozvržení notového zápisu</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3612"/>
         <source>Export all system and page breaks</source>
-        <translation>Vyvést všechna zalomení notových systémů a stran</translation>
+        <translation>Exportovat všechna zalomení notových systémů a stran</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3619"/>
         <source>Export manually added system and page breaks only</source>
-        <translation>Vyvést pouze ručně přidaná zalomení notových systémů a stran</translation>
+        <translation>Exportovat pouze ručně přidaná zalomení notových systémů a stran</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3626"/>
         <source>Do not export system or page breaks</source>
-        <translation>Nevyvádět zalomení notových systémů a stran</translation>
+        <translation>Neexportovat zalomení notových systémů a stran</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3531"/>
@@ -18265,7 +18265,7 @@ Nastavení latence na hodnotu větší než nula může ovladači pomoci nepřes
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3473"/>
         <source>Export tab</source>
-        <translation>Karta Vyvedení</translation>
+        <translation>Karta Export</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3537"/>
@@ -21822,12 +21822,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="110"/>
         <source>Export…</source>
-        <translation>Vyvést…</translation>
+        <translation>Exportovat…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="111"/>
         <source>Export score</source>
-        <translation>Vyvést notový zápis</translation>
+        <translation>Exportovat notový zápis</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="112"/>
@@ -21837,12 +21837,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="121"/>
         <source>Export Parts…</source>
-        <translation>Vyvést party…</translation>
+        <translation>Exportovat party…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="122"/>
         <source>Export parts</source>
-        <translation>Vyvést party</translation>
+        <translation>Exportovat party</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="123"/>
