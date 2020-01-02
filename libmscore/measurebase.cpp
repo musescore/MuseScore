@@ -614,5 +614,37 @@ LayoutBreak* MeasureBase::sectionBreakElement() const
             }
       return 0;
       }
+
+//---------------------------------------------------------
+//   addCourtesyKeySigStaff
+//---------------------------------------------------------
+
+void MeasureBase::addCourtesyKeySigStaff(int idx)
+      {
+      setHasCourtesyKeySig(true);
+      _courtesyKeySigStaves.insert(idx);
+      }
+
+//---------------------------------------------------------
+//   clearCourtesyKeySigStaves
+//---------------------------------------------------------
+
+void MeasureBase::clearCourtesyKeySigStaves()
+      {
+      setHasCourtesyKeySig(false);
+      _courtesyKeySigStaves.clear();
+      }
+
+//---------------------------------------------------------
+//   requiresCourtesyKeySig
+//---------------------------------------------------------
+
+bool MeasureBase::requiresCourtesyKeySig(int idx) const
+      {
+      if (!hasCourtesyKeySig())
+            return false;
+      return std::find(_courtesyKeySigStaves.cbegin(), _courtesyKeySigStaves.cend(), idx) != _courtesyKeySigStaves.cend();
+      }
+
 }
 

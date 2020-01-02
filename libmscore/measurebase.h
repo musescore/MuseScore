@@ -68,6 +68,8 @@ class MeasureBase : public Element {
       int _no                { 0 };       ///< Measure number, counting from zero
       int _noOffset          { 0 };       ///< Offset to measure number
 
+      std::set<int> _courtesyKeySigStaves;  ///< Staves which require a courtesy key sig when this is an end measure
+
    protected:
       Fraction _len  { Fraction(0, 1) };  ///< actual length of measure
       void cleanupLayoutBreaks(bool undo);
@@ -169,6 +171,10 @@ class MeasureBase : public Element {
 
       bool hasCourtesyKeySig() const   { return flag(ElementFlag::KEYSIG);        }
       void setHasCourtesyKeySig(int v) { setFlag(ElementFlag::KEYSIG, v);         }
+
+      void clearCourtesyKeySigStaves();
+      void addCourtesyKeySigStaff(int idx);
+      bool requiresCourtesyKeySig(int idx) const;
 
       virtual void computeMinWidth() { };
 

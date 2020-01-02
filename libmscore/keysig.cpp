@@ -341,7 +341,7 @@ Element* KeySig::drop(EditData& data)
             }
       else {
             // apply to all staves:
-            foreach(Staff* s, score()->masterScore()->staves())
+            for (Staff* s : score()->masterScore()->staves())
                   score()->undoChangeKeySig(s, tick(), k);
             }
       return this;

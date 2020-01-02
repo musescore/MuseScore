@@ -3579,18 +3579,16 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             }
       else {
             BarLineType t = nm ? BarLineType::NORMAL : BarLineType::END;
+            BarLineType forCourtesyKeySig = BarLineType::DOUBLE;
+            bool allowCourtesyKeySig = true;
+
             if (!seg)
                   seg = getSegmentR(SegmentType::EndBarLine, ticks());
             seg->setEnabled(true);
-            //
-            //  Set flag "hasCourtesyKeySig" if this measure needs a courtesy key sig.
-            //  This flag is later used to set a double end bar line and to actually
-            //  create the courtesy key sig.
-            //
 
             bool show = score()->styleB(Sid::genCourtesyKeysig) && !sectionBreak() && nm;
 
-            setHasCourtesyKeySig(false);
+            clearCourtesyKeySigStaves();
 
             if (isLastMeasureInSystem && show) {
                   Fraction tick = endTick();
@@ -3607,9 +3605,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                                     if (ks && !ks->showCourtesy())
                                           continue;
                                     }
-                              setHasCourtesyKeySig(true);
-                              t = BarLineType::DOUBLE;
-                              break;
+                              addCourtesyKeySigStaff(staffIdx);
                               }
                         }
                   }
@@ -3618,9 +3614,11 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             if (repeatEnd()) {
                   t = BarLineType::END_REPEAT;
                   force = true;
+                  allowCourtesyKeySig = false;
                   }
             else if (isLastMeasureInSystem && nextMeasure() && nextMeasure()->repeatStart()) {
                   t = BarLineType::NORMAL;
+                  allowCourtesyKeySig = false;
 //                  force = true;
                   }
 
@@ -3628,6 +3626,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   int track    = staffIdx * VOICES;
                   BarLine* bl  = toBarLine(seg->element(track));
                   Staff* staff = score()->staff(staffIdx);
+                  bool useCourtesyKeySigBl = allowCourtesyKeySig && requiresCourtesyKeySig(staffIdx);
                   if (!bl) {
                         bl = new BarLine(score());
                         bl->setParent(seg);
@@ -3636,7 +3635,10 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                         bl->setSpanStaff(staff->barLineSpan());
                         bl->setSpanFrom(staff->barLineFrom());
                         bl->setSpanTo(staff->barLineTo());
-                        bl->setBarLineType(t);
+                        if (useCourtesyKeySigBl)
+                              bl->setBarLineType(forCourtesyKeySig);
+                        else
+                              bl->setBarLineType(t);
                         score()->addElement(bl);
                         }
                   else {
@@ -3647,12 +3649,18 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                               bl->setSpanStaff(staff->barLineSpan());
                               bl->setSpanFrom(staff->barLineFrom());
                               bl->setSpanTo(staff->barLineTo());
-                              bl->setBarLineType(t);
+                              if (useCourtesyKeySigBl)
+                                    bl->setBarLineType(forCourtesyKeySig);
+                              else
+                                    bl->setBarLineType(t);
                               }
                         else {
                               if (bl->barLineType() != t) {
                                     if (force) {
-                                          bl->undoChangeProperty(Pid::BARLINE_TYPE, QVariant::fromValue(t));
+                                          if (useCourtesyKeySigBl)
+                                                bl->undoChangeProperty(Pid::BARLINE_TYPE, QVariant::fromValue(forCourtesyKeySig));
+                                          else
+                                                bl->undoChangeProperty(Pid::BARLINE_TYPE, QVariant::fromValue(t));
                                           bl->setGenerated(true);
                                           }
                                     }
@@ -4013,7 +4021,6 @@ void Measure::addSystemTrailer(Measure* nm)
       // courtesy key signatures, clefs
 
       int n      = score()->nstaves();
-      bool show  = hasCourtesyKeySig();
       s          = findSegmentR(SegmentType::KeySigAnnounce, _rtick);
 
       Segment* clefSegment = findSegmentR(SegmentType::Clef, ticks());
@@ -4022,7 +4029,7 @@ void Measure::addSystemTrailer(Measure* nm)
             int track    = staffIdx * VOICES;
             Staff* staff = score()->staff(staffIdx);
 
-            if (show) {
+            if (requiresCourtesyKeySig(staffIdx)) {
                   if (!s) {
                         s = new Segment(this, SegmentType::KeySigAnnounce, _rtick);
                         s->setTrailer(true);
@@ -4048,8 +4055,12 @@ void Measure::addSystemTrailer(Measure* nm)
                   }
             else {
                   // remove any existent courtesy key signature
-                  if (s)
-                        s->setEnabled(false);
+                  if (s) {
+                        KeySig* ks = toKeySig(s->element(track));
+                        if (ks && ks->generated()) {
+                              score()->removeElement(ks);
+                              }
+                        }
                   }
             if (clefSegment) {
                   Clef* clef = toClef(clefSegment->element(track));
