@@ -4004,6 +4004,7 @@ void Score::cmd(const QAction* a, EditData& ed)
             const char* name;
             std::function<void(Score* cs, EditData& ed)> cmd;
             };
+
       static const std::vector<ScoreCmd> cmdList {
             { "note-c",                     [](Score* cs, EditData& ed){ cs->cmdAddPitch(ed, 0, false, false);                        }},
             { "note-d",                     [](Score* cs, EditData& ed){ cs->cmdAddPitch(ed, 1, false, false);                        }},
@@ -4081,8 +4082,8 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "pad-note-256-TAB",           [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE256, ed);                             }},
             { "pad-note-512",               [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE512, ed);                             }},
             { "pad-note-512-TAB",           [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE512, ed);                             }},
-            { "pad-note-1024",              [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE1024, ed);                             }},
-            { "pad-note-1024-TAB",          [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE1024, ed);                             }},
+            { "pad-note-1024",              [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE1024, ed);                            }},
+            { "pad-note-1024-TAB",          [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE1024, ed);                            }},
             { "reset-style",                [](Score* cs, EditData&){ cs->cmdResetStyle();                                            }},
             { "reset-beammode",             [](Score* cs, EditData&){ cs->cmdResetBeamMode();                                         }},
             { "reset-groupings",            [](Score* cs, EditData&){ cs->cmdResetNoteAndRestGroupings();                             }},
@@ -4135,9 +4136,11 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "add-audio",                  [](Score* cs, EditData&){ cs->addAudioTrack();                                            }},
             { "transpose-up",               [](Score* cs, EditData&){ cs->transposeSemitone(1);                                       }},
             { "transpose-down",             [](Score* cs, EditData&){ cs->transposeSemitone(-1);                                      }},
+            { "pitch-up-diatonic-alterations",   [](Score* cs, EditData&){ cs->transposeDiatonicAlterations(TransposeDirection::UP);  }},
+            { "pitch-down-diatonic-alterations", [](Score* cs, EditData&){ cs->transposeDiatonicAlterations(TransposeDirection::DOWN);}},
             { "delete",                     [](Score* cs, EditData&){ cs->cmdDeleteSelection();                                       }},
             { "full-measure-rest",          [](Score* cs, EditData&){ cs->cmdFullMeasureRest();                                       }},
-            { "toggle-insert-mode",         [](Score* cs, EditData&){ cs->_is.setInsertMode(!cs->_is.insertMode());                       }},
+            { "toggle-insert-mode",         [](Score* cs, EditData&){ cs->_is.setInsertMode(!cs->_is.insertMode());                   }},
             { "pitch-up",                   [](Score* cs, EditData&){ cs->cmdPitchUp();                                               }},
             { "pitch-down",                 [](Score* cs, EditData&){ cs->cmdPitchDown();                                             }},
             { "time-delete",                [](Score* cs, EditData&){ cs->cmdTimeDelete();                                            }},
