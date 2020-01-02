@@ -1813,12 +1813,10 @@ void ScoreView::cmd(const char* s)
             else if (state == ViewState::EDIT)
                   editPaste();
             }
-      else if (cmd == "paste-half") {
+      else if (cmd == "paste-half")
             normalPaste(Fraction(1, 2));
-            }
-      else if (cmd == "paste-double") {
+      else if (cmd == "paste-double")
             normalPaste(Fraction(2, 1));
-            }
       else if (cmd == "paste-special") {
             Fraction scale = Fraction(1, 1);
             Fraction duration = _score->inputState().duration().fraction();
@@ -1850,9 +1848,8 @@ void ScoreView::cmd(const char* s)
                   return;
                   }
             }
-      else if (cmd == "mag") {
-            // ??
-            }
+      else if (cmd == "mag")
+            ; // ??
       else if (cmd == "play") {
             if (seq && seq->canStart()) {
                   if (state == ViewState::NORMAL || state == ViewState::NOTE_ENTRY)
@@ -1913,30 +1910,22 @@ void ScoreView::cmd(const char* s)
             cmdAddText(Tid::FINGERING);
       else if (cmd == "sticking-text")
             cmdAddText(Tid::STICKING);
-
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
-            if (e && e->isEditable() && !popupActive) {
+            if (e && e->isEditable() && !popupActive)
                   startEditMode(e);
-                  }
             }
-      else if (cmd == "select-similar") {
-            if (_score->selection().isSingle()) {
-                  Element* e = _score->selection().element();
-                  mscore->selectSimilar(e, false);
-                  }
+      else if (cmd == "select-similar" && _score->selection().isSingle()) {
+            Element* e = _score->selection().element();
+            mscore->selectSimilar(e, false);
             }
-      else if (cmd == "select-similar-staff") {
-            if (_score->selection().isSingle()) {
-                  Element* e = _score->selection().element();
-                  mscore->selectSimilar(e, true);
-                  }
+      else if (cmd == "select-similar-staff" && _score->selection().isSingle()) {
+            Element* e = _score->selection().element();
+            mscore->selectSimilar(e, true);
             }
-      else if (cmd == "select-dialog") {
-            if (_score->selection().isSingle()) {
-                  Element* e = _score->selection().element();
-                  mscore->selectElementDialog(e);
-                  }
+      else if (cmd == "select-dialog" && _score->selection().isSingle()) {
+            Element* e = _score->selection().element();
+            mscore->selectElementDialog(e);
             }
 //      else if (cmd == "find")
 //            ; // TODO:state         sm->postEvent(new CommandEvent(cmd));
@@ -2067,7 +2056,7 @@ void ScoreView::cmd(const char* s)
       else if (cmd == "next-segment-element") {
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty() )
-                el = score()->selection().elements().first();
+                  el = score()->selection().elements().first();
 
             if (el)
                   cmdGotoElement(el->nextSegmentElement());
@@ -2077,7 +2066,7 @@ void ScoreView::cmd(const char* s)
       else if (cmd == "prev-segment-element") {
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty())
-                el = score()->selection().elements().last();
+                  el = score()->selection().elements().last();
 
             if (el)
                   cmdGotoElement(el->prevSegmentElement());
@@ -2091,7 +2080,7 @@ void ScoreView::cmd(const char* s)
                   }
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty() )
-                el = score()->selection().elements().first();
+                  el = score()->selection().elements().first();
             if (!el) {
                   ChordRest* cr = score()->selection().currentCR();
                   if (cr) {
@@ -2115,7 +2104,7 @@ void ScoreView::cmd(const char* s)
                   }
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty())
-                el = score()->selection().elements().last();
+                  el = score()->selection().elements().last();
             if (!el) {
                   ChordRest* cr = score()->selection().currentCR();
                   if (cr) {
@@ -2132,12 +2121,10 @@ void ScoreView::cmd(const char* s)
             else
                   cmdGotoElement(score()->lastElement());
             }
-      else if (cmd == "first-element") {
+      else if (cmd == "first-element")
             cmdGotoElement(score()->firstElement(false));
-            }
-      else if (cmd == "last-element") {
+      else if (cmd == "last-element")
             cmdGotoElement(score()->lastElement(false));
-            }
       else if (cmd == "get-location") {
             // get current selection
             Element* e = score()->selection().element();
@@ -2147,10 +2134,8 @@ void ScoreView::cmd(const char* s)
                   if (e && e->isChord())
                         e = toChord(e)->upNote();
                   }
-            if (!e) {
-                  // no current or last selection - fall back to first element
+            if (!e) // no current or last selection - fall back to first element
                   e = score()->firstElement(false);
-                  }
             // TODO: find & read current key & time signatures
             if (e) {
                   ScoreAccessibility::instance()->clearAccessibilityInfo();
@@ -2233,17 +2218,17 @@ void ScoreView::cmd(const char* s)
       else if (cmd == "append-measure")
             cmdAppendMeasures(1, ElementType::MEASURE);
       else if (cmd == "insert-measure")
-          cmdInsertMeasures(1, ElementType::MEASURE);
+            cmdInsertMeasures(1, ElementType::MEASURE);
       else if (cmd == "insert-hbox")
-          cmdInsertMeasures(1, ElementType::HBOX);
+            cmdInsertMeasures(1, ElementType::HBOX);
       else if (cmd == "insert-vbox")
-          cmdInsertMeasures(1, ElementType::VBOX);
+            cmdInsertMeasures(1, ElementType::VBOX);
       else if (cmd == "append-hbox") {
-          MeasureBase* mb = appendMeasure(ElementType::HBOX);
+            MeasureBase* mb = appendMeasure(ElementType::HBOX);
             _score->select(mb, SelectType::SINGLE, 0);
             }
       else if (cmd == "append-vbox") {
-          MeasureBase* mb = appendMeasure(ElementType::VBOX);
+            MeasureBase* mb = appendMeasure(ElementType::VBOX);
             _score->select(mb, SelectType::SINGLE, 0);
             }
       else if (cmd == "insert-textframe")
@@ -2291,10 +2276,8 @@ void ScoreView::cmd(const char* s)
             updateGrips();
             }
 #ifdef OMR
-      else if (cmd == "show-omr") {
-            if (_score->masterScore()->omr())
-                  showOmr(!_score->masterScore()->showOmr());
-            }
+      else if (cmd == "show-omr" && _score->masterScore()->omr())
+            showOmr(!_score->masterScore()->showOmr());
 #endif
       else if (cmd == "split-measure") {
             Element* e = _score->selection().element();
@@ -2315,9 +2298,8 @@ void ScoreView::cmd(const char* s)
                      tr("No measures selected:\n"
                      "Please select a range of measures to join and try again"));
                   }
-            else {
+            else
                   _score->cmdJoinMeasure(m1, m2);
-                  }
             }
       else if (cmd == "next-lyric" || cmd == "prev-lyric")
             editCmd(cmd);
@@ -2363,14 +2345,10 @@ void ScoreView::cmd(const char* s)
             else if (editData.element->isFiguredBass())
                   figuredBassTab(true, false);
             }
-      else if (cmd == "prev-beat-TEXT") {
-            if (editData.element->isHarmony())
-                  harmonyBeatsTab(false, true);
-            }
-      else if (cmd == "next-beat-TEXT") {
-            if (editData.element->isHarmony())
-                  harmonyBeatsTab(false, false);
-            }
+      else if (cmd == "prev-beat-TEXT" && editData.element->isHarmony())
+            harmonyBeatsTab(false, true);
+      else if (cmd == "next-beat-TEXT" && editData.element->isHarmony())
+            harmonyBeatsTab(false, false);
 
       // STATE_NOTE_ENTRY_TAB actions
 
@@ -2378,7 +2356,7 @@ void ScoreView::cmd(const char* s)
       // this may move the input state cursor outside of the tab line range to accommodate
       // instrument strings not represented in the tab (e.g.: lute bass strings):
       // the appropriate visual rendition of the input cursor in those cases will be managed by moveCursor()
-      else if(cmd == "string-above" || cmd == "string-below") {
+      else if (cmd == "string-above" || cmd == "string-below") {
             InputState& is          = _score->inputState();
             Staff*      staff       = _score->staff(is.track() / VOICES);
             int         instrStrgs  = staff->part()->instrument()->stringData()->strings();
