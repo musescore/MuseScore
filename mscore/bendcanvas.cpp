@@ -49,8 +49,8 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
       static const int ROWS    = 13;
       static const int COLUMNS = 13;
 
-      int xs = w / (COLUMNS);
-      int ys = h / (ROWS);
+      int xs = w / COLUMNS;
+      int ys = h / ROWS;
       int lm = xs / 2;
       int tm = ys / 2;
       int tw = (COLUMNS - 1) * xs;
@@ -82,7 +82,7 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
       pen.setWidth(5);
       pen.setColor(Qt::gray);
       p.setPen(pen);
-      foreach(const PitchValue& v, _points) {
+      for (const PitchValue& v : _points) {
             int x = ((tw * v.time) / 60) + lm;
             int y = th - ((th * v.pitch) / 300) + tm;
             if (idx)
@@ -92,7 +92,7 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
             ++idx;
             }
 
-      foreach(const PitchValue& v, _points) {
+      for (const PitchValue& v : _points) {
             int x = ((tw * v.time) / 60) + lm;
             int y = th - ((th * v.pitch) / 300) + tm;
             p.fillRect(x - GRIP2, y - GRIP2, GRIP, GRIP, Qt::blue);

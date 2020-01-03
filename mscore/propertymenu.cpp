@@ -506,8 +506,12 @@ void ScoreView::editTremoloBarProperties(TremoloBar* tb)
       {
       TremoloBarProperties bp(tb, 0);
       if (bp.exec()) {
-            for (ScoreElement* b : tb->linkList())
-                  score()->undo(new ChangeTremoloBar(static_cast<TremoloBar*>(b), bp.points()));
+            score()->startCmd();
+            for (ScoreElement* b : tb->linkList()) {
+                  score()->undo(new ChangeTremoloBar(toTremoloBar(b), bp.points()));
+                  toTremoloBar(b)->triggerLayout();
+                  }
+            score()->endCmd();
             }
       }
 
