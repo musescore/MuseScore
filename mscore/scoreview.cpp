@@ -1779,47 +1779,54 @@ void ScoreView::cmd(const QAction* a)
 
 void ScoreView::cmd(const char* s)
       {
+      struct ScoreViewCmd {
+            std::vector<const char*> commands;
+            std::function<void()> exec;
+            };
+
       const QByteArray cmd(s);
 
       shadowNote->setVisible(false);
       if (MScore::debugMode)
             qDebug("ScoreView::cmd <%s>", s);
 
-      if (cmd == "escape")
+      const std::vector<ScoreViewCmd> cmdList {
+      {{"escape"}, [this] {
             escapeCmd();
-      else if (cmd == "note-input") {
+            }},
+      {{"note-input"}, [this] {
             if (state == ViewState::NORMAL)
                   changeState(ViewState::NOTE_ENTRY);
             else if (state == ViewState::NOTE_ENTRY)
                   changeState(ViewState::NORMAL);
-            }
-      else if (cmd == "copy") {
+            }},
+      {{"copy"}, [this] {
             if (fotoMode())
                   fotoModeCopy();
             else if (state == ViewState::NORMAL)
                   normalCopy();
             else if (state == ViewState::EDIT)
                   editCopy();
-            }
-      else if (cmd == "cut") {
+            }},
+      {{"cut"}, [this] {
             if (state == ViewState::NORMAL)
                   normalCut();
             else if (state == ViewState::EDIT)
                   editCut();
-            }
-      else if (cmd == "paste") {
+            }},
+      {{"paste"}, [this] {
             if (state == ViewState::NORMAL)
                   normalPaste();
             else if (state == ViewState::EDIT)
                   editPaste();
-            }
-      else if (cmd == "paste-half") {
+            }},
+      {{"paste-half"}, [this] {
             normalPaste(Fraction(1, 2));
-            }
-      else if (cmd == "paste-double") {
+            }},
+      {{"paste-double"}, [this] {
             normalPaste(Fraction(2, 1));
-            }
-      else if (cmd == "paste-special") {
+            }},
+      {{"paste-special"}, [this] {
             Fraction scale = Fraction(1, 1);
             Fraction duration = _score->inputState().duration().fraction();
             if (duration.isValid() && !duration.isZero()) {
@@ -1827,14 +1834,14 @@ void ScoreView::cmd(const char* s)
                   scale.reduce();
                   }
             normalPaste(scale);
-            }
-      else if (cmd == "swap") {
+            }},
+      {{"swap"}, [this] {
             if (state == ViewState::NORMAL)
                   normalSwap();
             else if (state == ViewState::EDIT)
                   editSwap();
-            }
-      else if (cmd == "lyrics") {
+            }},
+      {{"lyrics"}, [this] {
             _score->startCmd();
             Lyrics* lyrics = _score->addLyrics();
             _score->endCmd();
@@ -1842,18 +1849,18 @@ void ScoreView::cmd(const char* s)
                   startEditMode(lyrics);
                   return;
                   }
-            }
-      else if (cmd == "figured-bass") {
+            }},
+      {{"figured-bass"}, [this] {
             FiguredBass* fb = _score->addFiguredBass();
             if (fb) {
                   startEditMode(fb);
                   return;
                   }
-            }
-      else if (cmd == "mag") {
+            }},
+      {{"mag"}, /*[this]*/ {
             // ??
-            }
-      else if (cmd == "play") {
+            }},
+      {{"play"}, [this] {
             if (seq && seq->canStart()) {
                   if (state == ViewState::NORMAL || state == ViewState::NOTE_ENTRY)
                         changeState(ViewState::PLAY);
@@ -1862,118 +1869,140 @@ void ScoreView::cmd(const char* s)
                   }
             else
                   getAction("play")->setChecked(false);
-            }
-      else if (cmd == "fotomode") {
+            }},
+      {{"fotomode"}, [this] {
             if (state == ViewState::NORMAL)
                   changeState(ViewState::FOTO);
             else if (fotoMode())
                   changeState(ViewState::NORMAL);
-            }
-      else if (cmd == "add-slur")
+            }},
+      {{"add-slur"}, [this] {
             addSlur();
-      else if (cmd == "add-hairpin")
+            }},
+      {{"add-hairpin"}, [this] {
             cmdAddHairpin(HairpinType::CRESC_HAIRPIN);
-      else if (cmd == "add-hairpin-reverse")
+            }},
+      {{"add-hairpin-reverse"}, [this] {
             cmdAddHairpin(HairpinType::DECRESC_HAIRPIN);
-      else if (cmd == "add-noteline")
+            }},
+      {{"add-noteline"}, [this] {
             cmdAddNoteLine();
-      else if (cmd == "chord-text") {
+            }},
+      {{"chord-text"}, [this] {
             changeState(ViewState::NORMAL);
             cmdAddChordName(HarmonyType::STANDARD);
-            }
-      else if (cmd == "roman-numeral-text") {
+            }},
+      {{"roman-numeral-text"}, [this] {
             changeState(ViewState::NORMAL);
             cmdAddChordName(HarmonyType::ROMAN);
-            }
-      else if (cmd == "nashville-number-text") {
+            }},
+      {{"nashville-number-text"}, [this] {
             changeState(ViewState::NORMAL);
             cmdAddChordName(HarmonyType::NASHVILLE);
-            }
-      else if (cmd == "title-text")
+            }},
+      {{"title-text"}, [this] {
             cmdAddText(Tid::TITLE);
-      else if (cmd == "subtitle-text")
+            }},
+      {{"subtitle-text"}, [this] {
             cmdAddText(Tid::SUBTITLE);
-      else if (cmd == "composer-text")
+            }},
+      {{"composer-text"}, [this] {
             cmdAddText(Tid::COMPOSER);
-      else if (cmd == "poet-text")
+            }},
+      {{"poet-text"}, [this] {
             cmdAddText(Tid::POET);
-      else if (cmd == "part-text")
+            }},
+      {{"part-text"}, [this] {
             cmdAddText(Tid::INSTRUMENT_EXCERPT);
-      else if (cmd == "system-text")
+            }},
+      {{"system-text"}, [this] {
             cmdAddText(Tid::SYSTEM);
-      else if (cmd == "staff-text")
+            }},
+      {{"staff-text"}, [this] {
             cmdAddText(Tid::STAFF);
-      else if (cmd == "expression-text")
+            }},
+      {{"expression-text"}, [this] {
             cmdAddText(Tid::EXPRESSION);
-      else if (cmd == "rehearsalmark-text")
+            }},
+      {{"rehearsalmark-text"}, [this] {
             cmdAddText(Tid::REHEARSAL_MARK);
-      else if (cmd == "instrument-change-text")
+            }},
+      {{"instrument-change-text"}, [this] {
             cmdAddText(Tid::INSTRUMENT_CHANGE);
-      else if (cmd == "fingering-text")
+            }},
+      {{"fingering-text"}, [this] {
             cmdAddText(Tid::FINGERING);
-      else if (cmd == "sticking-text")
+            }},
+      {{"sticking-text"}, [this] {
             cmdAddText(Tid::STICKING);
-
-      else if (cmd == "edit-element") {
+            }},
+      {{"edit-element"}, [this] {
             Element* e = _score->selection().element();
             if (e && e->isEditable() && !popupActive) {
                   startEditMode(e);
                   }
-            }
-      else if (cmd == "select-similar") {
+            }},
+      {{"select-similar"}, [this] {
             if (_score->selection().isSingle()) {
                   Element* e = _score->selection().element();
                   mscore->selectSimilar(e, false);
                   }
-            }
-      else if (cmd == "select-similar-staff") {
+            }},
+      {{"select-similar-staff"}, [this] {
             if (_score->selection().isSingle()) {
                   Element* e = _score->selection().element();
                   mscore->selectSimilar(e, true);
                   }
-            }
-      else if (cmd == "select-dialog") {
+            }},
+      {{"select-dialog"}, [this] {
             if (_score->selection().isSingle()) {
                   Element* e = _score->selection().element();
                   mscore->selectElementDialog(e);
                   }
-            }
-//      else if (cmd == "find")
+            }},
+//      {{"find"}, [this] {
 //            ; // TODO:state         sm->postEvent(new CommandEvent(cmd));
-      else if (cmd == "scr-prev")
+//            }},
+      {{"scr-prev"}, [this] {
             screenPrev();
-      else if (cmd == "scr-next")
+            }},
+      {{"scr-next"}, [this] {
             screenNext();
-      else if (cmd == "page-prev")
+            }},
+      {{"page-prev"}, [this] {
             pagePrev();
-      else if (cmd == "page-next")
+            }},
+      {{"page-next"}, [this] {
             pageNext();
-      else if (cmd == "page-top")
+            }},
+      {{"page-top"}, [this] {
             pageTop();
-      else if (cmd == "page-end")
+            }},
+      {{"page-end"}, [this] {
             pageEnd();
-      else if (cmd == "select-next-chord"
-         || cmd == "select-prev-chord"
-         || cmd == "select-next-measure"
-         || cmd == "select-prev-measure"
-         || cmd == "select-begin-line"
-         || cmd == "select-end-line"
-         || cmd == "select-begin-score"
-         || cmd == "select-end-score"
-         || cmd == "select-staff-above"
-         || cmd == "select-staff-below") {
+            }},
+      {{"select-next-chord",
+        "select-prev-chord",
+        "select-next-measure",
+        "select-prev-measure",
+        "select-begin-line",
+        "select-end-line",
+        "select-begin-score",
+        "select-end-score",
+        "select-staff-above",
+        "select-staff-below"}, [this, cmd] {
             Element* el = _score->selectMove(cmd);
             if (el)
                   adjustCanvasPosition(el, false);
             score()->setPlayChord(true);
             updateAll();
-            }
-      else if (cmd == "next-chord"
-         || cmd == "prev-chord"
-         || cmd == "next-track"
-         || cmd == "prev-track"
-         || cmd == "next-measure"
-         || cmd == "prev-measure") {
+            }},
+      {{"next-chord",
+        "prev-chord",
+        "next-track",
+        "prev-track",
+        "next-measure",
+        "prev-measure"}, [this, cmd] {
             Element* el = score()->selection().element();
             if (el && (el->isTextBase())) {
                   score()->startCmd();
@@ -1995,12 +2024,14 @@ void ScoreView::cmd(const char* s)
                   score()->setPlayChord(true);
                   updateAll();
                   }
-            }
-      else if (cmd == "pitch-up-diatonic")
+            }},
+      {{"pitch-up-diatonic"}, [this] {
             score()->upDown(true, UpDownMode::DIATONIC);
-      else if (cmd == "pitch-down-diatonic")
+            }},
+      {{"pitch-down-diatonic"}, [this] {
             score()->upDown(false, UpDownMode::DIATONIC);
-      else if (cmd == "move-up") {
+            }},
+      {{"move-up"}, [this] {
             QList<Element*> el = score()->selection().uniqueElements();
             foreach (Element* e, el) {
                   ChordRest* cr = nullptr;
@@ -2011,8 +2042,8 @@ void ScoreView::cmd(const char* s)
                   if (cr)
                         score()->moveUp(cr);
                   }
-            }
-      else if (cmd == "move-down") {
+            }},
+      {{"move-down"}, [this] {
             QList<Element*> el = score()->selection().uniqueElements();
             foreach (Element* e, el) {
                   ChordRest* cr = nullptr;
@@ -2023,8 +2054,8 @@ void ScoreView::cmd(const char* s)
                   if (cr)
                         score()->moveDown(cr);
                   }
-            }
-      else if (cmd == "up-chord") {
+            }},
+      {{"up-chord"}, [this] {
             Element* el = score()->selection().element();
             Element* oel = el;
             if (el && (el->isNote() || el->isRest()))
@@ -2038,8 +2069,8 @@ void ScoreView::cmd(const char* s)
                   el = score()->upAlt(el);
                   cmdGotoElement(el);
                   }
-            }
-      else if (cmd == "down-chord") {
+            }},
+      {{"down-chord"}, [this] {
             Element* el = score()->selection().element();
             Element* oel = el;
             if (el && (el->isNote() || el->isRest()))
@@ -2053,18 +2084,18 @@ void ScoreView::cmd(const char* s)
                   el = score()->downAlt(el);
                   cmdGotoElement(el);
                   }
-            }
-      else if (cmd == "top-chord" ) {
+            }},
+      {{"top-chord"}, [this] {
             Element* el = score()->selection().element();
             if (el && el->type() == ElementType::NOTE)
                   cmdGotoElement(score()->upAltCtrl(static_cast<Note*>(el)));
-            }
-      else if (cmd == "bottom-chord") {
+            }},
+      {{"bottom-chord"}, [this] {
             Element* el = score()->selection().element();
             if (el && el->type() == ElementType::NOTE)
                   cmdGotoElement(score()->downAltCtrl(static_cast<Note*>(el)));
-            }
-      else if (cmd == "next-segment-element") {
+            }},
+      {{"next-segment-element"}, [this] {
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty() )
                 el = score()->selection().elements().first();
@@ -2073,8 +2104,8 @@ void ScoreView::cmd(const char* s)
                   cmdGotoElement(el->nextSegmentElement());
             else
                   cmdGotoElement(score()->firstElement());
-            }
-      else if (cmd == "prev-segment-element") {
+            }},
+      {{"prev-segment-element"}, [this] {
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty())
                 el = score()->selection().elements().last();
@@ -2083,8 +2114,8 @@ void ScoreView::cmd(const char* s)
                   cmdGotoElement(el->prevSegmentElement());
             else
                   cmdGotoElement(score()->lastElement());
-            }
-      else if (cmd == "next-element") {
+            }},
+      {{"next-element"}, [this] {
             if (editMode()) {
                   textTab(false);
                   return;
@@ -2107,8 +2138,8 @@ void ScoreView::cmd(const char* s)
                   cmdGotoElement(score()->nextElement());
             else
                   cmdGotoElement(score()->firstElement());
-            }
-      else if (cmd == "prev-element") {
+            }},
+      {{"prev-element"}, [this] {
             if (editMode()) {
                   textTab(true);
                   return;
@@ -2131,14 +2162,14 @@ void ScoreView::cmd(const char* s)
                   cmdGotoElement(score()->prevElement());
             else
                   cmdGotoElement(score()->lastElement());
-            }
-      else if (cmd == "first-element") {
+            }},
+      {{"first-element"}, [this] {
             cmdGotoElement(score()->firstElement(false));
-            }
-      else if (cmd == "last-element") {
+            }},
+      {{"last-element"}, [this] {
             cmdGotoElement(score()->lastElement(false));
-            }
-      else if (cmd == "get-location") {
+            }},
+      {{"get-location"}, [this] {
             // get current selection
             Element* e = score()->selection().element();
             if (!e) {
@@ -2156,18 +2187,31 @@ void ScoreView::cmd(const char* s)
                   ScoreAccessibility::instance()->clearAccessibilityInfo();
                   cmdGotoElement(e);
                   }
-            }
-      else if (cmd == "rest" || cmd == "rest-TAB")
+            }},
+      {{"rest", "rest-TAB"}, [this] {
             cmdEnterRest();
-      else if (cmd == "rest-1")
+            }},
+      {{"rest-1"}, [this] {
             cmdEnterRest(TDuration(TDuration::DurationType::V_WHOLE));
-      else if (cmd == "rest-2")
+            }},
+      {{"rest-2"}, [this] {
             cmdEnterRest(TDuration(TDuration::DurationType::V_HALF));
-      else if (cmd == "rest-4")
+            }},
+      {{"rest-4"}, [this] {
             cmdEnterRest(TDuration(TDuration::DurationType::V_QUARTER));
-      else if (cmd == "rest-8")
+            }},
+      {{"rest-8"}, [this] {
             cmdEnterRest(TDuration(TDuration::DurationType::V_EIGHTH));
-      else if (cmd.startsWith("interval")) {
+            }},
+      {{"interval1",
+        "interval2", "interval-2",
+        "interval3", "interval-3",
+        "interval4", "interval-4",
+        "interval5", "interval-5",
+        "interval6", "interval-6",
+        "interval7", "interval-7",
+        "interval8", "interval-8",
+        "interval9", "interval-9"}, [this, cmd] {
             int n = cmd.mid(8).toInt();
             std::vector<Note*> nl = _score->selection().noteList();
             if (!nl.empty()) {
@@ -2175,80 +2219,100 @@ void ScoreView::cmd(const char* s)
                   //      ;     // TODO: state    sm->postEvent(new CommandEvent("note-input"));
                   _score->cmdAddInterval(n, nl);
                   }
-            }
-      else if (cmd == "tie") {
+            }},
+      {{"tie"}, [this] {
             if (noteEntryMode()) {
                   _score->cmdAddTie();
                   moveCursor();
                   }
             else
                   _score->cmdToggleTie();
-            }
-      else if (cmd == "chord-tie") {
+            }},
+      {{"chord-tie"}, [this] {
             _score->cmdAddTie(true);
             moveCursor();
-            }
-      else if (cmd == "duplet")
+            }},
+      {{"duplet"}, [this] {
             cmdTuplet(2);
-      else if (cmd == "triplet")
+            }},
+      {{"triplet"}, [this] {
             cmdTuplet(3);
-      else if (cmd == "quadruplet")
+            }},
+      {{"quadruplet"}, [this] {
             cmdTuplet(4);
-      else if (cmd == "quintuplet")
+            }},
+      {{"quintuplet"}, [this] {
             cmdTuplet(5);
-      else if (cmd == "sextuplet")
+            }},
+      {{"sextuplet"}, [this] {
             cmdTuplet(6);
-      else if (cmd == "septuplet")
+            }},
+      {{"septuplet"}, [this] {
             cmdTuplet(7);
-      else if (cmd == "octuplet")
+            }},
+      {{"octuplet"}, [this] {
             cmdTuplet(8);
-      else if (cmd == "nonuplet")
+            }},
+      {{"nonuplet"}, [this] {
             cmdTuplet(9);
-      else if (cmd == "tuplet-dialog") {
+            }},
+      {{"tuplet-dialog"}, [this] {
             _score->startCmd();
             Tuplet* tuplet = mscore->tupletDialog();
             if (tuplet)
                   cmdCreateTuplet(_score->getSelectedChordRest(), tuplet);
             _score->endCmd();
             moveCursor();
-            }
-      else if (cmd == "repeat-sel")
+            }},
+      {{"repeat-sel"}, [this] {
             cmdRepeatSelection();
-      else if (cmd == "voice-1")
+            }},
+      {{"voice-1"}, [this] {
             changeVoice(0);
-      else if (cmd == "voice-2")
+            }},
+      {{"voice-2"}, [this] {
             changeVoice(1);
-      else if (cmd == "voice-3")
+            }},
+      {{"voice-3"}, [this] {
             changeVoice(2);
-      else if (cmd == "voice-4")
+            }},
+      {{"voice-4"}, [this] {
             changeVoice(3);
-      else if (cmd == "enh-both")
+            }},
+      {{"enh-both"}, [this] {
             cmdChangeEnharmonic(true);
-      else if (cmd == "enh-current")
+            }},
+      {{"enh-current"}, [this] {
             cmdChangeEnharmonic(false);
-      else if (cmd == "revision") {
+            }},
+      {{"revision"}, [this] {
             Score* sc = _score->masterScore();
             sc->createRevision();
-            }
-      else if (cmd == "append-measure")
+            }},
+      {{"append-measure"}, [this] {
             cmdAppendMeasures(1, ElementType::MEASURE);
-      else if (cmd == "insert-measure")
+            }},
+      {{"insert-measure"}, [this] {
           cmdInsertMeasures(1, ElementType::MEASURE);
-      else if (cmd == "insert-hbox")
+          }},
+      {{"insert-hbox"}, [this] {
           cmdInsertMeasures(1, ElementType::HBOX);
-      else if (cmd == "insert-vbox")
+          }},
+      {{"insert-vbox"}, [this] {
           cmdInsertMeasures(1, ElementType::VBOX);
-      else if (cmd == "append-hbox") {
+          }},
+      {{"append-hbox"}, [this] {
           MeasureBase* mb = appendMeasure(ElementType::HBOX);
             _score->select(mb, SelectType::SINGLE, 0);
-            }
-      else if (cmd == "append-vbox") {
+            }},
+      {{"append-vbox"}, [this] {
           MeasureBase* mb = appendMeasure(ElementType::VBOX);
             _score->select(mb, SelectType::SINGLE, 0);
-            }
-      else if (cmd == "insert-textframe")
+            }},
+      {{"insert-textframe"}, [this] {
             cmdInsertMeasure(ElementType::TBOX);
-      else if (cmd == "append-textframe") {
+            }},
+      {{"append-textframe"}, [this] {
             MeasureBase* mb = appendMeasure(ElementType::TBOX);
             if (mb) {
                   TBox* tf = static_cast<TBox*>(mb);
@@ -2264,14 +2328,19 @@ void ScoreView::cmd(const char* s)
                         startEditMode(text);
                         }
                   }
-            }
-      else if (cmd == "insert-fretframe" && enableExperimental)
+            }},
+      {{"insert-fretframe"}, [this] {
+            if (!enableExperimental)
+                  return;
             cmdInsertMeasure(ElementType::FBOX);
-      else if (cmd == "move-left")
+            }},
+      {{"move-left"}, [this] {
             cmdMoveCR(true);
-      else if (cmd == "move-right")
+            }},
+      {{"move-right"}, [this] {
             cmdMoveCR(false);
-      else if (cmd == "reset") {
+            }},
+      {{"reset"}, [this] {
             if (editMode()) {
                   editData.element->reset();
                   _score->update();
@@ -2289,14 +2358,14 @@ void ScoreView::cmd(const char* s)
                   _score->endCmd();
                   }
             updateGrips();
-            }
+            }},
 #ifdef OMR
-      else if (cmd == "show-omr") {
+      {{"show-omr"}, [this] {
             if (_score->masterScore()->omr())
                   showOmr(!_score->masterScore()->showOmr());
-            }
+            }},
 #endif
-      else if (cmd == "split-measure") {
+      {{"split-measure"}, [this] {
             Element* e = _score->selection().element();
             if (!(e && (e->isNote() || e->isRest())))
                   MScore::setError(NO_CHORD_REST_SELECTED);
@@ -2306,8 +2375,8 @@ void ScoreView::cmd(const char* s)
                   ChordRest* cr = toChordRest(e);
                   _score->cmdSplitMeasure(cr);
                   }
-            }
-      else if (cmd == "join-measures") {
+            }},
+      {{"join-measures"}, [this] {
             Measure* m1;
             Measure* m2;
             if (!_score->selection().measureRange(&m1, &m2) || m1 == m2) {
@@ -2318,59 +2387,72 @@ void ScoreView::cmd(const char* s)
             else {
                   _score->cmdJoinMeasure(m1, m2);
                   }
-            }
-      else if (cmd == "next-lyric" || cmd == "prev-lyric")
+            }},
+      {{"next-lyric", "prev-lyric"}, [this, cmd] {
             editCmd(cmd);
-      else if (cmd == "add-remove-breaks")
+            }},
+      {{"add-remove-breaks"}, [this] {
             cmdAddRemoveBreaks();
-      else if (cmd == "copy-lyrics-to-clipboard")
+            }},
+      {{"copy-lyrics-to-clipboard"}, [this] {
             cmdCopyLyricsToClipboard();
+            }},
 
       // STATE_NOTE_ENTRY_REALTIME actions (auto or manual)
 
-      else if (cmd == "realtime-advance")
+      {{"realtime-advance"}, [this] {
             realtimeAdvance(true);
+            }},
 
       // STATE_HARMONY_FIGBASS_EDIT actions
 
-      else if (cmd == "advance-longa")
+      {{"advance-longa"}, [this] {
             ticksTab(Fraction(4,1));
-      else if (cmd == "advance-breve")
+            }},
+      {{"advance-breve"}, [this] {
             ticksTab(Fraction(2,1));
-      else if (cmd == "advance-1")
+            }},
+      {{"advance-1"}, [this] {
             ticksTab(Fraction(1,1));
-      else if (cmd == "advance-2")
+            }},
+      {{"advance-2"}, [this] {
             ticksTab(Fraction(1,2));
-      else if (cmd == "advance-4")
+            }},
+      {{"advance-4"}, [this] {
             ticksTab(Fraction(1,4));
-      else if (cmd == "advance-8")
+            }},
+      {{"advance-8"}, [this] {
             ticksTab(Fraction(1,8));
-      else if (cmd == "advance-16")
+            }},
+      {{"advance-16"}, [this] {
             ticksTab(Fraction(1,16));
-      else if (cmd == "advance-32")
+            }},
+      {{"advance-32"}, [this] {
             ticksTab(Fraction(1,32));
-      else if (cmd == "advance-64")
+            }},
+      {{"advance-64"}, [this] {
             ticksTab(Fraction(1,64));
-      else if (cmd == "prev-measure-TEXT") {
+            }},
+      {{"prev-measure-TEXT"}, [this] {
             if (editData.element->isHarmony())
                   harmonyTab(true);
             else if (editData.element->isFiguredBass())
                   figuredBassTab(true, true);
-            }
-      else if (cmd == "next-measure-TEXT") {
+            }},
+      {{"next-measure-TEXT"}, [this] {
             if (editData.element->isHarmony())
                   harmonyTab(false);
             else if (editData.element->isFiguredBass())
                   figuredBassTab(true, false);
-            }
-      else if (cmd == "prev-beat-TEXT") {
+            }},
+      {{"prev-beat-TEXT"}, [this] {
             if (editData.element->isHarmony())
                   harmonyBeatsTab(false, true);
-            }
-      else if (cmd == "next-beat-TEXT") {
+            }},
+      {{"next-beat-TEXT"}, [this] {
             if (editData.element->isHarmony())
                   harmonyBeatsTab(false, false);
-            }
+            }},
 
       // STATE_NOTE_ENTRY_TAB actions
 
@@ -2378,7 +2460,8 @@ void ScoreView::cmd(const char* s)
       // this may move the input state cursor outside of the tab line range to accommodate
       // instrument strings not represented in the tab (e.g.: lute bass strings):
       // the appropriate visual rendition of the input cursor in those cases will be managed by moveCursor()
-      else if(cmd == "string-above" || cmd == "string-below") {
+      {{"string-above",
+        "string-below"}, [this, cmd] {
             InputState& is          = _score->inputState();
             Staff*      staff       = _score->staff(is.track() / VOICES);
             int         instrStrgs  = staff->part()->instrument()->stringData()->strings();
@@ -2392,18 +2475,33 @@ void ScoreView::cmd(const char* s)
                   is.setString(strg);                       // update status
                   moveCursor();
                   }
-            }
-      else if (cmd == "text-word-left")
+            }},
+      {{"text-word-left"}, [this] {
             toTextBase(editData.element)->movePosition(editData, QTextCursor::WordLeft);
-      else if (cmd == "text-word-right")
+            }},
+      {{"text-word-right"}, [this] {
             toTextBase(editData.element)->movePosition(editData, QTextCursor::NextWord);
-      else if (cmd == "concert-pitch") {
+            }},
+      {{"concert-pitch"}, [this, cmd] {
             QAction* a = getAction(cmd);
             if (_score->styleB(Sid::concertPitch) != a->isChecked()) {
                   _score->startCmd();
                   _score->cmdConcertPitchChanged(a->isChecked(), true);
                   _score->endCmd();
                   }
+            }},
+      };
+
+      auto c = std::find_if(cmdList.begin(), cmdList.end(), [cmd](const ScoreViewCmd& cc) {
+            for (auto name : cc.commands) {
+                  if (cmd == name)
+                        return true;
+                  }
+            return false;
+            });
+
+      if (c != cmdList.end()) {
+            c->exec();
             }
       else {
             editData.view = this;
