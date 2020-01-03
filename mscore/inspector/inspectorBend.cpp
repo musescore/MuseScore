@@ -22,7 +22,7 @@ namespace Ms {
 //   Preset bends
 //---------------------------------------------------------
 
-static const QList<PitchValue> BEND 
+static const QList<PitchValue> BEND
    = { PitchValue(0, 0),   PitchValue(15, 100), PitchValue(60, 100) };
 static const QList<PitchValue> BEND_RELEASE
    = { PitchValue(0, 0),   PitchValue(10, 100), PitchValue(20, 100), PitchValue(30, 0), PitchValue(60, 0) };
@@ -117,6 +117,8 @@ void InspectorBend::bendTypeChanged(int n)
             points = PREBEND_RELEASE;
             break;
          case 5:
+            break;
+         default:
             break;
             }
 
