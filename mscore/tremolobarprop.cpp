@@ -29,7 +29,22 @@
 
 namespace Ms {
 
-enum class TremoloBarType { DIP, DIVE, RELEASE_UP, INVERTED_DIP, RETURN, RELEASE_DOWN };
+//---------------------------------------------------------
+//   Preset tremolo bars
+//---------------------------------------------------------
+
+static const QList<PitchValue> DIP
+   = { PitchValue(0, 0),    PitchValue(30, -100), PitchValue(60, 0) };
+static const QList<PitchValue> DIVE
+   = { PitchValue(0, 0),    PitchValue(60, -150) };
+static const QList<PitchValue> RELEASE_UP
+   = { PitchValue(0, -150), PitchValue(60, 0)    };
+static const QList<PitchValue> INVERTED_DIP
+   = { PitchValue(0, 0),    PitchValue(30, 100),  PitchValue(60, 0) };
+static const QList<PitchValue> RETURN
+   = { PitchValue(0, 0),    PitchValue(60, 150)  };
+static const QList<PitchValue> RELEASE_DOWN
+   = { PitchValue(0, 150),  PitchValue(60, 0)    };
 
 //---------------------------------------------------------
 //   TremoloBarProperties
@@ -45,12 +60,12 @@ TremoloBarProperties::TremoloBarProperties(TremoloBar* b, QWidget* parent)
       bend = b;
       bendCanvas->setPoints(bend->points());
       bendTypes = new QButtonGroup(this);
-      bendTypes->addButton(bend1, int(TremoloBarType::DIP));
-      bendTypes->addButton(bend2, int(TremoloBarType::DIVE));
-      bendTypes->addButton(bend3, int(TremoloBarType::RELEASE_UP));
-      bendTypes->addButton(bend4, int(TremoloBarType::INVERTED_DIP));
-      bendTypes->addButton(bend5, int(TremoloBarType::RETURN));
-      bendTypes->addButton(bend6, int(TremoloBarType::RELEASE_DOWN));
+      bendTypes->addButton(bend1, 1);
+      bendTypes->addButton(bend2, 2);
+      bendTypes->addButton(bend3, 3);
+      bendTypes->addButton(bend4, 4);
+      bendTypes->addButton(bend5, 5);
+      bendTypes->addButton(bend6, 6);
       bendTypes->setExclusive(true);
 
       connect(bendTypes, SIGNAL(buttonClicked(int)), SLOT(bendTypeChanged(int)));
@@ -75,47 +90,27 @@ void TremoloBarProperties::bendTypeChanged(int n)
       QList<PitchValue>& points = bendCanvas->points();
 
       points.clear();
-      switch (TremoloBarType(n)) {
-            case TremoloBarType::DIP:
-                  points.append(PitchValue(0,0));
-                  points.append(PitchValue(30,-100));
-                  points.append(PitchValue(60,0));
-                  break;
-
-            // TODO: fill in the right points
-
-            case TremoloBarType::DIVE:
-                  points.append(PitchValue(0,0));
-                  points.append(PitchValue(10,100));
-                  points.append(PitchValue(20,100));
-                  points.append(PitchValue(30,0));
-                  points.append(PitchValue(60,0));
-                  break;
-            case TremoloBarType::RELEASE_UP:
-                  points.append(PitchValue(0,0));
-                  points.append(PitchValue(10,100));
-                  points.append(PitchValue(20,100));
-                  points.append(PitchValue(30,0));
-                  points.append(PitchValue(40,0));
-                  points.append(PitchValue(50,100));
-                  points.append(PitchValue(60,100));
-                  break;
-            case TremoloBarType::INVERTED_DIP:
-                  points.append(PitchValue(0,100));
-                  points.append(PitchValue(60,100));
-                  break;
-            case TremoloBarType::RETURN:
-                  points.append(PitchValue(0,100));
-                  points.append(PitchValue(15,100));
-                  points.append(PitchValue(30,0));
-                  points.append(PitchValue(60,0));
-                  break;
-            case TremoloBarType::RELEASE_DOWN:
-                  points.append(PitchValue(0,100));
-                  points.append(PitchValue(15,100));
-                  points.append(PitchValue(30,0));
-                  points.append(PitchValue(60,50));
-                  break;
+      switch (n) {
+         case 1:
+            points = DIP;
+            break;
+         case 2:
+            points = DIVE;
+            break;
+         case 3:
+            points = RELEASE_UP;
+            break;
+         case 4:
+            points = INVERTED_DIP;
+            break;
+         case 5:
+            points = RETURN;
+            break;
+         case 6:
+            points = RELEASE_DOWN;
+            break;
+         default:
+            break;
             }
       update();
       }
@@ -141,11 +136,11 @@ void TremoloBarCanvas::paintEvent(QPaintEvent* ev)
       QPainter p(this);
       p.fillRect(rect(), Qt::white);
 
-      static const int ROWS    = 25;
+      static const int ROWS    = 33;
       static const int COLUMNS = 13;
 
-      int xs = w / (COLUMNS);
-      int ys = h / (ROWS);
+      int xs = w / COLUMNS;
+      int ys = h / ROWS;
       int lm = xs / 2;
       int tm = ys / 2;
       int tw = (COLUMNS - 1) * xs;
@@ -163,7 +158,7 @@ void TremoloBarCanvas::paintEvent(QPaintEvent* ev)
       for (int y = 0; y < ROWS; ++y) {
             int yy = tm + y * ys;
             pen.setColor(y % 2 ? Qt::gray : Qt::black);
-            pen.setWidth(y == ROWS/2 ? 3 : 1);
+            pen.setWidth(y == ROWS / 2 ? 3 : 1);
             p.setPen(pen);
             p.drawLine(lm, yy, lm + tw, yy);
             }
@@ -180,7 +175,7 @@ void TremoloBarCanvas::paintEvent(QPaintEvent* ev)
       p.setPen(pen);
       for (const PitchValue& v : _points) {
             int x = ((tw * v.time) / 60) + lm;
-            int y = th - ((th * v.pitch) / 300) - ys * (ROWS/2) + tm;
+            int y = th - ((th * v.pitch) / 400) - ys * (ROWS / 2) + tm;
             if (idx)
                   p.drawLine(x1, y1, x, y);
             x1 = x;
@@ -190,7 +185,7 @@ void TremoloBarCanvas::paintEvent(QPaintEvent* ev)
 
       for (const PitchValue& v : _points) {
             int x = ((tw * v.time) / 60) + lm;
-            int y = th - ((th * v.pitch) / 300) - ys * (ROWS/2) + tm;
+            int y = th - ((th * v.pitch) / 400) - ys * (ROWS / 2) + tm;
             p.fillRect(x - GRIP2, y - GRIP2, GRIP, GRIP, Qt::blue);
             }
 
@@ -203,11 +198,11 @@ void TremoloBarCanvas::paintEvent(QPaintEvent* ev)
 
 void TremoloBarCanvas::mousePressEvent(QMouseEvent* ev)
       {
-      static const int ROWS = 13;
+      static const int ROWS    = 33;
       static const int COLUMNS = 13;
 
-      int xs = width() / (COLUMNS);
-      int ys = height() / (ROWS);
+      int xs = width() / COLUMNS;
+      int ys = height() / ROWS;
       int lm = xs / 2;
       int tm = ys / 2;
 //      int tw = (COLUMNS - 1) * xs;
@@ -215,8 +210,8 @@ void TremoloBarCanvas::mousePressEvent(QMouseEvent* ev)
 
       int x = ev->x() - lm;
       int y = ev->y() - tm;
-      x = (x + xs/2) / xs;
-      y = (y + ys/2) / ys;
+      x = (x + xs / 2) / xs;
+      y = (y + ys / 2) / ys;
       if (x >= COLUMNS)
             x = COLUMNS - 1;
       if (y >= ROWS)
@@ -224,7 +219,7 @@ void TremoloBarCanvas::mousePressEvent(QMouseEvent* ev)
       y = ROWS - y - 1;
 
       int time = x * 5;
-      int pitch = y * 25;
+      int pitch = (y - ROWS / 2) * 12.5;
 
       int n = _points.size();
       bool found = false;
@@ -235,7 +230,7 @@ void TremoloBarCanvas::mousePressEvent(QMouseEvent* ev)
                   break;
                   }
             if (_points[i].time == time) {
-                  if (_points[i].pitch == pitch && i > 0 && i < (n-1)) {
+                  if (_points[i].pitch == pitch && i > 0 && i < (n - 1)) {
                         _points.removeAt(i);
                         }
                   else {
@@ -259,5 +254,5 @@ void TremoloBarProperties::hideEvent(QHideEvent* event)
       MuseScore::saveGeometry(this);
       QWidget::hideEvent(event);
       }
-}
 
+}
