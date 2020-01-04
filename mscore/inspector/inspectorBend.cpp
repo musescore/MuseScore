@@ -84,37 +84,26 @@ void InspectorBend::setElement()
       }
 
 //---------------------------------------------------------
-//   points
-//---------------------------------------------------------
-
-const QList<PitchValue>& InspectorBend::points() const
-      {
-      return g.bendCanvas->points();
-      }
-
-//---------------------------------------------------------
 //   bendTypeChanged
 //---------------------------------------------------------
 
 void InspectorBend::bendTypeChanged(int n)
       {
-      QList<PitchValue>& points = g.bendCanvas->points();
-
       switch (n) {
          case 0:
-            points = BEND;
+            g.bendCanvas->setPoints(BEND);
             break;
          case 1:
-            points = BEND_RELEASE;
+            g.bendCanvas->setPoints(BEND_RELEASE);
             break;
          case 2:
-            points = BEND_RELEASE_BEND;
+            g.bendCanvas->setPoints(BEND_RELEASE_BEND);
             break;
          case 3:
-            points = PREBEND;
+            g.bendCanvas->setPoints(PREBEND);
             break;
          case 4:
-            points = PREBEND_RELEASE;
+            g.bendCanvas->setPoints(PREBEND_RELEASE);
             break;
          case 5:
          default:

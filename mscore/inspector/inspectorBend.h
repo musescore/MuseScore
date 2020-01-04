@@ -34,7 +34,6 @@ class InspectorBend : public InspectorElementBase {
 
    public:
       InspectorBend(QWidget* parent);
-      const QList<PitchValue>& points() const;
       virtual void setElement() override;
       };
 
