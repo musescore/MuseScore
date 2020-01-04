@@ -763,7 +763,7 @@ int Note::tpc() const
 QString Note::tpcUserName(bool explicitAccidental) const
       {
       QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental);
-      QString octaveName = QString::number((epitch() / 12) - 1);
+      QString octaveName = QString::number(((epitch() + ottaveCapoFret()) / 12) - 1);
       return pitchName + (explicitAccidental ? " " : "") + octaveName;
       }
 
@@ -2045,13 +2045,14 @@ void Note::updateAccidental(AccidentalState* as)
 
             AccidentalVal accVal = tpc2alter(tpc());
             bool error = false;
-            AccidentalVal relLineAccVal = as->accidentalVal(relLine, error);
+            int eRelLine = absStep(tpc(), epitch()+ottaveCapoFret());
+            AccidentalVal relLineAccVal = as->accidentalVal(eRelLine, error);
             if (error) {
                   qDebug("error accidetalVal");
                   return;
                   }
-            if ((accVal != relLineAccVal) || hidden() || as->tieContext(relLine)) {
-                  as->setAccidentalVal(relLine, accVal, _tieBack != 0 && _accidental == 0);
+            if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine)) {
+                  as->setAccidentalVal(eRelLine, accVal, _tieBack != 0 && _accidental == 0);
                   acci = Accidental::value2subtype(accVal);
                   // if previous tied note has same tpc, don't show accidental
                   if (_tieBack && _tieBack->startNote()->tpc1() == tpc1())
@@ -2257,6 +2258,21 @@ void Note::setHeadGroup(NoteHead::Group val)
       }
 
 //---------------------------------------------------------
+//   ottaveCapoFret
+//    offset added by Ottava's and Capo Fret.
+//---------------------------------------------------------
+
+int Note::ottaveCapoFret() const
+      {
+      Chord* ch = chord();
+      int capoFretId = staff()->capo(ch->segment()->tick());
+      if (capoFretId != 0)
+            capoFretId -= 1;
+
+      return staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
+      }
+
+//---------------------------------------------------------
 //   ppitch
 //    playback pitch
 //---------------------------------------------------------
@@ -2274,11 +2290,8 @@ int Note::ppitch() const
                         return div.pitch;
                   }
             }
-      int capoFretId = staff()->capo(ch->segment()->tick());
-      if (capoFretId != 0)
-            capoFretId -= 1;
 
-      return _pitch + staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
+      return _pitch + ottaveCapoFret();
       }
 
 //---------------------------------------------------------
