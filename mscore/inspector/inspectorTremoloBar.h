@@ -29,8 +29,8 @@ class InspectorTremoloBar : public InspectorElementBase {
       Ui::InspectorTremoloBar g;
 
    private slots:
-      void bendTypeChanged(int);
-      void updateBend();
+      void tremoloBarTypeChanged(int);
+      void updateTremoloBar();
 
    public:
       InspectorTremoloBar(QWidget* parent);
