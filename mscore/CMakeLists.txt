@@ -96,7 +96,7 @@ QT5_WRAP_UI (ui_headers
       transposedialog.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
       articulation.ui metaedit.ui paletteProperties.ui paletteCellProperties.ui selectdialog.ui selectnotedialog.ui
       synthcontrol.ui splitstaff.ui keyedit.ui selectinstr.ui
-      editstafftype.ui tremolobar.ui
+      editstafftype.ui
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui
       omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
@@ -335,7 +335,7 @@ add_library(mscoreapp STATIC
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
       startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
       templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
-      toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h tremolobarprop.h
+      toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h
       tupletdialog.h updatechecker.h uploadscoredialog.h waveview.h webpage.h workspace.h
 
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
@@ -377,8 +377,8 @@ add_library(mscoreapp STATIC
       stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
       articulationprop.cpp
-      bendcanvas.cpp fretcanvas.cpp
-      tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
+      bendcanvas.cpp fretcanvas.cpp tremolobarcanvas.cpp
+      file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
       dragelement.cpp startupWizard.cpp
       svggenerator.cpp
@@ -423,6 +423,7 @@ add_library(mscoreapp STATIC
       inspector/inspectorPedal.cpp
       inspector/inspectorDynamic.cpp
       inspector/inspectorInstrchange.cpp
+      inspector/inspectorTremoloBar.cpp
       inspector/inspectorElementBase.cpp
       inspector/resetButton.cpp
       enableplayforwidget.cpp

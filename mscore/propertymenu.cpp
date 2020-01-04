@@ -20,7 +20,6 @@
 #include "libmscore/mscore.h"
 
 #include "articulationprop.h"
-#include "tremolobarprop.h"
 #include "timesigproperties.h"
 #include "stafftextproperties.h"
 #include "selinstrument.h"
@@ -36,7 +35,6 @@
 #include "libmscore/text.h"
 #include "libmscore/articulation.h"
 #include "libmscore/volta.h"
-#include "libmscore/tremolobar.h"
 #include "libmscore/timesig.h"
 #include "libmscore/accidental.h"
 #include "libmscore/clef.h"
@@ -132,10 +130,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(getAction("flip"));
       else if (e->isHook())
             popup->addAction(getAction("flip"));
-      else if (e->isTremoloBar()) {
-            genPropertyMenu1(e, popup);
-            popup->addAction(tr("Tremolo Bar Properties…"))->setData("tr-props");
-            }
       else if (e->isHBox()) {
             QMenu* textMenu = popup->addMenu(tr("Add"));
             // borrow translation info from global actions
@@ -355,8 +349,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             score()->select(s, SelectType::SINGLE, 0);
             startEditMode(s);
             }
-      else if (cmd == "tr-props")
-            editTremoloBarProperties(toTremoloBar(e));
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
             ts->undoChangeProperty(Pid::SHOW_COURTESY, !ts->showCourtesySig());
@@ -495,23 +487,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             int n = cmd.mid(6).toInt();
             uint mask = 1 << n;
             e->setTag(mask);
-            }
-      }
-
-//---------------------------------------------------------
-//   editTremoloBarProperties
-//---------------------------------------------------------
-
-void ScoreView::editTremoloBarProperties(TremoloBar* tb)
-      {
-      TremoloBarProperties bp(tb, 0);
-      if (bp.exec()) {
-            score()->startCmd();
-            for (ScoreElement* b : tb->linkList()) {
-                  score()->undo(new ChangeTremoloBar(toTremoloBar(b), bp.points()));
-                  toTremoloBar(b)->triggerLayout();
-                  }
-            score()->endCmd();
             }
       }
 

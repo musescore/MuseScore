@@ -67,7 +67,7 @@ void InspectorBend::setElement()
       InspectorElementBase::setElement();
 
       QList<PitchValue> points = g.bendCanvas->points();
-      if (!(g.bendType->currentIndex() == 5)) {
+      if (!(g.bendType->currentIndex() == 5)) {  // custom bend
             if (points == BEND)
                   g.bendType->setCurrentIndex(0);
             else if (points == BEND_RELEASE)
@@ -117,7 +117,6 @@ void InspectorBend::bendTypeChanged(int n)
             points = PREBEND_RELEASE;
             break;
          case 5:
-            break;
          default:
             break;
             }
