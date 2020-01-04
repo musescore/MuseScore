@@ -213,10 +213,10 @@
       <item row="4" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Bend type:</string>
+         <string>Tremolo bar type:</string>
         </property>
         <property name="buddy">
-         <cstring>bendType</cstring>
+         <cstring>tremoloBarType</cstring>
         </property>
        </widget>
       </item>
@@ -257,48 +257,13 @@
        </widget>
       </item>
       <item row="4" column="1" colspan="2">
-       <widget class="QComboBox" name="bendType">
+       <widget class="QComboBox" name="tremoloBarType">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <item>
-         <property name="text">
-          <string>Dip</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Dive</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Release (Up)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Inverted Dip</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Return</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Release (Down)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Custom</string>
-         </property>
-        </item>
        </widget>
       </item>
      </layout>
@@ -308,15 +273,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::TremoloBarCanvas</class>
-   <extends>QFrame</extends>
-   <header>tremolobarcanvas.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Ms::ResetButton</class>
    <extends>QWidget</extends>
    <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::TremoloBarCanvas</class>
+   <extends>QFrame</extends>
+   <header>tremolobarcanvas.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -325,7 +290,7 @@
   <tabstop>lineWidth</tabstop>
   <tabstop>mag</tabstop>
   <tabstop>play</tabstop>
-  <tabstop>bendType</tabstop>
+  <tabstop>tremoloBarType</tabstop>
  </tabstops>
  <resources/>
  <connections/>

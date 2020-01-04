@@ -19,20 +19,24 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   Preset tremolo bars
+//   TremoloBarType
 //---------------------------------------------------------
 
-static const QList<PitchValue> DIP
+enum class TremoloBarType : char {
+      DIP, DIVE, RELEASE_UP, INVERTED_DIP, RETURN, RELEASE_DOWN, CUSTOM
+      };
+
+static const QList<PitchValue> Dip
    = { PitchValue(0, 0),    PitchValue(30, -100), PitchValue(60, 0) };
-static const QList<PitchValue> DIVE
+static const QList<PitchValue> Dive
    = { PitchValue(0, 0),    PitchValue(60, -150) };
-static const QList<PitchValue> RELEASE_UP
+static const QList<PitchValue> ReleaseUp
    = { PitchValue(0, -150), PitchValue(60, 0)    };
-static const QList<PitchValue> INVERTED_DIP
+static const QList<PitchValue> InvertedDip
    = { PitchValue(0, 0),    PitchValue(30, 100),  PitchValue(60, 0) };
-static const QList<PitchValue> RETURN
+static const QList<PitchValue> Return
    = { PitchValue(0, 0),    PitchValue(60, 150)  };
-static const QList<PitchValue> RELEASE_DOWN
+static const QList<PitchValue> ReleaseDown
    = { PitchValue(0, 150),  PitchValue(60, 0)    };
 
 //---------------------------------------------------------
@@ -53,10 +57,19 @@ InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
 
       mapSignals(iiList, ppList);
 
+      g.tremoloBarType->clear();
+      g.tremoloBarType->addItem(tr("Dip"),            int(TremoloBarType::DIP)          );
+      g.tremoloBarType->addItem(tr("Dive"),           int(TremoloBarType::DIVE)         );
+      g.tremoloBarType->addItem(tr("Release (Up)"),   int(TremoloBarType::RELEASE_UP)   );
+      g.tremoloBarType->addItem(tr("Inverted Dip"),   int(TremoloBarType::INVERTED_DIP) );
+      g.tremoloBarType->addItem(tr("Return"),         int(TremoloBarType::RETURN)       );
+      g.tremoloBarType->addItem(tr("Release (Down)"), int(TremoloBarType::RELEASE_DOWN) );
+      g.tremoloBarType->addItem(tr("Custom"),         int(TremoloBarType::CUSTOM)       );
+
       TremoloBar* tb = toTremoloBar(inspector->element());
       g.tremoloBarCanvas->setPoints(tb->points());
-      connect(g.bendType,         SIGNAL(currentIndexChanged(int)),  SLOT(bendTypeChanged(int)));
-      connect(g.tremoloBarCanvas, SIGNAL(tremoloBarCanvasChanged()), SLOT(updateBend())        );
+      connect(g.tremoloBarType,   SIGNAL(currentIndexChanged(int)),  SLOT(tremoloBarTypeChanged(int)));
+      connect(g.tremoloBarCanvas, SIGNAL(tremoloBarCanvasChanged()), SLOT(updateTremoloBar())        );
       }
 
 //---------------------------------------------------------
@@ -68,70 +81,70 @@ void InspectorTremoloBar::setElement()
       InspectorElementBase::setElement();
 
       QList<PitchValue> points = g.tremoloBarCanvas->points();
-      if (!(g.bendType->currentIndex() == 6)) { // custom bend
-            if (points == DIP)
-                  g.bendType->setCurrentIndex(0);
-            else if (points == DIVE)
-                  g.bendType->setCurrentIndex(1);
-            else if (points == RELEASE_UP)
-                  g.bendType->setCurrentIndex(2);
-            else if (points == INVERTED_DIP)
-                  g.bendType->setCurrentIndex(3);
-            else if (points == RETURN)
-                  g.bendType->setCurrentIndex(4);
-            else if (points == RELEASE_DOWN)
-                  g.bendType->setCurrentIndex(5);
+      if (!(g.tremoloBarType->currentIndex() == int(TremoloBarType::CUSTOM))) { // custom tremolo bar
+            if (points == Dip)
+                  g.tremoloBarType->setCurrentIndex(int(TremoloBarType::DIP));
+            else if (points == Dive)
+                  g.tremoloBarType->setCurrentIndex(int(TremoloBarType::DIVE));
+            else if (points == ReleaseUp)
+                  g.tremoloBarType->setCurrentIndex(int(TremoloBarType::RELEASE_UP));
+            else if (points == InvertedDip)
+                  g.tremoloBarType->setCurrentIndex(int(TremoloBarType::INVERTED_DIP));
+            else if (points == Return)
+                  g.tremoloBarType->setCurrentIndex(int(TremoloBarType::RETURN));
+            else if (points == ReleaseDown)
+                  g.tremoloBarType->setCurrentIndex(int(TremoloBarType::RELEASE_DOWN));
             else
-                  g.bendType->setCurrentIndex(6);
+                  g.tremoloBarType->setCurrentIndex(int(TremoloBarType::CUSTOM));
             }
       }
 
 //---------------------------------------------------------
-//   bendTypeChanged
+//   tremoloBarTypeChange
 //---------------------------------------------------------
 
-void InspectorTremoloBar::bendTypeChanged(int n)
+void InspectorTremoloBar::tremoloBarTypeChanged(int n)
       {
       switch (n) {
          case 0:
-            g.tremoloBarCanvas->setPoints(DIP);
+            g.tremoloBarCanvas->setPoints(Dip);
             break;
          case 1:
-            g.tremoloBarCanvas->setPoints(DIVE);
+            g.tremoloBarCanvas->setPoints(Dive);
             break;
          case 2:
-            g.tremoloBarCanvas->setPoints(RELEASE_UP);
+            g.tremoloBarCanvas->setPoints(ReleaseUp);
             break;
          case 3:
-            g.tremoloBarCanvas->setPoints(INVERTED_DIP);
+            g.tremoloBarCanvas->setPoints(InvertedDip);
             break;
          case 4:
-            g.tremoloBarCanvas->setPoints(RETURN);
+            g.tremoloBarCanvas->setPoints(Return);
             break;
          case 5:
-            g.tremoloBarCanvas->setPoints(RELEASE_DOWN);
+            g.tremoloBarCanvas->setPoints(ReleaseDown);
             break;
          case 6:
          default:
             break;
             }
 
-      updateBend();
+      updateTremoloBar();
       update();
       }
 
 //---------------------------------------------------------
-//   updateBend
+//   updateTremoloBar
 //---------------------------------------------------------
 
-void InspectorTremoloBar::updateBend()
+void InspectorTremoloBar::updateTremoloBar()
       {
       TremoloBar* tb = toTremoloBar(inspector->element());
       Score* sc = tb->score();
       sc->startCmd();
-      for (ScoreElement* t : tb->linkList()) {
-            sc->undo(new ChangeTremoloBar(toTremoloBar(t), g.tremoloBarCanvas->points()));
-            toTremoloBar(t)->triggerLayout();
+      for (ScoreElement* el : tb->linkList()) {
+            sc->undo(new ChangeTremoloBar(toTremoloBar(el), g.tremoloBarCanvas->points()));
+            toTremoloBar(el)->triggerLayout();
             }
       sc->endCmd();
       }
