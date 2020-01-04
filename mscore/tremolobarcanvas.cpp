@@ -1,8 +1,8 @@
 //=============================================================================
-//  MusE Score
-//  Linux Music Score Editor
+//  MuseScore
+//  Music Composition & Notation
 //
-//  Copyright (C) 2010-2011 Werner Schweer and others
+//  Copyright (C) 2010-2019 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,103 +17,13 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "tremolobarprop.h"
-#include "libmscore/tremolobar.h"
 #include "tremolobarcanvas.h"
-#include "libmscore/score.h"
-#include "libmscore/undo.h"
+#include "libmscore/tremolobar.h"
 #include "libmscore/staff.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
-#include "musescore.h"
 
 namespace Ms {
-
-//---------------------------------------------------------
-//   Preset tremolo bars
-//---------------------------------------------------------
-
-static const QList<PitchValue> DIP
-   = { PitchValue(0, 0),    PitchValue(30, -100), PitchValue(60, 0) };
-static const QList<PitchValue> DIVE
-   = { PitchValue(0, 0),    PitchValue(60, -150) };
-static const QList<PitchValue> RELEASE_UP
-   = { PitchValue(0, -150), PitchValue(60, 0)    };
-static const QList<PitchValue> INVERTED_DIP
-   = { PitchValue(0, 0),    PitchValue(30, 100),  PitchValue(60, 0) };
-static const QList<PitchValue> RETURN
-   = { PitchValue(0, 0),    PitchValue(60, 150)  };
-static const QList<PitchValue> RELEASE_DOWN
-   = { PitchValue(0, 150),  PitchValue(60, 0)    };
-
-//---------------------------------------------------------
-//   TremoloBarProperties
-//---------------------------------------------------------
-
-TremoloBarProperties::TremoloBarProperties(TremoloBar* b, QWidget* parent)
-   : QDialog(parent)
-      {
-      setObjectName("TremoloBarProperties");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-      bend = b;
-      bendCanvas->setPoints(bend->points());
-      bendTypes = new QButtonGroup(this);
-      bendTypes->addButton(bend1, 1);
-      bendTypes->addButton(bend2, 2);
-      bendTypes->addButton(bend3, 3);
-      bendTypes->addButton(bend4, 4);
-      bendTypes->addButton(bend5, 5);
-      bendTypes->addButton(bend6, 6);
-      bendTypes->setExclusive(true);
-
-      connect(bendTypes, SIGNAL(buttonClicked(int)), SLOT(bendTypeChanged(int)));
-      MuseScore::restoreGeometry(this);
-      }
-
-//---------------------------------------------------------
-//   points
-//---------------------------------------------------------
-
-const QList<PitchValue>& TremoloBarProperties::points() const
-      {
-      return bendCanvas->points();
-      }
-
-//---------------------------------------------------------
-//   bendTypeChanged
-//---------------------------------------------------------
-
-void TremoloBarProperties::bendTypeChanged(int n)
-      {
-      QList<PitchValue>& points = bendCanvas->points();
-
-      points.clear();
-      switch (n) {
-         case 1:
-            points = DIP;
-            break;
-         case 2:
-            points = DIVE;
-            break;
-         case 3:
-            points = RELEASE_UP;
-            break;
-         case 4:
-            points = INVERTED_DIP;
-            break;
-         case 5:
-            points = RETURN;
-            break;
-         case 6:
-            points = RELEASE_DOWN;
-            break;
-         default:
-            break;
-            }
-      update();
-      }
 
 //---------------------------------------------------------
 //   TremoloBarCanvas
@@ -243,16 +153,8 @@ void TremoloBarCanvas::mousePressEvent(QMouseEvent* ev)
       if (!found)
             _points.append(PitchValue(time, pitch, false));
       update();
-      }
 
-//---------------------------------------------------------
-//   hideEvent
-//---------------------------------------------------------
-
-void TremoloBarProperties::hideEvent(QHideEvent* event)
-      {
-      MuseScore::saveGeometry(this);
-      QWidget::hideEvent(event);
+      emit tremoloBarCanvasChanged();
       }
 
 }
