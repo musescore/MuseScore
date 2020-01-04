@@ -87,40 +87,29 @@ void InspectorTremoloBar::setElement()
       }
 
 //---------------------------------------------------------
-//   points
-//---------------------------------------------------------
-
-const QList<PitchValue>& InspectorTremoloBar::points() const
-      {
-      return g.tremoloBarCanvas->points();
-      }
-
-//---------------------------------------------------------
 //   bendTypeChanged
 //---------------------------------------------------------
 
 void InspectorTremoloBar::bendTypeChanged(int n)
       {
-      QList<PitchValue>& points = g.tremoloBarCanvas->points();
-
       switch (n) {
          case 0:
-            points = DIP;
+            g.tremoloBarCanvas->setPoints(DIP);
             break;
          case 1:
-            points = DIVE;
+            g.tremoloBarCanvas->setPoints(DIVE);
             break;
          case 2:
-            points = RELEASE_UP;
+            g.tremoloBarCanvas->setPoints(RELEASE_UP);
             break;
          case 3:
-            points = INVERTED_DIP;
+            g.tremoloBarCanvas->setPoints(INVERTED_DIP);
             break;
          case 4:
-            points = RETURN;
+            g.tremoloBarCanvas->setPoints(RETURN);
             break;
          case 5:
-            points = RELEASE_DOWN;
+            g.tremoloBarCanvas->setPoints(RELEASE_DOWN);
             break;
          case 6:
          default:
