@@ -41,6 +41,7 @@
 #include "inspectorInstrchange.h"
 #include "inspectorMeasureNumber.h"
 #include "inspectorBend.h"
+#include "inspectorTremoloBar.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "icons.h"
@@ -65,7 +66,6 @@
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/tuplet.h"
-#include "libmscore/tremolobar.h"
 #include "libmscore/slur.h"
 #include "libmscore/breath.h"
 #include "libmscore/lyrics.h"
@@ -986,41 +986,7 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   InspectorTremoloBar
-//---------------------------------------------------------
-
-InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
-   : InspectorElementBase(parent)
-      {
-      g.setupUi(addWidget());
-
-      const std::vector<InspectorItem> iiList = {
-            { Pid::PLAY,       0, g.play,        g.resetPlay        },
-            { Pid::LINE_WIDTH, 0, g.lineWidth,   g.resetLineWidth   },
-            { Pid::MAG,        0, g.mag,         g.resetMag         }
-            };
-      const std::vector<InspectorPanel> ppList = { { g.title, g.panel } };
-
-      mapSignals(iiList, ppList);
-      connect(g.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
-      }
-
-//---------------------------------------------------------
-//   propertiesClicked
-//---------------------------------------------------------
-
-void InspectorTremoloBar::propertiesClicked()
-      {
-      TremoloBar* b = toTremoloBar(inspector->element());
-      Score* score = b->score();
-      score->startCmd();
-      mscore->currentScoreView()->editTremoloBarProperties(b);
-      b->triggerLayoutAll();
-      score->endCmd();
-      }
-
-//---------------------------------------------------------
-//   InspectorTremoloBar
+//   InspectorTremolo
 //---------------------------------------------------------
 
 InspectorTremolo::InspectorTremolo(QWidget* parent)

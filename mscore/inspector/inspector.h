@@ -42,7 +42,6 @@
 #include "ui_inspector_text.h"
 // #include "ui_inspector_fret.h"
 #include "ui_inspector_tremolo.h"
-#include "ui_inspector_tremolobar.h"
 #include "ui_inspector_caesura.h"
 #include "ui_inspector_bracket.h"
 #include "ui_inspector_iname.h"
@@ -304,22 +303,6 @@ class InspectorAccidental : public InspectorElementBase {
 
    public:
       InspectorAccidental(QWidget* parent);
-      };
-
-//---------------------------------------------------------
-//   InspectorTremoloBar
-//---------------------------------------------------------
-
-class InspectorTremoloBar : public InspectorElementBase {
-      Q_OBJECT
-
-      Ui::InspectorTremoloBar g;
-
-   private slots:
-      void propertiesClicked();
-
-   public:
-      InspectorTremoloBar(QWidget* parent);
       };
 
 //---------------------------------------------------------
