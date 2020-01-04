@@ -34,7 +34,6 @@ class InspectorTremoloBar : public InspectorElementBase {
 
    public:
       InspectorTremoloBar(QWidget* parent);
-      const QList<PitchValue>& points() const;
       virtual void setElement() override;
       };
 
