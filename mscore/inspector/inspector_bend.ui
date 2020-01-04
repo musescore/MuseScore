@@ -340,36 +340,6 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <item>
-         <property name="text">
-          <string>Bend</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Bend/Release</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Bend/Release/Bend</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Prebend</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Prebend/Release</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Custom</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="5" column="0" colspan="2">
