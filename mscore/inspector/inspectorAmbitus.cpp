@@ -33,8 +33,8 @@ enum AmbitusControl : char {
 InspectorAmbitus::InspectorAmbitus(QWidget* parent)
    : InspectorElementBase(parent)
       {
-      r.setupUi(addWidget());
       s.setupUi(addWidget());
+      r.setupUi(addWidget());
 
       static const NoteHead::Group heads[] = {
             NoteHead::Group::HEAD_NORMAL,
