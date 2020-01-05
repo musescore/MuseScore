@@ -100,7 +100,9 @@ AboutBoxDialog::AboutBoxDialog()
       if (MuseScore::unstable())
             versionLabel->setText(tr("Unstable Prerelease for Version: %1").arg(VERSION));
       else {
-            auto msVersion = QString(VERSION) + QString(".") + QString(BUILD_NUMBER);// +QString(" Beta");
+            auto msVersion = QString(VERSION);
+            if (strlen(BUILD_NUMBER))
+                  msVersion += QString(".") + QString(BUILD_NUMBER);// +QString(" Beta");
             versionLabel->setText(tr("Version: %1").arg(msVersion));
       }
 
@@ -137,8 +139,10 @@ void AboutBoxDialog::copyRevisionToClipboard()
       // endianness?
       sysinfo += ", MuseScore version (";
       sysinfo += QSysInfo::WordSize==32 ? "32" : "64";
-      auto msVersion = QString(VERSION) + QString(".") + QString(BUILD_NUMBER);
-      sysinfo += "-bit): " + msVersion + ", revision: ";
+      sysinfo += "-bit): " + QString(VERSION);
+      if (strlen(BUILD_NUMBER))
+            sysinfo += QString(".") + QString(BUILD_NUMBER);
+      sysinfo += ", revision: ";
       sysinfo += "github-musescore-musescore-";
       sysinfo += revision;
       cb->setText(sysinfo);
