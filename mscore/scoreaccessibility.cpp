@@ -48,12 +48,28 @@ QAccessibleInterface* AccessibleScoreView::parent() const
 
 QRect AccessibleScoreView::rect() const
       {
-      return s->rect();
+      QPoint origin = s->mapToGlobal(QPoint(0, 0));
+      return s->rect().translated(origin);
       }
+
+bool AccessibleScoreView::isValid() const
+      {
+      return true;
+      }
+
+#if 0
+// TODO: determine if setting state explicitly would be helpful
+QAccessible::State AccessibleScoreView::state() const
+      {
+      return QAccessible::State::active;
+      }
+#endif
 
 QAccessible::Role AccessibleScoreView::role() const
       {
-      return QAccessible::NoRole;
+      // TODO: determine optimum role
+      // StaticText has the advantage of being read by Windows Narrator
+      return QAccessible::StaticText;
       }
 
 QString AccessibleScoreView::text(QAccessible::Text t) const
@@ -62,15 +78,20 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
             case QAccessible::Name:
                   return s->score()->title();
             case QAccessible::Value:
+            case QAccessible::Description:
                   return s->score()->accessibleInfo();
             default:
                   return QString();
            }
       }
 
+#if 0
+// TODO: determine if this is part of the problem or part of the solution
+// without this override, Qt determines window by looking upwards in hierarchy
 QWindow* AccessibleScoreView::window() const {
-      return qApp->focusWindow();
+      return mscore->windowHandle();      // qApp->focusWindow();
       }
+#endif
 
 QAccessibleInterface* AccessibleScoreView::ScoreViewFactory(const QString &classname, QObject *object)
       {
@@ -249,22 +270,28 @@ void ScoreAccessibility::updateAccessibilityInfo()
       //getInspector->isAncestorOf is used so that inspector and search dialog don't loose focus
       //when this method is called
       //TODO: create a class to manage focus and replace this massive if
-      if ( (qApp->focusWidget() != w) &&
-           !mscore->inspector()->isAncestorOf(qApp->focusWidget()) &&
-           !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) &&
-           !(mscore->getSelectionWindow() && mscore->getSelectionWindow()->isAncestorOf(qApp->focusWidget())) &&
-           !(mscore->getPlayPanel() && mscore->getPlayPanel()->isAncestorOf(qApp->focusWidget())) &&
-           !(mscore->getSynthControl() && mscore->getSynthControl()->isAncestorOf(qApp->focusWidget())) &&
-           !(mscore->getMixer() && mscore->getMixer()->isAncestorOf(qApp->focusWidget())) &&
-           !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) &&
-           !(mscore->getDrumrollEditor() && mscore->getDrumrollEditor()->isAncestorOf(qApp->focusWidget())) &&
-           !(mscore->getPianorollEditor() && mscore->getPianorollEditor()->isAncestorOf(qApp->focusWidget()))) {
+      QWidget* focusWidget = qApp->focusWidget();
+      if ( (focusWidget != w) &&
+           !(mscore->inspector() && mscore->inspector()->isAncestorOf(focusWidget)) &&
+           !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(focusWidget)) &&
+           !(mscore->getSelectionWindow() && mscore->getSelectionWindow()->isAncestorOf(focusWidget)) &&
+           !(mscore->getPlayPanel() && mscore->getPlayPanel()->isAncestorOf(focusWidget)) &&
+           !(mscore->getSynthControl() && mscore->getSynthControl()->isAncestorOf(focusWidget)) &&
+           !(mscore->getMixer() && mscore->getMixer()->isAncestorOf(focusWidget)) &&
+           !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(focusWidget)) &&
+           !(mscore->getDrumrollEditor() && mscore->getDrumrollEditor()->isAncestorOf(focusWidget)) &&
+           !(mscore->getPianorollEditor() && mscore->getPianorollEditor()->isAncestorOf(focusWidget))) {
             mscore->activateWindow();
             w->setFocus();
             }
       QObject* obj = static_cast<QObject*>(w);
       QAccessibleValueChangeEvent ev(obj, w->score()->accessibleInfo());
       QAccessible::updateAccessibility(&ev);
+      // TODO:
+      // some screenreaders may repond better to description change
+      // the version of Qt used may also relevant
+      //QAccessibleEvent ev(obj, QAccessible::DescriptionChanged);
+      //QAccessible::updateAccessibility(&ev);
       }
 
 std::pair<int, float> ScoreAccessibility::barbeat(Element *e)

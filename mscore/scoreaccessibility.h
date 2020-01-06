@@ -22,9 +22,11 @@ class AccessibleScoreView : public QObject, QAccessibleWidget {
       QAccessibleInterface* child(int /*index*/) const Q_DECL_OVERRIDE;
       QAccessibleInterface* parent() const Q_DECL_OVERRIDE;
       QRect rect() const Q_DECL_OVERRIDE;
+      bool isValid() const Q_DECL_OVERRIDE;
+      //QAccessible::State state() const Q_DECL_OVERRIDE;
       QAccessible::Role role() const Q_DECL_OVERRIDE;
       QString text(QAccessible::Text t) const Q_DECL_OVERRIDE;
-      QWindow* window() const  Q_DECL_OVERRIDE;
+      //QWindow* window() const  Q_DECL_OVERRIDE;
       static QAccessibleInterface* ScoreViewFactory(const QString &classname, QObject *object);
       };
 
