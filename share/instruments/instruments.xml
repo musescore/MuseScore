@@ -1921,6 +1921,76 @@
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
             </Instrument>
+            <Instrument id="xaphoon">
+                  <longName>Pocket-sax C</longName>
+                  <shortName>P. Sx. C</shortName>
+                  <description>Pocket-Sax/Xaphoon in C</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>60-77</aPitchRange>
+                  <pPitchRange>59-84</pPitchRange>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="bb-xaphoon">
+                  <longName>Pocket-sax Bb</longName>
+                  <shortName>P. Sx. Bb</shortName>
+                  <description>Pocket-Sax/Xaphoon in Bb</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>58-75</aPitchRange>
+                  <pPitchRange>57-83</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="d-xaphoon">
+                  <longName>Pocket-sax D</longName>
+                  <shortName>P. Sx. D</shortName>
+                  <description>Pocket-Sax/Xaphoon in D</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>62-79</aPitchRange>
+                  <pPitchRange>61-86</pPitchRange>
+                  <transposeDiatonic>1</transposeDiatonic>
+                  <transposeChromatic>2</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="g-xaphoon">
+                  <longName>Pocket-sax G</longName>
+                  <shortName>P. Sx. G</shortName>
+                  <description>Pocket-Sax/Xaphoon in G</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>55-72</aPitchRange>
+                  <pPitchRange>54-79</pPitchRange>
+                  <transposeDiatonic>-3</transposeDiatonic>
+                  <transposeChromatic>-5</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
+            </Instrument>
             <Instrument id="chalumeau">
                   <longName>Chalumeau</longName>
                   <shortName>Cha.</shortName>
