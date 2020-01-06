@@ -39,6 +39,8 @@ namespace Ms {
 ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
    : QWidget(parent)
       {
+      setObjectName("scoretab");
+      setAccessibleName("score tab");
       mainWindow = static_cast<MuseScore*>(parent);
       scoreList = sl;
       QVBoxLayout* layout = new QVBoxLayout;
@@ -53,6 +55,8 @@ ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
       connect(ag, SIGNAL(triggered(QAction*)), this, SIGNAL(actionTriggered(QAction*)));
 
       tab = new QTabBar(this);
+      tab->setObjectName("primary tab");
+      tab->setAccessibleName("primary tab");
       tab->setExpanding(false);
       tab->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
       tab->setFocusPolicy(Qt::ClickFocus);
@@ -60,6 +64,8 @@ ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
       tab->setMovable(true);
 
       tab2 = new QTabBar(this);
+      tab2->setObjectName("secondarytab");
+      tab2->setAccessibleName("secondary tab");
       tab2->setExpanding(false);
       tab2->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
       tab2->setFocusPolicy(Qt::ClickFocus);
