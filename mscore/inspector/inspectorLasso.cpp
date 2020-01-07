@@ -24,15 +24,16 @@ InspectorLasso::InspectorLasso(QWidget* parent)
       {
       b.setupUi(addWidget());
 
-      iList = {
+      const std::vector<InspectorItem> iiList = {
             { Pid::LASSO_POS,    0, b.pos,   0 },
             { Pid::LASSO_SIZE,   0, b.size,  0 },
             };
+      const std::vector<InspectorPanel> ppList = { { b.title, b.panel } };
 
       b.pos->setSuffix(tr("mm"));
       b.size->setSuffix(tr("mm"));
 
-      mapSignals();
+      mapSignals(iiList, ppList);
       }
 
 }

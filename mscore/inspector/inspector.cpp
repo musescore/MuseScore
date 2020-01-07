@@ -442,7 +442,7 @@ void UiInspectorElement::setupUi(QWidget* inspectorElement)
 InspectorElement::InspectorElement(QWidget* parent)
    : InspectorElementBase(parent)
       {
-      mapSignals();
+      // mapSignals();
       }
 
 //---------------------------------------------------------
@@ -454,10 +454,10 @@ InspectorBreak::InspectorBreak(QWidget* parent)
       {
       b.setupUi(addWidget());
 
-      iList = {         // currently empty
+      const std::vector<InspectorItem> iiList = {         // currently empty
             };
-
-      mapSignals();
+      const std::vector<InspectorPanel> ppList = { { b.title, nullptr /*b.panel*/} };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -469,12 +469,13 @@ InspectorSectionBreak::InspectorSectionBreak(QWidget* parent)
       {
       scb.setupUi(addWidget());
 
-      iList = {
+      const std::vector<InspectorItem> iiList = {
             { Pid::PAUSE,                   0, scb.pause,               scb.resetPause               },
             { Pid::START_WITH_LONG_NAMES,   0, scb.startWithLongNames,  scb.resetStartWithLongNames  },
             { Pid::START_WITH_MEASURE_ONE,  0, scb.startWithMeasureOne, scb.resetStartWithMeasureOne }
             };
-      mapSignals();
+      const std::vector<InspectorPanel> ppList = { { scb.title, scb.panel } };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -486,7 +487,7 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
       {
       sl.setupUi(addWidget());
 
-      iList = {
+      const std::vector<InspectorItem> iiList = {
             { Pid::STAFF_YOFFSET,          0, sl.yoffset,         sl.resetYoffset         },
             { Pid::SMALL,                  0, sl.small,           sl.resetSmall           },
             { Pid::MAG,                    0, sl.scale,           sl.resetScale           },
@@ -501,6 +502,7 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
             { Pid::STAFF_GEN_TIMESIG,      0, sl.genTimesig,      sl.resetGenTimesig      },
             { Pid::STAFF_GEN_KEYSIG,       0, sl.genKeysig,       sl.resetGenKeysig       },
             };
+      const std::vector<InspectorPanel> ppList = { { sl.title, sl.panel } };
 
       sl.noteheadScheme->clear();
       for (auto i : { NoteHeadScheme::HEAD_NORMAL,
@@ -514,7 +516,7 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
          NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER} ) {
             sl.noteheadScheme->addItem(StaffType::scheme2userName(i), int(i));
             }
-      mapSignals();
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -551,7 +553,7 @@ InspectorVBox::InspectorVBox(QWidget* parent)
       {
       vb.setupUi(addWidget());
 
-      iList = {
+      const std::vector<InspectorItem> iiList = {
             { Pid::TOP_GAP,       0, vb.topGap,       vb.resetTopGap       },
             { Pid::BOTTOM_GAP,    0, vb.bottomGap,    vb.resetBottomGap    },
             { Pid::LEFT_MARGIN,   0, vb.leftMargin,   vb.resetLeftMargin   },
@@ -560,7 +562,8 @@ InspectorVBox::InspectorVBox(QWidget* parent)
             { Pid::BOTTOM_MARGIN, 0, vb.bottomMargin, vb.resetBottomMargin },
             { Pid::BOX_HEIGHT,    0, vb.height,       0                    }
             };
-      mapSignals();
+      const std::vector<InspectorPanel> ppList = { { vb.title, vb.panel } };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -572,7 +575,7 @@ InspectorTBox::InspectorTBox(QWidget* parent)
       {
       tb.setupUi(addWidget());
 
-      iList = {
+      const std::vector<InspectorItem> iiList = {
             { Pid::TOP_GAP,       0, tb.topGap,       tb.resetTopGap       },
             { Pid::BOTTOM_GAP,    0, tb.bottomGap,    tb.resetBottomGap    },
             { Pid::LEFT_MARGIN,   0, tb.leftMargin,   tb.resetLeftMargin   },
@@ -580,7 +583,8 @@ InspectorTBox::InspectorTBox(QWidget* parent)
             { Pid::TOP_MARGIN,    0, tb.topMargin,    tb.resetTopMargin    },
             { Pid::BOTTOM_MARGIN, 0, tb.bottomMargin, tb.resetBottomMargin },
             };
-      mapSignals();
+      const std::vector<InspectorPanel> ppList = { { tb.title, tb.panel } };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -592,14 +596,14 @@ InspectorHBox::InspectorHBox(QWidget* parent)
       {
       hb.setupUi(addWidget());
 
-      iList = {
+      const std::vector<InspectorItem> iiList = {
             { Pid::TOP_GAP,               0, hb.leftGap,  hb.resetLeftGap  },
             { Pid::BOTTOM_GAP,            0, hb.rightGap, hb.resetRightGap },
             { Pid::BOX_WIDTH,             0, hb.width,    0                },
             { Pid::CREATE_SYSTEM_HEADER,  0, hb.createSystemHeader, hb.resetCreateSystemHeader }
             };
-
-      mapSignals();
+      const std::vector<InspectorPanel> ppList = { { hb.title, hb.panel } };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -656,9 +660,8 @@ void InspectorArticulation::propertiesClicked()
 void InspectorArticulation::setElement()
       {
       InspectorElementBase::setElement();
-      if (!ar.playArticulation->isChecked()) {
+      if (!ar.playArticulation->isChecked())
             ar.gridWidget->setEnabled(false);
-            }
       }
 
 //---------------------------------------------------------
@@ -984,7 +987,7 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
             { Pid::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         },
             { Pid::SIZE_SPATIUM_DEPENDENT,      0,    t.spatiumDependent,     t.resetSpatiumDependent },
             };
-      const std::vector<InspectorPanel> ppList = { {t.title, t.panel} };
+      const std::vector<InspectorPanel> ppList = { { t.title, t.panel } };
       mapSignals(iiList, ppList);
       }
 
@@ -1286,11 +1289,11 @@ InspectorCaesura::InspectorCaesura(QWidget* parent)
       if (sameTypes)
             c.title->setText(b->isCaesura() ? tr("Caesura") : tr("Breath"));
 
-      const std::vector<InspectorItem> il = {
-            { Pid::PAUSE,  0, c.pause,         c.resetPause         }
+      const std::vector<InspectorItem> iiList = {
+            { Pid::PAUSE,  0, c.pause, c.resetPause         }
             };
       const std::vector<InspectorPanel> ppList = { {c.title, c.panel} };
-      mapSignals(il, ppList);
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -1302,11 +1305,11 @@ InspectorBracket::InspectorBracket(QWidget* parent)
       {
       b.setupUi(addWidget());
 
-      const std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> iiList = {
             { Pid::BRACKET_COLUMN, 0, b.column, b.resetColumn }
             };
       const std::vector<InspectorPanel> ppList = { { b.title, b.panel } };
-      mapSignals(il, ppList);
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -1318,11 +1321,11 @@ InspectorIname::InspectorIname(QWidget* parent)
       {
       i.setupUi(addWidget());
 
-      const std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> iiList = {
             { Pid::INAME_LAYOUT_POSITION, 0, i.layoutPosition, i.resetLayoutPosition }
             };
       const std::vector<InspectorPanel> ppList = { { i.title, i.panel } };
-      mapSignals(il, ppList);
+      mapSignals(iiList, ppList);
       }
 
 }
