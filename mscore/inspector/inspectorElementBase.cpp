@@ -26,7 +26,8 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
       {
       e.setupUi(addWidget());
       e.offset->showRaster(true);
-      iList = {
+
+      const std::vector<InspectorItem> iiList = {
             { Pid::VISIBLE,   0, e.visible,    e.resetVisible   },
             { Pid::Z,         0, e.z,          e.resetZ         },
             { Pid::COLOR,     0, e.color,      e.resetColor     },
@@ -34,7 +35,8 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
             { Pid::AUTOPLACE, 0, e.autoplace,  e.resetAutoplace },
             { Pid::MIN_DISTANCE, 0, e.minDistance, e.resetMinDistance },
             };
-      pList = { { e.title, e.panel } };
+      const std::vector<InspectorPanel> ppList = { { e.title, e.panel } };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
