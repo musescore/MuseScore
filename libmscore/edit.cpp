@@ -2895,7 +2895,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
 //    If measure is zero, append new MeasureBase.
 //---------------------------------------------------------
 
-void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmptyMeasures)
+void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmptyMeasures, bool moveSignaturesClef)
       {
       Fraction tick;
       if (measure) {
@@ -2972,7 +2972,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                   //
                   // remove clef, time and key signatures
                   //
-                  if (mi) {
+                  if (moveSignaturesClef && mi) {
                         for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                               Measure* pm = mi->prevMeasure();
                               if (pm) {
