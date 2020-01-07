@@ -55,7 +55,7 @@ ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
       connect(ag, SIGNAL(triggered(QAction*)), this, SIGNAL(actionTriggered(QAction*)));
 
       tab = new QTabBar(this);
-      tab->setObjectName("primary tab");
+      tab->setObjectName("primarytab");
       tab->setAccessibleName("primary tab");
       tab->setExpanding(false);
       tab->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
@@ -194,6 +194,8 @@ void ScoreTab::setCurrent(int n)
       ScoreView* v;
       if (!vs) {
             vs = new QSplitter;
+            vs->setObjectName("score");
+            vs->setAccessibleName("score");
             v  = new ScoreView;
             tab2->blockSignals(true);
             tab2->setCurrentIndex(0);
@@ -331,6 +333,8 @@ void ScoreTab::setExcerpt(int n)
             }
       if (!vs) {
             vs = new QSplitter;
+            vs->setObjectName("part");
+            vs->setAccessibleName("part");
             v  = new ScoreView;
             vs->addWidget(v);
             v->setScore(score);
@@ -478,6 +482,8 @@ void ScoreTab::initScoreView(int idx, double mag, MagIdx magIdx, double xoffset,
                   return;
                   }
             QSplitter* vs = new QSplitter;
+            vs->setObjectName("score");
+            vs->setAccessibleName("score");
             vs->addWidget(v);
             stack->addWidget(vs);
             }
