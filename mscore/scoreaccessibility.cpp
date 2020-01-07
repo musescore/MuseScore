@@ -85,11 +85,15 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
            }
       }
 
-#if 0
-// TODO: determine if this is part of the problem or part of the solution
+#if 1
+// TODO: determine best option here
 // without this override, Qt determines window by looking upwards in hierarchy
+// we can duplicate that by returning nullptr
+// qApp->focusWindow() is the "old" return value,
+// but it could conceivably refer to something other than main window, which seems wrong
 QWindow* AccessibleScoreView::window() const {
-      return mscore->windowHandle();      // qApp->focusWindow();
+      return nullptr;
+      //return mscore->windowHandle();      // qApp->focusWindow();
       }
 #endif
 
