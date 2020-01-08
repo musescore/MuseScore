@@ -76,6 +76,11 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
       {
       switch (t) {
             case QAccessible::Name:
+                  // TODO:
+                  // leave empty to prevent name from being read on value/description change
+                  // name will need to be in containing widget so it is read on tab change
+                  // and we will need to be sure to read that
+                  //return QString();
                   return s->score()->title();
             case QAccessible::Value:
             case QAccessible::Description:
@@ -275,7 +280,7 @@ void ScoreAccessibility::updateAccessibilityInfo()
       //when this method is called
       //TODO: create a class to manage focus and replace this massive if
       QWidget* focusWidget = qApp->focusWidget();
-      if ( (focusWidget != w) &&
+      if ((focusWidget != w) &&
            !(mscore->inspector() && mscore->inspector()->isAncestorOf(focusWidget)) &&
            !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(focusWidget)) &&
            !(mscore->getSelectionWindow() && mscore->getSelectionWindow()->isAncestorOf(focusWidget)) &&
@@ -289,12 +294,12 @@ void ScoreAccessibility::updateAccessibilityInfo()
             w->setFocus();
             }
       QObject* obj = static_cast<QObject*>(w);
-      QAccessibleValueChangeEvent ev(obj, w->score()->accessibleInfo());
-      QAccessible::updateAccessibility(&ev);
+      QAccessibleValueChangeEvent vcev(obj, w->score()->accessibleInfo());
+      QAccessible::updateAccessibility(&vcev);
       // TODO:
-      // some screenreaders may repond better to description change
-      // the version of Qt used may also relevant
-      //QAccessibleEvent ev(obj, QAccessible::DescriptionChanged);
+      // some screenreaders may repond better to other events
+      // the version of Qt used may also be relevants, and platform
+      //QAccessibleEvent ev(obj, QAccessible::VisibleDataChanged);
       //QAccessible::updateAccessibility(&ev);
       }
 

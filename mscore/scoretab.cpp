@@ -40,7 +40,7 @@ ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
    : QWidget(parent)
       {
       setObjectName("scoretab");
-      setAccessibleName("score tab");
+      setAccessibleName("");
       mainWindow = static_cast<MuseScore*>(parent);
       scoreList = sl;
       QVBoxLayout* layout = new QVBoxLayout;
@@ -56,7 +56,7 @@ ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
 
       tab = new QTabBar(this);
       tab->setObjectName("primarytab");
-      tab->setAccessibleName("primary tab");
+      tab->setAccessibleName("");
       tab->setExpanding(false);
       tab->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
       tab->setFocusPolicy(Qt::ClickFocus);
@@ -65,7 +65,7 @@ ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
 
       tab2 = new QTabBar(this);
       tab2->setObjectName("secondarytab");
-      tab2->setAccessibleName("secondary tab");
+      tab2->setAccessibleName("");
       tab2->setExpanding(false);
       tab2->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
       tab2->setFocusPolicy(Qt::ClickFocus);
@@ -195,7 +195,7 @@ void ScoreTab::setCurrent(int n)
       if (!vs) {
             vs = new QSplitter;
             vs->setObjectName("score");
-            vs->setAccessibleName("score");
+            vs->setAccessibleName("");
             v  = new ScoreView;
             tab2->blockSignals(true);
             tab2->setCurrentIndex(0);
@@ -334,7 +334,7 @@ void ScoreTab::setExcerpt(int n)
       if (!vs) {
             vs = new QSplitter;
             vs->setObjectName("part");
-            vs->setAccessibleName("part");
+            vs->setAccessibleName("");
             v  = new ScoreView;
             vs->addWidget(v);
             v->setScore(score);
@@ -483,7 +483,7 @@ void ScoreTab::initScoreView(int idx, double mag, MagIdx magIdx, double xoffset,
                   }
             QSplitter* vs = new QSplitter;
             vs->setObjectName("score");
-            vs->setAccessibleName("score");
+            vs->setAccessibleName("");
             vs->addWidget(v);
             stack->addWidget(vs);
             }
