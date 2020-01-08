@@ -1072,12 +1072,12 @@ MuseScore::MuseScore()
 
       mainWindow = new QSplitter;
       mainWindow->setObjectName("mainwindow");
-      mainWindow->setAccessibleName("main window");
+      mainWindow->setAccessibleName("");
       mainWindow->setChildrenCollapsible(false);
 
       QWidget* mainScore = new QWidget;
       mainScore->setObjectName("mainscore");
-      mainScore->setAccessibleName("main score");
+      mainScore->setAccessibleName("");
       mainScore->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       mainWindow->addWidget(mainScore);
 
@@ -1127,7 +1127,7 @@ MuseScore::MuseScore()
 
       QSplitter* envelope = new QSplitter;
       envelope->setObjectName("pane");
-      envelope->setAccessibleName("pane");
+      envelope->setAccessibleName("");
       envelope->setChildrenCollapsible(false);
       envelope->setOrientation(Qt::Vertical);
       envelope->addWidget(mainWindow);
@@ -1157,7 +1157,7 @@ MuseScore::MuseScore()
 
       splitter = new QSplitter;
       splitter->setObjectName("splitter");
-      splitter->setAccessibleName("splitter");
+      splitter->setAccessibleName("");
       tab1 = createScoreTab();
       splitter->addWidget(tab1);
       ctab = tab1; // make tab1 active by default.
