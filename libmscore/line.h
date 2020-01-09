@@ -35,7 +35,7 @@ class LineSegment : public SpannerSegment {
    protected:
       virtual void editDrag(EditData&) override;
       virtual bool edit(EditData&) override;
-      virtual QPointF gripAnchor(Grip) const override;
+      QVector<QLineF> gripAnchorLines(Grip) const override;
       virtual void startEditDrag(EditData&) override;
 
    public:
@@ -57,9 +57,12 @@ class LineSegment : public SpannerSegment {
       int gripsCount() const override { return 3; }
       Grip initialEditModeGrip() const override { return Grip::END; }
       Grip defaultGrip() const override { return Grip::MIDDLE; }
-      std::vector<QPointF> gripsPositions(const EditData&) const override;
+      std::vector<QPointF> gripsPositions(const EditData& = EditData()) const override;
 
-      virtual QLineF dragAnchor() const override;
+      virtual QVector<QLineF> dragAnchorLines() const override;
+private:
+      QPointF leftAnchorPosition(const qreal& systemPositionY) const;
+      QPointF rightAnchorPosition(const qreal& systemPositionY) const;
       };
 
 //---------------------------------------------------------

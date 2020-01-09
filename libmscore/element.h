@@ -137,7 +137,7 @@ class EditData {
       Element* element                 { 0     };
       Element* dropElement             { 0     };
 
-      EditData(MuseScoreView* v) : view(v) {}
+      EditData(MuseScoreView* v = nullptr) : view(v) {}
       void clearData();
 
       ElementEditData* getData(const Element*) const;
@@ -308,13 +308,13 @@ class Element : public ScoreElement {
       void updateGrips(EditData&) const;
       virtual bool nextGrip(EditData&) const;
       virtual bool prevGrip(EditData&) const;
-      virtual QPointF gripAnchor(Grip) const     { return QPointF(); }
+      virtual QVector<QLineF> gripAnchorLines(Grip) const     { return QVector<QLineF>(); }
 
       virtual EditBehavior normalModeEditBehavior() const { return EditBehavior::SelectOnly; }
       virtual int gripsCount() const { return 0; }
       virtual Grip initialEditModeGrip() const { return Grip::NO_GRIP; }
       virtual Grip defaultGrip() const { return Grip::NO_GRIP; }
-      virtual std::vector<QPointF> gripsPositions(const EditData&) const { return std::vector<QPointF>(); }
+      virtual std::vector<QPointF> gripsPositions(const EditData& = EditData()) const { return std::vector<QPointF>(); }
 
       int track() const                       { return _track; }
       virtual void setTrack(int val)          { _track = val;  }

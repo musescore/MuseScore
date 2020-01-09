@@ -43,33 +43,45 @@ SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
       }
 
 //---------------------------------------------------------
-//   gripAnchor
+//   gripAnchorLines
 //---------------------------------------------------------
 
-QPointF SlurTieSegment::gripAnchor(Grip grip) const
+QVector<QLineF> SlurTieSegment::gripAnchorLines(Grip grip) const
       {
+      QVector<QLineF> result;
+
       if (!system() || (grip != Grip::START && grip != Grip::END))
-            return QPointF();
+            return result;
 
       QPointF sp(system()->pagePos());
       QPointF pp(pagePos());
       QPointF p1(ups(Grip::START).p + pp);
       QPointF p2(ups(Grip::END).p + pp);
 
+      QPointF anchorPosition;
+      int gripIndex = static_cast<int>(grip);
+
       switch (spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
-                  return grip == Grip::START ? p1 : p2;
+                  anchorPosition = (grip == Grip::START ? p1 : p2);
+                  break;
 
             case SpannerSegmentType::BEGIN:
-                  return grip == Grip::START ? p1 : system()->abbox().topRight();
+                  anchorPosition = (grip == Grip::START ? p1 : system()->abbox().topRight());
+                  break;
 
             case SpannerSegmentType::MIDDLE:
-                  return grip == Grip::START ? sp : system()->abbox().topRight();
+                  anchorPosition = (grip == Grip::START ? sp : system()->abbox().topRight());
+                  break;
 
             case SpannerSegmentType::END:
-                  return grip == Grip::START ? sp : p2;
+                  anchorPosition = (grip == Grip::START ? sp : p2);
+                  break;
             }
-      return QPointF();
+
+      result << QLineF(anchorPosition, gripsPositions().at(gripIndex));
+
+      return result;
       }
 
 //---------------------------------------------------------
