@@ -290,15 +290,17 @@ void Arpeggio::editDrag(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   dragAnchor
+//   dragAnchorLines
 //---------------------------------------------------------
 
-QLineF Arpeggio::dragAnchor() const
+QVector<QLineF> Arpeggio::dragAnchorLines() const
       {
+      QVector<QLineF> result;
+
       Chord* c = chord();
       if (c)
-            return QLineF(pagePos(), c->upNote()->pagePos());
-      return QLineF();
+            result << QLineF(pagePos(), c->upNote()->pagePos());
+      return QVector<QLineF>();
       }
 
 //---------------------------------------------------------

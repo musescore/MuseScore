@@ -416,18 +416,12 @@ Element* LineSegment::propertyDelegate(Pid pid)
       }
 
 //---------------------------------------------------------
-//   dragAnchor
+//   dragAnchorLines
 //---------------------------------------------------------
 
-QLineF LineSegment::dragAnchor() const
+QVector<QLineF> LineSegment::dragAnchorLines() const
       {
-      if (spannerSegmentType() != SpannerSegmentType::SINGLE && spannerSegmentType() != SpannerSegmentType::BEGIN)
-            return QLineF();
-      System* s;
-      QPointF p = line()->linePos(Grip::START, &s);
-      p += QPointF(s->canvasPos().x(), s->staffCanvasYpage(line()->staffIdx()));
-
-      return QLineF(p, canvasPos());
+      return gripAnchorLines(Grip::MIDDLE);
       }
 
 //---------------------------------------------------------
