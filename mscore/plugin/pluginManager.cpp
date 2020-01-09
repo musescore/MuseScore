@@ -20,6 +20,8 @@
 
 namespace Ms {
 
+static const QByteArray pluginShortcutActionName = "plugin-run";
+
 //---------------------------------------------------------
 //   PluginManager
 //---------------------------------------------------------
@@ -95,6 +97,7 @@ bool PluginManager::readPluginList()
                                     }
                               d.shortcut.setState(STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT |
                                           STATE_ALLTEXTUAL_EDIT | STATE_PLAY | STATE_FOTO | STATE_LOCK );
+                              d.shortcut.setKey(pluginShortcutActionName);
                               if (d.path.endsWith(".qml"))
                                     _pluginList.append(d);
                               }
@@ -167,6 +170,7 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
                               PluginDescription p;
                               p.path = path;
                               p.load = false;
+                              p.shortcut.setKey(pluginShortcutActionName);
                               if (collectPluginMetaInformation(&p))
                                     pluginList.append(p);
                               }
