@@ -1861,11 +1861,13 @@ void TextBase::dragTo(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   dragAnchor
+//   dragAnchorLines
 //---------------------------------------------------------
 
-QLineF TextBase::dragAnchor() const
+QVector<QLineF> TextBase::dragAnchorLines() const
       {
+      QVector<QLineF> result;
+
       qreal xp = 0.0;
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
@@ -1880,7 +1882,10 @@ QLineF TextBase::dragAnchor() const
       QPointF p2 = canvasPos();
       if (layoutToParentWidth())
             p2 += bbox().topLeft();
-      return QLineF(p1, p2);
+
+      result << QLineF(p1, p2);
+
+      return result;
       }
 
 //---------------------------------------------------------

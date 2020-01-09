@@ -78,7 +78,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
             QVector<QLineF> anchorLines = e->dragAnchorLines();
 
             if (!anchorLines.isEmpty())
-                  setDropAnchorList(anchorLines);
+                  setDropAnchorLines(anchorLines);
             else
                   setDropTarget(0); // this also resets dropAnchor
             }

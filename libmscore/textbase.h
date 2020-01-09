@@ -316,7 +316,7 @@ class TextBase : public Element {
 
       void dragTo(EditData&);
 
-      virtual QLineF dragAnchor() const override;
+      QVector<QLineF> dragAnchorLines() const override;
 
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;

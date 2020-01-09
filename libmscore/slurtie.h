@@ -86,7 +86,7 @@ class SlurTieSegment : public SpannerSegment {
       Shape _shape;
 
       virtual void changeAnchor(EditData&, Element*) = 0;
-      virtual QPointF gripAnchor(Grip grip) const override;
+      QVector<QLineF> gripAnchorLines(Grip grip) const override;
 
    public:
       SlurTieSegment(Score*);
@@ -115,7 +115,7 @@ class SlurTieSegment : public SpannerSegment {
       int gripsCount() const override { return int(Grip::GRIPS); }
       Grip initialEditModeGrip() const override{ return Grip::END; }
       Grip defaultGrip() const override { return Grip::DRAG; }
-      std::vector<QPointF> gripsPositions(const EditData&) const override;
+      std::vector<QPointF> gripsPositions(const EditData& = EditData()) const override;
 
       void writeSlur(XmlWriter& xml, int no) const;
       void read(XmlReader&);
