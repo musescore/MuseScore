@@ -309,11 +309,19 @@ void PluginCreator::runClicked()
             stop->setEnabled(false);
             return;
             }
+
+      item = qobject_cast<QmlPlugin*>(obj);
+
+      if (!item) {
+            msg(tr("Component is not a MuseScore plugin") + '\n');
+            delete obj;
+            return;
+            }
+
       qInstallMessageHandler(qmlMsgHandler);
       stop->setEnabled(true);
       run->setEnabled(false);
 
-      item = qobject_cast<QmlPlugin*>(obj);
       msg(tr("Plugin Details:") + "\n");
       msg("  " + tr("Menu Path:") + " " + item->menuPath() + "\n");
       msg("  " + tr("Version:") + " " + item->version() + "\n");
