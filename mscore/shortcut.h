@@ -138,6 +138,7 @@ class Shortcut {
 
       QAction* action() const;
       const QByteArray& key() const { return _key; }
+      void setKey(const QByteArray& key) { _key = key; }
       QString descr() const;
       QString text() const;
       QString help() const;
