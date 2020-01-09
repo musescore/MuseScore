@@ -233,20 +233,51 @@ extern Preferences preferences;
 
 // Stream operators for enum classes
 // enum classes don't play well with QSettings without custom serialization
-template<typename T, typename std::enable_if<std::is_enum<T>::value>::type* = nullptr>
-inline QDataStream &operator<<(QDataStream &out, const T &val)
+inline QDataStream&
+operator<<(QDataStream &out, const Ms::MuseScoreStyleType &val)
 {
     return out << static_cast<int>(val);
 }
 
-template<typename T, typename std::enable_if<std::is_enum<T>::value>::type* = nullptr>
-inline QDataStream &operator>>(QDataStream &in, T &val)
+inline QDataStream&
+operator>>(QDataStream &in, Ms::MuseScoreStyleType &val)
 {
     int tmp;
     in >> tmp;
-    val = static_cast<T>(tmp);
+    val = static_cast<Ms::MuseScoreStyleType>(tmp);
     return in;
 }
+
+inline QDataStream&
+operator<<(QDataStream &out, const Ms::SessionStart &val)
+{
+    return out << static_cast<int>(val);
+}
+
+inline QDataStream&
+operator>>(QDataStream &in, Ms::SessionStart &val)
+{
+    int tmp;
+    in >> tmp;
+    val = static_cast<Ms::SessionStart>(tmp);
+    return in;
+}
+
+inline QDataStream&
+operator<<(QDataStream &out, const Ms::MusicxmlExportBreaks &val)
+{
+    return out << static_cast<int>(val);
+}
+
+inline QDataStream&
+operator>>(QDataStream &in, Ms::MusicxmlExportBreaks &val)
+{
+    int tmp;
+    in >> tmp;
+    val = static_cast<Ms::MusicxmlExportBreaks>(tmp);
+    return in;
+}
+
 
 class PreferenceVisitor {
    public:
