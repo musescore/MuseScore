@@ -291,7 +291,7 @@ class Element : public ScoreElement {
       virtual void startDrag(EditData&);
       virtual QRectF drag(EditData&);
       virtual void endDrag(EditData&);
-      virtual QLineF dragAnchor() const       { return QLineF(); }
+      virtual QVector<QLineF> dragAnchorLines() const       { return QVector<QLineF>(); }
 
       virtual bool isEditable() const         { return !flag(ElementFlag::GENERATED); }
 

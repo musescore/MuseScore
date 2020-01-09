@@ -272,12 +272,14 @@ bool Articulation::layoutCloseToNote() const
       }
 
 //---------------------------------------------------------
-//   dragAnchor
+//   dragAnchorLines
 //---------------------------------------------------------
 
-QLineF Articulation::dragAnchor() const
+QVector<QLineF> Articulation::dragAnchorLines() const
       {
-      return QLineF(canvasPos(), parent()->canvasPos());
+      QVector<QLineF> result;
+      result << QLineF(canvasPos(), parent()->canvasPos());
+      return result;
       }
 
 //---------------------------------------------------------

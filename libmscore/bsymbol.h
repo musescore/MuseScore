@@ -50,7 +50,7 @@ class BSymbol : public Element {
       QList<Element*>& leafs()             { return _leafs; }
       virtual QPointF pagePos() const override;
       virtual QPointF canvasPos() const override;
-      virtual QLineF dragAnchor() const override;
+      QVector<QLineF> dragAnchorLines() const override;
       Segment* segment() const            { return (Segment*)parent(); }
       };
 

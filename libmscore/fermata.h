@@ -59,7 +59,7 @@ class Fermata final : public Element {
       void write(XmlWriter& xml) const override;
       bool readProperties(XmlReader&) override;
 
-      QLineF dragAnchor() const override;
+      QVector<QLineF> dragAnchorLines() const override;
 
       QVariant getProperty(Pid propertyId) const override;
       bool setProperty(Pid propertyId, const QVariant&) override;

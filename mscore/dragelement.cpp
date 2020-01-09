@@ -75,10 +75,10 @@ void ScoreView::doDragElement(QMouseEvent* ev)
                   mscore->play(e);
                   _score->setPlayNote(false);
                   }
-            QLineF anchor = e->dragAnchor();
+            QVector<QLineF> anchorLines = e->dragAnchorLines();
 
-            if (!anchor.isNull())
-                  setDropAnchor(anchor);
+            if (!anchorLines.isEmpty())
+                  setDropAnchorList(anchorLines);
             else
                   setDropTarget(0); // this also resets dropAnchor
             }
