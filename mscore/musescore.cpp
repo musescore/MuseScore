@@ -2266,21 +2266,34 @@ void MuseScore::aboutMusicXML()
 
 void MuseScore::selectScore(QAction* action)
       {
-      QString a = action->data().toString();
-      if (!a.isEmpty()) {
-            if (a == "clear-recent") {
-                  _recentScores.clear();
-                  if (startcenter)
-                        startcenter->updateRecentScores();
+      QVariant actionData = action->data();
+
+      if (!actionData.isValid())
+            return;
+
+      switch (actionData.type()) {
+            case QVariant::String: {
+                  if (actionData.toString() == "clear-recent") {
+                        _recentScores.clear();
+
+                        if (startcenter)
+                              startcenter->updateRecentScores();
+                        }
+                  break;
                   }
-            else {
-                  MasterScore* score = readScore(a);
+            case QVariant::Map: {
+                  QVariantMap pathMap = actionData.toMap();
+
+                  MasterScore* score = readScore(pathMap.value("filePath").toString());
                   if (score) {
                         setCurrentScoreView(appendScore(score));
                         addRecentScore(score);
                         writeSessionFile(false);
                         }
+                  break;
                   }
+            default:
+                  return;
             }
       }
 
@@ -2446,9 +2459,15 @@ void MuseScore::openRecentMenu()
       bool one = false;
       for (const QFileInfo& fi : recentScores()) {
             QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show filename only
-            QString dta(fi.canonicalFilePath());
-            action->setData(dta);
-            action->setToolTip(dta);
+
+            QString filePath = fi.canonicalFilePath();
+
+            QVariantMap actionData;
+            actionData.insert("actionName", "open-recent");
+            actionData.insert("filePath", filePath);
+
+            action->setData(actionData);
+            action->setToolTip(filePath);
             one = true;
             }
       if (one) {
@@ -4337,6 +4356,8 @@ void MuseScore::changeState(ScoreState val)
       bool noteEntry = val & STATE_NOTE_ENTRY;
       a->setChecked(noteEntry);
       _sstate = val;
+
+      emit scoreStateChanged(_sstate);
 
       Element* e = cv && (_sstate & STATE_ALLTEXTUAL_EDIT || _sstate == STATE_EDIT) ? cv->getEditElement() : 0;
       if (!e) {
@@ -7757,6 +7778,8 @@ void MuseScore::init(QStringList& argv)
 
 #ifndef TELEMETRY_DISABLED
       QApplication::instance()->installEventFilter(ActionEventObserver::instance());
+      ActionEventObserver::instance()->setScoreState(mscore->state());
+      QObject::connect(mscore, &MuseScore::scoreStateChanged, ActionEventObserver::instance(), &ActionEventObserver::setScoreState);
 #endif
 
       mscore->setRevision(Ms::revision);
