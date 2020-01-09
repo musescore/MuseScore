@@ -300,7 +300,8 @@ void PluginCreator::runClicked()
 
       item = 0;
       QQmlComponent component(qml);
-      component.setData(textEdit->toPlainText().toUtf8(), QUrl());
+      const QUrl url = created ? QUrl() : QUrl::fromLocalFile(path);
+      component.setData(textEdit->toPlainText().toUtf8(), url);
       QObject* obj = component.create();
       if (obj == 0) {
             msg(tr("Creating component failed\n"));
