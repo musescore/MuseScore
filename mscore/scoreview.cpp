@@ -1973,7 +1973,9 @@ void ScoreView::cmd(const char* s)
          || cmd == "next-track"
          || cmd == "prev-track"
          || cmd == "next-measure"
-         || cmd == "prev-measure") {
+         || cmd == "prev-measure"
+         || cmd == "next-system"
+         || cmd == "prev-system") {
             Element* el = score()->selection().element();
             if (el && (el->isTextBase())) {
                   score()->startCmd();

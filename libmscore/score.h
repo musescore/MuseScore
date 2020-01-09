@@ -816,6 +816,7 @@ class Score : public QObject, public ScoreElement {
       void rebuildTempoAndTimeSigMaps(Measure* m);
       Element* nextElement();
       Element* prevElement();
+      void cmdNextPrevSystem(ChordRest*, bool);
 
       void cmd(const QAction*, EditData&);
       int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision/2) / _fileDivision; }

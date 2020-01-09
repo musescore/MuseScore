@@ -22,7 +22,7 @@
 
 #include "config.h"
 #include "globals.h"
-#include "singleapp/src/QtSingleApplication"
+#include "thirdparty/singleapp/src/QtSingleApplication"
 #include "updatechecker.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"

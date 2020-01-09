@@ -74,6 +74,8 @@
 #include "tremolo.h"
 #include "rehearsalmark.h"
 #include "sym.h"
+#include "mscore/scoreview.h"
+#include "mscore/musescore.h"
 
 namespace Ms {
 
@@ -2374,6 +2376,12 @@ Element* Score::move(const QString& cmd)
             if (noteEntryMode())
                   _is.moveInputPos(el);
             }
+      else if (cmd == "next-system") {
+            cmdNextPrevSystem(cr, true);
+            }
+      else if (cmd == "prev-system") {
+            cmdNextPrevSystem(cr, false);
+            }
       else if (cmd == "next-track") {
             el = nextTrack(cr);
             if (noteEntryMode())
@@ -2462,6 +2470,50 @@ Element* Score::selectMove(const QString& cmd)
       if (el)
             select(el, SelectType::RANGE, el->staffIdx());
       return el;
+      }
+
+//---------------------------------------------------------
+//   cmdNextPrevSystem
+//---------------------------------------------------------
+
+void Score::cmdNextPrevSystem(ChordRest* cr, bool next)
+      {
+      // To be called from within Score::move() which will provide a valid ChordRest pointer.
+      // This utilizes the already existing functionality of ScoreView::gotoMeasure()
+      // to traverse forward/backward per-system, bringing the user to the top-left most of
+      // systems (first instrument, first measure), going to last measure on last system.
+      Measure* currentMeasure       = cr->measure();
+      System*  currentSystem        = currentMeasure->system();
+      Measure* destinationMeasure   = currentSystem->firstMeasure();
+      Segment* firstSegmentOfSystem = destinationMeasure->first();
+
+      if (currentSystem) {
+            if (next) {
+                  // [Go to Next System]:
+                  // Select the first chord/rest of the next system, but if user is already
+                  // within the final system, go to its last measure. However, if user is
+                  // currently positioned within the last measure, do nothing.
+                  destinationMeasure = currentSystem->lastMeasure()->nextMeasure();
+                  if (destinationMeasure)
+                        mscore->currentScoreView()->gotoMeasure(destinationMeasure);
+                  else if (currentMeasure != lastMeasure())
+                        mscore->currentScoreView()->gotoMeasure(lastMeasure());
+                  }
+            else {
+                  // [Go to Previous System]:
+                  // If current position is equivalent to the first chord/rest of first instrument [track 0]
+                  // of the current system, go to the previous system's first measure, so long as the user isn't
+                  // in the first measure of the entire score. Otherwise, go to current system's first measure.
+                  Segment* currentSegment = cr->segment();
+                  Segment* segmentOfFirstCR = firstSegmentOfSystem->nextChordRest(cr->track(), false)->segment();
+                  if (destinationMeasure != firstMeasure())
+                        if (currentSegment == segmentOfFirstCR)
+                              if (cr->track() == 0)
+                                    destinationMeasure = destinationMeasure->prevMeasure()->system()->firstMeasure();
+                  if (destinationMeasure)
+                        mscore->currentScoreView()->gotoMeasure(destinationMeasure);
+                  }
+            }
       }
 
 //---------------------------------------------------------
