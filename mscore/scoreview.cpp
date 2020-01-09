@@ -896,11 +896,37 @@ void ScoreView::setShadowNote(const QPointF& p)
       }
 
 //---------------------------------------------------------
+//   drawAnchorLines
+//---------------------------------------------------------
+void ScoreView::drawAnchorLines(QPainter& painter)
+      {
+      if (m_dropAnchorLines.isEmpty())
+            return;
+
+      const auto dropAnchorColor = preferences.getColor(PREF_UI_SCORE_VOICE4_COLOR);
+      QPen pen(QBrush(dropAnchorColor), 2.0 / painter.worldTransform().m11(), Qt::DotLine);
+
+      for (const QLineF& anchor : m_dropAnchorLines) {
+            painter.setPen(pen);
+            painter.drawLine(anchor);
+
+            qreal d = 4.0 / painter.worldTransform().m11();
+            QRectF rect(-d, -d, 2 * d, 2 * d);
+
+            painter.setBrush(QBrush(dropAnchorColor));
+            painter.setPen(Qt::NoPen);
+            rect.moveCenter(anchor.p1());
+            painter.drawEllipse(rect);
+            rect.moveCenter(anchor.p2());
+            painter.drawEllipse(rect);
+            }
+      }
+
+//---------------------------------------------------------
 //   paintEvent
 //    Note: desktop background and paper background are not
 //    scaled
 //---------------------------------------------------------
-
 void ScoreView::paintEvent(QPaintEvent* ev)
       {
       if (!_score)
@@ -925,22 +951,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             lasso->draw(&vp);
       shadowNote->draw(&vp);
 
-      if (!dropAnchor.isNull()) {
-            const auto dropAnchorColor = preferences.getColor(PREF_UI_SCORE_VOICE4_COLOR);
-            QPen pen(QBrush(dropAnchorColor), 2.0 / vp.worldTransform().m11(), Qt::DotLine);
-            vp.setPen(pen);
-            vp.drawLine(dropAnchor);
-
-            qreal d = 4.0 / vp.worldTransform().m11();
-            QRectF r(-d, -d, 2 * d, 2 * d);
-
-            vp.setBrush(QBrush(dropAnchorColor));
-            vp.setPen(Qt::NoPen);
-            r.moveCenter(dropAnchor.p1());
-            vp.drawEllipse(r);
-            r.moveCenter(dropAnchor.p2());
-            vp.drawEllipse(r);
-            }
+      drawAnchorLines(vp);
       }
 
 //---------------------------------------------------------
