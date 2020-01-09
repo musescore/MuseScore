@@ -11,7 +11,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "musescore.h"
 #include "scoreview.h"
 #include "texttools.h"
 #include "libmscore/chordrest.h"

@@ -11,10 +11,7 @@
 //=============================================================================
 
 #include "inspectorGlissando.h"
-#include "musescore.h"
 #include "libmscore/glissando.h"
-#include "libmscore/score.h"
-#include "icons.h"
 
 namespace Ms {
 

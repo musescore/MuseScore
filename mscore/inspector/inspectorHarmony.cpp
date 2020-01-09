@@ -11,10 +11,7 @@
 //=============================================================================
 
 #include "inspectorHarmony.h"
-#include "musescore.h"
 #include "libmscore/harmony.h"
-#include "libmscore/score.h"
-#include "icons.h"
 
 namespace Ms {
 

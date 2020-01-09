@@ -18,7 +18,6 @@
 //=============================================================================
 
 #include "musedata.h"
-#include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"

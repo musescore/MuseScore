@@ -19,9 +19,10 @@
 
 #ifndef __SCORETAB_H__
 #define __SCORETAB_H__
-#include "musescore.h"
+
 namespace Ms {
 
+class MuseScore;
 class ScoreView;
 class Score;
 enum class MagIdx : char;

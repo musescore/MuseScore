@@ -12,9 +12,7 @@
 
 #include "inspector.h"
 #include "inspectorVibrato.h"
-#include "musescore.h"
 #include "libmscore/vibrato.h"
-#include "libmscore/score.h"
 
 namespace Ms {
 

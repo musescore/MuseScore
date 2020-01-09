@@ -12,8 +12,6 @@
 
 #include "inspector.h"
 #include "inspectorPalmMute.h"
-#include "musescore.h"
-#include "libmscore/score.h"
 
 namespace Ms {
 

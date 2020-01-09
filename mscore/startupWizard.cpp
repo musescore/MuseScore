@@ -20,7 +20,6 @@
 #include "musescore.h"
 #include "libmscore/mscore.h"
 #include "shortcut.h"
-#include "workspace.h"
 
 namespace Ms {
 

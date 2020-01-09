@@ -27,11 +27,9 @@
 #include <sys/time.h>
 #include "alsa.h"
 #include "libmscore/score.h"
-#include "musescore.h"
 #include "preferences.h"
 #include "seq.h"
 #include "alsamidi.h"
-#include "libmscore/utils.h"
 
 namespace Ms {
 

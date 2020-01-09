@@ -11,10 +11,8 @@
 //=============================================================================
 
 #include "inspectorFret.h"
-#include "musescore.h"
 #include "libmscore/fret.h"
 #include "libmscore/score.h"
-#include "scoreview.h"
 
 namespace Ms {
 

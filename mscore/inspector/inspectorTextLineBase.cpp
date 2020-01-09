@@ -13,7 +13,6 @@
 #include "inspector.h"
 #include "inspectorTextLineBase.h"
 #include "libmscore/textlinebase.h"
-#include "icons.h"
 
 namespace Ms {
 
