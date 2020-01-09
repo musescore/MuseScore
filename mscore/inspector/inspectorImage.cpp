@@ -11,9 +11,7 @@
 //=============================================================================
 
 #include "inspectorImage.h"
-#include "musescore.h"
 #include "libmscore/image.h"
-#include "libmscore/score.h"
 
 namespace Ms {
 

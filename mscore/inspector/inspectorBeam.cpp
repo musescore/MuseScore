@@ -11,9 +11,7 @@
 //=============================================================================
 
 #include "inspectorBeam.h"
-#include "musescore.h"
 #include "libmscore/beam.h"
-#include "libmscore/score.h"
 
 namespace Ms {
 

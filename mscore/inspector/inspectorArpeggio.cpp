@@ -11,9 +11,7 @@
 //=============================================================================
 
 #include "inspectorArpeggio.h"
-#include "musescore.h"
 #include "libmscore/arpeggio.h"
-#include "libmscore/score.h"
 
 namespace Ms {
 

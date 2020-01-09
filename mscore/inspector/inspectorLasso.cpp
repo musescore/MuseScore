@@ -11,7 +11,6 @@
 //=============================================================================
 
 #include "inspectorLasso.h"
-#include "musescore.h"
 #include "libmscore/lasso.h"
 
 namespace Ms {
