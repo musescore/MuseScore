@@ -12,8 +12,8 @@
 
 #include "inspectorBend.h"
 #include "bendcanvas.h"
-#include "musescore.h"
 #include "libmscore/bend.h"
+#include "libmscore/score.h"
 #include "libmscore/undo.h"
 
 namespace Ms {

@@ -919,8 +919,6 @@ extern bool saveMxl(Score*, QIODevice*);
 extern bool saveXml(Score*, QIODevice*);
 extern bool saveXml(Score*, const QString& name);
 
-struct PluginDescription;
-extern bool collectPluginMetaInformation(PluginDescription*);
 extern QString getSharePath();
 
 extern Score::FileError importMidi(MasterScore*, const QString& name);

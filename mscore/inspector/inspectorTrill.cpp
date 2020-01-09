@@ -11,9 +11,7 @@
 //=============================================================================
 
 #include "inspectorTrill.h"
-#include "musescore.h"
 #include "libmscore/trill.h"
-#include "libmscore/score.h"
 
 namespace Ms {
 

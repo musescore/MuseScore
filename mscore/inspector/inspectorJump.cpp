@@ -11,9 +11,7 @@
 //=============================================================================
 
 #include "inspectorJump.h"
-#include "musescore.h"
 #include "libmscore/jump.h"
-#include "libmscore/score.h"
 
 namespace Ms {
 

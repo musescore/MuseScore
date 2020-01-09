@@ -11,8 +11,6 @@
 //=============================================================================
 
 #include "templateBrowser.h"
-#include "musescore.h"
-#include "icons.h"
 #include "libmscore/score.h"
 
 namespace Ms {

@@ -20,13 +20,11 @@
 #include "symboldialog.h"
 #include "menus.h"
 #include "palette.h"
-#include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/sym.h"
 #include "libmscore/style.h"
 #include "libmscore/element.h"
 #include "libmscore/symbol.h"
-#include "preferences.h"
 
 namespace Ms {
 
