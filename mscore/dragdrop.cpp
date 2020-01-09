@@ -48,8 +48,8 @@ void ScoreView::setDropTarget(const Element* el)
                   dropTarget->setDropTarget(true);
                   }
             }
-      if (!m_dropAnchorList.isEmpty())
-            m_dropAnchorList.clear();
+      if (!m_dropAnchorLines.isEmpty())
+            m_dropAnchorLines.clear();
 
       if (dropRectangle.isValid()) {
             dropRectangle = QRectF();
@@ -71,12 +71,12 @@ void ScoreView::setDropRectangle(const QRectF& r)
             _score->addRefresh(dropTarget->canvasBoundingRect());
             dropTarget = 0;
             }
-      else if (!m_dropAnchorList.isEmpty()) {
+      else if (!m_dropAnchorLines.isEmpty()) {
             QRectF rf;
-            rf.setTopLeft(m_dropAnchorList.first().p1());
-            rf.setBottomRight(m_dropAnchorList.first().p2());
+            rf.setTopLeft(m_dropAnchorLines.first().p1());
+            rf.setBottomRight(m_dropAnchorLines.first().p2());
             _score->addRefresh(rf.normalized());
-            m_dropAnchorList.clear();
+            m_dropAnchorLines.clear();
             }
 
       update();
@@ -87,8 +87,8 @@ void ScoreView::setDropRectangle(const QRectF& r)
 //---------------------------------------------------------
 void ScoreView::setDropAnchorLines(const QVector<QLineF>& anchorList)
       {
-      if (m_dropAnchorList != anchorList)
-            m_dropAnchorList = anchorList;
+      if (m_dropAnchorLines != anchorList)
+            m_dropAnchorLines = anchorList;
 
       if (dropRectangle.isValid())
             dropRectangle = QRectF();
