@@ -51,7 +51,7 @@ bool ScoreView::event(QEvent* event)
                         return true;
                         }
 
-                  if (editMode() || editData.grips) {
+                  if (hasEditGrips() || editMode()) {
                         if (ke->key() == Qt::Key_Tab)
                               editData.element->nextGrip(editData);
                         else
@@ -69,7 +69,7 @@ bool ScoreView::event(QEvent* event)
                         case Qt::Key_Right:
                         case Qt::Key_Up:
                         case Qt::Key_Down: {
-                              if (!editData.grips)
+                              if (!hasEditGrips())
                                     break;
                               const auto m = ke->modifiers();
                               // KeypadModifier is necessary on MacOS as arrow keys seem to always
@@ -471,7 +471,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       editData.modifiers = qApp->keyboardModifiers();
 
       bool gripFound = false;
-      if (editData.element && editData.grips && ev->button() == Qt::LeftButton) {
+      if (hasEditGrips() && ev->button() == Qt::LeftButton) {
             switch (state) {
                   case ViewState::NORMAL:
                   case ViewState::EDIT:
@@ -774,14 +774,14 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
 
       if (state != ViewState::EDIT) {
             const bool shiftModifier = ev->modifiers() & Qt::ShiftModifier;
-            if (editData.grips && !(shiftModifier && ev->key() == Qt::Key_Backtab)) {
+            if (hasEditGrips() && !(shiftModifier && ev->key() == Qt::Key_Backtab)) {
                   switch (ev->key()) {
                         case Qt::Key_Left:
                         case Qt::Key_Right:
                         case Qt::Key_Up:
                         case Qt::Key_Down:
                               // Move focus to default grip if arrow keys are pressed and no grip is focused
-                              if (editData.grips && editData.curGrip == Grip::NO_GRIP)
+                              if (editData.curGrip == Grip::NO_GRIP)
                                     editData.curGrip = editData.element->defaultGrip();
                               break;
                         default:
@@ -821,7 +821,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                   return;
             }
 
-      ScoreViewCmdContext cc(this, editData.grips);
+      ScoreViewCmdContext cc(this, hasEditGrips());
       const bool textEdit = textEditMode();
 
 #ifdef Q_OS_WIN // Japenese IME on Windows needs to know when Ctrl/Alt/Shift/CapsLock is pressed while in predit
