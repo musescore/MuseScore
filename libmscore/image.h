@@ -85,10 +85,10 @@ class Image final : public BSymbol {
       ImageType getImageType() const { return imageType; }
       bool isValid() const           { return rasterDoc || svgDoc; }
 
-      // TODO: single click behavior?
+      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
       int gripsCount() const override { return 2; }
       Grip initialEditModeGrip() const override { return Grip(1); }
-      Grip defaultGrip() const override { return Grip(1); } // TODO
+      Grip defaultGrip() const override { return Grip(1); }
       std::vector<QPointF> gripsPositions(const EditData&) const override;
       };
 
