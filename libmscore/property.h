@@ -344,6 +344,8 @@ enum class Pid {
       START_WITH_LONG_NAMES,
       START_WITH_MEASURE_ONE,
 
+      PATH, // for ChordLine to make its shape changes undoable
+
       END
       };
 
@@ -389,6 +391,8 @@ enum class P_TYPE : char {
       CLEF_TYPE,        // enum class ClefType
       DYNAMIC_TYPE,     // enum class Dynamic::Type
       KEYMODE,          // enum class KeyMode
+
+      PATH,             // QPainterPath
       };
 
 extern QVariant readProperty(Pid type, XmlReader& e);
@@ -402,5 +406,8 @@ extern Pid propertyId(const QStringRef& name);
 extern QString propertyUserName(Pid);
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(QPainterPath); // for properties with P_TYPE::PATH
+
 #endif
 
