@@ -2157,8 +2157,10 @@ void renderChordArticulation(Chord* chord, QList<NoteEventList> & ell, int & gat
                   for (Articulation* a : chord->articulations()) {
                         if (!a->playArticulation())
                               continue;
-                        if (!renderNoteArticulation(events, note, false, a->symId(), a->ornamentStyle()))
-                              instr->updateGateTime(&gateTime, channel, a->articulationName());
+                        if (!renderNoteArticulation(events, note, false, a->symId(), a->ornamentStyle())) {
+                              // instr->updateGateTime(&gateTime, channel, a->articulationName());
+                              gateTime = a->gateTime() * 100;
+                              }
                         }
                   }
             }

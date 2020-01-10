@@ -57,6 +57,8 @@ constexpr bool operator& (ArticulationShowIn a1, ArticulationShowIn a2) {
 class Articulation final : public Element {
       SymId _symId;
       Direction _direction;
+      qreal _gateTime;
+      bool _gateTimeInitialized;
       QString _channelName;
 
       ArticulationAnchor _anchor;
@@ -118,6 +120,12 @@ class Articulation final : public Element {
       Measure* measure() const;
       System* system() const;
       Page* page() const;
+
+      qreal gateTime() const      { return _gateTime; }
+      void setGateTime(qreal ts)  { _gateTime = ts;   }
+      qreal defaultGateTime() const;
+      bool gateTimeInitialized() const       { return _gateTimeInitialized; }
+      void setGateTimeInitialized(bool val)  { _gateTimeInitialized = val;  }
 
       ArticulationAnchor anchor() const     { return _anchor;      }
       void setAnchor(ArticulationAnchor v)  { _anchor = v;         }

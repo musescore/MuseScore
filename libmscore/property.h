@@ -346,6 +346,8 @@ enum class Pid {
 
       PATH, // for ChordLine to make its shape changes undoable
 
+      ARTICULATION_GATE_TIME,
+
       END
       };
 

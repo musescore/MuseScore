@@ -337,6 +337,8 @@ static constexpr PropertyMetaData propertyList[] = {
 
       { Pid::PATH,                    false, "path",                  P_TYPE::PATH,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "path") },
 
+      { Pid::ARTICULATION_GATE_TIME,  true,  "gateTime",              P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "articulation gate time") },
+
       { Pid::END, false, "++end++", P_TYPE::INT, DUMMY_QT_TRANSLATE_NOOP("propertyName", "<invalid property>") }
       };
 

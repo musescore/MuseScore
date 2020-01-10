@@ -12,6 +12,7 @@
 
 #include "articulation.h"
 #include "score.h"
+#include "part.h"
 #include "chordrest.h"
 #include "system.h"
 #include "measure.h"
@@ -46,6 +47,8 @@ Articulation::Articulation(Score* s)
       _symId         = SymId::noSym;
       _anchor        = ArticulationAnchor::TOP_STAFF;
       _direction     = Direction::AUTO;
+      _gateTime      = 1.0;
+      _gateTimeInitialized = false;
       _up            = true;
       _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
       setPlayArticulation(true);
@@ -65,6 +68,19 @@ void Articulation::setSymId(SymId id)
       {
       _symId  = id;
       _anchor = ArticulationAnchor(propertyDefault(Pid::ARTICULATION_ANCHOR).toInt());
+      }
+
+//---------------------------------------------------------
+//   defaultGateTime
+//---------------------------------------------------------
+
+qreal Articulation::defaultGateTime() const
+      {
+      for (const MidiArticulation a : part()->instrument(tick())->articulation()) {
+            if (a.name == articulationName())
+                  return qreal(a.gateTime) / 100.0;
+            }
+      return 1.0;
       }
 
 //---------------------------------------------------------
@@ -132,9 +148,11 @@ bool Articulation::readProperties(XmlReader& e)
             ;
       else if (tag == "direction")
             readProperty(e, Pid::DIRECTION);
-      else if ( tag == "ornamentStyle")
+      else if (tag == "gateTime")
+            readProperty(e, Pid::ARTICULATION_GATE_TIME);
+      else if (tag == "ornamentStyle")
             readProperty(e, Pid::ORNAMENT_STYLE);
-      else if ( tag == "play")
+      else if (tag == "play")
             setPlayArticulation(e.readBool());
       else if (tag == "offset") {
             if (score()->mscVersion() > 114)
@@ -161,6 +179,7 @@ void Articulation::write(XmlWriter& xml) const
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
       writeProperty(xml, Pid::DIRECTION);
+      writeProperty(xml, Pid::ARTICULATION_GATE_TIME);
       xml.tag("subtype", Sym::id2name(_symId));
       writeProperty(xml, Pid::PLAY);
       writeProperty(xml, Pid::ORNAMENT_STYLE);
@@ -287,11 +306,18 @@ QLineF Articulation::dragAnchor() const
 QVariant Articulation::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case Pid::SYMBOL:              return QVariant::fromValue(_symId);
-            case Pid::DIRECTION:           return QVariant::fromValue<Direction>(direction());
-            case Pid::ARTICULATION_ANCHOR: return int(anchor());
-            case Pid::ORNAMENT_STYLE:      return int(ornamentStyle());
-            case Pid::PLAY:                return bool(playArticulation());
+            case Pid::SYMBOL:
+                  return QVariant::fromValue(_symId);
+            case Pid::DIRECTION:
+                  return QVariant::fromValue<Direction>(direction());
+            case Pid::ARTICULATION_GATE_TIME:
+                  return gateTime();
+            case Pid::ARTICULATION_ANCHOR:
+                  return int(anchor());
+            case Pid::ORNAMENT_STYLE:
+                  return int(ornamentStyle());
+            case Pid::PLAY:
+                  return bool(playArticulation());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -309,6 +335,9 @@ bool Articulation::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::DIRECTION:
                   setDirection(v.value<Direction>());
+                  break;
+            case Pid::ARTICULATION_GATE_TIME:
+                  setGateTime(v.toDouble());
                   break;
             case Pid::ARTICULATION_ANCHOR:
                   setAnchor(ArticulationAnchor(v.toInt()));
@@ -335,14 +364,15 @@ QVariant Articulation::propertyDefault(Pid propertyId) const
       switch (propertyId) {
             case Pid::DIRECTION:
                   return QVariant::fromValue<Direction>(Direction::AUTO);
-
+            case Pid::ARTICULATION_GATE_TIME:
+                  // Since the first initialization is before part() exists,
+                  // defaultGateTime() cannot be called
+                  // 1.0 is altered later in InspectorArticulation::setElement()
+                  return part() ? defaultGateTime() : 1.0;
             case Pid::ORNAMENT_STYLE:
-                  //return int(score()->style()->ornamentStyle(_ornamentStyle));
                   return int(MScore::OrnamentStyle::DEFAULT);
-
             case Pid::PLAY:
                   return true;
-
             default:
                   break;
             }

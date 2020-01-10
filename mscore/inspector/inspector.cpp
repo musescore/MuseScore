@@ -75,6 +75,7 @@
 #include "libmscore/stafftypechange.h"
 #include "libmscore/mscore.h"
 #include "libmscore/stafftextbase.h"
+#include "libmscore/property.h"
 
 namespace Ms {
 
@@ -599,11 +600,11 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
       ar.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::ARTICULATION_ANCHOR, 0, ar.anchor,           ar.resetAnchor           },
-            { Pid::DIRECTION,           0, ar.direction,        ar.resetDirection        },
-            { Pid::TIME_STRETCH,        0, ar.timeStretch,      ar.resetTimeStretch      },
-            { Pid::ORNAMENT_STYLE,      0, ar.ornamentStyle,    ar.resetOrnamentStyle    },
-            { Pid::PLAY,                0, ar.playArticulation, ar.resetPlayArticulation }
+            { Pid::ARTICULATION_ANCHOR,    0, ar.anchor,           ar.resetAnchor           },
+            { Pid::DIRECTION,              0, ar.direction,        ar.resetDirection        },
+            { Pid::ARTICULATION_GATE_TIME, 0, ar.timeStretch,      ar.resetTimeStretch      },
+            { Pid::ORNAMENT_STYLE,         0, ar.ornamentStyle,    ar.resetOrnamentStyle    },
+            { Pid::PLAY,                   0, ar.playArticulation, ar.resetPlayArticulation }
             };
       const std::vector<InspectorPanel> ppList = { { ar.title, ar.panel } };
       mapSignals(iiList, ppList);
@@ -631,6 +632,13 @@ void InspectorArticulation::propertiesClicked()
 void InspectorArticulation::setElement()
       {
       InspectorElementBase::setElement();
+
+      Articulation* a = toArticulation(inspector->element());
+      if (!a->gateTimeInitialized()) {
+            ar.timeStretch->setValue(a->defaultGateTime());
+            a->setGateTimeInitialized(true);
+            a->setPropertyFlags(Pid::ARTICULATION_GATE_TIME, PropertyFlags::STYLED);
+            }
       if (!ar.playArticulation->isChecked()) {
             ar.gridWidget->setEnabled(false);
             }

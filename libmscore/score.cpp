@@ -454,7 +454,7 @@ void Score::fixTicks()
       }
 
 //---------------------------------------------------------
-//    fixTicks
+//    rebuildTempoAndTimeSigMaps
 ///    updates tempomap and time sig map for a measure
 //---------------------------------------------------------
 
