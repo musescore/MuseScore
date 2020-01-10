@@ -97,7 +97,7 @@ class Bracket final : public Element {
       void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
       using ScoreElement::undoChangeProperty;
 
-      // TODO: single click behavior?
+      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
       int gripsCount() const override { return 1; }
       Grip initialEditModeGrip() const override { return Grip::START; }
       Grip defaultGrip() const override { return Grip::START; }

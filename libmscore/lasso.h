@@ -34,10 +34,9 @@ class Lasso : public Element {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
 
-      // TODO: single click behavior?
       int gripsCount() const override { return 8; }
       Grip initialEditModeGrip() const override { return Grip(7); }
-      Grip defaultGrip() const override { return Grip(7); } // TODO
+      Grip defaultGrip() const override { return Grip(7); }
       std::vector<QPointF> gripsPositions(const EditData&) const override;
       };
 

@@ -70,10 +70,10 @@ class ChordLine final : public Element {
       virtual QVariant propertyDefault(Pid) const override;
       virtual Pid propertyId(const QStringRef& xmlName) const override;
 
-      // TODO: single click behavior?
+      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
       int gripsCount() const override { return _straight ? 1 : path.elementCount(); }
       Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
-      Grip defaultGrip() const override { return initialEditModeGrip(); } // TODO: what is most sensible here?
+      Grip defaultGrip() const override { return initialEditModeGrip(); }
       std::vector<QPointF> gripsPositions(const EditData&) const override;
 
       };
