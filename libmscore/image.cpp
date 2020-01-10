@@ -354,24 +354,15 @@ bool Image::loadFromData(const QString& ss, const QByteArray& ba)
       }
 
 //---------------------------------------------------------
-//   ImageEditData
-//---------------------------------------------------------
-
-class ImageEditData : public ElementEditData {
-   public:
-      QSizeF size;
-      };
-
-//---------------------------------------------------------
 //   startDrag
 //---------------------------------------------------------
 
 void Image::startEditDrag(EditData& data)
       {
-      ImageEditData* ed = new ImageEditData();
-      ed->e    = this;
-      ed->size = _size;
-      data.addData(ed);
+      BSymbol::startEditDrag(data);
+      ElementEditData* eed = data.getData(this);
+
+      eed->pushProperty(Pid::SIZE);
       }
 
 //---------------------------------------------------------
@@ -403,17 +394,6 @@ void Image::editDrag(EditData& ed)
                   _size.setWidth(_size.height() * ratio);
             }
       layout();
-      }
-
-//---------------------------------------------------------
-//   endEditDrag
-//---------------------------------------------------------
-
-void Image::endEditDrag(EditData& ed)
-      {
-      ImageEditData* ied = static_cast<ImageEditData*>(ed.getData(this));
-      if (_size != ied->size)
-            score()->undoPropertyChanged(this, Pid::SIZE, ied->size);
       }
 
 //---------------------------------------------------------

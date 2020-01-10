@@ -75,6 +75,7 @@ class Tuplet final : public DurationElement {
       void resetNumberProperty();
 
       virtual bool isEditable() const override;
+      void startEditDrag(EditData&) override;
       virtual void editDrag(EditData&) override;
 
       virtual void setSelected(bool f) override;

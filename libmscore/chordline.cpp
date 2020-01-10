@@ -264,6 +264,18 @@ void ChordLine::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
+//   startEditDrag
+//---------------------------------------------------------
+
+void ChordLine::startEditDrag(EditData& ed)
+      {
+      Element::startEditDrag(ed);
+      ElementEditData* eed = ed.getData(this);
+
+      eed->pushProperty(Pid::PATH);
+      }
+
+//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
@@ -395,6 +407,8 @@ QString ChordLine::accessibleInfo() const
 QVariant ChordLine::getProperty(Pid propertyId) const
       {
       switch(propertyId) {
+            case Pid::PATH:
+                  return QVariant::fromValue(path);
             case Pid::CHORD_LINE_TYPE:
                   return int(_chordLineType);
             case Pid::CHORD_LINE_STRAIGHT:
@@ -412,6 +426,9 @@ QVariant ChordLine::getProperty(Pid propertyId) const
 bool ChordLine::setProperty(Pid propertyId, const QVariant& val)
       {
       switch(propertyId) {
+            case Pid::PATH:
+                  path = val.value<QPainterPath>();
+                  break;
             case Pid::CHORD_LINE_TYPE:
                   setChordLineType(ChordLineType(val.toInt()));
                   break;
@@ -419,9 +436,10 @@ bool ChordLine::setProperty(Pid propertyId, const QVariant& val)
                   setStraight(val.toBool());
                   break;
             default:
-                  break;
+                  return Element::setProperty(propertyId, val);
             }
-      return Element::setProperty(propertyId, val);
+      triggerLayout();
+      return true;
       }
 
 //---------------------------------------------------------

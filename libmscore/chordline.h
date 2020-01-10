@@ -60,6 +60,7 @@ class ChordLine final : public Element {
       virtual void layout() override;
       virtual void draw(QPainter*) const override;
 
+      void startEditDrag(EditData&) override;
       virtual void editDrag(EditData&) override;
 
       virtual QString accessibleInfo() const override;

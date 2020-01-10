@@ -931,6 +931,19 @@ bool Tuplet::isEditable() const
       }
 
 //---------------------------------------------------------
+//   startEditDrag
+//---------------------------------------------------------
+
+void Tuplet::startEditDrag(EditData& ed)
+      {
+      DurationElement::startEditDrag(ed);
+      ElementEditData* eed = ed.getData(this);
+
+      eed->pushProperty(Pid::P1);
+      eed->pushProperty(Pid::P2);
+      }
+
+//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
