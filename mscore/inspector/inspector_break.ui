@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>148</width>
-    <height>34</height>
+    <height>41</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -59,26 +59,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetDefaultConstraint</enum>
-     </property>
-     <property name="leftMargin">
-      <number>3</number>
-     </property>
-     <property name="topMargin">
-      <number>3</number>
-     </property>
-     <property name="rightMargin">
-      <number>3</number>
-     </property>
-     <property name="bottomMargin">
-      <number>3</number>
-     </property>
-     <property name="spacing">
-      <number>3</number>
-     </property>
-    </layout>
+    <widget class="QWidget" name="panel" native="true"/>
    </item>
   </layout>
  </widget>

@@ -456,7 +456,7 @@ InspectorBreak::InspectorBreak(QWidget* parent)
 
       const std::vector<InspectorItem> iiList = {         // currently empty
             };
-      const std::vector<InspectorPanel> ppList = { { b.title, nullptr /*b.panel*/} };
+      const std::vector<InspectorPanel> ppList = { { b.title, b.panel } };
       mapSignals(iiList, ppList);
       }
 
