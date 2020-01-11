@@ -179,8 +179,12 @@ ListView {
             currentItem.forceActiveFocus();
     }
 
-    // set highlight color for selected palette depending on using light or dark mode
-    readonly property color highlightColor: globalStyle.window.hsvValue > 0.5 ? globalStyle.button : "#33EFF0F1"
+    function getTintedColor(baseColor, tintColor, opacity) {
+        var tintColorWithOpacity = Qt.rgba(tintColor.r, tintColor.g, tintColor.b, opacity);
+        return Qt.tint(baseColor, tintColorWithOpacity);
+    }
+    readonly property color selectionColor: getTintedColor(globalStyle.window, globalStyle.base, 0.85)
+    readonly property color highlightColor: getTintedColor(globalStyle.window, globalStyle.base, 0.6)
 
     model: DelegateModel {
         id: paletteTreeDelegateModel
@@ -234,7 +238,7 @@ ListView {
             background: Rectangle {
                 visible: !control.Drag.active
                 z: -1
-                color: control.selected ? paletteTree.highlightColor : (control.highlighted ? Qt.lighter(globalStyle.button, 1.2) : (control.down ? globalStyle.button : "transparent"))
+                color: control.selected ? paletteTree.selectionColor : (control.highlighted ? paletteTree.highlightColor : (control.down ? globalStyle.button : "transparent"))
             }
 
             highlighted: (activeFocus && !selected) || DelegateModel.isUnresolved
