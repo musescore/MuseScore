@@ -647,12 +647,15 @@ ScoreElement* LinkedElements::mainElement()
             return nullptr;
       MasterScore* ms = at(0)->masterScore();
       const bool elements = at(0)->isElement();
-      return *std::min_element(begin(), end(), [ms, elements](ScoreElement* s1, ScoreElement* s2) {
+      const bool staves = at(0)->isStaff();
+      return *std::min_element(begin(), end(), [ms, elements, staves](ScoreElement* s1, ScoreElement* s2) {
             if (s1->score() == ms && s2->score() != ms)
                   return true;
+            if (s1->score() != s2->score())
+                  return false;
+            if (staves)
+                  return toStaff(s1)->idx() < toStaff(s2)->idx();
             if (elements) {
-                  if (s1->score() != s2->score())
-                        return false;
                   // Now we compare either two elements from master score
                   // or two elements from excerpt.
                   Element* e1 = toElement(s1);
