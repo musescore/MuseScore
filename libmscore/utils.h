@@ -56,7 +56,8 @@ extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc,
    Interval, bool useDoubleSharpsFlats);
 extern int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 
-extern Interval intervalList[26];
+constexpr int intervalListSize = 26;
+extern Interval intervalList[intervalListSize];
 extern int searchInterval(int steps, int semitones);
 extern int chromatic2diatonic(int val);
 
