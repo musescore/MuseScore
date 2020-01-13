@@ -7720,7 +7720,7 @@ void MuseScore::init(QStringList& argv)
       gscore->setMovements(new Movements());
       gscore->setStyle(MScore::baseStyle());
 
-      gscore->style().set(Sid::MusicalTextFont, QString("Bravura Text"));
+      gscore->style().set(Sid::musicalTextFont, QString("Bravura Text"));
       ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
       gscore->setScoreFont(scoreFont);
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);

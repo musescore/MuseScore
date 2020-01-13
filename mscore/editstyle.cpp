@@ -206,15 +206,15 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::ledgerLineLength,        false, ledgerLineLength,        0 },
       { Sid::shortStemProgression,    false, shortStemProgression,    0 },
       { Sid::shortestStem,            false, shortestStem,            0 },
-      { Sid::ArpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
-      { Sid::ArpeggioLineWidth,       false, arpeggioLineWidth,       0 },
-      { Sid::ArpeggioHookLen,         false, arpeggioHookLen,         0 },
-      { Sid::ArpeggioHiddenInStdIfTab,false, arpeggioHiddenInStdIfTab,0 },
-      { Sid::SlurEndWidth,            false, slurEndLineWidth,        resetSlurEndLineWidth    },
-      { Sid::SlurMidWidth,            false, slurMidLineWidth,        resetSlurMidLineWidth    },
-      { Sid::SlurDottedWidth,         false, slurDottedLineWidth,     resetSlurDottedLineWidth },
-      { Sid::SlurMinDistance,         false, slurMinDistance,         resetSlurMinDistance     },
-      { Sid::MinTieLength,            false, minTieLength,            resetMinTieLength        },
+      { Sid::arpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
+      { Sid::arpeggioLineWidth,       false, arpeggioLineWidth,       0 },
+      { Sid::arpeggioHookLen,         false, arpeggioHookLen,         0 },
+      { Sid::arpeggioHiddenInStdIfTab,false, arpeggioHiddenInStdIfTab,0 },
+      { Sid::slurEndWidth,            false, slurEndLineWidth,        resetSlurEndLineWidth    },
+      { Sid::slurMidWidth,            false, slurMidLineWidth,        resetSlurMidLineWidth    },
+      { Sid::slurDottedWidth,         false, slurDottedLineWidth,     resetSlurDottedLineWidth },
+      { Sid::slurMinDistance,         false, slurMinDistance,         resetSlurMinDistance     },
+      { Sid::minTieLength,            false, minTieLength,            resetMinTieLength        },
       { Sid::bracketWidth,            false, bracketWidth,            0 },
       { Sid::bracketDistance,         false, bracketDistance,         0 },
       { Sid::akkoladeWidth,           false, akkoladeWidth,           0 },
@@ -330,8 +330,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::scaleBarlines,            false, scaleBarlines,                resetScaleBarlines},
       { Sid::crossMeasureValues,       false, crossMeasureValues,           0 },
 
-      { Sid::MusicalSymbolFont,        false, musicalSymbolFont,            0 },
-      { Sid::MusicalTextFont,          false, musicalTextFont,              0 },
+      { Sid::musicalSymbolFont,        false, musicalSymbolFont,            0 },
+      { Sid::musicalTextFont,          false, musicalTextFont,              0 },
       { Sid::autoplaceHairpinDynamicsDistance, false, autoplaceHairpinDynamicsDistance, resetAutoplaceHairpinDynamicsDistance },
 
       { Sid::dynamicsPlacement,       false, dynamicsPlacement,          resetDynamicsPlacement },
@@ -1094,7 +1094,7 @@ void EditStyle::setValues()
       doubleSpinFBVertPos->setValue(lstyle.value(Sid::figuredBassYOffset).toDouble());
       spinFBLineHeight->setValue(lstyle.value(Sid::figuredBassLineHeight).toDouble() * 100.0);
 
-      QString mfont(lstyle.value(Sid::MusicalSymbolFont).toString());
+      QString mfont(lstyle.value(Sid::musicalSymbolFont).toString());
       int idx = 0;
       for (const auto& i : ScoreFont::scoreFonts()) {
             if (i.name().toLower() == mfont.toLower()) {
@@ -1111,7 +1111,7 @@ void EditStyle::setValues()
       musicalTextFont->addItem("Emmentaler Text", "MScore Text");
       musicalTextFont->addItem("Gonville Text", "Gootville Text");
       musicalTextFont->addItem("MuseJazz Text", "MuseJazz Text");
-      QString tfont(lstyle.value(Sid::MusicalTextFont).toString());
+      QString tfont(lstyle.value(Sid::musicalTextFont).toString());
       idx = musicalTextFont->findData(tfont);
       musicalTextFont->setCurrentIndex(idx);
       musicalTextFont->blockSignals(false);
@@ -1326,7 +1326,7 @@ void EditStyle::valueChanged(int i)
       Sid idx       = (Sid)i;
       QVariant val  = getValue(idx);
       bool setValue = false;
-      if (idx == Sid::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
+      if (idx == Sid::musicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
             ScoreFont* scoreFont = ScoreFont::fontFactory(val.toString());
             if (scoreFont) {
                   for (auto j : scoreFont->engravingDefaults()) {

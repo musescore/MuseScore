@@ -59,7 +59,7 @@ qreal Bracket::width() const
       qreal w;
       switch (bracketType()) {
             case BracketType::BRACE:
-                  if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville")
+                  if (score()->styleSt(Sid::musicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::musicalSymbolFont) == "Gonville")
                         w = score()->styleP(Sid::akkoladeWidth) + score()->styleP(Sid::akkoladeBarDistance);
                   else
                         w = (symWidth(_braceSymbol) * _magx) + score()->styleP(Sid::akkoladeBarDistance);
@@ -91,7 +91,7 @@ void Bracket::setStaffSpan(int a, int b)
       _lastStaff = b;
 
       if (bracketType() == BracketType::BRACE &&
-         score()->styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && score()->styleSt(Sid::MusicalSymbolFont) != "Gonville")
+         score()->styleSt(Sid::musicalSymbolFont) != "Emmentaler" && score()->styleSt(Sid::musicalSymbolFont) != "Gonville")
             {
             int v = _lastStaff - _firstStaff + 1;
             // total default height of a system of n staves / height of a 5 line staff
@@ -120,7 +120,7 @@ void Bracket::layout()
       _shape.clear();
       switch (bracketType()) {
             case BracketType::BRACE: {
-                  if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
+                  if (score()->styleSt(Sid::musicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::musicalSymbolFont) == "Gonville") {
                         _braceSymbol = SymId::noSym;
                         qreal w = score()->styleP(Sid::akkoladeWidth);
 

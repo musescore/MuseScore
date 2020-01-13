@@ -66,7 +66,7 @@ void Breath::layout()
       if (!palette) {
             if (isCaesura())
                   setPos(rxpos(), spatium());
-            else if ((score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler") && (symId() == SymId::breathMarkComma))
+            else if ((score()->styleSt(Sid::musicalSymbolFont) == "Emmentaler") && (symId() == SymId::breathMarkComma))
                   setPos(rxpos(), 0.5 * spatium());
             else
                   setPos(rxpos(), -0.5 * spatium());

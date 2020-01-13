@@ -1349,7 +1349,7 @@ qreal Chord::defaultStemLength() const
             }
 
       qreal normalStemLen = small() ? 2.5 : 3.5;
-      normalStemLen += hookAdjustment(score()->styleSt(Sid::MusicalSymbolFont), hookIdx, up(), small());
+      normalStemLen += hookAdjustment(score()->styleSt(Sid::musicalSymbolFont), hookIdx, up(), small());
       if (hookIdx && tab == 0) {
             if (up() && durationType().dots()) {
                   //
@@ -1828,7 +1828,7 @@ void Chord::layoutPitched()
       qreal mag_             = staff() ? staff()->mag(tick()) : 1.0;    // palette elements do not have a staff
       qreal dotNoteDistance  = score()->styleP(Sid::dotNoteDistance)  * mag_;
       qreal minNoteDistance  = score()->styleP(Sid::minNoteDistance)  * mag_;
-      qreal minTieLength     = score()->styleP(Sid::MinTieLength)     * mag_;
+      qreal minTieLength     = score()->styleP(Sid::minTieLength)     * mag_;
 
       qreal graceMag         = score()->styleD(Sid::graceNoteMag);
       qreal chordX           = (_noteType == NoteType::NORMAL) ? ipos().x() : 0.0;
@@ -1963,7 +1963,7 @@ void Chord::layoutPitched()
       addLedgerLines();
 
       if (_arpeggio) {
-            qreal arpeggioDistance = score()->styleP(Sid::ArpeggioNoteDistance) * mag_;
+            qreal arpeggioDistance = score()->styleP(Sid::arpeggioNoteDistance) * mag_;
             _arpeggio->layout();    // only for width() !
             _arpeggio->setHeight(0.0);
             lll        += _arpeggio->width() + arpeggioDistance + chordX;
@@ -2094,7 +2094,7 @@ void Chord::layoutTablature()
       qreal _spatium          = spatium();
       qreal dotNoteDistance   = score()->styleP(Sid::dotNoteDistance);
       qreal minNoteDistance   = score()->styleP(Sid::minNoteDistance);
-      qreal minTieLength      = score()->styleP(Sid::MinTieLength);
+      qreal minTieLength      = score()->styleP(Sid::minTieLength);
 
       for (Chord* c : _graceNotes)
             c->layoutTablature();
@@ -2337,7 +2337,7 @@ void Chord::layoutTablature()
       // allocate enough room for glissandi
       if (_endsGlissando) {
             if (!rtick().isZero())                        // if not at beginning of measure
-                  lll += (0.5 + score()->styleS(Sid::MinTieLength).val()) * _spatium;
+                  lll += (0.5 + score()->styleS(Sid::minTieLength).val()) * _spatium;
             // special case of system-initial glissando final note is handled in Glissando::layout() itself
             }
 

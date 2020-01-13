@@ -22,7 +22,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle sectionBreakStyle {
-      { Sid::SectionPause, Pid::PAUSE }
+      { Sid::sectionPause, Pid::PAUSE }
       };
 
 //---------------------------------------------------------
@@ -292,7 +292,7 @@ QVariant LayoutBreak::propertyDefault(Pid id) const
             case Pid::LAYOUT_BREAK:
                   return QVariant(); // LAYOUT_BREAK_LINE;
             case Pid::PAUSE:
-                  return score()->styleD(Sid::SectionPause);
+                  return score()->styleD(Sid::sectionPause);
             case Pid::START_WITH_LONG_NAMES:
                   return true;
             case Pid::START_WITH_MEASURE_ONE:

@@ -211,16 +211,16 @@ struct StyleVal2 {
       { Sid::tenutoGateTime,              QVariant(100) },
       { Sid::staccatoGateTime,            QVariant(50) },
       { Sid::slurGateTime,                QVariant(100) },
-      { Sid::ArpeggioNoteDistance,        QVariant(.5) },
-      { Sid::ArpeggioLineWidth,           QVariant(.18) },
-      { Sid::ArpeggioHookLen,             QVariant(.8) },
-      { Sid::SlurEndWidth,                QVariant(.07) },
-      { Sid::SlurMidWidth,                QVariant(.15) },
-      { Sid::SlurDottedWidth,             QVariant(.1) },
-      { Sid::MinTieLength,                QVariant(1.0) },
-      { Sid::SectionPause,                QVariant(qreal(3.0)) },
-      { Sid::MusicalSymbolFont,           QVariant(QString("Emmentaler")) },
-      { Sid::MusicalTextFont,             QVariant(QString("MScore Text")) },
+      { Sid::arpeggioNoteDistance,        QVariant(.5) },
+      { Sid::arpeggioLineWidth,           QVariant(.18) },
+      { Sid::arpeggioHookLen,             QVariant(.8) },
+      { Sid::slurEndWidth,                QVariant(.07) },
+      { Sid::slurMidWidth,                QVariant(.15) },
+      { Sid::slurDottedWidth,             QVariant(.1) },
+      { Sid::minTieLength,                QVariant(1.0) },
+      { Sid::sectionPause,                QVariant(qreal(3.0)) },
+      { Sid::musicalSymbolFont,           QVariant(QString("Emmentaler")) },
+      { Sid::musicalTextFont,             QVariant(QString("MScore Text")) },
       { Sid::showHeader,                  QVariant(false) },
       { Sid::headerFirstPage,             QVariant(false) },
       { Sid::headerOddEven,               QVariant(true) },
@@ -3713,15 +3713,15 @@ static bool readScore(Score* score, XmlReader& e)
             else if (tag == "Style") {
                   qreal sp = score->style().value(Sid::spatium).toDouble();
                   readStyle(&score->style(), e);
-                  if (score->style().value(Sid::MusicalTextFont).toString() == "MuseJazz")
-                        score->style().set(Sid::MusicalTextFont, "MuseJazz Text");
+                  if (score->style().value(Sid::musicalTextFont).toString() == "MuseJazz")
+                        score->style().set(Sid::musicalTextFont, "MuseJazz Text");
                   // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
                   if (score->layoutMode() == LayoutMode::FLOAT) {
                         // style should not change spatium in
                         // float mode
                         score->style().set(Sid::spatium, sp);
                         }
-                  score->setScoreFont(ScoreFont::fontFactory(score->style().value(Sid::MusicalSymbolFont).toString()));
+                  score->setScoreFont(ScoreFont::fontFactory(score->style().value(Sid::musicalSymbolFont).toString()));
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(score);

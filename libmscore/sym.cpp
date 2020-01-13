@@ -6007,8 +6007,8 @@ void ScoreFont::load()
             { "beamSpacing",                   Sid::beamDistance },
             { "legerLineThickness",            Sid::ledgerLineWidth },
             { "legerLineExtension",            Sid::ledgerLineLength },
-            { "slurEndpointThickness",         Sid::SlurEndWidth },
-            { "slurMidpointThickness",         Sid::SlurMidWidth },
+            { "slurEndpointThickness",         Sid::slurEndWidth },
+            { "slurMidpointThickness",         Sid::slurMidWidth },
             { "thinBarlineThickness",          Sid::barWidth },
             { "thinBarlineThickness",          Sid::doubleBarWidth },
             { "thickBarlineThickness",         Sid::endBarWidth },
@@ -6032,7 +6032,7 @@ void ScoreFont::load()
                         _textEnclosureThickness = oo.value(i).toDouble();
                   }
             }
-      _engravingDefaults.push_back(std::make_pair(Sid::MusicalTextFont, QString("%1 Text").arg(_family)));
+      _engravingDefaults.push_back(std::make_pair(Sid::musicalTextFont, QString("%1 Text").arg(_family)));
 
       // create missing composed glyphs
       struct Composed {

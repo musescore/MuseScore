@@ -1151,7 +1151,7 @@ static void creditWords(XmlWriter& xml, Score* s, double x, double y, QString ju
       if (words.isEmpty())
             return;
 
-      const QString mtf = s->styleSt(Sid::MusicalTextFont);
+      const QString mtf = s->styleSt(Sid::musicalTextFont);
       CharFormat defFmt;
       defFmt.setFontFamily(s->styleSt(Sid::staffTextFontFace));
       defFmt.setFontSize(s->styleD(Sid::staffTextFontSize));
@@ -3396,7 +3396,7 @@ static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, c
       QList<TextFragment>       wordsRight; // words right of metronome
 
       // set the default words format
-      const QString mtf = s->styleSt(Sid::MusicalTextFont);
+      const QString mtf = s->styleSt(Sid::musicalTextFont);
       CharFormat defFmt;
       defFmt.setFontFamily(s->styleSt(Sid::staffTextFontFace));
       defFmt.setFontSize(s->styleD(Sid::staffTextFontSize));
@@ -3523,7 +3523,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       attr += addPositioningAttributes(rmk);
       if (!rmk->hasFrame()) attr = " enclosure=\"none\"";
       // set the default words format
-      const QString mtf = _score->styleSt(Sid::MusicalTextFont);
+      const QString mtf = _score->styleSt(Sid::musicalTextFont);
       CharFormat defFmt;
       defFmt.setFontFamily(_score->styleSt(Sid::staffTextFontFace));
       defFmt.setFontSize(_score->styleD(Sid::staffTextFontSize));
@@ -4056,7 +4056,7 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
                         _xml.tag("syllabic", s);
                         QString attr; // TODO TBD
                         // set the default words format
-                        const QString mtf       = _score->styleSt(Sid::MusicalTextFont);
+                        const QString mtf       = _score->styleSt(Sid::musicalTextFont);
                         CharFormat defFmt;
                         defFmt.setFontFamily(_score->styleSt(Sid::lyricsEvenFontFace));
                         defFmt.setFontSize(_score->styleD(Sid::lyricsOddFontSize));

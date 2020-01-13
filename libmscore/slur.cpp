@@ -38,21 +38,21 @@ void SlurSegment::draw(QPainter* painter) const
                   painter->setBrush(QBrush(pen.color()));
                   pen.setCapStyle(Qt::RoundCap);
                   pen.setJoinStyle(Qt::RoundJoin);
-                  pen.setWidthF(score()->styleP(Sid::SlurEndWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::slurEndWidth) * mag);
                   break;
             case 1:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::slurDottedWidth) * mag);
                   pen.setStyle(Qt::DotLine);
                   break;
             case 2:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::slurDottedWidth) * mag);
                   pen.setStyle(Qt::DashLine);
                   break;
             case 3:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::slurDottedWidth) * mag);
                   pen.setStyle(Qt::CustomDashLine);
                   QVector<qreal> dashes { 5.0, 5.0 };
                   pen.setDashPattern(dashes);
@@ -292,7 +292,7 @@ void SlurSegment::computeBezier(QPointF p6o)
       QPointF p3(c1, -shoulderH);
       QPointF p4(c2, -shoulderH);
 
-      qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
+      qreal w = score()->styleP(Sid::slurMidWidth) - score()->styleP(Sid::slurEndWidth);
       if (staff())
             w *= staff()->mag(slur()->tick());
       if ((c2 - c1) <= _spatium)
@@ -386,7 +386,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             qreal slurMaxMove = spatium();
             bool intersection = false;
             qreal gdist = 0.0;
-            qreal minDistance = score()->styleS(Sid::SlurMinDistance).val() * spatium();
+            qreal minDistance = score()->styleS(Sid::slurMinDistance).val() * spatium();
             for (int tries = 1; true; ++tries) {
                   for (Segment* s = fs; s && s != ls; s = s->next1()) {
                         if (!s->enabled())
