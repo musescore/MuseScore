@@ -48,8 +48,10 @@ QAccessibleInterface* AccessibleScoreView::parent() const
 
 QRect AccessibleScoreView::rect() const
       {
-      QPoint origin = s->mapToGlobal(QPoint(0, 0));
-      return s->rect().translated(origin);
+      // TODO: calculate this ourselves?
+      //QPoint origin = s->mapToGlobal(QPoint(0, 0));
+      //return s->rect().translated(origin);
+      return QAccessibleWidget::rect();
       }
 
 bool AccessibleScoreView::isValid() const
@@ -69,7 +71,7 @@ QAccessible::Role AccessibleScoreView::role() const
       {
       // TODO: determine optimum role
       // StaticText has the advantage of being read by Windows Narrator
-      return QAccessible::StaticText;
+      return QAccessible::StatusBar;
       }
 
 QString AccessibleScoreView::text(QAccessible::Text t) const
@@ -80,8 +82,8 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
                   // leave empty to prevent name from being read on value/description change
                   // name will need to be in containing widget so it is read on tab change
                   // and we will need to be sure to read that
-                  //return QString();
-                  return s->score()->title();
+                  return QString();
+                  //return s->score()->title();
             case QAccessible::Value:
             case QAccessible::Description:
                   return s->score()->accessibleInfo();
@@ -112,6 +114,42 @@ QAccessibleInterface* AccessibleScoreView::ScoreViewFactory(const QString &class
 
           return iface;
       }
+
+#ifdef SCOREVIEW_VALUEINTERFACE
+
+void* AccessibleScoreView::interface_cast(QAccessible::InterfaceType t)
+      {
+      if (t == QAccessible::ValueInterface)
+            return static_cast<QAccessibleValueInterface*>(this);
+      return QAccessibleWidget::interface_cast(t);
+      }
+
+void AccessibleScoreView::setCurrentValue(const QVariant& val)
+      {
+      //QString str = val;
+      s->score()->setAccessibleInfo(tr("Set externally"));
+      }
+
+QVariant AccessibleScoreView::currentValue() const
+      {
+      return s->score()->accessibleInfo();
+      }
+
+QVariant AccessibleScoreView::maximumValue() const
+      {
+      return QString();
+      }
+
+QVariant AccessibleScoreView::minimumValue() const
+      {
+      return QString();
+      }
+
+QVariant AccessibleScoreView::minimumStepSize() const
+      {
+      return QString();
+      }
+#endif
 
 
 ScoreAccessibility* ScoreAccessibility::inst = 0;
@@ -298,9 +336,11 @@ void ScoreAccessibility::updateAccessibilityInfo()
       QAccessible::updateAccessibility(&vcev);
       // TODO:
       // some screenreaders may repond better to other events
-      // the version of Qt used may also be relevants, and platform
-      //QAccessibleEvent ev(obj, QAccessible::VisibleDataChanged);
-      //QAccessible::updateAccessibility(&ev);
+      // the version of Qt used may also be relevant, and platform too
+      //QAccessibleEvent ev1(obj, QAccessible::DescriptionChanged);
+      //QAccessible::updateAccessibility(&ev1);
+      //QAccessibleEvent ev2(obj, QAccessible::NameChanged);
+      //QAccessible::updateAccessibility(&ev2);
       }
 
 std::pair<int, float> ScoreAccessibility::barbeat(Element *e)

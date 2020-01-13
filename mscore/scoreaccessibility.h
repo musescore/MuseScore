@@ -12,7 +12,13 @@ namespace  Ms {
 //   AccessibleScoreView
 //---------------------------------------------------------
 
+#define SCOREVIEW_VALUEINTERFACE
+
+#ifdef SCOREVIEW_VALUEINTERFACE
+class AccessibleScoreView : public QObject, QAccessibleWidget, QAccessibleValueInterface {
+#else
 class AccessibleScoreView : public QObject, QAccessibleWidget {
+#endif
       Q_OBJECT
       ScoreView* s;
 
@@ -28,6 +34,14 @@ class AccessibleScoreView : public QObject, QAccessibleWidget {
       QString text(QAccessible::Text t) const Q_DECL_OVERRIDE;
       QWindow* window() const  Q_DECL_OVERRIDE;
       static QAccessibleInterface* ScoreViewFactory(const QString &classname, QObject *object);
+#ifdef SCOREVIEW_VALUEINTERFACE
+      virtual void* interface_cast(QAccessible::InterfaceType t) Q_DECL_OVERRIDE;
+      virtual void setCurrentValue(const QVariant&) Q_DECL_OVERRIDE;
+      virtual QVariant currentValue() const Q_DECL_OVERRIDE;
+      virtual QVariant maximumValue() const Q_DECL_OVERRIDE;
+      virtual QVariant minimumValue() const Q_DECL_OVERRIDE;
+      virtual QVariant minimumStepSize() const Q_DECL_OVERRIDE;
+#endif
       };
 
 //---------------------------------------------------------
