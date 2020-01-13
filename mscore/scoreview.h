@@ -424,7 +424,6 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       virtual Element* elementNear(QPointF);
       QList<Element*> elementsNear(QPointF);
-      void editTremoloBarProperties(TremoloBar*);
       void editArticulationProperties(Articulation*);
       void editTimeSigProperties(TimeSig*);
       void editStaffTextProperties(StaffTextBase*);

@@ -121,19 +121,6 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QCheckBox" name="playBend">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Play</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="2">
        <widget class="Ms::ResetButton" name="resetFontSize" native="true">
         <property name="sizePolicy">
@@ -353,36 +340,19 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <item>
-         <property name="text">
-          <string>Bend</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Bend/Release</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Bend/Release/Bend</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Prebend</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Prebend/Release</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Custom</string>
-         </property>
-        </item>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="2">
+       <widget class="QCheckBox" name="playBend">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Play</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -392,15 +362,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::BendCanvas</class>
-   <extends>QFrame</extends>
-   <header>bendcanvas.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Ms::ResetButton</class>
    <extends>QWidget</extends>
    <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::BendCanvas</class>
+   <extends>QFrame</extends>
+   <header>bendcanvas.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
