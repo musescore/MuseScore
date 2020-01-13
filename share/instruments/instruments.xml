@@ -2501,8 +2501,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>60-96</aPitchRange>
-                  <pPitchRange>60-96</pPitchRange>
+                  <aPitchRange>60-98</aPitchRange>
+                  <pPitchRange>60-98</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2514,8 +2514,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>55-96</aPitchRange>
-                  <pPitchRange>55-96</pPitchRange>
+                  <aPitchRange>55-98</aPitchRange>
+                  <pPitchRange>55-98</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2527,8 +2527,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>55-91</aPitchRange>
-                  <pPitchRange>55-91</pPitchRange>
+                  <aPitchRange>55-93</aPitchRange>
+                  <pPitchRange>55-93</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2540,8 +2540,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>48-96</aPitchRange>
-                  <pPitchRange>48-96</pPitchRange>
+                  <aPitchRange>48-98</aPitchRange>
+                  <pPitchRange>48-98</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2553,8 +2553,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>48-84</aPitchRange>
-                  <pPitchRange>48-84</pPitchRange>
+                  <aPitchRange>48-86</aPitchRange>
+                  <pPitchRange>48-86</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2670,8 +2670,8 @@
                   <musicXMLid>wind.reed.harmonica.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-40</aPitchRange>
-                  <pPitchRange>28-60</pPitchRange>
+                  <aPitchRange>40-64</aPitchRange>
+                  <pPitchRange>40-64</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2683,8 +2683,8 @@
                   <musicXMLid>wind.reed.harmonica.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-60</aPitchRange>
-                  <pPitchRange>28-60</pPitchRange>
+                  <aPitchRange>40-72</aPitchRange>
+                  <pPitchRange>40-72</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2696,8 +2696,8 @@
                   <musicXMLid>wind.reed.harmonica.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-40</aPitchRange>
-                  <pPitchRange>28-40</pPitchRange>
+                  <aPitchRange>40-65</aPitchRange>
+                  <pPitchRange>40-65</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
