@@ -100,6 +100,7 @@
 #include "libmscore/fermata.h"
 #include "musicxmlfonthandler.h"
 #include "libmscore/textframe.h"
+#include "libmscore/instrchange.h"
 
 namespace Ms {
 
@@ -336,6 +337,7 @@ public:
       double getTenthsFromInches(double) const;
       double getTenthsFromDots(double) const;
       Fraction tick() const { return _tick; }
+      void writeInstrumentDetails(const Instrument* instrument);
       };
 
 //---------------------------------------------------------
@@ -1303,10 +1305,10 @@ static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter,
 
 static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       {
-
-      const Staff* st = note->staff();
-      const Instrument* instr = st->part()->instrument();   // TODO: tick
-      const Interval intval = instr->transpose();
+      const auto st = note->staff();
+      const auto tick = note->tick();
+      const auto instr = st->part()->instrument(tick);
+      const auto intval = instr->transpose();
 
       s      = tpc2stepName(note->tpc());
       alter  = tpc2alterByKey(note->tpc(), Key::C);
@@ -1320,7 +1322,6 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       // note->pitch() and note->line()
       // note->line() is determined by drumMap
       //
-      Fraction tick        = note->chord()->tick();
       ClefType ct     = st->clef(tick);
       if (ct == ClefType::PERC || ct == ClefType::PERC2) {
             alter = 0;
@@ -4401,6 +4402,16 @@ static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Seg
 
 static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
       {
+      bool instrChangeHandled  = false;
+
+      // note: write the changed instrument details (transposition) here,
+      // optionally writing the associated staff text is done below
+      if (e->isInstrumentChange()) {
+            const auto instrChange = toInstrumentChange(e);
+            exp->writeInstrumentDetails(instrChange->instrument());
+            instrChangeHandled = true;
+            }
+
       if (e->isSymbol())
             exp->symbol(toSymbol(e), sstaff);
       else if (e->isTempoText())
@@ -4412,7 +4423,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
       else if (e->isRehearsalMark())
             exp->rehearsal(toRehearsalMark(e), sstaff);
       else
-            return false;
+            return instrChangeHandled;
 
       return true;
       }
@@ -4454,13 +4465,13 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                         else if (e->isFermata() || e->isFiguredBass() || e->isFretDiagram() || e->isJump())
                               ;  // handled separately by chordAttributes(), figuredBass(), findFretDiagram() or ignored
                         else
-                              qDebug("annotations: direction type %s at tick %d not implemented",
+                              qDebug("direction type %s at tick %d not implemented",
                                      Element::name(e->type()), seg->tick().ticks());
                         }
                   }
             if (fd)
                   // found fd but no harmony, cannot write (MusicXML would be invalid)
-                  qDebug("annotations seg %p found fretboard diagram %p w/o harmony: cannot write",
+                  qDebug("seg %p found fretboard diagram %p w/o harmony: cannot write",
                          seg, fd);
             }
       }
@@ -5431,22 +5442,21 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
 //---------------------------------------------------------
 
 /**
- Write the instrument details for \a part to \a xml.
+ Write the instrument details for \a instrument.
  */
 
-static void writeInstrumentDetails(XmlWriter& xml, const Part* part)
+void ExportMusicXml::writeInstrumentDetails(const Instrument* instrument)
       {
-      const Instrument* instrument = part->instrument();
-
-      // instrument details
-      if (instrument->transpose().chromatic) {        // TODO: tick
-            xml.stag("transpose");
-            xml.tag("diatonic",  instrument->transpose().diatonic % 7);
-            xml.tag("chromatic", instrument->transpose().chromatic % 12);
+      if (instrument->transpose().chromatic) {
+            _attr.doAttr(_xml, true);
+            _xml.stag("transpose");
+            _xml.tag("diatonic",  instrument->transpose().diatonic % 7);
+            _xml.tag("chromatic", instrument->transpose().chromatic % 12);
             int octaveChange = instrument->transpose().chromatic / 12;
             if (octaveChange != 0)
-                  xml.tag("octave-change", octaveChange);
-            xml.etag();
+                  _xml.tag("octave-change", octaveChange);
+            _xml.etag();
+            _attr.doAttr(_xml, false);
             }
       }
 
@@ -5662,7 +5672,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   // output attributes with the first actual measure (pickup or regular) only
                   if (isFirstActualMeasure) {
                         writeStaffDetails(_xml, part);
-                        writeInstrumentDetails(_xml, part);
+                        writeInstrumentDetails(part->instrument());
                         }
 
                   // output attribute at start of measure: measure-style

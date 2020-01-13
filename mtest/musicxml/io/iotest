@@ -8,7 +8,9 @@
 # OS X terminal build
 #MSCORE=../../../applebuild/mscore.app/Contents/MacOS/mscore
 # OS X Xcode build
-MSCORE=../../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+#MSCORE=../../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build (since early 2020)
+MSCORE=../../../build.xcode/main/Debug/mscore.app/Contents/MacOS/mscore
 
 echo "----------------------------------------------"
 echo "Regression Tests for MuseScore MusicXML import"
