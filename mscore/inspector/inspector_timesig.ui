@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>193</width>
-    <height>150</height>
+    <width>218</width>
+    <height>143</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -89,6 +89,19 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetShowCourtesy" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Show courtesy' value</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
@@ -112,19 +125,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetShowCourtesy" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Show courtesy' value</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="2">
        <widget class="Ms::ResetButton" name="resetScale" native="true">
         <property name="sizePolicy">
@@ -138,14 +138,14 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="0" colspan="3">
+       <widget class="QPushButton" name="properties">
+        <property name="text">
+         <string>Properties</string>
+        </property>
+       </widget>
+      </item>
      </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="properties">
-     <property name="text">
-      <string>Properties</string>
-     </property>
     </widget>
    </item>
   </layout>
