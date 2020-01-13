@@ -191,6 +191,7 @@ static const StyleType styleTypes[] {
       { Sid::ledgerLineLength,        "ledgerLineLength",        Spatium(.6)   },     // notehead width + this value
       { Sid::accidentalDistance,      "accidentalDistance",      Spatium(0.22) },
       { Sid::accidentalNoteDistance,  "accidentalNoteDistance",  Spatium(0.22) },
+      { Sid::alwaysUseWholeRest,      "alwaysUseWholeRest",      QVariant(false) },
 
       { Sid::beamWidth,               "beamWidth",               Spatium(0.5)  },     // was 0.48
       { Sid::beamDistance,            "beamDistance",            QVariant(0.5) },     // 0.25sp units

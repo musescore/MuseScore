@@ -278,7 +278,7 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
             case TDuration::DurationType::V_BREVE:
                   return SymId::restDoubleWhole;
             case TDuration::DurationType::V_MEASURE:
-                  if (ticks() >= Fraction(2, 1))
+                  if (ticks() >= Fraction(2, 1) && !score()->styleB(Sid::alwaysUseWholeRest))
                         return SymId::restDoubleWhole;
                   // fall through
             case TDuration::DurationType::V_WHOLE:

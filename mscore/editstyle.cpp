@@ -366,6 +366,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       { Sid::bendLineWidth,     false, bendLineWidth,     resetBendLineWidth     },
       { Sid::bendArrowWidth,    false, bendArrowWidth,    resetBendArrowWidth    },
+
+      { Sid::alwaysUseWholeRest,      false, alwaysUseWholeRest,    0 }
       };
 
       for (QComboBox* cb : std::vector<QComboBox*> {

@@ -165,6 +165,8 @@ enum class Sid {
       ledgerLineLength,
       accidentalDistance,
       accidentalNoteDistance,
+      alwaysUseWholeRest,
+
       beamWidth,
       beamDistance,
       beamMinLen,
