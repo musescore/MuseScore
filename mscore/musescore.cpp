@@ -193,6 +193,8 @@ bool exportScoreMedia = false;
 bool exportScoreMeta = false;
 bool exportScoreMp3 = false;
 bool exportScorePartsPdf = false;
+static bool exportTransposedScore = false;
+static QString transposeExportOptions;
 
 QString mscoreGlobalShare;
 
@@ -3730,6 +3732,8 @@ static bool processNonGui(const QStringList& argv)
             return mscore->exportMp3AsJSON(argv[0]);
       else if (exportScorePartsPdf)
             return mscore->exportPartsPdfsToJSON(argv[0]);
+      else if (exportTransposedScore)
+            return mscore->exportTransposedScoreToJSON(argv[0], transposeExportOptions);
 
       if (pluginMode) {
             loadScores(argv);
@@ -7257,6 +7261,7 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
       parser.addOption(QCommandLineOption("score-meta", "Export score metadata to JSON document and print it to stdout"));
       parser.addOption(QCommandLineOption("score-mp3", "Generates mp3 for the given score and export the data to a single JSON file, print it to std out"));
       parser.addOption(QCommandLineOption("score-parts-pdf", "Generates parts data for the given score and export the data to a single JSON file, print it to std out"));
+      parser.addOption(QCommandLineOption("score-transpose", "Transposes the given score and exports the data to a single JSON file, prints it to std out", "options"));
       parser.addOption(QCommandLineOption("raw-diff", "Print a raw diff for the given scores"));
       parser.addOption(QCommandLineOption("diff", "Print a diff for the given scores"));
 
@@ -7418,6 +7423,13 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
 
       if (parser.isSet("score-parts-pdf")) {
             exportScorePartsPdf = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+
+      if (parser.isSet("score-transpose")) {
+            exportTransposedScore = true;
+            transposeExportOptions = parser.value("score-transpose");
             MScore::noGui = true;
             converterMode = true;
             }

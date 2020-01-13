@@ -3401,5 +3401,114 @@ bool MuseScore::exportScoreMetadata(const QString& inFilePath, const QString& ou
       return true;
       }
 
+//---------------------------------------------------------
+//   exportTransposedScoreToJSON
+//---------------------------------------------------------
+
+bool MuseScore::exportTransposedScoreToJSON(const QString& inFilePath, const QString& transposeOptions, const QString& outFilePath)
+      {
+      QJsonDocument doc = QJsonDocument::fromJson(transposeOptions.toUtf8());
+      if (!doc.isObject()) {
+            qCritical("Transpose options JSON is not an object: %s", qUtf8Printable(transposeOptions));
+            return false;
+            }
+
+      QJsonObject options = doc.object();
+
+      TransposeMode mode;
+      const QString modeName = options["mode"].toString();
+      if (modeName == "by_key")
+            mode = TransposeMode::BY_KEY;
+      else if (modeName == "by_interval")
+            mode = TransposeMode::BY_INTERVAL;
+      else if (modeName == "diatonically")
+            mode = TransposeMode::DIATONICALLY;
+      else {
+            qCritical("Transpose: invalid \"mode\" option: %s", qUtf8Printable(modeName));
+            return false;
+            }
+
+      TransposeDirection direction;
+      const QString directionName = options["direction"].toString();
+      if (directionName == "up")
+            direction = TransposeDirection::UP;
+      else if (directionName == "down")
+            direction = TransposeDirection::DOWN;
+      else if (directionName == "closest")
+            direction = TransposeDirection::CLOSEST;
+      else {
+            qCritical("Transpose: invalid \"direction\" option: %s", qUtf8Printable(directionName));
+            return false;
+            }
+
+      constexpr int defaultKey = int(Key::INVALID);
+      const Key targetKey = Key(options["targetKey"].toInt(defaultKey));
+      if (mode == TransposeMode::BY_KEY) {
+            const bool targetKeyValid = int(Key::MIN) <= int(targetKey) && int(targetKey) <= int(Key::MAX);
+            if (!targetKeyValid) {
+                  qCritical("Transpose: invalid targetKey: %d", int(targetKey));
+                  return false;
+                  }
+            }
+
+      const int transposeInterval = options["transposeInterval"].toInt(-1);
+      if (mode != TransposeMode::BY_KEY) {
+            const bool transposeIntervalValid = -1 < transposeInterval && transposeInterval < intervalListSize;
+            if (!transposeIntervalValid) {
+                  qCritical("Transpose: invalid transposeInterval: %d", transposeInterval);
+                  return false;
+                  }
+            }
+
+      const bool transposeKeySignatures = options["transposeKeySignatures"].toBool();
+      const bool transposeChordNames = options["transposeChordNames"].toBool();
+      const bool useDoubleSharpsFlats = options["useDoubleSharpsFlats"].toBool();
+
+      std::unique_ptr<MasterScore> score(mscore->readScore(inFilePath));
+      if (!score)
+            return false;
+
+      score->switchToPageMode();
+      score->cmdSelectAll();
+
+      score->startCmd();
+      const bool transposed = score->transpose(mode, direction, targetKey, transposeInterval, transposeKeySignatures, transposeChordNames, useDoubleSharpsFlats);
+      if (!transposed) {
+            qCritical("Transposition failed");
+            return false;
+            }
+      score->endCmd();
+
+      bool res = true;
+      CustomJsonWriter jsonWriter(outFilePath);
+
+      // export mscz
+      {
+      jsonWriter.addKey("mscz");
+      bool saved = false;
+      QTemporaryFile tmpFile(QString("%1_transposed.XXXXXX.mscz").arg(score->title()));
+      if (tmpFile.open()) {
+            QFileInfo fi(tmpFile.fileName());
+            saved = score->Score::saveCompressedFile(&tmpFile, fi, /* onlySelection */ false);
+            tmpFile.close();
+            tmpFile.open();
+            jsonWriter.addValue(tmpFile.readAll().toBase64());
+            tmpFile.close();
+            }
+
+      if (!saved) {
+            qCritical("Transpose: adding mscz failed");
+            jsonWriter.addValue("");
+            res = false;
+            }
+      }
+
+      // export score pdf
+      jsonWriter.addKey("pdf");
+      jsonWriter.addValue(exportPdfAsJSON(score.get()), /* lastJsonElement */ true);
+
+      return res;
+      }
+
 }
 
