@@ -502,7 +502,7 @@ QString pitch2string(int v)
  * tracks all the different valid intervals. They are arranged
  * in diatonic then chromatic order.
  */
-Interval intervalList[26] = {
+Interval intervalList[intervalListSize] = {
       // diatonic - chromatic
       Interval(0, 0),         //  0 Perfect Unison
       Interval(0, 1),         //  1 Augmented Unison
