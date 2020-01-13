@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "bendcanvas.h"
-#include "libmscore/bend.h"
+#include "tremolobarcanvas.h"
+#include "libmscore/tremolobar.h"
 #include "libmscore/staff.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
@@ -26,10 +26,10 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   BendCanvas
+//   TremoloBarCanvas
 //---------------------------------------------------------
 
-BendCanvas::BendCanvas(QWidget* parent)
+TremoloBarCanvas::TremoloBarCanvas(QWidget* parent)
    : QFrame(parent)
       {
       }
@@ -38,7 +38,7 @@ BendCanvas::BendCanvas(QWidget* parent)
 //   paintEvent
 //---------------------------------------------------------
 
-void BendCanvas::paintEvent(QPaintEvent* ev)
+void TremoloBarCanvas::paintEvent(QPaintEvent* ev)
       {
       int w = width();
       int h = height();
@@ -46,7 +46,7 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
       QPainter p(this);
       p.fillRect(rect(), Qt::white);
 
-      static const int ROWS    = 13;
+      static const int ROWS    = 33;
       static const int COLUMNS = 13;
 
       int xs = w / COLUMNS;
@@ -67,7 +67,8 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
 
       for (int y = 0; y < ROWS; ++y) {
             int yy = tm + y * ys;
-            pen.setColor(y % 4 ? Qt::gray : Qt::black);
+            pen.setColor(y % 2 ? Qt::gray : Qt::black);
+            pen.setWidth(y == ROWS / 2 ? 3 : 1);
             p.setPen(pen);
             p.drawLine(lm, yy, lm + tw, yy);
             }
@@ -84,7 +85,7 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
       p.setPen(pen);
       for (const PitchValue& v : _points) {
             int x = ((tw * v.time) / 60) + lm;
-            int y = th - ((th * v.pitch) / 300) + tm;
+            int y = th - ((th * v.pitch) / 400) - ys * (ROWS / 2) + tm;
             if (idx)
                   p.drawLine(x1, y1, x, y);
             x1 = x;
@@ -94,7 +95,7 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
 
       for (const PitchValue& v : _points) {
             int x = ((tw * v.time) / 60) + lm;
-            int y = th - ((th * v.pitch) / 300) + tm;
+            int y = th - ((th * v.pitch) / 400) - ys * (ROWS / 2) + tm;
             p.fillRect(x - GRIP2, y - GRIP2, GRIP, GRIP, Qt::blue);
             }
 
@@ -105,9 +106,9 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
 //   mousePressEvent
 //---------------------------------------------------------
 
-void BendCanvas::mousePressEvent(QMouseEvent* ev)
+void TremoloBarCanvas::mousePressEvent(QMouseEvent* ev)
       {
-      static const int ROWS = 13;
+      static const int ROWS    = 33;
       static const int COLUMNS = 13;
 
       int xs = width() / COLUMNS;
@@ -128,7 +129,7 @@ void BendCanvas::mousePressEvent(QMouseEvent* ev)
       y = ROWS - y - 1;
 
       int time = x * 5;
-      int pitch = y * 25;
+      int pitch = (y - ROWS / 2) * 12.5;
 
       int n = _points.size();
       bool found = false;
@@ -153,7 +154,7 @@ void BendCanvas::mousePressEvent(QMouseEvent* ev)
             _points.append(PitchValue(time, pitch, false));
       update();
 
-      emit bendCanvasChanged();
+      emit tremoloBarCanvasChanged();
       }
 
 }

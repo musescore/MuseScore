@@ -10,32 +10,33 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_BEND_H__
-#define __INSPECTOR_BEND_H__
+#ifndef __INSPECTOR_TREMOLO_BAR_H__
+#define __INSPECTOR_TREMOLO_BAR_H__
 
 #include "inspector.h"
-#include "ui_inspector_bend.h"
+#include "ui_inspector_tremolobar.h"
 #include "libmscore/pitchvalue.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorBend
+//   InspectorTremoloBar
 //---------------------------------------------------------
 
-class InspectorBend : public InspectorElementBase {
+class InspectorTremoloBar : public InspectorElementBase {
       Q_OBJECT
 
-      Ui::InspectorBend g;
+      Ui::InspectorTremoloBar g;
 
    private slots:
-      void bendTypeChanged(int);
-      void updateBend();
+      void tremoloBarTypeChanged(int);
+      void updateTremoloBar();
 
    public:
-      InspectorBend(QWidget* parent);
+      InspectorTremoloBar(QWidget* parent);
       virtual void setElement() override;
       };
 
-} // namespace Ms
+}
+
 #endif
