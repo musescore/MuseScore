@@ -1922,8 +1922,8 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="xaphoon">
-                  <longName>Pocket-sax C</longName>
-                  <shortName>P. Sx. C</shortName>
+                  <longName>Pocket-Sax C</longName>
+                  <shortName>P.-Sx. C</shortName>
                   <description>Pocket-Sax/Xaphoon in C</description>
                   <musicXMLid>wind.reed.xaphoon</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -1938,9 +1938,9 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="bb-xaphoon">
-                  <longName>Pocket-sax Bb</longName>
-                  <shortName>P. Sx. Bb</shortName>
-                  <description>Pocket-Sax/Xaphoon in Bb</description>
+                  <longName>Pocket-Sax B♭</longName>
+                  <shortName>P.-Sx. B♭</shortName>
+                  <description>Pocket-Sax/Xaphoon in B♭</description>
                   <musicXMLid>wind.reed.xaphoon</musicXMLid>
                   <transposingClef>G</transposingClef>
                   <concertClef>G8vb</concertClef>
@@ -1956,8 +1956,8 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="d-xaphoon">
-                  <longName>Pocket-sax D</longName>
-                  <shortName>P. Sx. D</shortName>
+                  <longName>Pocket-Sax D</longName>
+                  <shortName>P.-Sx. D</shortName>
                   <description>Pocket-Sax/Xaphoon in D</description>
                   <musicXMLid>wind.reed.xaphoon</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -1974,8 +1974,8 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="g-xaphoon">
-                  <longName>Pocket-sax G</longName>
-                  <shortName>P. Sx. G</shortName>
+                  <longName>Pocket-Sax G</longName>
+                  <shortName>P.-Sx. G</shortName>
                   <description>Pocket-Sax/Xaphoon in G</description>
                   <musicXMLid>wind.reed.xaphoon</musicXMLid>
                   <transposingClef>G</transposingClef>
