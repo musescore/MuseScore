@@ -19,8 +19,8 @@
 
 
 REVISION  = $(shell type mscore\revision.h)
-VERSION   = 3.4b-${REVISION}
-#VERSION = 3.3.3
+#VERSION   = 3.4b-${REVISION}
+VERSION = 3.4.0
 BUILD_NUMBER=""
 CPUS = %NUMBER_OF_PROCESSORS%
 BUILD_FOR_WINSTORE="OFF"     # Override with "ON" to enable.
