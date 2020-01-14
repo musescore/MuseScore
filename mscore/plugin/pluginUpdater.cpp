@@ -765,8 +765,10 @@ bool PluginWorker::install(QString& download_pkg, PluginStatus* result/*= nullpt
       if (suffix == "zip") {
             MQZipReader zipFile(download_pkg);
             QVector<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
-            if (allFiles.size() == 0)
+            if (allFiles.size() == 0) {
+                  *result = INSTALL_FAILED;
                   return false;
+            }
             // If zip contains multiple files in root, or a single qml, create a
             // root folder in plugin dir for them.
             // If zip contains a single directory, don't use that directory's name
@@ -859,7 +861,7 @@ void PluginWorker::downloadInstall(QPushButton* button)
       if (r)
             emit pluginStatusChanged(buttonRow, PluginStatus::DOWNLOADING);
       QString localPath = download(page_url);
-      PluginStatus result;
+      PluginStatus result = INSTALL_FAILED;
       if (install(localPath, &result)) {
             // add the new description item to the map
             emit pluginInstalled(page_url, new PluginPackageDescription(desc));
