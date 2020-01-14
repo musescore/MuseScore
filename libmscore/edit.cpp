@@ -1461,7 +1461,7 @@ void Score::cmdFlip()
       {
       const QList<Element*>& el = selection().elements();
       if (el.empty()) {
-            MScore::setError(NO_NOTE_SLUR_SELECTED);
+            MScore::setError(NO_FLIPPABLE_SELECTED);
             return;
             }
 
