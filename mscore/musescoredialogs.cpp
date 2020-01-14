@@ -116,7 +116,7 @@ AboutBoxDialog::AboutBoxDialog()
                                      .arg("</a>");
       visitAndDonateString += "\n\n";
 #endif
-      QString finalString = visitAndDonateString + tr("Copyright &copy; 1999-2019 Werner Schweer and Others.\nPublished under the GNU General Public License.");
+      QString finalString = visitAndDonateString + tr("Copyright &copy; 1999-2020 MuseScore BVBA and others.\nPublished under the GNU General Public License.");
       finalString.replace("\n", "<br/>");
       copyrightLabel->setText(QString("<span style=\"font-size:10pt;\">%1</span>").arg(finalString));
       connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
@@ -155,7 +155,7 @@ AboutMusicXMLBoxDialog::AboutMusicXMLBoxDialog()
       label->setText(QString("<span style=\"font-size:10pt;\">%1<br/></span>")
                      .arg(tr(   "MusicXML is an open file format for exchanging digital sheet music,\n"
                                 "supported by many applications.\n"
-                                "Copyright © 2004-2018 the Contributors to the MusicXML\n"
+                                "Copyright © 2004-2017 the Contributors to the MusicXML\n"
                                 "Specification, published by the W3C Music Notation Community\n"
                                 "Group under the W3C Community Contributor License Agreement\n"
                                 "(CLA):\n%1\n"
