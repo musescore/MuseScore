@@ -198,6 +198,9 @@ prefix="$(cat build.release/PREFIX.txt)" # MuseScore was installed here
 cd "$(dirname "${prefix}")"
 appdir="$(basename "${prefix}")" # directory that will become the AppImage
 
+# Prevent linuxdeploy setting RUNPATH in binaries that shouldn't have it
+mv "${appdir}/bin/findlib" "${appdir}/../findlib"
+
 # Remove Qt plugins for MySQL and PostgreSQL to prevent
 # linuxdeploy-plugin-qt from failing due to missing dependencies.
 # SQLite plugin alone should be enough for our AppImage.
@@ -221,6 +224,9 @@ unset QML_SOURCES_PATHS
 mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
 mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so"
 
+# Put the non-RUNPATH binaries back
+mv "${appdir}/../findlib" "${appdir}/bin/findlib"
+
 ##########################################################################
 # BUNDLE REMAINING DEPENDENCIES MANUALLY
 ##########################################################################
@@ -228,22 +234,7 @@ mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so
 function find_library()
 {
   # Print full path to a library or return exit status 1 if not found
-  local library="$1" # take library name as input (e.g. "libfoo.so")
-  # Look for the library in $LD_LIBRARY_PATH
-  local dir IFS=':' # split path into array on this separator
-  for dir in "${LD_LIBRARY_PATH[@]}"; do
-    if [[ -e "${dir}/${library}" ]]; then
-      echo "${dir}/${library}"
-      return # Library found
-    fi
-  done
-  # Not found yet so check system cache
-  ldconfig -p | awk -v lib="${library}" -v arch="x86_64" \
-'
-BEGIN {status=1}
-($1 == lib && index($0, arch)) {print $NF; status=0; exit}
-END {exit status}
-'
+  "${appdir}/bin/findlib" "$@"
 }
 
 function fallback_library()
@@ -261,19 +252,28 @@ function fallback_library()
 }
 
 # UNWANTED FILES
-# linuxdeploy may have added some files or directories that we don't want
-unwanted_files=(
-  "lib/libnss3.so" # see https://github.com/probonopd/linuxdeployqt/issues/35#issuecomment-382994446
-  "lib/libnssutil3.so"
-)
+# linuxdeploy or linuxdeploy-plugin-qt may have added some files or folders
+# that we don't want. List them here using paths relative to AppDir root.
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
+# or https://github.com/linuxdeploy/linuxdeploy-plugin-qt/issues for Qt libs.
+unwanted_files=(
+  # none
+)
+
+# ADDITIONAL QT COMPONENTS
+# linuxdeploy-plugin-qt may have missed some Qt files or folders that we need.
+# List them here using paths relative to the Qt root directory. Report new
+# additions at https://github.com/linuxdeploy/linuxdeploy-plugin-qt/issues
+additional_qt_components=(
+  /plugins/printsupport/libcupsprintersupport.so
+)
 
 # ADDITIONAL LIBRARIES
-# Linuxdeploy may have missed some libraries that we need
+# linuxdeploy may have missed some libraries that we need
+# Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
 additional_libraries=(
   # none
 )
-# Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
 
 # FALLBACK LIBRARIES
 # These get bundled in the AppImage, but are only loaded if the user does not
@@ -282,13 +282,18 @@ additional_libraries=(
 # a particular feature to work properly, but where the program would crash at
 # startup if the library was not found. The fallback library may not provide
 # the full functionality of the system version, but it does avoid the crash.
-fallback_libraries=(
-  "libjack.so.0" # https://github.com/LMMS/lmms/pull/3958
-)
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
+fallback_libraries=(
+  libjack.so.0 # https://github.com/LMMS/lmms/pull/3958
+)
 
 for file in "${unwanted_files[@]}"; do
   rm -rf "${appdir}/${file}"
+done
+
+for file in "${additional_qt_components[@]}"; do
+  mkdir -p "${appdir}/$(dirname "${file}")"
+  cp -L "${qt_path}/${file}" "${appdir}/${file}"
 done
 
 for lib in "${additional_libraries[@]}"; do
@@ -298,6 +303,38 @@ done
 
 for fb_lib in "${fallback_libraries[@]}"; do
   fallback_library "${fb_lib}"
+done
+
+# METHOD OF LAST RESORT
+# Special treatment for some dependencies when all other methods fail
+
+# Bundle libnss3 and friends as fallback libraries. Needed on Chromebook.
+# See discussion at https://github.com/probonopd/linuxdeployqt/issues/35
+libnss3_files=(
+  # https://packages.ubuntu.com/xenial/amd64/libnss3/filelist
+  libnss3.so
+  libnssutil3.so
+  libsmime3.so
+  libssl3.so
+  nss/libfreebl3.chk
+  nss/libfreebl3.so
+  nss/libfreeblpriv3.chk
+  nss/libfreeblpriv3.so
+  nss/libnssckbi.so
+  nss/libnssdbm3.chk
+  nss/libnssdbm3.so
+  nss/libsoftokn3.chk
+  nss/libsoftokn3.so
+)
+
+libnss3_system_path="$(dirname "$(find_library libnss3.so)")"
+libnss3_appdir_path="${appdir}/fallback/libnss3.so" # directory named like library
+
+mkdir -p "${libnss3_appdir_path}/nss"
+
+for file in "${libnss3_files[@]}"; do
+  cp -L "${libnss3_system_path}/${file}" "${libnss3_appdir_path}/${file}"
+  rm -f "${appdir}/lib/$(basename "${file}")" # in case it was already packaged by linuxdeploy
 done
 
 ##########################################################################

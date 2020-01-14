@@ -641,6 +641,7 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     string(TOUPPER "mscore${MSCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
     if (${MSCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "-portable-anything" would match
       # Build portable AppImage as per https://github.com/probonopd/AppImageKit
+      add_subdirectory(build/Linux+BSD/portable)
       if (NOT DEFINED ARCH)
         execute_process(COMMAND arch OUTPUT_VARIABLE ARCH OUTPUT_STRIP_TRAILING_WHITESPACE)# Get architecture (strip trailing newline)
       endif (NOT DEFINED ARCH)
