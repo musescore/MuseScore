@@ -71,7 +71,7 @@ QAccessible::Role AccessibleScoreView::role() const
       {
       // TODO: determine optimum role
       // StaticText has the advantage of being read by Windows Narrator
-      return QAccessible::StatusBar;
+      return QAccessible::StaticText;
       }
 
 QString AccessibleScoreView::text(QAccessible::Text t) const
@@ -82,8 +82,8 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
                   // leave empty to prevent name from being read on value/description change
                   // name will need to be in containing widget so it is read on tab change
                   // and we will need to be sure to read that
-                  return QString();
-                  //return s->score()->title();
+                  //return "";
+                  return s->score()->title();
             case QAccessible::Value:
             case QAccessible::Description:
                   return s->score()->accessibleInfo();
@@ -149,6 +149,33 @@ QVariant AccessibleScoreView::minimumStepSize() const
       {
       return QString();
       }
+
+#endif
+
+#ifdef SCOREVIEW_IMAGEINTERFACE
+
+void* AccessibleScoreView::interface_cast(QAccessible::InterfaceType t)
+      {
+      if (t == QAccessible::ImageInterface)
+            return static_cast<QAccessibleImageInterface*>(this);
+      return QAccessibleWidget::interface_cast(t);
+      }
+
+QString AccessibleScoreView::imageDescription() const
+      {
+      return s->score()->accessibleInfo();
+      }
+
+QSize AccessibleScoreView::imageSize() const
+      {
+      return QSize();
+      }
+
+QPoint AccessibleScoreView::imagePosition() const
+      {
+      return QPoint();
+      }
+
 #endif
 
 
@@ -337,8 +364,8 @@ void ScoreAccessibility::updateAccessibilityInfo()
       // TODO:
       // some screenreaders may repond better to other events
       // the version of Qt used may also be relevant, and platform too
-      //QAccessibleEvent ev1(obj, QAccessible::DescriptionChanged);
-      //QAccessible::updateAccessibility(&ev1);
+      QAccessibleEvent ev1(obj, QAccessible::DescriptionChanged);
+      QAccessible::updateAccessibility(&ev1);
       //QAccessibleEvent ev2(obj, QAccessible::NameChanged);
       //QAccessible::updateAccessibility(&ev2);
       }
