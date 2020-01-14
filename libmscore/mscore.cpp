@@ -126,12 +126,12 @@ extern QString mscoreGlobalShare;
 std::vector<MScoreError> MScore::errorList {
       { MS_NO_ERROR,                     0,    0                                                                           },
 
-      { NO_NOTE_SELECTED,                "s1", QT_TRANSLATE_NOOP("error", "No note selected:\nPlease select a note and retry\n")                   },
+      { NO_NOTE_SELECTED,                "s1", QT_TRANSLATE_NOOP("error", "No note selected:\nPlease select a note and retry")                     },
       { NO_CHORD_REST_SELECTED,          "s2", QT_TRANSLATE_NOOP("error", "No chord/rest selected:\nPlease select a chord or rest and retry")      },
       { NO_LYRICS_SELECTED,              "s3", QT_TRANSLATE_NOOP("error", "No note or lyrics selected:\nPlease select a note or lyrics and retry") },
       { NO_NOTE_REST_SELECTED,           "s4", QT_TRANSLATE_NOOP("error", "No note or rest selected:\nPlease select a note or rest and retry")     },
-      { NO_NOTE_SLUR_SELECTED,           "s5", QT_TRANSLATE_NOOP("error", "No note or slur selected:\nPlease select a note or slur and retry")     },
-      { NO_STAFF_SELECTED,               "s6", QT_TRANSLATE_NOOP("error", "No staff selected:\nPlease select one or more staves and retry\n")      },
+      { NO_FLIPPABLE_SELECTED,           "s5", QT_TRANSLATE_NOOP("error", "No flippable element selected:\nPlease select an element that can be flipped and retry") },
+      { NO_STAFF_SELECTED,               "s6", QT_TRANSLATE_NOOP("error", "No staff selected:\nPlease select one or more staves and retry")        },
       { NO_NOTE_FIGUREDBASS_SELECTED,    "s7", QT_TRANSLATE_NOOP("error", "No note or figured bass selected:\nPlease select a note or figured bass and retry") },
 
       { CANNOT_INSERT_TUPLET,            "t1", QT_TRANSLATE_NOOP("error", "Cannot insert chord/rest in tuplet")                                    },
