@@ -12,13 +12,21 @@ namespace  Ms {
 //   AccessibleScoreView
 //---------------------------------------------------------
 
-#define SCOREVIEW_VALUEINTERFACE
+//#define SCOREVIEW_VALUEINTERFACE
+//#define SCOREVIEW_IMAGEINTERFACE
 
-#ifdef SCOREVIEW_VALUEINTERFACE
-class AccessibleScoreView : public QObject, QAccessibleWidget, QAccessibleValueInterface {
+#if defined(SCOREVIEW_VALUEINTERFACE)
+#define SCOREVIEW_INHERIT_VALUE     ,QAccessibleValueInterface
 #else
-class AccessibleScoreView : public QObject, QAccessibleWidget {
+#define SCOREVIEW_INHERIT_VALUE
 #endif
+#if defined(SCOREVIEW_IMAGEINTERFACE)
+#define SCOREVIEW_INHERIT_IMAGE     ,QAccessibleImageInterface
+#else
+#define SCOREVIEW_INHERIT_IMAGE
+#endif
+
+class AccessibleScoreView : public QObject, QAccessibleWidget SCOREVIEW_INHERIT_VALUE SCOREVIEW_INHERIT_IMAGE {
       Q_OBJECT
       ScoreView* s;
 
@@ -41,6 +49,12 @@ class AccessibleScoreView : public QObject, QAccessibleWidget {
       virtual QVariant maximumValue() const Q_DECL_OVERRIDE;
       virtual QVariant minimumValue() const Q_DECL_OVERRIDE;
       virtual QVariant minimumStepSize() const Q_DECL_OVERRIDE;
+#endif
+#ifdef SCOREVIEW_IMAGEINTERFACE
+      virtual void* interface_cast(QAccessible::InterfaceType t) Q_DECL_OVERRIDE;
+      virtual QString imageDescription() const Q_DECL_OVERRIDE;
+      virtual QSize imageSize() const Q_DECL_OVERRIDE;
+      virtual QPoint imagePosition() const Q_DECL_OVERRIDE;
 #endif
       };
 
