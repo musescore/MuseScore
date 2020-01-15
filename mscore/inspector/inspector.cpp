@@ -197,7 +197,7 @@ void Inspector::update(Score* s)
                       (ee->isBreath() && toBreath(ee)->isCaesura() != toBreath(element())->isCaesura()) ||
                       // a staff text and a system text
                       ((ee->isStaffText() || ee->isSystemText())
-                          && (ee->type() != element()->type()) || (ee->isSystemText() != element()->isSystemText())))
+                          && (ee->type() != element()->type() || ee->isSystemText() != element()->isSystemText())))
                         sameSubtypes = false;
                   }
             }
