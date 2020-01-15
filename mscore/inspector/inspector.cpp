@@ -175,6 +175,7 @@ void Inspector::update(Score* s)
             return;
       _score = s;
       bool sameTypes = true;
+      bool sameSubtypes = true;
       if (el()) {
             for (Element* ee : *el()) {
                   if (((element()->type() != ee->type()) && // different and
@@ -188,9 +189,19 @@ void Inspector::update(Score* s)
                         sameTypes = false;
                         break;
                         }
+                      // an articulation and an ornament
+                  if ((ee->isArticulation() && toArticulation(ee)->isOrnament() != toArticulation(element())->isOrnament()) ||
+                      // a slur and a tie
+                      (ee->isSlurTieSegment() && toSlurTieSegment(ee)->isSlurSegment() != toSlurTieSegment(element())->isSlurSegment()) ||
+                      // a breath and a caesura
+                      (ee->isBreath() && toBreath(ee)->isCaesura() != toBreath(element())->isCaesura()) ||
+                      // a staff text and a system text
+                      ((ee->isStaffText() || ee->isSystemText())
+                          && (ee->type() != element()->type()) || (ee->isSystemText() != element()->isSystemText())))
+                        sameSubtypes = false;
                   }
             }
-      if (oe != element() || oSameTypes != sameTypes) {
+      if (oe != element() || oSameTypes != sameTypes || (sameTypes && !sameSubtypes)) {
             delete ie;
             ie  = 0;
             oe  = element();
@@ -200,7 +211,7 @@ void Inspector::update(Score* s)
             else if (!sameTypes)
                   ie = new InspectorGroupElement(this);
             else {
-                  switch(element()->type()) {
+                  switch (element()->type()) {
                         case ElementType::FBOX:
                         case ElementType::VBOX:
                               ie = new InspectorVBox(this);
@@ -597,6 +608,18 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
    : InspectorElementBase(parent)
       {
       ar.setupUi(addWidget());
+
+      Articulation* el = toArticulation(inspector->element());
+      bool sameTypes = true;
+
+      for (const auto& ee : *inspector->el()) {
+            if (toArticulation(ee)->isOrnament() != el->isOrnament()) {
+                  sameTypes = false;
+                  break;
+                  }
+            }
+      if (sameTypes)
+            ar.title->setText(el->isOrnament() ? tr("Ornament") : tr("Articulation"));
 
       const std::vector<InspectorItem> iiList = {
             { Pid::ARTICULATION_ANCHOR, 0, ar.anchor,           ar.resetAnchor           },
@@ -1205,13 +1228,13 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent)
       bool sameTypes = true;
 
       for (const auto& ee : *inspector->el()) {
-            if (ee->accessibleInfo() != el->accessibleInfo()) {
+            if (ee->isSlurSegment() != el->isSlurSegment()) {
                   sameTypes = false;
                   break;
                   }
             }
       if (sameTypes)
-            s.title->setText(el->accessibleInfo());
+            s.title->setText(el->isSlurSegment() ? tr("Slur") : tr("Tie"));
 
       const std::vector<InspectorItem> iiList = {
             { Pid::LINE_TYPE,       0, s.lineType,      s.resetLineType      },
@@ -1226,7 +1249,7 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent)
 //---------------------------------------------------------
 
 InspectorEmpty::InspectorEmpty(QWidget* parent)
-      :InspectorBase(parent)
+   : InspectorBase(parent)
       {
       e.setupUi(addWidget());
       }
@@ -1244,20 +1267,21 @@ QSize InspectorEmpty::sizeHint() const
 //   InspectorCaesura
 //---------------------------------------------------------
 
-InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorElementBase(parent)
+InspectorCaesura::InspectorCaesura(QWidget* parent)
+   : InspectorElementBase(parent)
       {
       c.setupUi(addWidget());
 
       Breath* b = toBreath(inspector->element());
       bool sameTypes = true;
       for (const auto& ee : *inspector->el()) {
-            if (ee->accessibleInfo() != b->accessibleInfo()) {
+            if (toBreath(ee)->isCaesura() != b->isCaesura()) {
                   sameTypes = false;
                   break;
                   }
             }
       if (sameTypes)
-            c.title->setText(b->accessibleInfo());
+            c.title->setText(b->isCaesura() ? tr("Caesura") : tr("Breath"));
 
       const std::vector<InspectorItem> il = {
             { Pid::PAUSE,  0, c.pause,         c.resetPause         }
@@ -1270,7 +1294,8 @@ InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorElementBase(paren
 //   InspectorBracket
 //---------------------------------------------------------
 
-InspectorBracket::InspectorBracket(QWidget* parent) : InspectorBase(parent)
+InspectorBracket::InspectorBracket(QWidget* parent)
+   : InspectorBase(parent)
       {
       b.setupUi(addWidget());
 
@@ -1285,7 +1310,8 @@ InspectorBracket::InspectorBracket(QWidget* parent) : InspectorBase(parent)
 //   InspectorIname
 //---------------------------------------------------------
 
-InspectorIname::InspectorIname(QWidget* parent) : InspectorTextBase(parent)
+InspectorIname::InspectorIname(QWidget* parent)
+   : InspectorTextBase(parent)
       {
       i.setupUi(addWidget());
 
