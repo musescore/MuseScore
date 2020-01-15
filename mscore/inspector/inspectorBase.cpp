@@ -430,6 +430,12 @@ void InspectorBase::valueChanged(int idx, bool reset)
                   setValue(ii, val2);           // set UI, this may call valueChanged()
                   }
             e->undoChangeProperty(id, val2, ps);
+            if (e->isClef() && (id == Pid::SHOW_COURTESY)) {
+                  // copy into 'other clef' the ShowCourtesy set for this clef
+                  Clef* otherClef = toClef(e)->otherClef();
+                  if (otherClef)
+                        otherClef->undoChangeProperty(id, val2, ps);
+                  }
             }
       inspector->setInspectorEdit(true);
       checkDifferentValues(ii);
