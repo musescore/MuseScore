@@ -40,7 +40,13 @@ const std::vector<Tid>& InspectorFingering::allowedTextStyles()
             Tid::USER3,
             Tid::USER4,
             Tid::USER5,
-            Tid::USER6
+            Tid::USER6,
+            Tid::USER7,
+            Tid::USER8,
+            Tid::USER9,
+            Tid::USER10,
+            Tid::USER11,
+            Tid::USER12,
             };
 
       return _fingeringTextStyles;
