@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>229</width>
-    <height>221</height>
+    <width>348</width>
+    <height>126</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -76,8 +76,27 @@
       <property name="spacing">
        <number>3</number>
       </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Placement:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>tremoloPlacement</cstring>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="tremoloPlacement">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Tremolo range</string>
         </property>
@@ -93,19 +112,6 @@
         </item>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Placement:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>tremoloPlacement</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="2">
        <widget class="Ms::ResetButton" name="resetTremoloPlacement" native="true">
         <property name="sizePolicy">
@@ -116,6 +122,49 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Tremolo range' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelBeamStyle">
+        <property name="text">
+         <string>Beam style:</string>
+        </property>
+        <property name="buddy">
+         <cstring>beamStyle</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="beamStyle">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>Default</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>All lines attached to stem</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetBeamStyle" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Beam style' value</string>
         </property>
        </widget>
       </item>
@@ -135,6 +184,7 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>tremoloPlacement</tabstop>
+  <tabstop>beamStyle</tabstop>
  </tabstops>
  <resources/>
  <connections/>

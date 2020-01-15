@@ -528,8 +528,8 @@ void InspectorStaffTypeChange::setElement()
       InspectorBase::setElement();
       bool hasTabStaff = false;
       bool hasNonTabStaff = false;
-      for (Element* el : *(inspector->el())) {
-            StaffTypeChange* stc = toStaffTypeChange(el);
+      for (Element* ee : *(inspector->el())) {
+            StaffTypeChange* stc = toStaffTypeChange(ee);
             // tab staff shouldn't have key signature
             if (stc->staffType()->group() == StaffGroup::TAB) {
                   hasTabStaff = true;
@@ -1023,11 +1023,34 @@ InspectorTremolo::InspectorTremolo(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::TREMOLO_PLACEMENT, 0, g.tremoloPlacement, g.resetTremoloPlacement },
+            { Pid::TREMOLO_PLACEMENT,  0, g.tremoloPlacement, g.resetTremoloPlacement },
+            { Pid::TREMOLO_BEAM_STYLE, 0, g.beamStyle,        g.resetBeamStyle        }
             };
       const std::vector<InspectorPanel> ppList = { { g.title, g.panel } };
 
       mapSignals(iiList, ppList);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorTremolo::setElement()
+      {
+      InspectorElementBase::setElement();
+      bool hasNonMinimTwoNoteTremolo = false;
+      for (Element* ee : *(inspector->el())) {
+            if (toTremolo(ee)->durationType() != TDuration::DurationType::V_HALF) {
+                  hasNonMinimTwoNoteTremolo = true;
+                  break;
+                  }
+            }
+      // beam style setting is only appliable to minim two-note tremolo
+      if (hasNonMinimTwoNoteTremolo) {
+            g.labelBeamStyle->setVisible(false);
+            g.beamStyle->setVisible(false);
+            g.resetBeamStyle->setVisible(false);
+            }
       }
 
 //---------------------------------------------------------
