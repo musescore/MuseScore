@@ -40,7 +40,7 @@ class AccessibleScoreView : public QObject, QAccessibleWidget SCOREVIEW_INHERIT_
       //QAccessible::State state() const Q_DECL_OVERRIDE;
       QAccessible::Role role() const Q_DECL_OVERRIDE;
       QString text(QAccessible::Text t) const Q_DECL_OVERRIDE;
-      QWindow* window() const  Q_DECL_OVERRIDE;
+      //QWindow* window() const  Q_DECL_OVERRIDE;
       static QAccessibleInterface* ScoreViewFactory(const QString &classname, QObject *object);
 #ifdef SCOREVIEW_VALUEINTERFACE
       virtual void* interface_cast(QAccessible::InterfaceType t) Q_DECL_OVERRIDE;

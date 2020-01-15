@@ -92,15 +92,15 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
            }
       }
 
-#if 1
+#if 0
 // TODO: determine best option here
 // without this override, Qt determines window by looking upwards in hierarchy
 // we can duplicate that by returning nullptr
 // qApp->focusWindow() is the "old" return value,
 // but it could conceivably refer to something other than main window, which seems wrong
 QWindow* AccessibleScoreView::window() const {
-      return nullptr;
-      //return mscore->windowHandle();      // qApp->focusWindow();
+      //return nullptr;
+      return mscore->windowHandle();      // qApp->focusWindow();
       }
 #endif
 
@@ -362,10 +362,10 @@ void ScoreAccessibility::updateAccessibilityInfo()
       QAccessibleValueChangeEvent vcev(obj, w->score()->accessibleInfo());
       QAccessible::updateAccessibility(&vcev);
       // TODO:
-      // some screenreaders may repond better to other events
+      // some screenreaders may respond better to other events
       // the version of Qt used may also be relevant, and platform too
-      QAccessibleEvent ev1(obj, QAccessible::DescriptionChanged);
-      QAccessible::updateAccessibility(&ev1);
+      //QAccessibleStateChangeEvent ev1(obj, QAccessible::DescriptionChanged);
+      //QAccessible::updateAccessibility(&ev1);
       //QAccessibleEvent ev2(obj, QAccessible::NameChanged);
       //QAccessible::updateAccessibility(&ev2);
       }
