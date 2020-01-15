@@ -431,14 +431,17 @@ Clef* Clef::otherClef()
       Measure* otherMeas = nullptr;
       Segment* otherSegm = nullptr;
       Fraction segmTick  = segm->tick();
-      if (segmTick == meas->tick())                         // if clef segm is measure-initial
-            otherMeas = meas->prevMeasure();                // look for a previous measure
-      else if (segmTick == meas->tick() + meas->ticks())    // if clef segm is measure-final
-            otherMeas = meas->nextMeasure();                // look for a next measure
+      SegmentType type = SegmentType::Clef;
+      if (segmTick == meas->tick() && segm->segmentType() == SegmentType::HeaderClef) // if clef segm is measure-initial
+            otherMeas = meas->prevMeasure();                                          // look for a previous measure
+      else if (segmTick == meas->tick() + meas->ticks()) {                            // if clef segm is measure-final
+            otherMeas = meas->nextMeasure();                                          // look for a next measure
+            type = SegmentType::HeaderClef;
+            }
       if (!otherMeas)
             return nullptr;
       // look for a clef segment in the 'other' measure at the same tick of this clef segment
-      otherSegm = otherMeas->findSegment(SegmentType::Clef | SegmentType::HeaderClef, segmTick);
+      otherSegm = otherMeas->findSegment(type, segmTick);
       if (!otherSegm)
             return nullptr;
       // if any 'other' segment found, look for a clef in the same track as this

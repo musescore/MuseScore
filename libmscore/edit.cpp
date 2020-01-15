@@ -3937,6 +3937,9 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool forInstr
                         }
                   clef->setGenerated(false);
                   score->undo(new ChangeClefType(clef, cp, tp));
+                  Clef* oClef = clef->otherClef();
+                  if (oClef && !(oClef->generated()))
+                        score->undo(new ChangeClefType(oClef, cp, tp));
                   // change the clef in the mmRest if any
                   if (measure->hasMMRest()) {
                         Measure* mmMeasure = measure->mmRest();
