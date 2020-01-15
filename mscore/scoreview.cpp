@@ -4875,8 +4875,12 @@ void ScoreView::updateEditElement()
                   setEditElement(nullptr);
                   break;
             case SelState::LIST:
-                  if (Element* e = sel.element())
-                        setEditElement(e);
+                  if (Element* e = sel.element()) {
+                        if (editData.element == e)
+                              updateGrips();
+                        else
+                              setEditElement(e);
+                        }
                   break;
             }
       }
