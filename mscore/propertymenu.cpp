@@ -172,8 +172,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->isClef()) {
             genPropertyMenu1(e, popup);
             Clef* clef = toClef(e);
-            // if the clef is not generated (= not courtesy) add the specific menu item
-            if (!e->generated() && clef->measure() != score()->firstMeasure()) {
+            if (clef->measure() != score()->firstMeasure()) {
                   QAction* a = popup->addAction(toClef(e)->showCourtesy()
                      ? tr("Hide Courtesy Clef")
                      : tr("Show Courtesy Clef") );
