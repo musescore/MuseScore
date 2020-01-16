@@ -164,6 +164,7 @@ extern Ms::Synthesizer* createZerberus();
 #include "actioneventobserver.h"
 #include "widgets/telemetrypermissiondialog.h"
 #endif
+#include "telemetrymanager.h"
 
 namespace Ms {
 
@@ -283,6 +284,9 @@ static constexpr double SCALE_MIN  = 0.05;
 static constexpr double SCALE_STEP = 1.7;
 
 static const char* saveOnlineMenuItem = "file-save-online";
+
+std::unique_ptr<TelemetryManager> TelemetryManager::mgr;
+
 //---------------------------------------------------------
 // cmdInsertMeasure
 //---------------------------------------------------------
