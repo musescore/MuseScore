@@ -643,6 +643,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setRevision(QString& r)  {rev = r;}
       Q_INVOKABLE QString revision()            {return rev;}
       Q_INVOKABLE QString version()            {return VERSION;}
+      static QString fullVersion();
       Q_INVOKABLE void newFile();
       MasterScore* getNewFile();
       Q_INVOKABLE void loadFile(const QString& url);
