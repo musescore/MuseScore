@@ -348,6 +348,7 @@ add_library(mscoreapp STATIC
       instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
       musescore.cpp musescoredialogs.cpp navigator.cpp pagesettings.cpp palette.cpp
+      sessionstatusobserver.cpp
       timeline.cpp
       mixer.cpp mixertrackchannel.cpp mixertrackitem.cpp mixertrackpart.cpp mixerdetails.cpp
       parteditbase.cpp playpanel.cpp selectionwindow.cpp

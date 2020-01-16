@@ -26,6 +26,7 @@
 #include "updatechecker.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
+#include "sessionstatusobserver.h"
 
 namespace Ms {
 
@@ -402,6 +403,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool _lastFocusWindowIsQQuickView { false };
 
       std::unique_ptr<GeneralAutoUpdater> autoUpdater;
+
+      SessionStatusObserver sessionStatusObserver;
 
       //---------------------
 
