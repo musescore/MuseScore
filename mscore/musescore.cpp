@@ -7171,6 +7171,21 @@ void MuseScore::updateUiStyleAndTheme()
       }
 
 //---------------------------------------------------------
+//   fullVersion
+///   \return Full version of MuseScore, including version
+///   label (e.g. 3.4.0-Beta).
+//---------------------------------------------------------
+
+QString MuseScore::fullVersion()
+      {
+      QString version(VERSION);
+      const QString versionLabel(VERSION_LABEL);
+      if (!versionLabel.isEmpty())
+            version.append("-").append(versionLabel);
+      return version;
+      }
+
+//---------------------------------------------------------
 //   initApplication
 //---------------------------------------------------------
 
@@ -7197,7 +7212,7 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
 
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
-      QCoreApplication::setApplicationVersion(VERSION);
+      QCoreApplication::setApplicationVersion(MuseScore::fullVersion());
 
 #ifdef BUILD_CRASH_REPORTER
       {
