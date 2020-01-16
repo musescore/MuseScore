@@ -163,6 +163,13 @@ class Beam final : public Element {
       std::vector<QPointF> gripsPositions(const EditData&) const override;
 
       static IconType iconType(Mode);
+
+      QRectF drag(EditData &) override;
+      bool isMovable() const override;
+      void startDrag(EditData &) override;
+
+    private:
+      void initBeamEditData(EditData &ed);
       };
 
 

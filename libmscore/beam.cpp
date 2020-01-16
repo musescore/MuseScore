@@ -2232,23 +2232,7 @@ void Beam::reset()
 
 void Beam::startEdit(EditData& ed)
       {
-      BeamEditData* bed = new BeamEditData();
-      bed->e    = this;
-      bed->editFragment = 0;
-      ed.addData(bed);
-
-      QPointF pt(ed.startMove - pagePos());
-      qreal ydiff = 100000000.0;
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
-      int i = 0;
-      for (BeamFragment* f : fragments) {
-            qreal d = fabs(f->py1[idx] - pt.y());
-            if (d < ydiff) {
-                  ydiff = d;
-                  bed->editFragment = i;
-                  }
-            ++i;
-            }
+      initBeamEditData(ed);
       }
 
 //---------------------------------------------------------
@@ -2525,5 +2509,75 @@ IconType Beam::iconType(Mode mode)
                   break;
             }
       return IconType::NONE;
+}
+
+//---------------------------------------------------------
+//   drag
+//---------------------------------------------------------
+
+QRectF Beam::drag(EditData& ed)
+      {
+      int idx  = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      qreal dy = ed.pos.y() - ed.lastPos.y();
+      BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
+      BeamFragment* f = fragments[bed->editFragment];
+
+      qreal y1 = f->py1[idx];
+      qreal y2 = f->py2[idx];
+
+      y1 += dy;
+      y2 += dy;
+
+      qreal _spatium = spatium();
+      // Because of the logic in Beam::setProperty(),
+      // changing Pid::BEAM_POS only has an effect if Pid::USER_MODIFIED is true.
+      undoChangeProperty(Pid::USER_MODIFIED, true);
+      undoChangeProperty(Pid::BEAM_POS, QPointF(y1 / _spatium, y2 / _spatium));
+      undoChangeProperty(Pid::GENERATED, false);
+
+      triggerLayout();
+
+      return canvasBoundingRect();
       }
+
+//---------------------------------------------------------
+//   isMovable
+//---------------------------------------------------------
+bool Beam::isMovable() const
+      {
+      return true;
+      }
+
+//---------------------------------------------------------
+//   initBeamEditData
+//---------------------------------------------------------
+void Beam::initBeamEditData(EditData& ed)
+      {
+      BeamEditData* bed = new BeamEditData();
+      bed->e    = this;
+      bed->editFragment = 0;
+      ed.addData(bed);
+
+      QPointF pt(ed.startMove - pagePos());
+      qreal ydiff = 100000000.0;
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int i = 0;
+      for (BeamFragment* f : fragments) {
+            qreal d = fabs(f->py1[idx] - pt.y());
+            if (d < ydiff) {
+                  ydiff = d;
+                  bed->editFragment = i;
+                  }
+            ++i;
+            }
+      }
+
+//---------------------------------------------------------
+//   startDrag
+//---------------------------------------------------------
+void Beam::startDrag(EditData& editData)
+      {
+      initBeamEditData(editData);
+      }
+
 }
