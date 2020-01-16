@@ -156,11 +156,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->isTimeSig()) {
             genPropertyMenu1(e, popup);
             TimeSig* ts = toTimeSig(e);
-            int _track = ts->track();
-            // if the time sig. is not generated (= not courtesy) and is in track 0
-            // add the specific menu item
+            // if the time sig. is not generated (= not courtesy) add the specific menu item
             QAction* a;
-            if (!ts->generated() && !_track && ts->measure() != score()->firstMeasure()) {
+            if (!ts->generated() && ts->measure() != score()->firstMeasure()) {
                   a = popup->addAction(ts->showCourtesySig()
                      ? tr("Hide Courtesy Time Signature")
                      : tr("Show Courtesy Time Signature") );
@@ -173,10 +171,10 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->isClef()) {
             genPropertyMenu1(e, popup);
-            Clef* clef = static_cast<Clef*>(e);
+            Clef* clef = toClef(e);
             // if the clef is not generated (= not courtesy) add the specific menu item
             if (!e->generated() && clef->measure() != score()->firstMeasure()) {
-                  QAction* a = popup->addAction(static_cast<Clef*>(e)->showCourtesy()
+                  QAction* a = popup->addAction(toClef(e)->showCourtesy()
                      ? tr("Hide Courtesy Clef")
                      : tr("Show Courtesy Clef") );
                         a->setData("clef-courtesy");
@@ -207,7 +205,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
       else if (e->isKeySig()) {
             genPropertyMenu1(e, popup);
-            KeySig* ks = static_cast<KeySig*>(e);
+            KeySig* ks = toKeySig(e);
             if (!e->generated() && ks->measure() != score()->firstMeasure()) {
                   QAction* a = popup->addAction(ks->showCourtesy()
                      ? tr("Hide Courtesy Key Signature")
@@ -234,7 +232,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             a = new QAction(tr("Measure Properties…"), 0);
             a->setData("measure-props");
             // disable property changes for multi measure rests
-            a->setEnabled(!static_cast<Rest*>(e)->segment()->measure()->isMMRest());
+            a->setEnabled(!toRest(e)->segment()->measure()->isMMRest());
 
             popup->insertAction(b, a);
             genPropertyMenu1(e, popup);
@@ -252,7 +250,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             a = new QAction(tr("Measure Properties…"), 0);
             a->setData("measure-props");
             // disable property changes for multi measure rests
-            a->setEnabled(!static_cast<Note*>(e)->chord()->segment()->measure()->isMMRest());
+            a->setEnabled(!toNote(e)->chord()->segment()->measure()->isMMRest());
 
             popup->insertAction(b, a);
 
@@ -290,9 +288,9 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "measure-props") {
             Measure* m = 0;
             if (e->type() == ElementType::NOTE)
-                  m = static_cast<Note*>(e)->chord()->segment()->measure();
+                  m = toNote(e)->chord()->segment()->measure();
             else if (e->type() == ElementType::REST)
-                  m = static_cast<Rest*>(e)->segment()->measure();
+                  m = toRest(e)->segment()->measure();
             if (m) {
                   MeasureProperties vp(m);
                   vp.exec();
@@ -353,14 +351,17 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             startEditMode(s);
             }
       if (cmd == "ts-courtesy") {
-            TimeSig* ts = static_cast<TimeSig*>(e);
-            ts->undoChangeProperty(Pid::SHOW_COURTESY, !ts->showCourtesySig());
+            for (int stave = 0; stave < score()->nstaves(); stave++) {
+                  TimeSig* ts = toTimeSig(toSegment(e->parent())->element(stave*VOICES));
+                  if (ts)
+                        ts->undoChangeProperty(Pid::SHOW_COURTESY, !ts->showCourtesySig());
+                  }
             }
       else if (cmd == "ts-props") {
             editTimeSigProperties(toTimeSig(e));
             }
       else if (cmd == "smallNote")
-            e->undoChangeProperty(Pid::SMALL, !static_cast<Note*>(e)->small());
+            e->undoChangeProperty(Pid::SMALL, !toNote(e)->small());
       else if (cmd == "clef-courtesy") {
             Clef* clef = toClef(e);
             bool show = !clef->showCourtesy();
@@ -374,15 +375,15 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
 #if 0
       else if (cmd == "text-style") {
-            Text* t = static_cast<Text*>(e);
+            Text* t = toText(e);
             QString name = t->textStyle().name();
             TextStyleDialog ts(0, score());
             ts.setPage(name);
             ts.exec();
             }
       else if (cmd == "text-props") {
-            Text* ot    = static_cast<Text*>(e);
-            Text* nText = static_cast<Text*>(ot->clone());
+            Text* ot    = toText(e);
+            Text* nText = toText(ot->clone());
             TextProperties tp(nText);
             int rv = tp.exec();
             if (rv) {
@@ -400,11 +401,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
 #endif
       else if (cmd == "key-courtesy") {
-            KeySig* ks = static_cast<KeySig*>(e);
-            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), !ks->showCourtesy() /*, ks->showNaturals()*/));
+            for (int stave = 0; stave < score()->nstaves(); stave++) {
+                  KeySig* ks = toKeySig(toSegment(e->parent())->element(stave*VOICES));
+                  score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), !ks->showCourtesy() /*, ks->showNaturals()*/));
+                  }
             }
       else if (cmd == "ss-props") {
-            StaffState* ss = static_cast<StaffState*>(e);
+            StaffState* ss = toStaffState(e);
             SelectInstrument si(ss->instrument(), 0);
             if (si.exec()) {
                   const InstrumentTemplate* it = si.instrTemplate();
