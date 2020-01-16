@@ -1075,6 +1075,17 @@ void populatePlacement(QComboBox* b)
       b->addItem(b->QObject::tr("Below"), int(Placement::BELOW));
       }
 
+
+//---------------------------------------------------------
+//   populateSystemRelativePlacement
+//---------------------------------------------------------
+
+void populateSystemRelativePlacement(QComboBox* b)
+      {
+      b->clear();
+      b->addItem(b->QObject::tr("Above system"), int(Placement::ABOVE));
+      b->addItem(b->QObject::tr("Below system"), int(Placement::BELOW));
+      }
 //---------------------------------------------------------
 //   InspectorTempoText
 //---------------------------------------------------------

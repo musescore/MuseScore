@@ -33,6 +33,8 @@
 
 namespace Ms {
 
+extern void populatePlacement(QComboBox*);
+
 //---------------------------------------------------------
 //   EditStyle
 //---------------------------------------------------------
@@ -279,7 +281,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::showMeasureNumberOne,     false, showFirstMeasureNumber,       0 },
       { Sid::measureNumberInterval,    false, intervalMeasureNumber,        0 },
       { Sid::measureNumberSystem,      false, showEverySystemMeasureNumber, 0 },
-      { Sid::measureNumberAllStaffs,   false, showAllStaffsMeasureNumber,   0 },
+      { Sid::measureNumberAllStaves,   false, showAllStavesMeasureNumber,   0 },
+      { Sid::measureNumberSystemPlacement, false, measureNumberSystemPlacement, 0 },
 
       { Sid::beamDistance,             true,  beamDistance,                 0 },
       { Sid::beamNoSlope,              false, beamNoSlope,                  0 },
@@ -371,11 +374,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       for (QComboBox* cb : std::vector<QComboBox*> {
             lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
             trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
-            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement
+            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement,
+            measureNumberSystemPlacement
             }) {
-            cb->clear();
-            cb->addItem(tr("Above"), int(Placement::ABOVE));
-            cb->addItem(tr("Below"), int(Placement::BELOW));
+            populatePlacement(cb);
             }
 
       autoplaceVerticalAlignRange->clear();

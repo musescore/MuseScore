@@ -1165,23 +1165,23 @@ Line::Line() {
       }
 
 Line::~Line() {
-      for(int i=0; i<staffs_.size(); ++i){
-            delete staffs_[i];
+      for(int i=0; i<staves_.size(); ++i){
+            delete staves_[i];
             }
-      staffs_.clear();
+      staves_.clear();
       }
 
 void Line::addStaff(Staff* staff) {
-      staffs_.push_back(staff);
+      staves_.push_back(staff);
       }
 
 int Line::getStaffCount() const {
-      return staffs_.size();
+      return staves_.size();
       }
 
 Staff* Line::getStaff(int idx) const {
-      if (idx >= 0 && idx < (int) staffs_.size()) {
-            return staffs_[idx];
+      if (idx >= 0 && idx < (int) staves_.size()) {
+            return staves_[idx];
             }
 
       return 0;

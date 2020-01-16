@@ -2069,7 +2069,7 @@
            <bool>true</bool>
           </property>
           <layout class="QGridLayout" name="_2">
-           <item row="2" column="2">
+           <item row="3" column="2">
             <spacer name="horizontalSpacer_18">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -2082,14 +2082,28 @@
              </property>
             </spacer>
            </item>
-           <item row="2" column="0">
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="showFirstMeasureNumber">
+             <property name="text">
+              <string>Show first</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="showAllStavesMeasureNumber">
+             <property name="text">
+              <string>All staves</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
             <widget class="QRadioButton" name="showEverySystemMeasureNumber">
              <property name="text">
               <string>Every system</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="0" colspan="2">
+           <item row="5" column="0" colspan="2">
             <layout class="QHBoxLayout" name="horizontalLayout_8">
              <item>
               <widget class="QRadioButton" name="showIntervalMeasureNumber">
@@ -2113,19 +2127,19 @@
              </item>
             </layout>
            </item>
-           <item row="0" column="0">
-            <widget class="QCheckBox" name="showFirstMeasureNumber">
-             <property name="text">
-              <string>Show first</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="showAllStaffsMeasureNumber">
-             <property name="text">
-              <string>All staves</string>
-             </property>
-            </widget>
+           <item row="6" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QLabel" name="label_92">
+               <property name="text">
+                <string>Placement:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="measureNumberSystemPlacement"/>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>
@@ -9354,7 +9368,7 @@
               <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="extensionAdjust">
                 <property name="minimum">
-                 <double>-99.99</double>
+                 <double>-99.989999999999995</double>
                 </property>
                </widget>
               </item>
@@ -9388,7 +9402,7 @@
               <item row="1" column="4">
                <widget class="QDoubleSpinBox" name="modifierAdjust">
                 <property name="minimum">
-                 <double>-99.99</double>
+                 <double>-99.989999999999995</double>
                 </property>
                </widget>
               </item>
@@ -10201,8 +10215,7 @@
                   <number>0</number>
                  </property>
                  <item row="0" column="1">
-                  <widget class="Awl::ColorLabel" name="textStyleFrameForeground">
-                  </widget>
+                  <widget class="Awl::ColorLabel" name="textStyleFrameForeground"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="label_205">
@@ -10287,8 +10300,7 @@
                   <widget class="QDoubleSpinBox" name="textStyleFramePadding"/>
                  </item>
                  <item row="1" column="1">
-                  <widget class="Awl::ColorLabel" name="textStyleFrameBackground">
-                  </widget>
+                  <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
                  </item>
                  <item row="3" column="2">
                   <widget class="QToolButton" name="resetTextStyleFramePadding">
@@ -10348,8 +10360,7 @@
             </widget>
            </item>
            <item row="6" column="1">
-            <widget class="Awl::ColorLabel" name="textStyleColor">
-            </widget>
+            <widget class="Awl::ColorLabel" name="textStyleColor"/>
            </item>
            <item row="7" column="1">
             <widget class="Ms::OffsetSelect" name="textStyleOffset" native="true"/>
@@ -10606,7 +10617,7 @@
   <tabstop>evenFooterR</tabstop>
   <tabstop>showMeasureNumber</tabstop>
   <tabstop>showFirstMeasureNumber</tabstop>
-  <tabstop>showAllStaffsMeasureNumber</tabstop>
+  <tabstop>showAllStavesMeasureNumber</tabstop>
   <tabstop>showEverySystemMeasureNumber</tabstop>
   <tabstop>showIntervalMeasureNumber</tabstop>
   <tabstop>intervalMeasureNumber</tabstop>

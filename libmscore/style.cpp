@@ -361,7 +361,8 @@ static const StyleType styleTypes[] {
       { Sid::showMeasureNumberOne,    "showMeasureNumberOne",    QVariant(false) },
       { Sid::measureNumberInterval,   "measureNumberInterval",   QVariant(5) },
       { Sid::measureNumberSystem,     "measureNumberSystem",     QVariant(true) },
-      { Sid::measureNumberAllStaffs,  "measureNumberAllStaffs",  QVariant(false) },
+      { Sid::measureNumberAllStaves,  "measureNumberAllStaffs",  QVariant(false) }, // need to keep staffs and not staves here for backward compatibility
+      { Sid::measureNumberSystemPlacement, "measureNumberSystemPlacement", int(Placement::ABOVE) },
       { Sid::smallNoteMag,            "smallNoteMag",            QVariant(.7) },
       { Sid::graceNoteMag,            "graceNoteMag",            QVariant(0.7) },
       { Sid::smallStaffMag,           "smallStaffMag",           QVariant(0.7) },
@@ -821,7 +822,7 @@ static const StyleType styleTypes[] {
       { Sid::measureNumberFontStyle,        "measureNumberFontStyle",       int(FontStyle::Normal) },
       { Sid::measureNumberColor,            "measureNumberColor",           QColor(0, 0, 0, 255) },
       { Sid::measureNumberOffset,           "measureNumberOffset",          QPointF(0.0, -2.0) },
-      { Sid::measureNumberOffsetType,       "measureNumberOffsetType",      int(OffsetType::SPATIUM)   },
+      { Sid::measureNumberOffsetType,       "measureNumberOffsetType",      int(OffsetType::SPATIUM) },
       { Sid::measureNumberAlign,            "measureNumberAlign",           QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
       { Sid::measureNumberFrameType,        "measureNumberFrameType",       int(FrameType::NO_FRAME) },
       { Sid::measureNumberFramePadding,     "measureNumberFramePadding",    0.2 },

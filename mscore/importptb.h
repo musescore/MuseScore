@@ -242,7 +242,7 @@ class PowerTab {
             struct ptTrack;
             struct ptSection {
                   int                                 number{ 0 };
-                  int                                 staffs{ 0 };
+                  int                                 staves{ 0 };
                   std::string                   partName;
                   char                          partMarker;
                   std::vector<ptPosition> positions;

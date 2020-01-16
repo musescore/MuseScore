@@ -333,7 +333,8 @@ enum class Sid {
       measureNumberInterval,
       measureNumberSystem,
 
-      measureNumberAllStaffs,
+      measureNumberAllStaves,
+      measureNumberSystemPlacement,
       smallNoteMag,
       graceNoteMag,
       smallStaffMag,

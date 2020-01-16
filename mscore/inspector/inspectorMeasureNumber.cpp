@@ -11,10 +11,11 @@
 //=============================================================================
 
 #include "inspectorMeasureNumber.h"
-#include "libmscore/score.h"
-#include "icons.h"
+#include "libmscore/measurenumber.h"
 
 namespace Ms {
+
+extern void populateSystemRelativePlacement(QComboBox*);
 
 //---------------------------------------------------------
 //   InspectorMeasureNumber
@@ -23,14 +24,19 @@ namespace Ms {
 InspectorMeasureNumber::InspectorMeasureNumber(QWidget* parent)
    : InspectorTextBase(parent)
       {
+      mn.setupUi(addWidget());
+
       const std::vector<InspectorItem> iiList = {
+            { Pid::SUB_STYLE, 0, mn.style,     mn.resetStyle },
+            { Pid::PLACEMENT, 0, mn.placement, mn.resetPlacement  }
             };
       const std::vector<InspectorPanel> ppList = {
-            { t.title, t.panel },
+            { mn.title, mn.panel },
             };
 
+      populateStyle(mn.style);
+      populateSystemRelativePlacement(mn.placement);
       mapSignals(iiList, ppList);
       }
 
-}
-
+} // namespace Ms

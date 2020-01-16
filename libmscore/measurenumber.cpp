@@ -10,6 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "score.h"
 #include "measurenumber.h"
 // #include "xml.h"
 #include "measure.h"
@@ -22,6 +23,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle measureNumberStyle {
+      { Sid::measureNumberSystemPlacement, Pid::PLACEMENT },
       };
 
 //---------------------------------------------------------
@@ -30,9 +32,9 @@ static const ElementStyle measureNumberStyle {
 
 MeasureNumber::MeasureNumber(Score* s) : TextBase(s, Tid::MEASURE_NUMBER)
       {
-      setFlag(ElementFlag::ON_STAFF, true);
-      resetProperty(Pid::PLACEMENT);
       initElementStyle(&measureNumberStyle);
+      setFlag(ElementFlag::ON_STAFF, true);
+      setSystemFlag(true);
       }
 
 //---------------------------------------------------------
@@ -45,7 +47,7 @@ QVariant MeasureNumber::propertyDefault(Pid id) const
             case Pid::SUB_STYLE:
                   return int(Tid::MEASURE_NUMBER);
             case Pid::PLACEMENT:
-                  return int (Placement::ABOVE);
+                  return int(Placement::ABOVE);
             default:
                   return TextBase::propertyDefault(id);
             }
@@ -64,14 +66,11 @@ void MeasureNumber::layout()
       //      setOffset(propertyDefault(Pid::OFFSET).toPointF());
 
       const StaffType* st = staff()->constStaffType(measure()->tick());
-      if (st->lines() == 1 && staff())
-            rypos() = (placeBelow() ? 2.0 : -2.0) * spatium();
-      else {
-            if (placeBelow())
-                  rypos() = staff() ? staff()->height() : 0.0;
-            }
+      if (staff() && st->lines() == 1)
+            rypos() = (placeBelow() ? 6.0 : -1.0) * spatium();
+      else
+            rypos() = (staff() ? staff()->height() : 0.0) + (placeBelow() ? 5.0 : -4.0) * spatium();
       TextBase::layout1();
       }
 
-}
-
+} // namespace Ms

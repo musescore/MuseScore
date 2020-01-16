@@ -2267,7 +2267,7 @@ void Score::createBeams(Measure* measure)
       for (int track = 0; track < ntracks(); ++track) {
             Staff* stf = staff(track2staff(track));
 
-            // don’t compute beams for invisible staffs and tablature without stems
+            // don’t compute beams for invisible staves and tablature without stems
             if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->stemless()))
                   continue;
 
@@ -2475,7 +2475,7 @@ static void breakCrossMeasureBeams(Measure* measure)
       for (int track = 0; track < ntracks; ++track) {
             Staff* stf = score->staff(track2staff(track));
 
-            // don’t compute beams for invisible staffs and tablature without stems
+            // don’t compute beams for invisible staves and tablature without stems
             if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->stemless()))
                   continue;
 

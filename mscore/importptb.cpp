@@ -531,10 +531,10 @@ std::vector<int> PowerTab::getStaffMap(ptSection& sec)
                   }
             }
 
-      if (result.empty() || int(result.size()) < sec.staffs) {
+      if (result.empty() || int(result.size()) < sec.staves) {
             result.clear();
-            if (int(lastStaffMap.size()) < sec.staffs) {
-                  for (int i = 0; i < sec.staffs; ++i) {
+            if (int(lastStaffMap.size()) < sec.staves) {
+                  for (int i = 0; i < sec.staves; ++i) {
                         result.push_back(i + staffInc);
                         }
                   }
@@ -931,7 +931,7 @@ void PowerTab::addToScore(ptSection& sec)
 void PowerTab::ptSection::copyTracks(ptTrack* track)
       {
       //if not found GuitarIn in section or all tracks are read -> return
-      if (staffs == int(staffMap.size())) {
+      if (staves == int(staffMap.size())) {
             return;
             }
 
@@ -1017,12 +1017,12 @@ void PowerTab::readSection(ptSection& sec)
                   readShort();
             }
       // Staff
-      sec.staffs = readHeaderItems();
+      sec.staves = readHeaderItems();
       sec.staffMap = getStaffMap(sec);
-      for (int i = 0; i < sec.staffs; ++i) {
+      for (int i = 0; i < sec.staves; ++i) {
             int staff = sec.staffMap[i];
             readStaff(staff, sec);
-            if (i < sec.staffs - 1) {
+            if (i < sec.staves - 1) {
                   readShort();
                   }
             }

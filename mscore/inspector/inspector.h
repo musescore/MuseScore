@@ -464,6 +464,7 @@ class InspectorEmpty : public InspectorBase {
       };
 
 extern void populatePlacement(QComboBox*);
+extern void populateSystemRelativePlacement(QComboBox*);
 
 } // namespace Ms
 #endif

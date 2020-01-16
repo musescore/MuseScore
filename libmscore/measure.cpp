@@ -474,40 +474,54 @@ qreal Measure::tick2pos(Fraction tck) const
 
 void Measure::layoutMeasureNumber()
       {
-      bool smn = false;
+      bool show = false;
 
       if (_noMode == MeasureNumberMode::SHOW)
-            smn = true;
+            show = true;
       else if (_noMode == MeasureNumberMode::HIDE)
-            smn = false;
-      else {
+            show = false;
+      else { // MeasureNumberMode::AUTO
             if (score()->styleB(Sid::showMeasureNumber)
                && !irregular()
                && (no() || score()->styleB(Sid::showMeasureNumberOne))) {
                   if (score()->styleB(Sid::measureNumberSystem))
-                        smn = (system()->firstMeasure() == this) || (prevMeasure() && prevMeasure()->irregular() && system()->firstMeasure() == prevMeasure());
+                        show = (system()->firstMeasure() == this) || (prevMeasure() && prevMeasure()->irregular() && system()->firstMeasure() == prevMeasure());
                   else {
-                        smn = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
+                        show = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
                               ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) ) ||
                               (score()->styleI(Sid::measureNumberInterval) == 1);
                         }
                   }
             }
-      QString s;
-      if (smn)
-            s = QString("%1").arg(no() + 1);
+      QString measureNumber;
+      if (show)
+            measureNumber.setNum(no() + 1);
       int nn = 1;
-      bool nas = score()->styleB(Sid::measureNumberAllStaffs);
+      bool numberAllStaves = score()->styleB(Sid::measureNumberAllStaves);
 
-      if (!nas) {
-            //find first non invisible staff
-            for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-                  MStaff* ms = _mstaves[staffIdx];
-                  SysStaff* ss  = system()->staff(staffIdx);
-                  Staff* staff = score()->staff(staffIdx);
-                  if (ms->visible() && staff->show() && ss->show()) {
-                        nn = staffIdx;
-                        break;
+      if (!numberAllStaves) { // number one staff by system
+            if (score()->styleI(Sid::measureNumberSystemPlacement) == int(Placement::ABOVE)) {
+                  //find first non invisible staff
+                  for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
+                        MStaff* ms = _mstaves[staffIdx];
+                        SysStaff* ss = system()->staff(staffIdx);
+                        Staff* staff = score()->staff(staffIdx);
+                        if (ms->visible() && staff->show() && ss->show()) {
+                              nn = staffIdx;
+                              break;
+                              }
+                        }
+                  }
+            else {
+                  //find last non invisible staff
+                  for (int staffIdx = _mstaves.size() - 1; staffIdx > -1; --staffIdx) {
+                        MStaff* ms = _mstaves[staffIdx];
+                        SysStaff* ss = system()->staff(staffIdx);
+                        Staff* staff = score()->staff(staffIdx);
+                        if (ms->visible() && staff->show() && ss->show()) {
+                              nn = staffIdx;
+                              break;
+                              }
                         }
                   }
             }
@@ -515,16 +529,15 @@ void Measure::layoutMeasureNumber()
             MStaff* ms       = _mstaves[staffIdx];
             MeasureNumber* t = ms->noText();
             if (t)
-                  t->setTrack(staffIdx * VOICES);
-            if (smn && ((staffIdx == nn) || nas)) {
+                  t->setTrack(staffIdx* VOICES);
+            if (show && ((staffIdx == nn) || numberAllStaves)) {
                   if (t == 0) {
                         t = new MeasureNumber(score());
                         t->setTrack(staffIdx * VOICES);
                         t->setGenerated(true);
-                        t->setParent(this);
                         add(t);
                         }
-                  t->setXmlText(s);
+                  t->setXmlText(measureNumber);
                   t->layout();
                   }
             else {
@@ -569,74 +582,6 @@ void Measure::layout2()
             }
 
       MeasureBase::layout();  // layout LAYOUT_BREAK elements
-#if 0
-      //---------------------------------------------------
-      //   set measure number
-      //---------------------------------------------------
-
-      bool smn = false;
-
-      if (_noMode == MeasureNumberMode::SHOW)
-            smn = true;
-      else if (_noMode == MeasureNumberMode::HIDE)
-            smn = false;
-      else {
-            if (score()->styleB(Sid::showMeasureNumber)
-               && !irregular()
-               && (no() || score()->styleB(Sid::showMeasureNumberOne))) {
-                  if (score()->styleB(Sid::measureNumberSystem))
-                        smn = (system()->firstMeasure() == this) || (prevMeasure() && prevMeasure()->irregular() && system()->firstMeasure() == prevMeasure());
-                  else {
-                        smn = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
-                              ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) ) ||
-                              (score()->styleI(Sid::measureNumberInterval) == 1);
-                        }
-                  }
-            }
-      QString s;
-      if (smn)
-            s = QString("%1").arg(no() + 1);
-      int nn = 1;
-      bool nas = score()->styleB(Sid::measureNumberAllStaffs);
-
-      if (!nas) {
-            //find first non invisible staff
-            for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-                  MStaff* ms = _mstaves[staffIdx];
-                  SysStaff* ss  = system()->staff(staffIdx);
-                  Staff* staff = score()->staff(staffIdx);
-                  if (ms->visible() && staff->show() && ss->show()) {
-                        nn = staffIdx;
-                        break;
-                        }
-                  }
-            }
-      for (int staffIdx = 0; staffIdx < int(_mstaves.size()); ++staffIdx) {
-            MStaff* ms       = _mstaves[staffIdx];
-            MeasureNumber* t = ms->noText();
-            if (t)
-                  t->setTrack(staffIdx * VOICES);
-            if (smn && ((staffIdx == nn) || nas)) {
-                  if (t == 0) {
-                        t = new MeasureNumber(score());
-                        t->setTrack(staffIdx * VOICES);
-                        t->setGenerated(true);
-                        t->setParent(this);
-                        add(t);
-                        }
-                  t->setXmlText(s);
-                  t->layout();
-                  }
-            else {
-                  if (t) {
-                        if (t->generated())
-                              score()->removeElement(t);
-                        else
-                              score()->undo(new RemoveElement(t));
-                        }
-                  }
-            }
-#endif
 
       //---------------------------------------------------
       //    layout ties
