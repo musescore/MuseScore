@@ -87,6 +87,30 @@ class InspectorBase : public QWidget {
       friend class InspectorScriptEntry;
       };
 
+//---------------------------------------------------------
+//   InspectorEventObserver
+//---------------------------------------------------------
+
+class InspectorEventObserver {
+      static std::unique_ptr<InspectorEventObserver> i;
+
+      InspectorEventObserver() = default;
+
+   public:
+      enum EventType {
+            PropertyChange,
+            PropertyReset,
+            PropertySetStyle,
+            };
+      void event(EventType evtType, const InspectorItem& ii, const Element* e);
+
+      static InspectorEventObserver* instance()
+            {
+            if (!i)
+                  i.reset(new InspectorEventObserver());
+            return i.get();
+            }
+      };
 
 } // namespace Ms
 #endif
