@@ -31,7 +31,7 @@ enum class TremoloPlacement : signed char {
       DEFAULT = 0, STEM_CENTER
       };
 
-// only appliable to minim two-note tremolo
+// only appliable to minim two-note tremolo in non-TAB staves
 enum class TremoloBeamStyle : signed char {
       DEFAULT = 0, ALL_LINES_ATTACHED
       };

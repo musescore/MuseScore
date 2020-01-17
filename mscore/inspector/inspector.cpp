@@ -1039,14 +1039,19 @@ void InspectorTremolo::setElement()
       {
       InspectorElementBase::setElement();
       bool hasNonMinimTwoNoteTremolo = false;
+      bool hasTabStaffTremolo = false;
       for (Element* ee : *(inspector->el())) {
             if (toTremolo(ee)->durationType() != TDuration::DurationType::V_HALF) {
                   hasNonMinimTwoNoteTremolo = true;
                   break;
                   }
+            if (toTremolo(ee)->staffType()->group() == StaffGroup::TAB) {
+                  hasTabStaffTremolo = true;
+                  break;
+                  }
             }
-      // beam style setting is only appliable to minim two-note tremolo
-      if (hasNonMinimTwoNoteTremolo) {
+      // beam style setting is only appliable to minim two-note tremolo in non-TAB staves
+      if (hasNonMinimTwoNoteTremolo || hasTabStaffTremolo) {
             g.labelBeamStyle->setVisible(false);
             g.beamStyle->setVisible(false);
             g.resetBeamStyle->setVisible(false);
