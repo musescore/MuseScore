@@ -12,6 +12,7 @@
 
 #include "tremolo.h"
 #include "score.h"
+#include "staff.h"
 #include "style.h"
 #include "chord.h"
 #include "note.h"
@@ -397,8 +398,9 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
       {
       bool defaultStyle = (beamStyle() == TremoloBeamStyle::DEFAULT);
 
-      // non-default beam styles are only appliable to minim two-note tremolo
-      if (durationType() != TDuration::DurationType::V_HALF)
+      // non-default beam styles are only appliable to minim two-note tremolo in non-TAB staves
+      if (durationType() != TDuration::DurationType::V_HALF
+         || staff()->staffType(tick())->group() == StaffGroup::TAB)
             defaultStyle = true;
 
       y += (h - bbox().height()) * .5;
