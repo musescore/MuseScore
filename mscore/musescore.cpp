@@ -164,6 +164,7 @@ extern Ms::Synthesizer* createZerberus();
 #include "actioneventobserver.h"
 #include "widgets/telemetrypermissiondialog.h"
 #endif
+#include "telemetrymanager.h"
 
 namespace Ms {
 
@@ -283,6 +284,9 @@ static constexpr double SCALE_MIN  = 0.05;
 static constexpr double SCALE_STEP = 1.7;
 
 static const char* saveOnlineMenuItem = "file-save-online";
+
+std::unique_ptr<TelemetryManager> TelemetryManager::mgr;
+
 //---------------------------------------------------------
 // cmdInsertMeasure
 //---------------------------------------------------------
@@ -4918,7 +4922,7 @@ void MuseScore::writeSessionFile(bool cleanExit)
             }
       XmlWriter xml(0, &f);
       xml.header();
-      xml.stag("museScore version=\"" MSC_VERSION "\"");
+      xml.stag(QStringLiteral("museScore version=\"" MSC_VERSION "\" full-version=\"%1\"").arg(fullVersion()));
       xml.tagE(cleanExit ? "clean" : "dirty");
 
       foreach(MasterScore* score, scoreList) {
@@ -5058,6 +5062,15 @@ void MuseScore::autoSaveTimerTimeout()
             }
       }
 
+class CallOnReturn {
+      std::function<void()> f;
+   public:
+      CallOnReturn(std::function<void()> func) : f(std::move(func)) {}
+      CallOnReturn(const CallOnReturn&) = delete;
+      CallOnReturn& operator=(const CallOnReturn&) = delete;
+      ~CallOnReturn() { f(); }
+      };
+
 //---------------------------------------------------------
 //   restoreSession
 //    Restore last session. If "always" is true, then restore
@@ -5068,6 +5081,14 @@ void MuseScore::autoSaveTimerTimeout()
 
 bool MuseScore::restoreSession(bool always)
       {
+      bool sessionFileFound = false;
+      bool cleanExit = false;
+      QString sessionFullVersion;
+
+      CallOnReturn onReturn([this, &sessionFileFound, &sessionFullVersion, &cleanExit]() {
+            sessionStatusObserver.prevSessionStatus(sessionFileFound, sessionFullVersion, cleanExit);
+            });
+
       QFile f(dataPath + "/session");
       if (!f.exists())
             return false;
@@ -5075,22 +5096,24 @@ bool MuseScore::restoreSession(bool always)
             qDebug("Cannot open session file <%s>", qPrintable(f.fileName()));
             return false;
             }
+      sessionFileFound = true;
+
       XmlReader e(&f);
       int tab = 0;
       int idx = -1;
-      bool cleanExit = false;
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   /* QString version = e.attribute(QString("version"));
                   QStringList sl  = version.split('.');
                   int v           = sl[0].toInt() * 100 + sl[1].toInt();
                   */
+                  sessionFullVersion = e.attribute("full-version");
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "clean") {
+                              cleanExit = true;
                               if (!always)
                                     return false;
-                              cleanExit = true;
                               e.readNext();
                               }
                         else if (tag == "dirty") {
@@ -7171,6 +7194,21 @@ void MuseScore::updateUiStyleAndTheme()
       }
 
 //---------------------------------------------------------
+//   fullVersion
+///   \return Full version of MuseScore, including version
+///   label (e.g. 3.4.0-Beta).
+//---------------------------------------------------------
+
+QString MuseScore::fullVersion()
+      {
+      QString version(VERSION);
+      const QString versionLabel(VERSION_LABEL);
+      if (!versionLabel.isEmpty())
+            version.append("-").append(versionLabel);
+      return version;
+      }
+
+//---------------------------------------------------------
 //   initApplication
 //---------------------------------------------------------
 
@@ -7197,7 +7235,7 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
 
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
-      QCoreApplication::setApplicationVersion(VERSION);
+      QCoreApplication::setApplicationVersion(MuseScore::fullVersion());
 
 #ifdef BUILD_CRASH_REPORTER
       {
