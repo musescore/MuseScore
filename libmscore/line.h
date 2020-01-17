@@ -60,9 +60,12 @@ class LineSegment : public SpannerSegment {
       std::vector<QPointF> gripsPositions(const EditData& = EditData()) const override;
 
       virtual QVector<QLineF> dragAnchorLines() const override;
+      QRectF drag(EditData &ed) override;
 private:
       QPointF leftAnchorPosition(const qreal& systemPositionY) const;
       QPointF rightAnchorPosition(const qreal& systemPositionY) const;
+      void moveLeftAnchor(const QPointF& positionDelta);
+      void moveRightAnchor(const QPointF& positionDelta);
       };
 
 //---------------------------------------------------------
