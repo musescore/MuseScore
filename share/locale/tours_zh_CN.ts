@@ -19,7 +19,7 @@
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation>符号面板帮助您在乐谱中插入大多数没有展示在主面板中的符号。</translation>
+        <translation>符号面板帮助您在乐谱中添加大多数没有展示在主面板中的其他符号。</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
