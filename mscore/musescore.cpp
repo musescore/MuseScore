@@ -7108,9 +7108,10 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
 
 void tryToRequestTelemetryPermission()
       {
+      static const QString telemetryVersion = "3.4.1";
       QString accessRequestedAtVersion = preferences.getString(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED);
 
-      if (accessRequestedAtVersion == VERSION)
+      if (accessRequestedAtVersion == telemetryVersion)
             return;
 
       QEventLoop eventLoop;
@@ -7124,7 +7125,7 @@ void tryToRequestTelemetryPermission()
       eventLoop.exec();
       requestDialog->deleteLater();
 
-      preferences.setPreference(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, VERSION);
+      preferences.setPreference(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, telemetryVersion);
       }
 #endif
 
