@@ -79,6 +79,8 @@ void ScoreView::doDragElement(QMouseEvent* ev)
                   mscore->play(e);
                   _score->setPlayNote(false);
                   }
+            _score->update();
+
             QVector<QLineF> anchorLines = e->dragAnchorLines();
             const QPointF pageOffset(e->findAncestor(ElementType::PAGE)->pos());
 
@@ -108,6 +110,7 @@ void ScoreView::endDrag()
       _score->selection().unlock("drag");
       setDropTarget(0); // this also resets dropAnchor
       _score->endCmd();
+      updateGrips();
       if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit && _score->selection().element() == editData.element)
             startEdit(/* editMode */ false);
       }
