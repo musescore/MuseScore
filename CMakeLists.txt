@@ -156,7 +156,7 @@ set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 
 if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
       message("Telemetry feature is disabled")
-      message("Build is stable = ${MSCORE_UNSTABLE}")
+      message("Build is unstable = ${MSCORE_UNSTABLE}")
 
       if (TELEMETRY_TRACK_ID STREQUAL "")
             message("Telemetry track id is empty")
@@ -641,6 +641,7 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     string(TOUPPER "mscore${MSCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
     if (${MSCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "-portable-anything" would match
       # Build portable AppImage as per https://github.com/probonopd/AppImageKit
+      add_subdirectory(build/Linux+BSD/portable)
       if (NOT DEFINED ARCH)
         execute_process(COMMAND arch OUTPUT_VARIABLE ARCH OUTPUT_STRIP_TRAILING_WHITESPACE)# Get architecture (strip trailing newline)
       endif (NOT DEFINED ARCH)

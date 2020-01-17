@@ -164,6 +164,7 @@ extern Ms::Synthesizer* createZerberus();
 #include "actioneventobserver.h"
 #include "widgets/telemetrypermissiondialog.h"
 #endif
+#include "telemetrymanager.h"
 
 namespace Ms {
 
@@ -193,6 +194,8 @@ bool exportScoreMedia = false;
 bool exportScoreMeta = false;
 bool exportScoreMp3 = false;
 bool exportScorePartsPdf = false;
+static bool exportTransposedScore = false;
+static QString transposeExportOptions;
 
 QString mscoreGlobalShare;
 
@@ -281,6 +284,9 @@ static constexpr double SCALE_MIN  = 0.05;
 static constexpr double SCALE_STEP = 1.7;
 
 static const char* saveOnlineMenuItem = "file-save-online";
+
+std::unique_ptr<TelemetryManager> TelemetryManager::mgr;
+
 //---------------------------------------------------------
 // cmdInsertMeasure
 //---------------------------------------------------------
@@ -2266,21 +2272,34 @@ void MuseScore::aboutMusicXML()
 
 void MuseScore::selectScore(QAction* action)
       {
-      QString a = action->data().toString();
-      if (!a.isEmpty()) {
-            if (a == "clear-recent") {
-                  _recentScores.clear();
-                  if (startcenter)
-                        startcenter->updateRecentScores();
+      QVariant actionData = action->data();
+
+      if (!actionData.isValid())
+            return;
+
+      switch (actionData.type()) {
+            case QVariant::String: {
+                  if (actionData.toString() == "clear-recent") {
+                        _recentScores.clear();
+
+                        if (startcenter)
+                              startcenter->updateRecentScores();
+                        }
+                  break;
                   }
-            else {
-                  MasterScore* score = readScore(a);
+            case QVariant::Map: {
+                  QVariantMap pathMap = actionData.toMap();
+
+                  MasterScore* score = readScore(pathMap.value("filePath").toString());
                   if (score) {
                         setCurrentScoreView(appendScore(score));
                         addRecentScore(score);
                         writeSessionFile(false);
                         }
+                  break;
                   }
+            default:
+                  return;
             }
       }
 
@@ -2446,9 +2465,15 @@ void MuseScore::openRecentMenu()
       bool one = false;
       for (const QFileInfo& fi : recentScores()) {
             QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show filename only
-            QString dta(fi.canonicalFilePath());
-            action->setData(dta);
-            action->setToolTip(dta);
+
+            QString filePath = fi.canonicalFilePath();
+
+            QVariantMap actionData;
+            actionData.insert("actionName", "open-recent");
+            actionData.insert("filePath", filePath);
+
+            action->setData(actionData);
+            action->setToolTip(filePath);
             one = true;
             }
       if (one) {
@@ -3711,6 +3736,8 @@ static bool processNonGui(const QStringList& argv)
             return mscore->exportMp3AsJSON(argv[0]);
       else if (exportScorePartsPdf)
             return mscore->exportPartsPdfsToJSON(argv[0]);
+      else if (exportTransposedScore)
+            return mscore->exportTransposedScoreToJSON(argv[0], transposeExportOptions);
 
       if (pluginMode) {
             loadScores(argv);
@@ -4013,7 +4040,7 @@ bool MuseScore::readLanguages(const QString& path)
                 QMessageBox::warning(0,
                    QWidget::tr("Load Languages Failed:"),
                    error,
-                   QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+                   QString(), QWidget::tr("Quit"), QString(), 0, 1);
                 return false;
                 }
 
@@ -4337,6 +4364,8 @@ void MuseScore::changeState(ScoreState val)
       bool noteEntry = val & STATE_NOTE_ENTRY;
       a->setChecked(noteEntry);
       _sstate = val;
+
+      emit scoreStateChanged(_sstate);
 
       Element* e = cv && (_sstate & STATE_ALLTEXTUAL_EDIT || _sstate == STATE_EDIT) ? cv->getEditElement() : 0;
       if (!e) {
@@ -4893,7 +4922,7 @@ void MuseScore::writeSessionFile(bool cleanExit)
             }
       XmlWriter xml(0, &f);
       xml.header();
-      xml.stag("museScore version=\"" MSC_VERSION "\"");
+      xml.stag(QStringLiteral("museScore version=\"" MSC_VERSION "\" full-version=\"%1\"").arg(fullVersion()));
       xml.tagE(cleanExit ? "clean" : "dirty");
 
       foreach(MasterScore* score, scoreList) {
@@ -5033,6 +5062,15 @@ void MuseScore::autoSaveTimerTimeout()
             }
       }
 
+class CallOnReturn {
+      std::function<void()> f;
+   public:
+      CallOnReturn(std::function<void()> func) : f(std::move(func)) {}
+      CallOnReturn(const CallOnReturn&) = delete;
+      CallOnReturn& operator=(const CallOnReturn&) = delete;
+      ~CallOnReturn() { f(); }
+      };
+
 //---------------------------------------------------------
 //   restoreSession
 //    Restore last session. If "always" is true, then restore
@@ -5043,6 +5081,14 @@ void MuseScore::autoSaveTimerTimeout()
 
 bool MuseScore::restoreSession(bool always)
       {
+      bool sessionFileFound = false;
+      bool cleanExit = false;
+      QString sessionFullVersion;
+
+      CallOnReturn onReturn([this, &sessionFileFound, &sessionFullVersion, &cleanExit]() {
+            sessionStatusObserver.prevSessionStatus(sessionFileFound, sessionFullVersion, cleanExit);
+            });
+
       QFile f(dataPath + "/session");
       if (!f.exists())
             return false;
@@ -5050,22 +5096,24 @@ bool MuseScore::restoreSession(bool always)
             qDebug("Cannot open session file <%s>", qPrintable(f.fileName()));
             return false;
             }
+      sessionFileFound = true;
+
       XmlReader e(&f);
       int tab = 0;
       int idx = -1;
-      bool cleanExit = false;
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   /* QString version = e.attribute(QString("version"));
                   QStringList sl  = version.split('.');
                   int v           = sl[0].toInt() * 100 + sl[1].toInt();
                   */
+                  sessionFullVersion = e.attribute("full-version");
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "clean") {
+                              cleanExit = true;
                               if (!always)
                                     return false;
-                              cleanExit = true;
                               e.readNext();
                               }
                         else if (tag == "dirty") {
@@ -6753,7 +6801,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                   QMessageBox::warning(0,
                                        tr("Encoding Error"),
                                        tr("Unable to open target file for writing"),
-                                       QString::null, QString::null);
+                                       QString(), QString());
                   }
             return false;
             }
@@ -6792,7 +6840,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                   QMessageBox::warning(0,
                                tr("Error Opening LAME library"),
                                tr("Could not open MP3 encoding library!"),
-                               QString::null, QString::null);
+                               QString(), QString());
             qDebug("Could not open MP3 encoding library!");
             return false;
             }
@@ -6804,7 +6852,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                   QMessageBox::warning(0,
                                tr("Error Opening LAME library"),
                                tr("Not a valid or supported MP3 encoding library!"),
-                               QString::null, QString::null);
+                               QString(), QString());
             qDebug("Not a valid or supported MP3 encoding library!");
             return false;
             }
@@ -6829,7 +6877,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
             if (!MScore::noGui) {
                   QMessageBox::warning(0, tr("Encoding Error"),
                      tr("Unable to initialize MP3 stream"),
-                     QString::null, QString::null);
+                     QString(), QString());
                   }
             qDebug("Unable to initialize MP3 stream");
             MScore::sampleRate = oldSampleRate;
@@ -6996,7 +7044,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                                     QMessageBox::warning(0,
                                        tr("Encoding Error"),
                                        tr("Error %1 returned from MP3 encoder").arg(bytes),
-                                       QString::null, QString::null);
+                                       QString(), QString());
                               break;
                               }
                         else
@@ -7146,6 +7194,21 @@ void MuseScore::updateUiStyleAndTheme()
       }
 
 //---------------------------------------------------------
+//   fullVersion
+///   \return Full version of MuseScore, including version
+///   label (e.g. 3.4.0-Beta).
+//---------------------------------------------------------
+
+QString MuseScore::fullVersion()
+      {
+      QString version(VERSION);
+      const QString versionLabel(VERSION_LABEL);
+      if (!versionLabel.isEmpty())
+            version.append("-").append(versionLabel);
+      return version;
+      }
+
+//---------------------------------------------------------
 //   initApplication
 //---------------------------------------------------------
 
@@ -7172,7 +7235,7 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
 
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
-      QCoreApplication::setApplicationVersion(VERSION);
+      QCoreApplication::setApplicationVersion(MuseScore::fullVersion());
 
 #ifdef BUILD_CRASH_REPORTER
       {
@@ -7236,6 +7299,7 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
       parser.addOption(QCommandLineOption("score-meta", "Export score metadata to JSON document and print it to stdout"));
       parser.addOption(QCommandLineOption("score-mp3", "Generates mp3 for the given score and export the data to a single JSON file, print it to std out"));
       parser.addOption(QCommandLineOption("score-parts-pdf", "Generates parts data for the given score and export the data to a single JSON file, print it to std out"));
+      parser.addOption(QCommandLineOption("score-transpose", "Transposes the given score and exports the data to a single JSON file, prints it to std out", "options"));
       parser.addOption(QCommandLineOption("raw-diff", "Print a raw diff for the given scores"));
       parser.addOption(QCommandLineOption("diff", "Print a diff for the given scores"));
 
@@ -7397,6 +7461,13 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
 
       if (parser.isSet("score-parts-pdf")) {
             exportScorePartsPdf = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+
+      if (parser.isSet("score-transpose")) {
+            exportTransposedScore = true;
+            transposeExportOptions = parser.value("score-transpose");
             MScore::noGui = true;
             converterMode = true;
             }
@@ -7757,6 +7828,8 @@ void MuseScore::init(QStringList& argv)
 
 #ifndef TELEMETRY_DISABLED
       QApplication::instance()->installEventFilter(ActionEventObserver::instance());
+      ActionEventObserver::instance()->setScoreState(mscore->state());
+      QObject::connect(mscore, &MuseScore::scoreStateChanged, ActionEventObserver::instance(), &ActionEventObserver::setScoreState);
 #endif
 
       mscore->setRevision(Ms::revision);

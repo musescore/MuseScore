@@ -26,6 +26,7 @@
 #include "updatechecker.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
+#include "sessionstatusobserver.h"
 
 namespace Ms {
 
@@ -142,7 +143,7 @@ struct LanguageItem {
       LanguageItem(const QString k, const QString n) {
             key = k;
             name = n;
-            handbook = QString::null;
+            handbook = QString();
             }
       LanguageItem(const QString k, const QString n, const QString h) {
             key = k;
@@ -403,6 +404,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       std::unique_ptr<GeneralAutoUpdater> autoUpdater;
 
+      SessionStatusObserver sessionStatusObserver;
+
       //---------------------
 
       virtual void closeEvent(QCloseEvent*);
@@ -471,6 +474,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void windowSplit(bool);
       void musescoreWindowWasShown();
       void workspacesChanged();
+      void scoreStateChanged(ScoreState state);
 
    private slots:
       void cmd(QAction* a, const QString& cmd);
@@ -642,6 +646,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setRevision(QString& r)  {rev = r;}
       Q_INVOKABLE QString revision()            {return rev;}
       Q_INVOKABLE QString version()            {return VERSION;}
+      static QString fullVersion();
       Q_INVOKABLE void newFile();
       MasterScore* getNewFile();
       Q_INVOKABLE void loadFile(const QString& url);
@@ -731,6 +736,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool exportScoreMetadata(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       bool exportMp3AsJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       bool exportPartsPdfsToJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
+      bool exportTransposedScoreToJSON(const QString& inFilePath, const QString& transposeOptions, const QString& outFilePath = "/dev/stdout");
       /////////////////////////////////////////////////
 
       void scoreUnrolled(MasterScore* original);
@@ -918,8 +924,6 @@ extern bool saveMxl(Score*, QIODevice*);
 extern bool saveXml(Score*, QIODevice*);
 extern bool saveXml(Score*, const QString& name);
 
-struct PluginDescription;
-extern bool collectPluginMetaInformation(PluginDescription*);
 extern QString getSharePath();
 
 extern Score::FileError importMidi(MasterScore*, const QString& name);

@@ -13,10 +13,7 @@
 #include "inspector.h"
 #include "inspectorTextLine.h"
 #include "inspectorHairpin.h"
-#include "musescore.h"
 #include "libmscore/hairpin.h"
-#include "libmscore/score.h"
-// #include "icons.h"
 
 namespace Ms {
 

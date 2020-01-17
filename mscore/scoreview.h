@@ -346,6 +346,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool noteEntryMode() const { return state == ViewState::NOTE_ENTRY; }
       bool editMode() const      { return state == ViewState::EDIT; }
       bool textEditMode() const  { return editMode() && editData.element && editData.element->isTextBase(); }
+      bool hasEditGrips() const  { return editData.element && editData.grips; }
       bool fotoMode() const;
 
       virtual void setDropRectangle(const QRectF&);
@@ -423,7 +424,6 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       virtual Element* elementNear(QPointF);
       QList<Element*> elementsNear(QPointF);
-      void editTremoloBarProperties(TremoloBar*);
       void editArticulationProperties(Articulation*);
       void editTimeSigProperties(TimeSig*);
       void editStaffTextProperties(StaffTextBase*);

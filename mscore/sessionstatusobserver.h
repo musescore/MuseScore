@@ -1,8 +1,8 @@
 //=============================================================================
-//  MusE Score
-//  Linux Music Score Editor
+//  MuseScore
+//  Music Composition & Notation
 //
-//  Copyright (C) 2010 Werner Schweer and others
+//  Copyright (C) 2020 MuseScore BVBA
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,36 +17,20 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __TREMOLOBARPROP_H__
-#define __TREMOLOBARPROP_H__
-
-#include "libmscore/element.h"
-#include "ui_tremolobar.h"
-#include "libmscore/pitchvalue.h"
+#ifndef __SESSIONSTATUSOBSERVER_H__
+#define __SESSIONSTATUSOBSERVER_H__
 
 namespace Ms {
 
-class Painter;
-class TremoloBar;
-
 //---------------------------------------------------------
-//   TremoloBarProperties
+//   SessionStatusObserver
 //---------------------------------------------------------
 
-class TremoloBarProperties : public QDialog, public Ui::TremoloBarDialog {
-      Q_OBJECT
-      TremoloBar* bend;
-      QButtonGroup* bendTypes;
-
-      virtual void hideEvent(QHideEvent*);
-   private slots:
-      void bendTypeChanged(int);
-
+class SessionStatusObserver {
    public:
-      TremoloBarProperties(TremoloBar*, QWidget* parent = 0);
-      const QList<PitchValue>& points() const;
+      void prevSessionStatus(bool sessionFileFound, const QString& sessionFullVersion, bool clean);
       };
-}
+
+} // namespace Ms
 
 #endif
-

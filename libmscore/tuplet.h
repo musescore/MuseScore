@@ -75,6 +75,7 @@ class Tuplet final : public DurationElement {
       void resetNumberProperty();
 
       virtual bool isEditable() const override;
+      void startEditDrag(EditData&) override;
       virtual void editDrag(EditData&) override;
 
       virtual void setSelected(bool f) override;
@@ -133,7 +134,7 @@ class Tuplet final : public DurationElement {
 
       virtual Shape shape() const override;
 
-      // TODO: single click behavior?
+      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
       int gripsCount() const override { return 2; }
       Grip initialEditModeGrip() const override { return Grip::END; }
       Grip defaultGrip() const override { return Grip::START; }

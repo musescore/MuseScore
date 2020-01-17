@@ -914,20 +914,6 @@
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
             </Instrument>
-            <Instrument id="tin-whistle">
-                  <longName>Tin Whistle</longName>
-                  <shortName>Tin Wh.</shortName>
-                  <description>same as 6 hole Flageolet but metal construction</description>
-                  <musicXMLid>wind.flutes.whistle.tin</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-96</aPitchRange>
-                  <pPitchRange>72-102</pPitchRange>
-                  <Channel>
-                        <program value="78"/> <!--Whistle-->
-                  </Channel>
-                  <genre>classroom</genre>
-            </Instrument>
             <Instrument id="bflat-tin-whistle">
                   <longName>B♭ Tin Whistle</longName>
                   <shortName>B♭ Tin Wh.</shortName>
@@ -940,6 +926,20 @@
                   <Channel>
                         <program value="78"/> <!--Whistle-->
                   </Channel>
+            </Instrument>
+            <Instrument id="c-tin-whistle">
+                  <longName>C Tin Whistle</longName>
+                  <shortName>C Tin Wh.</shortName>
+                  <description>same as 6 hole Flageolet but metal construction</description>
+                  <musicXMLid>wind.flutes.whistle.tin</musicXMLid>
+                  <clef>G8va</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>72-96</aPitchRange>
+                  <pPitchRange>72-102</pPitchRange>
+                  <Channel>
+                        <program value="78"/> <!--Whistle-->
+                  </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="d-tin-whistle">
                   <longName>D Tin Whistle</longName>
@@ -1921,6 +1921,76 @@
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
             </Instrument>
+            <Instrument id="xaphoon">
+                  <longName>Pocket-Sax C</longName>
+                  <shortName>P.-Sx. C</shortName>
+                  <description>Pocket-Sax/Xaphoon in C</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>60-77</aPitchRange>
+                  <pPitchRange>59-84</pPitchRange>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="bb-xaphoon">
+                  <longName>Pocket-Sax B♭</longName>
+                  <shortName>P.-Sx. B♭</shortName>
+                  <description>Pocket-Sax/Xaphoon in B♭</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>58-75</aPitchRange>
+                  <pPitchRange>57-83</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="d-xaphoon">
+                  <longName>Pocket-Sax D</longName>
+                  <shortName>P.-Sx. D</shortName>
+                  <description>Pocket-Sax/Xaphoon in D</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>62-79</aPitchRange>
+                  <pPitchRange>61-86</pPitchRange>
+                  <transposeDiatonic>1</transposeDiatonic>
+                  <transposeChromatic>2</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="g-xaphoon">
+                  <longName>Pocket-Sax G</longName>
+                  <shortName>P.-Sx. G</shortName>
+                  <description>Pocket-Sax/Xaphoon in G</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>55-72</aPitchRange>
+                  <pPitchRange>54-79</pPitchRange>
+                  <transposeDiatonic>-3</transposeDiatonic>
+                  <transposeChromatic>-5</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
+            </Instrument>
             <Instrument id="chalumeau">
                   <longName>Chalumeau</longName>
                   <shortName>Cha.</shortName>
@@ -2501,8 +2571,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>60-96</aPitchRange>
-                  <pPitchRange>60-96</pPitchRange>
+                  <aPitchRange>60-98</aPitchRange>
+                  <pPitchRange>60-98</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2514,8 +2584,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>55-96</aPitchRange>
-                  <pPitchRange>55-96</pPitchRange>
+                  <aPitchRange>55-98</aPitchRange>
+                  <pPitchRange>55-98</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2527,8 +2597,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>55-91</aPitchRange>
-                  <pPitchRange>55-91</pPitchRange>
+                  <aPitchRange>55-93</aPitchRange>
+                  <pPitchRange>55-93</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2540,8 +2610,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>48-96</aPitchRange>
-                  <pPitchRange>48-96</pPitchRange>
+                  <aPitchRange>48-98</aPitchRange>
+                  <pPitchRange>48-98</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2553,8 +2623,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>48-84</aPitchRange>
-                  <pPitchRange>48-84</pPitchRange>
+                  <aPitchRange>48-86</aPitchRange>
+                  <pPitchRange>48-86</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2670,8 +2740,8 @@
                   <musicXMLid>wind.reed.harmonica.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-40</aPitchRange>
-                  <pPitchRange>28-60</pPitchRange>
+                  <aPitchRange>40-64</aPitchRange>
+                  <pPitchRange>40-64</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2683,8 +2753,8 @@
                   <musicXMLid>wind.reed.harmonica.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-60</aPitchRange>
-                  <pPitchRange>28-60</pPitchRange>
+                  <aPitchRange>40-72</aPitchRange>
+                  <pPitchRange>40-72</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2696,8 +2766,8 @@
                   <musicXMLid>wind.reed.harmonica.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-40</aPitchRange>
-                  <pPitchRange>28-40</pPitchRange>
+                  <aPitchRange>40-65</aPitchRange>
+                  <pPitchRange>40-65</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>

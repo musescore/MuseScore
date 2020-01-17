@@ -300,7 +300,8 @@ void PluginCreator::runClicked()
 
       item = 0;
       QQmlComponent component(qml);
-      component.setData(textEdit->toPlainText().toUtf8(), QUrl());
+      const QUrl url = created ? QUrl() : QUrl::fromLocalFile(path);
+      component.setData(textEdit->toPlainText().toUtf8(), url);
       QObject* obj = component.create();
       if (obj == 0) {
             msg(tr("Creating component failed\n"));
@@ -309,11 +310,19 @@ void PluginCreator::runClicked()
             stop->setEnabled(false);
             return;
             }
+
+      item = qobject_cast<QmlPlugin*>(obj);
+
+      if (!item) {
+            msg(tr("Component is not a MuseScore plugin") + '\n');
+            delete obj;
+            return;
+            }
+
       qInstallMessageHandler(qmlMsgHandler);
       stop->setEnabled(true);
       run->setEnabled(false);
 
-      item = qobject_cast<QmlPlugin*>(obj);
       msg(tr("Plugin Details:") + "\n");
       msg("  " + tr("Menu Path:") + " " + item->menuPath() + "\n");
       msg("  " + tr("Version:") + " " + item->version() + "\n");

@@ -138,6 +138,7 @@ class Shortcut {
 
       QAction* action() const;
       const QByteArray& key() const { return _key; }
+      void setKey(const QByteArray& key) { _key = key; }
       QString descr() const;
       QString text() const;
       QString help() const;
@@ -175,7 +176,7 @@ class Shortcut {
       static void resetToDefault();
       static bool dirty;
       static bool customSource() { return source != defaultFileName; }
-      static Shortcut* getShortcutByKeySequence(const QKeySequence &keySequence);
+      static Shortcut* getShortcutByKeySequence(const QKeySequence &keySequence, const ScoreState state);
       static Shortcut* getShortcut(const char* key);
       static const QHash<QByteArray, Shortcut*>& shortcuts() { return _shortcuts; }
       static QActionGroup* getActionGroupForWidget(MsWidget w);

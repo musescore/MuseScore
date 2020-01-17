@@ -12,6 +12,7 @@
 
 #include "scorelistmodel.h"
 
+#include "libmscore/score.h"
 #include "scoretab.h"
 #include "scoreview.h"
 

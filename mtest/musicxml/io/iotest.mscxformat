@@ -10,7 +10,9 @@
 #MSCORE=../../../applebuild/mscore.app/Contents/MacOS/mscore
 # OS X Xcode build
 OLD_MSCORE=../../../oldbuilds/mscore-20150301.app/Contents/MacOS/mscore
-NEW_MSCORE=../../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+#NEW_MSCORE=../../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build (since early 2020)
+NEW_MSCORE=../../../build.xcode/main/Debug/mscore.app/Contents/MacOS/mscore
 
 echo "----------------------------------------------"
 echo "Regression Tests for MuseScore MusicXML import"
