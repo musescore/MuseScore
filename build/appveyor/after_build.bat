@@ -4,11 +4,7 @@ ccache.exe -s
 CD C:\MuseScore
 
 REM the code is used to generate MS version for both nightly and stable releases
-SET input=C:\MuseScore\CMakeLists.txt
-FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MAJOR" %input%') DO set VERSION_MAJOR=%%A
-FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MINOR" %input%') DO set VERSION_MINOR=%%A
-FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_PATCH" %input%') DO set VERSION_PATCH=%%A
-SET MUSESCORE_VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%.%APPVEYOR_BUILD_NUMBER%
+SET MUSESCORE_VERSION=%MUSESCORE_VERSION_FULL%.%APPVEYOR_BUILD_NUMBER%
 
 SET DEBUG_SYMS_FILE=musescore_win%TARGET_PROCESSOR_BITS%.sym
 @echo on
