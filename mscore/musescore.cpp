@@ -7202,7 +7202,8 @@ void MuseScore::updateUiStyleAndTheme()
 QString MuseScore::fullVersion()
       {
       QString version(VERSION);
-      const QString versionLabel(VERSION_LABEL);
+      QString versionLabel(VERSION_LABEL);
+      versionLabel = versionLabel.replace(' ', "");
       if (!versionLabel.isEmpty())
             version.append("-").append(versionLabel);
       return version;
