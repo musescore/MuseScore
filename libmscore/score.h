@@ -859,6 +859,7 @@ public:
     void rebuildTempoAndTimeSigMaps(Measure* m);
     Element* nextElement();
     Element* prevElement();
+    ChordRest* cmdNextPrevSystem(ChordRest*, bool);
 
     void cmd(const QAction*, EditData&);
     int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision / 2) / _fileDivision; }
@@ -1224,13 +1225,15 @@ public:
     void cmdRemoveEmptyTrailingMeasures();
     void cmdRealizeChordSymbols(bool lit = true, Voicing v = Voicing(-1), HDuration durationType = HDuration(-1));
 
+    Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
+    ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
+
     void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
     QString accessibleInfo() const { return accInfo; }
 
     QImage createThumbnail();
     QString createRehearsalMarkText(RehearsalMark* current) const;
     QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
-
     //@ ??
 //      Q_INVOKABLE void cropPage(qreal margins);
     bool sanityCheck(const QString& name = QString());

@@ -752,11 +752,11 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
     bool isRest   = nval.pitch == -1;
     Fraction tick = segment->tick();
-    Element* nr   = 0;
-    Tie* tie      = 0;
+    Element* nr   = nullptr;
+    Tie* tie      = nullptr;
     ChordRest* cr = toChordRest(segment->element(track));
 
-    Measure* measure = 0;
+    Measure* measure = nullptr;
     for (;;) {
         if (track % VOICES) {
             expandVoice(segment, track);
@@ -781,9 +781,9 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
         size_t n = dl.size();
         for (size_t i = 0; i < n; ++i) {
             const TDuration& d = dl[i];
-            ChordRest* ncr;
-            Note* note = 0;
-            Tie* addTie = 0;
+            ChordRest* ncr = nullptr;
+            Note* note = nullptr;
+            Tie* addTie = nullptr;
             if (isRest) {
                 nr = ncr = new Rest(this);
                 nr->setTrack(track);
@@ -837,7 +837,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
         }
 
         Segment* nseg = tick2segment(tick, false, SegmentType::ChordRest);
-        if (nseg == 0) {
+        if (!nseg) {
             qDebug("reached end of score");
             break;
         }
@@ -845,7 +845,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
         cr = toChordRest(segment->element(track));
 
-        if (cr == 0) {
+        if (!cr) {
             if (track % VOICES) {
                 cr = addRest(segment, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
             } else {
@@ -1227,11 +1227,11 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& 
         }
         // go to next cr
         Measure* m = cr->measure()->nextMeasure();
-        if (m == 0) {
+        if (!m) {
             qDebug("EOS reached");
             insertMeasure(ElementType::MEASURE, 0, false);
             m = cr->measure()->nextMeasure();
-            if (m == 0) {
+            if (!m) {
                 qDebug("===EOS reached");
                 return true;
             }
@@ -1240,7 +1240,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& 
         Segment* s = m->undoGetSegment(SegmentType::ChordRest, m->tick());
         int t  = cr->track();
         cr = toChordRest(s->element(t));
-        if (cr == 0) {
+        if (!cr) {
             addRest(s, t, TDuration(TDuration::DurationType::V_MEASURE), 0);
             cr = toChordRest(s->element(t));
         }
@@ -2117,7 +2117,7 @@ void Score::cmdResetBeamMode()
          seg = seg->next1(SegmentType::ChordRest)) {
         for (int track = selection().staffStart() * VOICES; track < selection().staffEnd() * VOICES; ++track) {
             ChordRest* cr = toChordRest(seg->element(track));
-            if (cr == 0) {
+            if (!cr) {
                 continue;
             }
             if (cr->type() == ElementType::CHORD) {
@@ -2345,13 +2345,15 @@ Element* Score::move(const QString& cmd)
     }
 
     // no chord/rest found? look for another type of element
-    if (cr == 0) {
+    // but commands [empty-trailing-measure] and [top-staff] don't
+    // necessarily need an active selection for appropriate functioning
+    if (!cr && cmd != "empty-trailing-measure" && cmd != "top-staff") {
         if (selection().elements().empty()) {
             return 0;
         }
         // retrieve last element of section list
         Element* el = selection().elements().last();
-        Element* trg = 0;
+        Element* trg = nullptr;
 
         // get parent of element and process accordingly:
         // trg is the element to select on "next-chord" cmd
@@ -2377,7 +2379,7 @@ Element* Score::move(const QString& cmd)
             // if segment is not chord/rest or grace, move to next chord/rest or grace segment
             if (!seg->isChordRest()) {
                 seg = seg->next1(SegmentType::ChordRest);
-                if (seg == 0) {                 // if none found, return failure
+                if (!seg) {                 // if none found, return failure
                     return 0;
                 }
             }
@@ -2414,13 +2416,13 @@ Element* Score::move(const QString& cmd)
             return trg;
         }
         // if no chordrest found, do nothing
-        if (cr == 0) {
+        if (!cr) {
             return 0;
         }
         // if some chordrest found, continue with default processing
     }
 
-    Element* el = 0;
+    Element* el = nullptr;
     Segment* ois = noteEntryMode() ? _is.segment() : nullptr;
     Measure* oim = ois ? ois->measure() : nullptr;
 
@@ -2505,6 +2507,16 @@ Element* Score::move(const QString& cmd)
         if (noteEntryMode()) {
             _is.moveInputPos(el);
         }
+    } else if (cmd == "next-system") {
+        el = cmdNextPrevSystem(cr, true);
+        if (noteEntryMode()) {
+            _is.moveInputPos(el);
+        }
+    } else if (cmd == "prev-system") {
+        el = cmdNextPrevSystem(cr, false);
+        if (noteEntryMode()) {
+            _is.moveInputPos(el);
+        }
     } else if (cmd == "next-track") {
         el = nextTrack(cr);
         if (noteEntryMode()) {
@@ -2515,6 +2527,29 @@ Element* Score::move(const QString& cmd)
         if (noteEntryMode()) {
             _is.moveInputPos(el);
         }
+    } else if (cmd == "top-staff") {
+        if (!cr) {
+            // No valid selection: Go to the top staff of score's first measure
+            el = cmdTopStaff();
+        } else {
+            // Entire score: don't yet have a valid active element
+            el = cmdTopStaff(cr);
+        }
+        if (noteEntryMode()) {
+            _is.moveInputPos(el);
+        }
+    } else if (cmd == "empty-trailing-measure") {
+        if (!cr) {
+            // of the entire score (don't have a valid selected element)
+            el = firstTrailingMeasure()->first()->nextChordRest(0, false);
+        } else {
+            // Staff-Specific trailing measure:
+            firstTrailingMeasure(&cr);
+            el = cr;
+        }
+        // Note: Due to the nature of this command, ensure Note-Entry activation
+        // from within ScoreView::cmd()
+        _is.moveInputPos(el);
     }
 
     if (el) {
@@ -2552,14 +2587,14 @@ Element* Score::selectMove(const QString& cmd)
     } else {
         cr = selection().lastChordRest();
     }
-    if (cr == 0 && noteEntryMode()) {
+    if (!cr && noteEntryMode()) {
         cr = inputState().cr();
     }
-    if (cr == 0) {
+    if (!cr) {
         return 0;
     }
 
-    ChordRest* el = 0;
+    ChordRest* el = nullptr;
     if (cmd == "select-next-chord") {
         el = nextChordRest(cr, true);
     } else if (cmd == "select-prev-chord") {
@@ -3336,13 +3371,13 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
     Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
 
     Fraction tick = segment->tick();
-    Chord* nr     = 0;   //current added chord used so we can select the last added chord and so we can apply ties
+    Chord* nr     = nullptr;   //current added chord used so we can select the last added chord and so we can apply ties
     std::vector<Tie*> tie(chordTemplate->notes().size());   //keep pointer to a tie for each note in the chord in case we need to tie notes
     ChordRest* cr = toChordRest(segment->element(track));   //chord rest under the segment for the specified track
 
     bool addTie = false;
 
-    Measure* measure = 0;
+    Measure* measure = nullptr;
     //keep creating chords and tieing them until we created the full duration asked for (dur)
     for (;;) {
         if (track % VOICES) {
@@ -3445,7 +3480,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
 
         //go to next segment unless we are at the score (which means we will just be done there)
         Segment* nseg = tick2segment(tick, false, SegmentType::ChordRest);
-        if (nseg == 0) {
+        if (!nseg) {
             qDebug("reached end of score");
             break;
         }
@@ -3453,7 +3488,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
 
         cr = toChordRest(segment->element(track));
 
-        if (cr == 0) {
+        if (!cr) {
             if (track % VOICES) {
                 cr = addRest(segment, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
             } else {
@@ -3595,21 +3630,10 @@ void Score::addRemoveBreaks(int interval, bool lock)
 
 void Score::cmdRemoveEmptyTrailingMeasures()
 {
-    MasterScore* score = masterScore();
-    Measure* firstMeasure;
-    Measure* lastMeasure = score->lastMeasure();
-    if (!lastMeasure || !lastMeasure->isFullMeasureRest()) {
-        return;
+    auto beginMeasure = firstTrailingMeasure();
+    if (beginMeasure) {
+        deleteMeasures(beginMeasure, lastMeasure());
     }
-    firstMeasure = lastMeasure;
-    for (firstMeasure = lastMeasure;;) {
-        Measure* m = firstMeasure->prevMeasure();
-        if (!m || !m->isFullMeasureRest()) {
-            break;
-        }
-        firstMeasure = m;
-    }
-    deleteMeasures(firstMeasure, lastMeasure);
 }
 
 //---------------------------------------------------------
