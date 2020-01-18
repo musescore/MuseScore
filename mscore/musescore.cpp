@@ -3234,7 +3234,7 @@ void MuseScore::removeTab(int i)
 
       QString tmpName = score->tmpName();
 
-      if (!scriptTestMode && checkDirty(score))
+      if (!scriptTestMode && !converterMode && checkDirty(score))
             return;
       if (seq && seq->score() == score) {
             seq->stopWait();
@@ -3671,18 +3671,18 @@ static bool convert(const QString& inFile, const QJsonArray& outFiles, const QSt
       MasterScore* score = mscore->readScore(inFile);
       if (!score)
             return false;
-      if (processJob)
-            mscore->setCurrentScore(score);
-      else {
-            mscore->appendScore(score);
-            mscore->setCurrentScore(score);
-            mscore->setCurrentView(0, 0);
-            mscore->setCurrentView(1, 0);
+      mscore->setCurrentScore(score);
+      if (!plugin.isEmpty()) {
+            int index = mscore->appendScore(score);
+            mscore->setCurrentView(index, 0);
             }
       bool success = doConvert(score, outFiles, plugin);
       fprintf(stderr, success ? "... success!\n" : "... failed!\n");
+      if (plugin.isEmpty())
+            delete score;
+      else
+            mscore->closeScore(score);
       mscore->setCurrentScore(nullptr);
-      delete score;
       return success;
       }
 
@@ -3764,7 +3764,7 @@ static bool processNonGui(const QStringList& argv)
             return mscore->exportPartsPdfsToJSON(argv[0]);
       else if (exportTransposedScore)
             return mscore->exportTransposedScoreToJSON(argv[0], transposeExportOptions);
-      
+
       if (pluginMode && !converterMode) {
             loadScores(argv);
             QString pn(pluginName);
