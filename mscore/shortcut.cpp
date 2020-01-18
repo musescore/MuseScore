@@ -1035,6 +1035,13 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "prev-system",
+         QT_TRANSLATE_NOOP("action","Previous System"),
+         QT_TRANSLATE_NOOP("action","Go to previous system")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "prev-track",
          QT_TRANSLATE_NOOP("action","Previous Staff or Voice"),
          QT_TRANSLATE_NOOP("action","Previous staff or voice")
@@ -1052,6 +1059,27 @@ Shortcut Shortcut::_sc[] = {
          "next-measure",
          QT_TRANSLATE_NOOP("action","Next Measure"),
          QT_TRANSLATE_NOOP("action","Go to next measure or move text right")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "next-system",
+         QT_TRANSLATE_NOOP("action","Next System"),
+         QT_TRANSLATE_NOOP("action","Go to next system")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "top-staff",
+         QT_TRANSLATE_NOOP("action","Top Staff"),
+         QT_TRANSLATE_NOOP("action","Go to top staff")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "empty-trailing-measure",
+         QT_TRANSLATE_NOOP("action","First Empty Trailing Measure"),
+         QT_TRANSLATE_NOOP("action","Go to first empty trailing measure")
          },
       {
          MsWidget::SCORE_TAB,

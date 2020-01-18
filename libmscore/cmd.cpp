@@ -805,7 +805,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
             cr = toChordRest(segment->element(track));
 
-            if (cr == 0) {
+            if (!cr) {
                   if (track % VOICES)
                         cr = addRest(segment, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
                   else {
@@ -1186,7 +1186,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& 
             Segment* s = m->undoGetSegment(SegmentType::ChordRest, m->tick());
             int t  = cr->track();
             cr = toChordRest(s->element(t));
-            if (cr == 0) {
+            if (!cr) {
                   addRest(s, t, TDuration(TDuration::DurationType::V_MEASURE), 0);
                   cr = toChordRest(s->element(t));
                   }
@@ -2028,7 +2028,7 @@ void Score::cmdResetBeamMode()
       for (Segment* seg = selection().firstChordRestSegment(); seg && seg->tick() < endTick; seg = seg->next1(SegmentType::ChordRest)) {
             for (int track = selection().staffStart() * VOICES; track < selection().staffEnd() * VOICES; ++track) {
                   ChordRest* cr = toChordRest(seg->element(track));
-                  if (cr == 0)
+                  if (!cr)
                         continue;
                   if (cr->type() == ElementType::CHORD) {
                         if (cr->beamMode() != Beam::Mode::AUTO)
@@ -2240,8 +2240,10 @@ Element* Score::move(const QString& cmd)
       else
             cr = selection().lastChordRest();
 
-      // no chord/rest found? look for another type of element
-      if (cr == 0) {
+      // no chord/rest found? look for another type of element,
+      // but commands [empty-trailing-measure] and [top-staff] don't
+      // necessarily need an active selection for appropriate functioning
+      if (!cr && cmd != "empty-trailing-measure" && cmd != "top-staff") {
             if (selection().elements().empty())
                   return 0;
             // retrieve last element of section list
@@ -2305,7 +2307,7 @@ Element* Score::move(const QString& cmd)
                   return trg;
                   }
             // if no chordrest found, do nothing
-            if (cr == 0)
+            if (!cr)
                   return 0;
             // if some chordrest found, continue with default processing
             }
@@ -2390,6 +2392,16 @@ Element* Score::move(const QString& cmd)
             if (noteEntryMode())
                   _is.moveInputPos(el);
             }
+      else if (cmd == "next-system") {
+            el = cmdNextPrevSystem(cr, true);
+            if (noteEntryMode())
+                  _is.moveInputPos(el);
+            }
+      else if (cmd == "prev-system") {
+            el = cmdNextPrevSystem(cr, false);
+            if (noteEntryMode())
+                  _is.moveInputPos(el);
+            }
       else if (cmd == "next-track") {
             el = nextTrack(cr);
             if (noteEntryMode())
@@ -2400,6 +2412,29 @@ Element* Score::move(const QString& cmd)
             if (noteEntryMode())
                   _is.moveInputPos(el);
             }
+      else if (cmd == "top-staff") {
+             // No valid selection: Go to the top staff of score's first measure.
+             if (!cr)
+                   el = cmdTopStaff();
+             // Go to the top of current measure.
+             else
+                   el = cmdTopStaff(cr);
+             if (noteEntryMode())
+                   _is.moveInputPos(el);
+             }
+       else if (cmd == "empty-trailing-measure") {
+             // Entire score: don't yet have a valid active element
+             if (!cr)
+                   el = firstTrailingMeasure()->first()->nextChordRest(0, false);
+             // Staff-Specific trailing measure:
+             else {
+                   firstTrailingMeasure(&cr);
+                   el = cr;
+                   }
+             // Note: Due to the nature of this command, ensure Note-Entry Mode afterwards
+             // from within ScoreView::cmd()
+             _is.moveInputPos(el);
+             }
 
       if (el) {
             if (el->type() == ElementType::CHORD)
@@ -2433,9 +2468,9 @@ Element* Score::selectMove(const QString& cmd)
             cr = selection().activeCR();
       else
             cr = selection().lastChordRest();
-      if (cr == 0 && noteEntryMode())
+      if (!cr && noteEntryMode())
             cr = inputState().cr();
-      if (cr == 0)
+      if (!cr)
             return 0;
 
       ChordRest* el = 0;
@@ -3293,7 +3328,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
 
             cr = toChordRest(segment->element(track));
 
-            if (cr == 0) {
+            if (!cr) {
                   if (track % VOICES)
                         cr = addRest(segment, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
                   else {
@@ -3427,19 +3462,9 @@ void Score::addRemoveBreaks(int interval, bool lock)
 
 void Score::cmdRemoveEmptyTrailingMeasures()
       {
-      MasterScore* score = masterScore();
-      Measure* firstMeasure;
-      Measure* lastMeasure = score->lastMeasure();
-      if (!lastMeasure || !lastMeasure->isFullMeasureRest())
-            return;
-      firstMeasure = lastMeasure;
-      for (firstMeasure = lastMeasure;;) {
-            Measure* m = firstMeasure->prevMeasure();
-            if (!m || !m->isFullMeasureRest())
-                  break;
-            firstMeasure = m;
-            }
-      deleteMeasures(firstMeasure, lastMeasure);
+      auto beginMeasure = firstTrailingMeasure();
+      if (beginMeasure)
+            deleteMeasures(beginMeasure, lastMeasure());
       }
 
 //---------------------------------------------------------

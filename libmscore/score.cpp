@@ -3893,6 +3893,38 @@ ChordRest* Score::findCRinStaff(const Fraction& tick, int staffIdx) const
       }
 
 //---------------------------------------------------------
+//   cmdNextPrevSystem
+//---------------------------------------------------------
+
+ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
+      {
+      auto currentMeasure       = cr->measure();
+      auto currentSystem        = currentMeasure->system();
+      auto destinationMeasure   = currentSystem->firstMeasure();
+      auto firstSegmentOfSystem = destinationMeasure->first();
+
+      // [go to next system]
+      if (next) {
+            if ((destinationMeasure = currentSystem->lastMeasure()->nextMeasure())) {
+                  firstSegmentOfSystem = destinationMeasure->first();
+                  cr = firstSegmentOfSystem->nextChordRest(trackZeroVoice(cr->track()), false);
+                  }
+            else if (currentMeasure != lastMeasure())
+                  cr = lastMeasure()->first()->nextChordRest(trackZeroVoice(cr->track()), false);
+            }
+      // [go to previous system]
+      else {
+            auto currentSegment = cr->segment();
+            auto segmentOfFirstCR = firstSegmentOfSystem->nextChordRest(trackZeroVoice(cr->track()), false)->segment();
+            if (destinationMeasure != firstMeasure() && currentSegment == segmentOfFirstCR)
+                  destinationMeasure = destinationMeasure->prevMeasure()->system()->firstMeasure();
+            if (destinationMeasure)
+                  cr = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false);
+            }
+      return cr;
+      }
+
+//---------------------------------------------------------
 //   setSoloMute
 //   called once at opening file, adds soloMute marks
 //---------------------------------------------------------
@@ -3933,6 +3965,44 @@ int Score::nmeasures() const
             n++;
       return n;
       }
+
+//---------------------------------------------------------
+//   firstTrailingMeasure
+//---------------------------------------------------------
+
+Measure* Score::firstTrailingMeasure(ChordRest** cr)
+      {
+      Measure* firstMeasure = nullptr;
+      auto m = lastMeasure();
+
+      // No active selection: prepare first empty trailing measure of entire score
+      if (!cr)
+            for (; m && m->isFullMeasureRest(); firstMeasure = m, m = m->prevMeasure());
+      // Active selection: select full measure rest of active staff's empty trailing measure
+      else {
+            ChordRest* tempCR = nullptr;
+            while (m && (tempCR = m->first()->nextChordRest(trackZeroVoice((*cr)->track()), false))->isFullMeasureRest()) {
+                  *cr = tempCR;
+                  m = m->prevMeasure();
+                  }
+            }
+      return firstMeasure;
+      }
+
+//---------------------------------------------------------
+//   cmdTopStaff
+//---------------------------------------------------------
+
+ChordRest* Score::cmdTopStaff(ChordRest* cr)
+      {
+      // Go to top-most staff of current or first measure depending upon active selection
+      if (!cr)
+            cr = firstMeasure()->first()->nextChordRest(0, false);
+      else
+            cr = cr->measure()->first()->nextChordRest(0, false);
+      return cr;
+      }
+
 
 //---------------------------------------------------------
 //   hasLyrics
