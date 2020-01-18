@@ -17,12 +17,10 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-REVISION  := `cat mscore/revision.h`
 CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
 PREFIX    = "/usr/local"
-VERSION   = "3.5b-${REVISION}"
-#VERSION = 3.5.0
+VERSION   = `cmake -P config.cmake | grep -oP "VERSION\s+\K.*"`
 BUILD_NUMBER=""
 
 TELEMETRY_TRACK_ID=""
