@@ -121,15 +121,16 @@ public:
       void scorePartwise();
       void identification();
       void credit(CreditWordsList& credits);
-      void defaults(int& pageWidth, int& pageHeight);
-      void pageLayout(PageFormat& pf, const qreal conversion, int& pageWidth, int& pageHeight);
+      void defaults();
+      void pageLayout(PageFormat& pf, const qreal conversion);
       void partList(MusicXmlPartGroupList& partGroupList);
       void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups);
       void scorePart();
       void scoreInstrument(const QString& partId);
       void midiInstrument(const QString& partId);
       void part();
-      void measure(const QString& partId, const Fraction cTime, Fraction& mdur, VoiceOverlapDetector& vod);
+      void measure(const QString& partId, const Fraction cTime, Fraction& mdur, VoiceOverlapDetector& vod, const int measureNr);
+      void print(const int measureNr);
       void attributes(const QString& partId, const Fraction cTime);
       void clef(const QString& partId);
       void time(const Fraction cTime);
@@ -161,6 +162,7 @@ public:
       MusicXmlInstrList getInstrList(const QString id) const;
       Fraction getMeasureStart(const int i) const;
       int octaveShift(const QString& id, const int staff, const Fraction f) const;
+      const CreditWordsList& credits() const { return _credits; }
 
 private:
       // functions
@@ -170,8 +172,11 @@ private:
       QXmlStreamReader _e;
       int _divs;                                ///< Current MusicXML divisions value
       QMap<QString, MusicXmlPart> _parts;       ///< Parts data, mapped on part id
+      std::set<int> _systemStartMeasureNrs;     ///< Measure numbers of measures starting a page
+      std::set<int> _pageStartMeasureNrs;       ///< Measure numbers of measures starting a page
       QVector<Fraction> _measureLength;         ///< Length of each measure
       QVector<Fraction> _measureStart;          ///< Start time of each measure
+      CreditWordsList _credits;                 ///< All credits collected
       PartMap _partMap;                         ///< TODO merge into MusicXmlPart ??
       QMap<QString, MusicXMLDrumset> _drumsets; ///< Drumset for each part, mapped on part id
       Score* _score;                            ///< MuseScore score
@@ -182,6 +187,7 @@ private:
       QMap<int, MxmlOctaveShiftDesc> _octaveShifts; ///< Pending octave-shifts
       Fraction _firstInstrSTime;                ///< First instrument start time
       QString _firstInstrId;                    ///< First instrument id
+      QSize _pageSize;                          ///< Page width read from defaults
       };
 
 } // namespace Ms

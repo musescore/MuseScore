@@ -251,7 +251,6 @@ private:
       void measure(const QString& partId, const Fraction time);
       void attributes(const QString& partId, Measure* measure, const Fraction& tick);
       void measureStyle(Measure* measure);
-      void print(Measure* measure);
       void barline(const QString& partId, Measure* measure, const Fraction& tick);
       void key(const QString& partId, Measure* measure, const Fraction& tick);
       void clef(const QString& partId, Measure* measure, const Fraction& tick);
