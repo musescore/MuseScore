@@ -47,6 +47,8 @@ include_directories(
       ${PROJECT_SOURCE_DIR}/thirdparty
       ${PROJECT_SOURCE_DIR}/global
       ${PROJECT_SOURCE_DIR}/importexport
+      ${PROJECT_SOURCE_DIR}/inspectors
+      ${PROJECT_BINARY_DIR}
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
@@ -278,6 +280,7 @@ else (MSVC OR MINGW)
 endif (MSVC OR MINGW)
 
 target_link_libraries(mscoreapp
+      inspectors
       awl
       ${QTSINGLEAPPLICATION_LIBRARIES}
       audio
@@ -493,14 +496,6 @@ endif (NOT MSVC)
 
 add_library(
       inspectorplugin SHARED
-      inspector/inspectorplugin.cpp
-      inspector/inspectorplugin.h
-#      inspector/alignSelect.cpp
-      inspector/fontStyleSelect.cpp
-#      inspector/offsetSelect.cpp
-#      inspector/scaleSelect.cpp
-#      inspector/sizeSelect.cpp
-      inspector/resetButton.cpp
       icons.cpp
       miconengine.cpp
       ${qrc_files}

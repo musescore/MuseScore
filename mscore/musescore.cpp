@@ -82,7 +82,7 @@
 #include "selectnotedialog.h"
 #include "transposedialog.h"
 #include "metaedit.h"
-#include "inspector/inspector.h"
+#include "view/ui/inspector.h"
 #ifdef OMR
 #include "omrpanel.h"
 #endif

@@ -27,9 +27,9 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/layout.h"
-#include "inspector/alignSelect.h"
-#include "inspector/offsetSelect.h"
-#include "inspector/fontStyleSelect.h"
+#include "view/ui/alignSelect.h"
+#include "view/ui/offsetSelect.h"
+#include "view/ui/fontStyleSelect.h"
 #include "preferences.h"
 
 namespace Ms {
