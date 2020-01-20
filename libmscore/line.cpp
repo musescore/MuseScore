@@ -130,7 +130,7 @@ QPointF LineSegment::rightAnchorPosition(const qreal& systemPositionY) const
     return result;
     }
 
-void LineSegment::moveLeftAnchor(const QPointF &positionDelta)
+void LineSegment::moveLeftAnchor(const QPointF& positionDelta)
     {
     if (line()->anchor() == Spanner::Anchor::SEGMENT && isSingleBeginType()) {
           int staffIndex = staffIdx();
@@ -164,7 +164,7 @@ void LineSegment::moveLeftAnchor(const QPointF &positionDelta)
         }
     }
 
-void LineSegment::moveRightAnchor(const QPointF &positionDelta)
+void LineSegment::moveRightAnchor(const QPointF& positionDelta)
     {
     if (line()->anchor() == Spanner::Anchor::SEGMENT && isSingleEndType()) {
           int staffIndex = track2staff(line()->effectiveTrack2());
