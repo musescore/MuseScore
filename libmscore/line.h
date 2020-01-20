@@ -37,6 +37,7 @@ class LineSegment : public SpannerSegment {
       virtual bool edit(EditData&) override;
       QVector<QLineF> gripAnchorLines(Grip) const override;
       virtual void startEditDrag(EditData&) override;
+      void startDrag(EditData&) override;
 
    public:
       LineSegment(Spanner* sp, Score* s, ElementFlags f = ElementFlag::NOTHING) : SpannerSegment(sp, s, f) {}
