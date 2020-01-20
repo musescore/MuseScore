@@ -295,6 +295,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Minimum distance</string>
+        </property>
         <property name="suffix">
          <string>sp</string>
         </property>

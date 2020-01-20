@@ -12,7 +12,7 @@ namespace  Ms {
 //   AccessibleScoreView
 //---------------------------------------------------------
 
-//#define SCOREVIEW_VALUEINTERFACE
+#define SCOREVIEW_VALUEINTERFACE
 //#define SCOREVIEW_IMAGEINTERFACE
 
 #if defined(SCOREVIEW_VALUEINTERFACE)
@@ -37,13 +37,13 @@ class AccessibleScoreView : public QObject, QAccessibleWidget SCOREVIEW_INHERIT_
       QAccessibleInterface* parent() const Q_DECL_OVERRIDE;
       QRect rect() const Q_DECL_OVERRIDE;
       bool isValid() const Q_DECL_OVERRIDE;
-      //QAccessible::State state() const Q_DECL_OVERRIDE;
+      QAccessible::State state() const Q_DECL_OVERRIDE;
       QAccessible::Role role() const Q_DECL_OVERRIDE;
       QString text(QAccessible::Text t) const Q_DECL_OVERRIDE;
       //QWindow* window() const  Q_DECL_OVERRIDE;
       static QAccessibleInterface* ScoreViewFactory(const QString &classname, QObject *object);
-#ifdef SCOREVIEW_VALUEINTERFACE
       virtual void* interface_cast(QAccessible::InterfaceType t) Q_DECL_OVERRIDE;
+#ifdef SCOREVIEW_VALUEINTERFACE
       virtual void setCurrentValue(const QVariant&) Q_DECL_OVERRIDE;
       virtual QVariant currentValue() const Q_DECL_OVERRIDE;
       virtual QVariant maximumValue() const Q_DECL_OVERRIDE;
@@ -51,7 +51,6 @@ class AccessibleScoreView : public QObject, QAccessibleWidget SCOREVIEW_INHERIT_
       virtual QVariant minimumStepSize() const Q_DECL_OVERRIDE;
 #endif
 #ifdef SCOREVIEW_IMAGEINTERFACE
-      virtual void* interface_cast(QAccessible::InterfaceType t) Q_DECL_OVERRIDE;
       virtual QString imageDescription() const Q_DECL_OVERRIDE;
       virtual QSize imageSize() const Q_DECL_OVERRIDE;
       virtual QPoint imagePosition() const Q_DECL_OVERRIDE;

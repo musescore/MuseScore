@@ -59,11 +59,16 @@ bool AccessibleScoreView::isValid() const
       return true;
       }
 
-#if 0
+#if 1
 // TODO: determine if setting state explicitly would be helpful
 QAccessible::State AccessibleScoreView::state() const
       {
-      return QAccessible::State::active;
+      QAccessible::State s = QAccessibleWidget::state();
+      s.focusable = 1;
+      s.selectable = 1;
+      s.active = 1;
+      s.animated = 1;
+      return s;
       }
 #endif
 
@@ -71,7 +76,7 @@ QAccessible::Role AccessibleScoreView::role() const
       {
       // TODO: determine optimum role
       // StaticText has the advantage of being read by Windows Narrator
-      return QAccessible::StaticText;
+      return QAccessible::Graphic;
       }
 
 QString AccessibleScoreView::text(QAccessible::Text t) const
@@ -115,19 +120,25 @@ QAccessibleInterface* AccessibleScoreView::ScoreViewFactory(const QString &class
           return iface;
       }
 
-#ifdef SCOREVIEW_VALUEINTERFACE
-
 void* AccessibleScoreView::interface_cast(QAccessible::InterfaceType t)
       {
+#ifdef SCOREVIEW_VALUEINTERFACE
       if (t == QAccessible::ValueInterface)
             return static_cast<QAccessibleValueInterface*>(this);
+#endif
+#ifdef SCOREVIEW_IMAGEINTERFACE
+      if (t == QAccessible::ImageInterface)
+            return static_cast<QAccessibleImageInterface*>(this);
+#endif
       return QAccessibleWidget::interface_cast(t);
       }
 
+#ifdef SCOREVIEW_VALUEINTERFACE
+
 void AccessibleScoreView::setCurrentValue(const QVariant& val)
       {
-      //QString str = val;
-      s->score()->setAccessibleInfo(tr("Set externally"));
+      QString str = val.toString();
+      s->score()->setAccessibleInfo(str);
       }
 
 QVariant AccessibleScoreView::currentValue() const
@@ -154,13 +165,6 @@ QVariant AccessibleScoreView::minimumStepSize() const
 
 #ifdef SCOREVIEW_IMAGEINTERFACE
 
-void* AccessibleScoreView::interface_cast(QAccessible::InterfaceType t)
-      {
-      if (t == QAccessible::ImageInterface)
-            return static_cast<QAccessibleImageInterface*>(this);
-      return QAccessibleWidget::interface_cast(t);
-      }
-
 QString AccessibleScoreView::imageDescription() const
       {
       return s->score()->accessibleInfo();
@@ -168,7 +172,7 @@ QString AccessibleScoreView::imageDescription() const
 
 QSize AccessibleScoreView::imageSize() const
       {
-      return QSize();
+      return s->size();
       }
 
 QPoint AccessibleScoreView::imagePosition() const
@@ -358,15 +362,21 @@ void ScoreAccessibility::updateAccessibilityInfo()
             mscore->activateWindow();
             w->setFocus();
             }
+#if 0
+      else if (focusWidget == w) {
+            w->clearFocus();
+            w->setFocus();
+            }
+#endif
       QObject* obj = static_cast<QObject*>(w);
       QAccessibleValueChangeEvent vcev(obj, w->score()->accessibleInfo());
       QAccessible::updateAccessibility(&vcev);
       // TODO:
       // some screenreaders may respond better to other events
       // the version of Qt used may also be relevant, and platform too
-      //QAccessibleStateChangeEvent ev1(obj, QAccessible::DescriptionChanged);
+      //QAccessibleEvent ev1(obj, QAccessible::NameChanged);
       //QAccessible::updateAccessibility(&ev1);
-      //QAccessibleEvent ev2(obj, QAccessible::NameChanged);
+      //QAccessibleEvent ev2(obj, QAccessible::DescriptionChanged);
       //QAccessible::updateAccessibility(&ev2);
       }
 
