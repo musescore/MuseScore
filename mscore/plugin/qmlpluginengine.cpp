@@ -40,15 +40,19 @@ QmlPluginEngine::QmlPluginEngine(QObject* parent)
 //   QmlPluginEngine::beginEndCmd
 //---------------------------------------------------------
 
-void QmlPluginEngine::beginEndCmd(MuseScore* ms)
+void QmlPluginEngine::beginEndCmd(MuseScore* ms, bool inUndoRedo)
       {
       ++cmdCount;
+
+      if (inUndoRedo)
+            undoRedo = true;
+
+      const Score* cs = ms->currentScore();
+      currScoreState = cs->masterScore()->state(); // score and excerpts have united undo stack so we are better to track master score
 
       // TODO: most of plugins are never deleted so receivers usually never decrease
       if (!receivers(SIGNAL(endCmd(const QMap<QString, QVariant>&))))
             return;
-
-      const Score* cs = ms->currentScore();
 
       endCmdInfo["selectionChanged"] = !cs || cs->selectionChanged();
       endCmdInfo["excerptsChanged"] = !cs || cs->masterScore()->excerptsChanged();
@@ -56,6 +60,8 @@ void QmlPluginEngine::beginEndCmd(MuseScore* ms)
 
       endCmdInfo["startLayoutTick"] = cs ? cs->cmdState().startTick().ticks() : -1;
       endCmdInfo["endLayoutTick"] = cs ? cs->cmdState().endTick().ticks() : -1;
+
+      endCmdInfo["undoRedo"] = undoRedo;
       }
 
 //---------------------------------------------------------
@@ -73,7 +79,23 @@ void QmlPluginEngine::endEndCmd(MuseScore*)
             emit endCmd(endCmdInfo);
 
       --cmdCount;
-      if (!cmdCount)
+      if (!cmdCount) {
             recursion = false;
+            undoRedo = false;
+            lastScoreState = currScoreState;
+            }
+      }
+
+//---------------------------------------------------------
+//   QmlPluginEngine::inScoreChangeActionHandler
+///   Returns \p true if the engine is in process of
+///   handling endCmd() call which is a result of score
+///   change user action (not undo/redo or simple selection
+///   changes/mouse clicks etc.)
+//---------------------------------------------------------
+
+bool QmlPluginEngine::inScoreChangeActionHandler() const
+      {
+      return cmdCount > 0 && !undoRedo && currScoreState.isNewerThan(lastScoreState);
       }
 }
