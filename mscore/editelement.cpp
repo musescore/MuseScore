@@ -172,6 +172,7 @@ void ScoreView::endEdit()
                   figuredBassEndEdit();
             }
       editData.clearData();
+      editData.element = nullptr;
       mscore->updateInspector();
       }
 
