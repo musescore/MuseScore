@@ -21,6 +21,7 @@
 #define __QMLPLUGINENGINE_H__
 
 #include "../qml/msqmlengine.h"
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -36,14 +37,20 @@ class QmlPluginEngine : public MsQmlEngine {
       QMap<QString, QVariant> endCmdInfo;
       int cmdCount = 0;
       bool recursion = false;
+      bool undoRedo = false;
+
+      ScoreContentState lastScoreState;
+      ScoreContentState currScoreState;
 
    signals:
       void endCmd(const QMap<QString, QVariant>& changes);
    public:
       QmlPluginEngine(QObject* parent = nullptr);
 
-      void beginEndCmd(MuseScore*);
+      void beginEndCmd(MuseScore*, bool undoRedo);
       void endEndCmd(MuseScore*);
+
+      bool inScoreChangeActionHandler() const;
       };
 
 } // namespace Ms

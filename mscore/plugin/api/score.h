@@ -154,7 +154,7 @@ class Score : public Ms::PluginAPI::ScoreElement {
        * least once by "dock" type plugins in case they
        * modify the score.
        */
-      Q_INVOKABLE void startCmd() { score()->startCmd(); }
+      Q_INVOKABLE void startCmd();
       /**
        * For "dock" type plugins: to be used after score
        * modifications to make them undoable.

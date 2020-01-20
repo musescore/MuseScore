@@ -818,7 +818,7 @@ bool Score::dirty() const
 
 ScoreContentState Score::state() const
       {
-      return std::make_pair(this, undoStack()->state());
+      return ScoreContentState(this, undoStack()->state());
       }
 
 //---------------------------------------------------------

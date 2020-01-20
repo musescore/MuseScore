@@ -697,7 +697,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       Q_INVOKABLE void openExternalLink(const QString&);
 
-      virtual void endCmd() override;
+      void endCmd(bool undoRedo);
+      void endCmd() override { endCmd(false); };
       void printFile();
       void exportFile();
       bool exportParts();
