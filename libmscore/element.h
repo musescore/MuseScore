@@ -193,6 +193,10 @@ class Element : public ScoreElement {
 
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
+
+      Element* findAncestor(ElementType t);
+      const Element* findAncestor(ElementType t) const;
+
       Measure* findMeasure();
       const Measure* findMeasure() const;
       MeasureBase* findMeasureBase();
@@ -291,6 +295,7 @@ class Element : public ScoreElement {
       virtual void startDrag(EditData&);
       virtual QRectF drag(EditData&);
       virtual void endDrag(EditData&);
+      /** Returns anchor lines displayed while dragging element in page coordinates. */
       virtual QVector<QLineF> dragAnchorLines() const       { return QVector<QLineF>(); }
 
       virtual bool isEditable() const         { return !flag(ElementFlag::GENERATED); }
@@ -308,12 +313,14 @@ class Element : public ScoreElement {
       void updateGrips(EditData&) const;
       virtual bool nextGrip(EditData&) const;
       virtual bool prevGrip(EditData&) const;
+      /** Returns anchor lines displayed while dragging element's grip in page coordinates. */
       virtual QVector<QLineF> gripAnchorLines(Grip) const     { return QVector<QLineF>(); }
 
       virtual EditBehavior normalModeEditBehavior() const { return EditBehavior::SelectOnly; }
       virtual int gripsCount() const { return 0; }
       virtual Grip initialEditModeGrip() const { return Grip::NO_GRIP; }
       virtual Grip defaultGrip() const { return Grip::NO_GRIP; }
+      /** Returns grips positions in page coordinates. */
       virtual std::vector<QPointF> gripsPositions(const EditData& = EditData()) const { return std::vector<QPointF>(); }
 
       int track() const                       { return _track; }

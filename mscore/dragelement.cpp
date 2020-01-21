@@ -76,9 +76,13 @@ void ScoreView::doDragElement(QMouseEvent* ev)
                   _score->setPlayNote(false);
                   }
             QVector<QLineF> anchorLines = e->dragAnchorLines();
+            const QPointF pageOffset(e->findAncestor(ElementType::PAGE)->pos());
 
-            if (!anchorLines.isEmpty())
+            if (!anchorLines.isEmpty()) {
+                  for (QLineF& l : anchorLines)
+                        l.translate(pageOffset);
                   setDropAnchorLines(anchorLines);
+                  }
             else
                   setDropTarget(0); // this also resets dropAnchor
             }

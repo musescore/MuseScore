@@ -1394,6 +1394,26 @@ bool Element::isPrintable() const
       }
 
 //---------------------------------------------------------
+//   findAncestor
+//---------------------------------------------------------
+
+Element* Element::findAncestor(ElementType t)
+      {
+      Element* e = this;
+      while (e && e->type() != t)
+            e = e->parent();
+      return e;
+      }
+
+const Element* Element::findAncestor(ElementType t) const
+      {
+      const Element* e = this;
+      while (e && e->type() != t)
+            e = e->parent();
+      return e;
+      }
+
+//---------------------------------------------------------
 //   findMeasure
 //---------------------------------------------------------
 
