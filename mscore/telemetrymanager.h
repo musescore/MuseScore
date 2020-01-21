@@ -20,12 +20,10 @@
 #ifndef __TELEMETRYMANAGER_H__
 #define __TELEMETRYMANAGER_H__
 
-#include "serviceinjector.h"
 #ifdef BUILD_TELEMETRY_MODULE
+
+#include "serviceinjector.h"
 #include "interfaces/itelemetryservice.h"
-#else
-class ITelemetryService;
-#endif
 
 namespace Ms {
 
@@ -53,4 +51,5 @@ class TelemetryManager : public ServiceInjector<ITelemetryService> {
 
 } // namespace Ms
 
-#endif
+#endif // BUILD_TELEMETRY_MODULE
+#endif // __TELEMETRYMANAGER_H__
