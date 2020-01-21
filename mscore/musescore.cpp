@@ -285,7 +285,9 @@ static constexpr double SCALE_STEP = 1.7;
 
 static const char* saveOnlineMenuItem = "file-save-online";
 
+#ifdef BUILD_TELEMETRY_MODULE
 std::unique_ptr<TelemetryManager> TelemetryManager::mgr;
+#endif
 
 //---------------------------------------------------------
 // cmdInsertMeasure
