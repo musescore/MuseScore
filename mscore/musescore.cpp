@@ -2354,7 +2354,7 @@ void MuseScore::updatePaletteBeamMode()
 
 void MuseScore::updateInspector()
       {
-      if (_inspector)
+      if (_inspector && _inspector->isVisible())
             _inspector->update(cs);
       }
 

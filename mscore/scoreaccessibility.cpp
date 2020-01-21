@@ -67,7 +67,7 @@ QAccessible::State AccessibleScoreView::state() const
       s.focusable = 1;
       s.selectable = 1;
       s.active = 1;
-      s.animated = 1;
+      //s.animated = 1;
       return s;
       }
 #endif
@@ -97,14 +97,15 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
            }
       }
 
-#if 0
+#if 1
 // TODO: determine best option here
 // without this override, Qt determines window by looking upwards in hierarchy
-// we can duplicate that by returning nullptr
+// we can supposedly duplicate that by returning nullptr
 // qApp->focusWindow() is the "old" return value,
 // but it could conceivably refer to something other than main window, which seems wrong
 QWindow* AccessibleScoreView::window() const {
       //return nullptr;
+      //return QWdiegt::window();
       return mscore->windowHandle();      // qApp->focusWindow();
       }
 #endif
