@@ -65,8 +65,8 @@ class LineSegment : public SpannerSegment {
 private:
       QPointF leftAnchorPosition(const qreal& systemPositionY) const;
       QPointF rightAnchorPosition(const qreal& systemPositionY) const;
-      void moveLeftAnchor(const QPointF& positionDelta);
-      void moveRightAnchor(const QPointF& positionDelta);
+      void rebaseLeftAnchor();
+      void rebaseRightAnchor();
       };
 
 //---------------------------------------------------------
