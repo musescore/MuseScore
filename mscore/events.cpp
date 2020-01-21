@@ -1125,6 +1125,7 @@ void ScoreView::changeState(ViewState s)
                   if (state == ViewState::EDIT) {
                         _blockShowEdit = true;  // otherwise may jump on clicking outside the text element being edited
                         endEdit();
+                        editData.element = nullptr; // editData.element will be determined by selection state in normal mode
                         _blockShowEdit = false;
                         }
                   setCursor(QCursor(Qt::ArrowCursor));
