@@ -5815,7 +5815,8 @@ void MuseScore::cmd(QAction* a)
       cmd(a, cmdn);
       if (lastShortcut->isCmd())
             cs->endCmd();
-      endCmd();
+      else
+            endCmd();
       TourHandler::startTour(cmdn);
       }
 
