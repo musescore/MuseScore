@@ -18,7 +18,7 @@
 #include <assert.h>
 
 #include "types.h"
-//#include "musescoreCore.h"
+#include "musescoreCore.h"
 #include "score.h"
 #include "utils.h"
 #include "key.h"
