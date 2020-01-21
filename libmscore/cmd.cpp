@@ -18,7 +18,7 @@
 #include <assert.h>
 
 #include "types.h"
-#include "musescoreCore.h"
+//#include "musescoreCore.h"
 #include "score.h"
 #include "utils.h"
 #include "key.h"
@@ -268,7 +268,7 @@ void Score::endCmd(bool rollback)
             masterScore()->setPlaylistDirty();  // TODO: flag individual operations
             masterScore()->setAutosaveDirty(true);
             }
-      MuseScoreCore::mscoreCore->endCmd();
+      //MuseScoreCore::mscoreCore->endCmd();
       cmdState().reset();
       }
 

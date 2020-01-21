@@ -1080,13 +1080,18 @@ MuseScore::MuseScore()
       connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
 
       mainWindow = new QSplitter;
+      mainWindow->setObjectName("mainwindow");
+      mainWindow->setAccessibleName("");
       mainWindow->setChildrenCollapsible(false);
 
       QWidget* mainScore = new QWidget;
+      mainScore->setObjectName("mainscore");
+      mainScore->setAccessibleName("");
       mainScore->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       mainWindow->addWidget(mainScore);
 
       layout = new QVBoxLayout;
+      layout->setObjectName("layout");
       layout->setMargin(0);
       layout->setSpacing(0);
       mainScore->setLayout(layout);
@@ -1130,6 +1135,8 @@ MuseScore::MuseScore()
       mainWindow->setSizes(QList<int>({500, 50}));
 
       QSplitter* envelope = new QSplitter;
+      envelope->setObjectName("pane");
+      envelope->setAccessibleName("");
       envelope->setChildrenCollapsible(false);
       envelope->setOrientation(Qt::Vertical);
       envelope->addWidget(mainWindow);
@@ -1158,6 +1165,8 @@ MuseScore::MuseScore()
       envelope->setSizes(QList<int>({550, 180}));
 
       splitter = new QSplitter;
+      splitter->setObjectName("splitter");
+      splitter->setAccessibleName("");
       tab1 = createScoreTab();
       splitter->addWidget(tab1);
       ctab = tab1; // make tab1 active by default.
@@ -2354,7 +2363,7 @@ void MuseScore::updatePaletteBeamMode()
 
 void MuseScore::updateInspector()
       {
-      if (_inspector)
+      if (_inspector && _inspector->isVisible())
             _inspector->update(cs);
       }
 
