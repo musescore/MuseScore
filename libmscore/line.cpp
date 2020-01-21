@@ -130,66 +130,6 @@ QPointF LineSegment::rightAnchorPosition(const qreal& systemPositionY) const
     return result;
     }
 
-void LineSegment::rebaseLeftAnchor()
-      {
-      if (line()->anchor() == Spanner::Anchor::SEGMENT && isSingleBeginType()) {
-            int staffIndex = staffIdx();
-            Segment* const oldFirstSeg = spanner()->startSegment();
-            Segment* firstSeg = oldFirstSeg;
-
-//             QLineF leftAnchorLine = gripAnchorLines(Grip::START).at(0);
-
-//             QPointF position = QPointF(leftAnchorLine.p2().x(), leftAnchorLine.p1().y());
-
-            QPointF position = canvasPos();
-
-            score()->dragPosition(position, &staffIndex, &firstSeg);
-
-            if (firstSeg != oldFirstSeg) {
-                  const Fraction deltaTick = firstSeg->tick() - oldFirstSeg->tick();
-                  spanner()->undoChangeProperty(Pid::SPANNER_TICK, firstSeg->tick());
-                  spanner()->undoChangeProperty(Pid::SPANNER_TICKS, std::max(spanner()->ticks() - deltaTick, firstSeg->ticks()));
-
-                  if (firstSeg->system() == oldFirstSeg->system()) {
-                        const QPointF oldBase = oldFirstSeg->canvasPos();
-                        const QPointF newBase = firstSeg->canvasPos();
-                        const QPointF deltaRebase = oldBase - newBase;
-                        setOffset(offset() + deltaRebase);
-                        _offset2 -= deltaRebase;
-                        setOffsetChanged(true);
-                        }
-                  }
-            }
-      }
-
-void LineSegment::rebaseRightAnchor()
-      {
-      if (line()->anchor() == Spanner::Anchor::SEGMENT && isSingleEndType()) {
-            int staffIndex = track2staff(line()->effectiveTrack2());
-            Segment* const oldLastSeg = score()->tick2leftSegmentMM(spanner()->tick2() - Fraction::eps());
-            Segment* lastSeg = (offset().x() + _offset2.x()) > -oldLastSeg->width() ? oldLastSeg : oldLastSeg->prev1MM(SegmentType::ChordRest);
-
-//             QLineF rightAnchorLine = gripAnchorLines(Grip::END).at(0);
-
-//             QPointF position = QPointF(rightAnchorLine.p2().x(), rightAnchorLine.p1().y());
-
-            QPointF position = canvasPos() + pos2();
-
-            score()->dragPosition(position, &staffIndex, &lastSeg);
-
-            if (lastSeg != oldLastSeg && lastSeg->tick() >= spanner()->tick()) {
-                  const Fraction endTick = lastSeg->tick() + lastSeg->ticks();
-                  spanner()->undoChangeProperty(Pid::SPANNER_TICKS, endTick - spanner()->tick());
-
-                  if (lastSeg->system() == oldLastSeg->system()) {
-                        const QPointF oldBase = oldLastSeg->canvasPos() + QPointF(oldLastSeg->width(), 0);
-                        const QPointF newBase = lastSeg->canvasPos() + QPointF(lastSeg->width(), 0);
-                        _offset2 += oldBase - newBase;
-                        }
-                  }
-            }
-      }
-
 //---------------------------------------------------------
 //   gripAnchorLines
 //    return page coordinates
@@ -437,13 +377,234 @@ bool LineSegment::edit(EditData& ed)
       }
 
 //---------------------------------------------------------
+//   findSegmentForGrip
+//---------------------------------------------------------
+
+Segment* LineSegment::findSegmentForGrip(Grip grip, QPointF pos) const
+      {
+      if (grip != Grip::START && grip != Grip::END)
+            return nullptr;
+
+      SLine* l = line();
+      const bool left = (grip == Grip::START);
+
+      Segment* const oldSeg = left ? l->startSegment() : score()->tick2leftSegmentMM(l->tick2() - Fraction::eps());
+      const int oldStaffIndex = left ? staffIdx() : track2staff(l->effectiveTrack2());
+
+      const qreal spacingFactor = left ? 0.5 : 1.0; // defines the point where canvas is divided between segments, systems etc.
+
+      System* sys = oldSeg->system();
+      const QList<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
+
+      if (!foundSystems.empty() && !foundSystems.contains(sys))
+            sys = foundSystems[0];
+
+      // Restrict searching segment to the correct staff
+      pos.setY(sys->staffCanvasYpage(oldStaffIndex));
+
+      Segment* seg = nullptr; // don't prefer any segment while searching line position
+      int staffIndex = oldStaffIndex;
+      score()->dragPosition(pos, &staffIndex, &seg, spacingFactor);
+
+      return seg;
+      }
+
+//---------------------------------------------------------
+//   deltaRebaseLeft
+///   Helper function for anchors rebasing when dragging.
+//---------------------------------------------------------
+
+QPointF LineSegment::deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg)
+      {
+      if (oldSeg == newSeg)
+            return QPointF();
+      return oldSeg->canvasPos() - newSeg->canvasPos();
+      }
+
+//---------------------------------------------------------
+//   deltaRebaseRight
+///   Helper function for anchors rebasing when dragging.
+//---------------------------------------------------------
+
+QPointF LineSegment::deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, int staffIndex)
+      {
+      if (oldSeg == newSeg)
+            return QPointF();
+
+      const QPointF oldBase = oldSeg->canvasPos() + QPointF(oldSeg->width(), 0);
+      const QPointF newBase = newSeg->canvasPos() + QPointF(newSeg->widthInStaff(staffIndex), 0);
+      return oldBase - newBase;
+      }
+
+//---------------------------------------------------------
+//   lastSegmentEndTick
+///   Helper function for anchors rebasing when dragging.
+//---------------------------------------------------------
+
+Fraction LineSegment::lastSegmentEndTick(const Segment* seg, const Spanner* s)
+      {
+      return seg->tick() + seg->ticksInStaff(track2staff(s->effectiveTrack2()));
+      }
+
+//---------------------------------------------------------
+//   rebaseAnchor
+///   If system has changed, returns the new line segment
+///   (may appear to be reused \c this segment), otherwise
+///   returns nullptr.
+//---------------------------------------------------------
+
+LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
+      {
+      switch (grip) {
+            case Grip::START:
+                  if (!isSingleBeginType())
+                        return nullptr;
+                  break;
+            case Grip::END:
+                  if (!isSingleEndType())
+                        return nullptr;
+                  break;
+            default:
+                  return nullptr;
+            }
+
+      SLine* l = line();
+      const bool left = (grip == Grip::START);
+      Segment* const oldSeg = left ? l->startSegment() : score()->tick2leftSegmentMM(l->tick2() - Fraction::eps());
+      System* const oldSystem = system();
+
+      if (!newSeg || oldSeg == newSeg)
+            return nullptr;
+
+      Fraction startTick = left ? newSeg->tick() : l->tick();
+      Fraction endTick = left ? l->tick2() : lastSegmentEndTick(newSeg, l);
+
+      if (endTick <= startTick) {
+            if (left)
+                  endTick = lastSegmentEndTick(newSeg, l);
+            else
+                  startTick = newSeg->tick();
+            }
+
+      if (l->tick() != startTick)
+            l->undoChangeProperty(Pid::SPANNER_TICK, startTick);
+
+      l->undoChangeProperty(Pid::SPANNER_TICKS, endTick - startTick);
+
+      if (newSeg->system() == oldSystem) {
+            const QPointF delta = left ? deltaRebaseLeft(oldSeg, newSeg) : deltaRebaseRight(oldSeg, newSeg, track2staff(l->effectiveTrack2()));
+            if (left) {
+                  setOffset(offset() + delta);
+                  _offset2 -= delta;
+                  setOffsetChanged(true);
+                  }
+            else {
+                  _offset2 += delta;
+                  }
+            }
+      else {
+            l->layout();
+            return left ? l->frontSegment() : l->backSegment();
+            }
+
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   rebaseAnchors
+//---------------------------------------------------------
+
+void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
+      {
+      if (line()->anchor() != Spanner::Anchor::SEGMENT)
+            return;
+
+      switch (grip) {
+            case Grip::START:
+            case Grip::END: {
+                  const bool left = (grip == Grip::START);
+
+                  if (left && !isSingleBeginType())
+                        return;
+                  if (!left && !isSingleEndType())
+                        return;
+
+                  // Find an appropriate segment to bind from actual mouse
+                  // position. This allows changing systems while dragging
+                  // while not setting line position to something
+                  // inappropriate.
+                  Segment* seg = findSegmentForGrip(grip, ed.pos);
+                  LineSegment* newLineSegment = rebaseAnchor(grip, seg);
+
+                  if (newLineSegment) {
+                        // If new line segment is not the same as this one,
+                        // switch to dragging that new segment.
+                        if (newLineSegment != this) {
+                              // Reset offset for the old line segment
+                              if (left) {
+                                    _offset2.rx() -= offset().x();
+                                    setOffset(QPointF());
+                                    }
+                              else {
+                                    setUserOff2(QPointF());
+                                    }
+
+                              // Switch to dragging the new line segment
+                              ed.view->changeEditElement(newLineSegment);
+                              }
+
+                        // Set offset for the new line segment for grip to appear under the mouse cursor
+                        System* sys;
+                        const QPointF lp = line()->linePos(grip, &sys);
+                        const qreal xoff = sys->mapFromCanvas(ed.pos).x() - lp.x();
+
+                        if (left) {
+                              newLineSegment->rxoffset() = xoff;
+                              newLineSegment->setUserOff2(QPointF(-xoff, 0.0));
+                              }
+                        else {
+                              newLineSegment->setUserXoffset2(xoff);
+                              }
+                        }
+                  }
+                  break;
+            case Grip::MIDDLE: {
+                  if (!isSingleType())
+                        return;
+
+                  SLine* l = line();
+
+                  // If dragging middle grip (or the entire hairpin), mouse position
+                  // does not directly correspond to any sensible position, so use
+                  // actual line coordinates instead. This method doesn't allow for
+                  // system changes, but that seems OK when dragging the entire line:
+                  // the line will just push away other systems according to autoplacement
+                  // rules if necessary.
+                  QPointF cpos = canvasPos();
+                  cpos.setY(l->startSegment()->system()->staffCanvasYpage(l->staffIdx())); // prevent cross-system move
+
+                  Segment* seg1 = findSegmentForGrip(Grip::START, cpos);
+                  Segment* seg2 = findSegmentForGrip(Grip::END, cpos + pos2());
+
+                  if (!(seg1 && seg2 && seg1->system() == seg2->system() && seg1->system() == system()))
+                        return;
+
+                  rebaseAnchor(Grip::START, seg1);
+                  rebaseAnchor(Grip::END, seg2);
+                  }
+            default:
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
 void LineSegment::editDrag(EditData& ed)
       {
       // Only for resizing according to the diagonal properties
-      QPointF deltaResize(ed.delta.x(), line()->diagonal() ? ed.delta.y() : 0.0);
+      const QPointF deltaResize(ed.evtDelta.x(), line()->diagonal() ? ed.evtDelta.y() : 0.0);
 
       switch (ed.curGrip) {
             case Grip::START: // Resize the begin of element (left grip)
@@ -452,23 +613,21 @@ void LineSegment::editDrag(EditData& ed)
 
                   if (isStyled(Pid::OFFSET))
                         setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-                  rebaseLeftAnchor();
+
+                  rebaseAnchors(ed, ed.curGrip);
                   break;
             case Grip::END: // Resize the end of element (right grip)
                   _offset2 += deltaResize;
-                  rebaseRightAnchor();
+                  rebaseAnchors(ed, ed.curGrip);
                   break;
             case Grip::MIDDLE: { // Move the element (middle grip)
                   // Only for moving, no y limitation
-                  QPointF deltaMove(ed.delta.x(), ed.delta.y());
+                  const QPointF deltaMove(ed.evtDelta);
                   setOffset(offset() + deltaMove);
                   setOffsetChanged(true);
                   if (isStyled(Pid::OFFSET))
                         setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-                  if (ed.modifiers & Qt::AltModifier) {
-                        rebaseLeftAnchor();
-                        rebaseRightAnchor();
-                        }
+                  rebaseAnchors(ed, ed.curGrip);
                   }
                   break;
             default:
@@ -553,10 +712,7 @@ QRectF LineSegment::drag(EditData& ed)
       if (isStyled(Pid::OFFSET))
             setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
 
-      if (ed.modifiers & Qt::AltModifier) {
-            rebaseLeftAnchor();
-            rebaseRightAnchor();
-            }
+      rebaseAnchors(ed, Grip::MIDDLE);
 
       return canvasBoundingRect();
       }
@@ -585,8 +741,10 @@ SLine::SLine(const SLine& s)
 
 //---------------------------------------------------------
 //   linePos
-//    Anchor::NOTE: return anchor note position in system coordinates
-//    Other:        return (x position (relative to what?), 0)
+///   - Anchor::NOTE:  return anchor note position in system
+///                    coordinates
+///   - Anchor::CHORD: not implemented
+///   - Other:         return (x position in system coordinates, 0)
 //---------------------------------------------------------
 
 QPointF SLine::linePos(Grip grip, System** sys) const

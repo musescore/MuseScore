@@ -3931,9 +3931,20 @@ void ScoreView::cloneElement(Element* e)
 
 void ScoreView::changeEditElement(Element* e)
       {
-      Grip grip = editData.curGrip;
+      if (editData.element == e)
+            return;
+
+      const Grip grip = editData.curGrip;
+      const bool dragEdit = (state == ViewState::DRAG_EDIT);
+
+      if (editData.element && dragEdit)
+            editData.element->endEditDrag(editData);
+
       endEdit();
       startEdit(e, grip);
+
+      if (editData.element && dragEdit)
+            editData.element->startEditDrag(editData);
       }
 
 //---------------------------------------------------------

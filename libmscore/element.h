@@ -253,6 +253,9 @@ class Element : public ScoreElement {
       qreal pageX() const;
       qreal canvasX() const;
 
+      QPointF mapFromCanvas(const QPointF& p) const { return p - canvasPos(); }
+      QPointF mapToCanvas(const QPointF& p) const { return p + canvasPos(); }
+
       const QPointF& offset() const               { return _offset;  }
       virtual void setOffset(const QPointF& o)    { _offset = o;     }
       void setOffset(qreal x, qreal y)            { _offset.rx() = x, _offset.ry() = y; }

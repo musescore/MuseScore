@@ -86,6 +86,7 @@ class Segment final : public Element {
       Segment* next(SegmentType) const;
       Segment* nextActive() const;
       Segment* nextEnabled() const;
+      Segment* nextInStaff(int staffIdx, SegmentType t = SegmentType::ChordRest) const;
       void setNext(Segment* e)            { _next = e;      }
 
       Segment* prev() const               { return _prev;   }
@@ -162,6 +163,9 @@ class Segment final : public Element {
 
       Fraction ticks() const                     { return _ticks;   }
       void setTicks(const Fraction& v)           { _ticks = v;      }
+
+      qreal widthInStaff(int staffIdx, SegmentType t = SegmentType::ChordRest) const;
+      Fraction ticksInStaff(int staffIdx) const;
 
       bool splitsTuplet() const;
 
@@ -240,6 +244,8 @@ class Segment final : public Element {
       bool isEndBarLineType() const         { return _segmentType == SegmentType::EndBarLine; }
       bool isKeySigAnnounceType() const     { return _segmentType == SegmentType::KeySigAnnounce; }
       bool isTimeSigAnnounceType() const    { return _segmentType == SegmentType::TimeSigAnnounce; }
+
+      static constexpr SegmentType durationSegmentsMask = SegmentType::ChordRest; // segment types which may have non-zero tick length
       };
 
 //---------------------------------------------------------
