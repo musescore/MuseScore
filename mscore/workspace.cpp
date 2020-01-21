@@ -823,9 +823,10 @@ void Workspace::read(XmlReader& e)
                   QMenuBar* mb = mscore->menuBar();
                   const QObjectList menus(mb->children()); // need a copy
                   for (QObject* m : menus) {
-                        if (qobject_cast<QMenu*>(m)) {
-                              m->setParent(nullptr);
-                              m->deleteLater();
+                        QMenu* menu = qobject_cast<QMenu*>(m);
+                        if (menu) {
+                              menu->setParent(nullptr);
+                              menu->deleteLater();
                               }
                         }
                   mb->clear();
@@ -931,9 +932,10 @@ void Workspace::readGlobalMenuBar()
                               QMenuBar* mb = mscore->menuBar();
                               const QObjectList menus(mb->children()); // need a copy
                               for (QObject* m : menus) {
-                                    if (qobject_cast<QMenu*>(m)) {
-                                          m->setParent(nullptr);
-                                          m->deleteLater();
+                                    QMenu* menu = qobject_cast<QMenu*>(m);
+                                    if (menu) {
+                                          menu->setParent(nullptr);
+                                          menu->deleteLater();
                                           }
                                     }
                               mb->clear();
