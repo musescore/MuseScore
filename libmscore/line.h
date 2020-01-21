@@ -65,8 +65,13 @@ class LineSegment : public SpannerSegment {
 private:
       QPointF leftAnchorPosition(const qreal& systemPositionY) const;
       QPointF rightAnchorPosition(const qreal& systemPositionY) const;
-      void rebaseLeftAnchor();
-      void rebaseRightAnchor();
+
+      Segment* findSegmentForGrip(Grip grip, QPointF pos) const;
+      static QPointF deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg);
+      static QPointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, int staffIdx);
+      static Fraction lastSegmentEndTick(const Segment* lastSeg, const Spanner* s);
+      LineSegment* rebaseAnchor(Grip grip, Segment* newSeg);
+      void rebaseAnchors(EditData&, Grip);
       };
 
 //---------------------------------------------------------
