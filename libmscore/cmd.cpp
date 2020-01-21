@@ -268,7 +268,7 @@ void Score::endCmd(bool rollback)
             masterScore()->setPlaylistDirty();  // TODO: flag individual operations
             masterScore()->setAutosaveDirty(true);
             }
-      //MuseScoreCore::mscoreCore->endCmd();
+      MuseScoreCore::mscoreCore->endCmd();
       cmdState().reset();
       }
 
