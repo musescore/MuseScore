@@ -3479,6 +3479,32 @@ void MuseScore::removeTab(int i)
 }
 
 //---------------------------------------------------------
+//   showInspector
+//---------------------------------------------------------
+
+void MuseScore::showInspector(bool visible)
+      {
+      QAction* a = getAction("inspector");
+      if (!_inspector) {
+            _inspector = new Inspector();
+            connect(_inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+            connect(_inspector, &Inspector::propertyEditStarted, [this] (Element* element) {
+                  if (element->isArticulation())
+                      currentScoreView()->editArticulationProperties(toArticulation(element));
+                  else if (element->isTimeSig())
+                      currentScoreView()->editTimeSigProperties(toTimeSig(element));
+                  else if (element->isStaffText())
+                      currentScoreView()->editStaffTextProperties(toStaffTextBase(element));
+            });
+            addDockWidget(Qt::RightDockWidgetArea, _inspector);
+            }
+      if (_inspector)
+            reDisplayDockWidget(_inspector, visible);
+      if (visible)
+            updateInspector();
+      }
+
+//---------------------------------------------------------
 //   runTestScripts
 //---------------------------------------------------------
 
