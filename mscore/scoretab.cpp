@@ -39,6 +39,8 @@ namespace Ms {
 ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
    : QWidget(parent)
       {
+      setObjectName("scoretab");
+      setAccessibleName("");
       mainWindow = static_cast<MuseScore*>(parent);
       scoreList = sl;
       QVBoxLayout* layout = new QVBoxLayout;
@@ -53,6 +55,8 @@ ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
       connect(ag, SIGNAL(triggered(QAction*)), this, SIGNAL(actionTriggered(QAction*)));
 
       tab = new QTabBar(this);
+      tab->setObjectName("primarytab");
+      tab->setAccessibleName("");
       tab->setExpanding(false);
       tab->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
       tab->setFocusPolicy(Qt::ClickFocus);
@@ -60,6 +64,8 @@ ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
       tab->setMovable(true);
 
       tab2 = new QTabBar(this);
+      tab2->setObjectName("secondarytab");
+      tab2->setAccessibleName("");
       tab2->setExpanding(false);
       tab2->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
       tab2->setFocusPolicy(Qt::ClickFocus);
@@ -188,6 +194,8 @@ void ScoreTab::setCurrent(int n)
       ScoreView* v;
       if (!vs) {
             vs = new QSplitter;
+            vs->setObjectName("score");
+            vs->setAccessibleName("");
             v  = new ScoreView;
             tab2->blockSignals(true);
             tab2->setCurrentIndex(0);
@@ -325,6 +333,8 @@ void ScoreTab::setExcerpt(int n)
             }
       if (!vs) {
             vs = new QSplitter;
+            vs->setObjectName("part");
+            vs->setAccessibleName("");
             v  = new ScoreView;
             vs->addWidget(v);
             v->setScore(score);
@@ -472,6 +482,8 @@ void ScoreTab::initScoreView(int idx, double mag, MagIdx magIdx, double xoffset,
                   return;
                   }
             QSplitter* vs = new QSplitter;
+            vs->setObjectName("score");
+            vs->setAccessibleName("");
             vs->addWidget(v);
             stack->addWidget(vs);
             }
