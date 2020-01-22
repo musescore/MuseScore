@@ -2621,7 +2621,7 @@ bool MuseScore::savePng(Score* score, const QString& name)
 bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool drawPageBackground)
       {
       const bool screenshot = false;
-      const bool transparent = preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY);
+      const bool transparent = preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY) && !drawPageBackground;
       const double convDpi = preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION);
       const int localTrimMargin = trimMargin;
       const QImage::Format format = QImage::Format_ARGB32_Premultiplied;
@@ -2663,9 +2663,6 @@ bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool dr
       p.scale(mag_, mag_);
       if (localTrimMargin >= 0)
             p.translate(-r.topLeft());
-
-      if (drawPageBackground)
-            p.fillRect(r, Qt::white);
 
       QList< Element*> pel = page->elements();
       qStableSort(pel.begin(), pel.end(), elementLessThan);
