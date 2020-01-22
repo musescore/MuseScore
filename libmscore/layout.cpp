@@ -1196,8 +1196,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
             if (beam) {
                   bool beamEnd = bm == Beam::Mode::BEGIN;
                   if (!beamEnd) {
-                        cr->removeDeleteBeam(true);
-                        beam->add(cr);
+                        cr->replaceBeam(beam);
                         cr = 0;
                         beamEnd = (bm == Beam::Mode::END);
                         }
@@ -1221,11 +1220,9 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
                               beam = new Beam(this);
                               beam->setGenerated(true);
                               beam->setTrack(mainNote->track());
-                              a1->removeDeleteBeam(true);
-                              beam->add(a1);
+                              a1->replaceBeam(beam);
                               }
-                        cr->removeDeleteBeam(true);
-                        beam->add(cr);
+                        cr->replaceBeam(beam);
                         a1 = 0;
                         }
                   }
@@ -2400,8 +2397,7 @@ void Score::createBeams(Measure* measure)
                   if (beam) {
                         bool beamEnd = (bm == Beam::Mode::BEGIN);
                         if (!beamEnd) {
-                              cr->removeDeleteBeam(true);
-                              beam->add(cr);
+                              cr->replaceBeam(beam);
                               cr = 0;
                               beamEnd = (bm == Beam::Mode::END);
                               }
@@ -2433,11 +2429,9 @@ void Score::createBeams(Measure* measure)
                                     beam = new Beam(this);
                                     beam->setGenerated(true);
                                     beam->setTrack(track);
-                                    a1->removeDeleteBeam(true);
-                                    beam->add(a1);
+                                    a1->replaceBeam(beam);
                                     }
-                              cr->removeDeleteBeam(true);
-                              beam->add(cr);
+                              cr->replaceBeam(beam);
                               a1 = 0;
                               }
                         }
