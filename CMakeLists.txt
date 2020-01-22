@@ -835,7 +835,6 @@ endif(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 add_subdirectory(rdoc EXCLUDE_FROM_ALL)
 add_subdirectory(miditools EXCLUDE_FROM_ALL)
 add_subdirectory(fonttools EXCLUDE_FROM_ALL)
-add_subdirectory(manual)
 add_subdirectory(demos)
 
 if (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
@@ -913,8 +912,6 @@ add_custom_target(lrelease
    COMMAND Qt5::lrelease ${QT_TS_FILES}
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
 )
-
-add_dependencies(mscore pluginDocumentation)
 
 ##
 ## Miscellaneous Microsoft Visual Studio settings
