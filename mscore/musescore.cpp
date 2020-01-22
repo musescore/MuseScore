@@ -2992,7 +2992,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
             QBuffer pngDevice(&pngData);
             pngDevice.open(QIODevice::ReadWrite);
             //QString fileName2 = QString("D:\\123") + QString(i) + ".png";
-            res &= mscore->savePng(score, &pngDevice, i);
+            res &= mscore->savePng(score, &pngDevice, i, /* drawPageBackground */ true);
             bool lastArrayValue = ((score->pages().size() - 1) == i);
             jsonWriter.addValue(pngData.toBase64(), lastArrayValue);
             }
@@ -3005,7 +3005,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
             QBuffer svgDevice(&svgData);
             svgDevice.open(QIODevice::ReadWrite);
             //QString fileName2 = QString("D:\\123") + QString(i) + ".svg";
-            res &= mscore->saveSvg(score, &svgDevice, i);
+            res &= mscore->saveSvg(score, &svgDevice, i, /* drawPageBackground */ true);
             bool lastArrayValue = ((score->pages().size() - 1) == i);
             jsonWriter.addValue(svgData.toBase64(), lastArrayValue);
             }

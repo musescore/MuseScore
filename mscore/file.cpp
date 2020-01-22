@@ -2516,10 +2516,10 @@ bool MuseScore::savePng(Score* score, const QString& name)
 //    return true on success
 //---------------------------------------------------------
 
-bool MuseScore::savePng(Score* score, QIODevice* deviceForPngs, int pageNumber)
+bool MuseScore::savePng(Score* score, QIODevice* deviceForPngs, int pageNumber, bool drawPageBackground)
       {
       const bool screenshot = false;
-      const bool transparent = preferences.pngTransparent;
+      const bool transparent = preferences.pngTransparent && !drawPageBackground;
       const double convDpi = converterDpi;
       const int localTrimMargin = trimMargin;
       const QImage::Format format = QImage::Format_ARGB32_Premultiplied;
@@ -2854,7 +2854,8 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
 //---------------------------------------------------------
 //   MuseScore::saveSvg
 //---------------------------------------------------------
-bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber)
+
+bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool drawPageBackground)
       {
       QString title(score->title());
       score->setPrinting(true);
@@ -2882,6 +2883,10 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber)
       p.setRenderHint(QPainter::TextAntialiasing, true);
       if (trimMargin >= 0)
             p.translate(-r.topLeft());
+
+      if (drawPageBackground)
+            p.fillRect(r, Qt::white);
+
       // 1st pass: StaffLines
       for  (System* s : *page->systems()) {
             for (int i = 0, n = s->staves()->size(); i < n; i++) {
