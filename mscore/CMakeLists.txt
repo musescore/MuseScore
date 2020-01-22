@@ -235,7 +235,6 @@ add_library(mscoreapp STATIC
       noteGroups.cpp
       pathlistdialog.cpp
       exampleview.cpp
-      miconengine.cpp
 
       palette/createpalettedialog.cpp
       palette/palettedialog.cpp palette/palettecelldialog.cpp
@@ -497,7 +496,6 @@ endif (NOT MSVC)
 add_library(
       inspectorplugin SHARED
       icons.cpp
-      miconengine.cpp
       ${qrc_files}
       )
 
