@@ -23,10 +23,8 @@ namespace PluginAPI {
 
 void Element::setOffsetX(qreal offX)
       {
-      offX *= element()->spatium();
-      QPointF off(element()->offset());
-      off.rx() += offX;
-      set(Ms::Pid::OFFSET, off);
+      const qreal offY = element()->offset().y() / element()->spatium();
+      set(Ms::Pid::OFFSET, QPointF(offX, offY));
       }
 
 //---------------------------------------------------------
@@ -35,10 +33,8 @@ void Element::setOffsetX(qreal offX)
 
 void Element::setOffsetY(qreal offY)
       {
-      offY *= element()->spatium();
-      QPointF off(element()->offset());
-      off.ry() += offY;
-      set(Ms::Pid::OFFSET, off);
+      const qreal offX = element()->offset().x() / element()->spatium();
+      set(Ms::Pid::OFFSET, QPointF(offX, offY));
       }
 
 //---------------------------------------------------------
