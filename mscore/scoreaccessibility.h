@@ -12,7 +12,14 @@ namespace  Ms {
 //   AccessibleScoreView
 //---------------------------------------------------------
 
+#ifndef Q_OS_WIN
+// implement value interface so the value change event is generated
+// even though it is not an expected property for static text on Linux (AT-SPI)
+// on Windows, static text *does* use value, so defining this interface is unnecessary
+// and it results in Narrator reading all of the range value information (min/max/current)
+// macOS is more like Linux than it is like Windows...
 #define SCOREVIEW_VALUEINTERFACE
+#endif
 //#define SCOREVIEW_IMAGEINTERFACE
 
 #if defined(SCOREVIEW_VALUEINTERFACE)
