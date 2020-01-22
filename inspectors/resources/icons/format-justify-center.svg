@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>format-justify-center</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="format-justify-center">
+            <g id="ic_format_align_center_24px">
+                <path d="M7,15 L7,17 L17,17 L17,15 L7,15 Z M3,21 L21,21 L21,19 L3,19 L3,21 Z M3,13 L21,13 L21,11 L3,11 L3,13 Z M7,7 L7,9 L17,9 L17,7 L7,7 Z M3,3 L3,5 L21,5 L21,3 L3,3 Z" id="Shape" fill="#3B3F45"></path>
+                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
