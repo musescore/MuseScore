@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>format-text-underline</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="format-text-underline" fill="#3B3F45">
+            <path d="M12,17 C15.31,17 18,14.31 18,11 L18,3 L15.5,3 L15.5,11 C15.5,12.93 13.93,14.5 12,14.5 C10.07,14.5 8.5,12.93 8.5,11 L8.5,3 L6,3 L6,11 C6,14.31 8.69,17 12,17 Z M5,19 L5,21 L19,21 L19,19 L5,19 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

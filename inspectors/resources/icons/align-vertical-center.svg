@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>align-vertical-center</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="align-vertical-center" fill="#3B3F45">
+            <path d="M3,13 L5,13 L5,11 L3,11 L3,13 Z M7,13 L9,13 L9,11 L7,11 L7,13 Z M11,13 L13,13 L13,11 L11,11 L11,13 Z M15,13 L17,13 L17,11 L15,11 L15,13 Z M19,13 L21,13 L21,11 L19,11 L19,13 Z" id="Line"></path>
+            <path d="M13.5,6 L11.5,6 L7,18 L9,18 L10.12,15 L14.87,15 L16,18 L18,18 L13.5,6 Z M10.88,13 L12.5,8.67 L14.12,13 L10.88,13 L10.88,13 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>
