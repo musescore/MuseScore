@@ -37,6 +37,8 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       QDockWidget* manualDock;
       QPointer<QQuickView> view;
       QPointer<QDockWidget> dock;
+      QDockWidget* logDock;
+      QPlainTextEdit* log;
 
       void setState(PCState newState);
       virtual void closeEvent(QCloseEvent*);

@@ -42,11 +42,18 @@ PluginCreator::PluginCreator(QWidget* parent)
       dock        = 0;
       manualDock  = 0;
       helpBrowser = 0;
+      logDock     = new QDockWidget(tr("Log"), this);
+      log         = new QPlainTextEdit;
+
+      logDock->setWidget(log);
 
       setObjectName("PluginCreator");
       setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
 
       setupUi(this);
+
+      menuHelp->addAction(logDock->toggleViewAction());
+      addDockWidget(Qt::BottomDockWidgetArea, logDock);
 
       QToolBar* fileTools = addToolBar(tr("File Operations"));
       fileTools->setObjectName("FileOperations");
@@ -213,7 +220,6 @@ void PluginCreator::writeSettings()
       QSettings settings;
       settings.beginGroup(objectName());
       settings.setValue("windowState", saveState());
-      settings.setValue("splitter", splitter->saveState());
       settings.endGroup();
 
       MuseScore::saveGeometry(this);
@@ -228,7 +234,6 @@ void PluginCreator::readSettings()
       if (!useFactorySettings) {
             QSettings settings;
             settings.beginGroup(objectName());
-            splitter->restoreState(settings.value("splitter").toByteArray());
             restoreState(settings.value("windowState").toByteArray());
             settings.endGroup();
             }
@@ -455,7 +460,6 @@ void PluginCreator::load()
       created = false;
       setState(PCState::CLEAN);
       setTitle( fi.completeBaseName() );
-      setToolTip(path);
       raise();
       }
 
@@ -485,7 +489,6 @@ void PluginCreator::doSavePlugin(bool saveas)
             created = false;
             setState(PCState::CLEAN);
             setTitle( fi.completeBaseName() );
-            setToolTip(path);
             }
       else {
             // TODO
@@ -538,7 +541,6 @@ void PluginCreator::newPlugin()
       textEdit->setPlainText(s);
       setState(PCState::CLEAN);
       setTitle(path);
-      setToolTip(path);
       raise();
       }
 
