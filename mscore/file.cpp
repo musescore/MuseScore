@@ -2618,7 +2618,7 @@ bool MuseScore::savePng(Score* score, const QString& name)
 //    return true on success
 //---------------------------------------------------------
 
-bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber)
+bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool drawPageBackground)
       {
       const bool screenshot = false;
       const bool transparent = preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY);
@@ -2663,6 +2663,10 @@ bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber)
       p.scale(mag_, mag_);
       if (localTrimMargin >= 0)
             p.translate(-r.topLeft());
+
+      if (drawPageBackground)
+            p.fillRect(r, Qt::white);
+
       QList< Element*> pel = page->elements();
       qStableSort(pel.begin(), pel.end(), elementLessThan);
       paintElements(p, pel);
@@ -2844,7 +2848,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
 ///  Save a single page
 //---------------------------------------------------------
 
-bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber)
+bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool drawPageBackground)
       {
       QString title(score->title());
       score->setPrinting(true);
@@ -2878,6 +2882,10 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber)
       MScore::pixelRatio = DPI / printer.logicalDpiX();
       if (trimMargin >= 0)
              p.translate(-r.topLeft());
+
+      if (drawPageBackground)
+            p.fillRect(r, Qt::white);
+
       // 1st pass: StaffLines
       for  (System* s : page->systems()) {
             for (int i = 0, n = s->staves()->size(); i < n; i++) {
@@ -3307,7 +3315,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
             QByteArray pngData;
             QBuffer pngDevice(&pngData);
             pngDevice.open(QIODevice::ReadWrite);
-            res &= mscore->savePng(score.get(), &pngDevice, i);
+            res &= mscore->savePng(score.get(), &pngDevice, i, /* drawPageBackground */ true);
             bool lastArrayValue = ((score->pages().size() - 1) == i);
             jsonWriter.addValue(pngData.toBase64(), lastArrayValue);
             }
@@ -3319,7 +3327,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
             QByteArray svgData;
             QBuffer svgDevice(&svgData);
             svgDevice.open(QIODevice::ReadWrite);
-            res &= mscore->saveSvg(score.get(), &svgDevice, i);
+            res &= mscore->saveSvg(score.get(), &svgDevice, i, /* drawPageBackground */ true);
             bool lastArrayValue = ((score->pages().size() - 1) == i);
             jsonWriter.addValue(svgData.toBase64(), lastArrayValue);
             }
