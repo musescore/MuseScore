@@ -61,9 +61,19 @@ QVariant ScoreElement::get(Ms::Pid pid) const
       if (!e)
             return QVariant();
       const QVariant val = e->getProperty(pid);
-      if (propertyType(pid) == P_TYPE::FRACTION) {
-            const Fraction f(val.value<Fraction>());
-            return QVariant::fromValue(wrap(f));
+      switch (propertyType(pid)) {
+            case P_TYPE::FRACTION: {
+                  const Fraction f(val.value<Fraction>());
+                  return QVariant::fromValue(wrap(f));
+                  }
+            case P_TYPE::POINT_SP:
+            case P_TYPE::POINT_SP_MM:
+                  if (e->isElement())
+                        return val.toPointF() / toElement(e)->spatium();
+                  // TODO: handle Staff and other classes?
+                  break;
+            default:
+                  break;
             }
       return val;
       }
@@ -77,13 +87,24 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
       if (!e)
             return;
 
-      if (propertyType(pid) == P_TYPE::FRACTION) {
-            FractionWrapper* f = val.value<FractionWrapper*>();
-            if (!f) {
-                  qWarning("ScoreElement::set: trying to assign value of wrong type to fractional property");
-                  return;
+      switch (propertyType(pid)) {
+            case P_TYPE::FRACTION: {
+                  FractionWrapper* f = val.value<FractionWrapper*>();
+                  if (!f) {
+                        qWarning("ScoreElement::set: trying to assign value of wrong type to fractional property");
+                        return;
+                        }
+                  val = QVariant::fromValue(f->fraction());
                   }
-            val = QVariant::fromValue(f->fraction());
+                  break;
+            case P_TYPE::POINT_SP:
+            case P_TYPE::POINT_SP_MM:
+                  if (e->isElement())
+                        val = val.toPointF() * toElement(e)->spatium();
+                  // TODO: handle Staff and other classes?
+                  break;
+            default:
+                  break;
             }
 
       const PropertyFlags f = e->propertyFlags(pid);
