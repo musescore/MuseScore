@@ -134,6 +134,7 @@
 #include "awl/aslider.h"
 #include "extension.h"
 #include "thirdparty/qzip/qzipreader_p.h"
+#include "gui/miconengine.h"
 
 #include "sparkle/autoUpdater.h"
 #if defined(WIN_SPARKLE_ENABLED)
@@ -8194,7 +8195,8 @@ inline static void showSplashMessage(MsSplashScreen* sc, QString&& message)
 void MuseScore::init(QStringList& argv)
 {
     mscoreGlobalShare = getSharePath();
-    iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") : QString(":/data/icons/");
+    iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
+    MIconEngine::iconDirPath = iconPath;
 
     if (dataPath.isEmpty()) {
         dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
