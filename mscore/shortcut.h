@@ -97,12 +97,11 @@ static const int KEYSEQ_SIZE = 4;
 
 class Shortcut {
       MsWidget _assignedWidget;   //! the widget where the action will be assigned
-      int _state { 0 };           //! shortcut is valid in this Mscore state
+      int _state { 0 };           //! shortcut is valid in this Mscore state (or'd list of states)
       QByteArray _key;            //! xml tag name for configuration file
       QByteArray _descr;          //! descriptor, shown in editor
       QByteArray _text;           //! text as shown on buttons or menus
       QByteArray _help;           //! ballon help
-                                  //! (or'd list of states)
 
       Icons _icon                            { Icons::Invalid_ICON };
       Qt::ShortcutContext _context           { Qt::WindowShortcut };
@@ -147,7 +146,7 @@ class Shortcut {
       void reset();           //! reset to buildin
       void addShortcut(const QKeySequence&);
       int state() const                        { return _state; }
-      void setState(int v)                      { _state = v;     }
+      void setState(int v)                     { _state = v;     }
       bool needsScore() const                  { return _flags & ShortcutFlags::A_SCORE; }
       bool isCmd() const                       { return _flags & ShortcutFlags::A_CMD; }
       bool isCheckable() const                 { return _flags & ShortcutFlags::A_CHECKABLE; }

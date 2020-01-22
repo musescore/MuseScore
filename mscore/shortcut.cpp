@@ -3731,6 +3731,38 @@ Shortcut Shortcut::_sc[] = {
          Icons::mail_ICON,
          Qt::ApplicationShortcut
          },
+#ifdef SCRIPT_INTERFACE
+      {
+         MsWidget::PLUGIN_CREATOR,
+         STATE_PLUGIN_CREATOR, // So that no conflict occur (and are shown in the shortcut preferences)
+         "plugin-reload-source",
+         QT_TRANSLATE_NOOP("action", "Reload"),
+         QT_TRANSLATE_NOOP("action", "Reload plugin source"),
+         QT_TRANSLATE_NOOP("action", "Reload plugin source code"),
+         Icons::viewRefresh_ICON,
+         Qt::WindowShortcut
+         },
+      {
+         MsWidget::PLUGIN_CREATOR,
+         STATE_PLUGIN_CREATOR, // So that no conflict occur (and are shown in the shortcut preferences)
+         "plugin-run",
+         QT_TRANSLATE_NOOP("action", "Run"),
+         QT_TRANSLATE_NOOP("action", "Run current plugin"),
+         QT_TRANSLATE_NOOP("action", "Run currently loaded plugin source."),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut
+         },
+      {
+         MsWidget::PLUGIN_CREATOR,
+         STATE_PLUGIN_CREATOR, // So that no conflict occur (and are shown in the shortcut preferences)
+         "plugin-stop",
+         QT_TRANSLATE_NOOP("action", "Stop"),
+         QT_TRANSLATE_NOOP("action", "Stop running plugin"),
+         QT_TRANSLATE_NOOP("action", "Stop running plugin.\nWarning: this stops all running plugins."),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut
+         },
+#endif // SCRIPT_INTERFACE
 #ifdef MSCORE_UNSTABLE
       {
          MsWidget::MAIN_WINDOW,

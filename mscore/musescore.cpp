@@ -4253,6 +4253,14 @@ void MuseScore::changeState(ScoreState val)
             QAction* a = s->action();
             if (!a)
                   continue;
+#ifdef SCRIPT_INTERFACE
+            // The states inside the plugin creator are handled internally.
+            // changeState(STATE_PLUGIN_CREATOR) will never be called,
+            // because when the plugin creator gets focus, it sets the state
+            // to STATE_DISABLED.
+            if (s->state() == STATE_PLUGIN_CREATOR)
+                  continue;
+#endif
             if (enable && (s->key() == "undo"))
                   a->setEnabled((s->state() & val) && (cs ? cs->undoStack()->canUndo() : false));
             else if (enable && (s->key() == "redo"))

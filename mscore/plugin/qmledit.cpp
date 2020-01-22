@@ -376,27 +376,6 @@ QmlEdit::QmlEdit(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   focusInEvent
-//---------------------------------------------------------
-
-void QmlEdit::focusInEvent(QFocusEvent* event)
-      {
-      mscoreState = mscore->state();
-      mscore->changeState(STATE_DISABLED);
-      QPlainTextEdit::focusInEvent(event);
-      }
-
-//---------------------------------------------------------
-//   focusOutEvent
-//---------------------------------------------------------
-
-void QmlEdit::focusOutEvent(QFocusEvent* event)
-      {
-      mscore->changeState(mscoreState);
-      QPlainTextEdit::focusOutEvent(event);
-      }
-
-//---------------------------------------------------------
 //   move
 //---------------------------------------------------------
 

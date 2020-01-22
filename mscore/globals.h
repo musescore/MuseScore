@@ -20,6 +20,8 @@
 #ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
+#include "config.h"
+
 namespace Ms {
 
 extern bool enableExperimental;
@@ -42,7 +44,12 @@ extern bool ignoreWarnings;
 
 enum MsWidget {
       MAIN_WINDOW = 0,
-      SCORE_TAB   = 1 << 0
+#ifdef SCRIPT_INTERFACE
+      SCORE_TAB   = 1 << 0,
+      PLUGIN_CREATOR = 1 << 1
+#else
+      SCORE_TAB   = 1 << 0 // needs to be on a separate line to avoid the endline coma
+#endif
       };
 
 //---------------------------------------------------------
@@ -70,6 +77,7 @@ enum ScoreState {
       STATE_FOTO                                = 1 << 14,
       STATE_LOCK                                = 1 << 15,
       STATE_NOTE_ENTRY_METHOD_TIMEWISE          = 1 << 16,
+      STATE_PLUGIN_CREATOR                      = 1 << 17,
 
       STATE_NEVER                               = 1 << 31,
 

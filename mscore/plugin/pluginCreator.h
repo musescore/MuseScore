@@ -31,6 +31,8 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       PCState state;
       bool created;
 
+      ScoreState mscoreState; // used to restore the main window's state
+
       QString path;
       QmlPlugin* item;
       HelpBrowser* helpBrowser;
@@ -38,8 +40,16 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       QPointer<QQuickView> view;
       QPointer<QDockWidget> dock;
 
+      QAction* actionRun;
+      QAction* actionStop;
+      QAction* actionReload;
+
       void setState(PCState newState);
+
+      virtual void focusInEvent(QFocusEvent*);
+      virtual void focusOutEvent(QFocusEvent*); // used to restore the main window's state
       virtual void closeEvent(QCloseEvent*);
+
       void readSettings();
       void setTitle(const QString&);
       QString manualPath();

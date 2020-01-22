@@ -5,6 +5,10 @@
     <seq>Ctrl+Shift+P</seq>
     </SC>
   <SC>
+    <key>plugin-run</key>
+    <seq>Ctrl+B</seq>
+    </SC>
+  <SC>
     <key>help</key>
     <seq>F1</seq>
     </SC>

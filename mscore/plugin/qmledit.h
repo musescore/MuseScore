@@ -28,11 +28,8 @@ class QmlEdit : public QPlainTextEdit {
 
       QWidget* lineNumberArea;
       JSHighlighter* hl;
-      ScoreState mscoreState;
       QString pickBuffer;
 
-      virtual void focusInEvent(QFocusEvent*);
-      virtual void focusOutEvent(QFocusEvent*);
       void move(QTextCursor::MoveOperation);
       virtual void keyPressEvent(QKeyEvent*);
       void tab();

@@ -59,7 +59,7 @@ PluginCreator::PluginCreator(QWidget* parent)
       actionOpen->setShortcut(QKeySequence(QKeySequence::Open));
       fileTools->addAction(actionOpen);
 
-      actionReload->setIcon(*icons[int(Icons::viewRefresh_ICON)]);
+      actionReload = getAction("plugin-reload-source");
       fileTools->addAction(actionReload);
 
       actionSave->setIcon(*icons[int(Icons::fileSave_ICON)]);
@@ -90,26 +90,33 @@ PluginCreator::PluginCreator(QWidget* parent)
       actionUndo->setEnabled(false);
       actionRedo->setEnabled(false);
 
+      QToolBar* runTools = addToolBar(tr("Run Operations"));
+      runTools->setObjectName("RunOperations");
+      actionRun = getAction("plugin-run");
+      actionStop = getAction("plugin-stop");
+      runTools->addAction(actionRun);
+      runTools->addAction(actionStop);
+
       log->setReadOnly(true);
       log->setMaximumBlockCount(1000);
 
       readSettings();
       setState(PCState::EMPTY);
 
-      connect(run,        SIGNAL(clicked()),     SLOT(runClicked()));
-      connect(stop,       SIGNAL(clicked()),     SLOT(stopClicked()));
-      connect(actionOpen, SIGNAL(triggered()),   SLOT(loadPlugin()));
-      connect(actionReload, SIGNAL(triggered()), SLOT(load()));
-      connect(actionSave, SIGNAL(triggered()),   SLOT(savePlugin()));
-      connect(actionSaveAs, SIGNAL(triggered()), SLOT(savePluginAs()));
-      connect(actionNew,  SIGNAL(triggered()),   SLOT(newPlugin()));
-      connect(actionQuit, SIGNAL(triggered()),   SLOT(close()));
-      connect(actionManual, SIGNAL(triggered()), SLOT(showManual()));
-      connect(actionUndo, SIGNAL(triggered()),         textEdit,   SLOT(undo()));
-      connect(actionRedo, SIGNAL(triggered()),         textEdit,   SLOT(redo()));
-      connect(textEdit,   SIGNAL(undoAvailable(bool)), actionUndo, SLOT(setEnabled(bool)));
-      connect(textEdit,   SIGNAL(redoAvailable(bool)), actionRedo, SLOT(setEnabled(bool)));
-      connect(textEdit,   SIGNAL(textChanged()), SLOT(textChanged()));
+      connect(actionRun,      SIGNAL(triggered()),    SLOT(runClicked()));
+      connect(actionStop,     SIGNAL(triggered()),    SLOT(stopClicked()));
+      connect(actionOpen,     SIGNAL(triggered()),    SLOT(loadPlugin()));
+      connect(actionReload,   SIGNAL(triggered()),    SLOT(load()));
+      connect(actionSave,     SIGNAL(triggered()),    SLOT(savePlugin()));
+      connect(actionSaveAs,   SIGNAL(triggered()),    SLOT(savePluginAs()));
+      connect(actionNew,      SIGNAL(triggered()),    SLOT(newPlugin()));
+      connect(actionQuit,     SIGNAL(triggered()),    SLOT(close()));
+      connect(actionManual,   SIGNAL(triggered()),    SLOT(showManual()));
+      connect(actionUndo,     SIGNAL(triggered()),         textEdit,   SLOT(undo()));
+      connect(actionRedo,     SIGNAL(triggered()),         textEdit,   SLOT(redo()));
+      connect(textEdit,       SIGNAL(undoAvailable(bool)), actionUndo, SLOT(setEnabled(bool)));
+      connect(textEdit,       SIGNAL(redoAvailable(bool)), actionRedo, SLOT(setEnabled(bool)));
+      connect(textEdit,       SIGNAL(textChanged()),  SLOT(textChanged()));
       }
 
 //---------------------------------------------------------
@@ -140,8 +147,9 @@ void PluginCreator::setState(PCState newState)
                               setTitle("");
                               actionSave->setEnabled(false);
                               actionSaveAs->setEnabled(false);
-                              run->setEnabled(false);
-                              stop->setEnabled(false);
+                              actionRun->setEnabled(false);
+                              actionStop->setEnabled(false);
+                              actionReload->setEnabled(false);
                               textEdit->setEnabled(false);
                               break;
                         case PCState::CLEAN:
@@ -157,7 +165,8 @@ void PluginCreator::setState(PCState newState)
                         case PCState::CLEAN:
                               setTitle(path);
                               actionSaveAs->setEnabled(true);
-                              run->setEnabled(true);
+                              actionReload->setEnabled(true);
+                              actionRun->setEnabled(true);
                               textEdit->setEnabled(true);
                               break;
                         case PCState::DIRTY:
@@ -182,7 +191,6 @@ void PluginCreator::setState(PCState newState)
                         case PCState::EMPTY:
                         case PCState::CLEAN:
                               actionSave->setEnabled(false);
-                              actionSave->setEnabled(true);
                         case PCState::DIRTY:
                               break;
                         }
@@ -307,7 +315,7 @@ void PluginCreator::runClicked()
             msg(tr("Creating component failed\n"));
             foreach(QQmlError e, component.errors())
                   msg("   " + tr("line %1: %2\n").arg(e.line()).arg(e.description()));
-            stop->setEnabled(false);
+            actionStop->setEnabled(false);
             return;
             }
 
@@ -320,8 +328,8 @@ void PluginCreator::runClicked()
             }
 
       qInstallMessageHandler(qmlMsgHandler);
-      stop->setEnabled(true);
-      run->setEnabled(false);
+      actionStop->setEnabled(true);
+      actionRun->setEnabled(false);
 
       msg(tr("Plugin Details:") + "\n");
       msg("  " + tr("Menu Path:") + " " + item->menuPath() + "\n");
@@ -383,12 +391,14 @@ void PluginCreator::runClicked()
       // Main window is on top at this point. Make sure correct view is on top.
       if (item->pluginType() == "dock") {
             raise(); // Screen needs to be on top to see docked panel.
+            activateWindow();
             }
       else if (view) {
             view->raise();
             }
       else {
             raise(); // Console only, bring to top to see results.
+            activateWindow();
             }
       }
 
@@ -398,14 +408,15 @@ void PluginCreator::runClicked()
 
 void PluginCreator::closePlugin()
       {
-      stop->setEnabled(false);
-      run->setEnabled(true);
+      actionStop->setEnabled(false);
+      actionRun->setEnabled(true);
       if (view)
             view->close();
       if (dock)
             dock->close();
       qInstallMessageHandler(0);
       raise();
+      activateWindow();
       }
 
 //---------------------------------------------------------
@@ -446,17 +457,18 @@ void PluginCreator::load()
       QFileInfo fi(f);
       if (f.open(QIODevice::ReadOnly)) {
             textEdit->setPlainText(f.readAll());
-            run->setEnabled(true);
+            actionRun->setEnabled(true);
             f.close();
             }
       else {
+            qDebug(QString("Plugin Creator: could not open file '" + path + "'for reading.").toUtf8());
             path = QString();
             }
       created = false;
       setState(PCState::CLEAN);
       setTitle( fi.completeBaseName() );
-      setToolTip(path);
       raise();
+      activateWindow();
       }
 
 //---------------------------------------------------------
@@ -485,12 +497,12 @@ void PluginCreator::doSavePlugin(bool saveas)
             created = false;
             setState(PCState::CLEAN);
             setTitle( fi.completeBaseName() );
-            setToolTip(path);
             }
       else {
             // TODO
             }
       raise();
+      activateWindow();
       }
 
 void PluginCreator::savePlugin()
@@ -538,8 +550,8 @@ void PluginCreator::newPlugin()
       textEdit->setPlainText(s);
       setState(PCState::CLEAN);
       setTitle(path);
-      setToolTip(path);
       raise();
+      activateWindow();
       }
 
 //---------------------------------------------------------
@@ -590,5 +602,27 @@ void PluginCreator::showManual()
             }
       manualDock->setVisible(!manualDock->isVisible());
       }
-}
+
+//---------------------------------------------------------
+//   focusInEvent
+//---------------------------------------------------------
+
+void PluginCreator::focusInEvent(QFocusEvent* event)
+      {
+      mscoreState = mscore->state();
+      mscore->changeState(STATE_DISABLED);
+      QMainWindow::focusInEvent(event);
+      }
+
+//---------------------------------------------------------
+//   focusOutEvent
+//---------------------------------------------------------
+
+void PluginCreator::focusOutEvent(QFocusEvent* event)
+      {
+      mscore->changeState(mscoreState);
+      QMainWindow::focusOutEvent(event);
+      }
+
+} // namespace Ms
 
