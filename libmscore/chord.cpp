@@ -1432,26 +1432,66 @@ qreal Chord::defaultStemLength() const
 
 qreal Chord::minAbsStemLength() const
       {
-      if (!_tremolo || _tremolo->twoNotes())
+      const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val();
+      const qreal td = score()->styleS(Sid::tremoloDistance).val();
+      int beamLvl = beams();
+      const qreal beamDist = beam() ? beam()->beamDist() : (sw * spatium());
+
+      if (!_tremolo)
             return 0.0;
 
-      _tremolo->layout(); // guarantee right "height value"
+      // single-note tremolo
+      else if (!_tremolo->twoNotes()) {
+            _tremolo->layout(); // guarantee right "height value"
 
-      qreal height;
-      if (up())
-            height = downPos() - _tremolo->pos().y();
-      else
-            height = _tremolo->pos().y() + _tremolo->height() - upPos();
+            qreal height;
+            if (up())
+                  height = downPos() - _tremolo->pos().y();
+            else
+                  height = _tremolo->pos().y() + _tremolo->height() - upPos();
+            const bool hasHook = beamLvl && !beam();
+            if (hasHook)
+                  beamLvl += (up() ? 4.0 : 2.5); // reserve more space for stem with both hook and tremolo
+           
+            const qreal additionalHeight = beamLvl ? 0 : sw * spatium();
 
-      int beamLvl = beams();
-      const bool hasHook = beamLvl && !beam();
-      if (hasHook)
-            beamLvl += (up() ? 4.0 : 2.5); // reserve more space for stem with both hook and tremolo
-      const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val();
-      const qreal beamDist = beam() ? beam()->beamDist() : (sw * spatium());
-      const qreal additionalHeight = beamLvl ? 0 : sw * spatium();
+            return height + beamLvl * beamDist + additionalHeight;
+            }
 
-      return height + beamLvl * beamDist + additionalHeight;
+      // two-note tremolo
+      else {
+            const qreal tremoloMinHeight = ((_tremolo->lines() - 1) * td + sw) * spatium();
+            return tremoloMinHeight + beamLvl * beamDist + 2 * td * spatium();
+            }
+      }
+
+//---------------------------------------------------------
+//   adjustStemLenWithTwoNotesTremolo
+//    Extend stem of one of the chords to make the tremolo less steep
+//---------------------------------------------------------
+
+static void adjustStemLenWithTwoNotesTremolo(Tremolo* _tremolo, qreal _spatium)
+      {
+      Chord* c1 = _tremolo->chord1();
+      Chord* c2 = _tremolo->chord2();
+      if (c1->up() == c2->up()) {
+            const qreal sgn = c1->up() ? -1.0 : 1.0;
+            const qreal stemTipDistance =
+               (c2->stemPos().y() + sgn * c2->stem()->len()) - (c1->stemPos().y() + sgn * c1->stem()->len());
+            const bool stem1Higher = stemTipDistance > 0.0;
+            if (std::abs(stemTipDistance) > 1.0 * _spatium) {
+                  if (  ( c1->up() && !stem1Higher)
+                     || (!c1->up() &&  stem1Higher)) {
+                        const qreal chord1StemLen = c1->stem()->len();
+                        c1->stem()->setLen(chord1StemLen + std::abs(stemTipDistance) - 1.0 * _spatium);
+                        }
+                  else if (( c1->up() &&  stem1Higher)
+                     ||    (!c1->up() && !stem1Higher)) {
+                        const qreal chord2StemLen = c2->stem()->len();
+                        c2->stem()->setLen(chord2StemLen + std::abs(stemTipDistance) - 1.0 * _spatium);
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -1483,6 +1523,11 @@ void Chord::layoutStem1()
             qreal stemWidth5 = _stem->lineWidth() * .5 * mag();
             _stem->rxpos()   = stemPosX() + (up() ? -stemWidth5 : +stemWidth5);
             _stem->setLen(defaultStemLength());
+            // if there is a two-note tremolo attached, and it is too steep,
+            // extend stem of one of the chords.
+            // this should be done after the stem lengths of two notes are both calculated
+            if (_tremolo && this == _tremolo->chord2())
+                  adjustStemLenWithTwoNotesTremolo(_tremolo, spatium());
             }
       else {
             if (_stem)
