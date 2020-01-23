@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Généré par Microsoft Visio 11.0, SVG Export, v1.0 bin.svg Capa_1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="8.5in" height="11in" viewBox="0 0 612 792"
+		xml:space="preserve" color-interpolation-filters="sRGB" class="st2">
+	<v:documentProperties v:langID="1033" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:#3b3f45;stroke:none;stroke-linecap:butt;stroke-width:1.59375}
+		.st2 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Capa_1</title>
+		<v:pageProperties v:drawingScale="1" v:pageScale="1" v:drawingUnits="19" v:shadowOffsetX="9" v:shadowOffsetY="-9"/>
+		<g id="group1-1" transform="translate(68.0005,-90)" v:mID="1" v:groupContext="group">
+			<title>Feuille.1</title>
+			<g id="shape2-2" v:mID="2" v:groupContext="shape" transform="translate(33.9995,-3.06954E-012)">
+				<title>Feuille.2</title>
+				<path d="M0 724 C-0 761.57 30.43 792 68 792 L340 792 C377.57 792 408 761.57 408 724 L408 316 L0 316 L0 724 Z"
+						class="st1"/>
+			</g>
+			<g id="shape3-4" v:mID="3" v:groupContext="shape" transform="translate(0,-510)">
+				<title>Feuille.3</title>
+				<path d="M357 724 L323 690 L153 690 L119 724 L0 724 L0 792 L476 792 L476 724 L357 724 Z" class="st1"/>
+			</g>
+		</g>
+	</g>
+</svg>
