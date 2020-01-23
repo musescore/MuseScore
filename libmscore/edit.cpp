@@ -3282,9 +3282,9 @@ void Score::localTimeDelete()
 
 void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
       {
-      Fraction tick  = startSegment->rtick();
-      Fraction len   = f;
-      Fraction etick = tick + len;
+      const Fraction tick  = startSegment->rtick();
+      const Fraction len   = f;
+      const Fraction etick = tick + len;
 
       Segment* fs = m->first(CR_TYPE);
 
@@ -3336,32 +3336,46 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                         }
                   }
             }
-      Fraction abstick = startSegment->tick();
+      const Fraction abstick = startSegment->tick();
       undoInsertTime(abstick, -len);
-      undo(new InsertTime(this, abstick, -len));
 
-      Fraction updatedTick = tick;
-      for (Segment* s = startSegment; s; s = s->next()) {
-            if (s->rtick() >= etick && s->rtick() != updatedTick) {
+      std::vector<Segment*> emptySegments;
+
+      for (Score* score : masterScore()->scoreList()) {
+            Measure* localMeasure = score->tick2measure(abstick);
+
+            undo(new InsertTime(score, abstick, -len));
+
+            Fraction updatedTick = tick;
+            for (Segment* s = localMeasure->first(CR_TYPE); s; s = s->next()) {
+                  if (s->rtick() < etick || s->rtick() == updatedTick)
+                        continue;
+
                   s->undoChangeProperty(Pid::TICK, updatedTick);
                   updatedTick += s->ticks();
+
+                  if (score->isMaster()) {
+                        if (s->isChordRestType() && !s->hasElements())
+                              emptySegments.push_back(s);
+                        }
                   }
-            if (s->isChordRestType() && !s->hasElements()) {
-                  if (Segment* ns = s->next(CR_TYPE)) {
-                        // Move annotations from the empty segment.
-                        // TODO: do we need to preserve annotations at all?
-                        // Maybe only some types (Tempo etc.)?
-                        for (Element* a : s->annotations()) {
-                              Element* a1 = a->clone();
-                              a1->setParent(ns);
-                              undoRemoveElement(a);
-                              undoAddElement(a1);
-                              }
+
+            undo(new ChangeMeasureLen(localMeasure, localMeasure->ticks() - f));
+            }
+
+      for (Segment* s : emptySegments) {
+            if (Segment* ns = s->next(CR_TYPE)) {
+                  // Move annotations from the empty segment.
+                  // TODO: do we need to preserve annotations at all?
+                  // Maybe only some types (Tempo etc.)?
+                  for (Element* a : s->annotations()) {
+                        Element* a1 = a->clone();
+                        a1->setParent(ns);
+                        undoRemoveElement(a);
+                        undoAddElement(a1);
                         }
                   }
             }
-
-      undo(new ChangeMeasureLen(m, m->ticks() - f));
       }
 
 //---------------------------------------------------------
