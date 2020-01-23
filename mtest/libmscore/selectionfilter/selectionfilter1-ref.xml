@@ -11,6 +11,18 @@
         <tpc>14</tpc>
         </Note>
       </Chord>
+    <Spanner type="HairPin">
+      <HairPin>
+        <subtype>0</subtype>
+        <veloChange>10</veloChange>
+        <ticks_f>2/4</ticks_f>
+        </HairPin>
+      <next>
+        <location>
+          <fractions>1/2</fractions>
+          </location>
+        </next>
+      </Spanner>
     <Chord>
       <durationType>quarter</durationType>
       <Note>
@@ -25,6 +37,13 @@
         <tpc>18</tpc>
         </Note>
       </Chord>
+    <Spanner type="HairPin">
+      <prev>
+        <location>
+          <fractions>-1/2</fractions>
+          </location>
+        </prev>
+      </Spanner>
     <Chord>
       <durationType>quarter</durationType>
       <Note>

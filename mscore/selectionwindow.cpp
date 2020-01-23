@@ -35,12 +35,14 @@ static const char* labels[] = {
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 2"),
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 3"),
       QT_TRANSLATE_NOOP("selectionfilter", "Voice 4"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Dynamics & Hairpins"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Dynamics"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Hairpins"),
       QT_TRANSLATE_NOOP("selectionfilter", "Fingerings"),
       QT_TRANSLATE_NOOP("selectionfilter", "Lyrics"),
       QT_TRANSLATE_NOOP("selectionfilter", "Chord Symbols"),
       QT_TRANSLATE_NOOP("selectionfilter", "Other Text"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Articulations & Ornaments"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Articulations"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Ornaments"),
       QT_TRANSLATE_NOOP("selectionfilter", "Slurs"),
       QT_TRANSLATE_NOOP("selectionfilter", "Figured Bass"),
       QT_TRANSLATE_NOOP("selectionfilter", "Ottavas"),
@@ -129,7 +131,7 @@ void SelectionWindow::updateFilteredElements()
       bool all = true;
       bool none = true;
       _listWidget->blockSignals(true);
-      for(int row = 1; row < _listWidget->count(); row++) {
+      for (int row = 1; row < _listWidget->count(); row++) {
             QListWidgetItem *item = _listWidget->item(row);
             if (filter & 1 << (row - 1)) {
                   if (item->checkState() != Qt::Checked)
