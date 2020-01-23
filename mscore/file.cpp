@@ -3422,8 +3422,8 @@ bool MuseScore::exportTransposedScoreToJSON(const QString& inFilePath, const QSt
 
       TransposeMode mode;
       const QString modeName = options["mode"].toString();
-      if (modeName == "by_key")
-            mode = TransposeMode::BY_KEY;
+      if (modeName == "by_key" || modeName == "to_key") // "by_key" for backwards compatibility
+            mode = TransposeMode::TO_KEY;
       else if (modeName == "by_interval")
             mode = TransposeMode::BY_INTERVAL;
       else if (modeName == "diatonically")
@@ -3448,7 +3448,7 @@ bool MuseScore::exportTransposedScoreToJSON(const QString& inFilePath, const QSt
 
       constexpr int defaultKey = int(Key::INVALID);
       const Key targetKey = Key(options["targetKey"].toInt(defaultKey));
-      if (mode == TransposeMode::BY_KEY) {
+      if (mode == TransposeMode::TO_KEY) {
             const bool targetKeyValid = int(Key::MIN) <= int(targetKey) && int(targetKey) <= int(Key::MAX);
             if (!targetKeyValid) {
                   qCritical("Transpose: invalid targetKey: %d", int(targetKey));
@@ -3457,7 +3457,7 @@ bool MuseScore::exportTransposedScoreToJSON(const QString& inFilePath, const QSt
             }
 
       const int transposeInterval = options["transposeInterval"].toInt(-1);
-      if (mode != TransposeMode::BY_KEY) {
+      if (mode != TransposeMode::TO_KEY) {
             const bool transposeIntervalValid = -1 < transposeInterval && transposeInterval < intervalListSize;
             if (!transposeIntervalValid) {
                   qCritical("Transpose: invalid transposeInterval: %d", transposeInterval);
