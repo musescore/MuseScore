@@ -252,7 +252,7 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal _spatium)
                         t = qMax(5.0  - (2.0 * (lines() - 1)) * td - 2.0 * sw, 3.0);
                   else if ( up && !(line & 1)) // stem is up; even line
                         t = qMin(-3.0 - (2.0 * (lines() - 1)) * td - 2.0 * sw, -6.0);
-                  else if ( up &&  (line & 1)) // stem is up; odd line
+                  else /*if ( up &&  (line & 1))*/ // stem is up; odd line
                         t = qMin(-3.0 - (2.0 * (lines() - 1)) * td - 2.0 * sw, -5.0);
                   }
 
