@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2019-2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -51,8 +51,12 @@ Rectangle {
             id: titleLabel
 
             anchors {
-                horizontalCenter: parent.horizontalCenter
+                left: parent.left
+                right: parent.right
             }
+
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
 
             color: "#00447a"
             font.pixelSize: 28
