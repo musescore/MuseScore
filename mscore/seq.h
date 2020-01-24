@@ -165,6 +165,28 @@ class Seq : public QObject, public Sequencer {
       QTimer* heartBeatTimer;
       QTimer* noteTimer;
 
+      /**
+       * Preferences cached for faster access in realtime context.
+       * Using QSettings-based Ms::Preferences directly results in
+       * audible glitches on some systems (esp. MacOS, see #280493).
+       */
+      struct CachedPreferences {
+            int portMidiOutputLatencyMilliseconds = 0;
+            bool jackTimeBaseMaster = false;
+            bool useJackTransport = false;
+            bool useJackMidi = false;
+            bool useJackAudio = false;
+            bool useAlsaAudio = false;
+            bool usePortAudio = false;
+            bool usePulseAudio = false;
+
+            void update();
+            };
+      CachedPreferences cachedPrefs;
+
+      void startTransport();
+      void stopTransport();
+
       void renderChunk(const MidiRenderer::Chunk&, EventMap*);
       void updateEventsEnd();
 
@@ -266,6 +288,8 @@ class Seq : public QObject, public Sequencer {
 
       void setInitialMillisecondTimestampWithLatency();
       unsigned getCurrentMillisecondTimestampWithLatency(unsigned framePos) const;
+
+      void preferencesChanged() { cachedPrefs.update(); }
       };
 
 extern Seq* seq;
