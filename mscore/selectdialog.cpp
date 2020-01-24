@@ -103,9 +103,18 @@ void SelectDialog::setPattern(ElementPattern* p)
       else
             p->durationTicks = Fraction(-1,1);
 
+      if (sameBeat->isChecked())
+            p->beat = e->beat();
+      else
+            p->beat = Fraction(0,0);
+
+      if (sameMeasure->isChecked())
+            p->measure = e->findMeasure();
+      else
+            p->measure = nullptr;
+
       p->voice   = sameVoice->isChecked() ? e->voice() : -1;
       p->subtypeValid = sameSubtype->isChecked();
-      p->system  = 0;
       if (sameSystem->isChecked()) {
             do {
                   if (e->type() == ElementType::SYSTEM) {

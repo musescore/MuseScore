@@ -18,6 +18,7 @@
 #include "fraction.h"
 #include "scoreElement.h"
 #include "shape.h"
+#include "sig.h"
 
 namespace Ms {
 
@@ -266,6 +267,8 @@ class Element : public ScoreElement {
       virtual Fraction tick() const;
       virtual Fraction rtick() const;
       virtual Fraction playTick() const; ///< Returns the tick at which playback should begin when this element is selected. Defaults to the element's own tick position.
+
+      Fraction beat() const;
 
       bool isNudged() const                       { return !_offset.isNull(); }
 

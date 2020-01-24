@@ -74,12 +74,18 @@ void SelectNoteDialog::setPattern(NotePattern* p)
             p->type = n->noteType();
       if (sameDurationType->isChecked())
             p->durationType = n->chord()->actualDurationType();
-
+      if (sameBeat->isChecked())
+            p->beat = n->beat();
+      else
+            p->beat = Fraction(0,0);
+      if (sameMeasure->isChecked())
+            p->measure = n->findMeasure();
+      else
+            p->measure = nullptr;
       if (sameDurationTicks->isChecked())
             p->durationTicks = n->chord()->actualTicks();
       else
             p->durationTicks = Fraction(-1,1);
-
       if (sameStaff->isChecked()) {
             p->staffStart = n->staffIdx();
             p->staffEnd = n->staffIdx() + 1;
@@ -94,7 +100,6 @@ void SelectNoteDialog::setPattern(NotePattern* p)
             }
 
       p->voice   = sameVoice->isChecked() ? n->voice() : -1;
-      p->system  = 0;
       if (sameSystem->isChecked())
             p->system = n->chord()->segment()->system();
       }

@@ -40,9 +40,11 @@ struct ElementPattern {
       int staffStart;
       int staffEnd; // exclusive
       int voice;
-      const System* system;
+      const System* system = nullptr;
       bool subtypeValid;
       Fraction durationTicks;
+      Fraction beat {0,0};
+      const Measure* measure = nullptr;
       };
 
 //---------------------------------------------------------
@@ -53,7 +55,7 @@ struct NotePattern {
       QList<Note*> el;
       int pitch = -1;
       int string = STRING_NONE;
-      int tpc = Tpc::TPC_INVALID;;
+      int tpc = Tpc::TPC_INVALID;
       NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
       TDuration durationType = TDuration();
       Fraction durationTicks;
@@ -61,7 +63,9 @@ struct NotePattern {
       int staffStart;
       int staffEnd; // exclusive
       int voice;
-      const System* system;
+      Fraction beat {0,0};
+      const Measure* measure = nullptr;
+      const System* system = nullptr;
       };
 
 //---------------------------------------------------------
