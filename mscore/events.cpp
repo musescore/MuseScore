@@ -75,7 +75,9 @@ bool ScoreView::event(QEvent* event)
                               // KeypadModifier is necessary on MacOS as arrow keys seem to always
                               // trigger that modifier there. However it would probably be appropriate
                               // to allow it on other systems too.
-                              constexpr auto allowedModifiers = Qt::ShiftModifier | Qt::KeypadModifier;
+                              const auto allowedModifiers = (editData.curGrip == Grip::NO_GRIP)
+                                 ? (Qt::KeypadModifier | Qt::ShiftModifier)
+                                 : (Qt::KeypadModifier | Qt::ShiftModifier | Qt::ControlModifier);
                               if ((m & ~allowedModifiers) == 0) {
                                     ke->accept();
                                     return true;
@@ -1123,6 +1125,7 @@ void ScoreView::changeState(ViewState s)
                   if (state == ViewState::EDIT) {
                         _blockShowEdit = true;  // otherwise may jump on clicking outside the text element being edited
                         endEdit();
+                        editData.element = nullptr; // editData.element will be determined by selection state in normal mode
                         _blockShowEdit = false;
                         }
                   setCursor(QCursor(Qt::ArrowCursor));

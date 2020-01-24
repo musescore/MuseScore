@@ -285,7 +285,9 @@ static constexpr double SCALE_STEP = 1.7;
 
 static const char* saveOnlineMenuItem = "file-save-online";
 
+#ifdef BUILD_TELEMETRY_MODULE
 std::unique_ptr<TelemetryManager> TelemetryManager::mgr;
+#endif
 
 //---------------------------------------------------------
 // cmdInsertMeasure
@@ -4832,7 +4834,7 @@ void MuseScore::undoRedo(bool undo)
             cv->changeState(ViewState::NORMAL);
       cv->startUndoRedo(undo);
       updateInputState(cs);
-      endCmd();
+      endCmd(/* undoRedo */ true);
       if (pianorollEditor)
             pianorollEditor->update();
       }
@@ -5813,10 +5815,10 @@ void MuseScore::cmd(QAction* a)
 //    Updates the UI after a possible score change.
 //---------------------------------------------------------
 
-void MuseScore::endCmd()
+void MuseScore::endCmd(bool undoRedo)
       {
 #ifdef SCRIPT_INTERFACE
-      getPluginEngine()->beginEndCmd(this);
+      getPluginEngine()->beginEndCmd(this, undoRedo);
 #endif
       if (timeline())
             timeline()->updateGrid();
@@ -7202,7 +7204,8 @@ void MuseScore::updateUiStyleAndTheme()
 QString MuseScore::fullVersion()
       {
       QString version(VERSION);
-      const QString versionLabel(VERSION_LABEL);
+      QString versionLabel(VERSION_LABEL);
+      versionLabel = versionLabel.replace(' ', "");
       if (!versionLabel.isEmpty())
             version.append("-").append(versionLabel);
       return version;

@@ -697,7 +697,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       Q_INVOKABLE void openExternalLink(const QString&);
 
-      virtual void endCmd() override;
+      void endCmd(bool undoRedo);
+      void endCmd() override { endCmd(false); };
       void printFile();
       void exportFile();
       bool exportParts();
@@ -721,8 +722,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveMp3(Score*, const QString& name);
       bool saveMp3(Score*, QIODevice*, bool& wasCanceled);
       bool saveSvg(Score*, const QString& name);
-      bool saveSvg(Score*, QIODevice*, int pageNum = 0);
-      bool savePng(Score*, QIODevice*, int pageNum = 0);
+      bool saveSvg(Score*, QIODevice*, int pageNum = 0, bool drawPageBackground = false);
+      bool savePng(Score*, QIODevice*, int pageNum = 0, bool drawPageBackground = false);
       bool savePng(Score*, const QString& name);
       bool saveMidi(Score*, const QString& name);
       bool saveMidi(Score*, QIODevice*);
