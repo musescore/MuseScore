@@ -3354,6 +3354,14 @@ void Score::collectMatch(void* data, Element* e)
         }
     }
 
+    if (p->measure && (p->measure != e->findMeasure())) {
+        return;
+    }
+
+    if ((p->beat.isValid()) && (p->beat != e->beat())) {
+        return;
+    }
+
     p->el.append(e);
 }
 
@@ -3400,6 +3408,13 @@ void Score::collectNoteMatch(void* data, Element* e)
     if (p->system && (p->system != n->chord()->segment()->system())) {
         return;
     }
+    if (p->measure && (p->measure != n->findMeasure())) {
+        return;
+    }
+    if ((p->beat.isValid()) && (p->beat != n->beat())) {
+        return;
+    }
+
     p->el.append(n);
 }
 

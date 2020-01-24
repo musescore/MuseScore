@@ -39,9 +39,11 @@ struct ElementPattern {
     int staffStart;
     int staffEnd;   // exclusive
     int voice;
-    const System* system;
     bool subtypeValid;
     Fraction durationTicks;
+    Fraction beat {0,0};
+    const Measure* measure = nullptr;
+    const System* system = nullptr;
 };
 
 //---------------------------------------------------------
@@ -60,7 +62,9 @@ struct NotePattern {
     int staffStart;
     int staffEnd;   // exclusive
     int voice;
-    const System* system;
+    Fraction beat {0,0};
+    const Measure* measure = nullptr;
+    const System* system = nullptr;
 };
 
 //---------------------------------------------------------
