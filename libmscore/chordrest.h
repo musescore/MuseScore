@@ -139,6 +139,7 @@ class ChordRest : public DurationElement {
       virtual void add(Element*);
       virtual void remove(Element*);
       void removeDeleteBeam(bool beamed);
+      void replaceBeam(Beam* newBeam);
 
       ElementList& el()                            { return _el; }
       const ElementList& el() const                { return _el; }

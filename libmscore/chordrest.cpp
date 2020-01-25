@@ -780,9 +780,9 @@ void ChordRest::remove(Element* e)
 
 //---------------------------------------------------------
 //   removeDeleteBeam
-//      beamed - the chordrest is beamed (will get a (new) beam)
-//          remove ChordRest from beam
-//          delete beam if empty
+///   Remove ChordRest from beam, delete beam if empty.
+///   \param beamed - if the chordrest is beamed (will get
+///                   a (new) beam)
 //---------------------------------------------------------
 
 void ChordRest::removeDeleteBeam(bool beamed)
@@ -797,6 +797,18 @@ void ChordRest::removeDeleteBeam(bool beamed)
             }
       if (!beamed && isChord())
             toChord(this)->layoutStem();
+      }
+
+//---------------------------------------------------------
+//   replaceBeam
+//---------------------------------------------------------
+
+void ChordRest::replaceBeam(Beam* newBeam)
+      {
+      if (_beam == newBeam)
+            return;
+      removeDeleteBeam(true);
+      newBeam->add(this);
       }
 
 //---------------------------------------------------------
