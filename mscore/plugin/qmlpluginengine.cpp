@@ -48,7 +48,9 @@ void QmlPluginEngine::beginEndCmd(MuseScore* ms, bool inUndoRedo)
             undoRedo = true;
 
       const Score* cs = ms->currentScore();
-      currScoreState = cs->masterScore()->state(); // score and excerpts have united undo stack so we are better to track master score
+
+      // score and excerpts have united undo stack so we are better to track master score
+      currScoreState = cs ? cs->masterScore()->state() : ScoreContentState();
 
       // TODO: most of plugins are never deleted so receivers usually never decrease
       if (!receivers(SIGNAL(endCmd(const QMap<QString, QVariant>&))))
