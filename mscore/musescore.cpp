@@ -512,6 +512,9 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
       newWizard = 0;
       reloadInstrumentTemplates();
       updateInstrumentDialog();
+
+      if (seq)
+            seq->preferencesChanged();
       }
 
 //---------------------------------------------------------
