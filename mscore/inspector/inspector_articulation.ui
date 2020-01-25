@@ -194,13 +194,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="playArticulation">
-        <property name="text">
-         <string>Play</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="2">
        <widget class="Ms::ResetButton" name="resetPlayArticulation" native="true">
         <property name="sizePolicy">
@@ -214,7 +207,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2">
+      <item row="3" column="0" colspan="3">
        <widget class="QWidget" name="gridWidget" native="true">
         <layout class="QGridLayout" name="gridLayout_2">
          <property name="leftMargin">
@@ -324,6 +317,13 @@
        <widget class="QPushButton" name="properties">
         <property name="text">
          <string>Properties</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="playArticulation">
+        <property name="text">
+         <string>Play</string>
         </property>
        </widget>
       </item>
