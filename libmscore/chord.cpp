@@ -1460,38 +1460,40 @@ qreal Chord::minAbsStemLength() const
 
       // two-note tremolo
       else {
-            const qreal tremoloMinHeight = ((_tremolo->lines() - 1) * td + sw) * spatium();
-            return tremoloMinHeight + beamLvl * beamDist + 2 * td * spatium();
+            if (_tremolo->chord1()->up() == _tremolo->chord2()->up()) {
+                  const qreal tremoloMinHeight = ((_tremolo->lines() - 1) * td + sw) * spatium();
+                  return tremoloMinHeight + beamLvl * beamDist + 2 * td * spatium();
+                  }
+            return 0.0;
             }
       }
 
 //---------------------------------------------------------
-//   adjustStemLenWithTwoNotesTremolo
+//   extendedStemLenWithTwoNotesTremolo
 //    Extend stem of one of the chords to make the tremolo less steep
 //---------------------------------------------------------
 
-static void adjustStemLenWithTwoNotesTremolo(Tremolo* _tremolo, qreal _spatium)
+std::array<double, 2> extendedStemLenWithTwoNoteTremolo(Tremolo* _tremolo, qreal _spatium,
+   qreal stemLen1, qreal stemLen2)
       {
       Chord* c1 = _tremolo->chord1();
       Chord* c2 = _tremolo->chord2();
+      const qreal sgn1 = c1->up() ? -1.0 : 1.0;
+      const qreal sgn2 = c2->up() ? -1.0 : 1.0;
       if (c1->up() == c2->up()) {
-            const qreal sgn = c1->up() ? -1.0 : 1.0;
             const qreal stemTipDistance =
-               (c2->stemPos().y() + sgn * c2->stem()->len()) - (c1->stemPos().y() + sgn * c1->stem()->len());
+               (c2->stemPos().y() + stemLen2) - (c1->stemPos().y() + stemLen1);
             const bool stem1Higher = stemTipDistance > 0.0;
             if (std::abs(stemTipDistance) > 1.0 * _spatium) {
                   if (  ( c1->up() && !stem1Higher)
-                     || (!c1->up() &&  stem1Higher)) {
-                        const qreal chord1StemLen = c1->stem()->len();
-                        c1->stem()->setLen(chord1StemLen + std::abs(stemTipDistance) - 1.0 * _spatium);
-                        }
-                  else if (( c1->up() &&  stem1Higher)
-                     ||    (!c1->up() && !stem1Higher)) {
-                        const qreal chord2StemLen = c2->stem()->len();
-                        c2->stem()->setLen(chord2StemLen + std::abs(stemTipDistance) - 1.0 * _spatium);
-                        }
+                     || (!c1->up() &&  stem1Higher))
+                        return { stemLen1 + sgn1 * (std::abs(stemTipDistance) - 1.0 * _spatium), stemLen2 };
+                  else /* if (( c1->up() &&  stem1Higher)
+                     ||       (!c1->up() && !stem1Higher)) */
+                        return { stemLen1, stemLen2 + sgn2 * (std::abs(stemTipDistance) - 1.0 * _spatium) };
                   }
             }
+      return { stemLen1, stemLen2 };
       }
 
 //---------------------------------------------------------
@@ -1526,8 +1528,14 @@ void Chord::layoutStem1()
             // if there is a two-note tremolo attached, and it is too steep,
             // extend stem of one of the chords.
             // this should be done after the stem lengths of two notes are both calculated
-            if (_tremolo && this == _tremolo->chord2())
-                  adjustStemLenWithTwoNotesTremolo(_tremolo, spatium());
+            if (_tremolo && this == _tremolo->chord2()) {
+                  Stem* stem1 = _tremolo->chord1()->stem();
+                  Stem* stem2 = _tremolo->chord2()->stem();
+                  std::array<double, 2> extendedLen = extendedStemLenWithTwoNoteTremolo(_tremolo, spatium(),
+                     stem1->stemLen(), stem2->stemLen());
+                  stem1->setLen(extendedLen[0]);
+                  stem2->setLen(extendedLen[1]);
+                  }
             }
       else {
             if (_stem)
