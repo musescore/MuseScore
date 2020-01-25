@@ -3224,13 +3224,17 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
             }
 
       if (align && segments.size() > 1) {
-            qreal y = segments[0]->rypos();
-            for (unsigned i = 1; i < segments.size(); ++i) {
-                  if (segments[i]->visible())
-                        y = qMax(y, segments[i]->rypos());
+            const int nstaves = system->staves()->size();
+            std::vector<qreal> y(nstaves, -1000000.0);
+
+            for (SpannerSegment* ss : segments) {
+                  if (ss->visible()) {
+                        qreal& staffY = y[ss->staffIdx()];
+                        staffY = qMax(staffY, ss->rypos());
+                        }
                   }
-            for (auto ss : segments)
-                  ss->rypos() = y;
+            for (SpannerSegment* ss : segments)
+                  ss->rypos() = y[ss->staffIdx()];
             }
 
       //
