@@ -241,7 +241,7 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal _spatium)
             const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val();
 
             qreal t;
-            // nearest distance between note and tremolo stroke should be no less than 3
+            // nearest distance between note and tremolo stroke should be no less than 3.0
             if (chord()->hook() || chord()->beam()) {
                   t = up ? -3.0 - (2.0 * (lines() - 1)) * td - 2.0 * sw : 3.0;
                   }
@@ -354,6 +354,8 @@ void Tremolo::layout()
             layoutOneNoteTremolo(x, y, _spatium);
       }
 
+extern std::array<double, 2> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal, qreal, qreal);
+
 //---------------------------------------------------------
 //   layoutTwoNotesTremolo
 //---------------------------------------------------------
@@ -404,8 +406,10 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
             }
       else {
             firstChordStaffY = _chord1->pagePos().y() - _chord1->y();  // y coordinate of the staff of the first chord
-            y1 = _chord1->stemPosBeam().y() - firstChordStaffY + _chord1->defaultStemLength();
-            y2 = _chord2->stemPosBeam().y() - firstChordStaffY + _chord2->defaultStemLength();
+            const std::array<double, 2> extendedLen 
+               = extendedStemLenWithTwoNoteTremolo(this, spatium(), _chord1->defaultStemLength(), _chord2->defaultStemLength());
+            y1 = _chord1->stemPos().y() - firstChordStaffY + extendedLen[0];
+            y2 = _chord2->stemPos().y() - firstChordStaffY + extendedLen[1];
             }
       
       qreal lw = _spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
