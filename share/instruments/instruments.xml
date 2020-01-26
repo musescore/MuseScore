@@ -1824,7 +1824,23 @@
                   <concertClef>G8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>37-75</aPitchRange>
-                  <pPitchRange>34-79</pPitchRange>
+                  <pPitchRange>34-82</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-14</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="bb-bass-clarinet">
+                  <longName>B♭ Bass Clarinet</longName>
+                  <shortName>B♭ B. Cl.</shortName>
+                  <description>B♭ Bass Clarinet</description>
+                  <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>37-75</aPitchRange>
+                  <pPitchRange>34-82</pPitchRange>
                   <transposeDiatonic>-8</transposeDiatonic>
                   <transposeChromatic>-14</transposeChromatic>
                   <Channel>
@@ -1837,15 +1853,16 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="bb-bass-clarinet-bass-clef">
-                  <longName>B♭ Bass Clarinet (Bass Clef)</longName>
+                  <trackName>B♭ Bass Clarinet (Bass Clef)</trackName>
+                  <longName>B♭ Bass Clarinet</longName>
                   <shortName>B♭ B. Cl.</shortName>
-                  <description>Bass Clarinet (Bass Clef)</description>
+                  <description>B♭ Bass Clarinet (Bass Clef)</description>
                   <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
                   <transposingClef>F</transposingClef>
                   <concertClef>F</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>37-75</aPitchRange>
-                  <pPitchRange>37-79</pPitchRange>
+                  <pPitchRange>34-82</pPitchRange>
                   <transposeDiatonic>-1</transposeDiatonic>
                   <transposeChromatic>-2</transposeChromatic>
                   <Channel>
@@ -1855,13 +1872,13 @@
             <Instrument id="a-bass-clarinet">
                   <longName>A Bass Clarinet</longName>
                   <shortName>A B. Cl.</shortName>
-                  <description>Bass Clarinet</description>
+                  <description>A Bass Clarinet</description>
                   <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
                   <transposingClef>G</transposingClef>
                   <concertClef>G8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-74</aPitchRange>
-                  <pPitchRange>36-78</pPitchRange>
+                  <pPitchRange>33-81</pPitchRange>
                   <transposeDiatonic>-9</transposeDiatonic>
                   <transposeChromatic>-15</transposeChromatic>
                   <Channel>
@@ -1870,15 +1887,16 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="a-bass-clarinet-bass-clef)">
-                  <longName>A Bass Clarinet (Bass Clef)</longName>
+                  <trackName>A Bass Clarinet (Bass Clef)</trackName>
+                  <longName>A Bass Clarinet</longName>
                   <shortName>A B. Cl.</shortName>
-                  <description>Bass Clarinet (Bass Clef)</description>
+                  <description>A Bass Clarinet (Bass Clef)</description>
                   <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
                   <transposingClef>F</transposingClef>
                   <concertClef>F</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-74</aPitchRange>
-                  <pPitchRange>36-78</pPitchRange>
+                  <pPitchRange>33-81</pPitchRange>
                   <transposeDiatonic>-2</transposeDiatonic>
                   <transposeChromatic>-3</transposeChromatic>
                   <Channel>
