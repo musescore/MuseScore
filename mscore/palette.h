@@ -88,6 +88,7 @@ class Palette : public QWidget {
       bool _drawGrid;
       bool _selectable;
       bool _disableElementsApply { false };
+      bool _useDoubleClickToActivate { false };
       bool _readOnly;
       bool _systemPalette;
       qreal _yOffset;                // in spatium units of "gscore"
@@ -99,6 +100,7 @@ class Palette : public QWidget {
       virtual void paintEvent(QPaintEvent*) override;
       virtual void mousePressEvent(QMouseEvent*) override;
       void mouseReleaseEvent(QMouseEvent* event) override;
+      void mouseDoubleClickEvent(QMouseEvent*) override;
       virtual void mouseMoveEvent(QMouseEvent*) override;
       virtual void leaveEvent(QEvent*) override;
       virtual bool event(QEvent*) override;
@@ -115,6 +117,7 @@ class Palette : public QWidget {
       const QList<PaletteCell*>* ccp() const { return filterActive ? &dragCells : &cells; }
       QPixmap pixmap(int cellIdx) const;
 
+      void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
 
    private slots:
       void actionToggled(bool val);
@@ -156,6 +159,9 @@ class Palette : public QWidget {
       void setReadOnly(bool val);
       bool disableElementsApply() const      { return _disableElementsApply; }
       void setDisableElementsApply(bool val) { _disableElementsApply = val; }
+
+      bool useDoubleClickToActivate() const { return _useDoubleClickToActivate; }
+      void setUseDoubleClickToActivate(bool val) { _useDoubleClickToActivate = val; }
 
       bool systemPalette() const     { return _systemPalette; }
       void setSystemPalette(bool val);
