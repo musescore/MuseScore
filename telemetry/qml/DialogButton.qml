@@ -40,6 +40,16 @@ Rectangle {
         GradientStop { position: 1.0; color: "#C4C9CD" }
     }
 
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Return ||
+            event.key === Qt.Key_Enter) {
+
+            root.clicked()
+
+            event.accepted = true
+        }
+    }
+
     Text {
         id: buttonLabel
 

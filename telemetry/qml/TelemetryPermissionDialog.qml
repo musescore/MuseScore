@@ -116,11 +116,21 @@ Rectangle {
 
             spacing: 24
 
+            focus: true
+            Keys.forwardTo: [positiveButton, negativeButton]
+
+            Keys.onEscapePressed: {
+                root.closeRequested()
+            }
+
             Column {
 
                 width: parent.width
 
                 spacing: 10
+
+                KeyNavigation.down: negativeButton
+                KeyNavigation.tab: negativeButton
 
                 DialogButton {
                     id: positiveButton
@@ -151,6 +161,9 @@ Rectangle {
                 width: parent.width
 
                 spacing: 10
+
+                KeyNavigation.up: positiveButton
+                KeyNavigation.tab: positiveButton
 
                 DialogButton {
                     id: negativeButton
