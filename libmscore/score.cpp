@@ -608,7 +608,8 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
 
 void Score::dragPosition(const QPointF& p, int* rst, Segment** seg) const
       {
-      Measure* m = searchMeasure(p);
+      const System* preferredSystem = (*seg) ? (*seg)->system() : nullptr;
+      Measure* m = searchMeasure(p, preferredSystem);
       if (m == 0)
             return;
 
@@ -897,12 +898,16 @@ Page* Score::searchPage(const QPointF& p) const
 
 //---------------------------------------------------------
 //   searchSystem
-//    return list of systems as there may be more than
-//    one system in a row
-//    p is in canvas coordinates
+///   Returns list of systems as there may be more than
+///   one system in a row
+///   \param pos Position in canvas coordinates
+///   \param preferredSystem If not nullptr, will give more
+///   space to the given system when searching it by its
+///   coordinate.
+///   \returns List of found systems.
 //---------------------------------------------------------
 
-QList<System*> Score::searchSystem(const QPointF& pos) const
+QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSystem) const
       {
       QList<System*> systems;
       Page* page = searchPage(pos);
@@ -925,7 +930,12 @@ QList<System*> Score::searchSystem(const QPointF& pos) const
                   y2 = page->height();
             else {
                   qreal sy2 = s->y() + s->bbox().height();
-                  y2         = sy2 + (ns->y() - sy2) * .5;
+                  if (s == preferredSystem)
+                        y2 = ns->y();
+                  else if (ns == preferredSystem)
+                        y2 = sy2;
+                  else
+                        y2 = sy2 + (ns->y() - sy2) * .5;
                   }
             if (y < y2) {
                   systems.append(s);
@@ -942,12 +952,14 @@ QList<System*> Score::searchSystem(const QPointF& pos) const
 
 //---------------------------------------------------------
 //   searchMeasure
-//    p is in canvas coordinates
+///   \param p Position in canvas coordinates
+///   \param preferredSystem If not nullptr, will give more
+///   space to measures in this system when searching.
 //---------------------------------------------------------
 
-Measure* Score::searchMeasure(const QPointF& p) const
+Measure* Score::searchMeasure(const QPointF& p, const System* preferredSystem) const
       {
-      QList<System*> systems = searchSystem(p);
+      QList<System*> systems = searchSystem(p, preferredSystem);
       for (System* system : systems) {
             qreal x = p.x() - system->canvasPos().x();
             for (MeasureBase* mb : system->measures()) {
