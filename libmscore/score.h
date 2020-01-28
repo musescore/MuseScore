@@ -958,8 +958,8 @@ class Score : public QObject, public ScoreElement {
       void lassoSelectEnd();
 
       Page* searchPage(const QPointF&) const;
-      QList<System*> searchSystem(const QPointF& p) const;
-      Measure* searchMeasure(const QPointF& p) const;
+      QList<System*> searchSystem(const QPointF& p, const System* preferredSystem = nullptr) const;
+      Measure* searchMeasure(const QPointF& p, const System* preferredSystem = nullptr) const;
 
       bool getPosition(Position* pos, const QPointF&, int voice) const;
 
