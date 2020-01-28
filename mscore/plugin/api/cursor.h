@@ -78,6 +78,13 @@ class Cursor : public QObject {
       Q_PROPERTY(Ms::PluginAPI::Segment*  segment READ qmlSegment)
       /** Current measure, read only */
       Q_PROPERTY(Ms::PluginAPI::Measure*  measure READ measure)
+      /**
+       * A physical string number where this cursor currently at. This is useful
+       * in conjunction with \ref InputStateMode.INPUT_STATE_SYNC_WITH_SCORE
+       * cursor mode.
+       * \since MuseScore 3.5
+       */
+      Q_PROPERTY(int stringNumber READ inputStateString WRITE setInputStateString)
 
    public:
       enum RewindMode {
@@ -120,6 +127,9 @@ class Cursor : public QObject {
 
       Ms::Segment* segment() const;
       void setSegment(Ms::Segment* seg);
+
+      int inputStateString() const;
+      void setInputStateString(int);
 
    public:
       /// \cond MS_INTERNAL
