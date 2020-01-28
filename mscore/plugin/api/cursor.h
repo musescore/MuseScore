@@ -156,6 +156,7 @@ class Cursor : public QObject {
       /// \endcond
 
       Q_INVOKABLE void rewind(RewindMode mode);
+      Q_INVOKABLE void rewindToTick(int tick);
 
       Q_INVOKABLE bool next();
       Q_INVOKABLE bool nextMeasure();
