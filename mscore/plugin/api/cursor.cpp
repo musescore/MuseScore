@@ -602,5 +602,22 @@ int Cursor::qmlKeySignature()
       Staff* staff = _score->staves()[staffIdx()];
       return static_cast<int>(staff->key(Fraction::fromTicks(tick())));
       }
+
+//---------------------------------------------------------
+//   inputStateString
+//---------------------------------------------------------
+
+int Cursor::inputStateString() const
+      {
+      const InputState& istate = inputState();
+      return _score->staff(staffIdx())->staffType(istate.tick())->visualStringToPhys(istate.string());
+      }
+
+void Cursor::setInputStateString(int string)
+      {
+      InputState& istate = inputState();
+      const int visString = _score->staff(staffIdx())->staffType(istate.tick())->visualStringToPhys(string);
+      istate.setString(visString);
+      }
 }
 }
