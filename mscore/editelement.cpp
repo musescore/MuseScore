@@ -68,7 +68,8 @@ void ScoreView::updateGrips()
                   score()->addRefresh(grip.adjusted(-dx, -dy, dx, dy));
                   }
 
-            QVector<QLineF> anchorLines = (editData.curGrip != Grip::NO_GRIP) ? editData.element->gripAnchorLines(editData.curGrip) : QVector<QLineF>();
+            const Grip anchorLinesGrip = editData.curGrip == Grip::NO_GRIP ? editData.element->defaultGrip() : editData.curGrip;
+            QVector<QLineF> anchorLines = editData.element->gripAnchorLines(anchorLinesGrip);
 
             if (!anchorLines.isEmpty()) {
                   for (QLineF& l : anchorLines)
