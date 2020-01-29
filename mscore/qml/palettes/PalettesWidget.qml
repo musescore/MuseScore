@@ -42,7 +42,7 @@ Item {
         paletteTree.applyCurrentElement();
     }
 
-    FocusChainBreak {}
+    FocusChainBreak { id: focusBreaker }
 
     PalettesWidgetHeader {
         id: palettesWidgetHeader

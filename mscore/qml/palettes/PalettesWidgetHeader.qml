@@ -48,10 +48,21 @@ Item {
         anchors.right: parent.right
 
         placeholderText: qsTr("Search")
-        //TODO: in the future we may wish these values to differ
-        //Accessible.name: qsTr("Search")
-        Accessible.name: placeholderText
         font: globalStyle.font
+
+        onTextChanged: resultsTimer.restart()
+        onActiveFocusChanged: {
+            resultsTimer.stop();
+            Accessible.name = qsTr("Palette Search")
+        }
+
+        Timer {
+            id: resultsTimer
+            interval: 500
+            onTriggered: {
+                parent.Accessible.name = parent.text.length === 0 ? qsTr("Palette Search") : qsTr("%n palettes match", "", paletteTree.count);
+            }
+        }
 
         color: globalStyle.text
 
@@ -61,8 +72,7 @@ Item {
         }
 
         KeyNavigation.tab: paletteTree.currentTreeItem
-        KeyNavigation.up: paletteTree
-        KeyNavigation.down: paletteTree
+
         Keys.onDownPressed: paletteTree.focusFirstItem();
         Keys.onUpPressed: paletteTree.focusLastItem();
 
@@ -78,6 +88,7 @@ Item {
             visible: searchTextInput.text.length && searchTextInput.width > 2 * width
             flat: true
             onClicked: searchTextInput.clear()
+            activeFocusOnTab: false // don't annoy keyboard users tabbing to palette (they can use Ctrl+A, Delete to clear search)
 
             padding: 4
 
