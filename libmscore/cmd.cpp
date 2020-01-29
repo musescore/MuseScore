@@ -3708,7 +3708,7 @@ void Score::cmdAddFret(int fret)
       Position pos;
       pos.segment   = is.segment();
       pos.staffIdx  = is.track() / VOICES;
-      pos.line      = is.cr()->staff()->staffType(is.tick())->physStringToVisual(is.string());
+      pos.line      = staff(pos.staffIdx)->staffType(is.tick())->physStringToVisual(is.string());
       pos.fret      = fret;
       putNote(pos, false);
       }
