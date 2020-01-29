@@ -7110,6 +7110,9 @@ void tryToRequestTelemetryPermission()
       {
       QString accessRequestedAtVersion = preferences.getString(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED);
 
+      if (MScore::noGui))
+            return;
+
       if (accessRequestedAtVersion == VERSION)
             return;
 
