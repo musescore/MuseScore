@@ -620,10 +620,10 @@ void Score::dragPosition(const QPointF& p, int* rst, Segment** seg, qreal spacin
 
       // search for segment + offset
       QPointF pppp = p - m->canvasPos();
-      int strack   = i * VOICES;
+      int strack = staff2track(i);
       if (!staff(i))
             return;
-      int etrack = staff(i)->part()->nstaves() * VOICES + strack;
+      int etrack = staff2track(i + 1);
 
       constexpr SegmentType st = SegmentType::ChordRest;
       Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack, *seg, spacingFactor);
