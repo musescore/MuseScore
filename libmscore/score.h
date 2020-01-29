@@ -648,7 +648,7 @@ class Score : public QObject, public ScoreElement {
       Staff* staff(int n) const              { return ((n >= 0) && (n < _staves.size())) ? _staves.at(n) : nullptr; }
 
       Measure* pos2measure(const QPointF&, int* staffIdx, int* pitch, Segment**, QPointF* offset) const;
-      void dragPosition(const QPointF&, int* staffIdx, Segment**) const;
+      void dragPosition(const QPointF&, int* staffIdx, Segment**, qreal spacingFactor = 0.5) const;
 
       void undoAddElement(Element* element);
       void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
@@ -958,8 +958,8 @@ class Score : public QObject, public ScoreElement {
       void lassoSelectEnd();
 
       Page* searchPage(const QPointF&) const;
-      QList<System*> searchSystem(const QPointF& p, const System* preferredSystem = nullptr) const;
-      Measure* searchMeasure(const QPointF& p, const System* preferredSystem = nullptr) const;
+      QList<System*> searchSystem(const QPointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5) const;
+      Measure* searchMeasure(const QPointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5) const;
 
       bool getPosition(Position* pos, const QPointF&, int voice) const;
 

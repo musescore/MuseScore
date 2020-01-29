@@ -835,7 +835,7 @@ int System::y2staff(qreal y) const
 ///   \returns Number of the found staff.
 //---------------------------------------------------------
 
-int System::searchStaff(qreal y, int preferredStaff /* = -1 */) const
+int System::searchStaff(qreal y, int preferredStaff /* = -1 */, qreal spacingFactor) const
       {
       int i = 0;
       const int nstaves = score()->nstaves();
@@ -861,7 +861,7 @@ int System::searchStaff(qreal y, int preferredStaff /* = -1 */) const
                   else if (ni == preferredStaff)
                         sy2 = s1y2;
                   else
-                        sy2 = s1y2 + (nstaff->bbox().y() - s1y2) * .5;
+                        sy2 = s1y2 + (nstaff->bbox().y() - s1y2) * spacingFactor;
                   }
             else
                   sy2 = page()->height() - pos().y();

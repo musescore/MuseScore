@@ -138,7 +138,7 @@ public:
       void adjustStavesNumber(int);
 
       int y2staff(qreal y) const;
-      int searchStaff(qreal y, int preferredStaff = -1) const;
+      int searchStaff(qreal y, int preferredStaff = -1, qreal spacingFactor = 0.5) const;
       void setInstrumentNames(bool longName, Fraction tick = {0,1});
       Fraction snap(const Fraction& tick, const QPointF p) const;
       Fraction snapNote(const Fraction& tick, const QPointF p, int staff) const;
