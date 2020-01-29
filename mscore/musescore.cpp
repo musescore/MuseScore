@@ -548,10 +548,10 @@ void MuseScore::populateNoteInputMenu()
                         connect(noteEntryMethods, SIGNAL(triggered(QAction*)), this, SLOT(cmd(QAction*)));
 
                         w = new ToolButtonMenu(tr("Note Entry Methods"),
-                           ToolButtonMenu::TYPES::ICON_CHANGED,
                            getAction("note-input"),
                            noteEntryMethods,
-                           this);
+                           this,
+                           false);
                         w->setObjectName("note-entry-methods");
                         }
                   else if (strncmp(s, "voice-", 6) == 0) {
