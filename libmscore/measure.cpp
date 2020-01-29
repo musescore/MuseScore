@@ -3081,7 +3081,7 @@ Fraction Measure::snapNote(const Fraction& /*tick*/, const QPointF p, int staff)
 ///   \returns The segment that was found.
 //---------------------------------------------------------
 
-Segment* Measure::searchSegment(qreal x, SegmentType st, int strack, int etrack, const Segment* preferredSegment) const
+Segment* Measure::searchSegment(qreal x, SegmentType st, int strack, int etrack, const Segment* preferredSegment, qreal spacingFactor) const
       {
       const int lastTrack = etrack - 1;
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
@@ -3103,7 +3103,7 @@ Segment* Measure::searchSegment(qreal x, SegmentType st, int strack, int etrack,
                         return segment;
                   }
             else {
-                  if (x < (segment->x() + (ns->x() - segment->x())/2.0))
+                  if (x < (segment->x() + (ns->x() - segment->x()) * spacingFactor))
                         return segment;
                   }
             }

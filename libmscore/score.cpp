@@ -606,17 +606,17 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
 ///              \b output: new segment for drag position
 //---------------------------------------------------------
 
-void Score::dragPosition(const QPointF& p, int* rst, Segment** seg) const
+void Score::dragPosition(const QPointF& p, int* rst, Segment** seg, qreal spacingFactor) const
       {
       const System* preferredSystem = (*seg) ? (*seg)->system() : nullptr;
-      Measure* m = searchMeasure(p, preferredSystem);
+      Measure* m = searchMeasure(p, preferredSystem, spacingFactor);
       if (m == 0)
             return;
 
       System* s = m->system();
       qreal y   = p.y() - s->canvasPos().y();
 
-      const int i = s->searchStaff(y, *rst);
+      const int i = s->searchStaff(y, *rst, spacingFactor);
 
       // search for segment + offset
       QPointF pppp = p - m->canvasPos();
@@ -626,7 +626,7 @@ void Score::dragPosition(const QPointF& p, int* rst, Segment** seg) const
       int etrack = staff(i)->part()->nstaves() * VOICES + strack;
 
       constexpr SegmentType st = SegmentType::ChordRest;
-      Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack, *seg);
+      Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack, *seg, spacingFactor);
       if (segment) {
             *rst = i;
             *seg = segment;
@@ -907,7 +907,7 @@ Page* Score::searchPage(const QPointF& p) const
 ///   \returns List of found systems.
 //---------------------------------------------------------
 
-QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSystem) const
+QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSystem, qreal spacingFactor) const
       {
       QList<System*> systems;
       Page* page = searchPage(pos);
@@ -935,7 +935,7 @@ QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSy
                   else if (ns == preferredSystem)
                         y2 = sy2;
                   else
-                        y2 = sy2 + (ns->y() - sy2) * .5;
+                        y2 = sy2 + (ns->y() - sy2) * spacingFactor;
                   }
             if (y < y2) {
                   systems.append(s);
@@ -957,9 +957,9 @@ QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSy
 ///   space to measures in this system when searching.
 //---------------------------------------------------------
 
-Measure* Score::searchMeasure(const QPointF& p, const System* preferredSystem) const
+Measure* Score::searchMeasure(const QPointF& p, const System* preferredSystem, qreal spacingFactor) const
       {
-      QList<System*> systems = searchSystem(p, preferredSystem);
+      QList<System*> systems = searchSystem(p, preferredSystem, spacingFactor);
       for (System* system : systems) {
             qreal x = p.x() - system->canvasPos().x();
             for (MeasureBase* mb : system->measures()) {
