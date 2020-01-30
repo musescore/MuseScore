@@ -804,19 +804,35 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
       }
 
 //---------------------------------------------------------
+//   mouseDoubleClickEvent
+//---------------------------------------------------------
+
+void Palette::mouseDoubleClickEvent(QMouseEvent* event)
+      {
+      if (_useDoubleClickToActivate)
+            applyElementAtPosition(event->pos(), event->modifiers());
+      }
+
+//---------------------------------------------------------
 //   mouseReleaseEvent
 //---------------------------------------------------------
 
-void Palette::mouseReleaseEvent(QMouseEvent *event)
+void Palette::mouseReleaseEvent(QMouseEvent* event)
       {
       pressedIndex = -1;
 
       update();
 
+      if (!_useDoubleClickToActivate)
+            applyElementAtPosition(event->pos(), event->modifiers());
+      }
+
+void Palette::applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers)
+      {
       if (_disableElementsApply)
             return;
 
-      int index = idx(event->pos());
+      const int index = idx(pos);
 
       if (index == -1)
             return;
@@ -831,7 +847,7 @@ void Palette::mouseReleaseEvent(QMouseEvent *event)
       if (!cell)
             return;
 
-      applyPaletteElement(cell->element.get(), event->modifiers());
+      applyPaletteElement(cell->element.get(), modifiers);
       }
 
 //---------------------------------------------------------
