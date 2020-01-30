@@ -44,7 +44,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
-      buttonApplyToAllParts->setEnabled(!cs->isMaster());
+      //buttonApplyToAllParts->setEnabled(!cs->isMaster()); // set in showEvent() now
       buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
       setModal(true);
 
@@ -780,6 +780,7 @@ void EditStyle::showEvent(QShowEvent* ev)
       setValues();
       pageList->setFocus();
       cs->startCmd();
+      buttonApplyToAllParts->setEnabled(!cs->isMaster());
       QWidget::showEvent(ev);
       }
 
@@ -1085,8 +1086,8 @@ void EditStyle::setValues()
       dontHideStavesInFirstSystem->setEnabled(hideEmptyStaves->isChecked());
 
       // figured bass
-      for(int i = 0; i < comboFBFont->count(); i++)
-            if(comboFBFont->itemText(i) == lstyle.value(Sid::figuredBassFontFamily).toString()) {
+      for (int i = 0; i < comboFBFont->count(); i++)
+            if (comboFBFont->itemText(i) == lstyle.value(Sid::figuredBassFontFamily).toString()) {
                   comboFBFont->setCurrentIndex(i);
                   break;
             }
