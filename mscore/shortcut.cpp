@@ -919,7 +919,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
-         STATE_NORMAL | STATE_TEXT_EDIT | STATE_HARMONY_FIGBASS_EDIT,
+         STATE_NORMAL,
          "get-location",
          QT_TRANSLATE_NOOP("action","Get Location"),
          QT_TRANSLATE_NOOP("action","Accessibility: Get location"),
