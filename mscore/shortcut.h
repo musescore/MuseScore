@@ -77,7 +77,8 @@ enum class ShortcutFlags : char {
       A_SCORE     = 1,
       A_CMD       = 1 << 1,
       A_CHECKABLE = 1 << 2,
-      A_CHECKED   = 1 << 3
+      A_CHECKED   = 1 << 3,
+      A_UNDO_REDO = 1 << 4,
       };
 
 constexpr ShortcutFlags operator| (ShortcutFlags t1, ShortcutFlags t2) {
@@ -150,6 +151,7 @@ class Shortcut {
       void setState(int v)                      { _state = v;     }
       bool needsScore() const                  { return _flags & ShortcutFlags::A_SCORE; }
       bool isCmd() const                       { return _flags & ShortcutFlags::A_CMD; }
+      bool isUndoRedo() const                  { return _flags & ShortcutFlags::A_UNDO_REDO; }
       bool isCheckable() const                 { return _flags & ShortcutFlags::A_CHECKABLE; }
       bool isChecked() const                   { return _flags & ShortcutFlags::A_CHECKED; }
       Icons icon() const                       { return _icon;  }
