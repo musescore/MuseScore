@@ -8,10 +8,10 @@ FocusScope {
     MouseArea {
         anchors.fill: parent
 
-        hoverEnabled: true
+        preventStealing: true
 
-        onContainsMouseChanged: {
-            if (containsMouse) {
+        onClicked: {
+            if (!activeFocus) {
                 root.forceActiveFocus()
             }
         }
