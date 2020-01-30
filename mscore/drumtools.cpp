@@ -72,6 +72,7 @@ DrumTools::DrumTools(QWidget* parent)
       drumPalette = new Palette;
       drumPalette->setMag(0.8);
       drumPalette->setSelectable(true);
+      drumPalette->setUseDoubleClickToActivate(true);
       drumPalette->setGrid(28, 60);
       PaletteScrollArea* sa = new PaletteScrollArea(drumPalette);
       sa->setFocusPolicy(Qt::NoFocus);
