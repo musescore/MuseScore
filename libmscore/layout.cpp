@@ -3306,9 +3306,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
 
                   m->createEndBarLines(true);
-                  Measure* nm = m->nextMeasure();
-                  if (nm)
-                        m->addSystemTrailer(nm);
+                  m->addSystemTrailer(m->nextMeasure());
                   m->computeMinWidth();
                   ww = m->width();
                   }
