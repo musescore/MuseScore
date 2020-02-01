@@ -26,7 +26,7 @@
 #define DLL_EXPORT
 #endif
 
-namespace OVE {
+namespace Ove {
 
 class OveSong;
 class Track;
@@ -54,12 +54,12 @@ class Articulation;
 class Glissando;
 class Decorator;
 class MeasureRepeat;
-class Dynamics;
+class Dynamic;
 class Wedge;
 class WedgeEndPoint;
 class Pedal;
-class KuoHao;
-class Expressions;
+class Bracket;
+class Expression;
 class HarpPedal;
 class MultiMeasureRest;
 class OctaveShift;
@@ -77,13 +77,17 @@ class MidiProgramChange;
 class MidiChannelPressure;
 class MidiPitchWheel;
 
-const int TWELVE_TONE = 12 ;
-const int INVALID_NOTE = -1 ;
-const int OCTAVE = 7 ;
+const int TWELVE_TONE = 12;
+const int INVALID_NOTE = -1;
+const int OCTAVE = 7;
+
+//---------------------------------------------------------
+//   enum classes
+//---------------------------------------------------------
 
 enum class CondType : char {
       None,
-      Time_Parameters    = 0x09, // size - 7, TimeSignature
+      _timeParameters    = 0x09, // size - 7, TimeSignature
       Bar_Number         = 0x0A, // size, compatible with previous version
       Decorator          = 0x16,
       Tempo              = 0x1C, // size - 7
@@ -102,7 +106,7 @@ enum class BdatType : unsigned char {
       Beam                  = 0x10,
       Harmony               = 0x11,
       Clef                  = 0x12,
-      Dynamics              = 0x13,
+      Dynamic               = 0x13,
       Wedge                 = 0x14, // cresendo, decresendo
       Glissando             = 0x15,
       Decorator             = 0x16, // measure repeat | piano pedal | dotted barline
@@ -116,8 +120,8 @@ enum class BdatType : unsigned char {
       Guitar_Bend           = 0x21, //
       Guitar_Barre          = 0x22, //
       Pedal                 = 0x23,
-      KuoHao                = 0x24, // () [] {}
-      Expressions           = 0x25,
+      Bracket               = 0x24, // () [] {}
+      Expression            = 0x25,
       Harp_Pedal            = 0x26,
       Multi_Measure_Rest    = 0x27,
       Harmony_GuitarFrame   = 0x28,
@@ -135,8 +139,6 @@ enum class BdatType : unsigned char {
       Bar_End               = 0xFF,
       };
 
-////////////////////////////////////////
-
 enum class MusicDataType : char {
       None,
 
@@ -149,12 +151,12 @@ enum class MusicDataType : char {
       Tempo,
 
       // direction
-      Dynamics,
+      Dynamic,
       Wedge,
       Wedge_EndPoint,
       OctaveShift,
       OctaveShift_EndPoint,
-      Expressions,
+      Expression,
       Repeat,
       Text,
       Harp_Pedal,
@@ -175,7 +177,7 @@ enum class MusicDataType : char {
       // barline
       Numeric_Ending,
 
-      KuoHao,
+      Bracket,
       Bar_End,
       Decorator,
       Multi_Measure_Rest,
@@ -208,8 +210,8 @@ enum class ClefType : char {
 
 enum class GroupType : char {
       None = 0,
-      Brace,
-      Bracket
+      Braces,
+      Brackets
       };
 
 enum class AccidentalType : char {
@@ -330,14 +332,14 @@ enum class ArticulationType : char {
 
       None
 
-      /*	Detached_Legato,
+      /* Detached_Legato,
       Spiccato,
       Scoop,
       Plop,
       Doit,
       Falloff,
       Breath_Mark,
-      Caesura,*/
+      Caesura */
       };
 
 enum class NoteType : char {
@@ -355,12 +357,13 @@ enum class NoteType : char {
       Note_None
       };
 
-inline int NoteTypeToTick(NoteType type, int quarter) {
-      int c = int(pow(2.0, int(type))) ;
-      return quarter * 4 * 2 / c ;
+inline int noteTypeToTick(NoteType type, int quarter)
+      {
+      int c = int(pow(2.0, int(type)));
+      return quarter * 4 * 2 / c;
       }
 
-enum class DynamicsType : char {
+enum class DynamicType : char {
       PPPP = 0,
       PPP,
       PP,
@@ -380,17 +383,24 @@ enum class DynamicsType : char {
       };
 
 enum class WedgeType : char {
-      Cres_Line = 0, // <
-      Double_Line,   // <>, not appear in xml
-      Decresc_Line,  // >
-      Cres,          // cresc., not appear in xml, will create Expression
-      Decresc        // decresc., not appear in xml, will create Expression
+      Crescendo_Line = 0, // <
+      Double_Line,        // <>, not appear in xml
+      Decrescendo_Line,   // >
+      Crescendo,          // cresc., not appear in xml, will create Expression
+      Decrescendo         // decresc., not appear in xml, will create Expression
       };
 
-enum class KuoHaoType : char {
+enum class BracketType : char {
       Parentheses = 0,
-      Brace,
-      Bracket
+      Braces,
+      Brackets
+      };
+
+enum class HarpPedalType : char {
+      Graph = 0,
+      Char,
+      Char_Cut,
+      Change
       };
 
 enum class OctaveShiftType : char {
@@ -401,7 +411,7 @@ enum class OctaveShiftType : char {
       };
 
 enum class OctaveShiftPosition : char {
-      Start = 0 ,
+      Start = 0,
       Continue,
       Stop
       };
@@ -420,26 +430,26 @@ enum class RepeatType : char {
       };
 
 enum class BarLineType : char {
-      Default = 0, //0x00 will be | or final (at last measure)
-      Double,      //0x01 ||
-      RepeatLeft,  //0x02 ||:
-      RepeatRight, //0x03 :||
-      Final,       //0x04
-      Dashed,      //0x05
-      Null         //0x06
-      } ;
+      Default = 0,  // 0x00 will be | or final (at last measure)
+      Double,       // 0x01 ||
+      Repeat_Left,  // 0x02 ||:
+      Repeat_Right, // 0x03 :||
+      Final,        // 0x04
+      Dashed,       // 0x05
+      Null          // 0x06
+      };
 
 enum class NoteDuration {
-      D_256 = 15,
-      D_128 = NoteDuration::D_256 * 2,           // 30
-      D_64 = NoteDuration::D_128 * 2,            // 60
-      D_32 = NoteDuration::D_64 * 2,             // 120
-      D_16 = NoteDuration::D_32 * 2,             // 240
-      D_8 = NoteDuration::D_16 * 2,              // 480
-      D_4 = NoteDuration::D_8 * 2,               // 960
-      D_2 = NoteDuration::D_4 * 2,               // 1920
-      D_Whole = NoteDuration::D_2 * 2,           // 3840
-      D_Double_Whole = NoteDuration::D_Whole * 2 // 7680
+      D_256   = 15,
+      D_128   = D_256 * 2,         // 30
+      D_64    = D_128 * 2,         // 60
+      D_32    = D_64 * 2,          // 120
+      D_16    = D_32 * 2,          // 240
+      D_8     = D_16 * 2,          // 480
+      D_4     = D_8 * 2,           // 960
+      D_2     = D_4 * 2,           // 1920
+      D_Whole = D_2 * 2,           // 3840
+      D_Double_Whole = D_Whole * 2 // 7680
       };
 
 enum class ToneType : char {
@@ -470,26 +480,31 @@ enum class KeyType : char {
       Key_Sharp_7		// C#
       };
 
-// IOveNotify.h
+//---------------------------------------------------------
+//   IOveNotify
+//---------------------------------------------------------
+
 class IOveNotify {
-public:
+   public:
       IOveNotify() {}
       virtual ~IOveNotify() {}
 
-public:
       virtual void loadInfo(const QString& info) = 0;
       virtual void loadError() = 0;
       virtual void loadPosition(int currentMeasure, int totalMeasure, int currentTrack, int totalTrack) = 0;
       };
 
+//---------------------------------------------------------
+//   IOVEStreamLoader
+//---------------------------------------------------------
+
 class IOVEStreamLoader {
-public:
+   public:
       IOVEStreamLoader() {}
       virtual ~IOVEStreamLoader() {}
 
-public:
       virtual void setNotify(IOveNotify* notify) = 0;
-      virtual void setFileStream(unsigned char* buffer, unsigned int size) = 0;
+      virtual void setFileStream(unsigned char* buffer, unsigned size) = 0;
       virtual void setOve(OveSong* ove) = 0;
 
       // read stream, set read data to setOve(ove)
@@ -500,675 +515,722 @@ public:
 
 DLL_EXPORT IOVEStreamLoader* createOveStreamLoader();
 
-/////////////////////////////////////////////////////////////////////////////
-// basic element
+//---------------------------------------------------------
+//   TickElement
+//---------------------------------------------------------
+
 class TickElement {
-public:
+      int _tick;
+
+   public:
       TickElement();
       virtual ~TickElement() {}
 
-public:
-      void setTick(int tick);
-      int getTick(void) const;
-
-private:
-      int tick_;
+      void setTick(int tick)  { _tick = tick; }
+      int tick() const        { return _tick; }
       };
 
+//---------------------------------------------------------
+//   MeasurePos
+//---------------------------------------------------------
+
 class MeasurePos {
-public:
+      int _measure;
+      int _offset;
+
+   public:
       MeasurePos();
       virtual ~MeasurePos() {}
 
-public:
-      void setMeasure(int measure);
-      int getMeasure() const;
+      void setMeasure(int measure) { _measure = measure; }
+      int measure() const          { return _measure;    }
 
-      void setOffset(int offset);
-      int getOffset() const;
+      void setOffset(int offset)   { _offset = offset;   }
+      int offset() const           { return _offset;     }
 
       MeasurePos shiftMeasure(int measure) const;
       MeasurePos shiftOffset(int offset) const; // ignore cross measure
 
-      bool operator ==(const MeasurePos& mp) const;
-      bool operator !=(const MeasurePos& mp) const;
-      bool operator <(const MeasurePos& mp) const;
-      bool operator <=(const MeasurePos& mp) const;
-      bool operator >(const MeasurePos& mp) const;
-      bool operator >=(const MeasurePos& mp) const;
-
-private:
-      int measure_;
-      int offset_;
+      bool operator==(const MeasurePos& mp) const;
+      bool operator!=(const MeasurePos& mp) const;
+      bool operator<(const MeasurePos& mp) const;
+      bool operator<=(const MeasurePos& mp) const;
+      bool operator>(const MeasurePos& mp) const;
+      bool operator>=(const MeasurePos& mp) const;
       };
 
+//---------------------------------------------------------
+//   PairElement
+//---------------------------------------------------------
+
 class PairElement {
-public:
+      MeasurePos* _start;
+      MeasurePos* _stop;
+
+   public:
       PairElement();
       virtual ~PairElement();
 
-public:
-      MeasurePos* start() const;
-      MeasurePos* stop() const;
-
-private:
-      MeasurePos* start_;
-      MeasurePos* stop_;
+      MeasurePos* start() const { return _start; }
+      MeasurePos* stop() const  { return _stop;  }
       };
 
+//---------------------------------------------------------
+//   PairEnds
+//---------------------------------------------------------
+
 class PairEnds {
-public:
+      LineElement* _leftLine;
+      LineElement* _rightLine;
+      OffsetElement* _leftShoulder;
+      OffsetElement* _rightShoulder;
+
+   public:
       PairEnds();
       virtual ~PairEnds();
 
-public:
-      LineElement* getLeftLine() const;
-      LineElement* getRightLine() const;
+      LineElement* leftLine() const        { return _leftLine;      }
+      LineElement* rightLine() const       { return _rightLine;     }
 
-      OffsetElement* getLeftShoulder() const;
-      OffsetElement* getRightShoulder() const;
-
-private:
-      LineElement* leftLine_;
-      LineElement* rightLine_;
-      OffsetElement* leftShoulder_;
-      OffsetElement* rightShoulder_;
+      OffsetElement* leftShoulder() const  { return _leftShoulder;  }
+      OffsetElement* rightShoulder() const { return _rightShoulder; }
       };
 
+//---------------------------------------------------------
+//   LineElement
+//---------------------------------------------------------
+
 class LineElement {
-public:
+      int _line;
+
+   public:
       LineElement();
       virtual ~LineElement() {}
 
-public:
-      virtual void setLine(int line); // middle line (3rd line of each clef) is set 0
-      virtual int getLine(void) const;
-
-private:
-      int line_;
+      // middle line (3rd line of each clef) is set 0
+      virtual void setLine(int line) { _line = line; }
+      virtual int line() const       { return _line; }
       };
 
+//---------------------------------------------------------
+//   OffsetElement
+//---------------------------------------------------------
+
 class OffsetElement {
-public:
+      int _xOffset;
+      int _yOffset;
+
+   public:
       OffsetElement();
       virtual ~OffsetElement() {}
 
-public:
-      virtual void setXOffset(int offset);
-      virtual int getXOffset() const;
+      virtual void setXOffset(int offset) { _xOffset = offset; }
+      virtual int xOffset() const         { return _xOffset;   }
 
-      virtual void setYOffset(int offset);
-      virtual int getYOffset() const;
-
-private:
-      int xOffset_;
-      int yOffset_;
+      virtual void setYOffset(int offset) { _yOffset = offset; }
+      virtual int yOffset() const         { return _yOffset;   }
       };
 
+//---------------------------------------------------------
+//   LengthElement
+//---------------------------------------------------------
+
 class LengthElement {
-public:
+      int _length; // tick
+
+   public:
       LengthElement();
       virtual ~LengthElement() {}
 
-public:
-      void setLength(int length);
-      int getLength() const;
-
-private:
-      int length_; // tick
+      void setLength(int length) { _length = length; }
+      int length() const         { return _length;   }
       };
 
-// base class of many ove music element
-class MusicData: public TickElement, public PairElement, public OffsetElement {
-public:
+//---------------------------------------------------------
+//   MusicData
+//    Base class of many ove music element
+//---------------------------------------------------------
+
+class MusicData : public TickElement, public PairElement, public OffsetElement {
+      bool _show;
+      unsigned _color;
+      unsigned _voice;
+
+   protected:
+      MusicDataType _musicDataType;
+
+   public:
       MusicData();
       virtual ~MusicData() {}
-
-public:
-      MusicDataType getMusicDataType() const;
 
       enum class XmlDataType : char {
             Attributes = 0, NoteBeam, Notations, Direction, None
             };
-      static XmlDataType getXmlDataType(MusicDataType type);
-      //	static bool get_is_pair_element(MusicDataType type) ;
+      static XmlDataType xmlDataType(MusicDataType type);
+      // static bool isPairElement(MusicDataType type);
 
-      // show / hide
-      void setShow(bool show);
-      bool getShow() const;
+      void setShow(bool show)       { _show = show;   }
+      bool show() const             { return _show;   }
 
-      // color
-      void setColor(unsigned int color); // not exists in ove 3
-      unsigned int getColor() const;
+      void setColor(unsigned color) { _color = color; } // not exists in ove 3
+      unsigned color() const        { return _color;  }
 
-      void setVoice(unsigned int voice);
-      unsigned int getVoice() const;
+      void setVoice(unsigned voice) { _voice = voice; }
+      unsigned voice() const        { return _voice;  }
+
+      MusicDataType musicDataType() const { return _musicDataType; }
 
       void copyCommonBlock(const MusicData& source);
-
-protected:
-      MusicDataType musicDataType_;
-
-private:
-      bool show_;
-      unsigned int color_;
-      unsigned int voice_;
       };
 
-class MidiData: public TickElement {
-public:
+//---------------------------------------------------------
+//   MidiData
+//---------------------------------------------------------
+
+class MidiData : public TickElement {
+   protected:
+      MidiType _midiType;
+
+   public:
       MidiData();
       virtual ~MidiData() {}
 
-public:
-      MidiType getMidiType() const;
-
-protected:
-      MidiType midiType_;
+      MidiType midiType() const { return _midiType; }
       };
 
+//---------------------------------------------------------
+//   OveSong
+//---------------------------------------------------------
 
-////////////////////////////////////////////////////////////////////////////////
 class OveSong {
-public:
+      bool _version4;
+      int _quarter;
+
+      bool _showPageMargin;
+      bool _showTransposeTrack;
+      bool _showLineBreak;
+      bool _showRuler;
+      bool _showColor;
+      bool _playRepeat;
+
+      QList<QString> _titles;
+      QList<QString> _annotates;
+      QList<QString> _writers;
+      QList<QString> _copyrights;
+      QList<QString> _headers;
+      QList<QString> _footers;
+
+      QList<Track*> _tracks;
+      QList<Page*> _pages;
+      QList<Line*> _lines;
+      QList<Measure*> _measures;
+      QList<MeasureData*> _measureDatas;
+      int _trackBarCount;	//equal to measures_.size()
+
+      QList<int> _partStaffCounts;
+      QTextCodec* _codec;
+
+   public:
       OveSong();
       ~OveSong();
 
-public:
-      void setIsVersion4(bool version4 = true);
-      bool getIsVersion4() const;
+      void setIsVersion4(bool version4 = true) { _version4 = version4;        }
+      bool isVersion4() const                  { return _version4;            }
 
-      void setQuarter(int tick);
-      int getQuarter(void) const;
+      void setQuarter(int tick)                { _quarter = tick;             }
+      int isQuarter() const                    { return _quarter;             }
 
-      void setShowPageMargin(bool show);
-      bool getShowPageMargin() const;
+      void setShowPageMargin(bool show)        { _showPageMargin = show;      }
+      bool showPageMargin() const              { return _showPageMargin;      }
 
-      void setShowTransposeTrack(bool show);
-      bool getShowTransposeTrack() const;
+      void setShowTransposeTrack(bool show)    { _showTransposeTrack = show;  }
+      bool showTransposeTrack() const          { return _showTransposeTrack;  }
 
-      void setShowLineBreak(bool show);
-      bool getShowLineBreak() const;
+      void setShowLineBreak(bool show)         { _showLineBreak = show;       }
+      bool showLineBreak() const               { return _showLineBreak;       }
+      
+      void setShowRuler(bool show)             { _showRuler = show;           }
+      bool showRuler() const                   { return _showRuler;           }
 
-      void setShowRuler(bool show);
-      bool getShowRuler() const;
+      void setShowColor(bool show)             { _showColor = show;           }
+      bool showColor() const                   { return _showColor;           }
 
-      void setShowColor(bool show);
-      bool getShowColor() const;
-
-      void setPlayRepeat(bool play);
-      bool getPlayRepeat() const;
+      void setPlayRepeat(bool play)            { _playRepeat = play;          }
+      bool playRepeat() const                  { return _playRepeat;          }
 
       enum class PlayStyle : char {
             Record, Swing, Notation
             };
-      void setPlayStyle(PlayStyle style);
-      PlayStyle getPlayStyle() const;
 
-      void addTitle(const QString& str);
-      QList<QString> getTitles(void) const;
+      void setPlayStyle(PlayStyle style)       { _playStyle = style;          }
+      PlayStyle playStyle() const              { return _playStyle;           }
 
-      void addAnnotate(const QString& str);
-      QList<QString> getAnnotates(void) const;
+      void addTitle(const QString& str)        { _titles.push_back(str);      }
+      QList<QString> titles() const            { return _titles;              }
 
-      void addWriter(const QString& str);
-      QList<QString> getWriters(void) const;
+      void addAnnotate(const QString& str)     { _annotates.push_back(str);   }
+      QList<QString> annotates() const         { return _annotates;           }
 
-      void addCopyright(const QString& str);
-      QList<QString> getCopyrights(void) const;
+      void addWriter(const QString& str)       { _writers.push_back(str);     }
+      QList<QString> writers() const           { return _writers;             }
 
-      void addHeader(const QString& str);
-      QList<QString> getHeaders(void) const;
+      void addCopyright(const QString& str)    { _copyrights.push_back(str);  }
+      QList<QString> copyrights() const        { return _copyrights;          }
 
-      void addFooter(const QString& str);
-      QList<QString> getFooters(void) const;
+      void addHeader(const QString& str)       { _headers.push_back(str);     }
+      QList<QString> headers() const           { return _headers;             }
 
-      void addTrack(Track* ptr);
-      int getTrackCount(void) const;
-      QList<Track*> getTracks() const;
-      Track* getTrack(int part, int staff) const;
+      void addFooter(const QString& str)       { _footers.push_back(str);     }
+      QList<QString> footers() const           { return _footers;             }
 
-      void setTrackBarCount(int count);
-      int getTrackBarCount() const;
+      void addTrack(Track* t)                  { _tracks.push_back(t);        }
+      int trackCount() const                   { return _tracks.size();       }
+      QList<Track*> tracks() const             { return _tracks;              }
+      Track* track(int part, int staff) const;
 
-      bool addPage(Page* page);
-      int getPageCount() const;
-      Page* getPage(int idx);
+      void setTrackBarCount(int count)         { _trackBarCount = count;      }
+      int trackBarCount() const                { return _trackBarCount;       }
 
-      void addLine(Line* ptr);
-      int getLineCount() const;
-      Line* getLine(int idx) const;
+      void addPage(Page* page)                 { _pages.push_back(page);      }
+      int pageCount() const                    { return _pages.size();        }
+      Page* page(int idx) const;
 
-      void addMeasure(Measure* ptr);
-      int getMeasureCount(void) const;
-      Measure* getMeasure(int bar) const;
+      void addLine(Line* line)                 { _lines.push_back(line);      }
+      int lineCount() const                    { return _lines.size();        }
+      Line* line(int idx) const;
 
-      void addMeasureData(MeasureData* ptr);
-      int getMeasureDataCount(void) const;
-      MeasureData* getMeasureData(int part, int staff/*=0*/, int bar) const;
-      MeasureData* getMeasureData(int track, int bar) const;
+      void addMeasure(Measure* m)              { _measures.push_back(m);      }
+      int measureCount() const                 { return _measures.size();     }
+      Measure* measure(int m) const;
+
+      void addMeasureData(MeasureData* md)     { _measureDatas.push_back(md); }
+      int measureDataCount() const             { return _measureDatas.size(); }
+      MeasureData* measureData(int part, int staff/*= 0*/, int bar) const;
+      MeasureData* measureData(int track, int bar) const;
 
       // tool
-      void setPartStaffCounts(const QList<int>& partStaffCounts);
-      int getPartCount() const;
-      int getStaffCount(int part) const;
-      int getPartBarCount() const;
+      void addPartStaffCounts(const QList<int>& partStaffCounts);
+      int partCount() const                    { return _partStaffCounts.size(); }
+      int staffCount(int part) const;
+      int partBarCount() const   { return _measureDatas.size() / _tracks.size(); }
 
-      void clear(void);
+      void clear();
 
       QPair<int, int> trackToPartStaff(int track) const;
 
-      void setTextCodecName(const QString& codecName);
-      QString getCodecString(const QByteArray& text);
+      void setTextCodecName(const QString& codecName) { _codec = QTextCodec::codecForName(codecName.toLatin1()); }
+      QString codecString(const QByteArray& text);
 
-private:
+   private:
+      PlayStyle _playStyle;
+
       int partStaffToTrack(int part, int staff) const;
-
-private:
-      bool version4_;
-      int quarter_;
-
-      bool showPageMargin_;
-      bool showTransposeTrack;
-      bool showLineBreak_;
-      bool showRuler_;
-      bool showColor_;
-      bool playRepeat_;
-      PlayStyle playStyle_;
-
-      QList<QString> titles_;
-      QList<QString> annotates_;
-      QList<QString> writers_;
-      QList<QString> copyrights_;
-      QList<QString> headers_;
-      QList<QString> footers_;
-
-      QList<Track*> tracks_;
-      QList<Page*> pages_;
-      QList<Line*> lines_;
-      QList<Measure*> measures_;
-      QList<MeasureData*> measureDatas_;
-      int trackBarCount_;	//equal to measures_.size()
-
-      QList<int> partStaffCounts_;
-      QTextCodec* codec_;
       };
+
+//---------------------------------------------------------
+//   Voice
+//---------------------------------------------------------
 
 class Voice {
-public:
+      int _channel;    // [0, 15]
+      int _volume;     // [-1, 127], -1 default
+      int _pitchShift; // [-36, 36]
+      int _pan;        // [-64, 63]
+      int _patch;      // [0, 127]
+      int _stemType;   // 0, 1, 2
+
+   public:
       Voice();
-      ~Voice(){}
+      ~Voice() {}
 
-public:
-      void setChannel(int channel);
-      int getChannel() const;
+      void setChannel(int channel)       { _channel = channel;       }
+      int channel() const                { return _channel;          }
 
-      void setVolume(int volume);
-      int getVolume() const;
+      void setVolume(int volume)         { _volume = volume;         }
+      int volume() const                 { return _volume;           }
 
-      void setPitchShift(int pitchShift);
-      int getPitchShift() const;
+      void setPitchShift(int pitchShift) { _pitchShift = pitchShift; }
+      int pitchShift() const             { return _pitchShift;       }
 
-      void setPan(int pan);
-      int getPan() const;
+      void setPan(int pan)               { _pan = pan;               }
+      int pan() const                    { return _pan;              }
 
-      void setPatch(int patch);
-      int getPatch() const;
+      void setPatch(int patch)           { _patch = patch;           }
+      int patch() const                  { return _patch;            }
 
-      void setStemType(int stemType);
-      int getStemType() const;
+      void setStemType(int stemType)     { _stemType = stemType;     }
+      int stemType() const               { return _stemType;         }
 
-      static int getDefaultPatch();
-      static int getDefaultVolume();
-
-private:
-      int channel_;		// [0, 15]
-      int volume_;		// [-1, 127], -1 default
-      int pitchShift_;	// [-36, 36]
-      int pan_;			// [-64, 63]
-      int patch_;			// [0, 127]
-      int stemType_;		// 0, 1, 2
+      static int defaultPatch()          { return -1;                }
+      static int defaultVolume()         { return -1;                }
       };
 
+//---------------------------------------------------------
+//   Track
+//---------------------------------------------------------
+
 class Track {
-public:
+      int _number;
+      QString _name;
+      QString _briefName;
+      unsigned _patch;
+      int _channel;
+      int _transpose;
+      bool _showTranspose;
+      int _noteShift;
+      ClefType _startClef;
+      ClefType _transposeClef;
+      unsigned _displayPercent;
+      KeyType _startKey;
+      int _voiceCount;
+      QList<Voice*> _voices;
+
+      bool _showName;
+      bool _showBriefName;
+      bool _showKeyEachLine;
+      bool _showLegerLine;
+      bool _showClef;
+      bool _showTimeSignature;
+      bool _showKeySignature;
+      bool _showBarline;
+      bool _showClefEachLine;
+
+      bool _fillWithRest;
+      bool _flatTail;
+
+      bool _mute;
+      bool _solo;
+
+      int _part;
+
+   public:
       Track();
       ~Track();
 
-public:
-      void setName(const QString& str);
-      QString getName(void) const;
+      void setName(const QString& str)      { _name = str;               }
+      QString name() const                  { return _name;              }
 
-      void setBriefName(const QString& str);
-      QString getBriefName(void) const;
+      void setBriefName(const QString& str) { _briefName = str;          }
+      QString briefName() const             { return _briefName;         }
 
-      void setPatch(unsigned int patch); // -1: percussion
-      unsigned int getPatch() const;
+      void setPatch(unsigned patch)         { _patch = patch;            } // -1: percussion
+      unsigned patch() const                { return _patch;             }
 
-      void setChannel(int channel);
-      int getChannel() const;
+      void setChannel(int channel)          { _channel = channel;        }
+      int channel() const                   { return _channel;           }
 
-      void setShowName(bool show);
-      bool getShowName() const;
+      void setShowName(bool show)           { _showName = show;          }
+      bool showName() const                 { return _showName;          }
 
-      void setShowBriefName(bool show);
-      bool getShowBriefName() const;
+      void setShowBriefName(bool show)      { _showBriefName = show;     }
+      bool showBriefName() const            { return _showBriefName;     }
 
-      void setMute(bool mute);
-      bool getMute() const;
+      void setMute(bool mute)               { _mute = mute;              }
+      bool mute() const                     { return _mute;              }
 
-      void setSolo(bool solo);
-      bool getSolo() const;
+      void setSolo(bool solo)               { _solo = solo;              }
+      bool solo() const                     { return _solo;              }
 
-      void setShowKeyEachLine(bool show);
-      bool getShowKeyEachLine() const;
+      void setShowKeyEachLine(bool show)    { _showKeyEachLine = show;   }
+      bool showKeyEachLine() const          { return _showKeyEachLine;   }
 
-      void setVoiceCount(int voices);
-      int getVoiceCount() const;
+      void setVoiceCount(int voices)        { _voiceCount = voices;      }
+      int voiceCount() const                { return _voiceCount;        }
 
-      void addVoice(Voice* voice);
-      QList<Voice*> getVoices() const;
+      void addVoice(Voice* voice)           { _voices.push_back(voice);  }
+      QList<Voice*> voices() const          { return _voices;            }
 
-      void setShowTranspose(bool show);
-      bool getShowTranspose() const;
+      void setShowTranspose(bool show)      { _showTranspose = show;     }
+      bool showTranspose() const            { return _showTranspose;     }
 
-      void setTranspose(int transpose);
-      int getTranspose() const;
+      void setTranspose(int transpose)      { _transpose = transpose;    }
+      int transpose() const                 { return _transpose;         }
 
-      void setNoteShift(int shift);
-      int getNoteShift() const;
+      void setNoteShift(int shift)          { _noteShift = shift;        }
+      int noteShift() const                 { return _noteShift;         }
 
-      void setStartClef(int clef/*in ClefType*/);
-      ClefType getStartClef() const;
+      void setStartClef(ClefType clef)      { _startClef = clef;         }
+      ClefType startClef() const            { return _startClef;         }
 
-      void setTransposeClef(int clef/*in ClefType*/);
-      ClefType getTansposeClef() const;
+      void setTransposeClef(ClefType clef)  { _transposeClef = clef;     }
+      ClefType transposeClef() const        { return _transposeClef;     }
 
-      void setStartKey(int key/*in KeyType*/);
-      int getStartKey() const;
+      void setStartKey(KeyType key)         { _startKey = key;           }
+      KeyType startKey() const              { return _startKey;          }
 
-      void setDisplayPercent(unsigned int percent/*25~100*/);
-      unsigned int getDisplayPercent() const;
+      void setDisplayPercent(unsigned percent/*25~100*/) { _displayPercent = percent; }
+      unsigned displayPercent() const                    { return _displayPercent;    }
 
-      void setShowLegerLine(bool show);
-      bool getShowLegerLine() const;
+      void setShowLegerLine(bool show)      { _showLegerLine = show;     }
+      bool showLegerLine() const            { return _showLegerLine;     }
 
-      void setShowClef(bool show);
-      bool getShowClef() const;
+      void setShowClef(bool show)           { _showClef = show;          }
+      bool showClef() const                 { return _showClef;          }
 
-      void setShowTimeSignature(bool show);
-      bool getShowTimeSignature() const;
+      void setShowTimeSignature(bool show)  { _showTimeSignature = show; }
+      bool showTimeSignature() const        { return _showTimeSignature; }
 
-      void setShowKeySignature(bool show);
-      bool getShowKeySignature() const;
+      void setShowKeySignature(bool show)   { _showKeySignature = show;  }
+      bool showKeySignature() const         { return _showKeySignature;  }
 
-      void setShowBarline(bool show);
-      bool getShowBarline() const;
+      void setShowBarline(bool show)        { _showBarline = show;       }
+      bool showBarline() const              { return _showBarline;       }
 
-      void setFillWithRest(bool fill);
-      bool getFillWithRest() const;
+      void setFillWithRest(bool fill)       { _fillWithRest = fill;      }
+      bool fillWithRest() const             { return _fillWithRest;      }
 
-      void setFlatTail(bool flat);
-      bool getFlatTail() const;
+      void setFlatTail(bool flat)           { _flatTail = flat;          }
+      bool flatTail() const                 { return _flatTail;          }
 
-      void setShowClefEachLine(bool show);
-      bool getShowClefEachLine() const;
+      void setShowClefEachLine(bool show)   { _showClefEachLine = show;  }
+      bool showClefEachLine() const         { return _showClefEachLine;  }
 
       struct DrumNode {
-            int line_;
-            int headType_;
-            int pitch_;
-            int voice_;
+            int _line;
+            int _headType;
+            int _pitch;
+            int _voice;
 
-      public:
-            DrumNode():line_(0), headType_(0), pitch_(0), voice_(0){}
+         public:
+            DrumNode():
+                  _line(0), _headType(0), _pitch(0), _voice(0) {}
             };
-      void addDrum(const DrumNode& node);
-      QList<DrumNode> getDrumKit() const;
+      void addDrum(const DrumNode& node)    { _drumKit.push_back(node);  }
+      QList<DrumNode> drumKit() const       { return _drumKit;           }
 
-      void clear(void);
+      void clear();
 
-      /////////////////////////////////////////////////
-      void setPart(int part);
-      int getPart() const;
+      void setPart(int part)                { _part = part;              }
+      int part() const                      { return _part;              }
 
-private:
-      int number_;
-      QString name_;
-      QString briefName_;
-      unsigned int patch_;
-      int channel_;
-      int transpose_;
-      bool showTranspose_;
-      int noteShift_;
-      ClefType startClef_;
-      ClefType transposeClef_;
-      unsigned int displayPercent_;
-      int startKey_;
-      int voiceCount_;
-      QList<Voice*> voices_;
-
-      bool showName_;
-      bool showBriefName_;
-      bool showKeyEachLine_;
-      bool showLegerLine_;
-      bool showClef_;
-      bool showTimeSignature_;
-      bool showKeySignature_;
-      bool showBarline_;
-      bool showClefEachLine_;
-
-      bool fillWithRest_;
-      bool flatTail_;
-
-      bool mute_;
-      bool solo_;
-
-      QList<DrumNode> drumKit_;
-
-      //////////////////////////////
-      int part_;
+   private:
+      QList<DrumNode> _drumKit;
       };
+
+//---------------------------------------------------------
+//   Page
+//---------------------------------------------------------
 
 class Page {
-public:
+      int _beginLine;
+      int _lineCount;
+
+      int _lineInterval;
+      int _staffInterval;
+      int _staffInlineInterval;
+
+      int _lineBarCount;
+      int _pageLineCount;
+
+      int _leftMargin;
+      int _topMargin;
+      int _rightMargin;
+      int _bottomMargin;
+
+      int _pageWidth;
+      int _pageHeight;
+
+   public:
       Page();
-      ~Page(){}
+      ~Page() {}
 
-public:
-      void setBeginLine(int line);
-      int getBeginLine() const;
+      void setBeginLine(int line)               { _beginLine = line;               }
+      int beginLine() const                     { return _beginLine;               }
 
-      void setLineCount(int count);
-      int getLineCount() const;
+      void setLineCount(int count)              { _lineCount = count;              }
+      int lineCount() const                     { return _lineCount;               }
 
-      void setLineInterval(int interval);	// between system
-      int getLineInterval() const;
+      void setLineInterval(int interval)        { _lineInterval = interval;        } // between system
+      int lineInterval() const                  { return _lineInterval;            }
 
-      void setStaffInterval(int interval);
-      int getStaffInterval() const;
+      void setStaffInterval(int interval)       { _staffInterval = interval;       }
+      int staffInterval() const                 { return _staffInterval;           }
 
-      void setStaffInlineInterval(int interval); // between treble-bass staff
-      int getStaffInlineInterval() const;
+      void setStaffInlineInterval(int interval) { _staffInlineInterval = interval; } // between treble-bass staff
+      int staffInlineInterval() const           { return _staffInlineInterval;     }
 
-      void setLineBarCount(int count);
-      int getLineBarCount() const;
+      void setLineBarCount(int count)           { _lineBarCount = count;           }
+      int lineBarCount() const                  { return _lineBarCount;            }
 
-      void setPageLineCount(int count);
-      int getPageLineCount() const;
+      void setPageLineCount(int count)          { _pageLineCount = count;          }
+      int pageLineCount() const                 { return _pageLineCount;           }
 
-      void setLeftMargin(int margin);
-      int getLeftMargin() const;
+      void setLeftMargin(int margin)            { _leftMargin = margin;            }
+      int leftMargin() const                    { return _leftMargin;              }
 
-      void setTopMargin(int margin);
-      int getTopMargin() const;
+      void setTopMargin(int margin)             { _topMargin = margin;             }
+      int topMargin() const                     { return _topMargin;               }
 
-      void setRightMargin(int margin);
-      int getRightMargin() const;
+      void setRightMargin(int margin)           { _rightMargin = margin;           }
+      int rightMargin() const                   { return _rightMargin;             }
 
-      void setBottomMargin(int margin);
-      int getBottomMargin() const;
+      void setBottomMargin(int margin)          { _bottomMargin = margin;          }
+      int bottomMargin() const                  { return _bottomMargin;            }
 
-      void setPageWidth(int width);
-      int getPageWidth() const;
+      void setPageWidth(int width)              { _pageWidth = width;              }
+      int pageWidth() const                     { return _pageWidth;               }
 
-      void setPageHeight(int height);
-      int getPageHeight() const;
-
-private:
-      int beginLine_;
-      int lineCount_;
-
-      int lineInterval_;
-      int staffInterval_;
-      int staffInlineInterval_;
-
-      int lineBarCount_;
-      int pageLineCount_;
-
-      int leftMargin_;
-      int topMargin_;
-      int rightMargin_;
-      int bottomMargin_;
-
-      int pageWidth_;
-      int pageHeight_;
+      void setPageHeight(int height)            { _pageHeight = height;            }
+      int pageHeight() const                    { return _pageHeight;              }
       };
 
+//---------------------------------------------------------
+//   Line
+//---------------------------------------------------------
+
 class Line {
-public:
+      QList<Staff*> _staffs;
+      unsigned _beginBar;
+      unsigned _barCount;
+      int _yOffset;
+      int _leftXOffset;
+      int _rightXOffset;
+
+   public:
       Line();
       ~Line();
 
-public:
-      void addStaff(Staff* staff);
-      int getStaffCount() const;
-      Staff* getStaff(int idx) const;
+      void addStaff(Staff* staff)      { _staffs.push_back(staff); }
+      int staffCount() const           { return _staffs.size();    }
+      Staff* staff(int idx) const;
 
-      void setBeginBar(unsigned int bar);
-      unsigned int getBeginBar() const;
+      void setBeginBar(unsigned bar)   { _beginBar = bar;          }
+      unsigned beginBar() const        { return _beginBar;         }
 
-      void setBarCount(unsigned int count);
-      unsigned int getBarCount() const;
+      void setBarCount(unsigned count) { _barCount = count;        }
+      unsigned barCount() const        { return _barCount;         }
 
-      void setYOffset(int offset);
-      int getYOffset() const;
+      void setYOffset(int offset)      { _yOffset = offset;        }
+      int yOffset() const              { return _yOffset;          }
 
-      void setLeftXOffset(int offset);
-      int getLeftXOffset() const;
+      void setLeftXOffset(int offset)  { _leftXOffset = offset;    }
+      int leftXOffset() const          { return _leftXOffset;      }
 
-      void setRightXOffset(int offset);
-      int getRightXOffset() const;
-
-private:
-      QList<Staff*> staffs_;
-      unsigned int beginBar_;
-      unsigned int barCount_;
-      int yOffset_;
-      int leftXOffset_;
-      int rightXOffset_;
+      void setRightXOffset(int offset) { _rightXOffset = offset;   }
+      int rightXOffset() const         { return _rightXOffset;     }
       };
+
+//---------------------------------------------------------
+//   Staff
+//---------------------------------------------------------
 
 class Staff : public OffsetElement {
-public:
+      ClefType _clef;
+      int _keyType;
+      bool _visible;
+      GroupType _groupType;
+      int _groupStaffCount;
+
+   public:
       Staff();
-      virtual ~Staff(){}
+      virtual ~Staff() {}
 
-public:
-      void setClefType(int clef);
-      ClefType getClefType() const;
+      void setClefType(ClefType clef)    { _clef = clef;             }
+      ClefType clefType() const          { return _clef;             }
 
-      void setKeyType(int key);
-      int getKeyType() const;
+      void setKeyType(int key)           { _keyType = key;           }
+      int keyType() const                { return _keyType;          }
 
-      void setVisible(bool visible);
-      bool setVisible() const;
+      void setVisible(bool visible)      { _visible = visible;       }
+      bool visible() const               { return _visible;          }
 
-      void setGroupType(GroupType type);
-      GroupType getGroupType() const;
+      void setGroupType(GroupType type)  { _groupType = type;        }
+      GroupType groupType() const        { return _groupType;        }
 
-      void setGroupStaffCount(int count);
-      int getGroupStaffCount() const;
-
-private:
-      ClefType clef_;
-      int key_;
-      bool visible_;
-      GroupType groupType_;
-      int groupStaffCount_;
+      void setGroupStaffCount(int count) { _groupStaffCount = count; }
+      int groupStaffCount() const        { return _groupStaffCount;  }
       };
 
-///////////////////////////////////////////////////////////////////////////////
+//---------------------------------------------------------
+//   Note
+//---------------------------------------------------------
 
 class Note : public LineElement {
-public:
+      bool _isRest;
+      unsigned _note;
+      AccidentalType _accidental;
+      bool _showAccidental;
+      unsigned _onVelocity;
+      unsigned _offVelocity;
+      NoteHeadType _headType;
+      TiePos _tiePos;
+      int _offsetStaff;
+      bool _show;
+      int _offsetTick; // for playback
+
+   public:
       Note();
-      virtual ~Note(){}
+      virtual ~Note() {}
 
-public:
-      void setIsRest(bool rest);
-      bool getIsRest() const;
+      void setIsRest(bool rest)               { _isRest = rest;          }
+      bool isRest() const                     { return _isRest;          }
 
-      void setNote(unsigned int note);
-      unsigned int getNote() const;
+      void setNote(unsigned note)             { _note = note;            }
+      unsigned note() const                   { return _note;            }
 
-      void setAccidental(int type);		//AccidentalType
-      AccidentalType getAccidental() const;
+      void setAccidental(AccidentalType type) { _accidental = type;      }
+      AccidentalType accidental() const       { return _accidental;      }
 
-      void setShowAccidental(bool show);
-      bool getShowAccidental() const;
+      void setShowAccidental(bool show)       { _showAccidental = show;  }
+      bool showAccidental() const             { return _showAccidental;  }
 
-      void setOnVelocity(unsigned int velocity);
-      unsigned int getOnVelocity() const;
+      void setOnVelocity(unsigned velocity)   { _onVelocity = velocity;  }
+      unsigned onVelocity() const             { return _onVelocity;      }
 
-      void setOffVelocity(unsigned int velocity);
-      unsigned int getOffVelocity() const;
+      void setOffVelocity(unsigned velocity)  { _offVelocity = velocity; }
+      unsigned offVelocity() const            { return _offVelocity;     }
 
-      void setHeadType(int type);		//NoteHeadType
-      NoteHeadType getHeadType() const;
+      void setHeadType(NoteHeadType type)     { _headType = type;        }
+      NoteHeadType headType() const           { return _headType;        }
 
-      void setTiePos(int tiePos);
-      TiePos getTiePos() const;
+      void setTiePos(TiePos tiePos)           { _tiePos = tiePos;        }
+      TiePos tiePos() const                   { return _tiePos;          }
 
-      void setOffsetStaff(int offset);	// cross staff notes
-      int getOffsetStaff() const;
+      void setOffsetStaff(int offset)         { _offsetStaff = offset;   } // cross staff notes
+      int offsetStaff() const                 { return _offsetStaff;     }
 
-      void setShow(bool show);
-      bool getShow() const;
+      void setShow(bool show)                 { _show = show;            }
+      bool show() const                       { return _show;            }
 
-      void setOffsetTick(int offset);
-      int getOffsetTick() const;
-
-private:
-      bool rest_;
-      unsigned int note_;
-      AccidentalType accidental_;
-      bool showAccidental_;
-      unsigned int onVelocity_;
-      unsigned int offVelocity_;
-      NoteHeadType headType_;
-      TiePos tiePos_;
-      int offsetStaff_;
-      bool show_;
-      int offsetTick_;//for playback
+      void setOffsetTick(int offset)          { _offsetTick = offset;    }
+      int offsetTick() const                  { return _offsetTick;      }
       };
 
+//---------------------------------------------------------
+//   Articulation
+//---------------------------------------------------------
+
 class Articulation : public OffsetElement {
-public:
+      ArticulationType _type;
+      bool _above;
+
+      bool _changeSoundEffect;
+      QPair<int, int> _soundEffect;
+      bool _changeLength;
+      int _lengthPercentage;
+      bool _changeVelocity;
+      int _velocity;
+      bool _changeExtraLength;
+      int _extraLength;
+
+      bool _auxiliaryFirst;
+      NoteType _trillRate;
+      int _trillNoteLength;
+
+   public:
       Articulation();
-      virtual ~Articulation(){}
+      virtual ~Articulation() {}
 
-public:
-      void setArtType(int type);//ArticulationType
-      ArticulationType getArtType() const;
+      void setArticulationType(ArticulationType type) { _type = type;   }
+      ArticulationType articulationType() const       { return _type;   }
 
-      void setPlacementAbove(bool above);
-      bool getPlacementAbove() const;
+      void setPlacementAbove(bool above)              { _above = above; }
+      bool placementAbove() const                     { return _above;  }
 
       // for midi
       bool willAffectNotes() const;
 
-      static bool isTrill(ArticulationType type);
+      bool isTrill() const;
 
       // for xml
       enum class XmlType : char {
@@ -1181,1293 +1243,1375 @@ public:
 
             Unknown
             };
-      XmlType getXmlType() const;
+      XmlType xmlType() const;
 
       // sound setting
-      bool getChangeSoundEffect() const;
+      bool changeSoundEffect() const      { return _changeSoundEffect; }
       void setSoundEffect(int soundFrom, int soundTo);
-      QPair<int, int> getSoundEffect() const;
+      QPair<int, int> soundEffect() const { return _soundEffect;       }
 
-      bool getChangeLength() const;
+      bool changeLength() const           { return _changeLength;      }
       void setLengthPercentage(int percentage);
-      int getLengthPercentage() const;
+      int lengthPercentage() const        { return _lengthPercentage;  }
 
-      bool getChangeVelocity() const;
+      bool changeVelocity() const         { return _changeVelocity;    }
       enum class VelocityType : char {
             Offset,
             SetValue,
             Percentage
             };
       void setVelocityType(VelocityType type);
-      VelocityType getVelocityType() const;
+      VelocityType velocityType() const   { return _velocityType;      }
 
-      void setVelocityValue(int value);
-      int getVelocityValue() const;
+      void setVelocity(int value)         { _velocity = value;         }
+      int velocity() const                { return _velocity;          }
 
-      bool getChangeExtraLength() const;
+      bool changeExtraLength() const      { return _changeExtraLength; }
       void setExtraLength(int length);
-      int getExtraLength() const;
+      int extraLength() const             { return _extraLength;       }
 
-      // trill
       enum class TrillInterval : char {
             Diatonic = 0,
             Chromatic,
             Whole
             };
-      void setTrillInterval(int interval);
-      TrillInterval getTrillInterval() const;
+      void setTrillInterval(TrillInterval interval) { _trillInterval = interval; }
+      TrillInterval trillInterval() const           { return _trillInterval;     }
 
-      void setAuxiliaryFirst(bool first);
-      bool getAuxiliaryFirst() const;
+      void setAuxiliaryFirst(bool first)  { _auxiliaryFirst = first;   }
+      bool auxiliaryFirst() const         { return _auxiliaryFirst;    }
 
-      void setTrillRate(NoteType rate);
-      NoteType getTrillRate() const;
+      void setTrillRate(NoteType rate)    { _trillRate = rate;         }
+      NoteType trillRate() const          { return _trillRate;         }
 
-      void setTrillNoteLength(int length);
-      int getTrillNoteLength() const;
+      void setTrillNoteLength(int length) { _trillNoteLength = length; }
+      int trillNoteLength() const         { return _trillNoteLength;   }
 
       enum class AccelerateType : char {
-            None = 0 ,
+            None = 0,
             Slow,
             Normal,
             Fast
             };
-      void setAccelerateType(int type);
-      AccelerateType getAccelerateType() const;
+      void setAccelerateType(AccelerateType type) { _accelerateType = type; }
+      AccelerateType accelerateType() const       { return _accelerateType; }
 
-private:
-      ArticulationType type_;
-      bool above_;
-
-      bool changeSoundEffect_;
-      QPair<int, int> soundEffect_;
-      bool changeLength_;
-      int lengthPercentage_;
-      bool changeVelocity_;
-      VelocityType velocityType_;
-      int velocityValue_;
-      bool changeExtraLength_;
-      int extraLength_;
-
-      // trill
-      TrillInterval trillInterval_;
-      bool auxiliaryFirst_;
-      NoteType trillRate_;
-      int trillNoteLength_;
-      AccelerateType accelerateType_;
+   private:
+      VelocityType _velocityType;
+      TrillInterval _trillInterval;
+      AccelerateType _accelerateType;
       };
 
+//---------------------------------------------------------
+//   NoteContainer
+//---------------------------------------------------------
+
 class NoteContainer : public MusicData, public LengthElement {
-public:
+      bool _isGrace;
+      bool _isCue;
+      bool _isRest;
+      bool _isRaw;
+      NoteType _noteType;
+      int _dot;
+      NoteType _graceNoteType;
+      int _tuplet;
+      int _space;
+      bool _inBeam;
+      bool _up;
+      bool _showStem;
+      int _stemLength; // line count span
+      int _noteShift;
+
+      QList<Note*> _notes;
+      QList<Articulation*> _articulations;
+
+   public:
       NoteContainer();
       virtual ~NoteContainer();
 
-public:
-      void setIsGrace(bool grace);
-      bool getIsGrace() const;
+      void setIsGrace(bool grace)                { _isGrace = grace;      }
+      bool isGrace() const                       { return _isGrace;       }
 
-      void setIsCue(bool cue);
-      bool getIsCue() const;
+      void setIsCue(bool cue)                    { _isCue = cue;          }
+      bool isCue() const                         { return _isCue;         }
 
-      void setIsRest(bool rest/*or note*/);
-      bool getIsRest() const;
+      void setIsRest(bool rest)                  { _isRest = rest;        }
+      bool isRest() const                        { return _isRest;        }
 
-      void setIsRaw(bool raw);
-      bool getIsRaw() const;
+      void setIsRaw(bool raw)                    { _isRaw = raw;          }
+      bool isRaw() const                         { return _isRaw;         }
 
       void setNoteType(NoteType type);
-      NoteType getNoteType() const;
+      NoteType noteType() const                  { return _noteType;      }
 
-      void setDot(int dot);
-      int getDot() const;
+      void setDot(int dot)                       { _dot = dot;            }
+      int dot() const                            { return _dot;           }
 
-      void setGraceNoteType(NoteType type);
-      NoteType getGraceNoteType() const;
+      void setGraceNoteType(NoteType type)       { _graceNoteType = type; }
+      NoteType graceNoteType() const             { return _graceNoteType; }
 
-      void setInBeam(bool in);
-      bool getInBeam() const;
+      void setInBeam(bool in)                    { _inBeam = in;          }
+      bool inBeam() const                        { return _inBeam;        }
 
-      void setStemUp(bool up);
-      bool getStemUp(void) const;
+      void setUp(bool up)                        { _up = up;              }
+      bool up() const                            { return _up;            }
 
-      void setShowStem(bool show);
-      bool getShowStem() const;
+      void setShowStem(bool show)                { _showStem = show;      }
+      bool showStem() const                      { return _showStem;      }
 
-      void setStemLength(int line);
-      int getStemLength() const;
+      void setStemLength(int line)               { _stemLength = line;    }
+      int stemLength() const                     { return _stemLength;    }
 
-      void setTuplet(int tuplet);
-      int getTuplet() const;
+      void setTuplet(int tuplet)                 { _tuplet = tuplet;      }
+      int tuplet() const                         { return _tuplet;        }
 
-      void setSpace(int space);
-      int getSpace() const;
+      void setSpace(int space)                   { _space = space;        }
+      int space() const                          { return _space;         }
 
-      void addNoteRest(Note* note);
-      QList<Note*> getNotesRests() const;
+      void addNoteRest(Note* note)               { _notes.push_back(note);        }
+      QList<Note*> notesRests() const            { return _notes;                 }
 
-      void addArticulation(Articulation* art);
-      QList<Articulation*> getArticulations() const;
+      void addArticulation(Articulation* art)    { _articulations.push_back(art); }
+      QList<Articulation*> articulations() const { return _articulations;         }
 
-      void setNoteShift(int octave);
-      int getNoteShift() const;
+      void setNoteShift(int octave)              { _noteShift = octave;   }
+      int noteShift() const                      { return _noteShift;     }
 
-      int getOffsetStaff() const;
+      int offsetStaff() const;
 
-      int getDuration() const;
-
-private:
-      bool grace_;
-      bool cue_;
-      bool rest_;
-      bool raw_;
-      NoteType noteType_;
-      int dot_;
-      NoteType graceNoteType_;
-      int tuplet_;
-      int space_;
-      bool inBeam_;
-      bool stemUp_;
-      bool showStem_;
-      int stemLength_;	// line count span
-      int noteShift_;
-
-      QList<Note*> notes_;
-      QList<Articulation*> articulations_;
+      int duration() const;
       };
+
+//---------------------------------------------------------
+//   Beam
+//---------------------------------------------------------
 
 class Beam : public MusicData, public PairEnds {
-public:
+      bool _isGrace;
+      QList<QPair<MeasurePos, MeasurePos>> _lines;
+
+   public:
       Beam();
-      virtual ~Beam(){}
+      virtual ~Beam() {}
 
-public:
-      void setIsGrace(bool grace);
-      bool getIsGrace() const;
+      void setIsGrace(bool grace) { _isGrace = grace; }
+      bool isGrace() const        { return _isGrace;  }
 
-      void addLine(const MeasurePos& startMp, const MeasurePos& endMp);
-      const QList<QPair<MeasurePos, MeasurePos> > getLines() const;
-
-private:
-      bool grace_;
-      QList<QPair<MeasurePos, MeasurePos> > lines_;
+      void addLine(const MeasurePos& startMp, const MeasurePos& endMp) { _lines.push_back(qMakePair(startMp, endMp)); }
+      const QList<QPair<MeasurePos, MeasurePos>> lines() const         { return _lines; }
       };
+
+//---------------------------------------------------------
+//   Tie
+//---------------------------------------------------------
 
 class Tie : public MusicData, public PairEnds {
-public:
+      bool _showOnTop;
+      int _note;
+      int _height;
+
+   public:
       Tie();
-      virtual ~Tie(){}
+      virtual ~Tie() {}
 
-public:
-      void setShowOnTop(bool top);
-      bool getShowOnTop() const;
+      void setShowOnTop(bool top) { _showOnTop = top;  }
+      bool showOnTop() const      { return _showOnTop; }
 
-      void setNote(int note);// note value tie point to
-      int getNote() const;
+      void setNote(int note)      { _note = note;      } // note value tie point to
+      int note() const            { return _note;      }
 
-      void setHeight(int height);
-      int getHeight() const;
-
-private:
-      bool showOnTop_;
-      int note_;
-      int height_;
+      void setHeight(int height)  { _height = height;  }
+      int height() const          { return _height;    }
       };
+
+//---------------------------------------------------------
+//   Glissando
+//---------------------------------------------------------
 
 class Glissando : public MusicData, public PairEnds {
-public:
+      bool _straight;
+      QString _text;
+      int _lineThick;
+
+   public:
       Glissando();
-      virtual ~Glissando(){}
+      virtual ~Glissando() {}
 
-public:
-      void setStraightWavy(bool straight);
-      bool getStraightWavy() const;
+      void setStraightWavy(bool straight) { _straight = straight; }
+      bool straightWavy() const           { return _straight;     }
 
-      void setText(const QString& text);
-      QString getText() const;
+      void setText(const QString& text)   { _text = text;         }
+      QString text() const                { return _text;         }
 
-      void setLineThick(int thick);
-      int getLineThick() const;
-
-private:
-      bool straight_;
-      QString text_;
-      int lineThick_;
+      void setLineThick(int thick)        { _lineThick = thick;   }
+      int lineThick() const               { return _lineThick;    }
       };
 
-class Decorator : public MusicData {
-public:
-      Decorator();
-      virtual ~Decorator(){}
+//---------------------------------------------------------
+//   Decorator
+//---------------------------------------------------------
 
-public:
-      enum class Type : char {
+class Decorator : public MusicData {
+      ArticulationType _articulationType;
+
+   public:
+      Decorator();
+      virtual ~Decorator() {}
+
+      enum class DecoratorType : char {
             Dotted_Barline = 0,
             Articulation
             };
-      void setDecoratorType(Type type);
-      Type getDecoratorType() const;
+      void setDecoratorType(DecoratorType type)       { _decoratorType = type;    }
+      DecoratorType decoratorType() const             { return _decoratorType;    }
 
-      void setArticulationType(ArticulationType type);
-      ArticulationType getArticulationType() const;
+      void setArticulationType(ArticulationType type) { _articulationType = type; }
+      ArticulationType articulationType() const       { return _articulationType; }
 
-private:
-      Type decoratorType_;
-      ArticulationType artType_;
+   private:
+      DecoratorType _decoratorType;
       };
+
+//---------------------------------------------------------
+//   MeasureRepeat
+//---------------------------------------------------------
 
 class MeasureRepeat : public MusicData {
-public:
+      bool _singleRepeat;
+
+   public:
       MeasureRepeat();
-      virtual ~MeasureRepeat(){}
+      virtual ~MeasureRepeat() {}
 
-public:
-      void setSingleRepeat(bool single); // false : double
-      bool getSingleRepeat() const;
-
-private:
-      bool singleRepeat_;
+      void setSingleRepeat(bool single); // false : qreal
+      bool singleRepeat() const { return _singleRepeat; }
       };
 
+//---------------------------------------------------------
+//   Tuplet
+//---------------------------------------------------------
+
 class Tuplet : public MusicData, public PairEnds {
-public:
+      int _tuplet;
+      int _space;
+      int _height;
+      NoteType _noteType;
+      OffsetElement* _mark;
+
+   public:
       Tuplet();
       virtual ~Tuplet();
 
-public:
-      void setTuplet(int tuplet=3);
-      int getTuplet() const;
+      void setTuplet(int tuplet = 3)    { _tuplet = tuplet; }
+      int tuplet() const                { return _tuplet;   }
 
-      void setSpace(int space=2);
-      int getSpace() const;
+      void setSpace(int space = 2)      { _space = space;   }
+      int space() const                 { return _space;    }
 
-      void setHeight(int height);
-      int getHeight() const;
+      void setHeight(int height)        { _height = height; }
+      int height() const                { return _height;   }
 
-      void setNoteType(NoteType type);
-      NoteType getNoteType() const;
+      void setNoteType(NoteType type)   { _noteType = type; }
+      NoteType noteType() const         { return _noteType; }
 
-      OffsetElement* getMarkHandle() const;
-
-private:
-      int tuplet_;
-      int space_;
-      int height_;
-      NoteType noteType_;
-      OffsetElement* mark_;
+      OffsetElement* markHandle() const { return _mark;     }
       };
+
+//---------------------------------------------------------
+//   Harmony
+//---------------------------------------------------------
 
 class Harmony : public MusicData, public LengthElement {
-public:
+      QString _harmonyType;
+      int _root;
+      int _bass;
+      int _alterRoot;
+      int _alterBass;
+      bool _bassOnBottom;
+      int _angle;
+
+   public:
       Harmony();
-      virtual ~Harmony(){}
+      virtual ~Harmony() {}
 
-public:
-      void setHarmonyType(QString type);
-      QString getHarmonyType() const;
+      void setHarmonyType(QString type) { _harmonyType = type;  }
+      QString harmonyType() const       { return _harmonyType;  }
 
-      void setRoot(int root=0);//C
-      int getRoot() const;
+      void setRoot(int root = 0)        { _root = root;         } // C
+      int root() const                  { return _root;         }
 
-      void setBass(int bass);
-      int getBass() const;
+      void setBass(int bass)            { _bass = bass;         }
+      int bass() const                  { return _bass;         }
 
-      void setAlterRoot(int val);
-      int getAlterRoot() const;
+      void setAlterRoot(int val)        { _alterRoot = val;     }
+      int alterRoot() const             { return _alterRoot;    }
 
-      void setAlterBass(int val);
-      int getAlterBass() const;
+      void setAlterBass(int val)        { _alterBass = val;     }
+      int alterBass() const             { return _alterBass;    }
 
-      void setBassOnBottom(bool on);
-      bool getBassOnBottom() const;
+      void setBassOnBottom(bool on)     { _bassOnBottom = on;   }
+      bool bassOnBottom() const         { return _bassOnBottom; }
 
-      void setAngle(int angle);
-      int getAngle() const;
-
-private:
-      QString harmonyType_;
-      int root_;
-      int bass_;
-      int alterRoot_;
-      int alterBass_;
-      bool bassOnBottom_;
-      int angle_;
+      void setAngle(int angle)          { _angle = angle;       }
+      int angle() const                 { return _angle;        }
       };
+
+//---------------------------------------------------------
+//   Clef
+//---------------------------------------------------------
 
 class Clef : public MusicData, public LineElement {
-public:
+      ClefType _clefType;
+
+   public:
       Clef();
-      virtual ~Clef(){}
+      virtual ~Clef() {}
 
-public:
-      void setClefType(int type);	// ClefType
-      ClefType getClefType() const;
-
-private:
-      ClefType clefType_;
+      void setClefType(ClefType type) { _clefType = type; }
+      ClefType clefType() const       { return _clefType; }
       };
+
+//---------------------------------------------------------
+//   Lyric
+//---------------------------------------------------------
 
 class Lyric : public MusicData {
-public:
+      QString _lyric;
+      int _verse;
+
+   public:
       Lyric();
-      virtual ~Lyric(){}
+      virtual ~Lyric() {}
 
-public:
-      void setLyric(const QString& lyricText);
-      QString getLyric() const;
+      void setLyric(const QString& lyricText) { _lyric = lyricText; }
+      QString lyric() const                   { return _lyric;      }
 
-      void setVerse(int verse);
-      int getVerse() const;
-
-private:
-      QString lyric_;
-      int verse_;
+      void setVerse(int verse)                { _verse = verse;     }
+      int verse() const                       { return _verse;      }
       };
 
-class Slur: public MusicData, public PairEnds {
-public:
+//---------------------------------------------------------
+//   Slur
+//---------------------------------------------------------
+
+class Slur : public MusicData, public PairEnds {
+      int _containerCount;
+      bool _showOnTop;
+      int _noteTimePercent;
+      OffsetElement* _handle2;
+      OffsetElement* _handle3;
+
+   public:
       Slur();
       virtual ~Slur();
 
-public:
-      void setContainerCount(int count); // span
-      int getContainerCount() const;
+      void setContainerCount(int count)    { _containerCount = count;    } // span
+      int containerCount() const           { return _containerCount;     }
 
-      void setShowOnTop(bool top);
-      bool getShowOnTop() const;
+      void setShowOnTop(bool top)          { _showOnTop = top;           }
+      bool showOnTop() const               { return _showOnTop;          }
 
-      OffsetElement* getHandle2() const;
-      OffsetElement* getHandle3() const;
+      OffsetElement* handle2() const       { return _handle2;            }
+      OffsetElement* handle3() const       { return _handle3;            }
 
-      void setNoteTimePercent(int percent); // 50% ~ 200%
-      int getNoteTimePercent() const;
-
-private:
-      int containerCount_;
-      bool showOnTop_;
-      int noteTimePercent_;
-      OffsetElement* handle_2_;
-      OffsetElement* handle_3_;
+      void setNoteTimePercent(int percent) { _noteTimePercent = percent; } // 50% ~ 200%
+      int noteTimePercent() const          { return _noteTimePercent;    }
       };
 
-class Dynamics: public MusicData {
-public:
-      Dynamics();
-      virtual ~Dynamics() {}
+//---------------------------------------------------------
+//   Dynamic
+//---------------------------------------------------------
 
-public:
-      void setDynamicsType(int type);//DynamicsType
-      DynamicsType getDynamicsType() const;
+class Dynamic : public MusicData {
+      DynamicType _dynamicType;
+      bool _play;
+      int _velocity;
 
-      void setIsPlayback(bool play);
-      bool getIsPlayback() const;
+   public:
+      Dynamic();
+      virtual ~Dynamic() {}
 
-      void setVelocity(int vel);
-      int getVelocity() const;
+      void setDynamicType(DynamicType type) { _dynamicType = type; }
+      DynamicType dynamicType() const       { return _dynamicType; }
 
-private:
-      DynamicsType dynamicsType_;
-      bool playback_;
-      int velocity_;
+      void setPlay(bool play)               { _play = play;        }
+      bool play() const                     { return _play;        }
+
+      void setVelocity(int vel)             { _velocity = vel;     }
+      int velocity() const                  { return _velocity;    }
       };
 
-class WedgeEndPoint: public MusicData {
-public:
+//---------------------------------------------------------
+//   WedgeEndPoint
+//---------------------------------------------------------
+
+class WedgeEndPoint : public MusicData {
+      int _height;
+      WedgeType _wedgeType;
+      bool _wedgeStart;
+
+   public:
       WedgeEndPoint();
       virtual ~WedgeEndPoint() {}
 
-public:
-      void setWedgeType(WedgeType type);
-      WedgeType getWedgeType() const;
+      void setWedgeType(WedgeType type)   { _wedgeType = type;        }
+      WedgeType wedgeType() const         { return _wedgeType;        }
 
-      void setHeight(int height);
-      int getHeight() const;
+      void setHeight(int height)          { _height = height;         }
+      int height() const                  { return _height;           }
 
-      void setWedgeStart(bool wedgeStart);
-      bool getWedgeStart() const;
-
-private:
-      int height_;
-      WedgeType wedgeType_;
-      bool wedgeStart_;
+      void setWedgeStart(bool wedgeStart) { _wedgeStart = wedgeStart; }
+      bool wedgeStart() const             { return _wedgeStart;       }
       };
 
-class Wedge: public MusicData {
-public:
+//---------------------------------------------------------
+//   Wedge
+//---------------------------------------------------------
+
+class Wedge : public MusicData {
+      int _height;
+      WedgeType _wedgeType;
+
+   public:
       Wedge();
       virtual ~Wedge() {}
 
-public:
-      void setWedgeType(WedgeType type);
-      WedgeType getWedgeType() const;
+      void setWedgeType(WedgeType type) { _wedgeType = type; }
+      WedgeType wedgeType() const       { return _wedgeType; }
 
-      void setHeight(int height);
-      int getHeight() const;
-
-private:
-      int height_;
-      WedgeType wedgeType_;
+      void setHeight(int height)        { _height = height;  }
+      int height() const                { return _height;    }
       };
 
-class Pedal: public MusicData, public PairEnds {
-public:
+//---------------------------------------------------------
+//   Pedal
+//---------------------------------------------------------
+
+class Pedal : public MusicData, public PairEnds {
+      bool _half;
+      bool _play;
+      int _playOffset;
+      OffsetElement* _pedalHandle;
+
+   public:
       Pedal();
       virtual ~Pedal();
 
-public:
-      void setHalf(bool half);
-      bool getHalf() const;
+      void setHalf(bool half)            { _half = half;         }
+      bool half() const                  { return _half;         }
 
-      void setIsPlayback(bool playback);
-      bool getIsPlayback() const;
+      void setPlay(bool play)            { _play = play;         }
+      bool play() const                  { return _play;         }
 
-      void setPlayOffset(int offset); // -127~127
-      int getPlayOffset() const;
+      void setPlayOffset(int offset)     { _playOffset = offset; } // -127~127
+      int playOffset() const             { return _playOffset;   }
 
-      OffsetElement* getPedalHandle() const; //only on half pedal
-
-private:
-      bool half_;
-      bool playback_;
-      int playOffset_;
-      OffsetElement* pedalHandle_;
+      OffsetElement* pedalHandle() const { return _pedalHandle;  } // only on half pedal
       };
 
-class KuoHao: public MusicData, public PairEnds {
-public:
-      KuoHao();
-      virtual ~KuoHao() {}
+//---------------------------------------------------------
+//   Bracket
+//---------------------------------------------------------
 
-public:
-      void setHeight(int height);
-      int getHeight() const;
+class Bracket : public MusicData, public PairEnds {
+      int _height;
+      BracketType _bracketType;
 
-      void setKuohaoType(int type);// KuoHaoType
-      KuoHaoType getKuohaoType() const;
+   public:
+      Bracket();
+      virtual ~Bracket() {}
 
-private:
-      int height_;
-      KuoHaoType kuohaoType_;
+      void setHeight(int height)            { _height = height;    }
+      int height() const                    { return _height;      }
+
+      void setBracketType(BracketType type) { _bracketType = type; }
+      BracketType bracketType() const       { return _bracketType; }
       };
 
-class Expressions: public MusicData {
-public:
-      Expressions();
-      virtual ~Expressions() {}
+//---------------------------------------------------------
+//   Expression
+//---------------------------------------------------------
 
-public:
-      void setText(const QString& str);
-      QString getText() const;
+class Expression : public MusicData {
+      QString _text;
 
-private:
-      QString text_;
+   public:
+      Expression();
+      virtual ~Expression() {}
+
+      void setText(const QString& str) { _text = str;  }
+      QString text() const             { return _text; }
       };
 
-class HarpPedal: public MusicData {
-public:
+//---------------------------------------------------------
+//   HarpPedal
+//---------------------------------------------------------
+
+class HarpPedal : public MusicData {
+      HarpPedalType _type;
+      int _showCharFlag;
+
+   public:
       HarpPedal();
       virtual ~HarpPedal() {}
 
-public:
-      void setShowType(int type);//0:graph, 1:char, 2:char cut, 3:change
-      int getShowType() const;
+      void setType(HarpPedalType type) { _type = type;         }
+      HarpPedalType type() const       { return _type;         }
 
-      void setShowCharFlag(int flag);//each bit is a bool, total 7 bools
-      int getShowCharFlag() const;
-
-private:
-      int showType_;
-      int showCharFlag_;
+      // each bit is a bool, total 7 bools
+      void setShowCharFlag(int flag)   { _showCharFlag = flag; }
+      int showCharFlag() const         { return _showCharFlag; }
       };
 
-class OctaveShift: public MusicData, public LengthElement {
-public:
+//---------------------------------------------------------
+//   OctaveShift
+//---------------------------------------------------------
+
+class OctaveShift : public MusicData, public LengthElement {
+      OctaveShiftType _octaveShiftType;
+      OctaveShiftPosition _octaveShiftPosition;
+      int _endTick;
+
+   public:
       OctaveShift();
       virtual ~OctaveShift() {}
 
-public:
-      void setOctaveShiftType(OctaveShiftType type);
-      OctaveShiftType getOctaveShiftType() const;
+      void setOctaveShiftType(OctaveShiftType type) { _octaveShiftType = type; }
+      OctaveShiftType octaveShiftType() const       { return _octaveShiftType; }
 
-      void setOctaveShiftPosition(OctaveShiftPosition position);
-      OctaveShiftPosition getOctaveShiftPosition() const;
+      void setOctaveShiftPosition(OctaveShiftPosition position) { _octaveShiftPosition = position; }
+      OctaveShiftPosition octaveShiftPosition() const           { return _octaveShiftPosition;     }
 
-      int getNoteShift() const;
+      int noteShift() const;
 
-      void setEndTick(int tick);
-      int getEndTick() const;
-
-private:
-      OctaveShiftType octaveShiftType_;
-      OctaveShiftPosition octaveShiftPosition_;
-      int endTick_;
+      void setEndTick(int tick) { _endTick = tick; }
+      int endTick() const       { return _endTick; }
       };
 
-class OctaveShiftEndPoint: public MusicData, public LengthElement {
-public:
+//---------------------------------------------------------
+//   OctaveShiftEndPoint
+//---------------------------------------------------------
+
+class OctaveShiftEndPoint : public MusicData, public LengthElement {
+      OctaveShiftType _octaveShiftType;
+      OctaveShiftPosition _octaveShiftPosition;
+      int _endTick;
+
+   public:
       OctaveShiftEndPoint();
       virtual ~OctaveShiftEndPoint() {}
 
-public:
-      void setOctaveShiftType(OctaveShiftType type);
-      OctaveShiftType getOctaveShiftType() const;
+      void setOctaveShiftType(OctaveShiftType type) { _octaveShiftType = type; }
+      OctaveShiftType octaveShiftType() const       { return _octaveShiftType; }
 
-      void setOctaveShiftPosition(OctaveShiftPosition position);
-      OctaveShiftPosition getOctaveShiftPosition() const;
+      void setOctaveShiftPosition(OctaveShiftPosition position) { _octaveShiftPosition = position; }
+      OctaveShiftPosition octaveShiftPosition() const           { return _octaveShiftPosition;     }
 
-      void setEndTick(int tick);
-      int getEndTick() const;
-
-private:
-      OctaveShiftType octaveShiftType_;
-      OctaveShiftPosition octaveShiftPosition_;
-      int endTick_;
+      void setEndTick(int tick) { _endTick = tick; }
+      int endTick() const       { return _endTick; }
       };
 
-class MultiMeasureRest: public MusicData {
-public:
+//---------------------------------------------------------
+//   MultiMeasureRest
+//---------------------------------------------------------
+
+class MultiMeasureRest : public MusicData {
+      int _measureCount;
+
+   public:
       MultiMeasureRest();
       virtual ~MultiMeasureRest() {}
 
-public:
-      void setMeasureCount(int count);
-      int getMeasureCount() const;
-
-private:
-      int measureCount_;
+      void setMeasureCount(int count) { _measureCount = count; }
+      int measureCount() const        { return _measureCount;  }
       };
 
-class Tempo: public MusicData {
-public:
+//---------------------------------------------------------
+//   Tempo
+//---------------------------------------------------------
+
+class Tempo : public MusicData {
+      bool _showMark;
+      bool _showBeforeText;
+      bool _showParentheses;
+      qreal _typeTempo;
+      QString _leftText;
+      QString _rightText;
+      bool _swingEighth;
+      NoteType _leftNoteType;
+      NoteType _rightNoteType;
+      bool _leftNoteDot;
+      bool _rightNoteDot;
+      int _rightSideType;
+
+   public:
       Tempo();
       virtual ~Tempo() {}
 
-public:
-      void setLeftNoteType(int type);//NoteType
-      NoteType getLeftNoteType() const;
+      void setShowMark(bool show)           { _showMark = show;        }
+      bool showMark() const                 { return _showMark;        }
 
-      void setShowMark(bool show);
-      bool getShowMark() const;
+      void setShowBeforeText(bool show)     { _showBeforeText = show;  }
+      bool showBeforeText() const           { return _showBeforeText;  }
 
-      void setShowBeforeText(bool show);
-      bool getShowBeforeText() const;
+      void setShowParentheses(bool show)    { _showParentheses = show; }
+      bool showParentheses() const          { return _showParentheses; }
 
-      void setShowParenthesis(bool show);
-      bool getShowParenthesis() const;
+      void setTypeTempo(qreal tempo)        { _typeTempo = tempo;      } // 0x2580 = 96.00
+      qreal typeTempo() const               { return _typeTempo;       }
+      qreal quarterTempo() const;
 
-      void setTypeTempo(double tempo); //0x2580 = 96.00
-      double getTypeTempo() const;
-      double getQuarterTempo() const;
+      void setLeftText(const QString& str)  { _leftText = str;         } // string at left of the mark
+      QString leftText() const              { return _leftText;        }
 
-      void setLeftText(const QString& str);// string at left of the mark
-      QString getLeftText() const;
+      void setRightText(const QString& str) { _rightText = str;        }
+      QString rightText() const             { return _rightText;       }
 
-      void setRightText(const QString& str);
-      QString getRightText() const;
+      void setSwingEighth(bool swing)       { _swingEighth = swing;    }
+      bool swingEighth() const              { return _swingEighth;     }
 
-      void setSwingEighth(bool swing);
-      bool getSwingEighth() const;
+      void setLeftNoteType(NoteType type)   { _leftNoteType = type;    }
+      NoteType leftNoteType() const         { return _leftNoteType;    }
 
-      void setRightNoteType(int type);
-      NoteType getRightNoteType() const;
+      void setRightNoteType(NoteType type)  { _rightNoteType = type;   }
+      NoteType rightNoteType() const        { return _rightNoteType;   }
 
-      void setLeftNoteDot(bool showDot);
-      bool getLeftNoteDot() const;
+      void setLeftNoteDot(bool showDot)     { _leftNoteDot = showDot;  }
+      bool leftNoteDot() const              { return _leftNoteDot;     }
 
-      void setRightNoteDot(bool showDot);
-      bool getRightNoteDot() const;
+      void setRightNoteDot(bool showDot)    { _rightNoteDot = showDot; }
+      bool rightNoteDot() const             { return _rightNoteDot;    }
 
-      void setRightSideType(int type);
-      int getRightSideType() const;
-
-private:
-      int leftNoteType_;
-      bool showMark_;
-      bool showText_;
-      bool showParenthesis_;
-      double typeTempo_;
-      QString leftText_;
-      QString rightText_;
-      bool swingEighth_;
-      int rightNoteType_;
-      bool leftNoteDot_;
-      bool rightNoteDot_;
-      int rightSideType_;
+      void setRightSideType(int type)       { _rightSideType = type;   }
+      int rightSideType() const             { return _rightSideType;   }
       };
 
-class Text: public MusicData, public LengthElement {
-public:
+//---------------------------------------------------------
+//  Text
+//---------------------------------------------------------
+
+class Text : public MusicData, public LengthElement {
+      int _horizontalMargin;
+      int _verticalMargin;
+      int _lineThick;
+      QString _text;
+      int _width;
+      int _height;
+
+   public:
       Text();
       virtual ~Text() {}
 
-public:
-      enum class Type : char {
+      enum class TextType : char {
             Rehearsal,
             SystemText,
             MeasureText
             };
 
-      void setTextType(Type type);
-      Type getTextType() const;
+      void setTextType(TextType type)      { _textType = type;           }
+      TextType textType() const            { return _textType;           }
 
-      void setHorizontalMargin(int margin);
-      int getHorizontalMargin() const;
+      void setHorizontalMargin(int margin) { _horizontalMargin = margin; }
+      int horizontalMargin() const         { return _horizontalMargin;   }
 
-      void setVerticalMargin(int margin);
-      int getVerticalMargin() const;
+      void setVerticalMargin(int margin)   { _verticalMargin = margin;   }
+      int verticalMargin() const           { return _verticalMargin;     }
 
-      void setLineThick(int thick);
-      int getLineThick() const;
+      void setLineThick(int thick)         { _lineThick = thick;         }
+      int lineThick() const                { return _lineThick;          }
 
-      void setText(const QString& text);
-      QString getText() const;
+      void setText(const QString& str)     { _text = str;                }
+      QString text() const                 { return _text;               }
 
-      void setWidth(int width);
-      int getWidth() const;
+      void setWidth(int width)             { _width = width;             }
+      int width() const                    { return _width;              }
 
-      void setHeight(int height);
-      int getHeight() const;
+      void setHeight(int height)           { _height = height;           }
+      int height() const                   { return _height;             }
 
-private:
-      Type textType_;
-      int horiMargin_;
-      int vertMargin_;
-      int lineThick_;
-      QString text_;
-      int width_;
-      int height_;
+   private:
+      TextType _textType;
       };
 
-///////////////////////////////////////////////////////////////////////////////
+//---------------------------------------------------------
+//   TimeSignature
+//---------------------------------------------------------
 
-class TimeSignature: public MusicData {
-public:
+class TimeSignature : public MusicData {
+      int _numerator;
+      int _denominator;
+      bool _isSymbol;
+      int _beatLength;
+      int _barLength;
+
+      struct BeatNode {
+            int _startUnit;
+            int _lengthUnit;
+            int _startTick;
+
+            BeatNode() :
+                  _startUnit(0), _lengthUnit(0), _startTick(0) {}
+      };
+      QList<BeatNode> _beats;
+      int _barLengthUnits;
+
+      bool _replaceFont;
+      bool _showBeatGroup;
+
+      int _groupNumerator1;
+      int _groupNumerator2;
+      int _groupNumerator3;
+      int _groupDenominator1;
+      int _groupDenominator2;
+      int _groupDenominator3;
+
+      int _beamGroup1;
+      int _beamGroup2;
+      int _beamGroup3;
+      int _beamGroup4;
+
+      int _beamCount16th;
+      int _beamCount32th;
+
+   public:
       TimeSignature();
       virtual ~TimeSignature() {}
 
-public:
-      void setNumerator(int numerator);
-      int getNumerator() const;
+      void setNumerator(int numerator)     { _numerator = numerator;     }
+      int numerator() const                { return _numerator;          }
 
-      void setDenominator(int denominator);
-      int getDenominator() const;
+      void setDenominator(int denominator) { _denominator = denominator; }
+      int denominator() const              { return _denominator;        }
 
-      void setIsSymbol(bool symbol); //4/4:common, 2/2:cut
-      bool getIsSymbol() const;
+      void setIsSymbol(bool symbol)        { _isSymbol = symbol;         } // 4/4: common, 2/2: cut
+      bool isSymbol() const;
 
-      void setBeatLength(int length); // tick
-      int getBeatLength() const;
+      void setBeatLength(int length)       { _beatLength = length;       } // tick
+      int beatLength() const               { return _beatLength;         }
 
-      void setBarLength(int length); // tick
-      int getBarLength() const;
+      void setBarLength(int length)        { _barLength = length;        } // tick
+      int barLength() const                { return _barLength;          }
 
       void addBeat(int startUnit, int lengthUnit, int startTick);
       void endAddBeat();
-      int getUnits() const;
+      int units() const                    { return _barLengthUnits;     }
 
-      void setReplaceFont(bool replace);
-      bool getReplaceFont() const;
+      void setReplaceFont(bool replace)    { _replaceFont = replace;     }
+      bool replaceFont() const             { return _replaceFont;        }
 
-      void setShowBeatGroup(bool show);
-      bool getShowBeatGroup() const;
+      void setShowBeatGroup(bool show)     { _showBeatGroup = show;      }
+      bool showBeatGroup() const           { return _showBeatGroup;      }
 
-      void setGroupNumerator1(int numerator);
-      void setGroupNumerator2(int numerator);
-      void setGroupNumerator3(int numerator);
-      void setGroupDenominator1(int denominator);
-      void setGroupDenominator2(int denominator);
-      void setGroupDenominator3(int denominator);
+      void setGroupNumerator1(int numerator)     { _groupNumerator1 = numerator;     }
+      void setGroupNumerator2(int numerator)     { _groupNumerator2 = numerator;     }
+      void setGroupNumerator3(int numerator)     { _groupNumerator3 = numerator;     }
+      void setGroupDenominator1(int denominator) { _groupDenominator1 = denominator; }
+      void setGroupDenominator2(int denominator) { _groupDenominator2 = denominator; }
+      void setGroupDenominator3(int denominator) { _groupDenominator3 = denominator; }
 
-      void setBeamGroup1(int count);
-      void setBeamGroup2(int count);
-      void setBeamGroup3(int count);
-      void setBeamGroup4(int count);
+      void setBeamGroup1(int count)        { _beamGroup1 = count;        }
+      void setBeamGroup2(int count)        { _beamGroup2 = count;        }
+      void setBeamGroup3(int count)        { _beamGroup3 = count;        }
+      void setBeamGroup4(int count)        { _beamGroup4 = count;        }
 
-      void set16thBeamCount(int count);
-      void set32thBeamCount(int count);
-
-private:
-      int numerator_;
-      int denominator_;
-      bool isSymbol_;
-      int beatLength_;
-      int barLength_;
-
-      struct BeatNode {
-            int startUnit_;
-            int lengthUnit_;
-            int startTick_;
-
-            BeatNode() :
-                  startUnit_(0),
-                  lengthUnit_(0),
-                  startTick_(0) {
-                  }
-            };
-      QList<BeatNode> beats_;
-      int barLengthUnits_;
-
-      bool replaceFont_;
-      bool showBeatGroup_;
-
-      int groupNumerator1_;
-      int groupNumerator2_;
-      int groupNumerator3_;
-      int groupDenominator1_;
-      int groupDenominator2_;
-      int groupDenominator3_;
-
-      int beamGroup1_;
-      int beamGroup2_;
-      int beamGroup3_;
-      int beamGroup4_;
-
-      int beamCount16th_;
-      int beamCount32th_;
+      void set16thBeamCount(int count)     { _beamCount16th = count;     }
+      void set32thBeamCount(int count)     { _beamCount32th = count;     }
       };
 
-class Key: public MusicData {
-public:
+//---------------------------------------------------------
+//   Key
+//---------------------------------------------------------
+
+class Key : public MusicData {
+      int _key;
+      bool _set;
+      int _previousKey;
+      int _symbolCount;
+
+   public:
       Key();
       virtual ~Key() {}
 
-public:
-      void setKey(int key); //C=0x0, G=0x8, C#=0xE, F=0x1, Db=0x7
-      int getKey() const;
-      bool getSetKey() const;
+      void setKey(int key); // C=0x0, G=0x8, C#=0xE, F=0x1, Db=0x7
+      int key() const                { return _key;          }
+      bool setKey() const            { return _set;          }
 
-      void setPreviousKey(int key);
-      int getPreviousKey() const;
+      void setPreviousKey(int key)   { _previousKey = key;   }
+      int previousKey() const        { return _previousKey;  }
 
-      void setSymbolCount(int count);
-      int getSymbolCount() const;
-
-private:
-      int key_;
-      bool set_;
-      int previousKey_;
-      int symbolCount_;
+      void setSymbolCount(int count) { _symbolCount = count; }
+      int symbolCount() const        { return _symbolCount;  }
       };
 
-class RepeatSymbol: public MusicData {
-public:
+//---------------------------------------------------------
+//   RepeatSymbol
+//---------------------------------------------------------
+
+class RepeatSymbol : public MusicData {
+      QString _text;
+      RepeatType _repeatType;
+
+   public:
       RepeatSymbol();
       virtual ~RepeatSymbol() {}
 
-public:
-      void setText(const QString& text);
-      QString getText() const;
+      void setText(const QString& text)         { _text = text;             }
+      QString text() const                      { return _text;             }
 
-      void setRepeatType(int repeatType);
-      RepeatType getRepeatType() const;
-
-private:
-      QString text_;
-      RepeatType repeatType_;
+      void setRepeatType(RepeatType repeatType) { _repeatType = repeatType; }
+      RepeatType repeatType() const             { return _repeatType;       }
       };
 
-class NumericEnding: public MusicData, public PairEnds {
-public:
+//---------------------------------------------------------
+//   NumericEnding
+//---------------------------------------------------------
+
+class NumericEnding : public MusicData, public PairEnds {
+      int _height;
+      QString _text;
+      OffsetElement* _numericHandle;
+
+   public:
       NumericEnding();
       virtual ~NumericEnding();
 
-public:
-      OffsetElement* getNumericHandle() const;
+      OffsetElement* numericHandle() const { return _numericHandle; }
 
-      void setHeight(int height);
-      int getHeight() const;
+      void setHeight(int height)           { _height = height;      }
+      int height() const                   { return _height;        }
 
-      void setText(const QString& text);
-      QString getText() const;
-      QList<int> getNumbers() const;
-      int getJumpCount() const;
+      void setText(const QString& text)    { _text = text;          }
+      QString text() const                 { return _text;          }
 
-private:
-      int height_;
-      QString text_;
-      OffsetElement* numericHandle_;
+      QList<int> numbers() const;
+      int jumpCount() const;
       };
 
-class BarNumber: public MusicData {
-public:
+//---------------------------------------------------------
+//   BarNumber
+//---------------------------------------------------------
+
+class BarNumber : public MusicData {
+      int _index;
+      bool _showOnParagraphStart;
+      int _align;
+      int _showFlag;
+      int _barRange;
+      QString _prefix;
+
+   public:
       BarNumber();
       virtual ~BarNumber() {}
 
-public:
-      void setIndex(int index);
-      int getIndex() const;
+      void setIndex(int index)                { _index = index;               }
+      int index() const                       { return _index;                }
 
-      void setShowOnParagraphStart(bool show);
-      bool getShowOnParagraphStart() const;
+      void setShowOnParagraphStart(bool show) { _showOnParagraphStart = show; }
+      bool showOnParagraphStart() const       { return _showOnParagraphStart; }
 
-      void setAlign(int align);// 0:left, 1:center, 2:right
-      int getAlign() const;
+      void setAlign(int align)                { _align = align;               } // 0: left, 1: center, 2: right
+      int align() const                       { return _align;                }
 
-      void setShowFlag(int flag); // 0:page, 1:staff, 2:bar, 3:none
-      int getShowFlag() const;
+      void setShowFlag(int flag)              { _showFlag = flag;             } // 0: page, 1: staff, 2: bar, 3: none
+      int showFlag() const                    { return _showFlag;             }
 
-      void setShowEveryBarCount(int count);
-      int getShowEveryBarCount() const;
+      void setShowEveryBarCount(int count)    { _barRange = count;            }
+      int showEveryBarCount() const           { return _barRange;             }
 
-      void setPrefix(const QString& str);
-      QString getPrefix() const;
-
-private:
-      int index_;
-      bool showOnParagraphStart_;
-      int align_;
-      int showFlag_;
-      int barRange_;
-      QString prefix_;
+      void setPrefix(const QString& str)      { _prefix = str;                }
+      QString prefix() const                  { return _prefix;               }
       };
 
-///////////////////////////////////////////////////////////////////////////////
-// MIDI
-class MidiController: public MidiData {
-public:
+//---------------------------------------------------------
+//   MidiController
+//---------------------------------------------------------
+
+class MidiController : public MidiData {
+      int _controller;
+      int _value;
+
+   public:
       MidiController();
       virtual ~MidiController() {}
 
-public:
-      void setController(int number);
-      int getController() const;
+      void setController(int number) { _controller = number; }
+      int controller() const         { return _controller;   }
 
-      void setValue(int value);
-      int getValue() const;
-
-private:
-      int controller_;
-      int value_;
+      void setValue(int value)       { _value = value;       }
+      int value() const              { return _value;        }
       };
 
-class MidiProgramChange: public MidiData {
-public:
+//---------------------------------------------------------
+//   MidiProgramChange
+//---------------------------------------------------------
+
+class MidiProgramChange : public MidiData {
+      int _patch;
+
+   public:
       MidiProgramChange();
       virtual ~MidiProgramChange() {}
 
-public:
-      void setPatch(int patch);
-      int getPatch() const;
-
-private:
-      int patch_;
+      void setPatch(int patch) { _patch = patch; }
+      int patch() const        { return _patch;  }
       };
 
-class MidiChannelPressure: public MidiData {
-public:
+//---------------------------------------------------------
+//   MidiChannelPressure
+//---------------------------------------------------------
+
+class MidiChannelPressure : public MidiData {
+      int _pressure;
+
+   public:
       MidiChannelPressure();
       virtual ~MidiChannelPressure() {}
 
-public:
-      void setPressure(int pressure);
-      int getPressure() const;
-
-private:
-      int pressure_;
+      void setPressure(int pressure) { _pressure = pressure; }
+      int pressure() const           { return _pressure;     }
       };
 
-class MidiPitchWheel: public MidiData {
-public:
+//---------------------------------------------------------
+//   MidiPitchWheel
+//---------------------------------------------------------
+
+class MidiPitchWheel : public MidiData {
+      int _value;
+
+   public:
       MidiPitchWheel();
       virtual ~MidiPitchWheel() {}
 
-public:
-      void setValue(int value);
-      int getValue() const;
-
-private:
-      int value_;
+      void setValue(int value) { _value = value; }
+      int value() const        { return _value;  }
       };
 
-///////////////////////////////////////////////////////////////////////////////
-class Measure: public LengthElement {
-public:
+//---------------------------------------------------------
+//   Measure
+//---------------------------------------------------------
+
+class Measure : public LengthElement {
+      BarNumber* _barNumber;
+      TimeSignature* _timeSig;
+
+      BarLineType _leftBarlineType;
+      BarLineType _rightBarlineType;
+      int _repeatCount;
+      qreal _typeTempo; // based on some type
+      bool _isPickup;
+      bool _isMultiMeasureRest;
+      int _multiMeasureRestCount;
+
+   public:
       Measure(int index = 0);
       virtual ~Measure();
 
-private:
+   private:
       Measure();
 
-public:
-      BarNumber* getBarNumber() const;
-      TimeSignature* getTime() const;
+   public:
+      BarNumber* barNumber() const                 { return _barNumber;              }
+      TimeSignature* timeSig() const               { return _timeSig;                }
 
-      void setLeftBarline(int barline/*in BarLineType*/);
-      BarLineType getLeftBarline() const;
+      void setLeftBarlineType(BarLineType type)    { _leftBarlineType = type;        }
+      BarLineType leftBarlineType() const          { return _leftBarlineType;        }
 
-      void setRightBarline(int barline/*in BarLineType*/);
-      BarLineType getRightBarline() const;
+      void setRightBarlineType(BarLineType type)   { _rightBarlineType = type;       }
+      BarLineType rightBarlineType() const         { return _rightBarlineType;       }
 
-      // set when rightBarline == Baline_Backward
-      void setBackwardRepeatCount(int repeatCount);
-      int getBackwardRepeatCount() const;
+      // set when rightBarlineType == BarLineType::Repeat_Right
+      void setBackwardRepeatCount(int repeatCount) { _repeatCount = repeatCount;     }
+      int backwardRepeatCount() const              { return _repeatCount;            }
 
-      void setTypeTempo(double tempo);
-      double getTypeTempo() const;
+      void setTypeTempo(qreal tempo)               { _typeTempo = tempo;             }
+      qreal typeTempo() const                      { return _typeTempo;              }
 
-      void setIsPickup(bool pickup);
-      bool getIsPickup() const;
+      void setIsPickup(bool pickup)                { _isPickup = pickup;             }
+      bool isPickup() const                        { return _isPickup;               }
 
-      void setIsMultiMeasureRest(bool rest);
-      bool getIsMultiMeasureRest() const;
+      void setIsMultiMeasureRest(bool mm)          { _isMultiMeasureRest = mm;       }
+      bool isMultiMeasureRest() const              { return _isMultiMeasureRest;     }
 
-      void setMultiMeasureRestCount(int count);
-      int getMultiMeasureRestCount() const;
+      void setMultiMeasureRestCount(int count)     { _multiMeasureRestCount = count; }
+      int multiMeasureRestCount() const            { return _multiMeasureRestCount;  }
 
-private:
+   private:
       void clear();
-
-      BarNumber* barNumber_;
-      TimeSignature* time_;
-
-      BarLineType leftBarline_;
-      BarLineType rightBarline_;
-      int repeatCount_;
-      double typeTempo_; // based on some type
-      bool pickup_;
-      bool multiMeasureRest_;
-      int multiMeasureRestCount_;
       };
 
+//---------------------------------------------------------
+//   MeasureData
+//---------------------------------------------------------
+
 class MeasureData {
-public:
+      Key* _key;
+      Clef* _clef;
+      QList<MusicData*> _musicDatas;
+      QList<NoteContainer*> _noteContainers;
+      QList<QPair<MusicData*, bool>> _crossMeasureElements;
+      QList<MidiData*> _midiDatas;
+
+   public:
       MeasureData();
       ~MeasureData();
 
-public:
-      Clef* getClef() const;
-      Key* getKey() const;
+      Clef* clef() const { return _clef; }
+      Key* key() const   { return _key;  }
 
-      void addNoteContainer(NoteContainer* ptr);
-      QList<NoteContainer*> getNoteContainers() const;
+      void addNoteContainer(NoteContainer* ptr)    { _noteContainers.push_back(ptr); }
+      QList<NoteContainer*> noteContainers() const { return _noteContainers;         }
 
       // put Tempo, Text, RepeatSymbol to MeasureData at part=0 && staff=0
-      void addMusicData(MusicData* ptr);
-      // if type==MusicData_None, return all
-      QList<MusicData*> getMusicDatas(MusicDataType type);//MusicXml: note|direction|harmony
+      void addMusicData(MusicData* ptr)            { _musicDatas.push_back(ptr);     }
+      // if type == MusicDataType::None, return all
+      QList<MusicData*> musicDatas(MusicDataType type); // MusicXml: note | direction | harmony
 
       // put NumericEnding to MeasureData at part=0 && staff=0
-      void addCrossMeasureElement(MusicData* ptr, bool start);
+      void addCrossMeasureElement(MusicData* ptr, bool start) { _crossMeasureElements.push_back(qMakePair(ptr, start)); }
       enum class PairType : char {
             Start,
             Stop,
             All
             };
-      QList<MusicData*> getCrossMeasureElements(MusicDataType type, PairType pairType);
+      QList<MusicData*> crossMeasureElements(MusicDataType type, PairType pairType);
 
       // for midi
-      void addMidiData(MidiData* ptr);
-      QList<MidiData*> getMidiDatas(MidiType type);
-
-private:
-      Key* key_;
-      Clef* clef_;
-      QList<MusicData*> musicDatas_;
-      QList<NoteContainer*> noteContainers_;
-      QList<QPair<MusicData*, bool> > crossMeasureElements_;
-      QList<MidiData*> midiDatas_;
+      void addMidiData(MidiData* data)             { _midiDatas.push_back(data);     }
+      QList<MidiData*> midiDatas(MidiType type);
       };
 
-// StreamHandle
+//---------------------------------------------------------
+//   StreamHandle
+//---------------------------------------------------------
+
 class StreamHandle {
-public:
+      int _size;
+      int _curPos;
+      unsigned char* _point;
+
+   public:
       StreamHandle(unsigned char* p, int size);
       virtual ~StreamHandle();
 
-private:
+   private:
       StreamHandle();
 
-public:
+   public:
       virtual bool read(char* buff, int size);
-      virtual bool write(char* buff, int size);
-
-private:
-      int size_;
-      int curPos_;
-      unsigned char* point_;
+      virtual bool write(char* /*buff*/, int /*size*/) { return true; }
       };
 
-// Block.h
-// base block, or resizable block in ove to store data
+//---------------------------------------------------------
+//   Block
+//    Base block, or resizable block in ove to store data
+//---------------------------------------------------------
+
 class Block {
-public:
-      Block();
-      explicit Block(unsigned int size);
-      virtual ~Block() {
-            }
-
-public:
-      // size > 0, check this in use code
-      virtual void resize(unsigned int count);
-
-      const unsigned char* data() const;
-      unsigned char* data();
-      int size() const;
-
-      bool operator ==(const Block& block) const;
-      bool operator !=(const Block& block) const;
-
-      bool toBoolean() const;
-      unsigned int toUnsignedInt() const;
-      int toInt() const;
-      QByteArray toStrByteArray() const;					// string
-      QByteArray fixedSizeBufferToStrByteArray() const;	// string
-
-private:
-      void doResize(unsigned int count);
-
-private:
       // char [-128, 127], unsigned char [0, 255]
-      QList<unsigned char> data_;
+      QList<unsigned char> _data;
+
+   public:
+      Block();
+      explicit Block(unsigned size);
+      virtual ~Block() {}
+
+      // size > 0, check this in use code
+      virtual void resize(unsigned count) { doResize(count); }
+
+      const unsigned char* data() const { return &_data.front(); }
+      unsigned char* data()             { return &_data.front(); }
+      int size() const                  { return _data.size();   }
+
+      bool operator==(const Block& block) const;
+      bool operator!=(const Block& block) const;
+
+      bool toBool() const;
+      unsigned toUnsignedInt() const;
+      int toInt() const;
+      QByteArray toStrByteArray() const; // string
+      QByteArray fixedSizeBufferToStrByteArray() const; // string
+
+   private:
+      void doResize(unsigned count);
       };
 
-class FixedBlock: public Block {
-public:
-      explicit FixedBlock(unsigned int count);
-      virtual ~FixedBlock() {
-            }
+//---------------------------------------------------------
+//   FixedBlock
+//---------------------------------------------------------
 
-private:
+class FixedBlock : public Block {
+   public:
+      explicit FixedBlock(unsigned count);
+      virtual ~FixedBlock() {}
+
+   private:
       FixedBlock();
 
-private:
       // can't resize
-      virtual void resize(unsigned int count);
+      virtual void resize(unsigned count);
       };
 
-///////////////////////////////////////////////////////////////////////////////
-// 4 byte block in ove to store size
-class SizeBlock: public FixedBlock {
-public:
+//---------------------------------------------------------
+//   SizeBlock
+//    4 byte block in ove to store size
+//---------------------------------------------------------
+
+class SizeBlock : public FixedBlock {
+   public:
       SizeBlock();
-      virtual ~SizeBlock() {
-            }
+      virtual ~SizeBlock() {}
 
-public:
-      //	void fromUnsignedInt(unsigned int count) ;
-
-      unsigned int toSize() const;
+      unsigned toSize() const;
       };
 
-// 4 bytes block in ove to store name
-class NameBlock: public FixedBlock {
-public:
-      NameBlock();
-      virtual ~NameBlock() {
-            }
+//---------------------------------------------------------
+//   NameBlock
+//    4 byte block in ove to store name
+//---------------------------------------------------------
 
-public:
+class NameBlock : public FixedBlock {
+   public:
+      NameBlock();
+      virtual ~NameBlock() {}
+
       // ignore data more than 4 bytes
       bool isEqual(const QString& name) const;
       };
 
-// 2 bytes block in ove to store count
-class CountBlock: public FixedBlock {
-public:
-      CountBlock();
-      virtual ~CountBlock() {
-            }
+//---------------------------------------------------------
+//   CountBlock
+//    2 byte block in ove to store count
+//---------------------------------------------------------
 
-public:
-      //	void setValue(unsigned short count) ;
+class CountBlock : public FixedBlock {
+   public:
+      CountBlock();
+      virtual ~CountBlock() {}
 
       unsigned short toCount() const;
       };
 
-// Chunk.h
-// content : name
+//---------------------------------------------------------
+//   Chunk
+//    content : name
+//---------------------------------------------------------
+
 class Chunk {
-public:
+   public:
       Chunk();
-      virtual ~Chunk() {
-            }
+      virtual ~Chunk() {}
 
-public:
-      const static QString TrackName;
-      const static QString PageName;
-      const static QString LineName;
-      const static QString StaffName;
-      const static QString MeasureName;
-      const static QString ConductName;
-      const static QString BdatName;
+      static const QString TrackName;
+      static const QString PageName;
+      static const QString LineName;
+      static const QString StaffName;
+      static const QString MeasureName;
+      static const QString ConductName;
+      static const QString BdatName;
 
-      NameBlock getName() const;
+      NameBlock name() const;
 
-protected:
-      NameBlock nameBlock_;
+   protected:
+      NameBlock _nameBlock;
       };
 
-// content : name / size / data
-class SizeChunk: public Chunk {
-public:
+//---------------------------------------------------------
+//   SizeChunk
+//    content : name / size / data
+//---------------------------------------------------------
+
+class SizeChunk : public Chunk {
+   public:
       SizeChunk();
       virtual ~SizeChunk();
 
-public:
-      SizeBlock* getSizeBlock() const;
-      Block* getDataBlock() const;
+      SizeBlock* sizeBlock() const { return _sizeBlock; }
+      Block* dataBlock() const     { return _dataBlock; }
 
-      const static unsigned int version3TrackSize;
+      static const unsigned version3TrackSize;
 
-protected:
-      SizeBlock* sizeBlock_;
-      Block* dataBlock_;
+   protected:
+      SizeBlock* _sizeBlock;
+      Block* _dataBlock;
       };
 
-// content : name / count
-class GroupChunk: public Chunk {
-public:
+//---------------------------------------------------------
+//   GroupChunk
+//    content : name / count
+//---------------------------------------------------------
+
+class GroupChunk : public Chunk {
+   public:
       GroupChunk();
       virtual ~GroupChunk();
 
-public:
-      CountBlock* getCountBlock() const;
+      CountBlock* countBlock() const { return _childCount; }
 
-protected:
-      CountBlock* childCount_;
+   protected:
+      CountBlock* _childCount;
       };
 
-// ChunkParse.h
+//---------------------------------------------------------
+//   BasicParse
+//---------------------------------------------------------
+
 class BasicParse {
-public:
+   public:
       BasicParse(OveSong* ove);
       virtual ~BasicParse();
 
-private:
+   private:
       BasicParse();
 
-public:
-      void setNotify(IOveNotify* notify);
-      virtual bool parse();
+   public:
+      void setNotify(IOveNotify* notify) { _notify = notify; }
+      virtual bool parse()               { return false;     }
 
-protected:
+   protected:
       bool readBuffer(Block& placeHolder, int size);
       bool jump(int offset);
 
       void messageOut(const QString& str);
 
-protected:
-      OveSong* ove_;
-      StreamHandle* handle_;
-      IOveNotify* notify_;
+      OveSong* _ove;
+      StreamHandle* _handle;
+      IOveNotify* _notify;
       };
 
-///////////////////////////////////////////////////////////////////////////////
+//---------------------------------------------------------
+//   OvscParse
+//---------------------------------------------------------
 
-class OvscParse: public BasicParse {
-public:
+class OvscParse : public BasicParse {
+      SizeChunk* _chunk;
+
+   public:
       OvscParse(OveSong* ove);
       virtual ~OvscParse();
 
-public:
-      void setOvsc(SizeChunk* chunk);
+      void setOvsc(SizeChunk* chunk) { _chunk = chunk; }
 
       virtual bool parse();
-
-private:
-      SizeChunk* chunk_;
       };
 
-class TrackParse: public BasicParse {
-public:
+//---------------------------------------------------------
+//   TrackParse
+//---------------------------------------------------------
+
+class TrackParse : public BasicParse {
+      SizeChunk* _chunk;
+
+   public:
       TrackParse(OveSong* ove);
       virtual ~TrackParse();
 
-public:
-      void setTrack(SizeChunk* chunk);
+      void setTrack(SizeChunk* chunk) { _chunk = chunk; }
 
       virtual bool parse();
-
-private:
-      SizeChunk* chunk_;
       };
 
-class GroupParse: BasicParse {
-public:
+//---------------------------------------------------------
+//   GroupParse
+//---------------------------------------------------------
+
+class GroupParse : BasicParse {
+      QList<SizeChunk*> _sizeChunks;
+
+   public:
       GroupParse(OveSong* ove);
       virtual ~GroupParse();
 
-public:
-      void addSizeChunk(SizeChunk* sizeChunk);
+      void addSizeChunk(SizeChunk* sizeChunk) { _sizeChunks.push_back(sizeChunk); }
 
-      virtual bool parse();
-
-private:
-      QList<SizeChunk*> sizeChunks_;
+      virtual bool parse() { return false; }
       };
 
-class PageGroupParse: public BasicParse {
-public:
+//---------------------------------------------------------
+//   PageGroupParse
+//---------------------------------------------------------
+
+class PageGroupParse : public BasicParse {
+      QList<SizeChunk*> _pageChunks;
+
+   public:
       PageGroupParse(OveSong* ove);
       virtual ~PageGroupParse();
 
-public:
-      void addPage(SizeChunk* chunk);
+      void addPage(SizeChunk* chunk) { _pageChunks.push_back(chunk); }
 
       virtual bool parse();
 
-private:
+   private:
       bool parsePage(SizeChunk* chunk, Page* page);
-
-private:
-      QList<SizeChunk*> pageChunks_;
       };
 
-class StaffCountGetter: public BasicParse {
-public:
+//---------------------------------------------------------
+//   StaffCountGetter
+//---------------------------------------------------------
+
+class StaffCountGetter : public BasicParse {
+   public:
       StaffCountGetter(OveSong* ove);
       virtual ~StaffCountGetter() {}
 
-public:
-      unsigned int getStaffCount(SizeChunk* chunk);
+      unsigned staffCount(SizeChunk* chunk);
       };
 
-class LineGroupParse: public BasicParse {
-public:
+//---------------------------------------------------------
+//   LineGroupParse
+//---------------------------------------------------------
+
+class LineGroupParse : public BasicParse {
+      GroupChunk* _chunk;
+      QList<SizeChunk*> _lineChunks;
+      QList<SizeChunk*> _staffChunks;
+
+   public:
       LineGroupParse(OveSong* ove);
       virtual ~LineGroupParse();
 
-public:
-      void setLineGroup(GroupChunk* chunk);
-      void addLine(SizeChunk* chunk);
-      void addStaff(SizeChunk* chunk);
+      void setLineGroup(GroupChunk* chunk) { _chunk = chunk;                }
+      void addLine(SizeChunk* chunk)       { _lineChunks.push_back(chunk);  }
+      void addStaff(SizeChunk* chunk)      { _staffChunks.push_back(chunk); }
 
       virtual bool parse();
 
-private:
+   private:
       bool parseLine(SizeChunk* chunk, Line* line);
       bool parseStaff(SizeChunk* chunk, Staff* staff);
-
-private:
-      GroupChunk* chunk_;
-      QList<SizeChunk*> lineChunks_;
-      QList<SizeChunk*> staffChunks_;
       };
 
-class BarsParse: public BasicParse {
-public:
+//---------------------------------------------------------
+//   BarsParse
+//---------------------------------------------------------
+
+class BarsParse : public BasicParse {
+      QList<SizeChunk*> _measureChunks;
+      QList<SizeChunk*> _conductChunks;
+      QList<SizeChunk*> _bdatChunks;
+
+   public:
       BarsParse(OveSong* ove);
       virtual ~BarsParse();
 
-public:
-      void addMeasure(SizeChunk* chunk);
-      void addConduct(SizeChunk* chunk);
-      void addBdat(SizeChunk* chunk);
+      void addMeasure(SizeChunk* chunk) { _measureChunks.push_back(chunk); }
+      void addConduct(SizeChunk* chunk) { _conductChunks.push_back(chunk); }
+      void addBdat(SizeChunk* chunk)    { _bdatChunks.push_back(chunk);    }
 
       virtual bool parse();
 
-private:
       bool parseMeas(Measure* measure, SizeChunk* chunk);
       bool parseCond(Measure* measure, MeasureData* measureData, SizeChunk* chunk);
       bool parseBdat(Measure* measure, MeasureData* measureData, SizeChunk* chunk);
 
-      bool getCondElementType(unsigned int byteData, CondType& type);
-      bool getBdatElementType(unsigned int byteData, BdatType& type);
+      bool condElementType(unsigned byteData, CondType& type);
+      bool bdatElementType(unsigned byteData, BdatType& type);
 
       // COND
       bool parseTimeSignature(Measure* measure, int length);
       bool parseTimeSignatureParameters(Measure* measure, int length);
       bool parseRepeatSymbol(MeasureData* measureData, int length);
-      bool parseNumericEndings(MeasureData* measureData, int length);
+      bool parseNumericEnding(MeasureData* measureData, int length);
       bool parseTempo(MeasureData* measureData, int length);
       bool parseBarNumber(Measure* measure, int length);
       bool parseText(MeasureData* measureData, int length);
@@ -2483,13 +2627,13 @@ private:
       bool parseLyric(MeasureData* measureData, int length);
       bool parseSlur(MeasureData* measureData, int length);
       bool parseGlissando(MeasureData* measureData, int length);
-      bool parseDecorators(MeasureData* measureData, int length);
-      bool parseDynamics(MeasureData* measureData, int length);
+      bool parseDecorator(MeasureData* measureData, int length);
+      bool parseDynamic(MeasureData* measureData, int length);
       bool parseWedge(MeasureData* measureData, int length);
       bool parseKey(MeasureData* measureData, int length);
       bool parsePedal(MeasureData* measureData, int length);
-      bool parseKuohao(MeasureData* measureData, int length);
-      bool parseExpressions(MeasureData* measureData, int length);
+      bool parseBracket(MeasureData* measureData, int length);
+      bool parseExpression(MeasureData* measureData, int length);
       bool parseHarpPedal(MeasureData* measureData, int length);
       bool parseMultiMeasureRest(MeasureData* measureData, int length);
       bool parseHarmonyGuitarFrame(MeasureData* measureData, int length);
@@ -2503,145 +2647,140 @@ private:
       bool parseMidiCommon(MidiData* ptr);
       bool parseCommonBlock(MusicData* ptr);
       bool parseOffsetCommonBlock(MusicData* ptr);
-      bool parsePairLinesBlock(PairEnds* ptr); //size==2
-      bool parseOffsetElement(OffsetElement* ptr);//size==2
-
-private:
-      QList<SizeChunk*> measureChunks_;
-      QList<SizeChunk*> conductChunks_;
-      QList<SizeChunk*> bdatChunks_;
+      bool parsePairLinesBlock(PairEnds* ptr); // size == 2
+      bool parseOffsetElement(OffsetElement* ptr); // size == 2
       };
 
-class LyricChunkParse: public BasicParse {
-public:
-      LyricChunkParse(OveSong* ove);
-      virtual ~LyricChunkParse() {}
+//---------------------------------------------------------
+//   LyricChunkParse
+//---------------------------------------------------------
 
-public:
-      void setLyricChunk(SizeChunk* chunk);
+class LyricChunkParse : public BasicParse {
+      SizeChunk* _chunk;
+
+   public:
+      LyricChunkParse(OveSong* ove);
+      virtual ~LyricChunkParse();
+
+      void setLyricChunk(SizeChunk* chunk) { _chunk = chunk; }
 
       virtual bool parse();
 
-private:
+   private:
       struct LyricInfo {
-            int track_;
-            int measure_;
-            int verse_;
-            int voice_;
-            int wordCount_;
-            int lyricSize_;
-            QString name_;
-            QString lyric_;
-            int font_;
-            int fontSize_;
-            int fontStyle_;
+            int _track;
+            int _measure;
+            int _verse;
+            int _voice;
+            int _wordCount;
+            int _lyricSize;
+            QString _name;
+            QString _lyric;
+            int _font;
+            int _fontSize;
+            int _fontStyle;
 
             LyricInfo() :
-                  track_(0), measure_(0), verse_(0), voice_(0), wordCount_(0),
-                  lyricSize_(0), name_(QString()), lyric_(QString()),
-                  font_(0), fontSize_(12), fontStyle_(0) {}
+                  _track(0), _measure(0), _verse(0), _voice(0), _wordCount(0),
+                  _lyricSize(0), _name(QString()), _lyric(QString()),
+                  _font(0), _fontSize(12), _fontStyle(0) {}
             };
 
       void processLyricInfo(const LyricInfo& info);
-
-private:
-      SizeChunk* chunk_;
       };
 
-class TitleChunkParse: public BasicParse {
-public:
-      TitleChunkParse(OveSong* ove);
-      virtual ~TitleChunkParse() {}
+//---------------------------------------------------------
+//   TitleChunkParse
+//---------------------------------------------------------
 
-public:
-      void setTitleChunk(SizeChunk* chunk);
+class TitleChunkParse : public BasicParse {
+      unsigned _titleType;
+      unsigned _annotateType;
+      unsigned _writerType;
+      unsigned _copyrightType;
+      unsigned _headerType;
+      unsigned _footerType;
+
+      SizeChunk* _chunk;
+
+   public:
+      TitleChunkParse(OveSong* ove);
+      virtual ~TitleChunkParse();
+
+      void setTitleChunk(SizeChunk* chunk) { _chunk = chunk; }
 
       virtual bool parse();
 
-private:
-      void addToOve(const QString& str, unsigned int titleType);
-
-private:
-      unsigned int titleType_;
-      unsigned int annotateType_;
-      unsigned int writerType_;
-      unsigned int copyrightType_;
-      unsigned int headerType_;
-      unsigned int footerType_;
-
-      SizeChunk* chunk_;
+   private:
+      void addToOve(const QString& str, unsigned titleType);
       };
 
-// OveOrganizer.h
+//---------------------------------------------------------
+//   OveOrganizer
+//---------------------------------------------------------
+
 class OveOrganizer {
-public:
-      OveOrganizer(OveSong* ove) ;
-      virtual ~OveOrganizer(){}
+      OveSong* _ove;
 
-public:
-      void organize() ;
+   public:
+      OveOrganizer(OveSong* ove);
+      virtual ~OveOrganizer() {}
 
-private:
-      void organizeAttributes() ;
-      void organizeTracks() ;
-      void organizeMeasures() ;
-      void organizeMeasure(int part, int track, Measure* measure, MeasureData* measureData) ;
+      void organize();
 
-      void organizeContainers(int part, int track, Measure* measure, MeasureData* measureData) ;
-      void organizeMusicDatas(int part, int track, Measure* measure, MeasureData* measureData) ;
-      void organizeCrossMeasureElements(int part, int track, Measure* measure, MeasureData* measureData) ;
+   private:
+      void organizeAttributes();
+      void organizeTracks();
+      void organizeMeasures();
+      void organizeMeasure(int part, int track, Measure* measure, MeasureData* measureData);
 
-      void organizePairElement(MusicData* data, int part, int track, Measure* measure, MeasureData* measureData) ;
-      void organizeOctaveShift(OctaveShift* octave, Measure* measure, MeasureData* measureData) ;
-      void organizeWedge(Wedge* wedge, int part, int track, Measure* measure, MeasureData* measureData) ;
+      void organizeContainers(int part, int track, Measure* measure, MeasureData* measureData);
+      void organizeMusicDatas(int part, int track, Measure* measure, MeasureData* measureData);
+      void organizeCrossMeasureElements(int part, int track, Measure* measure, MeasureData* measureData);
 
-private:
-      OveSong* ove_ ;
+      void organizePairElement(MusicData* data, int part, int track, Measure* measure, MeasureData* measureData);
+      void organizeOctaveShift(OctaveShift* octave, Measure* measure, MeasureData* measureData);
+      void organizeWedge(Wedge* wedge, int part, int track, Measure* measure, MeasureData* measureData);
       };
 
-// OveSerialize.h
-class StreamHandle;
-class Block;
-class NameBlock;
-class Chunk;
-class SizeChunk;
-class GroupChunk;
+//---------------------------------------------------------
+//   OveSerialize
+//---------------------------------------------------------
 
-class OveSerialize: public IOVEStreamLoader {
-public:
+class OveSerialize : public IOVEStreamLoader {
+      OveSong* _ove;
+      StreamHandle* _streamHandle;
+      IOveNotify* _notify;
+
+   public:
       OveSerialize();
       virtual ~OveSerialize();
 
-public:
-      virtual void setOve(OveSong* ove);
-      virtual void setFileStream(unsigned char* buffer, unsigned int size);
-      virtual void setNotify(IOveNotify* notify);
-      virtual bool load(void);
+      virtual void setOve(OveSong* ove)          { _ove = ove;       }
+      virtual void setFileStream(unsigned char* buffer, unsigned size)
+         { _streamHandle = new StreamHandle(buffer, size); }
+      virtual void setNotify(IOveNotify* notify) { _notify = notify; }
+      virtual bool load();
 
       virtual void release();
 
-private:
+   private:
       bool readNameBlock(NameBlock& nameBlock);
       bool readChunkName(Chunk* chunk, const QString& name);
       bool readSizeChunk(SizeChunk* sizeChunk); // contains a SizeChunk and data buffer
-      bool readDataChunk(Block* block, unsigned int size);
+      bool readDataChunk(Block* block, unsigned size);
       bool readGroupChunk(GroupChunk* groupChunk);
 
       bool readHeader();
       bool readHeadData(SizeChunk* ovscChunk);
-      bool readTracksData();
-      bool readPagesData();
-      bool readLinesData();
-      bool readBarsData();
+      bool readTrackData();
+      bool readPageData();
+      bool readLineData();
+      bool readBarData();
       bool readOveEnd();
 
       void messageOutError();
       void messageOut(const QString& str);
-
-private:
-      OveSong* ove_;
-      StreamHandle* streamHandle_;
-      IOveNotify* notify_;
       };
 
 }

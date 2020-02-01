@@ -317,9 +317,10 @@ add_library(mscoreapp STATIC
       editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
       exampleview.h excerptsdialog.h exportmidi.h exportmp3.h extension.h
       file.h fotomode.h fretcanvas.h globals.h greendotbutton.h
-      harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h importgtp.h importmxml.h
-      importmxmllogger.h importmxmlnoteduration.h importmxmlnotepitch.h importmxmlpass1.h
-      importmxmlpass2.h importptb.h importxmlfirstpass.h instrdialog.h instrwidget.h jackaudio.h
+      harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h
+      importgtp.h importove.h importmxml.h importmxmllogger.h importmxmlnoteduration.h importmxmlnotepitch.h
+      importmxmlpass1.h importmxmlpass2.h importptb.h importxmlfirstpass.h
+      instrdialog.h instrwidget.h jackaudio.h
       keycanvas.h keyedit.h layer.h licence.h
       logindialog.h network/loginmanager.h network/loginmanager_p.h
       magbox.h masterpalette.h
