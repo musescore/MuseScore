@@ -3967,7 +3967,7 @@ void Measure::addSystemTrailer(Measure* nm)
       TimeSig* ts = nullptr;
       bool showCourtesySig = false;
       Segment* s = findSegmentR(SegmentType::TimeSigAnnounce, _rtick);
-      if (score()->genCourtesyTimesig() && !isFinalMeasure && !score()->floatMode()) {
+      if (nm && score()->genCourtesyTimesig() && !isFinalMeasure && !score()->floatMode()) {
             Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0,1));
             if (tss) {
                   int nstaves = score()->nstaves();
@@ -4055,7 +4055,7 @@ void Measure::addSystemTrailer(Measure* nm)
                   Clef* clef = toClef(clefSegment->element(track));
                   if (clef) {
                         clef->setSmall(true);
-                        if (!score()->genCourtesyClef() || isFinalMeasure || !clef->showCourtesy())
+                        if (!nm || !score()->genCourtesyClef() || isFinalMeasure || !clef->showCourtesy())
                               clef->clear();          // make invisible
                         }
                   }
