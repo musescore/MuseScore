@@ -1,0 +1,16 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Marr11317/ConflictAdviser@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          conflict_label: "merge conflicts"
+          comment: 'Rebase needed'
