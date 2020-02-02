@@ -48,6 +48,7 @@ InspectorBase::InspectorBase(QWidget* parent)
       _layout->setSpacing(0);
       _layout->setContentsMargins(0, 10, 0, 0);
       _layout->addStretch(100);
+      scrollPreventer = new InspectorScrollPreventer(this);
       }
 
 //---------------------------------------------------------
@@ -570,6 +571,16 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
             QWidget* w = ii.w;
             if (!w)
                   continue;
+
+            if (qobject_cast<QAbstractSpinBox*>(w)
+                || qobject_cast<QComboBox*>(w)) {
+                  w->setFocusPolicy(Qt::StrongFocus);
+                  w->installEventFilter(scrollPreventer);
+                  }
+            else if (qobject_cast<OffsetSelect*>(w)) {
+                  qobject_cast<OffsetSelect*>(w)->installScrollPreventer(scrollPreventer);
+                  }
+
             if (qobject_cast<QDoubleSpinBox*>(w))
                   connect(qobject_cast<QDoubleSpinBox*>(w), QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=] { valueChanged(i); });
             else if (qobject_cast<QSpinBox*>(w))
@@ -654,6 +665,28 @@ void InspectorBase::resetToStyle()
             }
       score->endCmd();
       }
+
+//---------------------------------------------------------
+//   eventFilter
+///   This blocks scrolling on a scrollable thing when not in focus.
+///   `watched` should be a QComboBox or QAbstractSpinBox.
+///   If this event filter is on any non-QWidget, it will crash.
+//---------------------------------------------------------
+
+bool InspectorScrollPreventer::eventFilter(QObject* watched, QEvent* event)
+      {
+      if (event->type() != QEvent::Wheel)
+            return QObject::eventFilter(watched, event);
+
+      if (!qobject_cast<QWidget*>(watched)->hasFocus())
+            return true;
+
+      return QObject::eventFilter(watched, event);
+      }
+
+//---------------------------------------------------------
+//   event
+//---------------------------------------------------------
 
 void InspectorEventObserver::event(EventType evtType, const InspectorItem& ii, const Element* e)
       {

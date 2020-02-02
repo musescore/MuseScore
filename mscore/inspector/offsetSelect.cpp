@@ -14,6 +14,7 @@
 #include "libmscore/types.h"
 #include "icons.h"
 #include "musescore.h"
+#include "inspectorBase.h"
 
 namespace Ms {
 
@@ -102,6 +103,12 @@ void OffsetSelect::setOffset(const QPointF& o)
       xVal->setValue(o.x());
       yVal->setValue(o.y());
       blockOffset(false);
+      }
+
+void OffsetSelect::installScrollPreventer(InspectorScrollPreventer* sp)
+      {
+      xVal->installEventFilter(sp);
+      yVal->installEventFilter(sp);
       }
 
 }
