@@ -20,6 +20,7 @@ namespace Ms {
 
 class Inspector;
 class Element;
+class InspectorScrollPreventer;
 
 //---------------------------------------------------------
 //   InspectorPanel
@@ -53,6 +54,7 @@ class InspectorBase : public QWidget {
       void checkDifferentValues(const InspectorItem&);
       bool compareValues(const InspectorItem& ii, QVariant a, QVariant b);
       Element* effectiveElement(const InspectorItem&) const;
+      InspectorScrollPreventer* scrollPreventer;
 
    signals:
       void elementChanged();
@@ -85,6 +87,20 @@ class InspectorBase : public QWidget {
       QWidget* addWidget();
 
       friend class InspectorScriptEntry;
+      };
+
+//---------------------------------------------------------
+//   InspectorScrollPreventer
+//---------------------------------------------------------
+
+class InspectorScrollPreventer : public QObject {
+      Q_OBJECT
+
+   protected:
+      bool eventFilter(QObject* watched, QEvent* event) override;
+
+   public:
+      InspectorScrollPreventer(QObject* parent) : QObject(parent) {};
       };
 
 //---------------------------------------------------------
