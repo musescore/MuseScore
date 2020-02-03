@@ -1780,7 +1780,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               crBase[i1] = bl;
                         }
 
-                  qreal stemWidth  = score()->styleP(Sid::stemWidth);
+                  qreal stemWidth  = toChord(cr1)->stem()->lineWidthMag();
                   qreal x2         = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
                   qreal x3;
 
@@ -1797,7 +1797,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               if (cr1->up())
                                     x2 -= stemWidth;
                               if (!chordRest2->up())
-                                    x3 += stemWidth;
+                                    x3 += toChord(chordRest2)->stem()->lineWidthMag();
                               }
                         }
                   else {
@@ -1975,7 +1975,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
             Stem* stem = c->stem();
             if (stem) {
                   bool useTablature = staff() && staff()->isTabStaff(cr->tick());
-                  qreal sw2  = useTablature ? 0.f : stem->lineWidth() * .5;
+                  qreal sw2  = useTablature ? 0.f : stem->lineWidthMag() * .5;
                   if (c->up())
                         sw2 = -sw2;
                   stem->rxpos() = c->stemPosX() + sw2;
