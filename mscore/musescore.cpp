@@ -5039,7 +5039,7 @@ void MuseScore::autoSaveTimerTimeout()
                   if (!tmp.isEmpty()) {
                         QFileInfo fi(tmp);
                         // TODO: cannot catch exception here:
-                        s->saveCompressedFile(fi, false);
+                        s->saveCompressedFile(fi, false, false); // no thumbnail
                         }
                   else {
                         QDir dir;
