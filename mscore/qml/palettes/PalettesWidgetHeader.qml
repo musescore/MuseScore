@@ -127,6 +127,9 @@ Item {
 
     Connections {
         target: mscore
-        onPaletteSearchRequested: searchTextInput.forceActiveFocus()
+        onPaletteSearchRequested: {
+            searchTextInput.forceActiveFocus()
+            searchTextInput.selectAll()
+        }
     }
 }
