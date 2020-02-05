@@ -7114,6 +7114,12 @@ void tryToRequestTelemetryPermission()
       if (accessRequestedAtVersion == telemetryVersion)
             return;
 
+      // Disable telemetry until the permission is explicitly confirmed by user
+      preferences.setPreference(PREF_APP_TELEMETRY_ALLOWED, false);
+
+      if (MScore::noGui)
+            return;
+
       QEventLoop eventLoop;
 
       TelemetryPermissionDialog *requestDialog = new TelemetryPermissionDialog(mscore->getQmlUiEngine());
