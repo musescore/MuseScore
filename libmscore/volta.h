@@ -47,6 +47,7 @@ class VoltaSegment final : public TextLineBaseSegment {
 
 class Volta final : public TextLineBase {
       QList<int> _endings;
+      static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
 
    public:
       enum class Type : char {
@@ -60,6 +61,7 @@ class Volta final : public TextLineBase {
 
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader& e) override;
+      bool readProperties(XmlReader&) override;
       virtual SpannerSegment* layoutSystem(System* system) override;
 
       void setVelocity() const;
