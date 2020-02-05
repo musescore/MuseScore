@@ -1258,6 +1258,24 @@ static void updateStyles(Score* score,
       }
 
 //---------------------------------------------------------
+//   setPageFormat
+//---------------------------------------------------------
+
+static void setPageFormat(Score* score, const PageFormat& pf)
+      {
+      score->style().set(Sid::pageWidth, pf.size.width());
+      score->style().set(Sid::pageHeight, pf.size.height());
+      score->style().set(Sid::pagePrintableWidth, pf.printableWidth);
+      score->style().set(Sid::pageEvenLeftMargin, pf.evenLeftMargin);
+      score->style().set(Sid::pageOddLeftMargin, pf.oddLeftMargin);
+      score->style().set(Sid::pageEvenTopMargin, pf.evenTopMargin);
+      score->style().set(Sid::pageEvenBottomMargin, pf.evenBottomMargin);
+      score->style().set(Sid::pageOddTopMargin, pf.oddTopMargin);
+      score->style().set(Sid::pageOddBottomMargin, pf.oddBottomMargin);
+      score->style().set(Sid::pageTwosided, pf.twosided);
+      }
+
+//---------------------------------------------------------
 //   defaults
 //---------------------------------------------------------
 
@@ -1297,8 +1315,8 @@ void MusicXMLParserPass1::defaults()
             else if (_e.name() == "page-layout") {
                   PageFormat pf;
                   pageLayout(pf, millimeter / (tenths * INCH));
-//TODO:ws                  if (preferences.musicxmlImportLayout)
-//                        _score->setPageFormat(pf);
+                  if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT))
+                        setPageFormat(_score, pf);
                   }
             else if (_e.name() == "system-layout") {
                   while (_e.readNextStartElement()) {
@@ -1363,8 +1381,11 @@ void MusicXMLParserPass1::defaults()
 //---------------------------------------------------------
 
 /**
- Parse the /score-partwise/defaults/page-layout node:
- read the page layout.
+ Parse the /score-partwise/defaults/page-layout node: read the page layout.
+ Note that MuseScore does not support a separate value for left and right margins
+ for odd and even pages. Only odd and even left margins are used, together  with
+ the printable width, which is calculated from the left and right margins in the
+ MusicXML file.
  */
 
 void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion)
