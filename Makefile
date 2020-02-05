@@ -21,8 +21,8 @@ REVISION  := `cat mscore/revision.h`
 CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
 PREFIX    = "/usr/local"
-VERSION   = "3.4b-${REVISION}"
-#VERSION = 3.3.3
+#VERSION  = "3.4b-${REVISION}"
+VERSION   = 3.4.2
 BUILD_NUMBER=""
 
 TELEMETRY_TRACK_ID=""
