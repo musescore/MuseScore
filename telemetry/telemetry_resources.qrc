@@ -3,5 +3,6 @@
         <file>qml/TelemetryPermissionDialog.qml</file>
         <file>qml/DialogButton.qml</file>
         <file>qml/TextLabel.qml</file>
+        <file>qml/FocusableItem.qml</file>
     </qresource>
 </RCC>
