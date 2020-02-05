@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -19,25 +19,49 @@
 
 import QtQuick 2.0
 
-Rectangle {
+FocusableItem {
     id: root
 
     property alias text: buttonLabel.text
     property alias pressed: clickableArea.pressed
 
-    signal clicked()
+    signal clicked
 
     height: 24
     width: 252
 
-    border.color: "#a2a2a2"
-    border.width: 1
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
 
-    radius: 3
+            root.clicked()
 
-    gradient: Gradient {
-        GradientStop { position: 0.0; color: "#E5E9EF" }
-        GradientStop { position: 1.0; color: "#C4C9CD" }
+            event.accepted = true
+        }
+    }
+
+    Accessible.role: Accessible.Button
+    Accessible.name: root.text
+
+    Rectangle {
+        id: backgroundRect
+
+        anchors.fill: parent
+
+        border.color: "#a2a2a2"
+        border.width: 1
+
+        radius: 3
+
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0
+                color: "#E5E9EF"
+            }
+            GradientStop {
+                position: 1.0
+                color: "#C4C9CD"
+            }
+        }
     }
 
     Text {
@@ -66,7 +90,7 @@ Rectangle {
             when: root.pressed
 
             PropertyChanges {
-                target: root
+                target: backgroundRect
 
                 color: "#C4C9CD"
                 gradient: undefined
