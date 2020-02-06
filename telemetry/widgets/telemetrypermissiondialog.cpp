@@ -32,7 +32,7 @@ TelemetryPermissionDialog::TelemetryPermissionDialog(QQmlEngine* engine) : QQuic
       setMinimumWidth(500);
       setMinimumHeight(460);
 
-      setFlags(Qt::CustomizeWindowHint); ///@note Hidding a native frame with 'X' close button
+      setFlags(Qt::Dialog | Qt::CustomizeWindowHint); ///@note Hidding a native frame with 'X' close button
 
       QRect desktopRect = QApplication::desktop()->availableGeometry();
       QPoint center = desktopRect.center();
@@ -51,4 +51,14 @@ TelemetryPermissionDialog::TelemetryPermissionDialog(QQmlEngine* engine) : QQuic
 
       connect(rootObject(), SIGNAL(closeRequested()), this, SLOT(close()));
       connect(rootObject(), SIGNAL(closeRequested()), this, SIGNAL(closeRequested()));
+      }
+
+//---------------------------------------------------------
+//   focusInEvent
+//---------------------------------------------------------
+
+void TelemetryPermissionDialog::focusInEvent(QFocusEvent* evt)
+      {
+      QQuickView::focusInEvent(evt);
+      rootObject()->forceActiveFocus();
       }
