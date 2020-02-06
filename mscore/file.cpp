@@ -77,6 +77,7 @@
 #include "scorecmp/scorecmp.h"
 #include "extension.h"
 #include "tourhandler.h"
+#include "plugin/qmlpluginengine.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -2021,6 +2022,10 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
             cs_->setLayoutMode(layoutMode);
             cs_->doLayout();
             }
+
+      // Send event to plugins
+      getPluginEngine()->sendScoreSaved(cs_, rv, ext);
+
       return rv;
       }
 

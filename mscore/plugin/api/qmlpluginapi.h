@@ -214,14 +214,46 @@ class PluginAPI : public Ms::QmlPlugin {
        */
       void scoreStateChanged(const QMap<QString, QVariant>& state);
 
-   public:
-      /// \cond MS_INTERNAL
-      PluginAPI(QQuickItem* parent = 0);
+      /**
+       * Notifies plugin about a user saving a score.
+       *
+       * If a plugin modifies score in this handler, then it should:
+       * 1. enclose all modifications within Score::startCmd() / Score::endCmd()
+       * 2. take care of preventing an infinite recursion, as plugin-originated
+       *    changes will trigger this signal again after calling Score::endCmd()
+       *
+       * Example:
+       * \code
+       *import QtQuick 2.0
+       *import MuseScore 3.0
+       *
+       *MuseScore {
+       *    menuPath: "Plugins.Auto Save Pdf"
+       *    description: "Saves a pdf of the current score every time it is saved"
+       *    version: "1.0"
+       *    requiresScore: true;
+       *    onScoreSaved: {
+       *        if (ext !== '.pdf')
+       *            writeScore(curScore(), curScore().scoreName(), ".pdf")
+       *    }
+       *}
+       * \endcode
+       * \warning This functionality is considered experimental.
+       * This API may change in future versions of MuseScore.
+       * \since MuseScore 3.5
+       */
+      void scoreSaved(Score* score, bool successful, const QString& ext);
 
-      static void registerQmlTypes();
+public slots:
+      void runPlugin() override                                         { emit run(); }
+      void endCmd(const QMap<QString, QVariant>& stateInfo) override    { emit scoreStateChanged(stateInfo); }
+      void sendScoreSaved(Ms::Score* s, bool successful, const QString& ext) override; // WARNING: Ms::Score is not the same as Ms::PluginAPI::Score!
 
-      void runPlugin() override            { emit run();       }
-      void endCmd(const QMap<QString, QVariant>& stateInfo) override { emit scoreStateChanged(stateInfo); }
+public:
+   /// \cond MS_INTERNAL
+   PluginAPI(QQuickItem* parent = 0);
+
+   static void registerQmlTypes();
 
       Score* curScore() const;
       QQmlListProperty<Score> scores();

@@ -73,7 +73,7 @@ void QmlPluginEngine::beginEndCmd(MuseScore* ms, bool inUndoRedo)
 void QmlPluginEngine::endEndCmd(MuseScore*)
       {
       if (cmdCount >= maxCmdCount) {
-            QMessageBox::warning(mscore, tr("Plugin Error"), tr("Score update recursion limit reached (%1)").arg(maxCmdCount));
+            QMessageBox::warning(mscore, tr("Plugin Error"), tr("Score update recursion limit reached (%1) with scoreStateChanged").arg(maxCmdCount));
             recursion = true;
             }
 
@@ -86,6 +86,26 @@ void QmlPluginEngine::endEndCmd(MuseScore*)
             undoRedo = false;
             lastScoreState = currScoreState;
             }
+}
+
+//---------------------------------------------------------
+//   QmlPluginEngine::scoreSaved
+//---------------------------------------------------------
+
+void QmlPluginEngine::sendScoreSaved(Score* s, bool successful, const QString& ext)
+      {
+      emit scoreSaved(s, successful, ext);
+      }
+
+//---------------------------------------------------------
+//   QmlPluginEngine::mapPluginSignals
+///   maps the MuseScore events to the plugins.
+//---------------------------------------------------------
+
+void QmlPluginEngine::mapPluginSignals(QmlPlugin* plugin)
+      {
+      connect(this, &QmlPluginEngine::endCmd, plugin, &QmlPlugin::endCmd);
+      connect(this, &QmlPluginEngine::scoreSaved, plugin, &QmlPlugin::sendScoreSaved);
       }
 
 //---------------------------------------------------------

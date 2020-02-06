@@ -438,7 +438,7 @@ void MuseScore::pluginTriggered(QString pp)
                   }
             }
 
-      connect(engine, &QmlPluginEngine::endCmd, p, &QmlPlugin::endCmd);
+      engine->mapPluginSignals(p);
 
       p->setFilePath(pp.section('/', 0, -2));
 

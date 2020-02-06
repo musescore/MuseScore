@@ -63,6 +63,7 @@ class QmlPlugin : public QQuickItem {
 
    public slots:
       virtual void endCmd(const QMap<QString, QVariant>&) = 0;
+      virtual void sendScoreSaved(Score* s, bool successful, const QString& ext) = 0;
 
    public:
       QmlPlugin(QQuickItem* parent = 0);

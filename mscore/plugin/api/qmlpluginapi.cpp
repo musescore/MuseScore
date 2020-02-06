@@ -384,5 +384,10 @@ void PluginAPI::registerQmlTypes()
       qmlTypesRegistered = true;
       }
 
-}
-}
+void PluginAPI::sendScoreSaved(Ms::Score* s, bool successful, const QString& ext) // WARNING: Ms::Score is not the same as Ms::PluginAPI::Score!
+      {
+      emit scoreSaved(wrap<Score>(s), successful, ext);
+      }
+
+} // namespace PluginAPI
+} // namespace Ms

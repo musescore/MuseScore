@@ -22,11 +22,11 @@
 
 #include "../qml/msqmlengine.h"
 #include "libmscore/score.h"
+#include "api/qmlpluginapi.h"
 
 namespace Ms {
 
 class MuseScore;
-
 //---------------------------------------------------------
 //   QmlPluginEngine
 //---------------------------------------------------------
@@ -44,11 +44,18 @@ class QmlPluginEngine : public MsQmlEngine {
 
    signals:
       void endCmd(const QMap<QString, QVariant>& changes);
+      void scoreSaved(Score* s, bool successful, const QString& ext);
+
    public:
       QmlPluginEngine(QObject* parent = nullptr);
 
+      void mapPluginSignals(QmlPlugin* item);
+
       void beginEndCmd(MuseScore*, bool undoRedo);
       void endEndCmd(MuseScore*);
+
+      void sendScoreSaved(Score* s, bool successful, const QString& ext);
+
 
       bool inScoreChangeActionHandler() const;
       };

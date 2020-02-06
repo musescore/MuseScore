@@ -371,8 +371,9 @@ void PluginCreator::runClicked()
             connect(view, SIGNAL(destroyed()), SLOT(closePlugin()));
             }
 
+      // relatif to the pluginCreator: should not be included in mapSignals
       connect(qml,  SIGNAL(quit()), SLOT(closePlugin()));
-      connect(qml, &QmlPluginEngine::endCmd, item, &QmlPlugin::endCmd);
+      qml->mapPluginSignals(item);
 
       if (mscore->currentScore() && item->pluginType() != "dock")
             mscore->currentScore()->startCmd();
