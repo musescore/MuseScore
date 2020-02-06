@@ -31,6 +31,8 @@
 class TelemetryPermissionDialog : public QQuickView {
       Q_OBJECT
 
+      void focusInEvent(QFocusEvent*) override;
+
    public:
       explicit TelemetryPermissionDialog(QQmlEngine* engine);
 

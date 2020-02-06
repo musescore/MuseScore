@@ -31,10 +31,6 @@ FocusScope {
         root.closeRequested()
     }
 
-    Component.onCompleted: {
-        forceActiveFocus()
-    }
-
     Rectangle {
         anchors.fill: parent
 
@@ -74,8 +70,6 @@ FocusScope {
             font.pixelSize: 28
 
             text: qsTr("Help us improve MuseScore")
-
-            focus: true
         }
 
         Column {
