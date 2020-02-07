@@ -1331,7 +1331,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       if (lassoToDraw)
             lassoToDraw->drawEditMode(&p, editData);
 
-      p.setMatrixEnabled(false);
+      p.setWorldMatrixEnabled(false);
       if (_score->layoutMode() != LayoutMode::LINE && _score->layoutMode() != LayoutMode::SYSTEM && !r1.isEmpty()) {
             p.setClipRegion(r1);  // only background
             if (_bgPixmap == 0 || _bgPixmap->isNull())
