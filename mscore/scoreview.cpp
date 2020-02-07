@@ -110,7 +110,7 @@ ScoreView::ScoreView(QWidget* parent)
       setAttribute(Qt::WA_OpaquePaintEvent);
 #endif
       setAttribute(Qt::WA_NoSystemBackground);
-      setFocusPolicy(Qt::ClickFocus);
+      setFocusPolicy(Qt::StrongFocus);
       setAttribute(Qt::WA_InputMethodEnabled);
       setAttribute(Qt::WA_KeyCompression);
       setAttribute(Qt::WA_StaticContents);
