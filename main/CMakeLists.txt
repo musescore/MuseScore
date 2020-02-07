@@ -45,6 +45,7 @@ endif (APPLE)
 include_directories(
       ${PROJECT_SOURCE_DIR}/global
       ${PROJECT_BINARY_DIR}
+      ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
 add_executable(${ExecutableName}
