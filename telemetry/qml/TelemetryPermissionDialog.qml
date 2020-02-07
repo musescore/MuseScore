@@ -20,14 +20,22 @@
 import QtQuick 2.0
 import MuseScore.Telemetry 3.3
 
-Rectangle {
+FocusScope {
     id: root
 
-    signal closeRequested()
+    signal closeRequested
 
     height: childrenRect.height
 
-    color: globalStyle.window
+    Keys.onEscapePressed: {
+        root.closeRequested()
+    }
+
+    Rectangle {
+        anchors.fill: parent
+
+        color: globalStyle.window
+    }
 
     TelemetryPermissionModel {
         id: permissionModel
@@ -47,7 +55,7 @@ Rectangle {
             width: parent.width
         }
 
-        Text {
+        TextLabel {
             id: titleLabel
 
             anchors {
@@ -189,4 +197,3 @@ Rectangle {
         }
     }
 }
-

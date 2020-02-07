@@ -3225,7 +3225,9 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
 
       if (align && segments.size() > 1) {
             const int nstaves = system->staves()->size();
-            std::vector<qreal> y(nstaves, -1000000.0);
+            constexpr qreal minY = -1000000.0;
+            const qreal defaultY = segments[0]->rypos();
+            std::vector<qreal> y(nstaves, minY);
 
             for (SpannerSegment* ss : segments) {
                   if (ss->visible()) {
@@ -3233,8 +3235,13 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
                         staffY = qMax(staffY, ss->rypos());
                         }
                   }
-            for (SpannerSegment* ss : segments)
-                  ss->rypos() = y[ss->staffIdx()];
+            for (SpannerSegment* ss : segments) {
+                  const qreal staffY = y[ss->staffIdx()];
+                  if (staffY > minY)
+                        ss->rypos() = staffY;
+                  else
+                        ss->rypos() = defaultY;
+                  }
             }
 
       //
@@ -3306,9 +3313,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
 
                   m->createEndBarLines(true);
-                  Measure* nm = m->nextMeasure();
-                  if (nm)
-                        m->addSystemTrailer(nm);
+                  m->addSystemTrailer(m->nextMeasure());
                   m->computeMinWidth();
                   ww = m->width();
                   }
