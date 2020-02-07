@@ -34,7 +34,7 @@ class ResourceManager : public QDialog, public Ui::Resource
       void selectLanguagesTab();
       void selectExtensionsTab();
       
-      static inline QString baseAddr() { return "http://extensions.musescore.org/3.4/"; }
+      static inline QString baseAddr() { return "http://extensions.musescore.org/3.5/"; }
 
    private:
       QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
