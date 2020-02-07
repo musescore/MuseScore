@@ -358,24 +358,7 @@ void StaffType::read(XmlReader& e)
 
 qreal StaffType::doty1() const
       {
-      switch(_lines) {
-            case 1:
-                  return -_lineDistance.val() * .5;
-            case 2:
-                  return -_lineDistance.val() * .5;
-            case 3:
-                  return _lineDistance.val() * .5;
-            case 4:
-                  return _lineDistance.val() * .5;
-            case 5:
-                  return _lineDistance.val() * 1.5;
-            case 6:
-                  return _lineDistance.val() * 1.5;
-            default:
-                  qDebug("StaffType::doty1(): lines %d unsupported", _lines);
-                  break;
-            }
-      return 0.0;
+      return _lineDistance.val() * (static_cast<qreal>((_lines - 1)/2) - 0.5);
       }
 
 //---------------------------------------------------------
@@ -385,24 +368,7 @@ qreal StaffType::doty1() const
 
 qreal StaffType::doty2() const
       {
-      switch(_lines) {
-            case 1:
-                  return _lineDistance.val() * .5;
-            case 2:
-                  return _lineDistance.val() * 1.5;
-            case 3:
-                  return _lineDistance.val() * 1.5;
-            case 4:
-                  return _lineDistance.val() * 2.5;
-            case 5:
-                  return _lineDistance.val() * 2.5;
-            case 6:
-                  return _lineDistance.val() * 3.5;
-            default:
-                  qDebug("StaffType::doty2(): lines %d unsupported", _lines);
-                  break;
-            }
-      return 0.0;
+      return _lineDistance.val() * (static_cast<qreal>(_lines/2) + 0.5);
       }
 
 //---------------------------------------------------------
