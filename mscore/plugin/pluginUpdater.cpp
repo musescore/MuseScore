@@ -194,7 +194,10 @@ void ResourceManager::parsePluginRepo(QByteArray html_raw)
             refreshPluginButton(row, installed ? PluginStatus::UPDATED : PluginStatus::NOT_INSTALLED);
             }
       categories->insertItems(0, all_categories);
-      scanPluginUpdate();
+      if (firstLaunch) {
+            scanPluginUpdate();
+            firstLaunch = false;
+            }
       }
 
 //---------------------------------------------------------
@@ -387,6 +390,7 @@ static QDateTime GetLastModified(QString& url)
 
 void ResourceManager::scanPluginUpdate()
       {
+      checkUpdate->setEnabled(false);
       for (int row = 0; row < pluginsTable->rowCount(); row++) {
             QPushButton* install = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 2)));
             const QString& page_url = install->property("page_url").toString();
@@ -398,6 +402,7 @@ void ResourceManager::scanPluginUpdate()
                   QtConcurrent::run(&workerThreads, worker, &PluginWorker::checkUpdate, install);
                   }
             }
+      checkUpdate->setEnabled(true);
       }
 
 //---------------------------------------------------------

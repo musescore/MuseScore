@@ -24,6 +24,8 @@ extern QString dataPath;
 extern QString mscoreGlobalShare;
 extern QString localeName;
 
+bool ResourceManager::firstLaunch = true;
+
 ResourceManager::ResourceManager(QWidget *parent) :
       QDialog(parent)
       {

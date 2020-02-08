@@ -27,6 +27,7 @@ class ResourceManager : public QDialog, public Ui::Resource
     virtual void hideEvent(QHideEvent*);
     QByteArray txt;
     static QThreadPool workerThreads;
+    static bool firstLaunch;
     bool verifyFile(QString path, QString hash);
     bool verifyLanguageFile(QString filename, QString hash);
     void refreshPluginButton(int row, bool updated = true);

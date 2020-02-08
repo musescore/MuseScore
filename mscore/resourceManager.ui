@@ -323,7 +323,7 @@
              </item>
              <item>
               <widget class="QToolButton" name="checkUpdate">
-               <property name="text">
+               <property name="toolTip">
                 <string>Check for update</string>
                </property>
                <property name="icon">
