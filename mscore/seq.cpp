@@ -833,8 +833,10 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                         if (mscore->loop()) {
                               int loopOutUTick = cs->repeatList().tick2utick(cs->loopOutTick().ticks());
                               if (loopOutUTick < scoreEndUTick) {
-                                    // Also make sure we are not "before" the loop
-                                    if (playPosUTick >= loopOutUTick || cs->repeatList().utick2tick(playPosUTick) < cs->loopInTick().ticks()) {
+                                    qreal framesPerPeriodInTime = static_cast<qreal>(framesPerPeriod) / MScore::sampleRate;
+                                    int framesPerPeriodInTicks = cs->utime2utick(framesPerPeriodInTime);
+                                    // Also make sure we are inside the loop
+                                    if (playPosUTick >= loopOutUTick - 2 * framesPerPeriodInTicks || cs->repeatList().utick2tick(playPosUTick) < cs->loopInTick().ticks()) {
                                           qDebug ("Process: playPosUTick = %d, cs->loopInTick().ticks() = %d, cs->loopOutTick().ticks() = %d, getCurTick() = %d, loopOutUTick = %d, playFrame = %d",
                                                             playPosUTick,      cs->loopInTick().ticks(),      cs->loopOutTick().ticks(),      getCurTick(),      loopOutUTick,    *pPlayFrame);
                                           if (cachedPrefs.useJackTransport) {
@@ -846,7 +848,7 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                                                       }
                                                 }
                                           else {
-                                                emit toGui('3');
+                                                emit toGui('3'); // calls loopStart()
                                                 }
                                           // Exit this function to avoid segmentation fault in Scoreview
                                           return;
@@ -1086,7 +1088,7 @@ void Seq::collectEvents(int utick)
             }
 
       updateEventsEnd();
-      playPos = events.cbegin();
+      playPos = mscore->loop() ? events.find(cs->loopInTick().ticks()) : events.cbegin();
       playlistChanged = false;
       mutex.unlock();
       }
