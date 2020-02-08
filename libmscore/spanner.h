@@ -40,6 +40,8 @@ class SpannerEditData : public ElementEditData {
       int editTrack2;
       QList<QPointF> userOffsets;
       QList<QPointF> userOffsets2;
+
+      virtual EditDataType type() override      { return EditDataType::SpannerEditData; }
       };
 
 //---------------------------------------------------------

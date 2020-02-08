@@ -31,6 +31,8 @@ struct TextEditData : public ElementEditData {
 
       TextEditData(TextBase* t) : cursor(t)  {}
       ~TextEditData() {}
+
+      virtual EditDataType type() override      { return EditDataType::TextEditData; }
       };
 
 //---------------------------------------------------------

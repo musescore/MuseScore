@@ -2122,6 +2122,7 @@ void Beam::read(XmlReader& e)
 class BeamEditData : public ElementEditData {
    public:
       int editFragment;
+      virtual EditDataType type() override      { return EditDataType::BeamEditData; }
       };
 
 //---------------------------------------------------------
