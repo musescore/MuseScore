@@ -510,6 +510,20 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
       }
 
 //---------------------------------------------------------
+//   createAndAddTimeSig
+//---------------------------------------------------------
+
+static Segment* createAndAddTimeSig(Score* score, Measure* m, Fraction f, int track, Fraction tick)
+      {
+      TimeSig* ts = new TimeSig(score);
+      ts->setSig(f);
+      ts->setTrack(track);
+      auto s = m->getSegment(SegmentType::TimeSig, tick);
+      s->add(ts);
+      return s;
+      }
+
+//---------------------------------------------------------
 //   readCapVoice
 //---------------------------------------------------------
 
@@ -852,12 +866,13 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                               if (e && static_cast<TimeSig*>(e)->sig() == f)
                                     break;
                               }
-
-                        TimeSig* ts = new TimeSig(score);
-                        ts->setSig(f);
-                        ts->setTrack(track);
-                        s = m->getSegment(SegmentType::TimeSig, tick);
-                        s->add(ts);
+                        // create timesig in current track
+                        s = createAndAddTimeSig(score, m, f, track, tick);
+                        // if not present, also create timesig in track 0
+                        // to prevent corrupt .msc[xz] files when first staff
+                        // is empty and timesig is not 4/4
+                        if (!(s->element(0)))
+                              createAndAddTimeSig(score, m, f, 0, tick);
                         m->setTicks(f);
                         }
                         break;
