@@ -321,6 +321,17 @@
                </item>
               </widget>
              </item>
+             <item>
+              <widget class="QToolButton" name="checkUpdate">
+               <property name="text">
+                <string>Check for update</string>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/view-refresh.svg</normaloff>:/data/icons/view-refresh.svg</iconset>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
           </layout>
@@ -515,7 +526,9 @@
    <header location="global">QtWebEngineWidgets/QWebEngineView</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

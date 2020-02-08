@@ -29,14 +29,7 @@ ResourceManager::ResourceManager(QWidget *parent) :
       {
       setObjectName("ResourceManager");
       setupUi(this);
-      
-#ifndef NDEBUG
-      QPushButton* check_update = new QPushButton();
-      check_update->setText(tr("Check for Update"));
-      bottom_layout->addWidget(check_update);
-      connect(check_update, SIGNAL(clicked()), this, SLOT(scanPluginUpdate()));
-#endif // !NDEBUG
-
+      connect(checkUpdate, SIGNAL(clicked()), this, SLOT(scanPluginUpdate()));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
       dir.mkpath(dataPath + "/locale");
