@@ -743,18 +743,34 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
       }
 
 //---------------------------------------------------------
+//   findStaffIndex -- find index of layout in staffLayouts
+//---------------------------------------------------------
+
+static int findStaffIndex(const QString& layout, const QList<CapStaffLayout*>& staffLayouts)
+      {
+      int index = 0;
+      for (const auto& capStaffLayout : staffLayouts) {
+            if (capStaffLayout->descr == layout)
+                  return index;
+            ++index;
+            }
+      qFatal("staff layout '%s' not found", qPrintable(layout));
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   readCapxStaff -- capx equivalent of readStaff(CapSystem* system)
 //---------------------------------------------------------
 
-void Capella::readCapxStaff(XmlReader& e, CapSystem* system, int iStave)
+void Capella::readCapxStaff(XmlReader& e, CapSystem* system)
       {
       qDebug("Capella::readCapxStaff");
       CapStaff* staff = new CapStaff;
-      //Meter
+      QString layout = e.attribute("layout");
       QString time = e.attribute("defaultTime");
       qstring2timesig(time, staff->numerator, staff->log2Denom, staff->allaBreve);
 
-      staff->iLayout   = iStave;
+      staff->iLayout   = findStaffIndex(layout,staffLayouts());
       staff->topDistX  = 0;
       staff->btmDistX  = 0;
       staff->color     = Qt::black;
@@ -780,7 +796,33 @@ void Capella::readCapxStaff(XmlReader& e, CapSystem* system, int iStave)
                   e.unknown();
             }
 
-      system->staves.append(staff);
+      system->staves[staff->iLayout] = staff;
+      }
+
+//---------------------------------------------------------
+//   initUnreadStaves
+//---------------------------------------------------------
+
+static void initUnreadStaves(QList<CapStaff*>& staves)
+      {
+      // find the first staff actually read
+      CapStaff* firstNonEmptyStaff = nullptr;
+      for (const auto staff : staves) {
+            if (staff && !firstNonEmptyStaff)
+                  firstNonEmptyStaff = staff;
+            }
+
+      // copy its data to the staves present in the file
+      for (int i = 0; i < staves.size(); ++i) {
+            if (!(staves.at(i))) {
+                  auto staff = new CapStaff;
+                  staff->numerator = firstNonEmptyStaff->numerator;
+                  staff->log2Denom = firstNonEmptyStaff->log2Denom;
+                  staff->allaBreve = firstNonEmptyStaff->allaBreve;
+                  staff->iLayout = i;
+                  staves[i] = staff;
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -803,6 +845,11 @@ void Capella::readCapxSystem(XmlReader& e)
       s->bPageBreak    = (b & 4) != 0;
       s->instrNotation = (b >> 3) & 7;
 
+      // set all staves in this system to "not yet read"
+      for (int i = 0; i < _staffLayouts.size(); ++i)
+            s->staves.append(nullptr);
+
+      // read staves
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "barCount") {
@@ -810,12 +857,9 @@ void Capella::readCapxSystem(XmlReader& e)
                   e.skipCurrentElement();
                   }
             else if (tag == "staves") {
-                  int iStave = 0;
                   while (e.readNextStartElement()) {
-                        if (e.name() == "staff") {
-                              readCapxStaff(e, s, iStave);
-                              ++iStave;
-                              }
+                        if (e.name() == "staff")
+                              readCapxStaff(e, s);
                         else
                               e.unknown();
                         }
@@ -823,6 +867,9 @@ void Capella::readCapxSystem(XmlReader& e)
             else
                   e.unknown();
             }
+
+      // initializes staves not read
+      initUnreadStaves(s->staves);
 
       systems.append(s);
       }

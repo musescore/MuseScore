@@ -4,7 +4,14 @@
 # run mtest/capella/io directory as "./iotest"
 # note that the debug build must be used with the -t option to get the beams right in the .mscx files
 
-MSCORE=../../../build.debug/mscore/mscore
+# Linux
+#MSCORE=../../../build.debug/mscore/mscore
+# OS X terminal build
+#MSCORE=../../../applebuild/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build
+#MSCORE=../../../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build (since early 2020)
+MSCORE=../../../build.xcode/main/Debug/mscore.app/Contents/MacOS/mscore
 
 echo "---------------------------------------------"
 echo "Regression Tests for MuseScore Capella import"
