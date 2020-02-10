@@ -9,6 +9,11 @@ QHash<QString, Tour*> TourHandler::allTours;
 QHash<QString, Tour*> TourHandler::shortcutToTour;
 QMap<QString, QMap<QString, QString>*> TourHandler::eventNameLookup;
 
+static int mboxFrameTopThickness = 0;
+static int mboxFrameBottomThickness = 0;
+static int mboxFrameLeftThickness = 0;
+static int mboxFrameRightThickness = 0;
+
 //---------------------------------------------------------
 //   OverlayWidget
 //---------------------------------------------------------
@@ -364,26 +369,20 @@ void TourHandler::positionMessage(QList<QWidget*> widgets, QMessageBox* mbox)
       QPoint displayPoint(0, 0);
       if (topBottom) {
             bool displayAbove = (widgetsBox.center().y() > midY);
-            if (displayAbove) {
-                  int mBoxHeight = mbox->size().height() + 15; // hack
-                  int y = widgetsBox.top();
-                  displayPoint.setY(y - mBoxHeight);
-                  }
+            if (displayAbove)
+                  displayPoint.setY(widgetsBox.top() - mbox->height() - mboxFrameBottomThickness);
             else
-                  displayPoint.setY(widgetsBox.bottom());
+                  displayPoint.setY(widgetsBox.bottom() + mboxFrameTopThickness);
 
             int x = (int) (widgetsBox.width() - mbox->size().width()) / 2 + widgetsBox.left();
             displayPoint.setX(x);
             }
       else {
             bool displayLeft = (widgetsBox.center().x() > midX);
-            if (displayLeft) {
-                  int mBoxWidth = mbox->size().width();
-                  int x = widgetsBox.left();
-                  displayPoint.setX(x - mBoxWidth);
-                  }
+            if (displayLeft)
+                  displayPoint.setX(widgetsBox.left() - mbox->width() - mboxFrameRightThickness);
             else
-                  displayPoint.setX(widgetsBox.right());
+                  displayPoint.setX(widgetsBox.right() + mboxFrameLeftThickness);
 
             int y = (widgetsBox.height() - mbox->size().height()) / 2 + widgetsBox.top();
             displayPoint.setY(y);
@@ -481,6 +480,10 @@ void TourHandler::displayTour(Tour* tour)
 
             overlay->show();
             mbox->exec();
+            mboxFrameTopThickness = mbox->geometry().top() - mbox->frameGeometry().top();
+            mboxFrameBottomThickness = mbox->frameGeometry().bottom() - mbox->geometry().bottom();
+            mboxFrameLeftThickness = mbox->geometry().left() - mbox->frameGeometry().left();
+            mboxFrameRightThickness = mbox->frameGeometry().right() - mbox->geometry().right();
             overlay->hide();
             showTours = showToursBox->isChecked();
 
