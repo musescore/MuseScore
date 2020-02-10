@@ -1,0 +1,7 @@
+{
+    "schedule": "monthly", // daily|weekly|monthly
+    "ignoredFiles": [
+        "*.svg",                   // svgs should not be compressed, see https://github.com/musescore/MuseScore/pull/5664
+    ],
+    "aggressiveCompression": "false" // true|false ---> already the default, but still...
+}
