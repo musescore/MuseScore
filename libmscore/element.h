@@ -495,6 +495,15 @@ class Element : public ScoreElement {
 //    endEditDrag(EditData&)      use data to create undo records
 //-----------------------------------------------------------------------------
 
+enum class EditDataType : signed char {
+      ElementEditData,
+      TextEditData,
+      BarLineEditData,
+      BeamEditData,
+      NoteEditData,
+      SpannerEditData
+      };
+
 struct PropertyData {
       Pid id;
       QVariant data;
@@ -508,6 +517,7 @@ class ElementEditData {
 
       virtual ~ElementEditData() = default;
       void pushProperty(Pid pid) { propertyData.push_back(PropertyData({ pid, e->getProperty(pid), e->propertyFlags(pid) })); }
+      virtual EditDataType type()   { return EditDataType::ElementEditData; }
       };
 
 //---------------------------------------------------------

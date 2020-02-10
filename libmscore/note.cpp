@@ -1495,6 +1495,8 @@ class NoteEditData : public ElementEditData {
       EditMode mode = EditMode_Undefined;
       QPointF delta;
 
+      virtual EditDataType type() override      { return EditDataType::NoteEditData; }
+
       static constexpr double MODE_TRANSITION_LIMIT_DEGREES = 15.0;
 
       static inline EditMode editModeByDragDirection(const qreal& deltaX, const qreal& deltaY)

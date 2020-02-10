@@ -186,6 +186,7 @@ class BarLineEditData : public ElementEditData {
    public:
       qreal yoff1;
       qreal yoff2;
+      virtual EditDataType type() override      { return EditDataType::BarLineEditData; }
       };
 
 //---------------------------------------------------------
