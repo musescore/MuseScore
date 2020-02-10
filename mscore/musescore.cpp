@@ -447,7 +447,7 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
       setPlayRepeats(MScore::playRepeats);
       getAction("pan")->setChecked(MScore::panPlayback);
       getAction("follow")->setChecked(preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG));
-      getAction("midi-on")->setEnabled(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
+      getAction("midi-on")->setChecked(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
       getAction("toggle-statusbar")->setChecked(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
       getAction("show-tours")->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
       _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
