@@ -36,7 +36,7 @@
           </StaffType>
         </Staff>
       <trackName>Horn in D</trackName>
-      <preferSharpFlat>2</preferSharpFlat>
+      <preferSharpFlat>flats</preferSharpFlat>
       <Instrument>
         <longName>Horn in D</longName>
         <shortName>D Hn.</shortName>
