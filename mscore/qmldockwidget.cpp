@@ -259,6 +259,13 @@ void QmlDockWidget::setSource(const QUrl& url)
       setupStyle();
 
       view->setSource(url);
+      // In some cases, setSource() will result in errors the first time the sources are loaded.
+      // If this happens, reload the sources from the same URL.
+      // For some reason, it seems to work the second time.
+      if (view->status() == QQuickView::Error) {
+            engine->clearComponentCache();
+            view->setSource(url);
+            }
       view->setResizeMode(QQuickView::SizeRootObjectToView);
       }
 
