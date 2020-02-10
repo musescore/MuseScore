@@ -3863,6 +3863,7 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "no-beam",                    [this]{ cmdSetBeamMode(Beam::Mode::NONE);                           }},
             { "beam32",                     [this]{ cmdSetBeamMode(Beam::Mode::BEGIN32);                        }},
             { "beam64",                     [this]{ cmdSetBeamMode(Beam::Mode::BEGIN64);                        }},
+            { "auto-beam",                  [this]{ cmdSetBeamMode(Beam::Mode::AUTO);                           }},
             { "sharp2",                     [this,ed]{ toggleAccidental(AccidentalType::SHARP2, ed);            }},
             { "sharp",                      [this,ed]{ toggleAccidental(AccidentalType::SHARP, ed);             }},
             { "nat",                        [this,ed]{ toggleAccidental(AccidentalType::NATURAL, ed);           }},
