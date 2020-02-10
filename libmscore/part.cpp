@@ -123,7 +123,8 @@ bool Part::readProperties(XmlReader& e)
       else if (tag == "show")
             _show = e.readInt();
       else if (tag == "preferSharpFlat")
-            _preferSharpFlat = PreferSharpFlat(e.readInt());
+            _preferSharpFlat =
+               e.readElementText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS;
       else
             return false;
       return true;
@@ -158,7 +159,8 @@ void Part::write(XmlWriter& xml) const
       if (_color != DEFAULT_COLOR)
             xml.tag("color", _color);
       if (_preferSharpFlat != PreferSharpFlat::DEFAULT)
-            xml.tag("preferSharpFlat", int(_preferSharpFlat));
+            xml.tag("preferSharpFlat",
+               _preferSharpFlat == PreferSharpFlat::SHARPS ? "sharps" : "flats");
       instrument()->write(xml, this);
       xml.etag();
       }

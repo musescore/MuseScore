@@ -34,7 +34,7 @@
         <defaultTransposingClef>G</defaultTransposingClef>
         </Staff>
       <trackName>D♭ Piccolo</trackName>
-      <preferSharpFlat>2</preferSharpFlat>
+      <preferSharpFlat>flats</preferSharpFlat>
       <Instrument>
         <longName>D♭ Piccolo</longName>
         <shortName>D♭ Picc.</shortName>
