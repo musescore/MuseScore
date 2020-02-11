@@ -692,7 +692,7 @@ void Rest::reset()
 
 qreal Rest::mag() const
       {
-      qreal m = staff()->mag(tick());
+      qreal m = staff()->mag(this);
       if (small())
             m *= score()->styleD(Sid::smallNoteMag);
       return m;

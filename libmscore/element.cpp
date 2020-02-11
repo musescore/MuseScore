@@ -134,7 +134,7 @@ qreal Element::spatium() const
             }
       else {
             Staff* s = staff();
-            return s ? s->spatium(tick()) : score()->spatium();
+            return s ? s->spatium(this) : score()->spatium();
             }
       }
 
@@ -2374,7 +2374,7 @@ void Element::autoplaceSegmentElement(bool above, bool add)
                         si = firstVis;
                   }
             else {
-                  qreal mag = staff()->mag(tick());
+                  qreal mag = staff()->mag(this);
                   sp *= mag;
                   }
             qreal minDistance = _minDistance.val() * sp;

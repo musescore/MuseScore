@@ -1648,7 +1648,7 @@ void Chord::layout2()
       for (Chord* c : _graceNotes)
             c->layout2();
 
-      qreal mag = staff()->mag(tick());
+      const qreal mag = staff()->mag(this);
 
       //
       // position after-chord grace notes
@@ -1833,7 +1833,7 @@ void Chord::layoutPitched()
             c->layoutPitched();
 
       qreal _spatium         = spatium();
-      qreal mag_             = staff() ? staff()->mag(tick()) : 1.0;    // palette elements do not have a staff
+      qreal mag_             = staff() ? staff()->mag(this) : 1.0;    // palette elements do not have a staff
       qreal dotNoteDistance  = score()->styleP(Sid::dotNoteDistance)  * mag_;
       qreal minNoteDistance  = score()->styleP(Sid::minNoteDistance)  * mag_;
       qreal minTieLength     = score()->styleP(Sid::MinTieLength)     * mag_;
@@ -2897,7 +2897,7 @@ void Chord::removeMarkings(bool keepTremolo)
 
 qreal Chord::mag() const
       {
-      qreal m = staff() ? staff()->mag(tick()) : 1.0;
+      qreal m = staff() ? staff()->mag(this) : 1.0;
       if (small())
             m *= score()->styleD(Sid::smallNoteMag);
       if (_noteType != NoteType::NORMAL)
