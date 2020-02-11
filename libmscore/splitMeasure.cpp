@@ -17,7 +17,9 @@
 #include "range.h"
 #include "tuplet.h"
 #include "spanner.h"
+#include "tie.h"
 #include "undo.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -70,14 +72,27 @@ void Score::splitMeasure(Segment* segment)
                   sl.push_back(make_tuple(s, s->tick(), s->ticks()));
             }
 
+      // Make sure ties are the beginning the split measure are restored.
+      std::vector<Tie*> ties;
+      for (int track = 0; track < ntracks(); track++) {
+            Chord* chord = measure->findChord(stick, track);
+            if (chord)
+                  for (Note* note : chord->notes()) {
+                        Tie* tie = note->tieBack();
+                        if (tie)
+                              ties.push_back(tie->clone());
+                        }
+                  }
+
       MeasureBase* nm = measure->next();
+
       undoRemoveMeasures(measure, measure);
       undoInsertTime(measure->tick(), -measure->ticks());
 
       // create empty measures:
-      insertMeasure(ElementType::MEASURE, nm, true);
+      insertMeasure(ElementType::MEASURE, nm, true, false);
       Measure* m2 = toMeasure(nm ? nm->prev() : lastMeasure());
-      insertMeasure(ElementType::MEASURE, m2, true);
+      insertMeasure(ElementType::MEASURE, m2, true, false);
       Measure* m1 = toMeasure(m2->prev());
 
       Fraction tick = segment->tick();
@@ -90,6 +105,12 @@ void Score::splitMeasure(Segment* segment)
       m1->adjustToLen(ticks1.reduced(), false);
       m2->adjustToLen(ticks2.reduced(), false);
       range.write(this, m1->tick());
+
+      // Restore ties the the beginning of the split measure.
+      for (auto tie : ties) {
+            tie->setEndNote(searchTieNote(tie->startNote()));
+            undoAddElement(tie);
+            }
 
       for (auto i : sl) {
             Spanner* s      = std::get<0>(i);
