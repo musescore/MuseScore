@@ -296,8 +296,8 @@ void ChangeMap::cleanupStage2(std::vector<bool>& startsInRamp, EndPointsVector& 
             }
 
       // Re-insert the events that we need to move in their new positions
-      for (auto i = moveTo.begin(); i != moveTo.end(); i++) {
-            insert(i->first, i->second);
+      for (auto k = moveTo.begin(); k != moveTo.end(); k++) {
+            insert(k->first, k->second);
             }
       }
 
@@ -370,11 +370,11 @@ void ChangeMap::cleanupStage3()
                         }
                   else {
                         // Search for a fixed event at the next event point
-                        bool foundFix = false;
+                        bool foundFix2 = false;
                         for (auto& nextChangeEvent : values(nextChangeEventIter.key())) {
                               if (nextChangeEvent.type == ChangeEventType::FIX) {
                                     event.cachedEndVal = nextChangeEvent.value;
-                                    foundFix = true;
+                                    foundFix2 = true;
                                     break;
                                     }
                               }
@@ -383,7 +383,7 @@ void ChangeMap::cleanupStage3()
                         // A good guess would to be to interpolate, but that might get complex, so just ignore
                         // this ramp and set the ending to be the same as the start.
                         // TODO: implementing some form of smart interpolation would be nice.
-                        if (!foundFix) {
+                        if (!foundFix2) {
                               event.cachedEndVal = event.cachedStartVal;
                               }
                         }
