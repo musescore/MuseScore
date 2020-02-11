@@ -58,6 +58,7 @@ class TestSplit : public QObject, public MTest
             split("split184061-keep-tie-before-break-voice-4.mscx", "split184061-keep-tie-before-break-voice-4-ref.mscx", 2); // splitting 1/64th after middle of measure...voice 4 already has a tie that need to be preserved after splitting, and voice 2 has whole note that must be split up with triple-dotted
             split("split184061-other-inst-only-one-tie.mscx", "split184061-other-inst-only-one-tie-ref.mscx", 2); // only the one tied note of the chord in the flute should still be tied over
             }
+      void split295207() { split("split295207.mscx", "split295207-ref.mscx", 5) ; }
       };
 
 //---------------------------------------------------------
