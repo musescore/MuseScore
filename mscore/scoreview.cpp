@@ -4881,6 +4881,9 @@ void ScoreView::updateEditElement()
                         else
                               setEditElement(e);
                         }
+                  else {
+                        setEditElement(nullptr);
+                        }
                   break;
             }
       }
