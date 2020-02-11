@@ -198,6 +198,7 @@ class Staff final : public ScoreElement {
       //==== staff type helper function
       const StaffType* staffType(const Fraction&) const;
       const StaffType* constStaffType(const Fraction&) const;
+      const StaffType* staffTypeForElement(const Element*) const;
       StaffType* staffType(const Fraction&);
       StaffType* setStaffType(const Fraction&, const StaffType&);
       void removeStaffType(const Fraction&);

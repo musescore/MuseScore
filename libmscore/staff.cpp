@@ -996,6 +996,13 @@ StaffType* Staff::staffType(const Fraction& tick)
       return &_staffTypeList.staffType(tick);
       }
 
+const StaffType* Staff::staffTypeForElement(const Element* e) const
+      {
+      if (_staffTypeList.uniqueStaffType()) // optimize if one staff type spans for the entire staff
+            return &_staffTypeList.staffType({0, 1});
+      return &_staffTypeList.staffType(e->tick());
+      }
+
 //---------------------------------------------------------
 //   staffTypeListChanged
 //    Signal that the staffTypeList has changed at

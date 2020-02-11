@@ -2637,7 +2637,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                         ks->layout();
                         }
                   else if (segment.isChordRestType()) {
-                        const StaffType* st = staff->staffType(segment.tick());
+                        const StaffType* st = staff->staffTypeForElement(&segment);
                         int track     = staffIdx * VOICES;
                         int endTrack  = track + VOICES;
 
