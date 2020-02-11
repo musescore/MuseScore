@@ -63,6 +63,7 @@ class Stem final : public Element {
       void setUserLen(qreal l)        { _userLen = l; }
 
       qreal lineWidth() const         { return _lineWidth; }
+      qreal lineWidthMag() const      { return _lineWidth * mag(); }
       void setLineWidth(qreal w)      { _lineWidth = w; }
 
       void setLen(qreal l);
