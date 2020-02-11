@@ -263,10 +263,20 @@ Staff* Element::staff() const
 //   staffType
 //---------------------------------------------------------
 
-StaffType* Element::staffType() const
+const StaffType* Element::staffType() const
       {
       Staff* s = staff();
-      return s ? s->staffType(tick()) : 0;
+      return s ? s->staffTypeForElement(this) : nullptr;
+      }
+
+//---------------------------------------------------------
+//   onTabStaff
+//---------------------------------------------------------
+
+bool Element::onTabStaff() const
+      {
+      const StaffType* stt = staffType();
+      return stt ? stt->isTabStaff() : false;
       }
 
 //---------------------------------------------------------

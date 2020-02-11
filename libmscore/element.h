@@ -324,7 +324,8 @@ class Element : public ScoreElement {
       int voice() const                       { return _track & 3;         }
       void setVoice(int v)                    { _track = (_track / VOICES) * VOICES + v; }
       Staff* staff() const;
-      StaffType* staffType() const;
+      const StaffType* staffType() const;
+      bool onTabStaff() const;
       Part* part() const;
 
       virtual void add(Element*);

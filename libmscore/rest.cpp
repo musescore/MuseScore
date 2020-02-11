@@ -74,10 +74,11 @@ Rest::Rest(const Rest& r, bool link)
 
 void Rest::draw(QPainter* painter) const
       {
+      const StaffType* stt = staff() ? staff()->staffTypeForElement(this) : nullptr;
       if (
-         (staff() && staff()->isTabStaff(tick())
+         (stt && stt->isTabStaff()
          // in tab staff, do not draw rests is rests are off OR if dur. symbols are on
-         && (!staff()->staffType(tick())->showRests() || staff()->staffType(tick())->genDurations())
+         && (!stt->showRests() || stt->genDurations())
          && (!measure() || !measure()->isMMRest()))        // show multi measure rest always
          || generated()
             )
@@ -348,8 +349,9 @@ void Rest::layout()
             }
 
       rxpos() = 0.0;
-      if (staff() && staff()->isTabStaff(tick())) {
-            const StaffType* tab = staff()->staffType(tick());
+      const StaffType* stt = staffType();
+      if (stt && stt->isTabStaff()) {
+            const StaffType* tab = stt;
             // if rests are shown and note values are shown as duration symbols
             if (tab->showRests() && tab->genDurations()) {
                   TDuration::DurationType type = durationType().type();
@@ -386,7 +388,7 @@ void Rest::layout()
 
       qreal yOff       = offset().y();
       const Staff* stf = staff();
-      const StaffType*  st = stf->staffType(tick());
+      const StaffType*  st = stf->staffTypeForElement(this);
       qreal lineDist = st ? st->lineDistance().val() : 1.0;
       int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
       int lines      = st ? st->lines() : 5;

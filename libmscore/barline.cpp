@@ -1260,7 +1260,7 @@ void BarLine::layout()
       setPos(QPointF());
       // barlines hidden on this staff
       if (staff() && segment()) {
-            if ((!staff()->staffType(tick())->showBarlines() && segment()->segmentType() == SegmentType::EndBarLine)
+            if ((!staff()->staffTypeForElement(this)->showBarlines() && segment()->segmentType() == SegmentType::EndBarLine)
                 || (staff()->hideSystemBarLine() && segment()->segmentType() == SegmentType::BeginBarLine)) {
                   setbbox(QRectF());
                   return;
@@ -1328,7 +1328,7 @@ void BarLine::layout2()
       {
       // barlines hidden on this staff
       if (staff() && segment()) {
-            if ((!staff()->staffType(tick())->showBarlines() && segment()->segmentType() == SegmentType::EndBarLine)
+            if ((!staff()->staffTypeForElement(this)->showBarlines() && segment()->segmentType() == SegmentType::EndBarLine)
                 || (staff()->hideSystemBarLine() && segment()->segmentType() == SegmentType::BeginBarLine)) {
                   setbbox(QRectF());
                   return;
