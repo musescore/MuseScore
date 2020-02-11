@@ -1301,7 +1301,7 @@ class MStyle {
       MStyle();
 
       void precomputeValues();
-      QVariant value(Sid idx) const;
+      const QVariant& value(Sid idx) const;
       qreal pvalue(Sid idx) const    { return _precomputedValues[int(idx)]; }
       void set(Sid idx, const QVariant& v);
 
