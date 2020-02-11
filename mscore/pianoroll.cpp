@@ -501,7 +501,7 @@ void PianorollEditor::veloTypeChanged(int val)
             return;
 
       int newVelocity = note->veloOffset();
-      int dynamicsVel = staff->velocities().velo(note->tick().ticks());
+      int dynamicsVel = staff->velocities().val(note->tick());
 
       //Change velocity to equivalent in new metric
       switch (Note::ValueType(val)) {

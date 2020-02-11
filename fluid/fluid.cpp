@@ -194,6 +194,22 @@ void Fluid::play(const PlayEvent& event)
             int midiPitch = event.dataB() * 128 + event.dataA();  // msb * 128 + lsb
             cp->pitchBend(midiPitch);
             }
+      /*
+       *    MIDI spec.: One data byte follows the Status. It is the pressure amount, a value
+       *    from 0 to 127 (where 127 is the most pressure).
+       */
+      else if (type == ME_AFTERTOUCH){
+            cp->setChannelPressure(event.dataA());
+            }
+      /*
+       *    MIDI spec.: Two data bytes follow the Status. The first data is the note number.
+       *    This indicates to which note the pressure is being applied. The second data byte is the
+       *    pressure amount, a value from 0 to 127 (where 127 is the most pressure).
+       */
+      else if (type == ME_POLYAFTER){
+            cp->setKeyPressure(event.dataA(), event.dataB());
+            }
+
       if (err) {
             // TODO: distinguish between types of error code.
             // Lack of a soundfont should not produce qDebug messages, because user could deliberately be using MIDI out only.

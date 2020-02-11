@@ -93,9 +93,9 @@ class Element : public Ms::PluginAPI::ScoreElement {
       /**
        * Reference position of this element relative to its parent element.
        *
-       * This is an offset from the parent object that is determined by the 
-       * autoplace feature. It includes any other offsets applied to the 
-       * element. You can use this value to accurately position other elements 
+       * This is an offset from the parent object that is determined by the
+       * autoplace feature. It includes any other offsets applied to the
+       * element. You can use this value to accurately position other elements
        * related to the same parent.
        *
        * This value is in spatium units for compatibility with Element.offsetX.
@@ -105,9 +105,9 @@ class Element : public Ms::PluginAPI::ScoreElement {
       /**
        * Reference position of this element relative to its parent element.
        *
-       * This is an offset from the parent object that is determined by the 
-       * autoplace feature. It includes any other offsets applied to the 
-       * element. You can use this value to accurately position other elements 
+       * This is an offset from the parent object that is determined by the
+       * autoplace feature. It includes any other offsets applied to the
+       * element. You can use this value to accurately position other elements
        * related to the same parent.
        *
        * This value is in spatium units for compatibility with Element.offsetY.
@@ -223,6 +223,11 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( veloChangeMethod,        VELO_CHANGE_METHOD        )
       API_PROPERTY( veloChangeSpeed,         VELO_CHANGE_SPEED         )
       API_PROPERTY( dynamicRange,            DYNAMIC_RANGE             )
+      /**
+       *    The way a ramp interpolates between values.
+       *    \since MuseScore 3.5
+       */
+      API_PROPERTY( changeMethod,            CHANGE_METHOD             )
       API_PROPERTY( placement,               PLACEMENT                 )
       API_PROPERTY( velocity,                VELOCITY                  )
       API_PROPERTY( jumpTo,                  JUMP_TO                   )

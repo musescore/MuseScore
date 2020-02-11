@@ -1,5 +1,4 @@
 Tick  =      0   Type  =   144   Pitch  =    65   Velocity  =    80   Channel  =     0    
-Tick  =      0   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =      0   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
 Tick  =     55   Type  =   144   Pitch  =    65   Velocity  =     0   Channel  =     0    
 Tick  =     60   Type  =   144   Pitch  =    72   Velocity  =    80   Channel  =     0    
@@ -17,7 +16,6 @@ Tick  =    415   Type  =   144   Pitch  =    65   Velocity  =     0   Channel  =
 Tick  =    420   Type  =   144   Pitch  =    72   Velocity  =    80   Channel  =     0    
 Tick  =    475   Type  =   144   Pitch  =    72   Velocity  =     0   Channel  =     0    
 Tick  =    480   Type  =   144   Pitch  =    65   Velocity  =    80   Channel  =     0    
-Tick  =    480   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =    480   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
 Tick  =    535   Type  =   144   Pitch  =    65   Velocity  =     0   Channel  =     0    
 Tick  =    540   Type  =   144   Pitch  =    72   Velocity  =    80   Channel  =     0    
@@ -36,7 +34,6 @@ Tick  =    900   Type  =   144   Pitch  =    72   Velocity  =    80   Channel  =
 Tick  =    955   Type  =   144   Pitch  =    72   Velocity  =     0   Channel  =     0    
 Tick  =    960   Type  =   144   Pitch  =    65   Velocity  =    80   Channel  =     0    
 Tick  =    960   Type  =   144   Pitch  =    69   Velocity  =    80   Channel  =     0    
-Tick  =    960   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =    960   Type  =     4   Pitch  =     0   Velocity  =   127   Channel  =     0    
 Tick  =   1072   Type  =   144   Pitch  =    65   Velocity  =     0   Channel  =     0    
 Tick  =   1072   Type  =   144   Pitch  =    69   Velocity  =     0   Channel  =     0    
@@ -50,7 +47,6 @@ Tick  =   1320   Type  =   144   Pitch  =    74   Velocity  =    80   Channel  =
 Tick  =   1432   Type  =   144   Pitch  =    74   Velocity  =     0   Channel  =     0    
 Tick  =   1440   Type  =   144   Pitch  =    65   Velocity  =    80   Channel  =     0    
 Tick  =   1440   Type  =   144   Pitch  =    69   Velocity  =    80   Channel  =     0    
-Tick  =   1440   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =   1440   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
 Tick  =   1552   Type  =   144   Pitch  =    65   Velocity  =     0   Channel  =     0    
 Tick  =   1552   Type  =   144   Pitch  =    69   Velocity  =     0   Channel  =     0    
@@ -64,7 +60,6 @@ Tick  =   1800   Type  =   144   Pitch  =    74   Velocity  =    80   Channel  =
 Tick  =   1912   Type  =   144   Pitch  =    74   Velocity  =     0   Channel  =     0    
 Tick  =   1920   Type  =   144   Pitch  =    65   Velocity  =    80   Channel  =     0    
 Tick  =   1920   Type  =   144   Pitch  =    69   Velocity  =    80   Channel  =     0    
-Tick  =   1920   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =   1920   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
 Tick  =   2146   Type  =   144   Pitch  =    65   Velocity  =     0   Channel  =     0    
 Tick  =   2146   Type  =   144   Pitch  =    69   Velocity  =     0   Channel  =     0    
@@ -79,7 +74,6 @@ Tick  =   2625   Type  =   144   Pitch  =    65   Velocity  =     0   Channel  =
 Tick  =   2625   Type  =   144   Pitch  =    69   Velocity  =     0   Channel  =     0    
 Tick  =   2639   Type  =   144   Pitch  =    75   Velocity  =    80   Channel  =     0    
 Tick  =   2639   Type  =   144   Pitch  =    77   Velocity  =    80   Channel  =     0    
-Tick  =   2640   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =   2865   Type  =   144   Pitch  =    75   Velocity  =     0   Channel  =     0    
 Tick  =   2865   Type  =   144   Pitch  =    77   Velocity  =     0   Channel  =     0    
 Tick  =   2879   Type  =   144   Pitch  =    65   Velocity  =    80   Channel  =     0    
@@ -92,7 +86,6 @@ Tick  =   3118   Type  =   144   Pitch  =    77   Velocity  =    80   Channel  =
 Tick  =   3344   Type  =   144   Pitch  =    75   Velocity  =     0   Channel  =     0    
 Tick  =   3344   Type  =   144   Pitch  =    77   Velocity  =     0   Channel  =     0    
 Tick  =   3360   Type  =   144   Pitch  =    65   Velocity  =    80   Channel  =     0    
-Tick  =   3360   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =   3360   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
 Tick  =   3473   Type  =   144   Pitch  =    65   Velocity  =     0   Channel  =     0    
 Tick  =   3480   Type  =   144   Pitch  =    70   Velocity  =    80   Channel  =     0    
@@ -100,7 +93,6 @@ Tick  =   3480   Type  =   144   Pitch  =    74   Velocity  =    80   Channel  =
 Tick  =   3593   Type  =   144   Pitch  =    70   Velocity  =     0   Channel  =     0    
 Tick  =   3593   Type  =   144   Pitch  =    74   Velocity  =     0   Channel  =     0    
 Tick  =   3600   Type  =   144   Pitch  =    65   Velocity  =    80   Channel  =     0    
-Tick  =   3600   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =   3713   Type  =   144   Pitch  =    65   Velocity  =     0   Channel  =     0    
 Tick  =   3720   Type  =   144   Pitch  =    70   Velocity  =    80   Channel  =     0    
 Tick  =   3720   Type  =   144   Pitch  =    74   Velocity  =    80   Channel  =     0    
@@ -109,7 +101,6 @@ Tick  =   3833   Type  =   144   Pitch  =    74   Velocity  =     0   Channel  =
 Tick  =   3840   Type  =   144   Pitch  =    63   Velocity  =    80   Channel  =     0    
 Tick  =   3840   Type  =   144   Pitch  =    69   Velocity  =    80   Channel  =     0    
 Tick  =   3840   Type  =   144   Pitch  =    72   Velocity  =    80   Channel  =     0    
-Tick  =   3840   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =   3840   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
 Tick  =   3866   Type  =   144   Pitch  =    63   Velocity  =     0   Channel  =     0    
 Tick  =   3866   Type  =   144   Pitch  =    69   Velocity  =     0   Channel  =     0    
@@ -240,7 +231,6 @@ Tick  =   4788   Type  =   144   Pitch  =    74   Velocity  =     0   Channel  =
 Tick  =   4792   Type  =   144   Pitch  =    63   Velocity  =    80   Channel  =     0    
 Tick  =   4792   Type  =   144   Pitch  =    69   Velocity  =    80   Channel  =     0    
 Tick  =   4792   Type  =   144   Pitch  =    72   Velocity  =    80   Channel  =     0    
-Tick  =   4800   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =   4800   Type  =     4   Pitch  =     0   Velocity  =   127   Channel  =     0    
 Tick  =   4818   Type  =   144   Pitch  =    63   Velocity  =     0   Channel  =     0    
 Tick  =   4818   Type  =   144   Pitch  =    69   Velocity  =     0   Channel  =     0    
@@ -371,7 +361,6 @@ Tick  =   5740   Type  =   144   Pitch  =    74   Velocity  =     0   Channel  =
 Tick  =   5760   Type  =   144   Pitch  =    74   Velocity  =    80   Channel  =     0    
 Tick  =   5760   Type  =   144   Pitch  =    77   Velocity  =    80   Channel  =     0    
 Tick  =   5760   Type  =   144   Pitch  =    70   Velocity  =    80   Channel  =     0    
-Tick  =   5760   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =   5760   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
 Tick  =   5872   Type  =   144   Pitch  =    74   Velocity  =     0   Channel  =     0    
 Tick  =   5872   Type  =   144   Pitch  =    77   Velocity  =     0   Channel  =     0    
@@ -397,7 +386,6 @@ Tick  =   6232   Type  =   144   Pitch  =    69   Velocity  =     0   Channel  =
 Tick  =   6240   Type  =   144   Pitch  =    74   Velocity  =    80   Channel  =     0    
 Tick  =   6240   Type  =   144   Pitch  =    77   Velocity  =    80   Channel  =     0    
 Tick  =   6240   Type  =   144   Pitch  =    70   Velocity  =    80   Channel  =     0    
-Tick  =   6240   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =   6240   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
 Tick  =   6352   Type  =   144   Pitch  =    74   Velocity  =     0   Channel  =     0    
 Tick  =   6352   Type  =   144   Pitch  =    77   Velocity  =     0   Channel  =     0    
@@ -424,7 +412,6 @@ Tick  =   6720   Type  =   144   Pitch  =    74   Velocity  =    80   Channel  =
 Tick  =   6720   Type  =   144   Pitch  =    79   Velocity  =    80   Channel  =     0    
 Tick  =   6720   Type  =   144   Pitch  =    65   Velocity  =    80   Channel  =     0    
 Tick  =   6720   Type  =   144   Pitch  =    68   Velocity  =    80   Channel  =     0    
-Tick  =   6720   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =   6720   Type  =     4   Pitch  =     0   Velocity  =   127   Channel  =     0    
 Tick  =   6832   Type  =   144   Pitch  =    74   Velocity  =     0   Channel  =     0    
 Tick  =   6832   Type  =   144   Pitch  =    79   Velocity  =     0   Channel  =     0    
@@ -450,7 +437,6 @@ Tick  =   7200   Type  =   144   Pitch  =    74   Velocity  =    80   Channel  =
 Tick  =   7200   Type  =   144   Pitch  =    79   Velocity  =    80   Channel  =     0    
 Tick  =   7200   Type  =   144   Pitch  =    65   Velocity  =    80   Channel  =     0    
 Tick  =   7200   Type  =   144   Pitch  =    68   Velocity  =    80   Channel  =     0    
-Tick  =   7200   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =   7200   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
 Tick  =   7312   Type  =   144   Pitch  =    74   Velocity  =     0   Channel  =     0    
 Tick  =   7312   Type  =   144   Pitch  =    79   Velocity  =     0   Channel  =     0    

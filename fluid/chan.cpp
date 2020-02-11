@@ -66,7 +66,6 @@ void Channel::init()
 
 void Channel::initCtrl()
       {
-      key_pressure     = 0;
       channel_pressure = 0;
       pitch_bend       = 0x2000; // Range is 0x4000, pitch bend wheel starts in centered position
       pitch_wheel_sensitivity = 12; /* twelve semi-tones */
@@ -76,8 +75,13 @@ void Channel::initCtrl()
             gen[i]     = 0.0f;
             gen_abs[i] = 0;
             }
-      for (int i = 0; i < 128; i++)
+
+      /* Reset key pressure and CCs for all possible values */
+      for (int i = 0; i < 128; i++) {
+            // For MuseScore purposes, default to 80 for poly aftertouch
+            setKeyPressure(i, 80);
             setCC(i, 0);
+            }
 
       /* Volume / initial attenuation (MSB & LSB) */
       setCC(VOLUME_MSB, 127);
@@ -201,6 +205,26 @@ void Channel::pitchBend(int val)
       {
       pitch_bend = val;
       synth->modulate_voices(channum, false, FLUID_MOD_PITCHWHEEL);
+      }
+
+//---------------------------------------------------------
+//   setChannelPressure
+//---------------------------------------------------------
+
+void Channel::setChannelPressure(int val)
+      {
+      channel_pressure = val;
+      synth->modulate_voices(channum, false, FLUID_MOD_CHANNELPRESSURE);
+      }
+
+//---------------------------------------------------------
+//   setKeyPressure
+//---------------------------------------------------------
+
+void Channel::setKeyPressure(int key, int val)
+      {
+      key_pressure[key] = val;
+      synth->modulate_voices(channum, false, FLUID_MOD_KEYPRESSURE);
       }
 
 //---------------------------------------------------------
