@@ -15,7 +15,6 @@
 #include "bracket.h"
 #include "clef.h"
 #include "dynamic.h"
-#include "hairpin.h"
 #include "mscore.h"
 #include "ottava.h"
 #include "tremolo.h"
@@ -28,6 +27,7 @@
 #include "barline.h"
 #include "style.h"
 #include "sym.h"
+#include "changeMap.h"
 
 namespace Ms {
 
@@ -156,12 +156,13 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::HAIRPIN_HEIGHT,          false, "hairpinHeight",         P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin height")   },
       { Pid::HAIRPIN_CONT_HEIGHT,     false, "hairpinContHeight",     P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin cont height") },
       { Pid::VELO_CHANGE,             true,  "veloChange",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity change")  },
-      { Pid::VELO_CHANGE_METHOD,      true,  "veloChangeMethod",      P_TYPE::CHANGE_METHOD,       DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity change method")   },
+      { Pid::VELO_CHANGE_METHOD,      true,  "veloChangeMethod",      P_TYPE::CHANGE_METHOD,       DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity change method")   },     // left as a compatability property - we need to be able to read it correctly
       { Pid::VELO_CHANGE_SPEED,       true,  "veloChangeSpeed",       P_TYPE::CHANGE_SPEED,        DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity change speed")  },
       { Pid::DYNAMIC_TYPE,            true,  "subtype",               P_TYPE::DYNAMIC_TYPE,        DUMMY_QT_TRANSLATE_NOOP("propertyName", "dynamic type")     },
       { Pid::DYNAMIC_RANGE,           true,  "dynType",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "dynamic range")    },
 //100
       { Pid::SINGLE_NOTE_DYNAMICS,    true,  "singleNoteDynamics",    P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "single note dynamics")   },
+      { Pid::CHANGE_METHOD,           true,  "changeMethod",          P_TYPE::CHANGE_METHOD,       DUMMY_QT_TRANSLATE_NOOP("propertyName", "change method")   },        // the new, more general version of VELO_CHANGE_METHOD
       { Pid::PLACEMENT,               false, "placement",             P_TYPE::PLACEMENT,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "placement")        },
       { Pid::VELOCITY,                false, "velocity",              P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity")         },
       { Pid::JUMP_TO,                 true,  "jumpTo",                P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "jump to")          },
@@ -791,7 +792,7 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
             case P_TYPE::CHANGE_SPEED:
                   return Dynamic::speedToName(Dynamic::Speed(value.toInt()));
             case P_TYPE::CHANGE_METHOD:
-                  return Hairpin::veloChangeMethodToName(VeloChangeMethod(value.toInt()));
+                  return ChangeMap::changeMethodToName(ChangeMethod(value.toInt()));
             case P_TYPE::CLEF_TYPE:
                   return ClefInfo::tag(ClefType(value.toInt()));
             case P_TYPE::DYNAMIC_TYPE:
