@@ -1004,18 +1004,17 @@ StaffType* Staff::staffType(const Fraction& tick)
 
 void Staff::staffTypeListChanged(const Fraction& tick)
       {
-      triggerLayout(tick);
-      auto i = _staffTypeList.find(tick.ticks());
-      if (i == _staffTypeList.end()) {
-            triggerLayout();
-            }
-      else {
-            ++i;
-            if (i != _staffTypeList.end())
-                  triggerLayout(Fraction::fromTicks(i->first));
-            else if (score()->lastMeasure())
-                  triggerLayout(score()->lastMeasure()->endTick());
-            }
+      std::pair<int, int> range = _staffTypeList.staffTypeRange(tick);
+
+      if (range.first < 0)
+            triggerLayout(Fraction(0,1));
+      else
+            triggerLayout(Fraction::fromTicks(range.first));
+
+      if (range.second < 0)
+            triggerLayout(score()->lastMeasure()->endTick());
+      else
+            triggerLayout(Fraction::fromTicks(range.second));
       }
 
 //---------------------------------------------------------
@@ -1033,11 +1032,10 @@ StaffType* Staff::setStaffType(const Fraction& tick, const StaffType& nst)
 
 void Staff::removeStaffType(const Fraction& tick)
       {
-      auto i = _staffTypeList.find(tick.ticks());
-      if (i == _staffTypeList.end())
-            return;
       qreal old = spatium(tick);
-      _staffTypeList.erase(i);
+      const bool removed = _staffTypeList.removeStaffType(tick);
+      if (!removed)
+            return;
       localSpatiumChanged(old, spatium(tick), tick);
       staffTypeListChanged(tick);
       }
@@ -1416,12 +1414,9 @@ QVariant Staff::propertyDefault(Pid id) const
 
 void Staff::localSpatiumChanged(double oldVal, double newVal, Fraction tick)
       {
-      Fraction etick;
-      auto i = _staffTypeList.upper_bound(tick.ticks());
-      if (i == _staffTypeList.end())
-            etick = score()->lastSegment()->tick();
-      else
-            etick = Fraction::fromTicks(i->first);
+      const int intEndTick = _staffTypeList.staffTypeRange(tick).second;
+      const Fraction etick = (intEndTick == -1) ? score()->lastMeasure()->endTick() : Fraction::fromTicks(intEndTick);
+
       int staffIdx = idx();
       int startTrack = staffIdx * VOICES;
       int endTrack = startTrack + VOICES;

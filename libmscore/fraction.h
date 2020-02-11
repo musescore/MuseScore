@@ -76,6 +76,7 @@ class Fraction {
 
       bool isZero() const        { return _numerator == 0;      }
       bool isNotZero() const     { return _numerator != 0;      }
+      bool negative() const      { return _numerator < 0;       }
 
       bool isValid() const       { return _denominator != 0;    }
 
