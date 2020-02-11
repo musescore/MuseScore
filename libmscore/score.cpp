@@ -1228,9 +1228,9 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       //
       // TODO: restrict to reasonable values (pitch 0-127)
       //
-      Staff* s      = staff(pos->staffIdx);
-      qreal mag     = s->mag(segment->tick());
-      Fraction tick = segment->tick();
+      const Staff* s      = staff(pos->staffIdx);
+      const Fraction tick = segment->tick();
+      const qreal mag     = s->mag(tick);
       // in TABs, step from one string to another; in other staves, step on and between lines
       qreal lineDist = s->staffType(tick)->lineDistance().val() * (s->isTabStaff(measure->tick()) ? 1 : .5) * mag * spatium();
 
@@ -3702,8 +3702,9 @@ void Score::appendPart(const QString& name)
       for (int i = 0; i < t->nstaves(); ++i) {
             Staff* staff = new Staff(this);
             staff->setPart(part);
-            staff->setLines(Fraction(0,1), t->staffLines[i]);
-            staff->setSmall(Fraction(0,1), t->smallStaff[i]);
+            StaffType* stt = staff->staffType(Fraction(0,1));
+            stt->setLines(t->staffLines[i]);
+            stt->setSmall(t->smallStaff[i]);
             if (i == 0) {
                   staff->setBracketType(0, t->bracket[0]);
                   staff->setBracketSpan(0, t->nstaves());
