@@ -23,11 +23,15 @@ namespace Ms {
 const StaffType& StaffTypeList::staffType(const Fraction& tick) const
       {
       static const StaffType st;
-      if (empty())
+
+      if (tick.negative())
             return st;
-      auto i = upper_bound(tick.ticks());
-      if (i == begin())
-            return st;
+      if (staffTypeChanges.empty())
+            return firstStaffType;
+
+      auto i = staffTypeChanges.upper_bound(tick.ticks());
+      if (i == staffTypeChanges.begin())
+            return firstStaffType;
       return (--i)->second;
       }
 
@@ -37,9 +41,14 @@ const StaffType& StaffTypeList::staffType(const Fraction& tick) const
 
 StaffType& StaffTypeList::staffType(const Fraction& tick)
       {
-      Q_ASSERT(!empty());
-      auto i = upper_bound(tick.ticks());
-      Q_ASSERT(i != begin());
+      Q_ASSERT(!tick.negative());
+
+      if (staffTypeChanges.empty())
+            return firstStaffType;
+
+      auto i = staffTypeChanges.upper_bound(tick.ticks());
+      if (i == staffTypeChanges.begin())
+            return firstStaffType;
       return (--i)->second;
       }
 
@@ -49,11 +58,17 @@ StaffType& StaffTypeList::staffType(const Fraction& tick)
 
 StaffType* StaffTypeList::setStaffType(const Fraction& tick, const StaffType& st)
       {
-      Q_ASSERT(tick >= Fraction(0,1));
-      auto i = find(tick.ticks());
+      Q_ASSERT(!tick.negative());
+
+      if (tick.isZero()) {
+            firstStaffType = st;
+            return &firstStaffType;
+            }
+
+      auto i = staffTypeChanges.find(tick.ticks());
       StaffType* nst;
-      if (i == end()) {
-            auto k = insert(std::pair<int, StaffType>(tick.ticks(), st));
+      if (i == staffTypeChanges.end()) {
+            auto k = staffTypeChanges.insert(std::pair<int, StaffType>(tick.ticks(), st));
             nst = &(k.first->second);
             }
       else {
@@ -61,6 +76,43 @@ StaffType* StaffTypeList::setStaffType(const Fraction& tick, const StaffType& st
             nst = &i->second;
             }
       return nst;
+      }
+
+//---------------------------------------------------------
+//   removeStaffType
+//---------------------------------------------------------
+
+bool StaffTypeList::removeStaffType(const Fraction& tick)
+      {
+      Q_ASSERT(!tick.negative());
+      if (tick.isZero()) {
+            firstStaffType = StaffType();
+            return true;
+            }
+
+      auto i = staffTypeChanges.find(tick.ticks());
+
+      if (i == staffTypeChanges.end())
+            return false;
+
+      staffTypeChanges.erase(i);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   staffTypeRange
+//---------------------------------------------------------
+
+std::pair<int, int> StaffTypeList::staffTypeRange(const Fraction& tick) const
+      {
+      if (tick.negative())
+            return { -1, -1 };
+
+      auto i = staffTypeChanges.upper_bound(tick.ticks());
+      const int end = (i == staffTypeChanges.end()) ? -1 : i->first;
+      const int start = (i == staffTypeChanges.begin()) ? 0 : (--i)->first;
+
+      return { start, end };
       }
 
 //---------------------------------------------------------
