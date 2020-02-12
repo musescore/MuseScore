@@ -433,6 +433,8 @@ QVariant Part::getProperty(Pid id) const
                   return QVariant(_show);
             case Pid::USE_DRUMSET:
                   return instrument()->useDrumset();
+            case Pid::PREFER_SHARP_FLAT:
+                  return int(preferSharpFlat());
             default:
                   return QVariant();
             }
@@ -451,6 +453,8 @@ bool Part::setProperty(Pid id, const QVariant& property)
             case Pid::USE_DRUMSET:
                   instrument()->setUseDrumset(property.toBool());
                   break;
+            case Pid::PREFER_SHARP_FLAT:
+                  setPreferSharpFlat(PreferSharpFlat(property.toInt()));
             default:
                   qDebug("Part::setProperty: unknown id %d", int(id));
                   break;

@@ -141,7 +141,7 @@ class Part final : public ScoreElement {
       const Part* masterPart() const;
       Part* masterPart();
 
-      PreferSharpFlat preferSharpFlat()           { return _preferSharpFlat; }
+      PreferSharpFlat preferSharpFlat() const     { return _preferSharpFlat; }
       void setPreferSharpFlat(PreferSharpFlat v)  { _preferSharpFlat = v;    }
 
       // Allows not reading the same instrument twice on importing 2.X scores.

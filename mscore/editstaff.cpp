@@ -340,9 +340,9 @@ void EditStaff::apply()
       bool preferSharpFlatChanged = (part->preferSharpFlat() != PreferSharpFlat(preferSharpFlat->currentIndex()));
       // instrument becomes non/octave-transposing, preferSharpFlat isn't useful anymore
       if ((iList->currentIndex() == 0) || (iList->currentIndex() == 25))
-            part->setPreferSharpFlat(PreferSharpFlat::DEFAULT);
+            part->undoChangeProperty(Pid::PREFER_SHARP_FLAT, int(PreferSharpFlat::DEFAULT));
       else
-            part->setPreferSharpFlat(PreferSharpFlat(preferSharpFlat->currentIndex()));
+            part->undoChangeProperty(Pid::PREFER_SHARP_FLAT, int(PreferSharpFlat(preferSharpFlat->currentIndex())));
 
       instrument.setMinPitchA(_minPitchA);
       instrument.setMaxPitchA(_maxPitchA);
