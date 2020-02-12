@@ -640,7 +640,9 @@ void TextBlock::layout(TextBase* t)
             _lineSpacing = fm.lineSpacing();
             }
       else {
-            for (TextFragment& f : _fragments) {
+            const auto fiLast = --_fragments.end();
+            for (auto fi = _fragments.begin(); fi != _fragments.end(); ++fi) {
+                  TextFragment& f = *fi;
                   f.pos.setX(x);
                   QFontMetricsF fm(f.font(t), MScore::paintDevice());
                   if (f.format.valign() != VerticalAlignment::AlignNormal) {
@@ -653,9 +655,15 @@ void TextBlock::layout(TextBase* t)
                         }
                   else
                         f.pos.setY(0.0);
-                  qreal w  = fm.width(f.text);
+
+                  // Optimization: don't calculate character position
+                  // for the next fragment if there is no next fragment
+                  if (fi != fiLast) {
+                        const qreal w  = fm.width(f.text);
+                        x += w;
+                        }
+
                   _bbox   |= fm.tightBoundingRect(f.text).translated(f.pos);
-                  x += w;
                   _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
                   }
             }
