@@ -2424,7 +2424,7 @@ QRectF Note::drag(EditData& ed)
             return QRectF();
             }
 
-      QPointF delta = ed.pos - ed.lastPos;
+      QPointF delta = ed.evtDelta;
       noteEditData->delta = delta;
 
       if (noteEditData->mode == NoteEditData::EditMode_Undefined) {
@@ -2468,11 +2468,11 @@ void Note::editDrag(EditData& editData)
       if (ch->notes().size() == 1) {
             // if the chord contains only this note, then move the whole chord
             // including stem, flag etc.
-            ch->undoChangeProperty(Pid::OFFSET, ch->offset() + offset() + editData.delta);
+            ch->undoChangeProperty(Pid::OFFSET, ch->offset() + offset() + editData.evtDelta);
             setOffset(QPointF());
             }
       else
-            setOffset(offset() + editData.delta);
+            setOffset(offset() + editData.evtDelta);
 
       triggerLayout();
       }
@@ -2495,7 +2495,7 @@ void Note::verticalDrag(EditData &ed)
       qreal _spatium      = spatium();
       bool tab            = st->isTabStaff();
       qreal step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
-      int lineOffset      = lrint(ed.delta.y() / step);
+      int lineOffset      = lrint(ed.moveDelta.y() / step);
 
       if (tab) {
             const StringData* strData = staff()->part()->instrument()->stringData();
@@ -2582,7 +2582,7 @@ void Note::horizontalDrag(EditData &ed)
           (((ed.buttons & Qt::LeftButton) && !(ed.modifiers & Qt::ControlModifier))
            || (ed.modifiers & Qt::ShiftModifier))) {
 
-            if (ed.delta.x() < 0)
+            if (ed.moveDelta.x() < 0)
                   normalizeLeftDragDelta(seg, ed, ned);
             }
 

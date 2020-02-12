@@ -1946,6 +1946,7 @@ void Element::startDrag(EditData& ed)
       eed->e = this;
       eed->pushProperty(Pid::OFFSET);
       eed->pushProperty(Pid::AUTOPLACE);
+      eed->initOffset = offset();
       ed.addData(eed);
       if (ed.modifiers & Qt::AltModifier)
             setAutoplace(false);
@@ -1963,8 +1964,11 @@ QRectF Element::drag(EditData& ed)
 
       const QRectF r0(canvasBoundingRect());
 
-      qreal x = ed.delta.x();
-      qreal y = ed.delta.y();
+      const ElementEditData* eed = ed.getData(this);
+
+      const QPointF offset0 = ed.moveDelta + eed->initOffset;
+      qreal x = offset0.x();
+      qreal y = offset0.y();
 
       qreal _spatium = spatium();
       if (ed.hRaster) {

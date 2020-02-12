@@ -120,9 +120,12 @@ class EditData {
 
       QPointF pos;
       QPointF startMove;
+      QPointF normalizedStartMove; ///< Introduced for transition of drag logic. Don't use in new code.
       QPoint  startMovePixel;
       QPointF lastPos;
-      QPointF delta;
+      QPointF delta; ///< This property is deprecated, use evtDelta or moveDelta instead. In normal drag equals to moveDelta, in edit drag - to evtDelta
+      QPointF evtDelta; ///< Mouse offset for the last mouse move event
+      QPointF moveDelta; ///< Mouse offset from the start of mouse move
       bool hRaster                     { false };
       bool vRaster                     { false };
 
@@ -535,6 +538,7 @@ class ElementEditData {
    public:
       Element* e;
       QList<PropertyData> propertyData;
+      QPointF initOffset; ///< for dragging: difference between actual offset and editData.moveDelta
 
       virtual ~ElementEditData() = default;
       void pushProperty(Pid pid) { propertyData.push_back(PropertyData({ pid, e->getProperty(pid), e->propertyFlags(pid) })); }
