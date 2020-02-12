@@ -122,7 +122,7 @@ void updateNoteLines(Segment* segment, int track)
 
 UndoCommand::~UndoCommand()
       {
-      for (auto c : childList)
+      for (auto c : qAsConst(childList))
             delete c;
       }
 
