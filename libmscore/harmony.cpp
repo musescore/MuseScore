@@ -1895,8 +1895,16 @@ QString Harmony::accessibleInfo() const
 
 QString Harmony::screenReaderInfo() const
       {
-      QString rez = userName();
+      return QString("%1 %2").arg(userName(), generateScreenReaderInfo());
+      }
 
+//---------------------------------------------------------
+//   generateScreenReaderInfo
+//---------------------------------------------------------
+
+QString Harmony::generateScreenReaderInfo() const
+      {
+      QString rez;
       switch (_harmonyType) {
             case HarmonyType::ROMAN: {
                   QString aux = _textName;

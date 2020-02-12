@@ -343,7 +343,7 @@ void FretDiagram::draw(QPainter* painter) const
                         case FretDotType::TRIANGLE:
                               painter->drawLine(QLineF(x, y + dotd, x + .5 * dotd, y));
                               painter->drawLine(QLineF(x + .5 * dotd, y, x + dotd, y + dotd));
-                              painter->drawLine(QLineF(x + dotd, y + dotd, x, y + dotd));                                    
+                              painter->drawLine(QLineF(x + dotd, y + dotd, x, y + dotd));
                               break;
                         case FretDotType::NORMAL:
                         default:
@@ -700,9 +700,9 @@ void FretDiagram::read(XmlReader& e)
                   }
             if (tag == "fretDiagram") {
                   readNew(e);
-                  haveReadNew = true;       
+                  haveReadNew = true;
                   }
-            
+
             // Check for new properties
             else if (tag == "showNut")
                   readProperty(e, Pid::FRET_NUT);
@@ -888,7 +888,7 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
                   _barres[fret] = FretItem::Barre(string, -1);
                   removeDotsMarkers(string, -1, fret);
                   }
-            } 
+            }
       else if (b.endString == -1 && b.startString < string) {
             _barres[fret].endString = string;
             }
@@ -967,7 +967,7 @@ void FretDiagram::removeBarres(int string, int fret /*= 0*/)
             else
                   ++iter;
             }
-      }   
+      }
 
 //---------------------------------------------------------
 //   removeMarker
@@ -1049,7 +1049,7 @@ void FretDiagram::undoFretClear()
 
 //---------------------------------------------------------
 //   dot
-//    take fret value of zero to mean all dots 
+//    take fret value of zero to mean all dots
 //---------------------------------------------------------
 
 std::vector<FretItem::Dot> FretDiagram::dot(int s, int f /*= 0*/) const
@@ -1346,6 +1346,117 @@ void FretDiagram::endEditDrag(EditData& editData)
       triggerLayout();
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString FretDiagram::accessibleInfo() const
+      {
+      QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->harmonyName()) : QObject::tr("without chord symbol");
+      return QString("%1 %2").arg(userName()).arg(chordName);
+      }
+
+//---------------------------------------------------------
+//   screenReaderInfo
+//---------------------------------------------------------
+
+QString FretDiagram::screenReaderInfo() const
+      {
+      QString detailedInfo;
+      for (int i = 0; i < _strings; i++) {
+            QString stringIdent = QObject::tr("string %1").arg(i + 1);
+
+            const FretItem::Marker& m = marker(i);
+            QString markerName;
+            switch (m.mtype) {
+                  case FretMarkerType::CIRCLE:
+                        markerName = QObject::tr("circle marker");
+                        break;
+                  case FretMarkerType::CROSS:
+                        markerName = QObject::tr("cross marker");
+                        break;
+                  case FretMarkerType::NONE:
+                  default:
+                        break;
+                  }
+
+            int dotsCount = 0;
+            std::vector<int> fretsWithDots;
+            for (auto const& d : dot(i)) {
+                  if (!d.exists())
+                        continue;
+                  fretsWithDots.push_back(d.fret + _fretOffset);
+                  dotsCount += 1;
+                  // TODO consider: do we need to announce what type of dot a dot is?
+                  // i.e. triangle, square, normal dot. It's mostly just information
+                  // that clutters the screenreader output and makes it harder to
+                  // understand, so leaving it out for now.
+                  }
+
+            if (dotsCount == 0 && markerName.length() == 0)
+                  continue;
+
+            QString fretInfo;
+            if (dotsCount == 1) {
+                  fretInfo = QString("%1").arg(fretsWithDots.front());
+                  }
+            else if (dotsCount > 1) {
+                  int max = int(fretsWithDots.size());
+                  for (int i = 0; i < max; i++) {
+                        if (i == max - 1)
+                              fretInfo = QObject::tr("%1 and %2").arg(fretInfo).arg(fretsWithDots[i]);
+                        else
+                              fretInfo = QString("%1 %2").arg(fretInfo).arg(fretsWithDots[i]);
+                        }
+                  }
+
+            QString dotsInfo;
+            if (dotsCount == 1)
+                  dotsInfo = QObject::tr("dot on fret %1").arg(fretInfo);
+            else if (dotsCount > 1)
+                  dotsInfo = QObject::tr("%n dots on frets %1", "", dotsCount).arg(fretInfo);
+
+            detailedInfo = QString("%1 %2 %3 %4").arg(detailedInfo).arg(stringIdent).arg(markerName).arg(dotsInfo);
+            }
+
+      QString barreInfo;
+      for (auto const& iter : _barres) {
+            const FretItem::Barre& b = iter.second;
+            if (!b.exists())
+                  continue;
+
+            QString fretInfo = QObject::tr("fret %1").arg(iter.first);
+
+            QString newBarreInfo;
+            if (b.startString == 0 && (b.endString == -1 || b.endString == _strings - 1)) {
+                  newBarreInfo = QObject::tr("barré %1").arg(fretInfo);
+                  }
+            else {
+                  QString startPart = QObject::tr("beginning string %1").arg(b.startString + 1);
+                  QString endPart;
+                  if (b.endString != -1)
+                        endPart = QObject::tr("and ending string %1").arg(b.endString + 1);
+
+                  newBarreInfo = QObject::tr("partial barré %1 %2 %3").arg(fretInfo).arg(startPart).arg(endPart);
+                  }
+
+            barreInfo = QString("%1 %2").arg(barreInfo).arg(newBarreInfo);
+            }
+
+      detailedInfo = QString("%1 %2").arg(detailedInfo).arg(barreInfo);
+
+      if (detailedInfo.trimmed().length() == 0)
+            detailedInfo = QObject::tr("no content");
+
+      QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->generateScreenReaderInfo()) : QObject::tr("without chord symbol");
+      QString basicInfo = QString("%1 %2").arg(userName()).arg(chordName);
+
+      QString generalInfo = QObject::tr("%n strings total", "", _strings);
+
+      QString res = QString("%1 %2 %3").arg(basicInfo).arg(generalInfo).arg(detailedInfo);
+
+      return res;
+      }
 
 //---------------------------------------------------------
 //   markerToChar
