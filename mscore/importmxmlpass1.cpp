@@ -445,21 +445,237 @@ void MusicXMLParserPass1::skipLogCurrElem()
       }
 
 //---------------------------------------------------------
-//   createMeasures
+//   addBreak
+//---------------------------------------------------------
+
+static void addBreak(Score* const score, MeasureBase* const mb, const LayoutBreak::Type type)
+      {
+      LayoutBreak* lb = new LayoutBreak(score);
+      lb->setLayoutBreakType(type);
+      mb->add(lb);
+      }
+
+//---------------------------------------------------------
+//   addBreakToPreviousMeasureBase
+//---------------------------------------------------------
+
+static void addBreakToPreviousMeasureBase(Score* const score, MeasureBase* const mb, const LayoutBreak::Type type)
+      {
+      const auto pm = mb->prev();
+      if (pm && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTBREAKS))
+            addBreak(score, pm, type);
+      }
+
+//---------------------------------------------------------
+//   addText
+//---------------------------------------------------------
+
+/**
+ Add text \a strTxt to VBox \a vbx using Tid \a stl.
+ */
+
+static void addText(VBox* vbx, Score* s, const QString strTxt, const Tid stl)
+      {
+      if (!strTxt.isEmpty()) {
+            Text* text = new Text(s, stl);
+            text->setXmlText(strTxt);
+            vbx->add(text);
+            }
+      }
+
+//---------------------------------------------------------
+//   addText2
+//---------------------------------------------------------
+
+/**
+ Add text \a strTxt to VBox \a vbx using Tid \a stl.
+ Also sets Align and Yoff.
+ */
+
+static void addText2(VBox* vbx, Score* s, const QString strTxt, const Tid stl, const Align align, const double yoffs)
+      {
+      if (!strTxt.isEmpty()) {
+            Text* text = new Text(s, stl);
+            text->setXmlText(strTxt);
+            text->setAlign(align);
+            text->setOffset(QPointF(0.0, yoffs));
+            vbx->add(text);
+            }
+      }
+
+//---------------------------------------------------------
+//   findYMinYMaxInWords
+//---------------------------------------------------------
+
+static void findYMinYMaxInWords(const std::vector<const CreditWords*>& words, int& miny, int& maxy)
+      {
+      miny = 0;
+      maxy = 0;
+
+      if (words.empty())
+            return;
+
+      miny = words.at(0)->defaultY;
+      maxy = words.at(0)->defaultY;
+      for (const auto w : words) {
+            if (w->defaultY < miny) miny = w->defaultY;
+            if (w->defaultY > maxy) maxy = w->defaultY;
+            }
+      }
+
+//---------------------------------------------------------
+//   alignForCreditWords
+//---------------------------------------------------------
+
+static Align alignForCreditWords(const CreditWords* const w, const int pageWidth)
+      {
+      Align align = Align::LEFT;
+      if (w->defaultX > (pageWidth / 3)) {
+            if (w->defaultX < (2 * pageWidth / 3))
+                  align = Align::HCENTER;
+            else
+                  align = Align::RIGHT;
+            }
+      return align;
+      }
+
+//---------------------------------------------------------
+//   createAndAddVBoxForCreditWords
+//---------------------------------------------------------
+
+static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75)
+      {
+      auto vbox = new VBox(score);
+      qreal vboxHeight = 10;                         // default height in tenths
+      double diff = maxy - miny;                     // calculate height in tenths
+      if (diff > vboxHeight)                         // and size is reasonable
+            vboxHeight = diff;
+      vboxHeight /= 10;                              // height in spatium
+      vboxHeight += 2.5;                             // guesstimated correction for last line
+
+      vbox->setBoxHeight(Spatium(vboxHeight));
+      score->measures()->add(vbox);
+      return vbox;
+      }
+
+//---------------------------------------------------------
+//   addCreditWords
+//---------------------------------------------------------
+
+static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
+                            const int pageNr, const QSize pageSize,
+                            const bool top)
+      {
+      VBox* vbox = nullptr;
+
+      std::vector<const CreditWords*> topwords;
+      for (const auto w : crWords) {
+            if (w->page == pageNr) {
+                  if ((w->defaultY > (pageSize.height() / 2)) == top)
+                        topwords.push_back(w);
+                  }
+            }
+
+      int miny = 0;
+      int maxy = 0;
+      findYMinYMaxInWords(topwords, miny, maxy);
+
+      for (const auto w : topwords) {
+            const auto align = alignForCreditWords(w, pageSize.width());
+            double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
+            if (!vbox)
+                  vbox = createAndAddVBoxForCreditWords(score, miny, maxy);
+            addText2(vbox, score, w->words, Tid::DEFAULT, align, yoffs);
+            }
+
+      return vbox;
+      }
+
+//---------------------------------------------------------
+//   createMeasuresAndVboxes
+//---------------------------------------------------------
+
+static void createDefaultHeader(Score* const score)
+      {
+      QString strTitle;
+      QString strSubTitle;
+      QString strComposer;
+      QString strPoet;
+      QString strTranslator;
+
+      if (!(score->metaTag("movementTitle").isEmpty() && score->metaTag("workTitle").isEmpty())) {
+            strTitle = score->metaTag("movementTitle");
+            if (strTitle.isEmpty())
+                  strTitle = score->metaTag("workTitle");
+            }
+      if (!(score->metaTag("movementNumber").isEmpty() && score->metaTag("workNumber").isEmpty())) {
+            strSubTitle = score->metaTag("movementNumber");
+            if (strSubTitle.isEmpty())
+                  strSubTitle = score->metaTag("workNumber");
+            }
+      QString metaComposer = score->metaTag("composer");
+      QString metaPoet = score->metaTag("poet");
+      QString metaTranslator = score->metaTag("translator");
+      if (!metaComposer.isEmpty()) strComposer = metaComposer;
+      if (metaPoet.isEmpty()) metaPoet = score->metaTag("lyricist");
+      if (!metaPoet.isEmpty()) strPoet = metaPoet;
+      if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
+
+      const auto vbox = createAndAddVBoxForCreditWords(score);
+      addText(vbox, score, strTitle.toHtmlEscaped(),      Tid::TITLE);
+      addText(vbox, score, strSubTitle.toHtmlEscaped(),   Tid::SUBTITLE);
+      addText(vbox, score, strComposer.toHtmlEscaped(),   Tid::COMPOSER);
+      addText(vbox, score, strPoet.toHtmlEscaped(),       Tid::POET);
+      addText(vbox, score, strTranslator.toHtmlEscaped(), Tid::TRANSLATOR);
+      }
+
+//---------------------------------------------------------
+//   createMeasuresAndVboxes
 //---------------------------------------------------------
 
 /**
  Create required measures with correct number, start tick and length for Score \a score.
  */
 
-static void createMeasures(Score* score, const QVector<Fraction>& ml, const QVector<Fraction>& ms)
+static void createMeasuresAndVboxes(Score* const score,
+                                    const QVector<Fraction>& ml, const QVector<Fraction>& ms,
+                                    const std::set<int>& systemStartMeasureNrs,
+                                    const std::set<int>& pageStartMeasureNrs,
+                                    const CreditWordsList& crWords,
+                                    const QSize pageSize)
       {
+      if (crWords.empty())
+            createDefaultHeader(score);
+
+      int pageNr = 0;
       for (int i = 0; i < ml.size(); ++i) {
+
+            VBox* vbox = nullptr;
+
+            // add a header vbox if the this measure is the first in the score or the first on a new page
+            if (pageStartMeasureNrs.count(i) || i == 0) {
+                  ++pageNr;
+                  vbox = addCreditWords(score, crWords, pageNr, pageSize, true);
+                  }
+
+            // create and add the measure
             Measure* measure  = new Measure(score);
             measure->setTick(ms.at(i));
             measure->setTicks(ml.at(i));
             measure->setNo(i);
             score->measures()->add(measure);
+
+            // add break to previous measure or vbox
+            MeasureBase* mb = vbox;
+            if (!mb) mb = measure;
+            if (pageStartMeasureNrs.count(i))
+                  addBreakToPreviousMeasureBase(score, mb, LayoutBreak::Type::PAGE);
+            else if (systemStartMeasureNrs.count(i))
+                  addBreakToPreviousMeasureBase(score, mb, LayoutBreak::Type::LINE);
+
+            // add a footer vbox if the next measure is on a new page or end of score has been reached
+            if (pageStartMeasureNrs.count(i+1) || i == (ml.size() - 1))
+                  addCreditWords(score, crWords, pageNr, pageSize, false);
             }
       }
 
@@ -489,67 +705,15 @@ static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>
       }
 
 //---------------------------------------------------------
-//   addText
+//   dumpCredits
 //---------------------------------------------------------
 
-/**
- Add text \a strTxt to VBox \a vbx using Tid \a stl.
- */
-
-static void addText(VBox* vbx, Score* s, QString strTxt, Tid stl)
+static void dumpCredits(const CreditWordsList& credits)
       {
-      if (!strTxt.isEmpty()) {
-            Text* text = new Text(s, stl);
-            text->setXmlText(strTxt);
-            vbx->add(text);
-            }
-      }
-
-//---------------------------------------------------------
-//   addText
-//---------------------------------------------------------
-
-/**
- Add text \a strTxt to VBox \a vbx using Tid \a stl.
- Also sets Align and Yoff.
- */
-
-static void addText2(VBox* vbx, Score* s, QString strTxt, Tid stl, Align v, double yoffs)
-      {
-      if (!strTxt.isEmpty()) {
-            Text* text = new Text(s, stl);
-            text->setXmlText(strTxt);
-            text->setAlign(v);
-            text->setOffset(QPointF(0.0, yoffs));
-            vbx->add(text);
-            }
-      }
-
-//---------------------------------------------------------
-//   doCredits
-//---------------------------------------------------------
-
-/**
- Create Text elements for the credits read from MusicXML credit-words elements.
- Apply simple heuristics using only default x and y to recognize the meaning of credit words
- If no credits are found, create credits from meta data.
- */
-
-static void doCredits(Score* score, const CreditWordsList& credits, const int pageWidth, const int pageHeight)
-      {
-      // page width, height and odd top margin in tenths
-      const int ph  = pageHeight;
-      const int pw1 = pageWidth / 3;
-      const int pw2 = pageWidth * 2 / 3;
-      const int ph2 = pageHeight / 2;
-      //qDebug("page format (xml, tenths) w=%d h=%d", pageWidth, pageHeight);
-      //qDebug("page format pw1=%d pw2=%d ph=%d ph2=%d", pw1, pw2, ph, ph2);
-
-      // dump the credits
       /*
-      for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
-            CreditWords* w = *ci;
-            qDebug("credit-words defx=%g defy=%g just=%s hal=%s val=%s words='%s'",
+      for (const auto w : credits) {
+            qDebug("credit-words pg=%d defx=%g defy=%g just=%s hal=%s val=%s words='%s'",
+                   w->page,
                    w->defaultX,
                    w->defaultY,
                    qPrintable(w->justify),
@@ -557,169 +721,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                    qPrintable(w->vAlign),
                    qPrintable(w->words));
             }
-      */
-
-      int nWordsHeader = 0;               // number of credit-words in the header
-      int nWordsFooter = 0;               // number of credit-words in the footer
-      for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
-            CreditWords* w = *ci;
-            double defy = w->defaultY;
-            // and count #words in header and footer
-            if (defy > ph2)
-                  nWordsHeader++;
-            else
-                  nWordsFooter++;
-            } // end for (ciCreditWords ...
-
-      // if there are any credit words in the header, use these
-      // else use the credit words in the footer (if any)
-      bool useHeader = nWordsHeader > 0;
-      bool useFooter = nWordsHeader == 0 && nWordsFooter > 0;
-      //qDebug("header %d footer %d useHeader %d useFooter %d",
-      //       nWordsHeader, nWordsFooter, useHeader, useFooter);
-
-      // determine credits height and create vbox to contain them
-      qreal vboxHeight = 10;            // default height in spatium
-      double miny = pageHeight;
-      double maxy = 0;
-      if (pageWidth > 1 && pageHeight > 1) {
-            for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
-                  CreditWords* w = *ci;
-                  double defy = w->defaultY;
-                  if ((useHeader && defy > ph2) || (useFooter && defy < ph2)) {
-                        if (defy > maxy) maxy = defy;
-                        if (defy < miny) miny = defy;
-                        }
-                  }
-            //qDebug("miny=%g maxy=%g", miny, maxy);
-            if (miny < (ph - 1) && maxy > 1) {  // if both miny and maxy set
-                  double diff = maxy - miny;    // calculate height in tenths
-                  if (diff > 1 && diff < ph2) { // and size is reasonable
-                        vboxHeight = diff;
-                        vboxHeight /= 10;       // height in spatium
-                        vboxHeight += 2.5;      // guesstimated correction for last line
-                        }
-                  }
-            }
-      //qDebug("vbox height %g sp", vboxHeight);
-      VBox* vbox = new VBox(score);
-      vbox->setBoxHeight(Spatium(vboxHeight));
-
-      QMap<int, CreditWords*> creditMap;  // store credit-words sorted on y pos
-      bool creditWordsUsed = false;
-
-      for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
-            CreditWords* w = *ci;
-            double defx = w->defaultX;
-            double defy = w->defaultY;
-            // handle all credit words in the box
-            if ((useHeader && defy > ph2) || (useFooter && defy < ph2)) {
-                  creditWordsUsed = true;
-                  // composer is in the right column
-                  if (pw2 < defx) {
-                        // found composer
-                        addText2(vbox, score, w->words,
-                                 Tid::COMPOSER, Align::RIGHT | Align::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / 10);
-                        }
-                  // poet is in the left column
-                  else if (defx < pw1) {
-                        // found poet/lyricist
-                        addText2(vbox, score, w->words,
-                                 Tid::POET, Align::LEFT | Align::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / 10);
-                        }
-                  // save others (in the middle column) to be handled later
-                  else {
-                        creditMap.insert(defy, w);
-                        }
-                  }
-            // keep remaining footer text for possible use as copyright
-            else if (useHeader && defy < ph2) {
-                  // found credit words in both header and footer
-                  // header was used to create a vbox at the top of the first page
-                  // footer is ignored as it conflicts with the default MuseScore footer style
-                  //qDebug("add to copyright: '%s'", qPrintable(w->words));
-                  }
-            } // end for (ciCreditWords ...
-
-      /*
-       QMap<int, CreditWords*>::const_iterator ci = creditMap.constBegin();
-       while (ci != creditMap.constEnd()) {
-       CreditWords* w = ci.value();
-       qDebug("creditMap %d credit-words defx=%g defy=%g just=%s hal=%s val=%s words=%s",
-       ci.key(),
-       w->defaultX,
-       w->defaultY,
-       qPrintable(w->justify),
-       qPrintable(w->hAlign),
-       qPrintable(w->vAlign),
-       qPrintable(w->words));
-       ++ci;
-       }
        */
-
-      // assign title, subtitle and copyright
-      QList<int> keys = creditMap.uniqueKeys(); // note: ignoring credit-words at the same y pos
-
-      // if any credit-words present, the highest is the title
-      // note that the keys are sorted in ascending order
-      // -> use the last key
-      if (keys.size() >= 1) {
-            CreditWords* w = creditMap.value(keys.at(keys.size() - 1));
-            //qDebug("title='%s'", qPrintable(w->words));
-            addText2(vbox, score, w->words,
-                     Tid::TITLE, Align::HCENTER | Align::TOP,
-                     (maxy - w->defaultY) * score->spatium() / 10);
-            }
-
-      // add remaining credit-words as subtitles
-      for (int i = 0; i < (keys.size() - 1); i++) {
-            CreditWords* w = creditMap.value(keys.at(i));
-            //qDebug("subtitle='%s'", qPrintable(w->words));
-            addText2(vbox, score, w->words,
-                     Tid::SUBTITLE, Align::HCENTER | Align::TOP,
-                     (maxy - w->defaultY) * score->spatium() / 10);
-            }
-
-      // use metadata if no workable credit-words found
-      if (!creditWordsUsed) {
-
-            QString strTitle;
-            QString strSubTitle;
-            QString strComposer;
-            QString strPoet;
-            QString strTranslator;
-
-            if (!(score->metaTag("movementTitle").isEmpty() && score->metaTag("workTitle").isEmpty())) {
-                  strTitle = score->metaTag("movementTitle");
-                  if (strTitle.isEmpty())
-                        strTitle = score->metaTag("workTitle");
-                  }
-            if (!(score->metaTag("movementNumber").isEmpty() && score->metaTag("workNumber").isEmpty())) {
-                  strSubTitle = score->metaTag("movementNumber");
-                  if (strSubTitle.isEmpty())
-                        strSubTitle = score->metaTag("workNumber");
-                  }
-            QString metaComposer = score->metaTag("composer");
-            QString metaPoet = score->metaTag("poet");
-            QString metaTranslator = score->metaTag("translator");
-            if (!metaComposer.isEmpty()) strComposer = metaComposer;
-            if (metaPoet.isEmpty()) metaPoet = score->metaTag("lyricist");
-            if (!metaPoet.isEmpty()) strPoet = metaPoet;
-            if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
-
-            addText(vbox, score, strTitle.toHtmlEscaped(),      Tid::TITLE);
-            addText(vbox, score, strSubTitle.toHtmlEscaped(),   Tid::SUBTITLE);
-            addText(vbox, score, strComposer.toHtmlEscaped(),   Tid::COMPOSER);
-            addText(vbox, score, strPoet.toHtmlEscaped(),       Tid::POET);
-            addText(vbox, score, strTranslator.toHtmlEscaped(), Tid::TRANSLATOR);
-            }
-
-      if (vbox) {
-            vbox->setTick(Fraction(0,1));
-            score->measures()->add(vbox);
-            }
       }
 
 //---------------------------------------------------------
@@ -768,8 +770,10 @@ Score::FileError MusicXMLParserPass1::parse(QIODevice* device)
       determineMeasureStart(_measureLength, _measureStart);
       // Fixup timesig at tick = 0 if necessary
       fixupSigmap(_logger, _score, _measureLength);
+      // Debug: dump the credits read
+      dumpCredits(_credits);
       // Create the measures
-      createMeasures(_score, _measureLength, _measureStart);
+      createMeasuresAndVboxes(_score, _measureLength, _measureStart, _systemStartMeasureNrs, _pageStartMeasureNrs, _credits, _pageSize);
 
       return res;
       }
@@ -839,21 +843,12 @@ void MusicXMLParserPass1::scorePartwise()
       _logger->logDebugTrace("MusicXMLParserPass1::scorePartwise", &_e);
 
       MusicXmlPartGroupList partGroupList;
-      CreditWordsList credits;
-      int pageWidth  = 0;                        ///< Page width read from defaults
-      int pageHeight = 0;                        ///< Page height read from defaults
 
       while (_e.readNextStartElement()) {
             if (_e.name() == "part")
                   part();
-            else if (_e.name() == "part-list") {
-                  // if any credits are present, they have been read now
-                  // add the credits to the score before adding any measure
-                  // note that a part-list element must always be present
-                  doCredits(_score, credits, pageWidth, pageHeight);
-                  // and read the part list
+            else if (_e.name() == "part-list")
                   partList(partGroupList);
-                  }
             else if (_e.name() == "work") {
                   while (_e.readNextStartElement()) {
                         if (_e.name() == "work-number")
@@ -867,13 +862,13 @@ void MusicXMLParserPass1::scorePartwise()
             else if (_e.name() == "identification")
                   identification();
             else if (_e.name() == "defaults")
-                  defaults(pageWidth, pageHeight);
+                  defaults();
             else if (_e.name() == "movement-number")
                   _score->setMetaTag("movementNumber", _e.readElementText());
             else if (_e.name() == "movement-title")
                   _score->setMetaTag("movementTitle", _e.readElementText());
             else if (_e.name() == "credit")
-                  credit(credits);
+                  credit(_credits);
             else
                   skipLogCurrElem();
             }
@@ -1140,43 +1135,39 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
       Q_ASSERT(_e.isStartElement() && _e.name() == "credit");
       _logger->logDebugTrace("MusicXMLParserPass1::credit", &_e);
 
-      QString page = _e.attributes().value("page").toString();
-      // handle only page 1 credits (to extract title etc.)
-      // assume no page attribute means page 1
-      if (page == "" || page == "1") {
-            // multiple credit-words elements may be present,
-            // which are appended
-            // use the position info from the first one
-            // font information is ignored, credits will be styled
-            bool creditWordsRead = false;
-            double defaultx = 0;
-            double defaulty = 0;
-            QString justify;
-            QString halign;
-            QString valign;
-            QString crwords;
-            while (_e.readNextStartElement()) {
-                  if (_e.name() == "credit-words") {
-                        // IMPORT_LAYOUT
-                        if (!creditWordsRead) {
-                              defaultx = _e.attributes().value("default-x").toString().toDouble();
-                              defaulty = _e.attributes().value("default-y").toString().toDouble();
-                              justify  = _e.attributes().value("justify").toString();
-                              halign   = _e.attributes().value("halign").toString();
-                              valign   = _e.attributes().value("valign").toString();
-                              creditWordsRead = true;
-                              }
-                        crwords += nextPartOfFormattedString(_e);
+      const auto page = _e.attributes().value("page").toString().toInt();       // ignoring errors implies incorrect conversion defaults to the first page
+      // multiple credit-words elements may be present,
+      // which are appended
+      // use the position info from the first one
+      // font information is ignored, credits will be styled
+      bool creditWordsRead = false;
+      double defaultx = 0;
+      double defaulty = 0;
+      QString justify;
+      QString halign;
+      QString valign;
+      QString crwords;
+      while (_e.readNextStartElement()) {
+            if (_e.name() == "credit-words") {
+                  // IMPORT_LAYOUT
+                  if (!creditWordsRead) {
+                        defaultx = _e.attributes().value("default-x").toString().toDouble();
+                        defaulty = _e.attributes().value("default-y").toString().toDouble();
+                        justify  = _e.attributes().value("justify").toString();
+                        halign   = _e.attributes().value("halign").toString();
+                        valign   = _e.attributes().value("valign").toString();
+                        creditWordsRead = true;
                         }
-                  else if (_e.name() == "credit-type")
-                        _e.skipCurrentElement();  // skip but don't log
-                  else
-                        skipLogCurrElem();
+                  crwords += nextPartOfFormattedString(_e);
                   }
-            if (crwords != "") {
-                  CreditWords* cw = new CreditWords(defaultx, defaulty, justify, halign, valign, crwords);
-                  credits.append(cw);
-                  }
+            else if (_e.name() == "credit-type")
+                  _e.skipCurrentElement();        // skip but don't log
+            else
+                  skipLogCurrElem();
+            }
+      if (crwords != "") {
+            CreditWords* cw = new CreditWords(page, defaultx, defaulty, justify, halign, valign, crwords);
+            credits.append(cw);
             }
       else
             _e.skipCurrentElement();  // skip but don't log
@@ -1275,7 +1266,7 @@ static void updateStyles(Score* score,
  read the general score layout settings.
  */
 
-void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
+void MusicXMLParserPass1::defaults()
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "defaults");
       //_logger->logDebugTrace("MusicXMLParserPass1::defaults", &_e);
@@ -1305,7 +1296,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                   }
             else if (_e.name() == "page-layout") {
                   PageFormat pf;
-                  pageLayout(pf, millimeter / (tenths * INCH), pageWidth, pageHeight);
+                  pageLayout(pf, millimeter / (tenths * INCH));
 //TODO:ws                  if (preferences.musicxmlImportLayout)
 //                        _score->setPageFormat(pf);
                   }
@@ -1376,8 +1367,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
  read the page layout.
  */
 
-void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion,
-                                     int& pageWidth, int& pageHeight)
+void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "page-layout");
       _logger->logDebugTrace("MusicXMLParserPass1::pageLayout", &_e);
@@ -1422,13 +1412,13 @@ void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion,
                   double val = _e.readElementText().toDouble();
                   size.rheight() = val * conversion;
                   // set pageHeight and pageWidth for use by doCredits()
-                  pageHeight = static_cast<int>(val + 0.5);
+                  _pageSize.setHeight(static_cast<int>(val + 0.5));
                   }
             else if (_e.name() == "page-width") {
                   double val = _e.readElementText().toDouble();
                   size.rwidth() = val * conversion;
                   // set pageHeight and pageWidth for use by doCredits()
-                  pageWidth = static_cast<int>(val + 0.5);
+                  _pageSize.setWidth(static_cast<int>(val + 0.5));
                   }
             else
                   skipLogCurrElem();
@@ -1889,10 +1879,12 @@ void MusicXMLParserPass1::part()
       Fraction time;  // current time within part
       Fraction mdur;  // measure duration
 
+      int measureNr = 0;
       while (_e.readNextStartElement()) {
             if (_e.name() == "measure") {
-                  measure(id, time, mdur, vod);
+                  measure(id, time, mdur, vod, measureNr);
                   time += mdur;
+                  ++measureNr;
                   }
             else
                   skipLogCurrElem();
@@ -1971,7 +1963,8 @@ static Fraction measureDurationAsFraction(const Fraction length, const int tsigt
 void MusicXMLParserPass1::measure(const QString& partId,
                                   const Fraction cTime,
                                   Fraction& mdur,
-                                  VoiceOverlapDetector& vod)
+                                  VoiceOverlapDetector& vod,
+                                  const int measureNr)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "measure");
       _logger->logDebugTrace("MusicXMLParserPass1::measure", &_e);
@@ -2031,7 +2024,7 @@ void MusicXMLParserPass1::measure(const QString& partId,
             else if (_e.name() == "harmony")
                   _e.skipCurrentElement();  // skip but don't log
             else if (_e.name() == "print")
-                  _e.skipCurrentElement();  // skip but don't log
+                  print(measureNr);
             else if (_e.name() == "sound")
                   _e.skipCurrentElement();  // skip but don't log
             else
@@ -2090,6 +2083,25 @@ void MusicXMLParserPass1::measure(const QString& partId,
              qPrintable(partId), qPrintable(number), qPrintable(mdur.print()), mdur.ticks());
        */
       _parts[partId].addMeasureNumberAndDuration(number, mdur);
+      }
+
+//---------------------------------------------------------
+//   print
+//---------------------------------------------------------
+
+void MusicXMLParserPass1::print(const int measureNr)
+      {
+      Q_ASSERT(_e.isStartElement() && _e.name() == "print");
+      _logger->logDebugTrace("MusicXMLParserPass1::print", &_e);
+
+      const QString newPage = _e.attributes().value("new-page").toString();
+      const QString newSystem = _e.attributes().value("new-system").toString();
+      if (newPage == "yes")
+            _pageStartMeasureNrs.insert(measureNr);
+      if (newSystem == "yes")
+            _systemStartMeasureNrs.insert(measureNr);
+
+      _e.skipCurrentElement();        // skip but don't log
       }
 
 //---------------------------------------------------------

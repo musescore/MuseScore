@@ -1,3 +1,6 @@
+2.2.2020 lv
+      Convert files Page*.xml and Title*.xml into regular testfiles.
+      Note: depends on fixing MusicXML export for the fetaures tested.
 6.2.2015 ws
       Test Wedge2 needs checking.
       A Hairpin() changes its tick length in checkSpanners().
