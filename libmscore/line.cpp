@@ -547,7 +547,7 @@ QVector<QLineF> LineSegment::dragAnchorLines() const
 
 QRectF LineSegment::drag(EditData& ed)
       {
-      setOffset(offset() + (ed.pos - ed.lastPos));
+      setOffset(offset() + ed.evtDelta);
       setOffsetChanged(true);
 
       if (isStyled(Pid::OFFSET))

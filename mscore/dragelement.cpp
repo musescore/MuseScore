@@ -31,7 +31,7 @@ void ScoreView::startDrag()
       {
       editData.grips = 0;
       editData.clearData();
-      editData.startMove  -= editData.element->offset();
+      editData.normalizedStartMove = editData.startMove - editData.element->offset();
 
       _score->startCmd();
 
@@ -47,21 +47,29 @@ void ScoreView::startDrag()
 
 void ScoreView::doDragElement(QMouseEvent* ev)
       {
-      QPointF delta = toLogical(ev->pos()) - editData.startMove;
+      const QPointF logicalPos = toLogical(ev->pos());
+      QPointF delta = logicalPos - editData.normalizedStartMove;
+      QPointF evtDelta = logicalPos - editData.pos;
 
       TourHandler::startTour("autoplace-tour");
 
       QPointF pt(delta);
-      if (qApp->keyboardModifiers() == Qt::ShiftModifier)
-            pt.setX(editData.element->offset().x());
-      else if (qApp->keyboardModifiers() == Qt::ControlModifier)
-            pt.setY(editData.element->offset().y());
+      if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
+            pt.setX(editData.delta.x());
+            evtDelta.setX(0.0);
+            }
+      else if (qApp->keyboardModifiers() == Qt::ControlModifier) {
+            pt.setY(editData.delta.y());
+            evtDelta.setY(0.0);
+            }
 
       editData.lastPos = editData.pos;
       editData.hRaster = mscore->hRaster();
       editData.vRaster = mscore->vRaster();
       editData.delta   = pt;
-      editData.pos     = toLogical(ev->pos());
+      editData.moveDelta = pt + (editData.normalizedStartMove - editData.startMove); // TODO: restructure
+      editData.evtDelta = evtDelta;
+      editData.pos     = logicalPos;
 
       const Selection& sel = _score->selection();
       const bool filterType = sel.isRange();

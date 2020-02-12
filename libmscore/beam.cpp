@@ -2565,7 +2565,7 @@ void Beam::initBeamEditData(EditData& ed)
       bed->editFragment = 0;
       ed.addData(bed);
 
-      QPointF pt(ed.startMove - pagePos());
+      QPointF pt(ed.normalizedStartMove - pagePos());
       qreal ydiff = 100000000.0;
       int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       int i = 0;
