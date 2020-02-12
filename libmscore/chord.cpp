@@ -1735,7 +1735,8 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       // PITCHED_ and PERCUSSION_STAFF can go note by note
 
       if (staffGroup == StaffGroup::STANDARD) {
-            for (Chord* ch : graceNotesBefore()) {
+            const QVector<Chord*> gnb(graceNotesBefore());
+            for (Chord* ch : gnb) {
                   std::vector<Note*> notes(ch->notes());  // we need a copy!
                   for (Note* note : notes)
                         note->updateAccidental(as);
@@ -1754,7 +1755,8 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                         }
                   note->updateAccidental(as);
                   }
-            for (Chord* ch : graceNotesAfter()) {
+            const QVector<Chord*> gna(graceNotesAfter());
+            for (Chord* ch : gna) {
                   std::vector<Note*> notes(ch->notes());  // we need a copy!
                   for (Note* note : notes)
                         note->updateAccidental(as);
@@ -1815,20 +1817,20 @@ void Chord::layout()
 void Chord::layoutPitched()
       {
       int gi = 0;
-      for (Chord* c : _graceNotes) {
+      for (Chord* c : qAsConst(_graceNotes)) {
             // HACK: graceIndex is not well-maintained on add & remove
             // so rebuild now
             c->setGraceIndex(gi++);
             if (c->isGraceBefore())
                   c->layoutPitched();
             }
-      QVector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
-      int gnb = graceNotesBefore.size();
+      const QVector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
+      const int gnb = graceNotesBefore.size();
 
       // lay out grace notes after separately so they are processed left to right
       // (they are normally stored right to left)
 
-      QVector<Chord*> gna = graceNotesAfter();
+      const QVector<Chord*> gna = graceNotesAfter();
       for (Chord* c : gna)
             c->layoutPitched();
 
