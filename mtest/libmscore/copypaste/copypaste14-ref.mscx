@@ -179,6 +179,9 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
