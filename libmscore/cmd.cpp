@@ -1248,8 +1248,11 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
             return;
             }
       Fraction srcF(cr->ticks());
-      if (srcF == dstF)
+      if (srcF == dstF) {
+            if (cr->isFullMeasureRest())
+                  undoChangeChordRestLen(cr, dstF);
             return;
+            }
 
       //keep selected element if any
       Element* selElement = selection().isSingle() ? getSelectedElement() : 0;
