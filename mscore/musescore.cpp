@@ -3671,7 +3671,14 @@ static bool convert(const QString& inFile, const QJsonArray& outFiles, const QSt
       MasterScore* score = mscore->readScore(inFile);
       if (!score)
             return false;
-      mscore->setCurrentScore(score);
+      if (processJob)
+            mscore->setCurrentScore(score);
+      else {
+            mscore->appendScore(score);
+            mscore->setCurrentScore(score);
+            mscore->setCurrentView(0, 0);
+            mscore->setCurrentView(1, 0);
+            }
       bool success = doConvert(score, outFiles, plugin);
       fprintf(stderr, success ? "... success!\n" : "... failed!\n");
       mscore->setCurrentScore(nullptr);
@@ -3681,7 +3688,10 @@ static bool convert(const QString& inFile, const QJsonArray& outFiles, const QSt
 
 static bool convert(const QString& inFile, const QString& outFile)
       {
-      return convert(inFile, QJsonArray{ outFile });
+      if (pluginMode)
+            return convert(inFile, QJsonArray{ outFile }, pluginName);
+      else
+            return convert(inFile, QJsonArray{ outFile });
       }
 
 //---------------------------------------------------------
@@ -3754,8 +3764,8 @@ static bool processNonGui(const QStringList& argv)
             return mscore->exportPartsPdfsToJSON(argv[0]);
       else if (exportTransposedScore)
             return mscore->exportTransposedScoreToJSON(argv[0], transposeExportOptions);
-
-      if (pluginMode) {
+      
+      if (pluginMode && !converterMode) {
             loadScores(argv);
             QString pn(pluginName);
             bool res = false;
@@ -3778,9 +3788,9 @@ static bool processNonGui(const QStringList& argv)
                         }
                   res = true;
                   }
-            if (!converterMode)
-                  return res;
+            return res;
             }
+
       if (converterMode) {
             if (processJob)
                   return doProcessJob(jsonFileName);
