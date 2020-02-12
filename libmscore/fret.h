@@ -125,7 +125,7 @@ class FretDiagram final : public Element {
       int _fretOffset    { 0  };
       int _maxFrets      { 24 };
       bool _showNut      { true };
-      
+
       // Barres are stored in the format: K: fret, V: barre struct
       BarreMap _barres;
 
@@ -216,7 +216,7 @@ class FretDiagram final : public Element {
 
       Harmony* harmony() const { return _harmony; }
 
-      void init(Ms::StringData *, Chord*);
+      void init(Ms::StringData*, Chord*);
 
       void add(Element*) override;
       void remove(Element*) override;
@@ -233,6 +233,9 @@ class FretDiagram final : public Element {
 
       qreal userMag() const         { return _userMag;   }
       void setUserMag(qreal m)      { _userMag = m;      }
+
+      virtual QString accessibleInfo() const override;
+      virtual QString screenReaderInfo() const override;
 
       friend class FretUndoData;
       };

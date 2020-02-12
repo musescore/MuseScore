@@ -204,6 +204,7 @@ class Harmony final : public TextBase {
 
       QString userName() const override;
       QString accessibleInfo() const override;
+      QString generateScreenReaderInfo() const;
       QString screenReaderInfo() const override;
 
       bool acceptDrop(EditData&) const override;
