@@ -717,7 +717,7 @@ class Capella {
 // capx support
    private:
       void readCapxVoice(XmlReader& e, CapStaff*, int);
-      void readCapxStaff(XmlReader& e, CapSystem*, int);
+      void readCapxStaff(XmlReader& e, CapSystem*);
       void readCapxSystem(XmlReader& e);
       void capxSystems(XmlReader& e);
       void readCapxStaveLayout(XmlReader& e, CapStaffLayout*, int);
