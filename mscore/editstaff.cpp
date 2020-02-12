@@ -368,10 +368,11 @@ void EditStaff::apply()
       if (instrumentFieldChanged && _tickStart == Fraction(-1, 1))
             clefType = instrument.clefType(orgStaff->rstaff());
 
-      if (instrumentFieldChanged || part->partName() != newPartName || preferSharpFlatChanged) {
+      Interval v1 = instrument.transpose();
+      Interval v2 = part->instrument(_tickStart)->transpose();
+
+      if (instrumentFieldChanged || part->partName() != newPartName) {
             // instrument has changed
-            Interval v1 = instrument.transpose();
-            Interval v2 = part->instrument(_tickStart)->transpose();
 
             if (_tickStart == Fraction(-1, 1)) {
                   // change instrument and part name globally
@@ -392,9 +393,13 @@ void EditStaff::apply()
                   }
             emit instrumentChanged();
 
-            if ((v1 != v2) || preferSharpFlatChanged)
+            if (v1 != v2)
                   score->transpositionChanged(part, v2, _tickStart, _tickEnd);
             }
+
+      if (preferSharpFlatChanged)
+            score->transpositionChanged(part, v2, _tickStart, _tickEnd);
+
       orgStaff->undoChangeProperty(Pid::MAG, mag->value() / 100.0);
       orgStaff->undoChangeProperty(Pid::COLOR, color->color());
       orgStaff->undoChangeProperty(Pid::SMALL, small->isChecked());
