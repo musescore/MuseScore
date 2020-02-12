@@ -710,7 +710,7 @@ static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>
 
 static void dumpCredits(const CreditWordsList& credits)
       {
-      /*
+#if 0
       for (const auto w : credits) {
             qDebug("credit-words pg=%d defx=%g defy=%g just=%s hal=%s val=%s words='%s'",
                    w->page,
@@ -721,7 +721,9 @@ static void dumpCredits(const CreditWordsList& credits)
                    qPrintable(w->vAlign),
                    qPrintable(w->words));
             }
-       */
+#else
+      Q_UNUSED(credits);
+#endif
       }
 
 //---------------------------------------------------------
