@@ -807,9 +807,10 @@ SymId Note::noteHead() const
       if (_headType != NoteHead::Type::HEAD_AUTO)
             ht = _headType;
 
+      const Staff* st = chord() ? chord()->staff() : nullptr;
+
       if (_headGroup == NoteHead::Group::HEAD_CUSTOM) {
-            if (chord() && chord()->staff()) {
-                  const Staff* st = chord()->staff();
+            if (st) {
                   if (st->staffTypeForElement(chord())->isDrumStaff())
                         return st->part()->instrument(chord()->tick())->drumset()->noteHeads(_pitch, ht);
                   }
@@ -820,10 +821,9 @@ SymId Note::noteHead() const
 
       Key key = Key::C;
       NoteHeadScheme scheme = NoteHeadScheme::HEAD_NORMAL;
-      if (chord() && chord()->staff()){
+      if (st) {
             Fraction tick = chord()->tick();
             if (tick >= Fraction(0,1)) {
-                  const Staff* st = chord()->staff();
                   key    = st->key(tick);
                   scheme = st->staffTypeForElement(chord())->noteHeadScheme();
                   }

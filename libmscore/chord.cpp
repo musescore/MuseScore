@@ -71,10 +71,10 @@ Note* Chord::upNote() const
       Q_ASSERT(!_notes.empty());
 
       Note* result = _notes.back();
-      if (!staff())
+      const Staff* stf = staff();
+      if (!stf)
             return result;
 
-      const Staff* stf = staff();
       const StaffType* st  = stf->staffTypeForElement(this);
       if (st->isDrumStaff()) {
             for (Note* n : _notes) {
@@ -108,10 +108,10 @@ Note* Chord::downNote() const
       Q_ASSERT(!_notes.empty());
 
       Note* result = _notes.front();
-      if (!staff())
+      const Staff* stf = staff();
+      if (!stf)
             return result;
 
-      const Staff* stf = staff();
       const StaffType* st  = stf->staffTypeForElement(this);
       if (st->isDrumStaff()) {
             for (Note* n : _notes) {
@@ -193,7 +193,7 @@ int Chord::downString() const
 
       const StaffType* tab = st->staffTypeForElement(this);
       if (!tab->isTabStaff())                // if staff not a TAB, return bottom line
-            return staff()->lines(tick())-1;
+            return st->lines(tick())-1;
 
       int line = 0;         // start at top line
       int noteLine;
@@ -2899,7 +2899,8 @@ void Chord::removeMarkings(bool keepTremolo)
 
 qreal Chord::mag() const
       {
-      qreal m = staff() ? staff()->mag(this) : 1.0;
+      const Staff* st = staff();
+      qreal m = st ? st->mag(this) : 1.0;
       if (small())
             m *= score()->styleD(Sid::smallNoteMag);
       if (_noteType != NoteType::NORMAL)
