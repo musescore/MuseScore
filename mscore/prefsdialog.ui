@@ -4314,7 +4314,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>normalize</tabstop>
   <tabstop>exportAudioSampleRate</tabstop>
   <tabstop>exportMp3BitRate</tabstop>
-  <tabstop>exportLayout</tabstop>
+  <tabstop>exportAllLayouts</tabstop>
   <tabstop>exportAllBreaks</tabstop>
   <tabstop>exportManualBreaks</tabstop>
   <tabstop>exportNoBreaks</tabstop>
