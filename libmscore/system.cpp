@@ -437,7 +437,7 @@ void System::setBracketsXPosition(const qreal xPosition)
             for (const Bracket* b2 : _brackets) {
                   bool b1FirstStaffInB2 = (b1->firstStaff() >= b2->firstStaff() && b1->firstStaff() <= b2->lastStaff());
                   bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
-                  if (b1->column() > b2->column() && 
+                  if (b1->column() > b2->column() &&
                         (b1FirstStaffInB2 || b1LastStaffInB2))
                         xOffset += b2->width() + bracketDistance;
                   }
@@ -514,17 +514,26 @@ void System::layout2()
             Staff* staff  = score()->staff(si1);
             auto ni       = i + 1;
 
-            qreal h = staff->height();
+            qreal dist = staff->height();
+            qreal yOffset;
+            qreal h;
+            if (staff->lines(Fraction(0, 1)) == 1) {
+                  yOffset = _spatium * BARLINE_SPAN_1LINESTAFF_TO * 0.5;
+                  h = _spatium * (BARLINE_SPAN_1LINESTAFF_TO - BARLINE_SPAN_1LINESTAFF_FROM) * 0.5;
+                  }
+            else {
+                  yOffset = 0.0;
+                  h = staff->height();
+                  }
             if (ni == visibleStaves.end()) {
 //                  ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
-                  ss->setYOff(0.0);
-                  ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
+                  ss->setYOff(yOffset);
+                  ss->bbox().setRect(_leftMargin, y - yOffset, width() - _leftMargin, h);
                   break;
                   }
 
             int si2        = ni->first;
             Staff* staff2  = score()->staff(si2);
-            qreal dist     = h;
 
 #if 1
             if (staff->part() == staff2->part()) {
@@ -592,7 +601,7 @@ void System::layout2()
                         }
                   sp = m->vspacerUp(si2);
                   if (sp)
-                        dist = qMax(dist, sp->gap() + h);
+                        dist = qMax(dist, sp->gap() + staff->height());
                   }
             if (!fixedSpace) {
                   qreal d = score()->lineMode() ? 0.0 : ss->skyline().minDistance(System::staff(si2)->skyline());
@@ -601,8 +610,8 @@ void System::layout2()
 #endif
 
 //            ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
-            ss->setYOff(0.0);
-            ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
+            ss->setYOff(yOffset);
+            ss->bbox().setRect(_leftMargin, y - yOffset, width() - _leftMargin, h);
             y += dist;
             }
 
