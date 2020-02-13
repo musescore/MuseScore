@@ -11,10 +11,12 @@ jobs:
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 3
     - name: get commit message
       run: |
-         curl -L -o commits.json ${{ github.event.pull_request.commits_url }}
-         export commitmsg="$(jq -r '.[-1].commit.message' commits.json)"
+         export commitmsg="$(git log --format=%B -n 1 ${{ github.event.after }} | head -1)"
+         echo $commitmsg
          echo "::set-env name=commitmsg::${commitmsg}"
     - name: Build the AppImage
       if: contains( env.commitmsg, 'collect_artifacts')
@@ -32,10 +34,12 @@ jobs:
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 3
     - name: get commit message
       run: |
-         curl -L -o commits.json ${{ github.event.pull_request.commits_url }}
-         export commitmsg="$(jq -r '.[-1].commit.message' commits.json)"
+         export commitmsg="$(git log --format=%B -n 1 ${{ github.event.after }} | head -1)"
+         echo $commitmsg
          echo "::set-env name=commitmsg::${commitmsg}"
     - name: Setup environment and build
       if: contains( env.commitmsg, 'collect_artifacts')
