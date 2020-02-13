@@ -100,6 +100,8 @@ class SpannerSegment : public Element {
 
       QByteArray mimeData(const QPointF& dragOffset) const override;
 
+      virtual void spatiumChanged(qreal ov, qreal nv) override;
+
       virtual QVariant getProperty(Pid id) const override;
       virtual bool setProperty(Pid id, const QVariant& v) override;
       virtual QVariant propertyDefault(Pid id) const override;
