@@ -7,6 +7,7 @@
 //  Copyright (C) 2012 Werner Schweer
 //  Copyright (C) 2013 - 2020 Joachim Schmitz
 //  Copyright (C) 2014 Jörn Eichler
+//  Copyright (C) 2020 Johan Temmerman
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -18,7 +19,7 @@ import QtQuick 2.2
 import MuseScore 3.0
 
 MuseScore {
-   version: "3.4.2"
+   version: "3.4.2.1"
    description: qsTr("This plugin names notes as per your language setting")
    menuPath: "Plugins.Notes." + qsTr("Note Names")
 
@@ -79,6 +80,9 @@ MuseScore {
          //text.text += (Math.floor(notes[i].pitch / 12) - 1)
          // or
          //text.text += (Math.floor(notes[i].ppitch / 12) - 1)
+         // or even this, similar to the Helmholtz system but one octave up
+         //var octaveTextPostfix = [",,,,,", ",,,,", ",,,", ",,", ",", "", "'", "''", "'''", "''''", "'''''"];
+         //text.text += octaveTextPostfix[Math.floor(notes[i].pitch / 12)];
 
 // change below false to true for courtesy- and microtonal accidentals
 // you might need to come up with suitable translations
