@@ -409,7 +409,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             case ElementType::HARMONY:
             case ElementType::BAGPIPE_EMBELLISHMENT:
             case ElementType::AMBITUS:
-            case ElementType::TREMOLOBAR:
+            case ElementType::TREMOLO_BAR:
             case ElementType::FIGURED_BASS:
             case ElementType::LYRICS:
             case ElementType::FRET_DIAGRAM:
@@ -548,7 +548,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::SLUR:
                   case ElementType::BAGPIPE_EMBELLISHMENT:
                   case ElementType::AMBITUS:
-                  case ElementType::TREMOLOBAR:
+                  case ElementType::TREMOLO_BAR:
                   case ElementType::FIGURED_BASS:
                   case ElementType::LYRICS:
                   case ElementType::STAFFTYPE_CHANGE: {

@@ -1585,7 +1585,7 @@ bool Note::acceptDrop(EditData& data) const
          || (type == ElementType::STICKING)
          || (type == ElementType::TEMPO_TEXT)
          || (type == ElementType::BEND)
-         || (type == ElementType::TREMOLOBAR)
+         || (type == ElementType::TREMOLO_BAR)
          || (type == ElementType::FRET_DIAGRAM)
          || (type == ElementType::FIGURED_BASS)
          || (type == ElementType::LYRICS));

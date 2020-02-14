@@ -497,7 +497,7 @@ Element* ChordRest::drop(EditData& data)
             case ElementType::TEMPO_TEXT:
             case ElementType::DYNAMIC:
             case ElementType::FRET_DIAGRAM:
-            case ElementType::TREMOLOBAR:
+            case ElementType::TREMOLO_BAR:
             case ElementType::SYMBOL:
                   e->setTrack(track());
                   e->setParent(segment());

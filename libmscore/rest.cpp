@@ -198,7 +198,7 @@ bool Rest::acceptDrop(EditData& data) const
          || (type == ElementType::TEMPO_TEXT)
          || (type == ElementType::REHEARSAL_MARK)
          || (type == ElementType::FRET_DIAGRAM)
-         || (type == ElementType::TREMOLOBAR)
+         || (type == ElementType::TREMOLO_BAR)
          || (type == ElementType::IMAGE)
          || (type == ElementType::SYMBOL)
          || (type == ElementType::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)

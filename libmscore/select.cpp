@@ -887,7 +887,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case ElementType::REHEARSAL_MARK:
                   case ElementType::INSTRUMENT_CHANGE:
                   case ElementType::BEND:
-                  case ElementType::TREMOLOBAR:
+                  case ElementType::TREMOLO_BAR:
                   case ElementType::VOLTA:
                   case ElementType::OTTAVA_SEGMENT:
                   case ElementType::TRILL_SEGMENT:

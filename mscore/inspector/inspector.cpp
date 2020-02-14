@@ -326,7 +326,7 @@ void Inspector::update(Score* s)
                         case ElementType::TREMOLO:
                               ie = new InspectorTremolo(this);
                               break;
-                        case ElementType::TREMOLOBAR:
+                        case ElementType::TREMOLO_BAR:
                               ie = new InspectorTremoloBar(this);
                               break;
                         case ElementType::ARPEGGIO:

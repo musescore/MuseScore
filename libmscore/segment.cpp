@@ -499,7 +499,7 @@ void Segment::add(Element* el)
             case ElementType::MARKER:
             case ElementType::IMAGE:
             case ElementType::TEXT:
-            case ElementType::TREMOLOBAR:
+            case ElementType::TREMOLO_BAR:
             case ElementType::TAB_DURATION_SYMBOL:
             case ElementType::FIGURED_BASS:
             case ElementType::FERMATA:
@@ -657,7 +657,7 @@ void Segment::remove(Element* el)
             case ElementType::TAB_DURATION_SYMBOL:
             case ElementType::TEMPO_TEXT:
             case ElementType::TEXT:
-            case ElementType::TREMOLOBAR:
+            case ElementType::TREMOLO_BAR:
             case ElementType::FERMATA:
             case ElementType::STICKING:
                   removeAnnotation(el);
@@ -1504,7 +1504,7 @@ Element* Segment::nextElement(int activeStaff)
             case ElementType::MARKER:
             case ElementType::IMAGE:
             case ElementType::TEXT:
-            case ElementType::TREMOLOBAR:
+            case ElementType::TREMOLO_BAR:
             case ElementType::TAB_DURATION_SYMBOL:
             case ElementType::FIGURED_BASS:
             case ElementType::STAFF_STATE:
@@ -1629,7 +1629,7 @@ Element* Segment::prevElement(int activeStaff)
             case ElementType::MARKER:
             case ElementType::IMAGE:
             case ElementType::TEXT:
-            case ElementType::TREMOLOBAR:
+            case ElementType::TREMOLO_BAR:
             case ElementType::TAB_DURATION_SYMBOL:
             case ElementType::FIGURED_BASS:
             case ElementType::STAFF_STATE:

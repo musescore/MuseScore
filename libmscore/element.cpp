@@ -1047,13 +1047,13 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::HARMONY:           return new Harmony(score);
             case ElementType::FRET_DIAGRAM:      return new FretDiagram(score);
             case ElementType::BEND:              return new Bend(score);
-            case ElementType::TREMOLOBAR:        return new TremoloBar(score);
+            case ElementType::TREMOLO_BAR:       return new TremoloBar(score);
             case ElementType::LYRICS:            return new Lyrics(score);
             case ElementType::FIGURED_BASS:      return new FiguredBass(score);
             case ElementType::STEM:              return new Stem(score);
             case ElementType::SLUR:              return new Slur(score);
             case ElementType::TIE:               return new Tie(score);
-            case ElementType::FINGERING:          return new Fingering(score);
+            case ElementType::FINGERING:         return new Fingering(score);
             case ElementType::HBOX:              return new HBox(score);
             case ElementType::VBOX:              return new VBox(score);
             case ElementType::TBOX:              return new TBox(score);

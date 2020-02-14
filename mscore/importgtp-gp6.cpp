@@ -1978,7 +1978,7 @@ bool checkForHold(Segment* segment, QList<PitchValue> points)
       if (!prevSeg)
             return false;
       foreach (Element* e, prevSeg->annotations()) {
-            if (e->type() == ElementType::TREMOLOBAR) {
+            if (e->type() == ElementType::TREMOLO_BAR) {
                   QList<PitchValue> prevPoints = ((TremoloBar*)e)->points();
                   if (prevPoints.length() != points.length())
                         break;
@@ -2046,7 +2046,7 @@ void GuitarPro6::addTremoloBar(Segment* segment, int track, int whammyOrigin, in
             if (!prevSeg)
                   return;
             foreach (Element* e, prevSeg->annotations()) {
-                  if (e->type() == ElementType::TREMOLOBAR) {
+                  if (e->type() == ElementType::TREMOLO_BAR) {
                         QList<PitchValue> prevPoints = ((TremoloBar*)e)->points();
                         QList<PitchValue> points;
                         points.append(PitchValue(0, prevPoints[prevPoints.length() - 1].pitch, false));

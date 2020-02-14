@@ -80,7 +80,7 @@ void TestElement::testIds()
             ElementType::HARMONY,
             ElementType::FRET_DIAGRAM,
             ElementType::BEND,
-            ElementType::TREMOLOBAR,
+            ElementType::TREMOLO_BAR,
             ElementType::LYRICS,
             ElementType::FIGURED_BASS,
             ElementType::STEM,
