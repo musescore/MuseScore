@@ -1222,41 +1222,57 @@ static bool mustSetSize(const int i)
  */
 
 static void updateStyles(Score* score,
-                         const QString& /*wordFamily*/, const QString& /*wordSize*/,
+                         const QString& wordFamily, const QString& wordSize,
                          const QString& lyricFamily, const QString& lyricSize)
       {
-//TODO:ws       const float fWordSize = wordSize.toFloat();   // note conversion error results in value 0.0
-      const auto dblLyricSize = lyricSize.toDouble(); // but avoid comparing floating point number with exact value later
+      const auto dblWordSize = wordSize.toDouble();   // note conversion error results in value 0.0
+      const auto dblLyricSize = lyricSize.toDouble(); // but avoid comparing (double) floating point number with exact value later
+      const auto epsilon = 0.001;                     // use epsilon instead
 
       // loop over all text styles (except the empty, always hidden, first one)
       // set all text styles to the MusicXML defaults
-#if 0 // TODO:ws
-      // TODO: check if fWordSize must be a double too (issue #277029)
-      for (int i = int(Tid::DEFAULT) + 1; i < int(Tid::TEXT_STYLES); ++i) {
-            TextStyle ts = score->style().textStyle(TextStyleType(i));
-            if (i == int(Tid::LYRIC1) || i == int(Tid::LYRIC2)) {
-                  if (lyricFamily != "")
-                        ts.setFamily(lyricFamily);
-                  if (fLyricSize > 0.001)
-                        ts.setSize(fLyricSize);
+      for (const auto tid : allTextStyles()) {
+
+            // exclude lyrics odd and even lines (handled separately)
+            // and Roman numeral analysis (special case, leave untouched)
+            if (tid == Tid::LYRICS_ODD || tid == Tid::LYRICS_EVEN || tid == Tid::HARMONY_ROMAN)
+                  continue;
+            const TextStyle* ts = textStyle(tid);
+            for (const StyledProperty& a :* ts) {
+                  if (a.pid == Pid::FONT_FACE && wordFamily != "")
+                        score->style().set(a.sid, wordFamily);
+                  else if (a.pid == Pid::FONT_SIZE && dblWordSize > epsilon)
+                        score->style().set(a.sid, dblWordSize);
                   }
-            else {
-                  if (wordFamily != "")
-                        ts.setFamily(wordFamily);
-                  if (fWordSize > 0.001 && mustSetSize(i))
-                        ts.setSize(fWordSize);
-                  }
-            score->style().setTextStyle(ts);
             }
-#endif
+
+      // handle lyrics odd and even lines separately
       if (lyricFamily != "") {
             score->style().set(Sid::lyricsOddFontFace, lyricFamily);
             score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
             }
-      if (dblLyricSize > 0.001) {
+      if (dblLyricSize > epsilon) {
             score->style().set(Sid::lyricsOddFontSize, QVariant(dblLyricSize));
             score->style().set(Sid::lyricsEvenFontSize, QVariant(dblLyricSize));
             }
+      }
+
+//---------------------------------------------------------
+//   setPageFormat
+//---------------------------------------------------------
+
+static void setPageFormat(Score* score, const PageFormat& pf)
+      {
+      score->style().set(Sid::pageWidth, pf.size.width());
+      score->style().set(Sid::pageHeight, pf.size.height());
+      score->style().set(Sid::pagePrintableWidth, pf.printableWidth);
+      score->style().set(Sid::pageEvenLeftMargin, pf.evenLeftMargin);
+      score->style().set(Sid::pageOddLeftMargin, pf.oddLeftMargin);
+      score->style().set(Sid::pageEvenTopMargin, pf.evenTopMargin);
+      score->style().set(Sid::pageEvenBottomMargin, pf.evenBottomMargin);
+      score->style().set(Sid::pageOddTopMargin, pf.oddTopMargin);
+      score->style().set(Sid::pageOddBottomMargin, pf.oddBottomMargin);
+      score->style().set(Sid::pageTwosided, pf.twosided);
       }
 
 //---------------------------------------------------------
@@ -1299,8 +1315,8 @@ void MusicXMLParserPass1::defaults()
             else if (_e.name() == "page-layout") {
                   PageFormat pf;
                   pageLayout(pf, millimeter / (tenths * INCH));
-//TODO:ws                  if (preferences.musicxmlImportLayout)
-//                        _score->setPageFormat(pf);
+                  if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT))
+                        setPageFormat(_score, pf);
                   }
             else if (_e.name() == "system-layout") {
                   while (_e.readNextStartElement()) {
@@ -1351,10 +1367,10 @@ void MusicXMLParserPass1::defaults()
             }
 
       /*
-       qDebug("word font family '%s' size '%s' lyric font family '%s' size '%s'",
-       qPrintable(wordFontFamily), qPrintable(wordFontSize),
-       qPrintable(lyricFontFamily), qPrintable(lyricFontSize));
-       */
+      qDebug("word font family '%s' size '%s' lyric font family '%s' size '%s'",
+             qPrintable(wordFontFamily), qPrintable(wordFontSize),
+             qPrintable(lyricFontFamily), qPrintable(lyricFontSize));
+      */
       updateStyles(_score, wordFontFamily, wordFontSize, lyricFontFamily, lyricFontSize);
 
       _score->setDefaultsRead(true); // TODO only if actually succeeded ?
@@ -1365,8 +1381,11 @@ void MusicXMLParserPass1::defaults()
 //---------------------------------------------------------
 
 /**
- Parse the /score-partwise/defaults/page-layout node:
- read the page layout.
+ Parse the /score-partwise/defaults/page-layout node: read the page layout.
+ Note that MuseScore does not support a separate value for left and right margins
+ for odd and even pages. Only odd and even left margins are used, together  with
+ the printable width, which is calculated from the left and right margins in the
+ MusicXML file.
  */
 
 void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion)
