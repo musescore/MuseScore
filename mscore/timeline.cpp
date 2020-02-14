@@ -896,7 +896,7 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
 
 void Timeline::drawGrid(int globalRows, int globalCols)
       {
-      scene()->clear();
+      clearScene();
       _metaRows.clear();
 
       if (globalRows == 0 || globalCols == 0)
@@ -912,10 +912,7 @@ void Timeline::drawGrid(int globalRows, int globalCols)
       QList<Part*> partList = getParts();
       for (int col = 0; col < globalCols; col++) {
             for (int row = 0; row < globalRows; row++) {
-                  QGraphicsRectItem* graphicsRectItem = new QGraphicsRectItem(col * _gridWidth,
-                                                                              _gridHeight * (row + numMetas) + 3,
-                                                                              _gridWidth,
-                                                                              _gridHeight);
+                  QGraphicsRectItem* graphicsRectItem = new QGraphicsRectItem(getMeasureRect(col, row, numMetas));
 
                   setMetaData(graphicsRectItem, row, ElementType::INVALID, currMeasure, false, 0);
 
@@ -1662,6 +1659,19 @@ QList<Part*> Timeline::getParts()
       }
 
 //---------------------------------------------------------
+//   clearScene
+//---------------------------------------------------------
+
+void Timeline::clearScene()
+      {
+      scene()->clear();
+
+      // clear pointers to scene items, they have been deleted by clear()
+      nonVisiblePathItem = nullptr;
+      visiblePathItem = nullptr;
+      }
+
+//---------------------------------------------------------
 //   Timeline::changeSelection
 //---------------------------------------------------------
 
@@ -2288,7 +2298,7 @@ void Timeline::updateGrid()
 void Timeline::setScore(Score* s)
       {
       _score = s;
-      scene()->clear();
+      clearScene();
 
       if (_score) {
             connect(_score, &QObject::destroyed, this, &Timeline::objectDestroyed, Qt::UniqueConnection);
@@ -2350,21 +2360,28 @@ void Timeline::updateView()
       if (_cv && _score) {
             QRectF canvas = QRectF(_cv->matrix().inverted().mapRect(_cv->geometry()));
 
-            std::set<std::pair<Measure*, int>> visibleItemsSet;
+            // Find visible elements in timeline
+            QPainterPath visiblePainterPath = QPainterPath();
+            visiblePainterPath.setFillRule(Qt::WindingFill);
 
             // Find visible measures of score
-            for (Measure* currMeasure = _score->firstMeasure(); currMeasure; currMeasure = currMeasure->nextMeasure()) {
+            int measureIndex = 0;
+            const int numMetas = nmetas();
+
+            for (Measure* currMeasure = _score->firstMeasure(); currMeasure; currMeasure = currMeasure->nextMeasure(), ++measureIndex) {
                   System* system = currMeasure->system();
 
                   if (currMeasure->mmRest() && _score->styleB(Sid::createMultiMeasureRests)) {
                         // Handle mmRests
                         Measure* mmrestMeasure = currMeasure->mmRest();
                         system = mmrestMeasure->system();
-                        if (!system)
+                        if (!system) {
+                              measureIndex += currMeasure->mmRestCount();
                               continue;
+                              }
 
                         // Add all measures within mmRest to visibleItemsSet if mmRest_visible
-                        for (; currMeasure != mmrestMeasure->mmRestLast(); currMeasure = currMeasure->nextMeasure()) {
+                        for (; currMeasure != mmrestMeasure->mmRestLast(); currMeasure = currMeasure->nextMeasure(), ++measureIndex) {
                               for (int staff = 0; staff < _score->staves().length(); staff++) {
                                     if (!_score->staff(staff)->show())
                                           continue;
@@ -2375,8 +2392,7 @@ void Timeline::updateView()
                                     QRectF showRect = mmrestMeasure->canvasBoundingRect().intersected(staveRect);
 
                                     if (canvas.intersects(showRect)) {
-                                          std::pair<Measure*, int> p = std::make_pair(currMeasure, staff);
-                                          visibleItemsSet.insert(p);
+                                          visiblePainterPath.addRect(getMeasureRect(measureIndex, staff, numMetas));
                                           }
                                     }
                               }
@@ -2392,8 +2408,7 @@ void Timeline::updateView()
                               QRectF showRect = mmrestMeasure->canvasBoundingRect().intersected(staveRect);
 
                               if (canvas.intersects(showRect)) {
-                                    std::pair<Measure*, int> p = std::make_pair(currMeasure, staff);
-                                    visibleItemsSet.insert(p);
+                                    visiblePainterPath.addRect(getMeasureRect(measureIndex, staff, numMetas));
                                     }
                               }
                         continue;
@@ -2412,26 +2427,20 @@ void Timeline::updateView()
                         QRectF showRect = currMeasure->canvasBoundingRect().intersected(staveRect);
 
                         if (canvas.intersects(showRect)) {
-                              std::pair<Measure*, int> p = std::make_pair(currMeasure, staff);
-                              visibleItemsSet.insert(p);
+                              visiblePainterPath.addRect(getMeasureRect(measureIndex, staff, numMetas));
                               }
                         }
                   }
 
-            // Find respective visible elements in timeline
-            QPainterPath visiblePainterPath = QPainterPath();
-            visiblePainterPath.setFillRule(Qt::WindingFill);
-            for (QGraphicsItem* graphicsItem : scene()->items()) {
-                  int stave = graphicsItem->data(0).value<int>();
-                  Measure* measure = static_cast<Measure*>(graphicsItem->data(2).value<void*>());
-                  if (numToStaff(stave) && !numToStaff(stave)->show())
-                        continue;
-
-                  std::pair<Measure*, int> tmp = std::make_pair(measure, stave);
-                  std::set<std::pair<Measure*, int>>::iterator it;
-                  it = visibleItemsSet.find(tmp);
-                  if (it != visibleItemsSet.end())
-                        visiblePainterPath.addRect(graphicsItem->boundingRect());
+            if (nonVisiblePathItem) {
+                  scene()->removeItem(nonVisiblePathItem);
+                  delete nonVisiblePathItem;
+                  nonVisiblePathItem = nullptr;
+                  }
+            if (visiblePathItem) {
+                  scene()->removeItem(visiblePathItem);
+                  delete visiblePathItem;
+                  visiblePathItem = nullptr;
                   }
 
             QPainterPath nonVisiblePainterPath = QPainterPath();
@@ -2442,7 +2451,7 @@ void Timeline::updateView()
 
             nonVisiblePainterPath = nonVisiblePainterPath.subtracted(visiblePainterPath);
 
-            QGraphicsPathItem* nonVisiblePathItem = new QGraphicsPathItem(nonVisiblePainterPath.simplified());
+            nonVisiblePathItem = new QGraphicsPathItem(nonVisiblePainterPath.simplified());
 
             QPen nonVisiblePen = QPen(activeTheme().nonVisiblePenColor);
             QBrush nonVisibleBrush = QBrush(activeTheme().nonVisibleBrushColor);
@@ -2450,24 +2459,13 @@ void Timeline::updateView()
             nonVisiblePathItem->setBrush(nonVisibleBrush);
             nonVisiblePathItem->setZValue(-3);
 
-            QGraphicsPathItem* visible = new QGraphicsPathItem(visiblePainterPath.simplified());
-            visible->setPen(nonVisiblePen);
-            visible->setBrush(Qt::NoBrush);
-            visible->setZValue(-2);
-
-            // Find old path, remove it
-            for (QGraphicsItem* graphicsItem : scene()->items()) {
-                  if (graphicsItem->type() == QGraphicsPathItem().type()) {
-                        QGraphicsPathItem* oldPathItem = static_cast<QGraphicsPathItem*>(graphicsItem);
-                        QBrush oldBrush = oldPathItem->brush();
-                        QPen oldPen = oldPathItem->pen();
-                        if (oldBrush == nonVisibleBrush || oldPen == nonVisiblePen)
-                              scene()->removeItem(oldPathItem);
-                        }
-                  }
+            visiblePathItem = new QGraphicsPathItem(visiblePainterPath.simplified());
+            visiblePathItem->setPen(nonVisiblePen);
+            visiblePathItem->setBrush(Qt::NoBrush);
+            visiblePathItem->setZValue(-2);
 
             scene()->addItem(nonVisiblePathItem);
-            scene()->addItem(visible);
+            scene()->addItem(visiblePathItem);
             }
       }
 

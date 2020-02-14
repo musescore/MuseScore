@@ -144,6 +144,9 @@ class Timeline : public QGraphicsView {
       Score* _score { nullptr };
       ScoreView* _cv { nullptr };
 
+      QGraphicsPathItem* nonVisiblePathItem = nullptr;
+      QGraphicsPathItem* visiblePathItem = nullptr;
+
       QGraphicsRectItem* _selectionBox { nullptr };
       std::vector<std::pair<QGraphicsItem*, int>> _metaRows;
 
@@ -184,6 +187,9 @@ class Timeline : public QGraphicsView {
       int correctStave(int stave);
 
       QList<Part*> getParts();
+
+      QRectF getMeasureRect(int measureIndex, int row, int numMetas) { return QRectF(measureIndex * _gridWidth, _gridHeight * (row + numMetas) + 3, _gridWidth, _gridHeight); }
+      void clearScene();
 
    private slots:
       void handleScroll(int value);
