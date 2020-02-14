@@ -382,6 +382,8 @@ void TextLineBaseSegment::layout()
 
 void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
       {
+      LineSegment::spatiumChanged(ov, nv);
+
       textLineBase()->spatiumChanged(ov, nv);
       _text->spatiumChanged(ov, nv);
       _endText->spatiumChanged(ov, nv);

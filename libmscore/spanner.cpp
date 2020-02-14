@@ -99,6 +99,17 @@ void SpannerSegment::setSystem(System* s)
       }
 
 //---------------------------------------------------------
+//   spatiumChanged
+//---------------------------------------------------------
+
+void SpannerSegment::spatiumChanged(qreal ov, qreal nv) 
+      {
+      Element::spatiumChanged(ov, nv);
+      if (sizeIsSpatiumDependent())
+            _offset2 *= (nv / ov);
+      }
+
+//---------------------------------------------------------
 //   mimeData
 //---------------------------------------------------------
 
