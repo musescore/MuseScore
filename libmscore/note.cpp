@@ -2406,7 +2406,7 @@ void Note::editDrag(EditData& editData)
 
 void Note::verticalDrag(EditData &ed)
       {
-      Fraction _tick           = chord()->tick();
+      Fraction _tick      = chord()->tick();
       const Staff* stf    = staff();
       const StaffType* st = stf->staffType(_tick);
 
@@ -2438,7 +2438,8 @@ void Note::verticalDrag(EditData &ed)
             }
       else {
             Key key = staff()->key(_tick);
-            int newPitch = line2pitch(ned->line + lineOffset, staff()->clef(_tick), key);
+            int idx = chord()->vStaffIdx();
+            int newPitch = line2pitch(ned->line + lineOffset, score()->staff(idx)->clef(_tick), key);
 
             if (!concertPitch()) {
                   Interval interval = staff()->part()->instrument(_tick)->transpose();
