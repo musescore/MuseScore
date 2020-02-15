@@ -175,14 +175,15 @@ GridView {
                     onEntered(drag);
                     return;
                 }
-
-                if (drag.source.dragged) {
-                    drag.source.internalDrag = internal;
-                    drag.source.dragCopy = action == Qt.CopyAction;
-                    paletteView.state = "drag";
-                    drag.source.paletteDrag = true;
-                } else if (typeof drag.source.paletteDrag !== "undefined") // if this is a palette and not, e.g., scoreview
-                    return;
+                if (drag.source) {
+                    if (drag.source.dragged) {
+                        drag.source.internalDrag = internal;
+                        drag.source.dragCopy = action == Qt.CopyAction;
+                        paletteView.state = "drag";
+                        drag.source.paletteDrag = true;
+                    } else if (typeof drag.source.paletteDrag !== "undefined") // if this is a palette and not, e.g., scoreview
+                        return;
+                }
 
                 drag.accept(action); // confirm we accept the action we determined inside onEntered
 
@@ -197,10 +198,9 @@ GridView {
 
             onEntered: {
                 onDragOverPaletteFinished();
-
                 // first check if controller allows dropping this item here
                 const mimeData = Utils.dropEventMimeData(drag);
-                internal = (drag.source.parentModelIndex == paletteView.paletteRootIndex);
+                internal = drag.source && (drag.source.parentModelIndex == paletteView.paletteRootIndex);
                 action = paletteView.paletteController.dropAction(mimeData, drag.proposedAction, paletteView.paletteRootIndex, internal);
                 proposedAction = drag.proposedAction;
 
@@ -245,8 +245,8 @@ GridView {
                 // Therefore record the necessary information to move cells later.
                 const data = {
                     action: action,
-                    srcParentModelIndex: drag.source.parentModelIndex,
-                    srcRowIndex: drag.source.rowIndex,
+                    srcParentModelIndex: drag.source ? drag.source.parentModelIndex : undefined,
+                    srcRowIndex: drag.source ? drag.source.rowIndex : undefined,
                     paletteView: paletteView,
                     destIndex: destIndex,
                     mimeData: Utils.dropEventMimeData(drop)
