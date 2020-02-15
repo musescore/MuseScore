@@ -76,6 +76,42 @@
       <property name="spacing">
        <number>3</number>
       </property>
+      <item row="4" column="1">
+       <widget class="QComboBox" name="placement">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Placement</string>
+        </property>
+        <item>
+         <property name="text">
+          <string notr="true">Below</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Above</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Placement:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>placement</cstring>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -102,43 +138,20 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Placement:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>placement</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="placement">
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetStyle" native="true">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Placement</string>
+         <string>Reset 'Style' value</string>
         </property>
-        <item>
-         <property name="text">
-          <string notr="true">Below</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">Above</string>
-         </property>
-        </item>
        </widget>
       </item>
-      <item row="0" column="0">
+      <item row="6" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Verse:</string>
@@ -151,7 +164,33 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="6" column="2">
+       <widget class="Ms::ResetButton" name="resetVerse" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Verse' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Placement' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
        <widget class="QSpinBox" name="verse">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -167,45 +206,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetVerse" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Verse' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetStyle" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Style' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetPlacement" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -215,12 +215,11 @@
   <customwidget>
    <class>Ms::ResetButton</class>
    <extends>QWidget</extends>
-   <header>inspector/resetButton.h</header>
+   <header location="global">inspector/resetButton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>verse</tabstop>
   <tabstop>style</tabstop>
   <tabstop>placement</tabstop>
  </tabstops>

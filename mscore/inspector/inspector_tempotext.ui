@@ -76,20 +76,7 @@
       <property name="spacing">
        <number>3</number>
       </property>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Tempo:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>tempo</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
+      <item row="5" column="1">
        <widget class="QDoubleSpinBox" name="tempo">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -117,17 +104,20 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QCheckBox" name="followText">
-        <property name="focusPolicy">
-         <enum>Qt::TabFocus</enum>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetTempo" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="text">
-         <string>Follow text</string>
+        <property name="accessibleName">
+         <string>Reset 'Tempo' value</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Style:</string>
@@ -140,16 +130,26 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="style">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Tempo:</string>
         </property>
-        <property name="accessibleName">
-         <string>Style</string>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>tempo</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <widget class="QCheckBox" name="followText">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="text">
+         <string>Follow text</string>
         </property>
        </widget>
       </item>
@@ -163,6 +163,19 @@
         </property>
         <property name="buddy">
          <cstring>placement</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Placement' value</string>
         </property>
        </widget>
       </item>
@@ -189,33 +202,7 @@
         </item>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetFollowText" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Follow text' value</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetTempo" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Tempo' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
        <widget class="Ms::ResetButton" name="resetStyle" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -228,8 +215,8 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetPlacement" native="true">
+      <item row="4" column="2">
+       <widget class="Ms::ResetButton" name="resetFollowText" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -237,7 +224,20 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
+         <string>Reset 'Follow text' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="style">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Style</string>
         </property>
        </widget>
       </item>
@@ -250,7 +250,7 @@
   <customwidget>
    <class>Ms::ResetButton</class>
    <extends>QWidget</extends>
-   <header>inspector/resetButton.h</header>
+   <header location="global">inspector/resetButton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -258,8 +258,6 @@
   <tabstop>title</tabstop>
   <tabstop>followText</tabstop>
   <tabstop>tempo</tabstop>
-  <tabstop>style</tabstop>
-  <tabstop>placement</tabstop>
  </tabstops>
  <resources/>
  <connections/>
