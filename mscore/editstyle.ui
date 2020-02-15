@@ -540,7 +540,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="SwingOff">
+                 <widget class="QRadioButton" name="swingOff">
                   <property name="text">
                    <string>Off</string>
                   </property>
@@ -10547,7 +10547,7 @@
   <tabstop>dontHideStavesInFirstSystem</tabstop>
   <tabstop>crossMeasureValues</tabstop>
   <tabstop>hideInstrumentNameIfOneInstrument</tabstop>
-  <tabstop>SwingOff</tabstop>
+  <tabstop>swingOff</tabstop>
   <tabstop>swingEighth</tabstop>
   <tabstop>swingSixteenth</tabstop>
   <tabstop>swingBox</tabstop>

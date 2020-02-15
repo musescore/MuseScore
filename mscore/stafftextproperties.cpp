@@ -152,13 +152,13 @@ StaffTextProperties::StaffTextProperties(const StaffTextBase* st, QWidget* paren
                   }
             else if (_staffText->swingParameters()->swingUnit == 0) {
                  swingBox->setEnabled(false);
-                 SwingOff->setChecked(true);
+                 swingOff->setChecked(true);
                  swingBox->setValue(_staffText->swingParameters()->swingRatio);
                  }
             }
 
       connect(mapper, SIGNAL(mapped(int)), SLOT(voiceButtonClicked(int)));
-      connect(SwingOff, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
+      connect(swingOff, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
       connect(swingEighth, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
       connect(swingSixteenth, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
 
@@ -291,7 +291,7 @@ void StaffTextProperties::setSwingControls(bool checked)
       {
       if (!checked)
             return;
-      if (SwingOff->isChecked())
+      if (swingOff->isChecked())
             swingBox->setEnabled(false);
       else if (swingEighth->isChecked())
             swingBox->setEnabled(true);
@@ -465,7 +465,7 @@ void StaffTextProperties::saveValues()
             }
       if (setSwingBox->isChecked()) {
             _staffText->setSwing(true);
-            if (SwingOff->isChecked()) {
+            if (swingOff->isChecked()) {
                   _staffText->setSwingParameters(0, swingBox->value());
                   swingBox->setEnabled(false);
                   }

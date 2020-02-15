@@ -4077,7 +4077,7 @@ VI</string>
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="SwingOff">
+            <widget class="QRadioButton" name="swingOff">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -4342,7 +4342,7 @@ VI</string>
   <tabstop>stop_1_14</tabstop>
   <tabstop>stop_1_15</tabstop>
   <tabstop>setSwingBox</tabstop>
-  <tabstop>SwingOff</tabstop>
+  <tabstop>swingOff</tabstop>
   <tabstop>swingEighth</tabstop>
   <tabstop>swingSixteenth</tabstop>
   <tabstop>swingBox</tabstop>
