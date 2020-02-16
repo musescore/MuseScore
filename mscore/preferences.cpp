@@ -245,7 +245,7 @@ void Preferences::init(bool storeInMemoryOnly)
             { PREF_UI_APP_STARTUP_SHOWPLAYPANEL,                    new BoolPreference(false, false)                   },
             { PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN,                 new BoolPreference(true, false)                    },
             { PREF_UI_APP_STARTUP_SHOWSTARTCENTER,                  new BoolPreference(true, false)                    },
-            { PREF_UI_APP_STARTUP_SHOWTOURS,                        new BoolPreference(true)                           },
+            { PREF_UI_APP_STARTUP_SHOWTOURS,                        new BoolPreference(true, false)                    },
             { PREF_UI_APP_GLOBALSTYLE,                              new EnumPreference(QVariant::fromValue(defaultAppGlobalStyle), false)},
             { PREF_UI_APP_LANGUAGE,                                 new StringPreference("system", false)              },
             { PREF_UI_APP_RASTER_HORIZONTAL,                        new IntPreference(2)                               },
@@ -427,9 +427,8 @@ QMetaType::Type Preferences::type(const QString key) const
       {
       if (_allPreferences.contains(key))
             return _allPreferences.value(key)->type();
-      else {
+      else
             return QMetaType::UnknownType;
-            }
       }
 
 //---------------------------------------------------------
@@ -499,7 +498,7 @@ void Preferences::setPreference(const QString key, QVariant value)
       checkIfKeyExists(key);
       set(key, value);
       for (const OnSetListener& l : _onSetListeners)
-          l(key, value);
+            l(key, value);
       }
 
 //---------------------------------------------------------
@@ -579,7 +578,8 @@ void Preferences::clearMidiRemote(int recordId)
 //   getDefaultLocalPreferences
 //---------------------------------------------------------
 
-QMap<QString, QVariant> Preferences::getDefaultLocalPreferences() {
+QMap<QString, QVariant> Preferences::getDefaultLocalPreferences()
+      {
       bool tmp = useLocalPrefs;
       useLocalPrefs = false;
       QMap<QString, QVariant> defaultLocalPreferences;
