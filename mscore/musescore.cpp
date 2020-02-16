@@ -6086,7 +6086,7 @@ void MuseScore::endCmd(bool undoRedo)
       getPluginEngine()->beginEndCmd(this, undoRedo);
 #endif
       if (timeline())
-            timeline()->updateGrid();
+            timeline()->updateGridFromCmdState();
       if (MScore::_error != MS_NO_ERROR)
             showError();
       if (cs) {

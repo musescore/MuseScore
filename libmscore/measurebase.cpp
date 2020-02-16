@@ -632,7 +632,7 @@ int MeasureBase::index() const
 int MeasureBase::measureIndex() const
       {
       int idx = 0;
-      MeasureBase* m = score()->first();
+      MeasureBase* m = score()->firstMeasure();
       while (m) {
             if (m == this)
                   return idx;

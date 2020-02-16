@@ -486,7 +486,7 @@ void TRowLabels::mousePressEvent(QMouseEvent* event)
             mouseOver(mapToScene(mapFromGlobal(QCursor::pos())));
 
             parent->setCollapsed(!parent->collapsed());
-            parent->updateGrid();
+            parent->updateGridView();
             }
       else {
             // Check if pixmap was selected
@@ -894,25 +894,69 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
 //   Timeline::drawGrid
 //---------------------------------------------------------
 
-void Timeline::drawGrid(int globalRows, int globalCols)
+void Timeline::drawGrid(int globalRows, int globalCols, int startMeasure, int endMeasure)
       {
-      clearScene();
+      if (endMeasure < 0)
+            endMeasure = globalCols;
+      if (startMeasure < 0)
+            endMeasure = startMeasure;
+
+      const bool rebuildAll = (
+         gridRows != globalRows || gridCols != globalCols
+         || (startMeasure == 0 && 2 * (endMeasure - startMeasure) > globalCols) // rebuild all if more than half of score has changed
+         );
+      const bool rebuildPartial = !rebuildAll && (startMeasure >= 0);
+
+      const unsigned numMetas = nmetas();
+
+      if (rebuildAll) {
+            clearScene();
+            startMeasure = 0;
+            endMeasure = globalCols;
+            }
+      else {
+            if (rebuildPartial) {
+                  const QRectF replacedRect = getMeasureRect(startMeasure, 0, numMetas) | getMeasureRect(endMeasure - 1, globalRows - 1, numMetas);
+                  const QList<QGraphicsItem*> replacedItems = scene()->items(replacedRect, Qt::ContainsItemShape);
+                  for (QGraphicsItem* item : replacedItems) {
+                        if (item->data(keyItemType).value<ItemType>() != ItemType::TYPE_MEASURE)
+                              continue;
+                        scene()->removeItem(item);
+                        delete item;
+                        }
+                  }
+
+            // Meta rows are still rebuilt from scratch, remove old meta rows manually
+            const QList<QGraphicsItem*> items = scene()->items();
+            for (QGraphicsItem* item : items) {
+                  if (item->data(keyItemType).value<ItemType>() != ItemType::TYPE_META)
+                        continue;
+                  scene()->removeItem(item);
+                  delete item;
+                  }
+            }
+
       _metaRows.clear();
 
       if (globalRows == 0 || globalCols == 0)
             return;
+
       int stagger = 0;
-      unsigned numMetas = nmetas();
       setMinimumHeight(_gridHeight * (numMetas + 1) + 5 + horizontalScrollBar()->height());
       setMinimumWidth(_gridWidth * 3);
       _globalZValue = 1;
 
       // Draw grid
       Measure* currMeasure = _score->firstMeasure();
+      for (int i = 0; i < startMeasure; ++i)
+            currMeasure = currMeasure->nextMeasure();
+
       QList<Part*> partList = getParts();
-      for (int col = 0; col < globalCols; col++) {
+
+      for (int col = startMeasure; col < endMeasure; col++) {
             for (int row = 0; row < globalRows; row++) {
                   QGraphicsRectItem* graphicsRectItem = new QGraphicsRectItem(getMeasureRect(col, row, numMetas));
+                  graphicsRectItem->setData(keyItemType, QVariant::fromValue(ItemType::TYPE_MEASURE));
 
                   setMetaData(graphicsRectItem, row, ElementType::INVALID, currMeasure, false, 0);
 
@@ -938,15 +982,16 @@ void Timeline::drawGrid(int globalRows, int globalCols)
             }
       setSceneRect(0, 0, getWidth(), getHeight());
 
-      //Draw meta rows and separator
+      // Draw meta rows and separator
       QGraphicsLineItem* graphicsLineItemSeparator = new QGraphicsLineItem(0,
                                                                            _gridHeight * numMetas + verticalScrollBar()->value() + 1,
                                                                            getWidth() - 1,
                                                                            _gridHeight * numMetas + verticalScrollBar()->value() + 1);
+      graphicsLineItemSeparator->setData(keyItemType, QVariant::fromValue(ItemType::TYPE_META));
       graphicsLineItemSeparator->setPen(QPen(activeTheme().gridColor1, 4));
       graphicsLineItemSeparator->setZValue(-2);
       scene()->addItem(graphicsLineItemSeparator);
-      std::pair<QGraphicsItem*, int> pairGraphicsIntSeparator = std::make_pair(graphicsLineItemSeparator, numMetas);
+      std::pair<QGraphicsItem*, int> pairGraphicsIntSeparator(graphicsLineItemSeparator, numMetas);
       _metaRows.push_back(pairGraphicsIntSeparator);
 
       for (unsigned row = 0; row < numMetas; row++) {
@@ -954,13 +999,14 @@ void Timeline::drawGrid(int globalRows, int globalCols)
                                                                _gridHeight * row + verticalScrollBar()->value(),
                                                                getWidth(),
                                                                _gridHeight);
+            metaRow->setData(keyItemType, QVariant::fromValue(ItemType::TYPE_META));
             metaRow->setBrush(QBrush(activeTheme().gridColor2));
             metaRow->setPen(QPen(activeTheme().gridColor1));
             metaRow->setData(0, QVariant::fromValue<int>(-1));
 
             scene()->addItem(metaRow);
 
-            std::pair<QGraphicsItem*, int> pairGraphicsIntMeta = std::make_pair(metaRow, row);
+            std::pair<QGraphicsItem*, int> pairGraphicsIntMeta(metaRow, row);
             _metaRows.push_back(pairGraphicsIntMeta);
             }
 
@@ -1039,7 +1085,9 @@ void Timeline::drawGrid(int globalRows, int globalCols)
             xPos += _gridWidth;
             std::get<4>(_repeatInfo) = false;
             }
-      drawSelection();
+
+      gridRows = globalRows;
+      gridCols = globalCols;
       }
 
 //---------------------------------------------------------
@@ -1378,6 +1426,7 @@ void Timeline::measureMeta(Segment* , int* , int pos)
       // Add measure number
       QString measureNumber = (currMeasure->irregular())? "( )" : QString::number(currMeasure->no() + 1);
       QGraphicsTextItem* graphicsTextItem = new QGraphicsTextItem(measureNumber);
+      graphicsTextItem->setData(keyItemType, QVariant::fromValue(ItemType::TYPE_META));
       graphicsTextItem->setDefaultTextColor(activeTheme().measureMetaColor);
       graphicsTextItem->setX(pos);
       graphicsTextItem->setY(_gridHeight * row + verticalScrollBar()->value());
@@ -1545,6 +1594,9 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
       setMetaData(graphicsRectItem, -1, elementType, measure, true, element, itemToAdd, seg);
       setMetaData(itemToAdd, -1, elementType, measure, true, element, graphicsRectItem, seg);
 
+      graphicsRectItem->setData(keyItemType, QVariant::fromValue(ItemType::TYPE_META));
+      itemToAdd->setData(keyItemType, QVariant::fromValue(ItemType::TYPE_META));
+
       graphicsRectItem->setZValue(_globalZValue);
       itemToAdd->setZValue(_globalZValue);
 
@@ -1669,6 +1721,7 @@ void Timeline::clearScene()
       // clear pointers to scene items, they have been deleted by clear()
       nonVisiblePathItem = nullptr;
       visiblePathItem = nullptr;
+      selectionItem = nullptr;
       }
 
 //---------------------------------------------------------
@@ -1853,7 +1906,7 @@ void Timeline::drawSelection()
                   }
             }
 
-      QList<QGraphicsItem*> graphicsItemList = scene()->items();
+      const QList<QGraphicsItem*> graphicsItemList = scene()->items();
       for (QGraphicsItem* graphicsItem : graphicsItemList) {
             int stave = graphicsItem->data(0).value<int>();
             ElementType elementType = graphicsItem->data(1).value<ElementType>();
@@ -1906,15 +1959,21 @@ void Timeline::drawSelection()
                   }
             }
 
-      QGraphicsPathItem* graphicsPathItem = new QGraphicsPathItem(_selectionPath.simplified());
-      if (selection.isRange())
-            graphicsPathItem->setPen(QPen(QColor(0, 0, 255), 3));
-      else
-            graphicsPathItem->setPen(QPen(QColor(0, 0, 0), 1));
+      if (selectionItem) {
+            scene()->removeItem(selectionItem);
+            delete selectionItem;
+            selectionItem = nullptr;
+            }
 
-      graphicsPathItem->setBrush(Qt::NoBrush);
-      graphicsPathItem->setZValue(-1);
-      scene()->addItem(graphicsPathItem);
+      selectionItem = new QGraphicsPathItem(_selectionPath.simplified());
+      if (selection.isRange())
+            selectionItem->setPen(QPen(QColor(0, 0, 255), 3));
+      else
+            selectionItem->setPen(QPen(QColor(0, 0, 0), 1));
+
+      selectionItem->setBrush(Qt::NoBrush);
+      selectionItem->setZValue(-1);
+      scene()->addItem(selectionItem);
 
       if (std::get<0>(_oldHoverInfo)) {
             std::get<0>(_oldHoverInfo) = nullptr;
@@ -2252,11 +2311,11 @@ void Timeline::wheelEvent(QWheelEvent* event)
 
             if (event->angleDelta().y() > 0 && _gridWidth < _maxZoom) {
                   _gridWidth++;
-                  updateGrid();
+                  updateGridFull();
                   }
             else if (event->angleDelta().y() < 0 && _gridWidth > _minZoom) {
                   _gridWidth--;
-                  updateGrid();
+                  updateGridFull();
                   }
 
             // Attempt to keep mouse in original spot
@@ -2273,22 +2332,64 @@ void Timeline::wheelEvent(QWheelEvent* event)
       }
 
 //---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void Timeline::showEvent(QShowEvent* evt)
+      {
+      QGraphicsView::showEvent(evt);
+      if (!evt->spontaneous())
+            setScore(_score);
+      }
+
+//---------------------------------------------------------
 //   Timeline::updateGrid
 //---------------------------------------------------------
 
-void Timeline::updateGrid()
+void Timeline::updateGrid(int startMeasure, int endMeasure)
       {
       if (!isVisible())
             return;
 
       if (_score && _score->firstMeasure()) {
-            drawGrid(nstaves(), _score->nmeasures());
+            drawGrid(nstaves(), _score->nmeasures(), startMeasure, endMeasure);
             updateView();
             drawSelection();
             mouseOver(mapToScene(mapFromGlobal(QCursor::pos())));
             _rowNames->updateLabels(getLabels(), _gridHeight);
             }
       viewport()->update();
+      }
+
+//---------------------------------------------------------
+//   updateGridFromCmdState
+//---------------------------------------------------------
+
+void Timeline::updateGridFromCmdState()
+      {
+      if (!isVisible())
+            return;
+
+      if (!_score) {
+            updateGridFull();
+            return;
+            }
+
+      const CmdState& state = _score->cmdState();
+
+      const bool layoutChanged = state.layoutRange();
+
+      if (!layoutChanged) {
+            updateGridView();
+            return;
+            }
+
+      const bool layoutAll = layoutChanged && (state.startTick() < Fraction(0, 1) || state.endTick() < Fraction(0, 1));
+
+      const int startMeasure = layoutAll ? 0 : _score->tick2measure(state.startTick())->measureIndex();
+      const int endMeasure = layoutAll ? _score->nmeasures() : (_score->tick2measure(state.endTick())->measureIndex() + 1);
+
+      updateGrid(startMeasure, endMeasure);
       }
 
 //---------------------------------------------------------
@@ -2300,9 +2401,15 @@ void Timeline::setScore(Score* s)
       _score = s;
       clearScene();
 
-      if (_score) {
+      if (_score)
             connect(_score, &QObject::destroyed, this, &Timeline::objectDestroyed, Qt::UniqueConnection);
+
+      if (!isVisible())
+            return;
+
+      if (_score) {
             drawGrid(nstaves(), _score->nmeasures());
+            drawSelection();
             changeSelection(SelState::NONE);
             _rowNames->updateLabels(getLabels(), _gridHeight);
             }
@@ -2863,7 +2970,8 @@ QString Timeline::cursorIsOn()
                   for (QGraphicsItem* currGraphicsItem : graphicsItemList) {
                         Measure* currMeasure = static_cast<Measure*>(currGraphicsItem->data(2).value<void*>());
                         int stave = currGraphicsItem->data(0).value<int>();
-                        if (currMeasure && !numToStaff(stave)->show())
+                        const Staff* st = numToStaff(stave);
+                        if (currMeasure && !(st && st->show()))
                               return "invalid";
                         }
                   return "instrument";

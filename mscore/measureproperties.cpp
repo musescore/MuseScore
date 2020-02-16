@@ -287,7 +287,7 @@ void MeasureProperties::apply()
 
       score->select(m, SelectType::SINGLE, 0);
       score->update();
-      mscore->timeline()->updateGrid();
+      mscore->timeline()->updateGridFull();
       }
 
 //---------------------------------------------------------
