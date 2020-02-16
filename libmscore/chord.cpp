@@ -1469,34 +1469,6 @@ qreal Chord::minAbsStemLength() const
       }
 
 //---------------------------------------------------------
-//   extendedStemLenWithTwoNotesTremolo
-//    Extend stem of one of the chords to make the tremolo less steep
-//---------------------------------------------------------
-
-std::array<double, 2> extendedStemLenWithTwoNoteTremolo(Tremolo* _tremolo, qreal _spatium,
-   qreal stemLen1, qreal stemLen2)
-      {
-      Chord* c1 = _tremolo->chord1();
-      Chord* c2 = _tremolo->chord2();
-      const qreal sgn1 = c1->up() ? -1.0 : 1.0;
-      const qreal sgn2 = c2->up() ? -1.0 : 1.0;
-      if (c1->up() == c2->up()) {
-            const qreal stemTipDistance =
-               (c2->stemPos().y() + stemLen2) - (c1->stemPos().y() + stemLen1);
-            const bool stem1Higher = stemTipDistance > 0.0;
-            if (std::abs(stemTipDistance) > 1.0 * _spatium) {
-                  if (  ( c1->up() && !stem1Higher)
-                     || (!c1->up() &&  stem1Higher))
-                        return { stemLen1 + sgn1 * (std::abs(stemTipDistance) - 1.0 * _spatium), stemLen2 };
-                  else /* if (( c1->up() &&  stem1Higher)
-                     ||       (!c1->up() && !stem1Higher)) */
-                        return { stemLen1, stemLen2 + sgn2 * (std::abs(stemTipDistance) - 1.0 * _spatium) };
-                  }
-            }
-      return { stemLen1, stemLen2 };
-      }
-
-//---------------------------------------------------------
 //   layoutStem1
 ///   Layout _stem and _stemSlash
 //
@@ -1525,17 +1497,6 @@ void Chord::layoutStem1()
             qreal stemWidth5 = _stem->lineWidth() * .5 * mag();
             _stem->rxpos()   = stemPosX() + (up() ? -stemWidth5 : +stemWidth5);
             _stem->setLen(defaultStemLength());
-            // if there is a two-note tremolo attached, and it is too steep,
-            // extend stem of one of the chords.
-            // this should be done after the stem lengths of two notes are both calculated
-            if (_tremolo && this == _tremolo->chord2()) {
-                  Stem* stem1 = _tremolo->chord1()->stem();
-                  Stem* stem2 = _tremolo->chord2()->stem();
-                  std::array<double, 2> extendedLen = extendedStemLenWithTwoNoteTremolo(_tremolo, spatium(),
-                     stem1->stemLen(), stem2->stemLen());
-                  stem1->setLen(extendedLen[0]);
-                  stem2->setLen(extendedLen[1]);
-                  }
             }
       else {
             if (_stem)

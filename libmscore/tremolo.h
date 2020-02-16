@@ -98,6 +98,8 @@ class Tremolo final : public Element {
 
       bool placeMidStem() const;
 
+      bool crossStaffBeamBetween() const;
+
       void spatiumChanged(qreal oldValue, qreal newValue) override;
       void localSpatiumChanged(qreal oldValue, qreal newValue) override;
       void styleChanged() override;

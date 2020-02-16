@@ -354,7 +354,7 @@ void Tremolo::layout()
             layoutOneNoteTremolo(x, y, _spatium);
       }
 
-extern std::array<double, 2> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal, qreal, qreal);
+extern QPair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal, qreal);
 
 //---------------------------------------------------------
 //   layoutTwoNotesTremolo
@@ -406,16 +406,16 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
             }
       else {
             firstChordStaffY = _chord1->pagePos().y() - _chord1->y();  // y coordinate of the staff of the first chord
-            const std::array<double, 2> extendedLen 
-               = extendedStemLenWithTwoNoteTremolo(this, spatium(), _chord1->defaultStemLength(), _chord2->defaultStemLength());
-            y1 = _chord1->stemPos().y() - firstChordStaffY + extendedLen[0];
-            y2 = _chord2->stemPos().y() - firstChordStaffY + extendedLen[1];
+            const QPair<qreal, qreal> extendedLen 
+               = extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength());
+            y1 = _chord1->stemPos().y() - firstChordStaffY + extendedLen.first;
+            y2 = _chord2->stemPos().y() - firstChordStaffY + extendedLen.second;
             }
-      
+
       qreal lw = _spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
       if (_chord1->beams() == 0 && _chord2->beams() == 0) {
             // improve the case when one stem is up and another is down
-            if (defaultStyle && _chord1->up() != _chord2->up()) {
+            if (defaultStyle && _chord1->up() != _chord2->up() && !crossStaffBeamBetween()) {
                   qreal meanNote1Y = .5 * (_chord1->upNote()->pagePos().y() - firstChordStaffY + _chord1->downNote()->pagePos().y() - firstChordStaffY);
                   qreal meanNote2Y = .5 * (_chord2->upNote()->pagePos().y() - firstChordStaffY + _chord2->downNote()->pagePos().y() - firstChordStaffY);
                   y1 = .5 * (y1 + meanNote1Y);
@@ -502,6 +502,20 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
 
       setbbox(path.boundingRect());
       setPos(x, y + beamYOffset);
+      }
+
+//---------------------------------------------------------
+//   crossStaffBeamBetween
+//    Return true if tremolo is two-note cross-staff and beams between staves
+//---------------------------------------------------------
+
+bool Tremolo::crossStaffBeamBetween() const
+      {
+      if (!twoNotes())
+            return false;
+
+      return ((_chord1->staffMove() > _chord2->staffMove()) && _chord1->up() && !_chord2->up())
+         ||  ((_chord1->staffMove() < _chord2->staffMove()) && !_chord1->up() && _chord2->up());
       }
 
 //---------------------------------------------------------

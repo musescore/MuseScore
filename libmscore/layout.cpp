@@ -2545,6 +2545,58 @@ void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, q
       }
 
 //---------------------------------------------------------
+//   extendedStemLenWithTwoNotesTremolo
+//    Extend stem of one of the chords to make the tremolo less steep
+//---------------------------------------------------------
+
+QPair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo* _tremolo, qreal stemLen1, qreal stemLen2)
+      {
+      const qreal _spatium = _tremolo->score()->spatium();
+      const qreal sw = _tremolo->score()->styleS(Sid::tremoloStrokeWidth).val();
+      const qreal td = _tremolo->score()->styleS(Sid::tremoloDistance).val();
+      Chord* c1 = _tremolo->chord1();
+      Chord* c2 = _tremolo->chord2();
+      Stem*  s1 = c1->stem();
+      Stem*  s2 = c2->stem();
+      const qreal sgn1 = c1->up() ? -1.0 : 1.0;
+      const qreal sgn2 = c2->up() ? -1.0 : 1.0;
+      const qreal stemTipDistance = s1 ? (s2->pagePos().y() + stemLen2) - (s1->pagePos().y() + stemLen1)
+         : (c2->stemPos().y() + stemLen2) - (c1->stemPos().y() + stemLen1);
+
+      // same staff & same direction: extend one of the stems
+      if (c1->staffMove() == c2->staffMove() && c1->up() == c2->up()) {
+            const bool stem1Higher = stemTipDistance > 0.0;
+            if (std::abs(stemTipDistance) > 1.0 * _spatium) {
+                  if ((c1->up() && !stem1Higher) || (!c1->up() && stem1Higher))
+                        return { stemLen1 + sgn1 * (std::abs(stemTipDistance) - 1.0 * _spatium), stemLen2 };
+                  else /* if ((c1->up() && stem1Higher) || (!c1->up() && !stem1Higher)) */
+                        return { stemLen1, stemLen2 + sgn2 * (std::abs(stemTipDistance) - 1.0 * _spatium) };
+                  }
+            }
+
+// TODO: cross-staff two-note tremolo. Currently doesn't generate the right result in some cases.
+#if 0
+      // cross-staff & beam between staves: extend both stems by the same length
+      else if (_tremolo->crossStaffBeamBetween()) {
+            const qreal tremoloMinHeight = ((_tremolo->lines() - 1) * td + sw) * _spatium;
+            const qreal dy = c1->up() ? tremoloMinHeight - stemTipDistance : tremoloMinHeight + stemTipDistance;
+            const bool tooShort = dy > 1.0 * _spatium;
+            const bool tooLong = dy < -1.0 * _spatium;
+            const qreal idealDistance = 1.0 * _spatium - tremoloMinHeight;
+
+            if (tooShort)
+                  return { stemLen1 + sgn1 * (std::abs(stemTipDistance) - idealDistance) / 2.0,
+                           stemLen2 + sgn2 * (std::abs(stemTipDistance) - idealDistance) / 2.0 };
+            else if (tooLong)
+                  return { stemLen1 - sgn1 * (std::abs(stemTipDistance) + idealDistance) / 2.0,
+                           stemLen2 - sgn2 * (std::abs(stemTipDistance) + idealDistance) / 2.0 };
+            }
+#endif
+
+      return { stemLen1, stemLen2 };
+      }
+
+//---------------------------------------------------------
 //   getNextMeasure
 //---------------------------------------------------------
 
@@ -2675,6 +2727,21 @@ void Score::getNextMeasure(LayoutContext& lc)
                                     chord->computeUp();
                                     chord->layoutStem1();   // create stems needed to calculate spacing
                                                             // stem direction can change later during beam processing
+
+                                    // if there is a two-note tremolo attached, and it is too steep,
+                                    // extend stem of one of the chords (if not cross-staff)
+                                    // or extend both stems (if cross-staff)
+                                    // this should be done after the stem lengths of two notes are both calculated
+                                    if (chord->tremolo() && chord == chord->tremolo()->chord2()) {
+                                          Stem* stem1 = chord->tremolo()->chord1()->stem();
+                                          Stem* stem2 = chord->tremolo()->chord2()->stem();
+                                          if (stem1 && stem2) {
+                                                QPair<qreal, qreal> extendedLen = extendedStemLenWithTwoNoteTremolo(chord->tremolo(),
+                                                   stem1->p2().y(), stem2->p2().y());
+                                                stem1->setLen(extendedLen.first);
+                                                stem2->setLen(extendedLen.second);
+                                                }
+                                          }
                                     }
                               cr->setMag(m);
                               }
