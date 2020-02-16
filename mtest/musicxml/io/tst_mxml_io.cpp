@@ -75,7 +75,7 @@ private slots:
       void divisionsDefinedTooLate2() { mxmlIoTestRef("testDivsDefinedTooLate2"); }
       void doubleClefError() { mxmlIoTestRef("testDoubleClefError"); }
       void drumset1() { mxmlIoTest("testDrumset1"); }
-//ws: fails      void drumset2() { mxmlIoTest("testDrumset2"); }
+      void drumset2() { mxmlIoTest("testDrumset2"); }
       void durationRoundingError() { mxmlIoTestRef("testDurationRoundingError"); }
       void dynamics1() { mxmlIoTest("testDynamics1"); }
       void dynamics2() { mxmlIoTest("testDynamics2"); }
@@ -126,8 +126,8 @@ private slots:
       void multiMeasureRest4() { mxmlIoTestRef("testMultiMeasureRest4"); }
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
       void nonStandardKeySig1() { mxmlIoTest("testNonStandardKeySig1"); }
-      //void nonStandardKeySig2() { mxmlIoTest("testNonStandardKeySig2"); } //problem with cautionary measure 8 and 9
-      void nonStandardKeySig2() { mxmlIoTest("testNonStandardKeySig3"); }
+      void nonStandardKeySig2() { mxmlIoTest("testNonStandardKeySig2"); }
+      void nonStandardKeySig3() { mxmlIoTest("testNonStandardKeySig3"); }
       void nonUniqueThings() { mxmlIoTestRef("testNonUniqueThings"); }
       void noteAttributes1() { mxmlIoTest("testNoteAttributes1"); }
       void noteAttributes2() { mxmlIoTestRef("testNoteAttributes2"); }
@@ -209,50 +209,14 @@ void TestMxmlIO::initTestCase()
 //---------------------------------------------------------
 //   fixupScore -- do required fixups after MusicXML import
 //   see mscore/file.cpp MuseScore::readScore(Score* score, QString name)
-//   TODO: remove duplication of code
 //---------------------------------------------------------
 
 static void fixupScore(Score* score)
       {
-//      score->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
       score->connectTies();
       score->masterScore()->rebuildMidiMapping();
       score->setCreated(false);
       score->setSaved(false);
-
-#if 0
-      int staffIdx = 0;
-      foreach(Staff* st, score->staves()) {
-            if (st->updateKeymap())
-                  st->clearKeys();
-            int track = staffIdx * VOICES;
-            KeySig* key1 = 0;
-            for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-                  for (Segment* s = m->first(); s; s = s->next()) {
-                        if (!s->element(track))
-                              continue;
-                        Element* e = s->element(track);
-                        if (e->generated())
-                              continue;
-                        //if ((s->subtype() == SegClef) && st->updateClefList()) {
-                        //      Clef* clef = static_cast<Clef*>(e);
-                        //      st->setClef(s->tick(), clef->clefTypeList());
-                        //      }
-                        if ((s->segmentType() == Segment::Type::KeySig) && st->updateKeymap()) {
-                              KeySig* ks = static_cast<KeySig*>(e);
-                              int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
-                              ks->setOldSig(naturals);
-                              st->setKey(s->tick(), ks->key());
-                              key1 = ks;
-                              }
-                        }
-                  if (m->sectionBreak())
-                        key1 = 0;
-                  }
-            st->setUpdateKeymap(false);
-            ++staffIdx;
-            }
-#endif
       }
 
 //---------------------------------------------------------
