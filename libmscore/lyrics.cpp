@@ -580,7 +580,7 @@ QVariant Lyrics::propertyDefault(Pid id) const
 
 Sid Lyrics::getPropertyStyle(Pid pid) const
       {
-      if (pid == Pid::OFFSET)
+      if (pid == Pid::OFFSET && (tid() == Tid::LYRICS_ODD || tid() == Tid::LYRICS_EVEN))
             return placeAbove() ? Sid::lyricsPosAbove : Sid::lyricsPosBelow;
       return TextBase::getPropertyStyle(pid);
       }

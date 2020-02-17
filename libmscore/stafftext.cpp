@@ -68,7 +68,7 @@ QVariant StaffText::propertyDefault(Pid id) const
 
 Sid StaffText::getPropertyStyle(Pid pid) const
       {
-      if (pid == Pid::OFFSET)
+      if (pid == Pid::OFFSET && tid() == Tid::STAFF)
             return placeAbove() ? Sid::staffTextPosAbove : Sid::staffTextPosBelow;
       return TextBase::getPropertyStyle(pid);
       }
