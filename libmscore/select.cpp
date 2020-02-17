@@ -507,6 +507,8 @@ void Selection::updateSelectedElements()
                   // the first segment for them.
                   return;
                   }
+            if (s2 && s2 == s2->measure()->first())
+                  s2 = s2->prev1();   // we want the last segment of the previous measure
             setRange(s1, s2, staffStart, staffEnd);
             _plannedTick1 = Fraction(-1,1);
             _plannedTick2 = Fraction(-1,1);
