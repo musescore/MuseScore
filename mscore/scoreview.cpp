@@ -294,6 +294,8 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       popup->addAction(getAction("cut"));
       popup->addAction(getAction("copy"));
       popup->addAction(getAction("paste"));
+      popup->addAction(getAction("paste-half"));
+      popup->addAction(getAction("paste-double"));
       popup->addAction(getAction("swap"));
       popup->addAction(getAction("delete"));
 
@@ -401,6 +403,8 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       popup->addAction(getAction("cut"));
       popup->addAction(getAction("copy"));
       popup->addAction(getAction("paste"));
+      popup->addAction(getAction("paste-half"));
+      popup->addAction(getAction("paste-double"));
       popup->addAction(getAction("swap"));
       popup->addAction(getAction("delete"));
 
