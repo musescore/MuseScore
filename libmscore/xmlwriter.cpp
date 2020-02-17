@@ -11,15 +11,8 @@
 //=============================================================================
 
 #include "xml.h"
-#include "layoutbreak.h"
-#include "spanner.h"
-#include "beam.h"
-#include "tuplet.h"
-#include "sym.h"
-#include "note.h"
-#include "barline.h"
-#include "dynamic.h"
-#include "hairpin.h"
+#include "property.h"
+#include "scoreElement.h"
 
 namespace Ms {
 
