@@ -1791,16 +1791,16 @@ void ScoreView::cmd(const char* s)
             qDebug("ScoreView::cmd <%s>", s);
 
       static const std::vector<ScoreViewCmd> cmdList {
-            {{"escape"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"escape"}, [](ScoreView* cv, const QByteArray&) {
                   cv->escapeCmd();
                   }},
-            {{"note-input"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"note-input"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->state == ViewState::NORMAL)
                         cv->changeState(ViewState::NOTE_ENTRY);
                   else if (cv->state == ViewState::NOTE_ENTRY)
                         cv->changeState(ViewState::NORMAL);
                   }},
-            {{"copy"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"copy"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->fotoMode())
                         cv->fotoModeCopy();
                   else if (cv->state == ViewState::NORMAL)
@@ -1808,25 +1808,25 @@ void ScoreView::cmd(const char* s)
                   else if (cv->state == ViewState::EDIT)
                         cv->editCopy();
                   }},
-            {{"cut"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"cut"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->state == ViewState::NORMAL)
                         cv->normalCut();
                   else if (cv->state == ViewState::EDIT)
                         cv->editCut();
                   }},
-            {{"paste"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"paste"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->state == ViewState::NORMAL)
                         cv->normalPaste();
                   else if (cv->state == ViewState::EDIT)
                         cv->editPaste();
                   }},
-            {{"paste-half"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"paste-half"}, [](ScoreView* cv, const QByteArray&) {
                   cv->normalPaste(Fraction(1, 2));
                   }},
-            {{"paste-double"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"paste-double"}, [](ScoreView* cv, const QByteArray&) {
                   cv->normalPaste(Fraction(2, 1));
                   }},
-            {{"paste-special"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"paste-special"}, [](ScoreView* cv, const QByteArray&) {
                   Fraction scale = Fraction(1, 1);
                   Fraction duration = cv->score()->inputState().duration().fraction();
                   if (duration.isValid() && !duration.isZero()) {
@@ -1835,13 +1835,13 @@ void ScoreView::cmd(const char* s)
                         }
                   cv->normalPaste(scale);
                   }},
-            {{"swap"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"swap"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->state == ViewState::NORMAL)
                         cv->normalSwap();
                   else if (cv->state == ViewState::EDIT)
                         cv->editSwap();
                   }},
-            {{"lyrics"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"lyrics"}, [](ScoreView* cv, const QByteArray&) {
                   cv->score()->startCmd();
                   Lyrics* lyrics = cv->score()->addLyrics();
                   cv->score()->endCmd();
@@ -1850,17 +1850,17 @@ void ScoreView::cmd(const char* s)
                         return;
                         }
                   }},
-            {{"figured-bass"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"figured-bass"}, [](ScoreView* cv, const QByteArray&) {
                   FiguredBass* fb = cv->score()->addFiguredBass();
                   if (fb) {
                         cv->startEditMode(fb);
                         return;
                         }
                   }},
-            {{"mag"}, /*[](ScoreView* cv, const QByteArray& cmd)*/ {
+            {{"mag"}, /*[](ScoreView* cv, const QByteArray&)*/ {
                   // ??
                   }},
-            {{"play"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"play"}, [](ScoreView* cv, const QByteArray&) {
                   if (seq && seq->canStart()) {
                         if (cv->state == ViewState::NORMAL || cv->state == ViewState::NOTE_ENTRY)
                               cv->changeState(ViewState::PLAY);
@@ -1870,115 +1870,115 @@ void ScoreView::cmd(const char* s)
                   else
                         getAction("play")->setChecked(false);
                   }},
-            {{"fotomode"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"fotomode"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->state == ViewState::NORMAL)
                         cv->changeState(ViewState::FOTO);
                   else if (cv->fotoMode())
                         cv->changeState(ViewState::NORMAL);
                   }},
-            {{"add-slur"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"add-slur"}, [](ScoreView* cv, const QByteArray&) {
                   cv->addSlur();
                   }},
-            {{"add-hairpin"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"add-hairpin"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddHairpin(HairpinType::CRESC_HAIRPIN);
                   }},
-            {{"add-hairpin-reverse"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"add-hairpin-reverse"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddHairpin(HairpinType::DECRESC_HAIRPIN);
                   }},
-            {{"add-noteline"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"add-noteline"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddNoteLine();
                   }},
-            {{"chord-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"chord-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->changeState(ViewState::NORMAL);
                   cv->cmdAddChordName(HarmonyType::STANDARD);
                   }},
-            {{"roman-numeral-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"roman-numeral-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->changeState(ViewState::NORMAL);
                   cv->cmdAddChordName(HarmonyType::ROMAN);
                   }},
-            {{"nashville-number-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"nashville-number-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->changeState(ViewState::NORMAL);
                   cv->cmdAddChordName(HarmonyType::NASHVILLE);
                   }},
-            {{"title-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"title-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::TITLE);
                   }},
-            {{"subtitle-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"subtitle-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::SUBTITLE);
                   }},
-            {{"composer-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"composer-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::COMPOSER);
                   }},
-            {{"poet-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"poet-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::POET);
                   }},
-            {{"part-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"part-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::INSTRUMENT_EXCERPT);
                   }},
-            {{"system-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"system-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::SYSTEM);
                   }},
-            {{"staff-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"staff-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::STAFF);
                   }},
-            {{"expression-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"expression-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::EXPRESSION);
                   }},
-            {{"rehearsalmark-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"rehearsalmark-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::REHEARSAL_MARK);
                   }},
-            {{"instrument-change-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"instrument-change-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::INSTRUMENT_CHANGE);
                   }},
-            {{"fingering-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"fingering-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::FINGERING);
                   }},
-            {{"sticking-text"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"sticking-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::STICKING);
                   }},
-            {{"edit-element"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"edit-element"}, [](ScoreView* cv, const QByteArray&) {
                   Element* e = cv->score()->selection().element();
                   if (e && e->isEditable() && !cv->popupActive) {
                         cv->startEditMode(e);
                         }
                   }},
-            {{"select-similar"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"select-similar"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->score()->selection().isSingle()) {
                         Element* e = cv->score()->selection().element();
                         mscore->selectSimilar(e, false);
                         }
                   }},
-            {{"select-similar-staff"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"select-similar-staff"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->score()->selection().isSingle()) {
                         Element* e = cv->score()->selection().element();
                         mscore->selectSimilar(e, true);
                         }
                   }},
-            {{"select-dialog"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"select-dialog"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->score()->selection().isSingle()) {
                         Element* e = cv->score()->selection().element();
                         mscore->selectElementDialog(e);
                         }
                   }},
-      //      {{"find"}, [](ScoreView* cv, const QByteArray& cmd) {
+      //      {{"find"}, [](ScoreView* cv, const QByteArray&) {
       //            ; // TODO:state         sm->postEvent(new CommandEvent(cmd));
       //            }},
-            {{"scr-prev"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"scr-prev"}, [](ScoreView* cv, const QByteArray&) {
                   cv->screenPrev();
                   }},
-            {{"scr-next"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"scr-next"}, [](ScoreView* cv, const QByteArray&) {
                   cv->screenNext();
                   }},
-            {{"page-prev"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"page-prev"}, [](ScoreView* cv, const QByteArray&) {
                   cv->pagePrev();
                   }},
-            {{"page-next"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"page-next"}, [](ScoreView* cv, const QByteArray&) {
                   cv->pageNext();
                   }},
-            {{"page-top"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"page-top"}, [](ScoreView* cv, const QByteArray&) {
                   cv->pageTop();
                   }},
-            {{"page-end"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"page-end"}, [](ScoreView* cv, const QByteArray&) {
                   cv->pageEnd();
                   }},
             {{"select-next-chord",
@@ -2025,13 +2025,13 @@ void ScoreView::cmd(const char* s)
                         cv->updateAll();
                         }
                   }},
-            {{"pitch-up-diatonic"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"pitch-up-diatonic"}, [](ScoreView* cv, const QByteArray&) {
                   cv->score()->upDown(true, UpDownMode::DIATONIC);
                   }},
-            {{"pitch-down-diatonic"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"pitch-down-diatonic"}, [](ScoreView* cv, const QByteArray&) {
                   cv->score()->upDown(false, UpDownMode::DIATONIC);
                   }},
-            {{"move-up"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"move-up"}, [](ScoreView* cv, const QByteArray) {
                   QList<Element*> el = cv->score()->selection().uniqueElements();
                   foreach (Element* e, el) {
                         ChordRest* cr = nullptr;
@@ -2043,7 +2043,7 @@ void ScoreView::cmd(const char* s)
                               cv->score()->moveUp(cr);
                         }
                   }},
-            {{"move-down"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"move-down"}, [](ScoreView* cv, const QByteArray&) {
                   QList<Element*> el = cv->score()->selection().uniqueElements();
                   foreach (Element* e, el) {
                         ChordRest* cr = nullptr;
@@ -2055,7 +2055,7 @@ void ScoreView::cmd(const char* s)
                               cv->score()->moveDown(cr);
                         }
                   }},
-            {{"up-chord"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"up-chord"}, [](ScoreView* cv, const QByteArray&) {
                   Element* el = cv->score()->selection().element();
                   Element* oel = el;
                   if (el && (el->isNote() || el->isRest()))
@@ -2070,7 +2070,7 @@ void ScoreView::cmd(const char* s)
                         cv->cmdGotoElement(el);
                         }
                   }},
-            {{"down-chord"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"down-chord"}, [](ScoreView* cv, const QByteArray&) {
                   Element* el = cv->score()->selection().element();
                   Element* oel = el;
                   if (el && (el->isNote() || el->isRest()))
@@ -2085,17 +2085,17 @@ void ScoreView::cmd(const char* s)
                         cv->cmdGotoElement(el);
                         }
                   }},
-            {{"top-chord"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"top-chord"}, [](ScoreView* cv, const QByteArray&) {
                   Element* el = cv->score()->selection().element();
                   if (el && el->type() == ElementType::NOTE)
                         cv->cmdGotoElement(cv->score()->upAltCtrl(static_cast<Note*>(el)));
                   }},
-            {{"bottom-chord"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"bottom-chord"}, [](ScoreView* cv, const QByteArray&) {
                   Element* el = cv->score()->selection().element();
                   if (el && el->type() == ElementType::NOTE)
                         cv->cmdGotoElement(cv->score()->downAltCtrl(static_cast<Note*>(el)));
                   }},
-            {{"next-segment-element"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"next-segment-element"}, [](ScoreView* cv, const QByteArray&) {
                   Element* el = cv->score()->selection().element();
                   if (!el && !cv->score()->selection().elements().isEmpty() )
                       el = cv->score()->selection().elements().first();
@@ -2105,7 +2105,7 @@ void ScoreView::cmd(const char* s)
                   else
                         cv->cmdGotoElement(cv->score()->firstElement());
                   }},
-            {{"prev-segment-element"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"prev-segment-element"}, [](ScoreView* cv, const QByteArray&) {
                   Element* el = cv->score()->selection().element();
                   if (!el && !cv->score()->selection().elements().isEmpty())
                       el = cv->score()->selection().elements().last();
@@ -2115,7 +2115,7 @@ void ScoreView::cmd(const char* s)
                   else
                         cv->cmdGotoElement(cv->score()->lastElement());
                   }},
-            {{"next-element"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"next-element"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->editMode()) {
                         cv->textTab(false);
                         return;
@@ -2139,7 +2139,7 @@ void ScoreView::cmd(const char* s)
                   else
                         cv->cmdGotoElement(cv->score()->firstElement());
                   }},
-            {{"prev-element"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"prev-element"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->editMode()) {
                         cv->textTab(true);
                         return;
@@ -2163,13 +2163,13 @@ void ScoreView::cmd(const char* s)
                   else
                         cv->cmdGotoElement(cv->score()->lastElement());
                   }},
-            {{"first-element"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"first-element"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdGotoElement(cv->score()->firstElement(false));
                   }},
-            {{"last-element"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"last-element"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdGotoElement(cv->score()->lastElement(false));
                   }},
-            {{"get-location"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"get-location"}, [](ScoreView* cv, const QByteArray&) {
                   // get current selection
                   Element* e = cv->score()->selection().element();
                   if (!e) {
@@ -2188,19 +2188,19 @@ void ScoreView::cmd(const char* s)
                         cv->cmdGotoElement(e);
                         }
                   }},
-            {{"rest", "rest-TAB"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"rest", "rest-TAB"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdEnterRest();
                   }},
-            {{"rest-1"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"rest-1"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdEnterRest(TDuration(TDuration::DurationType::V_WHOLE));
                   }},
-            {{"rest-2"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"rest-2"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdEnterRest(TDuration(TDuration::DurationType::V_HALF));
                   }},
-            {{"rest-4"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"rest-4"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdEnterRest(TDuration(TDuration::DurationType::V_QUARTER));
                   }},
-            {{"rest-8"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"rest-8"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdEnterRest(TDuration(TDuration::DurationType::V_EIGHTH));
                   }},
             {{"interval1",
@@ -2220,7 +2220,7 @@ void ScoreView::cmd(const char* s)
                         cv->score()->cmdAddInterval(n, nl);
                         }
                   }},
-            {{"tie"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"tie"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->noteEntryMode()) {
                         cv->score()->cmdAddTie();
                         cv->moveCursor();
@@ -2228,35 +2228,35 @@ void ScoreView::cmd(const char* s)
                   else
                         cv->score()->cmdToggleTie();
                   }},
-            {{"chord-tie"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"chord-tie"}, [](ScoreView* cv, const QByteArray&) {
                   cv->score()->cmdAddTie(true);
                   cv->moveCursor();
                   }},
-            {{"duplet"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"duplet"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdTuplet(2);
                   }},
-            {{"triplet"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"triplet"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdTuplet(3);
                   }},
-            {{"quadruplet"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"quadruplet"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdTuplet(4);
                   }},
-            {{"quintuplet"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"quintuplet"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdTuplet(5);
                   }},
-            {{"sextuplet"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"sextuplet"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdTuplet(6);
                   }},
-            {{"septuplet"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"septuplet"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdTuplet(7);
                   }},
-            {{"octuplet"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"octuplet"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdTuplet(8);
                   }},
-            {{"nonuplet"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"nonuplet"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdTuplet(9);
                   }},
-            {{"tuplet-dialog"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"tuplet-dialog"}, [](ScoreView* cv, const QByteArray&) {
                   cv->score()->startCmd();
                   Tuplet* tuplet = mscore->tupletDialog();
                   if (tuplet)
@@ -2264,55 +2264,55 @@ void ScoreView::cmd(const char* s)
                   cv->score()->endCmd();
                   cv->moveCursor();
                   }},
-            {{"repeat-sel"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"repeat-sel"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdRepeatSelection();
                   }},
-            {{"voice-1"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"voice-1"}, [](ScoreView* cv, const QByteArray&) {
                   cv->changeVoice(0);
                   }},
-            {{"voice-2"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"voice-2"}, [](ScoreView* cv, const QByteArray&) {
                   cv->changeVoice(1);
                   }},
-            {{"voice-3"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"voice-3"}, [](ScoreView* cv, const QByteArray) {
                   cv->changeVoice(2);
                   }},
-            {{"voice-4"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"voice-4"}, [](ScoreView* cv, const QByteArray&) {
                   cv->changeVoice(3);
                   }},
-            {{"enh-both"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"enh-both"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdChangeEnharmonic(true);
                   }},
-            {{"enh-current"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"enh-current"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdChangeEnharmonic(false);
                   }},
-            {{"revision"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"revision"}, [](ScoreView* cv, const QByteArray&) {
                   Score* sc = cv->score()->masterScore();
                   sc->createRevision();
                   }},
-            {{"append-measure"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"append-measure"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAppendMeasures(1, ElementType::MEASURE);
                   }},
-            {{"insert-measure"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"insert-measure"}, [](ScoreView* cv, const QByteArray&) {
                 cv->cmdInsertMeasures(1, ElementType::MEASURE);
                 }},
-            {{"insert-hbox"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"insert-hbox"}, [](ScoreView* cv, const QByteArray&) {
                 cv->cmdInsertMeasures(1, ElementType::HBOX);
                 }},
-            {{"insert-vbox"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"insert-vbox"}, [](ScoreView* cv, const QByteArray&) {
                 cv->cmdInsertMeasures(1, ElementType::VBOX);
                 }},
-            {{"append-hbox"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"append-hbox"}, [](ScoreView* cv, const QByteArray&) {
                 MeasureBase* mb = cv->appendMeasure(ElementType::HBOX);
                   cv->score()->select(mb, SelectType::SINGLE, 0);
                   }},
-            {{"append-vbox"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"append-vbox"}, [](ScoreView* cv, const QByteArray&) {
                 MeasureBase* mb = cv->appendMeasure(ElementType::VBOX);
                   cv->score()->select(mb, SelectType::SINGLE, 0);
                   }},
-            {{"insert-textframe"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"insert-textframe"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdInsertMeasure(ElementType::TBOX);
                   }},
-            {{"append-textframe"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"append-textframe"}, [](ScoreView* cv, const QByteArray&) {
                   MeasureBase* mb = cv->appendMeasure(ElementType::TBOX);
                   if (mb) {
                         TBox* tf = static_cast<TBox*>(mb);
@@ -2329,18 +2329,18 @@ void ScoreView::cmd(const char* s)
                               }
                         }
                   }},
-            {{"insert-fretframe"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"insert-fretframe"}, [](ScoreView* cv, const QByteArray&) {
                   if (!enableExperimental)
                         return;
                   cv->cmdInsertMeasure(ElementType::FBOX);
                   }},
-            {{"move-left"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"move-left"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdMoveCR(true);
                   }},
-            {{"move-right"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"move-right"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdMoveCR(false);
                   }},
-            {{"reset"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"reset"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->editMode()) {
                         cv->editData.element->reset();
                         cv->score()->update();
@@ -2360,12 +2360,12 @@ void ScoreView::cmd(const char* s)
                   cv->updateGrips();
                   }},
       #ifdef OMR
-            {{"show-omr"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"show-omr"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->score()->masterScore()->omr())
                         showOmr(!_score->masterScore()->showOmr());
                   }},
       #endif
-            {{"split-measure"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"split-measure"}, [](ScoreView* cv, const QByteArray&) {
                   Element* e = cv->score()->selection().element();
                   if (!(e && (e->isNote() || e->isRest())))
                         MScore::setError(NO_CHORD_REST_SELECTED);
@@ -2376,7 +2376,7 @@ void ScoreView::cmd(const char* s)
                         cv->score()->cmdSplitMeasure(cr);
                         }
                   }},
-            {{"join-measures"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"join-measures"}, [](ScoreView* cv, const QByteArray&) {
                   Measure* m1;
                   Measure* m2;
                   if (!cv->score()->selection().measureRange(&m1, &m2) || m1 == m2) {
@@ -2391,65 +2391,65 @@ void ScoreView::cmd(const char* s)
             {{"next-lyric", "prev-lyric"}, [](ScoreView* cv, const QByteArray& cmd) {
                   cv->editCmd(cmd);
                   }},
-            {{"add-remove-breaks"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"add-remove-breaks"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddRemoveBreaks();
                   }},
-            {{"copy-lyrics-to-clipboard"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"copy-lyrics-to-clipboard"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdCopyLyricsToClipboard();
                   }},
 
             // STATE_NOTE_ENTRY_REALTIME actions (auto or manual)
 
-            {{"realtime-advance"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"realtime-advance"}, [](ScoreView* cv, const QByteArray&) {
                   cv->realtimeAdvance(true);
                   }},
 
             // STATE_HARMONY_FIGBASS_EDIT actions
 
-            {{"advance-longa"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"advance-longa"}, [](ScoreView* cv, const QByteArray&) {
                   cv->ticksTab(Fraction(4,1));
                   }},
-            {{"advance-breve"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"advance-breve"}, [](ScoreView* cv, const QByteArray&) {
                   cv->ticksTab(Fraction(2,1));
                   }},
-            {{"advance-1"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"advance-1"}, [](ScoreView* cv, const QByteArray&) {
                   cv->ticksTab(Fraction(1,1));
                   }},
-            {{"advance-2"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"advance-2"}, [](ScoreView* cv, const QByteArray&) {
                   cv->ticksTab(Fraction(1,2));
                   }},
-            {{"advance-4"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"advance-4"}, [](ScoreView* cv, const QByteArray&) {
                   cv->ticksTab(Fraction(1,4));
                   }},
-            {{"advance-8"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"advance-8"}, [](ScoreView* cv, const QByteArray&) {
                   cv->ticksTab(Fraction(1,8));
                   }},
-            {{"advance-16"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"advance-16"}, [](ScoreView* cv, const QByteArray&) {
                   cv->ticksTab(Fraction(1,16));
                   }},
-            {{"advance-32"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"advance-32"}, [](ScoreView* cv, const QByteArray&) {
                   cv->ticksTab(Fraction(1,32));
                   }},
-            {{"advance-64"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"advance-64"}, [](ScoreView* cv, const QByteArray&) {
                   cv->ticksTab(Fraction(1,64));
                   }},
-            {{"prev-measure-TEXT"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"prev-measure-TEXT"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->editData.element->isHarmony())
                         cv->harmonyTab(true);
                   else if (cv->editData.element->isFiguredBass())
                         cv->figuredBassTab(true, true);
                   }},
-            {{"next-measure-TEXT"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"next-measure-TEXT"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->editData.element->isHarmony())
                         cv->harmonyTab(false);
                   else if (cv->editData.element->isFiguredBass())
                         cv->figuredBassTab(true, false);
                   }},
-            {{"prev-beat-TEXT"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"prev-beat-TEXT"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->editData.element->isHarmony())
                         cv->harmonyBeatsTab(false, true);
                   }},
-            {{"next-beat-TEXT"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"next-beat-TEXT"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->editData.element->isHarmony())
                         cv->harmonyBeatsTab(false, false);
                   }},
@@ -2476,10 +2476,10 @@ void ScoreView::cmd(const char* s)
                         cv->moveCursor();
                         }
                   }},
-            {{"text-word-left"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"text-word-left"}, [](ScoreView* cv, const QByteArray&) {
                   toTextBase(cv->editData.element)->movePosition(cv->editData, QTextCursor::WordLeft);
                   }},
-            {{"text-word-right"}, [](ScoreView* cv, const QByteArray& cmd) {
+            {{"text-word-right"}, [](ScoreView* cv, const QByteArray&) {
                   toTextBase(cv->editData.element)->movePosition(cv->editData, QTextCursor::NextWord);
                   }},
             {{"concert-pitch"}, [](ScoreView* cv, const QByteArray& cmd) {
