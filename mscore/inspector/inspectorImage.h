@@ -27,14 +27,21 @@ class InspectorImage : public InspectorElementBase {
       Q_OBJECT
 
       Ui::InspectorImage b;
+      qreal _aspectRatio; // used for widthChanged/heightChanged
 
       virtual void postInit();
 
    protected slots:
       virtual void valueChanged(int idx) override;
+      void lockAspectRatioClicked(bool checked);
+      void widthChanged(qreal val);
+      void heightChanged(qreal val);
 
    public:
       InspectorImage(QWidget* parent);
+
+   protected:
+      void updateAspectRatio();
       };
 
 

@@ -47,6 +47,12 @@ InspectorImage::InspectorImage(QWidget* parent)
             };
       const std::vector<InspectorPanel> ppList = { { b.title, b.panel } };
 
+      updateAspectRatio(); // initiate aspectRatio
+      connect(b.lockAspectRatio, &QCheckBox::toggled, this, &InspectorImage::lockAspectRatioClicked);
+
+      connect(b.size->xVal, QOverload<qreal>::of(&QDoubleSpinBox::valueChanged), this, &InspectorImage::widthChanged);
+      connect(b.size->yVal, QOverload<qreal>::of(&QDoubleSpinBox::valueChanged), this, &InspectorImage::heightChanged);
+
       mapSignals(iiList, ppList);
       }
 
@@ -56,8 +62,53 @@ InspectorImage::InspectorImage(QWidget* parent)
 
 void InspectorImage::valueChanged(int idx)
       {
-      InspectorBase::valueChanged(idx);
+      InspectorElementBase::valueChanged(idx);
       setElement();     // DEBUG
+      }
+
+//---------------------------------------------------------
+//   updateAspectRatio
+//---------------------------------------------------------
+
+void InspectorImage::updateAspectRatio()
+      {
+      Image* image = toImage(inspector->element());
+      qreal widthVal = image->size().width();
+      qreal heightVal = image->size().height();
+
+      _aspectRatio = heightVal != 0.0 ? widthVal / heightVal : 1.0;
+      }
+
+//---------------------------------------------------------
+//   lockAspectRatioClicked
+//---------------------------------------------------------
+
+void InspectorImage::lockAspectRatioClicked(bool checked)
+      {
+      if (checked)
+            updateAspectRatio();
+      }
+
+//---------------------------------------------------------
+//   widthChanged
+//---------------------------------------------------------
+
+void InspectorImage::widthChanged(qreal val)
+      {
+      Image* image = toImage(inspector->element());
+      if (image->lockAspectRatio() && val != 0.0) // to avoid stack overflow
+            b.size->yVal->setValue(val / _aspectRatio);
+      }
+
+//---------------------------------------------------------
+//   heightChanged
+//---------------------------------------------------------
+
+void InspectorImage::heightChanged(qreal val)
+      {
+      Image* image = toImage(inspector->element());
+      if (image->lockAspectRatio() && val != 0.0) // to avoid stack overflow
+            b.size->xVal->setValue(val * _aspectRatio);
       }
 
 //---------------------------------------------------------
