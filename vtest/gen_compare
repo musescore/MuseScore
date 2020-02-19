@@ -1,0 +1,79 @@
+#!/bin/bash
+
+echo "Run vtest comparison"
+
+# Create "compare" folder
+if [ -n "$VTEST_DIR" ]; then
+      DIR="$VTEST_DIR"
+else
+      DIR="$(cd "$(dirname "$0")" && pwd)"
+fi
+mkdir -p $DIR/compare
+cd $DIR/compare
+
+# rm -f *.png
+# Download reference images
+# wget -nd -r -P . -A png http://vtest.musescore.org/${BASEREF}/vtest.html
+# rm -f *-ref.png
+# rm -f *-diff.png
+
+# This flag will become true only if differences are found
+export VTEST_DIFF_FOUND=false
+
+# Generate first part of the html report
+F=vtest_compare.html
+rm -f $F
+cp ../style.css .
+echo "<html>" >> $F
+echo "  <head>" >> $F
+echo "   <link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">" >> $F
+echo "  </head>" >> $F
+echo "  <body>" >> $F
+echo "    <div id=\"topbar\">" >> $F
+echo "      <span>Current</span>" >> $F
+echo "      <span>Reference</span>" >> $F
+echo "      <span>Comparison</span>" >> $F
+echo "    </div>" >> $F
+echo "    <div id=\"topmargin\"></div>" >> $F
+
+# Compare current PNG results and reference files from parent commit
+echo "Compare PNG files and references"
+for src in $SRC; do
+      if test -f ../html/$src-1.png; then
+            LOG=$(compare -metric AE -fuzz 0.0% ../html/$src-1.png $src-1.png $src-diff.png 2>&1)
+            if (( $LOG > 0 )); then
+                  echo "Comparison of $src gave result $LOG"
+                  mv $src-1.png $src-ref.png 2>/dev/null
+                  cp ../html/$src-1.png . 2>/dev/null
+                  export VTEST_DIFF_FOUND=true
+                  echo "    <h2 id=\"$src\">$src <a class=\"toc-anchor\" href=\"#$src\">#</a></h2>" >> $F
+                  echo "    <div>" >> $F
+                  echo "      <img src=\"$src-1.png\">" >> $F
+                  echo "      <img src=\"$src-ref.png\">" >> $F
+                  echo "      <img src=\"$src-diff.png\">" >> $F
+                  echo "    </div>" >> $F
+            else
+                  rm $src-diff.png 2>/dev/null
+                  rm $src-1.png 2>/dev/null
+                  fi
+      else
+            echo "There were errors generating image $src"
+            export VTEST_DIFF_FOUND=true
+            echo "    <h2 id=\"$src\">$src <a class=\"toc-anchor\" href=\"#$src\">#</a></h2>" >> $F
+            echo "    <div>" >> $F
+            echo "      <img src=\"$src-1.png\">" >> $F
+            echo "      <img src=\"$src-ref.png\">" >> $F
+            echo "      <img src=\"$src-diff.png\">" >> $F
+            echo "    </div>" >> $F
+            fi
+      done
+# Close html file tags
+echo "  </body>" >> $F
+echo "</html>" >> $F
+
+# Remove "compare" folder if no differences were detected
+cd ..
+if [ "$VTEST_DIFF_FOUND" = false ]; then
+      rm -rf ./compare
+fi
+echo "::set-env name=VTEST_DIFF_FOUND::${VTEST_DIFF_FOUND}"
