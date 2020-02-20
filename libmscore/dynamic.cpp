@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "dynamic.h"
+#include "dynamichairpingroup.h"
 #include "xml.h"
 #include "score.h"
 #include "measure.h"
@@ -342,6 +343,19 @@ void Dynamic::endEdit(EditData& ed)
 void Dynamic::reset()
       {
       TextBase::reset();
+      }
+
+//---------------------------------------------------------
+//   getDragGroup
+//---------------------------------------------------------
+
+std::unique_ptr<ElementGroup> Dynamic::getDragGroup(std::function<bool(const Element*)> isDragged)
+      {
+      if (auto g = HairpinWithDynamicsDragGroup::detectFor(this, isDragged))
+            return g;
+      if (auto g = DynamicNearHairpinsDragGroup::detectFor(this, isDragged))
+            return g;
+      return TextBase::getDragGroup(isDragged);
       }
 
 //---------------------------------------------------------

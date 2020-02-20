@@ -13,6 +13,7 @@
 #ifndef __ELEMENT_H__
 #define __ELEMENT_H__
 
+#include "elementgroup.h"
 #include "spatium.h"
 #include "fraction.h"
 #include "scoreElement.h"
@@ -295,6 +296,9 @@ class Element : public ScoreElement {
 
       virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
+
+//       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
+      virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const Element*)> isDragged) { Q_UNUSED(isDragged); return std::unique_ptr<ElementGroup>(new SingleElementGroup(this)); }
 
       virtual void startDrag(EditData&);
       virtual QRectF drag(EditData&);

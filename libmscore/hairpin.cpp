@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "hairpin.h"
+#include "dynamichairpingroup.h"
 #include "style.h"
 #include "xml.h"
 #include "utils.h"
@@ -398,6 +399,17 @@ std::vector<QPointF> HairpinSegment::gripsPositions(const EditData&) const
       grips[int(Grip::APERTURE)] = gripLineAperturePoint + pp;
 
       return grips;
+      }
+
+//---------------------------------------------------------
+//   getDragGroup
+//---------------------------------------------------------
+
+std::unique_ptr<ElementGroup> HairpinSegment::getDragGroup(std::function<bool(const Element*)> isDragged)
+      {
+      if (auto g = HairpinWithDynamicsDragGroup::detectFor(this, isDragged))
+            return g;
+      return TextLineBaseSegment::getDragGroup(isDragged);
       }
 
 //---------------------------------------------------------
