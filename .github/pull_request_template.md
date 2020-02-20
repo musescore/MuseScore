@@ -2,7 +2,7 @@ Resolves: *(direct link to the issue)*
 
 *(short description of the changes and the motivation to make the changes)*
 
-*Use "x" letter to fill the checkboxes below like [x]*
+<!-- Use "x" to fill the checkboxes below like [x] -->
 
 - [ ] I signed [CLA](https://musescore.org/en/cla)
 - [ ] I made sure the code in the PR follows [the coding rules](https://musescore.org/en/handbook/developers-handbook/finding-your-way-around/musescore-coding-rules)
