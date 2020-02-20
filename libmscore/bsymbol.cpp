@@ -208,19 +208,7 @@ QRectF BSymbol::drag(EditData& ed)
 
 QVector<QLineF> BSymbol::dragAnchorLines() const
       {
-      QVector<QLineF> result;
-
-      if (parent() && parent()->type() == ElementType::SEGMENT) {
-            System* system = segment()->measure()->system();
-            qreal y        = system->staffCanvasYpage(staffIdx());
-            QPointF anchor(segment()->canvasPos().x(), y);
-            result << QLineF(canvasPos(), anchor);
-            }
-      else {
-            result << QLineF(canvasPos(), parent()->canvasPos());
-            }
-
-      return result;
+      return genericDragAnchorLines();
       }
 
 //---------------------------------------------------------

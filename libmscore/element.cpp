@@ -2024,6 +2024,27 @@ void Element::endDrag(EditData& ed)
       }
 
 //---------------------------------------------------------
+//   genericDragAnchorLines
+//---------------------------------------------------------
+
+QVector<QLineF> Element::genericDragAnchorLines() const
+      {
+      qreal xp = 0.0;
+      for (Element* e = parent(); e; e = e->parent())
+            xp += e->x();
+      qreal yp;
+      if (parent()->isSegment()) {
+            System* system = toSegment(parent())->measure()->system();
+            yp = system->staffCanvasYpage(staffIdx());
+            }
+      else
+            yp = parent()->canvasPos().y();
+      QPointF p1(xp, yp);
+      QLineF anchorLine(p1, canvasPos());
+      return { anchorLine };
+      }
+
+//---------------------------------------------------------
 //   updateGrips
 //---------------------------------------------------------
 
