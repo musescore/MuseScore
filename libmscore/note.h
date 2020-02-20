@@ -330,6 +330,7 @@ public:
       void setPitch(int val);
       void setPitch(int pitch, int tpc1, int tpc2);
       int pitch() const                   { return _pitch;    }
+      int ottaveCapoFret() const;
       int ppitch() const;           ///< playback pitch
       int epitch() const;           ///< effective pitch
       qreal tuning() const                { return _tuning;   }
