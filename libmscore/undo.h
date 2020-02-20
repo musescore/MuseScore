@@ -98,8 +98,19 @@ class UndoCommand {
 
    protected:
       virtual void flip(EditData*) {}
+      void appendChildren(UndoCommand*);
 
    public:
+      enum class Filter {
+            TextEdit,
+            AddElement,
+            AddElementLinked,
+            Link,
+            RemoveElement,
+            RemoveElementLinked,
+            ChangePropertyLinked,
+            };
+
       virtual ~UndoCommand();
       virtual void undo(EditData*);
       virtual void redo(EditData*);
@@ -112,6 +123,11 @@ class UndoCommand {
 // #ifndef QT_NO_DEBUG
       virtual const char* name() const { return "UndoCommand"; }
 // #endif
+
+      virtual bool isFiltered(Filter, const Element* /* target */) const { return false; }
+      bool hasFilteredChildren(Filter, const Element* target) const;
+      bool hasUnfilteredChildren(const std::vector<Filter>& filters, const Element* target) const;
+      void filterChildren(UndoCommand::Filter f, Element* target);
       };
 
 //---------------------------------------------------------
@@ -146,6 +162,8 @@ class UndoMacro : public UndoCommand {
       virtual void undo(EditData*) override;
       virtual void redo(EditData*) override;
       bool empty() const { return childCount() == 0; }
+      void append(UndoMacro&& other);
+
       UNDO_NAME("UndoMacro");
       };
 
@@ -182,10 +200,13 @@ class UndoStack {
       bool empty() const            { return !canUndo() && !canRedo();  }
       UndoMacro* current() const    { return curCmd;               }
       UndoMacro* last() const       { return curIdx > 0 ? list[curIdx-1] : 0; }
+      UndoMacro* prev() const       { return curIdx > 1 ? list[curIdx-2] : 0; }
       void undo(EditData*);
       void redo(EditData*);
       void rollback();
       void reopen();
+
+      void mergeCommands(int startIdx);
       };
 
 //---------------------------------------------------------
@@ -518,6 +539,8 @@ class AddElement : public UndoCommand {
       Element* getElement() const { return element; }
       virtual void cleanup(bool);
       virtual const char* name() const override;
+
+      bool isFiltered(UndoCommand::Filter f, const Element* target) const override;
       };
 
 //---------------------------------------------------------
@@ -533,6 +556,8 @@ class RemoveElement : public UndoCommand {
       virtual void redo(EditData*) override;
       virtual void cleanup(bool);
       virtual const char* name() const override;
+
+      bool isFiltered(UndoCommand::Filter f, const Element* target) const override;
       };
 
 //---------------------------------------------------------
@@ -997,6 +1022,11 @@ class ChangeProperty : public UndoCommand {
       ScoreElement* getElement() const { return element; }
       QVariant data() const { return property; }
       UNDO_NAME("ChangeProperty")
+
+      bool isFiltered(UndoCommand::Filter f, const Element* target) const override
+            {
+            return f == UndoCommand::Filter::ChangePropertyLinked && target->linkList().contains(element);
+            }
       };
 
 //---------------------------------------------------------
@@ -1224,6 +1254,8 @@ class Link : public LinkUnlink {
       virtual void undo(EditData*) override { unlink(); }
       virtual void redo(EditData*) override { link();   }
       UNDO_NAME("Link")
+
+      bool isFiltered(UndoCommand::Filter f, const Element* target) const override;
       };
 
 //---------------------------------------------------------
