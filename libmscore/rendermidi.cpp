@@ -314,6 +314,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
             // Get the velocity used for this note from the staff
             // This allows correct playback of tremolos even without SND enabled.
             int velo;
+            Fraction nonUnwoundTick = Fraction::fromTicks(on - tickOffset);
             if (config.useSND) {
                   switch (config.method) {
                         case DynamicsRenderMethod::FIXED_MAX:
@@ -321,12 +322,12 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
                               break;
                         case DynamicsRenderMethod::SEG_START:
                         default:
-                              velo = staff->velocities().val(Fraction::fromTicks(on));
+                              velo = staff->velocities().val(nonUnwoundTick);
                               break;
                         }
                   }
             else {
-                  velo = staff->velocities().val(Fraction::fromTicks(on));
+                  velo = staff->velocities().val(nonUnwoundTick);
                   }
 
             velo *= velocityMultiplier;
