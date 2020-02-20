@@ -137,6 +137,8 @@ class Dynamic final : public TextBase {
       Pid propertyId(const QStringRef& xmlName) const override;
       QString propertyUserValue(Pid) const override;
 
+      std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const Element*)> isDragged) override;
+
       QString accessibleInfo() const override;
       QString screenReaderInfo() const override;
       void doAutoplace();

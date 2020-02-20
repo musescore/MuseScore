@@ -15,6 +15,7 @@
 
 #include "globals.h"
 #include "libmscore/element.h"
+#include "libmscore/elementgroup.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
 #include "libmscore/mscoreview.h"
@@ -115,6 +116,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       QFocusFrame* focusFrame;
 
       EditData editData;
+      std::vector<std::unique_ptr<ElementGroup>> dragGroups;
 
       //--input state:
       PositionCursor* _cursor;
