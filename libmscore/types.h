@@ -244,6 +244,31 @@ enum class AccidentalType : char {
       // Persian
       SORI,
       KORON,
+
+      // Wyschnegradsky
+      TEN_TWELFTH_FLAT,
+      TEN_TWELFTH_SHARP,
+      ELEVEN_TWELFTH_FLAT,
+      ELEVEN_TWELFTH_SHARP,
+      ONE_TWELFTH_FLAT,
+      ONE_TWELFTH_SHARP,
+      TWO_TWELFTH_FLAT,
+      TWO_TWELFTH_SHARP,
+      THREE_TWELFTH_FLAT,
+      THREE_TWELFTH_SHARP,
+      FOUR_TWELFTH_FLAT,
+      FOUR_TWELFTH_SHARP,
+      FIVE_TWELFTH_FLAT,
+      FIVE_TWELFTH_SHARP,
+      SIX_TWELFTH_FLAT,
+      SIX_TWELFTH_SHARP,
+      SEVEN_TWELFTH_FLAT,
+      SEVEN_TWELFTH_SHARP,
+      EIGHT_TWELFTH_FLAT,
+      EIGHT_TWELFTH_SHARP,
+      NINE_TWELFTH_FLAT,
+      NINE_TWELFTH_SHARP,
+
       END
       ///\}
       };
