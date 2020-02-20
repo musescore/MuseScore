@@ -297,6 +297,16 @@ class Element : public ScoreElement {
       virtual void endDrag(EditData&);
       /** Returns anchor lines displayed while dragging element in page coordinates. */
       virtual QVector<QLineF> dragAnchorLines() const       { return QVector<QLineF>(); }
+      /**
+       * A generic \ref dragAnchorLines() implementation which can be used in
+       * dragAnchorLines() overrides in descendants. It is not made its default
+       * implementation in Element class since showing anchor lines is not
+       * desirable for most element types.
+       * TODO: maybe Annotation class could be extracted which would be a base
+       * class of various annotation types and which would have this
+       * dragAnchorLines() implementation by default.
+       */
+      QVector<QLineF> genericDragAnchorLines() const;
 
       virtual bool isEditable() const         { return !flag(ElementFlag::GENERATED); }
 
