@@ -36,11 +36,22 @@ struct TextEditData : public ElementEditData {
       };
 
 //---------------------------------------------------------
+//   TextEditUndoCommand
+//---------------------------------------------------------
+
+class TextEditUndoCommand : public UndoCommand {
+   protected:
+      TextCursor c;
+   public:
+      TextEditUndoCommand(const TextCursor& tc) : c(tc) {}
+      bool isFiltered(UndoCommand::Filter f, const Element* target) const override { return f == UndoCommand::Filter::TextEdit && c.text() == target; }
+      };
+
+//---------------------------------------------------------
 //   ChangeText
 //---------------------------------------------------------
 
-class ChangeText : public UndoCommand {
-      TextCursor c;
+class ChangeText : public TextEditUndoCommand {
       QString s;
 
    protected:
@@ -48,7 +59,7 @@ class ChangeText : public UndoCommand {
       void removeText(EditData*);
 
    public:
-      ChangeText(const TextCursor* tc, const QString& t) : c(*tc), s(t) {}
+      ChangeText(const TextCursor* tc, const QString& t) : TextEditUndoCommand(*tc), s(t) {}
       virtual void undo(EditData*) override = 0;
       virtual void redo(EditData*) override = 0;
       const TextCursor& cursor() const { return c; }
@@ -85,14 +96,13 @@ class RemoveText : public ChangeText {
 //   SplitJoinText
 //---------------------------------------------------------
 
-class SplitJoinText : public UndoCommand {
+class SplitJoinText : public TextEditUndoCommand {
    protected:
-      TextCursor c;
       virtual void split(EditData*);
       virtual void join(EditData*);
 
    public:
-      SplitJoinText(const TextCursor* tc) : c(*tc) {}
+      SplitJoinText(const TextCursor* tc) : TextEditUndoCommand(*tc) {}
       };
 
 //---------------------------------------------------------
