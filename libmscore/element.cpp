@@ -2035,7 +2035,10 @@ QVector<QLineF> Element::genericDragAnchorLines() const
       qreal yp;
       if (parent()->isSegment()) {
             System* system = toSegment(parent())->measure()->system();
-            yp = system->staffCanvasYpage(staffIdx());
+            const int stIdx = staffIdx();
+            yp = system->staffCanvasYpage(stIdx);
+            if (placement() == Placement::BELOW)
+                  yp += system->staff(stIdx)->bbox().height();
             }
       else
             yp = parent()->canvasPos().y();

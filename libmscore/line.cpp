@@ -144,8 +144,15 @@ QVector<QLineF> LineSegment::gripAnchorLines(Grip grip) const
             return result;
 
       // note-anchored spanners are relative to the system
-      qreal y = spanner()->anchor() == Spanner::Anchor::NOTE ?
-                system()->pos().y() : system()->staffYpage(staffIdx());
+      qreal y;
+      if (spanner()->anchor() == Spanner::Anchor::NOTE)
+            y = system()->pos().y();
+      else {
+            const int stIdx = staffIdx();
+            y = system()->staffYpage(stIdx);
+            if (line()->placement() == Placement::BELOW)
+                  y += system()->staff(stIdx)->bbox().height();
+            }
 
       switch (grip) {
       case Grip::START:
