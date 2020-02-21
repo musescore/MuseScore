@@ -120,7 +120,7 @@ void TestExchangevoices::undoChangeVoice()
             ChordRest* cr = static_cast<ChordRest*>(s->element(0));
             if (cr && cr->type() == ElementType::CHORD) {
                   Ms::Chord* c = static_cast<Ms::Chord*>(cr);
-                  score->select(c->downNote(), SelectType::ADD);
+                  score->select(c->lowestNote(), SelectType::ADD);
                   }
             }
       // change voice

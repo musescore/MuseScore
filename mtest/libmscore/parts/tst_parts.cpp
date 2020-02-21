@@ -406,7 +406,7 @@ MasterScore* TestParts::doAddBreath()
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(Fraction(1,4));
       Ms::Chord* chord = toChord(s->element(0));
-      Note* note   = chord->upNote();
+      Note* note   = chord->highestNote();
       EditData dd(0);
       Breath* b = new Breath(score);
       b->setSymId(SymId::breathMarkComma);
@@ -527,7 +527,7 @@ MasterScore* TestParts::doAddFingering()
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(Fraction(1,4));
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
-      Note* note   = chord->upNote();
+      Note* note   = chord->highestNote();
       EditData dd(0);
       Fingering* b = new Fingering(score);
       b->setXmlText("3");
@@ -586,7 +586,7 @@ MasterScore* TestParts::doRemoveFingering()
       Measure* m   = score->firstMeasure();
       Segment* s   = m->first()->next(SegmentType::ChordRest);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
-      Note* note   = chord->upNote();
+      Note* note   = chord->highestNote();
       Element* fingering = 0;
       foreach(Element* e, note->el()) {
             if (e->type() == ElementType::FINGERING) {
@@ -650,7 +650,7 @@ MasterScore* TestParts::doAddSymbol()
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(Fraction(1,4));
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
-      Note* note   = chord->upNote();
+      Note* note   = chord->highestNote();
       EditData dd(0);
       Symbol* b  = new Symbol(score);
       b->setSym(SymId::gClef);
@@ -709,7 +709,7 @@ MasterScore* TestParts::doRemoveSymbol()
       Measure* m   = score->firstMeasure();
       Segment* s   = m->first()->next(SegmentType::ChordRest);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
-      Note* note   = chord->upNote();
+      Note* note   = chord->highestNote();
       Element* se = 0;
       foreach(Element* e, note->el()) {
             if (e->type() == ElementType::SYMBOL) {
@@ -773,7 +773,7 @@ MasterScore* TestParts::doAddChordline()
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(Fraction(1,4));
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
-      Note* note   = chord->upNote();
+      Note* note   = chord->highestNote();
       EditData dd(0);
       ChordLine* b  = new ChordLine(score);
       b->setChordLineType(ChordLineType::FALL);
@@ -896,7 +896,7 @@ MasterScore* TestParts::doAddImage()
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(MScore::division);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
-      Note* note   = chord->upNote();
+      Note* note   = chord->highestNote();
       EditData dd(0);
       RasterImage* b = new RasterImage(score);
       b->load(DIR + "schnee.png");
@@ -955,7 +955,7 @@ MasterScore* TestParts::doRemoveImage()
       Measure* m   = score->firstMeasure();
       Segment* s   = m->first()->next(SegChordRest);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
-      Note* note   = chord->upNote();
+      Note* note   = chord->highestNote();
       Element* fingering = 0;
       foreach(Element* e, note->el()) {
             if (e->type() == IMAGE) {

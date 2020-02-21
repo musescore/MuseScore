@@ -301,7 +301,7 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal _spatium)
             y = (line + t[idx][up][_lines-1][line & 1]) * .5 * _spatium;
             }
       else {
-            const Note* n = up ? chord()->downNote() : chord()->upNote();
+            const Note* n = up ? chord()->lowestNote() : chord()->highestNote();
             const qreal noteBorder = n->y() + (up ? n->bbox().top() : n->bbox().bottom());
 
             const Stem* stem = chord()->stem();
@@ -365,7 +365,7 @@ void Tremolo::layout()
             return;
             }
 
-      Note* anchor1 = _chord1->upNote();
+      Note* anchor1 = _chord1->highestNote();
       Stem* stem    = _chord1->stem();
       qreal x, y, h;
       if (stem) {
@@ -437,8 +437,8 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
 
       // improve the case when one stem is up and another is down
       if (_chord1->beams() == 0 && _chord2->beams() == 0 && _chord1->up() != _chord2->up()) {
-            qreal meanNote1Y = .5 * (_chord1->upNote()->pagePos().y() - firstChordStaffY + _chord1->downNote()->pagePos().y() - firstChordStaffY);
-            qreal meanNote2Y = .5 * (_chord2->upNote()->pagePos().y() - firstChordStaffY + _chord2->downNote()->pagePos().y() - firstChordStaffY);
+            qreal meanNote1Y = .5 * (_chord1->highestNote()->pagePos().y() - firstChordStaffY + _chord1->lowestNote()->pagePos().y() - firstChordStaffY);
+            qreal meanNote2Y = .5 * (_chord2->highestNote()->pagePos().y() - firstChordStaffY + _chord2->lowestNote()->pagePos().y() - firstChordStaffY);
             y1 = .5 * (y1 + meanNote1Y);
             y2 = .5 * (y2 + meanNote2Y);
             }

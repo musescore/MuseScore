@@ -1010,7 +1010,7 @@ bool GuitarPro4::read(QFile* fp)
                               if (slide > 2)
                                     createSlide(convertGP4SlideNum(slide), cr, staffIdx);
                               if (slide < 3 || effect == SLIDE_OUT_UP) {
-                                    Note* last = chord->upNote();
+                                    Note* last = chord->highestNote();
                                     auto seg = chord->segment();
                                     Measure* mes = seg->measure();
                                     while ((seg = seg->prev()) || (mes = mes->prevMeasure())) {

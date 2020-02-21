@@ -228,7 +228,7 @@ Element* Rest::drop(EditData& data)
 
             case ElementType::CHORD: {
                   Chord* c = toChord(e);
-                  Note* n  = c->upNote();
+                  Note* n  = c->highestNote();
                   Direction dir = c->stemDirection();
                   // score()->select(0, SelectType::SINGLE, 0);
                   NoteVal nval;

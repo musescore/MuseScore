@@ -1707,7 +1707,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                     ChordRest* cr1 = segment->cr(track);
                                     if (cr1 && cr1->isChord()) {
                                           Chord* c = toChord(cr1);
-                                          addTextToNote("rasg.", Align::LEFT, c->upNote());
+                                          addTextToNote("rasg.", Align::LEFT, c->highestNote());
                                           }
 #if 0
                                     StaffText* st = new StaffText(score);

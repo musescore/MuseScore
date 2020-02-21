@@ -1583,7 +1583,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         if (!cr->isChord())
                               continue;
                         Chord* c = toChord(cr);
-                        QPointF p = c->upNote()->pagePos();
+                        QPointF p = c->highestNote()->pagePos();
                         qreal y1  = beamY + (p.x() - px1) * slope;
                         bool nup  = y1 < p.y();
                         if (c->up() != nup) {
@@ -1616,7 +1616,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         if (c->isRest())
                               continue;   //y = c->pagePos().y();
                         else
-                              y  = toChord(c)->upNote()->pagePos().y();
+                              y  = toChord(c)->highestNote()->pagePos().y();
                         y1 = qMax(y1, y);
                         y2 = qMin(y2, y);
                         }
@@ -1633,7 +1633,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         if (!cr->isChord())
                               continue;
                         Chord* c = toChord(cr);
-                        qreal y  = c->upNote()->pagePos().y();
+                        qreal y  = c->highestNote()->pagePos().y();
                         bool nup = beamY < y;
                         if (c->up() != nup) {
                               c->setUp(nup);
@@ -1656,7 +1656,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               continue;
                         Chord* c = toChord(cr);
                         bool _up1 = c->up();
-                        qreal y = (_up1 ? c->upNote() : c->downNote())->pagePos().y();
+                        qreal y = (_up1 ? c->highestNote() : c->lowestNote())->pagePos().y();
                         if (_up1)
                               yUpMin = qMin(y, yUpMin);
                         else

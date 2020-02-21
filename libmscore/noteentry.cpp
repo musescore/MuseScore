@@ -235,7 +235,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       else if (!_is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
             Segment* seg = setNoteRest(_is.segment(), track, nval, duration, stemDirection);
             if (seg) {
-                  note = toChord(seg->element(track))->upNote();
+                  note = toChord(seg->element(track))->highestNote();
                   }
             }
 

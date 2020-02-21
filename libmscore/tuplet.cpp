@@ -335,11 +335,11 @@ void Tuplet::layout()
                               l2l = vStemDistance;
                               }
                         else {
-                              p1.ry() = chord1->upNote()->abbox().top(); // whole note
+                              p1.ry() = chord1->highestNote()->abbox().top(); // whole note
                               }
                         }
                   else if (!chord1->up()) {
-                        p1.ry() = chord1->upNote()->abbox().top();
+                        p1.ry() = chord1->highestNote()->abbox().top();
                         if (stem)
                               p1.rx() = cr1->pagePos().x() - stemLeft;
                         }
@@ -359,7 +359,7 @@ void Tuplet::layout()
                         p2.rx() = chord2->pagePos().x() + chord2->maxHeadWidth() + stemRight;
                         }
                   else {
-                        p2.ry() = chord2->upNote()->abbox().top();
+                        p2.ry() = chord2->highestNote()->abbox().top();
                         }
                   }
             //
@@ -414,7 +414,7 @@ void Tuplet::layout()
                               const Chord* chord = toChord(e);
                               const Stem* stem = chord->stem();
                               if (stem) {
-                                    QRectF r(chord->up() ? stem->abbox() : chord->upNote()->abbox());
+                                    QRectF r(chord->up() ? stem->abbox() : chord->highestNote()->abbox());
                                     qreal y3 = r.top();
                                     qreal x3 = r.x() + r.width() * .5;
                                     qreal y0 = p1.y() + (x3 - p1.x()) * d;
@@ -446,11 +446,11 @@ void Tuplet::layout()
                               p1.rx() = cr1->pagePos().x() - stemLeft;
                               }
                         else {
-                              p1.ry() = chord1->downNote()->abbox().bottom(); // whole note
+                              p1.ry() = chord1->lowestNote()->abbox().bottom(); // whole note
                               }
                         }
                   else if (chord1->up()) {
-                        p1.ry() = chord1->downNote()->abbox().bottom();
+                        p1.ry() = chord1->lowestNote()->abbox().bottom();
                         }
                   }
 
@@ -469,7 +469,7 @@ void Tuplet::layout()
                         l2r = vStemDistance;
                         }
                   else {
-                        p2.ry() = chord2->downNote()->abbox().bottom();
+                        p2.ry() = chord2->lowestNote()->abbox().bottom();
                         if (stem)
                               p2.rx() = chord2->pagePos().x() + chord2->maxHeadWidth() + stemRight;
                         }
@@ -524,7 +524,7 @@ void Tuplet::layout()
                               const Chord* chord = toChord(e);
                               const Stem* stem = chord->stem();
                               if (stem) {
-                                    QRectF r(chord->up() ? chord->downNote()->abbox() : stem->abbox());
+                                    QRectF r(chord->up() ? chord->lowestNote()->abbox() : stem->abbox());
                                     qreal y3 = r.bottom();
                                     qreal x3 = r.x() + r.width() * .5;
                                     qreal y0 = p1.y() + (x3 - p1.x()) * d;

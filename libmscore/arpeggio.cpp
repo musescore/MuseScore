@@ -297,7 +297,7 @@ QLineF Arpeggio::dragAnchor() const
       {
       Chord* c = chord();
       if (c)
-            return QLineF(pagePos(), c->upNote()->pagePos());
+            return QLineF(pagePos(), c->highestNote()->pagePos());
       return QLineF();
       }
 
@@ -311,13 +311,13 @@ QPointF Arpeggio::gripAnchor(Grip n) const
       if (c == 0)
             return QPointF();
       if (n == Grip::START)
-            return c->upNote()->pagePos();
+            return c->highestNote()->pagePos();
       else if (n == Grip::END) {
-            Note* dnote = c->downNote();
+            Note* dnote = c->lowestNote();
             int btrack  = track() + (_span - 1) * VOICES;
             Element* e = c->segment()->element(btrack);
             if (e && e->isChord())
-                  dnote = toChord(e)->downNote();
+                  dnote = toChord(e)->lowestNote();
             return dnote->pagePos();
             }
       return QPointF();

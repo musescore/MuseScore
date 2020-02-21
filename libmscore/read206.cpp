@@ -2164,7 +2164,7 @@ bool readChordProperties206(XmlReader& e, Chord* ch)
             // temporarily attach the glissando to its final note as a back spanner;
             // after the whole score is read, Score::connectTies() will look for
             // the suitable initial note
-            Note* finalNote = ch->upNote();
+            Note* finalNote = ch->highestNote();
             Glissando* gliss = new Glissando(ch->score());
             gliss->read(e);
             gliss->setAnchor(Spanner::Anchor::NOTE);

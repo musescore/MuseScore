@@ -220,7 +220,7 @@ Element* Score::upAlt(Element* element)
 
 Note* Score::upAltCtrl(Note* note) const
       {
-      return note->chord()->upNote();
+      return note->chord()->highestNote();
       }
 
 //---------------------------------------------------------
@@ -263,7 +263,7 @@ Element* Score::downAlt(Element* element)
 
 Note* Score::downAltCtrl(Note* note) const
       {
-      return note->chord()->downNote();
+      return note->chord()->lowestNote();
       }
 
 //---------------------------------------------------------

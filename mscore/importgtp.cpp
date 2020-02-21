@@ -775,10 +775,10 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* /*note*/)
                         * but the /correct/ note need to check whether GP
                         * supports multi-note gliss. I think it can in modern
                         * versions */
-                        s->setStartElement(prevChord->upNote());
+                        s->setStartElement(prevChord->highestNote());
                         s->setTick(prevSeg->tick());
                         s->setTrack(staffIdx);
-                        s->setParent(prevChord->upNote());
+                        s->setParent(prevChord->highestNote());
                         s->setText("");
                         s->setGlissandoType(GlissandoType::STRAIGHT);
                         if (sl == LEGATO_SLIDE)
@@ -790,7 +790,7 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* /*note*/)
             /* TODO again here, we should not just set the up note but the
              * /correct/ note need to check whether GP supports
              * multi-note gliss. I think it can in modern versions */
-            s->setEndElement(chord->upNote());
+            s->setEndElement(chord->highestNote());
             s->setTick2(chord->segment()->tick());
             s->setTrack2(staffIdx);
             score->addElement(s);
@@ -1002,14 +1002,14 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
        */
       if (beatEffect == 1) {
             if (version > 300)
-                  addTap(chord->upNote());
+                  addTap(chord->highestNote());
             else
-                  addVibrato(chord->upNote());
+                  addVibrato(chord->highestNote());
             }
       else if (beatEffect == 2)
-            addSlap(chord->upNote());
+            addSlap(chord->highestNote());
       else if (beatEffect == 3)
-            addPop(chord->upNote());
+            addPop(chord->highestNote());
       else if (beatEffect == 4) {
             if (version >= 400) {
                   Articulation* a = new Articulation(chord->score());
@@ -1032,7 +1032,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
             chord->add(art);
             }
       else if (beatEffect == 7) {
-            addVibrato(chord->upNote(), Vibrato::Type::VIBRATO_SAWTOOTH);
+            addVibrato(chord->highestNote(), Vibrato::Type::VIBRATO_SAWTOOTH);
             }
       }
 

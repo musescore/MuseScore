@@ -553,7 +553,7 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
                   Chord* chord = toChord(cr);
                   Staff* st1   = chord->staff();
                   Instrument* instr = chord->part()->instrument(Fraction::fromTicks(tick));
-                  int channel = instr->channel(chord->upNote()->subchannel())->channel();
+                  int channel = instr->channel(chord->highestNote()->subchannel())->channel();
                   events->registerChannel(channel);
 
                   qreal veloMultiplier = 1;
@@ -626,7 +626,7 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                   Chord* chord = toChord(cr);
 
                   Instrument* instr = st1->part()->instrument(tick);
-                  int subchannel = chord->upNote()->subchannel();
+                  int subchannel = chord->highestNote()->subchannel();
                   int channel = instr->channel(subchannel)->channel();
 
                   events->registerChannel(channel);
@@ -1156,7 +1156,7 @@ void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
       {
       int notes = int(chord->notes().size());
       int l = 64;
-      while (l && (l * notes > chord->upNote()->playTicks()))
+      while (l && (l * notes > chord->highestNote()->playTicks()))
             l = 2*l / 3;
       int start, end, step;
       bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN && chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN_STRAIGHT;
@@ -1176,7 +1176,7 @@ void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
             events->clear();
 
             auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()) / Score::defaultTempo();
-            int ot = (l * j * 1000) / chord->upNote()->playTicks() *
+            int ot = (l * j * 1000) / chord->highestNote()->playTicks() *
                         tempoRatio * chord->arpeggio()->Stretch();
 
             events->append(NoteEvent(0, ot, 1000 - ot));

@@ -121,8 +121,8 @@ class Chord final : public ChordRest {
       const std::vector<Note*>& notes() const     { return _notes; }
 
       // Chord has at least one Note
-      Note* upNote() const;
-      Note* downNote() const;
+      Note* highestNote() const;
+      Note* lowestNote() const;
       virtual int upString() const;
       virtual int downString() const;
 

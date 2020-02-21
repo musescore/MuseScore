@@ -87,7 +87,7 @@ void TestSpanners::spanners01()
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
-      Note*       note  = chord->upNote();
+      Note*       note  = chord->highestNote();
       QVERIFY(note);
       // drop a glissando on note
       gliss             = new Glissando(score); // create a new element each time, as drop() will eventually delete it
@@ -103,7 +103,7 @@ void TestSpanners::spanners01()
       QVERIFY(seg);
       chord = static_cast<Ms::Chord*>(seg->element(0));   // voice 0 of staff 0
       QVERIFY(chord && chord->type() == ElementType::CHORD);
-      note  = chord->upNote();
+      note  = chord->highestNote();
       QVERIFY(note);
       // drop a glissando on note
       gliss             = new Glissando(score);
@@ -119,7 +119,7 @@ void TestSpanners::spanners01()
       QVERIFY(seg);
       chord = static_cast<Ms::Chord*>(seg->element(4));   // voice 0 of staff 1
       QVERIFY(chord && chord->type() == ElementType::CHORD);
-      note  = chord->upNote();
+      note  = chord->highestNote();
       QVERIFY(note);
       // drop a glissando on note
       gliss             = new Glissando(score);
@@ -135,7 +135,7 @@ void TestSpanners::spanners01()
       QVERIFY(seg);
       chord = static_cast<Ms::Chord*>(seg->element(0));   // voice 0 of staff 0
       QVERIFY(chord && chord->type() == ElementType::CHORD);
-      note  = chord->upNote();
+      note  = chord->highestNote();
       QVERIFY(note);
       // drop a glissando on note
       gliss             = new Glissando(score);
@@ -151,7 +151,7 @@ void TestSpanners::spanners01()
       QVERIFY(seg);
       chord = static_cast<Ms::Chord*>(seg->element(0));   // voice 0 of staff 0
       QVERIFY(chord && chord->type() == ElementType::CHORD);
-      note  = chord->upNote();
+      note  = chord->highestNote();
       QVERIFY(note);
       // drop a glissando on note
       gliss             = new Glissando(score);
@@ -202,7 +202,7 @@ void TestSpanners::spanners03()
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
-      Note*       note  = chord->upNote();
+      Note*       note  = chord->highestNote();
       QVERIFY(note);
       // drop a glissando on note
       gliss             = new Glissando(score); // create a new element each time, as drop() will eventually delete it
@@ -214,7 +214,7 @@ void TestSpanners::spanners03()
       // go to last after-grace of chord and drop a glissando on it
       Ms::Chord*      grace = chord->graceNotesAfter().last();
       QVERIFY(grace && grace->type() == ElementType::CHORD);
-      note              = grace->upNote();
+      note              = grace->highestNote();
       QVERIFY(note);
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
@@ -227,7 +227,7 @@ void TestSpanners::spanners03()
       QVERIFY(seg);
       chord             = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
-      note              = chord->upNote();
+      note              = chord->highestNote();
       QVERIFY(note);
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
@@ -243,7 +243,7 @@ void TestSpanners::spanners03()
       // go to its last before-grace note
       grace             = chord->graceNotesBefore().last();
       QVERIFY(grace && grace->type() == ElementType::CHORD);
-      note              = grace->upNote();
+      note              = grace->highestNote();
       QVERIFY(note);
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
@@ -335,7 +335,7 @@ void TestSpanners::spanners06()
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
-      Note*       note  = chord->upNote();
+      Note*       note  = chord->highestNote();
       QVERIFY(note);
       // drop a glissando on note
       gliss             = new Glissando(score);
@@ -367,7 +367,7 @@ void TestSpanners::spanners07()
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
-      Note*       note  = chord->upNote();
+      Note*       note  = chord->highestNote();
       QVERIFY(note);
       // drop a glissando on note
       gliss             = new Glissando(score);

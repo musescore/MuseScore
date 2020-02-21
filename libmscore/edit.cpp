@@ -1659,7 +1659,7 @@ void Score::deleteItem(Element* el)
                   Chord* chord = toChord(el->parent());
                   if (chord->notes().size() > 1) {
                         undoRemoveElement(el);
-                        select(chord->downNote(), SelectType::SINGLE, 0);
+                        select(chord->lowestNote(), SelectType::SINGLE, 0);
                         break;
                         }
                   // else fall through
@@ -2476,7 +2476,7 @@ void Score::cmdDeleteSelection()
             cr = _is.cr();
       if (cr) {
             if (cr->isChord())
-                  select(toChord(cr)->upNote(), SelectType::SINGLE);
+                  select(toChord(cr)->highestNote(), SelectType::SINGLE);
             else
                   select(cr, SelectType::SINGLE);
             }

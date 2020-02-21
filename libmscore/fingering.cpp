@@ -151,7 +151,7 @@ void Fingering::layout()
                                     top = stem->y() + stem->bbox().top();
                                     }
                               else {
-                                    Note* un = chord->upNote();
+                                    Note* un = chord->highestNote();
                                     top = qMin(0.0, un->y() + un->bbox().top());
                                     }
                               top -= md;
@@ -187,7 +187,7 @@ void Fingering::layout()
                                     bottom = stem->y() + stem->bbox().bottom();
                                     }
                               else {
-                                    Note* dn = chord->downNote();
+                                    Note* dn = chord->lowestNote();
                                     bottom = qMax(vStaff->height(), dn->y() + dn->bbox().bottom());
                                     }
                               bottom += md;

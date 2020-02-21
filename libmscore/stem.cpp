@@ -106,7 +106,7 @@ void Stem::layout()
                   }
             else {                              // non-TAB
                   // move stem start to note attach point
-                  Note* n  = up() ? chord()->downNote() : chord()->upNote();
+                  Note* n  = up() ? chord()->lowestNote() : chord()->highestNote();
                   y1      += (up() ? n->stemUpSE().y() : n->stemDownNW().y());
                   rypos() = n->rypos();
                   }

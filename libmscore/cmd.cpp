@@ -2284,7 +2284,7 @@ Element* Score::move(const QString& cmd)
             if (trg && cmd == "next-chord") {
                   // if chord, go to topmost note
                   if (trg->type() == ElementType::CHORD)
-                        trg = toChord(trg)->upNote();
+                        trg = toChord(trg)->highestNote();
                   setPlayNote(true);
                   select(trg, SelectType::SINGLE, 0);
                   return trg;
@@ -2388,7 +2388,7 @@ Element* Score::move(const QString& cmd)
 
       if (el) {
             if (el->type() == ElementType::CHORD)
-                  el = toChord(el)->upNote();       // originally downNote
+                  el = toChord(el)->highestNote();       // originally lowestNote
             setPlayNote(true);
             if (noteEntryMode()) {
                   // if cursor moved into a gap, selection cannot follow
@@ -3568,11 +3568,11 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
       else {
             static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
 
-            // if adding notes, add above the upNote of the current chord
+            // if adding notes, add above the highestNote of the current chord
             Element* el = selection().element();
             if (addFlag && el && el->isNote()) {
                   Chord* chord = toNote(el)->chord();
-                  Note* n      = chord->upNote();
+                  Note* n      = chord->highestNote();
                   octave = n->epitch() / 12;
                   int tpc = n->tpc();
                   if (tpc == Tpc::TPC_C_BB || tpc == Tpc::TPC_C_B)
@@ -3591,7 +3591,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
                               if (seg->isChordRestType()) {
                                     Element* p = seg->element(is.track());
                                     if (p && p->isChord()) {
-                                          curPitch = toChord(p)->downNote()->epitch();
+                                          curPitch = toChord(p)->lowestNote()->epitch();
                                           break;
                                           }
                                     }

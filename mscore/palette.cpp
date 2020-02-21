@@ -535,7 +535,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                   if (e) {
                         // get note if selection was full chord
                         if (e->isChord())
-                              e = toChord(e)->upNote();
+                              e = toChord(e)->highestNote();
                         // use voice of element being added to (otherwise we can might corrupt the measure)
                         element->setTrack(e->voice());
                         applyDrop(score, viewer, e, element, modifiers);
@@ -627,14 +627,14 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                               if (sel.startSegment()->isChordRestType() && sel.startSegment()->rtick().isNotZero()) {
                                     ChordRest* cr = static_cast<ChordRest*>(sel.startSegment()->nextChordRest(i * VOICES));
                                     if (cr && cr->isChord())
-                                          e1 = static_cast<Chord*>(cr)->upNote();
+                                          e1 = static_cast<Chord*>(cr)->highestNote();
                                     else
                                           e1 = cr;
                                     }
                               if (sel.endSegment() && sel.endSegment()->segmentType() == SegmentType::ChordRest) {
                                     ChordRest* cr = static_cast<ChordRest*>(sel.endSegment()->nextChordRest(i * VOICES));
                                     if (cr && cr->isChord())
-                                          e2 = static_cast<Chord*>(cr)->upNote();
+                                          e2 = static_cast<Chord*>(cr)->highestNote();
                                     else
                                           e2 = cr;
                                     }

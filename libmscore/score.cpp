@@ -911,7 +911,7 @@ Note* prevNote(Note* n)
                   for (int track = startTrack; track >= endTrack; --track) {
                         Element* e = seg->element(track);
                         if (e && e->type() == ElementType::CHORD)
-                              return toChord(e)->upNote();
+                              return toChord(e)->highestNote();
                         }
                   }
             seg = seg->prev1();
@@ -943,7 +943,7 @@ static Note* nextNote(Note* n)
                   for (int track = startTrack; track < endTrack; ++track) {
                         Element* e = seg->element(track);
                         if (e && e->type() == ElementType::CHORD) {
-                              return ((Chord*)e)->downNote();
+                              return ((Chord*)e)->lowestNote();
                               }
                         }
                   }

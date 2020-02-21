@@ -324,7 +324,7 @@ void TestNote::grace()
       MasterScore* score = readScore(DIR + "grace.mscx");
       score->doLayout();
       Ms::Chord* chord = score->firstMeasure()->findChord(Fraction(0,1), 0);
-      Note* note = chord->upNote();
+      Note* note = chord->highestNote();
 
       // create
       score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, MScore::division/2);

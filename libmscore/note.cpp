@@ -1789,7 +1789,7 @@ Element* Note::drop(EditData& data)
             case ElementType::CHORD:
                   {
                   Chord* c      = toChord(e);
-                  Note* n       = c->upNote();
+                  Note* n       = c->highestNote();
                   Direction dir = c->stemDirection();
                   int t         = (staff2track(staffIdx()) + n->voice());
                   score()->select(0, SelectType::SINGLE, 0);
@@ -2960,7 +2960,7 @@ QString Note::accessibleExtraInfo() const
 
       // only read extra information for top note of chord
       // (it is reached directly on next/previous element)
-      if (this == chord()->upNote())
+      if (this == chord()->highestNote())
             rez = QString("%1 %2").arg(rez).arg(chord()->accessibleExtraInfo());
 
       return rez;

@@ -165,7 +165,7 @@ void InputState::update(Selection& selection)
       ChordRest* cr = chordRest(e);
       Note* n = note(e);
       if (!n && cr && cr->isChord())
-            n = toChord(cr)->upNote();
+            n = toChord(cr)->highestNote();
 
       if (cr) {
             setTrack(cr->track());

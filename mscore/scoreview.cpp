@@ -2127,7 +2127,7 @@ void ScoreView::cmd(const char* s)
                         ChordRest* cr = cv->score()->selection().currentCR();
                         if (cr) {
                               if (cr->isChord())
-                                    el = toChord(cr)->downNote();
+                                    el = toChord(cr)->lowestNote();
                               else if (cr->isRest())
                                     el = cr;
                               cv->score()->select(el);
@@ -2151,7 +2151,7 @@ void ScoreView::cmd(const char* s)
                         ChordRest* cr = cv->score()->selection().currentCR();
                         if (cr) {
                               if (cr->isChord())
-                                    el = toChord(cr)->upNote();
+                                    el = toChord(cr)->highestNote();
                               else if (cr->isRest())
                                     el = cr;
                               cv->score()->select(el);
@@ -2176,7 +2176,7 @@ void ScoreView::cmd(const char* s)
                         // no current selection - restore lost selection
                         e = cv->score()->selection().currentCR();
                         if (e && e->isChord())
-                              e = toChord(e)->upNote();
+                              e = toChord(e)->highestNote();
                         }
                   if (!e) {
                         // no current or last selection - fall back to first element
@@ -2793,7 +2793,7 @@ void ScoreView::startNoteEntry()
             Chord* c = static_cast<Chord*>(el);
             note = c->selectedNote();
             if (note == 0)
-                  note = c->upNote();
+                  note = c->highestNote();
             el = note;
             }
       TDuration d(is.duration());
@@ -4594,7 +4594,7 @@ void ScoreView::gotoMeasure(Measure* measure)
                   if (cr) {
                         Element* e;
                         if (cr->type() == ElementType::CHORD)
-                              e =  static_cast<Chord*>(cr)->upNote();
+                              e =  static_cast<Chord*>(cr)->highestNote();
                         else //REST
                               e = cr;
 

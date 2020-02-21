@@ -329,12 +329,12 @@ Note* nextChordNote(Note* note)
             Element*    targetElement = seg->elementAt(track);
             // if a chord exists in the same track, return its top note
             if (targetElement && targetElement->isChord())
-                  return toChord(targetElement)->upNote();
+                  return toChord(targetElement)->highestNote();
             // if not, return topmost chord in track range
             for (int i = fromTrack ; i < toTrack; i++) {
                   targetElement = seg->elementAt(i);
                   if (targetElement && targetElement->isChord())
-                        return toChord(targetElement)->upNote();
+                        return toChord(targetElement)->highestNote();
                   }
             seg = seg->nextCR(track, true);
             }
@@ -353,12 +353,12 @@ Note* prevChordNote(Note* note)
                   Element*    targetElement = seg->elementAt(track);
                   // if a chord exists in the same track, return its top note
                   if (targetElement && targetElement->isChord())
-                        return toChord(targetElement)->upNote();
+                        return toChord(targetElement)->highestNote();
                   // if not, return topmost chord in track range
                   for (int i = fromTrack ; i < toTrack; i++) {
                         targetElement = seg->elementAt(i);
                         if (targetElement && targetElement->isChord())
-                              return toChord(targetElement)->upNote();
+                              return toChord(targetElement)->highestNote();
                         }
                   }
             seg = seg->prev1();

@@ -514,8 +514,8 @@ void Slur::slurPosChord(SlurPos* sp)
             stChord = startChord();
             enChord = endChord();
             }
-      Note* _startNote = stChord->downNote();
-      Note* _endNote   = enChord->downNote();
+      Note* _startNote = stChord->lowestNote();
+      Note* _endNote   = enChord->lowestNote();
       qreal hw         = _startNote->bboxRightPos();
       qreal __up       = _up ? -1.0 : 1.0;
       qreal _spatium = spatium();
@@ -591,13 +591,13 @@ void Slur::slurPos(SlurPos* sp)
       Note* note1    = 0;
       if (scr->isChord()) {
             sc    = toChord(scr);
-            note1 = _up ? sc->upNote() : sc->downNote();
+            note1 = _up ? sc->highestNote() : sc->lowestNote();
             }
       Chord* ec = 0;
       Note* note2 = 0;
       if (ecr->isChord()) {
             ec   = toChord(ecr);
-            note2 = _up ? ec->upNote() : ec->downNote();
+            note2 = _up ? ec->highestNote() : ec->lowestNote();
             }
 
       sp->system1 = scr->measure()->system();
@@ -735,9 +735,9 @@ void Slur::slurPos(SlurPos* sp)
 
                         qreal sh = stem1->height() + _spatium;
                         if (_up)
-                              yo = sc->downNote()->pos().y() - sh;
+                              yo = sc->lowestNote()->pos().y() - sh;
                         else
-                              yo = sc->upNote()->pos().y() + sh;
+                              yo = sc->highestNote()->pos().y() + sh;
                         xo       = stem1->pos().x();
 
                         // account for articulations
@@ -772,10 +772,10 @@ void Slur::slurPos(SlurPos* sp)
                               // see for example Gould p. 111
 
                               // get position of note on slur side for start & end chords
-                              Note* n1  = sc->up() ? sc->upNote() : sc->downNote();
+                              Note* n1  = sc->up() ? sc->highestNote() : sc->lowestNote();
                               Note* n2  = 0;
                               if (ec)
-                                    n2 = ec->up() ? ec->upNote() : ec->downNote();
+                                    n2 = ec->up() ? ec->highestNote() : ec->lowestNote();
 
                               // differential in note positions
                               qreal yd  = (n2 ? n2->pos().y() : ecr->pos().y()) - n1->pos().y();
@@ -784,9 +784,9 @@ void Slur::slurPos(SlurPos* sp)
                               // float along stem according to differential
                               qreal sh = stem1->height();
                               if (_up && yd < 0.0)
-                                    yo = qMax(yo + yd, sc->downNote()->pos().y() - sh - _spatium);
+                                    yo = qMax(yo + yd, sc->lowestNote()->pos().y() - sh - _spatium);
                               else if (!_up && yd > 0.0)
-                                    yo = qMin(yo + yd, sc->upNote()->pos().y() + sh + _spatium);
+                                    yo = qMin(yo + yd, sc->highestNote()->pos().y() + sh + _spatium);
 
                               // account for articulations
                               yo = fixArticulations(yo, sc, __up, true);
@@ -850,9 +850,9 @@ void Slur::slurPos(SlurPos* sp)
 
                               qreal sh = stem2->height() + _spatium;
                               if (_up)
-                                    yo = ec->downNote()->pos().y() - sh;
+                                    yo = ec->lowestNote()->pos().y() - sh;
                               else
-                                    yo = ec->upNote()->pos().y() + sh;
+                                    yo = ec->highestNote()->pos().y() + sh;
                               xo = stem2->pos().x();
 
                               // account for articulations
@@ -884,17 +884,17 @@ void Slur::slurPos(SlurPos* sp)
 
                                     Note* n1 = 0;
                                     if (sc)
-                                          n1 = sc->up() ? sc->upNote() : sc->downNote();
-                                    Note* n2 = ec->up() ? ec->upNote() : ec->downNote();
+                                          n1 = sc->up() ? sc->highestNote() : sc->lowestNote();
+                                    Note* n2 = ec->up() ? ec->highestNote() : ec->lowestNote();
 
                                     qreal yd = n2->pos().y() - (n1 ? n1->pos().y() : startCR()->pos().y());
                                     yd *= .5;
 
                                     qreal mh = stem2->height();
                                     if (_up && yd > 0.0)
-                                          yo = qMax(yo - yd, ec->downNote()->pos().y() - mh - _spatium);
+                                          yo = qMax(yo - yd, ec->lowestNote()->pos().y() - mh - _spatium);
                                     else if (!_up && yd < 0.0)
-                                          yo = qMin(yo - yd, ec->upNote()->pos().y() + mh + _spatium);
+                                          yo = qMin(yo - yd, ec->highestNote()->pos().y() + mh + _spatium);
 
                                     // account for articulations
                                     yo = fixArticulations(yo, ec, __up, true);

@@ -111,7 +111,7 @@ void ChordLine::layout()
 
       qreal _spatium = spatium();
       if (parent()) {
-            Note* note = chord()->upNote();
+            Note* note = chord()->highestNote();
             QPointF p(note->pos());
             // chordlines to the right of the note
             if (_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT)
