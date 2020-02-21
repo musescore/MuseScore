@@ -86,6 +86,7 @@ class MeasureBase : public Element {
       MeasureBase* nextMM() const;
       void setNext(MeasureBase* e)           { _next = e;      }
       MeasureBase* prev() const              { return _prev;   }
+      MeasureBase* prevMM() const;
       void setPrev(MeasureBase* e)           { _prev = e;      }
 
       Ms::Measure* nextMeasure() const;

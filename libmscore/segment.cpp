@@ -1259,8 +1259,10 @@ Element* Segment::firstInNextSegments(int activeStaff)
             return re;
 
       if (!seg) { //end of staff
-            seg = score()->firstSegment(SegmentType::All);
-            return seg->element( (activeStaff + 1) * VOICES );
+            if (activeStaff + 1 >= score()->nstaves()) //end of score
+                  return 0;
+            seg = score()->firstSegmentMM(SegmentType::All);
+            return seg->element((activeStaff + 1) * VOICES);
             }
       return 0;
       }
@@ -1520,12 +1522,12 @@ Element* Segment::nextElement(int activeStaff)
                         if (s)
                               return s->spannerSegments().front();
                         }
-                  Segment* nextSegment = this->next1enabled();
+                  Segment* nextSegment = this->next1MMenabled();
                   while (nextSegment) {
                         Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
                               return nextEl;
-                        nextSegment = nextSegment->next1enabled();
+                        nextSegment = nextSegment->next1MMenabled();
                         }
                   break;
                   }
@@ -1539,12 +1541,12 @@ Element* Segment::nextElement(int activeStaff)
                   if (sp)
                         return sp->spannerSegments().front();
 
-                  Segment* nextSegment = this->next1enabled();
+                  Segment* nextSegment = this->next1MMenabled();
                   while (nextSegment) {
                         Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
                               return nextEl;
-                        nextSegment = nextSegment->next1enabled();
+                        nextSegment = nextSegment->next1MMenabled();
                         }
                   break;
                   }
@@ -1578,7 +1580,7 @@ Element* Segment::nextElement(int activeStaff)
                   Spanner* s = firstSpanner(activeStaff);
                   if (s)
                         return s->spannerSegments().front();
-                  Segment* nextSegment =  seg->next1enabled();
+                  Segment* nextSegment =  seg->next1MMenabled();
                   if (!nextSegment) {
                         MeasureBase* mb = measure()->next();
                         return mb && mb->isBox() ? mb : score()->lastElement();
@@ -1587,7 +1589,7 @@ Element* Segment::nextElement(int activeStaff)
                   Measure* nsm = nextSegment->measure();
                   if (nsm != measure()) {
                         // check for frame, measure elements
-                        MeasureBase* nmb = measure()->next();
+                        MeasureBase* nmb = measure()->nextMM();
                         Element* nme = nsm->el().empty() ? nullptr : nsm->el().front();
                         if (nsm != nmb)
                               return nmb;
@@ -1599,7 +1601,7 @@ Element* Segment::nextElement(int activeStaff)
                         nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
                               return nextEl;
-                        nextSegment = nextSegment->next1enabled();
+                        nextSegment = nextSegment->next1MMenabled();
                         }
                   }
                   break;
@@ -1652,7 +1654,7 @@ Element* Segment::prevElement(int activeStaff)
                          el = s->element(--track);
                          if (track == 0) {
                                track = score()->nstaves() * VOICES - 1;
-                               s = s->prev1enabled();
+                               s = s->prev1MMenabled();
                                }
                          }
                    if (el->staffIdx() != activeStaff)
@@ -1723,7 +1725,7 @@ Element* Segment::prevElement(int activeStaff)
                               return prev;
                               }
                         }
-                   Segment* prevSeg = seg->prev1enabled();
+                   Segment* prevSeg = seg->prev1MMenabled();
                    if (!prevSeg) {
                          MeasureBase* mb = measure()->prev();
                          return mb && mb->isBox() ? mb : score()->firstElement();
@@ -1732,7 +1734,7 @@ Element* Segment::prevElement(int activeStaff)
                    Measure* psm = prevSeg->measure();
                    if (psm != measure()) {
                          // check for frame, measure elements
-                         MeasureBase* pmb = measure()->prev();
+                         MeasureBase* pmb = measure()->prevMM();
                          Element* me = measure()->el().empty() ? nullptr : measure()->el().back();
                          if (me && me->isTextBase() && me->staffIdx() == e->staffIdx())
                                return me;
@@ -1742,7 +1744,7 @@ Element* Segment::prevElement(int activeStaff)
 
                    prev = lastElementOfSegment(prevSeg, activeStaff);
                    while (!prev && prevSeg) {
-                         prevSeg = prevSeg->prev1enabled();
+                         prevSeg = prevSeg->prev1MMenabled();
                          prev = lastElementOfSegment(prevSeg, activeStaff);
                          }
                    if (!prevSeg)
@@ -1812,19 +1814,19 @@ Element* Segment::lastInPrevSegments(int activeStaff)
             return re;
 
       if (!seg) { //end of staff
-            if (activeStaff -1 < 0) //end of score
+            if (activeStaff - 1 < 0) //end of score
                   return 0;
 
             re = 0;
-            seg = score()->lastSegment();
+            seg = score()->lastSegmentMM();
             while (true) {
-                  if (seg->segmentType() == SegmentType::EndBarLine)
-                        score()->inputState().setTrack( (activeStaff -1) * VOICES ); //correction
+                  //if (seg->segmentType() == SegmentType::EndBarLine)
+                  //      score()->inputState().setTrack((activeStaff - 1) * VOICES ); //correction
 
-                  if ((re = seg->lastElement(activeStaff -1)) != 0)
+                  if ((re = seg->lastElement(activeStaff - 1)) != 0)
                         return re;
 
-                  seg = seg->prev1enabled();
+                  seg = seg->prev1MMenabled();
                   }
             }
 
