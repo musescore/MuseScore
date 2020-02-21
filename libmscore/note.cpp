@@ -1432,10 +1432,13 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                         sp->setTrack(l.track());
                         sp->setTick(tick());
                         if (sp->isTie()) {
+                              Note* n = this;
+                              while (n->tieFor())
+                                    n = n->tieFor()->endNote();
                               Tie* tie = toTie(sp);
-                              tie->setParent(this);
-                              tie->setStartNote(this);
-                              _tieFor = tie;
+                              tie->setParent(n);
+                              tie->setStartNote(n);
+                              n->_tieFor = tie;
                               }
                         else {
                               sp->setAnchor(Spanner::Anchor::NOTE);
