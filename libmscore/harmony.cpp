@@ -971,22 +971,64 @@ QString HDegree::text() const
       }
 
 //---------------------------------------------------------
+//   findInSeg
+///   find a Harmony in a given segment on the same track as this harmony.
+///
+///   returns 0 if there is none
+//---------------------------------------------------------
+
+Harmony* Harmony::findInSeg(Segment* seg) const
+      {
+      // Find harmony as parent of fret diagram on same track
+      Element* fde = seg->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
+      if (fde) {
+            FretDiagram* fd = toFretDiagram(fde);
+            if (fd->harmony()) {
+                  return toHarmony(fd->harmony());
+                  }
+            }
+
+      // Find harmony on same track
+      Element* e = seg->findAnnotation(ElementType::HARMONY, track(), track());
+      if (e) {
+            return toHarmony(e);
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   getParentSeg
+///   gets the parent segment of this harmony
+//---------------------------------------------------------
+
+Segment* Harmony::getParentSeg() const
+      {
+      Segment* seg;
+      if (parent()->isFretDiagram()) {
+            // When this harmony is the child of a fret diagram, we need to go up twice
+            // to get to the parent seg.
+            seg = toSegment(parent()->parent());
+            }
+      else {
+            seg = toSegment(parent());
+            }
+      return seg;
+      }
+
+//---------------------------------------------------------
 //   findNext
 ///   find the next Harmony in the score
 ///
 ///   returns 0 if there is none
 //---------------------------------------------------------
+
 Harmony* Harmony::findNext() const
       {
-      Segment* seg = toSegment(parent());
-      Segment* cur = seg->next1();
+      Segment* cur = getParentSeg()->next1();
       while (cur) {
-            //find harmony on same track
-            Element* e = cur->findAnnotation(ElementType::HARMONY,
-                                       track(), track());
-            if (e) {
-                  //we have found harmony element
-                  return toHarmony(e);
+            Harmony* h = findInSeg(cur);
+            if (h) {
+                  return h;
                   }
             cur = cur->next1();
             }
@@ -999,17 +1041,14 @@ Harmony* Harmony::findNext() const
 ///
 ///   returns 0 if there is none
 //---------------------------------------------------------
+
 Harmony* Harmony::findPrev() const
       {
-      Segment* seg = toSegment(parent());
-      Segment* cur = seg->prev1();
+      Segment* cur = getParentSeg()->prev1();
       while (cur) {
-            //find harmony on same track
-            Element* e = cur->findAnnotation(ElementType::HARMONY,
-                                       track(), track());
-            if (e) {
-                  //we have found harmony element
-                  return toHarmony(e);
+            Harmony* h = findInSeg(cur);
+            if (h) {
+                  return h;
                   }
             cur = cur->prev1();
             }
