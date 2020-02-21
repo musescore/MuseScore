@@ -1212,8 +1212,8 @@ void InspectorStaffText::propertiesClicked()
 void InspectorStaffText::setElement()
       {
       InspectorTextBase::setElement();
-      Element* e = inspector->element();
-      s.properties->setVisible(e->isStaffText() || e->isSystemText());
+      Element* el = inspector->element();
+      s.properties->setVisible(el->isStaffText() || el->isSystemText());
       }
 
 //---------------------------------------------------------
