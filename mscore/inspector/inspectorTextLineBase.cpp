@@ -13,6 +13,7 @@
 #include "inspector.h"
 #include "inspectorTextLineBase.h"
 #include "libmscore/textlinebase.h"
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -24,9 +25,9 @@ void populateHookType(QComboBox* b)
       {
       b->clear();
       b->addItem(b->QObject::tr("None", "no hook type"), int(HookType::NONE));
-      b->addItem(b->QObject::tr("90\u00b0"), int(HookType::HOOK_90)); // &deg;
-      b->addItem(b->QObject::tr("45\u00b0"), int(HookType::HOOK_45)); // &deg;
-      b->addItem(b->QObject::tr("90\u00b0 centered"), int(HookType::HOOK_90T)); // &deg;
+      b->addItem(b->QObject::tr("90\u00b0"),             int(HookType::HOOK_90)); // &deg;
+      b->addItem(b->QObject::tr("45\u00b0"),             int(HookType::HOOK_45)); // &deg;
+      b->addItem(b->QObject::tr("90\u00b0 centered"),    int(HookType::HOOK_90T)); // &deg;
       }
 
 //---------------------------------------------------------
@@ -105,6 +106,10 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
       populateTextPlace(tl.beginTextPlacement);
       populateTextPlace(tl.continueTextPlacement);
       populateTextPlace(tl.endTextPlacement);
+
+      connect(tl.hasBeginText,    &QCheckBox::clicked, this, &InspectorTextLineBase::hasBeginTextClicked);
+      connect(tl.hasContinueText, &QCheckBox::clicked, this, &InspectorTextLineBase::hasContinueTextClicked);
+      connect(tl.hasEndText,      &QCheckBox::clicked, this, &InspectorTextLineBase::hasEndTextClicked);
       }
 
 //---------------------------------------------------------
@@ -197,6 +202,73 @@ void InspectorTextLineBase::valueChanged(int idx)
             inspector->update();
       }
 
+//---------------------------------------------------------
+//   hasBeginTextClicked
+//---------------------------------------------------------
+
+void InspectorTextLineBase::hasBeginTextClicked(bool checked)
+      {
+      if (!checked) {
+            TextLineBaseSegment* ts = static_cast<TextLineBaseSegment*>(inspector->element());
+            TextLineBase* t = ts->textLineBase();
+
+            t->score()->startCmd();
+            t->undoChangeProperty(Pid::BEGIN_TEXT, QString());
+            t->undoResetProperty(Pid::BEGIN_TEXT_PLACE);
+            t->undoResetProperty(Pid::BEGIN_TEXT_ALIGN);
+            t->undoResetProperty(Pid::BEGIN_FONT_FACE);
+            t->undoResetProperty(Pid::BEGIN_FONT_SIZE);
+            t->undoResetProperty(Pid::BEGIN_FONT_STYLE);
+            t->undoResetProperty(Pid::BEGIN_TEXT_OFFSET);
+            t->triggerLayout();
+            t->score()->endCmd();
+            }
+      }
+
+//---------------------------------------------------------
+//   hasContinueTextClicked
+//---------------------------------------------------------
+
+void InspectorTextLineBase::hasContinueTextClicked(bool checked)
+      {
+      if (!checked) {
+            TextLineBaseSegment* ts = static_cast<TextLineBaseSegment*>(inspector->element());
+            TextLineBase* t = ts->textLineBase();
+
+            t->score()->startCmd();
+            t->undoChangeProperty(Pid::CONTINUE_TEXT, QString());
+            t->undoResetProperty(Pid::CONTINUE_TEXT_PLACE);
+            t->undoResetProperty(Pid::CONTINUE_TEXT_ALIGN);
+            t->undoResetProperty(Pid::CONTINUE_FONT_FACE);
+            t->undoResetProperty(Pid::CONTINUE_FONT_SIZE);
+            t->undoResetProperty(Pid::CONTINUE_FONT_STYLE);
+            t->undoResetProperty(Pid::CONTINUE_TEXT_OFFSET);
+            t->triggerLayout();
+            t->score()->endCmd();
+            }
+      }
+
+//---------------------------------------------------------
+//   hasEndTextClicked
+//---------------------------------------------------------
+
+void InspectorTextLineBase::hasEndTextClicked(bool checked)
+      {
+      if (!checked) {
+            TextLineBaseSegment* ts = static_cast<TextLineBaseSegment*>(inspector->element());
+            TextLineBase* t = ts->textLineBase();
+
+            t->score()->startCmd();
+            t->undoChangeProperty(Pid::END_TEXT, QString());
+            t->undoResetProperty(Pid::END_TEXT_PLACE);
+            t->undoResetProperty(Pid::END_TEXT_ALIGN);
+            t->undoResetProperty(Pid::END_FONT_FACE);
+            t->undoResetProperty(Pid::END_FONT_SIZE);
+            t->undoResetProperty(Pid::END_FONT_STYLE);
+            t->undoResetProperty(Pid::END_TEXT_OFFSET);
+            t->triggerLayout();
+            t->score()->endCmd();
+            }
+      }
 
 } // namespace Ms
-
