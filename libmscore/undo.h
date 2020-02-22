@@ -207,6 +207,7 @@ class UndoStack {
       void reopen();
 
       void mergeCommands(int startIdx);
+      void cleanRedoStack() { remove(curIdx); }
       };
 
 //---------------------------------------------------------

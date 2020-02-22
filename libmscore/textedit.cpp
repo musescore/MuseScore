@@ -76,6 +76,13 @@ void TextBase::endEdit(EditData& ed)
       // replace all undo/redo records collected during text editing with
       // one property change
 
+      if (undo->getCurIdx() == ted->startUndoIdx) {
+            // No text changes in "undo" part of undo stack,
+            // hence nothing to merge and filter.
+            undo->cleanRedoStack(); // prevent text editing commands from remaining in undo stack
+            return;
+            }
+
       using Filter = UndoCommand::Filter;
       undo->mergeCommands(ted->startUndoIdx);
       undo->last()->filterChildren(Filter::TextEdit, this);
