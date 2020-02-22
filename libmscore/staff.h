@@ -19,7 +19,7 @@
 */
 
 #include "mscore.h"
-#include "velo.h"
+#include "changeMap.h"
 #include "pitch.h"
 #include "cleflist.h"
 #include "keylist.h"
@@ -93,7 +93,7 @@ class Staff final : public ScoreElement {
       QMap<int,int> _capoList;
       bool _playbackVoice[VOICES] { true, true, true, true };
 
-      VeloList _velocities;         ///< cached value
+      ChangeMap _velocities;         ///< cached value
       PitchList _pitchOffsets;      ///< cached value
 
       void fillBrackets(int);
@@ -223,7 +223,7 @@ class Staff final : public ScoreElement {
       qreal spatium(const Fraction&) const;
       //===========
 
-      VeloList& velocities()           { return _velocities;     }
+      ChangeMap& velocities()           { return _velocities;     }
       PitchList& pitchOffsets()        { return _pitchOffsets;   }
 
       int pitchOffset(const Fraction& tick) { return _pitchOffsets.pitchOffset(tick.ticks());   }

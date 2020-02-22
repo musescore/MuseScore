@@ -75,7 +75,7 @@ private slots:
       void divisionsDefinedTooLate2() { mxmlIoTestRef("testDivsDefinedTooLate2"); }
       void doubleClefError() { mxmlIoTestRef("testDoubleClefError"); }
       void drumset1() { mxmlIoTest("testDrumset1"); }
-//ws: fails      void drumset2() { mxmlIoTest("testDrumset2"); }
+      void drumset2() { mxmlIoTest("testDrumset2"); }
       void durationRoundingError() { mxmlIoTestRef("testDurationRoundingError"); }
       void dynamics1() { mxmlIoTest("testDynamics1"); }
       void dynamics2() { mxmlIoTest("testDynamics2"); }
@@ -126,8 +126,8 @@ private slots:
       void multiMeasureRest4() { mxmlIoTestRef("testMultiMeasureRest4"); }
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
       void nonStandardKeySig1() { mxmlIoTest("testNonStandardKeySig1"); }
-      //void nonStandardKeySig2() { mxmlIoTest("testNonStandardKeySig2"); } //problem with cautionary measure 8 and 9
-      void nonStandardKeySig2() { mxmlIoTest("testNonStandardKeySig3"); }
+      void nonStandardKeySig2() { mxmlIoTest("testNonStandardKeySig2"); }
+      void nonStandardKeySig3() { mxmlIoTest("testNonStandardKeySig3"); }
       void nonUniqueThings() { mxmlIoTestRef("testNonUniqueThings"); }
       void noteAttributes1() { mxmlIoTest("testNoteAttributes1"); }
       void noteAttributes2() { mxmlIoTestRef("testNoteAttributes2"); }
@@ -149,6 +149,8 @@ private slots:
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void slurs() { mxmlIoTest("testSlurs"); }
       void slurs2() { mxmlIoTest("testSlurs2"); }
+      void sound1() { mxmlIoTestRef("testSound1"); }
+      void sound2() { mxmlIoTestRef("testSound2"); }
       void specialCharacters() { mxmlIoTest("testSpecialCharacters"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
@@ -159,6 +161,12 @@ private slots:
       void tablature3() { mxmlIoTest("testTablature3"); }
       void tablature4() { mxmlIoTest("testTablature4"); }
       void tablature5() { mxmlIoTestRef("testTablature5"); }
+      void tboxAboveBelow1() { mxmlMscxExportTestRef("testTboxAboveBelow1"); }
+      void tboxAboveBelow2() { mxmlMscxExportTestRef("testTboxAboveBelow2"); }
+      void tboxAboveBelow3() { mxmlMscxExportTestRef("testTboxAboveBelow3"); }
+      void tboxMultiPage1() { mxmlMscxExportTestRef("testTboxMultiPage1"); }
+      void tboxVbox1() { mxmlMscxExportTestRef("testTboxVbox1"); }
+      void tboxWords1() { mxmlMscxExportTestRef("testTboxWords1"); }
       void tempo1() { mxmlIoTest("testTempo1"); }
       void tempo2() { mxmlIoTestRef("testTempo2"); }
       void tempo3() { mxmlIoTestRef("testTempo3"); }
@@ -187,8 +195,6 @@ private slots:
       void wedge3() { mxmlIoTest("testWedge3"); }
       void words1() { mxmlIoTest("testWords1"); }
       void words2() { mxmlIoTest("testWords2"); }
-      void sound1() { mxmlIoTestRef("testSound1"); }
-      void sound2() { mxmlIoTestRef("testSound2"); }
       };
 
 //---------------------------------------------------------
@@ -203,50 +209,14 @@ void TestMxmlIO::initTestCase()
 //---------------------------------------------------------
 //   fixupScore -- do required fixups after MusicXML import
 //   see mscore/file.cpp MuseScore::readScore(Score* score, QString name)
-//   TODO: remove duplication of code
 //---------------------------------------------------------
 
 static void fixupScore(Score* score)
       {
-//      score->syntiState().append(SyntiParameter("soundfont", MScore::soundFont));
       score->connectTies();
       score->masterScore()->rebuildMidiMapping();
       score->setCreated(false);
       score->setSaved(false);
-
-#if 0
-      int staffIdx = 0;
-      foreach(Staff* st, score->staves()) {
-            if (st->updateKeymap())
-                  st->clearKeys();
-            int track = staffIdx * VOICES;
-            KeySig* key1 = 0;
-            for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-                  for (Segment* s = m->first(); s; s = s->next()) {
-                        if (!s->element(track))
-                              continue;
-                        Element* e = s->element(track);
-                        if (e->generated())
-                              continue;
-                        //if ((s->subtype() == SegClef) && st->updateClefList()) {
-                        //      Clef* clef = static_cast<Clef*>(e);
-                        //      st->setClef(s->tick(), clef->clefTypeList());
-                        //      }
-                        if ((s->segmentType() == Segment::Type::KeySig) && st->updateKeymap()) {
-                              KeySig* ks = static_cast<KeySig*>(e);
-                              int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
-                              ks->setOldSig(naturals);
-                              st->setKey(s->tick(), ks->key());
-                              key1 = ks;
-                              }
-                        }
-                  if (m->sectionBreak())
-                        key1 = 0;
-                  }
-            st->setUpdateKeymap(false);
-            ++staffIdx;
-            }
-#endif
       }
 
 //---------------------------------------------------------

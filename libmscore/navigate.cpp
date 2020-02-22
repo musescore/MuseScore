@@ -277,7 +277,7 @@ Element* Score::firstElement(bool frame)
             if (mb && mb->isBox())
                   return mb;
             }
-      Segment *s = firstSegment(SegmentType::All);
+      Segment *s = firstSegmentMM(SegmentType::All);
       return s ? s->element(0) : nullptr;
       }
 
@@ -293,7 +293,7 @@ Element* Score::lastElement(bool frame)
                   return mb;
             }
       Element* re = 0;
-      Segment* seg = lastSegment();
+      Segment* seg = lastSegmentMM();
       if (!seg)
             return nullptr;
       while (true) {
@@ -598,7 +598,7 @@ Element* Score::nextElement()
                                     Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, staffId);
                                     if (nextEl)
                                           return nextEl;
-                                    nextSegment = nextSegment->next1();
+                                    nextSegment = nextSegment->next1MM();
                                     }
                               }
                         break;
@@ -618,7 +618,7 @@ Element* Score::nextElement()
                   case ElementType::VBOX:
                   case ElementType::HBOX:
                   case ElementType::TBOX: {
-                        MeasureBase* mb = toMeasureBase(e)->next();
+                        MeasureBase* mb = toMeasureBase(e)->nextMM();
                         if (!mb) {
                               break;
                               }
@@ -741,7 +741,7 @@ Element* Score::prevElement()
                   case ElementType::VBOX:
                   case ElementType::HBOX:
                   case ElementType::TBOX: {
-                        MeasureBase* mb = toMeasureBase(e)->prev();
+                        MeasureBase* mb = toMeasureBase(e)->prevMM();
                         if (!mb) {
                               break;
                               }

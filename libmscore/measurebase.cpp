@@ -503,6 +503,20 @@ MeasureBase* MeasureBase::nextMM() const
       }
 
 //---------------------------------------------------------
+//   prevMM
+//---------------------------------------------------------
+
+MeasureBase* MeasureBase::prevMM() const
+      {
+      if (_prev
+         && _prev->isMeasure()
+         && score()->styleB(Sid::createMultiMeasureRests)) {
+            return const_cast<Measure*>(toMeasure(_prev)->mmRest1());
+            }
+      return _prev;
+      }
+
+//---------------------------------------------------------
 //   writeProperties
 //---------------------------------------------------------
 

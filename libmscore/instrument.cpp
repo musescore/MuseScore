@@ -1105,12 +1105,21 @@ void MidiArticulation::read(XmlReader& e)
 
 void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const QString& name)
       {
+      *velocity *= getVelocityMultiplier(name);
+      }
+
+//---------------------------------------------------------
+//   updateVelocity
+//---------------------------------------------------------
+
+qreal Instrument::getVelocityMultiplier(const QString& name)
+      {
       for (const MidiArticulation& a : _articulation) {
             if (a.name == name) {
-                  *velocity = *velocity * a.velocity / 100;
-                  break;
+                  return qreal(a.velocity) / 100;
                   }
             }
+      return 1;
       }
 
 //---------------------------------------------------------

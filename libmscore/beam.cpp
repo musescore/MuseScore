@@ -1780,7 +1780,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               crBase[i1] = bl;
                         }
 
-                  qreal stemWidth  = score()->styleP(Sid::stemWidth);
+                  qreal stemWidth  = cr1->isChord() ? toChord(cr1)->stem()->lineWidthMag() : 0.0;
                   qreal x2         = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
                   qreal x3;
 
@@ -1797,7 +1797,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               if (cr1->up())
                                     x2 -= stemWidth;
                               if (!chordRest2->up())
-                                    x3 += stemWidth;
+                                    x3 += chordRest2->isChord() ? toChord(chordRest2)->stem()->lineWidthMag() : 0.0;
                               }
                         }
                   else {
@@ -1879,7 +1879,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               else {
                                     // determine if this is a logical group end as per 2) above
 
-                                    Fraction baseTick = tuplet ? tuplet->tick() : cr1->measure()->tick();;
+                                    Fraction baseTick = tuplet ? tuplet->tick() : cr1->measure()->tick();
                                     Fraction tickNext = nextCR->tick() - baseTick;
                                     if (tuplet) {
                                           // for tuplets with odd ratios, apply ratio
@@ -1975,7 +1975,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
             Stem* stem = c->stem();
             if (stem) {
                   bool useTablature = staff() && staff()->isTabStaff(cr->tick());
-                  qreal sw2  = useTablature ? 0.f : stem->lineWidth() * .5;
+                  qreal sw2  = useTablature ? 0.f : stem->lineWidthMag() * .5;
                   if (c->up())
                         sw2 = -sw2;
                   stem->rxpos() = c->stemPosX() + sw2;
@@ -2122,6 +2122,7 @@ void Beam::read(XmlReader& e)
 class BeamEditData : public ElementEditData {
    public:
       int editFragment;
+      virtual EditDataType type() override      { return EditDataType::BeamEditData; }
       };
 
 //---------------------------------------------------------

@@ -41,9 +41,9 @@ void NoteEvent::read(XmlReader& e)
 void NoteEvent::write(XmlWriter& xml) const
       {
       xml.stag("Event");
-      xml.tag("pitch", _pitch);
-      xml.tag("ontime", _ontime);
-      xml.tag("len", _len);
+      xml.tag("pitch", _pitch, 0);
+      xml.tag("ontime", _ontime, 0);
+      xml.tag("len", _len, NOTE_LENGTH);
       xml.etag();
       }
 

@@ -763,7 +763,7 @@ int Note::tpc() const
 QString Note::tpcUserName(bool explicitAccidental) const
       {
       QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental);
-      QString octaveName = QString::number((epitch() / 12) - 1);
+      QString octaveName = QString::number(((epitch() + ottaveCapoFret()) / 12) - 1);
       return pitchName + (explicitAccidental ? " " : "") + octaveName;
       }
 
@@ -1495,6 +1495,8 @@ class NoteEditData : public ElementEditData {
       EditMode mode = EditMode_Undefined;
       QPointF delta;
 
+      virtual EditDataType type() override      { return EditDataType::NoteEditData; }
+
       static constexpr double MODE_TRANSITION_LIMIT_DEGREES = 15.0;
 
       static inline EditMode editModeByDragDirection(const qreal& deltaX, const qreal& deltaY)
@@ -2043,13 +2045,14 @@ void Note::updateAccidental(AccidentalState* as)
 
             AccidentalVal accVal = tpc2alter(tpc());
             bool error = false;
-            AccidentalVal relLineAccVal = as->accidentalVal(relLine, error);
+            int eRelLine = absStep(tpc(), epitch()+ottaveCapoFret());
+            AccidentalVal relLineAccVal = as->accidentalVal(eRelLine, error);
             if (error) {
                   qDebug("error accidetalVal");
                   return;
                   }
-            if ((accVal != relLineAccVal) || hidden() || as->tieContext(relLine)) {
-                  as->setAccidentalVal(relLine, accVal, _tieBack != 0 && _accidental == 0);
+            if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine)) {
+                  as->setAccidentalVal(eRelLine, accVal, _tieBack != 0 && _accidental == 0);
                   acci = Accidental::value2subtype(accVal);
                   // if previous tied note has same tpc, don't show accidental
                   if (_tieBack && _tieBack->startNote()->tpc1() == tpc1())
@@ -2255,6 +2258,21 @@ void Note::setHeadGroup(NoteHead::Group val)
       }
 
 //---------------------------------------------------------
+//   ottaveCapoFret
+//    offset added by Ottava's and Capo Fret.
+//---------------------------------------------------------
+
+int Note::ottaveCapoFret() const
+      {
+      Chord* ch = chord();
+      int capoFretId = staff()->capo(ch->segment()->tick());
+      if (capoFretId != 0)
+            capoFretId -= 1;
+
+      return staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
+      }
+
+//---------------------------------------------------------
 //   ppitch
 //    playback pitch
 //---------------------------------------------------------
@@ -2272,11 +2290,8 @@ int Note::ppitch() const
                         return div.pitch;
                   }
             }
-      int capoFretId = staff()->capo(ch->segment()->tick());
-      if (capoFretId != 0)
-            capoFretId -= 1;
 
-      return _pitch + staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
+      return _pitch + ottaveCapoFret();
       }
 
 //---------------------------------------------------------
@@ -2391,7 +2406,7 @@ void Note::editDrag(EditData& editData)
 
 void Note::verticalDrag(EditData &ed)
       {
-      Fraction _tick           = chord()->tick();
+      Fraction _tick      = chord()->tick();
       const Staff* stf    = staff();
       const StaffType* st = stf->staffType(_tick);
 
@@ -2423,7 +2438,8 @@ void Note::verticalDrag(EditData &ed)
             }
       else {
             Key key = staff()->key(_tick);
-            int newPitch = line2pitch(ned->line + lineOffset, staff()->clef(_tick), key);
+            int idx = chord()->vStaffIdx();
+            int newPitch = line2pitch(ned->line + lineOffset, score()->staff(idx)->clef(_tick), key);
 
             if (!concertPitch()) {
                   Interval interval = staff()->part()->instrument(_tick)->transpose();

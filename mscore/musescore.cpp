@@ -447,7 +447,7 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
       setPlayRepeats(MScore::playRepeats);
       getAction("pan")->setChecked(MScore::panPlayback);
       getAction("follow")->setChecked(preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG));
-      getAction("midi-on")->setEnabled(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
+      getAction("midi-on")->setChecked(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
       getAction("toggle-statusbar")->setChecked(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
       getAction("show-tours")->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
       _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
@@ -3234,7 +3234,7 @@ void MuseScore::removeTab(int i)
 
       QString tmpName = score->tmpName();
 
-      if (!scriptTestMode && checkDirty(score))
+      if (!scriptTestMode && !converterMode && checkDirty(score))
             return;
       if (seq && seq->score() == score) {
             seq->stopWait();
@@ -3672,16 +3672,26 @@ static bool convert(const QString& inFile, const QJsonArray& outFiles, const QSt
       if (!score)
             return false;
       mscore->setCurrentScore(score);
+      if (!plugin.isEmpty()) {
+            int index = mscore->appendScore(score);
+            mscore->setCurrentView(index, 0);
+            }
       bool success = doConvert(score, outFiles, plugin);
       fprintf(stderr, success ? "... success!\n" : "... failed!\n");
+      if (plugin.isEmpty())
+            delete score;
+      else
+            mscore->closeScore(score);
       mscore->setCurrentScore(nullptr);
-      delete score;
       return success;
       }
 
 static bool convert(const QString& inFile, const QString& outFile)
       {
-      return convert(inFile, QJsonArray{ outFile });
+      if (pluginMode)
+            return convert(inFile, QJsonArray{ outFile }, pluginName);
+      else
+            return convert(inFile, QJsonArray{ outFile });
       }
 
 //---------------------------------------------------------
@@ -3755,7 +3765,7 @@ static bool processNonGui(const QStringList& argv)
       else if (exportTransposedScore)
             return mscore->exportTransposedScoreToJSON(argv[0], transposeExportOptions);
 
-      if (pluginMode) {
+      if (pluginMode && !converterMode) {
             loadScores(argv);
             QString pn(pluginName);
             bool res = false;
@@ -3778,9 +3788,9 @@ static bool processNonGui(const QStringList& argv)
                         }
                   res = true;
                   }
-            if (!converterMode)
-                  return res;
+            return res;
             }
+
       if (converterMode) {
             if (processJob)
                   return doProcessJob(jsonFileName);

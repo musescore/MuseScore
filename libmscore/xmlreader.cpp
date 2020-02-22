@@ -11,17 +11,12 @@
 //=============================================================================
 
 #include "xml.h"
-#include "layoutbreak.h"
 #include "measure.h"
 #include "score.h"
 #include "spanner.h"
 #include "staff.h"
 #include "beam.h"
 #include "tuplet.h"
-#include "sym.h"
-#include "note.h"
-#include "barline.h"
-#include "style.h"
 
 namespace Ms {
 

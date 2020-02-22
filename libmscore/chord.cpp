@@ -3499,7 +3499,8 @@ void Chord::layoutArticulations2()
                         a->setPos(x, chordTopY);
                         a->doAutoplace();
                         }
-                  chordTopY = a->y() - a->height() - 0.5 * _spatium;
+                  if (a->visible())
+                        chordTopY = a->y() - a->height() - 0.5 * _spatium;
                   }
             else {
                   if (!a->layoutCloseToNote()) {
@@ -3507,7 +3508,8 @@ void Chord::layoutArticulations2()
                         a->setPos(x, chordBotY);
                         a->doAutoplace();
                         }
-                  chordBotY = a->y() + a->height() + 0.5 * _spatium;
+                  if (a->visible())
+                        chordBotY = a->y() + a->height() + 0.5 * _spatium;
                   }
             }
       //
@@ -3522,11 +3524,13 @@ void Chord::layoutArticulations2()
                   a->layout();
                   if (a->up()) {
                         a->setPos(x, staffTopY);
-                        staffTopY -= distance0;
+                        if (a->visible())
+                              staffTopY -= distance0;
                         }
                   else {
                         a->setPos(x, staffBotY);
-                        staffBotY += distance0;
+                        if (a->visible())
+                              staffBotY += distance0;
                         }
                   a->doAutoplace();
                   }

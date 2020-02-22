@@ -821,8 +821,8 @@ class Score : public QObject, public ScoreElement {
       Segment* tick2segmentMM(const Fraction& tick, bool first, SegmentType st) const;
       Segment* tick2segmentMM(const Fraction& tick) const;
       Segment* tick2segmentMM(const Fraction& tick, bool first) const;
-      Segment* tick2leftSegment(const Fraction& tick) const;
-      Segment* tick2rightSegment(const Fraction& tick) const;
+      Segment* tick2leftSegment(const Fraction& tick, bool useMMrest = false) const;
+      Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false) const;
       void fixTicks();
       void rebuildTempoAndTimeSigMaps(Measure* m);
       Element* nextElement();
@@ -998,6 +998,7 @@ class Score : public QObject, public ScoreElement {
       Segment* firstSegment(SegmentType s) const;
       Segment* firstSegmentMM(SegmentType s) const;
       Segment* lastSegment() const;
+      Segment* lastSegmentMM() const;
 
       void connectTies(bool silent=false);
 
@@ -1034,7 +1035,6 @@ class Score : public QObject, public ScoreElement {
       void setSynthesizerState(const SynthesizerState& s);
 
       void updateHairpin(Hairpin*);       // add/modify hairpin to pitchOffset list
-      void removeHairpin(Hairpin*);       // remove hairpin from pitchOffset list
 
       MasterScore* masterScore() const    { return _masterScore; }
       void setMasterScore(MasterScore* s) { _masterScore = s;    }
@@ -1087,7 +1087,7 @@ class Score : public QObject, public ScoreElement {
       void cmdSelectSection();
       void respace(std::vector<ChordRest*>* elements);
       void transposeSemitone(int semitone);
-      void insertMeasure(ElementType type, MeasureBase*, bool createEmptyMeasures = false);
+      void insertMeasure(ElementType type, MeasureBase*, bool createEmptyMeasures = false, bool moveSignaturesClef = true);
       Audio* audio() const         { return _audio;    }
       void setAudio(Audio* a)      { _audio = a;       }
       PlayMode playMode() const    { return _playMode; }

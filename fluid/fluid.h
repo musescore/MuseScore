@@ -223,12 +223,12 @@ class Channel {
 
    public:
       int channum;
-      short key_pressure;
       short channel_pressure;
       short pitch_bend;
       short pitch_wheel_sensitivity;
 
-      short cc[128];          // controller values
+      short cc[128];                // controller values
+      short key_pressure[128];      // MIDI polyphonic key pressure from [0;127]
 
       /* cached values of last MSB values of MSB/LSB controllers */
       unsigned char bank_msb;
@@ -283,6 +283,10 @@ class Channel {
       int getNum() const                  { return channum;    }
       void setInterpMethod(int m)         { interp_method = m; }
       int getInterpMethod() const         { return interp_method; }
+      void setChannelPressure(int val);
+      int channelPressure() const         { return channel_pressure; }
+      void setKeyPressure(int key, int val);
+      int keyPressure(int key) const      { return key_pressure[key]; }
       };
 
 // subsystems:
@@ -599,8 +603,8 @@ enum fluid_mod_src {
       FLUID_MOD_NONE             = 0,
       FLUID_MOD_VELOCITY         = 2,
       FLUID_MOD_KEY              = 3,
-      FLUID_MOD_KEYPRESSURE      = 10,
-      FLUID_MOD_CHANNELPRESSURE  = 13,
+      FLUID_MOD_KEYPRESSURE      = 10,          // polyphonic aftertouch
+      FLUID_MOD_CHANNELPRESSURE  = 13,          // channel aftertouch
       FLUID_MOD_PITCHWHEEL       = 14,
       FLUID_MOD_PITCHWHEELSENS   = 16
       };

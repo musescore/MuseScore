@@ -63,12 +63,12 @@ bool AccessibleScoreView::isValid() const
 // TODO: determine if setting state explicitly would be helpful
 QAccessible::State AccessibleScoreView::state() const
       {
-      QAccessible::State s = QAccessibleWidget::state();
-      s.focusable = 1;
-      s.selectable = 1;
-      s.active = 1;
-      //s.animated = 1;
-      return s;
+      QAccessible::State st = QAccessibleWidget::state();
+      st.focusable = 1;
+      st.selectable = 1;
+      st.active = 1;
+      //st.animated = 1;
+      return st;
       }
 #endif
 

@@ -286,7 +286,7 @@ class Note final : public Element {
 
       void normalizeLeftDragDelta(Segment* seg, EditData &ed, NoteEditData* ned);
 
-public:
+   public:
       Note(Score* s = 0);
       Note(const Note&, bool link = false);
       ~Note();
@@ -324,12 +324,13 @@ public:
       void setHeadGroup(NoteHead::Group val);
       void setHeadType(NoteHead::Type t);
 
-      virtual int subtype() const override { return (int) _headGroup; }
+      virtual int subtype() const override { return int(_headGroup); }
       virtual QString subtypeName() const override;
 
       void setPitch(int val);
       void setPitch(int pitch, int tpc1, int tpc2);
       int pitch() const                   { return _pitch;    }
+      int ottaveCapoFret() const;
       int ppitch() const;           ///< playback pitch
       int epitch() const;           ///< effective pitch
       qreal tuning() const                { return _tuning;   }

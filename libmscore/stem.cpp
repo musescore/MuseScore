@@ -112,7 +112,7 @@ void Stem::layout()
                   }
             }
 
-      qreal lw5 = _lineWidth * .5 * mag();
+      qreal lw5 = 0.5 * lineWidthMag();
 
       line.setLine(0.0, y1, 0.0, l);
 
@@ -155,7 +155,7 @@ void Stem::draw(QPainter* painter) const
       const StaffType* stt = st ? st->staffType(chord()->tick()) : 0;
       bool useTab          = stt && stt->isTabStaff();
 
-      painter->setPen(QPen(curColor(), _lineWidth * mag(), Qt::SolidLine, Qt::RoundCap));
+      painter->setPen(QPen(curColor(), lineWidthMag(), Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
 
       if (!(useTab && chord()))
@@ -397,7 +397,7 @@ QPointF Stem::hookPos() const
       {
       QPointF p(pos() + line.p2());
 
-      qreal xoff = _lineWidth * .5 * mag();
+      qreal xoff = 0.5 * lineWidthMag();
       p.rx() += xoff;
       return p;
       }

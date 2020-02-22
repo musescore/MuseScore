@@ -611,7 +611,6 @@ void ScoreView::adjustCursorForTextEditing(QMouseEvent* mouseEvent)
 
 void ScoreView::mouseMoveEvent(QMouseEvent* me)
       {
-      modifySelection = false;
       adjustCursorForTextEditing(me);
 
       if (state != ViewState::NOTE_ENTRY && editData.buttons == Qt::NoButton)
@@ -643,6 +642,7 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
                               }
                         }
                   changeState(ViewState::DRAG);
+                  modifySelection = false;
                   break;
 
             case ViewState::NOTE_ENTRY: {

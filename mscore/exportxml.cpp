@@ -2,7 +2,7 @@
 //  MusE Score
 //  Linux Music Score Editor
 //
-//  Copyright (C) 2002-2013 Werner Schweer and others
+//  Copyright (C) 2002-2020 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -324,6 +324,7 @@ public:
       void credits(XmlWriter& xml);
       void moveToTick(const Fraction& t);
       void words(TextBase const* const text, int staff);
+      void tboxTextAsWords(TextBase const* const text, int staff, QPointF position);
       void rehearsal(RehearsalMark const* const rmk, int staff);
       void hairpin(Hairpin const* const hp, int staff, const Fraction& tick);
       void ottava(Ottava const* const ot, int staff, const Fraction& tick);
@@ -341,12 +342,41 @@ public:
       };
 
 //---------------------------------------------------------
-//   addPositioningAttributes
+//   positionToQString
+//---------------------------------------------------------
+
+static QString positionToQString(const QPointF def, const QPointF rel, const float spatium)
+      {
+      // minimum value to export
+      const float positionElipson = 0.1f;
+
+      // convert into tenths for MusicXML
+      const float defaultX =  10 * def.x() / spatium;
+      const float defaultY =  -10 * def.y()  / spatium;
+      const float relativeX =  10 * rel.x() / spatium;
+      const float relativeY =  -10 * rel.y() / spatium;
+
+      // generate string representation
+      QString res;
+      if (fabsf(defaultX) > positionElipson)
+            res += QString(" default-x=\"%1\"").arg(QString::number(defaultX, 'f', 2));
+      if (fabsf(defaultY) > positionElipson)
+            res += QString(" default-y=\"%1\"").arg(QString::number(defaultY, 'f', 2));
+      if (fabsf(relativeX) > positionElipson)
+            res += QString(" relative-x=\"%1\"").arg(QString::number(relativeX, 'f', 2));
+      if (fabsf(relativeY) > positionElipson)
+            res += QString(" relative-y=\"%1\"").arg(QString::number(relativeY, 'f', 2));
+
+      return res;
+      }
+
+//---------------------------------------------------------
+//   positioningAttributes
 //   According to the specs (common.dtd), all direction-type and note elements must be relative to the measure
 //   while all other elements are relative to their position or the nearest note.
 //---------------------------------------------------------
 
-static QString addPositioningAttributes(Element const* const el, bool isSpanStart = true)
+static QString positioningAttributes(Element const* const el, bool isSpanStart = true)
       {
       if (!preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT))
             return "";
@@ -354,11 +384,8 @@ static QString addPositioningAttributes(Element const* const el, bool isSpanStar
       //qDebug("single el %p _pos x,y %f %f _userOff x,y %f %f spatium %f",
       //       el, el->ipos().x(), el->ipos().y(), el->offset().x(), el->offset().y(), el->spatium());
 
-      const float positionElipson = 0.1f;
-      float defaultX = 0;
-      float defaultY = 0;
-      float relativeX = 0;
-      float relativeY = 0;
+      QPointF def;
+      QPointF rel;
       float spatium = el->spatium();
 
       const SLine* span = nullptr;
@@ -370,8 +397,8 @@ static QString addPositioningAttributes(Element const* const el, bool isSpanStar
                   const auto seg = span->frontSegment();
                   const auto offset = seg->offset();
                   const auto p = seg->pos();
-                  relativeX = offset.x();
-                  defaultY = p.y();
+                  rel.setX(offset.x());
+                  def.setY(p.y());
 
                   //qDebug("sline start seg %p seg->pos x,y %f %f seg->userOff x,y %f %f spatium %f",
                   //       seg, p.x(), p.y(), seg->offset().x(), seg->offset().y(), seg->spatium());
@@ -389,36 +416,18 @@ static QString addPositioningAttributes(Element const* const el, bool isSpanStar
 
                   // For an SLine, the actual offset equals the sum of userOff and userOff2,
                   // as userOff moves the SLine as a whole
-                  relativeX = userOff.x() + userOff2.x();
+                  rel.setX(userOff.x() + userOff2.x());
 
                   // Following would probably required for non-horizontal SLines:
                   //defaultY = pos.y() + pos2.y();
                   }
             }
       else {
-            defaultX = el->ipos().x();   // Note: for some elements, Finale Notepad seems to work slightly better w/o default-x
-            defaultY = el->ipos().y();
-            relativeX = el->offset().x();
-            relativeY = el->offset().y();
+            def = el->ipos();   // Note: for some elements, Finale Notepad seems to work slightly better w/o default-x
+            rel = el->offset();
             }
 
-      // convert into spatium tenths for MusicXML
-      defaultX *=  10 / spatium;
-      defaultY *=  -10 / spatium;
-      relativeX *=  10 / spatium;
-      relativeY *=  -10 / spatium;
-
-      QString res;
-      if (fabsf(defaultX) > positionElipson)
-            res += QString(" default-x=\"%1\"").arg(QString::number(defaultX, 'f', 2));
-      if (fabsf(defaultY) > positionElipson)
-            res += QString(" default-y=\"%1\"").arg(QString::number(defaultY, 'f', 2));
-      if (fabsf(relativeX) > positionElipson)
-            res += QString(" relative-x=\"%1\"").arg(QString::number(relativeX, 'f', 2));
-      if (fabsf(relativeY) > positionElipson)
-            res += QString(" relative-y=\"%1\"").arg(QString::number(relativeY, 'f', 2));
-
-      return res;
+      return positionToQString(def, rel, spatium);
       }
 
 //---------------------------------------------------------
@@ -672,7 +681,7 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, XmlWriter& xm
       tagName += color2xml(s);
       tagName += QString(" type=\"start\" placement=\"%1\"")
             .arg(s->up() ? "above" : "below");
-      tagName += addPositioningAttributes(s, true);
+      tagName += positioningAttributes(s, true);
 
       if (i >= 0) {
             // remove from list and print start
@@ -719,7 +728,7 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml
                   started[i] = false;
                   notations.tag(xml);
                   QString tagName = QString("slur type=\"stop\" number=\"%1\"").arg(i + 1);
-                  tagName += addPositioningAttributes(s, false);
+                  tagName += positioningAttributes(s, false);
                   xml.tagE(tagName);
                   }
             else
@@ -731,7 +740,7 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml
             started[i] = false;
             notations.tag(xml);
             QString tagName = QString("slur type=\"stop\" number=\"%1\"").arg(i + 1);
-            tagName += addPositioningAttributes(s, false);
+            tagName += positioningAttributes(s, false);
             xml.tagE(tagName);
             }
       }
@@ -766,7 +775,7 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
             }
       tagName += QString(" number=\"%1\" type=\"%2\"").arg(number).arg(start ? "start" : "stop");
       tagName += color2xml(gli);
-      tagName += addPositioningAttributes(gli, start);
+      tagName += positioningAttributes(gli, start);
       notations.tag(xml);
       if (start && gli->showText() && gli->text() != "")
             xml.tag(tagName, gli->text());
@@ -1140,24 +1149,35 @@ static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, 
       xml.etag();
       }
 
+//---------------------------------------------------------
+//   formatForWords
+//---------------------------------------------------------
+
+static CharFormat formatForWords(const Score* const s)
+      {
+      CharFormat defFmt;
+      defFmt.setFontFamily(s->styleSt(Sid::staffTextFontFace));
+      defFmt.setFontSize(s->styleD(Sid::staffTextFontSize));
+      return defFmt;
+      }
 
 //---------------------------------------------------------
 //   creditWords
 //---------------------------------------------------------
 
-static void creditWords(XmlWriter& xml, Score* s, double x, double y, QString just, QString val, const QList<TextFragment>& words)
+static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
+                        const double x, const double y, const QString& just, const QString& val,
+                        const QList<TextFragment>& words)
       {
       // prevent incorrect MusicXML for empty text
       if (words.isEmpty())
             return;
 
       const QString mtf = s->styleSt(Sid::MusicalTextFont);
-      CharFormat defFmt;
-      defFmt.setFontFamily(s->styleSt(Sid::staffTextFontFace));
-      defFmt.setFontSize(s->styleD(Sid::staffTextFontSize));
+      const CharFormat defFmt = formatForWords(s);
 
       // export formatted
-      xml.stag("credit page=\"1\"");
+      xml.stag(QString("credit page=\"%1\"").arg(pageNr));
       QString attr = QString(" default-x=\"%1\"").arg(x);
       attr += QString(" default-y=\"%1\"").arg(y);
       attr += " justify=\"" + just + "\"";
@@ -1186,79 +1206,104 @@ static double parentHeight(const Element* element)
       }
 
 //---------------------------------------------------------
+//   textAsCreditWords
+//---------------------------------------------------------
+
+// Refactor suggestion: make getTenthsFromInches static instead of ExportMusicXml member function
+
+static void textAsCreditWords(const ExportMusicXml* const expMxml, XmlWriter& xml, const Score* const s, const int pageNr, const Text* const text)
+      {
+      // determine page formatting
+      const double h  = expMxml->getTenthsFromInches(s->styleD(Sid::pageHeight));
+      const double w  = expMxml->getTenthsFromInches(s->styleD(Sid::pageWidth));
+      const double lm = expMxml->getTenthsFromInches(s->styleD(Sid::pageOddLeftMargin));
+      const double rm = expMxml->getTenthsFromInches(s->styleD(Sid::pageEvenLeftMargin));
+      const double ph = expMxml->getTenthsFromDots(parentHeight(text));
+
+      double tx = w / 2;
+      double ty = h - expMxml->getTenthsFromDots(text->pagePos().y());
+
+      Align al = text->align();
+      QString just;
+      QString val;
+
+      if (al & Align::RIGHT) {
+            just = "right";
+            tx   = w - rm;
+            }
+      else if (al & Align::HCENTER) {
+            just = "center";
+            // tx already set correctly
+            }
+      else {
+            just = "left";
+            tx   = lm;
+            }
+
+      if (al & Align::BOTTOM) {
+            val = "bottom";
+            ty -= ph;
+            }
+      else if (al & Align::VCENTER) {
+            val = "middle";
+            ty -= ph / 2;
+            }
+      else if (al & Align::BASELINE) {
+            val = "baseline";
+            ty -= ph / 2;
+            }
+      else {
+            val = "top";
+            // ty already set correctly
+            }
+
+      creditWords(xml, s, pageNr, tx, ty, just, val, text->fragmentList());
+      }
+
+//---------------------------------------------------------
 //   credits
 //---------------------------------------------------------
 
 void ExportMusicXml::credits(XmlWriter& xml)
       {
-      // determine page formatting
-      const double h  = getTenthsFromInches(_score->styleD(Sid::pageHeight));
-      const double w  = getTenthsFromInches(_score->styleD(Sid::pageWidth));
-      const double lm = getTenthsFromInches(_score->styleD(Sid::pageOddLeftMargin));
-      const double rm = getTenthsFromInches(_score->styleD(Sid::pageEvenLeftMargin));
-      //const double tm = getTenthsFromInches(_score->styleD(Sid::pageOddTopMargin));
-      const double bm = getTenthsFromInches(_score->styleD(Sid::pageOddBottomMargin));
-      //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
-
-      // write the credits (found in the header, i.e. everything before the first measure)
-      for (auto mb = _score->measures()->first(); mb && !mb->isMeasure(); mb = mb->next()) {
-            for (const Element* element : mb->el()) {
-                  if (element->isText()) {
-                        const Text* text = toText(element);
-                        const double ph = getTenthsFromDots(parentHeight(text));
-
-                        double tx = w / 2;
-                        double ty = h - getTenthsFromDots(text->pagePos().y());
-
-                        Align al = text->align();
-                        QString just;
-                        QString val;
-
-                        if (al & Align::RIGHT) {
-                              just = "right";
-                              tx   = w - rm;
+      // find the vboxes in every page and write their elements as credit-words
+      for (const auto page : _score->pages()) {
+            const auto pageIdx = _score->pageIdx(page);
+            for (const auto system : page->systems()) {
+                  for (const auto mb : system->measures()) {
+                        if (mb->isVBox()) {
+                              for (const Element* element : mb->el()) {
+                                    if (element->isText()) {
+                                          const Text* text = toText(element);
+                                          textAsCreditWords(this, xml, _score, pageIdx + 1, text);
+                                          }
+                                    }
                               }
-                        else if (al & Align::HCENTER) {
-                              just = "center";
-                              // tx already set correctly
-                              }
-                        else {
-                              just = "left";
-                              tx   = lm;
-                              }
-
-                        if (al & Align::BOTTOM) {
-                              val = "bottom";
-                              ty -= ph;
-                              }
-                        else if (al & Align::VCENTER) {
-                              val = "middle";
-                              ty -= ph / 2;
-                              }
-                        else if (al & Align::BASELINE) {
-                              val = "baseline";
-                              ty -= ph / 2;
-                              }
-                        else {
-                              val = "top";
-                              // ty already set correctly
-                              }
-
-                        creditWords(xml, _score, tx, ty, just, val, text->fragmentList());
                         }
                   }
             }
 
+      // put copyright at the bottom center of every page
+      // note: as the copyright metatag contains plain text, special XML characters must be escaped
+      // determine page formatting
       const QString rights = _score->metaTag("copyright");
       if (!rights.isEmpty()) {
-            // put copyright at the bottom center of the page
-            // note: as the copyright metatag contains plain text, special XML characters must be escaped
+            const double bm = getTenthsFromInches(_score->styleD(Sid::pageOddBottomMargin));
+            const double w  = getTenthsFromInches(_score->styleD(Sid::pageWidth));
+            /*
+            const double h  = getTenthsFromInches(_score->styleD(Sid::pageHeight));
+            const double lm = getTenthsFromInches(_score->styleD(Sid::pageOddLeftMargin));
+            const double rm = getTenthsFromInches(_score->styleD(Sid::pageEvenLeftMargin));
+            const double tm = getTenthsFromInches(_score->styleD(Sid::pageOddTopMargin));
+            qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
+            */
             TextFragment f(XmlWriter::xmlString(rights));
             f.changeFormat(FormatId::FontFamily, _score->styleSt(Sid::footerFontFace));
             f.changeFormat(FormatId::FontSize, _score->styleD(Sid::footerFontSize));
             QList<TextFragment> list;
             list.append(f);
-            creditWords(xml, _score, w / 2, bm, "center", "bottom", list);
+            for (int pageIdx = 0; pageIdx < _score->npages(); ++pageIdx)
+                  creditWords(xml, _score, pageIdx + 1, w / 2, bm, "center", "bottom", list);
             }
       }
 
@@ -1449,7 +1494,7 @@ static void ending(XmlWriter& xml, Volta* v, bool left)
                   }
             }
       QString voltaXml = QString("ending number=\"%1\" type=\"%2\"").arg(number).arg(type);
-      voltaXml += addPositioningAttributes(v, left);
+      voltaXml += positioningAttributes(v, left);
       xml.tagE(voltaXml);
       }
 
@@ -1883,7 +1928,7 @@ static void wavyLineStart(const Trill* tr, const int number, Notations& notation
       QString tagName = "wavy-line type=\"start\"";
       tagName += QString(" number=\"%1\"").arg(number + 1);
       tagName += color2xml(tr);
-      tagName += addPositioningAttributes(tr, true);
+      tagName += positioningAttributes(tr, true);
       xml.tagE(tagName);
       }
 
@@ -1896,7 +1941,7 @@ static void wavyLineStop(const Trill* tr, const int number, Notations& notations
       notations.tag(xml);
       ornaments.tag(xml);
       QString trillXml = QString("wavy-line type=\"stop\" number=\"%1\"").arg(number + 1);
-      trillXml += addPositioningAttributes(tr, false);
+      trillXml += positioningAttributes(tr, false);
       xml.tagE(trillXml);
       }
 
@@ -2385,7 +2430,7 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Not
             }
 
       if (tagName != "") {
-            tagName += addPositioningAttributes(arp);
+            tagName += positioningAttributes(arp);
             xml.tagE(tagName);
             }
       }
@@ -3250,7 +3295,7 @@ static void partGroupStart(XmlWriter& xml, int number, BracketType bracket)
       }
 
 //---------------------------------------------------------
-//   words
+//   findUnit
 //---------------------------------------------------------
 
 static bool findUnit(TDuration::DurationType val, QString& unit)
@@ -3264,6 +3309,10 @@ static bool findUnit(TDuration::DurationType val, QString& unit)
             }
       return true;
       }
+
+//---------------------------------------------------------
+//   findMetronome
+//---------------------------------------------------------
 
 static bool findMetronome(const QList<TextFragment>& list,
                           QList<TextFragment>& wordsLeft,  // words left of metronome
@@ -3373,6 +3422,10 @@ static bool findMetronome(const QList<TextFragment>& list,
       return false;
       }
 
+//---------------------------------------------------------
+//   beatUnit
+//---------------------------------------------------------
+
 static void beatUnit(XmlWriter& xml, const TDuration dur)
       {
       int dots = dur.dots();
@@ -3384,6 +3437,10 @@ static void beatUnit(XmlWriter& xml, const TDuration dur)
             --dots;
             }
       }
+
+//---------------------------------------------------------
+//   wordsMetrome
+//---------------------------------------------------------
 
 static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, const int offset)
       {
@@ -3397,15 +3454,12 @@ static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, c
 
       // set the default words format
       const QString mtf = s->styleSt(Sid::MusicalTextFont);
-      CharFormat defFmt;
-      defFmt.setFontFamily(s->styleSt(Sid::staffTextFontFace));
-      defFmt.setFontSize(s->styleD(Sid::staffTextFontSize));
+      const CharFormat defFmt = formatForWords(s);
 
       if (findMetronome(list, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
             if (wordsLeft.size() > 0) {
                   xml.stag("direction-type");
-                  QString attr; // TODO TBD
-                  attr += addPositioningAttributes(text);
+                  QString attr = positioningAttributes(text);
                   MScoreTextToMXML mttm("words", attr, defFmt, mtf);
                   mttm.writeTextFragments(wordsLeft, xml);
                   xml.etag();
@@ -3413,7 +3467,7 @@ static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, c
 
             xml.stag("direction-type");
             QString tagName = QString("metronome parentheses=\"%1\"").arg(hasParen ? "yes" : "no");
-            tagName += addPositioningAttributes(text);
+            tagName += positioningAttributes(text);
             xml.stag(tagName);
             int len1 = 0;
             TDuration dur;
@@ -3430,8 +3484,7 @@ static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, c
 
             if (wordsRight.size() > 0) {
                   xml.stag("direction-type");
-                  QString attr; // TODO TBD
-                  attr += addPositioningAttributes(text);
+                  QString attr = positioningAttributes(text);
                   MScoreTextToMXML mttm("words", attr, defFmt, mtf);
                   mttm.writeTextFragments(wordsRight, xml);
                   xml.etag();
@@ -3447,7 +3500,7 @@ static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, c
                   else
                         attr = " enclosure=\"rectangle\"";
                   }
-            attr += addPositioningAttributes(text);
+            attr += positioningAttributes(text);
             MScoreTextToMXML mttm("words", attr, defFmt, mtf);
             //qDebug("words('%s')", qPrintable(text->text()));
             mttm.writeTextFragments(text->fragmentList(), xml);
@@ -3457,6 +3510,10 @@ static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, c
       if (offset)
             xml.tag("offset", offset);
       }
+
+//---------------------------------------------------------
+//   tempoText
+//---------------------------------------------------------
 
 void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       {
@@ -3471,6 +3528,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       _attr.doAttr(_xml, false);
       _xml.stag(QString("direction placement=\"%1\"").arg((text->placement() ==Placement::BELOW ) ? "below" : "above"));
       wordsMetrome(_xml, _score, text, offset);
+
       if (staff)
             _xml.tag("staff", staff);
       _xml.tagE(QString("sound tempo=\"%1\"").arg(QString::number(text->tempo()*60.0)));
@@ -3506,6 +3564,55 @@ void ExportMusicXml::words(TextBase const* const text, int staff)
       }
 
 //---------------------------------------------------------
+//   positioningAttributesForTboxText
+//---------------------------------------------------------
+
+static QString positioningAttributesForTboxText(const QPointF position, float spatium)
+      {
+      if (!preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT))
+            return "";
+
+      QPointF relative;       // use zero relative position
+      return positionToQString(position, relative, spatium);
+      }
+
+//---------------------------------------------------------
+//   tboxTextAsWords
+//---------------------------------------------------------
+
+void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const int staff, const QPointF relativePosition)
+      {
+      if (text->plainText() == "") {
+            // sometimes empty Texts are present, exporting would result
+            // in invalid MusicXML (as an empty direction-type would be created)
+            return;
+            }
+
+      // set the default words format
+      const QString mtf = _score->styleSt(Sid::MusicalTextFont);
+      const CharFormat defFmt = formatForWords(_score);
+
+      QString tagname { "direction" };
+      tagname += " placement=";
+      tagname += (relativePosition.y() < 0) ? "\"above\"" : "\"below\"";
+      _xml.stag(tagname);
+      _xml.stag("direction-type");
+      QString attr;
+      if (text->hasFrame()) {
+            if (text->circle())
+                  attr = " enclosure=\"circle\"";
+            else
+                  attr = " enclosure=\"rectangle\"";
+            }
+      attr += positioningAttributesForTboxText(relativePosition, text->spatium());
+      attr += " valign=\"top\"";
+      MScoreTextToMXML mttm("words", attr, defFmt, mtf);
+      mttm.writeTextFragments(text->fragmentList(), _xml);
+      _xml.etag();
+      directionETag(_xml, staff);
+      }
+
+//---------------------------------------------------------
 //   rehearsal
 //---------------------------------------------------------
 
@@ -3519,14 +3626,11 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
 
       directionTag(_xml, _attr, rmk);
       _xml.stag("direction-type");
-      QString attr;
-      attr += addPositioningAttributes(rmk);
+      QString attr = positioningAttributes(rmk);
       if (!rmk->hasFrame()) attr = " enclosure=\"none\"";
       // set the default words format
       const QString mtf = _score->styleSt(Sid::MusicalTextFont);
-      CharFormat defFmt;
-      defFmt.setFontFamily(_score->styleSt(Sid::staffTextFontFace));
-      defFmt.setFontSize(_score->styleD(Sid::staffTextFontSize));
+      const CharFormat defFmt = formatForWords(_score);
       // write formatted
       MScoreTextToMXML mttm("rehearsal", attr, defFmt, mtf);
       mttm.writeTextFragments(rmk->fragmentList(), _xml);
@@ -3622,14 +3726,14 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
                   tag += QString(" font-family=\"%1\"").arg(hp->getProperty(Pid::BEGIN_FONT_FACE).toString());
                   tag += QString(" font-size=\"%1\"").arg(hp->getProperty(Pid::BEGIN_FONT_SIZE).toReal());
                   tag += fontSyleToXML(static_cast<FontStyle>(hp->getProperty(Pid::BEGIN_FONT_STYLE).toInt()));
-                  tag += addPositioningAttributes(hp, hp->tick() == tick);
+                  tag += positioningAttributes(hp, hp->tick() == tick);
                   _xml.tag(tag, hp->getProperty(Pid::BEGIN_TEXT));
                   _xml.etag();
 
                   _xml.stag("direction-type");
                   tag = "dashes type=\"start\"";
                   tag += QString(" number=\"%1\"").arg(n + 1);
-                  tag += addPositioningAttributes(hp, hp->tick() == tick);
+                  tag += positioningAttributes(hp, hp->tick() == tick);
                   _xml.tagE(tag);
                   _xml.etag();
                   }
@@ -3660,7 +3764,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
                         }
                   }
             tag += QString(" number=\"%1\"").arg(n + 1);
-            tag += addPositioningAttributes(hp, hp->tick() == tick);
+            tag += positioningAttributes(hp, hp->tick() == tick);
             _xml.tagE(tag);
             _xml.etag();
             }
@@ -3740,7 +3844,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& t
       if (octaveShiftXml != "") {
             directionTag(_xml, _attr, ot);
             _xml.stag("direction-type");
-            octaveShiftXml += addPositioningAttributes(ot, ot->tick() == tick);
+            octaveShiftXml += positioningAttributes(ot, ot->tick() == tick);
             _xml.tagE(octaveShiftXml);
             _xml.etag();
             directionETag(_xml, staff);
@@ -3760,7 +3864,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tic
             pedalXml = "pedal type=\"start\" line=\"yes\"";
       else
             pedalXml = "pedal type=\"stop\" line=\"yes\"";
-      pedalXml += addPositioningAttributes(pd, pd->tick() == tick);
+      pedalXml += positioningAttributes(pd, pd->tick() == tick);
       _xml.tagE(pedalXml);
       _xml.etag();
       directionETag(_xml, staff);
@@ -3868,7 +3972,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, const Fractio
             rest += QString(" end-length=\"%1\"").arg(hookHeight * 10);
             }
 
-      rest += addPositioningAttributes(tl, tl->tick() == tick);
+      rest += positioningAttributes(tl, tl->tick() == tick);
 
       directionTag(_xml, _attr, tl);
 
@@ -3922,7 +4026,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       _xml.stag("direction-type");
 
       QString tagName = "dynamics";
-      tagName += addPositioningAttributes(dyn);
+      tagName += positioningAttributes(dyn);
       _xml.stag(tagName);
       const QString dynTypeName = dyn->dynamicTypeName();
 
@@ -4020,7 +4124,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
             return;
             }
       directionTag(_xml, _attr, sym);
-      mxmlName += addPositioningAttributes(sym);
+      mxmlName += positioningAttributes(sym);
       _xml.stag("direction-type");
       _xml.tagE(mxmlName);
       _xml.etag();
@@ -4041,7 +4145,7 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
                   if ((l)->track() == trk) {
                         QString lyricXml = QString("lyric number=\"%1\"").arg((l)->no() + 1);
                         lyricXml += color2xml(l);
-                        lyricXml += addPositioningAttributes(l);
+                        lyricXml += positioningAttributes(l);
                         _xml.stag(lyricXml);
                         Lyrics::Syllabic syl = (l)->syllabic();
                         QString s = "";
@@ -4146,8 +4250,7 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
       if (sound != "") {
             xml.stag(QString("direction placement=\"%1\"").arg((jp->placement() == Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
-            QString positioning = "";
-            positioning += addPositioningAttributes(jp);
+            QString positioning = positioningAttributes(jp);
             if (type != "") xml.tagE(type + positioning);
             if (words != "") xml.tag("words" + positioning, words);
             xml.etag();
@@ -4202,8 +4305,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m)
       if (sound != "") {
             xml.stag(QString("direction placement=\"%1\"").arg((m->placement() == Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
-            QString positioning = "";
-            positioning += addPositioningAttributes(m);
+            QString positioning = positioningAttributes(m);
             if (type != "") xml.tagE(type + positioning);
             if (words != "") xml.tag("words" + positioning, words);
             xml.etag();
@@ -4935,83 +5037,82 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                         newThing = " new-page=\"yes\"";
                   }
 
-            // determine if layout information is required
-            bool doLayout = false;
-            if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
-                  if (currentSystem == TopSystem
-                      || (preferences.musicxmlExportBreaks() == MusicxmlExportBreaks::ALL && newThing != "")) {
-                        doLayout = true;
-                        }
+            // determine if break and layout information is required
+            bool doBreak = false;
+            if (currentSystem == TopSystem || newThing != "") {
+                  doBreak = true;
                   }
+            bool doLayout = preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT);
 
-            if (doLayout) {
-                  _xml.stag(QString("print%1").arg(newThing));
-                  const double pageWidth  = getTenthsFromInches(score()->styleD(Sid::pageWidth));
-                  const double lm = getTenthsFromInches(score()->styleD(Sid::pageOddLeftMargin));
-                  const double rm = getTenthsFromInches(score()->styleD(Sid::pageWidth)
-                                                        - score()->styleD(Sid::pagePrintableWidth) - score()->styleD(Sid::pageOddLeftMargin));
-                  const double tm = getTenthsFromInches(score()->styleD(Sid::pageOddTopMargin));
+            if (doBreak) {
+                  if (doLayout) {
+                        _xml.stag(QString("print%1").arg(newThing));
+                        const double pageWidth  = getTenthsFromInches(score()->styleD(Sid::pageWidth));
+                        const double lm = getTenthsFromInches(score()->styleD(Sid::pageOddLeftMargin));
+                        const double rm = getTenthsFromInches(score()->styleD(Sid::pageWidth)
+                                                              - score()->styleD(Sid::pagePrintableWidth) - score()->styleD(Sid::pageOddLeftMargin));
+                        const double tm = getTenthsFromInches(score()->styleD(Sid::pageOddTopMargin));
 
-                  // System Layout
+                        // System Layout
 
-                  // For a multi-meaure rest positioning is valid only
-                  // in the replacing measure
-                  // note: for a normal measure, mmRest1 is the measure itself,
-                  // for a multi-meaure rest, it is the replacing measure
-                  const Measure* mmR1 = m->mmRest1();
-                  const System* system = mmR1->system();
+                        // For a multi-meaure rest positioning is valid only
+                        // in the replacing measure
+                        // note: for a normal measure, mmRest1 is the measure itself,
+                        // for a multi-meaure rest, it is the replacing measure
+                        const Measure* mmR1 = m->mmRest1();
+                        const System* system = mmR1->system();
 
-                  // Put the system print suggestions only for the first part in a score...
-                  if (partNr == 0) {
+                        // Put the system print suggestions only for the first part in a score...
+                        if (partNr == 0) {
 
-                        // Find the right margin of the system.
-                        double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
-                        double systemRM = pageWidth - rm - (getTenthsFromDots(system->bbox().width()) + lm);
+                              // Find the right margin of the system.
+                              double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
+                              double systemRM = pageWidth - rm - (getTenthsFromDots(system->bbox().width()) + lm);
 
-                        _xml.stag("system-layout");
-                        _xml.stag("system-margins");
-                        _xml.tag("left-margin", QString("%1").arg(QString::number(systemLM,'f',2)));
-                        _xml.tag("right-margin", QString("%1").arg(QString::number(systemRM,'f',2)) );
-                        _xml.etag();
+                              _xml.stag("system-layout");
+                              _xml.stag("system-margins");
+                              _xml.tag("left-margin", QString("%1").arg(QString::number(systemLM,'f',2)));
+                              _xml.tag("right-margin", QString("%1").arg(QString::number(systemRM,'f',2)) );
+                              _xml.etag();
 
-                        if (currentSystem == NewPage || currentSystem == TopSystem) {
-                              const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
-                              _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
+                              if (currentSystem == NewPage || currentSystem == TopSystem) {
+                                    const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
+                                    _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
+                                    }
+                              if (currentSystem == NewSystem) {
+                                    // see System::layout2() for the factor 2 * score()->spatium()
+                                    const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
+                                                                             - previousMeasure->pagePos().y()
+                                                                             - previousMeasure->bbox().height()
+                                                                             + 2 * score()->spatium()
+                                                                             );
+                                    _xml.tag("system-distance",
+                                             QString("%1").arg(QString::number(sysDist,'f',2)));
+                                    }
+
+                              _xml.etag();
                               }
-                        if (currentSystem == NewSystem) {
-                              // see System::layout2() for the factor 2 * score()->spatium()
-                              const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
-                                                                       - previousMeasure->pagePos().y()
-                                                                       - previousMeasure->bbox().height()
-                                                                       + 2 * score()->spatium()
-                                                                       );
-                              _xml.tag("system-distance",
-                                       QString("%1").arg(QString::number(sysDist,'f',2)));
+
+                        // Staff layout elements.
+                        for (int staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; staffIdx++) {
+
+                              // calculate distance between this and previous staff using the bounding boxes
+                              const auto staffNr = firstStaffOfPart + staffIdx;
+                              const auto prevBbox = system->staff(staffNr - 1)->bbox();
+                              const auto staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
+
+                              _xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
+                              _xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist),'f',2)));
+                              _xml.etag();
                               }
 
                         _xml.etag();
                         }
-
-                  // Staff layout elements.
-                  for (int staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; staffIdx++) {
-
-                        // calculate distance between this and previous staff using the bounding boxes
-                        const auto staffNr = firstStaffOfPart + staffIdx;
-                        const auto prevBbox = system->staff(staffNr - 1)->bbox();
-                        const auto staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
-
-                        _xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
-                        _xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist),'f',2)));
-                        _xml.etag();
-                        }
-
-                  _xml.etag();
-                  }
-            else {
-                  // !doLayout
-                  if (newThing != "")
+                  else if (newThing != "") {
                         _xml.tagE(QString("print%1").arg(newThing));
-                  }
+                        }
+
+                  } // if (!doBreak) ...
 
             } // if (currentSystem ...
 
@@ -5554,6 +5655,115 @@ bool MeasureNumberStateHandler::isFirstActualMeasure() const
       }
 
 //---------------------------------------------------------
+//  findLastSystemWithMeasures
+//---------------------------------------------------------
+
+static System* findLastSystemWithMeasures(const Page* const page)
+      {
+      for (int i = page->systems().size() - 1; i >= 0; --i) {
+            const auto s = page->systems().at(i);
+            const auto m = s->firstMeasure();
+            if (m)
+                  return s;
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//  isFirstMeasureInSystem
+//---------------------------------------------------------
+
+static bool isFirstMeasureInSystem(const Measure* const measure)
+      {
+      const auto system = measure->mmRest1()->system();
+      const auto firstMeasureInSystem = system->firstMeasure();
+      const auto realFirstMeasureInSystem = firstMeasureInSystem->isMMRest() ? firstMeasureInSystem->mmRestFirst() : firstMeasureInSystem;
+      return measure == realFirstMeasureInSystem;
+      }
+//---------------------------------------------------------
+//  isFirstMeasureInLastSystem
+//---------------------------------------------------------
+
+static bool isFirstMeasureInLastSystem(const Measure* const measure)
+      {
+      const auto system = measure->mmRest1()->system();
+      const auto page = system->page();
+
+      /*
+       Notes on multi-measure rest handling:
+       Function mmRest1() returns either the measure itself (if not part of multi-measure rest)
+       or the replacing multi-measure rest measure.
+       Using this is required as a measure that is covered by a multi-measure rest has no system.
+       Furthermore, the first measure in a system starting with a multi-measure rest is the a multi-
+       measure rest itself instead of the first covered measure.
+       */
+
+      const auto lastSystem = findLastSystemWithMeasures(page);
+      if (!lastSystem)
+            return false;       // degenerate case: no system with measures found
+      const auto firstMeasureInLastSystem = lastSystem->firstMeasure();
+      const auto realFirstMeasureInLastSystem = firstMeasureInLastSystem->isMMRest() ? firstMeasureInLastSystem->mmRestFirst() : firstMeasureInLastSystem;
+      return measure == realFirstMeasureInLastSystem;
+      }
+
+//---------------------------------------------------------
+//  systemHasMeasures
+//---------------------------------------------------------
+
+static bool systemHasMeasures(const System* const system)
+      {
+      return system->firstMeasure();
+      }
+
+//---------------------------------------------------------
+//  findTextFramesToWriteAsWordsAbove
+//---------------------------------------------------------
+
+static std::vector<TBox*> findTextFramesToWriteAsWordsAbove(const Measure* const measure)
+      {
+      const auto system = measure->mmRest1()->system();
+      const auto page = system->page();
+      const auto systemIndex = page->systems().indexOf(system);
+      std::vector<TBox*> tboxes;
+      if (isFirstMeasureInSystem(measure)) {
+            for (auto idx = systemIndex - 1; idx >= 0 && !systemHasMeasures(page->system(idx)); --idx) {
+                  const auto sys = page->system(idx);
+                  for (const auto mb : sys->measures()) {
+                        if (mb->isTBox()) {
+                              auto tbox = toTBox(mb);
+                              tboxes.insert(tboxes.begin(), tbox);
+                              }
+                        }
+                  }
+            }
+      return tboxes;
+      }
+
+//---------------------------------------------------------
+//  findTextFramesToWriteAsWordsBelow
+//---------------------------------------------------------
+
+static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const measure)
+      {
+      const auto system = measure->mmRest1()->system();
+      const auto page = system->page();
+      const auto systemIndex = page->systems().indexOf(system);
+      std::vector<TBox*> tboxes;
+      if (isFirstMeasureInLastSystem(measure)) {
+            for (auto idx = systemIndex + 1; idx < page->systems().size() /* && !systemHasMeasures(page->system(idx))*/; ++idx) {
+                  const auto sys = page->system(idx);
+                  for (const auto mb : sys->measures()) {
+                        if (mb->isTBox()) {
+                              auto tbox = toTBox(mb);
+                              tboxes.insert(tboxes.begin(), tbox);
+                              }
+                        }
+                  }
+            }
+      return tboxes;
+      }
+
+//---------------------------------------------------------
 //  write
 //---------------------------------------------------------
 
@@ -5606,6 +5816,8 @@ void ExportMusicXml::write(QIODevice* dev)
 
       for (int idx = 0; idx < il.size(); ++idx) {
             const auto part = il.at(idx);
+            const bool isFirstPart = (idx == 0);
+            const bool isLastPart = (idx == (il.size() - 1));
             _tick = { 0,1 };
             _xml.stag(QString("part id=\"P%1\"").arg(idx+1));
 
@@ -5622,6 +5834,7 @@ void ExportMusicXml::write(QIODevice* dev)
             FigBassMap fbMap;           // pending figured bass extends
 
             for (auto mb = _score->measures()->first(); mb; mb = mb->next()) {
+
                   if (!mb->isMeasure())
                         continue;
                   const auto m = toMeasure(mb);
@@ -5687,6 +5900,12 @@ void ExportMusicXml::write(QIODevice* dev)
                   if (idx == 0)
                         repeatAtMeasureStart(_xml, _attr, m, strack, etrack, strack);
 
+                  bool tboxesAboveWritten = false;
+                  const auto tboxesAbove = findTextFramesToWriteAsWordsAbove(m);
+
+                  bool tboxesBelowWritten = false;
+                  const auto tboxesBelow = findTextFramesToWriteAsWordsBelow(m);
+
                   for (int st = strack; st < etrack; ++st) {
                         // sstaff - xml staff number, counting from 1 for this
                         // instrument
@@ -5713,6 +5932,27 @@ void ExportMusicXml::write(QIODevice* dev)
                               // handle annotations and spanners (directions attached to this note or rest)
                               if (el->isChordRest()) {
                                     _attr.doAttr(_xml, false);
+                                    if (!tboxesAboveWritten && isFirstPart) {
+                                          for (const auto tbox : tboxesAbove) {
+                                                // note: use mmRest1() to get at a possible multi-measure rest,
+                                                // as the covered measure would be positioned at 0,0.
+                                                tboxTextAsWords(tbox->text(), 0, tbox->text()->canvasPos() - m->mmRest1()->canvasPos());
+                                                }
+                                          tboxesAboveWritten = true;
+                                          }
+                                    if (!tboxesBelowWritten && isLastPart && (etrack - VOICES) <= st) {
+                                          for (const auto tbox : tboxesBelow) {
+                                                const auto lastStaffNr = st / VOICES;
+                                                const auto sys = m->mmRest1()->system();
+                                                auto textPos = tbox->text()->canvasPos() - m->mmRest1()->canvasPos();
+                                                if (lastStaffNr < sys->staves()->size()) {
+                                                      // convert to position relative to last staff of system
+                                                      textPos.setY(textPos.y() - (sys->staffCanvasYpage(lastStaffNr) - sys->staffCanvasYpage(0)));
+                                                      }
+                                                tboxTextAsWords(tbox->text(), sstaff, textPos);
+                                                }
+                                          tboxesBelowWritten = true;
+                                          }
                                     annotations(this, strack, etrack, st, sstaff, seg);
                                     // look for more harmony
                                     for (auto seg1 = seg->next(); seg1; seg1 = seg1->next()) {

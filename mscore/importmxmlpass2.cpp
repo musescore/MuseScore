@@ -2002,7 +2002,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
             else if (_e.name() == "barline")
                   barline(partId, measure, time + mTime);
             else if (_e.name() == "print")
-                  print(measure);
+                  _e.skipCurrentElement();
             else
                   skipLogCurrElem();
 
@@ -2252,51 +2252,6 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
                   }
             else
                   skipLogCurrElem();
-            }
-      }
-
-
-//---------------------------------------------------------
-//   print
-//---------------------------------------------------------
-
-/**
- Parse the /score-partwise/part/measure/print node.
- */
-
-void MusicXMLParserPass2::print(Measure* measure)
-      {
-      Q_ASSERT(_e.isStartElement() && _e.name() == "print");
-
-      bool newSystem = _e.attributes().value("new-system") == "yes";
-      bool newPage   = _e.attributes().value("new-page") == "yes";
-      int blankPage = _e.attributes().value("blank-page").toInt();
-      //
-      // in MScore the break happens _after_ the marked measure:
-      //
-      MeasureBase* pm = measure->prevMeasure();        // We insert VBox only for title, no HBox for the moment
-      if (pm == 0) {
-            _logger->logDebugInfo("break on first measure", &_e);
-            if (blankPage == 1) {       // blank title page, insert a VBOX if needed
-                  pm = measure->prev();
-                  if (pm == 0) {
-                        _score->insertMeasure(ElementType::VBOX, measure);
-                        pm = measure->prev();
-                        }
-                  }
-            }
-      if (pm) {
-            if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTBREAKS) && (newSystem || newPage)) {
-                  if (!pm->lineBreak() && !pm->pageBreak()) {
-                        LayoutBreak* lb = new LayoutBreak(_score);
-                        lb->setLayoutBreakType(newSystem ? LayoutBreak::Type::LINE : LayoutBreak::Type::PAGE);
-                        pm->add(lb);
-                        }
-                  }
-            }
-
-      while (_e.readNextStartElement()) {
-            skipLogCurrElem();
             }
       }
 
