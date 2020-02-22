@@ -171,7 +171,7 @@ ChordRest* Selection::currentCR() const
       // no selection yet - start at very beginning, not first cr
       if (_currentTick == Fraction(-1, 1))
             return nullptr;
-      Segment* s = score()->tick2rightSegment(_currentTick);
+      Segment* s = score()->tick2rightSegment(_currentTick, true);
       if (!s)
             return nullptr;
       int track = _currentTrack;
