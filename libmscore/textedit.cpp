@@ -76,32 +76,38 @@ void TextBase::endEdit(EditData& ed)
       // replace all undo/redo records collected during text editing with
       // one property change
 
-      if (undo->getCurIdx() == ted->startUndoIdx) {
+      using Filter = UndoCommand::Filter;
+      const bool textWasEdited = (undo->getCurIdx() != ted->startUndoIdx);
+
+      if (textWasEdited) {
+            undo->mergeCommands(ted->startUndoIdx);
+            undo->last()->filterChildren(Filter::TextEdit, this);
+            }
+      else {
             // No text changes in "undo" part of undo stack,
             // hence nothing to merge and filter.
             undo->cleanRedoStack(); // prevent text editing commands from remaining in undo stack
-            return;
             }
-
-      using Filter = UndoCommand::Filter;
-      undo->mergeCommands(ted->startUndoIdx);
-      undo->last()->filterChildren(Filter::TextEdit, this);
 
       bool newlyAdded = false;
 
       if (ted->oldXmlText.isEmpty()) {
-            UndoStack* us = score()->undoStack();
-            UndoCommand* ucmd = us->prev();
+            UndoCommand* ucmd = textWasEdited ? undo->prev() : undo->last();
             if (ucmd && ucmd->hasFilteredChildren(Filter::AddElement, this)) {
                   // We have just added this element to a score.
                   // Combine undo records of text creation with text editing.
                   newlyAdded = true;
-                  us->mergeCommands(ted->startUndoIdx - 1);
+                  undo->mergeCommands(ted->startUndoIdx - 1);
                   }
             }
 
       if (actualText.isEmpty()) {
             qDebug("actual text is empty");
+
+            // If this assertion fails, no undo command relevant to this text
+            // resides on undo stack and reopen() would corrupt the previous
+            // command. Text shouldn't happen to be empty in other cases though.
+            Q_ASSERT(newlyAdded || textWasEdited);
 
             undo->reopen();
             score()->undoRemoveElement(this);
@@ -132,13 +138,18 @@ void TextBase::endEdit(EditData& ed)
             return;
             }
 
-      setXmlText(ted->oldXmlText);                    // reset text to value before editing
-      undo->reopen();
-      undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
-                                                      // this also changes text of linked elements
-      layout1();
-      triggerLayout();                                // force relayout even if text did not change
-      score()->endCmd();
+      if (textWasEdited) {
+            setXmlText(ted->oldXmlText);                    // reset text to value before editing
+            undo->reopen();
+            undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
+                                                            // this also changes text of linked elements
+            layout1();
+            triggerLayout();                                // force relayout even if text did not change
+            score()->endCmd();
+            }
+      else {
+            triggerLayout();
+            }
 
       static const qreal w = 2.0;
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
