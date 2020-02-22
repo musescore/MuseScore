@@ -1574,7 +1574,7 @@ Pid BarLine::propertyId(const QStringRef& name) const
 
 Element* BarLine::nextSegmentElement()
       {
-      return segment()->firstInNextSegments(score()->inputState().prevTrack() / VOICES);
+      return segment()->firstInNextSegments(staffIdx());    //score()->inputState().prevTrack() / VOICES);
       }
 
 //---------------------------------------------------------
@@ -1583,7 +1583,7 @@ Element* BarLine::nextSegmentElement()
 
 Element* BarLine::prevSegmentElement()
       {
-      return segment()->lastInPrevSegments(score()->inputState().prevTrack() / VOICES);
+      return segment()->lastInPrevSegments(staffIdx());     //score()->inputState().prevTrack() / VOICES);
       }
 
 //---------------------------------------------------------
