@@ -575,13 +575,23 @@ Element* Score::nextElement()
                        else
                              return score()->firstElement();
                        }
+#if 1
+                  case ElementType::VOLTA_SEGMENT:
+#else
+                  case ElementType::VOLTA_SEGMENT: {
+                        // TODO: see Spanner::nextSpanner()
+                        System* sys = toSpannerSegment(e)->system();
+                        if (sys)
+                              staffId = sys->firstVisibleStaff();
+                        }
+                        // fall through
+#endif
                   case ElementType::SLUR_SEGMENT:
                   case ElementType::TEXTLINE_SEGMENT:
                   case ElementType::HAIRPIN_SEGMENT:
                   case ElementType::OTTAVA_SEGMENT:
                   case ElementType::TRILL_SEGMENT:
                   case ElementType::VIBRATO_SEGMENT:
-                  case ElementType::VOLTA_SEGMENT:
                   case ElementType::LET_RING_SEGMENT:
                   case ElementType::PALM_MUTE_SEGMENT:
                   case ElementType::PEDAL_SEGMENT: {
@@ -682,13 +692,23 @@ Element* Score::prevElement()
                         Segment* s = toSegment(e);
                         return s->prevElement(staffId);
                         }
+#if 1
+                  case ElementType::VOLTA_SEGMENT:
+#else
+                  case ElementType::VOLTA_SEGMENT: {
+                        // TODO: see Spanner::nextSpanner()
+                        System* sys = toSpannerSegment(e)->system();
+                        if (sys)
+                              staffId = sys->firstVisibleStaff();
+                        }
+                        // fall through
+#endif
                   case ElementType::SLUR_SEGMENT:
                   case ElementType::TEXTLINE_SEGMENT:
                   case ElementType::HAIRPIN_SEGMENT:
                   case ElementType::OTTAVA_SEGMENT:
                   case ElementType::TRILL_SEGMENT:
                   case ElementType::VIBRATO_SEGMENT:
-                  case ElementType::VOLTA_SEGMENT:
                   case ElementType::PEDAL_SEGMENT: {
                         SpannerSegment* s = toSpannerSegment(e);
                         Spanner* sp = s->spanner();
