@@ -1595,10 +1595,12 @@ static bool readTextProperties206(XmlReader& e, TextBase* t)
             }
       else if (tag == "foregroundColor")  // same as "color" ?
             e.skipCurrentElement();
-      else if (tag == "frame")
+      else if (tag == "frame") {
             t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
+            t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
+            }
       else if (tag == "frameRound")
-            t->setFrameRound(e.readInt());
+            t->readProperty(e, Pid::FRAME_ROUND);
       else if (tag == "circle") {
             if (e.readBool())
                   t->setFrameType(FrameType::CIRCLE);
@@ -1606,15 +1608,16 @@ static bool readTextProperties206(XmlReader& e, TextBase* t)
                   if (t->circle())
                         t->setFrameType(FrameType::SQUARE);
                   }
+            t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
             }
       else if (tag == "paddingWidthS")
-            t->setPaddingWidth(Spatium(e.readDouble()));
+            t->readProperty(e, Pid::FRAME_PADDING);
       else if (tag == "frameWidthS")
-            t->setFrameWidth(Spatium(e.readDouble()));
+            t->readProperty(e, Pid::FRAME_WIDTH);
       else if (tag == "frameColor")
-            t->setFrameColor(e.readColor());
+            t->readProperty(e, Pid::FRAME_FG_COLOR);
       else if (tag == "backgroundColor")
-            t->setBgColor(e.readColor());
+            t->readProperty(e, Pid::FRAME_BG_COLOR);
       else if (tag == "halign") {
             Align align = Align(int(t->align()) & int(~Align::HMASK));
             const QString& val(e.readElementText());
@@ -1627,6 +1630,7 @@ static bool readTextProperties206(XmlReader& e, TextBase* t)
             else
                   qDebug("unknown alignment: <%s>", qPrintable(val));
             t->setAlign(align);
+            t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
             }
       else if (tag == "valign") {
             Align align = Align(int(t->align()) & int(~Align::VMASK));
@@ -1642,6 +1646,7 @@ static bool readTextProperties206(XmlReader& e, TextBase* t)
             else
                   qDebug("unknown alignment: <%s>", qPrintable(val));
             t->setAlign(align);
+            t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
             }
       else if (tag == "pos") {
             t->readProperty(e, Pid::OFFSET);
