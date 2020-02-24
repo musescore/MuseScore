@@ -60,18 +60,21 @@ void MeasureNumber::layout()
       setPos(QPointF());
       if (!parent())
             setOffset(0.0, 0.0);
-      //else if (isStyled(Pid::OFFSET))
-      //      setOffset(propertyDefault(Pid::OFFSET).toPointF());
 
-      const StaffType* st = staff()->constStaffType(measure()->tick());
-      if (st->lines() == 1 && staff())
-            rypos() = (placeBelow() ? 2.0 : -2.0) * spatium();
-      else {
-            if (placeBelow())
-                  rypos() = staff() ? staff()->height() : 0.0;
+      Staff* stf = staff();
+      if (stf && measure()) {
+            const StaffType* st = stf->constStaffType(measure()->tick());
+            if (st->lines() == 1)
+                  rypos() = (placeBelow() ? 2.0 : -2.0) * spatium();
+            else {
+                  if (placeBelow())
+                        rypos() = stf->height();
+                  }
             }
+      else 
+            rypos() = 0.0;
       TextBase::layout1();
       }
 
-}
+} // namespace MS
 

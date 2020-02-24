@@ -83,6 +83,7 @@
 #include "libmscore/vibrato.h"
 #include "libmscore/palmmute.h"
 #include "libmscore/fermata.h"
+#include "libmscore/measurenumber.h"
 
 #include "palette/palettetree.h"
 #include "palette/palettewidget.h"
@@ -1602,6 +1603,15 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
       stxt = new SystemText(gscore);
       stxt->setXmlText(QT_TRANSLATE_NOOP("Palette", "System Text"));
       sp->append(stxt, QT_TRANSLATE_NOOP("Palette", "System text"))->setElementTranslated(true);
+
+      // Measure numbers, unlike other elements (but like most text elements),
+      // are not copied directly into the score when drop.
+      // Instead, they simply set the corresponding measure's MeasureNumberMode to SHOW
+      // Because of that, the element shown in the palettes does not have to have any particular formatting.
+      MeasureNumber* meaNum = new MeasureNumber(gscore);
+      meaNum->setProperty(Pid::SUB_STYLE, int(Tid::STAFF)); // Make the element bigger in the palettes (using the default measure number style makes it too small)
+      meaNum->setXmlText(QT_TRANSLATE_NOOP("Palette", "Measure Number"));
+      sp->append(meaNum, QT_TRANSLATE_NOOP("Palette", "Measure Number"))->setElementTranslated(true);
 
       if (!defaultPalettePanel) {
             StaffText* pz = new StaffText(gscore);
