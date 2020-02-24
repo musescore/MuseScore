@@ -1343,6 +1343,10 @@ bool Measure::acceptDrop(EditData& data) const
                         viewer->setDropRectangle(canvasBoundingRect());
                   return true;
 
+            case ElementType::MEASURE_NUMBER:
+                  viewer->setDropRectangle(canvasBoundingRect());
+                  return true;
+
             case ElementType::BRACKET:
             case ElementType::REPEAT_MEASURE:
             case ElementType::MEASURE:
@@ -1432,6 +1436,11 @@ Element* Measure::drop(EditData& data)
                   score()->undoAddElement(e);
                   return e;
 
+            case ElementType::MEASURE_NUMBER:
+                  undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::SHOW));
+                  delete e;
+                  break;
+
             case ElementType::BRACKET:
                   {
                   Bracket* b = toBracket(e);
@@ -1448,7 +1457,7 @@ Element* Measure::drop(EditData& data)
                   score()->undoAddBracket(staff, level, b->bracketType(), 1);
                   delete b;
                   }
-                  return 0;
+                  break;
 
             case ElementType::CLEF:
                   score()->undoChangeClef(staff, this, toClef(e)->clefType());
@@ -1475,7 +1484,7 @@ Element* Measure::drop(EditData& data)
 
             case ElementType::TIMESIG:
                   score()->cmdAddTimeSig(this, staffIdx, toTimeSig(e), data.modifiers & Qt::ControlModifier);
-                  return 0;
+                  break;
 
             case ElementType::LAYOUT_BREAK: {
                   LayoutBreak* b = toLayoutBreak(e);
@@ -1844,7 +1853,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
             //
             //  CHECK: do not remove all slurs
             //
-            foreach (Element* e, m->el()) {
+            for (Element* e : m->el()) {
                   if (e->isSlur())
                         s->undoRemoveElement(e);
                   }
@@ -3012,7 +3021,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
                   s->add(ne);
                   }
             }
-      foreach(Element* e, el()) {
+      for (Element* e : el()) {
             Element* ne = e->clone();
             ne->setScore(sc);
             ne->setOffset(e->offset());
@@ -4403,4 +4412,3 @@ void Measure::computeMinWidth()
       }
 
 }
-
