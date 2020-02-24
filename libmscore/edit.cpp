@@ -98,7 +98,7 @@ void Score::getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const
       {
       *cr1 = 0;
       *cr2 = 0;
-      foreach(Element* e, selection().elements()) {
+      for (Element* e : selection().elements()) {
             if (e->isNote())
                   e = e->parent();
             if (e->isChordRest()) {
@@ -1894,7 +1894,7 @@ void Score::deleteItem(Element* el)
                   if (m->isMMRest()) {
                         // propagate to original measure
                         m = m->mmRestLast();
-                        foreach(Element* e, m->el()) {
+                        for (Element* e : m->el()) {
                               if (e->isLayoutBreak()) {
                                     undoRemoveElement(e);
                                     break;
@@ -2752,7 +2752,7 @@ void Score::colorItem(Element* element)
       if (!c.isValid())
             return;
 
-      foreach(Element* e, selection().elements()) {
+      for (Element* e : selection().elements()) {
             if (e->color() != c) {
                   e->undoChangeProperty(Pid::COLOR, c);
                   e->setGenerated(false);
@@ -4356,6 +4356,9 @@ void Score::undoAddElement(Element* element)
                         ne->setParent(m);
                         undo(new AddElement(ne));
                         }
+                  else if (et == ElementType::MEASURE_NUMBER) {
+                        toMeasure(element->parent())->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::SHOW));
+                        }
                   else {
                         Segment* segment  = toSegment(element->parent());
                         Fraction tick     = segment->tick();
@@ -4472,7 +4475,7 @@ void Score::undoAddElement(Element* element)
             return;
             }
 
-      foreach (Staff* staff, ostaff->staffList()) {
+      for (Staff* staff : ostaff->staffList()) {
             Score* score = staff->score();
             int staffIdx = staff->idx();
 
