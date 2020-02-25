@@ -1980,10 +1980,20 @@ void Chord::layoutPitched()
 
       // allocate enough room for glissandi
       if (_endsGlissando) {
-            if (!rtick().isZero()                  // if not at beginning of measure
-               || graceNotesBefore.size() > 0)     // or there are graces before
-                  lll += _spatium * 0.5 + minTieLength;
-            // special case of system-initial glissando final note is handled in Glissando::layout() itself
+            for (const Note* note : notes()) {
+                  for (const Spanner* sp : note->spannerBack()) {
+                        if (sp->isGlissando()) {
+                              if (toGlissando(sp)->visible()) {
+                                    if (!rtick().isZero()                 // if not at beginning of measure
+                                       || graceNotesBefore.size() > 0) {  // or there are graces before
+                                          lll += _spatium * 0.5 + minTieLength;
+                                          break;
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            // special case of system-initial glissando final note is handled in Glissando::layout() itself 
             }
 
       if (dots()) {
