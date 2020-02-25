@@ -57,7 +57,7 @@ class MuseScoreView {
       virtual QCursor cursor() const { return QCursor(); }
       virtual void setCursor(const QCursor&) {};
       virtual void setDropRectangle(const QRectF&) {};
-      virtual void cmdAddSlur(ChordRest*, ChordRest*, const Slur* /* slurTemplate */) {};
+      virtual void addSlur(ChordRest*, ChordRest*, const Slur* /* slurTemplate */) {};
       virtual void startEdit(Element*, Grip /*startGrip*/) {};
       virtual void startNoteEntryMode() {};
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;
