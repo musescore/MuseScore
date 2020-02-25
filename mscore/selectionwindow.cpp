@@ -192,6 +192,7 @@ void MuseScore::showSelectionWindow(bool visible)
                   }
             }
       reDisplayDockWidget(selectionWindow, visible);
+      a->setChecked(visible);
       if (visible) {
             selectionWindow->raise();
             }
