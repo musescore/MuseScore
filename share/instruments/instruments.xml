@@ -4265,7 +4265,7 @@
                   <aPitchRange>26-64</aPitchRange>
                   <pPitchRange>24-72</pPitchRange>
                   <Channel>
-                        <program value="58"/> <!--Tuba-->
+                        <program value="57"/> <!--Trombone-->
                   </Channel>
             </Instrument>
             <Instrument id="euphonium">
