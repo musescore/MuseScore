@@ -369,8 +369,10 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
             }
       else if (tag == "foregroundColor")  // same as "color" ?
             e.skipCurrentElement();
-      else if (tag == "frame")
+      else if (tag == "frame") {
             t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
+            t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
+            }
       else if (tag == "halign") {
             Align align = Align(int(t->align()) & int(~Align::HMASK));
             const QString& val(e.readElementText());
@@ -383,6 +385,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
             else
                   qDebug("readText: unknown alignment: <%s>", qPrintable(val));
             t->setAlign(align);
+            t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
             }
       else if (tag == "valign") {
             Align align = Align(int(t->align()) & int(~Align::VMASK));
@@ -398,6 +401,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
             else
                   qDebug("readText: unknown alignment: <%s>", qPrintable(val));
             t->setAlign(align);
+            t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
             }
       else if (tag == "rxoffset") {       // TODO
             e.readElementText();
