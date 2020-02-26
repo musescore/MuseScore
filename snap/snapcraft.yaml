@@ -1,0 +1,202 @@
+name: musescore
+adopt-info: musescore
+summary: Create, play and print beautiful sheet music.
+description: |
+    MuseScore is the world's leading free and open-source software for writing
+    music, with a user-friendly interface and immensely powerful features.
+    It is free to install on Windows, Mac, and Linux.
+
+    Some interfaces need to be connected manually:
+
+        $ sudo snap connect musescore:cups-control
+        $ sudo snap connect musescore:alsa
+        $ sudo snap connect musescore:removable-media
+
+    But most of the application functionality works without them.
+
+grade: stable
+confinement: strict
+base: core18
+
+plugs: # plugs for theming, font settings, cursor and to use gtk3 file chooser
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes:gtk-3-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/data-dir/icons
+    default-provider: gtk-common-themes:icon-themes
+  sound-themes:
+    interface: content
+    target: $SNAP/data-dir/sounds
+    default-provider: gtk-common-themes:sounds-themes
+
+apps:
+    mscore:
+        adapter: full
+        command: usr/bin/mscore
+        command-chain:
+            - bin/desktop-launch
+        environment:
+            # Make this the default till Qt apps in wayland look & work better
+            DISABLE_WAYLAND: 1
+            QT_QPA_PLATFORMTHEME: gtk3
+        plugs:
+          - gsettings
+          - home
+          - network
+          - pulseaudio
+          - audio-playback
+          - unity7
+          - x11
+          - opengl
+          - cups-control
+          - alsa
+          - desktop
+          - wayland
+          - desktop-legacy
+          - removable-media
+
+plugs:
+  # gtk-common-themes support
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes:gtk-3-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/data-dir/icons
+    default-provider: gtk-common-themes:icon-themes
+  sound-themes:
+    interface: content
+    target: $SNAP/data-dir/sounds
+    default-provider: gtk-common-themes:sounds-themes
+
+parts:
+    musescore:
+        source: https://github.com/musescore/MuseScore
+        source-type: git
+        plugin: make
+        override-build: |
+            make revision
+            QT_SELECT=qt5 snapcraftctl build
+        override-pull: |
+            snapcraftctl pull
+            "$SNAPCRAFT_STAGE"/scriptlets/selective-checkout \
+                        --release-tag-prefix='v' \
+                        --stable-tag-pattern=[[:digit:]]+$ \
+                        --force-stable
+        build-packages:
+            #- extra-cmake-modules
+            #- doxygen
+            # From https://musescore.org/en/handbook/developers-handbook/compilation/compile-instructions-ubuntu-1604lts-and-1804lts-git
+            # Tools
+            - cmake
+            - g++
+            # Audio & others
+            - libasound2-dev
+            - portaudio19-dev
+            - libmp3lame-dev
+            - libsndfile1-dev
+            - libportmidi-dev
+            - libssl-dev
+            - libpulse-dev
+            - libfreetype6-dev
+            - libfreetype6
+            # «Failed to find "GL" in "".»
+            - libdrm-dev
+            - libgl1-mesa-dev
+            - libegl1-mesa-dev
+            # QT
+            - qtbase5-dev
+            - qttools5-dev
+            - qttools5-dev-tools
+            - qtwebengine5-dev
+            - qtscript5-dev
+            - libqt5xmlpatterns5-dev
+            - libqt5svg5-dev
+            - libqt5webkit5-dev
+            - qtquickcontrols2-5-dev
+        make-parameters:
+            - PREFIX=/usr
+            - UPDATE_CACHE=FALSE
+            # TODO: This shouldn't be necessary
+            # https://musescore.org/en/comment/884393
+            - BUILD_WEBENGINE=off
+        stage-packages:
+            - libqt5core5a
+            - libqt5gui5
+            - libqt5network5
+            - libqt5xml5
+            - libqt5xmlpatterns5
+            - libqt5svg5
+            - libqt5printsupport5
+            - libqt5webkit5
+            - libcanberra-gtk-module
+            - overlay-scrollbar-gtk2
+            - unity-gtk2-module
+            - libatk-adaptor
+            - libgail-common
+            - libmp3lame0
+            - libportmidi0
+            - libvorbis0a
+            - libsndfile1
+            - libportaudio2
+            - libpulse0
+            - libjack0
+            - libasyncns0
+            - libflac8
+            - qtwayland5
+            - libqt5help5
+            - libqt5sql5
+            # Palettes need these, see:
+            # https://forum.snapcraft.io/t/missing-dependency-for-musescore/14884
+            - qml-module-qtgraphicaleffects
+            - qml-module-qtquick-controls2
+            - qml-module-qtqml-models2
+        after: [desktop-qt5, selective-checkout]
+
+  # Part for supporting various desktop technologies
+  # Refer: https://github.com/ubuntu/snapcraft-desktop-helpers/blob/master/snapcraft.yaml
+    desktop-qt5:
+        source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+        source-depth: 1
+        source-subdir: qt
+        plugin: make
+        make-parameters: ["FLAVOR=qt5"]
+        build-packages:
+            - build-essential
+            - qtbase5-dev
+            - dpkg-dev
+        stage-packages:
+            - libxkbcommon0
+            - ttf-ubuntu-font-family
+            - dmz-cursor-theme
+            - light-themes
+            - adwaita-icon-theme
+            - gnome-themes-standard
+            - shared-mime-info
+            - libqt5gui5
+            - libgdk-pixbuf2.0-0
+            - libqt5svg5 # for loading icon themes which are svg
+            - try: [appmenu-qt5] # not available on core18
+            - locales-all
+            - xdg-user-dirs
+            - fcitx-frontend-qt5
+
+    qt5-gtk-platform:
+        plugin: nil
+        stage-packages:
+            - qt5-gtk-platformtheme
+
+    # Check out the tagged release revision if it isn't promoted to the stable channel
+    # https://forum.snapcraft.io/t/selective-checkout-check-out-the-tagged-release-revision-if-it-isnt-promoted-to-the-stable-channel/10617
+    selective-checkout:
+        plugin: nil
+        build-packages:
+          - git
+        stage-snaps:
+          - selective-checkout
+        prime:
+          - -*
