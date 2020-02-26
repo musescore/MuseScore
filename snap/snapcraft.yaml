@@ -155,6 +155,8 @@ parts:
             - qml-module-qtgraphicaleffects
             - qml-module-qtquick-controls2
             - qml-module-qtqml-models2
+            # https://musescore.org/en/node/301501#comment-980979
+            - qml-module-qtquick-controls
         after: [desktop-qt5, selective-checkout]
 
   # Part for supporting various desktop technologies
