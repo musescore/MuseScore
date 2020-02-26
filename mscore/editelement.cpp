@@ -243,9 +243,9 @@ void ScoreView::endDragEdit()
 
       editData.element->endEditDrag(editData);
       score()->endCmd();            // calls update()
-      updateGrips();
       _score->addRefresh(editData.element->canvasBoundingRect());
       setDropTarget(0);
+      updateGrips();
       _score->rebuildBspTree();
       }
 }
