@@ -1053,9 +1053,25 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                                     continue; // this voice is empty here
                               if (!cr->isRest() || s->tick() + cr->actualTicks() > maxTick || toRest(cr)->isGap())
                                     break; // next element in the same voice is not a rest, or it exceeds the selection, or it is a gap
+                              if (cr->tuplet()) {
+                                    Tuplet* tuplet = cr->tuplet(); // element is a tuplet; special case
+                                    bool tupletAllRests = true;
+                                    for (auto const& el : tuplet->elements()) {
+                                          // Check all tuplet elements
+                                          if (!el->isRest() || el->type() == ElementType::TUPLET) {
+                                                tupletAllRests = false; // Tuplet element is not a rest or nested tuplet
+                                                break;
+                                                }
+                                          }
+                                    if (!tupletAllRests)
+                                          break;
+                                    // Set to last element (i.e. rest) of the tuplet
+                                    cr = toRest(tuplet->elements().back());
+                                    s = msr->getSegment(SegmentType::ChordRest, cr->tick());
+                                    }
                               lastRest = cr;
                               }
-                        Fraction restTicks = lastRest->tick() + lastRest->ticks() - curr->tick();
+                        Fraction restTicks = lastRest->tick() + lastRest->actualTicks() - curr->tick();
                         seg = setNoteRest(seg, curr->track(), NoteVal(), restTicks, Direction::AUTO, false, true);
                         }
                   else if (curr->isChord()) {
