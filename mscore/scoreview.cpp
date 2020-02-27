@@ -1877,7 +1877,7 @@ void ScoreView::cmd(const char* s)
                         cv->changeState(ViewState::NORMAL);
                   }},
             {{"add-slur"}, [](ScoreView* cv, const QByteArray&) {
-                  cv->addSlur();
+                  cv->cmdAddSlur();
                   }},
             {{"add-hairpin"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddHairpin(HairpinType::CRESC_HAIRPIN);
@@ -3551,11 +3551,11 @@ void ScoreView::startUndoRedo(bool undo)
       }
 
 //---------------------------------------------------------
-//   addSlur
+//   cmdAddSlur
 //    command invoked, or icon double clicked
 //---------------------------------------------------------
 
-void ScoreView::addSlur(const Slur* slurTemplate)
+void ScoreView::cmdAddSlur(const Slur* slurTemplate)
       {
       InputState& is = _score->inputState();
       if (noteEntryMode() && is.slur()) {
@@ -3568,6 +3568,9 @@ void ScoreView::addSlur(const Slur* slurTemplate)
             is.setSlur(nullptr);
             return;
             }
+
+      _score->startCmd();
+
       ChordRest* cr1;
       ChordRest* cr2;
       const auto& sel = _score->selection();
@@ -3593,7 +3596,7 @@ void ScoreView::addSlur(const Slur* slurTemplate)
                               cr2 = cr;
                         }
                   if (cr1 && (cr1 != cr2))
-                        cmdAddSlur(cr1, cr2, slurTemplate);
+                        addSlur(cr1, cr2, slurTemplate);
                   }
             }
       else {
@@ -3613,15 +3616,16 @@ void ScoreView::addSlur(const Slur* slurTemplate)
             if (cr1 == cr2)
                   cr2 = 0;
             if (cr1)
-                  cmdAddSlur(cr1, cr2, slurTemplate);
+                  addSlur(cr1, cr2, slurTemplate);
             }
+      _score->endCmd();
       }
 
 //---------------------------------------------------------
-//   cmdAddSlur
+//   addSlur
 //---------------------------------------------------------
 
-void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2, const Slur* slurTemplate)
+void ScoreView::addSlur(ChordRest* cr1, ChordRest* cr2, const Slur* slurTemplate)
       {
       bool switchToSlur = false;
       if (cr2 == 0) {
@@ -3630,8 +3634,6 @@ void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2, const Slur* slurTempl
                   cr2 = cr1;
             switchToSlur = true; // select slur for editing if last chord is not given
             }
-
-      _score->startCmd();
 
       Slur* slur = slurTemplate ? slurTemplate->clone() : new Slur(cr1->score());
       slur->setScore(cr1->score());
@@ -3651,8 +3653,6 @@ void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2, const Slur* slurTempl
       if (cr1 == cr2)
             ss->setSlurOffset(Grip::END, QPointF(3.0 * cr1->score()->spatium(), 0.0));
       slur->add(ss);
-
-      _score->endCmd();
 
       if (noteEntryMode()) {
             _score->inputState().setSlur(slur);

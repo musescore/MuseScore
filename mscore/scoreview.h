@@ -335,8 +335,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void doDragEdit(QMouseEvent* ev);
       bool testElementDragTransition(QMouseEvent* ev);
       bool fotoEditElementDragTransition(QMouseEvent* ev);
-      void addSlur(const Slur* slurTemplate = nullptr);
-      void cmdAddSlur(ChordRest*, ChordRest*, const Slur*) override;
+      void cmdAddSlur(const Slur* slurTemplate = nullptr);
+      void addSlur(ChordRest*, ChordRest*, const Slur*) override;
       virtual void cmdAddHairpin(HairpinType);
       void cmdAddNoteLine();
 
