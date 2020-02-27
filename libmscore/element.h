@@ -501,7 +501,6 @@ enum class EditDataType : signed char {
       BarLineEditData,
       BeamEditData,
       NoteEditData,
-      SpannerEditData
       };
 
 struct PropertyData {
