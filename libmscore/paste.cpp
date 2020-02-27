@@ -796,13 +796,13 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                               undoAddElement(d);
                               }
                         else if (tag == "HairPin") {
-                              Hairpin h(this);
-                              h.setTrack(destTrack);
-                              h.read(e);
-                              h.setTrack(destTrack);
-                              ChordRest* destCR1 = findCR(destTick, destTrack);
-                              ChordRest* destCR2 = findCR(destTick + h.ticks() - Fraction::eps(), destTrack);
-                              addHairpin(h.hairpinType(), destCR1, destCR2);
+                              Hairpin* h = new Hairpin(this);
+                              h->setTrack(destTrack);
+                              h->read(e);
+                              h->setTrack(destTrack);
+                              h->setTrack2(destTrack);
+                              h->setTick(destTick);
+                              undoAddElement(h);
                               }
                         else {
                               //
