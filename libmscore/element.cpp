@@ -1910,7 +1910,7 @@ QRectF Element::drag(EditData& ed)
       if (!isMovable())
             return QRectF();
 
-      QRectF r(canvasBoundingRect());
+      const QRectF r0(canvasBoundingRect());
 
       qreal x = ed.delta.x();
       qreal y = ed.delta.y();
@@ -1935,6 +1935,7 @@ QRectF Element::drag(EditData& ed)
             //
             // restrict move to page boundaries
             //
+            const QRectF r(canvasBoundingRect());
             Page* p = 0;
             Element* e = this;
             while (e) {
@@ -1967,7 +1968,7 @@ QRectF Element::drag(EditData& ed)
                         setOffset(QPointF(x, y));
                   }
             }
-      return canvasBoundingRect() | r;
+      return canvasBoundingRect() | r0;
       }
 
 //---------------------------------------------------------
