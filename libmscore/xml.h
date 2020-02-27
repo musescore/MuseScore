@@ -70,8 +70,8 @@ class XmlReader : public QXmlStreamReader {
       QString docName;  // used for error reporting
 
       // For readahead possibility.
-      // If needed, must be explicitly set by setReadAheadDevice.
-      QIODevice* _readAheadDevice = nullptr;
+      // If needed, must be explicitly set by setDevice.
+      QIODevice* _readDevice = nullptr;
 
       // Score read context (for read optimizations):
       Fraction _tick             { Fraction(0, 1) };
@@ -205,10 +205,9 @@ class XmlReader : public QXmlStreamReader {
       Tid addUserTextStyle(const QString& name);
       Tid lookupUserTextStyle(const QString& name);
 
-      // Ownership on read ahead device is NOT transferred to XmlReader.
-      void setReadAheadDevice(QIODevice* dev) { if (!dev->isSequential()) _readAheadDevice = dev; }
-      bool readAheadAvailable() const { return bool(_readAheadDevice); }
-      void performReadAhead(std::function<void(QIODevice&)> readAheadRoutine);
+      // Ownership on read device is NOT transferred to XmlReader.
+      void setDevice(QIODevice* dev) { if (!dev->isSequential()) _readDevice = dev; }
+      QIODevice* getDevice() { return _readDevice; }
 
       QList<std::pair<Element*, QPointF>>& fixOffsets() { return  _fixOffsets; }
       };
