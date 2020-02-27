@@ -28,23 +28,6 @@ enum class SpannerSegmentType {
       };
 
 //---------------------------------------------------------
-//   SpannerEditData
-//---------------------------------------------------------
-
-class SpannerEditData : public ElementEditData {
-   public:
-      Element* editStartElement;
-      Element* editEndElement;
-      int editTick;
-      int editTick2;
-      int editTrack2;
-      QList<QPointF> userOffsets;
-      QList<QPointF> userOffsets2;
-
-      virtual EditDataType type() override      { return EditDataType::SpannerEditData; }
-      };
-
-//---------------------------------------------------------
 //   @@ SpannerSegment
 //!    parent: System
 //---------------------------------------------------------
