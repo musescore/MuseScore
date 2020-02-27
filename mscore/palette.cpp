@@ -550,7 +550,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                   score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
                   }
             else if (element->isSlur() && addSingle) {
-                  viewer->addSlur(toSlur(element));
+                  viewer->cmdAddSlur(toSlur(element));
                   }
             else if (element->isSLine() && !element->isGlissando() && addSingle) {
                   Segment* startSegment = cr1->segment();
@@ -702,7 +702,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                         }
                   }
             else if (element->isSlur()) {
-                  viewer->addSlur(toSlur(element));
+                  viewer->cmdAddSlur(toSlur(element));
                   }
             else if (element->isSLine() && element->type() != ElementType::GLISSANDO) {
                   Segment* startSegment = sel.startSegment();
