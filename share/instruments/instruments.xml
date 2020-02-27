@@ -3246,6 +3246,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="baritone-horn">
+                  <trackName>Baritone Horn</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
                   <description>Baritone Horn</description>
@@ -3277,6 +3278,41 @@
                         <program value="60"/> <!--French Horn-->
                   </Channel>
                   <genre>concertband</genre>
+            </Instrument>
+            <Instrument id="baritone-horn-central-europe">
+                  <trackName>Baritone Horn (Central Europe)</trackName>
+                  <longName>Baritone Horn</longName>
+                  <shortName>Bar. Hn.</shortName>
+                  <description>Baritone Horn (Central Europe)</description>
+                  <musicXMLid>brass.baritone-horn</musicXMLid>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-67</aPitchRange>
+                  <pPitchRange>34-70</pPitchRange>
+                  <Channel>
+                        <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+            </Instrument>
+            <Instrument id="baritone-horn-central-europe-treble">
+                  <trackName>Baritone Horn (Central Europe, Treble Clef)</trackName>
+                  <longName>Baritone Horn</longName>
+                  <shortName>Bar. Hn.</shortName>
+                  <description>Baritone Horn (Central Europe, Treble Clef)</description>
+                  <musicXMLid>brass.baritone-horn</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-67</aPitchRange>
+                  <pPitchRange>34-70</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-14</transposeChromatic>
+                  <Channel>
+                        <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="posthorn">
                   <longName>Posthorn</longName>
