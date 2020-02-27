@@ -1171,8 +1171,6 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
             CreditWords* cw = new CreditWords(page, defaultx, defaulty, justify, halign, valign, crwords);
             credits.append(cw);
             }
-      else
-            _e.skipCurrentElement();  // skip but don't log
 
       Q_ASSERT(_e.isEndElement() && _e.name() == "credit");
       }
