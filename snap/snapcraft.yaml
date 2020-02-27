@@ -157,6 +157,7 @@ parts:
             - qml-module-qtqml-models2
             # https://musescore.org/en/node/301501#comment-980979
             - qml-module-qtquick-controls
+            - qml-module-qtquick-dialogs
         after: [desktop-qt5, selective-checkout]
 
   # Part for supporting various desktop technologies
