@@ -1,52 +1,30 @@
 {
     "configurations": [
         {
-            "name": "Linux",
+            "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/**",
-                "/usr/local/include/**"
+                "C:/Qt/5.9.9/msvc2017_64/include/**",
+                "C:/Qt/5.9.9/msvc2017_64/lib/**",
+                "C:/Qt/5.9.9/msvc2017_64/bin/**"
+
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.24.28314/bin/Hostx64/x64/cl.exe",
             "cStandard": "c11",
             "cppStandard": "c++11",
-            "intelliSenseMode": "gcc-x64",
-            "compileCommands": "${workspaceFolder}/build.debug/compile_commands.json",
             "browse": {
                 "path": [
-                    "${workspaceFolder}/build.debug/",
-                    "${workspaceFolder}/mscore/",
-                    "${workspaceFolder}/libmscore/",
-                    "${workspaceFolder}/aeolus/",
-                    "${workspaceFolder}/assets/",
-                    "${workspaceFolder}/audiofile/",
-                    "${workspaceFolder}/awl/",
-                    "${workspaceFolder}/build/",
-                    "${workspaceFolder}/bww2mxml/",
-                    "${workspaceFolder}/crashreporter/",
-                    "${workspaceFolder}/demos/",
-                    "${workspaceFolder}/doc/",
-                    "${workspaceFolder}/effects/",
-                    "${workspaceFolder}/fluid/",
-                    "${workspaceFolder}/fonts/",
-                    "${workspaceFolder}/fonttools/",
-                    "${workspaceFolder}/manual/",
-                    "${workspaceFolder}/midi/",
-                    "${workspaceFolder}/miditools/",
-                    "${workspaceFolder}/mscore/",
-                    "${workspaceFolder}/mtest/",
-                    "${workspaceFolder}/rdoc/",
-                    "${workspaceFolder}/share/",
-                    "${workspaceFolder}/synthesizer/",
-                    "${workspaceFolder}/test/",
-                    "${workspaceFolder}/telemetry/",
-                    "${workspaceFolder}/thirdparty/",
-                    "${workspaceFolder}/vtest/",
-                    "${workspaceFolder}/zerberus/",
-                    "${workspaceFolder}/*"
+                    "${workspaceFolder}/",
+                    "C:/Qt/5.9.9/msvc2017_64/include/**",
+                    "C:/Qt/5.9.9/msvc2017_64/lib/**",
+                    "C:/Qt/5.9.9/msvc2017_64/bin/**"
                 ]
-            }
+            },
+            "configurationProvider": "vector-of-bool.cmake-tools",
+            "forcedInclude": [
+                "${workspaceFolder}/all.h"
+            ]
         }
     ],
     "version": 4

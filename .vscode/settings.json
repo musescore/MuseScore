@@ -45,8 +45,14 @@
         "memory": "cpp",
         "qgroupbox": "cpp",
         "qbytearray": "cpp",
-        "qcombobox": "cpp"
+        "qcombobox": "cpp",
+        "qtgui": "cpp",
+        "qtcore": "cpp",
+        "qstring": "cpp",
+        "qtdebug": "cpp",
+        "xhash": "cpp",
+        "xtree": "cpp"
     },
-    "cmake.buildDirectory": "${workspaceRoot}/build.debug",
-    "cmake.configureOnOpen": true
+    "cmake.buildDirectory": "${workspaceRoot}/msvc.build_x64",
+    "cmake.configureOnOpen": false
 }

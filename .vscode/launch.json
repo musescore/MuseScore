@@ -5,6 +5,23 @@
       "version": "0.2.0",
       "configurations": [
             {
+                  "name": "(Windows) debug",
+                  "type": "cppvsdbg",
+                  "request": "launch",
+                  "program": "${workspaceFolder}/msvc.install_x64/bin/MuseScore3.exe",
+                  "args": ["-d"],
+                  "stopAtEntry": false,
+                  "cwd": "${workspaceFolder}",
+                  "environment": [],
+                  "externalConsole": true
+            },
+            {
+                  "name": "(Windows) Attach",
+                  "type": "cppvsdbg",
+                  "request": "attach",
+                  "processId": "${workspaceFolder}/msvc.install_x64/bin/MuseScore3.exe"
+            },
+            {
                   "name": "gdb debug from debug build",
                   "type": "cppdbg",
                   "request": "launch",
