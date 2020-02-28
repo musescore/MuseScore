@@ -9637,7 +9637,8 @@
                         <string>59</string>
                         <string>64</string>
                   </StringData>
-                  <clef>G8vb</clef>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-86</aPitchRange>
                   <pPitchRange>40-88</pPitchRange>
