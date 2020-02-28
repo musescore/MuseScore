@@ -1177,7 +1177,8 @@ Element* Segment::nextAnnotation(Element* e)
       auto ei = std::find(_annotations.begin(), _annotations.end(), e);
       if (ei == _annotations.end())
             return nullptr;               // element not found
-      
+
+      // TODO: firstVisibleStaff() for system elements? see Spanner::nextSpanner()
       auto resIt = std::find_if(ei + 1, _annotations.end(), [e](Element* nextElem){
             return nextElem && nextElem->staffIdx() == e->staffIdx();
             });
@@ -1197,7 +1198,8 @@ Element* Segment::prevAnnotation(Element* e)
       auto reverseIt = std::find(_annotations.rbegin(), _annotations.rend(), e);
       if (reverseIt == _annotations.rend())
             return nullptr;               // element not found
-      
+
+      // TODO: firstVisibleStaff() for system elements? see Spanner::nextSpanner()
       auto resIt = std::find_if(reverseIt + 1, _annotations.rend(), [e](Element* prevElem){
             return prevElem && prevElem->staffIdx() == e->staffIdx();
             });
@@ -1212,6 +1214,7 @@ Element* Segment::prevAnnotation(Element* e)
 Element* Segment::firstAnnotation(Segment* s, int activeStaff)
       {
       for (auto i = s->annotations().begin(); i != s->annotations().end(); ++i) {
+            // TODO: firstVisibleStaff() for system elements? see Spanner::nextSpanner()
             if ((*i)->staffIdx() == activeStaff)
                   return *i;
             }
@@ -1225,6 +1228,7 @@ Element* Segment::firstAnnotation(Segment* s, int activeStaff)
 Element* Segment::lastAnnotation(Segment* s, int activeStaff)
       {
       for (auto i = --s->annotations().end(); i != s->annotations().begin(); --i) {
+            // TODO: firstVisibleStaff() for system elements? see Spanner::nextSpanner()
             if ((*i)->staffIdx() == activeStaff)
                   return *i;
             }
@@ -1429,8 +1433,22 @@ Spanner* Segment::firstSpanner(int activeStaff)
                   Element* e = s->startElement();
                   if (!e)
                         continue;
-                  if (s->startSegment() == this && s->startElement()->staffIdx() == activeStaff)
-                        return s;
+                  if (s->startSegment() == this) {
+                        if (e->staffIdx() == activeStaff)
+                              return s;
+#if 1
+                        else if (e->isMeasure() && activeStaff == 0)
+                              return s;
+#else
+                        // TODO: see Spanner::nextSpanner()
+                        else if (e->isMeasure()) {
+                              SpannerSegment* ss = s->frontSegment();
+                              int top = ss && ss->system() ? ss->system()->firstVisibleStaff() : 0;
+                              if (activeStaff == top)
+                                    return s;
+                              }
+#endif
+                        }
                   }
             }
       return nullptr;
@@ -1445,16 +1463,29 @@ Spanner* Segment::lastSpanner(int activeStaff)
       std::multimap<int, Spanner*> mmap = score()->spanner();
       auto range = mmap.equal_range(tick().ticks());
       if (range.first != range.second){ // range not empty
-            for (auto i = --range.second; i != range.first; --i) {
+            for (auto i = --range.second; ; --i) {
                   Spanner* s = i->second;
-                  Element* st = s->startElement();
-                  if (!st)
+                  Element* e = s->startElement();
+                  if (!e)
                         continue;
-                  if (s->startElement()->staffIdx() == activeStaff)
-                        return s;
-                  }
-            if ((range.first)->second->startElement()->staffIdx() == activeStaff) {
-                  return (range.first)->second;
+                  if (s->startSegment() == this) {
+                        if (e->staffIdx() == activeStaff)
+                              return s;
+#if 1
+                        else if (e->isMeasure() && activeStaff == 0)
+                              return s;
+#else
+                        // TODO: see Spanner::nextSpanner()
+                        else if (e->isMeasure()) {
+                              SpannerSegment* ss = s->frontSegment();
+                              int top = ss && ss->system() ? ss->system()->firstVisibleStaff() : 0;
+                              if (activeStaff == top)
+                                    return s;
+                              }
+#endif
+                        }
+                  if (i == range.first)
+                        break;
                   }
             }
       return nullptr;
