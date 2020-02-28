@@ -158,6 +158,8 @@ parts:
             # https://musescore.org/en/node/301501#comment-980979
             - qml-module-qtquick-controls
             - qml-module-qtquick-dialogs
+            - qml-module-qt-labs-folderlistmodel
+            - qml-module-qt-labs-settings
         after: [desktop-qt5, selective-checkout]
 
   # Part for supporting various desktop technologies
