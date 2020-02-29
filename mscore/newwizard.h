@@ -32,7 +32,7 @@
 namespace Ms {
 
 class Score;
-class Palette;
+class PaletteListView;
 class StaffListItem;
 class InstrumentsWidget;
 class TemplateBrowser;
@@ -158,7 +158,7 @@ class NewWizardTemplatePage : public QWizardPage {
 class NewWizardKeysigPage : public QWizardPage {
       Q_OBJECT
 
-      Palette* sp;
+      PaletteListView* _plv;
       QDoubleSpinBox* _tempo;
       QGroupBox* tempoGroup;
 

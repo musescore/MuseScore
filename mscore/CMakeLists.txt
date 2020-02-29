@@ -460,6 +460,7 @@ add_library(mscoreapp STATIC
       palette/createpalettedialog.cpp
       palette/palettedialog.cpp palette/palettecelldialog.cpp
       palette/palettemodel.cpp palette/palettetree.cpp palette/paletteworkspace.cpp palette/palettewidget.cpp
+      palette/palettelistview.cpp
       scorecmp/scorecmp.cpp scorecmp/scorediffmodel.cpp scorecmp/scorelistmodel.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
