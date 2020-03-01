@@ -5648,9 +5648,10 @@ void MeasureNumberStateHandler::init()
 void MeasureNumberStateHandler::updateForMeasure(const Measure* const m)
       {
       // restart measure numbering after a section break if startWithMeasureOne is set
-      const auto previousMeasure = m->prevMeasure();
-      if (previousMeasure) {
-            const auto layoutSectionBreak = previousMeasure->sectionBreakElement();
+      // check the previous MeasureBase instead of Measure to catch breaks in frames too
+      const auto previousMB = m->prev();
+      if (previousMB) {
+            const auto layoutSectionBreak = previousMB->sectionBreakElement();
             if (layoutSectionBreak && layoutSectionBreak->startWithMeasureOne())
                   init();
             }
