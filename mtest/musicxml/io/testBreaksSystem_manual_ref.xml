@@ -84,8 +84,11 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3">
+    <measure number="1">
       <print new-system="yes"/>
+      <attributes>
+        <divisions>1</divisions>
+        </attributes>
       <direction>
         <direction-type>
           <words>After section break in horizontal frame</words>
@@ -97,7 +100,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4">
+    <measure number="2">
       <print new-page="yes"/>
       <direction>
         <direction-type>
@@ -110,7 +113,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5">
+    <measure number="3">
       <print new-system="yes"/>
       <direction>
         <direction-type>
@@ -123,7 +126,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6">
+    <measure number="4">
       <print new-system="yes"/>
       <direction placement="above">
         <direction-type>
@@ -141,7 +144,7 @@
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="7">
+    <measure number="5">
       <print new-system="yes"/>
       <direction>
         <direction-type>
