@@ -562,12 +562,29 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
       {
       Fraction tick(t);
 // qDebug("pasteChordRest %s at %d, len %d/%d", cr->name(), tick, cr->ticks().numerator(), cr->ticks().denominator() );
-      if (cr->isChord())
-            transposeChord(toChord(cr), srcTranspose, tick);
 
       Measure* measure = tick2measure(tick);
       if (!measure)
             return;
+
+      int twoNoteTremoloFactor = 1;
+      if (cr->isChord()) {
+            transposeChord(toChord(cr), srcTranspose, tick);
+            if (toChord(cr)->tremolo() && toChord(cr)->tremolo()->twoNotes())
+                  twoNoteTremoloFactor = 2;
+            else if (cr->durationTypeTicks() == (cr->actualTicks() * 2)) {
+                  // this could be the 2nd note of a two-note tremolo
+                  // check previous CR on same track, if it has a two-note tremolo, then set twoNoteTremoloFactor to 2
+                  Segment* seg = measure->undoGetSegment(SegmentType::ChordRest, tick);
+                  ChordRest* crt = seg->nextChordRest(cr->track(), true);
+                  if (crt && crt->isChord()) {
+                        Chord* chrt = toChord(crt);
+                        Tremolo* tr = chrt->tremolo();
+                        if (tr && tr->twoNotes())
+                              twoNoteTremoloFactor = 2;
+                        }
+                  }
+            }
 
       // we can paste a measure rest as such only at start of measure
       // and only if the lengths of the rest and measure match
@@ -584,7 +601,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
       if (cr->isRepeatMeasure())
             partialCopy = toRepeatMeasure(cr)->actualTicks() != measure->ticks();
       else if (!isGrace && !cr->tuplet())
-            partialCopy = cr->durationTypeTicks() != cr->actualTicks();
+            partialCopy = cr->durationTypeTicks() != (cr->actualTicks() * twoNoteTremoloFactor);
 
       // if note is too long to fit in measure, split it up with a tie across the barline
       // exclude tuplets from consideration

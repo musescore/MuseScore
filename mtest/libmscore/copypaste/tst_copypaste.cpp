@@ -36,6 +36,7 @@ class TestCopyPaste : public QObject, public MTest
       void copypastestaff(const char*);
       void copypastevoice(const char*, int);
       void copypastetuplet(const char*);
+      void copypastetremolo();
 
    private slots:
       void initTestCase();
@@ -72,6 +73,8 @@ class TestCopyPaste : public QObject, public MTest
 
       void copyPasteTuplet01() { copypastetuplet("01"); }
       void copyPasteTuplet02() { copypastetuplet("02"); }
+
+      void copyPasteTremolo01() { copypastetremolo(); }
       };
 
 //---------------------------------------------------------
@@ -406,6 +409,67 @@ void TestCopyPaste::copypastetuplet(const char* idx)
 
       QVERIFY(saveCompareScore(score, QString("copypaste_tuplet_%1.mscx").arg(idx),
          DIR + QString("copypaste_tuplet_%1-ref.mscx").arg(idx)));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   copypastetremolo
+//   copy-paste of tremolo between two notes
+//---------------------------------------------------------
+
+void TestCopyPaste::copypastetremolo()
+      {
+      MasterScore* score = readScore(DIR + QString("copypaste_tremolo.mscx"));
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = m1->nextMeasure();
+      Measure* m3 = m2->nextMeasure();
+
+      QVERIFY(m1 != 0);
+      QVERIFY(m2 != 0);
+      QVERIFY(m3 != 0);
+
+      // create a range selection on 2nd to 3rd beat (voice 1) of first measure
+      SegmentType segTypeCR = SegmentType::ChordRest;
+      Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
+      score->select(static_cast<Ms::Chord*>(s->element(1))->notes().at(0));
+      s = s->next1(segTypeCR);
+      score->select(s->element(1), SelectType::RANGE);
+
+      QVERIFY(score->selection().canCopy());
+      QString mimeType = score->selection().mimeType();
+      QVERIFY(!mimeType.isEmpty());
+      QMimeData* mimeData = new QMimeData;
+      mimeData->setData(mimeType, score->selection().mimeData());
+      QApplication::clipboard()->setMimeData(mimeData);
+
+      //paste to second measure
+      score->select(m2->first()->element(0));
+
+      score->startCmd();
+      score->cmdPaste(mimeData,0);
+      score->endCmd();
+
+      // create a range selection on 2nd to 4th beat (voice 0) of first measure
+      s = m1->first(segTypeCR)->next1(segTypeCR);
+      score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
+      s = s->next1(segTypeCR)->next1(segTypeCR);
+      score->select(s->element(0), SelectType::RANGE);
+
+      QVERIFY(score->selection().canCopy());
+      mimeType = score->selection().mimeType();
+      QVERIFY(!mimeType.isEmpty());
+      mimeData->setData(mimeType, score->selection().mimeData());
+      QApplication::clipboard()->setMimeData(mimeData);
+
+      //paste to third measure
+      score->select(m3->first()->element(0));
+
+      score->startCmd();
+      score->cmdPaste(mimeData,0);
+      score->endCmd();
+
+      QVERIFY(saveCompareScore(score, QString("copypaste_tremolo.mscx"),
+         DIR + QString("copypaste_tremolo-ref.mscx")));
       delete score;
       }
 
