@@ -3847,6 +3847,8 @@ void ScoreView::cloneElement(Element* e)
       if (e->isMeasure() || e->isNote() || e->isVBox())
             return;
       QDrag* drag = new QDrag(this);
+      drag->setDragCursor(QIcon(":data/cursor-forbidden.svg").pixmap(QSize(20, 20)), Qt::IgnoreAction); // Ignored under Windows
+
       QMimeData* mimeData = new QMimeData;
       if (e->isSpannerSegment())
             e = toSpannerSegment(e)->spanner();

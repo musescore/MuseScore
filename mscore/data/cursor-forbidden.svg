@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- cursor-forbidden.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="8.5in" height="11in" viewBox="0 0 612 792"
+		xml:space="preserve" color-interpolation-filters="sRGB" class="st3">
+	<v:documentProperties v:langID="1033" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:#000000;stroke:none;stroke-linecap:butt;stroke-width:1.1953}
+		.st2 {fill:#c00000;stroke:none;stroke-linecap:butt;stroke-width:1.1953}
+		.st3 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Capa_1</title>
+		<v:pageProperties v:drawingScale="1" v:pageScale="1" v:drawingUnits="19" v:shadowOffsetX="9" v:shadowOffsetY="-9"/>
+		<g id="group1-1" transform="translate(76.5016,-88.984)" v:mID="1" v:groupContext="group">
+			<title>Feuille.1</title>
+			<g id="shape2-2" v:mID="2" v:groupContext="shape">
+				<title>Feuille.2</title>
+				<path d="M345.64 487.52 C342.95 485.01 339.24 483.72 335.61 484.12 C330.05 484.69 324.42 484.98 318.75 484.98 C227.36
+							 484.98 153 410.62 153 319.23 L153.35 312.47 C153.45 308.82 152 305.3 149.34 302.78 L21.49 182.45 C17.78
+							 178.97 12.33 178.03 7.7 180.03 C3.01 182.05 0 186.64 0 191.73 L0 778.23 C0 783.38 3.11 788.04 7.87 790.01
+							 C12.6 792 18.1 790.88 21.76 787.24 L142.24 666.75 L205.52 784.27 C207.81 788.54 212.22 790.98 216.75
+							 790.98 C218.67 790.98 220.63 790.54 222.45 789.63 L324.45 738.63 C327.54 737.09 329.85 734.36 330.9
+							 731.08 C331.95 727.79 331.6 724.22 329.98 721.19 L271.43 612.48 L446.25 612.48 C451.48 612.48 456.18
+							 609.29 458.1 604.44 C460.02 599.57 458.8 594.03 454.99 590.44 L345.64 487.52 Z" class="st1"/>
+			</g>
+			<g id="shape3-4" v:mID="3" v:groupContext="shape" transform="translate(178.499,-332.518)">
+				<title>Feuille.3</title>
+				<path d="M140.25 792 C217.58 792 280.5 729.09 280.5 651.75 C280.5 574.42 217.58 511.5 140.25 511.5 C62.91 511.5 0
+							 574.42 0 651.75 C0 729.08 62.91 792 140.25 792 ZM140.25 562.5 C189.46 562.5 229.5 602.54 229.5 651.75
+							 C229.5 667.07 225.26 681.27 218.44 693.88 L98.12 573.56 C110.73 566.74 124.93 562.5 140.25 562.5 ZM62.06
+							 609.62 L182.38 729.94 C169.77 736.77 155.56 741 140.25 741 C91.04 741 51 700.96 51 651.75 C51 636.44
+							 55.23 622.23 62.06 609.62 Z" class="st2"/>
+			</g>
+		</g>
+	</g>
+</svg>

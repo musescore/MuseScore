@@ -418,6 +418,8 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
                   QPoint hotsp(drag->pixmap().rect().bottomRight());
                   drag->setHotSpot(hotsp);
 
+                  drag->setDragCursor(QIcon(":data/cursor-forbidden.svg").pixmap(QSize(20, 20)), Qt::IgnoreAction); // Ignored under Windows
+
                   Qt::DropActions da;
                   if (!(_readOnly || filterActive) && (ev->modifiers() & Qt::ShiftModifier)) {
                         dragCells = cells;      // backup
@@ -491,7 +493,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
 //             element = cell->element.get();
       if (element == 0)
             return false;
-      
+
       if (element->isSpanner())
             TourHandler::startTour("spanner-drop-apply");
 
@@ -1926,7 +1928,7 @@ void Palette::dropEvent(QDropEvent* event)
             event->ignore();
             return;
             }
-      
+
       if (e->isFretDiagram()) {
             name = toFretDiagram(e)->harmonyText();
             }
@@ -1947,4 +1949,3 @@ void Palette::dropEvent(QDropEvent* event)
       }
 
 }
-
