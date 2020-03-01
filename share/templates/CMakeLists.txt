@@ -41,6 +41,7 @@ install(FILES
       02-Choral/08-Barbershop_Quartet.mscx
       02-Choral/09-Liturgical_Unmetrical.mscx
       02-Choral/10-Liturgical_Unmetrical_+_Organ.mscx
+      02-Choral/11-Barbershop_Quartet_\(Women\).mscx
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/02-Choral
       )
 
