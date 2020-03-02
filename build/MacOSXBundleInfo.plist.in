@@ -65,7 +65,7 @@
 				<string>mscx</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>musescoreDocument.icns</string>
+			<string>mscxDocument.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>application/x-musescore+xml</string>
@@ -87,7 +87,7 @@
 				<string>mscz</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>musescoreDocument.icns</string>
+			<string>msczDocument.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>application/x-musescore</string>
