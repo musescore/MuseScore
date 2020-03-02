@@ -88,14 +88,15 @@ enum class ElementFlag {
       PAGE_BREAK             = 0x00040000,
       SECTION_BREAK          = 0x00080000,
       NO_BREAK               = 0x00100000,
-      HEADER                 = 0x00200000,
-      TRAILER                = 0x00400000,    // also used in segment
-      KEYSIG                 = 0x00800000,
+      STAFF_TYPE_CHANGE      = 0x00200000,
+      HEADER                 = 0x00400000,
+      TRAILER                = 0x00800000,    // also used in segment
+      KEYSIG                 = 0x01000000,
 
       // segment flags
-      ENABLED                = 0x01000000,    // used for segments
-      EMPTY                  = 0x02000000,
-      WRITTEN                = 0x04000000,
+      ENABLED                = 0x02000000,    // used for segments
+      EMPTY                  = 0x04000000,
+      WRITTEN                = 0x08000000,
       };
 
 typedef QFlags<ElementFlag> ElementFlags;

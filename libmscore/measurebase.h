@@ -168,6 +168,9 @@ class MeasureBase : public Element {
       bool noBreak() const             { return flag(ElementFlag::NO_BREAK);      }
       void setNoBreak(bool v)          { setFlag(ElementFlag::NO_BREAK, v);       }
 
+      bool staffTypeChange() const     { return flag(ElementFlag::STAFF_TYPE_CHANGE); }
+      void setStaffTypeChange(bool v)  { setFlag(ElementFlag::STAFF_TYPE_CHANGE, v);  }
+
       bool hasCourtesyKeySig() const   { return flag(ElementFlag::KEYSIG);        }
       void setHasCourtesyKeySig(int v) { setFlag(ElementFlag::KEYSIG, v);         }
 

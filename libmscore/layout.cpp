@@ -1880,6 +1880,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       mmr->setRepeatStart(m->repeatStart() || lm->repeatStart());
       mmr->setRepeatEnd(m->repeatEnd() || lm->repeatEnd());
       mmr->setSectionBreak(lm->sectionBreak());
+      mmr->setStaffTypeChange(m->staffTypeChange());
 
       ElementList oldList = mmr->takeElements();
       ElementList newList = lm->el();

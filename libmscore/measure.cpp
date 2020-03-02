@@ -888,6 +888,8 @@ void Measure::add(Element* e)
 
             case ElementType::STAFFTYPE_CHANGE:
                   {
+                  if (staffTypeChange())
+                        break;
                   StaffTypeChange* stc = toStaffTypeChange(e);
                   Staff* staff = stc->staff();
                   const StaffType* st = stc->staffType();
@@ -911,6 +913,7 @@ void Measure::add(Element* e)
                   staff->staffTypeListChanged(tick());
                   stc->setStaffType(nst);
                   MeasureBase::add(e);
+                  setStaffTypeChange(true);
                   }
                   break;
 
@@ -1007,6 +1010,7 @@ void Measure::remove(Element* e)
                         stc->setStaffType(st);
                         }
                   MeasureBase::remove(e);
+                  setStaffTypeChange(false);
                   }
                   break;
 
@@ -2913,7 +2917,8 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
       m->setTick(tick);
       m->setLineBreak(lineBreak());
       m->setPageBreak(pageBreak());
-      m->setSectionBreak(sectionBreak() ? new LayoutBreak(*sectionBreakElement()) : 0);
+      m->setSectionBreak(sectionBreak());
+      m->setStaffTypeChange(staffTypeChange());
 
       m->setHeader(header()); m->setTrailer(trailer());
 
