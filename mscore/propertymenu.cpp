@@ -525,6 +525,8 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
                               tickEnd = Fraction::fromTicks(i->first);
                         ic->score()->transpositionChanged(part, oldV, tickStart, tickEnd);
                         }
+                  const QString newInstrChangeText(Instrument::fromTemplate(it).trackName());
+                  ic->undoChangeProperty(Pid::TEXT, TextBase::plainToXmlText(newInstrChangeText));
                   }
             else
                   qDebug("no template selected?");
