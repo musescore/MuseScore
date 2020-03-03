@@ -300,7 +300,7 @@ void Glissando::layout()
       // interpolate y-coord of intermediate points across total width and height
       qreal xCurr = 0.0;
       qreal yCurr;
-      for (int i = 0; i < int(spannerSegments().size()-1); i++) {
+      for (unsigned i = 0; i + 1 < spannerSegments().size(); i++) {
             SpannerSegment* segm = segmentAt(i);
             xCurr += segm->ipos2().x();
             yCurr = y0 + ratio * xCurr;

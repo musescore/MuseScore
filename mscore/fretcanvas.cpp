@@ -290,7 +290,7 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
                               };
 
                               // Find the lowest dot type that doesn't already exist on the string
-                              for (int i = 0; i < int(dtypes.size()); i++) {
+                              for (size_t i = 0; i < dtypes.size(); i++) {
                                     FretDotType t = dtypes[i];
 
                                     bool hasThisType = false;

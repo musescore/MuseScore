@@ -1805,7 +1805,6 @@ void Sample::optimize()
       signed short peak;
       float normalized_amplitude_during_loop;
       double result;
-      int i;
 
       /* ignore ROM and other(?) invalid samples */
       if (!s->valid())
@@ -1813,7 +1812,7 @@ void Sample::optimize()
 
       if (!s->amplitude_that_reaches_noise_floor_is_valid) { /* Only once */
             /* Scan the loop */
-            for (i = (int)s->loopstart; i < (int) s->loopend; i ++) {
+            for (size_t i = s->loopstart; i < s->loopend; i++) {
                   signed short val = s->data[i];
                   if (val > peak_max)
                         peak_max = val;

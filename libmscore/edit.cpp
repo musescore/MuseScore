@@ -347,8 +347,8 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
                               }
                         }
                   else {
-                        for (int i = int(dList.size()) - 1; i >= 0; --i) {
-                              rest = addRest(tick, track, dList[i], tuplet);
+                        for (size_t i = dList.size(); i > 0; --i) { // loop needs to be in this reverse order
+                              rest = addRest(tick, track, dList[i-1], tuplet);
                               if (r == 0)
                                     r = rest;
                               tick += rest->actualTicks();

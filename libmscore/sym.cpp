@@ -5760,10 +5760,10 @@ void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPoin
             QImage img(QSize(bm->width, bm->rows), QImage::Format_ARGB32);
             img.fill(Qt::transparent);
 
-            for (int y = 0; y < int(bm->rows); ++y) {
+            for (unsigned y = 0; y < bm->rows; ++y) {
                   unsigned* dst      = (unsigned*)img.scanLine(y);
                   unsigned char* src = (unsigned char*)(bm->buffer) + bm->pitch * y;
-                  for (int x = 0; x < int(bm->width); ++x) {
+                  for (unsigned x = 0; x < bm->width; ++x) {
                         unsigned val = *src++;
                         color.setAlpha(val);
                         *dst++ = color.rgba();

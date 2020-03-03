@@ -51,7 +51,7 @@ bool areNotesSortedByOffTimeInAscOrder(
             const QList<MidiNote>& notes,
             const std::vector<int> &groupOfIndexes)
       {
-      for (int i = 0; i != (int)groupOfIndexes.size() - 1; ++i) {
+      for (size_t i = 0; i != groupOfIndexes.size() - 1; ++i) {
             if (notes[groupOfIndexes[i]].offTime > notes[groupOfIndexes[i + 1]].offTime)
                   return false;
             }
@@ -490,7 +490,7 @@ VoiceSplit findBestSplit(
                                    std::numeric_limits<int>::max()};
       int bestSplit = -1;
 
-      for (int i = 0; i != (int)possibleSplits.size(); ++i) {
+      for (size_t i = 0; i != possibleSplits.size(); ++i) {
             const int voice = possibleSplits[i].voice;
             const auto &notes = chordIt->second.notes;
             int totalPitchDist = 0;
@@ -513,7 +513,7 @@ VoiceSplit findBestSplit(
 
             if (error < minError) {
                   minError = error;
-                  bestSplit = i;
+                  bestSplit = static_cast<int>(i);
                   }
             }
 
