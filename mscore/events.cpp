@@ -158,7 +158,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
             nReal = static_cast<qreal>(stepsScrolled.y()) / 120;
             }
 
-      n = (int) nReal;
+      n = static_cast<int>(nReal);
 
       //this functionality seems currently blocked by the context menu
       if (event->buttons() & Qt::RightButton) {

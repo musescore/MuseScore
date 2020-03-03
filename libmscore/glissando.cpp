@@ -92,7 +92,7 @@ void GlissandoSegment::draw(QPainter* painter) const
       else if (glissando()->glissandoType() == GlissandoType::WAVY) {
             QRectF b = symBbox(SymId::wiggleTrill);
             qreal a  = symAdvance(SymId::wiggleTrill);
-            int n    = (int)(l / a);      // always round down (truncate) to avoid overlap
+            int n    = static_cast<int>(l / a);      // always round down (truncate) to avoid overlap
             qreal x  = (l - n*a) * 0.5;   // centre line in available space
             std::vector<SymId> ids;
             for (int i = 0; i < n; ++i)

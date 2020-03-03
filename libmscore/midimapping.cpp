@@ -253,7 +253,7 @@ int MasterScore::updateMidiMapping()
       for (const MidiMapping& mm :_midiMapping) {
             if (mm.port() == -1 || mm.channel() == -1)
                   continue;
-            occupiedMidiChannels.insert((int)(mm.port())*16+(int)mm.channel());
+            occupiedMidiChannels.insert(static_cast<int>(mm.port())*16+(int)mm.channel());
             if (maxport < mm.port())
                   maxport = mm.port();
             }

@@ -827,7 +827,7 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
 
       if (FiguredBass::fontData(index, 0, 0, &size, &lineHeight)) {
             doubleSpinFBSize->setValue(size);
-            spinFBLineHeight->setValue((int)(lineHeight * 100.0));
+            spinFBLineHeight->setValue(static_cast<int>(lineHeight * 100.0));
             }
       }
 

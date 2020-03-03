@@ -104,7 +104,7 @@ class Dynamic final : public TextBase {
       static QString dynamicTypeName(Dynamic::Type type);
       QString dynamicTypeName() const { return dynamicTypeName(_dynamicType); }
       Type dynamicType() const                     { return _dynamicType; }
-      virtual int subtype() const override         { return (int) _dynamicType; }
+      virtual int subtype() const override         { return static_cast<int>(_dynamicType); }
       virtual QString subtypeName() const override { return dynamicTypeName(); }
 
       virtual void layout() override;
