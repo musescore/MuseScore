@@ -34,6 +34,7 @@ Bracket::Bracket(Score* s)
       _firstStaff  = 0;
       _lastStaff   = 0;
       _bi          = 0;
+      _braceSymbol = SymId::noSym;
       setGenerated(true);     // brackets are not saved
       }
 
@@ -152,6 +153,8 @@ void Bracket::layout()
                         _shape.add(bbox());
                         }
                   else {
+                        if (_braceSymbol == SymId::noSym)
+                              _braceSymbol = SymId::brace;
                         qreal h = h2 * 2;
                         qreal w = symWidth(_braceSymbol) * _magx;
                         bbox().setRect(0, 0, w, h);
