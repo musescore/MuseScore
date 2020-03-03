@@ -208,7 +208,8 @@ struct Position {
 enum class LayoutFlag : char {
       NO_FLAGS       = 0,
       FIX_PITCH_VELO = 1,
-      PLAY_EVENTS    = 2
+      PLAY_EVENTS    = 2,
+      REBUILD_MIDI_MAPPING = 4,
       };
 
 typedef QFlags<LayoutFlag> LayoutFlags;

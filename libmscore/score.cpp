@@ -1469,7 +1469,7 @@ void Score::addElement(Element* element)
                   ic->part()->setInstrument(ic->instrument(), tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
 #endif
-                  masterScore()->rebuildMidiMapping();
+                  addLayoutFlags(LayoutFlag::REBUILD_MIDI_MAPPING);
                   cmdState()._instrumentsChanged = true;
                   }
                   break;
@@ -1637,7 +1637,7 @@ void Score::removeElement(Element* element)
                   ic->part()->removeInstrument(tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
 #endif
-                  masterScore()->rebuildMidiMapping();
+                  addLayoutFlags(LayoutFlag::REBUILD_MIDI_MAPPING);
                   cmdState()._instrumentsChanged = true;
                   }
                   break;
