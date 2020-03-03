@@ -66,13 +66,13 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       //
       // fix order of noteheads and tpc's
       //
-      for (int i = 0; i < int(sizeof(heads)/sizeof(*heads)); ++i)
+      for (unsigned i = 0; i < sizeof(heads)/sizeof(*heads); ++i)
             r.noteHeadGroup->setItemData(i, int(heads[i]));
       // noteHeadType starts at -1
       for (int i = 0; i < 5; ++i)
             r.noteHeadType->setItemData(i, i-1);
       // set proper itemdata for TPC combos
-      for (int i = 0; i < int(sizeof(tpcs)/sizeof(*tpcs)); ++i) {
+      for (unsigned i = 0; i < sizeof(tpcs)/sizeof(*tpcs); ++i) {
             r.topTpc->   setItemData(i, tpcs[i]);
             r.bottomTpc->setItemData(i, tpcs[i]);
             }

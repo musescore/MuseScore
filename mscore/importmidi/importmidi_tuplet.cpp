@@ -813,7 +813,7 @@ void addTupletEvents(std::multimap<ReducedFraction, TupletData> &tupletEvents,
                      const std::vector<TupletInfo> &tuplets,
                      const std::list<TiedTuplet> &backTiedTuplets)
       {
-      for (int i = 0; i != (int)tuplets.size(); ++i) {
+      for (size_t i = 0; i != tuplets.size(); ++i) {
             const auto &tupletInfo = tuplets[i];
             TupletData tupletData = {
                   tupletInfo.chords.begin()->second->second.voice,

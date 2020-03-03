@@ -1294,7 +1294,7 @@ const StaffType* StaffType::preset(StaffTypes idx)
 
 const StaffType* StaffType::presetFromXmlName(QString& xmlName)
       {
-      for (int i = 0; i < int(_presets.size()); ++i) {
+      for (size_t i = 0; i < _presets.size(); ++i) {
             if (_presets[i].xmlName() == xmlName)
                   return &_presets[i];
             }
@@ -1303,7 +1303,7 @@ const StaffType* StaffType::presetFromXmlName(QString& xmlName)
 #if 0
 const StaffType* StaffType::presetFromName(QString& name)
       {
-      for (int i = 0; i < (int)_presets.size(); ++i) {
+      for (size_t i = 0; i < _presets.size(); ++i) {
             if (_presets[i].name() == name)
                   return &_presets[i];
             }

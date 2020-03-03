@@ -1000,10 +1000,10 @@ int findLastChordPosition(const std::vector<QuantData> &quantData)
       int posIndex = -1;
       double minPenalty = std::numeric_limits<double>::max();
       const auto &lastPositions = quantData[quantData.size() - 1].positions;
-      for (int i = 0; i != (int)lastPositions.size(); ++i) {
+      for (size_t i = 0; i != lastPositions.size(); ++i) {
             if (lastPositions[i].penalty < minPenalty) {
                   minPenalty = lastPositions[i].penalty;
-                  posIndex = i;
+                  posIndex = static_cast<int>(i);
                   }
             }
 
@@ -1019,9 +1019,9 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
       const bool isHuman = opers.isHumanPerformance.value();
       const double MERGE_PENALTY_COEFF = 5.0;
 
-      for (int chordIndex = 0; chordIndex != (int)quantData.size(); ++chordIndex) {
+      for (size_t chordIndex = 0; chordIndex != quantData.size(); ++chordIndex) {
             QuantData &d = quantData[chordIndex];
-            for (int pos = 0; pos != (int)d.positions.size(); ++pos) {
+            for (size_t pos = 0; pos != d.positions.size(); ++pos) {
                   QuantPos &p = d.positions[pos];
 
                   const auto timePenalty = (d.chord->first - p.time).absValue().toDouble();
@@ -1047,7 +1047,7 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
                   double minPenalty = std::numeric_limits<double>::max();
                   int minPos = -1;
 
-                  for (int posPrev = 0; posPrev != (int)dPrev.positions.size(); ++posPrev) {
+                  for (size_t posPrev = 0; posPrev != dPrev.positions.size(); ++posPrev) {
                         const QuantPos &pPrev = dPrev.positions[posPrev];
                         if (pPrev.time > p.time)
                               continue;
@@ -1061,7 +1061,7 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
 
                         if (penalty < minPenalty) {
                               minPenalty = penalty;
-                              minPos = posPrev;
+                              minPos = static_cast<int>(posPrev);
                               }
                         }
 

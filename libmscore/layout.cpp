@@ -341,9 +341,9 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                               else
                                     break;
                               }
-                        for (int i = int(downStemNotes.size()) - 1; i >= 0; --i) {
-                              if (downStemNotes[i]->line() <= bottomUpNote->line() + 1)
-                                    overlapNotes.append(downStemNotes[i]);
+                        for (size_t i = downStemNotes.size(); i > 0; --i) { // loop most probably needs to be in this reverse order
+                              if (downStemNotes[i-1]->line() <= bottomUpNote->line() + 1)
+                                    overlapNotes.append(downStemNotes[i-1]);
                               else
                                     break;
                               }

@@ -4340,28 +4340,28 @@ bool BarsParse::parse() {
       QList<Measure*> measures;
       QList<MeasureData*> measureDatas;
 
-      if( measureChunks_.isEmpty() ||
+      if (measureChunks_.isEmpty() ||
           measureChunks_.size() != conductChunks_.size() ||
-          (int)bdatChunks_.size() != measureDataCount ) {
+          bdatChunks_.size() != measureDataCount) {
             return false;
             }
 
       // add to ove
-      for ( i=0; i<(int)measureChunks_.size(); ++i ) {
+      for ( i = 0; i < measureChunks_.size(); ++i ) {
             Measure* measure = new Measure(i);
 
             measures.push_back(measure);
             ove_->addMeasure(measure);
             }
 
-      for ( i=0; i<measureDataCount; ++i ) {
+      for ( i = 0; i < measureDataCount; ++i ) {
             MeasureData* oveMeasureData = new MeasureData();
 
             measureDatas.push_back(oveMeasureData);
             ove_->addMeasureData(oveMeasureData);
             }
 
-      for( i=0; i<(int)measureChunks_.size(); ++i ) {
+      for ( i = 0; i < measureChunks_.size(); ++i ) {
             Measure* measure = measures[i];
 
             // MEAS
@@ -4373,7 +4373,7 @@ bool BarsParse::parse() {
                   }
             }
 
-      for( i=0; i<(int)conductChunks_.size(); ++i ) {
+      for ( i = 0; i < conductChunks_.size(); ++i ) {
             // COND
             if( !parseCond(measures[i], measureDatas[i], conductChunks_[i]) ) {
                   QString ss = QString("failed in parse COND %1\n").arg(i);
@@ -4383,7 +4383,7 @@ bool BarsParse::parse() {
                   }
             }
 
-      for( i=0; i<(int)bdatChunks_.size(); ++i ) {
+      for ( i = 0; i < bdatChunks_.size(); ++i ) {
             int measId = i % trackMeasureCount;
 
             // BDAT
@@ -8419,15 +8419,15 @@ bool OveSerialize::readBarsData() {
       // parse bars
       BarsParse barsParse(ove_);
 
-      for (i = 0; i < (int) measureChunks.size(); ++i) {
+      for (i = 0; i < measureChunks.size(); ++i) {
             barsParse.addMeasure(measureChunks[i]);
             }
 
-      for (i = 0; i < (int) conductChunks.size(); ++i) {
+      for (i = 0; i < conductChunks.size(); ++i) {
             barsParse.addConduct(conductChunks[i]);
             }
 
-      for (i = 0; i < (int) bdatChunks.size(); ++i) {
+      for (i = 0; i < bdatChunks.size(); ++i) {
             barsParse.addBdat(bdatChunks[i]);
             }
 

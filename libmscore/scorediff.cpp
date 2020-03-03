@@ -196,7 +196,7 @@ std::vector<TextDiff> MscxModeDiff::mscxModeDiff(const QString& s1, const QStrin
 
 void MscxModeDiff::adjustSemanticsMscx(std::vector<TextDiff>& diffs)
       {
-      for (int i = 0; i < int(diffs.size()); ++i)
+      for (unsigned i = 0; i < diffs.size(); ++i)
             i = adjustSemanticsMscxOneDiff(diffs, i);
       }
 
