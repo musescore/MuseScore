@@ -1180,7 +1180,7 @@ int Line::getStaffCount() const {
       }
 
 Staff* Line::getStaff(int idx) const {
-      if (idx >= 0 && idx < (int) staffs_.size()) {
+      if (idx >= 0 && idx < static_cast<int>(staffs_.size())) {
             return staffs_[idx];
             }
 
@@ -1892,47 +1892,47 @@ int NoteContainer::getOffsetStaff() const {
       }
 
 int NoteContainer::getDuration() const {
-      int duration = (int) NoteDuration::D_4;
+      int duration = static_cast<int>(NoteDuration::D_4);
 
       switch (noteType_) {
             case NoteType::Note_DoubleWhole: {
-                  duration = (int) NoteDuration::D_Double_Whole;
+                  duration = static_cast<int>(NoteDuration::D_Double_Whole);
                   break;
                   }
             case NoteType::Note_Whole: {
-                  duration = (int) NoteDuration::D_Whole;
+                  duration = static_cast<int>(NoteDuration::D_Whole);
                   break;
                   }
             case NoteType::Note_Half: {
-                  duration = (int) NoteDuration::D_2;
+                  duration = static_cast<int>(NoteDuration::D_2);
                   break;
                   }
             case NoteType::Note_Quarter: {
-                  duration = (int) NoteDuration::D_4;
+                  duration = static_cast<int>(NoteDuration::D_4);
                   break;
                   }
             case NoteType::Note_Eight: {
-                  duration = (int) NoteDuration::D_8;
+                  duration = static_cast<int>(NoteDuration::D_8);
                   break;
                   }
             case NoteType::Note_Sixteen: {
-                  duration = (int) NoteDuration::D_16;
+                  duration = static_cast<int>(NoteDuration::D_16);
                   break;
                   }
             case NoteType::Note_32: {
-                  duration = (int) NoteDuration::D_32;
+                  duration = static_cast<int>(NoteDuration::D_32);
                   break;
                   }
             case NoteType::Note_64: {
-                  duration = (int) NoteDuration::D_64;
+                  duration = static_cast<int>(NoteDuration::D_64);
                   break;
                   }
             case NoteType::Note_128: {
-                  duration = (int) NoteDuration::D_128;
+                  duration = static_cast<int>(NoteDuration::D_128);
                   break;
                   }
             case NoteType::Note_256: {
-                  duration = (int) NoteDuration::D_256;
+                  duration = static_cast<int>(NoteDuration::D_256);
                   break;
                   }
             default:
@@ -3470,7 +3470,7 @@ int Block::toInt() const {
       int num = 0;
 
       for (i = 0; i < (int)sizeof(int) && i < size(); ++i) {
-            num = (num << 8) + (int) *(data() + i);
+            num = (num << 8) + static_cast<int>(*(data()) + i);
             }
 
       std::size_t minSize = sizeof(int);
@@ -3479,7 +3479,7 @@ int Block::toInt() const {
             }
 
       if ((*(data()) & 0x80) == 0x80) {
-            int maxNum = int(pow(2.0, (int) minSize * 8));
+            int maxNum = static_cast<int>(pow(2.0, static_cast<int>(minSize) * 8));
             num -= maxNum;
             //num *= -1;
             }
@@ -4825,7 +4825,7 @@ bool BarsParse::parseTempo(MeasureData* measureData, int /*length*/) {
       // right note dot
       tempo->setRightNoteDot((getHighNibble(thisByte) & 0x1 ) == 0x1 );
       // compatibility with v3 files ?
-      tempo->setRightSideType((int)(getHighNibble(thisByte) & 0x2));
+      tempo->setRightSideType(static_cast<int>(getHighNibble(thisByte) & 0x2));
       // right note type
       tempo->setRightNoteType(getLowNibble(thisByte));
       // right text

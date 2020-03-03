@@ -879,7 +879,7 @@ void MusicXMLParserPass1::scorePartwise()
 
       /*
        qDebug("partGroupList");
-       for (int i = 0; i < (int) partGroupList.size(); i++) {
+       for (size_t i = 0; i < partGroupList.size(); i++) {
        MusicXmlPartGroup* pg = partGroupList[i];
        qDebug("part-group span %d start %d type %hhd barlinespan %d",
        pg->span, pg->start, pg->type, pg->barlineSpan);

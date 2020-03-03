@@ -903,7 +903,7 @@ void TabDurationSymbol::layout()
                   _beamLength = 0.0;
                   }
             else if (chord->beamMode() == Beam::Mode::MID || chord->beamMode() == Beam::Mode::END) {
-                  _beamLevel  = (int)(chord->durationType().type()) - (int)(font.zeroBeamLevel);
+                  _beamLevel  = static_cast<int>(chord->durationType().type()) - static_cast<int>(font.zeroBeamLevel);
                   _beamGrid   = (_beamLevel < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
                   // _beamLength and bbox x and width will be set in layout2(),
                   // once horiz. positions of chords are known
