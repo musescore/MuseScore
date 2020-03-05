@@ -1041,7 +1041,7 @@ void InspectorTremolo::setElement()
       bool hasNonMinimTwoNoteTremolo = false;
       bool hasTabStaffTremolo = false;
       for (Element* ee : *(inspector->el())) {
-            if (toTremolo(ee)->durationType() != TDuration::DurationType::V_HALF) {
+            if (toTremolo(ee)->durationType().type() != TDuration::DurationType::V_HALF) {
                   hasNonMinimTwoNoteTremolo = true;
                   break;
                   }
