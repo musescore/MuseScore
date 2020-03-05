@@ -399,7 +399,7 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
       bool defaultStyle = (beamStyle() == TremoloBeamStyle::DEFAULT);
 
       // non-default beam styles are only appliable to minim two-note tremolo in non-TAB staves
-      if (durationType() != TDuration::DurationType::V_HALF
+      if (durationType().type() != TDuration::DurationType::V_HALF
          || staff()->staffType(tick())->group() == StaffGroup::TAB)
             defaultStyle = true;
 
