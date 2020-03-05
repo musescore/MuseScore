@@ -135,6 +135,14 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
+         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
+         "file-import-sib",
+         QT_TRANSLATE_NOOP("action","Import Sibelius Score…"),
+         QT_TRANSLATE_NOOP("action","Import Sibelius score"),
+         QT_TRANSLATE_NOOP("action","Import a Sibelius score with an experimental service on musescore.com")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "file-close",
          QT_TRANSLATE_NOOP("action","Close"),

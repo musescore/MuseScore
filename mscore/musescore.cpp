@@ -1322,6 +1322,7 @@ MuseScore::MuseScore()
             "file-export",
             "file-part-export",
             "file-import-pdf",
+            "file-import-sib",
             "",
             "file-close",
             "",
@@ -6038,6 +6039,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             exportParts();
       else if (cmd == "file-import-pdf")
             openExternalLink("https://musescore.com/import");
+      else if (cmd == "file-import-sib")
+            openExternalLink("https://musescore.com/upload");
       else if (cmd == "file-close")
             closeScore(cs);
       else if (cmd == "file-save-as")
