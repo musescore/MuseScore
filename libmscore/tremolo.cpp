@@ -354,7 +354,7 @@ void Tremolo::layout()
             layoutOneNoteTremolo(x, y, _spatium);
       }
 
-extern QPair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal, qreal);
+extern std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal, qreal);
 
 //---------------------------------------------------------
 //   layoutTwoNotesTremolo
@@ -406,7 +406,7 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
             }
       else {
             firstChordStaffY = _chord1->pagePos().y() - _chord1->y();  // y coordinate of the staff of the first chord
-            const QPair<qreal, qreal> extendedLen 
+            const std::pair<qreal, qreal> extendedLen 
                = extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength());
             y1 = _chord1->stemPos().y() - firstChordStaffY + extendedLen.first;
             y2 = _chord2->stemPos().y() - firstChordStaffY + extendedLen.second;
