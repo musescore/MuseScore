@@ -278,7 +278,10 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
 
       if (PaletteCellConstPtr cell = findCell(index)) {
             switch (role) {
-                  case Qt::DisplayRole: // TODO don't display cell names in palettes
+                  case Qt::DisplayRole:
+                        return QVariant(); // Don't show element names in
+                        // item views (i.e. just show icons). If you need
+                        // to know the name, use the ToolTip instead.
                   case Qt::ToolTipRole:
                         return cell->translatedName();
                   case Qt::AccessibleTextRole: {
