@@ -2734,6 +2734,24 @@ static int tremoloCorrection(const Note* const note)
       }
 
 //---------------------------------------------------------
+//   isSmallNote
+//---------------------------------------------------------
+
+static bool isSmallNote(const Note* const note)
+      {
+      return note->small() || note->chord()->small();
+      }
+
+//---------------------------------------------------------
+//   isCueNote
+//---------------------------------------------------------
+
+static bool isCueNote(const Note* const note)
+      {
+      return (!note->chord()->isGrace()) && isSmallNote(note) && !note->play();
+      }
+
+//---------------------------------------------------------
 //   writeTypeAndDots
 //---------------------------------------------------------
 
@@ -2755,7 +2773,8 @@ static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
       if (s.isEmpty())
             qDebug("no note type found for ticks %d", strActTicks);
 
-      if (note->small())
+      // small notes are indicated by size=cue, but for grace and cue notes this is implicit
+      if (isSmallNote(note) && !isCueNote(note) && !note->chord()->isGrace())
             xml.tag("type size=\"cue\"", s);
       else
             xml.tag("type", s);
@@ -2930,10 +2949,10 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
                   else
                         _xml.tagE("grace");
                   }
+            if (isCueNote(note))
+                  _xml.tagE("cue");
             if (note != nl.front())
                   _xml.tagE("chord");
-            else if (note->chord()->small()) // need this only once per chord
-                  _xml.tagE("cue");
 
             writePitch(_xml, note, useDrumset);
 
