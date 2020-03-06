@@ -65,6 +65,7 @@
         </note>
       </measure>
     <measure number="2">
+      <print new-page="yes"/>
       <attributes>
         <measure-style>
           <multiple-rest>2</multiple-rest>
@@ -94,6 +95,7 @@
         </note>
       </measure>
     <measure number="4">
+      <print new-page="yes"/>
       <direction placement="above">
         <direction-type>
           <words>Staff Text</words>

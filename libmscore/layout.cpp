@@ -4385,6 +4385,10 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
       _scoreFont     = ScoreFont::fontFactory(style().value(Sid::MusicalSymbolFont).toString());
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
+      if (cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
+            if (isMaster())
+                  masterScore()->rebuildMidiMapping();
+            }
       if (cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO)
             updateVelo();
 #if 0 // TODO: needed? It was introduced in ab9774ec4098512068b8ef708167d9aa6e702c50

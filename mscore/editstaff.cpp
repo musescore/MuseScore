@@ -497,6 +497,11 @@ void EditStaff::showInstrumentDialog()
       si.setWindowModality(Qt::WindowModal);
       if (si.exec()) {
             instrument = Instrument::fromTemplate(si.instrTemplate());
+            const StaffType* staffType = si.instrTemplate()->staffTypePreset;
+            if (!staffType)
+                  staffType = StaffType::getDefaultPreset(StaffGroup::STANDARD);
+            staff->setStaffType(Fraction(0,1), *staffType);
+            updateStaffType();
             updateInstrument();
             }
       }

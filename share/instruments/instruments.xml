@@ -10698,13 +10698,13 @@
                   <aPitchRange>24-108</aPitchRange>
                   <pPitchRange>24-108</pPitchRange>
                   <Channel name="arco">
-                        <program value="48"/>
+                        <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <program value="45"/>
+                        <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
-                        <program value="44"/>
+                        <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
             </Instrument>
             <Instrument id="erhu">
@@ -10742,13 +10742,13 @@
                   <aPitchRange>48-79</aPitchRange>
                   <pPitchRange>48-93</pPitchRange>
                   <Channel name="arco">
-                        <program value="41"/>
+                        <program value="41"/> <!--Viola-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <program value="45"/>
+                        <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
-                        <program value="44"/>
+                        <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
@@ -10852,8 +10852,8 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-67</aPitchRange>
                   <pPitchRange>36-90</pPitchRange>
-                  <Channel name="arco"> <!--Cello-->
-                        <program value="42"/>
+                  <Channel name="arco">
+                        <program value="42"/> <!--Cello-->
                   </Channel>
                   <Channel name="pizzicato">
                         <program value="45"/> <!--Pizzicato Strings-->
@@ -10901,8 +10901,8 @@
                   <pPitchRange>24-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <Channel name="arco"> <!--Contrabass-->
-                        <program value="43"/>
+                  <Channel name="arco">
+                        <program value="43"/> <!--Contrabass-->
                   </Channel>
                   <Channel name="pizzicato">
                         <program value="32"/> <!--Accoustic Bass-->
@@ -10945,6 +10945,28 @@
                   <init>contrabass</init>
                   <longName>Double Bass</longName>
                   <shortName>Db.</shortName>
+            </Instrument>
+            <Instrument id="octobass">
+                  <longName>Octobass</longName>
+                  <shortName>Otb.</shortName>
+                  <description>Octobass</description>
+                  <musicXMLid>strings.octobass</musicXMLid>
+                  <transposingClef>F</transposingClef>
+                  <concertClef>F15mb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>21-31</aPitchRange>
+                  <pPitchRange>12-33</pPitchRange>
+                  <transposeDiatonic>-14</transposeDiatonic>
+                  <transposeChromatic>-24</transposeChromatic>
+                  <Channel name="arco">
+                        <program value="43"/> <!--Contrabass-->
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="32"/> <!--Accoustic Bass-->
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/> <!--Tremolo Strings-->
+                  </Channel>
             </Instrument>
             <Instrument id="pardessus-de-viole">
                   <longName>Pardessus de viole</longName>
@@ -11112,13 +11134,13 @@
                   <aPitchRange>33-74</aPitchRange>
                   <pPitchRange>33-79</pPitchRange>
                   <Channel name="arco">
-                        <program value="42"/>
+                        <program value="42"/> <!--Cello-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <program value="15"/>
+                        <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
-                        <program value="44"/>
+                        <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>

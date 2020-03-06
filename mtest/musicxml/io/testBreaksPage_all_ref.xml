@@ -44,9 +44,9 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction placement="above">
+      <direction>
         <direction-type>
-          <words valign="top" font-size="12">Tbox 1</words>
+          <words>First system (no frames above)</words>
           </direction-type>
         </direction>
       <note>
@@ -56,6 +56,12 @@
         </note>
       </measure>
     <measure number="2">
+      <print new-page="yes"/>
+      <direction>
+        <direction-type>
+          <words>After page break</words>
+          </direction-type>
+        </direction>
       <note>
         <rest/>
         <duration>4</duration>
@@ -63,10 +69,15 @@
         </note>
       </measure>
     <measure number="3">
-      <print new-system="yes"/>
-      <direction placement="above">
+      <print new-page="yes"/>
+      <direction placement="below">
         <direction-type>
-          <words valign="top" font-size="12">Tbox 2</words>
+          <words valign="top" font-size="12">Tframe</words>
+          </direction-type>
+        </direction>
+      <direction>
+        <direction-type>
+          <words>After page break in vframe</words>
           </direction-type>
         </direction>
       <note>
@@ -76,6 +87,12 @@
         </note>
       </measure>
     <measure number="4">
+      <print new-page="yes"/>
+      <direction>
+        <direction-type>
+          <words>After page break in tframe</words>
+          </direction-type>
+        </direction>
       <note>
         <rest/>
         <duration>4</duration>
@@ -83,49 +100,12 @@
         </note>
       </measure>
     <measure number="5">
-      <print new-system="yes"/>
-      <direction placement="above">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 3</words>
-          </direction-type>
-        </direction>
-      <direction placement="below">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 4</words>
-          </direction-type>
-        </direction>
-      <note>
-        <rest/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="6">
-      <note>
-        <rest/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="7">
       <print new-page="yes"/>
-      <direction placement="above">
+      <direction>
         <direction-type>
-          <words valign="top" font-size="12">Tbox 5</words>
+          <words>After page break in hframe</words>
           </direction-type>
         </direction>
-      <direction placement="below">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 6</words>
-          </direction-type>
-        </direction>
-      <note>
-        <rest/>
-        <duration>4</duration>
-        <voice>1</voice>
-        </note>
-      </measure>
-    <measure number="8">
       <note>
         <rest/>
         <duration>4</duration>
