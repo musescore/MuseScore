@@ -43,12 +43,10 @@
           <sign>G</sign>
           <line>2</line>
           </clef>
+        <measure-style>
+          <multiple-rest>2</multiple-rest>
+          </measure-style>
         </attributes>
-      <direction placement="above">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 1</words>
-          </direction-type>
-        </direction>
       <note>
         <rest/>
         <duration>4</duration>
@@ -63,37 +61,33 @@
         </note>
       </measure>
     <measure number="3">
-      <print new-system="yes"/>
-      <direction placement="above">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 2</words>
-          </direction-type>
-        </direction>
       <note>
-        <rest/>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
         <duration>4</duration>
         <voice>1</voice>
+        <type>whole</type>
         </note>
       </measure>
     <measure number="4">
       <note>
-        <rest/>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
         <duration>4</duration>
         <voice>1</voice>
+        <type>whole</type>
         </note>
       </measure>
     <measure number="5">
-      <print new-system="yes"/>
-      <direction placement="above">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 3</words>
-          </direction-type>
-        </direction>
-      <direction placement="below">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 4</words>
-          </direction-type>
-        </direction>
+      <attributes>
+        <measure-style>
+          <multiple-rest>2</multiple-rest>
+          </measure-style>
+        </attributes>
       <note>
         <rest/>
         <duration>4</duration>
@@ -108,28 +102,44 @@
         </note>
       </measure>
     <measure number="7">
-      <print new-page="yes"/>
-      <direction placement="above">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 5</words>
-          </direction-type>
-        </direction>
-      <direction placement="below">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 6</words>
-          </direction-type>
-        </direction>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      </measure>
+    <measure number="8">
+      <attributes>
+        <measure-style>
+          <multiple-rest>2</multiple-rest>
+          </measure-style>
+        </attributes>
       <note>
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="8">
+    <measure number="9">
       <note>
         <rest/>
         <duration>4</duration>
         <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="10">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>

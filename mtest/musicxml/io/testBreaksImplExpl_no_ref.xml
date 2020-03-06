@@ -44,11 +44,6 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction placement="above">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 1</words>
-          </direction-type>
-        </direction>
       <note>
         <rest/>
         <duration>4</duration>
@@ -63,12 +58,6 @@
         </note>
       </measure>
     <measure number="3">
-      <print new-system="yes"/>
-      <direction placement="above">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 2</words>
-          </direction-type>
-        </direction>
       <note>
         <rest/>
         <duration>4</duration>
@@ -83,17 +72,6 @@
         </note>
       </measure>
     <measure number="5">
-      <print new-system="yes"/>
-      <direction placement="above">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 3</words>
-          </direction-type>
-        </direction>
-      <direction placement="below">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 4</words>
-          </direction-type>
-        </direction>
       <note>
         <rest/>
         <duration>4</duration>
@@ -108,17 +86,6 @@
         </note>
       </measure>
     <measure number="7">
-      <print new-page="yes"/>
-      <direction placement="above">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 5</words>
-          </direction-type>
-        </direction>
-      <direction placement="below">
-        <direction-type>
-          <words valign="top" font-size="12">Tbox 6</words>
-          </direction-type>
-        </direction>
       <note>
         <rest/>
         <duration>4</duration>
@@ -126,6 +93,39 @@
         </note>
       </measure>
     <measure number="8">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="9">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="10">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="11">
+      <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="12">
+      <direction>
+        <direction-type>
+          <words>After system break</words>
+          </direction-type>
+        </direction>
       <note>
         <rest/>
         <duration>4</duration>
