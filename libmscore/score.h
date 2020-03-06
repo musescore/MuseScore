@@ -1230,7 +1230,7 @@ class MasterScore : public Score {
       TimeSigMap* _sigmap;
       TempoMap* _tempomap;
       RepeatList* _repeatList;
-      bool _expandRepeats     { true };
+      bool _expandRepeats     { MScore::playRepeats };
       bool _playlistDirty     { true };
       QList<Excerpt*> _excerpts;
       std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
