@@ -2549,7 +2549,7 @@ void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, q
 //    Extend stem of one of the chords to make the tremolo less steep
 //---------------------------------------------------------
 
-QPair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo* _tremolo, qreal stemLen1, qreal stemLen2)
+std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo* _tremolo, qreal stemLen1, qreal stemLen2)
       {
       const qreal _spatium = _tremolo->score()->spatium();
       const qreal sw = _tremolo->score()->styleS(Sid::tremoloStrokeWidth).val();
@@ -2736,7 +2736,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                                           Stem* stem1 = chord->tremolo()->chord1()->stem();
                                           Stem* stem2 = chord->tremolo()->chord2()->stem();
                                           if (stem1 && stem2) {
-                                                QPair<qreal, qreal> extendedLen = extendedStemLenWithTwoNoteTremolo(chord->tremolo(),
+                                                std::pair<qreal, qreal> extendedLen = extendedStemLenWithTwoNoteTremolo(chord->tremolo(),
                                                    stem1->p2().y(), stem2->p2().y());
                                                 stem1->setLen(extendedLen.first);
                                                 stem2->setLen(extendedLen.second);
