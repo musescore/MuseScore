@@ -17,6 +17,10 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+# adding or renaming templates here should also better be done in convert.json, 
+# but definitely need to get reflected in ../instruments/instrumentsxml.h,
+# like by running ../instruments/generateTs.py
+
 install(FILES
       drumset_fr.drm
       orchestral.drm
