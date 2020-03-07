@@ -208,10 +208,26 @@ void System::layoutSystem(qreal xo1)
 
       //---------------------------------------------------
       //  find x position of staves
-      //    create brackets
       //---------------------------------------------------
 
       qreal xoff2 = 0.0;         // x offset for instrument name
+
+      for (const Part* p : score()->parts()) {
+            if (firstVisibleSysStaffOfPart(p) < 0)
+                  continue;
+            for (int staffIdx = firstSysStaffOfPart(p); staffIdx <= lastSysStaffOfPart(p); ++staffIdx) {
+                  for (InstrumentName* t : _staves[staffIdx]->instrumentNames) {
+                        t->layout();
+                        qreal w = t->width() + point(instrumentNameOffset);
+                        if (w > xoff2)
+                              xoff2 = w;
+                        }
+                  }
+            }
+
+      //---------------------------------------------------
+      //  create brackets
+      //---------------------------------------------------
 
       int columns = getBracketsColumnsCount();
 
@@ -237,14 +253,6 @@ void System::layoutSystem(qreal xo1)
                         Bracket* b = createBracket(bi, i, staffIdx, bl, this->firstMeasure());
                         if (b != nullptr) bracketWidth[i] = qMax(bracketWidth[i], b->width());
                         }
-                  }
-            if (!staff(staffIdx)->show())
-                  continue;
-            for (InstrumentName* t : _staves[staffIdx]->instrumentNames) {
-                  t->layout();
-                  qreal w = t->width() + point(instrumentNameOffset);
-                  if (w > xoff2)
-                        xoff2 = w;
                   }
             }
 
@@ -293,29 +301,25 @@ void System::layoutSystem(qreal xo1)
 
       //---------------------------------------------------
       //  layout instrument names x position
+      //     at this point it is not clear which staves will
+      //     be hidden, so layout all instrument names
       //---------------------------------------------------
 
-      int idx = 0;
-      for (const Part* p : score()->parts()) {
-            SysStaff* s = staff(idx);
-            if (s->show() && p->show()) {
-                  for (InstrumentName* t : s->instrumentNames) {
-                        switch (int(t->align()) & int(Align::HMASK)) {
-                              case int(Align::LEFT):
-                                    t->rxpos() = 0;
-                                    break;
-                              case int(Align::HCENTER):
-                                    t->rxpos() = (xoff2 - point(instrumentNameOffset) + xo1) * .5;
-                                    break;
-                              case int(Align::RIGHT):
-                              default:
-                                    t->rxpos() = xoff2 - point(instrumentNameOffset) + xo1;
-                                    break;
-                              }
-//                        t->rxpos() += t->offset(t->spatium()).x();
+      for (SysStaff* s : _staves) {
+            for (InstrumentName* t : s->instrumentNames) {
+                  switch (int(t->align()) & int(Align::HMASK)) {
+                        case int(Align::LEFT):
+                              t->rxpos() = 0;
+                              break;
+                        case int(Align::HCENTER):
+                              t->rxpos() = (xoff2 - point(instrumentNameOffset) + xo1) * .5;
+                              break;
+                        case int(Align::RIGHT):
+                        default:
+                              t->rxpos() = xoff2 - point(instrumentNameOffset) + xo1;
+                              break;
                         }
                   }
-            idx += p->nstaves();
             }
       }
 
@@ -437,7 +441,7 @@ void System::setBracketsXPosition(const qreal xPosition)
             for (const Bracket* b2 : _brackets) {
                   bool b1FirstStaffInB2 = (b1->firstStaff() >= b2->firstStaff() && b1->firstStaff() <= b2->lastStaff());
                   bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
-                  if (b1->column() > b2->column() && 
+                  if (b1->column() > b2->column() &&
                         (b1FirstStaffInB2 || b1LastStaffInB2))
                         xOffset += b2->width() + bracketDistance;
                   }
@@ -666,7 +670,22 @@ void System::layout2()
             SysStaff* s = staff(staffIdx);
             SysStaff* s2;
             int nstaves = p->nstaves();
-            if (s->show()) {
+
+            int visible = firstVisibleSysStaffOfPart(p);
+            if (visible >= 0) {
+                  // The top staff might be invisible but this top staff contains the instrument names.
+                  // To make sure these instrument name are drawn, even when the top staff is invisible,
+                  // move the InstrumentName elements to the the first visible staff of the part.
+                  if (visible != staffIdx) {
+                        SysStaff* vs = staff(visible);
+                        for (InstrumentName* t : s->instrumentNames) {
+                              t->setTrack(visible * VOICES);
+                              vs->instrumentNames.append(t);
+                              }
+                        s->instrumentNames.clear();
+                        s = vs;
+                        }
+
                   for (InstrumentName* t : s->instrumentNames) {
                         //
                         // override Text->layout()
@@ -690,10 +709,6 @@ void System::layout2()
                                     y1 = s->bbox().top();
                                     y2 = s->bbox().bottom();
                                     break;
-
-                              // TODO:
-                              // sort out invisible staves
-
                               case 2:           // center between first and second staff
                                     y1 = s->bbox().top();
                                     y2 = staff(staffIdx + 1)->bbox().bottom();
@@ -1403,5 +1418,58 @@ Fraction System::endTick() const
       {
       return measures().back()->endTick();
       }
-}
 
+//---------------------------------------------------------
+//   firstSysStaffOfPart
+//---------------------------------------------------------
+
+int System::firstSysStaffOfPart(const Part* part) const
+      {
+      int staffIdx { 0 };
+      for (const Part* p : score()->parts()) {
+            if (p == part)
+                  return staffIdx;
+            staffIdx += p->nstaves();
+            }
+      return -1; // Part not found.
+      }
+
+//---------------------------------------------------------
+//   firstVisibleSysStaffOfPart
+//---------------------------------------------------------
+
+int System::firstVisibleSysStaffOfPart(const Part* part) const
+      {
+      int firstIdx = firstSysStaffOfPart(part);
+      for (int idx = firstIdx ; idx < firstIdx + part->nstaves(); ++idx) {
+            if (staff(idx)->show())
+                  return idx;
+            }
+      return -1; // No visible staves on this part.
+      }
+
+//---------------------------------------------------------
+//   lastSysStaffOfPart
+//---------------------------------------------------------
+
+int System::lastSysStaffOfPart(const Part* part) const
+      {
+      int firstIdx = firstSysStaffOfPart(part);
+      if (firstIdx < 0)
+            return -1; // Part not found.
+      return firstIdx + part->nstaves() - 1;
+      }
+
+//---------------------------------------------------------
+//   lastVisibleSysStaffOfPart
+//---------------------------------------------------------
+
+int System::lastVisibleSysStaffOfPart(const Part* part) const
+      {
+      for (int idx = lastSysStaffOfPart(part); idx >= firstSysStaffOfPart(part); --idx) {
+            if (staff(idx)->show())
+                  return idx;
+      }
+      return -1; // No visible staves on this part.
+      }
+}

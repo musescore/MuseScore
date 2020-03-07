@@ -177,6 +177,11 @@ public:
       int nextVisibleStaff(int) const;
       qreal distance() const { return _distance; }
       void setDistance(qreal d) { _distance = d; }
+
+      int firstSysStaffOfPart(const Part* part) const;
+      int firstVisibleSysStaffOfPart(const Part* part) const;
+      int lastSysStaffOfPart(const Part* part) const;
+      int lastVisibleSysStaffOfPart(const Part* part) const;
       };
 
 typedef QList<System*>::iterator iSystem;
