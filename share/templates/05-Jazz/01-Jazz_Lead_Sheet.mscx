@@ -24,6 +24,7 @@
       <ledgerLineWidth>0.2</ledgerLineWidth>
       <ledgerLineLength>0.2</ledgerLineLength>
       <beamDistance>0.33</beamDistance>
+      <lastSystemFillLimit>0.25</lastSystemFillLimit>
       <hairpinWidth>0.2</hairpinWidth>
       <hairpinFontFace>MuseJazz Text</hairpinFontFace>
       <pedalLineWidth>0.2</pedalLineWidth>
