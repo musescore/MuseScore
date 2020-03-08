@@ -272,12 +272,21 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
         }
     };
       int format;
+      int PCMRate;
+      switch (preferences.getInt(PREF_EXPORT_AUDIO_PCMRATE)) {
+            case 32: PCMRate = SF_FORMAT_PCM_32; break;
+            case 24: PCMRate = SF_FORMAT_PCM_24; break;
+            case 16: PCMRate = SF_FORMAT_PCM_16; break;
+            case 8:  PCMRate = SF_FORMAT_PCM_S8; break;
+            default: PCMRate = SF_FORMAT_PCM_16; break;
+            }
+
       if (name.endsWith(".wav"))
-            format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
+            format = SF_FORMAT_WAV | PCMRate;
       else if (name.endsWith(".ogg"))
             format = SF_FORMAT_OGG | SF_FORMAT_VORBIS;
-      else if (name.endsWith("flac"))
-            format = SF_FORMAT_FLAC | SF_FORMAT_PCM_16;
+      else if (name.endsWith(".flac"))
+            format = SF_FORMAT_FLAC | PCMRate;
       else {
             qDebug("unknown audio file type <%s>", qPrintable(name));
             return false;
