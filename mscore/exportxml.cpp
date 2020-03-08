@@ -303,7 +303,7 @@ struct MeasurePrintContext final
 //   ExportMusicXml
 //---------------------------------------------------------
 
-typedef QHash<const Chord*, const Trill*> TrillHash;
+typedef QHash<const ChordRest* const, const Trill*> TrillHash;
 typedef QMap<const Instrument*, int> MxmlInstrumentMap;
 
 class ExportMusicXml {
@@ -345,7 +345,7 @@ class ExportMusicXml {
       void keysigTimesig(const Measure* m, const Part* p);
       void chordAttributes(Chord* chord, Notations& notations, Technical& technical,
                            TrillHash& trillStart, TrillHash& trillStop);
-      void wavyLineStartStop(Chord* chord, Notations& notations, Ornaments& ornaments,
+      void wavyLineStartStop(const ChordRest* const cr, Notations& notations, Ornaments& ornaments,
                              TrillHash& trillStart, TrillHash& trillStop);
       void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart, const MeasurePrintContext& mpc);
       void findAndExportClef(const Measure* const m, const int staves, const int strack, const int etrack);
@@ -958,9 +958,9 @@ static void findTrills(const Measure* const measure, int strack, int etrack, Tri
                   auto elem1 = tr->startElement();
                   auto elem2 = tr->endElement();
 
-                  if (elem1 && elem1->isChord() && elem2 && elem2->isChord()) {
-                        trillStart.insert(toChord(elem1), tr);
-                        trillStop.insert(toChord(elem2), tr);
+                  if (elem1 && elem1->isChordRest() && elem2 && elem2->isChordRest()) {
+                        trillStart.insert(toChordRest(elem1), tr);
+                        trillStop.insert(toChordRest(elem2), tr);
                         }
                   }
             }
@@ -1991,23 +1991,23 @@ static void wavyLineStop(const Trill* tr, const int number, Notations& notations
 //   wavyLineStartStop
 //---------------------------------------------------------
 
-void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornaments& ornaments,
+void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& notations, Ornaments& ornaments,
                                        TrillHash& trillStart, TrillHash& trillStop)
       {
-      if (trillStart.contains(chord) && trillStop.contains(chord)) {
-            const auto tr = trillStart.value(chord);
+      if (trillStart.contains(cr) && trillStop.contains(cr)) {
+            const auto tr = trillStart.value(cr);
             auto n = findTrill(0);
             if (n >= 0) {
                   wavyLineStart(tr, n, notations, ornaments, _xml);
                   wavyLineStop(tr, n, notations, ornaments, _xml);
                   }
             else
-                  qDebug("too many overlapping trills (chord %p staff %d tick %d)",
-                         chord, chord->staffIdx(), chord->tick().ticks());
+                  qDebug("too many overlapping trills (cr %p staff %d tick %d)",
+                         cr, cr->staffIdx(), cr->tick().ticks());
             }
       else {
-            if (trillStop.contains(chord)) {
-                  const auto tr = trillStop.value(chord);
+            if (trillStop.contains(cr)) {
+                  const auto tr = trillStop.value(cr);
                   auto n = findTrill(tr);
                   if (n >= 0)
                         // trill stop after trill start
@@ -2018,16 +2018,16 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
                         if (n >= 0)
                               trills[n] = tr;
                         else
-                              qDebug("too many overlapping trills (chord %p staff %d tick %d)",
-                                     chord, chord->staffIdx(), chord->tick().ticks());
+                              qDebug("too many overlapping trills (cr %p staff %d tick %d)",
+                                     cr, cr->staffIdx(), cr->tick().ticks());
                         }
                   if (n >= 0) {
                         wavyLineStop(tr, n, notations, ornaments, _xml);
                         }
-                  trillStop.remove(chord);
+                  trillStop.remove(cr);
                   }
-            if (trillStart.contains(chord)) {
-                  const auto tr = trillStart.value(chord);
+            if (trillStart.contains(cr)) {
+                  const auto tr = trillStart.value(cr);
                   auto n = findTrill(tr);
                   if (n >= 0)
                         qDebug("wavyLineStartStop error");
@@ -2038,9 +2038,9 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
                               wavyLineStart(tr, n, notations, ornaments, _xml);
                               }
                         else
-                              qDebug("too many overlapping trills (chord %p staff %d tick %d)",
-                                     chord, chord->staffIdx(), chord->tick().ticks());
-                        trillStart.remove(chord);
+                              qDebug("too many overlapping trills (cr %p staff %d tick %d)",
+                                     cr, cr->staffIdx(), cr->tick().ticks());
+                        trillStart.remove(cr);
                         }
                   }
             }
@@ -2307,7 +2307,7 @@ static QString symIdToTechn(const SymId sid)
 static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations& notations, Articulations& articulations)
       {
       for (Element* e : chord->el()) {
-            qDebug("chordAttributes: el %p type %d (%s)", e, int(e->type()), e->name());
+            qDebug("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->name());
             if (e->type() == ElementType::CHORDLINE) {
                   ChordLine const* const cl = static_cast<ChordLine*>(e);
                   QString subtype;
@@ -3186,6 +3186,10 @@ void ExportMusicXml::rest(Rest* rest, int staff)
                   fl.push_back(e);
             }
       fermatas(fl, _xml, notations);
+
+      Ornaments ornaments;
+      wavyLineStartStop(rest, notations, ornaments, _trillStart, _trillStop);
+      ornaments.etag(_xml);
 
       sh.doSlurs(rest, notations, _xml);
 
