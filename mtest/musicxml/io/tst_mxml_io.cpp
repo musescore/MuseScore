@@ -119,6 +119,7 @@ private slots:
       void keysig2() { mxmlIoTest("testKeysig2"); }
       void lines1() { mxmlIoTest("testLines1"); }
       void lines2() { mxmlIoTest("testLines2"); }
+      void lines3() { mxmlIoTest("testLines3"); }
       void lyricColor() { mxmlIoTest("testLyricColor"); }
       void lyrics1() { mxmlIoTestRef("testLyrics1"); }
       void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }
