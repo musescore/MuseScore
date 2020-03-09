@@ -2137,7 +2137,7 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
 #else
       printer.setOutputFormat(QPrinter::PdfFormat);
 #endif
-      
+
       printer.setCreator("MuseScore Version: " VERSION);
       if (!printer.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
@@ -2350,6 +2350,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             s->setPlaylistDirty();
             s->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
             s->setLayoutAll();
+            s->doLayout();
             }
       score->updateChannel();
       score->updateExpressive(MuseScore::synthesizer("Fluid"));
