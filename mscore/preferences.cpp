@@ -38,6 +38,29 @@ void Preferences::init(bool storeInMemoryOnly)
             _settings = new QSettings();
             }
 
+#if defined(Q_OS_WIN)
+      // Use the correct default GUI font on Windows. Qt 5 and below use the deprecated function GetStockObject() with
+      // DEFAULT_GUI_FONT, which returns MS Shell Dlg 2 in 8 pt. MS Shell Dlg 2 is a virtual font that maps to Tahoma, which has
+      // not been the default Windows GUI font since 2006.
+      //
+      // The correct way to determine the default GUI font is to call SystemParametersInfoW() with SPI_GETNONCLIENTMETRICS and use
+      // the returned lfMessageFont structure. On all versions of Windows from Windows Vista through Windows 10, this typically
+      // returns Segoe UI in 9 pt.
+      //
+      // This problem is slated to be fixed in Qt 6. For details, see: https://bugreports.qt.io/browse/QTBUG-58610
+      //
+      // In the meantime, we can work around the problem by having Qt use the "QMessageBox" font instead, which is already being
+      // initialized the correct way.
+      QApplication::setFont(QApplication::font("QMessageBox"));
+
+      // If the current settings file is using the deprecated default GUI font, reset it so that the correct default font can be
+      // picked up automatically.
+      if (_settings->value(PREF_UI_THEME_FONTFAMILY) == "MS Shell Dlg 2") {
+            _settings->remove(PREF_UI_THEME_FONTFAMILY);
+            _settings->remove(PREF_UI_THEME_FONTSIZE);
+            }
+#endif
+
       _storeInMemoryOnly = storeInMemoryOnly;
 
 #if defined(Q_OS_MAC) || (defined(Q_OS_WIN) && !defined(FOR_WINSTORE))
