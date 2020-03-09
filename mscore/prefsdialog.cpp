@@ -711,11 +711,7 @@ void  PreferenceDialog::filterShortcutsTextChanged(const QString &query )
       QTreeWidgetItem *item;
       for(int i = 0; i < shortcutList->topLevelItemCount(); i++) {
           item = shortcutList->topLevelItem(i);
-
-          if(item->text(0).toLower().contains(query.toLower()))
-              item->setHidden(false);
-          else
-              item->setHidden(true);
+          item->setHidden(!(item->text(0).contains(query, Qt::CaseInsensitive) || item->text(1).contains(query, Qt::CaseInsensitive)));
           }
       }
 
