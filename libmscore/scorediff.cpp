@@ -403,14 +403,17 @@ int MscxModeDiff::performShiftDiff(std::vector<TextDiff>& diffs, int index, int 
       std::copy(chunkEnd, chunkEnd + 2, eqDiff.end);
 
       const int prevDiffIdx = index + (down ? -1 : 1);
+      bool merged = false;
       if (diffs[prevDiffIdx].type == DiffType::EQUAL)
-            diffs[prevDiffIdx].merge(eqDiff);
-      else {
+            merged = diffs[prevDiffIdx].merge(eqDiff);
+
+      if (!merged) {
             const int insertIdx = down ? index : (index + 1);
             diffs.insert(diffs.begin() + insertIdx, eqDiff);
             if (down)
                   ++index;
             }
+
       return index;
       }
 
@@ -1170,7 +1173,7 @@ QString ScoreDiff::userDiff() const
 //   TextDiff::merge
 //---------------------------------------------------------
 
-void TextDiff::merge(const TextDiff& other)
+bool TextDiff::merge(const TextDiff& other)
       {
       if (type == other.type) {
             if (other.end[0] == (start[0] - 1) && other.end[1] == (start[1] - 1)) {
@@ -1185,8 +1188,10 @@ void TextDiff::merge(const TextDiff& other)
                   text[0].append(other.text[0]);
                   text[1].append(other.text[1]);
                   }
-            else
-                  qFatal("TextDiff:merge: invalid argument: wrong line numbers");
+            else {
+                  qWarning("TextDiff:merge: invalid argument: wrong line numbers");
+                  return false;
+                  }
             }
       else if ((type == DiffType::INSERT && other.type == DiffType::DELETE)
          || (type == DiffType::DELETE && other.type == DiffType::INSERT)
@@ -1197,8 +1202,12 @@ void TextDiff::merge(const TextDiff& other)
             end[iOther] = other.end[iOther];
             text[iOther] = other.text[iOther];
             }
-      else
-            qFatal("TextDiff:merge: invalid argument: wrong types");
+      else {
+            qWarning("TextDiff:merge: invalid argument: wrong types");
+            return false;
+            }
+
+      return true;
       }
 
 //---------------------------------------------------------
