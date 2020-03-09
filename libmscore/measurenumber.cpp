@@ -57,6 +57,11 @@ QVariant MeasureNumber::propertyDefault(Pid id) const
 
 void MeasureNumber::layout()
       {
+      // In some cases, e.g. Ctrl + Shift + drag, the parent is 0.
+      // To prevent a crash, make sure the parent exists and is a measure.
+      if (!measure())
+            return;
+
       setPos(QPointF());
       if (!parent())
             setOffset(0.0, 0.0);
