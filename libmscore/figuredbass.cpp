@@ -1762,7 +1762,7 @@ void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEnd
 FiguredBass* Score::addFiguredBass()
       {
       Element* el = selection().element();
-      if (el == 0 || (el->type() != ElementType::NOTE && el->type() != ElementType::FIGURED_BASS)) {
+      if (!el || (!(el->isNote()) && !(el->isRest()) && !(el->isFiguredBass()))) {
             MScore::setError(NO_NOTE_FIGUREDBASS_SELECTED);
             return 0;
             }
@@ -1772,6 +1772,10 @@ FiguredBass* Score::addFiguredBass()
       if (el->isNote()) {
             ChordRest * cr = toNote(el)->chord();
             fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0,1), &bNew);
+            }
+      else if (el->isRest()) {
+            ChordRest* cr = toRest(el);
+            fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0, 1), &bNew);
             }
       else if (el->isFiguredBass()) {
             fb = toFiguredBass(el);
