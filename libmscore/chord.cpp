@@ -1966,9 +1966,11 @@ void Chord::layoutPitched()
             qreal arpeggioDistance = score()->styleP(Sid::ArpeggioNoteDistance) * mag_;
             _arpeggio->layout();    // only for width() !
             _arpeggio->setHeight(0.0);
-            lll        += _arpeggio->width() + arpeggioDistance + chordX;
+            qreal extraX = _arpeggio->width() + arpeggioDistance + chordX;
             qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
-            _arpeggio->setPos(-lll, y1);
+            _arpeggio->setPos(-(lll + extraX), y1);
+            if (_arpeggio->visible())
+                  lll += extraX;
             // _arpeggio->layout() called in layoutArpeggio2()
 
             // handle the special case of _arpeggio->span() > 1
@@ -1978,10 +1980,20 @@ void Chord::layoutPitched()
 
       // allocate enough room for glissandi
       if (_endsGlissando) {
-            if (!rtick().isZero()                           // if not at beginning of measure
-                        || graceNotesBefore.size() > 0)     // or there are graces before
-                  lll += _spatium * 0.5 + minTieLength;
-            // special case of system-initial glissando final note is handled in Glissando::layout() itself
+            for (const Note* note : notes()) {
+                  for (const Spanner* sp : note->spannerBack()) {
+                        if (sp->isGlissando()) {
+                              if (toGlissando(sp)->visible()) {
+                                    if (!rtick().isZero()                 // if not at beginning of measure
+                                       || graceNotesBefore.size() > 0) {  // or there are graces before
+                                          lll += _spatium * 0.5 + minTieLength;
+                                          break;
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            // special case of system-initial glissando final note is handled in Glissando::layout() itself 
             }
 
       if (dots()) {
