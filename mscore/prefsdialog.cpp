@@ -394,7 +394,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       alsaFragments->setValue(preferences.getInt(PREF_IO_ALSA_FRAGMENTS));
       drawAntialiased->setChecked(preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
       limitScrollArea->setChecked(preferences.getBool(PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA));
-      switch(preferences.sessionStart()) {
+      switch (preferences.sessionStart()) {
             case SessionStart::EMPTY:  emptySession->setChecked(true); break;
             case SessionStart::LAST:   lastSession->setChecked(true); break;
             case SessionStart::NEW:    newSession->setChecked(true); break;
@@ -409,6 +409,13 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       importLayout->setChecked(preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT));
       importBreaks->setChecked(preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTBREAKS));
+      QString resetElementPositions = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
+      if (resetElementPositions == "No")
+            resetElementPositionsNo->setChecked(true);
+      else if (resetElementPositions == "Yes")
+            resetElementPositionsYes->setChecked(true);
+      else // "Ask" or unset (or anything else)
+            resetElementPositionsAlwaysAsk->setChecked(true);
       if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
             exportAllLayouts->setChecked(true);
             }
@@ -948,6 +955,12 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_EXPORT_PNG_USETRANSPARENCY, pngTransparent->isChecked());
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, importBreaks->isChecked());
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTLAYOUT, importLayout->isChecked());
+      if (resetElementPositionsAlwaysAsk->isChecked())
+            preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "Ask");
+      else if (resetElementPositionsYes->isChecked())
+            preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "Yes");
+      else if (resetElementPositionsNo->isChecked())
+            preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "No");
       preferences.setPreference(PREF_IO_MIDI_ADVANCEONRELEASE, advanceOnRelease->isChecked());
       preferences.setPreference(PREF_IO_MIDI_ENABLEINPUT, enableMidiInput->isChecked());
       preferences.setPreference(PREF_IO_MIDI_EXPANDREPEATS, expandRepeats->isChecked());
