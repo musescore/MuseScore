@@ -13,24 +13,25 @@
 
 namespace Ms {
 
-ToolButtonMenu::ToolButtonMenu(QString str,
-                     TYPES type,
+ToolButtonMenu::ToolButtonMenu(QString name,
                      QAction* defaultAction,
                      QActionGroup* alternativeActions,
-                     QWidget* parent) : AccessibleToolButton(parent, defaultAction)
+                     QWidget* parent,
+                     bool swapAction)
+      : AccessibleToolButton(parent, defaultAction)
       {
-      // if, and only if, type is ACTION_SWAPPED then the default action is also an alternative action.
-      Q_ASSERT((type == TYPES::ACTION_SWAPPED) == alternativeActions->actions().contains(defaultAction));
+      // does the default action count as one of the alternative actions?
+      Q_ASSERT(swapAction == alternativeActions->actions().contains(defaultAction));
 
-      _type = type;
+      _swapAction = swapAction;
       _alternativeActions = alternativeActions;
 
-      setMenu(new QMenu(str, this));
+      setMenu(new QMenu(name, this));
       menu()->setToolTipsVisible(true);
 
       setPopupMode(QToolButton::MenuButtonPopup);
 
-      if (_type != TYPES::ACTION_SWAPPED) {
+      if (!swapAction) {
             addAction(defaultAction);
             addSeparator();
             }
@@ -45,11 +46,11 @@ ToolButtonMenu::ToolButtonMenu(QString str,
 
       connect(_alternativeActions, SIGNAL(triggered(QAction*)), this, SLOT(handleAlternativeAction(QAction*)));
 
-      if (_type != TYPES::ACTION_SWAPPED) {
+      if (!swapAction) {
+            // select first alternative action and use its icon for the default action
             QAction* a = _alternativeActions->actions().first();
             a->setChecked(true);
-            if (_type == TYPES::ICON_CHANGED)
-                  changeIcon(a);
+            switchIcon(a);
             }
       }
 
@@ -57,21 +58,30 @@ void ToolButtonMenu::handleAlternativeAction(QAction* a)
       {
       Q_ASSERT(_alternativeActions->actions().contains(a));
 
-      switch (_type) {
-            case TYPES::FIXED:
-                  break;
-            case TYPES::ICON_CHANGED:
-                  changeIcon(a);
-                  break;
-            case TYPES::ACTION_SWAPPED:
-                  setDefaultAction(a);
-                  break;
-            }
+      if (_swapAction)
+            setDefaultAction(a);
+      else
+            switchIcon(a);
 
       QAction* def = defaultAction();
 
       if (!def->isChecked())
             def->trigger();
+      }
+
+void ToolButtonMenu::keyPressEvent(QKeyEvent* event)
+      {
+      switch(event->key()) {
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+            case Qt::Key_Space:
+                  menu()->exec(this->mapToGlobal(QPoint(0, size().height())));
+                  menu()->setFocus();
+                  menu()->setActiveAction(defaultAction());
+                  break;
+            default:
+                  AccessibleToolButton::keyPressEvent(event);
+            }
       }
 
 } // namespace Ms
