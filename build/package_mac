@@ -191,13 +191,22 @@ ln -s /Applications/ ${VOLUME}/Applications
 set_bundle_display_options ${VOLUME}
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
 
+# Most nested locations should go first
+CODE_PATHS=(
+    "${VOLUME}/${LONGER_NAME}.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app"
+    "${VOLUME}/${LONGER_NAME}.app"
+)
+
 #codesign
 echo "Codesign"
-codesign --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
+# `codesign --deep` doesn't seem to search for code in Contents/Resources directory so sign libraries in it manually
+find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec codesign --options runtime --deep -s "Developer ID Application: MuseScore" '{}' ';'
+# Sign code in other (more conventional) locations
+codesign --options runtime --deep -s "Developer ID Application: MuseScore" "${CODE_PATHS[@]}"
 echo "spctl"
 spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
 echo "Codesign verify"
-codesign --verify --deep --strict --verbose=2 "${VOLUME}/${LONGER_NAME}.app"
+codesign --verify --deep --strict --verbose=2 "${CODE_PATHS[@]}"
 
 echo "Unmount"
 # Unmount the disk image
