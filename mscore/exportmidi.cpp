@@ -80,6 +80,33 @@ void ExportMidi::writeHeader()
 #endif
 
       //--------------------------------------------
+      //    write track names
+      //--------------------------------------------
+
+      int staffIdx = 0;
+      for (auto& track1: mf.tracks()) {
+            Staff* staff  = cs->staff(staffIdx);
+
+            QByteArray partName = staff->partName().toUtf8();
+            int len = partName.length() + 1;
+            unsigned char* data = new unsigned char[len];
+
+            memcpy(data, partName.data(), len);
+
+            MidiEvent ev;
+            ev.setType(ME_META);
+            ev.setMetaType(META_TRACK_NAME);
+            ev.setEData(data);
+            ev.setLen(len);
+
+            track1.insert(0, ev);
+
+
+            ++staffIdx;
+            }
+
+
+      //--------------------------------------------
       //    write time signature
       //--------------------------------------------
 
@@ -129,7 +156,7 @@ void ExportMidi::writeHeader()
       //    assume every staff corresponds to a midi track
       //---------------------------------------------------
 
-      int staffIdx = 0;
+      staffIdx = 0;
       for (auto& track1: mf.tracks()) {
             Staff* staff  = cs->staff(staffIdx);
             KeyList* keys = staff->keyList();
