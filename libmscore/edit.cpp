@@ -1254,6 +1254,7 @@ void Score::cmdAddTie(bool addToChord)
                   if (c->isGraceBefore()) {
                         // tie grace note before to main note
                         cr = toChord(c->parent());
+                        addToChord = true;
                         }
                   else {
                         _is.setSegment(note->chord()->segment());

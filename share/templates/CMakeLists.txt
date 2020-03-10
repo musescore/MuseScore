@@ -17,6 +17,10 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+# adding or renaming templates here should also better be done in convert.json, 
+# but definitely need to get reflected in ../instruments/instrumentsxml.h,
+# like by running ../instruments/generateTs.py
+
 install(FILES
       drumset_fr.drm
       orchestral.drm
@@ -38,9 +42,10 @@ install(FILES
       02-Choral/05-SATB_Closed_Score_+_Organ.mscx
       02-Choral/06-SATB_Closed_Score_+_Piano.mscx
       02-Choral/07-Voice_+_Piano.mscx
-      02-Choral/08-Barbershop_Quartet.mscx
-      02-Choral/09-Liturgical_Unmetrical.mscx
-      02-Choral/10-Liturgical_Unmetrical_+_Organ.mscx
+      02-Choral/08-Barbershop_Quartet_\(Men\).mscx
+      02-Choral/09-Barbershop_Quartet_\(Women\).mscx
+      02-Choral/10-Liturgical_Unmetrical.mscx
+      02-Choral/11-Liturgical_Unmetrical_+_Organ.mscx
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/02-Choral
       )
 

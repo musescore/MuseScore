@@ -53,6 +53,7 @@
 #define PREF_APP_TELEMETRY_ALLOWED                          "application/telemetry/allowed"
 #define PREF_EXPORT_AUDIO_NORMALIZE                         "export/audio/normalize"
 #define PREF_EXPORT_AUDIO_SAMPLERATE                        "export/audio/sampleRate"
+#define PREF_EXPORT_AUDIO_PCMRATE                           "export/audio/PCMRate"
 #define PREF_EXPORT_MP3_BITRATE                             "export/mp3/bitRate"
 #define PREF_EXPORT_MUSICXML_EXPORTLAYOUT                   "export/musicXML/exportLayout"
 #define PREF_EXPORT_MUSICXML_EXPORTBREAKS                   "export/musicXML/exportBreaks"

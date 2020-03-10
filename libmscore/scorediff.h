@@ -56,7 +56,7 @@ struct TextDiff {
       int start[2]; // starting line numbers in both texts
       int end[2];   // ending line numbers in both texts
 
-      void merge(const TextDiff& other); // merge other diff into this one
+      bool merge(const TextDiff& other); // merge other diff into this one
       QString toString(DiffType type, bool prefixLines = false) const;
       QString toString(bool prefixLines = false) const { return toString(type, prefixLines); }
       };

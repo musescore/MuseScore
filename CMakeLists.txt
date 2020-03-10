@@ -810,7 +810,6 @@ if (BUILD_CRASH_REPORTER)
       add_subdirectory(crashreporter)
       add_dependencies(mscore mscore-crash-reporter)
       set (CRASHREPORTER_EXECUTABLE "${CRASHREPORTER_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
-      set (MSCORE_EXECUTABLE "${MSCORE_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
 endif (BUILD_CRASH_REPORTER)
 
 ##

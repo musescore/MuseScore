@@ -177,14 +177,18 @@ void ChordRest::writeProperties(XmlWriter& xml) const
 
       for (Lyrics* lyrics : _lyrics)
             lyrics->write(xml);
+
+      const int curTick = xml.curTick().ticks();
+
       if (!isGrace()) {
             Fraction t(globalTicks());
             if (staff())
                   t /= staff()->timeStretch(xml.curTick());
             xml.incCurTick(t);
             }
-      for (auto i : score()->spanner()) {     // TODO: don’t search whole list
-            Spanner* s = i.second;
+
+      for (auto i : score()->spannerMap().findOverlapping(curTick - 1, curTick + 1)) {
+            Spanner* s = i.value;
             if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.canWrite(s))
                   continue;
 

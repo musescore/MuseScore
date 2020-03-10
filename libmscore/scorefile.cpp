@@ -486,7 +486,7 @@ bool MasterScore::saveFile()
 //   saveCompressedFile
 //---------------------------------------------------------
 
-bool Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
+bool Score::saveCompressedFile(QFileInfo& info, bool onlySelection, bool createThumbnail)
       {
       if (readOnly() && info == *masterScore()->fileInfo())
             return false;
@@ -495,7 +495,7 @@ bool Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
             MScore::lastError = tr("Open File\n%1\nfailed: %2").arg(info.filePath(), strerror(errno));
             return false;
             }
-      return saveCompressedFile(&fp, info, onlySelection);
+      return saveCompressedFile(&fp, info, onlySelection, createThumbnail);
       }
 
 //---------------------------------------------------------

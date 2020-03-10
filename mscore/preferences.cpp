@@ -102,6 +102,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED,          new StringPreference("", false)},
             {PREF_EXPORT_AUDIO_NORMALIZE,                          new BoolPreference(true)},
             {PREF_EXPORT_AUDIO_SAMPLERATE,                         new IntPreference(44100, false)},
+            {PREF_EXPORT_AUDIO_PCMRATE,                            new IntPreference(16)},
             {PREF_EXPORT_MP3_BITRATE,                              new IntPreference(128, false)},
             {PREF_EXPORT_MUSICXML_EXPORTBREAKS,                    new EnumPreference(QVariant::fromValue(MusicxmlExportBreaks::ALL), false)},
             {PREF_EXPORT_MUSICXML_EXPORTLAYOUT,                    new BoolPreference(true, false)},

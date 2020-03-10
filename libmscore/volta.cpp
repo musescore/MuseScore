@@ -98,7 +98,7 @@ Volta::Volta(Score* s)
       resetProperty(Pid::BEGIN_HOOK_TYPE);
       resetProperty(Pid::END_HOOK_TYPE);
 
-      setAnchor(Anchor::MEASURE);
+      setAnchor(VOLTA_ANCHOR);
       }
 
 //---------------------------------------------------------
@@ -138,9 +138,27 @@ void Volta::read(XmlReader& e)
                         _endings.append(i);
                         }
                   }
-            else if (!TextLineBase::readProperties(e))
+            else if (!readProperties(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Volta::readProperties(XmlReader& e)
+      {
+      if (!TextLineBase::readProperties(e))
+            return false;
+
+      if (anchor() != VOLTA_ANCHOR) {
+            // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
+            qWarning("Correcting volta anchor type from %d to %d", int(anchor()), int(VOLTA_ANCHOR));
+            setAnchor(VOLTA_ANCHOR);
+            }
+
+      return true;
       }
 
 //---------------------------------------------------------
@@ -246,7 +264,7 @@ QVariant Volta::propertyDefault(Pid propertyId) const
             case Pid::VOLTA_ENDING:
                   return QVariant::fromValue(QList<int>());
             case Pid::ANCHOR:
-                  return int(Anchor::MEASURE);
+                  return int(VOLTA_ANCHOR);
             case Pid::BEGIN_HOOK_TYPE:
                   return int(HookType::HOOK_90);
             case Pid::END_HOOK_TYPE:

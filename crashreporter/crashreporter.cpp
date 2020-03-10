@@ -124,13 +124,6 @@ void CrashReporter::onUploadFinished(QNetworkReply* reply)
 
       if (success) {
             QMessageBox::information(this, tr("Success!"), tr("Crash report uploaded successfully!"));
-            if (_ui->restartCheckBox->isChecked()) {
-                  static_assert(sizeof(MSCORE_EXECUTABLE) > 1,
-                     "MSCORE_EXECUTABLE should be defined to make it possible to restart MuseScore"
-                     );
-                  const QDir appDir(qApp->applicationDirPath());
-                  QProcess::startDetached(appDir.filePath(MSCORE_EXECUTABLE));
-                  }
             close();
             }
       else
