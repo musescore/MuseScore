@@ -156,6 +156,9 @@ class Measure final : public MeasureBase {
       void stretchMeasure(qreal stretch);
       Fraction computeTicks();
       void layout2();
+
+      bool showsMeasureNumber();
+      bool showsMeasureNumberInAutoMode();
       void layoutMeasureNumber();
 
       Chord* findChord(Fraction tick, int track);

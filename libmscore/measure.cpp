@@ -472,30 +472,69 @@ qreal Measure::tick2pos(Fraction tck) const
       }
 
 //---------------------------------------------------------
+//   showsMeasureNumberInAutoMode
+///    Wheter the measure will show measure number(s) when MeasureNumberMode is set to AUTO
+//---------------------------------------------------------
+
+bool Measure::showsMeasureNumberInAutoMode()
+      {
+      // Check wheter any measure number should be shown
+      if (!score()->styleB(Sid::showMeasureNumber))
+            return false;
+
+      // Measure numbers should not be shown on irregular measures.
+      if (irregular())
+            return false;
+
+      // Measure numbers should not show on first measure unless specified with Sid::showMeasureNumberOne
+      if (!no())
+            return score()->styleB(Sid::showMeasureNumberOne);
+
+      if (score()->styleB(Sid::measureNumberSystem))
+            // Show either if
+            //   1) This is the first measure of the system OR
+            //   2) The previous measure in the system is the first, and is irregular.
+            return (isFirstInSystem()
+                    || (prevMeasure() && prevMeasure()->irregular() && prevMeasure()->isFirstInSystem()));
+      else {
+            // In the case of an interval, we should show the measure number either if:
+            //   1) We should show them every measure
+            int interval = score()->styleI(Sid::measureNumberInterval);
+            if (interval == 1)
+                  return true;
+
+            //   2) (measureNumber + 1) % interval == 0 (or 1 if measure number one is numbered.)
+            // If measure number 1 is numbered, and the interval is let's say 5, then we should number #1, 6, 11, 16, etc.
+            // If measure number 1 is not numbered, with the same interval (5), then we should number #5, 10, 15, 20, etc.
+            return (((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0));
+            }
+      }
+
+//---------------------------------------------------------
+//   showsMeasureNumber
+///     Wheter the Measure shows a MeasureNumber
+//---------------------------------------------------------
+
+bool Measure::showsMeasureNumber()
+      {
+      if (_noMode == MeasureNumberMode::SHOW)
+            return true;
+      else if (_noMode == MeasureNumberMode::HIDE)
+            return false;
+      else {
+            return showsMeasureNumberInAutoMode();
+            }
+      }
+
+//---------------------------------------------------------
 //   layoutMeasureNumber
+///    Layouts the Measure Numbers according to the Measure's MeasureNumberMode
 //---------------------------------------------------------
 
 void Measure::layoutMeasureNumber()
       {
-      bool smn = false;
+      bool smn = showsMeasureNumber();
 
-      if (_noMode == MeasureNumberMode::SHOW)
-            smn = true;
-      else if (_noMode == MeasureNumberMode::HIDE)
-            smn = false;
-      else {
-            if (score()->styleB(Sid::showMeasureNumber)
-               && !irregular()
-               && (no() || score()->styleB(Sid::showMeasureNumberOne))) {
-                  if (score()->styleB(Sid::measureNumberSystem))
-                        smn = isFirstInSystem() || (prevMeasure() && prevMeasure()->irregular() && prevMeasure()->isFirstInSystem());
-                  else {
-                        smn = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
-                              ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) ) ||
-                              (score()->styleI(Sid::measureNumberInterval) == 1);
-                        }
-                  }
-            }
       QString s;
       if (smn)
             s = QString("%1").arg(no() + 1);
