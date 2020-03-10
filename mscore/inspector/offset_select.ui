@@ -23,6 +23,9 @@
      <property name="text">
       <string>X:</string>
      </property>
+     <property name="buddy">
+      <cstring>xVal</cstring>
+     </property>
     </widget>
    </item>
    <item row="0" column="1">
@@ -96,6 +99,9 @@
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Y:</string>
+     </property>
+     <property name="buddy">
+      <cstring>yVal</cstring>
      </property>
     </widget>
    </item>
