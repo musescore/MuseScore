@@ -79,6 +79,7 @@
 #include <QPointF>
 #include <QVariant>
 #include <QMap>
+#include <QMultiMap>
 #include <QByteArray>
 #include <QDateTime>
 #include <QtGlobal>

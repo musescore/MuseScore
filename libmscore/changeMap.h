@@ -13,6 +13,8 @@
 #ifndef __CHANGEMAP_H__
 #define __CHANGEMAP_H__
 
+#include <QMultiMap>
+
 #include "fraction.h"
 
 /**
