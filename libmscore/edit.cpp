@@ -1622,7 +1622,7 @@ void Score::deleteItem(Element* el)
       if (!el)
             return;
       // cannot remove generated elements
-      if (el->generated() && !(el->isBracket() || el->isBarLine() || el->isClef()))
+      if (el->generated() && !(el->isBracket() || el->isBarLine() || el->isClef() || el->isMeasureNumber()))
             return;
 //      qDebug("%s", el->name());
 
@@ -1933,6 +1933,29 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
+            case ElementType::MEASURE_NUMBER:
+                  {
+                  Measure* mea = toMeasure(el->parent());
+                  switch (mea->measureNumberMode()) {
+                        // If the user tries to remove an automatically generated measure number,
+                        // we should force the measure not to show any measure number
+                        case MeasureNumberMode::AUTO:
+                              mea->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::HIDE));
+                              break;
+
+                        // If the user tries to remove a measure number that he added manually,
+                        // then we should set the MeasureNumberMode to AUTO only if will not show if set to auto.
+                        // If after setting the MeasureNumberMode to AUTO, the measure number still shows,
+                        // We need to force the measure to hide its measure number.
+                        case MeasureNumberMode::SHOW:
+                              if (mea->showsMeasureNumberInAutoMode())
+                                    mea->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::HIDE));
+                              else
+                                    mea->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::AUTO));
+                              break;
+                        }
+                  }
+                  break;
             case ElementType::REHEARSAL_MARK:
             case ElementType::TEMPO_TEXT:
                   {
