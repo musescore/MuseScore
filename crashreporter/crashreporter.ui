@@ -34,13 +34,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QPushButton" name="sendReportButton">
-     <property name="text">
-      <string>Send report</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0" colspan="3">
     <widget class="QLabel" name="label_2">
      <property name="text">
@@ -54,23 +47,17 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
-    <widget class="QPushButton" name="cancelButton">
+   <item row="3" column="0" colspan="2">
+    <widget class="QPushButton" name="sendReportButton">
      <property name="text">
-      <string>Cancel</string>
+      <string>Send report</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="3">
-    <widget class="QCheckBox" name="restartCheckBox">
-     <property name="toolTip">
-      <string>Restart MuseScore after this report is sent</string>
-     </property>
+   <item row="3" column="2">
+    <widget class="QPushButton" name="cancelButton">
      <property name="text">
-      <string>Restart MuseScore</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
+      <string>Cancel</string>
      </property>
     </widget>
    </item>
@@ -78,7 +65,6 @@
  </widget>
  <tabstops>
   <tabstop>commentText</tabstop>
-  <tabstop>restartCheckBox</tabstop>
   <tabstop>sendReportButton</tabstop>
   <tabstop>cancelButton</tabstop>
  </tabstops>
