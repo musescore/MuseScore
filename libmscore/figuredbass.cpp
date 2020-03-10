@@ -1174,8 +1174,21 @@ void FiguredBass::layoutLines()
                         break;
                   }
             // locate the last ChordRest of this
-            if (nextSegm)
-                  lastCR = nextSegm->prev1()->nextChordRest(track(), true);
+            if (nextSegm) {
+                  int startTrack = trackZeroVoice(track());
+                  int endTrack = startTrack + VOICES;
+                  for (const Segment* seg = nextSegm->prev1(); seg; seg = seg->prev1()) {
+                        for (int t = startTrack; t < endTrack; ++t) {
+                              Element* el = seg->element(t);
+                              if (el && el->isChordRest()) {
+                                    lastCR = toChordRest(el);
+                                    break;
+                                    }
+                              }
+                        if (lastCR)
+                              break;
+                        }
+                  }
             }
       if (!m || !nextSegm) {
             qDebug("FiguredBass layout: no segment found for tick %d", nextTick.ticks());
