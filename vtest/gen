@@ -78,7 +78,13 @@ fi
 
 DPI=130
 
-DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ -n "$VTEST_DIR" ]; then
+# SRC env variable needed for Github action vtests
+      echo "::set-env name=SRC::${SRC}"
+      DIR="$VTEST_DIR"
+else
+      DIR="$(cd "$(dirname "$0")" && pwd)"
+fi
 mkdir -p $DIR/html
 cd $DIR/html
 rm -f *.png
