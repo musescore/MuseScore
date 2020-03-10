@@ -44,7 +44,15 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
             revision->setText(QString::number(rev, 16));
       else
             revision->setText(QString::number(rev, 10));
-      filePath->setText(score->importedFilePath());
+
+      QString currentFileName  = score->masterScore()->fileInfo()->absoluteFilePath();
+      QString previousFileName = score->importedFilePath();
+      if (previousFileName.isEmpty() || previousFileName == currentFileName) // New score or no "Save as" used
+            filePath->setText(previousFileName);
+      else
+            filePath->setText(QString("%1\n%2\n%3")
+                              .arg(QFileInfo::exists(currentFileName) ? currentFileName : "<b>" + tr("Not saved yet,") + "</b>",
+                                   tr("initially read from:"), previousFileName));
       filePath->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
       int idx = 0;
