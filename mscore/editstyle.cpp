@@ -280,7 +280,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::showMeasureNumberOne,     false, showFirstMeasureNumber,       0 },
       { Sid::measureNumberInterval,    false, intervalMeasureNumber,        0 },
       { Sid::measureNumberSystem,      false, showEverySystemMeasureNumber, 0 },
-      { Sid::measureNumberAllStaffs,   false, showAllStaffsMeasureNumber,   0 },
+      { Sid::measureNumberAllStaves,   false, showAllStavesMeasureNumber,   0 },
 
       { Sid::beamDistance,             true,  beamDistance,                 0 },
       { Sid::beamNoSlope,              false, beamNoSlope,                  0 },
