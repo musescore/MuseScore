@@ -622,16 +622,13 @@ Element* ChordRest::drop(EditData& data)
 
             case ElementType::HAIRPIN:
                   {
-                  const Hairpin* hairpin = toHairpin(e);
-                  ChordRest* endCR = this;
-                  if (hairpin->ticks().isNotZero()) {
-                        const Fraction tick2 = tick() + hairpin->ticks() - Fraction::eps();
-                        endCR = score()->findCR(tick2, track());
-                        }
-                  score()->addHairpin(hairpin->hairpinType(), this, endCR);
-                  delete e;
+                  Hairpin* hairpin = toHairpin(e);
+                  hairpin->setTick(tick());
+                  hairpin->setTrack(track());
+                  hairpin->setTrack2(track());
+                  score()->undoAddElement(hairpin);
                   }
-                  return nullptr;
+                  return e;
 
             default:
                   qDebug("cannot drop %s", e->name());

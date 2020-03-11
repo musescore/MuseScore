@@ -32,6 +32,7 @@ CMakeLists.txt.user.*
 *.qmlc
 *.jsc
 vtest/html
+vtest/compare
 thirdparty/mupdf-qt
 vtest/LOG
 vtest/META-INF

@@ -26,10 +26,9 @@ import "utils.js" as Utils
 
 ListView {
     id: paletteTree
-    Accessible.role: Accessible.Tree // makes NVDA say "TreeView"
+    Accessible.name: qsTr("Palettes Tree, contains %n palettes", "", count)
 
-    keyNavigationEnabled: true
-    activeFocusOnTab: true
+    activeFocusOnTab: true // allow focus even when empty
 
     property PaletteWorkspace paletteWorkspace
     property var paletteModel: paletteWorkspace ? paletteWorkspace.mainPaletteModel : null
@@ -54,6 +53,7 @@ ListView {
     }
 
     property bool enableAnimations: true
+    property int expandDuration: enableAnimations ? 150 : 0 // duration of expand / collapse animations
 
     function insertCustomPalette(idx) {
         if (paletteTree.paletteController.insertNewItem(paletteTreeDelegateModel.rootIndex, idx))
@@ -63,6 +63,18 @@ ListView {
     ItemSelectionModel {
         id: paletteSelectionModel
         model: paletteTree.paletteModel
+
+        function selectRange(endIndex) {
+            const firstRow = currentIndex.row;
+            const lastRow = endIndex.row;
+            const parentIndex = endIndex.parent;
+            const step = firstRow < lastRow ? 1 : -1;
+            const endRow = lastRow + step;
+            for (var row = firstRow; row !== endRow; row += step) {
+                const idx = paletteTree.paletteModel.index(row, 0, parentIndex);
+                select(idx, ItemSelectionModel.Select);
+            }
+        }
     }
 
     function applyCurrentElement() {
@@ -102,40 +114,38 @@ ListView {
         Utils.removeSelectedItems(paletteController, paletteSelectionModel, parentIndex);
     }
 
-    Keys.onDeletePressed: {
-        expandedPopupIndex = null;
-        removeSelectedItems();
-    }
     Keys.onPressed: {
-        if (event.key == Qt.Key_Backspace) {
-            expandedPopupIndex = null;
-            removeSelectedItems();
-            event.accepted = true;
-        } else if (event.key == Qt.Key_Home) {
-            positionViewAtBeginning();
-            event.accepted = true;
-        } else if (event.key == Qt.Key_End) {
-            positionViewAtEnd();
-            event.accepted = true;
-        } else if (event.key == Qt.Key_PageUp) {
-            var idx = indexAt(contentX, contentY);
-            if (idx < 0)
-                idx = 0;
-            if (idx > 0 && itemAt(contentX, contentY).height > height)
-                contentY -= height;
-            else
-                positionViewAtIndex(idx, ListView.End);
-            event.accepted = true;
-        } else if (event.key == Qt.Key_PageDown) {
-            var idx = indexAt(contentX, contentY + height);
-            if (idx < 0)
-                idx = count - 1;
-            if (idx < count - 1 && itemAt(contentX, contentY + height).height > height)
-                contentY += height;
-            else
-                positionViewAtIndex(idx, ListView.Beginning);
-            event.accepted = true;
+        switch (event.key) {
+            case Qt.Key_Down:
+                focusNextItem();
+                break;
+            case Qt.Key_Up:
+                focusPreviousItem();
+                break;
+            case Qt.Key_Home:
+                focusFirstItem();
+                break;
+            case Qt.Key_End:
+                focusLastItem();
+                break;
+            case Qt.Key_PageUp:
+                focusPreviousPageItem();
+                break;
+            case Qt.Key_PageDown:
+                focusNextPageItem();
+                break;
+            case Qt.Key_Backspace:
+            case Qt.Key_Delete:
+                expandedPopupIndex = null;
+                removeSelectedItems();
+                break;
+            case Qt.Key_Asterisk:
+                expandCollapseAll(null);
+                break;
+            default:
+                return; // don't accept event
         }
+        event.accepted = true;
     }
 
     displaced: Transition {
@@ -163,20 +173,117 @@ ListView {
         return { display: "", gridSize: Qt.size(1, 1), drawGrid: false, custom: false, editable: false, expanded: false };
     }
 
-    function focusFirstItem() {
-        currentIndex = 0;
-        if (filter.length) // on searching jump directly to the found cells
+    function focusNextItem(includeChildren) {
+        if (includeChildren === undefined) // https://stackoverflow.com/a/44128406
+            includeChildren = true;
+
+        if (includeChildren && currentItem.expanded) {
             currentItem.focusFirstItem();
+            return;
+        }
+
+        if (currentIndex == count - 1)
+            return; // no next item
+
+        incrementCurrentIndex();
+        currentItem.forceActiveFocus();
+        positionViewAtIndex(currentIndex, ListView.Contain);
+    }
+
+    function focusPreviousItem(includeChildren) {
+        if (includeChildren === undefined) // https://stackoverflow.com/a/44128406
+            includeChildren = true;
+
+        if (currentIndex == 0)
+            return; // no previous item
+
+        decrementCurrentIndex();
+
+        if (includeChildren && currentItem.expanded)
+            currentItem.focusLastItem();
         else
             currentItem.forceActiveFocus();
+
+        positionViewAtIndex(currentIndex, ListView.Contain);
+    }
+
+    function focusNextPageItem() {
+        if (currentIndex < count - 1) {
+            currentIndex++; // move by at least one item
+            // try to keep going, but new item must stay entirely in view
+            var distance = currentItem.height;
+            while (currentIndex < count - 1) {
+                currentIndex++; // try another
+                distance += currentItem.height;
+                if (distance > height) {
+                    currentIndex--; // too far, go back one
+                    break;
+                }
+            }
+        }
+        currentItem.forceActiveFocus();
+        positionViewAtIndex(currentIndex, ListView.Contain);
+    }
+
+    function focusPreviousPageItem() {
+        if (currentIndex > 0) {
+            currentIndex--; // move by at least one item
+            // try to keep going, but new item must stay entirely in view
+            var distance = currentItem.height;
+            while (currentIndex > 0) {
+                currentIndex--; // try another
+                distance += currentItem.height;
+                if (distance > height) {
+                    currentIndex++; // too far, go back one
+                    break;
+                }
+            }
+        }
+        currentItem.forceActiveFocus();
+        positionViewAtIndex(currentIndex, ListView.Contain);
+    }
+
+    function focusFirstItem() {
+        currentIndex = 0;
+        currentItem.forceActiveFocus();
+        positionViewAtIndex(currentIndex, ListView.Contain);
     }
 
     function focusLastItem() {
         currentIndex = count - 1;
-        if (filter.length) // on searching jump directly to the found cells
+        if (currentItem.expanded)
             currentItem.focusLastItem();
         else
             currentItem.forceActiveFocus();
+        positionViewAtIndex(currentIndex, ListView.Contain);
+    }
+
+    function focusNextMatchingItem(str) {
+        const nextIndex = (currentIndex < count - 1) ? currentIndex + 1 : 0;
+        const modelIndex = paletteModel.index(nextIndex, 0);
+        const matchedIndexList = paletteModel.match(modelIndex, Qt.DisplayRole, str);
+        if (matchedIndexList.length) {
+            currentIndex = matchedIndexList[0].row;
+            currentItem.forceActiveFocus();
+            positionViewAtIndex(currentIndex, ListView.Contain);
+        }
+    }
+
+    function expandCollapseAll(expand) {
+        console.assert([true, false, null].indexOf(expand) !== -1, "Invalid value for expand: " + expand);
+        // expand = true  - expand all
+        //          false - collapse all
+        //          null  - decide based on current state
+        if (expand === null) {
+            // if any are collapsed then expand all, otherwise collapse all
+            const startIndex = paletteModel.index(0, 0);
+            const collapsedIndexList = paletteModel.match(startIndex, PaletteTreeModel.PaletteExpandedRole, false);
+            expand = !!collapsedIndexList.length;
+        }
+        for (var idx = 0; idx < count; idx++) {
+            const paletteIndex = paletteModel.index(idx, 0);
+            paletteModel.setData(paletteIndex, expand, PaletteTreeModel.PaletteExpandedRole);
+        }
     }
 
     function getTintedColor(baseColor, tintColor, opacity) {
@@ -208,18 +315,25 @@ ListView {
             }
 
             function focusFirstItem() {
-                mainPalette.currentIndex = 0;
-                mainPalette.currentItem.forceActiveFocus();
+                mainPalette.focusFirstItem();
             }
 
             function focusLastItem() {
-                mainPalette.currentIndex = mainPalette.count - 1;
-                mainPalette.currentItem.forceActiveFocus();
+                mainPalette.focusLastItem();
             }
 
             property bool expanded: filter.length || model.expanded
             function toggleExpand() {
                 model.expanded = !expanded
+            }
+            Timer {
+                id: expandTimer
+                interval: expandDuration + 50 // allow extra grace period
+                onTriggered: paletteTree.positionViewAtIndex(index, ListView.Contain)
+                }
+            onExpandedChanged: {
+                if (ListView.isCurrentItem && !filter.length)
+                    expandTimer.restart();
             }
 
             property bool selected: paletteSelectionModel.hasSelection ? paletteSelectionModel.isSelected(modelIndex) : false
@@ -262,28 +376,42 @@ ListView {
             Keys.onPressed: {
                 switch (event.key) {
                     case Qt.Key_Right:
-                        if (expanded)
-                            mainPalette.focus = true;
-                        else
+                    case Qt.Key_Plus:
+                        if (!expanded)
                             toggleExpand();
+                        else if (event.key === Qt.Key_Right)
+                            focusFirstItem();
                         break;
                     case Qt.Key_Left:
-                        if (expanded && !mainPalette.focus)
+                    case Qt.Key_Minus:
+                        if (expanded)
                             toggleExpand();
-                        focus = true;
                         break;
                     case Qt.Key_Space:
                     case Qt.Key_Enter:
                     case Qt.Key_Return:
                         toggleExpand();
                         break;
+                    case Qt.Key_F10:
+                        if (!(event.modifiers & Qt.ShiftModifier))
+                            return;
+                        // fallthrough
+                    case Qt.Key_Menu:
+                        paletteHeader.showPaletteMenu();
+                        break;
                     default:
-                        return; // don't accept event
+                        if (event.modifiers === Qt.NoModifier && event.text.match(/\w/) !== null)
+                            paletteTree.focusNextMatchingItem(event.text);
+                        else
+                            return; // don't accept event
                 }
                 event.accepted = true;
             }
 
-            text: model.display
+            text: filter.length ? qsTr("%1, contains %n matching elements", "palette", mainPalette.count).arg(model.accessibleText)
+                                : model.expanded ? qsTr("%1 expanded", "tree item not collapsed").arg(model.accessibleText)
+                                                 : model.accessibleText
+            Accessible.role: Accessible.TreeItem
 
             width: parent.width
 
@@ -358,14 +486,14 @@ ListView {
                     Transition {
                         from: "collapsed"; to: "expanded"
                         enabled: paletteTree.enableAnimations
-                        NumberAnimation { target: mainPaletteContainer; property: "height"; from: 0; to: mainPaletteContainer.implicitHeight; easing.type: Easing.OutCubic; duration: 150 }
+                        NumberAnimation { target: mainPaletteContainer; property: "height"; from: 0; to: mainPaletteContainer.implicitHeight; easing.type: Easing.OutCubic; duration: paletteTree.expandDuration }
                     },
                     Transition {
                         from: "expanded"; to: "collapsed"
                         enabled: paletteTree.enableAnimations
                         SequentialAnimation {
                             PropertyAction { target: mainPaletteContainer; property: "visible"; value: true } // temporarily set palette visible to animate it being hidden
-                            NumberAnimation { target: mainPaletteContainer; property: "height"; from: mainPaletteContainer.implicitHeight; to: 0; easing.type: Easing.OutCubic; duration: 150 }
+                            NumberAnimation { target: mainPaletteContainer; property: "height"; from: mainPaletteContainer.implicitHeight; to: 0; easing.type: Easing.OutCubic; duration: paletteTree.expandDuration }
                             PropertyAction { target: mainPaletteContainer; property: "visible"; value: false } // make palette invisible again
                             PropertyAction { target: mainPaletteContainer; property: "height"; value: mainPaletteContainer.implicitHeight } // restore the height binding
                         }
@@ -380,7 +508,7 @@ ListView {
                     opacity: enabled ? 1 : 0.3
                     expanded: control.expanded
                     hovered: control.hovered
-                    text: control.text
+                    text: model.display
                     hidePaletteElementVisible: {
                         return !control.selected && control.expanded
                             && paletteSelectionModel.hasSelection && paletteSelectionModel.columnIntersectsSelection(0, control.modelIndex)
@@ -475,7 +603,7 @@ ListView {
                     cellSize: control.cellSize
                     drawGrid: control.drawGrid
 
-                    paletteName: control.text
+                    paletteName: model.display
                     paletteIsCustom: model.custom
                     paletteEditingEnabled: model.editable
 

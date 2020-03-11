@@ -548,10 +548,10 @@ void MuseScore::populateNoteInputMenu()
                         connect(noteEntryMethods, SIGNAL(triggered(QAction*)), this, SLOT(cmd(QAction*)));
 
                         w = new ToolButtonMenu(tr("Note Entry Methods"),
-                           ToolButtonMenu::TYPES::ICON_CHANGED,
                            getAction("note-input"),
                            noteEntryMethods,
-                           this);
+                           this,
+                           false);
                         w->setObjectName("note-entry-methods");
                         }
                   else if (strncmp(s, "voice-", 6) == 0) {
@@ -2535,18 +2535,32 @@ void MuseScore::reloadInstrumentTemplates()
 void MuseScore::askResetOldScorePositions(Score* score)
       {
       if (score->mscVersion() < 300) {
-            QMessageBox msgBox;
-            QString question = tr("Reset the positions of all elements?");
-            msgBox.setWindowTitle(question);
-            msgBox.setText(tr("To best take advantage of automatic placement in MuseScore 3 when importing '%1' from MuseScore %2, it is recommended to reset the positions of all elements.")
-                           .arg(score->masterScore()->fileInfo()->completeBaseName(), score->mscoreVersion()) + "\n\n" + question);
-            msgBox.setIcon(QMessageBox::Question);
-            msgBox.setStandardButtons(
-               QMessageBox::Yes | QMessageBox::No
-               );
-
-            if (msgBox.exec() == QMessageBox::Yes)
+            QString pref = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
+            if (pref == "No")
+                  return;
+            else if (pref == "Yes")
                   score->cmdResetAllPositions();
+            else { // either set to "Ask" or not at all
+                  QMessageBox msgBox;
+                  QCheckBox ask;
+                  ask.setText(tr("Don't ask me again."));
+                  ask.setToolTip(tr("You can change this behaviour any time in 'Preferences… > Import > Reset Element Positions'"));
+                  msgBox.setCheckBox(&ask);
+                  QString question = tr("Reset the positions of all elements?");
+                  msgBox.setWindowTitle(question);
+                  msgBox.setText(tr("To best take advantage of automatic placement in MuseScore 3 when importing '%1' from MuseScore %2, it is recommended to reset the positions of all elements.")
+                                 .arg(score->masterScore()->fileInfo()->completeBaseName(), score->mscoreVersion()) + "\n\n" + question);
+                  msgBox.setIcon(QMessageBox::Question);
+                  msgBox.setStandardButtons(
+                                    QMessageBox::Yes | QMessageBox::No
+                                    );
+
+                  int res = msgBox.exec();
+                  if (res == QMessageBox::Yes)
+                        score->cmdResetAllPositions();
+                  if (ask.checkState() == Qt::Checked)
+                        preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, res == QMessageBox::No? "Yes" : "No");
+                  }
             }
       }
 
