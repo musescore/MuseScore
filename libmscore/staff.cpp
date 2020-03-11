@@ -863,9 +863,8 @@ SwingParameters Staff::swing(const Fraction& tick) const
       int swingUnit = 0;
       QString unit = score()->styleSt(Sid::swingUnit);
       int swingRatio = score()->styleI(Sid::swingRatio);
-      if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
+      if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name())
             swingUnit = MScore::division / 2;
-            }
       else if (unit == TDuration(TDuration::DurationType::V_16TH).name())
             swingUnit = MScore::division / 4;
       else if (unit == TDuration(TDuration::DurationType::V_ZERO).name())
