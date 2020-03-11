@@ -128,7 +128,7 @@ static const StyleVal2 style114[] = {
       { Sid::showMeasureNumberOne,         QVariant(false) },
       { Sid::measureNumberInterval,        QVariant(5) },
       { Sid::measureNumberSystem,          QVariant(true) },
-      { Sid::measureNumberAllStaffs,       QVariant(false) },
+      { Sid::measureNumberAllStaves,       QVariant(false) },
       { Sid::smallNoteMag,                 QVariant(qreal(0.7)) },
       { Sid::graceNoteMag,                 QVariant(qreal(0.7)) },
       { Sid::smallStaffMag,                QVariant(qreal(0.7)) },

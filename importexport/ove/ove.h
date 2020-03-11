@@ -1061,7 +1061,7 @@ public:
       int getRightXOffset() const;
 
 private:
-      QList<Staff*> staffs_;
+      QList<Staff*> staves_;
       unsigned int beginBar_;
       unsigned int barCount_;
       int yOffset_;

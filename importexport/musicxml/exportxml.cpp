@@ -1039,7 +1039,7 @@ static bool isTwoNoteTremolo(Chord* chord)
 //  calcDivisions
 //---------------------------------------------------------
 
-// Loop over all voices in all staffs and determine a suitable value for divisions.
+// Loop over all voices in all staves and determine a suitable value for divisions.
 
 // Length of time in MusicXML is expressed in "units", which should allow expressing all time values
 // as an integral number of units. Divisions contains the number of units in a quarter note.

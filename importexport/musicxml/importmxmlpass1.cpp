@@ -320,12 +320,12 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
       msVoice = 0; // TODO
 
 
-      // Musicxml voices are counted for all staffs of an
+      // Musicxml voices are counted for all staves of an
       // instrument. They are not limited. In mscore voices are associated
       // with a staff. Every staff can have at most VOICES voices.
 
       // The following lines map musicXml voices to mscore voices.
-      // If a voice crosses two staffs, this is expressed with the
+      // If a voice crosses two staves, this is expressed with the
       // "move" parameter in mscore.
 
       // Musicxml voices are unique within a part, but not across parts.
