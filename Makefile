@@ -63,7 +63,7 @@ release:
   	  -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}" \
-  	  -DBUILD_PULSEMIDI="${DBUILD_PULSEMIDI}"  \
+  	  -DBUILD_PORTMIDI="${BUILD_PORTMIDI}"  \
   	  -DBUILD_JACK="${BUILD_JACK}"             \
   	  -BUILD_ALSA="${BUILD_ALSA}"              \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"   \
@@ -93,7 +93,7 @@ debug:
   	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"              \
   	  -DBUILD_LAME="${BUILD_LAME}"                        \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}"            \
-  	  -DBUILD_PULSEMIDI="${DBUILD_PULSEMIDI}"             \
+  	  -DBUILD_PORTMIDI="${BUILD_PORTMIDI}"             \
   	  -DBUILD_JACK="${BUILD_JACK}"                        \
   	  -BUILD_ALSA="${BUILD_ALSA}"                         \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"              \
