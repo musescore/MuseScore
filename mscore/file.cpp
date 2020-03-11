@@ -1389,7 +1389,6 @@ QString MuseScore::getPaletteFilename(bool open, const QString& name)
                   restoreDialogState("loadPaletteDialog", loadPaletteDialog);
                   loadPaletteDialog->setAcceptMode(QFileDialog::AcceptOpen);
                   }
-            urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/styles"));
             dialog = loadPaletteDialog;
             }
       else {
@@ -1551,7 +1550,6 @@ QString MuseScore::getDrumsetFilename(bool open)
                   restoreDialogState("loadDrumsetDialog", loadDrumsetDialog);
                   loadDrumsetDialog->setAcceptMode(QFileDialog::AcceptOpen);
                   }
-            urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/styles"));
             dialog = loadDrumsetDialog;
             }
       else {
