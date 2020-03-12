@@ -53,6 +53,7 @@ jobs:
         echo "::set-env name=PATH::${PATH}"
         echo "::set-env name=QT_PLUGIN_PATH::${QT_PLUGIN_PATH}"
         echo "::set-env name=QML2_IMPORT_PATH::${QML2_IMPORT_PATH}"
+        git checkout -- build/travis/job1_Tests/environment.sh
     - name: Build
       if: contains( env.found, '1')
       run: |
