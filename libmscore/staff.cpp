@@ -665,7 +665,7 @@ void Staff::write(XmlWriter& xml) const
             int b = i->bracketSpan();
             int c = i->column();
             if (a != BracketType::NO_BRACKET || b > 0)
-                  xml.tagE(QString("bracket type=\"%1\" span=\"%2\" col=\"%3\"").arg((int)(a)).arg(b).arg(c));
+                  xml.tagE(QString("bracket type=\"%1\" span=\"%2\" col=\"%3\"").arg(static_cast<int>(a)).arg(b).arg(c));
             }
 
       writeProperty(xml, Pid::STAFF_BARLINE_SPAN);

@@ -207,9 +207,9 @@ double findMatchRank(const std::set<ReducedFraction> &beatSet,
                   beatCount = 0;
                   int relationCount = 0;
                   int relationMatches = 0;
-                  for (int i = 0; i != (int)beatsOfBar.size() - 1; ++i) {
+                  for (size_t i = 0; i != beatsOfBar.size() - 1; ++i) {
                         const auto s1 = saliences.find(beatsOfBar[i]);
-                        for (int j = i + 1; j != (int)beatsOfBar.size(); ++j) {
+                        for (size_t j = i + 1; j != beatsOfBar.size(); ++j) {
                               ++relationCount;    // before s1 search check
                               if (s1 == saliences.end())
                                     continue;

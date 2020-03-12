@@ -1317,7 +1317,7 @@ void Seq::stopNotes(int channel, bool realTime)
       };
       // Stop notes in all channels
       if (channel == -1) {
-            for(int ch = 0; ch < int(cs->midiMapping().size()); ch++) {
+            for(unsigned ch = 0; ch < cs->midiMapping().size(); ch++) {
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_ALL_NOTES_OFF, 0));
                   if (cs->midiChannel(ch) != 9)

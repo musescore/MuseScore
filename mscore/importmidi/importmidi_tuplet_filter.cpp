@@ -141,10 +141,10 @@ std::set<int> findLongestUncommonGroup(
             };
 
       std::vector<TInfo> info;
-      for (int i = 0; i != (int)tuplets.size(); ++i) {
+      for (size_t i = 0; i != tuplets.size(); ++i) {
             const auto &tuplet = tuplets[i];
             const auto interval = tupletInterval(tuplet, basicQuant);
-            info.push_back({interval.first, interval.second, i});
+            info.push_back({interval.first, interval.second, static_cast<int>(i)});
             }
 
       std::sort(info.begin(), info.end());
@@ -155,8 +155,8 @@ std::set<int> findLongestUncommonGroup(
       // non-overlapping tuplets can have common chords
 
       std::set<int> indexes;
-      int lastSelected = 0;
-      for (int i = 0; i != (int)info.size(); ++i) {
+      size_t lastSelected = 0;
+      for (size_t i = 0; i != info.size(); ++i) {
             if (i > 0 && info[i].onTime < info[lastSelected].offTime)
                   continue;
             if (haveCommonChords(info[lastSelected].index, info[i].index, tuplets))
@@ -511,7 +511,7 @@ class ValidTuplets
       std::vector<std::pair<int, int>> save()
             {
             std::vector<std::pair<int, int>> indexes(indexes_.size() - first_);
-            for (int i = first_; i != (int)indexes_.size(); ++i)
+            for (size_t i = first_; i != indexes_.size(); ++i)
                   indexes[i - first_] = indexes_[i];
             return indexes;
             }
@@ -519,7 +519,7 @@ class ValidTuplets
       void restore(const std::vector<std::pair<int, int>> &indexes)
             {
             first_ = int(indexes_.size() - indexes.size());
-            for (int i = 0; i != int(indexes.size()); ++i)
+            for (size_t i = 0; i < indexes.size(); ++i)
                   indexes_[i + first_] = indexes[i];
             }
 

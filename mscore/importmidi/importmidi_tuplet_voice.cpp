@@ -49,10 +49,10 @@ chordInterval(const std::pair<const ReducedFraction, MidiChord> &chord,
 int findTupletWithChord(const MidiChord &midiChord,
                         const std::vector<TupletInfo> &tuplets)
       {
-      for (int i = 0; i != (int)tuplets.size(); ++i) {
+      for (size_t i = 0; i != tuplets.size(); ++i) {
             for (const auto &chord: tuplets[i].chords) {
                   if (&(chord.second->second) == &midiChord)
-                        return i;
+                        return static_cast<int>(i);
                   }
             }
       return -1;
@@ -389,7 +389,7 @@ void removeUnusedTuplets(
             return;
 
       std::vector<TupletInfo> newTuplets;
-      for (int i = 0; i != (int)tuplets.size(); ++i) {
+      for (size_t i = 0; i != tuplets.size(); ++i) {
             if (pendingTuplets.find(tuplets[i].id) == pendingTuplets.end()) {
                   newTuplets.push_back(tuplets[i]);
                   }
@@ -410,7 +410,7 @@ void removeUnusedTuplets(
 std::set<int> findPendingTuplets(const std::vector<TupletInfo> &tuplets)
       {
       std::set<int> pendingTuplets;       // tuplet indexes
-      for (int i = 0; i != (int)tuplets.size(); ++i) {
+      for (size_t i = 0; i != tuplets.size(); ++i) {
             pendingTuplets.insert(tuplets[i].id);
             }
       return pendingTuplets;
@@ -683,12 +683,12 @@ void setBackTiedVoices(
             }
       }
 
-std::map<std::pair<const ReducedFraction, MidiChord> *, int>
+std::map<std::pair<const ReducedFraction, MidiChord> *, size_t>
 findMappedTupletChords(const std::vector<TupletInfo> &tuplets)
       {
                   // <chord address, tupletIndex>
-      std::map<std::pair<const ReducedFraction, MidiChord> *, int> tupletChords;
-      for (int i = 0; i != (int)tuplets.size(); ++i) {
+      std::map<std::pair<const ReducedFraction, MidiChord> *, size_t> tupletChords;
+      for (size_t i = 0; i != tuplets.size(); ++i) {
             for (const auto &tupletChord: tuplets[i].chords) {
                   auto tupletIt = tupletChord.second;
                   tupletChords.insert({&*tupletIt, i});
@@ -776,7 +776,7 @@ findBackTiedTuplets(
       std::set<std::pair<const ReducedFraction, MidiChord> *> usedChords;
       const auto tupletChords = findMappedTupletChords(tuplets);
 
-      for (int i = 0; i != (int)tuplets.size(); ++i) {
+      for (size_t i = 0; i != tuplets.size(); ++i) {
 
             Q_ASSERT_X(!tuplets[i].chords.empty(),
                        "MidiTuplets::findBackTiedTuplets", "Tuplet chords are empty");

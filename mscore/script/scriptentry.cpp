@@ -345,7 +345,7 @@ bool InspectorScriptEntry::execute(ScriptContext& ctx) const
             return false;
 
       const auto iiList = ib->iList;
-      for (int idx = 0; idx < int(iiList.size()); ++idx) {
+      for (unsigned idx = 0; idx < iiList.size(); ++idx) {
             const InspectorItem& ii = iiList[idx];
             if (ii.t == _pid && ii.parent == _parentLevel) {
                   const Score* score = ctx.mscore()->currentScore();

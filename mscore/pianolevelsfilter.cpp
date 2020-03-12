@@ -76,7 +76,7 @@ int PianoLevelFilterVeloOffset::value(Staff* staff, Note* note, NoteEvent* /*evt
       switch (Note::ValueType(note->veloType())) {
             case Note::ValueType::USER_VAL: {
                   int dynamicsVel = staff->velocities().val(note->tick());
-                  return (int)((note->veloOffset() / (qreal)dynamicsVel - 1) * 100);
+                  return static_cast<int>((note->veloOffset() / (qreal)dynamicsVel - 1) * 100);
                   }
             default:
             case Note::ValueType::OFFSET_VAL:
@@ -97,7 +97,7 @@ void PianoLevelFilterVeloOffset::setValue(Staff* staff, Note* note, NoteEvent* /
       switch (Note::ValueType(note->veloType())) {
             case Note::ValueType::USER_VAL: {
                   int dynamicsVel = staff->velocities().val(note->tick());
-                  int newVelocity = (int)(dynamicsVel * (1 + value / 100.0));
+                  int newVelocity = static_cast<int>(dynamicsVel * (1 + value / 100.0));
 
                   score->undo(new ChangeVelocity(note, Note::ValueType::USER_VAL, newVelocity));
 
@@ -127,7 +127,7 @@ int PianoLevelFilterVeloUser::value(Staff* staff, Note* note, NoteEvent* /*evt*/
             default:
             case Note::ValueType::OFFSET_VAL: {
                   int dynamicsVel = staff->velocities().val(note->tick());
-                  return (int)(dynamicsVel * (1 + note->veloOffset() / 100.0));
+                  return static_cast<int>(dynamicsVel * (1 + note->veloOffset() / 100.0));
                   }
             }
       }
@@ -149,7 +149,7 @@ void PianoLevelFilterVeloUser::setValue(Staff* staff, Note* note, NoteEvent* /*e
             default:
             case Note::ValueType::OFFSET_VAL: {
                   int dynamicsVel = staff->velocities().val(note->tick());
-                  int newVelocity = (int)((value / (qreal)dynamicsVel - 1) * 100);
+                  int newVelocity = static_cast<int>((value / (qreal)dynamicsVel - 1) * 100);
 
                   score->undo(new ChangeVelocity(note, Note::ValueType::OFFSET_VAL, newVelocity));
                   break;

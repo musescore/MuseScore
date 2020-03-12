@@ -193,9 +193,9 @@ QVariant ScoreVersionListModel::data(const QModelIndex& index, int role) const
 
 int ScoreVersionListModel::getPosition(ScoreVersionIndex index) const
       {
-      for (int i = 0; i < int(_versions.size()); ++i) {
+      for (size_t i = 0; i < _versions.size(); ++i) {
             if (_versions[i].index == index)
-                  return i;
+                  return static_cast<int>(i);
             }
       return -1;
       }

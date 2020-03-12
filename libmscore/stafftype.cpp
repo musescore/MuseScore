@@ -903,7 +903,7 @@ void TabDurationSymbol::layout()
                   _beamLength = 0.0;
                   }
             else if (chord->beamMode() == Beam::Mode::MID || chord->beamMode() == Beam::Mode::END) {
-                  _beamLevel  = (int)(chord->durationType().type()) - (int)(font.zeroBeamLevel);
+                  _beamLevel  = static_cast<int>(chord->durationType().type()) - static_cast<int>(font.zeroBeamLevel);
                   _beamGrid   = (_beamLevel < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
                   // _beamLength and bbox x and width will be set in layout2(),
                   // once horiz. positions of chords are known
@@ -1294,7 +1294,7 @@ const StaffType* StaffType::preset(StaffTypes idx)
 
 const StaffType* StaffType::presetFromXmlName(QString& xmlName)
       {
-      for (int i = 0; i < int(_presets.size()); ++i) {
+      for (size_t i = 0; i < _presets.size(); ++i) {
             if (_presets[i].xmlName() == xmlName)
                   return &_presets[i];
             }
@@ -1303,7 +1303,7 @@ const StaffType* StaffType::presetFromXmlName(QString& xmlName)
 #if 0
 const StaffType* StaffType::presetFromName(QString& name)
       {
-      for (int i = 0; i < (int)_presets.size(); ++i) {
+      for (size_t i = 0; i < _presets.size(); ++i) {
             if (_presets[i].name() == name)
                   return &_presets[i];
             }

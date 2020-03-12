@@ -511,7 +511,7 @@ void Cursor::nextInTrack()
 int Cursor::qmlKeySignature()
       {
       Staff* staff = _score->staves()[staffIdx()];
-      return (int) staff->key(Fraction::fromTicks(tick()));
+      return static_cast<int>(staff->key(Fraction::fromTicks(tick())));
       }
 }
 }
