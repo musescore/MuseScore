@@ -4371,7 +4371,6 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
             _systems.clear();
             qDeleteAll(pages());
             pages().clear();
-            LayoutContext lc(this);
             lc.getNextPage();
             return;
             }
