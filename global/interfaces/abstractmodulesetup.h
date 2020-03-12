@@ -33,16 +33,19 @@ class AbstractModuleSetup {
             registerExports();
             registerResources();
             registerQmlTypes();
+            onStartInit();
             }
 
    protected:
-      virtual QString moduleName() = 0;
+      virtual QString moduleName() const = 0;
 
       virtual void registerExports() {}
 
       virtual void registerResources() {}
 
       virtual void registerQmlTypes() {}
+
+      virtual void onStartInit() {}
       };
 
 #endif // IMODULESETUP_H

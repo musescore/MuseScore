@@ -245,26 +245,39 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
  Import MusicXML file \a name into the Score.
  */
 
-Score::FileError importMusicXml(MasterScore* score, const QString& name)
+Score::FileError importMusicXml(MasterScore* score, QIODevice* dev, const QString& name)
       {
       ScoreLoad sl;     // suppress warnings for undo push/pop
 
-      //qDebug("importMusicXml(%p, %s)", score, qPrintable(name));
-
-      // open the MusicXML file
-      QFile xmlFile(name);
-      if (!xmlFile.exists())
-            return Score::FileError::FILE_NOT_FOUND;
-      if (!xmlFile.open(QIODevice::ReadOnly)) {
+      if (!dev->open(QIODevice::ReadOnly)) {
             qDebug("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
             MScore::lastError = QObject::tr("Could not open MusicXML file\n%1").arg(name);
             return Score::FileError::FILE_OPEN_ERROR;
             }
 
       // and import it
-      return doValidateAndImport(score, name, &xmlFile);
+      return doValidateAndImport(score, name, dev);
       }
 
+Score::FileError importMusicXml(MasterScore* score, const QString& name) {
+
+    ScoreLoad sl;     // suppress warnings for undo push/pop
+
+    //qDebug("importMusicXml(%p, %s)", score, qPrintable(name));
+
+    // open the MusicXML file
+    QFile xmlFile(name);
+    if (!xmlFile.exists())
+          return Score::FileError::FILE_NOT_FOUND;
+    if (!xmlFile.open(QIODevice::ReadOnly)) {
+          qDebug("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
+          MScore::lastError = QObject::tr("Could not open MusicXML file\n%1").arg(name);
+          return Score::FileError::FILE_OPEN_ERROR;
+          }
+
+    // and import it
+    return doValidateAndImport(score, name, &xmlFile);
+}
 
 //---------------------------------------------------------
 //   importCompressedMusicXml

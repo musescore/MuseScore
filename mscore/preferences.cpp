@@ -211,7 +211,12 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON,      new ColorPreference(QColor("#0065BF"))},
             {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF,     new ColorPreference(QColor("#3b3f45"))},
             {PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_LIGHT,            new ColorPreference(QColor("#0066BF"))},
-            {PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK,             new ColorPreference(QColor("#36B2FF"))}
+            {PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK,             new ColorPreference(QColor("#36B2FF"))},
+#ifdef AVSOMR
+            {PREF_IMPORT_AVSOMR_USELOCAL,                          new BoolPreference(false, false)},
+            {PREF_UI_AVSOMR_RECOGNITION_COLOR,                     new ColorPreference(QColor("#1DCCA0"))},
+            {PREF_UI_AVSOMR_NOT_RECOGNITION_COLOR,                 new ColorPreference(QColor("#C31989"))},
+#endif
       });
 
       _initialized = true;
@@ -412,6 +417,21 @@ void Preferences::setPreference(const QString key, QVariant value)
       {
       checkIfKeyExists(key);
       set(key, value);
+      for (const OnSetListener& l : _onSetListeners)
+          l(key, value);
+      }
+
+Preferences::ListenerID Preferences::addOnSetListener(const OnSetListener& l)
+      {
+      static ListenerID lastId{0};
+      ++lastId;
+      _onSetListeners[lastId] = l;
+      return lastId;
+      }
+
+void Preferences::removeOnSetListener(const ListenerID& id)
+      {
+      _onSetListeners.remove(id);
       }
 
 void Preferences::setTemporaryPreference(const QString key, QVariant value)

@@ -17,6 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include <QAction>
+
 #include "shortcut.h"
 #include "musescore.h"
 #include "config.h"
@@ -28,6 +30,12 @@
 #include "omr/omr.h"
 #include "omr/omrview.h"
 #endif
+
+#ifdef AVSOMR
+#include "avsomr/avsomr.h"
+#include "avsomr/ui/setupavsomrview.h"
+#endif
+
 #include "libmscore/excerpt.h"
 
 namespace Ms {
@@ -203,6 +211,13 @@ void ScoreTab::setCurrent(int n)
             vs->addWidget(v);
             v->setScore(scoreList->value(n));
             stack->addWidget(vs);
+#ifdef AVSOMR
+            Score* score = v->score();
+            if (score->masterScore()->avsOmr()) {
+                  Avs::SetupAvsOmrView setuperView;
+                  setuperView.setupView(v, score->masterScore()->avsOmr());
+                  }
+#endif
             }
       else {
             v = static_cast<ScoreView*>(vs->widget(0));
@@ -236,6 +251,7 @@ void ScoreTab::setCurrent(int n)
                   }
             }
 #endif
+
       stack->setCurrentWidget(vs);
       clearTab2();
       if (v) {
