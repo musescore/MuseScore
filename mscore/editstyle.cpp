@@ -493,7 +493,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       chordDescriptionFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
-      connect(SwingOff,            SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
+      connect(swingOff,            SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
       connect(swingEighth,         SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
       connect(swingSixteenth,      SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
 
@@ -827,7 +827,7 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
 
       if (FiguredBass::fontData(index, 0, 0, &size, &lineHeight)) {
             doubleSpinFBSize->setValue(size);
-            spinFBLineHeight->setValue((int)(lineHeight * 100.0));
+            spinFBLineHeight->setValue(static_cast<int>(lineHeight * 100.0));
             }
       }
 
@@ -1063,7 +1063,7 @@ void EditStyle::setValues()
             swingBox->setEnabled(true);
             }
       else if (unit == TDuration(TDuration::DurationType::V_ZERO).name()) {
-            SwingOff->setChecked(true);
+            swingOff->setChecked(true);
             swingBox->setEnabled(false);
             }
       QString s(lstyle.value(Sid::chordDescriptionFile).toString());
@@ -1143,7 +1143,7 @@ void EditStyle::setSwingParams(bool checked)
       if (!checked)
             return;
       QVariant val;
-      if (SwingOff->isChecked()) {
+      if (swingOff->isChecked()) {
             val = TDuration(TDuration::DurationType::V_ZERO).name();
             swingBox->setEnabled(false);
             }

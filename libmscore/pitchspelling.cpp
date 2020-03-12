@@ -586,13 +586,13 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
             int pa    = 0;
             int pb    = 0;
             int l     = pitch[0] * 2 + (i & 1);
-            Q_ASSERT(l >= 0 && l <= (int)(sizeof(tab1)/sizeof(*tab1)));
+            Q_ASSERT(l >= 0 && l <= static_cast<int>(sizeof(tab1)/sizeof(*tab1)));
             int lof1a = tab1[l];
             int lof1b = tab2[l];
 
             for (k = 1; k < 10; ++k) {
                   int l1 = pitch[k] * 2 + ((i & (1 << k)) >> k);
-                  Q_ASSERT(l1 >= 0 && l1 <= (int)(sizeof(tab1)/sizeof(*tab1)));
+                  Q_ASSERT(l1 >= 0 && l1 <= static_cast<int>(sizeof(tab1)/sizeof(*tab1)));
                   int lof2a = tab1[l1];
                   int lof2b = tab2[l1];
                   pa += penalty(lof1a, lof2a, key[k]);

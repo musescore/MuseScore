@@ -491,7 +491,7 @@ void PianoView::moveLocator(int /*i*/)
 //---------------------------------------------------------
 
 int PianoView::pixelXToTick(int pixX) {
-      return (int)(pixX / _xZoom) - MAP_OFFSET;
+      return static_cast<int>(pixX / _xZoom) - MAP_OFFSET;
       }
 
 
@@ -500,7 +500,7 @@ int PianoView::pixelXToTick(int pixX) {
 //---------------------------------------------------------
 
 int PianoView::tickToPixelX(int tick) {
-      return (int)(tick + MAP_OFFSET) * _xZoom;
+      return static_cast<int>(tick + MAP_OFFSET) * _xZoom;
       }
 
 //---------------------------------------------------------
@@ -531,7 +531,7 @@ void PianoView::wheelEvent(QWheelEvent* event)
             updateBoundingSize();
             updateNotes();
 
-            int mousePixY = (int)(mouseYNote * _noteHeight);
+            int mousePixY = static_cast<int>(mouseYNote * _noteHeight);
             verticalScrollBar()->setValue(mousePixY - event->y());
 
             scene()->update();
@@ -840,7 +840,7 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
 
       //Update mouse tracker
       QPointF p(mapToScene(event->pos()));
-      int pitch = (int)((_noteHeight * 128 - p.y()) / _noteHeight);
+      int pitch = static_cast<int>((_noteHeight * 128 - p.y()) / _noteHeight);
       emit pitchChanged(pitch);
 
       int tick = pixelXToTick(p.x());

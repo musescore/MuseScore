@@ -1295,9 +1295,9 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             t->setTempo(tpo);
             QString durationTempoL;
             QString durationTempoR;
-            if ((int)(tempoPtr->getLeftNoteType()))
+            if (static_cast<int>(tempoPtr->getLeftNoteType()))
                   durationTempoL = TempoText::duration2tempoTextString(OveNoteType_To_Duration(tempoPtr->getLeftNoteType()));
-            if ((int)(tempoPtr->getRightNoteType()))
+            if (static_cast<int>(tempoPtr->getRightNoteType()))
                   durationTempoR = TempoText::duration2tempoTextString(OveNoteType_To_Duration(tempoPtr->getRightNoteType()));
             QString textTempo;
             if (tempoPtr->getShowBeforeText())
@@ -1563,7 +1563,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               OVE::ToneType clefMiddleTone;
                               int clefMiddleOctave;
                               getMiddleToneOctave(clefType, clefMiddleTone, clefMiddleOctave);
-                              int absLine = (int) clefMiddleTone + clefMiddleOctave * OCTAVE + oveNote->getLine();
+                              int absLine = static_cast<int>(clefMiddleTone) + clefMiddleOctave * OCTAVE + oveNote->getLine();
                               if ((partStaffCount == 2) && oveNote->getOffsetStaff())
                                     absLine += 2 * (oveNote->getOffsetStaff());
                               int tone = absLine % OCTAVE;
@@ -1575,7 +1575,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               note->setTpc(step2tpc(tone, AccidentalVal(alter)));
                               if (oveNote->getShowAccidental()) {
                                     Ms::Accidental* a = new Accidental(score_);
-                                    bool bracket = (int)(oveNote->getAccidental()) & 0x8;
+                                    bool bracket = static_cast<int>(oveNote->getAccidental()) & 0x8;
                                     AccidentalType at = Ms::AccidentalType::NONE;
                                     switch(alter) {
                                           case 0: at = Ms::AccidentalType::NATURAL; break;

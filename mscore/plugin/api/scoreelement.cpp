@@ -128,6 +128,8 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
 
 ScoreElement* wrap(Ms::ScoreElement* se, Ownership own)
       {
+      if (!se)
+            return nullptr;
       if (se->isElement())
             return wrap(toElement(se), own);
 

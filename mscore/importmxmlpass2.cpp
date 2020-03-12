@@ -223,7 +223,7 @@ static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octa
       const Interval intval = instr->transpose();     // TODO: tick
 
       //qDebug("  staff=%p instr=%p dia=%d chro=%d",
-      //       staff, instr, (int) intval.diatonic, (int) intval.chromatic);
+      //       staff, instr, static_cast<int>(intval.diatonic), static_cast<int>(intval.chromatic));
 
       int pitch = MusicXMLStepAltOct2Pitch(step, alter, octave);
       pitch += intval.chromatic; // assume not in concert pitch

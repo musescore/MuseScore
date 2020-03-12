@@ -1389,7 +1389,6 @@ QString MuseScore::getPaletteFilename(bool open, const QString& name)
                   restoreDialogState("loadPaletteDialog", loadPaletteDialog);
                   loadPaletteDialog->setAcceptMode(QFileDialog::AcceptOpen);
                   }
-            urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/styles"));
             dialog = loadPaletteDialog;
             }
       else {
@@ -1551,7 +1550,6 @@ QString MuseScore::getDrumsetFilename(bool open)
                   restoreDialogState("loadDrumsetDialog", loadDrumsetDialog);
                   loadDrumsetDialog->setAcceptMode(QFileDialog::AcceptOpen);
                   }
-            urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/styles"));
             dialog = loadDrumsetDialog;
             }
       else {
@@ -1688,6 +1686,7 @@ void MuseScore::exportFile()
       fl.append(tr("Standard MIDI File") + " (*.mid)");
       fl.append(tr("Compressed MusicXML File") + " (*.mxl)");
       fl.append(tr("Uncompressed MusicXML File") + " (*.musicxml)");
+      fl.append(tr("Uncompressed MusicXML File (outdated)") + " (*.xml)");
       fl.append(tr("Uncompressed MuseScore 3 File") + " (*.mscx)");     // for debugging purposes
 
       QString saveDialogTitle = tr("Export");
@@ -1705,8 +1704,10 @@ void MuseScore::exportFile()
       if (saveDirectory.isEmpty())
             saveDirectory = preferences.getString(PREF_APP_PATHS_MYSCORES);
 
-      if (lastSaveCopyFormat.isEmpty())
-            lastSaveCopyFormat = settings.value("lastSaveCopyFormat", "pdf").toString();
+      if (lastSaveCopyFormat.isEmpty()) {
+            QSettings set;
+            lastSaveCopyFormat = set.value("lastSaveCopyFormat", "pdf").toString();
+            }
       QString saveFormat = lastSaveCopyFormat;
 
       if (saveFormat.isEmpty())
@@ -1767,6 +1768,7 @@ bool MuseScore::exportParts()
       fl.append(tr("Standard MIDI File") + " (*.mid)");
       fl.append(tr("Compressed MusicXML File") + " (*.mxl)");
       fl.append(tr("Uncompressed MusicXML File") + " (*.musicxml)");
+      fl.append(tr("Uncompressed MusicXML File (outdated)") + " (*.xml)");
       fl.append(tr("MuseScore 3 File") + " (*.mscz)");
       fl.append(tr("Uncompressed MuseScore 3 File") + " (*.mscx)");     // for debugging purposes
 
@@ -1785,8 +1787,10 @@ bool MuseScore::exportParts()
       if (saveDirectory.isEmpty())
             saveDirectory = preferences.getString(PREF_APP_PATHS_MYSCORES);
 
-      if (lastSaveCopyFormat.isEmpty())
-            lastSaveCopyFormat = settings.value("lastSaveCopyFormat", "pdf").toString();
+      if (lastSaveCopyFormat.isEmpty()) {
+            QSettings set;
+            lastSaveCopyFormat = set.value("lastSaveCopyFormat", "pdf").toString();
+            }
       QString saveFormat = lastSaveCopyFormat;
 
       if (saveFormat.isEmpty())
@@ -1958,7 +1962,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
                   writeSessionFile(false);
                   }
             }
-      else if (ext == "musicxml") {
+      else if ((ext == "musicxml") || (ext == "xml")) {
             // save as MusicXML *.musicxml file
             rv = saveXml(cs_, fn);
             }
