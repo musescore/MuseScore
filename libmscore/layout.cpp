@@ -1468,10 +1468,10 @@ void Score::connectTies(bool silent)
 //   checkDivider
 //---------------------------------------------------------
 
-static void checkDivider(bool left, System* s, qreal yOffset)
+static void checkDivider(bool left, System* s, qreal yOffset, bool remove = false)
       {
       SystemDivider* divider = left ? s->systemDividerLeft() : s->systemDividerRight();
-      if (s->score()->styleB(left ? Sid::dividerLeft : Sid::dividerRight)) {
+      if ((s->score()->styleB(left ? Sid::dividerLeft : Sid::dividerRight)) && !remove) {
             if (!divider) {
                   divider = new SystemDivider(s->score());
                   divider->setDividerType(left ? SystemDivider::Type::LEFT : SystemDivider::Type::RIGHT);
@@ -1531,23 +1531,25 @@ static void layoutPage(Page* page, qreal restHeight)
             sList.push_back(s1);
             }
 
+      // last systenm needs no divider
+      System* lastSystem = page->systems().back();
+      checkDivider(true, lastSystem, 0.0, true);      // remove
+      checkDivider(false, lastSystem, 0.0, true);     // remove
+
       if (sList.empty() || MScore::noVerticalStretch || score->layoutMode() == LayoutMode::SYSTEM) {
             if (score->layoutMode() == LayoutMode::FLOAT) {
                   qreal y = restHeight * .5;
                   for (System* system : page->systems())
                         system->move(QPointF(0.0, y));
                   }
-            // remove system dividers
-            for (System* s : page->systems()) {
-                  SystemDivider* sd = s->systemDividerLeft();
-                  if (sd) {
-                        s->remove(sd);
-                        delete sd;
-                        }
-                  sd = s->systemDividerRight();
-                  if (sd) {
-                        s->remove(sd);
-                        delete sd;
+            // system dividers
+            for (int i = 0; i < gaps; ++i) {
+                  System* s1 = page->systems().at(i);
+                  System* s2 = page->systems().at(i+1);
+                  if (!(s1->vbox() || s2->vbox())) {
+                        qreal yOffset = s1->height() + (s1->distance()-s1->height()) * .5;
+                        checkDivider(true,  s1, yOffset);
+                        checkDivider(false, s1, yOffset);
                         }
                   }
             return;
@@ -1600,7 +1602,7 @@ static void layoutPage(Page* page, qreal restHeight)
             s1->rypos() = y;
             y          += s1->distance();
 
-            if (!(s1->vbox() || s2->vbox() || s1->hasFixedDownDistance())) {
+            if (!(s1->vbox() || s2->vbox())) {
                   qreal yOffset = s1->height() + (s1->distance()-s1->height()) * .5;
                   checkDivider(true,  s1, yOffset);
                   checkDivider(false, s1, yOffset);
