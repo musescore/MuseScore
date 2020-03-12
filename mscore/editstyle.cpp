@@ -281,6 +281,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::measureNumberInterval,    false, intervalMeasureNumber,        0 },
       { Sid::measureNumberSystem,      false, showEverySystemMeasureNumber, 0 },
       { Sid::measureNumberAllStaves,   false, showAllStavesMeasureNumber,   0 },
+      { Sid::measureNumberVPlacement,  false, measureNumberVPlacement,      resetMeasureNumberVPlacement },
+      { Sid::measureNumberHPlacement,  false, measureNumberHPlacement,      resetMeasureNumberHPlacement },
 
       { Sid::beamDistance,             true,  beamDistance,                 0 },
       { Sid::beamNoSlope,              false, beamNoSlope,                  0 },
@@ -372,12 +374,18 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       for (QComboBox* cb : std::vector<QComboBox*> {
             lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
             trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
-            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement
+            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement,
+            measureNumberVPlacement
             }) {
             cb->clear();
             cb->addItem(tr("Above"), int(Placement::ABOVE));
             cb->addItem(tr("Below"), int(Placement::BELOW));
             }
+
+      measureNumberHPlacement->clear();
+      measureNumberHPlacement->addItem(tr("Left"),   int(HPlacement::LEFT));
+      measureNumberHPlacement->addItem(tr("Center"), int(HPlacement::CENTER));
+      measureNumberHPlacement->addItem(tr("Right"),  int(HPlacement::RIGHT));
 
       autoplaceVerticalAlignRange->clear();
       autoplaceVerticalAlignRange->addItem(tr("Segment"), int(VerticalAlignRange::SEGMENT));

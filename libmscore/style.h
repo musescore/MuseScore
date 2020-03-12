@@ -336,8 +336,8 @@ enum class Sid {
       showMeasureNumberOne,
       measureNumberInterval,
       measureNumberSystem,
-
       measureNumberAllStaves,
+
       smallNoteMag,
       graceNoteMag,
       smallStaffMag,
@@ -801,6 +801,8 @@ enum class Sid {
       measureNumberColor,
       measureNumberOffset,
       measureNumberOffsetType,
+      measureNumberVPlacement,
+      measureNumberHPlacement,
       measureNumberAlign,
       measureNumberFrameType,
       measureNumberFramePadding,
