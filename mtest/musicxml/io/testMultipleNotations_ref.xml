@@ -73,7 +73,7 @@
         <notations>
           <slur type="stop" number="1"/>
           <articulations>
-            <staccato/>
+            <staccato placement="below"/>
             </articulations>
           </notations>
         </note>

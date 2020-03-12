@@ -96,7 +96,7 @@
         <stem>up</stem>
         <notations>
           <articulations>
-            <accent/>
+            <accent placement="below"/>
             </articulations>
           </notations>
         </note>
@@ -123,7 +123,7 @@
         <stem>down</stem>
         <notations>
           <articulations>
-            <staccato/>
+            <staccato placement="above"/>
             </articulations>
           </notations>
         </note>
@@ -138,7 +138,7 @@
         <stem>down</stem>
         <notations>
           <articulations>
-            <staccatissimo/>
+            <staccatissimo placement="above"/>
             </articulations>
           </notations>
         </note>
@@ -153,7 +153,7 @@
         <stem>down</stem>
         <notations>
           <articulations>
-            <staccatissimo/>
+            <staccatissimo placement="above"/>
             </articulations>
           </notations>
         </note>
@@ -170,7 +170,7 @@
         <stem>up</stem>
         <notations>
           <articulations>
-            <tenuto/>
+            <tenuto placement="below"/>
             </articulations>
           </notations>
         </note>
@@ -205,7 +205,7 @@
         <stem>up</stem>
         <notations>
           <articulations>
-            <strong-accent type="up"/>
+            <strong-accent placement="above" type="up"/>
             </articulations>
           </notations>
         </note>
@@ -222,7 +222,7 @@
         <stem>down</stem>
         <notations>
           <articulations>
-            <strong-accent type="down"/>
+            <strong-accent placement="below" type="down"/>
             </articulations>
           </notations>
         </note>
@@ -448,7 +448,7 @@
         <stem>up</stem>
         <notations>
           <articulations>
-            <detached-legato/>
+            <detached-legato placement="below"/>
             </articulations>
           </notations>
         </note>
@@ -465,7 +465,7 @@
         <stem>up</stem>
         <notations>
           <articulations>
-            <staccatissimo/>
+            <staccatissimo placement="below"/>
             </articulations>
           </notations>
         </note>
