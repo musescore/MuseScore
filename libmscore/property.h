@@ -172,7 +172,8 @@ enum class Pid {
 //100
       SINGLE_NOTE_DYNAMICS,
       CHANGE_METHOD,
-      PLACEMENT,
+      PLACEMENT,              // Goes with P_TYPE::PLACEMENT
+      HPLACEMENT,             // Goes with P_TYPE::HPLACEMENT
       VELOCITY,
       JUMP_TO,
       PLAY_UNTIL,
@@ -380,7 +381,8 @@ enum class P_TYPE : char {
       LAYOUT_BREAK,
       VALUE_TYPE,
       BEAM_MODE,
-      PLACEMENT,
+      PLACEMENT,      // ABOVE or BELOW
+      HPLACEMENT,     // LEFT, CENTER or RIGHT
       TEXT_PLACE,
       TEMPO,
       GROUPS,

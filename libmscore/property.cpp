@@ -36,10 +36,10 @@ namespace Ms {
 //---------------------------------------------------------
 
 struct PropertyMetaData {
-      Pid id;
+      Pid id;                 // associated Pid
       bool link;              // link this property for linked elements
       const char* name;       // xml name of property
-      P_TYPE type;
+      P_TYPE type;            // associated P_TYPE
       const char* userName;   // user-visible name of property
       };
 
@@ -164,6 +164,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::SINGLE_NOTE_DYNAMICS,    true,  "singleNoteDynamics",    P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "single note dynamics")   },
       { Pid::CHANGE_METHOD,           true,  "changeMethod",          P_TYPE::CHANGE_METHOD,       DUMMY_QT_TRANSLATE_NOOP("propertyName", "change method")   },        // the new, more general version of VELO_CHANGE_METHOD
       { Pid::PLACEMENT,               false, "placement",             P_TYPE::PLACEMENT,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "placement")        },
+      { Pid::HPLACEMENT,              false, "hplacement",            P_TYPE::HPLACEMENT,          DUMMY_QT_TRANSLATE_NOOP("propertyName", "horizontal placement")   },
       { Pid::VELOCITY,                false, "velocity",              P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity")         },
       { Pid::JUMP_TO,                 true,  "jumpTo",                P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "jump to")          },
       { Pid::PLAY_UNTIL,              true,  "playUntil",             P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "play until")       },
@@ -270,13 +271,13 @@ static constexpr PropertyMetaData propertyList[] = {
 
       { Pid::FONT_FACE,               false, "family",                P_TYPE::FONT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "family")           },
       { Pid::FONT_SIZE,               false, "size",                  P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "size")             },
+//200
       { Pid::FONT_STYLE,              false, "fontStyle",             P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "font style")       },
 
       { Pid::FRAME_TYPE,              false, "frameType",             P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame type")       },
       { Pid::FRAME_WIDTH,             false, "frameWidth",            P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame width")      },
       { Pid::FRAME_PADDING,           false, "framePadding",          P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame padding")    },
       { Pid::FRAME_ROUND,             false, "frameRound",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame round")      },
-//200
       { Pid::FRAME_FG_COLOR,          false, "frameFgColor",          P_TYPE::COLOR,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame foreground color") },
       { Pid::FRAME_BG_COLOR,          false, "frameBgColor",          P_TYPE::COLOR,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame background color") },
       { Pid::SIZE_SPATIUM_DEPENDENT,  false, "sizeIsSpatiumDependent",P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "spatium dependent font") },
@@ -503,6 +504,15 @@ QVariant propertyFromString(Pid id, QString value)
                         return QVariant(int(Placement::BELOW));
                   }
                   break;
+            case P_TYPE::HPLACEMENT: {
+                  if (value == "left")
+                        return QVariant(int(HPlacement::LEFT));
+                  else if (value == "center")
+                        return QVariant(int(HPlacement::CENTER));
+                  else if (value == "right")
+                        return QVariant(int(HPlacement::RIGHT));
+                  }
+                  break;
             case P_TYPE::TEXT_PLACE: {
                   if (value == "auto")
                         return QVariant(int(PlaceText::AUTO));
@@ -621,6 +631,7 @@ QVariant readProperty(Pid id, XmlReader& e)
             case P_TYPE::LAYOUT_BREAK:
             case P_TYPE::VALUE_TYPE:
             case P_TYPE::PLACEMENT:
+            case P_TYPE::HPLACEMENT:
             case P_TYPE::TEXT_PLACE:
             case P_TYPE::BARLINE_TYPE:
             case P_TYPE::SYMID:
@@ -774,6 +785,16 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
                               return "above";
                         case Placement::BELOW:
                               return "below";
+                        }
+                  break;
+            case P_TYPE::HPLACEMENT:
+                  switch (HPlacement(value.toInt())) {
+                        case HPlacement::LEFT:
+                              return "left";
+                        case HPlacement::CENTER:
+                              return "center";
+                        case HPlacement::RIGHT:
+                              return "right";
                         }
                   break;
             case P_TYPE::TEXT_PLACE:

@@ -1866,11 +1866,8 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
             }
       qreal _spatium = spatium();
       MStaff* mstaff = _mstaves[staff];
-      if (mstaff->noText() && !mstaff->noText()->generated()) {
-            xml.stag("MeasureNumber", mstaff->noText());
-            mstaff->noText()->writeProperties(xml);
-            xml.etag();
-            }
+      if (mstaff->noText() && !mstaff->noText()->generated())
+            mstaff->noText()->write(xml);
 
       if (mstaff->vspacerUp())
             xml.tag("vspacerUp", mstaff->vspacerUp()->gap() / _spatium);
