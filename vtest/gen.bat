@@ -37,7 +37,7 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  beams-11,beams-12,beams-13,beams-14,beams-15,beams-16,beams-17, ^
  user-offset-1,user-offset-2,chord-space-1,chord-space-2,tablature-1,image-1, ^
  lyrics-1,lyrics-2,lyrics-3,lyrics-4,lyrics-5,lyrics-6,lyrics-7,lyrics-8,voice-1,voice-2,slash-1,slash-2, ^
- system-1,system-2,system-3,system-4,system-5,system-6,system-7,system-8,hide-1,small-1,tremolo-1, ^
+ system-1,system-2,system-3,system-4,system-5,system-6,system-7,system-8,system-9,hide-1,small-1,tremolo-1, ^
  staff-1,staff-2,layout-1,layout-2,layout-3,layout-4,layout-5,layout-6,layout-7,layout-8,layout-9,layout-10, ^
  articulation-1, ^
  percussion-grace, ^
