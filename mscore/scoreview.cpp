@@ -2775,7 +2775,7 @@ void ScoreView::startNoteEntry()
                   }
             }
 
-      Element* el = _score->selection().activeCR() ? _score->selection().activeCR() : _score->selection().element();
+      Element* el = _score->selection().element();
       if (!el)
             el = _score->selection().firstChordRest();
       if (el == 0 || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
