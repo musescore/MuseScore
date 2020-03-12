@@ -123,15 +123,16 @@ endif (NOT APPLE AND NOT MINGW AND NOT MSVC)
 option(AEOLUS        "Enable pipe organ synthesizer"      OFF)
 option(ZERBERUS      "Enable experimental SFZ sampler"    ON)
 option(OSC           "Enable OSC remote control protocol" ON)
-option(OMR           "Enable PDF import"  OFF)                 # OMR - optical music recognition
+option(AVSOMR        "Enable AVSOMR import"               OFF) # AVSOMR - optical music recognition by audirevis
+option(OMR           "Enable PDF import"                  OFF) # OMR - optical music recognition
 # For installation see: http://ubuntuforums.org/showthread.php?t=1647350
-option(OCR           "Enable OCR, requires OMR" OFF)           # Requires tesseract 3.0, needs work on mac/win
-option(SOUNDFONT3    "Ogg Vorbis compressed fonts" ON)         # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
-option(HAS_AUDIOFILE "Enable audio export" ON)                 # Requires libsndfile
+option(OCR           "Enable OCR, requires OMR"           OFF) # Requires tesseract 3.0, needs work on mac/win
+option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
+option(HAS_AUDIOFILE "Enable audio export"                ON)  # Requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
-option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF)          # requires freetype >= 2.5.2, does not work on win
-option(USE_SYSTEM_POPPLER  "Use system Poppler for OMR" OFF)
-option(BUILD_LAME    "Enable MP3 export" ON)                   # Requires libmp3lame, call CMake with -DBUILD_LAME="OFF" to disable
+option(USE_SYSTEM_FREETYPE "Use system FreeType"          OFF) # requires freetype >= 2.5.2, does not work on win
+option(USE_SYSTEM_POPPLER  "Use system Poppler for OMR"   OFF)
+option(BUILD_LAME    "Enable MP3 export"                  ON)  # Requires libmp3lame, call CMake with -DBUILD_LAME="OFF" to disable
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 
 # licence incompatibility, must never be distributed
@@ -852,30 +853,34 @@ add_subdirectory(manual)
 add_subdirectory(demos)
 
 if (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
-      subdirs (thirdparty/portmidi)
+      add_subdirectory(thirdparty/portmidi)
 endif (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
 
 if (AEOLUS)
-      subdirs (aeolus)
+      add_subdirectory(aeolus)
 endif (AEOLUS)
 
 if (ZERBERUS)
-      subdirs (zerberus)
+      add_subdirectory(zerberus)
 endif (ZERBERUS)
 
+if (AVSOMR)
+    add_subdirectory(avsomr)
+endif (AVSOMR)
+
 if (OMR)
-      subdirs (omr)
+      add_subdirectory(omr)
       if (NOT USE_SYSTEM_POPPLER)
-            subdirs (thirdparty/poppler)
+            add_subdirectory(thirdparty/poppler)
       endif (NOT USE_SYSTEM_POPPLER)
 endif (OMR)
 
 if (OSC)
-      subdirs (thirdparty/ofqf)
+      add_subdirectory(thirdparty/ofqf)
 endif (OSC)
 
 if (NOT USE_SYSTEM_FREETYPE)
-      subdirs (thirdparty/freetype)
+      add_subdirectory(thirdparty/freetype)
 endif (NOT USE_SYSTEM_FREETYPE)
 
 ##

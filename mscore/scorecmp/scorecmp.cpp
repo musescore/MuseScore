@@ -323,7 +323,7 @@ void ScoreComparisonTool::updateScoreVersions(const Score* s)
 void ScoreComparisonTool::on_browseFileButton_clicked()
       {
       Score* prevScore = mscore->currentScore();
-      mscore->loadFiles(/* switchTab */ true, /* singleFile */ true);
+      mscore->openFiles(/* switchTab */ true, /* singleFile */ true);
       Score* loadedScore = mscore->currentScore();
       if (loadedScore == prevScore) // we didn't load anything?
             return;

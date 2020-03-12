@@ -6041,7 +6041,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "keys")
             showKeyEditor();
       else if (cmd == "file-open")
-            loadFiles();
+            openFiles();
       else if (cmd == "file-save")
             saveFile();
       else if (cmd == saveOnlineMenuItem)
@@ -6051,7 +6051,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "file-part-export")
             exportParts();
       else if (cmd == "file-import-pdf")
-            openExternalLink("https://musescore.com/import");
+            importScore();
       else if (cmd == "file-close")
             closeScore(cs);
       else if (cmd == "file-save-as")

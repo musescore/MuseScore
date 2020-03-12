@@ -41,6 +41,10 @@
 #include "omr/omrpage.h"
 #endif
 
+#ifdef AVSOMR
+#include "avsomr/msmrwriter.h"
+#endif
+
 #include "sig.h"
 #include "undo.h"
 #include "imageStore.h"
@@ -392,7 +396,21 @@ bool MasterScore::saveFile()
             MScore::lastError = tr("Open Temp File\n%1\nfailed: %2").arg(tempName, strerror(errno));
             return false;
             }
-      bool rv = suffix == "mscx" ? Score::saveFile(&temp, false) : Score::saveCompressedFile(&temp, info, false);
+
+      bool rv = false;
+      if ("mscx" == suffix) {
+           rv = Score::saveFile(&temp, false);
+            }
+#ifdef AVSOMR
+      else if ("msmr" == suffix) {
+            Avs::MsmrWriter msmrWriter;
+            rv = msmrWriter.saveMsmrFile(this, &temp, info);
+            }
+#endif
+      else {
+           rv = Score::saveCompressedFile(&temp, info, false);
+            }
+
       if (!rv) {
             return false;
             }
@@ -545,7 +563,7 @@ QImage Score::createThumbnail()
 //    file is already opened
 //---------------------------------------------------------
 
-bool Score::saveCompressedFile(QFileDevice* f, QFileInfo& info, bool onlySelection, bool doCreateThumbnail)
+bool Score::saveCompressedFile(QIODevice* f, const QFileInfo& info, bool onlySelection, bool doCreateThumbnail)
       {
       MQZipWriter uz(f);
 
@@ -576,8 +594,11 @@ bool Score::saveCompressedFile(QFileDevice* f, QFileInfo& info, bool onlySelecti
       saveFile(&dbuf, true, onlySelection);
       dbuf.seek(0);
       uz.addFile(fn, dbuf.data());
-      f->flush(); // flush to preserve score data in case of
-                  // any failures on the further operations.
+
+      QFileDevice* fd = dynamic_cast<QFileDevice*>(f);
+      if (fd) // if is file (may be buffer)
+            fd->flush(); // flush to preserve score data in case of
+                         // any failures on the further operations.
 
       // save images
       //uz.addDirectory("Pictures");

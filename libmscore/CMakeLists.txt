@@ -102,6 +102,10 @@ add_library (
       unrollrepeats.cpp
       )
 
+if (AVSOMR)
+    target_link_libraries(libmscore avsomr)
+endif (AVSOMR)
+
 ##
 ## Code coverage. Only affects DEBUG builds.
 ##

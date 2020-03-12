@@ -49,7 +49,7 @@ void TelemetrySetup::registerExports()
 //   moduleName
 //---------------------------------------------------------
 
-QString TelemetrySetup::moduleName()
+QString TelemetrySetup::moduleName() const
       {
       return QStringLiteral("telemetry");
       }
