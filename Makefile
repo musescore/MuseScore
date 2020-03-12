@@ -65,7 +65,7 @@ release:
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}" \
   	  -DBUILD_PORTMIDI="${BUILD_PORTMIDI}"  \
   	  -DBUILD_JACK="${BUILD_JACK}"             \
-  	  -BUILD_ALSA="${BUILD_ALSA}"              \
+  	  -DBUILD_ALSA="${BUILD_ALSA}"              \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"   \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"   \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
@@ -95,7 +95,7 @@ debug:
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}"            \
   	  -DBUILD_PORTMIDI="${BUILD_PORTMIDI}"             \
   	  -DBUILD_JACK="${BUILD_JACK}"                        \
-  	  -BUILD_ALSA="${BUILD_ALSA}"                         \
+  	  -DBUILD_ALSA="${BUILD_ALSA}"                         \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"              \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"              \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
