@@ -717,6 +717,7 @@ VBox::VBox(Score* score)
       {
       initElementStyle(&boxStyle);
       setBoxHeight(Spatium(10.0));
+      setLineBreak(true);
       }
 
 //---------------------------------------------------------
