@@ -95,7 +95,7 @@ void PianoLevels::setXpos(int val)
 //---------------------------------------------------------
 
 int PianoLevels::pixelXToTick(int pixX) {
-      return (int)((pixX + _xpos) / _xZoom) - MAP_OFFSET;
+      return static_cast<int>((pixX + _xpos) / _xZoom) - MAP_OFFSET;
       }
 
 
@@ -104,7 +104,7 @@ int PianoLevels::pixelXToTick(int pixX) {
 //---------------------------------------------------------
 
 int PianoLevels::tickToPixelX(int tick) {
-      return (int)(tick + MAP_OFFSET) * _xZoom - _xpos;
+      return static_cast<int>(tick + MAP_OFFSET) * _xZoom - _xpos;
       }
 
 
@@ -303,7 +303,7 @@ int PianoLevels::valToPixelY(int value) {
       int range = filter->maxRange() - filter->minRange();
       qreal frac = (value - filter->minRange()) / (qreal)range;
 
-      return (int)(height() - vMargin * 2) * (1 - frac) + vMargin;
+      return static_cast<int>(height() - vMargin * 2) * (1 - frac) + vMargin;
       }
 
 
@@ -316,7 +316,7 @@ int PianoLevels::pixelYToVal(int pix) {
 
       PianoLevelsFilter* filter = PianoLevelsFilter::FILTER_LIST[_levelsIndex];
       int range = filter->maxRange() - filter->minRange();
-      return (int)(frac * range + filter->minRange());
+      return static_cast<int>(frac * range + filter->minRange());
       }
 
 //---------------------------------------------------------

@@ -57,13 +57,13 @@ double chorusToUserRange(char v) { return v * 100.0 / 128.0; }
 double reverbToUserRange(char v) { return v * 100.0 / 128.0; }
 
 //0 to 100
-char userRangeToVolume(double v) { return (char)qBound(0, (int)(v / 100.0 * 128.0), 127); }
+char userRangeToVolume(double v) { return (char)qBound(0, static_cast<int>(v / 100.0 * 128.0), 127); }
 //-180 to 180
-char userRangeToPan(double v) { return (char)qBound(0, (int)((v / 360.0) * 128.0), 127); }
+char userRangeToPan(double v) { return (char)qBound(0, static_cast<int>((v / 360.0) * 128.0), 127); }
 //0 to 100
-char userRangeToChorus(double v) { return (char)qBound(0, (int)(v / 100.0 * 128.0), 127); }
+char userRangeToChorus(double v) { return (char)qBound(0, static_cast<int>(v / 100.0 * 128.0), 127); }
 //0 to 100
-char userRangeToReverb(double v) { return (char)qBound(0, (int)(v / 100.0 * 128.0), 127); }
+char userRangeToReverb(double v) { return (char)qBound(0, static_cast<int>(v / 100.0 * 128.0), 127); }
 
 //---------------------------------------------------------
 //   Mixer

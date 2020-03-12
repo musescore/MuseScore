@@ -69,10 +69,10 @@ int findLastSplitPoint(const std::vector<ChordSplitData> &splits)
       int minPenalty = std::numeric_limits<int>::max();
       const auto &possibleSplits = splits[splits.size() - 1].possibleSplits;
 
-      for (int i = 0; i != (int)possibleSplits.size(); ++i) {
+      for (size_t i = 0; i != possibleSplits.size(); ++i) {
             if (possibleSplits[i].penalty < minPenalty) {
                   minPenalty = possibleSplits[i].penalty;
-                  splitPoint = i;
+                  splitPoint = static_cast<int>(i);
                   }
             }
 

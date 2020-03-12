@@ -993,14 +993,14 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                               }
                         }
                   else {
-                        for (int i = int(dList.size()) - 1; i >= 0; --i) {
+                        for (size_t i = dList.size(); i > 0; --i) { // loop needs to be in this reverse order
                               if (ltuplet) {
                                     // take care not to recreate tuplet we just deleted
-                                    Rest* r = setRest(tick, track, dList[i].fraction(), false, 0, false);
+                                    Rest* r = setRest(tick, track, dList[i-1].fraction(), false, 0, false);
                                     tick += r->actualTicks();
                                     }
                               else {
-                                    tick += addClone(cr, tick, dList[i])->actualTicks();
+                                    tick += addClone(cr, tick, dList[i-1])->actualTicks();
                                     }
                               }
                         }
@@ -1371,18 +1371,18 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                               }
                         }
                   else {
-                        for (int i = int(dList.size()) - 1; i >= 0; --i) {
+                        for (size_t i = dList.size(); i > 0; --i) { // loop probably needs to be in this reverse order
                               bool genTie;
                               Chord* cc;
                               if (oc) {
                                     genTie = true;
                                     cc = oc;
-                                    oc = addChord(tick, dList[i], cc, genTie, tuplet);
+                                    oc = addChord(tick, dList[i-1], cc, genTie, tuplet);
                                     }
                               else {
                                     genTie = false;
                                     cc = toChord(cr);
-                                    undoChangeChordRestLen(cr, dList[i]);
+                                    undoChangeChordRestLen(cr, dList[i-1]);
                                     oc = cc;
                                     }
                               if (first) {

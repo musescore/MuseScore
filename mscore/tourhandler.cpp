@@ -374,7 +374,7 @@ void TourHandler::positionMessage(QList<QWidget*> widgets, QMessageBox* mbox)
             else
                   displayPoint.setY(widgetsBox.bottom() + mboxFrameTopThickness);
 
-            int x = (int) (widgetsBox.width() - mbox->size().width()) / 2 + widgetsBox.left();
+            int x = static_cast<int>(widgetsBox.width() - mbox->size().width()) / 2 + widgetsBox.left();
             displayPoint.setX(x);
             }
       else {

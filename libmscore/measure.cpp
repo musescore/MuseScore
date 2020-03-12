@@ -496,7 +496,7 @@ void Measure::layoutMeasureNumber()
       QString s;
       if (smn)
             s = QString("%1").arg(no() + 1);
-      int nn = 1;
+      unsigned nn = 1;
       bool nas = score()->styleB(Sid::measureNumberAllStaffs);
 
       if (!nas) {
@@ -511,7 +511,7 @@ void Measure::layoutMeasureNumber()
                         }
                   }
             }
-      for (int staffIdx = 0; staffIdx < int(_mstaves.size()); ++staffIdx) {
+      for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
             MStaff* ms       = _mstaves[staffIdx];
             MeasureNumber* t = ms->noText();
             if (t)
@@ -611,7 +611,7 @@ void Measure::layout2()
                         }
                   }
             }
-      for (int staffIdx = 0; staffIdx < int(_mstaves.size()); ++staffIdx) {
+      for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
             MStaff* ms       = _mstaves[staffIdx];
             MeasureNumber* t = ms->noText();
             if (t)

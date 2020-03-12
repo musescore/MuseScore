@@ -1804,7 +1804,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, 
             renderChordArticulation(chord, ell, gateTime);
 
       // Check each note and apply gateTime
-      for (int i = 0; i < int(notes); ++i) {
+      for (unsigned i = 0; i < notes; ++i) {
             NoteEventList* el = &ell[i];
             if (!shouldRenderNote(chord->notes()[i])) {
                   el->clear();
@@ -1897,7 +1897,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
             QList<NoteEventList> el;
             Chord* gc = gnb.at(i);
             size_t nn = gc->notes().size();
-            for (size_t ii = 0; ii < nn; ++ii) {
+            for (unsigned ii = 0; ii < nn; ++ii) {
                   NoteEventList nel;
                   nel.append(NoteEvent(0, on, graceDuration));
                   el.append(nel);

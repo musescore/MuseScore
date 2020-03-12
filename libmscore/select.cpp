@@ -996,13 +996,13 @@ Enabling copying of more element types requires enabling pasting in Score::paste
       int   currTrack = -1;
       for (auto iter = map.cbegin(); iter != map.cend(); ++iter) {
             int   numSegs;
-            int   track = (int)(iter->first >> 32);
+            int   track = static_cast<int>(iter->first >> 32);
             if (currTrack != track) {
                   xml.tag("trackOffset", track - topTrack);
                   currTrack = track;
                   seg       = firstSeg;
                   }
-            xml.tag("tickOffset", (int)(iter->first & 0xFFFFFFFF) - firstTick.ticks());
+            xml.tag("tickOffset", static_cast<int>(iter->first & 0xFFFFFFFF) - firstTick.ticks());
             numSegs = 0;
             // with figured bass, we need to look for the proper segment
             // not only according to ChordRest elements, but also annotations

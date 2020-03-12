@@ -77,7 +77,7 @@ int MixerTrackItem::color()
 
 void MixerTrackItem::setVolume(char value)
       {
-//      char v = (char)qBound(0, (int)(value * 128.0 / 100.0), 127);
+//      char v = (char)qBound(0, static_cast<int>(value * 128.0 / 100.0), 127);
 
       if (_trackType == TrackType::PART) {
             const InstrumentList* il = _part->instruments();
@@ -106,7 +106,7 @@ void MixerTrackItem::setVolume(char value)
 
 void MixerTrackItem::setPan(char value)
       {
-//      char v = (char)qBound(0, (int)((value + 180.0) / 360.0 * 128.0), 127);
+//      char v = (char)qBound(0, static_cast<int>((value + 180.0) / 360.0 * 128.0), 127);
 
       if (_trackType == TrackType::PART) {
             const InstrumentList* il = _part->instruments();
@@ -135,7 +135,7 @@ void MixerTrackItem::setPan(char value)
 
 void MixerTrackItem::setChorus(char value)
       {
-//      char v = (char)qBound(0, (int)(value * 128.0 / 100.0), 127);
+//      char v = (char)qBound(0, static_cast<int>(value * 128.0 / 100.0), 127);
 
       if (_trackType == TrackType::PART) {
             const InstrumentList* il = _part->instruments();
@@ -164,7 +164,7 @@ void MixerTrackItem::setChorus(char value)
 
 void MixerTrackItem::setReverb(char value)
       {
-//      char v = (char)qBound(0, (int)(value * 128.0 / 100.0), 127);
+//      char v = (char)qBound(0, static_cast<int>(value * 128.0 / 100.0), 127);
 
       if (_trackType == TrackType::PART) {
             const InstrumentList* il = _part->instruments();

@@ -506,10 +506,10 @@ void PianorollEditor::veloTypeChanged(int val)
       //Change velocity to equivalent in new metric
       switch (Note::ValueType(val)) {
             case Note::ValueType::USER_VAL:
-                  newVelocity = (int)(dynamicsVel * (1 + newVelocity / 100.0));
+                  newVelocity = static_cast<int>(dynamicsVel * (1 + newVelocity / 100.0));
                   break;
             case Note::ValueType::OFFSET_VAL:
-                  newVelocity = (int)((newVelocity / (qreal)dynamicsVel - 1) * 100);
+                  newVelocity = static_cast<int>((newVelocity / (qreal)dynamicsVel - 1) * 100);
                   break;
             }
 
