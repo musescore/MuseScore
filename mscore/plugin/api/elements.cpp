@@ -246,6 +246,9 @@ void Chord::remove(Ms::PluginAPI::Element* wrapped)
 
 Element* wrap(Ms::Element* e, Ownership own)
       {
+      if (!e)
+            return nullptr;
+
       using Ms::ElementType;
       switch(e->type()) {
             case ElementType::NOTE:
