@@ -1606,6 +1606,8 @@ void ChangePart::flip(EditData*)
       part->setInstrument(instrument);
       part->setPartName(partName);
 
+      part->updateHarmonyChannels(false);
+
       Score* score = part->score();
       score->masterScore()->rebuildMidiMapping();
       score->setInstrumentsChanged(true);

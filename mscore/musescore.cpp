@@ -4667,7 +4667,9 @@ void MuseScore::play(Element* e) const
                   }
             seq->startNoteTimer(MScore::defaultPlayDuration);
             }
-      else if (e->isHarmony() && preferences.getBool(PREF_SCORE_HARMONY_PLAYWHENEDITING)) {
+      else if (e->isHarmony()
+               && preferences.getBool(PREF_SCORE_HARMONY_PLAY)
+               && preferences.getBool(PREF_SCORE_HARMONY_PLAY_ONEDIT)) {
             seq->stopNotes();
             Harmony* h = toHarmony(e);
             if (!h->isRealizable())
@@ -4675,7 +4677,17 @@ void MuseScore::play(Element* e) const
             RealizedHarmony r = h->getRealizedHarmony();
             QList<int> pitches = r.pitches();
 
-            int channel = e->part()->harmonyChannel()->channel();
+            const Channel* hChannel = e->part()->harmonyChannel();
+            if (!hChannel)
+                  return;
+
+            int channel = hChannel->channel();
+
+            // reset the cc that is used for single note dynamics, if any
+            int cc = synthesizerState().ccToUse();
+            if (cc != -1)
+                  seq->sendEvent(NPlayEvent(ME_CONTROLLER, channel, cc, 80));
+
             for (int pitch : pitches)
                   seq->startNote(channel, pitch, 80, 0);
             seq->startNoteTimer(MScore::defaultPlayDuration);

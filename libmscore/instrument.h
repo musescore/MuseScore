@@ -131,6 +131,7 @@ class Channel {
 
 public:
       static const char* DEFAULT_NAME;
+      static const char* HARMONY_NAME;
       static constexpr char defaultVolume = 100;
 
       enum class A : char {

@@ -368,7 +368,9 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       realtimeDelay->setValue(preferences.getInt(PREF_IO_MIDI_REALTIMEDELAY));
       playNotes->setChecked(preferences.getBool(PREF_SCORE_NOTE_PLAYONCLICK));
       playChordOnAddNote->setChecked(preferences.getBool(PREF_SCORE_CHORD_PLAYONADDNOTE));
-      playHarmonyWhenEditing->setChecked(preferences.getBool(PREF_SCORE_HARMONY_PLAYWHENEDITING));
+
+      playHarmony->setChecked(preferences.getBool(PREF_SCORE_HARMONY_PLAY));
+      playHarmonyOnEdit->setChecked(preferences.getBool(PREF_SCORE_HARMONY_PLAY_ONEDIT));
 
       checkUpdateStartup->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_CHECKUPDATE));
 
@@ -994,7 +996,8 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_IO_OSC_PORTNUMBER, oscPort->value());
       preferences.setPreference(PREF_IO_OSC_USEREMOTECONTROL, oscServer->isChecked());
       preferences.setPreference(PREF_SCORE_CHORD_PLAYONADDNOTE, playChordOnAddNote->isChecked());
-      preferences.setPreference(PREF_SCORE_HARMONY_PLAYWHENEDITING, playHarmonyWhenEditing->isChecked());
+      preferences.setPreference(PREF_SCORE_HARMONY_PLAY, playHarmony->isChecked());
+      preferences.setPreference(PREF_SCORE_HARMONY_PLAY_ONEDIT, playHarmonyOnEdit->isChecked());
       preferences.setPreference(PREF_SCORE_NOTE_DEFAULTPLAYDURATION, defaultPlayDuration->value());
       preferences.setPreference(PREF_SCORE_NOTE_PLAYONCLICK, playNotes->isChecked());
       preferences.setPreference(PREF_UI_APP_STARTUP_CHECKUPDATE, checkUpdateStartup->isChecked());

@@ -106,6 +106,13 @@ QString Harmony::baseName()
       return tpc2name(_baseTpc, _baseSpelling, _baseCase);
       }
 
+
+bool Harmony::isRealizable() const
+      {
+      return (_rootTpc != Tpc::TPC_INVALID)
+                  || (_harmonyType == HarmonyType::NASHVILLE); // unable to fully check at for nashville at the moment
+      }
+
 //---------------------------------------------------------
 //   resolveDegreeList
 //    try to detect chord number and to eliminate degree

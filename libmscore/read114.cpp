@@ -3266,12 +3266,13 @@ Score::FileError MasterScore::read114(XmlReader& e)
             style().set(Sid::voltaPosAbove, QPointF(0.0, -2.0f));
 
       fixTicks();
-      rebuildMidiMapping();
-      updateChannel();
 
       for (Part* p : parts()) {
-            p->updateHarmonyChannels();
+            p->updateHarmonyChannels(false);
             }
+
+      rebuildMidiMapping();
+      updateChannel();
 
       // treat reading a 1.14 file as import
       // on save warn if old file will be overwritten
