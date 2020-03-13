@@ -61,7 +61,7 @@ class RangeMap {
 //---------------------------------------------------------
 
 class MidiRenderer {
-      Score* score;
+      Score* score{nullptr};
       bool needUpdate = true;
       int minChunkSize = 0;
 
@@ -92,20 +92,40 @@ class MidiRenderer {
    private:
       std::vector<Chunk> chunks;
 
+      struct StaffContext
+            {
+            Staff* staff{nullptr};
+            DynamicsRenderMethod method{DynamicsRenderMethod::SIMPLE};
+            int cc{0};
+            bool renderHarmony{false};
+            };
+
       void updateChunksPartition();
       static bool canBreakChunk(const Measure* last);
       void updateState();
 
-      void renderStaffChunk(const Chunk&, EventMap* events, Staff*, DynamicsRenderMethod method, int cc);
+      void renderStaffChunk(const Chunk&, EventMap* events, const StaffContext& sctx);
       void renderSpanners(const Chunk&, EventMap* events);
       void renderMetronome(const Chunk&, EventMap* events);
       void renderMetronome(EventMap* events, Measure* m, const Fraction& tickOffset);
 
+      void collectMeasureEvents(EventMap* events, Measure* m, const MidiRenderer::StaffContext& sctx, int tickOffset);
+      void collectMeasureEventsSimple(EventMap* events, Measure* m, const StaffContext& sctx, int tickOffset);
+      void collectMeasureEventsDefault(EventMap* events, Measure* m, const StaffContext& sctx, int tickOffset);
+
    public:
       explicit MidiRenderer(Score* s) : score(s) {}
 
-      void renderScore(EventMap* events, const SynthesizerState& synthState, bool metronome = true);
-      void renderChunk(const Chunk&, EventMap* events, const SynthesizerState& synthState, bool metronome = true);
+      struct Context
+            {
+            const SynthesizerState& synthState;
+            bool metronome{true};
+            bool renderHarmony{false};
+            Context(const SynthesizerState& ss) : synthState(ss) {}
+            };
+
+      void renderScore(EventMap* events, const Context& ctx);
+      void renderChunk(const Chunk&, EventMap* events, const Context& ctx);
 
       void setScoreChanged() { needUpdate = true; }
       void setMinChunkSize(int sizeMeasures) { minChunkSize = sizeMeasures; needUpdate = true; }

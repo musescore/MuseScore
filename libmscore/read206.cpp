@@ -3895,6 +3895,11 @@ static bool readScore(Score* score, XmlReader& e)
             }
 #endif
       score->fixTicks();
+
+      for (Part* p : score->parts()) {
+            p->updateHarmonyChannels(false);
+            }
+
       if (score->isMaster()) {
             MasterScore* ms = static_cast<MasterScore*>(score);
             if (!ms->omr())
@@ -3902,10 +3907,6 @@ static bool readScore(Score* score, XmlReader& e)
             ms->rebuildMidiMapping();
             ms->updateChannel();
  //           ms->createPlayEvents();
-            }
-
-      for (Part* p : score->parts()) {
-            p->updateHarmonyChannels();
             }
 
       return true;

@@ -551,7 +551,7 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       {
       int type = event.type();
       if (type == ME_NOTEON) {
-            if (!event.isMuted(cs->playbackScore())) {
+            if (!event.isMuted()) {
                   if (event.discard()) { // ignore noteoff but restrike noteon
                         if (event.velo() > 0)
                               putEvent(NPlayEvent(ME_NOTEON, event.channel(), event.pitch(), 0) ,framePos);
@@ -1035,7 +1035,10 @@ void Seq::initInstruments(bool realTime)
 
 void Seq::renderChunk(const MidiRenderer::Chunk& ch, EventMap* eventMap)
       {
-      midi.renderChunk(ch, eventMap, mscore->synthesizerState(), /* metronome */ true);
+      MidiRenderer::Context ctx(mscore->synthesizerState());
+      ctx.metronome = true;
+      ctx.renderHarmony = preferences.getBool(PREF_SCORE_HARMONY_PLAY);
+      midi.renderChunk(ch, eventMap, ctx);
       renderEventsStatus.setOccupied(ch.utick1(), ch.utick2());
       }
 

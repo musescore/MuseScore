@@ -25,6 +25,9 @@
 
 namespace Ms {
 
+const char* Channel::DEFAULT_NAME = "normal";
+const char* Channel::HARMONY_NAME = "harmony";
+
 Instrument InstrumentList::defaultInstrument;
 const std::initializer_list<Channel::Prop> PartChannelSettingsLink::excerptProperties {
       Channel::Prop::SOLOMUTE,
@@ -419,10 +422,6 @@ NamedEventList* Instrument::midiAction(const QString& s, int channelIdx) const
             }
       return 0;
       }
-
-
-const char *Channel::DEFAULT_NAME = "normal";
-
 
 //---------------------------------------------------------
 //   Channel

@@ -18,6 +18,7 @@
 namespace Ms {
 
 class Note;
+class Harmony;
 class XmlWriter;
 class Score;
 
@@ -237,7 +238,8 @@ class PlayEvent : public MidiCoreEvent {
 //---------------------------------------------------------
 
 class NPlayEvent : public PlayEvent {
-      const Note* _note = 0;
+      const Note* _note{nullptr};
+      const Harmony* _harmony{nullptr};
       int _origin = -1;
       int _discard = 0;
 
@@ -248,14 +250,16 @@ class NPlayEvent : public PlayEvent {
       NPlayEvent(const MidiCoreEvent& e) : PlayEvent(e) {}
       NPlayEvent(BeatType beatType);
 
-      const Note* note() const       { return _note; }
-      void setNote(const Note* v)    { _note = v; }
+      const Note* note() const            { return _note;    }
+      void setNote(const Note* v)         { _note = v;       }
+      const Harmony* harmony() const      { return _harmony; }
+      void setHarmony(const Harmony* v)   { _harmony = v;    }
 
       int getOriginatingStaff() const { return _origin; }
       void setOriginatingStaff(int i) { _origin = i; }
       void setDiscard(int d) { _discard = d; }
       int discard() const { return _discard; }
-      bool isMuted(Score* score = 0) const;
+      bool isMuted() const;
       };
 
 //---------------------------------------------------------

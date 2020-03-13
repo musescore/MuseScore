@@ -457,7 +457,7 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
             }
 
       Harmony* next = _harmony->findNext();
-      if (!_literal && next) {
+      if (!_literal && next && tpcIsValid(next->rootTpc())) {
             //jazz interpretation
             QString qNext = next->parsedForm()->quality();
             //pitch from current to next harmony normalized to a range between 0 and 12

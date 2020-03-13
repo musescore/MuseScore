@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>834</width>
-    <height>682</height>
+    <height>701</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -90,7 +90,7 @@
       <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -1278,13 +1278,6 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="playChordOnAddNote">
-            <property name="text">
-             <string>Play whole chord when editing</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="2">
            <spacer name="horizontalSpacer_2">
             <property name="orientation">
@@ -1302,6 +1295,13 @@
            <widget class="QLabel" name="label_37">
             <property name="text">
              <string>Default duration:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="playChordOnAddNote">
+            <property name="text">
+             <string>Play whole chord when editing</string>
             </property>
            </widget>
           </item>
@@ -1327,10 +1327,34 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QCheckBox" name="playHarmonyWhenEditing">
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="playHarmony">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
+         <property name="title">
+          <string>Play Harmony</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="playHarmonyOnEdit">
             <property name="text">
              <string>Play harmony when editing</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -4298,7 +4322,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>playNotes</tabstop>
   <tabstop>defaultPlayDuration</tabstop>
   <tabstop>playChordOnAddNote</tabstop>
-  <tabstop>playHarmonyWhenEditing</tabstop>
   <tabstop>rcGroup</tabstop>
   <tabstop>rewindActive</tabstop>
   <tabstop>recordRewind</tabstop>

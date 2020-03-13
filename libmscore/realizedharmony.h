@@ -20,6 +20,9 @@
 #ifndef __REALIZEDHARMONY_H__
 #define __REALIZEDHARMONY_H__
 
+#include <QMap>
+#include <QList>
+
 namespace Ms {
 
 class Harmony;

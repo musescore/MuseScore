@@ -262,12 +262,14 @@ bool Score::read(XmlReader& e)
             masterScore()->setShowOmr(false);
 
       fixTicks();
+
+      for (Part* p : _parts) {
+            p->updateHarmonyChannels(false);
+            }
+
       masterScore()->rebuildMidiMapping();
       masterScore()->updateChannel();
 
-      for (Part* p : _parts) {
-            p->updateHarmonyChannels();
-            }
 //      createPlayEvents();
       return true;
       }

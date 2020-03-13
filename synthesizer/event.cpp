@@ -12,6 +12,7 @@
 
 #include "libmscore/xml.h"
 #include "libmscore/note.h"
+#include "libmscore/harmony.h"
 #include "libmscore/sig.h"
 #include "event.h"
 #include "libmscore/staff.h"
@@ -171,7 +172,7 @@ NPlayEvent::NPlayEvent(BeatType beatType)
 //   isMuted
 //---------------------------------------------------------
 
-bool NPlayEvent::isMuted(Score* score) const
+bool NPlayEvent::isMuted() const
       {
       const Note* n = note();
       if (n) {
@@ -181,15 +182,14 @@ bool NPlayEvent::isMuted(Score* score) const
             const Channel* a = instr->playbackChannel(n->subchannel(), cs);
             return a->mute() || a->soloMute() || !staff->playbackVoice(n->voice());
             }
-      else if (score) {
-            //maybe we have a harmony channel to account for
-            Staff* staff = score->staff(getOriginatingStaff());
-            if (!staff)
-                  return false;
-            const Channel* a = staff->part()->harmonyChannel();
-            if (a) //if there is a harmony channel
-                  return a->mute() || a->soloMute();
+
+      const Harmony* h = harmony();
+      if (h) {
+            const Channel* hCh = h->part()->harmonyChannel();
+            if (hCh) //if there is a harmony channel
+                  return hCh->mute() || hCh->soloMute();
             }
+
       return false;
       }
 

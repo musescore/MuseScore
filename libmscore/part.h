@@ -63,7 +63,6 @@ class Part final : public ScoreElement {
       int _color;                   ///User specified color for helping to label parts
 
       PreferSharpFlat _preferSharpFlat;
-      Channel* _harmonyChannel = 0;      ///channel which harmony is played
 
    public:
       Part(Score* = 0);
@@ -139,9 +138,8 @@ class Part final : public ScoreElement {
       bool hasTabStaff() const;
       bool hasDrumStaff() const;
 
-      void updateHarmonyChannels(bool checkRemoval = false);
-      const Channel* harmonyChannel() const { return _harmonyChannel; }
-      void setHarmonyChannel(Channel* c) { _harmonyChannel = c; }
+      void updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval = false);
+      const Channel* harmonyChannel() const;
 
       const Part* masterPart() const;
       Part* masterPart();

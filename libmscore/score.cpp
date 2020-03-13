@@ -1491,7 +1491,7 @@ void Score::addElement(Element* element)
                   }
                   break;
             case ElementType::HARMONY:
-                  element->part()->updateHarmonyChannels();
+                  element->part()->updateHarmonyChannels(true);
                   break;
 
             default:
@@ -1655,7 +1655,7 @@ void Score::removeElement(Element* element)
                   }
                   break;
             case ElementType::HARMONY:
-                  element->part()->updateHarmonyChannels(true);
+                  element->part()->updateHarmonyChannels(true, true);
                   break;
 
             default:
