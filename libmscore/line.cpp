@@ -711,7 +711,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   Note* n = toNote(e);
                   System* s = n->chord()->segment()->system();
                   if (s == 0) {
-                        qDebug("no system: %s  start %s chord parent %s\n", name(), n->name(), n->chord()->parent()->name());
+                        qDebug("no system: %s  start %s chord parent %s", name(), n->name(), n->chord()->parent()->name());
                         return QPointF();
                         }
                   *sys = s;

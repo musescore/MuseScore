@@ -1628,10 +1628,12 @@ void MusicXMLParserPass2::part()
                   sp->setTick(tick1);
                   sp->setTick2(tick2);
                   sp->score()->addElement(sp);
+                  //qDebug("spanner %p added to score", sp);
                   }
             else {
                   // incomplete spanner -> cleanup
                   delete sp;
+                  //qDebug("spanner %p cleaned (deleted)", sp);
                   }
             ++i;
             }
@@ -5705,7 +5707,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
                   gliss->setText(glissandoText);
                   gliss->setGlissandoType(glissandoTag == 0 ? GlissandoType::STRAIGHT : GlissandoType::WAVY);
                   spanners[gliss] = QPair<int, int>(tick.ticks(), -1);
-                  // qDebug("glissando/slide=%p inserted at first tick %d", gliss, tick);
+                  //qDebug("glissando/slide=%p inserted at first tick %s", gliss, qPrintable(tick.print()));
                   }
             }
       else if (glissandoType == "stop") {
@@ -5720,7 +5722,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
                   gliss->setEndElement(note);
                   gliss->setTick2(tick);
                   gliss->setTrack2(track);
-                  // qDebug("glissando/slide=%p second tick %d", gliss, tick);
+                  //qDebug("glissando/slide=%p second tick %s", gliss, qPrintable(tick.print()));
                   gliss = nullptr;
                   }
             }

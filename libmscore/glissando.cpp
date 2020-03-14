@@ -237,6 +237,11 @@ void Glissando::layout()
       GlissandoSegment* segm1 = toGlissandoSegment(frontSegment());
       GlissandoSegment* segm2 = toGlissandoSegment(backSegment());
 
+      if (!cr2->segment()->system()) {
+            qDebug("no system: %s  start %s chord parent %s", name(), cr2->name(), cr2->parent()->name());
+            return;
+            }
+
       // Note: line segments are defined by
       // initial point: ipos() (relative to system origin)
       // ending point:  pos2() (relative to initial point)
