@@ -1,1 +1,101 @@
-<?xml version="1.0" standalone="no"?><!-- Generator: Gravit.io --><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 94 94" width="94" height="94"><defs><clipPath id="_clipPath_9JbtuVy4F6hNHJ0cXypNjAsezHGDpwlU"><rect width="94" height="94"/></clipPath></defs><g clip-path="url(#_clipPath_9JbtuVy4F6hNHJ0cXypNjAsezHGDpwlU)"><g><path d=" M 61.992 0 L 53.971 0 L 53.971 65.358 C 49.536 63.652 43.797 63.628 38.136 65.686 C 27.994 69.377 21.951 78.355 24.638 85.736 C 27.326 93.119 37.726 96.11 47.867 92.419 C 56.481 89.285 62.116 82.337 61.978 75.793 L 61.992 22.342 C 75.978 24.546 76.935 42.226 75.26 47.184 C 74.624 49.063 75.744 50.47 77.858 47.184 C 92.938 23.726 61.992 13.376 61.992 0 Z " fill="rgb(59,63,69)"/></g><g><rect x="24" y="21.011" width="21" height="5" transform="matrix(-0.004,-1,1,-0.004,11.137,58.11)" fill="rgb(59,63,69)"/><rect x="24" y="21.011" width="21" height="5" transform="matrix(1,0,0,1,0,0)" fill="rgb(59,63,69)"/><rect x="24" y="38" width="21" height="5" transform="matrix(1,0,0,1,0,0)" fill="rgb(59,63,69)"/></g></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Gravit.io -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   style="isolation:isolate"
+   viewBox="0 0 94 94"
+   width="94"
+   height="94"
+   version="1.1"
+   id="svg21"
+   sodipodi:docname="note_timewise.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <metadata
+     id="metadata25">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview23"
+     showgrid="false"
+     inkscape:zoom="5.0212766"
+     inkscape:cx="40.159729"
+     inkscape:cy="82.006409"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg21" />
+  <defs
+     id="defs5">
+    <clipPath
+       id="_clipPath_9JbtuVy4F6hNHJ0cXypNjAsezHGDpwlU">
+      <rect
+         width="94"
+         height="94"
+         id="rect2" />
+    </clipPath>
+  </defs>
+  <g
+     clip-path="url(#_clipPath_9JbtuVy4F6hNHJ0cXypNjAsezHGDpwlU)"
+     id="g19">
+    <g
+       id="g9">
+      <path
+         d="m 61.992,0 h -8.021 v 65.358 c -4.435,-1.706 -10.174,-1.73 -15.835,0.328 -10.142,3.691 -16.185,12.669 -13.498,20.05 2.688,7.383 13.088,10.374 23.229,6.683 8.614,-3.134 14.109286,-10.080545 14.111,-16.626 l 0.014,-53.451 c 13.986,2.204 14.943783,19.884265 13.268,24.842 -0.635217,1.879265 0.484988,3.286635 2.598,0 C 92.938988,23.726635 61.992,13.376 61.992,0 Z"
+         id="path7"
+         inkscape:connector-curvature="0"
+         style="fill:#3b3f45"
+         sodipodi:nodetypes="ccccccscssc" />
+    </g>
+    <g
+       id="g17">
+      <rect
+         x="24"
+         y="21.011"
+         width="21"
+         height="5"
+         transform="matrix(-0.004,-1,1,-0.004,11.137,58.11)"
+         fill="rgb(59,63,69)"
+         id="rect11" />
+      <rect
+         x="24"
+         y="21.011"
+         width="21"
+         height="5"
+         transform="matrix(1,0,0,1,0,0)"
+         fill="rgb(59,63,69)"
+         id="rect13" />
+      <rect
+         x="24"
+         y="38"
+         width="21"
+         height="5"
+         transform="matrix(1,0,0,1,0,0)"
+         fill="rgb(59,63,69)"
+         id="rect15" />
+    </g>
+  </g>
+</svg>

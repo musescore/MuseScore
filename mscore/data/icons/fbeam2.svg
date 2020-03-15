@@ -10,7 +10,7 @@
    viewBox="-1 -200 1000 1000"
    id="svg34224"
    sodipodi:version="0.32"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    width="128"
    height="128"
    sodipodi:docname="fbeam2.svg"
@@ -45,7 +45,7 @@
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
-     inkscape:window-height="1145"
+     inkscape:window-height="1017"
      inkscape:window-width="1920"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -55,11 +55,11 @@
      id="base"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:zoom="5.6862552"
-     inkscape:cx="32.256679"
-     inkscape:cy="68.014718"
-     inkscape:window-x="-3"
-     inkscape:window-y="-3"
+     inkscape:zoom="128.66527"
+     inkscape:cx="17.045656"
+     inkscape:cy="124.50589"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:current-layer="svg34224"
      width="128px"
      height="128px"
@@ -71,11 +71,15 @@
      d="m 939.80902,-121.57405 -807.20706,0.71187"
      id="path2158" />
   <path
-     style="direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:117.85194397;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-     d="m 943.88295,240.09265 0.0937,117.89243 -809.9375,-420.049694 -0.125,-117.939916 809.96875,420.09714 z"
-     id="path3136" />
+     style="color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;stroke:none;stroke-width:117.85194397;marker:none;enable-background:accumulate"
+     d="m 943.88295,240.09265 0.0937,117.89243 -809.9375,-420.049694 -0.125,-117.211286 809.96875,419.36851 z"
+     id="path3136"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccc" />
   <path
-     style="direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:117.8515625;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-     d="m 942.50259,28.403098 0.0937,117.899352 -809.9375,-209.696712 -0.0937,-117.868098 809.9375,209.665458 z"
-     id="path3136-5" />
+     style="color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;stroke:none;stroke-width:117.8515625;marker:none;enable-background:accumulate"
+     d="m 942.50259,28.403098 0.0937,117.899352 -809.9375,-209.696712 0.0277,-115.803628 z"
+     id="path3136-5"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccc" />
 </svg>

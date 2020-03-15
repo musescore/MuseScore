@@ -1,12 +1,71 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>insert-symbol</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Original-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="insert-symbol" fill="#3B3F45">
-            <path d="M2,5.99922997 C2,3.79051625 3.79246765,2 5.99922997,2 L18.00077,2 C20.2094838,2 22,3.79246765 22,5.99922997 L22,18.00077 C22,20.2094838 20.2075324,22 18.00077,22 L5.99922997,22 C3.79051625,22 2,20.2075324 2,18.00077 L2,5.99922997 Z M15.16188,7 L14.9321,7.40208 C14.8421,7.54212 14.7776,7.64259 14.70234,7.8329 C14.62714,8.0232 14.54161,8.27638 14.44385,8.55091 C14.33451,8.85788 14.22262,9.24679 14.0992,9.61358 C13.79085,9.13114 13.51243,8.62238 13.09399,8.2637 C12.43982,7.70299 11.62368,7.34464 10.68146,7.34464 C8.04258,7.34464 6,9.61354 6,12.2846 C6,14.82378 8.13105,16.82245 10.68146,16.82245 C12.16398,16.82245 13.24456,15.89668 14.07049,14.75456 C14.33786,15.49739 14.59496,16.26602 14.9321,16.76501 L15.1906,17.16709 L16.99282,15.95724 L16.74151,15.58746 C16.15125,14.70892 15.76802,13.47198 15.39165,12.2846 C15.6101,11.61533 15.86014,10.82849 16.10966,10.13054 C16.37615,9.38511 16.66501,8.69255 16.74151,8.57964 L17,8.20627 L16.59792,7.94778 L15.56396,7.25848 L15.16188,7 Z M10.68147,9.44125 C11.32847,9.44125 11.80572,9.7553 12.23238,10.30287 C12.62879,10.81162 12.90191,11.54941 13.15144,12.2846 C12.91199,12.92908 12.63127,13.5488 12.23238,13.97911 C11.79886,14.44675 11.29869,14.72584 10.68147,14.72584 C9.31608,14.72584 8.18277,13.63806 8.18277,12.2846 C8.18277,10.73867 9.27206,9.44125 10.68147,9.44125 L10.68147,9.44125 Z" id="Combined-Shape"></path>
-        </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24px"
+   height="24px"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg11"
+   sodipodi:docname="insert-symbol.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <metadata
+     id="metadata15">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview13"
+     showgrid="false"
+     inkscape:zoom="45.254834"
+     inkscape:cx="2.3269741"
+     inkscape:cy="12.886678"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11" />
+  <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title2">insert-symbol</title>
+  <desc
+     id="desc4">Created with Sketch.</desc>
+  <defs
+     id="defs6" />
+  <g
+     id="Original-24"
+     stroke="none"
+     stroke-width="1"
+     fill="none"
+     fill-rule="evenodd">
+    <g
+       id="insert-symbol"
+       fill="#3B3F45">
+      <path
+         d="M 2,5.99923 C 2,3.7905162 3.7924676,2 5.99923,2 H 18.00077 C 20.209484,2 22,3.7924676 22,5.99923 V 18.00077 C 22,20.209484 20.207532,22 18.00077,22 H 5.99923 C 3.7905163,22 2,20.207532 2,18.00077 Z M 15.16188,7 14.9321,7.40208 C 14.849504,7.5466106 14.777576,7.6425804 14.70234,7.8329 14.627116,8.0231904 14.54161,8.27638 14.44385,8.55091 14.33451,8.85788 14.22262,9.24679 14.0992,9.61358 13.79085,9.13114 13.51243,8.62238 13.09399,8.2637 12.43982,7.70299 11.62368,7.34464 10.68146,7.34464 8.04258,7.34464 6,9.61354 6,12.2846 c 0,2.53918 2.13105,4.53785 4.68146,4.53785 1.48252,0 2.5631,-0.92577 3.38903,-2.06789 0.26737,0.74283 0.52447,1.51146 0.86161,2.01045 l 0.2585,0.40208 1.80222,-1.20985 -0.25131,-0.36978 c -0.59026,-0.87854 -0.97349,-2.11548 -1.34986,-3.30286 0.21845,-0.66927 0.46849,-1.45611 0.71801,-2.15406 0.26649,-0.74543 0.55535,-1.43799 0.63185,-1.5509 L 17,8.20627 16.59792,7.94778 15.56396,7.25848 Z m -4.48041,2.44125 c 0.647,0 1.12425,0.31405 1.55091,0.86162 0.39641,0.50875 0.920021,1.68145 0.91906,1.98173 -9.61e-4,0.30028 -0.52017,1.2642 -0.91906,1.69451 -0.43352,0.46764 -0.93369,0.74673 -1.55091,0.74673 -1.36539,0 -2.4987,-1.08778 -2.4987,-2.44124 0,-1.54593 1.08929,-2.84335 2.4987,-2.84335 z"
+         id="Combined-Shape"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ssssssssscsscccsssccccccccccccsczcsss" />
     </g>
+  </g>
 </svg>
