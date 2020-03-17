@@ -550,7 +550,11 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                         resetButton->setIcon(*icons[int(Icons::reset_ICON)]);
                         connect(resetButton, &QToolButton::clicked, [=] { resetClicked(i); });
                         Sid sidx = inspector->element()->getPropertyStyle(ii.t);
-                        if (sidx != Sid::NOSTYLE) {
+                        // S button for fingering placement is bugged and proposed to be hidden
+                        // it can be brought back once the relevant design is fixed, 
+                        // for example changing values of fingering placement to "Auto, Above, Below", "Auto" as default
+                        // See https://musescore.org/en/node/288372 and https://musescore.org/en/node/297092
+                        if (sidx != Sid::NOSTYLE && sidx != Sid::fingeringPlacement) {
                               QMenu* menu = new QMenu(this);
                               resetButton->setMenu(menu);
                               resetButton->setPopupMode(QToolButton::MenuButtonPopup);
@@ -562,7 +566,8 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                         ResetButton* b = qobject_cast<ResetButton*>(rw);
                         connect(b, &ResetButton::resetClicked, [=] { resetClicked(i); });
                         Sid sidx = inspector->element()->getPropertyStyle(ii.t);
-                        if (sidx != Sid::NOSTYLE) {
+                        // Same, see comment above
+                        if (sidx != Sid::NOSTYLE && sidx != Sid::fingeringPlacement) {
                               b->enableSetStyle(true);
                               connect(b, &ResetButton::setStyleClicked, [=] { setStyleClicked(i); });
                               }
