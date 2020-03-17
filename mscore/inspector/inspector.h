@@ -36,6 +36,7 @@
 #include "ui_inspector_accidental.h"
 #include "ui_inspector_tempotext.h"
 #include "ui_inspector_lyric.h"
+#include "ui_inspector_instrchange.h"
 #include "ui_inspector_stafftext.h"
 #include "ui_inspector_slur.h"
 #include "ui_inspector_empty.h"
@@ -348,7 +349,7 @@ class InspectorLyric : public InspectorTextBase {
       };
 
 //---------------------------------------------------------
-//   InspectorLyric
+//   InspectorStaffText
 //---------------------------------------------------------
 
 class InspectorStaffText : public InspectorTextBase {
