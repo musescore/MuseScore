@@ -88,4 +88,19 @@ void QmlNativeMenu::popup()
       showMenu(QCursor::pos());
       }
 
+//---------------------------------------------------------
+//   QmlNativeMenu::setVisible
+//---------------------------------------------------------
+
+void QmlNativeMenu::setVisible(bool val)
+      {
+      if (val == _visible)
+            return;
+
+      if (val)
+            open();
+      else
+            Q_ASSERT(false); // trying to hide visible menu: not implemented and (is supposed to be) unused
+      }
+
 } // namespace Ms

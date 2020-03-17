@@ -40,7 +40,7 @@ class QmlNativeMenu : public QQuickItem {
       Q_PROPERTY(int x READ x WRITE setX)
       Q_PROPERTY(int y READ y WRITE setY)
 
-      Q_PROPERTY(bool visible READ visible NOTIFY visibleChanged)
+      Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
 
       QQmlListProperty<QObject> contentData() { return QQmlListProperty<QObject>(this, _contentData); } // TODO: use different QQmlListProperty constructor?
 
@@ -58,7 +58,8 @@ class QmlNativeMenu : public QQuickItem {
       void setX(int val) { pos.setX(val); }
       void setY(int val) { pos.setY(val); }
 
-      bool visible() const { return _visible; };
+      bool visible() const { return _visible; }
+      void setVisible(bool val);
 
       Q_INVOKABLE void open();
       Q_INVOKABLE void popup();
