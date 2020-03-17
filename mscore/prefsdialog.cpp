@@ -409,10 +409,10 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       importLayout->setChecked(preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT));
       importBreaks->setChecked(preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTBREAKS));
-      QString resetElementPositions = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
-      if (resetElementPositions == "No")
+      QString resPref = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
+      if (resPref == "No")
             resetElementPositionsNo->setChecked(true);
-      else if (resetElementPositions == "Yes")
+      else if (resPref == "Yes")
             resetElementPositionsYes->setChecked(true);
       else // "Ask" or unset (or anything else)
             resetElementPositionsAlwaysAsk->setChecked(true);
