@@ -305,7 +305,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::END_HOOK_HEIGHT,         false, "endHookHeight",         P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "end hook height")  },
       { Pid::END_FONT_FACE,           false, "endFontFace",           P_TYPE::FONT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "end font face")    },
       { Pid::END_FONT_SIZE,           false, "endFontSize",           P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "end font size")    },
-      { Pid::END_FONT_STYLE,          false, "endFontStyle",          P_TYPE::INT,                DUMMY_QT_TRANSLATE_NOOP("propertyName",  "end font style")    },
+      { Pid::END_FONT_STYLE,          false, "endFontStyle",          P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName",  "end font style")  },
       { Pid::END_TEXT_OFFSET,         false, "endTextOffset",         P_TYPE::POINT_SP,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "end text offset")  },
 
       { Pid::POS_ABOVE,               false, "posAbove",              P_TYPE::SP_REAL,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "position above")   },
@@ -337,6 +337,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::START_WITH_MEASURE_ONE,  true,  "startWithMeasureOne",   P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "start with measure one") },
 
       { Pid::PATH,                    false, "path",                  P_TYPE::PATH,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "path") },
+
+      { Pid::PREFER_SHARP_FLAT,       true,  "preferSharpFlat",       P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "prefer sharps or flats") },
 
       { Pid::END, false, "++end++", P_TYPE::INT, DUMMY_QT_TRANSLATE_NOOP("propertyName", "<invalid property>") }
       };

@@ -346,6 +346,8 @@ enum class Pid {
       START_WITH_MEASURE_ONE,
 
       PATH, // for ChordLine to make its shape changes undoable
+      
+      PREFER_SHARP_FLAT,
 
       END
       };

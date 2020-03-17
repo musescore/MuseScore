@@ -1156,7 +1156,7 @@ void Timeline::key_meta(Segment* seg, int* stagger, int pos)
                   global_key = Key::NUM_OF;
             else {
                   const Interval curr_interval = stave->part()->instrument()->transpose();
-                  global_key = transposeKey(global_key, curr_interval);
+                  global_key = transposeKey(global_key, curr_interval, stave->part()->preferSharpFlat());
                   }
 
             std::map<Key, int>::iterator it = key_frequencies.find(global_key);
