@@ -385,7 +385,7 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
       downButton->setEnabled(false);
       addStaffButton->setEnabled(false);
       addLinkedStaffButton->setEnabled(false);
-      
+
       upButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
       downButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
 
@@ -508,6 +508,7 @@ void InstrumentsWidget::on_partiturList_itemSelectionChanged()
             downButton->setEnabled(false);
             addLinkedStaffButton->setEnabled(false);
             addStaffButton->setEnabled(false);
+            completeChanged(false);
             return;
             }
       QTreeWidgetItem* item = wi.front();
@@ -538,7 +539,7 @@ void InstrumentsWidget::on_partiturList_itemSelectionChanged()
       bool first = (witems.first() == item);
       bool last = (witems.last() == item);
 
-      removeButton->setEnabled(flag && !onlyOne);
+      removeButton->setEnabled(flag /*&& !onlyOne*/);
       upButton->setEnabled(flag && !onlyOne && !first);
       downButton->setEnabled(flag && !onlyOne && !last);
       addLinkedStaffButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
@@ -605,11 +606,6 @@ void InstrumentsWidget::on_removeButton_clicked()
       QTreeWidgetItem* parent = item->parent();
 
       if (parent) {
-            if (parent->childCount() == 1) {
-                  Q_ASSERT(false); // shouldn't get here (remove button disabled when one item left)
-                  removeButton->setEnabled(false); // nevertheless, handle gracefully in release builds
-                  return;
-                  }
             if (((StaffListItem*)item)->op() == ListItemOp::ADD) {
                   if (parent->childCount() == 1) {
                         partiturList->takeTopLevelItem(partiturList->indexOfTopLevelItem(parent));
@@ -640,12 +636,6 @@ void InstrumentsWidget::on_removeButton_clicked()
             partiturList->setCurrentItem(parent);
             }
       else {
-            if (partiturList->topLevelItemCount() == 1) {
-                  Q_ASSERT(false); // shouldn't get here as (remove button disabled when one item left)
-                  removeButton->setEnabled(false); // nevertheless, handle gracefully in release builds
-                  emit completeChanged(false);
-                  return;
-                  }
             int idx = partiturList->indexOfTopLevelItem(item);
             if (((PartListItem*)item)->op == ListItemOp::ADD) {
                   partiturList->blockSignals(true);
