@@ -73,6 +73,7 @@ private slots:
       void clefs1() { mxmlIoTest("testClefs1"); }
       void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }
       void cueNotes() { mxmlIoTest("testCueNotes"); }
+      void cueNotes2() { mxmlMscxExportTestRef("testCueNotes2"); }
       void dalSegno() { mxmlIoTest("testDalSegno"); }
       void dcalCoda() { mxmlIoTest("testDCalCoda"); }
       void dcalFine() { mxmlIoTest("testDCalFine"); }
@@ -118,6 +119,7 @@ private slots:
       void keysig2() { mxmlIoTest("testKeysig2"); }
       void lines1() { mxmlIoTest("testLines1"); }
       void lines2() { mxmlIoTest("testLines2"); }
+      void lines3() { mxmlIoTest("testLines3"); }
       void lyricColor() { mxmlIoTest("testLyricColor"); }
       void lyrics1() { mxmlIoTestRef("testLyrics1"); }
       void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }
