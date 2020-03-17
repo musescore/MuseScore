@@ -200,7 +200,7 @@ class FilterPaletteTreeModel : public QSortFilterProxyModel {
 class PaletteCellFilterProxyModel : public QSortFilterProxyModel {
       Q_OBJECT
    public:
-      PaletteCellFilterProxyModel(QObject* parent = nullptr) : QSortFilterProxyModel(parent) {}
+      PaletteCellFilterProxyModel(QObject* parent = nullptr);
 
       bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
       };

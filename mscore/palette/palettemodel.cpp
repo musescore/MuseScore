@@ -253,8 +253,8 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
       if (const PalettePanel* pp = findPalettePanel(index)) {
             switch (role) {
                   case Qt::DisplayRole:
-                        return pp->translatedName();
                   case Qt::ToolTipRole:
+                        return pp->translatedName();
                   case Qt::AccessibleTextRole:
                         return QString("%1 palette").arg(pp->translatedName());
                   case VisibleRole:
@@ -1018,6 +1018,16 @@ bool FilterPaletteTreeModel::filterAcceptsRow(int sourceRow, const QModelIndex& 
       if (!cell) // a palette panel or just an unrelated model
             return true;
       return cellFilter->accept(*cell);
+      }
+
+//---------------------------------------------------------
+//   PaletteCellFilterProxyModel::PaletteCellFilterProxyModel
+//---------------------------------------------------------
+
+PaletteCellFilterProxyModel::PaletteCellFilterProxyModel(QObject* parent)
+      : QSortFilterProxyModel(parent)
+      {
+      setFilterRole(Qt::ToolTipRole); // palette cells have no data for DisplayRole
       }
 
 //---------------------------------------------------------
