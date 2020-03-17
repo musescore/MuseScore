@@ -412,7 +412,7 @@ GridView {
     function focusNextMatchingItem(str) {
         const nextIndex = (currentIndex === count - 1) ? 0 : currentIndex + 1;
         const modelIndex = paletteModel.index(nextIndex, 0, paletteRootIndex);
-        const matchedIndexList = paletteModel.match(modelIndex, Qt.DisplayRole, str);
+        const matchedIndexList = paletteModel.match(modelIndex, Qt.ToolTipRole, str);
         if (matchedIndexList.length) {
             currentIndex = matchedIndexList[0].row;
             currentItem.forceActiveFocus();
