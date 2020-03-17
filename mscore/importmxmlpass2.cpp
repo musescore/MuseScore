@@ -4450,7 +4450,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   addGraceChordsBefore(c, gcl);
                   }
 
-            note->setSmall(small);
+            note->setSmall(cue || small); // cue notes are always small, normal notes only if size=cue
+            note->setPlay(!cue);          // cue notes don't play
             note->setHeadGroup(headGroup);
             if (noteColor != QColor::Invalid)
                   note->setColor(noteColor);
@@ -4487,10 +4488,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // cr can be 0 here (if a rest cannot be added)
       // TODO: complete and cleanup handling this case
-      if (cr) {
+      if (cr)
             cr->setVisible(printObject);
-            if (cue) cr->setSmall(cue);  // only once per chord
-            }
 
       Q_ASSERT(_pass1.getPart(partId));
 
