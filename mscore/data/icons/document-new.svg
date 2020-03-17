@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>document-new</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="document-new" fill="#3B3F45">
-            <path d="M5.99,20 L6,20 C6,20.005444 5.99459356,20 5.99,20 Z M6.0099203,4 C6.00997234,4.00035953 6,20 6,20 L18,20 L18,8.82842712 L13.1715729,4 L6.0099203,4 Z M14,2 L20,8 L20,20 C20,21.105 19.105,22 18,22 L5.99,22 C4.885,22 4,21.105 4,20 L4.01,4 C4.01,2.895 4.895,2 6,2 L14,2 Z" id="Shape"></path>
-            <polygon id="Path" points="16 16 13 16 13 19 11 19 11 16 8 16 8 14 11 14 11 11 13 11 13 14 16 14"></polygon>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" version="1.1" viewBox="0 0 24 24"><title>document-new</title><desc>Created with Sketch.</desc><g id="Derived-24" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="document-new" fill="#3B3F45"><path id="Shape" d="M5.99,20 L6,20 C6,20.005444 5.99459356,20 5.99,20 Z M6.0099203,4 C6.00997234,4.00035953 6,20 6,20 L18,20 L18,8.82842712 L13.1715729,4 L6.0099203,4 Z M14,2 L20,8 L20,20 C20,21.105 19.105,22 18,22 L5.99,22 C4.885,22 4,21.105 4,20 L4.01,4 C4.01,2.895 4.895,2 6,2 L14,2 Z"/><polygon id="Path" points="16 16 13 16 13 19 11 19 11 16 8 16 8 14 11 14 11 11 13 11 13 14 16 14"/></g></g></svg>

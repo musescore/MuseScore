@@ -1,18 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>frame-vertical</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Original-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="frame-vertical">
-            <g>
-                <rect id="rect4374" transform="translate(11.999984, 12.000000) rotate(90.000000) translate(-11.999984, -12.000000) " x="0" y="0" width="23.9999685" height="24"></rect>
-                <rect id="rect5617-3" stroke="#5999DB" stroke-width="1.00000003" stroke-dasharray="2.000000059604644,2.000000059604644" x="1.5" y="1.5" width="21" height="21"></rect>
-                <polygon id="Path" fill="#5999DB" points="8.000147 8 12.000147 4 16.000147 8"></polygon>
-                <polygon id="Path-Copy-2" fill="#5999DB" transform="translate(12.000000, 18.000000) scale(1, -1) translate(-12.000000, -18.000000) " points="8 20 12 16 16 20"></polygon>
-                <rect id="Rectangle" fill="#5999DB" x="11" y="7" width="2" height="11"></rect>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" version="1.1" viewBox="0 0 24 24"><title>frame-vertical</title><desc>Created with Sketch.</desc><g id="Original-24" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="frame-vertical"><g><rect id="rect4374" width="24" height="24" x="0" y="0" transform="translate(11.999984, 12.000000) rotate(90.000000) translate(-11.999984, -12.000000)"/><rect id="rect5617-3" width="21" height="21" x="1.5" y="1.5" stroke="#5999DB" stroke-dasharray="2 2" stroke-width="1"/><polygon id="Path" fill="#5999DB" points="8 8 12 4 16 8"/><polygon id="Path-Copy-2" fill="#5999DB" points="8 20 12 16 16 20" transform="translate(12.000000, 18.000000) scale(1, -1) translate(-12.000000, -18.000000)"/><rect id="Rectangle" width="2" height="11" x="11" y="7" fill="#5999DB"/></g></g></g></svg>

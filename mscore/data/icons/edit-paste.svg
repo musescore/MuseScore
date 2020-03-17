@@ -1,12 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>edit-paste</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="edit-paste" fill="#3B3F45">
-            <path d="M19,2 L14.82,2 C14.4,0.84 13.3,0 12,0 C10.7,0 9.6,0.84 9.18,2 L5,2 C3.9,2 3,2.9 3,4 L3,20 C3,21.1 3.9,22 5,22 L19,22 C20.1,22 21,21.1 21,20 L21,4 C21,2.9 20.1,2 19,2 Z M12,2 C12.55,2 13,2.45 13,3 C13,3.55 12.55,4 12,4 C11.45,4 11,3.55 11,3 C11,2.45 11.45,2 12,2 Z M19,20 L5,20 L5,4 L7,4 L7,7 L17,7 L17,4 L19,4 L19,20 Z" id="Shape"></path>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" version="1.1" viewBox="0 0 24 24"><title>edit-paste</title><desc>Created with Sketch.</desc><g id="Derived-24" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="edit-paste" fill="#3B3F45"><path id="Shape" d="M19,2 L14.82,2 C14.4,0.84 13.3,0 12,0 C10.7,0 9.6,0.84 9.18,2 L5,2 C3.9,2 3,2.9 3,4 L3,20 C3,21.1 3.9,22 5,22 L19,22 C20.1,22 21,21.1 21,20 L21,4 C21,2.9 20.1,2 19,2 Z M12,2 C12.55,2 13,2.45 13,3 C13,3.55 12.55,4 12,4 C11.45,4 11,3.55 11,3 C11,2.45 11.45,2 12,2 Z M19,20 L5,20 L5,4 L7,4 L7,7 L17,7 L17,4 L19,4 L19,20 Z"/></g></g></svg>

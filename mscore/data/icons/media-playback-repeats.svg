@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>media-playback-repeats</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Original-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="media-playback-repeats">
-            <rect id="rect8079" x="0" y="0" width="24" height="24"></rect>
-            <rect id="rect8081" x="0" y="0" width="24" height="24"></rect>
-            <rect id="rect8087" fill="#3B3F45" x="11.9997975" y="1.999995" width="3" height="19.9999995"></rect>
-            <rect id="rect8089" fill="#3B3F45" x="8.9997975" y="1.999995" width="1.00000004" height="19.9999995"></rect>
-            <path d="M5.99980041,14.9999925 C5.99980041,15.8284197 5.32822762,16.4999925 4.49980042,16.4999925 C3.67137323,16.4999925 2.99980043,15.8284197 2.99980043,14.9999925 C2.99980043,14.1715653 3.67137323,13.4999925 4.49980042,13.4999925 C5.32822762,13.4999925 5.99980041,14.1715653 5.99980041,14.9999925 Z" id="path8093" fill="#3B3F45"></path>
-            <path d="M5.99980041,9.0000075 C5.99980041,9.82843469 5.32822762,10.5000075 4.49980042,10.5000075 C3.67137323,10.5000075 2.99980043,9.82843469 2.99980043,9.0000075 C2.99980043,8.1715803 3.67137323,7.50000751 4.49980042,7.50000751 C5.32822762,7.50000751 5.99980041,8.1715803 5.99980041,9.0000075 Z" id="path8095" fill="#3B3F45"></path>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" version="1.1" viewBox="0 0 24 24"><title>media-playback-repeats</title><desc>Created with Sketch.</desc><g id="Original-24" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="media-playback-repeats"><rect id="rect8079" width="24" height="24" x="0" y="0"/><rect id="rect8081" width="24" height="24" x="0" y="0"/><rect id="rect8087" width="3" height="20" x="12" y="2" fill="#3B3F45"/><rect id="rect8089" width="1" height="20" x="9" y="2" fill="#3B3F45"/><path id="path8093" fill="#3B3F45" d="M5.99980041,14.9999925 C5.99980041,15.8284197 5.32822762,16.4999925 4.49980042,16.4999925 C3.67137323,16.4999925 2.99980043,15.8284197 2.99980043,14.9999925 C2.99980043,14.1715653 3.67137323,13.4999925 4.49980042,13.4999925 C5.32822762,13.4999925 5.99980041,14.1715653 5.99980041,14.9999925 Z"/><path id="path8095" fill="#3B3F45" d="M5.99980041,9.0000075 C5.99980041,9.82843469 5.32822762,10.5000075 4.49980042,10.5000075 C3.67137323,10.5000075 2.99980043,9.82843469 2.99980043,9.0000075 C2.99980043,8.1715803 3.67137323,7.50000751 4.49980042,7.50000751 C5.32822762,7.50000751 5.99980041,8.1715803 5.99980041,9.0000075 Z"/></g></g></svg>

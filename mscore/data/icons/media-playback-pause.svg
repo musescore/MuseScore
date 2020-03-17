@@ -1,15 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>media-playback-pause</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="media-playback-pause">
-            <g id="ic_pause_24px">
-                <path d="M6,19 L10,19 L10,5 L6,5 L6,19 Z M14,5 L14,19 L18,19 L18,5 L14,5 Z" id="Shape" fill="#3B3F45"></path>
-                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" version="1.1" viewBox="0 0 24 24"><title>media-playback-pause</title><desc>Created with Sketch.</desc><g id="Derived-24" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="media-playback-pause"><g id="ic_pause_24px"><path id="Shape" fill="#3B3F45" d="M6,19 L10,19 L10,5 L6,5 L6,19 Z M14,5 L14,19 L18,19 L18,5 L14,5 Z"/><polygon id="Shape" points="0 0 24 0 24 24 0 24"/></g></g></g></svg>

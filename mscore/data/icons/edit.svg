@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>edit</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-16" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="edit">
-            <g id="ic_mode_edit_18px" transform="translate(-1.000000, -1.000000)">
-                <g id="Group">
-                    <path d="M2,12.88 L2,16 L5.12,16 L14,7.12 L10.88,4 L2,12.88 Z M16.76,4.37 C17.09,4.04 17.09,3.52 16.76,3.19 L14.81,1.24 C14.48,0.91 13.96,0.91 13.63,1.24 L12,2.88 L15.12,6 L16.76,4.37 L16.76,4.37 Z" id="Shape" fill="#3B3F45"></path>
-                    <polygon id="Shape" points="0 0 18 0 18 18 0 18"></polygon>
-                </g>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" version="1.1" viewBox="0 0 16 16"><title>edit</title><desc>Created with Sketch.</desc><g id="Derived-16" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="edit"><g id="ic_mode_edit_18px" transform="translate(-1.000000, -1.000000)"><g id="Group"><path id="Shape" fill="#3B3F45" d="M2,12.88 L2,16 L5.12,16 L14,7.12 L10.88,4 L2,12.88 Z M16.76,4.37 C17.09,4.04 17.09,3.52 16.76,3.19 L14.81,1.24 C14.48,0.91 13.96,0.91 13.63,1.24 L12,2.88 L15.12,6 L16.76,4.37 L16.76,4.37 Z"/><polygon id="Shape" points="0 0 18 0 18 18 0 18"/></g></g></g></g></svg>

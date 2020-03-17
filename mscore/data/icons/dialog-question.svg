@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>dialog-question</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-48" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="dialog-question">
-            <polygon id="Shape" points="0 0 48 0 48 48 0 48"></polygon>
-            <path d="M42,12 L38,12 L38,30 L12,30 L12,34 C12,35.1 12.9,36 14,36 L36,36 L44,44 L44,14 C44,12.9 43.1,12 42,12 Z M34,24 L34,6 C34,4.9 33.1,4 32,4 L6,4 C4.9,4 4,4.9 4,6 L4,34 L12,26 L32,26 C33.1,26 34,25.1 34,24 Z" id="Shape" fill="#666666"></path>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" version="1.1" viewBox="0 0 48 48"><title>dialog-question</title><desc>Created with Sketch.</desc><g id="Derived-48" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="dialog-question"><polygon id="Shape" points="0 0 48 0 48 48 0 48"/><path id="Shape" fill="#666" d="M42,12 L38,12 L38,30 L12,30 L12,34 C12,35.1 12.9,36 14,36 L36,36 L44,44 L44,14 C44,12.9 43.1,12 42,12 Z M34,24 L34,6 C34,4.9 33.1,4 32,4 L6,4 C4.9,4 4,4.9 4,6 L4,34 L12,26 L32,26 C33.1,26 34,25.1 34,24 Z"/></g></g></svg>

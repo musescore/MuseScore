@@ -1,12 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>dialog-error</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-48" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="dialog-error" fill="#666666">
-            <path d="M2,42 L46,42 L24,4 L2,42 Z M26,36 L22,36 L22,32 L26,32 L26,36 Z M26,28 L22,28 L22,20 L26,20 L26,28 Z" id="Shape"></path>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" version="1.1" viewBox="0 0 48 48"><title>dialog-error</title><desc>Created with Sketch.</desc><g id="Derived-48" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="dialog-error" fill="#666"><path id="Shape" d="M2,42 L46,42 L24,4 L2,42 Z M26,36 L22,36 L22,32 L26,32 L26,36 Z M26,28 L22,28 L22,20 L26,20 L26,28 Z"/></g></g></svg>

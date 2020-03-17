@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>help-contents</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="help-contents">
-            <g id="ic_help_24px">
-                <g id="Group">
-                    <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-                    <path d="M12,2 C6.48,2 2,6.48 2,12 C2,17.52 6.48,22 12,22 C17.52,22 22,17.52 22,12 C22,6.48 17.52,2 12,2 Z M13,19 L11,19 L11,17 L13,17 L13,19 Z M15.07,11.25 L14.17,12.17 C13.45,12.9 13,13.5 13,15 L11,15 L11,14.5 C11,13.4 11.45,12.4 12.17,11.67 L13.41,10.41 C13.78,10.05 14,9.55 14,9 C14,7.9 13.1,7 12,7 C10.9,7 10,7.9 10,9 L8,9 C8,6.79 9.79,5 12,5 C14.21,5 16,6.79 16,9 C16,9.88 15.64,10.68 15.07,11.25 Z" id="Shape" fill="#3B3F45"></path>
-                </g>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" version="1.1" viewBox="0 0 24 24"><title>help-contents</title><desc>Created with Sketch.</desc><g id="Derived-24" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="help-contents"><g id="ic_help_24px"><g id="Group"><polygon id="Shape" points="0 0 24 0 24 24 0 24"/><path id="Shape" fill="#3B3F45" d="M12,2 C6.48,2 2,6.48 2,12 C2,17.52 6.48,22 12,22 C17.52,22 22,17.52 22,12 C22,6.48 17.52,2 12,2 Z M13,19 L11,19 L11,17 L13,17 L13,19 Z M15.07,11.25 L14.17,12.17 C13.45,12.9 13,13.5 13,15 L11,15 L11,14.5 C11,13.4 11.45,12.4 12.17,11.67 L13.41,10.41 C13.78,10.05 14,9.55 14,9 C14,7.9 13.1,7 12,7 C10.9,7 10,7.9 10,9 L8,9 C8,6.79 9.79,5 12,5 C14.21,5 16,6.79 16,9 C16,9.88 15.64,10.68 15.07,11.25 Z"/></g></g></g></g></svg>

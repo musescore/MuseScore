@@ -1,15 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>edit-reset</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Original-16" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="edit-reset">
-            <path d="M6,11 L11,6" id="Path-2" stroke="#3B3F45" stroke-width="1.5"></path>
-            <path d="M6,11 L11,6" id="Path-2-Copy" stroke="#3B3F45" stroke-width="1.5" transform="translate(8.500000, 8.500000) scale(1, -1) translate(-8.500000, -8.500000) "></path>
-            <path d="M2.92857143,2 L8.5,2 C12.0898509,2 15,4.91014913 15,8.5 C15,12.0898509 12.0898509,15 8.5,15 C4.91014913,15 2,12.0898509 2,8.5 L3.5,8.5 C3.5,11.2614237 5.73857625,13.5 8.5,13.5 C11.2614237,13.5 13.5,11.2614237 13.5,8.5 C13.5,5.73857625 11.2614237,3.5 8.5,3.5 L2.92857143,3.5 L2.92857143,2 Z" id="Oval-2" fill="#3B3F45"></path>
-            <polygon id="Path-3" fill="#3B3F45" points="5 5 5 0 2 2.5"></polygon>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" version="1.1" viewBox="0 0 16 16"><title>edit-reset</title><desc>Created with Sketch.</desc><g id="Original-16" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="edit-reset"><path id="Path-2" stroke="#3B3F45" stroke-width="1.5" d="M6,11 L11,6"/><path id="Path-2-Copy" stroke="#3B3F45" stroke-width="1.5" d="M6,11 L11,6" transform="translate(8.500000, 8.500000) scale(1, -1) translate(-8.500000, -8.500000)"/><path id="Oval-2" fill="#3B3F45" d="M2.92857143,2 L8.5,2 C12.0898509,2 15,4.91014913 15,8.5 C15,12.0898509 12.0898509,15 8.5,15 C4.91014913,15 2,12.0898509 2,8.5 L3.5,8.5 C3.5,11.2614237 5.73857625,13.5 8.5,13.5 C11.2614237,13.5 13.5,11.2614237 13.5,8.5 C13.5,5.73857625 11.2614237,3.5 8.5,3.5 L2.92857143,3.5 L2.92857143,2 Z"/><polygon id="Path-3" fill="#3B3F45" points="5 5 5 0 2 2.5"/></g></g></svg>

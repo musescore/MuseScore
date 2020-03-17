@@ -1,12 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>dialog-information</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-48" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="dialog-information" fill="#666666">
-            <path d="M24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,12.95 35.05,4 24,4 Z M26,34 L22,34 L22,22 L26,22 L26,34 Z M26,18 L22,18 L22,14 L26,14 L26,18 Z" id="Shape"></path>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" version="1.1" viewBox="0 0 48 48"><title>dialog-information</title><desc>Created with Sketch.</desc><g id="Derived-48" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="dialog-information" fill="#666"><path id="Shape" d="M24,4 C12.95,4 4,12.95 4,24 C4,35.05 12.95,44 24,44 C35.05,44 44,35.05 44,24 C44,12.95 35.05,4 24,4 Z M26,34 L22,34 L22,22 L26,22 L26,34 Z M26,18 L22,18 L22,14 L26,14 L26,18 Z"/></g></g></svg>

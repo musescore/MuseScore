@@ -1,12 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>object-select</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-16" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="object-select" fill="#3B3F45">
-            <polygon id="Shape" points="12 4 13.5 5.5 6.51 12.5 2 8 3.5 6.5 6.51 9.5"></polygon>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" version="1.1" viewBox="0 0 16 16"><title>object-select</title><desc>Created with Sketch.</desc><g id="Derived-16" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="object-select" fill="#3B3F45"><polygon id="Shape" points="12 4 13.5 5.5 6.51 12.5 2 8 3.5 6.5 6.51 9.5"/></g></g></svg>

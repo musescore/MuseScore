@@ -1,16 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>media-playback-pan</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="media-playback-pan" fill="#3B3F45">
-            <path d="M15,8.81818182 L15,2 L14,2 L14,8.18181818 L15,8.81818182 Z M15,15.1818182 L15,22 L14,22 L14,15.8181818 L15,15.1818182 Z M17,10.0909091 L17,2 L16,2 L16,9.45454545 L17,10.0909091 Z M17,13.9090909 L17,22 L16,22 L16,14.5454545 L17,13.9090909 Z" id="Combined-Shape"></path>
-            <rect id="Rectangle-Copy-4" x="18" y="2" width="2" height="20"></rect>
-            <polygon id="Shape" points="6 5 6 19 17 12"></polygon>
-            <rect id="Rectangle" x="4" y="5" width="1" height="14"></rect>
-            <rect id="Rectangle-Copy" x="2" y="5" width="1" height="14"></rect>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" version="1.1" viewBox="0 0 24 24"><title>media-playback-pan</title><desc>Created with Sketch.</desc><g id="Derived-24" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1"><g id="media-playback-pan" fill="#3B3F45"><path id="Combined-Shape" d="M15,8.81818182 L15,2 L14,2 L14,8.18181818 L15,8.81818182 Z M15,15.1818182 L15,22 L14,22 L14,15.8181818 L15,15.1818182 Z M17,10.0909091 L17,2 L16,2 L16,9.45454545 L17,10.0909091 Z M17,13.9090909 L17,22 L16,22 L16,14.5454545 L17,13.9090909 Z"/><rect id="Rectangle-Copy-4" width="2" height="20" x="18" y="2"/><polygon id="Shape" points="6 5 6 19 17 12"/><rect id="Rectangle" width="1" height="14" x="4" y="5"/><rect id="Rectangle-Copy" width="1" height="14" x="2" y="5"/></g></g></svg>
