@@ -25,6 +25,14 @@ class Score;
 class InstrumentTemplate;
 
 //---------------------------------------------------------
+//   PreferSharpFlat
+//---------------------------------------------------------
+
+enum class PreferSharpFlat : char {
+      DEFAULT, SHARPS, FLATS
+      };
+
+//---------------------------------------------------------
 //   @@ Part
 //   @P endTrack        int         (read only)
 //   @P harmonyCount    int         (read only)
@@ -53,6 +61,8 @@ class Part final : public ScoreElement {
 
       static const int DEFAULT_COLOR = 0x3399ff;
       int _color;                   ///User specified color for helping to label parts
+
+      PreferSharpFlat _preferSharpFlat;
 
    public:
       Part(Score* = 0);
@@ -130,6 +140,9 @@ class Part final : public ScoreElement {
 
       const Part* masterPart() const;
       Part* masterPart();
+
+      PreferSharpFlat preferSharpFlat() const     { return _preferSharpFlat; }
+      void setPreferSharpFlat(PreferSharpFlat v)  { _preferSharpFlat = v;    }
 
       // Allows not reading the same instrument twice on importing 2.X scores.
       // TODO: do we need instruments info in parts at all?

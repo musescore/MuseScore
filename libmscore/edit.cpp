@@ -2110,7 +2110,7 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
                                     transposeKeySigEvent = true;
                                     Interval v = staff(0)->part()->instrument(m->tick())->transpose();
                                     if (!v.isZero())
-                                          lastDeletedKeySigEvent.setKey(transposeKey(lastDeletedKeySigEvent.key(), v));
+                                          lastDeletedKeySigEvent.setKey(transposeKey(lastDeletedKeySigEvent.key(), v, lastDeletedKeySig->part()->preferSharpFlat()));
                                     }
                               }
                         }
@@ -2173,7 +2173,7 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
                               if (transposeKeySigEvent) {
                                     Interval v = score->staff(staffIdx)->part()->instrument(Fraction(0,1))->transpose();
                                     v.flip();
-                                    nkse.setKey(transposeKey(nkse.key(), v));
+                                    nkse.setKey(transposeKey(nkse.key(), v, lastDeletedKeySig->part()->preferSharpFlat()));
                                     }
                               KeySig* nks = new KeySig(score);
                               nks->setTrack(staffIdx * VOICES);
@@ -3780,7 +3780,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
             bool concertPitch = score->styleB(Sid::concertPitch);
             if (interval.chromatic && !concertPitch && !nkey.custom() && !nkey.isAtonal()) {
                   interval.flip();
-                  nkey.setKey(transposeKey(key.key(), interval));
+                  nkey.setKey(transposeKey(key.key(), interval, staff->part()->preferSharpFlat()));
                   }
             if (ks) {
                   ks->undoChangeProperty(Pid::GENERATED, false);
