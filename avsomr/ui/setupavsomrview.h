@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,30 +17,26 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "modulessetup.h"
-#include "config.h"
+#ifndef AVS_SETUPAVSOMRVIEW_H
+#define AVS_SETUPAVSOMRVIEW_H
 
-#ifdef BUILD_TELEMETRY_MODULE
-#include "telemetrysetup.h"
-#endif
+#include <memory>
+#include "avsomr/avsomr.h"
 
-//---------------------------------------------------------
-//   ModulesSetup
-//---------------------------------------------------------
+namespace Ms {
+class ScoreView;
 
-ModulesSetup::ModulesSetup()
+namespace Avs {
+
+class SetupAvsOmrView
       {
-#ifdef BUILD_TELEMETRY_MODULE
-      m_modulesSetupList << new TelemetrySetup();
-#endif
-      }
+   public:
+      SetupAvsOmrView();
 
-//---------------------------------------------------------
-//   setup
-//---------------------------------------------------------
+      void setupView(Ms::ScoreView* view, std::shared_ptr<AvsOmr> avsOmr);
+      };
 
-void ModulesSetup::setup()
-      {
-      for (AbstractModuleSetup* moduleSetup : m_modulesSetupList)
-            moduleSetup->setup();
-      }
+} // Avs
+} // Ms
+
+#endif // AVS_SETUPAVSOMRVIEW_H

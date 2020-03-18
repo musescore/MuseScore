@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>834</width>
-    <height>569</height>
+    <height>682</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -90,7 +90,7 @@
       <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -3378,6 +3378,22 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_omr">
+         <property name="title">
+          <string>OMR</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_omr">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="useLocalAvsOmr">
+            <property name="text">
+             <string>Use local OMR engine</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="MIDI">
          <property name="minimumSize">
           <size>
@@ -4383,6 +4399,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
+  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

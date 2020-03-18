@@ -551,6 +551,10 @@ if (OSC)
       target_link_libraries(mscoreapp ofqf)
 endif (OSC)
 
+if (AVSOMR)
+   target_link_libraries(mscoreapp avsomr)
+endif (AVSOMR)
+
 if (MINGW)
    string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
    # Windows: Add -mconsole to LINK_FLAGS to get a console window for debug output
