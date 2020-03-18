@@ -455,6 +455,7 @@ bool Part::setProperty(Pid id, const QVariant& property)
                   break;
             case Pid::PREFER_SHARP_FLAT:
                   setPreferSharpFlat(PreferSharpFlat(property.toInt()));
+                  break;
             default:
                   qDebug("Part::setProperty: unknown id %d", int(id));
                   break;
