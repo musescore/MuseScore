@@ -424,7 +424,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               }
                         }
                   else if (e->isKeySig() && trKeys && mode != TransposeMode::DIATONICALLY) {
-#if 1
+#if 0
                         bool startKey = segment->tick() == s1->tick();
                         QList<ScoreElement*> ll = e->linkList();
                         for (ScoreElement* scoreElement : ll) {
