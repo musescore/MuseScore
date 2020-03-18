@@ -14,6 +14,8 @@
  File handling: loading and saving.
  */
 
+#include <QFileInfo>
+
 #include "config.h"
 #include "globals.h"
 #include "musescore.h"
@@ -268,7 +270,51 @@ bool MuseScore::checkDirty(MasterScore* s)
       }
 
 //---------------------------------------------------------
-//   loadFile
+//   openFiles
+//---------------------------------------------------------
+
+void MuseScore::openFiles(bool switchTab, bool singleFile)
+      {
+      QString allExt = "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.ptb";
+#ifdef AVSOMR
+      allExt += " *.msmr"; // omr project with omr data and musicxml or score
+#endif
+
+      QStringList filter;
+      filter << tr("All Supported Files") + " (" + allExt + ")"
+             << tr("MuseScore Files") + " (*.mscz *.mscx)"
+             << tr("MusicXML Files") + " (*.mxl *.musicxml *.xml)"
+             << tr("MIDI Files") + " (*.mid *.midi *.kar)"
+             << tr("MuseData Files") + " (*.md)"
+             << tr("Capella Files") + " (*.cap *.capx)"
+             << tr("BB Files (experimental)") + " (*.mgu *.sgu)"
+             << tr("Overture / Score Writer Files (experimental)") + " (*.ove *.scw)"
+             << tr("Bagpipe Music Writer Files (experimental)") + " (*.bww)"
+             << tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx)"
+             << tr("Power Tab Editor Files (experimental)") + " (*.ptb)";
+
+      doLoadFiles(filter, switchTab, singleFile);
+      }
+
+//---------------------------------------------------------
+//   importFiles
+//---------------------------------------------------------
+
+void MuseScore::importScore(bool switchTab, bool singleFile)
+      {
+#ifndef AVSOMR
+      Q_UNUSED(switchTab);
+      Q_UNUSED(singleFile);
+      openExternalLink("https://musescore.com/import");
+#else
+      QStringList filter;
+      filter << tr("Optical Music Recognition") + " (*.pdf *.png *.jpg)";
+      doLoadFiles(filter, switchTab, singleFile);
+#endif
+      }
+
+//---------------------------------------------------------
+//   doLoadFiles
 //---------------------------------------------------------
 
 /**
@@ -277,30 +323,10 @@ bool MuseScore::checkDirty(MasterScore* s)
  Handles the GUI's file-open action.
  */
 
-void MuseScore::loadFiles(bool switchTab, bool singleFile)
+void MuseScore::doLoadFiles(const QStringList& filter, bool switchTab, bool singleFile)
       {
-      QStringList files = getOpenScoreNames(
-#ifdef OMR
-         tr("All Supported Files") + " (*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.pdf *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx);;" +
-#else
-         tr("All Supported Files") + " (*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.ptb);;" +
-#endif
-         tr("MuseScore Files") + " (*.mscz *.mscx);;" +
-         tr("MusicXML Files") + " (*.mxl *.musicxml *.xml);;" +
-         tr("MIDI Files") + " (*.mid *.midi *.kar);;" +
-         tr("MuseData Files") + " (*.md);;" +
-         tr("Capella Files") + " (*.cap *.capx);;" +
-         tr("BB Files (experimental)") + " (*.mgu *.sgu);;" +
-#ifdef OMR
-         tr("PDF Files (experimental OMR)") + " (*.pdf);;" +
-#endif
-         tr("Overture / Score Writer Files (experimental)") + " (*.ove *.scw);;" +
-         tr("Bagpipe Music Writer Files (experimental)") + " (*.bww);;" +
-         tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx);;" +
-         tr("Power Tab Editor Files (experimental)") + " (*.ptb)",
-         tr("Load Score"),
-         singleFile
-         );
+      QString filterStr = filter.join(";;");
+      QStringList files = getOpenScoreNames(filterStr, tr("Load Score"), singleFile);
       for (const QString& s : files)
             openScore(s, switchTab);
       mscore->tourHandler()->showDelayedWelcomeTour();
@@ -413,8 +439,8 @@ bool MuseScore::saveFile(MasterScore* score)
             if (t)
                   fn = t->plainText();
             QString name = createDefaultFileName(fn);
-            QString f1 = tr("MuseScore 3 File") + " (*.mscz)";
-            QString f2 = tr("Uncompressed MuseScore 3 File") + " (*.mscx)";     // for debugging purposes
+            QString msczType = tr("MuseScore 3 File") + " (*.mscz)";
+            QString mscxType = tr("Uncompressed MuseScore 3 File") + " (*.mscx)";     // for debugging purposes
 
             QSettings set;
             if (mscore->lastSaveDirectory.isEmpty())
@@ -425,9 +451,19 @@ bool MuseScore::saveFile(MasterScore* score)
                   saveDirectory = preferences.getString(PREF_APP_PATHS_MYSCORES);
 
             QString fname = QString("%1/%2").arg(saveDirectory).arg(name);
-            QString filter = f1 + ";;" + f2;
-            if (QFileInfo(fname).suffix().isEmpty())
+            QString filter;
+#ifdef AVSOMR
+            if (score->avsOmr()) {
+                  QString msmrType = tr("Music Recognition MuseScore 3 File") + " (*.msmr)";
+                  fname = QFileInfo(fname).baseName() + ".msmr";
+                  filter = msmrType + ";;" + mscxType + ";;" + msczType;
+                  }
+            else
+#endif
+            if (QFileInfo(fname).suffix().isEmpty()) {
                   fname += ".mscz";
+                  filter = msczType + ";;" + mscxType;
+                  }
 
             fn = mscore->getSaveScoreName(tr("Save Score"), fname, filter);
             if (fn.isEmpty())
@@ -2317,6 +2353,12 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                   { "gp5",  &importGTP                },
                   { "gpx",  &importGTP                },
                   { "ptb",  &importGTP                },
+#ifdef AVSOMR
+                  { "msmr", &importMSMR                },
+                  { "pdf",  &loadAndImportMSMR         },
+                  { "png",  &loadAndImportMSMR         },
+                  { "jpg",  &loadAndImportMSMR         },
+#endif
                   };
 
             // import
@@ -2345,7 +2387,8 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                   }
             score->setMetaTag("originalFormat", suffix);
             score->connectTies();
-            score->setCreated(true); // force save as for imported files
+            if (!score->avsOmr()) //! NOTE For avsomr сreated is set upon import
+                  score->setCreated(true); // force save as for imported files
             }
 
       score->rebuildMidiMapping();

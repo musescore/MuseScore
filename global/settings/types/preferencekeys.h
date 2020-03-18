@@ -63,6 +63,7 @@
 #define PREF_IMPORT_GUITARPRO_CHARSET                       "import/guitarpro/charset"
 #define PREF_IMPORT_MUSICXML_IMPORTBREAKS                   "import/musicXML/importBreaks"
 #define PREF_IMPORT_MUSICXML_IMPORTLAYOUT                   "import/musicXML/importLayout"
+#define PREF_IMPORT_AVSOMR_USELOCAL                         "import/avsomr/useLocalEngine"
 #define PREF_IMPORT_OVERTURE_CHARSET                        "import/overture/charset"
 #define PREF_IMPORT_STYLE_STYLEFILE                         "import/style/styleFile"
 #define PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS   "import/compatibility/resetElementPositions"
@@ -166,5 +167,7 @@
 #define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF    "ui/button/highlight/color/enabled/light/off"
 #define PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_LIGHT           "ui/inspector/styledtext/color/light"
 #define PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK            "ui/inspector/styledtext/color/dark"
+#define PREF_UI_AVSOMR_RECOGNITION_COLOR                    "ui/avsomr/recognition/valid/color"
+#define PREF_UI_AVSOMR_NOT_RECOGNITION_COLOR                "ui/avsomr/recognition/notValid/color"
 
 #endif // PREFERENCEKEYS_H

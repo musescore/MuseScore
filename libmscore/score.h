@@ -30,6 +30,10 @@
 
 namespace Ms {
 
+namespace Avs {
+      class AvsOmr;
+}
+
 class Articulation;
 class Audio;
 class BarLine;
@@ -791,7 +795,7 @@ class Score : public QObject, public ScoreElement {
       bool saveFile(QFileInfo& info);
       bool saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
       bool saveCompressedFile(QFileInfo&, bool onlySelection, bool createThumbnail = true);
-      bool saveCompressedFile(QFileDevice*, QFileInfo&, bool onlySelection, bool createThumbnail = true);
+      bool saveCompressedFile(QIODevice *, const QFileInfo &, bool onlySelection, bool createThumbnail = true);
 
       void print(QPainter* printer, int page);
       ChordRest* getSelectedChordRest() const;
@@ -1247,6 +1251,8 @@ class MasterScore : public Score {
       Omr* _omr               { 0 };
       bool _showOmr           { false };
 
+      std::shared_ptr<Avs::AvsOmr> _avsOmr { nullptr };
+
       Fraction _pos[3];                    ///< 0 - current, 1 - left loop, 2 - right loop
 
       int _midiPortCount      { 0 };                  // A count of JACK/ALSA midi out ports
@@ -1340,6 +1346,9 @@ class MasterScore : public Score {
       void removeOmr();
       bool showOmr() const                     { return _showOmr; }
       void setShowOmr(bool v)                  { _showOmr = v;    }
+
+      std::shared_ptr<Avs::AvsOmr> avsOmr() const      { return _avsOmr; }
+      void setAvsOmr(std::shared_ptr<Avs::AvsOmr> omr) { _avsOmr = omr;  }
 
       int midiPortCount() const                { return _midiPortCount;            }
       void setMidiPortCount(int val)           { _midiPortCount = val;             }

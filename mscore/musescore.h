@@ -470,6 +470,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void checkForUpdatesNoUI();
 
+      void doLoadFiles(const QStringList& filter, bool switchTab, bool singleFile);
+
    signals:
       void windowSplit(bool);
       void musescoreWindowWasShown();
@@ -764,7 +766,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool countIn() const           { return countInAction->isChecked(); }
       bool panDuringPlayback() const { return panAction->isChecked(); }
       void noteTooShortForTupletDialog();
-      void loadFiles(bool switchTab = true, bool singleFile = false);
+      void openFiles(bool switchTab = true, bool singleFile = false);
+      void importScore(bool switchTab = true, bool singleFile = false);
                   // midi panel functions
       void midiPanelOnSwitchToFile(const QString &file);
       void midiPanelOnCloseFile(const QString &file);
@@ -927,6 +930,10 @@ extern bool saveXml(Score*, const QString& name);
 
 extern QString getSharePath();
 
+#ifdef AVSOMR
+extern Score::FileError importMSMR(MasterScore*, const QString& name);
+extern Score::FileError loadAndImportMSMR(MasterScore*, const QString& name);
+#endif
 extern Score::FileError importMidi(MasterScore*, const QString& name);
 extern Score::FileError importGTP(MasterScore*, const QString& name);
 extern Score::FileError importBww(MasterScore*, const QString& path);

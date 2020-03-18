@@ -95,6 +95,7 @@
 
 #include <QPainterPath>
 #include <QPixmap>
+#include <QImage>
 #include <QPainter>
 #include <QKeyEvent>
 
@@ -184,6 +185,9 @@
 
 #include <QSvgRenderer>
 #include <QSvgGenerator>
+
+#include <QFile>
+#include <QFileInfo>
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
