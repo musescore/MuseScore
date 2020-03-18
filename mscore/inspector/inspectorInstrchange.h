@@ -27,6 +27,9 @@ class InspectorInstrumentChange : public InspectorTextBase {
 
       Ui::InspectorInstrumentChange ic;
 
+   private slots:
+      void selectInstrumentClicked();
+
    public:
       InspectorInstrumentChange(QWidget* parent);
       };

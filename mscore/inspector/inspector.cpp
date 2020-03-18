@@ -341,8 +341,10 @@ void Inspector::update(Score* s)
                         case ElementType::STAFF_TEXT:
                         case ElementType::SYSTEM_TEXT:
                         case ElementType::REHEARSAL_MARK:
-                        case ElementType::INSTRUMENT_CHANGE:
                               ie = new InspectorStaffText(this);
+                              break;
+                        case ElementType::INSTRUMENT_CHANGE:
+                              ie = new InspectorInstrumentChange(this);
                               break;
                         case ElementType::MEASURE_NUMBER:
                               ie = new InspectorMeasureNumber(this);
