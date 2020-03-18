@@ -40,6 +40,7 @@
 #include "slur.h"
 #include "staff.h"
 #include "stem.h"
+#include "stemslash.h"
 #include "sticking.h"
 #include "style.h"
 #include "sym.h"
@@ -878,6 +879,9 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
 
             Chord* chord = note->chord();
             bool _up     = chord->up();
+
+            if (chord->stemSlash())
+                  chord->stemSlash()->layout();
 
             qreal overlapMirror;
             Stem* stem = chord->stem();
@@ -4373,7 +4377,6 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
             _systems.clear();
             qDeleteAll(pages());
             pages().clear();
-            LayoutContext lc(this);
             lc.getNextPage();
             return;
             }

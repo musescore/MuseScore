@@ -37,6 +37,7 @@ Part::Part(Score* s)
       _color = DEFAULT_COLOR;
       _show  = true;
       _instruments.setInstrument(new Instrument, -1);   // default instrument
+      _preferSharpFlat = PreferSharpFlat::DEFAULT;
       }
 
 //---------------------------------------------------------
@@ -109,7 +110,7 @@ bool Part::readProperties(XmlReader& e)
       else if (tag == "Instrument") {
             Instrument* instr = new Instrument;
             instr->read(e, this);
-            setInstrument(instr, Fraction(-1,1));
+            setInstrument(instr, Fraction(-1, 1));
             }
       else if (tag == "name")
             instrument()->setLongName(e.readElementText());
@@ -121,6 +122,9 @@ bool Part::readProperties(XmlReader& e)
             _partName = e.readElementText();
       else if (tag == "show")
             _show = e.readInt();
+      else if (tag == "preferSharpFlat")
+            _preferSharpFlat =
+               e.readElementText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS;
       else
             return false;
       return true;
@@ -154,6 +158,9 @@ void Part::write(XmlWriter& xml) const
       xml.tag("trackName", _partName);
       if (_color != DEFAULT_COLOR)
             xml.tag("color", _color);
+      if (_preferSharpFlat != PreferSharpFlat::DEFAULT)
+            xml.tag("preferSharpFlat",
+               _preferSharpFlat == PreferSharpFlat::SHARPS ? "sharps" : "flats");
       instrument()->write(xml, this);
       xml.etag();
       }
@@ -426,6 +433,8 @@ QVariant Part::getProperty(Pid id) const
                   return QVariant(_show);
             case Pid::USE_DRUMSET:
                   return instrument()->useDrumset();
+            case Pid::PREFER_SHARP_FLAT:
+                  return int(preferSharpFlat());
             default:
                   return QVariant();
             }
@@ -444,6 +453,8 @@ bool Part::setProperty(Pid id, const QVariant& property)
             case Pid::USE_DRUMSET:
                   instrument()->setUseDrumset(property.toBool());
                   break;
+            case Pid::PREFER_SHARP_FLAT:
+                  setPreferSharpFlat(PreferSharpFlat(property.toInt()));
             default:
                   qDebug("Part::setProperty: unknown id %d", int(id));
                   break;

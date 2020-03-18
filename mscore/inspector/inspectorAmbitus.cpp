@@ -33,8 +33,8 @@ enum AmbitusControl : char {
 InspectorAmbitus::InspectorAmbitus(QWidget* parent)
    : InspectorElementBase(parent)
       {
-      r.setupUi(addWidget());
       s.setupUi(addWidget());
+      r.setupUi(addWidget());
 
       static const NoteHead::Group heads[] = {
             NoteHead::Group::HEAD_NORMAL,
@@ -144,18 +144,22 @@ void InspectorAmbitus::valueChanged(int idx)
             }
       }
 
-}
-
 //---------------------------------------------------------
-//   on updateRange clicked
+//   updateRange
+//    Automatically adjust range based on the score
 //---------------------------------------------------------
 
-void Ms::InspectorAmbitus::updateRange()
-{
+void InspectorAmbitus::updateRange()
+      {
       Ambitus* range = toAmbitus(inspector->element());
       range->updateRange();
-      range->layout();              // redo layout
-      setElement();                 // set Inspector values to range properties
-      valueChanged(AmbitusControl::TOPTPC);         // force score to notice new range properties
-}
 
+      range->score()->startCmd();
+      range->triggerLayout();
+      range->score()->endCmd();
+
+      setElement(); // set Inspector values to range properties
+      valueChanged(AmbitusControl::TOPTPC); // force score to notice new range properties
+      }
+
+}

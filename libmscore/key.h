@@ -145,7 +145,9 @@ class AccidentalState {
       };
 
 struct Interval;
-extern Key transposeKey(Key oldKey, const Interval&);
+
+enum class PreferSharpFlat : char;
+extern Key transposeKey(Key oldKey, const Interval&, PreferSharpFlat prefer = PreferSharpFlat(0));
 
 
 }     // namespace Ms

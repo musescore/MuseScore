@@ -48,6 +48,7 @@ InspectorBase::InspectorBase(QWidget* parent)
       _layout->setSpacing(0);
       _layout->setContentsMargins(0, 10, 0, 0);
       _layout->addStretch(100);
+      scrollPreventer = new InspectorScrollPreventer(this);
       }
 
 //---------------------------------------------------------
@@ -549,7 +550,11 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                         resetButton->setIcon(*icons[int(Icons::reset_ICON)]);
                         connect(resetButton, &QToolButton::clicked, [=] { resetClicked(i); });
                         Sid sidx = inspector->element()->getPropertyStyle(ii.t);
-                        if (sidx != Sid::NOSTYLE) {
+                        // S button for fingering placement is bugged and proposed to be hidden
+                        // it can be brought back once the relevant design is fixed, 
+                        // for example changing values of fingering placement to "Auto, Above, Below", "Auto" as default
+                        // See https://musescore.org/en/node/288372 and https://musescore.org/en/node/297092
+                        if (sidx != Sid::NOSTYLE && sidx != Sid::fingeringPlacement) {
                               QMenu* menu = new QMenu(this);
                               resetButton->setMenu(menu);
                               resetButton->setPopupMode(QToolButton::MenuButtonPopup);
@@ -561,7 +566,8 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                         ResetButton* b = qobject_cast<ResetButton*>(rw);
                         connect(b, &ResetButton::resetClicked, [=] { resetClicked(i); });
                         Sid sidx = inspector->element()->getPropertyStyle(ii.t);
-                        if (sidx != Sid::NOSTYLE) {
+                        // Same, see comment above
+                        if (sidx != Sid::NOSTYLE && sidx != Sid::fingeringPlacement) {
                               b->enableSetStyle(true);
                               connect(b, &ResetButton::setStyleClicked, [=] { setStyleClicked(i); });
                               }
@@ -570,6 +576,16 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
             QWidget* w = ii.w;
             if (!w)
                   continue;
+
+            if (qobject_cast<QAbstractSpinBox*>(w)
+                || qobject_cast<QComboBox*>(w)) {
+                  w->setFocusPolicy(Qt::StrongFocus);
+                  w->installEventFilter(scrollPreventer);
+                  }
+            else if (qobject_cast<OffsetSelect*>(w)) {
+                  qobject_cast<OffsetSelect*>(w)->installScrollPreventer(scrollPreventer);
+                  }
+
             if (qobject_cast<QDoubleSpinBox*>(w))
                   connect(qobject_cast<QDoubleSpinBox*>(w), QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=] { valueChanged(i); });
             else if (qobject_cast<QSpinBox*>(w))
@@ -654,6 +670,28 @@ void InspectorBase::resetToStyle()
             }
       score->endCmd();
       }
+
+//---------------------------------------------------------
+//   eventFilter
+///   This blocks scrolling on a scrollable thing when not in focus.
+///   `watched` should be a QComboBox or QAbstractSpinBox.
+///   If this event filter is on any non-QWidget, it will crash.
+//---------------------------------------------------------
+
+bool InspectorScrollPreventer::eventFilter(QObject* watched, QEvent* event)
+      {
+      if (event->type() != QEvent::Wheel)
+            return QObject::eventFilter(watched, event);
+
+      if (!qobject_cast<QWidget*>(watched)->hasFocus())
+            return true;
+
+      return QObject::eventFilter(watched, event);
+      }
+
+//---------------------------------------------------------
+//   event
+//---------------------------------------------------------
 
 void InspectorEventObserver::event(EventType evtType, const InspectorItem& ii, const Element* e)
       {

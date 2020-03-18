@@ -2616,7 +2616,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                   KeySigEvent nKey = oKey;
                   int diff = -staff->part()->instrument(tick)->transpose().chromatic;
                   if (diff != 0 && !styleB(Sid::concertPitch) && !oKey.custom() && !oKey.isAtonal())
-                        nKey.setKey(transposeKey(nKey.key(), diff));
+                        nKey.setKey(transposeKey(nKey.key(), diff, staff->part()->preferSharpFlat()));
                   staff->setKey(tick, nKey);
                   KeySig* keysig = new KeySig(this);
                   keysig->setTrack(staffIdx * VOICES);
@@ -4123,7 +4123,7 @@ int Score::keysig()
             result = key;
             int diff = st->part()->instrument()->transpose().chromatic;
             if (!styleB(Sid::concertPitch) && diff)
-                  result = transposeKey(key, diff);
+                  result = transposeKey(key, diff, st->part()->preferSharpFlat());
             break;
             }
       return int(result);

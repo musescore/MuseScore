@@ -264,7 +264,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               if (!styleB(Sid::concertPitch)) {
                                     int diff = s->part()->instrument(startTick)->transpose().chromatic;
                                     if (diff)
-                                          key = transposeKey(key, diff);
+                                          key = transposeKey(key, diff, s->part()->preferSharpFlat());
                                     }
                               // remember this staff to use as basis in transposing key signatures
                               st = s;
@@ -427,7 +427,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               KeySig* ks = toKeySig(scoreElement);
                               bool addKey = ks->isChange();
                               if (!ks->isCustom() && !ks->isAtonal()) {
-                                    Key nKey = transposeKey(ks->key(), interval);
+                                    Key nKey = transposeKey(ks->key(), interval, ks->part()->preferSharpFlat());
                                     KeySigEvent ke = ks->keySigEvent();
                                     ke.setKey(nKey);
                                     undo(new ChangeKeySig(ks, ke, ks->showCourtesy(), startKey || addKey));
@@ -467,7 +467,6 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
       // create missing key signatures
       //
       if (trKeys && (mode != TransposeMode::DIATONICALLY) && (s1->tick() == Fraction(0,1))) {
-            Key nKey = transposeKey(Key::C, interval);
             for (int track : tracks) {
                   if (track % VOICES)
                         continue;
@@ -476,6 +475,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                   if (!ks) {
                         ks = new KeySig(this);
                         ks->setTrack(track);
+                        Key nKey = transposeKey(Key::C, interval, ks->part()->preferSharpFlat());
                         ks->setKey(nKey);
                         ks->setParent(seg);
                         undoAddElement(ks);
@@ -520,7 +520,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, const Fraction& ts, cons
                         createKey = false;
                   if (!ks->isCustom() && !ks->isAtonal()) {
                         Key key  = st->key(s->tick());
-                        Key nKey = transposeKey(key, segmentInterval);
+                        Key nKey = transposeKey(key, segmentInterval, ks->part()->preferSharpFlat());
                         // remove initial C major key signatures
                         if (nKey == Key::C && s->tick().isZero()) {
                               undo(new RemoveElement(ks));
@@ -535,12 +535,11 @@ void Score::transposeKeys(int staffStart, int staffEnd, const Fraction& ts, cons
                         }
                   }
             if (createKey && firstMeasure()) {
-                  Key key  = Key::C;
-                  Key nKey = transposeKey(key, firstInterval);
-                  KeySigEvent ke;
-                  ke.setKey(nKey);
                   KeySig* ks = new KeySig(this);
                   ks->setTrack(staffIdx * VOICES);
+                  Key nKey = transposeKey(Key::C, firstInterval, ks->part()->preferSharpFlat());
+                  KeySigEvent ke;
+                  ke.setKey(nKey);
                   ks->setKeySigEvent(ke);
                   Segment* seg = firstMeasure()->undoGetSegmentR(SegmentType::KeySig, Fraction(0,1));
                   seg->setHeader(true);

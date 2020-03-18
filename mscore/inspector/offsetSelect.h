@@ -17,6 +17,8 @@
 
 namespace Ms {
 
+class InspectorScrollPreventer;
+
 //---------------------------------------------------------
 //   OffsetSelect
 //---------------------------------------------------------
@@ -38,6 +40,7 @@ class OffsetSelect : public QWidget, public Ui::OffsetSelect {
       QPointF offset() const;
       void setOffset(const QPointF&);
       void showRaster(bool);
+      void installScrollPreventer(InspectorScrollPreventer* sp);
       };
 
 }

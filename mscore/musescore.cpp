@@ -2535,10 +2535,10 @@ void MuseScore::reloadInstrumentTemplates()
 void MuseScore::askResetOldScorePositions(Score* score)
       {
       if (score->mscVersion() < 300) {
-            QString pref = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
-            if (pref == "No")
+            QString resPref = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
+            if (resPref == "No")
                   return;
-            else if (pref == "Yes")
+            else if (resPref == "Yes")
                   score->cmdResetAllPositions();
             else { // either set to "Ask" or not at all
                   QMessageBox msgBox;
@@ -5751,7 +5751,7 @@ void MuseScore::transpose()
                   if (!cs->styleB(Sid::concertPitch)) {
                         int diff = staff->part()->instrument(startTick)->transpose().chromatic;
                         if (diff)
-                              key = transposeKey(key, diff);
+                              key = transposeKey(key, diff, staff->part()->preferSharpFlat());
                         }
                   break;
                   }
