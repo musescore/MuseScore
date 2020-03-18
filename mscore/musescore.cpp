@@ -503,7 +503,7 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
       // change workspace
       if (!fromWorkspace && preferences.getString(PREF_APP_WORKSPACE) != WorkspacesManager::currentWorkspace()->name()) {
             Workspace* workspace = WorkspacesManager::findByName(preferences.getString(PREF_APP_WORKSPACE));
-            
+
             if (workspace)
                   mscore->changeWorkspace(workspace);
             }
@@ -764,7 +764,7 @@ bool MuseScore::importExtension(QString path)
 
                   if (!sfzs.isEmpty())
                         synti->storeState();
-                  
+
                   s->gui()->synthesizerChanged();
                   }
 
@@ -787,7 +787,7 @@ bool MuseScore::importExtension(QString path)
                         }
                   if (!sfs.isEmpty())
                         synti->storeState();
-                  
+
                   s->gui()->synthesizerChanged();
                   }
             };
@@ -854,7 +854,7 @@ bool MuseScore::uninstallExtension(QString extensionId)
                   }
             if (found)
                   synti->storeState();
-            
+
             s->gui()->synthesizerChanged();
             }
       bool refreshWorkspaces = false;
@@ -884,7 +884,7 @@ bool MuseScore::uninstallExtension(QString extensionId)
             bool curWorkspaceDisappeared = false;
             if (WorkspacesManager::findByName(curWorkspaceName))
                   curWorkspaceDisappeared = true;
-            
+
             if (curWorkspaceDisappeared)
                   changeWorkspace(WorkspacesManager::workspaces().last());
             }
@@ -1241,7 +1241,7 @@ MuseScore::MuseScore()
       {
       feedbackTools = addToolBar("");
       feedbackTools->setObjectName("feedback-tools");
-	  // Forbid to move or undock the toolbar...
+     // Forbid to move or undock the toolbar...
       feedbackTools->setMovable(false);
       feedbackTools->setFloatable(false);
       // Add a spacer to align the buttons to the right side.
@@ -2056,7 +2056,7 @@ void MuseScore::retranslate()
       if (paletteWorkspace)
           paletteWorkspace->retranslate();
       }
-      
+
 //---------------------------------------------------------
 //   setMenuTitles
 //---------------------------------------------------------
@@ -2156,7 +2156,7 @@ void MuseScore::updateMenus()
       addPluginMenuEntries();
 #endif
       }
-      
+
 //---------------------------------------------------------
 //   resizeEvent
 //---------------------------------------------------------
@@ -2999,12 +2999,13 @@ void MuseScore::showPlayPanel(bool visible)
             connect(synti,     SIGNAL(gainChanged(float)), playPanel, SLOT(setGain(float)));
             playPanel->setGain(synti->gain());
             playPanel->setScore(cs);
-            addDockWidget(Qt::RightDockWidgetArea, playPanel);
+            addDockWidget(Qt::RightDockWidgetArea, playPanel); //comment this out to allow for saving the position on both floating and docked mode (you must provide a default position)
 
             // The play panel must be set visible before being set floating for positioning
             // and window geometry reasons.
             playPanel->setVisible(visible);
-            playPanel->setFloating(false);
+            restoreDockWidget(playPanel);
+            playPanel->setFloating(settings.value("MainWindow/playPanelFloating").toBool());
             }
       else
             reDisplayDockWidget(playPanel, visible);
@@ -4504,6 +4505,7 @@ void MuseScore::writeSettings()
       settings.setValue("debuggerSplitter", mainWindow->saveState());
       settings.setValue("split", _horizontalSplit);
       settings.setValue("splitter", splitter->saveState());
+      settings.setValue("playPanelFloating", playPanel->isFloating());
       settings.endGroup();
 
       WorkspacesManager::currentWorkspace()->save();
@@ -6992,7 +6994,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                                           continue;
                                     e.setChannel(a->channel());
                                     int syntiIdx= synth->index(score->masterScore()->midiMapping(a->channel())->articulation()->synti());
-									synth->play(e, syntiIdx);
+                                    synth->play(e, syntiIdx);
                                     }
                               }
                         }
@@ -7845,7 +7847,7 @@ void MuseScore::init(QStringList& argv)
                   Workspace* targetWorkspace = WorkspacesManager::visibleWorkspaces()[0];
                   if (targetWorkspace)
                         mscore->changeWorkspace(targetWorkspace, true);
-                  
+
                   preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, sw->showTours());
                   delete sw;
 
