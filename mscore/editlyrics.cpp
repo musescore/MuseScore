@@ -143,7 +143,6 @@ void ScoreView::lyricsUpDown(bool up, bool end)
             }
 
       _score->setLayoutAll();
-      _score->update();
       }
 
 //---------------------------------------------------------
