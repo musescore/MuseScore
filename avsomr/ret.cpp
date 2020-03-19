@@ -111,17 +111,17 @@ QString Ret::text(Code c)
             case Ok:                return QObject::tr("Ok");
                   // common
             case UnknownError:      return QObject::tr("Unknown error");
-            case FailedReadFile:    return QObject::tr("Failed read file");
-            case FailedClearDir:    return QObject::tr("Failed clear directory");
+            case FailedReadFile:    return QObject::tr("Failed reading file");
+            case FailedClearDir:    return QObject::tr("Failed clearing directory");
             case FileNotSupported:  return QObject::tr("File not supported");
                   // network
             case NetworkError:      return QObject::tr("Network error");
             case ServerError:       return QObject::tr("Server error");
                   // local
             case LocalNotInstalled: return QObject::tr("Local OMR engine not installed");
-            case LocalInstaling:    return QObject::tr("Local OMR engine installing...");
-            case LocalFailedExec:   return QObject::tr("Failed execute local OMR engine");
-            case LocalAlreadyBuilding: return QObject::tr("Local OMR engine already building...");
+            case LocalInstaling:    return QObject::tr("Local OMR engine installing…");
+            case LocalFailedExec:   return QObject::tr("Failed executing local OMR engine");
+            case LocalAlreadyBuilding: return QObject::tr("Local OMR engine already building…");
             }
       return QString();
       }
