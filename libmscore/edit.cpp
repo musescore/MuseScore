@@ -1680,7 +1680,6 @@ void Score::deleteItem(Element* el)
                   {
                   Chord* chord = toChord(el);
                   removeChordRest(chord, false);
-                  Segment* seg = chord->segment();
 
                   // replace with rest
                   if (chord->noteType() == NoteType::NORMAL) {

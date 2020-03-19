@@ -27,6 +27,6 @@ target_link_libraries(google_analytics Qt5::Core Qt5::Network)
 
 if (MSVC)
   set_target_properties( google_analytics PROPERTIES
-    COMPILE_FLAGS "/wd4458"
+    COMPILE_FLAGS "/wd4458 /wd4127"
   )
 endif (MSVC)
