@@ -122,6 +122,9 @@ QString Ret::text(Code c)
             case LocalInstaling:    return QObject::tr("Local OMR engine installing…");
             case LocalFailedExec:   return QObject::tr("Failed executing local OMR engine");
             case LocalAlreadyBuilding: return QObject::tr("Local OMR engine already building…");
+
+            case AvsOmrFirst:
+            case AvsOmrLast: break;
             }
       return QString();
       }
@@ -152,6 +155,9 @@ QString Ret::supportHint(Code c)
             case LocalInstaling:    return PleaseTryAgain;
             case LocalFailedExec:   return PleaseTryAgain;
             case LocalAlreadyBuilding: return PleaseTryAgain;
+
+            case AvsOmrFirst:
+            case AvsOmrLast: break;
             }
       return QString();
       }

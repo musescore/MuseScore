@@ -72,13 +72,13 @@ if (NOT MSVC)
    set_target_properties (
       avsomr
       PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-unused-private-field"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
 else (NOT MSVC)
    set_target_properties (
       avsomr
       PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE}"    # TODO: Add disabling of unused private field warning?
+         COMPILE_FLAGS "${PCH_INCLUDE}"
       )
 endif (NOT MSVC)   
 
