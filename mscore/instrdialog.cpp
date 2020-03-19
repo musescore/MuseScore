@@ -519,6 +519,8 @@ void MuseScore::editInstrList()
             else {
                   for (Staff* s : sl) {
                         const LinkedElements* sll = s->links();
+                        if (!sll)
+                              continue;
                         for (auto le : *sll) {
                               Staff* ss = toStaff(le);
                               if (ss->primaryStaff()) {
