@@ -62,10 +62,15 @@ Beam::Beam(Score* s)
       _direction       = Direction::AUTO;
       _up              = true;
       _distribute      = false;
+      _noSlope         = false;
       _userModified[0] = false;
       _userModified[1] = false;
       _grow1           = 1.0;
       _grow2           = 1.0;
+      _beamDist        = 0.;
+      _id              = 0;
+      minMove          = 0;
+      maxMove          = 0;
       _isGrace         = false;
       _cross           = false;
       }
@@ -88,6 +93,7 @@ Beam::Beam(const Beam& b)
       _userModified[1] = b._userModified[1];
       _grow1           = b._grow1;
       _grow2           = b._grow2;
+      _beamDist        = b._beamDist;
       for (const BeamFragment* f : b.fragments)
             fragments.append(new BeamFragment(*f));
       minMove          = b.minMove;

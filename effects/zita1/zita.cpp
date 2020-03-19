@@ -234,7 +234,7 @@ void Diff1::fini()
       }
 
 Delay::Delay()
-   : _size (0), _line (0)
+   : _i(0), _size (0), _line (0)
       {
       }
 
@@ -259,7 +259,7 @@ void Delay::fini ()
       }
 
 Vdelay::Vdelay ()
-   : _size (0), _line (0)
+   : _ir(0), _iw(0), _size (0), _line (0)
       {
       }
 

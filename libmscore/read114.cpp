@@ -3015,6 +3015,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   beam->read(e);
                   beam->setParent(0);
                   // _beams.append(beam);
+                  delete beam;
                   }
             else if (tag == "name")
                   setName(e.readElementText());

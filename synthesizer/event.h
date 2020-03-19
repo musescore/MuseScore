@@ -194,9 +194,9 @@ class MidiCoreEvent {
 class MidiEvent : public MidiCoreEvent {
 
    protected:
-      uchar* _edata;           // always zero terminated (_data[_len] == 0; )
-      int _len;
-      int _metaType;
+      uchar* _edata { nullptr };           // always zero terminated (_data[_len] == 0; )
+      int _len { 0 };
+      int _metaType { 0 };
 
    public:
       MidiEvent() {}

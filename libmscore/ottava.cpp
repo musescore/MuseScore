@@ -212,7 +212,8 @@ Sid Ottava::getPropertyStyle(Pid pid) const
 Ottava::Ottava(Score* s)
    : TextLineBase(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
       {
-      _ottavaType = OttavaType::OTTAVA_8VA;
+      _ottavaType  = OttavaType::OTTAVA_8VA;
+      _numbersOnly = false;
       setBeginTextPlace(PlaceText::LEFT);
       setContinueTextPlace(PlaceText::LEFT);
       setEndHookType(HookType::HOOK_90);

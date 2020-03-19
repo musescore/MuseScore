@@ -44,7 +44,6 @@ AudioFile::AudioFile()
       {
       memset(&info, 0, sizeof(info));
       memset(&inst, 0, sizeof(inst));
-      sf = 0;
       }
 
 AudioFile::~AudioFile()

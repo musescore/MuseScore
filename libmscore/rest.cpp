@@ -39,6 +39,7 @@ namespace Ms {
 Rest::Rest(Score* s)
   : ChordRest(s)
       {
+      _mmWidth   = 0;
       _beamMode  = Beam::Mode::NONE;
       _sym       = SymId::restQuarter;
       }
@@ -46,6 +47,7 @@ Rest::Rest(Score* s)
 Rest::Rest(Score* s, const TDuration& d)
   : ChordRest(s)
       {
+      _mmWidth   = 0;
       _beamMode  = Beam::Mode::NONE;
       _sym       = SymId::restQuarter;
       setDurationType(d);

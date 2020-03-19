@@ -55,7 +55,7 @@ class ActionEventObserver : public QObject, public ServiceInjector<ITelemetrySer
       explicit ActionEventObserver(QObject* parent = nullptr);
       QPair<QString, QString> extractActionData(QObject *watched);
 
-      Ms::ScoreState m_scoreState;
+      Ms::ScoreState m_scoreState { Ms::STATE_INIT };
       };
 
 #endif // MENUBAR_H

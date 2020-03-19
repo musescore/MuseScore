@@ -229,6 +229,7 @@ Measure::Measure(const Measure& m)
       _timesig      = m._timesig;
       _len          = m._len;
       _repeatCount  = m._repeatCount;
+      _noMode       = m._noMode;
       _userStretch  = m._userStretch;
 
       _mstaves.reserve(m._mstaves.size());
@@ -3675,21 +3676,19 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       // if end repeat, clef goes after, otherwise clef goes before
       Segment* clefSeg = findSegmentR(SegmentType::Clef, ticks());
       if (clefSeg) {
-            if (clefSeg) {
-                  Segment* s1;
-                  Segment* s2;
-                  if (repeatEnd()) {
-                        s1 = seg;
-                        s2 = clefSeg;
-                        }
-                  else {
-                        s1 = clefSeg;
-                        s2 = seg;
-                        }
-                  if (s1->next() != s2) {
-                        _segments.remove(s1);
-                        _segments.insert(s1, s2);
-                        }
+            Segment* s1;
+            Segment* s2;
+            if (repeatEnd()) {
+                  s1 = seg;
+                  s2 = clefSeg;
+                  }
+            else {
+                  s1 = clefSeg;
+                  s2 = seg;
+                  }
+            if (s1->next() != s2) {
+                  _segments.remove(s1);
+                  _segments.insert(s1, s2);
                   }
             }
 
