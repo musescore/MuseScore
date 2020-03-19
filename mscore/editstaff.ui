@@ -804,7 +804,7 @@
            <item>
             <widget class="QLabel" name="labelPreferSharpFlat">
              <property name="text">
-              <string>Prefer sharps or flats for transposed key signature:</string>
+              <string>Prefer sharps or flats for transposed key signatures:</string>
              </property>
             </widget>
            </item>
