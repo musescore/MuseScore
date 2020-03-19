@@ -45,6 +45,7 @@ class PartListItem : public QTreeWidgetItem {
 
       PartListItem(Part* p, QTreeWidget* lv);
       PartListItem(const InstrumentTemplate* i, QTreeWidget* lv);
+      PartListItem(const InstrumentTemplate* i, QTreeWidget* lv, QTreeWidgetItem* prv);
       bool visible() const;
       void setVisible(bool val);
       void updateClefs();
