@@ -34,6 +34,11 @@ class InspectorTextLineBase : public InspectorElementBase {
       Ui::InspectorLine l;
       Ui::InspectorTextLineBase tl;
 
+   private slots:
+      void hasBeginTextClicked(bool checked);
+      void hasContinueTextClicked(bool checked);
+      void hasEndTextClicked(bool checked);
+
    public:
       InspectorTextLineBase(QWidget* parent);
       virtual void setElement() override;
