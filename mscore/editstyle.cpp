@@ -1050,6 +1050,8 @@ void EditStyle::setValues()
                   sw.widget->blockSignals(false);
             }
 
+      textStyleChanged(textStyles->currentRow());
+
       //TODO: convert the rest:
 
       QString unit(lstyle.value(Sid::swingUnit).toString());
