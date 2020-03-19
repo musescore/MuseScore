@@ -3701,7 +3701,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                           }
 
                                     // add element to skyline
-                                    if (e->addToSkyline())
+                                    if (e->addToSkyline() || e->isChord())
                                           skyline.add(e->shape().translated(e->pos() + p));
 
                                     // add tremolo to skyline

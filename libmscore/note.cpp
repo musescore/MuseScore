@@ -2670,6 +2670,8 @@ QVariant Note::getProperty(Pid propertyId) const
                   return fixed();
             case Pid::FIXED_LINE:
                   return fixedLine();
+            case Pid::AUTOPLACE:
+                  return chord() ? chord()->autoplace() : autoplace();
             default:
                   break;
             }
@@ -2749,6 +2751,12 @@ bool Note::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::FIXED_LINE:
                   setFixedLine(v.toInt());
+                  break;
+            case Pid::AUTOPLACE:
+                  if (chord())
+                        chord()->setAutoplace(v.toBool());
+                  else
+                        setAutoplace(v.toBool());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
