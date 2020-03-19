@@ -1812,11 +1812,11 @@ void Sample::optimize()
       if (!s->valid())
             return;
 
-      IF_ASSERT(s->loopstart >= s->start) {
+      IF_ASSERT_FAILED(s->loopstart >= s->start) {
             s->loopstart = s->start;
             }
 
-      IF_ASSERT(s->loopend <= s->end) {
+      IF_ASSERT_FAILED(s->loopend <= s->end) {
             s->loopend = s->end;
             }
 
