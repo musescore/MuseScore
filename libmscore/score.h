@@ -516,7 +516,6 @@ class Score : public QObject, public ScoreElement {
 
       void beamGraceNotes(Chord*, bool);
 
-
       void checkSlurs();
       void checkScore();
 
@@ -668,7 +667,7 @@ class Score : public QObject, public ScoreElement {
       void undoChangeTuning(Note*, qreal);
       void undoChangeUserMirror(Note*, MScore::DirectionH);
       void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
-      void undoChangeClef(Staff* ostaff, Element*, ClefType st);
+      void undoChangeClef(Staff* ostaff, Element*, ClefType st, bool forInstrumentChange = false);
       bool undoPropertyChanged(Element* e, Pid t, const QVariant& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
       void undoPropertyChanged(ScoreElement*, Pid, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
       inline virtual UndoStack* undoStack() const;
@@ -679,6 +678,8 @@ class Score : public QObject, public ScoreElement {
       void undoInsertTime(const Fraction& tick, const Fraction& len);
       void undoChangeStyleVal(Sid idx, const QVariant& v);
       void undoChangePageNumberOffset(int po);
+
+      void updateInstrumentChangeTranspositions(Ms::KeySigEvent& key, Ms::Staff* staff, const Ms::Fraction& tick);
 
       Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 

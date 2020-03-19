@@ -96,6 +96,7 @@ class KeySigEvent {
       Key _key            { Key::INVALID     };          // -7 -> +7
       KeyMode _mode       { KeyMode::UNKNOWN };
       bool _custom        { false            };
+      bool _forInstrumentChange{ false          };
       QList<KeySym> _keySymbols;
 
       void enforceLimits();
@@ -117,6 +118,8 @@ class KeySigEvent {
       void setCustom(bool val)   { _custom = val; _key = Key::C;   }
       bool isValid() const       { return _key != Key::INVALID;    }
       bool isAtonal() const      { return _mode == KeyMode::NONE;  }
+      void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
+      bool forInstrumentChange() const{ return _forInstrumentChange; }
       void initFromSubtype(int);    // for backward compatibility
       QList<KeySym>& keySymbols()             { return _keySymbols; }
       const QList<KeySym>& keySymbols() const { return _keySymbols; }
@@ -148,7 +151,7 @@ struct Interval;
 
 enum class PreferSharpFlat : char;
 extern Key transposeKey(Key oldKey, const Interval&, PreferSharpFlat prefer = PreferSharpFlat(0));
-
+extern Interval calculateInterval(Key key1, Key key2);
 
 }     // namespace Ms
 #endif

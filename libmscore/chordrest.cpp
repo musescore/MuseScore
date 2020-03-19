@@ -47,6 +47,7 @@
 #include "page.h"
 #include "hook.h"
 #include "rehearsalmark.h"
+#include "instrchange.h"
 
 namespace Ms {
 
@@ -541,14 +542,7 @@ Element* ChordRest::drop(EditData& data)
             case ElementType::SYSTEM_TEXT:
             case ElementType::STICKING:
             case ElementType::STAFF_STATE:
-            case ElementType::INSTRUMENT_CHANGE:
-                  if (e->isInstrumentChange() && part()->instruments()->find(tick().ticks()) != part()->instruments()->end()) {
-                        qDebug()<<"InstrumentChange already exists at tick = "<<tick().ticks();
-                        delete e;
-                        return 0;
-                        }
                   // fall through
-
             case ElementType::REHEARSAL_MARK:
                   {
                   e->setParent(segment());
@@ -561,6 +555,23 @@ Element* ChordRest::drop(EditData& data)
                   score()->undoAddElement(e);
                   return e;
                   }
+            case ElementType::INSTRUMENT_CHANGE:
+                  if (part()->instruments()->find(tick().ticks()) != part()->instruments()->end()) {
+                        qDebug() << "InstrumentChange already exists at tick = " << tick().ticks();
+                        delete e;
+                        return 0;
+                        }
+                  else {
+                        InstrumentChange* ic = toInstrumentChange(e);
+                        ic->setParent(segment());
+                        ic->setTrack((track() / VOICES) * VOICES);
+                        Instrument* instr = ic->instrument();
+                        Instrument* prevInstr = part()->instrument(tick());
+                        if (instr && instr->isDifferentInstrument(*prevInstr))
+                              ic->setupInstrument(instr);
+                        score()->undoAddElement(ic);
+                        return e;
+                        }
             case ElementType::FIGURED_BASS:
                   {
                   bool bNew;
