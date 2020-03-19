@@ -253,8 +253,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 
       Interval interval;
       if (mode != TransposeMode::DIATONICALLY) {
-            if (mode == TransposeMode::BY_KEY) {
-                  // calculate interval from "transpose by key"
+            if (mode == TransposeMode::TO_KEY) {
+                  // calculate interval from "transpose to key"
                   // find the key of the first pitched staff
                   Key key = Key::C;
                   for (int i = startStaffIdx; i < endStaffIdx; ++i) {
@@ -293,7 +293,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                   trKeys = false;
                   }
             bool fullOctave = (interval.chromatic % 12) == 0;
-            if (fullOctave && (mode != TransposeMode::BY_KEY)) {
+            if (fullOctave && (mode != TransposeMode::TO_KEY)) {
                   trKeys = false;
                   transposeChordNames = false;
                   }
