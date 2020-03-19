@@ -1923,7 +1923,9 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
             }
       Q_ASSERT(first());
       Q_ASSERT(last());
-      score()->writeSegments(xml, strack, etrack, first(), last()->next1(), writeSystemElements, forceTimeSig);
+      if (first() && last())
+            score()->writeSegments(xml, strack, etrack, first(), last()->next1(), writeSystemElements, forceTimeSig);
+
       xml.etag();
       }
 
