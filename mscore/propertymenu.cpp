@@ -53,6 +53,7 @@
 #include "libmscore/glissando.h"
 #include "libmscore/fret.h"
 #include "libmscore/instrchange.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/slur.h"
 #include "libmscore/jump.h"
 #include "libmscore/marker.h"
@@ -503,28 +504,9 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
       if (si.exec()) {
             const InstrumentTemplate* it = si.instrTemplate();
             if (it) {
-                  Fraction tickStart = ic->segment()->tick();
-                  Part* part = ic->staff()->part();
-                  Interval oldV = part->instrument(tickStart)->transpose();
-                  //Instrument* oi = ic->instrument();  //part->instrument(tickStart);
-                  //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
-                  // change instrument in all linked scores
-                  for (ScoreElement* se : ic->linkList()) {
-                        InstrumentChange* lic = toInstrumentChange(se);
-                        Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
-                        lic->score()->undo(new ChangeInstrument(lic, instrument));
-                        }
-                  // transpose for current score only
-                  // this automatically propagates to linked scores
-                  if (part->instrument(tickStart)->transpose() != oldV) {
-                        auto i = part->instruments()->upper_bound(tickStart.ticks());    // find(), ++i
-                        Fraction tickEnd;
-                        if (i == part->instruments()->end())
-                              tickEnd = Fraction(-1, 1);
-                        else
-                              tickEnd = Fraction::fromTicks(i->first);
-                        ic->score()->transpositionChanged(part, oldV, tickStart, tickEnd);
-                        }
+                  Instrument instr = Instrument::fromTemplate(it);
+                  ic->setInit(true);
+                  ic->setupInstrument(&instr);
                   }
             else
                   qDebug("no template selected?");

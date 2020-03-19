@@ -15,6 +15,7 @@
 
 #include "text.h"
 #include "instrument.h"
+#include "clef.h"
 
 namespace Ms {
 
@@ -22,8 +23,10 @@ namespace Ms {
 //   @@ InstrumentChange
 //---------------------------------------------------------
 
-class InstrumentChange final : public TextBase  {
+class InstrumentChange final : public TextBase {
+      Q_DECLARE_TR_FUNCTIONS(InstrumentChange)
       Instrument* _instrument;  // Staff holds ownership if part of score
+      bool _init = false; // Set if the instrument has been set by the user, as there is no other way to tell.
 
    public:
       InstrumentChange(Score*);
@@ -41,10 +44,19 @@ class InstrumentChange final : public TextBase  {
       void setInstrument(Instrument* i)     { _instrument = i;     }
       void setInstrument(Instrument&& i)    { *_instrument = i;    }
       void setInstrument(const Instrument& i);
+      void setupInstrument(const Instrument* instrument);
+
+      std::vector<KeySig*> keySigs() const;
+      std::vector<Clef*> clefs() const;
+
+      bool init() const                     { return _init; }
+      void setInit(bool init)               { _init = init; }
 
       Segment* segment() const              { return toSegment(parent()); }
 
       virtual QVariant propertyDefault(Pid) const override;
+
+      virtual bool placeMultiple() const override      { return false; }
       };
 
 

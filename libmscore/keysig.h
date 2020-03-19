@@ -73,6 +73,9 @@ class KeySig final : public Element {
 
       void setHideNaturals(bool hide)     { _hideNaturals = hide; }
 
+      void setForInstrumentChange(bool forInstrumentChange) { _sig.setForInstrumentChange(forInstrumentChange); }
+      bool forInstrumentChange() const    { return _sig.forInstrumentChange(); }
+
       QVariant getProperty(Pid propertyId) const;
       bool setProperty(Pid propertyId, const QVariant&);
       QVariant propertyDefault(Pid id) const;

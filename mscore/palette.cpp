@@ -467,6 +467,9 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
             dropData.dropElement->styleChanged();   // update to local style
 
             Element* el = target->drop(dropData);
+            if (el && el->isInstrumentChange()) {
+                  mscore->currentScoreView()->selectInstrument(toInstrumentChange(el));
+                  }
             if (el && !viewer->noteEntryMode())
                   score->select(el, SelectType::SINGLE, 0);
             dropData.dropElement = 0;
@@ -722,6 +725,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                   int track2 = sel.staffEnd() * VOICES;
                   Segment* startSegment = sel.startSegment();
                   Segment* endSegment = sel.endSegment(); //keep it, it could change during the loop
+
                   for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                         for (int track = track1; track < track2; ++track) {
                               Element* e = s->element(track);
@@ -738,6 +742,8 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                                           applyDrop(score, viewer, e, element, modifiers);
                                     }
                               }
+                        if (!element->placeMultiple())
+                              break;
                         }
                   }
             }
