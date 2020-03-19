@@ -453,7 +453,7 @@ QPointF Element::canvasPos() const
             else if (parent()->isChord())       // grace chord
                   measure = toSegment(parent()->parent())->measure();
             else if (parent()->isFretDiagram())
-                  return p + parent()->canvasPos();
+                  return p + parent()->canvasPos() + QPointF(toFretDiagram(parent())->centerX(), 0.0);
             else
                   qFatal("this %s parent %s\n", name(), parent()->name());
             if (measure) {
