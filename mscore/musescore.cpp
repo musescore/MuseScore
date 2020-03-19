@@ -5728,9 +5728,9 @@ void MuseScore::transpose()
       bool rangeSelection = cs->selection().isRange();
       TransposeDialog td;
 
-      // TRANSPOSE_BY_KEY and "transpose keys" is only possible if selection state is SelState::RANGE
+      // TRANSPOSE_TO_KEY and "transpose keys" is only possible if selection state is SelState::RANGE
       td.enableTransposeKeys(rangeSelection);
-      td.enableTransposeByKey(rangeSelection);
+      td.enableTransposeToKey(rangeSelection);
       td.enableTransposeChordNames(rangeSelection);
 
       int startStaffIdx = 0;

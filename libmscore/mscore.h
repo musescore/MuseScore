@@ -129,7 +129,7 @@ enum class TransposeDirection : char {
 //---------------------------------------------------------
 
 enum class TransposeMode : char {
-      BY_KEY, BY_INTERVAL, DIATONICALLY
+      TO_KEY, BY_INTERVAL, DIATONICALLY
       };
 
 //---------------------------------------------------------
