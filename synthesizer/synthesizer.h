@@ -42,8 +42,8 @@ class Synthesizer {
       bool _active;
 
    protected:
-      float _sampleRate;
-      SynthesizerGui* _gui;
+      float _sampleRate { 44100.0f };
+      SynthesizerGui* _gui { nullptr };
 
    public:
       Synthesizer() : _active(false) { _gui = 0; }

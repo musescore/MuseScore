@@ -26,12 +26,12 @@ class AudioFile {
             fltp
             };
       SF_INFO info;
-      SNDFILE* sf;
+      SNDFILE* sf { nullptr };
       SF_INSTRUMENT inst;
-      bool hasInstrument;
+      bool hasInstrument { false };
       QByteArray buf;  // used during read of Sample
-      int idx;
-      FormatType _type;
+      int idx { 0 };
+      FormatType _type { fltp };
 
    public:
       AudioFile();

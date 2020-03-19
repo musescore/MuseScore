@@ -1384,14 +1384,14 @@ class FretClear : public UndoCommand {
 //---------------------------------------------------------
 
 class MoveTremolo : public UndoCommand {
-      Score* score;
+      Score* score { nullptr };
       Fraction chord1Tick;
       Fraction chord2Tick;
-      Tremolo* trem;
-      int track;
+      Tremolo* trem { nullptr };
+      int track { 0 };
 
-      Chord* oldC1;
-      Chord* oldC2;
+      Chord* oldC1 { nullptr };
+      Chord* oldC2 { nullptr };
 
       void undo(EditData*) override;
       void redo(EditData*) override;

@@ -218,6 +218,8 @@ Chord::Chord(Score* s)
       _stemSlash        = 0;
       _noStem           = false;
       _playEventType    = PlayEventType::Auto;
+      _spaceLw          = 0.;
+      _spaceRw          = 0.;
       _crossMeasure     = CrossMeasure::UNKNOWN;
       _graceIndex   = 0;
       }
