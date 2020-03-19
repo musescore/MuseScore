@@ -37,6 +37,10 @@ else (NOT MSVC)
    set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
 endif (NOT MSVC)
 
+include_directories (
+      ${PROJECT_SOURCE_DIR}/global
+      )
+
 add_library (fluid STATIC
       ${_all_h_file}
       ${PCH}
