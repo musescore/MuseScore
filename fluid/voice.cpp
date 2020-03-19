@@ -18,6 +18,8 @@
  * 02111-1307, USA
  */
 
+#include "log.h"
+
 #include "conv.h"
 #include "fluid.h"
 #include "sfont.h"
@@ -1809,6 +1811,14 @@ void Sample::optimize()
       /* ignore ROM and other(?) invalid samples */
       if (!s->valid())
             return;
+
+      IF_ASSERT(s->loopstart >= s->start) {
+            s->loopstart = s->start;
+            }
+
+      IF_ASSERT(s->loopend <= s->end) {
+            s->loopend = s->end;
+            }
 
       if (!s->amplitude_that_reaches_noise_floor_is_valid) { /* Only once */
             /* Scan the loop */
