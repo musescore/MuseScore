@@ -161,7 +161,7 @@
          <string>Reset 'Placement' value</string>
         </property>
         <property name="text">
-         <string>Select Instrument...</string>
+         <string>Select Instrument…</string>
         </property>
        </widget>
       </item>
