@@ -1830,7 +1830,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
       // precautionary or microtonal accidental
       // either way, we display it unconditionally
       // both for this note and for any linked notes
-      else if (acc == acc2 || pitch == note->pitch() || Accidental::isMicrotonal(accidental))
+      else if (acc == acc2 || (pitch == note->pitch() && !Accidental::isMicrotonal(note->accidentalType())) || Accidental::isMicrotonal(accidental))
             forceAdd = true;
 
       for (ScoreElement* se : note->linkList()) {
@@ -1853,6 +1853,9 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
                   a1->setAccidentalType(accidental);
                   a1->setRole(AccidentalRole::USER);
                   lns->undoAddElement(a1);
+                  }
+            else if (a && Accidental::isMicrotonal(a->accidentalType())) {
+                  lns->undoRemoveElement(a);
                   }
             changeAccidental2(ln, pitch, tpc);
             }
