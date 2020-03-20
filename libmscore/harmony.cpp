@@ -154,8 +154,12 @@ Harmony::Harmony(Score* s)
       {
       _rootTpc    = Tpc::TPC_INVALID;
       _baseTpc    = Tpc::TPC_INVALID;
+      _rootSpelling = NoteSpellingType::STANDARD;
+      _baseSpelling = NoteSpellingType::STANDARD;
       _rootCase   = NoteCaseType::CAPITAL;
       _baseCase   = NoteCaseType::CAPITAL;
+      _rootRenderCase = NoteCaseType::CAPITAL;
+      _baseRenderCase = NoteCaseType::CAPITAL;
       _id         = -1;
       _parsedForm = 0;
       _harmonyType = HarmonyType::STANDARD;
@@ -169,8 +173,12 @@ Harmony::Harmony(const Harmony& h)
       {
       _rootTpc    = h._rootTpc;
       _baseTpc    = h._baseTpc;
+      _rootSpelling = h._rootSpelling;
+      _baseSpelling = h._baseSpelling;
       _rootCase   = h._rootCase;
       _baseCase   = h._baseCase;
+      _rootRenderCase = h._rootRenderCase;
+      _baseRenderCase = h._baseRenderCase;
       _id         = h._id;
       _leftParen  = h._leftParen;
       _rightParen = h._rightParen;

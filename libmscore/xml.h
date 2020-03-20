@@ -115,7 +115,7 @@ class XmlReader : public QXmlStreamReader {
       XmlReader& operator=(const XmlReader&) = delete;
       ~XmlReader();
 
-      bool hasAccidental;                     // used for userAccidental backward compatibility
+      bool hasAccidental { false };                     // used for userAccidental backward compatibility
       void unknown();
 
       // attribute helper routines:

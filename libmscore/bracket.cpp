@@ -30,11 +30,13 @@ namespace Ms {
 Bracket::Bracket(Score* s)
    : Element(s)
       {
+      ay1          = 0;
       h2           = 3.5 * spatium();
       _firstStaff  = 0;
       _lastStaff   = 0;
       _bi          = 0;
       _braceSymbol = SymId::noSym;
+      _magx        = 1.;
       setGenerated(true);     // brackets are not saved
       }
 

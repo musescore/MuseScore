@@ -24,7 +24,7 @@ class Chord;
 //---------------------------------------------------------
 
 class Hook final : public Symbol {
-      int _hookType;
+      int _hookType { 0 };
 
    public:
       Hook(Score* = 0);

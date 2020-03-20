@@ -468,6 +468,8 @@ namespace Bww {
     tempo(0),
     //inMeasure(false),
     //measureNr(0),
+    beat(0),
+    beats(0),
     tieStart(false),
     inTie(false),
     tripletStart(false),
