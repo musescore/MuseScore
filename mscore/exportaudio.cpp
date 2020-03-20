@@ -67,16 +67,12 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
       synth->init();
       int sampleRate = preferences.getInt(PREF_EXPORT_AUDIO_SAMPLERATE);
       synth->setSampleRate(sampleRate);
-      if (MScore::noGui) { // use score settings if possible
-            bool r = synth->setState(score->synthesizerState());
-            if (!r)
-                  synth->init();
-            }
-      else { // use current synth settings
-            bool r = synth->setState(mscore->synthesizerState());
-            if (!r)
-                  synth->init();
-            }
+
+      const SynthesizerState state = useCurrentSynthesizerState ? mscore->synthesizerState() : score->synthesizerState();
+      const bool setStateOk = synth->setState(state);
+
+      if (!setStateOk || !synth->hasSoundFontsLoaded())
+            synth->init(); // re-initialize master synthesizer with default settings
 
       if (!useCurrentSynthesizerState) {
             score->masterScore()->rebuildAndUpdateExpressive(synth->synthesizer("Fluid"));

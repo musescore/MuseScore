@@ -186,6 +186,23 @@ Synthesizer* MasterSynthesizer::synthesizer(const QString& name)
       }
 
 //---------------------------------------------------------
+//   hasSoundFontsLoaded
+///   Checks whether any of the synthesizers in use has
+///   at least one sound font loaded. \p false value may
+///   indicate some errors in the used synthesizer state
+///   as such configuration will produce no sound.
+//---------------------------------------------------------
+
+bool MasterSynthesizer::hasSoundFontsLoaded() const
+      {
+      for (const Synthesizer* s : _synthesizer) {
+            if (!s->soundFontsInfo().empty())
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   registerSynthesizer
 //    ownership of s moves to MasterSynthesizer
 //---------------------------------------------------------
