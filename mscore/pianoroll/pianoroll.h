@@ -74,6 +74,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       void readSettings();
       void doUpdate();
 
+
    private slots:
       void selectionChanged();
       void veloTypeChanged(int);
@@ -92,6 +93,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
 
    public slots:
       void changeSelection(SelState);
+      void handleAction(QAction*);
 
    public:
       PianorollEditor(QWidget* parent = 0);
@@ -115,6 +117,8 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
 
       void writeSettings();
       virtual const QRect geometry() const override { return QMainWindow::geometry(); }
+
+      void zoom(int amount = 1, bool horiz = true);
       };
 
 
