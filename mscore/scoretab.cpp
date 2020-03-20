@@ -19,6 +19,8 @@
 
 #include <QAction>
 
+#include "log.h"
+
 #include "shortcut.h"
 #include "musescore.h"
 #include "config.h"
@@ -119,10 +121,10 @@ ScoreView* ScoreTab::view(int n) const
 QSplitter* ScoreTab::viewSplitter(int n) const
       {
       const TabScoreView* tsv = tabScoreView(n);
-      if (tsv == 0) {
-            // qDebug("ScoreTab::viewSplitter %d is zero", n);
-            return 0;
+      IF_ASSERT_FAILED(tsv) {
+            return nullptr;
             }
+
       Score* score = tsv->score;
       if (tsv->part) {
             QList<Excerpt*>& excerpts = score->excerpts();
@@ -153,6 +155,33 @@ void ScoreTab::clearTab2()
       for (int i = 0; i < n; ++i)
             tab2->removeTab(0);
       tab2->blockSignals(false);
+      }
+
+//---------------------------------------------------------
+//   tabScoreView
+//---------------------------------------------------------
+
+TabScoreView* ScoreTab::tabScoreView(int idx)
+      {
+      IF_ASSERT_FAILED(tab) {
+            return nullptr;
+            }
+
+      QVariant data = tab->tabData(idx);
+      IF_ASSERT_FAILED(data.isValid()) {
+            return nullptr;
+            }
+
+      return static_cast<TabScoreView*>(data.value<void*>());
+      }
+
+//---------------------------------------------------------
+//   tabScoreView const
+//---------------------------------------------------------
+
+const TabScoreView* ScoreTab::tabScoreView(int idx) const
+      {
+      return const_cast<ScoreTab*>(this)->tabScoreView(idx);
       }
 
 //---------------------------------------------------------
@@ -196,7 +225,7 @@ void ScoreTab::setCurrent(int n)
             emit currentScoreViewChanged(0);
             return;
             }
-      TabScoreView* tsv = tabScoreView(n);
+
       QSplitter* vs = viewSplitter(n);
 
       ScoreView* v;
@@ -258,6 +287,10 @@ void ScoreTab::setCurrent(int n)
             MasterScore* score = v->score()->masterScore();
             QList<Excerpt*>& excerpts = score->excerpts();
             if (!excerpts.isEmpty()) {
+                  TabScoreView* tsv = tabScoreView(n);
+                  IF_ASSERT_FAILED(tsv) {
+                        return;
+                        }
                   tab2->blockSignals(true);
                   tab2->addTab(score->fileInfo()->completeBaseName().replace("&","&&") + (score->dirty() ? "*" : ""));
                   for (const Excerpt* excerpt : excerpts)
@@ -287,6 +320,10 @@ void ScoreTab::updateExcerpts()
       if (idx == -1)
             return;
       TabScoreView* tsv = tabScoreView(idx);
+      IF_ASSERT_FAILED(tsv) {
+            return;
+            }
+
       MasterScore* score = tsv->score;
       if (!score->excerptsChanged())
             return;
@@ -333,10 +370,17 @@ void ScoreTab::setExcerpt(int n)
       {
       if (n == -1)
             return;
+
+      IF_ASSERT_FAILED(tab) {
+            return;
+            }
+
       int idx           = tab->currentIndex();
       TabScoreView* tsv = tabScoreView(idx);
-      if (tsv == 0)
+      IF_ASSERT_FAILED(tsv) {
             return;
+            }
+
       tsv->part     = n;
       QSplitter* vs = viewSplitter(idx);
       ScoreView* v;
@@ -445,6 +489,9 @@ bool ScoreTab::setCurrentScore(Score* s)
 void ScoreTab::removeTab(int idx, bool noCurrentChangedSignal)
       {
       TabScoreView* tsv = tabScoreView(idx);
+      IF_ASSERT_FAILED(tsv) {
+            return;
+            }
       Score* score = tsv->score;
 
       for (int i = 0; i < stack->count(); ++i) {
