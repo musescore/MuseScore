@@ -1415,7 +1415,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
       // in case chord list has changed since last time
       if (!_renderList.empty())
             _renderList.clear();
-      bool adjust = cl->autoAdjust();
+      bool adjust = cl ? cl->autoAdjust() : false;
       for (ChordToken tok : _tokenList) {
             QString n = tok.names.first();
             QList<RenderAction> rl;

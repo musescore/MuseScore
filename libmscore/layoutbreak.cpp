@@ -32,6 +32,9 @@ static const ElementStyle sectionBreakStyle {
 LayoutBreak::LayoutBreak(Score* score)
    : Element(score, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
       {
+      _pause = 0.;
+      _startWithLongNames = false;
+      _startWithMeasureOne = false;
       _layoutBreakType = Type(propertyDefault(Pid::LAYOUT_BREAK).toInt());
 
       initElementStyle(&sectionBreakStyle);

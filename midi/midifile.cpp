@@ -57,10 +57,16 @@ const int xgOnMsgLen = sizeof(xgOnMsg);
 MidiFile::MidiFile()
       {
       fp               = 0;
+      _division        = 0;
       _isDivisionInTps = false;
       _format          = 1;
       _midiType        = MidiType::UNKNOWN;
       _noRunningStatus = false;
+
+      status           = 0;
+      sstatus          = 0;
+      click            = 0;
+      curPos           = 0;
       }
 
 //---------------------------------------------------------

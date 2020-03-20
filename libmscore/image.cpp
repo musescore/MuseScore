@@ -130,7 +130,7 @@ void Image::draw(QPainter* painter) const
                         s = _size * spatium();
                   else
                         s = _size * DPMM;
-                  if (score()->printing() && !MScore::svgPrinting) {
+                  if (score() && score()->printing() && !MScore::svgPrinting) {
                         // use original image size for printing, but not for svg for reasonable file size.
                         painter->scale(s.width() / rasterDoc->width(), s.height() / rasterDoc->height());
                         painter->drawPixmap(QPointF(0, 0), QPixmap::fromImage(*rasterDoc));

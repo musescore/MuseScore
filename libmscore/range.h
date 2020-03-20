@@ -34,7 +34,7 @@ class TrackList : public QList<Element*>
       {
       Fraction _duration;
       ScoreRange* _range;
-      int _track;
+      int _track { 0 };
 
       Tuplet* writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure, Fraction& rest) const;
       void append(Element*);

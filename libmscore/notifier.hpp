@@ -114,6 +114,8 @@ Listener<Data>& Listener<Data>::operator=(Listener<Data>&& other)
             }
       else
             setNotifier(nullptr);
+
+      return *this;
       }
 
 template<typename Data>

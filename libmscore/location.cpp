@@ -267,7 +267,7 @@ QVariant Location::getLocationProperty(Pid pid, const Element* start, const Elem
             case Pid::LOCATION_FRACTIONS:
                   return end->rtick() - start->rtick();
             case Pid::LOCATION_GRACE:
-                  return graceIndex(end) - graceIndex(end);
+                  return graceIndex(start) - graceIndex(end);
             case Pid::LOCATION_NOTE:
                   return note(start) - note(end);
             default:
