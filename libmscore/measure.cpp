@@ -1973,6 +1973,16 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.setTick(tick());
                   readVoice(e, staffIdx, irregular);
                   }
+            else if (tag == "Image") {
+                  if (MScore::noImages)
+                        e.skipCurrentElement();
+                  else {
+                        Element* el = Element::name2Element(tag, score());
+                        el->setTrack(staffIdx * VOICES);
+                        el->read(e);
+                        add(el);
+                        }
+                  }
             else if (tag == "Marker" || tag == "Jump") {
                   Element* el = Element::name2Element(tag, score());
                   el->setTrack(e.track());
@@ -2324,6 +2334,9 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                   fermata->setPlacement(fermata->track() & 1 ? Placement::BELOW : Placement::ABOVE);
                   fermata->read(e);
                   }
+            // There could be an Image here if the score was saved with an earlier version of MuseScore 3.
+            // This image would not have been visible upon reload. Let's read it in and add it directly
+            // to the measure so that it can be displayed.
             else if (tag == "Image") {
                   if (MScore::noImages)
                         e.skipCurrentElement();
@@ -2331,8 +2344,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         Element* el = Element::name2Element(tag, score());
                         el->setTrack(e.track());
                         el->read(e);
-                        segment = getSegment(SegmentType::ChordRest, e.tick());
-                        segment->add(el);
+                        add(el);
                         }
                   }
             //----------------------------------------------------

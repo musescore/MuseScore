@@ -484,7 +484,13 @@ void ScoreView::dropEvent(QDropEvent* event)
                               el = _score->pos2measure(pos, &staffIdx, 0, &seg, &offset);
                               if (el && el->isMeasure()) {
                                     editData.dropElement->setTrack(staffIdx * VOICES);
-                                    editData.dropElement->setParent(seg);
+                                    if (editData.dropElement->isImage()) {
+                                          editData.dropElement->setParent(el);
+                                          offset = pos - el->canvasPos();
+                                          }
+                                    else {
+                                          editData.dropElement->setParent(seg);
+                                          }
                                     if (applyUserOffset)
                                           editData.dropElement->setOffset(offset);
                                     score()->undoAddElement(editData.dropElement);
