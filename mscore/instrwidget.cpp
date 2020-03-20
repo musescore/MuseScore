@@ -1043,6 +1043,7 @@ void InstrumentsWidget::createInstruments(Score* cs)
                   m->cmdAddStaves(sidx, eidx, true);
             staffIdx += rstaff;
             }
+            numberInstrumentNames(cs);
 #if 0 // TODO
       //
       // check for bar lines
@@ -1064,6 +1065,44 @@ void InstrumentsWidget::createInstruments(Score* cs)
             }
 #endif
       cs->setLayoutAll();
+      }
+
+//---------------------------------------------------------
+//   numberInstrumentNames
+//---------------------------------------------------------
+
+void InstrumentsWidget::numberInstrumentNames(Score* cs)
+      {
+      vector<QString> names;
+      vector<QString> firsts;
+
+      for (auto i = cs->parts().begin(); i != cs->parts().end(); ++i) {
+            auto p = *i;
+
+            QString name = p->partName();
+
+            names.push_back(name);
+            int n = 1;
+
+            for (auto j = i + 1; j != cs->parts().end(); ++j) {
+                  auto part = *j;
+                  // number 2nd and subsequent instances of instrument
+                  if (std::find(names.begin(), names.end(), part->partName()) != names.end())  {
+                        firsts.push_back(name);
+                        n++;
+                        part->setPartName((part->partName() + QStringLiteral(" %1").arg(n)));
+                        part->setLongName((part->longName() + QStringLiteral(" %1").arg(n)));
+                        part->setShortName((part->shortName() + QStringLiteral(" %1").arg(n)));
+                        }
+                  }
+
+            // now finish by adding first instances
+            if (std::find(firsts.begin(), firsts.end(), p->partName()) != firsts.end()) {
+                  p->setPartName(p->partName() + " 1");
+                  p->setLongName(p->longName() + " 1");
+                  p->setShortName(p->shortName() + " 1");
+                  }
+            }
       }
 
 //---------------------------------------------------------

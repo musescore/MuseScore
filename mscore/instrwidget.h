@@ -155,6 +155,7 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
       void genPartList(Score*);
       void init();
       void createInstruments(Score*);
+      void numberInstrumentNames(Score*);
       QTreeWidget* getPartiturList();
       };
 
