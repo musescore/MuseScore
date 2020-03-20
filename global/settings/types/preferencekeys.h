@@ -51,6 +51,7 @@
 #define PREF_APP_WORKSPACE                                  "application/workspace"
 #define PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED         "application/startup/telemetry_access_requested"
 #define PREF_APP_TELEMETRY_ALLOWED                          "application/telemetry/allowed"
+#define PREF_APP_BACKUP_GENERATE_BACKUP                     "application/backup/generateBackup"
 #define PREF_EXPORT_AUDIO_NORMALIZE                         "export/audio/normalize"
 #define PREF_EXPORT_AUDIO_SAMPLERATE                        "export/audio/sampleRate"
 #define PREF_EXPORT_AUDIO_PCMRATE                           "export/audio/PCMRate"
