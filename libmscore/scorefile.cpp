@@ -375,7 +375,7 @@ void Score::readStaff(XmlReader& e)
 ///   Return true if OK and false on error.
 //---------------------------------------------------------
 
-bool MasterScore::saveFile()
+bool MasterScore::saveFile(bool generateBackup)
       {
       if (readOnly())
             return false;
@@ -424,7 +424,7 @@ bool MasterScore::saveFile()
       QString name(info.filePath());
       QString basename(info.fileName());
       QDir dir(info.path());
-      if (!saved()) {
+      if (!saved() && generateBackup) {
             // if file was already saved in this session
             // save but don't overwrite backup again
 

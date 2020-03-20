@@ -1331,7 +1331,7 @@ class MasterScore : public Score {
       bool isSavable() const;
       void setTempomap(TempoMap* tm);
 
-      bool saveFile();
+      bool saveFile(bool generateBackup = true);
       FileError read1(XmlReader&, bool ignoreVersionError);
       FileError loadCompressedMsc(QIODevice*, bool ignoreVersionError);
       FileError loadMsc(QString name, bool ignoreVersionError);

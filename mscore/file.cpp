@@ -472,14 +472,14 @@ bool MuseScore::saveFile(MasterScore* score)
 
             mscore->lastSaveDirectory = score->masterScore()->fileInfo()->absolutePath();
 
-            if (!score->masterScore()->saveFile()) {
+            if (!score->masterScore()->saveFile(preferences.getBool(PREF_APP_BACKUP_GENERATE_BACKUP))) {
                   QMessageBox::critical(mscore, tr("Save File"), MScore::lastError);
                   return false;
                   }
             addRecentScore(score);
             writeSessionFile(false);
             }
-      else if (!score->masterScore()->saveFile()) {
+      else if (!score->masterScore()->saveFile(preferences.getBool(PREF_APP_BACKUP_GENERATE_BACKUP))) {
             QMessageBox::critical(mscore, tr("Save File"), MScore::lastError);
             return false;
             }
