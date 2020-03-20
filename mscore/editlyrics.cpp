@@ -13,6 +13,7 @@
 #include "musescore.h"
 #include "scoreview.h"
 #include "texttools.h"
+#include "shortcut.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/score.h"
@@ -36,8 +37,12 @@ bool ScoreView::editKeyLyrics()
                   if (!editData.control(textEditing)) {
                         if (editData.s == "_")
                               lyricsUnderscore();
-                        else // TODO: shift+tab events are filtered by qt
-                              lyricsTab(editData.modifiers & Qt::ShiftModifier, true, false);
+                        else { // TODO: shift+tab events are filtered by qt
+                              Shortcut* mySC = Shortcut::getShortcut("prev-lyric");
+                              for (auto& ks : mySC->keys())
+                                    if (ks == QKeySequence(Qt::SHIFT + Qt::Key_Space))
+                                          lyricsTab(editData.modifiers & Qt::ShiftModifier, true, false);
+                              }
                         }
                   else
                         return false;
