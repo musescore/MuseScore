@@ -1726,7 +1726,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>47-86</aPitchRange>
                   <pPitchRange>47-91</pPitchRange>
-                  <transposeDiatonic>-2</transposeDiatonic>
+                  <transposeDiatonic>-3</transposeDiatonic>
                   <transposeChromatic>-5</transposeChromatic>
                   <Channel>
                         <program value="71"/>
