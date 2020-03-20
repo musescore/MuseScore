@@ -77,17 +77,17 @@ class SysStaff {
 //---------------------------------------------------------
 
 class System final : public Element {
-      SystemDivider* _systemDividerLeft    { 0 };     // to the next system
-      SystemDivider* _systemDividerRight   { 0 };
+      SystemDivider* _systemDividerLeft    { nullptr };     // to the next system
+      SystemDivider* _systemDividerRight   { nullptr };
 
       std::vector<MeasureBase*> ml;
       QList<SysStaff*> _staves;
       QList<Bracket*> _brackets;
       QList<SpannerSegment*> _spannerSegments;
 
-      qreal _leftMargin              { 0.0    };     ///< left margin for instrument name, brackets etc.
-      mutable bool fixedDownDistance { false  };
-      qreal _distance;                               // temp. variable used during layout
+      qreal _leftMargin              { 0.0   };     ///< left margin for instrument name, brackets etc.
+      mutable bool fixedDownDistance { false };
+      qreal _distance                { 0.0   };     // temp. variable used during layout
 
       int firstVisibleSysStaff() const;
       int lastVisibleSysStaff() const;

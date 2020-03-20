@@ -86,7 +86,7 @@ Startcenter::Startcenter(QWidget* parent)
             }
 #endif
 
-      if (enableExperimental)
+//      if (enableExperimental)
 // right now don’t know how it use in WebEngine @handrok
 //            QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 //      QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);

@@ -56,9 +56,9 @@ class Workspace : public QObject {
 
       QTimer _saveTimer;
 
-      bool saveComponents;
-      bool saveToolbars;
-      bool saveMenuBar;
+      bool saveComponents { false };
+      bool saveToolbars   { false };
+      bool saveMenuBar    { false };
 
       void readGlobalToolBar();
       void readGlobalMenuBar();

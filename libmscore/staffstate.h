@@ -30,11 +30,11 @@ enum class StaffStateType : char {
 //---------------------------------------------------------
 
 class StaffState final : public Element {
-      StaffStateType _staffStateType;
-      qreal lw;
+      StaffStateType _staffStateType { StaffStateType::INVISIBLE };
+      qreal lw { 0.0 };
       QPainterPath path;
 
-      Instrument* _instrument;
+      Instrument* _instrument { nullptr };
 
       virtual void draw(QPainter*) const;
       virtual void layout();

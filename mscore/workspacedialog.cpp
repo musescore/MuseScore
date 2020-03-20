@@ -37,7 +37,7 @@ void MuseScore::createNewWorkspace()
 
 void MuseScore::editWorkspace()
       {
-      if (!WorkspacesManager::currentWorkspace() && !WorkspacesManager::currentWorkspace()->readOnly())
+      if (WorkspacesManager::currentWorkspace() && !WorkspacesManager::currentWorkspace()->readOnly())
             return;
       if (!_workspaceDialog)
             _workspaceDialog = new WorkspaceDialog();

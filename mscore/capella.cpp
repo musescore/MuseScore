@@ -616,7 +616,8 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         if (tuplet) {
                               if (++nTuplet >= tupletCount) {
                                     tick = tupletTick + tuplet->actualTicks();
-                                    tuplet = 0;
+                                    delete tuplet;
+                                    tuplet = nullptr;
                                     }
                               else {
                                     tick += ticks / tuplet->ratio();
@@ -796,7 +797,8 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         if (tuplet) {
                               if (++nTuplet >= tupletCount) {
                                     tick = tupletTick + tuplet->actualTicks();
-                                    tuplet = 0;
+                                    delete tuplet;
+                                    tuplet = nullptr;
                                     }
                               else {
                                     tick += ticks / tuplet->ratio();
