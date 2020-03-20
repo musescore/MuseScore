@@ -985,7 +985,9 @@ void PreferenceDialog::apply()
             preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "Yes");
       else if (resetElementPositionsNo->isChecked())
             preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "No");
+#ifdef AVSOMR
       preferences.setPreference(PREF_IMPORT_AVSOMR_USELOCAL, useLocalAvsOmr->isChecked());
+#endif
       preferences.setPreference(PREF_IO_MIDI_ADVANCEONRELEASE, advanceOnRelease->isChecked());
       preferences.setPreference(PREF_IO_MIDI_ENABLEINPUT, enableMidiInput->isChecked());
       preferences.setPreference(PREF_IO_MIDI_EXPANDREPEATS, expandRepeats->isChecked());
