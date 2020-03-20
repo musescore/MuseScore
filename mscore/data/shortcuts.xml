@@ -1034,4 +1034,20 @@
     <key>toggle-autoplace</key>
     <seq>=</seq>
     </SC>
+  <SC>
+    <key>zoom-in-horiz-pre</key>
+    <seq>Ctrl++</seq>
+    </SC>
+  <SC>
+    <key>zoom-out-horiz-pre</key>
+    <seq>Ctrl+-</seq>
+    </SC>
+  <SC>
+    <key>zoom-in-vert-pre</key>
+    <seq>Ctrl+Shift++</seq>
+    </SC>
+  <SC>
+    <key>zoom-out-vert-pre</key>
+    <seq>Ctrl+Shift+-</seq>
+    </SC>
   </Shortcuts>
