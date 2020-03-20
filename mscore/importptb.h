@@ -241,22 +241,22 @@ class PowerTab {
 
             struct ptTrack;
             struct ptSection {
-                  int                                 number{ 0 };
-                  int                                 staffs{ 0 };
-                  std::string                   partName;
-                  char                          partMarker;
+                  int number { 0 };
+                  int staffs { 0 };
+                  std::string partName;
+                  char partMarker { 0 };
                   std::vector<ptPosition> positions;
 
-                  std::vector<int>        staffMap;
+                  std::vector<int> staffMap;
 
-                  int tempo{ 0 };
+                  int tempo { 0 };
 
                   std::list<stRhytmSlash> rhytm;
 
                   std::map<int, ptChordText> chordTextMap;
                   std::vector<tBeatList>  beats;
                   std::list<shared_ptr<ptBar>> bars;
-                  bool                          readed{ false };
+                  bool readed { false };
 
                   void copyTracks(ptTrack*);
 

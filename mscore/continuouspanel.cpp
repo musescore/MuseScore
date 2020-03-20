@@ -37,10 +37,11 @@ namespace Ms {
 
 ContinuousPanel::ContinuousPanel(ScoreView* sv)
       {
-      _sv                     = sv;
-      _active                 = true;
-      _visible                = false;
-      _width                  = 0.0;
+      _sv         = sv;
+      _score      = nullptr;
+      _active     = true;
+      _visible    = false;
+      _width      = 0.0;
       }
 
 //---------------------------------------------------------

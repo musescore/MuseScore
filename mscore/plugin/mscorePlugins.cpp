@@ -285,9 +285,8 @@ void MuseScore::removeMenuEntry(PluginDescription* plugin)
 
             QMenu* cmenu = qobject_cast<QMenu*>(cm->parent());
             if (cm->isEmpty())
-                  if(cm->isEmpty()) {
-                        delete cm;
-                        }
+                  delete cm;
+
             cm = cmenu;
             }
       }

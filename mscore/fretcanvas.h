@@ -34,11 +34,11 @@ enum class FretDotType : signed char;
 class FretCanvas : public QFrame {
       Q_OBJECT
 
-      FretDiagram* diagram;
-      int cstring;
-      int cfret;
+      FretDiagram* diagram { nullptr };
+      int cstring          { 0 };
+      int cfret            { 0 };
 
-      bool _automaticDotType   { true };
+      bool _automaticDotType    { true };
       FretDotType _currentDtype;
       bool _barreMode    { false };
       bool _multidotMode { false };

@@ -1326,6 +1326,7 @@ void FiguredBass::endEdit(EditData& ed)
                   score()->startCmd();
                   triggerLayout();
                   score()->endCmd();
+                  delete pItem;
                   return;
                   }
             pItem->setTrack(track());
