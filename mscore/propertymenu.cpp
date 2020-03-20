@@ -199,8 +199,10 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                || e->isFiguredBass()) {
             genPropertyMenuText(e, popup);
             }
-      else if (e->isHarmony())
+      else if (e->isHarmony()) {
             genPropertyMenu1(e, popup);
+            popup->addAction(getAction("realize-chord-symbols"));
+            }
       else if (e->isTempoText())
             genPropertyMenu1(e, popup);
       else if (e->isKeySig()) {

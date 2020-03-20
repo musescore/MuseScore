@@ -3266,6 +3266,11 @@ Score::FileError MasterScore::read114(XmlReader& e)
             style().set(Sid::voltaPosAbove, QPointF(0.0, -2.0f));
 
       fixTicks();
+
+      for (Part* p : parts()) {
+            p->updateHarmonyChannels(false);
+            }
+
       rebuildMidiMapping();
       updateChannel();
 

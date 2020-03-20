@@ -1341,6 +1341,7 @@ TransposeHarmony::TransposeHarmony(Harmony* h, int rtpc, int btpc)
 
 void TransposeHarmony::flip(EditData*)
       {
+      harmony->realizedHarmony().setDirty(true); //harmony should be re-realized after transposition
       int baseTpc1 = harmony->baseTpc();
       int rootTpc1 = harmony->rootTpc();
       harmony->setBaseTpc(baseTpc);
@@ -1604,6 +1605,8 @@ void ChangePart::flip(EditData*)
       QString s      = part->partName();
       part->setInstrument(instrument);
       part->setPartName(partName);
+
+      part->updateHarmonyChannels(false);
 
       Score* score = part->score();
       score->masterScore()->rebuildMidiMapping();

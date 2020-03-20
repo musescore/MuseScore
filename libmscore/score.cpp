@@ -1490,6 +1490,9 @@ void Score::addElement(Element* element)
                         createPlayEvents(toChord(cr));
                   }
                   break;
+            case ElementType::HARMONY:
+                  element->part()->updateHarmonyChannels(true);
+                  break;
 
             default:
                   break;
@@ -1650,6 +1653,9 @@ void Score::removeElement(Element* element)
                   if (cr->isChord())
                         createPlayEvents(toChord(cr));
                   }
+                  break;
+            case ElementType::HARMONY:
+                  element->part()->updateHarmonyChannels(true, true);
                   break;
 
             default:
@@ -2748,9 +2754,12 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                               // don't transpose all links
                               // just ones resulting from mmrests
                               Harmony* he = toHarmony(se);    // toHarmony() does not work as e is an ScoreElement
-                              if (he->staff() == h->staff())
+                              if (he->staff() == h->staff()) {
                                     undoTransposeHarmony(he, rootTpc, baseTpc);
+                                    }
                               }
+                        //realized harmony should be invalid after a transpose command
+                        Q_ASSERT(!h->realizedHarmony().valid());
                         }
                   }
             }

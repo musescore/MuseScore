@@ -131,6 +131,7 @@ class Channel {
 
 public:
       static const char* DEFAULT_NAME;
+      static const char* HARMONY_NAME;
       static constexpr char defaultVolume = 100;
 
       enum class A : char {
@@ -313,6 +314,7 @@ class Instrument {
 
       const QList<Channel*>& channel() const                 { return _channel; }
       void appendChannel(Channel* c)                         { _channel.append(c); }
+      void removeChannel(Channel* c)                         { _channel.removeOne(c);}
       void clearChannels()                                   { _channel.clear(); }
 
       void setMidiActions(const QList<NamedEventList>& l)    { _midiActions = l;  }
