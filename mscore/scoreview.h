@@ -117,6 +117,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       //--input state:
       PositionCursor* _cursor;
+      QColor _cursorColor;
+      const int maxCursorAlpha = 220;
       ShadowNote* shadowNote;
 
       // Realtime state:      Note: always set allowRealtimeRests to desired value before starting a timer.

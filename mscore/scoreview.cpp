@@ -151,7 +151,7 @@ ScoreView::ScoreView(QWidget* parent)
       editData.element = 0;
 
       lasso       = new Lasso(_score);
-      _foto       = 0;// new Lasso(_score);
+      _foto       = 0; // new Lasso(_score);
 
       _cursor     = new PositionCursor(this);
       _cursor->setType(CursorType::POS);
@@ -583,9 +583,10 @@ void ScoreView::moveCursor(const Fraction& tick)
       if (s == 0)
             return;
 
-      QColor c(MScore::selectColor[0]);
-      c.setAlpha(50);
-      _cursor->setColor(c);
+      _cursorColor = QColor(MScore::cursorColor);
+      if(_cursorColor.alpha() > maxCursorAlpha)
+            _cursorColor.setAlpha(50);
+      _cursor->setColor(_cursorColor);
       _cursor->setTick(tick);
 
       System* system = measure->system();
@@ -640,9 +641,10 @@ void ScoreView::moveCursor()
       int voice    = track % VOICES;
       int staffIdx = track / VOICES;
 
-      QColor c(MScore::selectColor[voice]);
-      c.setAlpha(50);
-      _cursor->setColor(c);
+      _cursorColor = QColor(MScore::cursorColor);
+      if(_cursorColor.alpha() > maxCursorAlpha)
+            _cursorColor.setAlpha(50);
+      _cursor->setColor(_cursorColor);
       _cursor->setTick(segment->tick());
 
       System* system = segment->measure()->system();
