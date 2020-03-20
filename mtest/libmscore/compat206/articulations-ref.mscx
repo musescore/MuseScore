@@ -1008,7 +1008,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <direction>down</direction>
-              <subtype>stringsUpBow</subtype>
+              <subtype>stringsUpBowTurned</subtype>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -1057,7 +1057,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <direction>down</direction>
-              <subtype>stringsDownBow</subtype>
+              <subtype>stringsDownBowTurned</subtype>
               </Articulation>
             <Note>
               <pitch>60</pitch>
