@@ -805,5 +805,77 @@ int tpc2degree(int tpc, Key key)
       return (names.indexOf(stepName) - names.indexOf(scale) +28) % 7;
       }
 
+//---------------------------------------------------------
+//   tpcInterval
+///   Finds tpc of a note based on an altered interval
+///   from a starting note
+//---------------------------------------------------------
+
+int tpcInterval(int startTpc, int interval, int alter)
+      {
+      Q_ASSERT(interval > 0);
+      static const int intervals[7] = {
+//          1  2  3   4  5  6  7
+            0, 2, 4, -1, 1, 3, 5
+      };
+
+      int result = startTpc + intervals[(interval - 1) % 7] + alter * TPC_DELTA_SEMITONE;
+      //ensure that we don't have anything more than double sharp or double flat
+      //(I know, breaking some convention, but it's the best we can do for now)
+      while (result > Tpc::TPC_MAX)
+            result -= TPC_DELTA_ENHARMONIC;
+      while (result < Tpc::TPC_MIN)
+            result += TPC_DELTA_ENHARMONIC;
+
+      return result;
+      }
+
+//---------------------------------------------------------
+//   step2pitchInterval
+///   Finds pitch between notes a specified altered interval away
+///
+///   For example:
+///         step = 3, alter = 0 means major 3rd
+///         step = 5, alter = -1 means diminished 5
+///         step = 6, alter = 2 means augmented sixth
+//---------------------------------------------------------
+
+int step2pitchInterval(int step, int alter)
+      {
+      Q_ASSERT(step > 0);
+      static const int intervals[7] = {
+//          1  2  3  4  5  6  7
+            0, 2, 4, 5, 7, 9, 11
+      };
+
+      return intervals[(step - 1) % 7] + alter;
+      }
+
+//----------------------------------------------
+//   function2Tpc
+///   might be temporary, just used to parse nashville notation now
+///
+//----------------------------------------------
+int function2Tpc(const QString& s, Key key) {
+      //TODO - PHV: allow for alternate spellings
+      int alter = 0;
+      int step;
+      if (!s.isEmpty() && s[0].isDigit()) {
+            step = s[0].digitValue();
+            }
+      else if (s.size() > 1 && s[1].isDigit()) {
+            step = s[1].digitValue();
+            if (s[0] == 'b')
+                  alter = -1;
+            else if (s[0] == '#')
+                  alter = 1;
+            }
+      else
+            return Tpc::TPC_INVALID;
+
+      int keyTpc = int(key) + 14; //tpc of key (ex. F# major would be Tpc::F_S)
+      return tpcInterval(keyTpc, step, alter);
+      }
+
 }
 

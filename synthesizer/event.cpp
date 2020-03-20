@@ -12,11 +12,13 @@
 
 #include "libmscore/xml.h"
 #include "libmscore/note.h"
+#include "libmscore/harmony.h"
 #include "libmscore/sig.h"
 #include "event.h"
 #include "libmscore/staff.h"
 #include "libmscore/instrument.h"
 #include "libmscore/part.h"
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -180,6 +182,14 @@ bool NPlayEvent::isMuted() const
             const Channel* a = instr->playbackChannel(n->subchannel(), cs);
             return a->mute() || a->soloMute() || !staff->playbackVoice(n->voice());
             }
+
+      const Harmony* h = harmony();
+      if (h) {
+            const Channel* hCh = h->part()->harmonyChannel();
+            if (hCh) //if there is a harmony channel
+                  return hCh->mute() || hCh->soloMute();
+            }
+
       return false;
       }
 

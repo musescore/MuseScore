@@ -1035,7 +1035,10 @@ void Seq::initInstruments(bool realTime)
 
 void Seq::renderChunk(const MidiRenderer::Chunk& ch, EventMap* eventMap)
       {
-      midi.renderChunk(ch, eventMap, mscore->synthesizerState(), /* metronome */ true);
+      MidiRenderer::Context ctx(mscore->synthesizerState());
+      ctx.metronome = true;
+      ctx.renderHarmony = preferences.getBool(PREF_SCORE_HARMONY_PLAY);
+      midi.renderChunk(ch, eventMap, ctx);
       renderEventsStatus.setOccupied(ch.utick1(), ch.utick2());
       }
 
