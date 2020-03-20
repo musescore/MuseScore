@@ -7004,16 +7004,12 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
       MasterSynthesizer* synth = synthesizerFactory();
       synth->init();
       synth->setSampleRate(sampleRate);
-      if (MScore::noGui) { // use score settings if possible
-            bool r = synth->setState(score->synthesizerState());
-            if (!r)
-                  synth->init();
-            }
-      else { // use current synth settings
-            bool r = synth->setState(mscore->synthesizerState());
-            if (!r)
-                  synth->init();
-            }
+
+      const SynthesizerState state = useCurrentSynthesizerState ? mscore->synthesizerState() : score->synthesizerState();
+      const bool setStateOk = synth->setState(state);
+
+      if (!setStateOk || !synth->hasSoundFontsLoaded())
+            synth->init(); // re-initialize master synthesizer with default settings
 
       MScore::sampleRate = sampleRate;
 
