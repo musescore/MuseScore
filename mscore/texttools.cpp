@@ -17,6 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "log.h"
+
 #include "texttools.h"
 #include "icons.h"
 #include "libmscore/text.h"
@@ -139,7 +141,14 @@ void TextTools::blockAllSignals(bool val)
 void TextTools::updateTools(EditData& ed)
       {
       text   = toTextBase(ed.element);
+      IF_ASSERT_FAILED(text) {
+            return;
+            }
+
       cursor = text->cursor(ed);
+      IF_ASSERT_FAILED(cursor) {
+            return;
+            }
 
       blockAllSignals(true);
       CharFormat* format = cursor->format();
@@ -185,6 +194,9 @@ void TextTools::layoutText()
 
 void TextTools::sizeChanged(double value)
       {
+      IF_ASSERT_FAILED(cursor) {
+            return;
+            }
       cursor->setFormat(FormatId::FontSize, value);
       cursor->format()->setFontSize(value);
       updateText();
@@ -196,7 +208,10 @@ void TextTools::sizeChanged(double value)
 
 void TextTools::fontChanged(const QFont& f)
       {
-      if (text)
+      //! REVIEW An explanation is needed why only in this one method
+      //! it is assumed that the cursor may not be,
+      //! and that this is a normal situation, and not an exception (no assertion)
+      if (cursor)
             cursor->setFormat(FormatId::FontFamily, f.family());
       if (textPalette)
             textPalette->setFont(f.family());
@@ -209,6 +224,9 @@ void TextTools::fontChanged(const QFont& f)
 
 void TextTools::boldClicked(bool val)
       {
+      IF_ASSERT_FAILED(cursor) {
+            return;
+            }
       cursor->setFormat(FormatId::Bold, val);
       updateText();
       }
@@ -249,6 +267,9 @@ void TextTools::toggleUnderline()
 
 void TextTools::underlineClicked(bool val)
       {
+      IF_ASSERT_FAILED(cursor) {
+            return;
+            }
       cursor->setFormat(FormatId::Underline, val);
       updateText();
       }
@@ -259,6 +280,9 @@ void TextTools::underlineClicked(bool val)
 
 void TextTools::italicClicked(bool val)
       {
+      IF_ASSERT_FAILED(cursor) {
+            return;
+            }
       cursor->setFormat(FormatId::Italic, val);
       updateText();
       }
@@ -269,6 +293,9 @@ void TextTools::italicClicked(bool val)
 
 void TextTools::subscriptClicked(bool val)
       {
+      IF_ASSERT_FAILED(cursor) {
+            return;
+            }
       cursor->setFormat(FormatId::Valign, int(val ? VerticalAlignment::AlignSubScript : VerticalAlignment::AlignNormal));
       typefaceSuperscript->blockSignals(true);
       typefaceSuperscript->setChecked(false);
@@ -282,6 +309,9 @@ void TextTools::subscriptClicked(bool val)
 
 void TextTools::superscriptClicked(bool val)
       {
+      IF_ASSERT_FAILED(cursor) {
+            return;
+            }
       cursor->setFormat(FormatId::Valign, int(val ? VerticalAlignment::AlignSuperScript : VerticalAlignment::AlignNormal));
       typefaceSubscript->blockSignals(true);
       typefaceSubscript->setChecked(false);
@@ -296,6 +326,9 @@ void TextTools::superscriptClicked(bool val)
 void TextTools::showKeyboardClicked(bool val)
       {
       if (val) {
+            IF_ASSERT_FAILED(cursor) {
+                  return;
+                  }
             if (textPalette == 0)
                   textPalette = new TextPalette(mscore);
             textPalette->setText(text);
