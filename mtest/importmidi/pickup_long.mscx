@@ -80,8 +80,11 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="60"/>
+          </Channel>
+        <Channel name="mute">
+          <program value="59"/>
           </Channel>
         </Instrument>
       </Part>
