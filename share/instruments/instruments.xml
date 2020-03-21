@@ -2940,8 +2940,11 @@
                   <pPitchRange>31-77</pPitchRange>
                   <transposeDiatonic>-4</transposeDiatonic>
                   <transposeChromatic>-7</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
@@ -2957,8 +2960,11 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>46-75</aPitchRange>
                   <pPitchRange>42-84</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="bb-horn-alto">
@@ -2972,8 +2978,11 @@
                   <pPitchRange>40-82</pPitchRange>
                   <transposeDiatonic>-1</transposeDiatonic>
                   <transposeChromatic>-2</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="a-horn">
@@ -2987,8 +2996,11 @@
                   <pPitchRange>39-81</pPitchRange>
                   <transposeDiatonic>-2</transposeDiatonic>
                   <transposeChromatic>-3</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="ab-horn">
@@ -3002,8 +3014,11 @@
                   <pPitchRange>38-80</pPitchRange>
                   <transposeDiatonic>-2</transposeDiatonic>
                   <transposeChromatic>-4</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="g-horn">
@@ -3017,8 +3032,11 @@
                   <pPitchRange>37-79</pPitchRange>
                   <transposeDiatonic>-3</transposeDiatonic>
                   <transposeChromatic>-5</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="e-horn">
@@ -3032,8 +3050,11 @@
                   <pPitchRange>34-76</pPitchRange>
                   <transposeDiatonic>-5</transposeDiatonic>
                   <transposeChromatic>-8</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="eb-horn">
@@ -3047,8 +3068,11 @@
                   <pPitchRange>33-75</pPitchRange>
                   <transposeDiatonic>-5</transposeDiatonic>
                   <transposeChromatic>-9</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="d-horn">
@@ -3062,8 +3086,11 @@
                   <pPitchRange>32-74</pPitchRange>
                   <transposeDiatonic>-6</transposeDiatonic>
                   <transposeChromatic>-10</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="c-horn">
@@ -3078,8 +3105,11 @@
                   <pPitchRange>30-72</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="c-horn-bass">
@@ -3092,8 +3122,11 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>34-67</aPitchRange>
                   <pPitchRange>30-72</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="bb-horn-basso">
@@ -3107,8 +3140,11 @@
                   <pPitchRange>28-70</pPitchRange>
                   <transposeDiatonic>-8</transposeDiatonic>
                   <transposeChromatic>-14</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="vienna-horn">
@@ -3122,8 +3158,11 @@
                   <pPitchRange>29-77</pPitchRange>
                   <transposeDiatonic>-4</transposeDiatonic>
                   <transposeChromatic>-7</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="eb-cornet">
@@ -3211,8 +3250,11 @@
                   <pPitchRange>45-75</pPitchRange>
                   <transposeDiatonic>-5</transposeDiatonic>
                   <transposeChromatic>-9</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="f-alto-horn">
@@ -3226,8 +3268,11 @@
                   <pPitchRange>47-77</pPitchRange>
                   <transposeDiatonic>-4</transposeDiatonic>
                   <transposeChromatic>-7</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="eb-alto-horn">
@@ -3241,8 +3286,11 @@
                   <pPitchRange>45-75</pPitchRange>
                   <transposeDiatonic>-5</transposeDiatonic>
                   <transposeChromatic>-9</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="baritone-horn">
@@ -3255,8 +3303,11 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-67</aPitchRange>
                   <pPitchRange>40-70</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>concertband</genre>
                   <genre>marching</genre>
@@ -3274,8 +3325,11 @@
                   <pPitchRange>40-70</pPitchRange>
                   <transposeDiatonic>-8</transposeDiatonic>
                   <transposeChromatic>-14</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>concertband</genre>
             </Instrument>
@@ -3289,8 +3343,11 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-67</aPitchRange>
                   <pPitchRange>34-70</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>concertband</genre>
                   <genre>marching</genre>
@@ -3308,8 +3365,11 @@
                   <pPitchRange>34-70</pPitchRange>
                   <transposeDiatonic>-8</transposeDiatonic>
                   <transposeChromatic>-14</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>concertband</genre>
                   <genre>marching</genre>
@@ -3323,8 +3383,11 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>34-67</aPitchRange>
                   <pPitchRange>30-72</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="alphorn">
@@ -4193,8 +4256,11 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-71</aPitchRange>
                   <pPitchRange>36-74</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="57"/> <!--Trombone-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -4216,8 +4282,11 @@
                   <pPitchRange>36-74</pPitchRange>
                   <transposeDiatonic>-8</transposeDiatonic>
                   <transposeChromatic>-14</transposeChromatic>
-                  <Channel>
+                  <Channel name="open">
                         <program value="57"/> <!--Trombone-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="soprano-trombone">
@@ -4229,8 +4298,11 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>52-77</aPitchRange>
                   <pPitchRange>52-81</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="57"/> <!--Trombone-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="alto-trombone">
@@ -4242,8 +4314,11 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>45-74</aPitchRange>
                   <pPitchRange>45-77</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="57"/> <!--Trombone-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
@@ -4256,8 +4331,11 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-70</aPitchRange>
                   <pPitchRange>40-74</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="57"/> <!--Trombone-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="bass-trombone">
@@ -4269,8 +4347,11 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>32-68</aPitchRange>
                   <pPitchRange>27-72</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="57"/> <!--Trombone-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
@@ -4286,8 +4367,11 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-55</aPitchRange>
                   <pPitchRange>28-58</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="57"/> <!--Trombone-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
