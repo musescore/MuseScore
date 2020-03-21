@@ -695,7 +695,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 const std::map<ElementType, EditStylePage> EditStyle::PAGES = {
       { ElementType::SCORE,               &EditStyle::PageScore    },
       { ElementType::PAGE,                &EditStyle::PagePage     },
-      { ElementType::MEASURE_NUMBER,      &EditStyle::PageSizes    },
+      { ElementType::MEASURE_NUMBER,      &EditStyle::PageMeasureNumbers },
       { ElementType::BRACKET,             &EditStyle::PageSystem   },
       { ElementType::BRACKET_ITEM,        &EditStyle::PageSystem   },
       { ElementType::CLEF,                &EditStyle::PageClefs    },
