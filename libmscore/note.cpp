@@ -2354,6 +2354,9 @@ void Note::startDrag(EditData& ed)
 QRectF Note::drag(EditData& ed)
       {
       NoteEditData* noteEditData = static_cast<NoteEditData*>(ed.getData(this));
+      IF_ASSERT_FAILED(noteEditData) {
+            return QRectF();
+            }
 
       QPointF delta = ed.pos - ed.lastPos;
       noteEditData->delta = delta;
