@@ -163,9 +163,9 @@ void ScoreView::endEdit()
       _score->addRefresh(editData.element->canvasBoundingRect());
       for (int i = 0; i < editData.grips; ++i)
             score()->addRefresh(editData.grip[i]);
-
+      editData.element->endEdit(editData);
+      //! NOTE After endEdit, the element may be null
       if (editData.element) {
-            editData.element->endEdit(editData);
             _score->addRefresh(editData.element->canvasBoundingRect());
             ElementType tp = editData.element->type();
             if (tp == ElementType::LYRICS)

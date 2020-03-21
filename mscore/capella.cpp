@@ -538,7 +538,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
       //
       Fraction startTick = tick;
 
-      Tuplet* tuplet  = 0;
+      Tuplet* tuplet  = nullptr;
       int tupletCount = 0;
       bool tuplettrp  = false;
       bool tupletprol = false;
@@ -559,7 +559,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         TDuration d;
                         d.setVal(ticks.ticks());
                         if (o->count) {
-                              if (tuplet == 0) {
+                              if (tuplet == nullptr) {
                                     tupletCount = o->count;
                                     tuplettrp   = o->tripartite;
                                     tupletprol  = o->isProlonging;
@@ -616,7 +616,10 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         if (tuplet) {
                               if (++nTuplet >= tupletCount) {
                                     tick = tupletTick + tuplet->actualTicks();
-                                    delete tuplet;
+                                    //! NOTE If the tuplet is not added anywhere, then delete it
+                                    if (tuplet->elements().empty())
+                                          delete tuplet;
+
                                     tuplet = nullptr;
                                     }
                               else {
@@ -641,7 +644,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
 
                         bool isgracenote = (!(o->invisible) && (ticks.isZero()));
                         if (o->count) {
-                              if (tuplet == 0) {
+                              if (tuplet == nullptr) {
                                     tupletCount = o->count;
                                     tuplettrp   = o->tripartite;
                                     tupletprol  = o->isProlonging;
@@ -797,7 +800,10 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         if (tuplet) {
                               if (++nTuplet >= tupletCount) {
                                     tick = tupletTick + tuplet->actualTicks();
-                                    delete tuplet;
+                                    //! NOTE If the tuplet is not added anywhere, then delete it
+                                    if (tuplet->elements().empty())
+                                          delete tuplet;
+
                                     tuplet = nullptr;
                                     }
                               else {
