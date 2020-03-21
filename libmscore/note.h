@@ -142,8 +142,8 @@ class NoteHead final : public Symbol {
 
       NoteHead(Score* s = 0) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&) = delete;
-      virtual NoteHead* clone() const override    { return new NoteHead(*this); }
-      virtual ElementType type() const override { return ElementType::NOTEHEAD; }
+      NoteHead* clone() const override    { return new NoteHead(*this); }
+      ElementType type() const override { return ElementType::NOTEHEAD; }
 
       Group headGroup() const;
 
@@ -295,16 +295,16 @@ class Note final : public Element {
       virtual Note* clone() const override  { return new Note(*this, false); }
       ElementType type() const override   { return ElementType::NOTE; }
 
-      virtual void undoUnlink() override;
+      void undoUnlink() override;
 
-      virtual qreal mag() const override;
+      qreal mag() const override;
 
-      void layout();
+      void layout() override;
       void layout2();
       //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
       void setCachedNoteheadSym(SymId i) { _cachedNoteheadSym = i; };
-      void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      void setTrack(int val);
+      void scanElements(void* data, void (*func)(void*, Element*), bool all = true) override;
+      void setTrack(int val) override;
 
       int playTicks() const;
 
@@ -324,8 +324,8 @@ class Note final : public Element {
       void setHeadGroup(NoteHead::Group val);
       void setHeadType(NoteHead::Type t);
 
-      virtual int subtype() const override { return int(_headGroup); }
-      virtual QString subtypeName() const override;
+      int subtype() const override { return int(_headGroup); }
+      QString subtypeName() const override;
 
       void setPitch(int val);
       void setPitch(int pitch, int tpc1, int tpc2);
@@ -374,8 +374,8 @@ class Note final : public Element {
       bool fretConflict() const       { return _fretConflict; }
       void setFretConflict(bool val)  { _fretConflict = val; }
 
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
+      void add(Element*) override;
+      void remove(Element*) override;
 
       bool mirror() const             { return _mirror;  }
       void setMirror(bool val)        { _mirror = val;   }
@@ -399,15 +399,15 @@ class Note final : public Element {
 
       Chord* chord() const            { return (Chord*)parent(); }
       void setChord(Chord* a)         { setParent((Element*)a);  }
-      virtual void draw(QPainter*) const override;
+      void draw(QPainter*) const override;
 
-      virtual void read(XmlReader&) override;
-      virtual bool readProperties(XmlReader&) override;
-      virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
-      virtual void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
+      bool readProperties(XmlReader&) override;
+      void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
+      void write(XmlWriter&) const override;
 
       bool acceptDrop(EditData&) const override;
-      Element* drop(EditData&);
+      Element* drop(EditData&) override;
 
       bool hidden() const                       { return _hidden; }
       void setHidden(bool val)                  { _hidden = val;  }
@@ -430,7 +430,7 @@ class Note final : public Element {
       void setUserDotPosition(Direction d)      { _userDotPosition = d;    }
       bool dotIsUp() const;               // actual dot position
 
-      void reset();
+      void reset() override;
 
       ValueType veloType() const            { return _veloType;          }
       void setVeloType(ValueType v)         { _veloType = v;             }
@@ -464,16 +464,16 @@ class Note final : public Element {
 
       void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 
-      virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
       void undoChangeDotsVisible(bool v);
-      virtual QVariant propertyDefault(Pid) const override;
-      virtual QString propertyUserValue(Pid) const override;
+      QVariant propertyDefault(Pid) const override;
+      QString propertyUserValue(Pid) const override;
 
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }
-      virtual void setScore(Score* s) override;
+      void setScore(Score* s) override;
       void setDotY(Direction);
 
       void addParentheses();
@@ -484,17 +484,17 @@ class Note final : public Element {
 
       Element* nextInEl(Element* e);
       Element* prevInEl(Element* e);
-      virtual Element* nextElement() override;
-      virtual Element* prevElement() override;
+      Element* nextElement() override;
+      Element* prevElement() override;
       virtual Element* lastElementBeforeSegment();
-      virtual Element* nextSegmentElement() override;
-      virtual Element* prevSegmentElement() override;
+      Element* nextSegmentElement() override;
+      Element* prevSegmentElement() override;
 
-      virtual QString accessibleInfo() const override;
-      virtual QString screenReaderInfo() const override;
-      virtual QString accessibleExtraInfo() const override;
+      QString accessibleInfo() const override;
+      QString screenReaderInfo() const override;
+      QString accessibleExtraInfo() const override;
 
-      virtual Shape shape() const override;
+      Shape shape() const override;
       std::vector<Note*> tiedNotes() const;
 
       void setOffTimeType(int v) { _offTimeType = v; }

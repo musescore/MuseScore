@@ -39,22 +39,22 @@ class Symbol : public BSymbol {
 
       Symbol &operator=(const Symbol&) = delete;
 
-      virtual Symbol* clone() const      { return new Symbol(*this); }
-      virtual ElementType type() const   { return ElementType::SYMBOL; }
+      Symbol* clone() const override     { return new Symbol(*this); }
+      ElementType type() const override  { return ElementType::SYMBOL; }
 
       void setSym(SymId s, const ScoreFont* sf = nullptr) { _sym  = s; _scoreFont = sf;    }
       SymId sym() const                  { return _sym;  }
       QString symName() const;
 
-      virtual void draw(QPainter*) const override;
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
-      virtual void layout() override;
+      void draw(QPainter*) const override;
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
+      void layout() override;
 
-      virtual QVariant getProperty(Pid) const override;
-      virtual bool setProperty(Pid, const QVariant&) override;
+      QVariant getProperty(Pid) const override;
+      bool setProperty(Pid, const QVariant&) override;
 
-      virtual qreal baseLine() const     { return 0.0; }
+      qreal baseLine() const override    { return 0.0; }
       virtual Segment* segment() const   { return (Segment*)parent(); }
       };
 
@@ -71,15 +71,15 @@ class FSymbol final : public BSymbol {
       FSymbol(Score* s);
       FSymbol(const FSymbol&);
 
-      virtual FSymbol* clone() const    { return new FSymbol(*this); }
-      virtual ElementType type() const  { return ElementType::FSYMBOL; }
+      FSymbol* clone() const override   { return new FSymbol(*this); }
+      ElementType type() const override { return ElementType::FSYMBOL; }
 
-      virtual void draw(QPainter*) const;
-      virtual void write(XmlWriter& xml) const;
-      virtual void read(XmlReader&);
-      virtual void layout();
+      void draw(QPainter*) const override;
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
+      void layout() override;
 
-      virtual qreal baseLine() const { return 0.0; }
+      qreal baseLine() const override{ return 0.0; }
       Segment* segment() const       { return (Segment*)parent(); }
       QFont font() const             { return _font; }
       int code() const               { return _code; }
