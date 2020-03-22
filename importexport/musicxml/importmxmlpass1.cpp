@@ -1657,7 +1657,7 @@ void MusicXMLParserPass1::scorePart()
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "score-part");
       _logger->logDebugTrace("MusicXMLParserPass1::scorePart", &_e);
-      QString id = _e.attributes().value("id").toString();
+      QString id = _e.attributes().value("id").toString().trimmed();
 
       if (_parts.contains(id)) {
             _logger->logError(QString("duplicate part id '%1'").arg(id), &_e);
@@ -1886,7 +1886,7 @@ void MusicXMLParserPass1::part()
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "part");
       _logger->logDebugTrace("MusicXMLParserPass1::part", &_e);
-      const QString id = _e.attributes().value("id").toString();
+      const QString id = _e.attributes().value("id").toString().trimmed();
 
       if (!_parts.contains(id)) {
             _logger->logError(QString("cannot find part '%1'").arg(id), &_e);
