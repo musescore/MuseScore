@@ -202,7 +202,9 @@ Harmony::Harmony(const Harmony& h)
       _textName   = h._textName;
       _userName   = h._userName;
       _function   = h._function;
+      _play       = h._play;
       _realizedHarmony = h._realizedHarmony;
+      _realizedHarmony.setHarmony(this);
       for (const TextSegment* s : h.textList) {
             TextSegment* ns = new TextSegment();
             ns->set(s->text, s->font, s->x, s->y);
