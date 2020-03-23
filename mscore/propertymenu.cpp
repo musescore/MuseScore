@@ -53,6 +53,7 @@
 #include "libmscore/glissando.h"
 #include "libmscore/fret.h"
 #include "libmscore/instrchange.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/slur.h"
 #include "libmscore/jump.h"
 #include "libmscore/marker.h"
@@ -198,8 +199,10 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                || e->isFiguredBass()) {
             genPropertyMenuText(e, popup);
             }
-      else if (e->isHarmony())
+      else if (e->isHarmony()) {
             genPropertyMenu1(e, popup);
+            popup->addAction(getAction("realize-chord-symbols"));
+            }
       else if (e->isTempoText())
             genPropertyMenu1(e, popup);
       else if (e->isKeySig()) {
@@ -262,7 +265,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->isInstrumentChange()) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Change Instrument…"))->setData("ch-instr");
+            popup->addAction(tr("Select Instrument…"))->setData("ch-instr");
             }
       else if (e->isInstrumentName())
             popup->addAction(tr("Staff/Part Properties…"))->setData("staff-props");
@@ -418,7 +421,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   }
             }
       else if (cmd == "articulation") {
-            Note* note = static_cast<Note*>(e);
+            Note* note = toNote(e);
             mscore->editInPianoroll(note->staff());
             }
       else if (cmd == "style") {
@@ -429,39 +432,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             mscore->styleDlg()->gotoElement(e);
             mscore->styleDlg()->exec();
             }
-      else if (cmd == "ch-instr") {
-            InstrumentChange* ic = static_cast<InstrumentChange*>(e);
-            SelectInstrument si(ic->instrument(), 0);
-            if (si.exec()) {
-                  const InstrumentTemplate* it = si.instrTemplate();
-                  if (it) {
-                        Fraction tickStart = ic->segment()->tick();
-                        Part* part = ic->staff()->part();
-                        Interval oldV = part->instrument(tickStart)->transpose();
-                        //Instrument* oi = ic->instrument();  //part->instrument(tickStart);
-                        //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
-                        // change instrument in all linked scores
-                        for (ScoreElement* se : ic->linkList()) {
-                              InstrumentChange* lic = static_cast<InstrumentChange*>(se);
-                              Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
-                              lic->score()->undo(new ChangeInstrument(lic, instrument));
-                              }
-                        // transpose for current score only
-                        // this automatically propagates to linked scores
-                        if (part->instrument(tickStart)->transpose() != oldV) {
-                              auto i = part->instruments()->upper_bound(tickStart.ticks());    // find(), ++i
-                              Fraction tickEnd;
-                              if (i == part->instruments()->end())
-                                    tickEnd = Fraction(-1, 1);
-                              else
-                                    tickEnd = Fraction::fromTicks(i->first);
-                              ic->score()->transpositionChanged(part, oldV, tickStart, tickEnd);
-                              }
-                        }
-                  else
-                        qDebug("no template selected?");
-                  }
-           }
+      else if (cmd == "ch-instr")
+            selectInstrument(toInstrumentChange(e));
       else if (cmd == "staff-props") {
             Fraction tick = {-1,1};
             if (e->isChordRest()) {
@@ -522,6 +494,25 @@ void ScoreView::editTimeSigProperties(TimeSig* ts)
                   }
             }
       delete r;
+      }
+
+//---------------------------------------------------------
+//   selectInstrument
+//---------------------------------------------------------
+
+void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
+      {
+      SelectInstrument si(ic->instrument(), 0);
+      if (si.exec()) {
+            const InstrumentTemplate* it = si.instrTemplate();
+            if (it) {
+                  Instrument instr = Instrument::fromTemplate(it);
+                  ic->setInit(true);
+                  ic->setupInstrument(&instr);
+                  }
+            else
+                  qDebug("no template selected?");
+            }
       }
 
 //---------------------------------------------------------

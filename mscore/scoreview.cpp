@@ -92,6 +92,11 @@
 #include "libmscore/textline.h"
 #include "libmscore/shape.h"
 
+#ifdef AVSOMR
+#include "avsomr/avsomr.h"
+#include "avsomr/avsomrdrawer.h"
+#endif
+
 namespace Ms {
 
 extern QErrorMessage* errorMessage;
@@ -1112,11 +1117,41 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   }
             }
 
+
+      // AvsOmr -----
+#ifdef AVSOMR
+      Avs::AvsOmrDrawer omrDrawer;
+      std::shared_ptr<Avs::AvsOmrDrawer::Context> omrDrawCtx = omrDrawer.makeContext(&p, _score);
+      auto pageMeasures = [](Page* page) -> QList<const Measure*> {
+            QList<const Measure*> ml;
+            for (const System* s : page->systems()) {
+                  const std::vector<MeasureBase*>& measures = s->measures();
+                  for (const MeasureBase* mb : measures) {
+                        if (mb->isMeasure())
+                              ml << toMeasure(mb);
+                        }
+                  }
+            return ml;
+            };
+#endif
+      // ------------
+
       QRegion r1(r);
       if ((_score->layoutMode() == LayoutMode::LINE) || (_score->layoutMode() == LayoutMode::SYSTEM)) {
             if (_score->pages().size() > 0) {
+
                   Page* page = _score->pages().front();
                   QList<Element*> ell = page->items(fr);
+
+                  // AvsOmr -----
+#ifdef AVSOMR
+                  if (omrDrawCtx) {
+                        QList<const Measure*> ml = pageMeasures(page);
+                        omrDrawer.draw(omrDrawCtx, ml);
+                        }
+#endif
+                  // ------------
+
                   drawElements(p, ell, editElement);
                   }
             }
@@ -1133,6 +1168,16 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   QList<Element*> ell = page->items(fr.translated(-page->pos()));
                   QPointF pos(page->pos());
                   p.translate(pos);
+
+                  // AvsOmr -----
+#ifdef AVSOMR
+                  if (omrDrawCtx) {
+                        QList<const Measure*> ml = pageMeasures(page);
+                        omrDrawer.draw(omrDrawCtx, ml);
+                        }
+#endif
+                  // ------------
+
                   drawElements(p, ell, editElement);
 
 #ifndef NDEBUG
@@ -1743,7 +1788,7 @@ bool ScoreView::normalPaste(Fraction scale)
 void ScoreView::cmdGotoElement(Element* e)
       {
       if (e) {
-            if (e->type() == ElementType::NOTE)
+            if (e->type() == ElementType::NOTE || e->type() == ElementType::HARMONY)
                   score()->setPlayNote(true);
             score()->select(e, SelectType::SINGLE, 0);
             if (e)
@@ -2775,7 +2820,7 @@ void ScoreView::startNoteEntry()
                   }
             }
 
-      Element* el = _score->selection().activeCR() ? _score->selection().activeCR() : _score->selection().element();
+      Element* el = _score->selection().element();
       if (!el)
             el = _score->selection().firstChordRest();
       if (el == 0 || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {

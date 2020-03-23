@@ -33,7 +33,7 @@ class TelemetrySetup : public AbstractModuleSetup {
    protected:
       void registerExports() override;
 
-      QString moduleName() override;
+      QString moduleName() const override;
 
       void registerResources() override;
 

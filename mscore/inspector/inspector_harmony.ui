@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>198</width>
-    <height>104</height>
+    <height>144</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -53,6 +53,9 @@
        <bold>true</bold>
       </font>
      </property>
+     <property name="accessibleName">
+      <string>Reset 'Play' value</string>
+     </property>
      <property name="text">
       <string>Chord Symbol</string>
      </property>
@@ -89,16 +92,16 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="style">
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetStyle" native="true">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Style</string>
+         <string>Reset 'Style' value</string>
         </property>
        </widget>
       </item>
@@ -112,6 +115,32 @@
         </property>
         <property name="buddy">
          <cstring>placement</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Placement' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="style">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Style</string>
         </property>
        </widget>
       </item>
@@ -138,21 +167,35 @@
         </item>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetStyle" native="true">
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetPlay" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Style' value</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetPlacement" native="true">
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="play">
+        <property name="text">
+         <string>Play</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="Ms::VoicingSelect" name="voicingSelect" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetVoicing" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -160,7 +203,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
+         <string>Reset 'Voicing' Value</string>
         </property>
        </widget>
       </item>
@@ -171,9 +214,15 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>Ms::VoicingSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/voicingSelect.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>Ms::ResetButton</class>
    <extends>QWidget</extends>
-   <header>inspector/resetButton.h</header>
+   <header location="global">inspector/resetButton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

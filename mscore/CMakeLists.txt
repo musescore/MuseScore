@@ -97,7 +97,7 @@ QT5_WRAP_UI (ui_headers
       articulation.ui metaedit.ui paletteProperties.ui paletteCellProperties.ui selectdialog.ui selectnotedialog.ui
       synthcontrol.ui splitstaff.ui keyedit.ui selectinstr.ui
       editstafftype.ui
-      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui
+      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui realizeharmonydialog.ui
       omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
@@ -208,6 +208,7 @@ QT5_WRAP_UI (ui_headers
       inspector/align_select.ui
       inspector/font_style_select.ui
       inspector/offset_select.ui
+      inspector/voicing_select.ui
       inspector/scale_select.ui
       inspector/size_select.ui
       inspector/inspector_stem.ui
@@ -335,7 +336,7 @@ add_library(mscoreapp STATIC
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
       startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
       templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
-      toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h
+      toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h realizeharmonydialog.h
       tupletdialog.h updatechecker.h uploadscoredialog.h waveview.h webpage.h workspace.h
 
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
@@ -358,7 +359,7 @@ add_library(mscoreapp STATIC
       simplebutton.cpp musedata.cpp
       editdrumset.cpp editstaff.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
-      excerptsdialog.cpp metaedit.cpp magbox.cpp
+      excerptsdialog.cpp metaedit.cpp magbox.cpp realizeharmonydialog.cpp
       capella.cpp capxml.cpp exportaudio.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianokeyboard.cpp pianolevels.cpp pianolevelschooser.cpp pianolevelsfilter.cpp
@@ -414,6 +415,7 @@ add_library(mscoreapp STATIC
       inspector/alignSelect.cpp
       inspector/fontStyleSelect.cpp
       inspector/offsetSelect.cpp
+      inspector/voicingSelect.cpp
       inspector/scaleSelect.cpp
       inspector/sizeSelect.cpp
       inspector/inspectorTextBase.cpp
@@ -550,6 +552,10 @@ endif (HAS_AUDIOFILE)
 if (OSC)
       target_link_libraries(mscoreapp ofqf)
 endif (OSC)
+
+if (AVSOMR)
+   target_link_libraries(mscoreapp avsomr)
+endif (AVSOMR)
 
 if (MINGW)
    string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)

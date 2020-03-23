@@ -455,6 +455,7 @@ bool Part::setProperty(Pid id, const QVariant& property)
                   break;
             case Pid::PREFER_SHARP_FLAT:
                   setPreferSharpFlat(PreferSharpFlat(property.toInt()));
+                  break;
             default:
                   qDebug("Part::setProperty: unknown id %d", int(id));
                   break;
@@ -539,15 +540,87 @@ int Part::harmonyCount() const
       {
       if (!score())
             return 0;
-      int count = 0;
+
+      Measure* firstM = score()->firstMeasure();
+      if (!firstM)
+            return 0;
+
       SegmentType st = SegmentType::ChordRest;
-      for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-            for (Element* e : seg->annotations()) {
+      int count = 0;
+      for (const Segment* seg = firstM->first(st); seg; seg = seg->next1(st)) {
+            for (const Element* e : seg->annotations()) {
                   if (e->type() == ElementType::HARMONY && e->track() >= startTrack() && e->track() < endTrack())
                         count++;
                   }
             }
       return count;
+      }
+
+//---------------------------------------------------------
+//   updateHarmonyChannels
+///   update the harmony channel by creating a new channel
+///   when appropriate or using the existing one
+///
+///   checkRemoval can be set to true to check to see if we
+///   can remove the harmony channel
+//---------------------------------------------------------
+void Part::updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval)
+      {
+
+      auto onInstrumentChanged = [this]() {
+            masterScore()->rebuildMidiMapping();
+            masterScore()->updateChannel();
+            score()->setInstrumentsChanged(true);
+            score()->setLayoutAll(); //do we need this?
+            };
+
+
+      // usage of harmony count is okay even if expensive since checking harmony channel will shortcircuit if existent
+      // harmonyCount will only be called on loading of a score (where it will need to be scanned for harmony anyway)
+      // or when the first harmony of a score is just added
+      if (checkRemoval) {
+            //may be a bit expensive since it gets called after every single delete or undo, but it should be okay for now
+            //~OPTIM~
+            if (harmonyCount() == 0) {
+                  Instrument* instr = instrument();
+                  int hChIdx= instr->channelIdx(Channel::HARMONY_NAME);
+                  if (hChIdx != -1) {
+                        Channel* hChan = instr->channel(hChIdx);
+                        instr->removeChannel(hChan);
+                        delete hChan;
+                        if (isDoOnInstrumentChanged)
+                              onInstrumentChanged();
+                        return;
+                        }
+                  }
+            }
+
+      if (!harmonyChannel() && harmonyCount() > 0) {
+            Instrument* instr = instrument();
+            Channel* c = new Channel(*instr->channel(0));
+            c->setName(Channel::HARMONY_NAME);
+            instr->appendChannel(c);
+            onInstrumentChanged();
+            }
+      }
+
+//---------------------------------------------------------
+//   harmonyChannel
+//---------------------------------------------------------
+
+const Channel* Part::harmonyChannel() const
+      {
+           const Instrument* instr = instrument();
+           if (!instr)
+                 return nullptr;
+
+           int chanIdx = instr->channelIdx(Channel::HARMONY_NAME);
+           if (chanIdx == -1)
+                 return nullptr;
+
+           const Channel* chan = instr->channel(chanIdx);
+           Q_ASSERT(chan);
+           return chan;
       }
 
 //---------------------------------------------------------

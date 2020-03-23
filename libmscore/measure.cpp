@@ -229,6 +229,7 @@ Measure::Measure(const Measure& m)
       _timesig      = m._timesig;
       _len          = m._len;
       _repeatCount  = m._repeatCount;
+      _noMode       = m._noMode;
       _userStretch  = m._userStretch;
 
       _mstaves.reserve(m._mstaves.size());
@@ -1923,7 +1924,9 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
             }
       Q_ASSERT(first());
       Q_ASSERT(last());
-      score()->writeSegments(xml, strack, etrack, first(), last()->next1(), writeSystemElements, forceTimeSig);
+      if (first() && last())
+            score()->writeSegments(xml, strack, etrack, first(), last()->next1(), writeSystemElements, forceTimeSig);
+
       xml.etag();
       }
 
@@ -1969,6 +1972,16 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.setTrack(nextTrack++);
                   e.setTick(tick());
                   readVoice(e, staffIdx, irregular);
+                  }
+            else if (tag == "Image") {
+                  if (MScore::noImages)
+                        e.skipCurrentElement();
+                  else {
+                        Element* el = Element::name2Element(tag, score());
+                        el->setTrack(staffIdx * VOICES);
+                        el->read(e);
+                        add(el);
+                        }
                   }
             else if (tag == "Marker" || tag == "Jump") {
                   Element* el = Element::name2Element(tag, score());
@@ -2321,6 +2334,9 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                   fermata->setPlacement(fermata->track() & 1 ? Placement::BELOW : Placement::ABOVE);
                   fermata->read(e);
                   }
+            // There could be an Image here if the score was saved with an earlier version of MuseScore 3.
+            // This image would not have been visible upon reload. Let's read it in and add it directly
+            // to the measure so that it can be displayed.
             else if (tag == "Image") {
                   if (MScore::noImages)
                         e.skipCurrentElement();
@@ -2328,8 +2344,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         Element* el = Element::name2Element(tag, score());
                         el->setTrack(e.track());
                         el->read(e);
-                        segment = getSegment(SegmentType::ChordRest, e.tick());
-                        segment->add(el);
+                        add(el);
                         }
                   }
             //----------------------------------------------------
@@ -3675,21 +3690,19 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       // if end repeat, clef goes after, otherwise clef goes before
       Segment* clefSeg = findSegmentR(SegmentType::Clef, ticks());
       if (clefSeg) {
-            if (clefSeg) {
-                  Segment* s1;
-                  Segment* s2;
-                  if (repeatEnd()) {
-                        s1 = seg;
-                        s2 = clefSeg;
-                        }
-                  else {
-                        s1 = clefSeg;
-                        s2 = seg;
-                        }
-                  if (s1->next() != s2) {
-                        _segments.remove(s1);
-                        _segments.insert(s1, s2);
-                        }
+            Segment* s1;
+            Segment* s2;
+            if (repeatEnd()) {
+                  s1 = seg;
+                  s2 = clefSeg;
+                  }
+            else {
+                  s1 = clefSeg;
+                  s2 = seg;
+                  }
+            if (s1->next() != s2) {
+                  _segments.remove(s1);
+                  _segments.insert(s1, s2);
                   }
             }
 

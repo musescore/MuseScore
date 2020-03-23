@@ -14,9 +14,10 @@ cmd escape
 cmd select-next-chord
 cmd copy
 cmd note-input
-cmd next-chord
-cmd next-chord
 cmd escape
+cmd next-chord
+cmd next-chord
+cmd next-chord
 cmd next-chord
 cmd paste
 test score #173381-mmrest-copy.mscx

@@ -62,9 +62,10 @@ Pos::Pos(TempoMap* tl, TimeSigMap* sl, const QString& s)
       sig    = sl;
       int m, b, t;
       sscanf(s.toLatin1().data(), "%04d.%02d.%03d", &m, &b, &t);
-      _tick = sig->bar2tick(m, b) + t;
-      _type = TType::TICKS;
-      sn    = -1;
+      _tick  = sig->bar2tick(m, b) + t;
+      _type  = TType::TICKS;
+      _frame = 0;
+      sn     = -1;
       _valid = true;
       }
 
@@ -74,6 +75,7 @@ Pos::Pos(TempoMap* tl, TimeSigMap* sl, int measure, int beat, int tick)
       sig    = sl;
       _tick  = sig->bar2tick(measure, beat) + tick;
       _type  = TType::TICKS;
+      _frame = 0;
       sn     = -1;
       _valid = true;
       }
@@ -100,6 +102,7 @@ Pos::Pos(TempoMap* tl, TimeSigMap* sl, int min, int sec, int frame, int subframe
                   break;
             }
       _type  = TType::FRAMES;
+      _tick  = 0;
       _frame = lrint(time * MScore::sampleRate);
       sn     = -1;
       _valid = true;

@@ -29,6 +29,7 @@
  *   using getString(), getInt(), etc., and changed using setPreference()
  */
 
+#include <functional>
 #include "globals.h"
 #include "global/settings/types/preferencekeys.h"
 
@@ -141,6 +142,8 @@ class EnumPreference: public Preference {
 class Preferences {
    public:
       typedef QHash<QString, Preference*> prefs_map_t;
+      using OnSetListener = std::function<void(const QString& key, const QVariant& value)>;
+      using ListenerID = uint32_t;
 
    private:
 
@@ -174,6 +177,8 @@ class Preferences {
       QMap<QString, QVariant> getDefaultLocalPreferences();
       bool useLocalPrefs = false;
 
+      QMap<ListenerID, OnSetListener> _onSetListeners;
+
    public:
       Preferences();
       ~Preferences();
@@ -195,6 +200,10 @@ class Preferences {
       // general setters
       void setToDefaultValue(const QString key);
       void setPreference(const QString key, QVariant value);
+
+      // set listeners
+      ListenerID addOnSetListener(const OnSetListener& l);
+      void removeOnSetListener(const ListenerID& id);
 
       // A temporary preference is stored "in memory" only and not written to file.
       // If there is both a "normal" preference and a temporary preference with the same

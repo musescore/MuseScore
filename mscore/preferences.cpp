@@ -100,6 +100,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_WORKSPACE,                                   new StringPreference("Basic", false)},
             {PREF_APP_TELEMETRY_ALLOWED,                           new BoolPreference(false, false)},
             {PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED,          new StringPreference("", false)},
+            {PREF_APP_BACKUP_GENERATE_BACKUP,                      new BoolPreference(true)},
             {PREF_EXPORT_AUDIO_NORMALIZE,                          new BoolPreference(true)},
             {PREF_EXPORT_AUDIO_SAMPLERATE,                         new IntPreference(44100, false)},
             {PREF_EXPORT_AUDIO_PCMRATE,                            new IntPreference(16)},
@@ -144,6 +145,8 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS,           new IntPreference(0)},
             {PREF_IO_PULSEAUDIO_USEPULSEAUDIO,                     new BoolPreference(defaultUsePulseAudio, false)},
             {PREF_SCORE_CHORD_PLAYONADDNOTE,                       new BoolPreference(true, false)},
+            {PREF_SCORE_HARMONY_PLAY,                              new BoolPreference(false, false)},
+            {PREF_SCORE_HARMONY_PLAY_ONEDIT,                       new BoolPreference(true, false)},
             {PREF_SCORE_MAGNIFICATION,                             new DoublePreference(1.0, false)},
             {PREF_SCORE_NOTE_PLAYONCLICK,                          new BoolPreference(true, false)},
             {PREF_SCORE_NOTE_DEFAULTPLAYDURATION,                  new IntPreference(300 /* ms */, false)},
@@ -211,7 +214,12 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON,      new ColorPreference(QColor("#0065BF"))},
             {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF,     new ColorPreference(QColor("#3b3f45"))},
             {PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_LIGHT,            new ColorPreference(QColor("#0066BF"))},
-            {PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK,             new ColorPreference(QColor("#36B2FF"))}
+            {PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK,             new ColorPreference(QColor("#36B2FF"))},
+#ifdef AVSOMR
+            {PREF_IMPORT_AVSOMR_USELOCAL,                          new BoolPreference(false, false)},
+            {PREF_UI_AVSOMR_RECOGNITION_COLOR,                     new ColorPreference(QColor("#1DCCA0"))},
+            {PREF_UI_AVSOMR_NOT_RECOGNITION_COLOR,                 new ColorPreference(QColor("#C31989"))},
+#endif
       });
 
       _initialized = true;
@@ -412,6 +420,21 @@ void Preferences::setPreference(const QString key, QVariant value)
       {
       checkIfKeyExists(key);
       set(key, value);
+      for (const OnSetListener& l : _onSetListeners)
+          l(key, value);
+      }
+
+Preferences::ListenerID Preferences::addOnSetListener(const OnSetListener& l)
+      {
+      static ListenerID lastId{0};
+      ++lastId;
+      _onSetListeners[lastId] = l;
+      return lastId;
+      }
+
+void Preferences::removeOnSetListener(const ListenerID& id)
+      {
+      _onSetListeners.remove(id);
       }
 
 void Preferences::setTemporaryPreference(const QString key, QVariant value)

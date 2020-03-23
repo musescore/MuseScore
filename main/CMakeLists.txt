@@ -51,6 +51,8 @@ include_directories(
 add_executable(${ExecutableName}
       ${resource_file}
       main.cpp
+      modulessetup.cpp
+      modulessetup.h
       )
 
 if (MINGW OR MSVC)

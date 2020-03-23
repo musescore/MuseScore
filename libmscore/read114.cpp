@@ -2047,8 +2047,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         Element* el = Element::name2Element(tag, m->score());
                         el->setTrack(e.track());
                         el->read(e);
-                        segment = m->getSegment(SegmentType::ChordRest, e.tick());
-                        segment->add(el);
+                        m->add(el);
                         }
                   }
             else if (tag == "stretch") {
@@ -3015,6 +3014,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   beam->read(e);
                   beam->setParent(0);
                   // _beams.append(beam);
+                  delete beam;
                   }
             else if (tag == "name")
                   setName(e.readElementText());
@@ -3266,6 +3266,11 @@ Score::FileError MasterScore::read114(XmlReader& e)
             style().set(Sid::voltaPosAbove, QPointF(0.0, -2.0f));
 
       fixTicks();
+
+      for (Part* p : parts()) {
+            p->updateHarmonyChannels(false);
+            }
+
       rebuildMidiMapping();
       updateChannel();
 

@@ -28,8 +28,11 @@
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <widget class="QGroupBox" name="transposeByKey">
+           <property name="toolTip">
+            <string>Transpose to key (specified at concert pitch)</string>
+           </property>
            <property name="title">
-            <string>By Key</string>
+            <string>To Key</string>
            </property>
            <property name="checkable">
             <bool>true</bool>

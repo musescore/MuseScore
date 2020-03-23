@@ -3274,8 +3274,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         Element* el = Element::name2Element(tag, score);
                         el->setTrack(e.track());
                         el->read(e);
-                        segment = m->getSegment(SegmentType::ChordRest, e.tick());
-                        segment->add(el);
+                        m->add(el);
                         }
                   }
             //----------------------------------------------------
@@ -3895,6 +3894,11 @@ static bool readScore(Score* score, XmlReader& e)
             }
 #endif
       score->fixTicks();
+
+      for (Part* p : score->parts()) {
+            p->updateHarmonyChannels(false);
+            }
+
       if (score->isMaster()) {
             MasterScore* ms = static_cast<MasterScore*>(score);
             if (!ms->omr())
@@ -3903,6 +3907,7 @@ static bool readScore(Score* score, XmlReader& e)
             ms->updateChannel();
  //           ms->createPlayEvents();
             }
+
       return true;
       }
 

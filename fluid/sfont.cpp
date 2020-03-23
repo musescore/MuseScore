@@ -52,6 +52,7 @@ SFont::SFont(Fluid* f)
       synth       = f;
       samplepos   = 0;
       samplesize  = 0;
+      _id         = 0;
       _bankOffset = 0;
       }
 

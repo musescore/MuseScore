@@ -35,6 +35,10 @@
 #include "resourceManager.h"
 #include "synthesizer/msynthesizer.h"
 
+#ifdef AVSOMR
+#include "avsomr/avsomrlocal.h"
+#endif
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -365,6 +369,9 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       playNotes->setChecked(preferences.getBool(PREF_SCORE_NOTE_PLAYONCLICK));
       playChordOnAddNote->setChecked(preferences.getBool(PREF_SCORE_CHORD_PLAYONADDNOTE));
 
+      playHarmony->setChecked(preferences.getBool(PREF_SCORE_HARMONY_PLAY));
+      playHarmonyOnEdit->setChecked(preferences.getBool(PREF_SCORE_HARMONY_PLAY_ONEDIT));
+
       checkUpdateStartup->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_CHECKUPDATE));
 
       navigatorShow->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWNAVIGATOR));
@@ -409,6 +416,22 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       importLayout->setChecked(preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT));
       importBreaks->setChecked(preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTBREAKS));
+
+#ifdef AVSOMR
+      useLocalAvsOmr->setChecked(preferences.getBool(PREF_IMPORT_AVSOMR_USELOCAL));
+      Avs::AvsOmrLocal::instance()->isInstalledAsync([this](bool isInstalled) {
+            QString text = QObject::tr("Use local OMR engine");
+            if (isInstalled)
+                  text += " (" + QObject::tr("Installed") + ")";
+            else
+                  text += " (" + QObject::tr("Not installed, needs internet connection for installing") + ")";
+
+            useLocalAvsOmr->setText(text);
+            });
+#else
+      groupBox_omr->setVisible(false);
+#endif
+
       QString resPref = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
       if (resPref == "No")
             resetElementPositionsNo->setChecked(true);
@@ -416,6 +439,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
             resetElementPositionsYes->setChecked(true);
       else // "Ask" or unset (or anything else)
             resetElementPositionsAlwaysAsk->setChecked(true);
+
       if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
             exportAllLayouts->setChecked(true);
             }
@@ -961,6 +985,9 @@ void PreferenceDialog::apply()
             preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "Yes");
       else if (resetElementPositionsNo->isChecked())
             preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "No");
+#ifdef AVSOMR
+      preferences.setPreference(PREF_IMPORT_AVSOMR_USELOCAL, useLocalAvsOmr->isChecked());
+#endif
       preferences.setPreference(PREF_IO_MIDI_ADVANCEONRELEASE, advanceOnRelease->isChecked());
       preferences.setPreference(PREF_IO_MIDI_ENABLEINPUT, enableMidiInput->isChecked());
       preferences.setPreference(PREF_IO_MIDI_EXPANDREPEATS, expandRepeats->isChecked());
@@ -971,6 +998,8 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_IO_OSC_PORTNUMBER, oscPort->value());
       preferences.setPreference(PREF_IO_OSC_USEREMOTECONTROL, oscServer->isChecked());
       preferences.setPreference(PREF_SCORE_CHORD_PLAYONADDNOTE, playChordOnAddNote->isChecked());
+      preferences.setPreference(PREF_SCORE_HARMONY_PLAY, playHarmony->isChecked());
+      preferences.setPreference(PREF_SCORE_HARMONY_PLAY_ONEDIT, playHarmonyOnEdit->isChecked());
       preferences.setPreference(PREF_SCORE_NOTE_DEFAULTPLAYDURATION, defaultPlayDuration->value());
       preferences.setPreference(PREF_SCORE_NOTE_PLAYONCLICK, playNotes->isChecked());
       preferences.setPreference(PREF_UI_APP_STARTUP_CHECKUPDATE, checkUpdateStartup->isChecked());

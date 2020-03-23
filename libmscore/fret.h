@@ -52,7 +52,7 @@ class FretItem {
       struct Dot {
             int fret                { 0 };
             FretDotType dtype       { FretDotType::NORMAL };
-            int fingering;          // NOTE:JT - possible future feature?
+            int fingering           { 0 }; // NOTE:JT - possible future feature?
 
             Dot() {}
             Dot(int f, FretDotType t = FretDotType::NORMAL) : fret(f), dtype(t) {}

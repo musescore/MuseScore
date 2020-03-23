@@ -28,6 +28,14 @@ if (USE_WEBENGINE)
     WebEngineWidgets
 	)
 endif(USE_WEBENGINE)
+
+if (WIN32)
+    set(_components
+      ${_components}
+      WinExtras
+      )
+endif(WIN32)
+
 foreach(_component ${_components})
   find_package(Qt5${_component})
   list(APPEND QT_LIBRARIES ${Qt5${_component}_LIBRARIES})

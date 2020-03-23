@@ -87,7 +87,7 @@ void TransposeDialog::diatonicBoxToggled(bool val)
 TransposeMode TransposeDialog::mode() const
       {
       return chromaticBox->isChecked()
-         ? (transposeByKey->isChecked() ? TransposeMode::BY_KEY : TransposeMode::BY_INTERVAL)
+         ? (transposeByKey->isChecked() ? TransposeMode::TO_KEY : TransposeMode::BY_INTERVAL)
          : TransposeMode::DIATONICALLY;
       }
 
@@ -95,7 +95,7 @@ TransposeMode TransposeDialog::mode() const
 //   enableTransposeByKey
 //---------------------------------------------------------
 
-void TransposeDialog::enableTransposeByKey(bool val)
+void TransposeDialog::enableTransposeToKey(bool val)
       {
       transposeByKey->setEnabled(val);
       transposeByInterval->setChecked(!val);
@@ -120,7 +120,7 @@ TransposeDirection TransposeDialog::direction() const
       {
       switch (mode())
             {
-            case TransposeMode::BY_KEY:
+            case TransposeMode::TO_KEY:
                   if (closestKey->isChecked())
                         return TransposeDirection::CLOSEST;
                   return upKey->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;

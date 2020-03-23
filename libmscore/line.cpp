@@ -150,8 +150,12 @@ void LineSegment::startEditDrag(EditData& ed)
 
 bool LineSegment::edit(EditData& ed)
       {
-      if (!((ed.modifiers & Qt::ShiftModifier) && (isSingleType() || (isBeginType() && ed.curGrip == Grip::START)
-         || (isEndType() && ed.curGrip == Grip::END))))
+      const bool moveStart = ed.curGrip == Grip::START;
+      const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
+
+      if (!((ed.modifiers & Qt::ShiftModifier)
+         && ((isSingleBeginType() && moveStart) || (isSingleEndType() && moveEnd))
+         ))
             return false;
 
       LineSegment* ls       = 0;
@@ -177,15 +181,15 @@ bool LineSegment::edit(EditData& ed)
                         return true;
                         }
                   if (ed.key == Qt::Key_Left) {
-                        if (ed.curGrip == Grip::START)
+                        if (moveStart)
                               s1 = prevSeg1(s1, track);
-                        else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE)
+                        else if (moveEnd)
                               s2 = prevSeg1(s2, track2);
                         }
                   else if (ed.key == Qt::Key_Right) {
-                        if (ed.curGrip == Grip::START)
+                        if (moveStart)
                               s1 = nextSeg1(s1, track);
-                        else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE) {
+                        else if (moveEnd) {
                               Segment* ns2 = nextSeg1(s2, track2);
                               if (ns2)
                                     s2 = ns2;
@@ -212,27 +216,27 @@ bool LineSegment::edit(EditData& ed)
 
                   switch (ed.key) {
                         case Qt::Key_Left:
-                              if (ed.curGrip == Grip::START)
+                              if (moveStart)
                                     note1 = prevChordNote(note1);
-                              else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE)
+                              else if (moveEnd)
                                     note2 = prevChordNote(note2);
                               break;
                         case Qt::Key_Right:
-                              if (ed.curGrip == Grip::START)
+                              if (moveStart)
                                     note1 = nextChordNote(note1);
-                              else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE)
+                              else if (moveEnd)
                                     note2 = nextChordNote(note2);
                               break;
                         case Qt::Key_Up:
-                              if (ed.curGrip == Grip::START)
+                              if (moveStart)
                                     note1 = toNote(score()->upAlt(note1));
-                              else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE)
+                              else if (moveEnd)
                                     note2 = toNote(score()->upAlt(note2));
                               break;
                         case Qt::Key_Down:
-                              if (ed.curGrip == Grip::START)
+                              if (moveStart)
                                     note1 = toNote(score()->downAlt(note1));
-                              else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE)
+                              else if (moveEnd)
                                     note2 = toNote(score()->downAlt(note2));
                               break;
                         default:
@@ -261,22 +265,22 @@ bool LineSegment::edit(EditData& ed)
                   Measure* m2 = l->endMeasure();
 
                   if (ed.key == Qt::Key_Left) {
-                        if (ed.curGrip == Grip::START) {
+                        if (moveStart) {
                               if (m1->prevMeasure())
                                     m1 = m1->prevMeasure();
                               }
-                        else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE) {
+                        else if (moveEnd) {
                               Measure* m = m2->prevMeasure();
                               if (m)
                                     m2 = m;
                               }
                         }
                   else if (ed.key == Qt::Key_Right) {
-                        if (ed.curGrip == Grip::START) {
+                        if (moveStart) {
                               if (m1->nextMeasure())
                                     m1 = m1->nextMeasure();
                               }
-                        else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE) {
+                        else if (moveEnd) {
                               if (m2->nextMeasure())
                                     m2 = m2->nextMeasure();
                               }
@@ -297,9 +301,9 @@ bool LineSegment::edit(EditData& ed)
 
       LineSegment* nls = 0;
       if (st == SpannerSegmentType::SINGLE) {
-            if (ed.curGrip == Grip::START)
+            if (moveStart)
                   nls = l->frontSegment();
-            else if (ed.curGrip == Grip::END)
+            else if (moveEnd)
                   nls = l->backSegment();
             }
       else if (st == SpannerSegmentType::BEGIN)

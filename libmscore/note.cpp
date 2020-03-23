@@ -17,6 +17,8 @@
 
 #include <assert.h>
 
+#include "log.h"
+
 #include "note.h"
 #include "score.h"
 #include "chord.h"
@@ -1151,7 +1153,7 @@ void Note::draw(QPainter* painter) const
 
       else {
             // skip drawing, if second note of a cross-measure value
-            if (chord()->crossMeasure() == CrossMeasure::SECOND)
+            if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND)
                   return;
             // warn if pitch extends usable range of instrument
             // by coloring the notehead
@@ -2375,8 +2377,11 @@ QRectF Note::drag(EditData& ed)
 void Note::endDrag(EditData& ed)
       {
       NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
+      IF_ASSERT_FAILED(ned) {
+            return;
+            }
       for (Note* nn : tiedNotes()) {
-            for (PropertyData pd : ned->propertyData) {
+            for (const PropertyData& pd : ned->propertyData) {
                   setPropertyFlags(pd.id, pd.f); // reset initial property flags state
                   score()->undoPropertyChanged(nn, pd.id, pd.data);
                   }

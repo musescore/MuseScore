@@ -33,6 +33,7 @@ Knob::Knob(QWidget* parent)
       _markSize  = 6;
       _border    = 2;
       points     = 0;
+      startY     = 0;
       }
 
 //---------------------------------------------------------

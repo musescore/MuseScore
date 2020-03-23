@@ -45,16 +45,16 @@ enum class ChangeDirection : signed char {
 enum class ChangeEventType : char { FIX, RAMP, INVALID };
 
 class ChangeEvent {
-      int value;
-      ChangeEventType type;
+      int value { 0 };
+      ChangeEventType type { ChangeEventType::INVALID };
       Fraction length;
-      ChangeMethod method;
-      ChangeDirection direction;
+      ChangeMethod method { ChangeMethod::NORMAL };
+      ChangeDirection direction { ChangeDirection::INCREASING };
       int cachedStartVal   { -1 };
       int cachedEndVal     { -1 };
 
    public:
-      ChangeEvent() : value(0), type(ChangeEventType::INVALID) {}
+      ChangeEvent() {}
       ChangeEvent(int vel) : value(vel), type(ChangeEventType::FIX) {}
       ChangeEvent(Fraction s, Fraction e, int diff, ChangeMethod m, ChangeDirection d)
             : value(diff), type(ChangeEventType::RAMP), length(e - s), method(m), direction(d) {}

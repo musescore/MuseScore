@@ -25,7 +25,7 @@ namespace Ms {
 
 struct TextEditData : public ElementEditData {
       QString oldXmlText;
-      int startUndoIdx;
+      int startUndoIdx { 0 };
 
       TextCursor cursor;
 

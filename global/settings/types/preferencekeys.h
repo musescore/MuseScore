@@ -51,6 +51,7 @@
 #define PREF_APP_WORKSPACE                                  "application/workspace"
 #define PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED         "application/startup/telemetry_access_requested"
 #define PREF_APP_TELEMETRY_ALLOWED                          "application/telemetry/allowed"
+#define PREF_APP_BACKUP_GENERATE_BACKUP                     "application/backup/generateBackup"
 #define PREF_EXPORT_AUDIO_NORMALIZE                         "export/audio/normalize"
 #define PREF_EXPORT_AUDIO_SAMPLERATE                        "export/audio/sampleRate"
 #define PREF_EXPORT_AUDIO_PCMRATE                           "export/audio/PCMRate"
@@ -63,6 +64,7 @@
 #define PREF_IMPORT_GUITARPRO_CHARSET                       "import/guitarpro/charset"
 #define PREF_IMPORT_MUSICXML_IMPORTBREAKS                   "import/musicXML/importBreaks"
 #define PREF_IMPORT_MUSICXML_IMPORTLAYOUT                   "import/musicXML/importLayout"
+#define PREF_IMPORT_AVSOMR_USELOCAL                         "import/avsomr/useLocalEngine"
 #define PREF_IMPORT_OVERTURE_CHARSET                        "import/overture/charset"
 #define PREF_IMPORT_STYLE_STYLEFILE                         "import/style/styleFile"
 #define PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS   "import/compatibility/resetElementPositions"
@@ -97,6 +99,8 @@
 #define PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS          "io/portMidi/outputLatencyMilliseconds"
 #define PREF_IO_PULSEAUDIO_USEPULSEAUDIO                    "io/pulseAudio/usePulseAudio"
 #define PREF_SCORE_CHORD_PLAYONADDNOTE                      "score/chord/playOnAddNote"
+#define PREF_SCORE_HARMONY_PLAY                             "score/harmony/play"
+#define PREF_SCORE_HARMONY_PLAY_ONEDIT                      "score/harmony/play/onedit"
 #define PREF_SCORE_MAGNIFICATION                            "score/magnification"
 #define PREF_SCORE_NOTE_PLAYONCLICK                         "score/note/playOnClick"
 #define PREF_SCORE_NOTE_DEFAULTPLAYDURATION                 "score/note/defaultPlayDuration"
@@ -166,5 +170,7 @@
 #define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF    "ui/button/highlight/color/enabled/light/off"
 #define PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_LIGHT           "ui/inspector/styledtext/color/light"
 #define PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK            "ui/inspector/styledtext/color/dark"
+#define PREF_UI_AVSOMR_RECOGNITION_COLOR                    "ui/avsomr/recognition/valid/color"
+#define PREF_UI_AVSOMR_NOT_RECOGNITION_COLOR                "ui/avsomr/recognition/notValid/color"
 
 #endif // PREFERENCEKEYS_H

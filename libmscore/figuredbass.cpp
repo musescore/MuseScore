@@ -71,6 +71,7 @@ FiguredBassItem::FiguredBassItem(Score* s, int l)
       _digit      = FBIDigitNone;
       parenth[0]  = parenth[1] = parenth[2] = parenth[3] = parenth[4] = Parenthesis::NONE;
       _contLine   = ContLine::NONE;
+      textWidth   = 0;
       }
 
 FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)

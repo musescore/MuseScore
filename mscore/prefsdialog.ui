@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>834</width>
-    <height>569</height>
+    <height>701</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1278,10 +1278,30 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_37">
             <property name="text">
              <string>Default duration:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="playChordOnAddNote">
+            <property name="text">
+             <string>Play whole chord when editing</string>
             </property>
            </widget>
           </item>
@@ -1307,25 +1327,36 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="playChordOnAddNote">
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="playHarmony">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
+         <property name="title">
+          <string>Play Harmony</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="playHarmonyOnEdit">
             <property name="text">
-             <string>Play whole chord when editing</string>
+             <string>Play harmony when editing</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
-          </item>
-          <item row="0" column="2">
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </widget>
@@ -3378,6 +3409,22 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_omr">
+         <property name="title">
+          <string>OMR</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_omr">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="useLocalAvsOmr">
+            <property name="text">
+             <string>Use local OMR engine</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="MIDI">
          <property name="minimumSize">
           <size>
@@ -4383,6 +4430,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
+  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>
