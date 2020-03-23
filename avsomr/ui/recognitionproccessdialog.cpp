@@ -65,27 +65,27 @@ QString RecognitionProccessDialog::formatStep(const IAvsOmrRecognizer::Step& ste
                   return QObject::tr("Preparing…");
             case IAvsOmrRecognizer::Step::PrepareFinish:
                   if (step.success())
-                        return QObject::tr("Success preparing");
+                        return QObject::tr("Successfully prepared");
 
-                  return QObject::tr("Failed preparing")
+                  return QObject::tr("Failed to prepare")
                               + "\n" + step.error.formatedText()
                               + "\n" + step.error.supportHint();
             case IAvsOmrRecognizer::Step::ProcessingStart:
-                  return QObject::tr("Procesing…");
+                  return QObject::tr("Processing…");
             case IAvsOmrRecognizer::Step::ProcessingFinish:
                   if (step.success())
-                        return QObject::tr("Success processing");
+                        return QObject::tr("Successfully processed");
 
-                  return QObject::tr("Failed processing")
+                  return QObject::tr("Failed to process")
                               + "\n" + step.error.formatedText()
                               + "\n" + step.error.supportHint();
             case IAvsOmrRecognizer::Step::LoadStart:
                   return QObject::tr("Loading…");
             case IAvsOmrRecognizer::Step::LoadFinish:
                   if (step.success())
-                        return QObject::tr("Success loading");
+                        return QObject::tr("Successfully loaded");
 
-                  return QObject::tr("Failed loading")
+                  return QObject::tr("Failed to load")
                               + "\n" + step.error.formatedText()
                               + "\n" + step.error.supportHint();
             }
