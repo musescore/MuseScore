@@ -55,10 +55,10 @@ class Tremolo final : public Element {
       Tremolo(Score*);
       Tremolo(const Tremolo&);
       Tremolo &operator=(const Tremolo&) = delete;
-      virtual Tremolo* clone() const       { return new Tremolo(*this); }
-      virtual ElementType type() const     { return ElementType::TREMOLO; }
-      virtual int subtype() const override { return static_cast<int>(_tremoloType); }
-      virtual QString subtypeName() const override;
+      Tremolo* clone() const override      { return new Tremolo(*this); }
+      ElementType type() const override    { return ElementType::TREMOLO; }
+      int subtype() const override         { return static_cast<int>(_tremoloType); }
+      QString subtypeName() const override;
 
       QString tremoloTypeName() const;
       void setTremoloType(const QString& s);
@@ -70,12 +70,12 @@ class Tremolo final : public Element {
       void setTremoloType(TremoloType t);
       TremoloType tremoloType() const      { return _tremoloType; }
 
-      virtual qreal mag() const;
-      virtual void draw(QPainter*) const;
-      virtual void layout();
+      qreal mag() const override;
+      void draw(QPainter*) const override;
+      void layout() override;
       void layout2();
-      virtual void write(XmlWriter& xml) const;
-      virtual void read(XmlReader&);
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
 
       Chord* chord1() const { return _chord1; }
       Chord* chord2() const { return _chord2; }
@@ -93,16 +93,16 @@ class Tremolo final : public Element {
 
       bool placeMidStem() const;
 
-      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
-      virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-      virtual void styleChanged() override;
+      void spatiumChanged(qreal oldValue, qreal newValue) override;
+      void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+      void styleChanged() override;
 
-      virtual QString accessibleInfo() const override;
+      QString accessibleInfo() const override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual Pid propertyId(const QStringRef& xmlName) const override;
-      virtual QString propertyUserValue(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      Pid propertyId(const QStringRef& xmlName) const override;
+      QString propertyUserValue(Pid) const override;
       };
 
 
