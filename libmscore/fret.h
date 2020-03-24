@@ -155,22 +155,23 @@ class FretDiagram final : public Element {
       FretDiagram(Score* s);
       FretDiagram(const FretDiagram&);
       ~FretDiagram();
-      virtual void draw(QPainter*) const override;
-      virtual FretDiagram* clone() const override { return new FretDiagram(*this); }
+
+      void draw(QPainter*) const override;
+      FretDiagram* clone() const override { return new FretDiagram(*this); }
 
       Segment* segment() { return toSegment(parent()); }
 
       static FretDiagram* fromString(Score* score, const QString &s);
 
-      virtual ElementType type() const override { return ElementType::FRET_DIAGRAM; }
-      virtual void layout() override;
-      virtual void write(XmlWriter& xml) const override;
+      ElementType type() const override { return ElementType::FRET_DIAGRAM; }
+      void layout() override;
+      void write(XmlWriter& xml) const override;
       void writeNew(XmlWriter& xml) const;
       void writeOld(XmlWriter& xml) const;
-      virtual void read(XmlReader&) override;
+      void read(XmlReader&) override;
       void readNew(XmlReader&);
-      virtual QLineF dragAnchor() const override;
-      virtual QPointF pagePos() const override;
+      QLineF dragAnchor() const override;
+      QPointF pagePos() const override;
 
       // read / write MusicXML
       void readMusicXML(XmlReader& de);
@@ -217,18 +218,18 @@ class FretDiagram final : public Element {
 
       void init(Ms::StringData *, Chord*);
 
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
+      void add(Element*) override;
+      void remove(Element*) override;
 
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
 
       void endEditDrag(EditData& editData) override;
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
 
       qreal userMag() const         { return _userMag;   }
       void setUserMag(qreal m)      { _userMag = m;      }
