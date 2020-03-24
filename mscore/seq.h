@@ -55,6 +55,7 @@ enum class SeqMsgId : char {
       NO_MESSAGE,
       TEMPO_CHANGE,
       PLAY, SEEK,
+      ALL_NOTE_OFF,
       MIDI_INPUT_EVENT
       };
 
