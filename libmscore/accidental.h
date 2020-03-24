@@ -18,6 +18,10 @@
  Definition of class Accidental
 */
 
+#include <QString>
+#include <QList>
+#include <QVariant>
+
 #include "config.h"
 #include "element.h"
 
@@ -71,8 +75,9 @@ class Accidental final : public Element {
 
    public:
       Accidental(Score* s = 0);
-      virtual Accidental* clone() const override  { return new Accidental(*this); }
-      virtual ElementType type() const override   { return ElementType::ACCIDENTAL; }
+
+      Accidental* clone() const override  { return new Accidental(*this); }
+      ElementType type() const override   { return ElementType::ACCIDENTAL; }
 
       QString subtypeUserName() const;
       void setSubtype(const QString& s);
@@ -81,15 +86,15 @@ class Accidental final : public Element {
       AccidentalType accidentalType() const        { return _accidentalType; }
       AccidentalRole role() const                  { return _role;           }
 
-      virtual int subtype() const override         { return (int)_accidentalType; }
-      virtual QString subtypeName() const override { return QString(subtype2name(_accidentalType)); }
+      int subtype() const override         { return (int)_accidentalType; }
+      QString subtypeName() const override { return QString(subtype2name(_accidentalType)); }
 
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
-      virtual void layout() override;
-      virtual void draw(QPainter*) const override;
-      virtual bool isEditable() const override               { return true; }
-      virtual void startEdit(EditData&) override { setGenerated(false); }
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
+      void layout() override;
+      void draw(QPainter*) const override;
+      bool isEditable() const override               { return true; }
+      void startEdit(EditData&) override { setGenerated(false); }
 
       SymId symbol() const;
       Note* note() const                        { return (parent() && parent()->isNote()) ? toNote(parent()) : 0; }
@@ -104,14 +109,14 @@ class Accidental final : public Element {
 
       void undoSetSmall(bool val);
 
-      virtual void read(XmlReader&) override;
-      virtual void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
+      void write(XmlWriter& xml) const override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid propertyId) const override;
-      virtual Pid propertyId(const QStringRef& xmlName) const override;
-      virtual QString propertyUserValue(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid propertyId) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
+      QString propertyUserValue(Pid) const override;
 
       static AccidentalVal subtype2value(AccidentalType);             // return effective pitch offset
       static SymId subtype2symbol(AccidentalType);

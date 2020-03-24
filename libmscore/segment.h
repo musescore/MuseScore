@@ -77,10 +77,10 @@ class Segment final : public Element {
       Segment(const Segment&);
       ~Segment();
 
-      virtual Segment* clone() const      { return new Segment(*this); }
-      virtual ElementType type() const    { return ElementType::SEGMENT; }
+      Segment* clone() const override      { return new Segment(*this); }
+      ElementType type() const override    { return ElementType::SEGMENT; }
 
-      virtual void setScore(Score*) override;
+      void setScore(Score*) override;
 
       Segment* next() const               { return _next;   }
       Segment* next(SegmentType) const;
@@ -124,18 +124,18 @@ class Segment final : public Element {
 
       void removeElement(int track);
       void setElement(int track, Element* el);
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
       Measure* measure() const                   { return toMeasure(parent()); }
       System* system() const                     { return toSystem(parent()->parent()); }
-      qreal x() const                            { return ipos().x();         }
+      qreal x() const override                   { return ipos().x();         }
       void setX(qreal v)                         { rxpos() = v;               }
 
       void insertStaff(int staff);
       void removeStaff(int staff);
 
-      virtual void add(Element*);
-      virtual void remove(Element*);
+      void add(Element*) override;
+      void remove(Element*) override;
       void swapElements(int i1, int i2);
 
       void sortStaves(QList<int>& dst);
@@ -156,9 +156,9 @@ class Segment final : public Element {
       qreal stretch() const                      { return _stretch; }
       void setStretch(qreal v)                   { _stretch = v;    }
 
-      virtual Fraction rtick() const override    { return _tick;    }
+      Fraction rtick() const override    { return _tick;    }
       void setRtick(const Fraction& v)           { Q_ASSERT(v >= Fraction(0,1));  _tick = v;       }
-      virtual Fraction tick() const override;
+      Fraction tick() const override;
 
       Fraction ticks() const                     { return _ticks;   }
       void setTicks(const Fraction& v)           { _ticks = v;      }
@@ -180,12 +180,12 @@ class Segment final : public Element {
       Spatium extraLeadingSpace() const          { return _extraLeadingSpace;  }
       void setExtraLeadingSpace(Spatium v)       { _extraLeadingSpace = v;     }
 
-      virtual void write(XmlWriter&) const;
-      virtual void read(XmlReader&);
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
 
-      virtual QVariant getProperty(Pid propertyId) const;
-      virtual bool setProperty(Pid propertyId, const QVariant&);
-      virtual QVariant propertyDefault(Pid) const;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
 
       bool operator<(const Segment&) const;
       bool operator>(const Segment&) const;

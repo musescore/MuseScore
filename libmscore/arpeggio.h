@@ -43,32 +43,33 @@ class Arpeggio final : public Element {
       void symbolLine(SymId start, SymId fill);
       void symbolLine2(SymId end, SymId fill);
 
-      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
-      virtual QLineF dragAnchor() const override;
-      virtual QPointF gripAnchor(Grip) const override;
-      virtual void startEdit(EditData&) override;
+      void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+      QLineF dragAnchor() const override;
+      QPointF gripAnchor(Grip) const override;
+      void startEdit(EditData&) override;
 
    public:
       Arpeggio(Score* s);
-      virtual Arpeggio* clone() const override    { return new Arpeggio(*this); }
-      virtual ElementType type() const override   { return ElementType::ARPEGGIO; }
+
+      Arpeggio* clone() const override    { return new Arpeggio(*this); }
+      ElementType type() const override   { return ElementType::ARPEGGIO; }
 
       ArpeggioType arpeggioType() const    { return _arpeggioType; }
       void setArpeggioType(ArpeggioType v) { _arpeggioType = v;    }
 
       Chord* chord() const                 { return (Chord*)parent(); }
 
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
-      virtual void layout() override;
-      virtual void draw(QPainter*) const override;
-      virtual bool isEditable() const override { return true; }
-      virtual void editDrag(EditData&) override;
-      virtual bool edit(EditData&) override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
+      void layout() override;
+      void draw(QPainter*) const override;
+      bool isEditable() const override { return true; }
+      void editDrag(EditData&) override;
+      bool edit(EditData&) override;
 
-      virtual void read(XmlReader& e) override;
-      virtual void write(XmlWriter& xml) const override;
-      virtual void reset() override;
+      void read(XmlReader& e) override;
+      void write(XmlWriter& xml) const override;
+      void reset() override;
 
       int span() const      { return _span; }
       void setSpan(int val) { _span = val; }
@@ -85,10 +86,10 @@ class Arpeggio final : public Element {
       qreal Stretch() const             { return _stretch; }
       void setStretch(qreal val)        { _stretch = val;  }
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid propertyId) const override;
-      virtual Pid propertyId(const QStringRef& xmlName) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid propertyId) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
 
       // TODO: add a grip for moving the entire arpeggio
       EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
