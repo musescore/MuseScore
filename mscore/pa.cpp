@@ -61,6 +61,8 @@ Portaudio::Portaudio(Seq* s)
       initialized = false;
       state       = Transport::STOP;
       seekflag    = false;
+      pos = 0;
+      startTime = 0.0;
       midiDriver  = 0;
       }
 

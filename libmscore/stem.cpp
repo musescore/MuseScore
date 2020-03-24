@@ -147,8 +147,11 @@ void Stem::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Stem::draw(QPainter* painter) const
       {
+      if (!chord()) // may be need assert?
+            return;
+
       // hide if second chord of a cross-measure pair
-      if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND)
+      if (chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
 
       const Staff* st      = staff();
@@ -158,17 +161,17 @@ void Stem::draw(QPainter* painter) const
       painter->setPen(QPen(curColor(), lineWidthMag(), Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
 
-      if (!(useTab && chord()))
+      if (!useTab)
             return;
 
       // TODO: adjust bounding rectangle in layout() for dots and for slash
       qreal sp = spatium();
-      bool _up = up();
+      bool isUp = up();
 
       // slashed half note stem
       if (chord()->durationType().type() == TDuration::DurationType::V_HALF && stt->minimStyle() == TablatureMinimStyle::SLASHED) {
             // position slashes onto stem
-            qreal y = _up ? -(_len+_userLen) + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp : (_len+_userLen) - STAFFTYPE_TAB_SLASH_2STARTY_DN*sp;
+            qreal y = isUp ? -(_len+_userLen) + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp : (_len+_userLen) - STAFFTYPE_TAB_SLASH_2STARTY_DN*sp;
             // if stems through, try to align slashes within or across lines
             if (stt->stemThrough()) {
                   qreal halfLineDist = stt->lineDistance().val() * sp * 0.5;
@@ -200,7 +203,7 @@ void Stem::draw(QPainter* painter) const
       int nDots = chord()->dots();
       if (nDots > 0 && !stt->stemThrough()) {
             qreal x     = chord()->dotPosX();
-            qreal y     = ( (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (_up ? -1.0 : 1.0);
+            qreal y     = ( (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
             qreal step  = score()->styleS(Sid::dotDotDistance).val() * sp;
             for (int dot = 0; dot < nDots; dot++, x += step)
                   drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));

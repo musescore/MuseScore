@@ -45,16 +45,19 @@ PianoLevels::PianoLevels(QWidget *parent)
     : QWidget(parent)
        {
        setMouseTracking(true);
-       _xpos   = 0;
-       _xZoom = X_ZOOM_INITIAL;
-       _tuplet = 1;
-       _subdiv = 0;
+       _score     = nullptr;
+       _xpos      = 0;
+       _xZoom     = X_ZOOM_INITIAL;
+       _locator   = nullptr;
+       _staff     = nullptr;
+       _tuplet    = 1;
+       _subdiv    = 0;
        _levelsIndex = 0;
        minBeatGap = 20;
-       vMargin = 10;
-       levelLen = 20;
-       mouseDown = false;
-       dragging = false;
+       vMargin    = 10;
+       levelLen   = 20;
+       mouseDown  = false;
+       dragging   = false;
        }
 
 //---------------------------------------------------------

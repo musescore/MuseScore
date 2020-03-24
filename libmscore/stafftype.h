@@ -418,12 +418,12 @@ enum class TabBeamGrid : char {
       };
 
 class TabDurationSymbol final : public Element {
-      qreal       _beamLength;      // if _grid==MEDIALFINAL, length of the beam toward previous grid element
-      int         _beamLevel;       // if _grid==MEDIALFINAL, the number of beams
-      TabBeamGrid _beamGrid;        // value for special 'English' grid display
-      const StaffType*  _tab;
+      qreal       _beamLength { 0.0 };      // if _grid==MEDIALFINAL, length of the beam toward previous grid element
+      int         _beamLevel  { 0 };       // if _grid==MEDIALFINAL, the number of beams
+      TabBeamGrid _beamGrid   { TabBeamGrid::NONE };        // value for special 'English' grid display
+      const StaffType*  _tab  { nullptr};
       QString     _text;
-      bool        _repeat;
+      bool        _repeat     { false };
 
    public:
       TabDurationSymbol(Score* s);

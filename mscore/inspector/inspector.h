@@ -223,7 +223,7 @@ class InspectorClef : public InspectorElementBase {
 
       Ui::InspectorSegment s;
       Ui::InspectorClef    c;
-      Clef* otherClef;        // the courtesy clef for a main clef or viceversa
+      Clef* otherClef { nullptr };        // the courtesy clef for a main clef or viceversa
                               // used to keep in sync ShowCourtesy setting of both clefs
    protected slots:
       virtual void valueChanged(int idx) override;

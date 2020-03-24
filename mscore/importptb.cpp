@@ -724,7 +724,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                         }
                   }
 
-            if (tupleBeatCounter) {
+            if (tupleBeatCounter && tuple) {
                   tupleBeatCounter--;
                   cr->setTuplet(tuple);
                   tuple->add(cr);
