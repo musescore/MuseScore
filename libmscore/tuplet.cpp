@@ -51,10 +51,14 @@ static const ElementStyle tupletStyle {
 Tuplet::Tuplet(Score* s)
   : DurationElement(s)
       {
+      _direction    = Direction::AUTO;
+      _numberType   = TupletNumberType::SHOW_NUMBER;
+      _bracketType  = TupletBracketType::AUTO_BRACKET;
       _ratio        = Fraction(1, 1);
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
+      _id           = 0;
       initElementStyle(&tupletStyle);
       }
 
@@ -77,6 +81,7 @@ Tuplet::Tuplet(const Tuplet& t)
       _p1            = t._p1;
       _p2            = t._p2;
 
+      _id            = t._id;
       // recreated on layout
       _number = 0;
       }

@@ -22,6 +22,7 @@
  between startUndo() and endUndo().
 */
 
+#include "log.h"
 #include "undo.h"
 #include "element.h"
 #include "note.h"
@@ -2563,8 +2564,14 @@ void MoveTremolo::redo(EditData*)
       // Find new tremolo chords
       Measure* m1 = score->tick2measure(chord1Tick);
       Measure* m2 = score->tick2measure(chord2Tick);
+      IF_ASSERT_FAILED(m1 && m2) {
+            return;
+            }
       Chord* c1 = m1->findChord(chord1Tick, track);
       Chord* c2 = m2->findChord(chord2Tick, track);
+      IF_ASSERT_FAILED(c1 && c2) {
+            return;
+            }
 
       // Remember the old tremolo chords
       oldC1 = trem->chord1();

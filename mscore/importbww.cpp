@@ -179,7 +179,8 @@ MsScWriter::MsScWriter()
       currentMeasure(0),
       tuplet(0),
       lastVolta(0),
-      tempo(0)
+      tempo(0),
+      ending(0)
       {
       qDebug() << "MsScWriter::MsScWriter()";
 

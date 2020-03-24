@@ -164,7 +164,7 @@ void ScoreView::endEdit()
       for (int i = 0; i < editData.grips; ++i)
             score()->addRefresh(editData.grip[i]);
       editData.element->endEdit(editData);
-
+      //! NOTE After endEdit, the element may be null
       if (editData.element) {
             _score->addRefresh(editData.element->canvasBoundingRect());
             ElementType tp = editData.element->type();

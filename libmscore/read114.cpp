@@ -2118,7 +2118,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   e.addBeam(beam);
                   }
             else if (tag == "Segment") {
-                  segment->read(e);
+                  if (segment)
+                        segment->read(e);
                   while (e.readNextStartElement()) {
                         const QStringRef& t(e.name());
                         if (t == "off1") {
