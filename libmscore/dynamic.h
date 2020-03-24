@@ -88,33 +88,33 @@ class Dynamic final : public TextBase {
       int _changeInVelocity         { 128 };
       Speed _velChangeSpeed         { Speed::NORMAL };
 
-      virtual QRectF drag(EditData&) override;
-      virtual Sid getPropertyStyle(Pid) const override;
+      QRectF drag(EditData&) override;
+      Sid getPropertyStyle(Pid) const override;
 
    public:
       Dynamic(Score*);
       Dynamic(const Dynamic&);
-      virtual Dynamic* clone() const override     { return new Dynamic(*this); }
-      virtual ElementType type() const override   { return ElementType::DYNAMIC; }
-      Segment* segment() const                    { return (Segment*)parent(); }
-      Measure* measure() const                    { return (Measure*)parent()->parent(); }
+      Dynamic* clone() const override     { return new Dynamic(*this); }
+      ElementType type() const override   { return ElementType::DYNAMIC; }
+      Segment* segment() const            { return (Segment*)parent(); }
+      Measure* measure() const            { return (Measure*)parent()->parent(); }
 
       void setDynamicType(Type val)               { _dynamicType = val;   }
       void setDynamicType(const QString&);
       static QString dynamicTypeName(Dynamic::Type type);
       QString dynamicTypeName() const { return dynamicTypeName(_dynamicType); }
       Type dynamicType() const                     { return _dynamicType; }
-      virtual int subtype() const override         { return static_cast<int>(_dynamicType); }
-      virtual QString subtypeName() const override { return dynamicTypeName(); }
+      int subtype() const override         { return static_cast<int>(_dynamicType); }
+      QString subtypeName() const override { return dynamicTypeName(); }
 
-      virtual void layout() override;
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
+      void layout() override;
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
 
-      virtual bool isEditable() const override { return true; }
-      virtual void startEdit(EditData&) override;
-      virtual void endEdit(EditData&) override;
-      virtual void reset() override;
+      bool isEditable() const override { return true; }
+      void startEdit(EditData&) override;
+      void endEdit(EditData&) override;
+      void reset() override;
 
       void setVelocity(int v)   { _velocity = v;    }
       int velocity() const;
@@ -131,14 +131,14 @@ class Dynamic final : public TextBase {
       static QString speedToName(Speed speed);
       static Speed nameToSpeed(QString name);
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool     setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
-      virtual Pid propertyId(const QStringRef& xmlName) const override;
-      virtual QString propertyUserValue(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool     setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid id) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
+      QString propertyUserValue(Pid) const override;
 
-      virtual QString accessibleInfo() const override;
-      virtual QString screenReaderInfo() const override;
+      QString accessibleInfo() const override;
+      QString screenReaderInfo() const override;
       void doAutoplace();
 
       static const std::vector<ChangeSpeedItem> changeSpeedTable;

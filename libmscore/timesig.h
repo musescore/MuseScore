@@ -64,20 +64,20 @@ class TimeSig final : public Element {
       QString ssig() const;
       void setSSig(const QString&);
 
-      virtual TimeSig* clone() const override          { return new TimeSig(*this);   }
-      virtual ElementType type() const override        { return ElementType::TIMESIG; }
+      TimeSig* clone() const override          { return new TimeSig(*this);   }
+      ElementType type() const override        { return ElementType::TIMESIG; }
 
       TimeSigType timeSigType() const    { return _timeSigType; }
 
       bool operator==(const TimeSig&) const;
       bool operator!=(const TimeSig& ts) const { return !(*this == ts); }
 
-      virtual qreal mag() const override;
-      virtual void draw(QPainter*) const override;
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
-      virtual void layout() override;
-      virtual Shape shape() const override;
+      qreal mag() const override;
+      void draw(QPainter*) const override;
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
+      void layout() override;
+      Shape shape() const override;
 
       Fraction sig() const               { return _sig; }
       void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
@@ -90,7 +90,7 @@ class TimeSig final : public Element {
       int denominatorStretch() const     { return _stretch.denominator(); }
 
       bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
+      Element* drop(EditData&) override;
 
       Segment* segment() const           { return (Segment*)parent(); }
       Measure* measure() const           { return (Measure*)parent()->parent(); }
@@ -111,10 +111,10 @@ class TimeSig final : public Element {
 
       void setFrom(const TimeSig*);
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
-      virtual Pid propertyId(const QStringRef& xmlName) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid id) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
 
       const Groups& groups() const    { return _groups; }
       void setGroups(const Groups& e) { _groups = e; }
@@ -124,9 +124,9 @@ class TimeSig final : public Element {
 
       bool isLocal() const                 { return _stretch != Fraction(1,1); }
 
-      virtual Element* nextSegmentElement();
-      virtual Element* prevSegmentElement();
-      virtual QString accessibleInfo() const override;
+      Element* nextSegmentElement() override;
+      Element* prevSegmentElement() override;
+      QString accessibleInfo() const override;
       };
 
 }     // namespace Ms
