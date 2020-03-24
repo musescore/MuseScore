@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "log.h"
+
 #include "scoreview.h"
 #include "libmscore/score.h"
 #include "musescore.h"
@@ -35,6 +37,8 @@ void ScoreView::startDrag()
 
       for (Element* e : _score->selection().elements())
             e->startDrag(editData);
+
+      _score->selection().lock("drag");
       }
 
 //---------------------------------------------------------
@@ -96,6 +100,8 @@ void ScoreView::endDrag()
             e->endDrag(editData);
             e->triggerLayout();
             }
+
+      _score->selection().unlock("drag");
       setDropTarget(0); // this also resets dropAnchor
       _score->endCmd();
       if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit && _score->selection().element() == editData.element)
