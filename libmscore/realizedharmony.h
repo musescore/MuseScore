@@ -83,10 +83,12 @@ class RealizedHarmony {
       void setDuration(HDuration);
       void setLiteral(bool);
       void setDirty(bool dirty) { cascadeDirty(dirty); } //set dirty flag and cascade
+      void setHarmony(Harmony* h) { _harmony = h; }
 
       Voicing voicing() const { return _voicing; }
       HDuration duration() const { return _duration; }
       bool literal() const { return _literal; }
+      Harmony* harmony() { return _harmony; }
 
       bool valid() const { return !_dirty && _harmony; }
 
