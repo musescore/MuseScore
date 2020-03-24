@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "log.h"
+
 #include "measure.h"
 #include "score.h"
 #include "system.h"
@@ -115,6 +117,9 @@ std::vector<QPointF> SlurTieSegment::gripsPositions(const EditData&) const
 void SlurTieSegment::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
+      IF_ASSERT_FAILED(eed) {
+            return;
+            }
       for (auto i : { Pid::SLUR_UOFF1, Pid::SLUR_UOFF2, Pid::SLUR_UOFF3, Pid::SLUR_UOFF4, Pid::OFFSET })
             eed->pushProperty(i);
       }
