@@ -98,6 +98,9 @@ void ScoreView::startEditMode(Element* e)
             }
       if (score()->undoStack()->active())
             score()->endCmd();
+      // Restart edit mode to reinit edit values
+      if (editMode())
+            changeState(ViewState::NORMAL);
       editData.element = e;
       changeState(ViewState::EDIT);
       }
