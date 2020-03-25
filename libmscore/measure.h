@@ -95,25 +95,26 @@ class Measure final : public MeasureBase {
       Measure(Score* = 0);
       Measure(const Measure&);
       ~Measure();
-      virtual Measure* clone() const override     { return new Measure(*this); }
-      virtual ElementType type() const override { return ElementType::MEASURE; }
-      virtual void setScore(Score* s) override;
+
+      Measure* clone() const override     { return new Measure(*this); }
+      ElementType type() const override { return ElementType::MEASURE; }
+      void setScore(Score* s) override;
       Measure* cloneMeasure(Score*, const Fraction& tick, TieMap*);
 
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
-      virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
-      virtual void write(XmlWriter& xml) const override { Element::write(xml); }
+      void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
+      void write(XmlWriter& xml) const override { Element::write(xml); }
       void write(XmlWriter&, int, bool writeSystemElements, bool forceTimeSig) const;
       void writeBox(XmlWriter&) const;
       void readBox(XmlReader&);
-      virtual bool isEditable() const override { return false; }
+      bool isEditable() const override { return false; }
       void checkMeasure(int idx);
 
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
-      virtual void change(Element* o, Element* n) override;
-      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
+      void add(Element*) override;
+      void remove(Element*) override;
+      void change(Element* o, Element* n) override;
+      void spatiumChanged(qreal oldValue, qreal newValue) override;
 
       System* system() const                      { return (System*)parent(); }
       bool hasVoices(int staffIdx) const;
@@ -166,7 +167,7 @@ class Measure final : public MeasureBase {
       void insertMStaff(MStaff* staff, int idx);
       void removeMStaff(MStaff* staff, int idx);
 
-      virtual void moveTicks(const Fraction& diff) override;
+      void moveTicks(const Fraction& diff) override;
 
       void cmdRemoveStaves(int s, int e);
       void cmdAddStaves(int s, int e, bool createRest);
@@ -178,8 +179,8 @@ class Measure final : public MeasureBase {
 
       void sortStaves(QList<int>& dst);
 
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
 
       int repeatCount() const         { return _repeatCount; }
       void setRepeatCount(int val)    { _repeatCount = val; }
@@ -202,7 +203,7 @@ class Measure final : public MeasureBase {
 
       RepeatMeasure* cmdInsertRepeatMeasure(int staffIdx);
 
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       void createVoice(int track);
       void adjustToLen(Fraction, bool appendRestsIfNecessary = true);
 
@@ -231,9 +232,9 @@ class Measure final : public MeasureBase {
       void setPlaybackCount(int val) { _playbackCount = val; }
       QRectF staffabbox(int staffIdx) const;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
 
       bool hasMMRest() const        { return _mmRest != 0; }
       bool isMMRest() const         { return _mmRestCount > 0; }
@@ -247,7 +248,7 @@ class Measure final : public MeasureBase {
 
       Element* nextElementStaff(int staff);
       Element* prevElementStaff(int staff);
-      virtual QString accessibleInfo() const override;
+      QString accessibleInfo() const override;
 
       void addSystemHeader(bool firstSystem);
       void addSystemTrailer(Measure* nm);
@@ -257,11 +258,11 @@ class Measure final : public MeasureBase {
       const BarLine* endBarLine() const;
       BarLineType endBarLineType() const;
       bool endBarLineVisible() const;
-      virtual void triggerLayout() const override;
+      void triggerLayout() const override;
       qreal basicStretch() const;
       qreal basicWidth() const;
       int layoutWeight(int maxMMRestLength = 0) const;
-      virtual void computeMinWidth();
+      void computeMinWidth();
       void checkHeader();
       void checkTrailer();
       void setStretchedWidth(qreal);

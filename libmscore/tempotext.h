@@ -34,16 +34,17 @@ class TempoText final : public TextBase  {
 
       void updateScore();
       void updateTempo();
-      virtual void endEdit(EditData&) override;
-      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+      void endEdit(EditData&) override;
+      void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
    public:
       TempoText(Score*);
-      virtual TempoText* clone() const override   { return new TempoText(*this); }
-      virtual ElementType type() const override   { return ElementType::TEMPO_TEXT; }
 
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
+      TempoText* clone() const override   { return new TempoText(*this); }
+      ElementType type() const override   { return ElementType::TEMPO_TEXT; }
+
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
 
       Segment* segment() const   { return toSegment(parent()); }
       Measure* measure() const   { return toMeasure(parent()->parent()); }
@@ -59,7 +60,7 @@ class TempoText final : public TextBase  {
       void undoSetFollowText(bool v);
       void updateRelative();
 
-      virtual void layout();
+      void layout() override;
 
       static int findTempoDuration(const QString& s, int& len, TDuration& dur);
       static QString duration2tempoTextString(const TDuration dur);
@@ -69,7 +70,7 @@ class TempoText final : public TextBase  {
       bool setProperty(Pid propertyId, const QVariant&) override;
       QVariant propertyDefault(Pid id) const override;
       Sid getPropertyStyle(Pid) const override;
-      virtual QString accessibleInfo() const override;
+      QString accessibleInfo() const override;
       };
 
 
