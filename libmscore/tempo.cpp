@@ -24,6 +24,7 @@ TEvent::TEvent()
       type     = TempoType::INVALID;
       tempo    = 0.0;
       pause    = 0.0;
+      time     = 0.0;
       }
 
 TEvent::TEvent(const TEvent& e)

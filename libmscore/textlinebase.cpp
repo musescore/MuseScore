@@ -261,7 +261,7 @@ void TextLineBaseSegment::layout()
 
       // diagonal line with no text or hooks - just use the basic rectangle for line
       if (_text->empty() && _endText->empty() && pp2.y() != 0
-          && textLineBase()->beginHookType() == HookType::NONE && textLineBase()->beginHookType() == HookType::NONE) {
+          && textLineBase()->beginHookType() == HookType::NONE) {
             npoints = 2;
             points[0] = pp1;
             points[1] = pp2;

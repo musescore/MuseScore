@@ -38,7 +38,7 @@ Item {
         id: morePalettesButton
         height: searchTextInput.height
         width: parent.width / 2 - 4
-        text: qsTr("Add palettes")
+        text: qsTr("Add Palettes")
         onClicked: palettePopup.visible = !palettePopup.visible
     }
 

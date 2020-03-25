@@ -117,10 +117,12 @@ void ChordStyleEditor::loadChordDescriptionFile(const QString& s)
       ChordList* cl = new ChordList;
       if (!cl->read("chords.xml")) {
             qDebug("cannot read <chords.xml>");
+            delete cl;
             return;
             }
       if (!cl->read(s)) {
             qDebug("cannot read <%s>", qPrintable(s));
+            delete cl;
             return;
             }
       setChordList(cl);
@@ -231,9 +233,10 @@ HarmonyCanvas::HarmonyCanvas(QWidget* parent)
       setAcceptDrops(true);
       setFocusPolicy(Qt::StrongFocus);
       extraMag = 3.0;
-      chordDescription = 0;
-      chordList = 0;
-      moveElement = 0;
+      chordDescription = nullptr;
+      chordList   = nullptr;
+      moveElement = nullptr;
+      dragElement = nullptr;
       QAction* a = getAction("delete");
       addAction(a);
       connect(a, SIGNAL(triggered()), SLOT(deleteAction()));

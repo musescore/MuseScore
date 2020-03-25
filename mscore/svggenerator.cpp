@@ -237,8 +237,8 @@ private:
     SvgPaintEnginePrivate *d_ptr;
 
 // Qt translates everything. These help avoid SVG transform="translate()".
-    qreal _dx;
-    qreal _dy;
+    qreal _dx { 0.0 };
+    qreal _dy { 0.0 };
 
 protected:
 // The Ms::Element being generated right now

@@ -110,8 +110,10 @@ PianoRuler::PianoRuler(QWidget* parent)
             markIcon[2] = new QPixmap(rmark_xpm);
             }
       setMouseTracking(true);
-      _xpos   = 0;
-      _xZoom = X_ZOOM_INITIAL;
+      _xpos       = 0;
+      _score      = nullptr;
+      _locator    = nullptr;
+      _xZoom      = X_ZOOM_INITIAL;
       _timeType = TType::TICKS;
       _font2.setPixelSize(14);
       _font2.setBold(true);

@@ -100,18 +100,19 @@ class Harmony final : public TextBase {
       NoteCaseType _rootRenderCase, _baseRenderCase;  // case to render
 
       void determineRootBaseSpelling();
-      virtual void draw(QPainter*) const override;
-      virtual void drawEditMode(QPainter* p, EditData& ed) override;
+      void draw(QPainter*) const override;
+      void drawEditMode(QPainter* p, EditData& ed) override;
       void render(const QString&, qreal&, qreal&);
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
-      virtual Sid getPropertyStyle(Pid) const override;
+      Sid getPropertyStyle(Pid) const override;
 
    public:
       Harmony(Score* = 0);
       Harmony(const Harmony&);
       ~Harmony();
-      virtual Harmony* clone() const override     { return new Harmony(*this); }
-      virtual ElementType type() const override   { return ElementType::HARMONY; }
+
+      Harmony* clone() const override     { return new Harmony(*this); }
+      ElementType type() const override   { return ElementType::HARMONY; }
 
       void setId(int d)                        { _id = d;       }
       int id() const                           { return _id;    }
@@ -144,13 +145,13 @@ class Harmony final : public TextBase {
          NoteSpellingType& baseSpelling, NoteCaseType& baseCase);
 
       void textChanged();
-      virtual void layout() override;
-      virtual void layout1() override;
+      void layout() override;
+      void layout1() override;
 
-      virtual bool isEditable() const override { return true; }
-      virtual void startEdit(EditData&) override;
-      virtual bool edit(EditData&) override;
-      virtual void endEdit(EditData&) override;
+      bool isEditable() const override { return true; }
+      void startEdit(EditData&) override;
+      bool edit(EditData&) override;
+      void endEdit(EditData&) override;
 
       bool isRealizable() const;
 
@@ -174,8 +175,8 @@ class Harmony final : public TextBase {
       HarmonyType harmonyType() const          { return _harmonyType;  }
       void setHarmonyType(HarmonyType val);
 
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
       QString harmonyName() const;
       void render();
 
@@ -191,26 +192,26 @@ class Harmony final : public TextBase {
 
       void resolveDegreeList();
 
-      virtual qreal baseLine() const override;
+      qreal baseLine() const override;
 
       const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&);
       const ChordDescription* fromXml(const QString& s, const QList<HDegree>&);
       const ChordDescription* fromXml(const QString& s);
-      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
-      virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+      void spatiumChanged(qreal oldValue, qreal newValue) override;
+      void localSpatiumChanged(qreal oldValue, qreal newValue) override;
       void setHarmony(const QString& s);
       void calculateBoundingRect();
 
-      virtual QString userName() const override;
-      virtual QString accessibleInfo() const override;
-      virtual QString screenReaderInfo() const override;
+      QString userName() const override;
+      QString accessibleInfo() const override;
+      QString screenReaderInfo() const override;
 
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant& v) override;
+      QVariant propertyDefault(Pid id) const override;
       };
 
 }     // namespace Ms

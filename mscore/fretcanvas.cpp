@@ -43,6 +43,7 @@ FretCanvas::FretCanvas(QWidget* parent)
 //      setFrameStyle(QFrame::Raised | QFrame::Panel);
       cstring = -2;
       cfret   = -2;
+      _currentDtype = FretDotType::NORMAL;
       }
 
 //---------------------------------------------------------

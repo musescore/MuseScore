@@ -387,7 +387,6 @@ void Mixer::updateTracks()
             Instrument* proxyInstr = nullptr;
             Channel* proxyChan = nullptr;
             if (!il->empty()) {
-                  il->begin();
                   proxyInstr = il->begin()->second;
                   proxyChan = proxyInstr->playbackChannel(0, _score->masterScore());
                   }

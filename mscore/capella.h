@@ -111,7 +111,7 @@ class CapKey : public NoteObj, public CapellaObj {
       CapKey(Capella* c) : NoteObj(CapellaNoteObjectType::KEY), CapellaObj(c) {}
       void read();
       void readCapx(XmlReader& e);
-      int signature;    // -7 - +7
+      int signature { 0 };    // -7 - +7
       };
 
 //---------------------------------------------------------
@@ -134,8 +134,8 @@ class CapMeter : public NoteObj, public CapellaObj {
 //---------------------------------------------------------
 
 class CapExplicitBarline : public NoteObj, public CapellaObj {
-      BarLineType _type;
-      int _barMode;      // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
+      BarLineType _type { BarLineType::NORMAL };
+      int _barMode      { 0 };      // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
 
    public:
       CapExplicitBarline(Capella* c) : NoteObj(CapellaNoteObjectType::EXPL_BARLINE), CapellaObj(c) {}
@@ -291,7 +291,7 @@ class TransposableObj : public BasicDrawObj {
       void read();
 
       QPointF relPos;
-      char b;
+      char b { 0 };
       QList<BasicDrawObj*> variants;
       };
 
@@ -318,7 +318,7 @@ class LineObj : public BasicDrawObj {
 
       QPointF pt1, pt2;
       QColor color;
-      char lineWidth;
+      char lineWidth { 0 };
       };
 
 //---------------------------------------------------------
@@ -596,8 +596,8 @@ class ChordObj : public BasicDurationalObj, public NoteObj {
 //---------------------------------------------------------
 
 class RestObj : public BasicDurationalObj, public NoteObj {
-      bool bVerticalCentered;
-      int vertShift;
+      bool bVerticalCentered { false };
+      int vertShift          { 0 };
 
    public:
       RestObj(Capella*);

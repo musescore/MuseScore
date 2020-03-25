@@ -46,14 +46,14 @@ struct TabScoreView {
 
 class ScoreTab : public QWidget {
       Q_OBJECT
-      QList<MasterScore*>* scoreList;
-      QTabBar* tab;                 // list of scores
-      QTabBar* tab2;                // list of excerpts for current score
-      QStackedLayout* stack;
-      MuseScore* mainWindow;
+      QList<MasterScore*>* scoreList { nullptr };
+      QTabBar* tab  { nullptr };                 // list of scores
+      QTabBar* tab2 { nullptr };                 // list of excerpts for current score
+      QStackedLayout* stack { nullptr };
+      MuseScore* mainWindow { nullptr };;
       void clearTab2();
-      TabScoreView* tabScoreView(int idx) { return static_cast<TabScoreView*>(tab->tabData(idx).value<void*>()); }
-      const TabScoreView* tabScoreView(int idx) const { return const_cast<ScoreTab*>(this)->tabScoreView(idx); }
+      TabScoreView* tabScoreView(int idx);
+      const TabScoreView* tabScoreView(int idx) const;
 
    signals:
       void currentScoreViewChanged(ScoreView*);

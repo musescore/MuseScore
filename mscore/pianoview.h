@@ -81,11 +81,11 @@ public:
 
 private:
       Staff* _staff;
-      Chord* chord;
+      Chord* _chord;
       
       Pos trackingPos;  //Track mouse position
       Pos* _locator;
-      int ticks;
+      int _ticks;
       TType _timeType;
       int _noteHeight;
       qreal _xZoom;
@@ -94,19 +94,19 @@ private:
       int _barPattern;
 
       bool _playEventsView;
-      bool mouseDown;
-      bool dragStarted;
-      QPointF mouseDownPos;
-      QPointF lastMousePos;
-      DragStyle dragStyle;
-      int lastDragPitch;
-      bool inProgressUndoEvent;
+      bool _mouseDown;
+      bool _dragStarted;
+      QPointF _mouseDownPos;
+      QPointF _lastMousePos;
+      DragStyle _dragStyle;
+      int _lastDragPitch;
+      bool _inProgressUndoEvent;
       
-      QList<PianoItem*> noteList;
+      QList<PianoItem*> _noteList;
 
       virtual void drawBackground(QPainter* painter, const QRectF& rect);
 
-      void addChord(Chord* chord, int voice);
+      void addChord(Chord* _chord, int voice);
       void updateBoundingSize();
       void clearNoteData();
       void selectNotes(int startTick, int endTick, int lowPitch, int highPitch, NoteSelectType selType);

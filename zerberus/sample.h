@@ -18,13 +18,13 @@
 //---------------------------------------------------------
 
 class Sample {
-      int _channel;
-      short* _data;
-      long long _frames;
-      int _sampleRate;
-      long long _loopStart;
-      long long _loopEnd;
-      int _loopMode;
+      int _channel      { 0 };
+      short* _data      { nullptr };
+      long long _frames { 0 };
+      int _sampleRate   { 44100 };
+      long long _loopStart { 0 };
+      long long _loopEnd   { 0 };
+      int _loopMode     { 0 };
 
    public:
       Sample(int ch, short* val, int f, int sr)

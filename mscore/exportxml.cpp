@@ -5531,9 +5531,9 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
             }
       else if (el->isChord()) {
             const auto c = toChord(el);
-            const auto ll = &c->lyrics();
             // ise grace after
             if (c) {
+                  const auto ll = &c->lyrics();
                   for (const auto g : c->graceNotesBefore()) {
                         chord(g, sstaff, ll, useDrumset);
                         }

@@ -33,7 +33,7 @@ class WaveView : public QWidget
       QByteArray waves;
 
       TType _timeType;
-      int magStep;
+      int _magStep;
       double _xmag;
       int _xpos;
 

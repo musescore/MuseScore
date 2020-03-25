@@ -98,6 +98,9 @@ void ScoreView::startEditMode(Element* e)
             }
       if (score()->undoStack()->active())
             score()->endCmd();
+      // Restart edit mode to reinit edit values
+      if (editMode())
+            changeState(ViewState::NORMAL);
       editData.element = e;
       changeState(ViewState::EDIT);
       }
@@ -164,7 +167,7 @@ void ScoreView::endEdit()
       for (int i = 0; i < editData.grips; ++i)
             score()->addRefresh(editData.grip[i]);
       editData.element->endEdit(editData);
-
+      //! NOTE After endEdit, the element may be null
       if (editData.element) {
             _score->addRefresh(editData.element->canvasBoundingRect());
             ElementType tp = editData.element->type();

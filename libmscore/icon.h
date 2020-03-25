@@ -33,8 +33,8 @@ class Icon final : public Element {
       Icon(Score* s) : Element(s) { }
       virtual ~Icon() {}
 
-      virtual Icon* clone() const override                { return new Icon(*this);    }
-      virtual ElementType type() const override           { return ElementType::ICON;  }
+      Icon* clone() const override                { return new Icon(*this);    }
+      ElementType type() const override           { return ElementType::ICON;  }
       IconType iconType() const                           { return _iconType;          }
       void setIconType(IconType val)                      { _iconType = val;           }
       void setAction(const QByteArray& a, const QIcon& i) { _action = a; _icon = i; }
@@ -42,10 +42,10 @@ class Icon final : public Element {
       QIcon icon() const                                  { return _icon;   }
       void setExtent(int v)                               { _extent = v; }
       int extent() const                                  { return _extent; }
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
-      virtual void draw(QPainter*) const override;
-      virtual void layout() override;
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
+      void draw(QPainter*) const override;
+      void layout() override;
 
       QVariant getProperty(Pid) const override;
       bool setProperty(Pid, const QVariant&) override;

@@ -619,6 +619,9 @@ void Seq::processMessages()
                   case SeqMsgId::SEEK:
                         setPos(msg.intVal);
                         break;
+                  case SeqMsgId::ALL_NOTE_OFF:
+                        _synti->allNotesOff(msg.intVal);
+                        break;
                   default:
                         break;
                   }
@@ -1333,8 +1336,9 @@ void Seq::stopNotes(int channel, bool realTime)
             if (cs->midiChannel(channel) != 9)
                   send(NPlayEvent(ME_PITCHBEND,  channel, 0, 64));
             }
-      if (cachedPrefs.useAlsaAudio || cachedPrefs.useJackAudio || cachedPrefs.usePulseAudio || cachedPrefs.usePortAudio)
-            _synti->allNotesOff(channel);
+      if (cachedPrefs.useAlsaAudio || cachedPrefs.useJackAudio || cachedPrefs.usePulseAudio || cachedPrefs.usePortAudio) {
+            guiToSeq(SeqMsg(SeqMsgId::ALL_NOTE_OFF, channel));
+            }
       }
 
 //---------------------------------------------------------

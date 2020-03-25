@@ -43,24 +43,24 @@ class LayoutBreak final : public Element {
       bool _startWithMeasureOne;
       Type _layoutBreakType;
 
-      virtual void draw(QPainter*) const override;
+      void draw(QPainter*) const override;
       void layout0();
-      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
+      void spatiumChanged(qreal oldValue, qreal newValue) override;
 
    public:
       LayoutBreak(Score* = 0);
       LayoutBreak(const LayoutBreak&);
-      virtual LayoutBreak* clone() const override { return new LayoutBreak(*this); }
 
-      virtual ElementType type() const override   { return ElementType::LAYOUT_BREAK; }
+      LayoutBreak* clone() const override { return new LayoutBreak(*this); }
+      ElementType type() const override   { return ElementType::LAYOUT_BREAK; }
 
       void setLayoutBreakType(Type);
       Type layoutBreakType() const  { return _layoutBreakType; }
 
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
 
       Measure* measure() const            { return (Measure*)parent();   }
       qreal pause() const                 { return _pause;               }
@@ -75,10 +75,10 @@ class LayoutBreak final : public Element {
       bool isSectionBreak() const { return _layoutBreakType == SECTION; }
       bool isNoBreak() const      { return _layoutBreakType == NOBREAK; }
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
-      virtual Pid propertyId(const QStringRef& xmlName) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
       };
 
 

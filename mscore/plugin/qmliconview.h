@@ -31,8 +31,8 @@ class QmlIconView : public QQuickPaintedItem {
 
       QColor _color;
       QIcon _icon;
-      bool _selected;
-      bool _active = false;
+      bool _selected { false };
+      bool _active   { false };
 
       Q_PROPERTY(QVariant icon READ icon WRITE setIcon)
       Q_PROPERTY(bool selected READ selected WRITE setSelected)
