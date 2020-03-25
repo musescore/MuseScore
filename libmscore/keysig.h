@@ -37,22 +37,23 @@ class KeySig final : public Element {
    public:
       KeySig(Score* = 0);
       KeySig(const KeySig&);
-      virtual KeySig* clone() const override       { return new KeySig(*this); }
-      virtual void draw(QPainter*) const override;
-      virtual ElementType type() const override    { return ElementType::KEYSIG; }
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
-      virtual void layout() override;
-      virtual Shape shape() const override;
-      virtual qreal mag() const override;
+
+      KeySig* clone() const override       { return new KeySig(*this); }
+      void draw(QPainter*) const override;
+      ElementType type() const override    { return ElementType::KEYSIG; }
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
+      void layout() override;
+      Shape shape() const override;
+      qreal mag() const override;
 
       //@ sets the key of the key signature
       Q_INVOKABLE void setKey(Key);
 
       Segment* segment() const            { return (Segment*)parent(); }
       Measure* measure() const            { return parent() ? (Measure*)parent()->parent() : nullptr; }
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
       //@ returns the key of the key signature (from -7 (flats) to +7 (sharps) )
       Q_INVOKABLE Key key() const         { return _sig.key(); }
       bool isCustom() const               { return _sig.custom(); }
@@ -76,13 +77,13 @@ class KeySig final : public Element {
       void setForInstrumentChange(bool forInstrumentChange) { _sig.setForInstrumentChange(forInstrumentChange); }
       bool forInstrumentChange() const    { return _sig.forInstrumentChange(); }
 
-      QVariant getProperty(Pid propertyId) const;
-      bool setProperty(Pid propertyId, const QVariant&);
-      QVariant propertyDefault(Pid id) const;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid id) const override;
 
-      virtual Element* nextSegmentElement() override;
-      virtual Element* prevSegmentElement() override;
-      virtual QString accessibleInfo() const override;
+      Element* nextSegmentElement() override;
+      Element* prevSegmentElement() override;
+      QString accessibleInfo() const override;
 
       SymId convertFromOldId(int val) const;
       };

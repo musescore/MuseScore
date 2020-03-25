@@ -42,14 +42,15 @@ class Ambitus final : public Element {
 
    public:
       Ambitus(Score* s);
-      virtual Ambitus* clone() const override         { return new Ambitus(*this); }
 
-      virtual qreal mag() const override;
+      ElementType type() const override       { return ElementType::AMBITUS; }
+      Ambitus* clone() const override         { return new Ambitus(*this); }
+
+      qreal mag() const override;
 
       void initFrom(Ambitus* a);
 
       // getters and setters
-      virtual ElementType type() const override       { return ElementType::AMBITUS; }
       NoteHead::Group noteHeadGroup() const           { return _noteHeadGroup;}
       NoteHead::Type noteHeadType() const             { return _noteHeadType; }
       MScore::DirectionH direction() const            { return _dir;          }
@@ -79,23 +80,23 @@ class Ambitus final : public Element {
       void  updateRange();                // scan staff up to next section break and update range pitches
 
       // re-implemented virtual functions
-      virtual void      draw(QPainter*) const override;
-      virtual void      layout() override;
-      virtual QPointF   pagePos() const override;      ///< position in page coordinates
-      virtual void      read(XmlReader&) override;
-      virtual void      scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
-      virtual void      setTrack(int val) override;
-      virtual void      write(XmlWriter&) const override;
-      virtual bool      readProperties(XmlReader&) override;
-      virtual QString   accessibleInfo() const override;
+      void      draw(QPainter*) const override;
+      void      layout() override;
+      QPointF   pagePos() const override;      ///< position in page coordinates
+      void      read(XmlReader&) override;
+      void      scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      void      setTrack(int val) override;
+      void      write(XmlWriter&) const override;
+      bool      readProperties(XmlReader&) override;
+      QString   accessibleInfo() const override;
 
       // properties
       QVariant getProperty(Pid ) const;
       bool setProperty(Pid propertyId, const QVariant&);
       QVariant propertyDefault(Pid id) const;
 
-      virtual Element* nextSegmentElement() override;
-      virtual Element* prevSegmentElement() override;
+      Element* nextSegmentElement() override;
+      Element* prevSegmentElement() override;
       };
 
 
