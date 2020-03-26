@@ -155,7 +155,7 @@ void KeySig::layout()
 
 
       // Don't repeat naturals if shown in courtesy
-      if (measure() && measure()->system() && measure() == measure()->system()->firstMeasure()
+      if (measure() && measure()->system() && measure()->isFirstInSystem()
           && prevMeasure && prevMeasure->findSegment(SegmentType::KeySigAnnounce, tick())
           && !segment()->isKeySigAnnounceType())
             naturalsOn = false;

@@ -19,6 +19,8 @@ NICE-TO-HAVE TODO:
       and SlurSegment::changeAnchor() in slur.cpp as models)
 */
 
+#include "log.h"
+
 #include "arpeggio.h"
 #include "glissando.h"
 #include "chord.h"
@@ -29,6 +31,7 @@ NICE-TO-HAVE TODO:
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
+#include "measure.h"
 #include "style.h"
 #include "sym.h"
 #include "xml.h"
@@ -274,7 +277,7 @@ void Glissando::layout()
 
       // FINAL SYSTEM-INITIAL NOTE
       // if the last gliss. segment attaches to a system-initial note, some extra width has to be added
-      if (cr2->segment()->measure() == cr2->segment()->system()->firstMeasure() && cr2->rtick().isZero()
+      if (cr2->segment()->measure()->isFirstInSystem() && cr2->rtick().isZero()
          // but ignore graces after, as they are not the first note of the system,
          // even if their segment is the first segment of the system
          && !(cr2->noteType() == NoteType::GRACE8_AFTER
@@ -348,7 +351,14 @@ void Glissando::layout()
 
       // compute glissando bbox as the bbox of the last segment, relative to the end anchor note
       QPointF anchor2PagePos = anchor2->pagePos();
-      QPointF system2PagePos = cr2->segment()->system()->pagePos();
+      QPointF system2PagePos;
+      IF_ASSERT_FAILED(cr2->segment()->system()) {
+            system2PagePos = segm2->pos();
+            }
+      else {
+            system2PagePos = cr2->segment()->system()->pagePos();
+            }
+
       QPointF anchor2SystPos = anchor2PagePos - system2PagePos;
       QRectF r = QRectF(anchor2SystPos - segm2->pos(), anchor2SystPos - segm2->pos() - segm2->pos2()).normalized();
       qreal lw = lineWidth() * .5;

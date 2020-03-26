@@ -2547,6 +2547,38 @@ void Chord::layoutArpeggio2()
       }
 
 //---------------------------------------------------------
+//   layoutNotesSpanners
+//---------------------------------------------------------
+
+void Chord::layoutSpanners()
+      {
+      for (const Note* n : notes()) {
+            Tie* tie = n->tieFor();
+            if (tie)
+                  tie->layout();
+            for (Spanner* sp : n->spannerBack())
+                  sp->layout();
+            }
+      }
+
+void Chord::layoutSpanners(System* system, const Fraction& stick)
+      {
+      //! REVIEW Needs explanation
+      for (const Note* note : notes()) {
+            Tie* t = note->tieFor();
+            if (t)
+                  t->layoutFor(system);
+            t = note->tieBack();
+            if (t) {
+                  if (t->startNote()->tick() < stick)
+                        t->layoutBack(system);
+                  }
+            for (Spanner* sp : note->spannerBack())
+                  sp->layout();
+            }
+      }
+
+//---------------------------------------------------------
 //   findNote
 //---------------------------------------------------------
 
