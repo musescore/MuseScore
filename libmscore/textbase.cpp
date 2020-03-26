@@ -1446,10 +1446,12 @@ void TextBase::layout1()
             t.setY(t.y() + yoff);
 
       bb.translate(0.0, yoff);
-
+      _basebbox = bb;
       setbbox(bb);
       if (hasFrame())
             layoutFrame();
+      applyRotation();
+      applyOffsets();
       score()->addRefresh(canvasBoundingRect());
       }
 
@@ -1504,6 +1506,7 @@ void TextBase::layoutFrame()
       frame.adjust(-w, -w, w, w);
       w = frameWidth().val() * _spatium;
       setbbox(frame.adjusted(-w, -w, w, w));
+      _basebbox = Element::bbox();
       }
 
 //---------------------------------------------------------
@@ -2610,6 +2613,59 @@ TextCursor* TextBase::cursor(const EditData& ed)
       }
 
 //---------------------------------------------------------
+//   applyRotation
+//---------------------------------------------------------
+
+void TextBase::applyRotation()
+      {
+      //
+      // because the bounding box is rotated by resizing the rectangle and the QPainter is rotated normally (TextBase::draw(Qpainter*)),
+      // there is small offset between the text and the bounding box of the text, that's where offsetCorrection comes in
+      //
+      qreal offsetCorrection = (_basebbox.height() / 2) * abs(sin(qDegreesToRadians(static_cast<double>(_rotation))));
+      if(_rotation < 0)
+            Element::bbox().setCoords(_basebbox.x() + ((_basebbox.width() - _basebbox.height()) * abs(sin(qDegreesToRadians(static_cast<double>(_rotation))))),
+                                      _basebbox.y(),
+                                      _basebbox.x() + _basebbox.width() + offsetCorrection,
+                                      _basebbox.y() + _basebbox.height() + ((_basebbox.width() - _basebbox.height()) * -sin(qDegreesToRadians(static_cast<double>(_rotation)))));
+      else if(_rotation > 0)
+            Element::bbox().setCoords(_basebbox.x() + ((_basebbox.width() - _basebbox.height()) * abs(sin(qDegreesToRadians(static_cast<double>(_rotation))))),
+                                      _basebbox.y() - ((_basebbox.width() - _basebbox.height()) * sin(qDegreesToRadians(static_cast<double>(_rotation)))),
+                                      _basebbox.x() + _basebbox.width() + offsetCorrection,
+                                      _basebbox.y() + _basebbox.height());
+      }
+
+//---------------------------------------------------------
+//   setRotation
+//---------------------------------------------------------
+
+void TextBase::setRotation(int r)
+      {
+      _rotation = r;
+      applyRotation();
+      }
+
+//---------------------------------------------------------
+//   applyOffsets
+//---------------------------------------------------------
+
+void TextBase::applyOffsets()
+      {
+      Element::bbox().translate(_offset.x(), _offset.y());
+      }
+
+//---------------------------------------------------------
+//   setOffsets
+//---------------------------------------------------------
+
+void TextBase::setOffsets(int x, int y)
+      {
+      _offset.setX(x);
+      _offset.setY(y);
+      applyOffsets();
+      }
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -2642,8 +2698,12 @@ void TextBase::draw(QPainter* p) const
             }
       p->setBrush(Qt::NoBrush);
       p->setPen(textColor());
+      p->translate(_offset.x(), _offset.y());
+      p->rotate(_rotation);
       for (const TextBlock& t : _layout)
             t.draw(p, this);
+      p->rotate(-_rotation);
+      p->translate(-_offset.x(), -_offset.y());
       }
 
 //---------------------------------------------------------

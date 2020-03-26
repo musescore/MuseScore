@@ -243,11 +243,17 @@ class TextBase : public Element {
       int  hexState                 { -1    };
       bool _primed                  { 0 };
 
+      QRectF _basebbox; // used to rotate and offset the text
+      QPointF _offset               { 0, 0 };
+      int _rotation                 { 0 };
+
       void drawSelection(QPainter*, const QRectF&) const;
       void insert(TextCursor*, uint code);
       void genText() const;
       virtual int getPropertyFlagsIdx(Pid id) const override;
       QString stripText(bool, bool, bool) const;
+      void applyRotation();
+      void applyOffsets();
 
    protected:
       QColor textColor() const;
@@ -358,6 +364,11 @@ class TextBase : public Element {
       TextBlock& textBlock(int line)             { return _layout[line]; }
       QList<TextBlock>& textBlockList()          { return _layout; }
       int rows() const                           { return _layout.size(); }
+
+      void setRotation(int r);
+      int rotation() const                       { return _rotation; }
+      void setOffsets(int x, int y);
+      QPointF offset() const                     { return _offset; }
 
       void setTextInvalid()                      { textInvalid = true;   }
       bool isTextInvalid() const                 { return textInvalid;   }

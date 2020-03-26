@@ -785,6 +785,8 @@ void System::setInstrumentNames(bool longName, Fraction tick)
                         iname->setTrack(staffIdx * VOICES);
                         iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                         iname->setLayoutPos(sn.pos());
+                        iname->setRotation(part->instrumentNameRotation());
+                        iname->setOffsets(part->instrumentNameOffset().x(), part->instrumentNameOffset().y());
                         score()->addElement(iname);
                         }
                   iname->setXmlText(sn.name());

@@ -55,6 +55,8 @@ enum class PreferSharpFlat : char {
 class Part final : public ScoreElement {
       QString _partName;            ///< used in tracklist (mixer)
       InstrumentList _instruments;
+      int _instrumentNameRotation { 0 };
+      QPointF _instrumentNameOffset {0, 0};
       QList<Staff*> _staves;
       QString _id;                  ///< used for MusicXml import
       bool _show;                   ///< show part in partitur if true
@@ -100,6 +102,10 @@ class Part final : public ScoreElement {
       void setPlainLongName(const QString& s);
       void setPlainShortName(const QString& s);
 
+      int instrumentNameRotation() const              { return _instrumentNameRotation; }
+      void setInstrumentNameRotation(int r)           { _instrumentNameRotation = r; }
+      QPointF instrumentNameOffset() const             { return _instrumentNameOffset; }
+      void setInstrumentNameOffset(int x, int y)      { _instrumentNameOffset.setX(x); _instrumentNameOffset.setY(y); }
       void setStaves(int);
 
       int midiProgram() const;

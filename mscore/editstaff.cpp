@@ -162,6 +162,9 @@ void EditStaff::updateStaffType()
       showTimesig->setChecked(staffType->genTimesig());
       showBarlines->setChecked(staffType->showBarlines());
       staffGroupName->setText(qApp->translate("Staff type group name", staffType->groupName()));
+      rotationInput->setValue(orgStaff->part()->instrumentNameRotation());
+      spinBoxOffsetX->setValue(orgStaff->part()->instrumentNameOffset().x());
+      spinBoxOffsetY->setValue(orgStaff->part()->instrumentNameOffset().y());
       }
 
 //---------------------------------------------------------
@@ -354,6 +357,16 @@ void EditStaff::apply()
 
       instrument.setSingleNoteDynamics(singleNoteDynamics->isChecked());
 
+      bool partChanged = false;
+      if(rotationInput->value() != part->instrumentNameRotation()){
+            part->setInstrumentNameRotation(rotationInput->value());
+            partChanged = true;
+            }
+      if(spinBoxOffsetX->value() != part->instrumentNameOffset().x() || spinBoxOffsetY->value() != part->instrumentNameOffset().y()) {
+            part->setInstrumentNameOffset(spinBoxOffsetX->value(), spinBoxOffsetY->value());
+            partChanged = true;
+            }
+
       bool inv       = invisible->isChecked();
       ClefTypeList clefType = orgStaff->defaultClefType();
       qreal userDist = spinExtraDistance->value();
@@ -371,7 +384,7 @@ void EditStaff::apply()
       Interval v1 = instrument.transpose();
       Interval v2 = part->instrument(_tickStart)->transpose();
 
-      if (instrumentFieldChanged || part->partName() != newPartName) {
+      if (instrumentFieldChanged || part->partName() != newPartName || partChanged) {
             // instrument has changed
 
             if (_tickStart == Fraction(-1, 1)) {

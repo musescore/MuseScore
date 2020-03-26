@@ -125,6 +125,10 @@ bool Part::readProperties(XmlReader& e)
       else if (tag == "preferSharpFlat")
             _preferSharpFlat =
                e.readElementText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS;
+      else if (tag == "instrumentNameRotation")
+            _instrumentNameRotation = e.readInt();
+      else if (tag == "instrumentNameOffset")
+            _instrumentNameOffset = e.readPoint();
       else
             return false;
       return true;
@@ -162,6 +166,8 @@ void Part::write(XmlWriter& xml) const
             xml.tag("preferSharpFlat",
                _preferSharpFlat == PreferSharpFlat::SHARPS ? "sharps" : "flats");
       instrument()->write(xml, this);
+      xml.tag("instrumentNameRotation", _instrumentNameRotation, 0);
+      xml.tag("instrumentNameOffset", _instrumentNameOffset, QPointF(0, 0));
       xml.etag();
       }
 
