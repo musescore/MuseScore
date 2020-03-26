@@ -41,14 +41,29 @@ struct TabScoreView {
       };
 
 //---------------------------------------------------------
+//   MsTabBar
+//---------------------------------------------------------
+
+class MsTabBar : public QTabBar {
+      int _middleClickedTab { -1 };
+
+   public:
+      MsTabBar(QWidget* parent = nullptr) : QTabBar(parent) {}
+
+   private:
+      void mousePressEvent(QMouseEvent* e) override;
+      void mouseReleaseEvent(QMouseEvent* e) override;
+      };
+
+//---------------------------------------------------------
 //   ScoreTab
 //---------------------------------------------------------
 
 class ScoreTab : public QWidget {
       Q_OBJECT
       QList<MasterScore*>* scoreList { nullptr };
-      QTabBar* tab  { nullptr };                 // list of scores
-      QTabBar* tab2 { nullptr };                 // list of excerpts for current score
+      MsTabBar* tab  { nullptr };                 // list of scores
+      MsTabBar* tab2 { nullptr };                 // list of excerpts for current score
       QStackedLayout* stack { nullptr };
       MuseScore* mainWindow { nullptr };;
       void clearTab2();
@@ -75,7 +90,7 @@ class ScoreTab : public QWidget {
       ScoreTab(QList<MasterScore*>*, QWidget* parent = 0);
       ~ScoreTab();
 
-      QTabBar* getTab() const { return tab; }
+      MsTabBar* getTab() const { return tab; }
 
       void insertTab(MasterScore*);
       void setTabText(int, const QString&);
