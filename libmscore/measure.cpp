@@ -15,6 +15,8 @@
  Implementation of most part of class Measure.
 */
 
+#include "log.h"
+
 #include "measure.h"
 #include "accidental.h"
 #include "ambitus.h"
@@ -486,7 +488,7 @@ void Measure::layoutMeasureNumber()
                && !irregular()
                && (no() || score()->styleB(Sid::showMeasureNumberOne))) {
                   if (score()->styleB(Sid::measureNumberSystem))
-                        smn = (system()->firstMeasure() == this) || (prevMeasure() && prevMeasure()->irregular() && system()->firstMeasure() == prevMeasure());
+                        smn = isFirstInSystem() || (prevMeasure() && prevMeasure()->irregular() && prevMeasure()->isFirstInSystem());
                   else {
                         smn = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
                               ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) ) ||
@@ -658,18 +660,7 @@ void Measure::layout2()
 
                   if (cr->isChord()) {
                         Chord* c = toChord(cr);
-                        for (const Note* note : c->notes()) {
-                              Tie* t = note->tieFor();
-                              if (t)
-                                    t->layoutFor(system());
-                              t = note->tieBack();
-                              if (t) {
-                                    if (t->startNote()->tick() < stick)
-                                          t->layoutBack(system());
-                                    }
-                              for (Spanner* sp : note->spannerFor())
-                                    sp->layout();
-                              }
+                        c->layoutSpanners(system(), stick);
                         }
                   }
             }
@@ -2516,6 +2507,18 @@ bool Measure::isAnacrusis() const
       }
 
 //---------------------------------------------------------
+//   isFirstInSystem
+//---------------------------------------------------------
+
+bool Measure::isFirstInSystem() const
+      {
+      IF_ASSERT_FAILED(system()) {
+            return false;
+            }
+      return system()->firstMeasure() == this;
+      }
+
+//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 
@@ -4201,7 +4204,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
       Segment* fs = firstEnabled();
       if (!fs->visible())           // first enabled could be a clef change on invisible staff
             fs = fs->nextActive();
-      bool first  = system()->firstMeasure() == this;
+      bool first  = isFirstInSystem();
       const Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
 
       if (isMMRest()) {
@@ -4316,7 +4319,7 @@ void Measure::computeMinWidth()
             return;
             }
       qreal x;
-      bool first = system()->firstMeasure() == this;
+      bool first = isFirstInSystem();
 
       // left barriere:
       //    Make sure no elements crosses the left boarder if first measure in a system.
