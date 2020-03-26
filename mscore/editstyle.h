@@ -75,6 +75,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
 
       static const std::map<ElementType, EditStylePage> PAGES;
 
+      friend class MuseScore;
+
    private slots:
       void selectChordDescriptionFile();
       void setChordStyle(bool);

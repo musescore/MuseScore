@@ -6314,6 +6314,14 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   _styleDlg->setScore(cs);
             _styleDlg->exec();
             }
+      else if (cmd == "edit-header-footer") {
+            if (!_styleDlg)
+                  _styleDlg = new EditStyle { cs, this };
+            else
+                  _styleDlg->setScore(cs);
+            _styleDlg->setPage(_styleDlg->pageStack->indexOf(_styleDlg->PageHeaderFooter));
+            _styleDlg->exec();
+            }
       else if (cmd == "edit-info") {
             MetaEditDialog med(cs, 0);
             med.exec();

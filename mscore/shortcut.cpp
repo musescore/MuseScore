@@ -3741,6 +3741,16 @@ Shortcut Shortcut::_sc[] = {
          Icons::mail_ICON,
          Qt::ApplicationShortcut
          },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "edit-header-footer",
+         QT_TRANSLATE_NOOP("action","Edit Header/Footer…"),
+         QT_TRANSLATE_NOOP("action","Edit header/footer"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut
+         },
 #ifdef MSCORE_UNSTABLE
       {
          MsWidget::MAIN_WINDOW,

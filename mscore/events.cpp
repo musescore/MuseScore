@@ -997,6 +997,7 @@ void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
                   popup->addAction(getAction("edit-style"));
                   popup->addAction(getAction("page-settings"));
                   popup->addAction(getAction("load-style"));
+                  popup->addAction(getAction("edit-header-footer"));
                   _score->update();
                   popup->popup(gp);
                   }
