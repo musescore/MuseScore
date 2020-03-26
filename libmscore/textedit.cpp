@@ -265,13 +265,21 @@ bool TextBase::edit(EditData& ed)
                         return true;
 
                   case Qt::Key_Backspace:
-                        if (!deleteSelectedText(ed)) {
-                              if (_cursor->column() == 0 && _cursor->row() != 0)
-                                    score()->undo(new JoinText(_cursor), &ed);
-                              else {
-                                    if (!_cursor->movePosition(QTextCursor::Left))
-                                          return false;
-                                    score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
+                        if (ctrlPressed) {
+                              // delete last word
+                              _cursor->movePosition(QTextCursor::WordLeft, QTextCursor::MoveMode::KeepAnchor);
+                              s.clear();
+                              deleteSelectedText(ed);
+                              }
+                        else {
+                              if (!deleteSelectedText(ed)) {
+                                    if (_cursor->column() == 0 && _cursor->row() != 0)
+                                          score()->undo(new JoinText(_cursor), &ed);
+                                    else {
+                                          if (!_cursor->movePosition(QTextCursor::Left))
+                                                return false;
+                                          score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
+                                          }
                                     }
                               }
                         return true;
