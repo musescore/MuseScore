@@ -37,20 +37,23 @@ class TremoloBar final : public Element {
 
    public:
       TremoloBar(Score* s);
-      virtual TremoloBar* clone() const override  { return new TremoloBar(*this); }
-      virtual ElementType type() const override   { return ElementType::TREMOLOBAR; }
-      virtual void layout() override;
-      virtual void draw(QPainter*) const override;
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader& e) override;
+
+      TremoloBar* clone() const override  { return new TremoloBar(*this); }
+      ElementType type() const override   { return ElementType::TREMOLOBAR; }
+
+      void layout() override;
+      void draw(QPainter*) const override;
+
+      void write(XmlWriter&) const override;
+      void read(XmlReader& e) override;
 
       QList<PitchValue>& points()                { return _points; }
       const QList<PitchValue>& points() const    { return _points; }
       void setPoints(const QList<PitchValue>& p) { _points = p;    }
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
 
       qreal userMag() const               { return _userMag;   }
       void setUserMag(qreal m)            { _userMag = m;      }

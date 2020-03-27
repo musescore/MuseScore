@@ -41,18 +41,23 @@ class Spacer final : public Element {
    public:
       Spacer(Score*);
       Spacer(const Spacer&);
-      virtual Spacer* clone() const    { return new Spacer(*this); }
-      virtual ElementType type() const { return ElementType::SPACER; }
+
+      Spacer* clone() const override    { return new Spacer(*this); }
+      ElementType type() const override { return ElementType::SPACER; }
+
       SpacerType spacerType() const    { return _spacerType; }
       void setSpacerType(SpacerType t) { _spacerType = t; }
 
-      virtual void write(XmlWriter&) const;
-      virtual void read(XmlReader&);
-      virtual void draw(QPainter*) const;
-      virtual bool isEditable() const { return true; }
-      virtual void startEditDrag(EditData&) override;
-      virtual void editDrag(EditData&) override;
-      virtual void spatiumChanged(qreal, qreal);
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
+
+      void draw(QPainter*) const override;
+
+      bool isEditable() const override { return true; }
+      void startEditDrag(EditData&) override;
+      void editDrag(EditData&) override;
+      void spatiumChanged(qreal, qreal) override;
+
       void setGap(qreal sp);
       qreal gap() const     { return _gap; }
 
@@ -62,9 +67,9 @@ class Spacer final : public Element {
       Grip defaultGrip() const override { return Grip::START; }
       std::vector<QPointF> gripsPositions(const EditData&) const override;
 
-      QVariant getProperty(Pid propertyId) const;
-      bool setProperty(Pid propertyId, const QVariant&);
-      QVariant propertyDefault(Pid id) const;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid id) const override;
       };
 
 
