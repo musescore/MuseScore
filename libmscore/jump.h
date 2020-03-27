@@ -51,16 +51,16 @@ class Jump final : public TextBase {
       Type jumpType() const;
       QString jumpTypeUserName() const;
 
-      virtual Jump* clone() const override      { return new Jump(*this);   }
-      virtual ElementType type() const override { return ElementType::JUMP; }
-      virtual int subtype() const override      { return int(jumpType());   }
+      Jump* clone() const override      { return new Jump(*this);   }
+      ElementType type() const override { return ElementType::JUMP; }
+      int subtype() const override      { return int(jumpType());   }
 
       Measure* measure() const                  { return toMeasure(parent()); }
 
-      virtual void read(XmlReader&) override;
-      virtual void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
+      void write(XmlWriter& xml) const override;
 
-      virtual void layout() override;
+      void layout() override;
 
       QString jumpTo() const                    { return _jumpTo;     }
       QString playUntil() const                 { return _playUntil;  }
@@ -74,13 +74,13 @@ class Jump final : public TextBase {
       bool playRepeats() const                  { return _playRepeats; }
       void setPlayRepeats(bool val)             { _playRepeats = val;  }
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
 
       Element* nextSegmentElement() override;
       Element* prevSegmentElement() override;
-      virtual QString accessibleInfo() const override;
+      QString accessibleInfo() const override;
       };
 
 //---------------------------------------------------------

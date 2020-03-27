@@ -33,19 +33,21 @@ class SystemDivider final : public Symbol {
       SystemDivider(Score* s = 0);
       SystemDivider(const SystemDivider&);
 
-      virtual SystemDivider* clone() const override   { return new SystemDivider(*this); }
-      virtual ElementType type() const override       { return ElementType::SYSTEM_DIVIDER; }
+      SystemDivider* clone() const override   { return new SystemDivider(*this); }
+      ElementType type() const override       { return ElementType::SYSTEM_DIVIDER; }
 
-      Type dividerType() const                        { return _dividerType; }
+      Type dividerType() const                 { return _dividerType; }
       void setDividerType(Type v);
 
-      virtual QRectF drag(EditData&) override;
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
-      virtual void layout() override;
+      QRectF drag(EditData&) override;
 
-      virtual Segment* segment() const override       { return 0; }
-      System* system() const                          { return (System*)parent(); }
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
+
+      void layout() override;
+
+      Segment* segment() const override       { return nullptr; }
+      System* system() const                  { return (System*)parent(); }
       };
 
 } // namespace Ms

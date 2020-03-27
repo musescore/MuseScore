@@ -105,7 +105,7 @@ class Staff final : public ScoreElement {
       void initFromStaffType(const StaffType* staffType);
       void init(const Staff*);
 
-      virtual ElementType type() const override { return ElementType::STAFF; }
+      ElementType type() const override { return ElementType::STAFF; }
 
       bool isTop() const;
       QString partName() const;
@@ -245,9 +245,9 @@ class Staff final : public ScoreElement {
       void undoSetColor(const QColor& val);
       void insertTime(const Fraction&, const Fraction& len);
 
-      virtual QVariant getProperty(Pid) const override;
-      virtual bool setProperty(Pid, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant getProperty(Pid) const override;
+      bool setProperty(Pid, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
 
       BracketType innerBracket() const;
 

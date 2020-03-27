@@ -69,16 +69,17 @@ class Ottava;
 //---------------------------------------------------------
 
 class OttavaSegment final : public TextLineBaseSegment {
-      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
-      virtual Sid getPropertyStyle(Pid) const override;
+      void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+      Sid getPropertyStyle(Pid) const override;
 
    public:
       OttavaSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)  { }
-      virtual ElementType type() const override     { return ElementType::OTTAVA_SEGMENT; }
-      virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
-      Ottava* ottava() const                        { return (Ottava*)spanner(); }
-      virtual void layout() override;
-      virtual Element* propertyDelegate(Pid) override;
+
+      ElementType type() const override     { return ElementType::OTTAVA_SEGMENT; }
+      OttavaSegment* clone() const override { return new OttavaSegment(*this); }
+      Ottava* ottava() const                { return (Ottava*)spanner(); }
+      void layout() override;
+      Element* propertyDelegate(Pid) override;
       };
 
 //---------------------------------------------------------
@@ -91,8 +92,8 @@ class Ottava final : public TextLineBase {
       bool _numbersOnly;
 
       void updateStyledProperties();
-      virtual Sid getPropertyStyle(Pid) const override;
-      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+      Sid getPropertyStyle(Pid) const override;
+      void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
    protected:
       friend class OttavaSegment;
@@ -100,8 +101,9 @@ class Ottava final : public TextLineBase {
    public:
       Ottava(Score* s);
       Ottava(const Ottava&);
-      virtual Ottava* clone() const override    { return new Ottava(*this); }
-      virtual ElementType type() const override { return ElementType::OTTAVA; }
+
+      Ottava* clone() const override    { return new Ottava(*this); }
+      ElementType type() const override { return ElementType::OTTAVA; }
 
       void setOttavaType(OttavaType val);
       OttavaType ottavaType() const             { return _ottavaType; }
@@ -111,19 +113,19 @@ class Ottava final : public TextLineBase {
 
       void setPlacement(Placement);
 
-      virtual LineSegment* createLineSegment() override;
+      LineSegment* createLineSegment() override;
       int pitchShift() const;
 
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader& de) override;
-      bool readProperties(XmlReader& e);
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader& de) override;
+      bool readProperties(XmlReader& e) override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
-      virtual Pid propertyId(const QStringRef& xmlName) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
 
-      virtual QString accessibleInfo() const override;
+      QString accessibleInfo() const override;
       static const char* ottavaTypeName(OttavaType type);
       };
 

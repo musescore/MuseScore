@@ -34,11 +34,13 @@ class InstrumentChange final : public TextBase {
       InstrumentChange(const InstrumentChange&);
       ~InstrumentChange();
 
-      virtual InstrumentChange* clone() const override { return new InstrumentChange(*this); }
-      virtual ElementType type() const override        { return ElementType::INSTRUMENT_CHANGE; }
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
-      virtual void layout() override;
+      InstrumentChange* clone() const override { return new InstrumentChange(*this); }
+      ElementType type() const override        { return ElementType::INSTRUMENT_CHANGE; }
+
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
+
+      void layout() override;
 
       Instrument* instrument() const        { return _instrument;  }
       void setInstrument(Instrument* i)     { _instrument = i;     }
@@ -54,9 +56,9 @@ class InstrumentChange final : public TextBase {
 
       Segment* segment() const              { return toSegment(parent()); }
 
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant propertyDefault(Pid) const override;
 
-      virtual bool placeMultiple() const override      { return false; }
+      bool placeMultiple() const override    { return false; }
       };
 
 
