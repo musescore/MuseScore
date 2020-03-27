@@ -26,26 +26,25 @@ class SlurSegment final : public SlurTieSegment {
 
    protected:
       qreal _extraHeight = 0.0;
-      virtual void changeAnchor(EditData&, Element*) override;
+      void changeAnchor(EditData&, Element*) override;
 
    public:
       SlurSegment(Score* s) : SlurTieSegment(s) {}
       SlurSegment(const SlurSegment& ss) : SlurTieSegment(ss) {}
 
-      virtual SlurSegment* clone() const override  { return new SlurSegment(*this); }
-      virtual ElementType type() const override    { return ElementType::SLUR_SEGMENT; }
-      virtual int subtype() const override         { return static_cast<int>(spanner()->type()); }
-      virtual QString subtypeName() const override { return name(spanner()->type()); }
-      virtual void draw(QPainter*) const override;
+      SlurSegment* clone() const override  { return new SlurSegment(*this); }
+      ElementType type() const override    { return ElementType::SLUR_SEGMENT; }
+      int subtype() const override         { return static_cast<int>(spanner()->type()); }
+      void draw(QPainter*) const override;
 
       void layoutSegment(const QPointF& p1, const QPointF& p2);
 
       bool isEdited() const;
-      virtual bool edit(EditData&) override;
+      bool edit(EditData&) override;
 
       Slur* slur() const { return toSlur(spanner()); }
 
-      virtual void computeBezier(QPointF so = QPointF());
+      void computeBezier(QPointF so = QPointF()) override;
       };
 
 //---------------------------------------------------------
@@ -59,13 +58,14 @@ class Slur final : public SlurTie {
    public:
       Slur(Score* = 0);
       ~Slur() {}
-      virtual Slur* clone() const override        { return new Slur(*this); }
-      virtual ElementType type() const override { return ElementType::SLUR; }
-      virtual void write(XmlWriter& xml) const override;
-      virtual void layout() override;
-      virtual SpannerSegment* layoutSystem(System*) override;
-      virtual void setTrack(int val) override;
-      virtual void slurPos(SlurPos*) override;
+
+      Slur* clone() const override        { return new Slur(*this); }
+      ElementType type() const override { return ElementType::SLUR; }
+      void write(XmlWriter& xml) const override;
+      void layout() override;
+      SpannerSegment* layoutSystem(System*) override;
+      void setTrack(int val) override;
+      void slurPos(SlurPos*) override;
 
       SlurSegment* frontSegment()               { return toSlurSegment(Spanner::frontSegment()); }
       const SlurSegment* frontSegment() const   { return toSlurSegment(Spanner::frontSegment()); }
@@ -73,7 +73,8 @@ class Slur final : public SlurTie {
       const SlurSegment* backSegment() const    { return toSlurSegment(Spanner::backSegment());  }
       SlurSegment* segmentAt(int n)             { return toSlurSegment(Spanner::segmentAt(n));   }
       const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n));   }
-      virtual SlurTieSegment* newSlurTieSegment() override { return new SlurSegment(score()); }
+
+      SlurTieSegment* newSlurTieSegment() override { return new SlurSegment(score()); }
       };
 
 }     // namespace Ms

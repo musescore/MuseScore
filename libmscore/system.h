@@ -99,16 +99,17 @@ class System final : public Element {
 public:
       System(Score*);
       ~System();
-      virtual System* clone() const override      { return new System(*this); }
-      virtual ElementType type() const override   { return ElementType::SYSTEM; }
 
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
-      virtual void change(Element* o, Element* n) override;
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
+      System* clone() const override      { return new System(*this); }
+      ElementType type() const override   { return ElementType::SYSTEM; }
 
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      void add(Element*) override;
+      void remove(Element*) override;
+      void change(Element* o, Element* n) override;
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
+
+      void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
       void appendMeasure(MeasureBase*);
       void removeMeasure(MeasureBase*);
@@ -161,8 +162,8 @@ public:
       SystemDivider* systemDividerLeft() const  { return _systemDividerLeft; }
       SystemDivider* systemDividerRight() const { return _systemDividerRight; }
 
-      virtual Element* nextSegmentElement() override;
-      virtual Element* prevSegmentElement() override;
+      Element* nextSegmentElement() override;
+      Element* prevSegmentElement() override;
 
       qreal minDistance(System*) const;
       qreal topDistance(int staffIdx, const SkylineLine&) const;

@@ -34,27 +34,27 @@ class Stem final : public Element {
       Stem(Score* = 0);
       Stem &operator=(const Stem&) = delete;
 
-      virtual Stem* clone() const override        { return new Stem(*this); }
-      virtual ElementType type() const override   { return ElementType::STEM; }
-      virtual void draw(QPainter*) const override;
-      virtual bool isEditable() const override    { return true; }
-      virtual void layout() override;
-      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+      Stem* clone() const override        { return new Stem(*this); }
+      ElementType type() const override   { return ElementType::STEM; }
+      void draw(QPainter*) const override;
+      bool isEditable() const override    { return true; }
+      void layout() override;
+      void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
-      virtual void startEdit(EditData&) override;
-      virtual void editDrag(EditData&) override;
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader& e) override;
-      virtual bool readProperties(XmlReader&) override;
-      virtual void reset() override;
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
+      void startEdit(EditData&) override;
+      void editDrag(EditData&) override;
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader& e) override;
+      bool readProperties(XmlReader&) override;
+      void reset() override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid id) const override;
 
-      virtual int vStaffIdx() const override;
+      int vStaffIdx() const override;
 
       Chord* chord() const            { return toChord(parent()); }
       bool up() const;

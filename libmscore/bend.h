@@ -40,12 +40,13 @@ class Bend final : public Element {
 
    public:
       Bend(Score* s);
-      virtual Bend* clone() const override        { return new Bend(*this); }
-      virtual ElementType type() const override   { return ElementType::BEND; }
-      virtual void layout() override;
-      virtual void draw(QPainter*) const override;
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader& e) override;
+
+      Bend* clone() const override        { return new Bend(*this); }
+      ElementType type() const override   { return ElementType::BEND; }
+      void layout() override;
+      void draw(QPainter*) const override;
+      void write(XmlWriter&) const override;
+      void read(XmlReader& e) override;
       QList<PitchValue>& points()                { return _points; }
       const QList<PitchValue>& points() const    { return _points; }
       void setPoints(const QList<PitchValue>& p) { _points = p;    }
@@ -53,9 +54,9 @@ class Bend final : public Element {
       void setPlayBend(bool v)                   { _playBend = v;    }
 
       // property methods
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
       };
 
 
