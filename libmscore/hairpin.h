@@ -43,26 +43,27 @@ class HairpinSegment final : public TextLineBaseSegment {
       QPointF circledTip;
       qreal   circledTipRadius;
 
-      virtual void startEditDrag(EditData&) override;
-      virtual void editDrag(EditData&) override;
+      void startEditDrag(EditData&) override;
+      void editDrag(EditData&) override;
 
-      virtual void draw(QPainter*) const override;
-      virtual Sid getPropertyStyle(Pid) const override;
+      void draw(QPainter*) const override;
+      Sid getPropertyStyle(Pid) const override;
 
       bool acceptDrop(EditData&) const override;
-      Element* drop(EditData&);
+      Element* drop(EditData&) override;
 
    public:
       HairpinSegment(Spanner* sp, Score* s);
-      virtual HairpinSegment* clone() const override { return new HairpinSegment(*this);    }
-      virtual ElementType type() const override      { return ElementType::HAIRPIN_SEGMENT; }
+
+      HairpinSegment* clone() const override { return new HairpinSegment(*this);    }
+      ElementType type() const override      { return ElementType::HAIRPIN_SEGMENT; }
 
       Hairpin* hairpin() const                       { return (Hairpin*)spanner();          }
 
-      virtual Element* propertyDelegate(Pid) override;
+      Element* propertyDelegate(Pid) override;
 
-      virtual void layout() override;
-      virtual Shape shape() const override;
+      void layout() override;
+      Shape shape() const override;
 
       int gripsCount() const override { return 4; }
       std::vector<QPointF> gripsPositions(const EditData&) const override;
@@ -86,19 +87,20 @@ class Hairpin final : public TextLineBase {
       Spatium _hairpinHeight;
       Spatium _hairpinContHeight;
 
-      virtual Sid getPropertyStyle(Pid) const override;
+      Sid getPropertyStyle(Pid) const override;
 
    public:
       Hairpin(Score* s);
-      virtual Hairpin* clone() const override   { return new Hairpin(*this); }
-      virtual ElementType type() const override { return ElementType::HAIRPIN;  }
+
+      Hairpin* clone() const override   { return new Hairpin(*this); }
+      ElementType type() const override { return ElementType::HAIRPIN;  }
 
       HairpinType hairpinType() const           { return _hairpinType; }
       void setHairpinType(HairpinType val);
 
       Segment* segment() const                  { return (Segment*)parent(); }
-      virtual void layout() override;
-      virtual LineSegment* createLineSegment() override;
+      void layout() override;
+      LineSegment* createLineSegment() override;
 
       bool hairpinCircledTip() const            { return _hairpinCircledTip; }
       void setHairpinCircledTip(bool val)       { _hairpinCircledTip = val; }
@@ -124,15 +126,15 @@ class Hairpin final : public TextLineBase {
       bool isCrescendo() const   { return _hairpinType == HairpinType::CRESC_HAIRPIN || _hairpinType == HairpinType::CRESC_LINE; }
       bool isDecrescendo() const { return _hairpinType == HairpinType::DECRESC_HAIRPIN || _hairpinType == HairpinType::DECRESC_LINE; }
 
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
 
-      virtual QVariant getProperty(Pid id) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
-      virtual Pid propertyId(const QStringRef& xmlName) const override;
+      QVariant getProperty(Pid id) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid id) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
 
-      virtual QString accessibleInfo() const override;
+      QString accessibleInfo() const override;
       bool isLineType() const  { return _hairpinType == HairpinType::CRESC_LINE || _hairpinType == HairpinType::DECRESC_LINE; }
       };
 
