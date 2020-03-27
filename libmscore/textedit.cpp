@@ -483,10 +483,12 @@ void SplitJoinText::join(EditData* ed)
       if (line < lines)
             t->textBlock(line).setEol(eol);
       t->textBlockList().removeAt(line);
+
       c.setRow(line-1);
       c.setColumn(col);
       c.setFormat(*charFmt);             // restore orig. format at new line
       c.clearSelection();
+
       if (ed)
             *t->cursor(*ed) = c;
       c.text()->setTextInvalid();
@@ -500,7 +502,7 @@ void SplitJoinText::split(EditData* ed)
       t->triggerLayout();
 
       CharFormat* charFmt = c.format();         // take current format
-      t->textBlockList().insert(line + 1, c.curLine().split(c.column()));
+      t->textBlockList().insert(line + 1, c.curLine().split(c.column(), &c));
       c.curLine().setEol(true);
 
       c.setRow(line+1);

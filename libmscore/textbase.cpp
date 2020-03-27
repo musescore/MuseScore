@@ -1035,7 +1035,7 @@ void TextFragment::changeFormat(FormatId id, QVariant data)
 //   split
 //---------------------------------------------------------
 
-TextBlock TextBlock::split(int column)
+TextBlock TextBlock::split(int column, TextCursor* tc)
       {
       TextBlock tl;
 
@@ -1066,7 +1066,10 @@ TextBlock TextBlock::split(int column)
       TextFragment tf("");
       if (_fragments.size() > 0)
             tf.format = _fragments.last().format;
+      else
+            tf.format = *(tc->format());
       tl._fragments.append(tf);
+
       return tl;
       }
 

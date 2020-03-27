@@ -196,7 +196,7 @@ class TextBlock {
       QString remove(int column);
       QString remove(int start, int n);
       int column(qreal x, TextBase*) const;
-      TextBlock split(int column);
+      TextBlock split(int column, TextCursor* tc);
       qreal xpos(int col, const TextBase*) const;
       const CharFormat* formatAt(int) const;
       const TextFragment* fragment(int col) const;
