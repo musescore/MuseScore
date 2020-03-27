@@ -27,19 +27,19 @@ class Fingering final : public TextBase {
       Fingering(Score*, Tid tid, ElementFlags ef = ElementFlag::HAS_TAG);
       Fingering(Score* s, ElementFlags ef = ElementFlag::HAS_TAG);
 
-      virtual Fingering* clone() const override { return new Fingering(*this); }
-      virtual ElementType type() const override { return ElementType::FINGERING; }
+      Fingering* clone() const override { return new Fingering(*this); }
+      ElementType type() const override { return ElementType::FINGERING; }
 
       Note* note() const { return toNote(parent()); }
       ElementType layoutType();
       Placement calculatePlacement() const;
 
-      virtual void draw(QPainter*) const override;
-      virtual void layout() override;
+      void draw(QPainter*) const override;
+      void layout() override;
 
-      virtual QVariant propertyDefault(Pid id) const override;
+      QVariant propertyDefault(Pid id) const override;
 
-      virtual QString accessibleInfo() const override;
+      QString accessibleInfo() const override;
       };
 
 

@@ -31,15 +31,16 @@ class RepeatMeasure final : public Rest {
    public:
       RepeatMeasure(Score*);
       RepeatMeasure &operator=(const RepeatMeasure&) = delete;
-      virtual RepeatMeasure* clone() const override   { return new RepeatMeasure(*this); }
-      virtual Element* linkedClone() override         { return Element::linkedClone(); }
-      virtual ElementType type() const override       { return ElementType::REPEAT_MEASURE; }
-      virtual void draw(QPainter*) const override;
-      virtual void layout() override;
-      virtual Fraction ticks() const override;
+
+      RepeatMeasure* clone() const override   { return new RepeatMeasure(*this); }
+      Element* linkedClone() override         { return Element::linkedClone(); }
+      ElementType type() const override       { return ElementType::REPEAT_MEASURE; }
+      void draw(QPainter*) const override;
+      void layout() override;
+      Fraction ticks() const override;
       Fraction actualTicks() const { return Rest::ticks(); }
 
-      virtual QString accessibleInfo() const override;
+      QString accessibleInfo() const override;
       };
 
 

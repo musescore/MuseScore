@@ -37,9 +37,10 @@ class LedgerLine final : public Element {
    public:
       LedgerLine(Score*);
       LedgerLine &operator=(const LedgerLine&) = delete;
-      virtual LedgerLine* clone() const override { return new LedgerLine(*this); }
-      virtual ElementType type() const override  { return ElementType::LEDGER_LINE; }
-      virtual QPointF pagePos() const override;      ///< position in page coordinates
+
+      LedgerLine* clone() const override { return new LedgerLine(*this); }
+      ElementType type() const override  { return ElementType::LEDGER_LINE; }
+      QPointF pagePos() const override;      ///< position in page coordinates
       Chord* chord() const                       { return toChord(parent()); }
 
       qreal len() const          { return _len;   }
@@ -47,16 +48,16 @@ class LedgerLine final : public Element {
       void setLen(qreal v)       { _len = v;      }
       void setLineWidth(qreal v) { _width = v;    }
 
-      virtual void layout() override;
-      virtual void draw(QPainter*) const override;
+      void layout() override;
+      void draw(QPainter*) const override;
 
       qreal measureXPos() const;
       LedgerLine* next() const    { return _next; }
       void setNext(LedgerLine* l) { _next = l;    }
 
-      virtual void writeProperties(XmlWriter& xml) const override;
-      virtual bool readProperties(XmlReader&) override;
-      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+      void writeProperties(XmlWriter& xml) const override;
+      bool readProperties(XmlReader&) override;
+      void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
       };
 
 }     // namespace Ms

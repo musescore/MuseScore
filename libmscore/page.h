@@ -46,14 +46,15 @@ class Page final : public Element {
    public:
       Page(Score*);
       ~Page();
-      virtual Page* clone() const           { return new Page(*this); }
-      virtual ElementType type() const      { return ElementType::PAGE; }
+
+      Page* clone() const override          { return new Page(*this); }
+      ElementType type() const override     { return ElementType::PAGE; }
       const QList<System*>& systems() const { return _systems;   }
       QList<System*>& systems()             { return _systems;   }
       System* system(int idx)               { return _systems[idx];   }
 
-      virtual void write(XmlWriter&) const;
-      virtual void read(XmlReader&);
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
 
       void appendSystem(System* s);
 
@@ -65,13 +66,13 @@ class Page final : public Element {
       qreal lm() const;
       qreal rm() const;
 
-      virtual void draw(QPainter*) const override;
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      void draw(QPainter*) const override;
+      void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
       QList<Element*> items(const QRectF& r);
       QList<Element*> items(const QPointF& p);
       void rebuildBspTree()   { bspTreeValid = false; }
-      QPointF pagePos() const { return QPointF(); }     ///< position in page coordinates
+      QPointF pagePos() const override { return QPointF(); }     ///< position in page coordinates
       QList<Element*> elements();               ///< list of visible elements
       QRectF tbbox();                           // tight bounding box, excluding white space
       Fraction endTick() const;
