@@ -4157,6 +4157,8 @@ void ScoreView::cmdRealtimeAdvance()
       if (!is.cr() || (is.cr()->ticks() != is.duration().fraction() && is.duration() < ticks2measureEnd))
             _score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), Direction::AUTO);
       ChordRest* prevCR = toChordRest(is.cr());
+      if (_score->inputState().endOfScore())
+            _score->appendMeasures(1);
       is.moveToNextInputPos();
       if (_score->activeMidiPitches()->empty())
             _score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), Direction::AUTO);
