@@ -29,7 +29,7 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>E-Gt</trackName>
+      <trackName>Electric Guitar</trackName>
       <Instrument>
         <longName>Electric Guitar</longName>
         <shortName>El. Guit.</shortName>
@@ -505,7 +505,7 @@
             </voice>
           </Measure>
         </Staff>
-      <name>E-Gt</name>
+      <name>Electric Guitar</name>
       </Score>
     </Score>
   </museScore>

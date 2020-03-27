@@ -65,7 +65,7 @@
 namespace Ms {
 
 
-const static std::map<QString, QString> instrumentMapping = {
+const std::map<QString, QString> GuitarPro6::instrumentMapping = {
             {"2Mrcs",           "maracas"},
             {"a-bass4",         "acoustic-bass"},
             {"a-bass5",         "acoustic-bass"},
@@ -475,7 +475,7 @@ void GuitarPro6::readTracks(QDomNode* track)
             while (!currentNode.isNull()) {
                   QString nodeName = currentNode.nodeName();
                   if (nodeName == "Name")
-                        part->setPlainLongName(currentNode.toElement().text());
+                        part->setPartName(currentNode.toElement().text());
                   else if (nodeName == "Color") {}
                   // this is a typo is guitar pro - 'defaut' is correct here
                   else if (nodeName == "SystemsDefautLayout") {}
@@ -502,8 +502,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                   else if (nodeName == "PlayingStyle") {}
                   else if (nodeName == "PageSetup") {}
                   else if (nodeName == "MultiVoice") {}
-                  else if (nodeName == "ShortName")
-                        part->setPartName(currentNode.toElement().text());
+                  else if (nodeName == "ShortName") {}
                   else if (nodeName == "Instrument") {
                         QString ref = currentNode.attributes().namedItem("ref").toAttr().value();
                         auto it     = instrumentMapping.find(ref);
@@ -521,41 +520,10 @@ void GuitarPro6::readTracks(QDomNode* track)
                               s->setBarLineSpan(2);
                               }
                         }
-                  else if (nodeName == "Properties") {
-                        QDomNode currentProperty = currentNode.firstChild();
-                        while (!currentProperty.isNull()) {
-                              QString propertyName = currentProperty.attributes().namedItem("name").toAttr().value();
-                              if (!propertyName.compare("Tuning")) {
-                                    // set up the tuning for the part
-                                    QString tuningString         = currentProperty.firstChild().toElement().text();
-                                    QStringList tuningStringList = tuningString.split(" ");
-                                    int strings                  = 0;
-                                    std::vector<int> tuning(tuningStringList.length());
-                                    //int tuning[tuningStringList.length()];
-                                    int frets = 24;
-                                    for (auto iter = tuningStringList.begin(); iter != tuningStringList.end(); ++iter) {
-                                          int currentString = (*iter).toInt();
-                                          tuning[strings] = currentString;
-                                          strings++;
-                                          }
-                                    StringData* stringData = new StringData(frets, strings, &tuning[0]);
-                                    Instrument* instr      = part->instrument();
-                                    instr->setStringData(*stringData);
-                                    instr->setSingleNoteDynamics(false);
-                                    hasTuning = true;
-                                    createTuningString(strings, &tuning[0]);
-                                    }
-                              else if (!propertyName.compare("DiagramCollection")) {
-                                    QDomNode items       = currentProperty.firstChild();
-                                    QDomNode currentItem = items.firstChild();
-                                    while (!currentItem.isNull()) {
-                                          readChord(&currentItem, trackCounter);
-                                          currentItem = currentItem.nextSibling();
-                                          }
-                                    }
-                              currentProperty = currentProperty.nextSibling();
-                              }
-                        }
+                  else if (nodeName == "PartSounding")
+                        part->instrument()->setTranspose(Interval(currentNode.firstChildElement("TranspositionPitch").text().toInt()));
+                  else if (nodeName == "Properties")
+                        readTrackProperties(currentNode, part, trackCounter, hasTuning);
                   currentNode = currentNode.nextSibling();
                   }
 
@@ -575,6 +543,47 @@ void GuitarPro6::readTracks(QDomNode* track)
             previousDynamic[i] = 0;
       // set the number of staves we need
       staves = score->staves().length();
+      }
+
+//---------------------------------------------------------
+//   readTrackProperties
+//---------------------------------------------------------
+
+void GuitarPro6::readTrackProperties(const QDomNode& currentNode, Part* part, int trackCounter, bool& hasTuning)
+      {
+      QDomNode currentProperty = currentNode.firstChild();
+      while (!currentProperty.isNull()) {
+            QString propertyName = currentProperty.attributes().namedItem("name").toAttr().value();
+            if (!propertyName.compare("Tuning")) {
+                  // set up the tuning for the part
+                  QString tuningString = currentProperty.firstChild().toElement().text();
+                  QStringList tuningStringList = tuningString.split(" ");
+                  int strings = 0;
+                  std::vector<int> tuning(tuningStringList.length());
+                  //int tuning[tuningStringList.length()];
+                  int frets = 24;
+                  for (auto iter = tuningStringList.begin(); iter != tuningStringList.end(); ++iter) {
+                        int currentString = (*iter).toInt();
+                        tuning[strings] = currentString;
+                        strings++;
+                        }
+                  StringData* stringData = new StringData(frets, strings, &tuning[0]);
+                  Instrument* instr = part->instrument();
+                  instr->setStringData(*stringData);
+                  instr->setSingleNoteDynamics(false);
+                  hasTuning = true;
+                  createTuningString(strings, &tuning[0]);
+                  }
+            else if (!propertyName.compare("DiagramCollection")) {
+                  QDomNode items = currentProperty.firstChild();
+                  QDomNode currentItem = items.firstChild();
+                  while (!currentItem.isNull()) {
+                        readChord(&currentItem, trackCounter);
+                        currentItem = currentItem.nextSibling();
+                        }
+                  }
+            currentProperty = currentProperty.nextSibling();
+            }
       }
 
 //---------------------------------------------------------
@@ -834,8 +843,8 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
       bool endSlur = false;
       for (auto currentBeat = currentBeatList.begin(); currentBeat != currentBeatList.end(); currentBeat++) {
             int sl = -1;
-            if (slides->contains(staffIdx * VOICES + voiceNum))
-                  sl = slides->take(staffIdx * VOICES + voiceNum);
+            if (slides.contains(staffIdx * VOICES + voiceNum))
+                  sl = slides.take(staffIdx * VOICES + voiceNum);
 
             Fraction l;
             int dotted           = 0;
@@ -2567,7 +2576,7 @@ void GuitarPro6::readGpif(QByteArray* data)
 //   parseFile
 //---------------------------------------------------------
 
-void GuitarPro6::parseFile(char* filename, QByteArray* data)
+void GuitarPro6::parseFile(const char* filename, QByteArray* data)
       {
       // test to check if we are dealing with the score
       if (!strcmp(filename, "score.gpif"))
@@ -2665,17 +2674,13 @@ int GuitarPro6::readBeatEffects(int, Segment*)
 
 bool GuitarPro6::read(QFile* fp)
       {
-      f      = fp;
-      slides = new QMap<int,int>();
-
+      f = fp;
       previousTempo = -1;
       QByteArray buffer = fp->readAll();
 
       // decompress and read files contained within GPX file
       readGPX(&buffer);
-      delete slides;
 
       return true;
       }
-
 }
