@@ -275,7 +275,7 @@ bool MuseScore::checkDirty(MasterScore* s)
 
 void MuseScore::openFiles(bool switchTab, bool singleFile)
       {
-      QString allExt = "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.ptb";
+      QString allExt = "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb";
 #ifdef AVSOMR
       allExt += " *.msmr"; // omr project with omr data and musicxml or score
 #endif
@@ -290,7 +290,7 @@ void MuseScore::openFiles(bool switchTab, bool singleFile)
              << tr("BB Files (experimental)") + " (*.mgu *.sgu)"
              << tr("Overture / Score Writer Files (experimental)") + " (*.ove *.scw)"
              << tr("Bagpipe Music Writer Files (experimental)") + " (*.bww)"
-             << tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx)"
+             << tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
              << tr("Power Tab Editor Files (experimental)") + " (*.ptb)";
 
       doLoadFiles(filter, switchTab, singleFile);
@@ -2354,6 +2354,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                   { "gp4",  &importGTP                },
                   { "gp5",  &importGTP                },
                   { "gpx",  &importGTP                },
+                  { "gp",   &importGTP                },
                   { "ptb",  &importGTP                },
 #ifdef AVSOMR
                   { "msmr", &importMSMR                },
