@@ -190,6 +190,7 @@ private slots:
       void tuplets5() { mxmlIoTestRef("testTuplets5"); }
       void tuplets6() { mxmlIoTestRef("testTuplets6"); }
       void tuplets7() { mxmlIoTest("testTuplets7"); }
+      void tuplets8() { mxmlMscxExportTestRef("testTuplets8"); }
       void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); }
       void unusualDurations() { mxmlIoTestRef("testUnusualDurations"); }
       void virtualInstruments() { mxmlIoTestRef("testVirtualInstruments"); }

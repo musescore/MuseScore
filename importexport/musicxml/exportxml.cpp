@@ -1916,7 +1916,125 @@ void ExportMusicXml::clef(int staff, const ClefType ct, const QString& extraAttr
       }
 
 //---------------------------------------------------------
-//   tupletStartStop
+//   tupletNesting
+//---------------------------------------------------------
+
+/*
+ * determine the tuplet nesting level for cr
+ * 0 = not part of tuplet
+ * 1 = part of a single tuplet
+ * 2 = part of two nested tuplets
+ * etc.
+ */
+
+static int tupletNesting(const ChordRest* const cr)
+      {
+      const DurationElement* el { cr->tuplet() };
+      int nesting { 0 };
+      while (el) {
+            nesting++;
+            el = el->tuplet();
+            }
+      return nesting;
+      }
+
+//---------------------------------------------------------
+//   isSimpleTuplet
+//---------------------------------------------------------
+
+/*
+ * determine if t is simple, i.e. all its children are chords or rests
+ */
+
+static bool isSimpleTuplet(const Tuplet* const t)
+      {
+      if (t->tuplet())
+            return false;
+      for (const auto el : t->elements()) {
+            if (!el->isChordRest())
+                  return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   isTupletStart
+//---------------------------------------------------------
+
+/*
+ * determine if t is the starting element of a tuplet
+ */
+
+static bool isTupletStart(const DurationElement* const el)
+      {
+      const auto t = el->tuplet();
+      if (!t)
+            return false;
+      return el == t->elements().front();
+      }
+
+//---------------------------------------------------------
+//   isTupletStop
+//---------------------------------------------------------
+
+/*
+ * determine if t is the stopping element of a tuplet
+ */
+
+static bool isTupletStop(const DurationElement* const el)
+      {
+      const auto t = el->tuplet();
+      if (!t)
+            return false;
+      return el == t->elements().back();
+      }
+
+//---------------------------------------------------------
+//   startTupletAtLevel
+//---------------------------------------------------------
+
+/*
+ * return the tuplet starting at tuplet nesting level, if any
+ */
+
+static const Tuplet* startTupletAtLevel(const DurationElement* const cr, const int level)
+      {
+      const DurationElement* el { cr };
+      if (!el->tuplet())
+            return nullptr;
+      for (int i = 0; i < level; ++i) {
+            if (!isTupletStart(el)) {
+                  return nullptr;
+                  }
+            el = el->tuplet();
+            }
+      return toTuplet(el);
+      }
+
+//---------------------------------------------------------
+//   stopTupletAtLevel
+//---------------------------------------------------------
+
+/*
+ * return the tuplet stopping at tuplet nesting level, if any
+ */
+
+static const Tuplet* stopTupletAtLevel(const DurationElement* const cr, const int level)
+      {
+      const DurationElement* el { cr };
+      if (!el->tuplet())
+            return nullptr;
+      for (int i = 0; i < level; ++i) {
+            if (!isTupletStop(el)) {
+                  return nullptr;
+                  }
+            el = el->tuplet();
+            }
+      return toTuplet(el);
+      }
+
+//---------------------------------------------------------
+//   tupletStart
 //---------------------------------------------------------
 
 // LVIFIX: add placement to tuplet support
@@ -1924,24 +2042,52 @@ void ExportMusicXml::clef(int staff, const ClefType ct, const QString& extraAttr
 //   <tuplet type="start" placement="above" bracket="no"/>
 // </notations>
 
-static void tupletStartStop(ChordRest* cr, Notations& notations, XmlWriter& xml)
+static void tupletStart(const Tuplet* const t, const int number, Notations& notations, XmlWriter& xml)
       {
-      Tuplet* t = cr->tuplet();
-      if (!t) return;
-      if (cr == t->elements().front()) {
-            notations.tag(xml);
-            QString tupletTag = "tuplet type=\"start\"";
-            tupletTag += " bracket=";
-            tupletTag += t->hasBracket() ? "\"yes\"" : "\"no\"";
-            if (t->numberType() == TupletNumberType::SHOW_RELATION)
-                  tupletTag += " show-number=\"both\"";
-            if (t->numberType() == TupletNumberType::NO_TEXT)
-                  tupletTag += " show-number=\"none\"";
-            xml.tagE(tupletTag);
-            }
-      if (cr == t->elements().back()) {
-            notations.tag(xml);
-            xml.tagE("tuplet type=\"stop\"");
+      notations.tag(xml);
+      QString tupletTag = "tuplet type=\"start\"";
+      if (!isSimpleTuplet(t))
+            tupletTag += QString(" number=\"%1\"").arg(number);
+      tupletTag += " bracket=";
+      tupletTag += t->hasBracket() ? "\"yes\"" : "\"no\"";
+      if (t->numberType() == TupletNumberType::SHOW_RELATION)
+            tupletTag += " show-number=\"both\"";
+      if (t->numberType() == TupletNumberType::NO_TEXT)
+            tupletTag += " show-number=\"none\"";
+      xml.tagE(tupletTag);
+      }
+
+//---------------------------------------------------------
+//   tupletStop
+//---------------------------------------------------------
+
+static void tupletStop(const Tuplet* const t, const int number, Notations& notations, XmlWriter& xml)
+      {
+      notations.tag(xml);
+      QString tupletTag = "tuplet type=\"stop\"";
+      if (!isSimpleTuplet(t))
+            tupletTag += QString(" number=\"%1\"").arg(number);
+      xml.tagE(tupletTag);
+      }
+
+//---------------------------------------------------------
+//   tupletStartStop
+//---------------------------------------------------------
+
+static void tupletStartStop(const ChordRest* const cr, Notations& notations, XmlWriter& xml)
+      {
+      const DurationElement* el = cr;
+      const auto nesting = tupletNesting(cr);
+      int level { 0 };
+      while (el->tuplet()) {
+            const auto startTuplet = startTupletAtLevel(cr, level + 1);
+            if (startTuplet)
+                  tupletStart(startTuplet, nesting - level, notations, xml);
+            const auto stopTuplet = stopTupletAtLevel(cr, level + 1);
+            if (stopTuplet)
+                  tupletStop(stopTuplet, nesting - level, notations, xml);
+            el = el->tuplet();
+            ++level;
             }
       }
 
@@ -2525,9 +2671,8 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Not
       (it seems after MusicXMLimport this is not the case)
  */
 
-static int determineTupletNormalTicks(ChordRest const* const chord)
+static int determineTupletNormalTicks(Tuplet const* const t)
       {
-      Tuplet const* const t = chord->tuplet();
       if (!t)
             return 0;
       /*
@@ -2797,24 +2942,41 @@ static bool isCueNote(const Note* const note)
       }
 
 //---------------------------------------------------------
+//   timeModification
+//---------------------------------------------------------
+
+static Fraction timeModification(const Tuplet* const tuplet, const int tremolo = 1)
+      {
+      int actNotes { tremolo };
+      int nrmNotes { 1 };
+      const Tuplet* t { tuplet };
+
+      while (t) {
+            // cannot use Fraction::operator*() as it contains a reduce(),
+            // which would change a 6:4 tuplet into 3:2
+            actNotes *= t->ratio().numerator();
+            nrmNotes *= t->ratio().denominator();
+            t = t->tuplet();
+            }
+
+      return { actNotes, nrmNotes };
+      }
+
+//---------------------------------------------------------
 //   writeTypeAndDots
 //---------------------------------------------------------
 
 static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
       {
       // type
-      int dots = 0;
-      Tuplet* t = note->chord()->tuplet();
-      int actNotes = 1;
-      int nrmNotes = 1;
-      if (t) {
-            actNotes = t->ratio().numerator();
-            nrmNotes = t->ratio().denominator();
-            }
+      int dots { 0 };
+      const auto ratio = timeModification(note->chord()->tuplet());
+      const auto actNotes = ratio.numerator();
+      const auto nrmNotes = ratio.denominator();
 
       const auto strActTicks = stretchCorrActTicks(note);
-      Fraction tt = Fraction::fromTicks(strActTicks * actNotes * tremoloCorrection(note) / nrmNotes);
-      QString s = tick2xml(tt, &dots);
+      const Fraction tt { Fraction::fromTicks(strActTicks * actNotes * tremoloCorrection(note) / nrmNotes) };
+      const QString s { tick2xml(tt, &dots) };
       if (s.isEmpty())
             qDebug("no note type found for ticks %d", strActTicks);
 
@@ -2831,31 +2993,21 @@ static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
 //   writeTimeModification
 //---------------------------------------------------------
 
-static void writeTimeModification(XmlWriter& xml, const Note* const note)
+static void writeTimeModification(XmlWriter& xml, const Tuplet* const tuplet, const int tremolo = 1)
       {
-      // time modification for two note tremolo
-      // TODO: support tremolo in tuplet ?
-      if (tremoloCorrection(note) == 2) {
-            xml.stag("time-modification");
-            xml.tag("actual-notes", 2);
-            xml.tag("normal-notes", 1);
-            xml.etag();
-            }
+      const auto ratio = timeModification(tuplet, tremolo);
+      if (ratio != Fraction(1, 1)) {
+            const auto actNotes = ratio.numerator();
+            const auto nrmNotes = ratio.denominator();
 
-      // time modification for tuplet
-      const auto t = note->chord()->tuplet();
-      if (t) {
-            auto actNotes = t->ratio().numerator();
-            auto nrmNotes = t->ratio().denominator();
-            auto nrmTicks = determineTupletNormalTicks(note->chord());
-            // TODO: remove following duplicated code (present for both notes and rests)
+            const auto nrmTicks = determineTupletNormalTicks(tuplet);
             xml.stag("time-modification");
             xml.tag("actual-notes", actNotes);
             xml.tag("normal-notes", nrmNotes);
             //qDebug("nrmTicks %d", nrmTicks);
             if (nrmTicks > 0) {
-                  int nrmDots = 0;
-                  QString nrmType = tick2xml(Fraction::fromTicks(nrmTicks), &nrmDots);
+                  int nrmDots { 0 };
+                  const QString nrmType { tick2xml(Fraction::fromTicks(nrmTicks), &nrmDots) };
                   if (nrmType.isEmpty())
                         qDebug("no note type found for ticks %d", nrmTicks);
                   else {
@@ -3029,7 +3181,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
 
             writeTypeAndDots(_xml, note);
             writeAccidental(_xml, "accidental", note->accidental());
-            writeTimeModification(_xml, note);
+            writeTimeModification(_xml, note->chord()->tuplet(), tremoloCorrection(note));
 
             // no stem for whole notes and beyond
             if (chord->noStem() || chord->measure()->stemless(chord->staffIdx())) {
@@ -3201,25 +3353,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
                   _xml.tagE("dot");
             }
 
-      if (rest->tuplet()) {
-            Tuplet* t = rest->tuplet();
-            _xml.stag("time-modification");
-            _xml.tag("actual-notes", t->ratio().numerator());
-            _xml.tag("normal-notes", t->ratio().denominator());
-            int nrmTicks = determineTupletNormalTicks(rest);
-            if (nrmTicks > 0) {
-                  int nrmDots = 0;
-                  QString nrmType = tick2xml(Fraction::fromTicks(nrmTicks), &nrmDots);
-                  if (nrmType.isEmpty())
-                        qDebug("no note type found for ticks %d", nrmTicks);
-                  else {
-                        _xml.tag("normal-type", nrmType);
-                        for (int ni = nrmDots; ni > 0; ni--)
-                              _xml.tagE("normal-dot");
-                        }
-                  }
-            _xml.etag();
-            }
+      writeTimeModification(_xml, rest->tuplet());
 
       if (staff)
             _xml.tag("staff", staff);
