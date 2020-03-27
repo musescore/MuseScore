@@ -152,8 +152,8 @@ class FiguredBassItem final : public Element {
       FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix) const;
 
       // standard re-implemented virtual functions
-      FiguredBassItem*  clone() const override   { return new FiguredBassItem(*this); }
-      ElementType       type() const override         { return ElementType::INVALID; }
+      FiguredBassItem*  clone() const override  { return new FiguredBassItem(*this); }
+      ElementType       type() const override   { return ElementType::INVALID; }
       void              draw(QPainter* painter) const override;
       void              layout() override;
       void              read(XmlReader&) override;
