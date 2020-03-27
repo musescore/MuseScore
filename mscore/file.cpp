@@ -458,12 +458,14 @@ bool MuseScore::saveFile(MasterScore* score)
                   fname = QFileInfo(fname).baseName() + ".msmr";
                   filter = msmrType + ";;" + mscxType + ";;" + msczType;
                   }
-            else
+            else {
 #endif
-            if (QFileInfo(fname).suffix().isEmpty()) {
+            filter = msczType + ";;" + mscxType;
+            if (QFileInfo(fname).suffix().isEmpty())
                   fname += ".mscz";
-                  filter = msczType + ";;" + mscxType;
-                  }
+#ifdef AVSOMR
+            }
+#endif
 
             fn = mscore->getSaveScoreName(tr("Save Score"), fname, filter);
             if (fn.isEmpty())
