@@ -28,11 +28,16 @@ struct TextEditData : public ElementEditData {
       int startUndoIdx { 0 };
 
       TextCursor cursor;
+      bool deleteText = false;
 
       TextEditData(TextBase* t) : cursor(t)  {}
-      ~TextEditData() {}
+      TextEditData(const TextEditData&) = delete;
+      TextEditData& operator=(const TextEditData&) = delete;
+      ~TextEditData();
 
       virtual EditDataType type() override      { return EditDataType::TextEditData; }
+
+      void setDeleteText(bool val) { deleteText = val; }
       };
 
 //---------------------------------------------------------
