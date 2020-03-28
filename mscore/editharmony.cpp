@@ -273,20 +273,5 @@ void ScoreView::harmonyTicksTab(const Fraction& ticks)
       _score->update();
       }
 
-//---------------------------------------------------------
-//   harmonyEndEdit
-//---------------------------------------------------------
-
-void ScoreView::harmonyEndEdit()
-      {
-      Harmony* harmony = toHarmony(editData.element);
-
-      if (harmony->empty()) {
-            _score->startCmd();
-            _score->undoRemoveElement(harmony);
-            _score->endCmd();
-            }
-      }
-
 }
 

@@ -173,10 +173,6 @@ void ScoreView::endEdit()
             ElementType tp = editData.element->type();
             if (tp == ElementType::LYRICS)
                   lyricsEndEdit();
-            else if (tp == ElementType::HARMONY)
-                  harmonyEndEdit();
-            else if (tp == ElementType::FIGURED_BASS)
-                  figuredBassEndEdit();
             }
       editData.clearData();
       mscore->updateInspector();

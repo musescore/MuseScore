@@ -22,20 +22,6 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   ScoreView::figuredBassEndEdit
-//    derived from harmonyEndEdit()
-//    remove the FB if empty
-//---------------------------------------------------------
-
-void ScoreView::figuredBassEndEdit()
-      {
-      FiguredBass* fb = static_cast<FiguredBass*>(editData.element);
-
-      if (fb->empty())
-            _score->undoRemoveElement(fb);
-      }
-
-//---------------------------------------------------------
 //   ScoreView::figuredBassTab
 //    derived from harmonyTab() (for Harmony)
 //    manages [Space] / [Shift][Space] keys, moving editing to FB of next/prev ChordRest
