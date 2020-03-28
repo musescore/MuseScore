@@ -16,6 +16,19 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   ~TextEditData
+//---------------------------------------------------------
+
+TextEditData::~TextEditData()
+      {
+      if (deleteText) {
+            TextBase* text = cursor.text();
+            for (ScoreElement* se : text->linkList())
+                  toTextBase(se)->deleteLater();
+            }
+      }
+
+//---------------------------------------------------------
 //   editInsertText
 //---------------------------------------------------------
 
@@ -125,11 +138,7 @@ void TextBase::endEdit(EditData& ed)
                         undo->current()->filterChildren(f, this);
 
                   score()->endCmd();
-
-                  // Ensure that unnecessary text elements will be cleaned up
-                  MasterScore* ms = score()->masterScore();
-                  for (ScoreElement* se : linkList())
-                        ms->deleteLater(se);
+                  ted->setDeleteText(true); // mark this text element for deletion
                   }
             else {
                   score()->endCmd();

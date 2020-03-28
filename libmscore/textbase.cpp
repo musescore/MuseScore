@@ -1227,7 +1227,7 @@ static qreal parseNumProperty(const QString& s)
 void TextBase::createLayout()
       {
       _layout.clear();
-      TextCursor cursor((Text*)this);
+      TextCursor cursor(this);
       cursor.init();
 
       int state = 0;
