@@ -511,7 +511,7 @@ void InstrumentTemplate::read(XmlReader& e)
             Channel a;
             a.setChorus(0);
             a.setReverb(0);
-            a.setName("normal");
+            a.setName(Channel::DEFAULT_NAME);
             a.setProgram(0);
             a.setBank(0);
             a.setVolume(90);

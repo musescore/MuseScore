@@ -3567,7 +3567,7 @@ Shortcut Shortcut::_sc[] = {
          "realize-chord-symbols",
          QT_TRANSLATE_NOOP("action","Realize Chord Symbols"),
          QT_TRANSLATE_NOOP("action","Realize chord symbols"),
-         0,
+         QT_TRANSLATE_NOOP("action","Convert chord symbols into notes"),
          Icons::Invalid_ICON,
          Qt::WindowShortcut
          },

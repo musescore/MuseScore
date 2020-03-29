@@ -70,7 +70,7 @@
         <Channel>
           <program value="24"/>
           </Channel>
-        <Channel name="harmony">
+        <Channel name="Chord symbols">
           <program value="24"/>
           </Channel>
         </Instrument>

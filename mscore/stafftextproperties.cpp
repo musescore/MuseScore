@@ -39,7 +39,7 @@ static void initChannelCombo(QComboBox* cb, StaffTextBase* st)
       Fraction tick = static_cast<Segment*>(st->parent())->tick();
       for (const Channel* a : part->instrument(tick)->channel()) {
             if (a->name().isEmpty() || a->name() == Channel::DEFAULT_NAME)
-                  cb->addItem(QObject::tr(Channel::DEFAULT_NAME));
+                  cb->addItem(qApp->translate("channel", Channel::DEFAULT_NAME));
             else
                   cb->addItem(qApp->translate("InstrumentsXML", a->name().toUtf8().data()));
             }
@@ -185,7 +185,7 @@ StaffTextProperties::StaffTextProperties(const StaffTextBase* st, QWidget* paren
             QTreeWidgetItem* item = new QTreeWidgetItem(channelList);
             item->setData(0, Qt::UserRole, i);
             if (a->name().isEmpty() || a->name() == Channel::DEFAULT_NAME)
-                  item->setText(0, tr(Channel::DEFAULT_NAME));
+                  item->setText(0, qApp->translate("channel", Channel::DEFAULT_NAME));
             else
                   item->setText(0, qApp->translate("InstrumentsXML", a->name().toUtf8().data()));
             item->setText(1, qApp->translate("InstrumentsXML", a->descr().toUtf8().data()));
@@ -389,7 +389,7 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
       for (const NamedEventList& e : part->instrument(tick)->midiActions()) {
             QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
             if (e.name.isEmpty() || e.name == Channel::DEFAULT_NAME) {
-                  ti->setText(0, tr(Channel::DEFAULT_NAME));
+                  ti->setText(0, qApp->translate("channel", Channel::DEFAULT_NAME));
                   ti->setData(0, Qt::UserRole, Channel::DEFAULT_NAME);
                   }
             else {
@@ -401,7 +401,7 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
       for (const NamedEventList& e : channel->midiActions) {
             QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
             if (e.name.isEmpty() || e.name == Channel::DEFAULT_NAME) {
-                  ti->setText(0, tr(Channel::DEFAULT_NAME));
+                  ti->setText(0, qApp->translate("channel", Channel::DEFAULT_NAME));
                   ti->setData(0, Qt::UserRole, Channel::DEFAULT_NAME);
                   }
             else {
