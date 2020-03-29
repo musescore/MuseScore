@@ -90,7 +90,7 @@
           <controller ctrl="32" value="0"/>
           <program value="4"/>
           </Channel>
-        <Channel name="harmony">
+        <Channel name="Chord symbols">
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="0"/>
           <program value="4"/>

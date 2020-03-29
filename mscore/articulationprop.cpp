@@ -58,7 +58,7 @@ ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent
 
             for (const Channel* a : instrument->channel()) {
                   if (a->name().isEmpty() || a->name() == Channel::DEFAULT_NAME) {
-                        channelList->addItem(tr(Channel::DEFAULT_NAME));
+                        channelList->addItem(qApp->translate("channel", Channel::DEFAULT_NAME));
                         channelList->item(channelList->count() - 1)->setData(Qt::UserRole, Channel::DEFAULT_NAME);
                         }
                   else {

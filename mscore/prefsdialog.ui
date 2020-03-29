@@ -1339,7 +1339,7 @@
           <bool>true</bool>
          </property>
          <property name="title">
-          <string>Play Harmony</string>
+          <string>Play Chord Symbols</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -1347,11 +1347,11 @@
          <property name="checked">
           <bool>false</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout_4">
+         <layout class="QGridLayout" name="gridLayout_41">
           <item row="0" column="0">
            <widget class="QCheckBox" name="playHarmonyOnEdit">
             <property name="text">
-             <string>Play harmony when editing</string>
+             <string>Play chord symbol when editing</string>
             </property>
             <property name="checked">
              <bool>true</bool>
