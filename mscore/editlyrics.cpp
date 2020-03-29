@@ -437,6 +437,7 @@ void ScoreView::lyricsUnderscore()
 
       // if a place for a new lyrics has been found, create a lyrics there
 
+      _score->startCmd();
       ChordRest* cr    = toChordRest(nextSegment->element(track));
       Lyrics* toLyrics = cr->lyrics(verse, placement);
       bool newLyrics   = (toLyrics == 0);

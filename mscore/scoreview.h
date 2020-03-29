@@ -200,13 +200,11 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void lyricsMinus() override;
       virtual void lyricsUnderscore() override;
       virtual void textTab(bool back = false) override;
-      void harmonyEndEdit();
       void harmonyTab(bool back);
       void harmonyBeatsTab(bool noterest, bool back);
       void harmonyTicksTab(const Fraction& ticks);
       void figuredBassTab(bool meas, bool back);
       void figuredBassTicksTab(const Fraction& ticks);
-      void figuredBassEndEdit();
       void realtimeAdvance(bool allowRests);
       void cmdAddFret(int fret);
       void cmdAddChordName(HarmonyType ht);
