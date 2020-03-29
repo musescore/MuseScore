@@ -16,6 +16,19 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   ~TextEditData
+//---------------------------------------------------------
+
+TextEditData::~TextEditData()
+      {
+      if (deleteText) {
+            TextBase* text = cursor.text();
+            for (ScoreElement* se : text->linkList())
+                  toTextBase(se)->deleteLater();
+            }
+      }
+
+//---------------------------------------------------------
 //   editInsertText
 //---------------------------------------------------------
 
@@ -70,7 +83,8 @@ void TextBase::startEdit(EditData& ed)
 void TextBase::endEdit(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      const QString actualText = xmlText();
+      const QString actualXmlText = xmlText();
+      const QString actualPlainText = plainText();
       UndoStack* undo = score()->undoStack();
 
       // replace all undo/redo records collected during text editing with
@@ -101,7 +115,7 @@ void TextBase::endEdit(EditData& ed)
                   }
             }
 
-      if (actualText.isEmpty()) {
+      if (actualPlainText.isEmpty()) {
             qDebug("actual text is empty");
 
             // If this assertion fails, no undo command relevant to this text
@@ -125,11 +139,7 @@ void TextBase::endEdit(EditData& ed)
                         undo->current()->filterChildren(f, this);
 
                   score()->endCmd();
-
-                  // Ensure that unnecessary text elements will be cleaned up
-                  MasterScore* ms = score()->masterScore();
-                  for (ScoreElement* se : linkList())
-                        ms->deleteLater(se);
+                  ted->setDeleteText(true); // mark this text element for deletion
                   }
             else {
                   score()->endCmd();
@@ -141,7 +151,7 @@ void TextBase::endEdit(EditData& ed)
       if (textWasEdited) {
             setXmlText(ted->oldXmlText);                    // reset text to value before editing
             undo->reopen();
-            undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
+            undoChangeProperty(Pid::TEXT, actualXmlText);   // change property to set text to actual value again
                                                             // this also changes text of linked elements
             layout1();
             triggerLayout();                                // force relayout even if text did not change

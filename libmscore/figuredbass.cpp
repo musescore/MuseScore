@@ -1307,11 +1307,9 @@ void FiguredBass::endEdit(EditData& ed)
       TextBase::endEdit(ed);
       // as the standard text editor keeps inserting spurious HTML formatting and styles
       // retrieve and work only on the plain text
-      QString txt = plainText();
-      if (txt.isEmpty()) {                       // if no text, nothing to do
-            setXmlText(txt);                       // clear the stored text: the empty f.b. element will be deleted
+      const QString txt = plainText();
+      if (txt.isEmpty()) // if no text, nothing to do
             return;
-            }
 
       // split text into lines and create an item for each line
       QStringList list = txt.split('\n', QString::SkipEmptyParts);
