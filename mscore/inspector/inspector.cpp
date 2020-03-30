@@ -442,7 +442,7 @@ void UiInspectorElement::setupUi(QWidget* inspectorElement)
 InspectorElement::InspectorElement(QWidget* parent)
    : InspectorElementBase(parent)
       {
-      // mapSignals();
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -454,10 +454,10 @@ InspectorBreak::InspectorBreak(QWidget* parent)
       {
       b.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {         // currently empty
-            };
-      const std::vector<InspectorPanel> ppList = { { b.title, b.panel } };
-      mapSignals(iiList, ppList);
+      // currently empty
+      iList = {};
+      pList = { { b.title, b.panel } };
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -469,13 +469,13 @@ InspectorSectionBreak::InspectorSectionBreak(QWidget* parent)
       {
       scb.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
+      iList = {
             { Pid::PAUSE,                   0, scb.pause,               scb.resetPause               },
             { Pid::START_WITH_LONG_NAMES,   0, scb.startWithLongNames,  scb.resetStartWithLongNames  },
             { Pid::START_WITH_MEASURE_ONE,  0, scb.startWithMeasureOne, scb.resetStartWithMeasureOne }
             };
-      const std::vector<InspectorPanel> ppList = { { scb.title, scb.panel } };
-      mapSignals(iiList, ppList);
+      pList = { { scb.title, scb.panel } };
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -487,7 +487,7 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
       {
       sl.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
+      iList = {
             { Pid::STAFF_YOFFSET,          0, sl.yoffset,         sl.resetYoffset         },
             { Pid::SMALL,                  0, sl.small,           sl.resetSmall           },
             { Pid::MAG,                    0, sl.scale,           sl.resetScale           },
@@ -502,7 +502,7 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
             { Pid::STAFF_GEN_TIMESIG,      0, sl.genTimesig,      sl.resetGenTimesig      },
             { Pid::STAFF_GEN_KEYSIG,       0, sl.genKeysig,       sl.resetGenKeysig       },
             };
-      const std::vector<InspectorPanel> ppList = { { sl.title, sl.panel } };
+      pList = { { sl.title, sl.panel } };
 
       sl.noteheadScheme->clear();
       for (auto i : { NoteHeadScheme::HEAD_NORMAL,
@@ -516,7 +516,7 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
          NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER} ) {
             sl.noteheadScheme->addItem(StaffType::scheme2userName(i), int(i));
             }
-      mapSignals(iiList, ppList);
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -553,7 +553,7 @@ InspectorVBox::InspectorVBox(QWidget* parent)
       {
       vb.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
+      iList = {
             { Pid::TOP_GAP,       0, vb.topGap,       vb.resetTopGap       },
             { Pid::BOTTOM_GAP,    0, vb.bottomGap,    vb.resetBottomGap    },
             { Pid::LEFT_MARGIN,   0, vb.leftMargin,   vb.resetLeftMargin   },
@@ -562,8 +562,8 @@ InspectorVBox::InspectorVBox(QWidget* parent)
             { Pid::BOTTOM_MARGIN, 0, vb.bottomMargin, vb.resetBottomMargin },
             { Pid::BOX_HEIGHT,    0, vb.height,       0                    }
             };
-      const std::vector<InspectorPanel> ppList = { { vb.title, vb.panel } };
-      mapSignals(iiList, ppList);
+      pList = { { vb.title, vb.panel } };
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -575,7 +575,7 @@ InspectorTBox::InspectorTBox(QWidget* parent)
       {
       tb.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
+      iList = {
             { Pid::TOP_GAP,       0, tb.topGap,       tb.resetTopGap       },
             { Pid::BOTTOM_GAP,    0, tb.bottomGap,    tb.resetBottomGap    },
             { Pid::LEFT_MARGIN,   0, tb.leftMargin,   tb.resetLeftMargin   },
@@ -583,8 +583,8 @@ InspectorTBox::InspectorTBox(QWidget* parent)
             { Pid::TOP_MARGIN,    0, tb.topMargin,    tb.resetTopMargin    },
             { Pid::BOTTOM_MARGIN, 0, tb.bottomMargin, tb.resetBottomMargin },
             };
-      const std::vector<InspectorPanel> ppList = { { tb.title, tb.panel } };
-      mapSignals(iiList, ppList);
+      pList = { { tb.title, tb.panel } };
+      mapSignals();
       }
 
 //---------------------------------------------------------
@@ -596,14 +596,14 @@ InspectorHBox::InspectorHBox(QWidget* parent)
       {
       hb.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
+      iList = {
             { Pid::TOP_GAP,               0, hb.leftGap,  hb.resetLeftGap  },
             { Pid::BOTTOM_GAP,            0, hb.rightGap, hb.resetRightGap },
             { Pid::BOX_WIDTH,             0, hb.width,    0                },
             { Pid::CREATE_SYSTEM_HEADER,  0, hb.createSystemHeader, hb.resetCreateSystemHeader }
             };
-      const std::vector<InspectorPanel> ppList = { { hb.title, hb.panel } };
-      mapSignals(iiList, ppList);
+      pList = { { hb.title, hb.panel } };
+      mapSignals();
       }
 
 //---------------------------------------------------------
