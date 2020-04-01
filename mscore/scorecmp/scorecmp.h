@@ -50,7 +50,7 @@ class ScoreComparisonTool : public QDockWidget {
       RawScoreDiffModel* _rawModel = nullptr;
       ScoreDiffModel* _intelligentModel = nullptr;
       
-      bool screenModeBefore = false;
+      bool wasSplitScreen = false;
 
       void updateDiffView(Mode mode);
       void updateDiffTitle();
