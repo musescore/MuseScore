@@ -299,8 +299,14 @@ void TimeSig::layout()
             ds.clear();
             }
       else {
-            ns = toTimeSigString(_numeratorString.isEmpty()   ? QString::number(_sig.numerator())   : _numeratorString);
-            ds = toTimeSigString(_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString);
+            if (_numeratorString.isEmpty()) {
+                  ns = toTimeSigString(_numeratorString.isEmpty()   ? QString::number(_sig.numerator())   : _numeratorString);
+                  ds = toTimeSigString(_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString);
+                  }
+            else {
+                  ns = toTimeSigString(_numeratorString);
+                  ds = toTimeSigString(_denominatorString);
+                  }
 
             ScoreFont* font = score()->scoreFont();
             QSizeF mag(magS() * _scale);

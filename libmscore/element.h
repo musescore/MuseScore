@@ -189,6 +189,8 @@ class Element : public ScoreElement {
       Q_INVOKABLE virtual Ms::Element* clone() const = 0;
       virtual Element* linkedClone();
 
+      void deleteLater();
+
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
       Measure* findMeasure();
