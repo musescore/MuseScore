@@ -1516,7 +1516,8 @@ void SetUserBankController::flip(EditData*)
 //---------------------------------------------------------
 
 ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible, ClefTypeList _clefType,
-   qreal _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway, bool hide)
+   qreal _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway, 
+   bool _hideSystemBarLine, bool  _mergeMatchingRests)
       {
       staff       = _staff;
       invisible   = _invisible;
@@ -1525,7 +1526,8 @@ ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible, ClefTypeList _clefType
       hideMode    = _hideMode;
       showIfEmpty = _showIfEmpty;
       cutaway     = _cutaway;
-      hideSystemBarLine = hide;
+      hideSystemBarLine = _hideSystemBarLine;
+      mergeMatchingRests = _mergeMatchingRests;
       }
 
 //---------------------------------------------------------
@@ -1541,7 +1543,8 @@ void ChangeStaff::flip(EditData*)
       Staff::HideMode oldHideMode    = staff->hideWhenEmpty();
       bool oldShowIfEmpty = staff->showIfEmpty();
       bool oldCutaway     = staff->cutaway();
-      bool hide           = staff->hideSystemBarLine();
+      bool oldHideSystemBarLine = staff->hideSystemBarLine();
+      bool oldMergeMatchingRests = staff->mergeMatchingRests();
 
       staff->setInvisible(invisible);
       staff->setDefaultClefType(clefType);
@@ -1550,6 +1553,7 @@ void ChangeStaff::flip(EditData*)
       staff->setShowIfEmpty(showIfEmpty);
       staff->setCutaway(cutaway);
       staff->setHideSystemBarLine(hideSystemBarLine);
+      staff->setMergeMatchingRests(mergeMatchingRests);
 
       invisible   = oldInvisible;
       clefType    = oldClefType;
@@ -1557,7 +1561,8 @@ void ChangeStaff::flip(EditData*)
       hideMode    = oldHideMode;
       showIfEmpty = oldShowIfEmpty;
       cutaway     = oldCutaway;
-      hideSystemBarLine = hide;
+      hideSystemBarLine = oldHideSystemBarLine;
+      mergeMatchingRests = oldMergeMatchingRests;
 
       Score* score = staff->score();
       if (invisibleChanged) {

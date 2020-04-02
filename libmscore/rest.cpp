@@ -493,7 +493,7 @@ int Rest::computeLineOffset(int lines)
             else if (measure()->isOnlyDeletedRests(track() + 1, tick(), tick() + globalTicks()))
                   offsetVoices = false;
             }
-#if 0
+
       if (offsetVoices && staff()->mergeMatchingRests()) {
             // automatically merge matching rests in voices 1 & 2 if nothing in any other voice
             // this is not always the right thing to do do, but is useful in choral music
@@ -510,8 +510,8 @@ int Rest::computeLineOffset(int lines)
                         // try to find match in other voice (1 or 2)
                         if (e && e->type() == ElementType::REST) {
                               Rest* r = toRest(e);
-                              if (r->globalDuration() == globalDuration()) {
-                                    matchFound = true;
+                              if (r->globalTicks() == globalTicks()) {
+                                          matchFound = true;
                                     continue;
                                     }
                               }
@@ -529,7 +529,6 @@ int Rest::computeLineOffset(int lines)
             if (matchFound && nothingElse)
                   offsetVoices = false;
             }
-#endif
 
       int lineOffset    = 0;
       int assumedCenter = 4;
@@ -549,7 +548,7 @@ int Rest::computeLineOffset(int lines)
                   case TDuration::DurationType::V_MEASURE:
                         if (ticks() >= Fraction(2, 1))   // breve symbol
                               lineOffset = up ? -3 : 5;
-                        else
+                        else 
                               lineOffset = up ? -4 : 6;     // whole symbol
                         break;
                   case TDuration::DurationType::V_WHOLE:

@@ -659,6 +659,8 @@ void Staff::write(XmlWriter& xml) const
             xml.tag("showIfSystemEmpty", showIfEmpty());
       if (_hideSystemBarLine)
             xml.tag("hideSystemBarLine", _hideSystemBarLine);
+      if (_mergeMatchingRests)
+            xml.tag("mergeMatchingRests", _mergeMatchingRests);
 
       for (const BracketItem* i : _brackets) {
             BracketType a = i->bracketType();
@@ -703,20 +705,20 @@ bool Staff::readProperties(XmlReader& e)
             StaffType st;
             st.read(e);
             setStaffType(Fraction(0,1), st);
-            }
+      }
       else if (tag == "defaultClef") {           // sets both default transposing and concert clef
             QString val(e.readElementText());
             ClefType ct = Clef::clefType(val);
             setDefaultClefType(ClefTypeList(ct, ct));
-            }
+      }
       else if (tag == "defaultConcertClef") {
             QString val(e.readElementText());
             setDefaultClefType(ClefTypeList(Clef::clefType(val), defaultClefType()._transposingClef));
-            }
+      }
       else if (tag == "defaultTransposingClef") {
             QString val(e.readElementText());
             setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, Clef::clefType(val)));
-            }
+      }
       else if (tag == "small")                  // obsolete
             setSmall(Fraction(0,1), e.readInt());
       else if (tag == "invisible")
@@ -729,6 +731,8 @@ bool Staff::readProperties(XmlReader& e)
             setShowIfEmpty(e.readInt());
       else if (tag == "hideSystemBarLine")
             _hideSystemBarLine = e.readInt();
+      else if (tag == "mergeMatchingRests")
+            _mergeMatchingRests = e.readInt();
       else if (tag == "keylist")
             _keys.read(e, score());
       else if (tag == "bracket") {
@@ -1087,6 +1091,7 @@ void Staff::init(const Staff* s)
       _cutaway           = s->_cutaway;
       _showIfEmpty       = s->_showIfEmpty;
       _hideSystemBarLine = s->_hideSystemBarLine;
+      _mergeMatchingRests = s->_mergeMatchingRests;
       _color             = s->_color;
       _userDist          = s->_userDist;
       }
