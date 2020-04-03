@@ -45,6 +45,7 @@ jobs:
         sudo apt-get install libasound2-dev portaudio19-dev libmp3lame-dev libsndfile1-dev libportmidi-dev
         sudo apt-get install libssl-dev libpulse-dev libfreetype6-dev libfreetype6
         sudo apt-get install libdrm-dev libgl1-mesa-dev libegl1-mesa-dev
+        sudo apt-get install ccache
     - name: Setup the environment
       if: contains( env.found, '1')
       run: |
@@ -53,6 +54,7 @@ jobs:
         echo "::set-env name=PATH::${PATH}"
         echo "::set-env name=QT_PLUGIN_PATH::${QT_PLUGIN_PATH}"
         echo "::set-env name=QML2_IMPORT_PATH::${QML2_IMPORT_PATH}"
+        git checkout -- build/travis/job1_Tests/environment.sh
     - name: Build
       if: contains( env.found, '1')
       run: |
@@ -102,8 +104,14 @@ jobs:
       with:
         message: 'This is an automatic message. This PR appears to change some of the visual tests.
           Please carefully review the new visual test results in the uploaded artifact that can be found
-          [here](https://github.com/musescore/MuseScore/actions/runs/${{ github.run_id }})'
+          [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})'
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Emit failure signal for PR if differences are found
+      if: github.event_name == 'pull_request' && contains( env.found, '1') && contains( env.VTEST_DIFF_FOUND, 'true')
+      run: |
+        echo "This PR appears to change some of the visual tests."
+        echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        exit 1
     - name: Comment push commit
       if: github.event_name == 'push' && contains( env.found, '1') && contains( env.VTEST_DIFF_FOUND, 'true')
       uses: peter-evans/commit-comment@v1.1.0
@@ -113,5 +121,5 @@ jobs:
           Please carefully review the new visual test results in the uploaded artifact that can be found
           [here][1]
           
-          [1]: https://github.com/musescore/MuseScore/actions/runs/${{ github.run_id }}
+          [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         token: ${{ secrets.GITHUB_TOKEN }}
