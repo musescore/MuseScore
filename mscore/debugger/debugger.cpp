@@ -670,6 +670,7 @@ void Debugger::updateElement(Element* el)
                   case ElementType::JUMP:
                   case ElementType::TEXT:
                   case ElementType::MEASURE_NUMBER:
+                  case ElementType::MMREST_RANGE:
                   case ElementType::STAFF_TEXT:
                   case ElementType::SYSTEM_TEXT:
                   case ElementType::REHEARSAL_MARK:
@@ -2846,4 +2847,3 @@ void BracketView::setElement(Element* e)
       }
 
 }
-

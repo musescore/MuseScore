@@ -167,6 +167,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::CHANGE_METHOD,           true,  "changeMethod",          P_TYPE::CHANGE_METHOD,       DUMMY_QT_TRANSLATE_NOOP("propertyName", "change method")   },        // the new, more general version of VELO_CHANGE_METHOD
       { Pid::PLACEMENT,               false, "placement",             P_TYPE::PLACEMENT,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "placement")        },
       { Pid::HPLACEMENT,              false, "hplacement",            P_TYPE::HPLACEMENT,          DUMMY_QT_TRANSLATE_NOOP("propertyName", "horizontal placement")   },
+      { Pid::MMREST_RANGE_BRACKET_TYPE, false, "mmrestRangeBracketType", P_TYPE::INT,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "multi-measure rest range bracket type")   },
       { Pid::VELOCITY,                false, "velocity",              P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity")         },
       { Pid::JUMP_TO,                 true,  "jumpTo",                P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "jump to")          },
       { Pid::PLAY_UNTIL,              true,  "playUntil",             P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "play until")       },

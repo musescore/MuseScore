@@ -4018,6 +4018,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   continue;
             Measure* m = toMeasure(mb);
             m->layoutMeasureNumber();
+            m->layoutMMRestRange();
+
             // in continuous view, entire score is one system
             // but we only need to process the range
             if (lineMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick))

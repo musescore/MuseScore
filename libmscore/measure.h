@@ -30,6 +30,7 @@ class Tuplet;
 class Staff;
 class Chord;
 class MeasureNumber;
+class MMRestRange;
 class ChordRest;
 class Score;
 class MuseScoreView;
@@ -130,6 +131,8 @@ class Measure final : public MeasureBase {
       void setCorrupted(int staffIdx, bool val);
       void setNoText(int staffIdx, MeasureNumber*);
       MeasureNumber* noText(int staffIdx) const;
+      void setMMRangeText(int staffIdx, MMRestRange *);
+      MMRestRange *mmRangeText(int staffIdx) const;
 
       void createStaves(int);
 
@@ -162,6 +165,7 @@ class Measure final : public MeasureBase {
       bool showsMeasureNumber();
       bool showsMeasureNumberInAutoMode();
       void layoutMeasureNumber();
+      void layoutMMRestRange();
 
       Chord* findChord(Fraction tick, int track);
       ChordRest* findChordRest(Fraction tick, int track);
@@ -278,4 +282,3 @@ class Measure final : public MeasureBase {
 
 }     // namespace Ms
 #endif
-
