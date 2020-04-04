@@ -505,6 +505,31 @@ void SimpleTextObj::readCapx(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   TransposableObj::readCapx -- capx equivalent of TransposableObj::read
+//---------------------------------------------------------
+
+void TransposableObj::readCapx(XmlReader& e)
+      {
+      QString enharmonicNote = e.attribute("base");
+      while (e.readNextStartElement()) {
+            const QStringRef& tag1(e.name());
+            if (tag1 == "drawObj") {
+                  if (e.attribute("base") == enharmonicNote) {
+                        while (e.readNextStartElement()) {
+                              const QStringRef& tag2(e.name());
+                              if (tag2 == "group") {
+                                    variants.append(cap->readCapxDrawObjectArray(e));
+                                    }
+                              }
+                        }
+                  else {
+                        e.skipCurrentElement();
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   SlurObj::readCapx -- capx equivalent of SlurObj::read
 //---------------------------------------------------------
 
@@ -663,8 +688,10 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                               ol.append(o);
                               }
                         else if (tag == "transposable") {
-                              qDebug("readCapxDrawObjectArray: found transposable (skipping)");
-                              e.skipCurrentElement();
+                              TransposableObj* o = new TransposableObj(this);
+                              bdo = o; // save o to handle the "basic" tag (which sometimes follows)
+                              o->readCapx(e);
+                              ol.append(o);
                               }
                         else if (tag == "group") {
                               qDebug("readCapxDrawObjectArray: found group (skipping)");
