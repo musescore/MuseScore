@@ -66,6 +66,7 @@
 #include "system.h"
 #include "tempotext.h"
 #include "measurenumber.h"
+#include "mmrestrange.h"
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
@@ -91,6 +92,7 @@ namespace Ms {
 
 class MStaff {
       MeasureNumber* _noText { 0 };         ///< Measure number text object
+      MMRestRange* _mmRangeText { 0 };      ///< Multi measure rest range text object
       StaffLines*  _lines    { 0 };
       Spacer* _vspacerUp     { 0 };
       Spacer* _vspacerDown   { 0 };
@@ -112,6 +114,9 @@ class MStaff {
 
       MeasureNumber* noText() const   { return _noText;     }
       void setNoText(MeasureNumber* t) { _noText = t;        }
+
+      MMRestRange *mmRangeText() const { return _mmRangeText; }
+      void setMMRangeText(MMRestRange *r) { _mmRangeText = r; }
 
       StaffLines* lines() const      { return _lines; }
       void setLines(StaffLines* l)   { _lines = l;    }
@@ -433,7 +438,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool &
 
 //---------------------------------------------------------
 //   tick2pos
-//    return x position for tick relative to System
+///    return x position for tick relative to System
 //---------------------------------------------------------
 
 qreal Measure::tick2pos(Fraction tck) const
@@ -538,6 +543,7 @@ void Measure::layoutMeasureNumber()
       QString s;
       if (smn)
             s = QString("%1").arg(no() + 1);
+
       unsigned nn = 1;
       bool nas = score()->styleB(Sid::measureNumberAllStaves);
 
@@ -577,6 +583,51 @@ void Measure::layoutMeasureNumber()
                               score()->undo(new RemoveElement(t));
                         }
                   }
+            }
+      }
+
+void Measure:layoutMMRestRange()
+      {
+      if (!isMMRest() || !score()->styleB(Sid::mmRestShowMeasureNumberRange)) {
+            // Remove existing
+            for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
+                  MStaff *ms = _mstaves[staffIdx];
+                  MMRestRange *rr = ms->mmRangeText();
+                  if (rr) {
+                        if (rr->generated())
+                              score()->removeElement(rr);
+                        else
+                              score()->undo(new RemoveElement(rr));
+                        }
+                  }
+
+            return;
+            }
+
+
+      QString s;
+      if (mmRestCount() > 1) {
+            // middle char is an en dash (not em)
+            s = QString("%1–%2").arg(no() + 1).arg(no() + mmRestCount());
+            }
+      else {
+            // If the minimum range to create a mmrest is set to 1,
+            // then simply show the measure number as there is no range
+            s = QString("%1").arg(no() + 1);
+            }
+
+      for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
+            MStaff *ms = _mstaves[staffIdx];
+            MMRestRange *rr = ms->mmRangeText();
+            if (!rr) {
+                  rr = new MMRestRange(score());
+                  rr->setTrack(staffIdx * VOICES);
+                  rr->setGenerated(true);
+                  rr->setParent(this);
+                  add(rr);
+                  }
+            rr->setXmlText(s);
+            rr->layout();
             }
       }
 

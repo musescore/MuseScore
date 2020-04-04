@@ -305,6 +305,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::measureNumberPosAbove,    false, measureNumberPosAbove,        resetMeasureNumberPosAbove },
       { Sid::measureNumberPosBelow,    false, measureNumberPosBelow,        resetMeasureNumberPosBelow },
 
+      { Sid::mmRestShowMeasureNumberRange, false, mmRestShowMeasureNumberRange,        0 },
+      { Sid::mmRestRangeBracketType,       false, mmRestMeasureNumberRangeBracketType, resetMmRestMeasureNumberRangeBracketType },
+      { Sid::mmRestRangeVPlacement,        false, mmRestMeasureNumberRangeVPlacement,  resetMmRestMeasureNumberRangeVPlacement },
+      { Sid::mmRestRangeHPlacement,        false, mmRestMeasureNumberRangeHPlacement,  resetMmRestMeasureNumberRangeHPlacement },
+
       { Sid::beamDistance,             true,  beamDistance,                 0 },
       { Sid::beamNoSlope,              false, beamNoSlope,                  0 },
       { Sid::graceNoteMag,             true,  graceNoteSize,                resetGraceNoteSize  },
@@ -398,17 +403,26 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
             trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
             tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement,
-            measureNumberVPlacement
+            measureNumberVPlacement, mmRestMeasureNumberRangeVPlacement
             }) {
             cb->clear();
             cb->addItem(tr("Above"), int(Placement::ABOVE));
             cb->addItem(tr("Below"), int(Placement::BELOW));
             }
+      for (QComboBox* cb : std::vector<QComboBox*> {
+           measureNumberHPlacement, mmRestMeasureNumberRangeHPlacement
+           }) {
+            cb->clear();
+            cb->addItem(tr("Left"),   int(HPlacement::LEFT));
+            cb->addItem(tr("Center"), int(HPlacement::CENTER));
+            cb->addItem(tr("Right"),  int(HPlacement::RIGHT));
+            }
 
-      measureNumberHPlacement->clear();
-      measureNumberHPlacement->addItem(tr("Left"),   int(HPlacement::LEFT));
-      measureNumberHPlacement->addItem(tr("Center"), int(HPlacement::CENTER));
-      measureNumberHPlacement->addItem(tr("Right"),  int(HPlacement::RIGHT));
+      mmRestMeasureNumberRangeBracketType->clear();
+      mmRestMeasureNumberRangeBracketType->addItem(tr("None"),        int(MMRestRangeBracketType::NONE));
+      mmRestMeasureNumberRangeBracketType->addItem(tr("Brackets"),    int(MMRestRangeBracketType::BRACKETS));
+      mmRestMeasureNumberRangeBracketType->addItem(tr("Parentheses"), int(MMRestRangeBracketType::PARENTHESES));
+
 
       autoplaceVerticalAlignRange->clear();
       autoplaceVerticalAlignRange->addItem(tr("Segment"), int(VerticalAlignRange::SEGMENT));

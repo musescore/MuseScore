@@ -31,7 +31,8 @@ static const ElementStyle measureNumberStyle {
 //   MeasureNumber
 //---------------------------------------------------------
 
-MeasureNumber::MeasureNumber(Score* s) : TextBase(s, Tid::MEASURE_NUMBER)
+MeasureNumber::MeasureNumber(Score* s, Tid tid, ElementFlags flags)
+      : TextBase(s, tid, flags)
       {
       setFlag(ElementFlag::ON_STAFF, true);
       initElementStyle(&measureNumberStyle);
@@ -95,7 +96,7 @@ QVariant MeasureNumber::propertyDefault(Pid id) const
             case Pid::PLACEMENT:
                   return score()->styleV(Sid::measureNumberVPlacement);
             case Pid::HPLACEMENT:
-                  return score()->styleV(Sid::measureNumberHPlacement);;
+                  return score()->styleV(Sid::measureNumberHPlacement);
             default:
                   return TextBase::propertyDefault(id);
             }
@@ -197,4 +198,3 @@ void MeasureNumber::layout()
       }
 
 } // namespace MS
-

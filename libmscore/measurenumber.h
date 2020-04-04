@@ -19,14 +19,16 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   MeasureNumber
+///   The basic element making measure numbers.
+///   Reimplemented by MMRestRange
 //---------------------------------------------------------
 
-class MeasureNumber final : public TextBase {
+class MeasureNumber : public TextBase {
 
       M_PROPERTY (HPlacement, hPlacement, setHPlacement) // Horizontal Placement
 
    public:
-      MeasureNumber(Score* s = nullptr);
+      MeasureNumber(Score* = nullptr, Tid tid = Tid::MEASURE_NUMBER, ElementFlags flags = ElementFlag::NOTHING);
       MeasureNumber(const MeasureNumber& other);
 
       virtual ElementType type() const override       { return ElementType::MEASURE_NUMBER; }
@@ -47,4 +49,3 @@ class MeasureNumber final : public TextBase {
 }     // namespace Ms
 
 #endif
-

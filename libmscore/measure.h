@@ -162,6 +162,7 @@ class Measure final : public MeasureBase {
       bool showsMeasureNumber();
       bool showsMeasureNumberInAutoMode();
       void layoutMeasureNumber();
+      void layoutMMRestRange();
 
       Chord* findChord(Fraction tick, int track);
       ChordRest* findChordRest(Fraction tick, int track);
@@ -278,4 +279,3 @@ class Measure final : public MeasureBase {
 
 }     // namespace Ms
 #endif
-

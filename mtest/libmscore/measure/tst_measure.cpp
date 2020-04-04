@@ -17,6 +17,7 @@
 #include "libmscore/undo.h"
 #include "libmscore/measure.h"
 #include "libmscore/measurenumber.h"
+#include "libmscore/mmrestrange.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/breath.h"
@@ -58,6 +59,7 @@ class TestMeasure : public QObject, public MTest
 //      void minWidth();
       void undoDelInitialVBox_269919();
       void mmrest();
+      void mmrestRange();
       void measureNumbers();
 
       void gap();
@@ -525,6 +527,23 @@ void TestMeasure::mmrest()
       }
 
 //---------------------------------------------------------
+///   mmrestRange
+//---------------------------------------------------------
+
+void TestMeasure::mmrestRange()
+      {
+      MMRestRange* mmRestRange = new MMRestRange(score);
+
+   // bracketing
+      mmRestRange->setBracketType(MMRestRangeBracketType::BRACKETS);
+      mmRestRange->setPropertyFlags(Pid::MMREST_RANGE_BRACKET_TYPE, PropertyFlags::UNSTYLED);
+      MMRestRange* mm = static_cast<MMRestRange*>(writeReadElement(mmRestRange));
+      QCOMPARE(mm->bracketType(), MMRestRangeBracketType::BRACKETS);
+      delete mm;
+      delete mmRestRange;
+      }
+
+//---------------------------------------------------------
 ///   measureNumbers
 ///    test measure numbers properties
 //---------------------------------------------------------
@@ -539,6 +558,7 @@ void TestMeasure::measureNumbers()
       MeasureNumber* mn = static_cast<MeasureNumber*>(writeReadElement(measureNumber));
       QCOMPARE(mn->hPlacement(), HPlacement::CENTER);
       delete mn;
+      delete measureNumber;
 
       MasterScore* score = readScore(DIR + "measurenumber.mscx");
 
