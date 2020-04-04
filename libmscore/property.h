@@ -173,6 +173,7 @@ enum class Pid {
       CHANGE_METHOD,
       PLACEMENT,              // Goes with P_TYPE::PLACEMENT
       HPLACEMENT,             // Goes with P_TYPE::HPLACEMENT
+      MMREST_RANGE_BRACKET_TYPE, // The brackets used arond the measure numbers indicating the range covered by the mmrest
       VELOCITY,
       JUMP_TO,
       PLAY_UNTIL,
@@ -404,7 +405,7 @@ enum class P_TYPE : char {
       FONT,
       SUB_STYLE,
       ALIGN,
-      CHANGE_METHOD,    // enum class VeloChangeMethod (for single notedynamics)
+      CHANGE_METHOD,    // enum class VeloChangeMethod (for single note dynamics)
       CHANGE_SPEED,     // enum class Dynamic::Speed
       CLEF_TYPE,        // enum class ClefType
       DYNAMIC_TYPE,     // enum class Dynamic::Type

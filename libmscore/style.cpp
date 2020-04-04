@@ -889,6 +889,27 @@ static const StyleType styleTypes[] {
       { Sid::measureNumberFrameFgColor,     "measureNumberFrameFgColor",    QColor(0, 0, 0, 255) },
       { Sid::measureNumberFrameBgColor,     "measureNumberFrameBgColor",    QColor(255, 255, 255, 0) },
 
+      { Sid::mmRestShowMeasureNumberRange,  "mmRestShowMeasureNumberRange", false },
+      { Sid::mmRestRangeBracketType,        "mmRestRangeBracketType",       int(MMRestRangeBracketType::BRACKETS) },
+
+      { Sid::mmRestRangeFontFace,           "mmRestRangeFontFace",          "Edwin" },
+      { Sid::mmRestRangeFontSize,           "mmRestRangeFontSize",          8.0 },
+      { Sid::mmRestRangeFontSpatiumDependent, "mmRestRangeFontSpatiumDependent", true },
+      { Sid::mmRestRangeFontStyle,          "mmRestRangeFontStyle",         int(FontStyle::Normal)          },
+      { Sid::mmRestRangeColor,              "mmRestRangeColor",             QColor(0, 0, 0, 255)            },
+      { Sid::mmRestRangePosAbove,           "measureNumberPosAbove",        QPointF(0.0, -3.0)              },
+      { Sid::mmRestRangePosBelow,           "measureNumberPosBelow",        QPointF(0.0, 1.0)               },
+      { Sid::mmRestRangeOffsetType,         "mmRestRangeOffsetType",        int(OffsetType::SPATIUM)        },
+      { Sid::mmRestRangeVPlacement,         "mmRestRangeVPlacement",        int(Placement::BELOW)           },
+      { Sid::mmRestRangeHPlacement,         "mmRestRangeHPlacement",        int(HPlacement::CENTER)         },
+      { Sid::mmRestRangeAlign,              "mmRestRangeAlign",             QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+      { Sid::mmRestRangeFrameType,          "mmRestRangeFrameType",         int(FrameType::NO_FRAME)        },
+      { Sid::mmRestRangeFramePadding,       "mmRestRangeFramePadding",      0.2                             },
+      { Sid::mmRestRangeFrameWidth,         "mmRestRangeFrameWidth",        0.1                             },
+      { Sid::mmRestRangeFrameRound,         "mmRestRangeFrameRound",        0                               },
+      { Sid::mmRestRangeFrameFgColor,       "mmRestRangeFrameFgColor",      QColor(0, 0, 0, 255)            },
+      { Sid::mmRestRangeFrameBgColor,       "mmRestRangeFrameBgColor",      QColor(255, 255, 255, 0)        },
+
       { Sid::translatorFontFace,            "translatorFontFace",           "Edwin" },
       { Sid::translatorFontSize,            "translatorFontSize",           11.0 },
       { Sid::translatorLineSpacing,         "translatorLineSpacing",        1.0 },
@@ -1436,7 +1457,7 @@ const TextStyle titleTextStyle {{
       { Sid::titleFrameRound,                    Pid::FRAME_ROUND            },
       { Sid::titleFrameFgColor,                  Pid::FRAME_FG_COLOR         },
       { Sid::titleFrameBgColor,                  Pid::FRAME_BG_COLOR         },
-      
+
       }};
 
 const TextStyle subTitleTextStyle {{
@@ -1726,6 +1747,22 @@ const TextStyle measureNumberTextStyle {{
       { Sid::measureNumberFrameRound,            Pid::FRAME_ROUND            },
       { Sid::measureNumberFrameFgColor,          Pid::FRAME_FG_COLOR         },
       { Sid::measureNumberFrameBgColor,          Pid::FRAME_BG_COLOR         },
+      }};
+
+const TextStyle mmRestRangeTextStyle {{
+      { Sid::mmRestRangeFontFace,              Pid::FONT_FACE              },
+      { Sid::mmRestRangeFontSize,              Pid::FONT_SIZE              },
+      { Sid::mmRestRangeFontSpatiumDependent,  Pid::SIZE_SPATIUM_DEPENDENT },
+      { Sid::mmRestRangeFontStyle,             Pid::FONT_STYLE             },
+      { Sid::mmRestRangeColor,                 Pid::COLOR                  },
+      { Sid::mmRestRangeAlign,                 Pid::ALIGN                  },
+      { Sid::mmRestRangePosAbove,              Pid::OFFSET                 },
+      { Sid::mmRestRangeFrameType,             Pid::FRAME_TYPE             },
+      { Sid::mmRestRangeFramePadding,          Pid::FRAME_PADDING          },
+      { Sid::mmRestRangeFrameWidth,            Pid::FRAME_WIDTH            },
+      { Sid::mmRestRangeFrameRound,            Pid::FRAME_ROUND            },
+      { Sid::mmRestRangeFrameFgColor,          Pid::FRAME_FG_COLOR         },
+      { Sid::mmRestRangeFrameBgColor,          Pid::FRAME_BG_COLOR         },
       }};
 
 const TextStyle translatorTextStyle {{
@@ -2390,6 +2427,7 @@ static constexpr std::array<TextStyleName, int(Tid::TEXT_STYLES)> textStyles { {
       { QT_TRANSLATE_NOOP("TextStyle", "Tempo"),                   &tempoTextStyle,             Tid::TEMPO },
       { QT_TRANSLATE_NOOP("TextStyle", "Metronome"),               &metronomeTextStyle,         Tid::METRONOME },
       { QT_TRANSLATE_NOOP("TextStyle", "Measure Number"),          &measureNumberTextStyle,     Tid::MEASURE_NUMBER },
+      { QT_TRANSLATE_NOOP("TextStyle", "Multi-Measure Rest Range"), &mmRestRangeTextStyle,      Tid::MMREST_RANGE },
       { QT_TRANSLATE_NOOP("TextStyle", "Translator"),              &translatorTextStyle,        Tid::TRANSLATOR },
       { QT_TRANSLATE_NOOP("TextStyle", "Tuplet"),                  &tupletTextStyle,            Tid::TUPLET },
 
@@ -2504,6 +2542,7 @@ static const std::vector<Tid> _primaryTextStyles = {
       Tid::HEADER,
       Tid::FOOTER,
       Tid::MEASURE_NUMBER,
+      Tid::MMREST_RANGE,
       Tid::INSTRUMENT_EXCERPT,
       Tid::INSTRUMENT_CHANGE,
       Tid::STAFF,

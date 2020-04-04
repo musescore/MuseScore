@@ -41,6 +41,7 @@ enum class ElementType {
       SYMBOL,
       TEXT,
       MEASURE_NUMBER,
+      MMREST_RANGE,
       INSTRUMENT_NAME,
       SLUR_SEGMENT,
       TIE_SEGMENT,
@@ -407,6 +408,17 @@ enum class HPlacement {
       };
 
 //---------------------------------------------------------
+//   MMRestRangeBracketType
+//---------------------------------------------------------
+
+enum class MMRestRangeBracketType {
+      ///.\{
+      BRACKETS, PARENTHESES, NONE
+      ///\}
+      };
+
+
+//---------------------------------------------------------
 //   OffsetType
 //---------------------------------------------------------
 
@@ -480,6 +492,7 @@ enum class Tid {
       TEMPO,
       METRONOME,
       MEASURE_NUMBER,
+      MMREST_RANGE,
       TRANSLATOR,
       TUPLET,
       SYSTEM,

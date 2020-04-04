@@ -272,6 +272,7 @@ void Cursor::add(Element* wrapped)
             switch (s->type()) {
                   // To be added at measure level
                   case ElementType::MEASURE_NUMBER:
+                  case ElementType::MMREST_RANGE:
                   case ElementType::SPACER:
                   case ElementType::JUMP:
                   case ElementType::MARKER:

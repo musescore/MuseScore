@@ -350,6 +350,7 @@ void Inspector::update(Score* s)
                               ie = new InspectorInstrumentChange(this);
                               break;
                         case ElementType::MEASURE_NUMBER:
+                        case ElementType::MMREST_RANGE:
                               ie = new InspectorMeasureNumber(this);
                               break;
                         case ElementType::STAFFTYPE_CHANGE:
@@ -1356,4 +1357,3 @@ InspectorIname::InspectorIname(QWidget* parent)
       }
 
 }
-

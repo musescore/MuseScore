@@ -307,6 +307,13 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::measureNumberPosAbove,    false, measureNumberPosAbove,        resetMeasureNumberPosAbove },
       { Sid::measureNumberPosBelow,    false, measureNumberPosBelow,        resetMeasureNumberPosBelow },
 
+      { Sid::mmRestShowMeasureNumberRange, false, mmRestShowMeasureNumberRange,  0 },
+      { Sid::mmRestRangeBracketType,       false, mmRestRangeBracketType,        resetMmRestRangeBracketType },
+      { Sid::mmRestRangeVPlacement,        false, mmRestRangeVPlacement,         resetMmRestRangeVPlacement },
+      { Sid::mmRestRangeHPlacement,        false, mmRestRangeHPlacement,         resetMmRestRangeHPlacement },
+      { Sid::mmRestRangePosAbove,          false, mmRestRangePosAbove,           resetMMRestRangePosAbove },
+      { Sid::mmRestRangePosBelow,          false, mmRestRangePosBelow,           resetMMRestRangePosBelow },
+
       { Sid::beamDistance,             true,  beamDistance,                 0 },
       { Sid::beamNoSlope,              false, beamNoSlope,                  0 },
       { Sid::graceNoteMag,             true,  graceNoteSize,                resetGraceNoteSize  },
@@ -400,17 +407,26 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
             trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
             tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement,
-            measureNumberVPlacement
+            measureNumberVPlacement, mmRestRangeVPlacement
             }) {
             cb->clear();
             cb->addItem(tr("Above"), int(Placement::ABOVE));
             cb->addItem(tr("Below"), int(Placement::BELOW));
             }
+      for (QComboBox* cb : std::vector<QComboBox*> {
+           measureNumberHPlacement, mmRestRangeHPlacement
+           }) {
+            cb->clear();
+            cb->addItem(tr("Left"),   int(HPlacement::LEFT));
+            cb->addItem(tr("Center"), int(HPlacement::CENTER));
+            cb->addItem(tr("Right"),  int(HPlacement::RIGHT));
+            }
 
-      measureNumberHPlacement->clear();
-      measureNumberHPlacement->addItem(tr("Left"),   int(HPlacement::LEFT));
-      measureNumberHPlacement->addItem(tr("Center"), int(HPlacement::CENTER));
-      measureNumberHPlacement->addItem(tr("Right"),  int(HPlacement::RIGHT));
+      mmRestRangeBracketType->clear();
+      mmRestRangeBracketType->addItem(tr("None"),        int(MMRestRangeBracketType::NONE));
+      mmRestRangeBracketType->addItem(tr("Brackets"),    int(MMRestRangeBracketType::BRACKETS));
+      mmRestRangeBracketType->addItem(tr("Parentheses"), int(MMRestRangeBracketType::PARENTHESES));
+
 
       autoplaceVerticalAlignRange->clear();
       autoplaceVerticalAlignRange->addItem(tr("Segment"), int(VerticalAlignRange::SEGMENT));
@@ -786,6 +802,7 @@ const std::map<ElementType, EditStylePage> EditStyle::PAGES = {
       { ElementType::SCORE,               &EditStyle::PageScore    },
       { ElementType::PAGE,                &EditStyle::PagePage     },
       { ElementType::MEASURE_NUMBER,      &EditStyle::PageMeasureNumbers },
+      { ElementType::MMREST_RANGE,        &EditStyle::PageMeasureNumbers },
       { ElementType::BRACKET,             &EditStyle::PageSystem   },
       { ElementType::BRACKET_ITEM,        &EditStyle::PageSystem   },
       { ElementType::CLEF,                &EditStyle::PageClefs    },
@@ -1726,4 +1743,3 @@ void EditStyle::resetUserStyleName()
       }
 
 } //namespace Ms
-

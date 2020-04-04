@@ -361,6 +361,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             case ElementType::BREATH:
             case ElementType::GLISSANDO:
             case ElementType::MEASURE_NUMBER:
+            case ElementType::MMREST_RANGE:
             case ElementType::BRACKET:
             case ElementType::ARTICULATION:
             case ElementType::FERMATA:
@@ -501,6 +502,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::BREATH:
                   case ElementType::GLISSANDO:
                   case ElementType::MEASURE_NUMBER:
+                  case ElementType::MMREST_RANGE:
                   case ElementType::BRACKET:
                   case ElementType::ARTICULATION:
                   case ElementType::FERMATA:
@@ -676,4 +678,3 @@ bool ScoreView::dropCanvas(Element* e)
       }
 
 } // namespace Ms
-
