@@ -586,12 +586,12 @@ int Rest::computeLineOffset(int lines)
                               }
                         else {
                               lineOffset = up ? -4 : 6;     // whole symbol
-                              lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 6 ? line - 5 : 0);
+                              lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
                               }
                         break;
                   case TDuration::DurationType::V_WHOLE:
                         lineOffset = up ? -4 : 6;
-                        lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 6 ? line - 5 : 0);
+                        lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
                         break;
                   case TDuration::DurationType::V_HALF:
                         lineOffset = up ? -4 : 4;
