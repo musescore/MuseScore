@@ -462,6 +462,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateViewModeCombo();
       void switchLayoutMode(LayoutMode);
       void setPlayRepeats(bool repeat);
+      void setPanPlayback(bool pan);
 
       ScoreTab* createScoreTab();
       void askResetOldScorePositions(Score* score);
