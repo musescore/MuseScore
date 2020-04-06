@@ -484,7 +484,7 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
       QTransform shearTransform;
       qreal dy = y2 - y1;
       if (_chord1->up() != _chord2->up() && !crossStaffBeamBetween())
-            dy = qMin(qMax(dy, -1.0), 1.0);
+            dy = qMin(qMax(dy, -1.0 * _spatium), 1.0 * _spatium);
       qreal dx = x2 - x1;
       if (_chord1->beams() == 0 && _chord2->beams() == 0) {
             if (_chord1->up() && !_chord2->up()) {
