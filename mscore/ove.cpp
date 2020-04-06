@@ -3470,7 +3470,7 @@ int Block::toInt() const {
       int num = 0;
 
       for (i = 0; i < (int)sizeof(int) && i < size(); ++i) {
-            num = (num << 8) + static_cast<int>(*(data()) + i);
+            num = (num << 8) + static_cast<int>(*(data() + i));
             }
 
       std::size_t minSize = sizeof(int);
