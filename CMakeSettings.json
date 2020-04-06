@@ -31,7 +31,7 @@
                "value": "${projectDir}\\dependencies\\libx64"
             }
          ],
-         "buildCommandArgs": "-v",
+         "buildCommandArgs": "",
          "ctestCommandArgs": ""
       }
    ]
