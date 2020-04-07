@@ -289,7 +289,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
                         s  = skipTuplet(t);    // continue with first chord/rest after tuplet
                         de = t;
                         }
-                  Q_ASSERT(gap >= Fraction(0,1));
+
                   if (gap.isNotZero()) {
                         appendGap(gap);
                         tick += gap;
