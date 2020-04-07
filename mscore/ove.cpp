@@ -3470,16 +3470,17 @@ int Block::toInt() const {
       int num = 0;
 
       for (i = 0; i < (int)sizeof(int) && i < size(); ++i) {
-            num = (num << 8) + static_cast<int>(*(data()) + i);
+            num = (num << 8) + static_cast<int>(*(data() + i));
             }
 
       std::size_t minSize = sizeof(int);
-      if (size() < (int)minSize) {
+      if (size() < static_cast<int>(minSize)) {
             minSize = size();
             }
 
       if ((*(data()) & 0x80) == 0x80) {
-            int maxNum = static_cast<int>(pow(2.0, static_cast<int>(minSize) * 8));
+            // same as int(pow(2, int(minSize) * 8))
+            int maxNum = 1 << (static_cast<int>(minSize) * 8);
             num -= maxNum;
             //num *= -1;
             }
@@ -5183,7 +5184,8 @@ int getInt(int byte, int bits) {
       int num = 0;
 
       if( bits > 0 ) {
-            int factor = int(pow(2.0, bits-1));
+            // same as int(pow(2, bits - 1))
+            int factor = 1 << (bits - 1);
             num = (byte % (factor*2));
 
             if ( (byte & factor) == factor ) {
