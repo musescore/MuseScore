@@ -10,6 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "log.h"
 #include "textedit.h"
 #include "score.h"
 
@@ -83,9 +84,17 @@ void TextBase::startEdit(EditData& ed)
 void TextBase::endEdit(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+      IF_ASSERT_FAILED(ted) {
+            return;
+            }
+
+      UndoStack* undo = score()->undoStack();
+      IF_ASSERT_FAILED(undo) {
+            return;
+            }
+
       const QString actualXmlText = xmlText();
       const QString actualPlainText = plainText();
-      UndoStack* undo = score()->undoStack();
 
       // replace all undo/redo records collected during text editing with
       // one property change
