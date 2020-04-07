@@ -52,8 +52,8 @@ cd -
 
 cd ..
 cd ..
-if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
-then # Build is marked UNSTABLE inside CMakeLists.txt
+if [ "$(cmake -P config.cmake | grep -P 'MSCORE_UNSTABLE\s+TRUE')" ]
+then # Build is marked UNSTABLE
   echo "Unstable version: do not upload source zip file"
 else
   make clean

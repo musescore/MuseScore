@@ -35,7 +35,7 @@ mkdir -p applebuild/mscore.app/Contents/Frameworks
 cp -Rf ~/Library/Frameworks/Sparkle.framework applebuild/mscore.app/Contents/Frameworks
 
 if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
-then # Build is marked UNSTABLE inside CMakeLists.txt
+then # Build is marked UNSTABLE
 build/package_mac $BRANCH-$REVISION
 PACKAGE_NAME=MuseScoreNightly
 DMGFILE=applebuild/$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
@@ -64,11 +64,9 @@ scp -C -i $SSH_INDENTITY build/travis/job_macos/web/nightly.xml musescore-nightl
 ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
 
 # send nightly update to S3
-VERSION_MAJOR=$(grep 'SET(MUSESCORE_VERSION_MAJOR' CMakeLists.txt | cut -d \" -f2)
-VERSION_MINOR=$(grep 'SET(MUSESCORE_VERSION_MINOR' CMakeLists.txt | cut -d \" -f2)
-VERSION_PATCH=$(grep 'SET(MUSESCORE_VERSION_PATCH' CMakeLists.txt | cut -d \" -f2)
+MUSESCORE_VERSION_FULL=$(cmake -P config.cmake | grep -oP 'MUSESCORE_VERSION_FULL\s+\K.*')
 BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
-MUSESCORE_VERSION=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${BUILD_NUMBER}
+MUSESCORE_VERSION=${MUSESCORE_VERSION_FULL}.${BUILD_NUMBER}
 SHORT_DATE="$(date -u +%Y-%m-%d)"
 #date -R is not supported !?
 RSS_DATE="$(LANG=C date +'%a, %d %b %Y %H:%M:%S %z')"
