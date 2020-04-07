@@ -271,8 +271,10 @@ void Lyrics::layout()
             styleDidChange    = true;
             }
 
+      QColor oldColor = _color;
       if (styleDidChange)
             styleChanged();
+      setColor(oldColor);
 
       if (isMelisma() || hasNumber)
             if (isStyled(Pid::ALIGN)) {
