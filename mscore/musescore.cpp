@@ -5108,7 +5108,7 @@ void MuseScore::autoSaveTimerTimeout()
                         QDir dir;
                         dir.mkpath(dataPath);
                         QTemporaryFile tf(dataPath + "/scXXXXXX.mscz");
-                        tf.setAutoRemove(false);
+                        tf.setAutoRemove(false); // do not remove when tf goes out of scope!
                         if (!tf.open()) {
                               qDebug("autoSaveTimerTimeout(): create temporary file failed");
                               return;
@@ -5545,6 +5545,8 @@ void MuseScore::networkFinished()
       reply->deleteLater();
 
       MasterScore* score = readScore(tmpName);
+      // delete the temp file created above
+      QFile::remove(tmpName);
       if (!score) {
             qDebug("readScore failed");
             return;
