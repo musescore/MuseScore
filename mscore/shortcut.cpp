@@ -2144,8 +2144,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "picture",
-         QT_TRANSLATE_NOOP("action","Picture"),
-         QT_TRANSLATE_NOOP("action","Add picture")
+         QT_TRANSLATE_NOOP("action","Image"),
+         QT_TRANSLATE_NOOP("action","Add image")
          },
       {
          MsWidget::SCORE_TAB,
