@@ -15,6 +15,8 @@
  Implementation of class Selection plus other selection related functions.
 */
 
+#include "log.h"
+
 #include "mscore.h"
 #include "arpeggio.h"
 #include "barline.h"
@@ -321,6 +323,12 @@ static QRectF changeSelection(Element* e, bool b)
 
 void Selection::clear()
       {
+
+      IF_ASSERT_FAILED(!isLocked()) {
+            LOGE() << "selection locked, reason: " << lockReason();
+            return;
+            }
+
       for (Element* e : _el) {
             if (e->isSpanner()) {   // TODO: only visible elements should be selectable?
                   Spanner* sp = toSpanner(e);
@@ -358,6 +366,10 @@ void Selection::remove(Element* el)
 
 void Selection::add(Element* el)
       {
+      IF_ASSERT_FAILED(!isLocked()) {
+            LOGE() << "selection locked, reason: " << lockReason();
+            return;
+            }
       _el.append(el);
       update();
       }
@@ -432,6 +444,10 @@ bool SelectionFilter::canSelectVoice(int track) const
 
 void Selection::appendFiltered(Element* e)
       {
+      IF_ASSERT_FAILED(!isLocked()) {
+            LOGE() << "selection locked, reason: " << lockReason();
+            return;
+            }
       if (selectionFilter().canSelect(e))
             _el.append(e);
       }
@@ -442,6 +458,10 @@ void Selection::appendFiltered(Element* e)
 
 void Selection::appendChord(Chord* chord)
       {
+      IF_ASSERT_FAILED(!isLocked()) {
+            LOGE() << "selection locked, reason: " << lockReason();
+            return;
+            }
       if (chord->beam() && !_el.contains(chord->beam()))
             _el.append(chord->beam());
       if (chord->stem())
@@ -487,6 +507,10 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::updateSelectedElements()
       {
+      IF_ASSERT_FAILED(!isLocked()) {
+            LOGE() << "selection locked, reason: " << lockReason();
+            return;
+            }
       if (_state != SelState::RANGE) {
             update();
             return;

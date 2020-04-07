@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "log.h"
+
 #include "scoreview.h"
 
 #include "breaksdialog.h"
@@ -2048,6 +2050,12 @@ void ScoreView::cmd(const char* s)
               "prev-track",
               "next-measure",
               "prev-measure"}, [](ScoreView* cv, const QByteArray& cmd) {
+
+                  if (cv->score()->selection().isLocked()) {
+                        LOGW() << "unable exec cmd: " << cmd << ", selection locked, reason: " << cv->score()->selection().lockReason();
+                        return;
+                        }
+
                   Element* el = cv->score()->selection().element();
                   if (el && (el->isTextBase())) {
                         cv->score()->startCmd();
