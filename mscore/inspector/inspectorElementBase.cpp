@@ -26,6 +26,7 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
       {
       e.setupUi(addWidget());
       e.offset->showRaster(true);
+
       iList = {
             { Pid::VISIBLE,   0, e.visible,    e.resetVisible   },
             { Pid::Z,         0, e.z,          e.resetZ         },

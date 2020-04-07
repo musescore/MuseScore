@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorLasso</class>
  <widget class="QWidget" name="InspectorLasso">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>169</width>
+    <height>93</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Lasso Inspector</string>
   </property>
@@ -46,12 +54,12 @@
       </font>
      </property>
      <property name="text">
-      <string>Lasso</string>
+      <string>Image Capture</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widget" native="true">
+    <widget class="QWidget" name="panel" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>

@@ -28,6 +28,7 @@ InspectorLasso::InspectorLasso(QWidget* parent)
             { Pid::LASSO_POS,    0, b.pos,   0 },
             { Pid::LASSO_SIZE,   0, b.size,  0 },
             };
+      pList = { { b.title, b.panel } };
 
       b.pos->setSuffix(tr("mm"));
       b.size->setSuffix(tr("mm"));
@@ -36,4 +37,3 @@ InspectorLasso::InspectorLasso(QWidget* parent)
       }
 
 }
-
