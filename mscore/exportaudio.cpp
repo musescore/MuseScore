@@ -59,8 +59,10 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
 
       if (useCurrentSynthesizerState) {
             score->renderMidi(&events, synthesizerState());
-            if (events.empty())
+            if (events.empty()) {
+                  device->close();
                   return false;
+                  }
             }
 
       MasterSynthesizer* synth = synthesizerFactory();
