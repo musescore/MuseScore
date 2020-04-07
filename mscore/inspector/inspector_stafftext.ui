@@ -30,15 +30,12 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="Line" name="line">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
      </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
      </property>
     </widget>
    </item>

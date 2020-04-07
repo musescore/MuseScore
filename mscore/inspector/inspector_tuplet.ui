@@ -30,7 +30,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QFrame" name="frame_1">
+    <widget class="QFrame" name="frame">
      <property name="frameShape">
       <enum>QFrame::HLine</enum>
      </property>

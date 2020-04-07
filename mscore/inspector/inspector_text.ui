@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
+    <width>329</width>
     <height>320</height>
    </rect>
   </property>
@@ -30,30 +30,12 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="Line" name="line">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Sunken</enum>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
-     <property name="midLineWidth">
-      <number>0</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -564,15 +546,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Awl::ColorLabel</class>
-   <extends>QPushButton</extends>
-   <header>awl/colorlabel.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Ms::FontStyleSelect</class>
    <extends>QWidget</extends>
    <header>inspector/fontStyleSelect.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Awl::ColorLabel</class>
+   <extends>QPushButton</extends>
+   <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

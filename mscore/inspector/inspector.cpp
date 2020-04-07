@@ -454,9 +454,9 @@ InspectorBreak::InspectorBreak(QWidget* parent)
       {
       b.setupUi(addWidget());
 
-      iList = {         // currently empty
-            };
-
+      // currently empty
+      iList = {};
+      pList = { { b.title, b.panel } };
       mapSignals();
       }
 
@@ -474,6 +474,7 @@ InspectorSectionBreak::InspectorSectionBreak(QWidget* parent)
             { Pid::START_WITH_LONG_NAMES,   0, scb.startWithLongNames,  scb.resetStartWithLongNames  },
             { Pid::START_WITH_MEASURE_ONE,  0, scb.startWithMeasureOne, scb.resetStartWithMeasureOne }
             };
+      pList = { { scb.title, scb.panel } };
       mapSignals();
       }
 
@@ -501,6 +502,7 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
             { Pid::STAFF_GEN_TIMESIG,      0, sl.genTimesig,      sl.resetGenTimesig      },
             { Pid::STAFF_GEN_KEYSIG,       0, sl.genKeysig,       sl.resetGenKeysig       },
             };
+      pList = { { sl.title, sl.panel } };
 
       sl.noteheadScheme->clear();
       for (auto i : { NoteHeadScheme::HEAD_NORMAL,
@@ -560,6 +562,7 @@ InspectorVBox::InspectorVBox(QWidget* parent)
             { Pid::BOTTOM_MARGIN, 0, vb.bottomMargin, vb.resetBottomMargin },
             { Pid::BOX_HEIGHT,    0, vb.height,       0                    }
             };
+      pList = { { vb.title, vb.panel } };
       mapSignals();
       }
 
@@ -580,6 +583,7 @@ InspectorTBox::InspectorTBox(QWidget* parent)
             { Pid::TOP_MARGIN,    0, tb.topMargin,    tb.resetTopMargin    },
             { Pid::BOTTOM_MARGIN, 0, tb.bottomMargin, tb.resetBottomMargin },
             };
+      pList = { { tb.title, tb.panel } };
       mapSignals();
       }
 
@@ -598,7 +602,7 @@ InspectorHBox::InspectorHBox(QWidget* parent)
             { Pid::BOX_WIDTH,             0, hb.width,    0                },
             { Pid::CREATE_SYSTEM_HEADER,  0, hb.createSystemHeader, hb.resetCreateSystemHeader }
             };
-
+      pList = { { hb.title, hb.panel } };
       mapSignals();
       }
 
@@ -656,9 +660,8 @@ void InspectorArticulation::propertiesClicked()
 void InspectorArticulation::setElement()
       {
       InspectorElementBase::setElement();
-      if (!ar.playArticulation->isChecked()) {
+      if (!ar.playArticulation->isChecked())
             ar.gridWidget->setEnabled(false);
-            }
       }
 
 //---------------------------------------------------------
@@ -984,7 +987,7 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
             { Pid::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         },
             { Pid::SIZE_SPATIUM_DEPENDENT,      0,    t.spatiumDependent,     t.resetSpatiumDependent },
             };
-      const std::vector<InspectorPanel> ppList = { {t.title, t.panel} };
+      const std::vector<InspectorPanel> ppList = { { t.title, t.panel } };
       mapSignals(iiList, ppList);
       }
 
@@ -1286,11 +1289,11 @@ InspectorCaesura::InspectorCaesura(QWidget* parent)
       if (sameTypes)
             c.title->setText(b->isCaesura() ? tr("Caesura") : tr("Breath"));
 
-      const std::vector<InspectorItem> il = {
-            { Pid::PAUSE,  0, c.pause,         c.resetPause         }
+      const std::vector<InspectorItem> iiList = {
+            { Pid::PAUSE,  0, c.pause, c.resetPause         }
             };
       const std::vector<InspectorPanel> ppList = { {c.title, c.panel} };
-      mapSignals(il, ppList);
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -1302,11 +1305,11 @@ InspectorBracket::InspectorBracket(QWidget* parent)
       {
       b.setupUi(addWidget());
 
-      const std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> iiList = {
             { Pid::BRACKET_COLUMN, 0, b.column, b.resetColumn }
             };
       const std::vector<InspectorPanel> ppList = { { b.title, b.panel } };
-      mapSignals(il, ppList);
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -1318,11 +1321,11 @@ InspectorIname::InspectorIname(QWidget* parent)
       {
       i.setupUi(addWidget());
 
-      const std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> iiList = {
             { Pid::INAME_LAYOUT_POSITION, 0, i.layoutPosition, i.resetLayoutPosition }
             };
       const std::vector<InspectorPanel> ppList = { { i.title, i.panel } };
-      mapSignals(il, ppList);
+      mapSignals(iiList, ppList);
       }
 
 }
