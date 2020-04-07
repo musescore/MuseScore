@@ -116,6 +116,8 @@ class Chord final : public ChordRest {
       void layoutStem1() override;
       void layoutStem();
       void layoutArpeggio2();
+      void layoutSpanners();
+      void layoutSpanners(System* system, const Fraction& stick);
 
       std::vector<Note*>& notes()                 { return _notes; }
       const std::vector<Note*>& notes() const     { return _notes; }

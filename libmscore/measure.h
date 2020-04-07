@@ -219,6 +219,7 @@ class Measure final : public MeasureBase {
       bool stemless(int staffIdx) const;
       bool isFinalMeasureOfSection() const;
       bool isAnacrusis() const;
+      bool isFirstInSystem() const;
 
       bool breakMultiMeasureRest() const        { return _breakMultiMeasureRest; }
       void setBreakMultiMeasureRest(bool val)   { _breakMultiMeasureRest = val;  }
