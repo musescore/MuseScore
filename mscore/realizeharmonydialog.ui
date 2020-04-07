@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Realize Chord Symbols</string>
   </property>
+  <property name="toolTip">
+   <string>Convert chord symbols to notes</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QWidget" name="widget" native="true">
@@ -67,7 +70,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>chordLabel</string>
+            <string notr="true">chordLabel</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -166,7 +169,7 @@
          <item>
           <widget class="QPushButton" name="showButton">
            <property name="text">
-            <string>Show more...</string>
+            <string>Show more…</string>
            </property>
           </widget>
          </item>
