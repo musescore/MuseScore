@@ -687,7 +687,7 @@ bool Score::loadStyle(const QString& fn, bool ign)
                   return true;
                   }
              else {
-                  MScore::lastError = tr("The style file is not compatible with this version of MuseScore.");
+                  MScore::lastError = QObject::tr("The style file is not compatible with this version of MuseScore.");
                   return false;
                   }
             }
@@ -718,7 +718,7 @@ bool Score::saveStyle(const QString& name)
       style().save(xml, false);     // save complete style
       xml.etag();
       if (f.error() != QFile::NoError) {
-            MScore::lastError = tr("Write Style failed: %1").arg(f.errorString());
+            MScore::lastError = QObject::tr("Write Style failed: %1").arg(f.errorString());
             return false;
             }
       return true;
