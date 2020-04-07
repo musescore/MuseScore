@@ -57,6 +57,7 @@ set (SOURCE_LIB
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp4.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp5.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp6.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp7.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importptb.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importove.cpp
       ${PROJECT_SOURCE_DIR}/mscore/ove.cpp

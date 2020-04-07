@@ -371,7 +371,6 @@ class GuitarPro6 : public GuitarPro {
       // an integer stored in the header indicating that the file is not compressed (BCFZ).
       const int GPX_HEADER_COMPRESSED = 1514554178;
       int position = 0;
-      QMap<int, int>* slides;
       // a constant storing the amount of bits per byte
       const int BITS_IN_BYTE = 8;
       // contains all the information about notes that will go in the parts
@@ -386,7 +385,7 @@ class GuitarPro6 : public GuitarPro {
       Slur** legatos;
       // a mapping from identifiers to fret diagrams
       QMap<int, FretDiagram*> fretDiagrams;
-      void parseFile(char* filename, QByteArray* data);
+      void parseFile(const char* filename, QByteArray* data);
       int readBit(QByteArray* buffer);
       QByteArray getBytes(QByteArray* buffer, int offset, int length);
       void readGPX(QByteArray* buffer);
@@ -394,7 +393,6 @@ class GuitarPro6 : public GuitarPro {
       QByteArray readString(QByteArray* buffer, int offset, int length);
       int readBits(QByteArray* buffer, int bitsToRead);
       int readBitsReversed(QByteArray* buffer, int bitsToRead);
-      void readGpif(QByteArray* data);
       void readScore(QDomNode* metadata);
       void readChord(QDomNode* diagram, int track);
       int findNumMeasures(GPPartInfo* partInfo);
@@ -402,24 +400,36 @@ class GuitarPro6 : public GuitarPro {
       void readDrumNote(Note* note, int element, int variation);
       Fraction readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, const Fraction& startTick, int staffIdx, int voiceNum, Tuplet* tuplets[], int measureCounter);
       void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, int measureCounter);
-      void readTracks(QDomNode* tracks);
+      virtual void readTracks(QDomNode* tracks);
       void readMasterBars(GPPartInfo* partInfo);
       Fraction rhythmToDuration(QString value);
       Fraction fermataToFraction(int numerator, int denominator);
       QDomNode getNode(const QString& id, QDomNode currentDomNode);
       void unhandledNode(QString nodeName);
       void makeTie(Note* note);
-      int* previousDynamic;
       void addTremoloBar(Segment* segment, int track, int whammyOrigin, int whammyMiddle, int whammyEnd);
 
       std::map<std::pair<int, int>, Note*> slideMap;
 
    protected:
+      const static std::map<QString, QString> instrumentMapping;
+      int* previousDynamic;
+      void readGpif(QByteArray* data);
       void readNote(int string, Note* note);
       virtual int readBeatEffects(int track, Segment*);
+      void readTrackProperties(const QDomNode& currentNode, Part* part, int trackCounter, bool& hasTuning);
 
    public:
       GuitarPro6(MasterScore* s) : GuitarPro(s, 6) {}
+      GuitarPro6(MasterScore* s, int v) : GuitarPro(s, v) {}
+      virtual bool read(QFile*);
+      };
+
+class GuitarPro7 : public GuitarPro6 {
+      virtual void readTracks(QDomNode* tracks);
+
+   public:
+      GuitarPro7(MasterScore* s) : GuitarPro6(s, 7) {}
       virtual bool read(QFile*);
       };
 
