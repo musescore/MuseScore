@@ -48,7 +48,7 @@ NO_RPATH="FALSE"# Package maintainers may want to override this (e.g. Debian)
 #
 # change path to include your Qt5 installation
 #
-BINPATH      = ${PATH}
+BINPATH      = "${PATH}"
 
 release:
 	if test ! -d build.release; then mkdir build.release; fi; \

@@ -368,7 +368,7 @@ add_library(mscoreapp STATIC
       importove.cpp
       ove.cpp
       ruler.cpp
-      importgtp.cpp importgtp-gp4.cpp importgtp-gp5.cpp importgtp-gp6.cpp
+      importgtp.cpp importgtp-gp4.cpp importgtp-gp5.cpp importgtp-gp6.cpp importgtp-gp7.cpp
       importptb.cpp
       fotomode.cpp drumtools.cpp
       selinstrument.cpp editstafftype.cpp texttools.cpp
