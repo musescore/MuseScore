@@ -76,6 +76,8 @@ int Articulation::subtype() const
       QString s = Sym::id2name(_symId);
       if (s.endsWith("Below"))
             return int(Sym::name2id(s.left(s.size() - 5) + "Above"));
+      else if (s.endsWith("Turned"))
+            return int(Sym::name2id(s.left(s.size() - 6)));
       else
             return int(_symId);
       }
@@ -92,6 +94,16 @@ void Articulation::setUp(bool val)
       if (s.endsWith(!dup ? "Above" : "Below")) {
             QString s2 = s.left(s.size() - 5) + (dup ? "Above" : "Below");
             _symId = Sym::name2id(s2);
+            }
+      else if (s.endsWith("Turned")) {
+            QString s2 = dup ? s.left(s.size() - 6) : s;
+            _symId = Sym::name2id(s2);
+            }
+      else if (!dup) {
+            QString s2 = s + "Turned";
+            SymId sym = Sym::name2id(s2);
+            if (sym != SymId::noSym)
+                  _symId = sym;
             }
       }
 
