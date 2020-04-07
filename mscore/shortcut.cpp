@@ -266,7 +266,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "note-input",
          QT_TRANSLATE_NOOP("action","Note Input"),
-         QT_TRANSLATE_NOOP("action","Note input"),
+         QT_TRANSLATE_NOOP("action","Note input: Toggle Entry/Normal mode"),
          QT_TRANSLATE_NOOP("action","Enter notes with a mouse or keyboard"),
          Icons::noteEntry_ICON,
          Qt::WindowShortcut,
@@ -277,8 +277,8 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "note-input-steptime",
          QT_TRANSLATE_NOOP("action","Step-Time (Default)"),
+         QT_TRANSLATE_NOOP("action","Note input: Enter Step-Time mode"),
          QT_TRANSLATE_NOOP("action","Enter notes in Step-time"),
-         0,
          Icons::noteEntry_ICON, // Icons::noteEntrySteptime_ICON (using normal icon for the time being.)
          Qt::WindowShortcut,
          ShortcutFlags::A_CHECKABLE
@@ -288,8 +288,8 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "note-input-repitch",
          QT_TRANSLATE_NOOP("action","Re-Pitch"),
+         QT_TRANSLATE_NOOP("action","Note input: Enter Re-Pitch mode"),
          QT_TRANSLATE_NOOP("action","Replace pitches without changing rhythms"),
-         0,
          Icons::noteEntryRepitch_ICON,
          Qt::ApplicationShortcut,
          ShortcutFlags::A_CMD | ShortcutFlags::A_CHECKABLE
@@ -299,8 +299,8 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "note-input-rhythm",
          QT_TRANSLATE_NOOP("action","Rhythm"),
+         QT_TRANSLATE_NOOP("action","Note input: Enter Rythm mode"),
          QT_TRANSLATE_NOOP("action","Enter durations with a single click or keypress"),
-         0,
          Icons::noteEntryRhythm_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CHECKABLE
@@ -310,8 +310,8 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "note-input-realtime-auto",
          QT_TRANSLATE_NOOP("action","Real-Time (Automatic)"),
+         QT_TRANSLATE_NOOP("action","Note input: Enter Real-Time (Automatic) mode"),
          QT_TRANSLATE_NOOP("action","Perform the piece at a fixed tempo indicated by a metronome beat"),
-         0,
          Icons::noteEntryRealtimeAuto_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CHECKABLE
@@ -321,8 +321,8 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "note-input-realtime-manual",
          QT_TRANSLATE_NOOP("action","Real-Time (Manual)"),
+         QT_TRANSLATE_NOOP("action","Note input: Enter Real-Time (Manual) mode"),
          QT_TRANSLATE_NOOP("action","Perform the piece while tapping a key or pedal to set the tempo"),
-         0,
          Icons::noteEntryRealtimeManual_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CHECKABLE
@@ -332,8 +332,8 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "note-input-timewise",
          QT_TRANSLATE_NOOP("action","Insert"),
+         QT_TRANSLATE_NOOP("action","Note input: Enter Insert mode"),
          QT_TRANSLATE_NOOP("action","Insert notes increasing measure duration"),
-         0,
          Icons::noteTimewise_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CHECKABLE
