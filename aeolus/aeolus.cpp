@@ -52,23 +52,34 @@ Synthesizer* createAeolus()
 //   Aeolus
 //---------------------------------------------------------
 
-Aeolus::Aeolus()
+Aeolus::Aeolus() : Synthesizer()
       {
-      model = 0;
+      model = nullptr;
       patchList.append(new MidiPatch { false, "Aeolus", 0, 0, 0, "Aeolus" });
 
       _sc_cmode = 0;
       _sc_group = 0;
       _running = false;
+      _hold = 0;
       _nplay = 0;
-      _fsamp = 0;
       _nasect = 0;
       _ndivis = 0;
+      _revsize = 0.0f;
+      _revtime = 0.0f;
       nout = 0;
-      _ifc_init = 0;
-      for (int i = 0; i < NGROUP; i++)
-            _ifelms [i] = 0;
-      memset(_keymap, 0, sizeof(_keymap));
+      _fsamp = 0.0f;
+      _fsize = 0;
+      _ifc_init = nullptr;
+      _midimap = { 0 };
+      _asectp = { nullptr };
+      _divisp = { nullptr };
+      _keymap = { 0 };
+      _audiopar = { 0.0f };
+      routb = { 0.0f };
+      loutb = { 0.0f };
+      _asectpar = { nullptr };
+      _ifelms = { 0 };
+      _tempstr = { 0 };
       }
 
 Aeolus::~Aeolus()
@@ -257,10 +268,11 @@ SynthesizerGroup Aeolus::state() const
 //   setState
 //---------------------------------------------------------
 
-void Aeolus::setState(const SynthesizerGroup& g)
+bool Aeolus::setState(const SynthesizerGroup& g)
       {
       for (const IdValue& v : g)
             setValue(v.id, v.data.toDouble());
+      return true;
       }
 
 //---------------------------------------------------------
