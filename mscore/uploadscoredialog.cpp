@@ -102,6 +102,9 @@ void UploadScoreDialog::upload(int nid)
            _nid = nid;
            _loginManager->upload(path, nid, scoreTitle);
            }
+     // TODO: Find out where, when and how to delete this temp score.
+     //       Won't be here, as the upload happens asynchronously.
+     //       Maybe in LoginManager::upload()
      }
 
 //---------------------------------------------------------

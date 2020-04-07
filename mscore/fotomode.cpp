@@ -620,7 +620,7 @@ void ScoreView::fotoDragDrop(QMouseEvent*)
       QRectF r(_foto->bbox());
 
       QTemporaryFile tf(QDir::tempPath() + QString("/imgXXXXXX.svg"));
-      tf.setAutoRemove(false);
+      tf.setAutoRemove(false);  // TODO: find out whether, where, when and how to delete it
       tf.open();
       tf.close();
       qDebug("Temp File <%s>", qPrintable(tf.fileName()));
