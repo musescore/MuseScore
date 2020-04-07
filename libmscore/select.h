@@ -154,6 +154,8 @@ class Selection {
       Fraction _currentTick;  // tracks the most recent selection
       int _currentTrack;
 
+      QString _lockReason;
+
       QByteArray staffMimeData() const;
       QByteArray symbolListMimeData() const;
       SelectionFilter selectionFilter() const;
@@ -171,6 +173,12 @@ class Selection {
       bool isRange() const             { return _state == SelState::RANGE; }
       bool isList() const              { return _state == SelState::LIST; }
       void setState(SelState s);
+
+      //! NOTE If locked, the selected items should not be changed.
+      void lock(const QString& reason)    { _lockReason = reason; }
+      void unlock(const QString& reason)  { Q_UNUSED(reason); _lockReason.clear(); } // reason for clarity
+      bool isLocked() const               { return  !_lockReason.isEmpty(); }
+      const QString& lockReason() const   { return _lockReason; }
 
       const QList<Element*>& elements() const { return _el; }
       std::vector<Note*> noteList(int track = -1) const;
