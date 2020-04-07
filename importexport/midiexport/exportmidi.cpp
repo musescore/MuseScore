@@ -11,19 +11,21 @@
 //=============================================================================
 
 #include "exportmidi.h"
-#include "midi/midifile.h"
+
 #include "libmscore/score.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/tempo.h"
-#include "synthesizer/event.h"
 #include "libmscore/sig.h"
 #include "libmscore/key.h"
 #include "libmscore/text.h"
 #include "libmscore/measure.h"
 #include "libmscore/repeatlist.h"
 #include "libmscore/synthesizerstate.h"
-#include "preferences.h"
+
+#include "midi/midifile.h"
+#include "synthesizer/event.h"
+#include "mscore/preferences.h"
 
 namespace Ms {
 

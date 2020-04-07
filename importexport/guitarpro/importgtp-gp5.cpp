@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include "importgtp.h"
-#include "globals.h"
+
 #include <libmscore/score.h>
 #include <libmscore/measurebase.h>
 #include <libmscore/text.h>

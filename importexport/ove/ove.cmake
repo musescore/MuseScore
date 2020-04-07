@@ -1,0 +1,4 @@
+
+file(GLOB OVE_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/*.*
+)

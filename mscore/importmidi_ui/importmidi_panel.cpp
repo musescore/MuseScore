@@ -1,14 +1,18 @@
 #include "importmidi_panel.h"
+
 #include "ui_importmidi_panel.h"
-#include "importmidi_model.h"
-#include "importmidi_lyrics.h"
-#include "importmidi_operations.h"
 #include "importmidi_delegate.h"
-#include "importmidi_inner.h"
-#include "mscore/preferences.h"
-#include "musescore.h"
+
+#include "importexport/midiimport/importmidi_model.h"
+#include "importexport/midiimport/importmidi_lyrics.h"
+#include "importexport/midiimport/importmidi_operations.h"
+#include "importexport/midiimport/importmidi_inner.h"
+
 #include "libmscore/score.h"
-#include "icons.h"
+
+#include "mscore/preferences.h"
+#include "mscore/musescore.h"
+#include "mscore/icons.h"
 
 namespace Ms {
 
