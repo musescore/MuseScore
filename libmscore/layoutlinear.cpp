@@ -240,26 +240,14 @@ void LayoutContext::layoutLinear()
                                     for (Chord* cc : c->graceNotes()) {
                                           if (cc->beam() && cc->beam()->elements().front() == cc)
                                                 cc->beam()->layout();
-                                          for (Note* n : cc->notes()) {
-                                                Tie* tie = n->tieFor();
-                                                if (tie)
-                                                      tie->layout();
-                                                for (Spanner* sp : n->spannerFor())
-                                                      sp->layout();
-                                                }
+                                          cc->layoutSpanners();
                                           for (Element* element : cc->el()) {
                                                 if (element->isSlur())
                                                       element->layout();
                                                 }
                                           }
                                     c->layoutArpeggio2();
-                                    for (Note* n : c->notes()) {
-                                          Tie* tie = n->tieFor();
-                                          if (tie)
-                                                tie->layout();
-                                          for (Spanner* sp : n->spannerFor())
-                                                sp->layout();
-                                          }
+                                    c->layoutSpanners();
                                     if (c->tremolo()) {
                                           Tremolo* t = c->tremolo();
                                           Chord* c1 = t->chord1();

@@ -57,7 +57,7 @@ void RehearsalMark::layout()
                   Segment* repeat = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                   qreal barlineX = repeat ? repeat->x() - s->x() : measureX;
                   System* sys = m->system();
-                  bool systemFirst = (sys && sys->firstMeasure() == m);
+                  bool systemFirst = (sys && m->isFirstInSystem());
 
                   if (!header || repeat || !systemFirst) {
                         // no header, or header with repeat, or header mid-system - align with barline
