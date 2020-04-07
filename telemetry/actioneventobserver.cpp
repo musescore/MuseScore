@@ -85,7 +85,7 @@ QPair<QString, QString> ActionEventObserver::extractActionData(QObject* watched)
 
 bool ActionEventObserver::eventFilter(QObject *watched, QEvent *event)
       {
-      if (event->type() == QEvent::MouseButtonRelease) {
+      /*if (event->type() == QEvent::MouseButtonRelease) {
 
             QPair<QString, QString> actionData = extractActionData(watched);
 
@@ -101,7 +101,7 @@ bool ActionEventObserver::eventFilter(QObject *watched, QEvent *event)
                 return false;
 
             telemetryService()->sendEvent("shortcut", shortcut->key());
-            }
+            } */
 
       return false;
       }
