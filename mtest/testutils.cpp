@@ -161,6 +161,7 @@ bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)
       {
       QString cmd = "diff";
       QStringList args;
+      args.append("-w");  // ignore any whitespace differences
       args.append("-u");
       args.append("--strip-trailing-cr");
       args.append(f2);

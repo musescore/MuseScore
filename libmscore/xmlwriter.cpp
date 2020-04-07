@@ -112,8 +112,9 @@ void XmlWriter::stag(const QString& name, const ScoreElement* se, const QString&
 
 void XmlWriter::etag()
       {
+      auto const tagToClose = stack.takeLast();
       putLevel();
-      *this << "</" << stack.takeLast() << '>' << endl;
+      *this << "</" << tagToClose << '>' << endl;
       }
 
 //---------------------------------------------------------
