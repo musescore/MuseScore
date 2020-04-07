@@ -20,9 +20,9 @@
 // TODO LVI 2011-10-30: determine how to report import errors.
 // Currently all output (both debug and error reports) are done using qDebug.
 
-#include "bww2mxml/lexer.h"
-#include "bww2mxml/writer.h"
-#include "bww2mxml/parser.h"
+#include "lexer.h"
+#include "writer.h"
+#include "parser.h"
 
 #include "libmscore/fraction.h"
 #include "libmscore/barline.h"
@@ -44,8 +44,6 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 #include "libmscore/segment.h"
-#include "musescore.h"
-#include "musicxml.h"
 
 //---------------------------------------------------------
 //   addText

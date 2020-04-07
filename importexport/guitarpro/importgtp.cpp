@@ -11,9 +11,11 @@
 //=============================================================================
 
 #include "importgtp.h"
+
 #include "importptb.h"
-#include "globals.h"
-#include "preferences.h"
+
+#include "mscore/preferences.h"
+
 #include <libmscore/measurebase.h>
 #include <libmscore/text.h>
 #include <libmscore/box.h>

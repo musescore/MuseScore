@@ -20,7 +20,6 @@
 #ifndef __CAPELLA_H__
 #define __CAPELLA_H__
 
-#include "globals.h"
 #include "libmscore/xml.h"
 
 namespace Ms {

@@ -787,8 +787,9 @@ if (BUILD_TELEMETRY_MODULE)
       add_subdirectory(telemetry)
       add_subdirectory(thirdparty/google_analytics)
 endif (BUILD_TELEMETRY_MODULE)
-add_subdirectory(global)
 
+add_subdirectory(global)
+add_subdirectory(importexport)
 add_subdirectory(mscore)
 add_subdirectory(main)
 
@@ -815,7 +816,6 @@ add_subdirectory(synthesizer)
 
 subdirs(
       awl bww2mxml share midi audiofile fluid libmscore
-      thirdparty/rtf2html thirdparty/beatroot
       thirdparty/qzip
       )
 

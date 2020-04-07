@@ -21,8 +21,8 @@
  MusicXML support.
  */
 
-#include "globals.h"
 #include "musicxmlsupport.h"
+
 #include "libmscore/sym.h"
 #include "libmscore/accidental.h"
 

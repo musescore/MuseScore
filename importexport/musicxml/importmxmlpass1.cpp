@@ -36,7 +36,8 @@
 #include "importmxmlnoteduration.h"
 #include "importmxmlpass1.h"
 #include "importmxmlpass2.h"
-#include "preferences.h"
+
+#include "mscore/preferences.h"
 
 namespace Ms {
 

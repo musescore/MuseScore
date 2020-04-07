@@ -46,69 +46,31 @@ add_library (testResources STATIC
       ${qrc_files}
       )
 
+set (IMPORTEXPORT_DIR ${PROJECT_SOURCE_DIR}/importexport)
+include(${IMPORTEXPORT_DIR}/bb/bb.cmake)
+include(${IMPORTEXPORT_DIR}/capella/capella.cmake)
+include(${IMPORTEXPORT_DIR}/musicxml/musicxml.cmake)
+include(${IMPORTEXPORT_DIR}/guitarpro/guitarpro.cmake)
+include(${IMPORTEXPORT_DIR}/ove/ove.cmake)
+include(${IMPORTEXPORT_DIR}/midiimport/midiimport.cmake)
+include(${IMPORTEXPORT_DIR}/midiexport/midiexport.cmake)
+
 set (SOURCE_LIB
       testutils.cpp
       mtestglobals.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/bb.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/capella.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/capxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/exportxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importgtp.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp4.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp5.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp6.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp7.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importptb.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importove.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/ove.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_operations.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_meter.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_quant.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tuplet.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tuplet_detect.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tuplet_filter.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tuplet_voice.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tuplet_tonotes.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_chord.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_fraction.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_swing.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_drum.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_clef.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_lrhand.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_lyrics.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tie.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_inner.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_beat.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_simplify.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_voice.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_key.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tempo.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_model.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_instrument.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_chordname.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmxml.cpp               # Required by importxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmxmllogger.cpp         # Required by importxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmxmlnoteduration.cpp   # Required by importxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmxmlnotepitch.cpp      # Required by importxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass1.cpp          # Required by importxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass2.cpp          # Required by importxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/musicxmlfonthandler.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/musicxmlsupport.cpp
+
+      ${BB_SRC}
+      ${CAPELLA_SRC}
+      ${MUSICXML_SRC}
+      ${MUSICXML_SRC}
+      ${GUITARPRO_SRC}
+      ${OVE_SRC}
+      ${MIDIIMPORT_SRC}
+      ${MIDIEXPORT_SRC}
+
       ${PROJECT_SOURCE_DIR}/mscore/preferences.cpp
       ${PROJECT_SOURCE_DIR}/mscore/shortcut.cpp
       ${PROJECT_SOURCE_DIR}/mscore/stringutils.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/fmt_opts.cpp    # Required by capella.cpp and capxml.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf2html.cpp    # Required by capella.cpp and capxml.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_keyword.cpp # Required by capella.cpp and capxml.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_table.cpp   # Required by capella.cpp and capxml.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Agent.cpp           # Required by importmidi.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/AgentList.cpp       # Required by importmidi.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/BeatTracker.cpp     # Required by importmidi.cpp
-      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Induction.cpp       # Required by importmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/extension.cpp # required by zerberus tests
       ${OMR_SRC}
       omr
@@ -236,7 +198,6 @@ subdirs (
 #        libmscore/text        work in progress...
         libmscore/utils
         mscore/workspaces
-        importmidi
         capella
         biab
         musicxml

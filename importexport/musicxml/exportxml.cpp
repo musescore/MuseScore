@@ -36,8 +36,14 @@
 
 #include <math.h>
 #include "config.h"
-//#include "musescore.h"
-#include "file.h"
+
+#include "musicxml.h"
+#include "musicxmlfonthandler.h"
+
+#include "thirdparty/qzip/qzipwriter_p.h"
+
+#include "mscore/preferences.h"
+
 #include "libmscore/score.h"
 #include "libmscore/rest.h"
 #include "libmscore/chord.h"
@@ -52,7 +58,6 @@
 #include "libmscore/part.h"
 #include "libmscore/measure.h"
 #include "libmscore/style.h"
-#include "musicxml.h"
 #include "libmscore/slur.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/dynamic.h"
@@ -84,7 +89,6 @@
 #include "libmscore/navigate.h"
 #include "libmscore/spanner.h"
 #include "libmscore/drumset.h"
-#include "preferences.h"
 #include "libmscore/mscore.h"
 #include "libmscore/accidental.h"
 #include "libmscore/breath.h"
@@ -92,13 +96,11 @@
 #include "libmscore/figuredbass.h"
 #include "libmscore/stringdata.h"
 #include "libmscore/rehearsalmark.h"
-#include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/fret.h"
 #include "libmscore/tie.h"
 #include "libmscore/undo.h"
 #include "libmscore/textline.h"
 #include "libmscore/fermata.h"
-#include "musicxmlfonthandler.h"
 #include "libmscore/textframe.h"
 #include "libmscore/instrchange.h"
 
