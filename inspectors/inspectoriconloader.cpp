@@ -5,7 +5,7 @@
 QMap<QString, QIcon*> InspectorIconLoader::m_iconCache = QMap<QString, QIcon*>();
 
 QIcon *InspectorIconLoader::icon(const char *iconName)
-    {
+{
     QIcon* result = m_iconCache.value(iconName);
 
     if (result)
@@ -18,4 +18,4 @@ QIcon *InspectorIconLoader::icon(const char *iconName)
         m_iconCache.insert(iconName, newIcon);
 
     return newIcon;
-    }
+}
