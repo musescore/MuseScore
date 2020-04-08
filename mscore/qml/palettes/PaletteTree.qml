@@ -304,6 +304,11 @@ ListView {
             property int rowIndex: index
             property var modelIndex: paletteTree.model.modelIndex(index, 0)
 
+            Component.onDestruction: {
+                if (paletteTree.paletteWorkspace.needsItemDestructionAccessibilityWorkaround())
+                    Utils.setInvisibleRecursive(this);
+            }
+
             onActiveFocusChanged: {
                 if (activeFocus)
                     paletteTree.currentTreeItem = this;
@@ -606,6 +611,11 @@ ListView {
                     paletteName: model.display
                     paletteIsCustom: model.custom
                     paletteEditingEnabled: model.editable
+
+                    Component.onDestruction: {
+                        if (paletteTree.paletteWorkspace.needsItemDestructionAccessibilityWorkaround())
+                            Utils.setInvisibleRecursive(this);
+                    }
 
                     onVisibleChanged: {
                         // build pool model on first popup appearance
