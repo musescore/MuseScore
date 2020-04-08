@@ -21,6 +21,7 @@
         <file>view/qml/common/ExpandableBlankSection.qml</file>
         <file>view/qml/common/TabPanel.qml</file>
         <file>view/qml/common/FlatRadioButton.qml</file>
+        <file>view/qml/common/StyledIcon.qml</file>
         <file>view/qml/common/RadioButtonGroup.qml</file>
         <file>view/qml/common/FlatButton.qml</file>
         <file>view/qml/common/FlatToogleButton.qml</file>
