@@ -1432,16 +1432,16 @@ qreal Chord::defaultStemLength() const
 
 qreal Chord::minAbsStemLength() const
       {
+      if (!_tremolo)
+            return 0.0;
+
       const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val();
       const qreal td = score()->styleS(Sid::tremoloDistance).val();
       int beamLvl = beams();
       const qreal beamDist = beam() ? beam()->beamDist() : (sw * spatium());
 
-      if (!_tremolo)
-            return 0.0;
-
       // single-note tremolo
-      else if (!_tremolo->twoNotes()) {
+      if (!_tremolo->twoNotes()) {
             _tremolo->layout(); // guarantee right "height value"
 
             qreal height;
@@ -1451,7 +1451,7 @@ qreal Chord::minAbsStemLength() const
                   height = _tremolo->pos().y() + _tremolo->height() - upPos();
             const bool hasHook = beamLvl && !beam();
             if (hasHook)
-                  beamLvl += (up() ? 4.0 : 2.5); // reserve more space for stem with both hook and tremolo
+                  beamLvl += (up() ? 4 : 2); // reserve more space for stem with both hook and tremolo
            
             const qreal additionalHeight = beamLvl ? 0 : sw * spatium();
 
