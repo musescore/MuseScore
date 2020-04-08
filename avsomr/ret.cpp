@@ -151,7 +151,7 @@ QString Ret::supportHint(Code c)
             case NetworkError:      return QObject::tr("Check your internet connection");
             case ServerError:       return PleaseTryAgain;
                   // local
-            case LocalNotInstalled: return QObject::tr("Try to uncheck and check again use the local OMR engine");
+            case LocalNotInstalled: return QObject::tr("Try to uncheck and check again to use the local OMR engine");
             case LocalInstaling:    return PleaseTryAgain;
             case LocalFailedExec:   return PleaseTryAgain;
             case LocalAlreadyBuilding: return PleaseTryAgain;
