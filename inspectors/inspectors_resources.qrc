@@ -13,11 +13,14 @@
         <file>resources/icons/raster-vertical.svg</file>
         <file>resources/icons/raster-horizontal.svg</file>
         <file>view/qml/InspectorElementView.qml</file>
+        <file>resources/icons/arrow_down.svg</file>
         <file>view/qml/common/CheckBox.qml</file>
         <file>view/qml/common/IncrementalPropertyControl.qml</file>
         <file>view/qml/common/ValueAdjustControl.qml</file>
         <file>view/qml/common/ExpandableBlank.qml</file>
         <file>view/qml/common/InspectorMenu.qml</file>
+        <file>resources/icons/menu_dots.svg</file>
+        <file>resources/icons/check-mark.svg</file>
         <file>view/qml/common/FocusableItem.qml</file>
         <file>view/qml/common/ExpandableBlankSection.qml</file>
         <file>view/qml/common/TabPanel.qml</file>
@@ -26,8 +29,63 @@
         <file>view/qml/common/StyledIcon.qml</file>
         <file>view/qml/common/RadioButtonGroup.qml</file>
         <file>view/qml/common/FlatButton.qml</file>
+        <file>resources/icons/horizontal_adjustment.svg</file>
+        <file>resources/icons/note.svg</file>
+        <file>resources/icons/orientation_arrow_down.svg</file>
+        <file>resources/icons/orientation_arrow_up.svg</file>
+        <file>resources/icons/vertical_adjustment.svg</file>
+        <file>resources/icons/orientation_auto.svg</file>
+        <file>resources/icons/orientation_arrow_left.svg</file>
+        <file>resources/icons/orientation_arrow_right.svg</file>
+        <file>resources/icons/notehead_brevis_alt.svg</file>
+        <file>resources/icons/notehead_circled.svg</file>
+        <file>resources/icons/notehead_circled_large.svg</file>
+        <file>resources/icons/notehead_cross.svg</file>
+        <file>resources/icons/notehead_diamond.svg</file>
+        <file>resources/icons/notehead_diamond_old.svg</file>
+        <file>resources/icons/notehead_do.svg</file>
+        <file>resources/icons/notehead_fa.svg</file>
+        <file>resources/icons/notehead_la.svg</file>
+        <file>resources/icons/notehead_large_arrow.svg</file>
+        <file>resources/icons/notehead_mi.svg</file>
+        <file>resources/icons/notehead_normal.svg</file>
+        <file>resources/icons/notehead_plus.svg</file>
+        <file>resources/icons/notehead_re.svg</file>
+        <file>resources/icons/notehead_slash.svg</file>
+        <file>resources/icons/notehead_slashed_left.svg</file>
+        <file>resources/icons/notehead_slashed_right.svg</file>
+        <file>resources/icons/notehead_sol.svg</file>
+        <file>resources/icons/notehead_ti.svg</file>
+        <file>resources/icons/notehead_triangle_down.svg</file>
+        <file>resources/icons/notehead_triangle_up.svg</file>
+        <file>resources/icons/notehead_xcircle.svg</file>
+        <file>resources/icons/notehead_xellipse.svg</file>
+        <file>resources/icons/notehead_parentheses.svg</file>
+        <file>resources/icons/notehead_brevis.svg</file>
+        <file>resources/icons/notehead_half.svg</file>
+        <file>resources/icons/notehead_quarter.svg</file>
+        <file>resources/icons/notehead_whole.svg</file>
+        <file>resources/icons/dot_position_above.svg</file>
+        <file>resources/icons/dot_position_below.svg</file>
+        <file>resources/icons/beam_hight_left.svg</file>
+        <file>resources/icons/beam_hight_right.svg</file>
+        <file>resources/icons/feathering_height_left.svg</file>
+        <file>resources/icons/feathering_height_right.svg</file>
+        <file>resources/icons/beams/beam_32_sub.svg</file>
+        <file>resources/icons/beams/beam_16_sub.svg</file>
+        <file>resources/icons/beams/beam_middle.svg</file>
+        <file>resources/icons/beams/beam_start.svg</file>
+        <file>resources/icons/beams/beam_none.svg</file>
+        <file>resources/icons/beams/beam_auto.svg</file>
+        <file>resources/icons/beams/beam_pos_lock.svg</file>
         <file>view/qml/common/FlatToogleButton.qml</file>
+        <file>resources/icons/playback.svg</file>
+        <file>resources/icons/appearance.svg</file>
         <file>view/qml/common/StyledComboBox.qml</file>
+        <file>resources/icons/indeterminate_check_mark.svg</file>
+        <file>resources/icons/beams/beam_feathered_right.svg</file>
+        <file>resources/icons/beams/beam_feathered_none.svg</file>
+        <file>resources/icons/beams/beam_feathered_left.svg</file>
         <file>view/qml/common/StyledTextLabel.qml</file>
     </qresource>
 </RCC>
