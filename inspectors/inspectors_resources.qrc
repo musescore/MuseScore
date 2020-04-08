@@ -16,5 +16,6 @@
         <file>view/qml/common/CheckBox.qml</file>
         <file>view/qml/common/ExpandableBlank.qml</file>
         <file>view/qml/common/ExpandableBlankSection.qml</file>
+        <file>view/qml/common/FlatButton.qml</file>
     </qresource>
 </RCC>
