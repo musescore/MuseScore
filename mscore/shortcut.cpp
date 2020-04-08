@@ -2928,6 +2928,13 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_FOTO,
+         "toggle-lyricseditor",
+         QT_TRANSLATE_NOOP("action","Lyrics Viewer"),
+         QT_TRANSLATE_NOOP("action","Show/hide Lyrics Viewer"),
+         },
+      {
+         MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "resource-manager",
          QT_TRANSLATE_NOOP("action", "Resource Manager…"),

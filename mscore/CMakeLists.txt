@@ -103,6 +103,7 @@ QT5_WRAP_UI (ui_headers
       startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
       logindialog.ui uploadscoredialog.ui breaksdialog.ui
       toolbarEditor.ui workspacedialog.ui
+      lyricseditor.ui
 
       importmidi/importmidi_panel.ui
 
@@ -351,6 +352,7 @@ add_library(mscoreapp STATIC
       musescore.cpp musescoredialogs.cpp navigator.cpp pagesettings.cpp palette.cpp
       sessionstatusobserver.cpp
       timeline.cpp
+      lyricseditor.cpp
       mixer.cpp mixertrackchannel.cpp mixertrackitem.cpp mixertrackpart.cpp mixerdetails.cpp
       parteditbase.cpp playpanel.cpp selectionwindow.cpp
       preferences.cpp measureproperties.cpp

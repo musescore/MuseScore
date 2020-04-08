@@ -78,6 +78,7 @@
 #include "transposedialog.h"
 #include "metaedit.h"
 #include "inspector/inspector.h"
+#include "lyricseditor.h"
 #ifdef OMR
 #include "omrpanel.h"
 #endif
@@ -1415,6 +1416,11 @@ MuseScore::MuseScore()
       a = getAction("inspector");
       a->setCheckable(true);
       menuView->addAction(a);
+
+      a = getAction("toggle-lyricseditor");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
 #ifdef OMR
       a = getAction("omr");
       a->setCheckable(true);
@@ -2334,6 +2340,8 @@ void MuseScore::selectionChanged(SelState selectionState)
             pianorollEditor->changeSelection(selectionState);
       if (drumrollEditor)
             drumrollEditor->changeSelection(selectionState);
+      if (_lyricsEditor && _lyricsEditor->isVisible())
+            updateLyricsEditor();
       if (timeline())
             timeline()->changeSelection(selectionState);
       if (_pianoTools && _pianoTools->isVisible()) {
@@ -2380,6 +2388,40 @@ void MuseScore::updateInspector()
 void MuseScore::updateShadowNote()
       {
       currentScoreView()->updateShadowNotes();
+      }
+
+//---------------------------------------------------------
+//   showLyricsEditor
+//---------------------------------------------------------
+
+void MuseScore::showLyricsEditor(bool visible)
+      {
+      if (!_lyricsEditor) {
+            _lyricsEditor = new LyricsEditor();
+            addDockWidget(Qt::RightDockWidgetArea, _lyricsEditor);
+            QAction* a = getAction("toggle-lyricseditor");
+            connect(_lyricsEditor, &LyricsEditor::visibilityChanged, a, &QAction::setChecked);
+            }
+
+      if (visible)
+            updateLyricsEditor();
+
+      _lyricsEditor->setVisible(visible);
+      }
+
+//---------------------------------------------------------
+//   updateLyricsEditor
+//---------------------------------------------------------
+
+void MuseScore::updateLyricsEditor()
+      {
+      if (!_lyricsEditor)
+            return;
+
+      if (cs)
+            _lyricsEditor->setLyrics(cs->extractLyrics());
+      else
+            _lyricsEditor->setLyrics("");
       }
 
 //---------------------------------------------------------
@@ -2664,6 +2706,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   }
             if (_inspector)
                   _inspector->update(0);
+            if (_lyricsEditor && _lyricsEditor->isVisible())
+                  updateLyricsEditor();
             viewModeCombo->setEnabled(false);
             if (_textTools) {
                   _textTools->hide();
@@ -4500,6 +4544,7 @@ void MuseScore::writeSettings()
       settings.beginGroup("MainWindow");
       settings.setValue("showPanel", paletteWidget && paletteWidget->isVisible());
       settings.setValue("showInspector", _inspector && _inspector->isVisible());
+      settings.setValue("showLyricsEditor", _lyricsEditor && _lyricsEditor->isVisible());
       settings.setValue("showPianoKeyboard", _pianoTools && _pianoTools->isVisible());
       settings.setValue("showSelectionWindow", selectionWindow && selectionWindow->isVisible());
       settings.setValue("state", saveState());
@@ -4605,6 +4650,7 @@ void MuseScore::readSettings()
             }
       mscore->showPalette(settings.value("showPanel", "1").toBool());
       mscore->showInspector(settings.value("showInspector", "1").toBool());
+      mscore->showLyricsEditor(settings.value("showLyricsEditor", "1").toBool());
       mscore->showPianoKeyboard(settings.value("showPianoKeyboard", "0").toBool());
       mscore->showSelectionWindow(settings.value("showSelectionWindow", "0").toBool());
       mscore->showMixer(mixerVisible);
@@ -5998,6 +6044,12 @@ void MuseScore::endCmd(bool undoRedo)
                   instrumentChanged();                // update mixer
                   ms->setInstrumentsChanged(false);
                   }
+            if (ms->lyricsChanged()) {
+                  if (_lyricsEditor && _lyricsEditor->isVisible()) {
+                        updateLyricsEditor();
+                        ms->setLyricsChanged(false);
+                        }
+                  }
             if (cs->selectionChanged()) {
                   cs->setSelectionChanged(false);
                   SelState ss = cs->selection().state();
@@ -6191,6 +6243,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showStartcenter(a->isChecked());
       else if (cmd == "inspector")
             showInspector(a->isChecked());
+      else if (cmd == "toggle-lyricseditor")
+            showLyricsEditor(a->isChecked());
 #ifdef OMR
       else if (cmd == "omr")
             showOmrPanel(a->isChecked());

@@ -805,6 +805,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
       if (editData.element->isLyrics()) {
             if (editKeyLyrics())
                   return;
+            _score->setLyricsChanged(true);
             }
       else if (editData.element->isHarmony()) {
             if (editData.key == Qt::Key_Space && !(editData.modifiers & CONTROL_MODIFIER)) {

@@ -80,6 +80,7 @@ class WebPageDockWidget;
 class ChordList;
 class Capella;
 class Inspector;
+class LyricsEditor;
 class OmrPanel;
 class NScrollArea;
 class TDockWidget;
@@ -310,6 +311,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PaletteWidget* paletteWidget { nullptr };
 
       Inspector* _inspector          { 0 };
+      LyricsEditor* _lyricsEditor    { 0 };
       OmrPanel* omrPanel             { 0 };
       QWidget* lastFocusWidget       { 0 };
 
@@ -437,6 +439,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void undoRedo(bool undo);
       void showPalette(bool);
       void showInspector(bool);
+      void showLyricsEditor(bool);
       void showOmrPanel(bool);
       void showNavigator(bool);
       void showTimeline(bool);
@@ -833,6 +836,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateMenus();
 
       Inspector* inspector()           { return _inspector; }
+      LyricsEditor* lyricsEditor()     { return _lyricsEditor; }
       PluginCreator* pluginCreator()   { return _pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
       ScoreTab* currentScoreTab() const { return ctab; }
@@ -867,6 +871,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void updateInspector() override;
       void updateInstrumentDialog();
       void reloadInstrumentTemplates();
+      void updateLyricsEditor();
       void showSynthControl(bool);
       void showMixer(bool);
 
