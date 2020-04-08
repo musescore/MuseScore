@@ -346,24 +346,14 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
         // TODO: do this in caller?
         if (isElement()) {
             Element* e = toElement(this);
-            if (e->offset().y() != v.toPointF().y()) {
+            if (e->offset() != v.toPointF()) {
                 e->setOffsetChanged(true, false, v.toPointF() - e->offset());
             }
         }
     }
     changeProperties(this, id, v, ps);
-    if (id == Pid::VISIBLE) {
-        if (isNote()) {
-            toNote(this)->undoChangeDotsVisible(v.toBool());
-        } else if (isRest()) {
-            toRest(this)->undoChangeDotsVisible(v.toBool());
-        }
-    }
     if (id != Pid::GENERATED) {
         changeProperties(this, Pid::GENERATED, QVariant(false), PropertyFlags::NOSTYLE);
-    }
-    if (doUpdateInspector) {
-        MuseScoreCore::mscoreCore->updateInspector();
     }
 }
 
