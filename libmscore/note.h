@@ -351,6 +351,7 @@ public:
     qreal headBodyWidth() const;
 
     NoteHead::Scheme headScheme() const { return _headScheme; }
+    void updateHeadGroup(const NoteHead::Group headGroup);
     NoteHead::Group headGroup() const { return _headGroup; }
     NoteHead::Type headType() const { return _headType; }
     void setHeadScheme(NoteHead::Scheme val);
