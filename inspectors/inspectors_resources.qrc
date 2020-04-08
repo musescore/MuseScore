@@ -31,6 +31,9 @@
         <file>view/qml/common/StyledIcon.qml</file>
         <file>view/qml/common/RadioButtonGroup.qml</file>
         <file>view/qml/common/FlatButton.qml</file>
+        <file>view/qml/notation_inspector/NoteSettingsPopup.qml</file>
+        <file>view/qml/notation_inspector/StemSettings.qml</file>
+        <file>view/qml/notation_inspector/NoteSettingsTabPanel.qml</file>
         <file>resources/icons/horizontal_adjustment.svg</file>
         <file>resources/icons/note.svg</file>
         <file>resources/icons/orientation_arrow_down.svg</file>
