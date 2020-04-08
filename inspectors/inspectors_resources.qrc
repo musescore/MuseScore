@@ -24,5 +24,6 @@
         <file>view/qml/common/RadioButtonGroup.qml</file>
         <file>view/qml/common/FlatButton.qml</file>
         <file>view/qml/common/FlatToogleButton.qml</file>
+        <file>view/qml/common/StyledComboBox.qml</file>
     </qresource>
 </RCC>
