@@ -34,12 +34,13 @@ include_directories(
       ${PROJECT_SOURCE_DIR}/libmscore
       ${PROJECT_SOURCE_DIR}/thirdparty
       ${PROJECT_SOURCE_DIR}/mscore
+      ${PROJECT_SOURCE_DIR}/telemetry
       ${PROJECT_BINARY_DIR}
       )
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
+set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
 set(LIBRARY_TYPE STATIC)
 
 file(GLOB_RECURSE inspectors_SOURCES RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.cpp)
@@ -50,4 +51,24 @@ qt5_wrap_ui(inspectors_UI ${inspectors_ui_files})
 qt5_add_resources(RCC_SOURCES inspectors_resources.qrc)
 
 add_library(inspectors ${LIBRARY_TYPE} ${inspectors_SOURCES} ${inspectors_HEADERS} ${inspectors_UI} ${RCC_SOURCES})
+
+if (NOT MSVC)
+   set_target_properties (
+      inspectors
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
+      )
+else (NOT MSVC)
+   set_target_properties (
+      inspectors
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"
+      )
+endif (NOT MSVC)
+
+xcode_pch(inspectors all)
+
+# Use MSVC pre-compiled headers
+vstudio_pch( inspectors )
+
 target_link_libraries(inspectors global)
