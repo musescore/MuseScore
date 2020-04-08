@@ -327,6 +327,7 @@ public:
     void undoUnlink() override;
 
     qreal mag() const override;
+    Element* elementBase() const override;
 
     void layout() override;
     void layout2();
