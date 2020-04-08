@@ -25,6 +25,7 @@
         <file>view/qml/common/FocusableItem.qml</file>
         <file>view/qml/common/ExpandableBlankSection.qml</file>
         <file>view/qml/common/TabPanel.qml</file>
+        <file>view/qml/notation_inspector/NotationInspectorView.qml</file>
         <file>view/qml/common/StyledPopup.qml</file>
         <file>view/qml/common/FlatRadioButton.qml</file>
         <file>view/qml/common/StyledIcon.qml</file>
@@ -36,8 +37,10 @@
         <file>resources/icons/orientation_arrow_up.svg</file>
         <file>resources/icons/vertical_adjustment.svg</file>
         <file>resources/icons/orientation_auto.svg</file>
+        <file>view/qml/notation_inspector/HeadSettings.qml</file>
         <file>resources/icons/orientation_arrow_left.svg</file>
         <file>resources/icons/orientation_arrow_right.svg</file>
+        <file>view/qml/notation_inspector/internal/NoteheadsGrid.qml</file>
         <file>resources/icons/notehead_brevis_alt.svg</file>
         <file>resources/icons/notehead_circled.svg</file>
         <file>resources/icons/notehead_circled_large.svg</file>
