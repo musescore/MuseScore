@@ -234,6 +234,23 @@ Fraction Dynamic::velocityChangeLength() const
 }
 
 //---------------------------------------------------------
+//   isVelocityChangeAvailable
+//---------------------------------------------------------
+
+bool Dynamic::isVelocityChangeAvailable() const
+{
+    switch (dynamicType()) {
+    case Type::SF:
+    case Type::SFPP:
+    case Type::FP:
+    case Type::RFZ:
+        return true;
+    default:
+        return false;
+    }
+}
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -533,7 +550,9 @@ bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
         _dynamicType = Type(v.toInt());
         break;
     case Pid::VELO_CHANGE:
-        setChangeInVelocity(v.toInt());
+        if (isVelocityChangeAvailable()) {
+            setChangeInVelocity(v.toInt());
+        }
         break;
     case Pid::VELO_CHANGE_SPEED:
         _velChangeSpeed = Speed(v.toInt());
