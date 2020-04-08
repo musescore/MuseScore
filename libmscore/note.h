@@ -513,7 +513,6 @@ public:
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
-    void undoChangeDotsVisible(bool v);
     QVariant propertyDefault(Pid) const override;
     QString propertyUserValue(Pid) const override;
 
