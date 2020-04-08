@@ -505,7 +505,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         {
                         }
                   QString headerName() const override { return QCoreApplication::translate(
-                                          "MIDI import operations", "2x less\nmeasure count"); }
+                                          "MIDI import operations", "Halving the\nmeasure count"); }
                   bool isForAllTracksOnly() const override { return true; }
                   QVariant value(int /*trackIndex*/) const override
                         {

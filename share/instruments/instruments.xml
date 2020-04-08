@@ -10751,9 +10751,9 @@
                    <genre>popular</genre>
              </Instrument>
              <Instrument id="laud">
-                   <longName>Laud</longName>
-                   <shortName>Laud</shortName>
-                   <description>Spanish Laud</description>
+                   <longName>Laúd</longName>
+                   <shortName>Laúd</shortName>
+                   <description>Spanish Laúd</description>
                    <musicXMLid>pluck.laud</musicXMLid>
                    <StringData>
                          <frets>22</frets>
@@ -10775,9 +10775,9 @@
                    <genre>popular</genre>
              </Instrument>
              <Instrument id="laud-tablature">
-                   <trackName>Laud (Tablature)</trackName>
+                   <trackName>Laúd (Tablature)</trackName>
                    <init>laud</init>
-                   <description>Spanish Laud (Tablature)</description>
+                   <description>Spanish Laúd (Tablature)</description>
                    <musicXMLid>pluck.laud</musicXMLid>
                    <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
                    <!--                  <clef>TAB</clef> -->
