@@ -10717,6 +10717,72 @@
                   </Channel>
                   <genre>world</genre>
             </Instrument>
+            <Instrument id="bandurria">
+                   <longName>Bandurria</longName>
+                   <shortName>Band.</shortName>
+                   <description>Spanish Bandurria</description>
+                   <musicXMLid>pluck.bandurria</musicXMLid>
+                   <StringData>
+                         <frets>17</frets>
+                         <string>56</string>
+                         <string>61</string>
+                         <string>66</string>
+                         <string>71</string>
+                         <string>76</string>
+                         <string>81</string>
+                   </StringData>
+                   <clef>G</clef>
+                   <barlineSpan>1</barlineSpan>
+                   <aPitchRange>56-98</aPitchRange>
+                   <pPitchRange>56-98</pPitchRange>
+                   <singleNoteDynamics>0</singleNoteDynamics>
+                   <Channel>
+                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                   </Channel>
+                   <genre>popular</genre>
+             </Instrument>
+             <Instrument id="bandurria-tablature">
+                   <trackName>Bandurria (Tablature)</trackName>
+                   <init>bandurria</init>
+                   <description>Bandurria (Tablature)</description>
+                   <musicXMLid>pluck.bandurria</musicXMLid>
+                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
+                   <!--                  <clef>TAB</clef> -->
+                   <genre>popular</genre>
+             </Instrument>
+             <Instrument id="laud">
+                   <longName>Laud</longName>
+                   <shortName>Laud</shortName>
+                   <description>Spanish Laud</description>
+                   <musicXMLid>pluck.laud</musicXMLid>
+                   <StringData>
+                         <frets>22</frets>
+                         <string>44</string>
+                         <string>49</string>
+                         <string>54</string>
+                         <string>59</string>
+                         <string>64</string>
+                         <string>69</string>
+                   </StringData>
+                   <clef>G8vb</clef>
+                   <barlineSpan>1</barlineSpan>
+                   <aPitchRange>44-91</aPitchRange>
+                   <pPitchRange>44-91</pPitchRange>
+                   <singleNoteDynamics>0</singleNoteDynamics>
+                   <Channel>
+                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                   </Channel>
+                   <genre>popular</genre>
+             </Instrument>
+             <Instrument id="laud-tablature">
+                   <trackName>Laud (Tablature)</trackName>
+                   <init>laud</init>
+                   <description>Spanish Laud (Tablature)</description>
+                   <musicXMLid>pluck.laud</musicXMLid>
+                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
+                   <!--                  <clef>TAB</clef> -->
+                   <genre>popular</genre>
+             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="strings">
             <name>Strings - Bowed</name>
