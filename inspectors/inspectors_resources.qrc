@@ -97,6 +97,7 @@
         <file>view/qml/common/StyledComboBox.qml</file>
         <file>view/qml/general_inspector/playback/internal/PausesExpandableBlank.qml</file>
         <file>view/qml/general_inspector/playback/DynamicsSettingsTab.qml</file>
+        <file>view/qml/general_inspector/playback/internal/HairpinsExpandableBlank.qml</file>
         <file>view/qml/general_inspector/playback/internal/ArpeggioExpandableBlank.qml</file>
         <file>resources/icons/indeterminate_check_mark.svg</file>
         <file>resources/icons/beams/beam_feathered_right.svg</file>
