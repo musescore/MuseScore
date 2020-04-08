@@ -1,0 +1,309 @@
+#include "abstractinspectormodel.h"
+
+AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository)
+    : QObject(parent)
+{
+    m_repository = repository;
+
+    if (!m_repository)
+        return;
+
+    connect(m_repository->getQObject(), SIGNAL(elementsUpdated()), this, SLOT(onRepositoryUpdated()));
+}
+
+void AbstractInspectorModel::requestResetToDefaults()
+{
+    resetProperties();
+}
+
+QString AbstractInspectorModel::title() const
+{
+    return m_title;
+}
+
+AbstractInspectorModel::InspectorModelType AbstractInspectorModel::type() const
+{
+    return m_type;
+}
+
+AbstractInspectorModel::InspectorModelType AbstractInspectorModel::modelTypeFromElementType(const Ms::ElementType elementType)
+{
+    switch (elementType) {
+    case Ms::ElementType::NOTE:
+    case Ms::ElementType::STEM:
+    case Ms::ElementType::NOTEDOT:
+    case Ms::ElementType::NOTEHEAD:
+    case Ms::ElementType::NOTELINE:
+    case Ms::ElementType::SHADOW_NOTE:
+    case Ms::ElementType::HOOK:
+    case Ms::ElementType::BEAM:
+        return NOTATION;
+
+    default:
+        return UNDEFINED;
+    }
+}
+
+bool AbstractInspectorModel::isEmpty() const
+{
+    return m_isEmpty;
+}
+
+void AbstractInspectorModel::setTitle(QString title)
+{
+    if (m_title == title)
+        return;
+
+    m_title = title;
+}
+
+void AbstractInspectorModel::setType(AbstractInspectorModel::InspectorModelType modelType)
+{
+    m_type = modelType;
+}
+
+void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVariant& newValue)
+{
+    if (!hasAcceptableElements())
+        return;
+
+    Ms::Score* score  = parentScore();
+    score->startCmd();
+
+    QVariant convertedValue;
+
+    for (Ms::Element* element : m_elementList) {
+
+        Ms::PropertyFlags ps = element->propertyFlags(pid);
+
+        if (ps == Ms::PropertyFlags::STYLED)
+            ps = Ms::PropertyFlags::UNSTYLED;
+
+        convertedValue = valueToElementUnits(pid, newValue, element);
+
+        element->undoChangeProperty(pid, convertedValue, ps);
+        element->triggerLayout();
+    }
+
+    score->endCmd(true /*isCmdFromInspector*/);
+
+    emit elementsModified();
+}
+
+void AbstractInspectorModel::setIsEmpty(bool isEmpty)
+{
+    if (m_isEmpty == isEmpty)
+        return;
+
+    m_isEmpty = isEmpty;
+    emit isEmptyChanged(m_isEmpty);
+}
+
+void AbstractInspectorModel::onRepositoryUpdated()
+{
+    updateProperties();
+
+    setIsEmpty(!hasAcceptableElements());
+}
+
+void AbstractInspectorModel::updateProperties()
+{
+    requestElements();
+
+    if (hasAcceptableElements()) {
+        loadProperties();
+    } else {
+        resetProperties();
+    }
+}
+
+void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
+{
+    if (isEmpty())
+        return;
+
+    Ms::Score* score  = parentScore();
+
+    if (!score)
+        return;
+
+    score->startCmd();
+
+    for (Ms::Element* element : m_elementList) {
+
+        for (const Ms::Pid pid : pidList)
+            element->elementBase()->undoResetProperty(pid);
+    }
+
+    score->endCmd();
+
+    emit elementsModified();
+
+    m_elementList.at(0)->triggerLayout();
+
+    emit modelReseted();
+}
+
+QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const
+{
+    switch (Ms::propertyType(pid)) {
+    case Ms::P_TYPE::POINT_SP:
+        return value.toPointF() * element->spatium();
+
+    case Ms::P_TYPE::POINT_SP_MM: {
+
+        if (element->sizeIsSpatiumDependent())
+            return value.toPointF() * element->spatium();
+        else
+            return value.toPointF() * Ms::DPMM;
+    }
+
+    case Ms::P_TYPE::SP_REAL:
+        return value.toDouble() * element->spatium();
+
+    case Ms::P_TYPE::TEMPO:
+        return value.toDouble() / 60.0;
+
+    case Ms::P_TYPE::ZERO_INT:
+        return value.toInt() - 1;
+
+    case Ms::P_TYPE::POINT_MM:
+        return value.toPointF() * Ms::DPMM;
+
+    case Ms::P_TYPE::SIZE_MM:
+        return value.toSizeF() * Ms::DPMM;
+
+    case Ms::P_TYPE::DIRECTION:
+        return static_cast<int>(value.value<Ms::Direction>());
+
+    case Ms::P_TYPE::INT_LIST: {
+        QStringList strList;
+
+        for (const int i : value.value<QList<int> >())
+            strList << QString("%1").arg(i);
+
+        return strList.join(",");
+    }
+
+    default:
+        return value;
+    }
+}
+
+QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const
+{
+    switch (Ms::propertyType(pid)) {
+
+    case Ms::P_TYPE::POINT_SP:
+        return value.toPointF() / element->spatium();
+
+    case Ms::P_TYPE::POINT_SP_MM: {
+
+        if (element->sizeIsSpatiumDependent())
+            return value.toPointF() / element->spatium();
+        else
+            return value.toPointF() / Ms::DPMM;
+    }
+
+    case Ms::P_TYPE::SP_REAL:
+        return value.toDouble() / element->spatium();
+
+    case Ms::P_TYPE::TEMPO:
+        return value.toDouble() * 60.0;
+
+    case Ms::P_TYPE::ZERO_INT:
+        return value.toInt() + 1;
+
+    case Ms::P_TYPE::POINT_MM:
+        return value.toPointF() / Ms::DPMM;
+
+    case Ms::P_TYPE::SIZE_MM:
+        return value.toSizeF() / Ms::DPMM;
+
+    case Ms::P_TYPE::DIRECTION:
+        return static_cast<int>(value.value<Ms::Direction>());
+
+    case Ms::P_TYPE::INT_LIST: {
+        QStringList strList;
+
+        for (const int i : value.value<QList<int> >())
+            strList << QString("%1").arg(i);
+
+        return strList.join(",");
+    }
+
+    default:
+        return value;
+    }
+}
+
+PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& pid, std::function<void(const int propertyId, const QVariant& newValue)> onPropertyChangedCallBack)
+{
+    PropertyItem* newPropertyItem = new PropertyItem(static_cast<int>(pid), this);
+
+    auto callback = onPropertyChangedCallBack;
+
+    if (!callback) {
+        callback = [this] (const int propertyId, const QVariant& newValue) {
+            onPropertyValueChanged(static_cast<Ms::Pid>(propertyId), newValue);
+        };
+    }
+
+    connect(newPropertyItem, &PropertyItem::propertyModified, this, callback);
+
+    return newPropertyItem;
+}
+
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::function<QVariant(const QVariant&)> convertElementPropertyValueFunc)
+{
+    if (!propertyItem || m_elementList.isEmpty())
+        return;
+
+    Ms::Pid pid = static_cast<Ms::Pid>(propertyItem->propertyId());
+
+    QVariant propertyValue;
+    QVariant defaultPropertyValue;
+
+    bool isUndefined = false;
+
+    for (const Ms::Element* element : m_elementList) {
+
+        QVariant elementCurrentValue = valueFromElementUnits(pid, element->getProperty(pid), element);
+        QVariant elementDefaultValue = valueFromElementUnits(pid, element->propertyDefault(pid), element);
+
+        if (convertElementPropertyValueFunc) {
+            elementCurrentValue = convertElementPropertyValueFunc(elementCurrentValue);
+            elementDefaultValue = convertElementPropertyValueFunc(elementDefaultValue);
+        }
+
+        if (!(propertyValue.isValid() && defaultPropertyValue.isValid())) {
+            propertyValue = elementCurrentValue;
+            defaultPropertyValue = elementDefaultValue;
+        }
+
+        isUndefined = propertyValue != elementCurrentValue;
+
+        if (isUndefined)
+            break;
+    }
+
+    if (isUndefined) {
+        propertyValue = QVariant();
+    }
+
+    propertyItem->fillValues(propertyValue, defaultPropertyValue);
+}
+
+bool AbstractInspectorModel::hasAcceptableElements() const
+{
+    return !m_elementList.isEmpty();
+}
+
+Ms::Score* AbstractInspectorModel::parentScore() const
+{
+    if (m_elementList.isEmpty()) {
+        return nullptr;
+    }
+
+    return m_elementList.at(0)->score();
+}
