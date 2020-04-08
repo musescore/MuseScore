@@ -124,6 +124,7 @@ public:
     int changeInVelocity() const;
     void setChangeInVelocity(int val);
     Fraction velocityChangeLength() const;
+    bool isVelocityChangeAvailable() const;
 
     Speed velChangeSpeed() const { return _velChangeSpeed; }
     void setVelChangeSpeed(Speed val) { _velChangeSpeed = val; }
