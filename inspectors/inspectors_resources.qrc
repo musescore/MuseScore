@@ -12,7 +12,8 @@
         <file>resources/icons/format-text-underline.svg</file>
         <file>resources/icons/raster-vertical.svg</file>
         <file>resources/icons/raster-horizontal.svg</file>
-        <file>view/qml/InspectorElementView.qml</file>
+        <file>view/qml/general_inspector/GeneralInspectorView.qml</file>
+        <file>view/qml/InspectorForm.qml</file>
         <file>resources/icons/arrow_down.svg</file>
         <file>view/qml/common/CheckBox.qml</file>
         <file>view/qml/common/IncrementalPropertyControl.qml</file>
