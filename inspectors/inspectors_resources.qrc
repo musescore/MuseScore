@@ -21,5 +21,6 @@
         <file>view/qml/common/TabPanel.qml</file>
         <file>view/qml/common/FlatRadioButton.qml</file>
         <file>view/qml/common/FlatButton.qml</file>
+        <file>view/qml/common/FlatToogleButton.qml</file>
     </qresource>
 </RCC>
