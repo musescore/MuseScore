@@ -299,7 +299,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "note-input-rhythm",
          QT_TRANSLATE_NOOP("action","Rhythm"),
-         QT_TRANSLATE_NOOP("action","Note input: Enter Rythm mode"),
+         QT_TRANSLATE_NOOP("action","Note input: Enter Rhythm mode"),
          QT_TRANSLATE_NOOP("action","Enter durations with a single click or keypress"),
          Icons::noteEntryRhythm_ICON,
          Qt::WindowShortcut,

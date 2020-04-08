@@ -14,7 +14,7 @@
    <string>Realize Chord Symbols</string>
   </property>
   <property name="toolTip">
-   <string>Convert chord symbols to notes</string>
+   <string>Convert chord symbols into notes</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
