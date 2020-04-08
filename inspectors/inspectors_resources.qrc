@@ -71,10 +71,12 @@
         <file>resources/icons/notehead_whole.svg</file>
         <file>resources/icons/dot_position_above.svg</file>
         <file>resources/icons/dot_position_below.svg</file>
+        <file>view/qml/notation_inspector/BeamSettings.qml</file>
         <file>resources/icons/beam_hight_left.svg</file>
         <file>resources/icons/beam_hight_right.svg</file>
         <file>resources/icons/feathering_height_left.svg</file>
         <file>resources/icons/feathering_height_right.svg</file>
+        <file>view/qml/notation_inspector/internal/BeamTypesGrid.qml</file>
         <file>resources/icons/beams/beam_32_sub.svg</file>
         <file>resources/icons/beams/beam_16_sub.svg</file>
         <file>resources/icons/beams/beam_middle.svg</file>
