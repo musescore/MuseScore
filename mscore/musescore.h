@@ -710,8 +710,7 @@ public:
 
     Q_INVOKABLE void openExternalLink(const QString&);
 
-    void endCmd(bool undoRedo);
-    void endCmd() override { endCmd(false); }
+    void endCmd(const bool isCmdFromInspector = false, const bool undoRedo = false) override;
     void printFile();
     void exportFile();
     bool exportParts();

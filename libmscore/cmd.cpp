@@ -260,7 +260,7 @@ void Score::undoRedo(bool undo, EditData* ed)
 ///   and (always) updating the redraw area.
 //---------------------------------------------------------
 
-void Score::endCmd(bool rollback)
+void Score::endCmd(const bool isCmdFromInspector, bool rollback)
 {
     if (!undoStack()->active()) {
         qDebug("Score::endCmd(): no cmd active");
@@ -287,7 +287,7 @@ void Score::endCmd(bool rollback)
         masterScore()->setPlaylistDirty();      // TODO: flag individual operations
         masterScore()->setAutosaveDirty(true);
     }
-    MuseScoreCore::mscoreCore->endCmd();
+    MuseScoreCore::mscoreCore->endCmd(isCmdFromInspector, rollback);
     cmdState().reset();
 }
 
