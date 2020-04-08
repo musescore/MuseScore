@@ -17,6 +17,7 @@
         <file>view/qml/common/IncrementalPropertyControl.qml</file>
         <file>view/qml/common/ValueAdjustControl.qml</file>
         <file>view/qml/common/ExpandableBlank.qml</file>
+        <file>view/qml/common/InspectorMenu.qml</file>
         <file>view/qml/common/FocusableItem.qml</file>
         <file>view/qml/common/ExpandableBlankSection.qml</file>
         <file>view/qml/common/TabPanel.qml</file>
