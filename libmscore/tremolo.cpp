@@ -240,7 +240,7 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal _spatium)
             const qreal td = score()->styleS(Sid::tremoloDistance).val();
             const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val();
 
-            qreal t;
+            qreal t = 0.0;
             // nearest distance between note and tremolo stroke should be no less than 3.0
             if (chord()->hook() || chord()->beam()) {
                   t = up ? -3.0 - (2.0 * (lines() - 1)) * td - 2.0 * sw : 3.0;

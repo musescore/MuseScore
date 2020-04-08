@@ -2546,43 +2546,44 @@ void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, q
 
 //---------------------------------------------------------
 //   extendedStemLenWithTwoNotesTremolo
-//    Extend stem of one of the chords to make the tremolo less steep
+//    Goal: To extend stem of one of the chords to make the tremolo less steep
+//    Returns a modified pair of stem lengths of two chords
 //---------------------------------------------------------
 
-std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo* _tremolo, qreal stemLen1, qreal stemLen2)
+std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, qreal stemLen1, qreal stemLen2)
       {
-      const qreal _spatium = _tremolo->score()->spatium();
-      const qreal sw = _tremolo->score()->styleS(Sid::tremoloStrokeWidth).val();
-      const qreal td = _tremolo->score()->styleS(Sid::tremoloDistance).val();
-      Chord* c1 = _tremolo->chord1();
-      Chord* c2 = _tremolo->chord2();
+      const qreal spatium = tremolo->score()->spatium();
+      const qreal sw = tremolo->score()->styleS(Sid::tremoloStrokeWidth).val();
+      const qreal td = tremolo->score()->styleS(Sid::tremoloDistance).val();
+      Chord* c1 = tremolo->chord1();
+      Chord* c2 = tremolo->chord2();
       Stem*  s1 = c1->stem();
       Stem*  s2 = c2->stem();
       const qreal sgn1 = c1->up() ? -1.0 : 1.0;
       const qreal sgn2 = c2->up() ? -1.0 : 1.0;
-      const qreal stemTipDistance = s1 ? (s2->pagePos().y() + stemLen2) - (s1->pagePos().y() + stemLen1)
+      const qreal stemTipDistance = (s1 && s2) ? (s2->pagePos().y() + stemLen2) - (s1->pagePos().y() + stemLen1)
          : (c2->stemPos().y() + stemLen2) - (c1->stemPos().y() + stemLen1);
 
       // same staff & same direction: extend one of the stems
       if (c1->staffMove() == c2->staffMove() && c1->up() == c2->up()) {
             const bool stem1Higher = stemTipDistance > 0.0;
-            if (std::abs(stemTipDistance) > 1.0 * _spatium) {
+            if (std::abs(stemTipDistance) > 1.0 * spatium) {
                   if ((c1->up() && !stem1Higher) || (!c1->up() && stem1Higher))
-                        return { stemLen1 + sgn1 * (std::abs(stemTipDistance) - 1.0 * _spatium), stemLen2 };
+                        return { stemLen1 + sgn1 * (std::abs(stemTipDistance) - 1.0 * spatium), stemLen2 };
                   else /* if ((c1->up() && stem1Higher) || (!c1->up() && !stem1Higher)) */
-                        return { stemLen1, stemLen2 + sgn2 * (std::abs(stemTipDistance) - 1.0 * _spatium) };
+                        return { stemLen1, stemLen2 + sgn2 * (std::abs(stemTipDistance) - 1.0 * spatium) };
                   }
             }
 
 // TODO: cross-staff two-note tremolo. Currently doesn't generate the right result in some cases.
 #if 0
       // cross-staff & beam between staves: extend both stems by the same length
-      else if (_tremolo->crossStaffBeamBetween()) {
-            const qreal tremoloMinHeight = ((_tremolo->lines() - 1) * td + sw) * _spatium;
+      else if (tremolo->crossStaffBeamBetween()) {
+            const qreal tremoloMinHeight = ((tremolo->lines() - 1) * td + sw) * spatium;
             const qreal dy = c1->up() ? tremoloMinHeight - stemTipDistance : tremoloMinHeight + stemTipDistance;
-            const bool tooShort = dy > 1.0 * _spatium;
-            const bool tooLong = dy < -1.0 * _spatium;
-            const qreal idealDistance = 1.0 * _spatium - tremoloMinHeight;
+            const bool tooShort = dy > 1.0 * spatium;
+            const bool tooLong = dy < -1.0 * spatium;
+            const qreal idealDistance = 1.0 * spatium - tremoloMinHeight;
 
             if (tooShort)
                   return { stemLen1 + sgn1 * (std::abs(stemTipDistance) - idealDistance) / 2.0,
