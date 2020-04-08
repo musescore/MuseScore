@@ -40,3 +40,14 @@ function dropEventMimeData(drag) {
 function removeSelectedItems(paletteController, selectionModel, parentIndex) {
     paletteController.removeSelection(selectionModel.selectedIndexes, parentIndex);
 }
+
+function setInvisibleRecursive(item) {
+    var children = item.children; // list of children if item is Item
+    if (!children)
+        children = item.contentChildren; // list of children if item is Popup
+
+    for (var i = 0; i < children.length; ++i)
+        setInvisibleRecursive(children[i]);
+
+    item.visible = false;
+}
