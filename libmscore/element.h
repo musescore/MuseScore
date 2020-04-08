@@ -203,10 +203,11 @@ public:
     Element* findAncestor(ElementType t);
     const Element* findAncestor(ElementType t) const;
 
-    Measure* findMeasure();
-    const Measure* findMeasure() const;
-    MeasureBase* findMeasureBase();
-    const MeasureBase* findMeasureBase() const;
+      Measure* findMeasure();
+      const Measure* findMeasure() const;
+      MeasureBase* findMeasureBase();
+      const MeasureBase* findMeasureBase() const;
+      virtual Element* elementBase() const { return const_cast<Element*>(this); }
 
     virtual bool isElement() const override { return true; }
 
