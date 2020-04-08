@@ -14,6 +14,8 @@
         <file>resources/icons/raster-horizontal.svg</file>
         <file>view/qml/InspectorElementView.qml</file>
         <file>view/qml/common/CheckBox.qml</file>
+        <file>view/qml/common/IncrementalPropertyControl.qml</file>
+        <file>view/qml/common/ValueAdjustControl.qml</file>
         <file>view/qml/common/ExpandableBlank.qml</file>
         <file>view/qml/common/ExpandableBlankSection.qml</file>
         <file>view/qml/common/FlatButton.qml</file>
