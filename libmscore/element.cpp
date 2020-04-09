@@ -134,7 +134,7 @@ qreal Element::spatium() const
             }
       else {
             Staff* s = staff();
-            return s ? s->spatium(tick()) : score()->spatium();
+            return s ? s->spatium(this) : score()->spatium();
             }
       }
 
@@ -274,10 +274,20 @@ Staff* Element::staff() const
 //   staffType
 //---------------------------------------------------------
 
-StaffType* Element::staffType() const
+const StaffType* Element::staffType() const
       {
       Staff* s = staff();
-      return s ? s->staffType(tick()) : 0;
+      return s ? s->staffTypeForElement(this) : nullptr;
+      }
+
+//---------------------------------------------------------
+//   onTabStaff
+//---------------------------------------------------------
+
+bool Element::onTabStaff() const
+      {
+      const StaffType* stt = staffType();
+      return stt ? stt->isTabStaff() : false;
       }
 
 //---------------------------------------------------------
@@ -2376,7 +2386,7 @@ void Element::autoplaceSegmentElement(bool above, bool add)
                         si = firstVis;
                   }
             else {
-                  qreal mag = staff()->mag(tick());
+                  qreal mag = staff()->mag(this);
                   sp *= mag;
                   }
             qreal minDistance = _minDistance.val() * sp;

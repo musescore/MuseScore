@@ -2380,7 +2380,7 @@ static void readStaff(Staff* staff, XmlReader& e)
                         }
                   }
             else if (tag == "small")
-                  staff->setSmall(Fraction(0,1), e.readInt());
+                  staff->staffType(Fraction(0,1))->setSmall(e.readInt());
             else if (tag == "invisible")
                   staff->setInvisible(e.readInt());
             else if (tag == "slashStyle")

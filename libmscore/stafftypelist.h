@@ -25,14 +25,20 @@ class XmlReader;
 //    to keep track of staff type changes
 //---------------------------------------------------------
 
-class StaffTypeList : public std::map<int, StaffType> {
+class StaffTypeList {
+      StaffType firstStaffType; ///< staff type at tick 0
+      std::map<int, StaffType> staffTypeChanges;
 
    public:
       StaffTypeList() {}
       StaffType& staffType(const Fraction&);
-      const StaffType& staffType(const Fraction&) const;
+      const StaffType& staffType(const Fraction& f) const;
       StaffType* setStaffType(const Fraction&, const StaffType&);
+      bool removeStaffType(const Fraction&);
       void read(XmlReader&, Score*);
+
+      bool uniqueStaffType() const { return staffTypeChanges.empty(); }
+      std::pair<int, int> staffTypeRange(const Fraction&) const;
       };
 
 }

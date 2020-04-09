@@ -71,11 +71,11 @@ Note* Chord::upNote() const
       Q_ASSERT(!_notes.empty());
 
       Note* result = _notes.back();
-      if (!staff())
+      const Staff* stf = staff();
+      if (!stf)
             return result;
 
-      const Staff* stf = staff();
-      const StaffType* st  = stf->staffType(tick());
+      const StaffType* st  = stf->staffTypeForElement(this);
       if (st->isDrumStaff()) {
             for (Note* n : _notes) {
                   if (n->line() < result->line()) {
@@ -108,11 +108,11 @@ Note* Chord::downNote() const
       Q_ASSERT(!_notes.empty());
 
       Note* result = _notes.front();
-      if (!staff())
+      const Staff* stf = staff();
+      if (!stf)
             return result;
 
-      const Staff* stf = staff();
-      const StaffType* st  = stf->staffType(tick());
+      const StaffType* st  = stf->staffTypeForElement(this);
       if (st->isDrumStaff()) {
             for (Note* n : _notes) {
                   if (n->line() > result->line()) {
@@ -142,12 +142,12 @@ Note* Chord::downNote() const
 
 int Chord::upLine() const
       {
-      return (staff() && staff()->isTabStaff(tick())) ? upString()*2 : upNote()->line();
+      return onTabStaff() ? upString()*2 : upNote()->line();
       }
 
 int Chord::downLine() const
       {
-      return (staff() && staff()->isTabStaff(tick())) ? downString()*2 : downNote()->line();
+      return onTabStaff() ? downString()*2 : downNote()->line();
       }
 
 //---------------------------------------------------------
@@ -164,10 +164,14 @@ int Chord::downLine() const
 int Chord::upString() const
       {
       // if no staff or staff not a TAB, return 0 (=topmost line)
-      if(!staff() || !staff()->isTabStaff(tick()))
-            return 0;
       const Staff* st = staff();
-      const StaffType* tab = st->staffType(tick());
+      if (!st)
+            return 0;
+
+      const StaffType* tab = st->staffTypeForElement(this);
+      if (!tab->isTabStaff())
+            return 0;
+
       int       line = tab->lines() - 1;      // start at bottom line
       int                     noteLine;
       // scan each note: if TAB strings are not in sequential order,
@@ -183,12 +187,14 @@ int Chord::upString() const
 
 int Chord::downString() const
       {
-      if (!staff())                              // if no staff, return 0
-            return 0;
-      if (!staff()->isTabStaff(tick()))                // if staff not a TAB, return bottom line
-            return staff()->lines(tick())-1;
       const Staff* st = staff();
-      const StaffType* tab = st->staffType(tick());
+      if (!st)                                         // if no staff, return 0
+            return 0;
+
+      const StaffType* tab = st->staffTypeForElement(this);
+      if (!tab->isTabStaff())                // if staff not a TAB, return bottom line
+            return st->lines(tick())-1;
+
       int line = 0;         // start at top line
       int noteLine;
       size_t n = _notes.size();
@@ -373,7 +379,7 @@ qreal Chord::noteHeadWidth() const
 qreal Chord::stemPosX() const
       {
       const Staff* stf = staff();
-      const StaffType* st = stf ? stf->staffType(tick()) : 0;
+      const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
       if (st && st->isTabStaff())
             return st->chordStemPosX(this) * spatium();
       return _up ? noteHeadWidth() : 0.0;
@@ -389,7 +395,7 @@ QPointF Chord::stemPos() const
       QPointF p(pagePos());
 
       const Staff* stf = staff();
-      const StaffType* st = stf ? stf->staffType(tick()) : 0;
+      const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
       if (st && st->isTabStaff())
             return st->chordStemPos(this) * spatium() + p;
 
@@ -415,7 +421,7 @@ QPointF Chord::stemPosBeam() const
       QPointF p(pagePos());
 
       const Staff* stf = staff();
-      const StaffType* st = stf ? stf->staffType(tick()) : 0;
+      const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
 
       if (st && st->isTabStaff())
             return st->chordStemPosBeam(this) * _spatium + p;
@@ -861,7 +867,7 @@ void Chord::computeUp()
       {
       Q_ASSERT(!_notes.empty());
       const Staff* st = staff();
-      const StaffType* tab = st ? st->staffType(tick()) : 0;
+      const StaffType* tab = st ? st->staffTypeForElement(this) : 0;
       bool tabStaff  = tab && tab->isTabStaff();
       // TAB STAVES
       if (tabStaff) {
@@ -1153,8 +1159,9 @@ qreal Chord::centerX() const
       {
       // TAB 'notes' are always centered on the stem
       const Staff* st = staff();
-      if (st->isTabStaff(tick()))
-            return st->staffType(tick())->chordStemPosX(this) * spatium();
+      const StaffType* stt = st->staffTypeForElement(this);
+      if (stt->isTabStaff())
+            return stt->chordStemPosX(this) * spatium();
 
       const Note* note = up() ? upNote() : downNote();
       qreal x = note->pos().x() + note->noteheadCenterX();
@@ -1312,7 +1319,8 @@ qreal Chord::defaultStemLength() const
       const Staff* st    = staff();
       qreal lineDistance = st ? st->lineDistance(tick()) : 1.0;
 
-      const StaffType* tab = (st && st->isTabStaff(tick())) ? st->staffType(tick()) : nullptr;
+      const StaffType* stt = st ? st->staffTypeForElement(this) : nullptr;
+      const StaffType* tab = (stt && stt->isTabStaff()) ? stt : nullptr;
       if (tab) {
             // require stems only if TAB is not stemless and this chord has a stem
             if (!tab->stemless() && _stem) {
@@ -1476,7 +1484,7 @@ qreal Chord::minAbsStemLength() const
 void Chord::layoutStem1()
       {
       const Staff* stf = staff();
-      const StaffType* st = stf ? stf->staffType(tick()) : 0;
+      const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
       if (durationType().hasStem() && !(_noStem || (measure() && measure()->stemless(staffIdx())) || (st && st->isTabStaff() && st->stemless()))) {
             if (!_stem) {
                   Stem* stem = new Stem(score());
@@ -1537,7 +1545,7 @@ void Chord::layoutStem()
       // TAB
       //
       const Staff* st = staff();
-      const StaffType* tab = st ? st->staffType(tick()) : 0;
+      const StaffType* tab = st ? st->staffTypeForElement(this) : 0;
       if (tab && tab->isTabStaff()) {
             // if stemless TAB
             if (tab->stemless()) {
@@ -1642,7 +1650,7 @@ void Chord::layout2()
       for (Chord* c : _graceNotes)
             c->layout2();
 
-      qreal mag = staff()->mag(tick());
+      const qreal mag = staff()->mag(this);
 
       //
       // position after-chord grace notes
@@ -1717,7 +1725,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       // in the context of the all of the chords of the whole segment
 
       const Staff* st = staff();
-      StaffGroup staffGroup = st->staffType(tick())->group();
+      StaffGroup staffGroup = st->staffTypeForElement(this)->group();
       if (staffGroup == StaffGroup::TAB) {
             const Instrument* instrument = part()->instrument();
             for (Chord* ch : graceNotes())
@@ -1729,7 +1737,8 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       // PITCHED_ and PERCUSSION_STAFF can go note by note
 
       if (staffGroup == StaffGroup::STANDARD) {
-            for (Chord* ch : graceNotesBefore()) {
+            const QVector<Chord*> gnb(graceNotesBefore());
+            for (Chord* ch : gnb) {
                   std::vector<Note*> notes(ch->notes());  // we need a copy!
                   for (Note* note : notes)
                         note->updateAccidental(as);
@@ -1748,7 +1757,8 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                         }
                   note->updateAccidental(as);
                   }
-            for (Chord* ch : graceNotesAfter()) {
+            const QVector<Chord*> gna(graceNotesAfter());
+            for (Chord* ch : gna) {
                   std::vector<Note*> notes(ch->notes());  // we need a copy!
                   for (Note* note : notes)
                         note->updateAccidental(as);
@@ -1796,7 +1806,7 @@ void Chord::layout()
       {
       if (_notes.empty())
             return;
-      if (staff() && staff()->isTabStaff(tick()))
+      if (onTabStaff())
             layoutTablature();
       else
             layoutPitched();
@@ -1809,25 +1819,25 @@ void Chord::layout()
 void Chord::layoutPitched()
       {
       int gi = 0;
-      for (Chord* c : _graceNotes) {
+      for (Chord* c : qAsConst(_graceNotes)) {
             // HACK: graceIndex is not well-maintained on add & remove
             // so rebuild now
             c->setGraceIndex(gi++);
             if (c->isGraceBefore())
                   c->layoutPitched();
             }
-      QVector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
-      int gnb = graceNotesBefore.size();
+      const QVector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
+      const int gnb = graceNotesBefore.size();
 
       // lay out grace notes after separately so they are processed left to right
       // (they are normally stored right to left)
 
-      QVector<Chord*> gna = graceNotesAfter();
+      const QVector<Chord*> gna = graceNotesAfter();
       for (Chord* c : gna)
             c->layoutPitched();
 
       qreal _spatium         = spatium();
-      qreal mag_             = staff() ? staff()->mag(tick()) : 1.0;    // palette elements do not have a staff
+      qreal mag_             = staff() ? staff()->mag(this) : 1.0;    // palette elements do not have a staff
       qreal dotNoteDistance  = score()->styleP(Sid::dotNoteDistance)  * mag_;
       qreal minNoteDistance  = score()->styleP(Sid::minNoteDistance)  * mag_;
       qreal minTieLength     = score()->styleP(Sid::MinTieLength)     * mag_;
@@ -2124,7 +2134,7 @@ void Chord::layoutTablature()
       Note* upnote      = upNote();
       qreal headWidth   = symWidth(SymId::noteheadBlack);
       const Staff* st   = staff();
-      const StaffType* tab = st->staffType(tick());
+      const StaffType* tab = st->staffTypeForElement(this);
       qreal lineDist    = tab->lineDistance().val() *_spatium;
       qreal stemX       = tab->chordStemPosX(this) *_spatium;
       int   ledgerLines = 0;
@@ -2935,7 +2945,8 @@ void Chord::removeMarkings(bool keepTremolo)
 
 qreal Chord::mag() const
       {
-      qreal m = staff() ? staff()->mag(tick()) : 1.0;
+      const Staff* st = staff();
+      qreal m = st ? st->mag(this) : 1.0;
       if (small())
             m *= score()->styleD(Sid::smallNoteMag);
       if (_noteType != NoteType::NORMAL)
@@ -3388,7 +3399,7 @@ void Chord::layoutArticulations()
       if (_articulations.empty())
             return;
       const Staff* st = staff();
-      const StaffType* staffType = st->staffType(tick());
+      const StaffType* staffType = st->staffTypeForElement(this);
       qreal mag            = (staffType->small() ? score()->styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
       qreal _spatium       = score()->spatium() * mag;
       qreal _spStaff       = _spatium * staffType->lineDistance().val();

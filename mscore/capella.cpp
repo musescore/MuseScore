@@ -1219,7 +1219,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   bstaff = 0;
                   }
 
-            s->setSmall(Fraction(0,1), cl->bSmall);
+            s->staffType(Fraction(0,1))->setSmall(cl->bSmall);
             part->insertStaff(s, -1);
             Interval interval;
             // guess diatonic transposition from chromatic transposition for the instrument

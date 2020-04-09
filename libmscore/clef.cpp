@@ -119,7 +119,7 @@ void Clef::layout()
       // check clef visibility and type compatibility
       if (clefSeg && staff()) {
             Fraction tick = clefSeg->tick();
-            StaffType* st = staffType();
+            const StaffType* st = staff()->staffType(tick);
             bool show     = st->genClef();        // check staff type allows clef display
 
             // check clef is compatible with staff type group:

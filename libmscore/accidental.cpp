@@ -305,7 +305,7 @@ void Accidental::layout()
       QRectF r;
       // TODO: remove Accidental in layout()
       // don't show accidentals for tab or slash notation
-      if ((staff() && staff()->isTabStaff(tick())) || (note() && note()->fixed())) {
+      if (onTabStaff() || (note() && note()->fixed())) {
             setbbox(r);
             return;
             }
@@ -365,7 +365,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
 void Accidental::draw(QPainter* painter) const
       {
       // don't show accidentals for tab or slash notation
-      if ((staff() && staff()->isTabStaff(tick())) || (note() && note()->fixed()))
+      if (onTabStaff() || (note() && note()->fixed()))
             return;
       painter->setPen(curColor());
       for (const SymElement& e : el)
