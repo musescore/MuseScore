@@ -32,12 +32,14 @@ extern LineSegment* voltaDebug;
 class VoltaSegment final : public TextLineBaseSegment {
    public:
       VoltaSegment(Spanner*, Score*);
-      virtual ElementType type() const override     { return ElementType::VOLTA_SEGMENT; }
-      virtual VoltaSegment* clone() const override  { return new VoltaSegment(*this); }
-      Volta* volta() const                          { return (Volta*)spanner(); }
-      virtual void layout() override;
 
-      virtual Element* propertyDelegate(Pid) override;
+      ElementType type() const override     { return ElementType::VOLTA_SEGMENT; }
+      VoltaSegment* clone() const override  { return new VoltaSegment(*this); }
+
+      Volta* volta() const                  { return (Volta*)spanner(); }
+      void layout() override;
+
+      Element* propertyDelegate(Pid) override;
       };
 
 //---------------------------------------------------------
@@ -55,14 +57,17 @@ class Volta final : public TextLineBase {
             };
 
       Volta(Score* s);
-      virtual Volta* clone()       const override { return new Volta(*this); }
-      virtual ElementType type() const override   { return ElementType::VOLTA; }
-      virtual LineSegment* createLineSegment() override;
 
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader& e) override;
+      Volta* clone() const override       { return new Volta(*this); }
+      ElementType type() const override   { return ElementType::VOLTA; }
+
+      LineSegment* createLineSegment() override;
+
+      void write(XmlWriter&) const override;
+      void read(XmlReader& e) override;
+
       bool readProperties(XmlReader&) override;
-      virtual SpannerSegment* layoutSystem(System* system) override;
+      SpannerSegment* layoutSystem(System* system) override;
 
       void setVelocity() const;
       void setChannel() const;
@@ -79,11 +84,11 @@ class Volta final : public TextLineBase {
       void setVoltaType(Volta::Type);     // deprecated
       Type voltaType() const;             // deprecated
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
 
-      virtual QString accessibleInfo() const override;
+      QString accessibleInfo() const override;
       };
 
 }     // namespace Ms

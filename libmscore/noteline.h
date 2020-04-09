@@ -32,14 +32,14 @@ class NoteLine final : public TextLineBase {
       NoteLine(const NoteLine&);
       ~NoteLine() {}
 
-      virtual NoteLine* clone() const         { return new NoteLine(*this); }
-      virtual ElementType type() const        { return ElementType::NOTELINE; }
+      NoteLine* clone() const override   { return new NoteLine(*this); }
+      ElementType type() const override  { return ElementType::NOTELINE; }
 
       void setStartNote(Note* n)  { _startNote = n; }
       Note* startNote() const     { return _startNote; }
       void setEndNote(Note* n)    { _endNote = n; }
       Note* endNote() const       { return _endNote; }
-      virtual LineSegment* createLineSegment() override;
+      LineSegment* createLineSegment() override;
       };
 
 
