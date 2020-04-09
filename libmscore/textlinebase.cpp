@@ -261,8 +261,9 @@ void TextLineBaseSegment::layout()
 
       // diagonal line with no text or hooks - just use the basic rectangle for line
       if (_text->empty() && _endText->empty() && pp2.y() != 0
-          && textLineBase()->beginHookType() == HookType::NONE) {
-            npoints = 2;
+          && textLineBase()->beginHookType() == HookType::NONE
+          && textLineBase()->endHookType() == HookType::NONE) {
+            npoints = 1; // 2 points, but only one line must be drawn
             points[0] = pp1;
             points[1] = pp2;
             lineLength = sqrt(QPointF::dotProduct(pp2-pp1, pp2-pp1));
