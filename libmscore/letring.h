@@ -26,10 +26,13 @@ class LetRing;
 class LetRingSegment final : public TextLineBaseSegment {
    public:
       LetRingSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)  { }
-      virtual ElementType type() const override       { return ElementType::LET_RING_SEGMENT; }
-      virtual LetRingSegment* clone() const override  { return new LetRingSegment(*this);    }
-      LetRing* letRing() const                        { return (LetRing*)spanner();          }
-      virtual void layout() override;
+
+      ElementType type() const override       { return ElementType::LET_RING_SEGMENT; }
+      LetRingSegment* clone() const override  { return new LetRingSegment(*this);    }
+
+      LetRing* letRing() const                { return (LetRing*)spanner();          }
+
+      void layout() override;
 
       friend class LetRing;
       };
@@ -44,13 +47,16 @@ class LetRing final : public TextLineBase {
 
    public:
       LetRing(Score* s);
-      virtual LetRing* clone() const override   { return new LetRing(*this);   }
-      virtual ElementType type() const override { return ElementType::LET_RING; }
-      virtual void read(XmlReader&) override;
+
+      LetRing* clone() const override   { return new LetRing(*this);   }
+      ElementType type() const override { return ElementType::LET_RING; }
+
+      void read(XmlReader&) override;
 //      virtual void write(XmlWriter& xml) const override;
-      LineSegment* createLineSegment();
-      virtual QVariant propertyDefault(Pid propertyId) const override;
-      virtual Sid getPropertyStyle(Pid) const override;
+      LineSegment* createLineSegment() override;
+
+      QVariant propertyDefault(Pid propertyId) const override;
+      Sid getPropertyStyle(Pid) const override;
       };
 
 }     // namespace Ms

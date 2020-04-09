@@ -29,25 +29,26 @@ class TrillSegment final : public LineSegment {
 
       void symbolLine(SymId start, SymId fill);
       void symbolLine(SymId start, SymId fill, SymId end);
-      virtual Sid getPropertyStyle(Pid) const override;
+      Sid getPropertyStyle(Pid) const override;
 
    protected:
    public:
       TrillSegment(Spanner* sp, Score* s) : LineSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)      {}
       TrillSegment(Score* s) : LineSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)      {}
-      Trill* trill() const                         { return (Trill*)spanner(); }
-      virtual ElementType type() const override  { return ElementType::TRILL_SEGMENT; }
-      virtual TrillSegment* clone() const override { return new TrillSegment(*this); }
-      virtual void draw(QPainter*) const override;
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
-      virtual void layout() override;
 
-      virtual Element* propertyDelegate(Pid) override;
+      Trill* trill() const                      { return (Trill*)spanner(); }
+      ElementType type() const override         { return ElementType::TRILL_SEGMENT; }
+      TrillSegment* clone() const override      { return new TrillSegment(*this); }
+      void draw(QPainter*) const override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
+      void layout() override;
 
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all) override;
+      Element* propertyDelegate(Pid) override;
+
+      void add(Element*) override;
+      void remove(Element*) override;
+      void scanElements(void* data, void (*func)(void*, Element*), bool all) override;
       Shape shape() const override;
 
       std::vector<SymId> symbols() const           { return _symbols; }
@@ -60,7 +61,7 @@ class TrillSegment final : public LineSegment {
 //---------------------------------------------------------
 
 class Trill final : public SLine {
-      virtual Sid getPropertyStyle(Pid) const override;
+      Sid getPropertyStyle(Pid) const override;
 
    public:
       enum class Type : char {
@@ -75,16 +76,17 @@ class Trill final : public SLine {
 
    public:
       Trill(Score* s);
-      virtual ~Trill();
-      virtual Trill* clone() const override       { return new Trill(*this); }
-      virtual ElementType type() const override { return ElementType::TRILL; }
+      ~Trill();
 
-      virtual void layout() override;
-      virtual LineSegment* createLineSegment() override;
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
+      Trill* clone() const override     { return new Trill(*this); }
+      ElementType type() const override { return ElementType::TRILL; }
+
+      void layout() override;
+      LineSegment* createLineSegment() override;
+      void add(Element*) override;
+      void remove(Element*) override;
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
 
       void setTrillType(const QString& s);
       void setTrillType(Type tt)          { _trillType = tt; }
@@ -100,14 +102,14 @@ class Trill final : public SLine {
       void setAccidental(Accidental* a)   { _accidental = a; }
 
       Segment* segment() const          { return (Segment*)parent(); }
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
-      virtual Pid propertyId(const QStringRef& xmlName) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
 
-      virtual QString accessibleInfo() const override;
+      QString accessibleInfo() const override;
       };
 
 struct TrillTableItem {

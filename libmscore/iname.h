@@ -31,8 +31,9 @@ class InstrumentName final : public TextBase  {
 
    public:
       InstrumentName(Score*);
-      virtual InstrumentName* clone() const override { return new InstrumentName(*this); }
-      virtual ElementType type() const override    { return ElementType::INSTRUMENT_NAME; }
+
+      InstrumentName* clone() const override { return new InstrumentName(*this); }
+      ElementType type() const override      { return ElementType::INSTRUMENT_NAME; }
 
       int layoutPos() const      { return _layoutPos; }
       void setLayoutPos(int val) { _layoutPos = val;  }
@@ -42,10 +43,10 @@ class InstrumentName final : public TextBase  {
       void setInstrumentNameType(InstrumentNameType v);
       void setInstrumentNameType(const QString& s);
 
-      virtual bool isEditable() const override { return false; }
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      bool isEditable() const override { return false; }
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
       };
 
 

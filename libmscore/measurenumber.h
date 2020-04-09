@@ -26,11 +26,12 @@ class MeasureNumber final : public TextBase {
    public:
       MeasureNumber(Score* s = 0);
 
-      virtual ElementType type() const override       { return ElementType::MEASURE_NUMBER; }
-      virtual MeasureNumber* clone() const override   { return new MeasureNumber(*this); }
-      virtual QVariant propertyDefault(Pid id) const override;
+      ElementType type() const override       { return ElementType::MEASURE_NUMBER; }
+      MeasureNumber* clone() const override   { return new MeasureNumber(*this); }
 
-      virtual void layout() override;
+      QVariant propertyDefault(Pid id) const override;
+
+      void layout() override;
       Measure* measure() const { return toMeasure(parent()); }
       };
 

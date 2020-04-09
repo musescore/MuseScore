@@ -67,7 +67,8 @@ class Part final : public ScoreElement {
    public:
       Part(Score* = 0);
       void initFromInstrTemplate(const InstrumentTemplate*);
-      virtual ElementType type() const override { return ElementType::PART; }
+
+      ElementType type() const override { return ElementType::PART; }
 
       void read(XmlReader&);
       bool readProperties(XmlReader&);

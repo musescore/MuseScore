@@ -30,19 +30,21 @@ namespace Ms {
 //-----------------------------------------------------------------------------
 
 class Sticking final : public TextBase {
-      virtual Sid getPropertyStyle(Pid) const override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      Sid getPropertyStyle(Pid) const override;
+      QVariant propertyDefault(Pid id) const override;
 
    public:
       Sticking(Score*);
-      virtual Sticking* clone() const override    { return new Sticking(*this); }
-      virtual ElementType type() const override   { return ElementType::STICKING; }
-      Segment* segment() const                    { return (Segment*)parent(); }
-      Measure* measure() const                    { return (Measure*)parent()->parent(); }
 
-      virtual void layout() override;
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
+      Sticking* clone() const override    { return new Sticking(*this); }
+      ElementType type() const override   { return ElementType::STICKING; }
+
+      Segment* segment() const            { return (Segment*)parent(); }
+      Measure* measure() const            { return (Measure*)parent()->parent(); }
+
+      void layout() override;
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
       };
 
 }     // namespace Ms

@@ -22,15 +22,16 @@ namespace Ms {
 //---------------------------------------------------------
 
 class RehearsalMark final : public TextBase  {
-      virtual Sid getPropertyStyle(Pid) const override;
+      Sid getPropertyStyle(Pid) const override;
 
    public:
       RehearsalMark(Score* score);
-      virtual RehearsalMark* clone() const override { return new RehearsalMark(*this); }
-      virtual ElementType type() const override     { return ElementType::REHEARSAL_MARK; }
-      Segment* segment() const                      { return (Segment*)parent(); }
-      virtual void layout() override;
-      virtual QVariant propertyDefault(Pid id) const override;
+
+      RehearsalMark* clone() const override { return new RehearsalMark(*this); }
+      ElementType type() const override     { return ElementType::REHEARSAL_MARK; }
+      Segment* segment() const              { return (Segment*)parent(); }
+      void layout() override;
+      QVariant propertyDefault(Pid id) const override;
       };
 
 
