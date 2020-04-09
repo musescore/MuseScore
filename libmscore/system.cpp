@@ -44,6 +44,7 @@
 #include "textframe.h"
 #include "stafflines.h"
 #include "bracketItem.h"
+#include "log.h"
 
 namespace Ms {
 
@@ -437,7 +438,7 @@ void System::setBracketsXPosition(const qreal xPosition)
             for (const Bracket* b2 : _brackets) {
                   bool b1FirstStaffInB2 = (b1->firstStaff() >= b2->firstStaff() && b1->firstStaff() <= b2->lastStaff());
                   bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
-                  if (b1->column() > b2->column() && 
+                  if (b1->column() > b2->column() &&
                         (b1FirstStaffInB2 || b1LastStaffInB2))
                         xOffset += b2->width() + bracketDistance;
                   }
@@ -1102,8 +1103,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 qreal System::staffYpage(int staffIdx) const
       {
-      if (_staves.size() <= staffIdx || staffIdx < 0) {
-            qWarning("staffY: staves %d: bad staffIdx %d", _staves.size(), staffIdx);
+      IF_ASSERT_FAILED(!(_staves.size() <= staffIdx || staffIdx < 0)) {
             return pagePos().y();
             }
       return _staves[staffIdx]->y() + y();
