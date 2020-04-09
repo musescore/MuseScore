@@ -123,6 +123,9 @@ FocusableItem {
                         enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
                         isIndeterminate: model ? model.featheringHeightLeft.isUndefined : false
                         currentValue: model ? model.featheringHeightLeft.value : 0
+                        maxValue: 4
+                        minValue: 0
+                        step: 0.1
 
                         onValueEdited: { model.featheringHeightLeft.value = newValue }
                     }
@@ -137,6 +140,9 @@ FocusableItem {
                         isIndeterminate: model ? model.featheringHeightRight.isUndefined : false
                         iconMode: iconModeEnum.right
                         currentValue: model ? model.featheringHeightRight.value : 0
+                        maxValue: 4
+                        minValue: 0
+                        step: 0.1
 
                         onValueEdited: { model.featheringHeightRight.value = newValue }
                     }
