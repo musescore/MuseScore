@@ -1,7 +1,6 @@
 #ifndef INSPECTORICONLOADER_H
 #define INSPECTORICONLOADER_H
 
-#include "all.h"
 
 class InspectorIconLoader
 {

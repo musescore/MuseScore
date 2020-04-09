@@ -15,9 +15,16 @@
 #ifndef __MICONENGINE_H__
 #define __MICONENGINE_H__
 
-#include <QtGui/qiconengine.h>
-#include <QtCore/qshareddata.h>
-#include "all.h"
+#include <QIconEngine>
+#include <QSharedData>
+#include <QSettings>
+#include <QVariant>
+#include <QSvgRenderer>
+#include <QPixmap>
+#include <QPixmapCache>
+#include <QFile>
+#include <QPainter>
+#include <QFileInfo>
 
 class MIconEnginePrivate;
 

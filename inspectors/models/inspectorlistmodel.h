@@ -1,8 +1,7 @@
 #ifndef INSPECTORLISTMODEL_H
 #define INSPECTORLISTMODEL_H
 
-#include "all.h"
-
+#include <QAbstractListModel>
 #include "libmscore/element.h"
 #include "models/abstractinspectormodel.h"
 #include "services/elementrepositoryservice.h"
