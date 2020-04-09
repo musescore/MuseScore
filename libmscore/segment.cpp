@@ -1626,6 +1626,8 @@ Element* Segment::nextElement(int activeStaff)
                               return nmb;
                         else if (nme && nme->isTextBase() && nme->staffIdx() == e->staffIdx())
                               return nme;
+                        else if (nme && nme->isLayoutBreak() && e->staffIdx() == 0)
+                              return nme;
                         }
 
                   while (nextSegment) {
@@ -1768,6 +1770,8 @@ Element* Segment::prevElement(int activeStaff)
                          MeasureBase* pmb = measure()->prevMM();
                          Element* me = measure()->el().empty() ? nullptr : measure()->el().back();
                          if (me && me->isTextBase() && me->staffIdx() == e->staffIdx())
+                               return me;
+                         else if (me && me->isLayoutBreak() && e->staffIdx() == 0)
                                return me;
                          else if (psm != pmb)
                               return pmb;
