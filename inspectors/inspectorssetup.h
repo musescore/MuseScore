@@ -30,7 +30,7 @@ class InspectorsSetup : public AbstractModuleSetup
     public:
       InspectorsSetup() = default;
 
-      QString moduleName() override;
+      QString moduleName() const override;
       void registerExports() override;
       void registerResources() override;
       void registerQmlTypes() override;

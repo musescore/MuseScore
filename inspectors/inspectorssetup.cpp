@@ -19,7 +19,7 @@
 
 #include "inspectorssetup.h"
 
-QString InspectorsSetup::moduleName()
+QString InspectorsSetup::moduleName() const
 {
     return QStringLiteral("inspectors");
 }

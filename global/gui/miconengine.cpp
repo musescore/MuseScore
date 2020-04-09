@@ -15,7 +15,7 @@
 #include "miconengine.h"
 #include "settings/types/preferencekeys.h"
 
-#include "preferences.h"
+#include "mscore/preferences.h"
 
 //---------------------------------------------------------
 //   MIconEnginePrivate
