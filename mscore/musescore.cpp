@@ -5221,6 +5221,11 @@ bool MuseScore::restoreSession(bool always)
                                                 appendScore(score);
                                                 score->setCreated(created);
                                                 }
+                                          else {
+                                                //! NOTE Return true so that there is no attempt to open this file again
+                                                //! See: static void loadScores(const QStringList& argv)
+                                                return true;
+                                                }
                                           }
                                     else {
                                           e.unknown();
