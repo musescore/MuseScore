@@ -14,6 +14,8 @@ FocusableItem {
     property var currentValue
     property real step: 0.5
     property int decimals: 2
+    property real maxValue: 999
+    property real minValue: -999
     property alias measureUnitsSymbol: measureUnitsLabel.text
 
     readonly property int spacing: 8
@@ -157,12 +159,20 @@ FocusableItem {
             onIncreaseButtonClicked: {
                 var value = root.isIndeterminate ? 0.0 : currentValue
                 var newValue = value + step
+
+                if (newValue > root.maxValue)
+                    return
+
                 root.valueEdited(+newValue.toFixed(decimals))
             }
 
             onDecreaseButtonClicked: {
                 var value = root.isIndeterminate ? 0.0 : currentValue
                 var newValue = value - step
+
+                if (newValue < root.minValue)
+                    return
+
                 root.valueEdited(+newValue.toFixed(decimals))
             }
         }
