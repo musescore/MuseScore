@@ -1320,11 +1320,18 @@ void Seq::stopNotes(int channel, bool realTime)
                   putEvent(event);
             else
                   sendEvent(event);
-      };
+            };
+      // For VSTs/devices that do not support All Notes Off
+      // CTRL_ALL_NOTES_OFF should still be evoked after calling this function, even if it seems redundant
+      auto turnAllNotesOff = [send](int channel) {
+            for (unsigned note = 0; note < 128; note++)
+                  send(NPlayEvent(ME_NOTEOFF, channel, note, 0));
+            };
       // Stop notes in all channels
       if (channel == -1) {
             for(unsigned ch = 0; ch < cs->midiMapping().size(); ch++) {
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
+                  turnAllNotesOff(ch);
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_ALL_NOTES_OFF, 0));
                   if (cs->midiChannel(ch) != 9)
                         send(NPlayEvent(ME_PITCHBEND,  ch, 0, 64));
@@ -1332,6 +1339,7 @@ void Seq::stopNotes(int channel, bool realTime)
             }
       else {
             send(NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0));
+            turnAllNotesOff(channel);
             send(NPlayEvent(ME_CONTROLLER, channel, CTRL_ALL_NOTES_OFF, 0));
             if (cs->midiChannel(channel) != 9)
                   send(NPlayEvent(ME_PITCHBEND,  channel, 0, 64));
