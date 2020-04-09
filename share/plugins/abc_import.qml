@@ -123,7 +123,7 @@ MuseScore {
                         Qt.quit()
                     }
                 }
-            request.open("POST", "http://abc2xml.appspot.com/abcrenderer", true)
+            request.open("POST", "https://abc2xml.appspot.com/abcrenderer", true)
             request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
             request.send(content)
             }
