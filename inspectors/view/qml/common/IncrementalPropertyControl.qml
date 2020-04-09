@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.9
 import MuseScore.Inspectors 3.3 // should be removed when component will be moved to the gui module, currently needed only for DoubleInputValidator
 
 FocusableItem {
@@ -91,6 +91,12 @@ FocusableItem {
 
             text: root.currentValue === undefined ? "" : root.currentValue
             validator: DoubleInputValidator {}
+
+            Keys.onPressed: {
+                if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+                    valueInput.focus = false
+                }
+            }
 
             onTextChanged: {
                 if (!acceptableInput)
