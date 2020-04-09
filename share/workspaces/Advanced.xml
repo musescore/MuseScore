@@ -1769,6 +1769,14 @@
             <text><sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym></text>
             </Tempo>
           </Cell>
+        <Cell name="Metric modulation">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>2</tempo>
+            <followText>1</followText>
+            <text><sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym></text>
+            </Tempo>
+          </Cell>
         </Palette>
       <Palette name="Dynamics">
         <type>Dynamic</type>
