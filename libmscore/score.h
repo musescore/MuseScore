@@ -1213,7 +1213,7 @@ class Score : public QObject, public ScoreElement {
       System* getNextSystem(LayoutContext&);
       void hideEmptyStaves(System* system, bool isFirstSystem);
       void layoutLyrics(System*);
-      void createBeams(Measure*);
+      void createBeams(LayoutContext&, Measure*);
 
       constexpr static double defaultTempo()  { return _defaultTempo; }
 
