@@ -2434,13 +2434,15 @@ const char* MStyle::valueType(const Sid i)
 //   value
 //---------------------------------------------------------
 
-QVariant MStyle::value(Sid idx) const
+const QVariant& MStyle::value(Sid idx) const
       {
-      if (!_values[int(idx)].isValid()) {
+      const QVariant& val = _values[int(idx)];
+      if (!val.isValid()) {
             qDebug("invalid style value %d %s", int(idx), MStyle::valueName(idx));
-            return QVariant();
+            static QVariant emptyVal;
+            return emptyVal;
             }
-      return _values[int(idx)];
+      return val;
       }
 
 //---------------------------------------------------------

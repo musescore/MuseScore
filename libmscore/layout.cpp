@@ -148,8 +148,9 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       const Staff* staff = Score::staff(staffIdx);
       const int startTrack = staffIdx * VOICES;
       const int endTrack   = startTrack + VOICES;
+      const Fraction tick = segment->tick();
 
-      if (staff->isTabStaff(segment->tick())) {
+      if (staff->isTabStaff(tick)) {
             layoutSegmentElements(segment, startTrack, endTrack);
             return;
             }
@@ -159,7 +160,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       std::vector<Note*> downStemNotes;
       int upVoices       = 0;
       int downVoices     = 0;
-      qreal nominalWidth = noteHeadWidth() * staff->mag(segment->tick());
+      qreal nominalWidth = noteHeadWidth() * staff->mag(tick);
       qreal maxUpWidth   = 0.0;
       qreal maxDownWidth = 0.0;
       qreal maxUpMag     = 0.0;
@@ -239,7 +240,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   maxDownWidth = qMax(maxDownWidth, hw);
                   }
 
-            qreal sp                 = staff->spatium(segment->tick());
+            qreal sp                 = staff->spatium(tick);
             qreal upOffset           = 0.0;      // offset to apply to upstem chords
             qreal downOffset         = 0.0;      // offset to apply to downstem chords
             qreal dotAdjust          = 0.0;      // additional chord offset to account for dots
@@ -263,7 +264,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             // amount by which actual width exceeds nominal, adjusted for staff mag() only
             qreal headDiff = maxUpWidth - nominalWidth;
             // amount by which actual width exceeds nominal, adjusted for staff & chord/note mag()
-            qreal headDiff2 = maxUpWidth - nominalWidth * (maxUpMag / staff->mag(segment->tick()));
+            qreal headDiff2 = maxUpWidth - nominalWidth * (maxUpMag / staff->mag(tick));
             if (headDiff > centerThreshold) {
                   // larger than nominal
                   centerUp = headDiff * -0.5;
@@ -2643,7 +2644,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                         ks->layout();
                         }
                   else if (segment.isChordRestType()) {
-                        const StaffType* st = staff->staffType(segment.tick());
+                        const StaffType* st = staff->staffTypeForElement(&segment);
                         int track     = staffIdx * VOICES;
                         int endTrack  = track + VOICES;
 
@@ -2651,7 +2652,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                               ChordRest* cr = segment.cr(t);
                               if (!cr)
                                     continue;
-                              qreal m = staff->mag(segment.tick());
+                              qreal m = staff->mag(&segment);
                               if (cr->small())
                                     m *= score()->styleD(Sid::smallNoteMag);
 

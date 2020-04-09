@@ -718,7 +718,7 @@ bool Staff::readProperties(XmlReader& e)
             setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, Clef::clefType(val)));
             }
       else if (tag == "small")                  // obsolete
-            setSmall(Fraction(0,1), e.readInt());
+            staffType(Fraction(0,1))->setSmall(e.readInt());
       else if (tag == "invisible")
             setInvisible(e.readInt());
       else if (tag == "hideWhenEmpty")
@@ -808,49 +808,28 @@ qreal Staff::spatium(const Fraction& tick) const
       return score()->spatium() * mag(tick);
       }
 
+qreal Staff::spatium(const Element* e) const
+      {
+      return score()->spatium() * mag(e);
+      }
+
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
+qreal Staff::mag(const StaffType* stt) const
+      {
+      return (stt->small() ? score()->styleD(Sid::smallStaffMag) : 1.0) * stt->userMag();
+      }
+
 qreal Staff::mag(const Fraction& tick) const
       {
-      return (small(tick) ? score()->styleD(Sid::smallStaffMag) : 1.0) * userMag(tick);
+      return mag(staffType(tick));
       }
 
-//---------------------------------------------------------
-//   userMag
-//---------------------------------------------------------
-
-qreal Staff::userMag(const Fraction& tick) const
+qreal Staff::mag(const Element* e) const
       {
-      return staffType(tick)->userMag();
-      }
-
-//---------------------------------------------------------
-//   setUserMag
-//---------------------------------------------------------
-
-void Staff::setUserMag(const Fraction& tick, qreal m)
-      {
-      staffType(tick)->setUserMag(m);
-      }
-
-//---------------------------------------------------------
-//   small
-//---------------------------------------------------------
-
-bool Staff::small(const Fraction& tick) const
-      {
-      return staffType(tick)->small();
-      }
-
-//---------------------------------------------------------
-//   setSmall
-//---------------------------------------------------------
-
-void Staff::setSmall(const Fraction& tick, bool val)
-      {
-      staffType(tick)->setSmall(val);
+      return mag(staffTypeForElement(e));
       }
 
 //---------------------------------------------------------
@@ -995,6 +974,13 @@ StaffType* Staff::staffType(const Fraction& tick)
       return &_staffTypeList.staffType(tick);
       }
 
+const StaffType* Staff::staffTypeForElement(const Element* e) const
+      {
+      if (_staffTypeList.uniqueStaffType()) // optimize if one staff type spans for the entire staff
+            return &_staffTypeList.staffType({0, 1});
+      return &_staffTypeList.staffType(e->tick());
+      }
+
 //---------------------------------------------------------
 //   staffTypeListChanged
 //    Signal that the staffTypeList has changed at
@@ -1003,18 +989,17 @@ StaffType* Staff::staffType(const Fraction& tick)
 
 void Staff::staffTypeListChanged(const Fraction& tick)
       {
-      triggerLayout(tick);
-      auto i = _staffTypeList.find(tick.ticks());
-      if (i == _staffTypeList.end()) {
-            triggerLayout();
-            }
-      else {
-            ++i;
-            if (i != _staffTypeList.end())
-                  triggerLayout(Fraction::fromTicks(i->first));
-            else if (score()->lastMeasure())
-                  triggerLayout(score()->lastMeasure()->endTick());
-            }
+      std::pair<int, int> range = _staffTypeList.staffTypeRange(tick);
+
+      if (range.first < 0)
+            triggerLayout(Fraction(0,1));
+      else
+            triggerLayout(Fraction::fromTicks(range.first));
+
+      if (range.second < 0)
+            triggerLayout(score()->lastMeasure()->endTick());
+      else
+            triggerLayout(Fraction::fromTicks(range.second));
       }
 
 //---------------------------------------------------------
@@ -1032,11 +1017,10 @@ StaffType* Staff::setStaffType(const Fraction& tick, const StaffType& nst)
 
 void Staff::removeStaffType(const Fraction& tick)
       {
-      auto i = _staffTypeList.find(tick.ticks());
-      if (i == _staffTypeList.end())
-            return;
       qreal old = spatium(tick);
-      _staffTypeList.erase(i);
+      const bool removed = _staffTypeList.removeStaffType(tick);
+      if (!removed)
+            return;
       localSpatiumChanged(old, spatium(tick), tick);
       staffTypeListChanged(tick);
       }
@@ -1052,12 +1036,12 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
       if (!pst)
             pst = StaffType::getDefaultPreset(t->staffGroup);
 
-      setStaffType(Fraction(0,1), *pst);
+      StaffType* stt = setStaffType(Fraction(0,1), *pst);
       if (cidx >= MAX_STAVES) {
-            setSmall(Fraction(0,1), false);
+            stt->setSmall(false);
             }
       else {
-            setSmall(Fraction(0,1),       t->smallStaff[cidx]);
+            stt->setSmall(t->smallStaff[cidx]);
             setBracketType(0, t->bracket[cidx]);
             setBracketSpan(0, t->bracketSpan[cidx]);
             setBarLineSpan(t->barlineSpan[cidx]);
@@ -1277,9 +1261,9 @@ QVariant Staff::getProperty(Pid id) const
       {
       switch (id) {
             case Pid::SMALL:
-                  return small(Fraction(0,1));
+                  return staffType(Fraction(0,1))->small();
             case Pid::MAG:
-                  return userMag(Fraction(0,1));
+                  return staffType(Fraction(0,1))->userMag();
             case Pid::COLOR:
                   return color();
             case Pid::PLAYBACK_VOICE1:
@@ -1315,13 +1299,13 @@ bool Staff::setProperty(Pid id, const QVariant& v)
       switch (id) {
             case Pid::SMALL: {
                   qreal _spatium = spatium(Fraction(0,1));
-                  setSmall(Fraction(0,1), v.toBool());
+                  staffType(Fraction(0,1))->setSmall(v.toBool());
                   localSpatiumChanged(_spatium, spatium(Fraction(0,1)), Fraction(0, 1));
                   break;
                   }
             case Pid::MAG: {
                   qreal _spatium = spatium(Fraction(0,1));
-                  setUserMag(Fraction(0,1), v.toReal());
+                  staffType(Fraction(0,1))->setUserMag(v.toReal());
                   localSpatiumChanged(_spatium, spatium(Fraction(0,1)), Fraction(0, 1));
                   }
                   break;
@@ -1415,12 +1399,9 @@ QVariant Staff::propertyDefault(Pid id) const
 
 void Staff::localSpatiumChanged(double oldVal, double newVal, Fraction tick)
       {
-      Fraction etick;
-      auto i = _staffTypeList.upper_bound(tick.ticks());
-      if (i == _staffTypeList.end())
-            etick = score()->lastSegment()->tick();
-      else
-            etick = Fraction::fromTicks(i->first);
+      const int intEndTick = _staffTypeList.staffTypeRange(tick).second;
+      const Fraction etick = (intEndTick == -1) ? score()->lastMeasure()->endTick() : Fraction::fromTicks(intEndTick);
+
       int staffIdx = idx();
       int startTrack = staffIdx * VOICES;
       int endTrack = startTrack + VOICES;

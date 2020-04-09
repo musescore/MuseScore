@@ -599,7 +599,7 @@ Note::Note(const Note& n, bool link)
 
       // types in _el: SYMBOL, IMAGE, FINGERING, TEXT, BEND
       const Staff* stf = staff();
-      bool tabFingering = stf->staffType(tick())->showTabFingering();
+      bool tabFingering = stf->staffTypeForElement(this)->showTabFingering();
       for (Element* e : n._el) {
             if (e->isFingering() && staff()->isTabStaff(tick()) && !tabFingering)    // tablature has no fingering
                   continue;
@@ -809,10 +809,11 @@ SymId Note::noteHead() const
       if (_headType != NoteHead::Type::HEAD_AUTO)
             ht = _headType;
 
+      const Staff* st = chord() ? chord()->staff() : nullptr;
+
       if (_headGroup == NoteHead::Group::HEAD_CUSTOM) {
-            if (chord() && chord()->staff()) {
-                  const Staff* st = chord()->staff();
-                  if (st->staffType(chord()->tick())->isDrumStaff())
+            if (st) {
+                  if (st->staffTypeForElement(chord())->isDrumStaff())
                         return st->part()->instrument(chord()->tick())->drumset()->noteHeads(_pitch, ht);
                   }
             else {
@@ -822,12 +823,11 @@ SymId Note::noteHead() const
 
       Key key = Key::C;
       NoteHeadScheme scheme = NoteHeadScheme::HEAD_NORMAL;
-      if (chord() && chord()->staff()){
+      if (st) {
             Fraction tick = chord()->tick();
             if (tick >= Fraction(0,1)) {
-                  const Staff* st = chord()->staff();
                   key    = st->key(tick);
-                  scheme = st->staffType(tick)->noteHeadScheme();
+                  scheme = st->staffTypeForElement(chord())->noteHeadScheme();
                   }
             }
       SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);
@@ -1093,7 +1093,7 @@ bool Note::isNoteName() const
       {
       if (chord() && chord()->staff()) {
             const Staff* st = staff();
-            NoteHeadScheme s = st->staffType(tick())->noteHeadScheme();
+            NoteHeadScheme s = st->staffTypeForElement(this)->noteHeadScheme();
             return s == NoteHeadScheme::HEAD_PITCHNAME || s == NoteHeadScheme::HEAD_PITCHNAME_GERMAN || s == NoteHeadScheme::HEAD_SOLFEGE || s == NoteHeadScheme::HEAD_SOLFEGE_FIXED;
             }
       return false;
@@ -1115,7 +1115,7 @@ void Note::draw(QPainter* painter) const
       // tablature
       if (tablature) {
             const Staff* st = staff();
-            const StaffType* tab = st->staffType(tick());
+            const StaffType* tab = st->staffTypeForElement(this);
             if (tieBack() && !tab->showBackTied()) {
                   if (chord()->measure()->system() == tieBack()->startNote()->chord()->measure()->system() && el().size() == 0)
                         // fret should be hidden, so return without drawing it
@@ -1543,7 +1543,7 @@ bool Note::acceptDrop(EditData& data) const
             }
       const Staff* st   = staff();
       bool isTablature  = st->isTabStaff(tick());
-      bool tabFingering = st->staffType(tick())->showTabFingering();
+      bool tabFingering = st->staffTypeForElement(this)->showTabFingering();
       return (type == ElementType::ARTICULATION
          || type == ElementType::FERMATA
          || type == ElementType::CHORDLINE
@@ -1606,7 +1606,7 @@ Element* Note::drop(EditData& data)
 
       const Staff* st = staff();
       bool isTablature = st->isTabStaff(tick());
-      bool tabFingering = st->staffType(tick())->showTabFingering();
+      bool tabFingering = st->staffTypeForElement(this)->showTabFingering();
       Chord* ch = chord();
 
       switch(e->type()) {
@@ -1845,7 +1845,7 @@ void Note::setDotY(Direction pos)
             // with TAB's, dotPosX is not set:
             // get dot X from width of fret text and use TAB default spacing
             const Staff* st = staff();
-            const StaffType* tab = st->staffType(tick());
+            const StaffType* tab = st->staffTypeForElement(this);
             if (tab->stemThrough() ) {
                   // if fret mark on lines, use standard processing
                   if (tab->onLines())
@@ -1911,7 +1911,7 @@ void Note::layout()
       bool useTablature = staff() && staff()->isTabStaff(chord()->tick());
       if (useTablature) {
             const Staff* st = staff();
-            const StaffType* tab = st->staffType(tick());
+            const StaffType* tab = st->staffTypeForElement(this);
             qreal mags = magS();
             bool paren = false;
             if (tieBack() && !tab->showBackTied()) {
@@ -1963,7 +1963,7 @@ void Note::layout2()
             // if TAB and stems through staff
             if (staff()->isTabStaff(chord()->tick())) {
                   const Staff* st = staff();
-                  const StaffType* tab = st->staffType(tick());
+                  const StaffType* tab = st->staffTypeForElement(this);
                   if (tab->stemThrough()) {
                         // with TAB's, dot Y is not calculated during layoutChords3(),
                         // as layoutChords3() is not even called for TAB's;
@@ -1995,7 +1995,7 @@ void Note::layout2()
                   if (sym->sym() == SymId::noteheadParenthesisRight) {
                         if (staff()->isTabStaff(chord()->tick())) {
                               const Staff* st = staff();
-                              const StaffType* tab = st->staffType(tick());
+                              const StaffType* tab = st->staffTypeForElement(this);
                               w = tabHeadWidth(tab);
                               }
                         e->rxpos() += w;
@@ -2546,14 +2546,14 @@ void Note::updateRelLine(int relLine, bool undoable)
       int idx      = chord()->vStaffIdx();
 
       const Staff* staff  = score()->staff(idx);
-      const StaffType* st = staff->staffType(tick());
+      const StaffType* st = staff->staffTypeForElement(this);
 
       if (chord()->staffMove()) {
             // check that destination staff makes sense (might have been deleted)
             int minStaff = part()->startTrack() / VOICES;
             int maxStaff = part()->endTrack() / VOICES;
             const Staff* stf = this->staff();
-            if (idx < minStaff || idx >= maxStaff || st->group() != stf->staffType(tick())->group()) {
+            if (idx < minStaff || idx >= maxStaff || st->group() != stf->staffTypeForElement(this)->group()) {
                   qDebug("staffMove out of scope %d + %d min %d max %d",
                      staffIdx(), chord()->staffMove(), minStaff, maxStaff);
                   chord()->undoChangeProperty(Pid::STAFF_MOVE, 0);

@@ -99,8 +99,8 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
       instrument        = *part->instrument(tick);
       Score* score      = part->score();
       staff             = new Staff(score);
-      staff->setStaffType(Fraction(0,1), *orgStaff->staffType(Fraction(0,1)));
-      staff->setSmall(Fraction(0,1), orgStaff->small(Fraction(0,1)));
+      StaffType* stt = staff->setStaffType(Fraction(0,1), *orgStaff->staffType(Fraction(0,1)));
+      stt->setSmall(orgStaff->staffType(Fraction(0,1))->small());
       staff->setInvisible(orgStaff->invisible());
       staff->setUserDist(orgStaff->userDist());
       staff->setColor(orgStaff->color());
@@ -108,7 +108,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
       staff->setCutaway(orgStaff->cutaway());
       staff->setHideWhenEmpty(orgStaff->hideWhenEmpty());
       staff->setShowIfEmpty(orgStaff->showIfEmpty());
-      staff->setUserMag(Fraction(0,1), orgStaff->userMag(Fraction(0,1)));
+      stt->setUserMag(orgStaff->staffType(Fraction(0,1))->userMag());
       staff->setHideSystemBarLine(orgStaff->hideSystemBarLine());
 
       // get tick range for instrument
@@ -126,14 +126,14 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
       // set dlg controls
       spinExtraDistance->setValue(s->userDist() / score->spatium());
       invisible->setChecked(staff->invisible());
-      small->setChecked(staff->small(Fraction(0,1)));
+      small->setChecked(stt->small());
       color->setColor(s->color());
       partName->setText(part->partName());
       cutaway->setChecked(staff->cutaway());
       hideMode->setCurrentIndex(int(staff->hideWhenEmpty()));
       showIfEmpty->setChecked(staff->showIfEmpty());
       hideSystemBarLine->setChecked(staff->hideSystemBarLine());
-      mag->setValue(staff->userMag(Fraction(0,1)) * 100.0);
+      mag->setValue(stt->userMag() * 100.0);
       updateStaffType();
       updateInstrument();
       updateNextPreviousButtons();
