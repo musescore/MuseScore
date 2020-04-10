@@ -8,8 +8,8 @@ Item {
     property alias sourceSize: image.sourceSize
     property alias color: colorOverlay.color
 
-    implicitHeight: 16
-    implicitWidth: 16
+    implicitHeight: root.icon == "" ? 0 : 16
+    implicitWidth: root.icon == "" ? 0 : 16
 
     Image {
         id: image

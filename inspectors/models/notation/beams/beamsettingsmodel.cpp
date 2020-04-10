@@ -11,15 +11,8 @@ BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService*
 void BeamSettingsModel::createProperties()
 {
     m_featheringHeightLeft = buildPropertyItem(Ms::Pid::GROW_LEFT);
-    m_featheringHeightRight = buildPropertyItem(Ms::Pid::GROW_RIGHT);
-
-    m_isForcedHorizontally = buildPropertyItem(Ms::Pid::BEAM_NO_SLOPE, [this] (const int pid, const QVariant& isForcedHorizontally) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), isForcedHorizontally.toBool());
-
-        if (isForcedHorizontally.toBool()) {
-            m_beamVectorX->setValue(0.0);
-            m_beamVectorY->setValue(0.0);
-        }
+    m_featheringHeightRight = buildPropertyItem(Ms::Pid::GROW_RIGHT, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
     });
 
     m_isBeamHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this] (const int pid, const QVariant& isBeamHidden) {
@@ -44,7 +37,6 @@ void BeamSettingsModel::loadProperties()
 {
     loadPropertyItem(m_featheringHeightLeft);
     loadPropertyItem(m_featheringHeightRight);
-    loadPropertyItem(m_isForcedHorizontally);
 
     loadPropertyItem(m_isBeamHidden, [this] (const QVariant& isVisible) -> QVariant {
        return !isVisible.toBool();
@@ -68,7 +60,6 @@ void BeamSettingsModel::resetProperties()
 {
     m_featheringHeightLeft->resetToDefault();
     m_featheringHeightRight->resetToDefault();
-    m_isForcedHorizontally->resetToDefault();
     m_beamVectorX->resetToDefault();
     m_beamVectorY->resetToDefault();
 
@@ -76,6 +67,22 @@ void BeamSettingsModel::resetProperties()
 
     setFeatheringMode(static_cast<int>(BeamTypes::FEATHERING_NONE));
     setIsBeamHeightLocked(false);
+}
+
+void BeamSettingsModel::forceHorizontal()
+{
+    qreal currentX = m_beamVectorX->value().toDouble();
+    qreal currentY = m_beamVectorY->value().toDouble();
+
+    qreal maxValue = qMax(qAbs(currentX), qAbs(currentY));
+
+    if (qFuzzyCompare(qAbs(currentX), maxValue)) {
+        m_beamVectorY->setValue(currentX);
+        m_beamVectorX->setValue(currentX);
+    } else {
+        m_beamVectorY->setValue(currentY);
+        m_beamVectorX->setValue(currentY);
+    }
 }
 
 void BeamSettingsModel::updateBeamHeight(const qreal& x, const qreal& y)
@@ -136,11 +143,6 @@ PropertyItem* BeamSettingsModel::featheringHeightRight() const
 int BeamSettingsModel::featheringMode() const
 {
     return static_cast<int>(m_featheringMode);
-}
-
-PropertyItem* BeamSettingsModel::isForcedHorizontally() const
-{
-    return m_isForcedHorizontally;
 }
 
 PropertyItem* BeamSettingsModel::isBeamHidden() const

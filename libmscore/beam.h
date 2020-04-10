@@ -124,8 +124,7 @@ public:
     void setUp(bool v) { _up = v; }
     void setId(int i) const { _id = i; }
     int id() const { return _id; }
-    bool noSlope() const { return _noSlope; }
-    void setNoSlope(bool val) { _noSlope = val; }
+    bool isNoSlope() const;
 
     void setBeamDirection(Direction d);
     Direction beamDirection() const { return _direction; }

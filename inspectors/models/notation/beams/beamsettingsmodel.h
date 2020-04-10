@@ -19,11 +19,12 @@ class BeamSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem* beamVectorY READ beamVectorY CONSTANT)
     Q_PROPERTY(bool isBeamHeightLocked READ isBeamHeightLocked WRITE setIsBeamHeightLocked NOTIFY isBeamHeightLockedChanged)
 
-    Q_PROPERTY(PropertyItem* isForcedHorizontally READ isForcedHorizontally CONSTANT)
     Q_PROPERTY(PropertyItem* isBeamHidden READ isBeamHidden CONSTANT)
 
 public:
     explicit BeamSettingsModel(QObject* parent, IElementRepositoryService* repository);
+
+    Q_INVOKABLE void forceHorizontal();
 
     QObject* beamModesModel() const;
 
@@ -31,7 +32,6 @@ public:
     PropertyItem* featheringHeightRight() const;
     int featheringMode() const;
 
-    PropertyItem* isForcedHorizontally() const;
     PropertyItem* isBeamHidden() const;
 
     PropertyItem* beamVectorX() const;
@@ -69,7 +69,6 @@ private:
     QPointF m_cachedBeamVector; //!Note used in delta calculation
     bool m_isBeamHeightLocked = false;
 
-    PropertyItem* m_isForcedHorizontally = nullptr;
     PropertyItem* m_isBeamHidden = nullptr;
 };
 
