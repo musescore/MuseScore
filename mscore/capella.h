@@ -289,6 +289,7 @@ class TransposableObj : public BasicDrawObj {
    public:
       TransposableObj(Capella* c) : BasicDrawObj(CapellaType::TRANSPOSABLE, c) {}
       void read();
+      void readCapx(XmlReader& e);
 
       QPointF relPos;
       char b { 0 };
