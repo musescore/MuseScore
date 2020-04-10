@@ -159,12 +159,15 @@ FocusableItem {
                 visible: featheringControlsColumn.visible
             }
 
-            CheckBox {
-                isIndeterminate: model ? model.isForcedHorizontally.isUndefined : false
-                checked: model && !isIndeterminate ? model.isForcedHorizontally.value : false
-                text: qsTr("Force horizontal")
+            FlatButton {
+                text: qsTr("Forse horizontal")
 
-                onClicked: { model.isForcedHorizontally.value = !checked }
+                onClicked: {
+                    if (!model)
+                        return
+
+                    model.forceHorizontal()
+                }
             }
 
             ExpandableBlank {
@@ -189,8 +192,6 @@ FocusableItem {
                     Item {
                         height: childrenRect.height
                         width: parent.width
-
-                        enabled: model && !model.isForcedHorizontally.isUndefined ? !model.isForcedHorizontally.value : false
 
                         IncrementalPropertyControl {
                             id: beamHightLeftControl

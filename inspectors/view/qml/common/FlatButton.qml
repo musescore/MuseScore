@@ -5,11 +5,11 @@ FocusableItem {
 
     property alias icon: buttonIcon.icon
     property alias text: textLabel.text
-    property int iconPixelSize: 16
+    property int iconPixelSize: root.icon == "" ? 0 : 16
 
     signal clicked
 
-    height: 48
+    height: contentWrapper.implicitHeight + 16
     width: parent.width
 
     Rectangle {
@@ -25,8 +25,9 @@ FocusableItem {
     Column {
         id: contentWrapper
 
-        anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
+
+        height: implicitHeight
         width: parent.width
 
         spacing: 4
@@ -43,6 +44,8 @@ FocusableItem {
         StyledTextLabel {
             id: textLabel
 
+            anchors.horizontalCenter: parent.horizontalCenter
+            height: implicitHeight
             width: parent.width
 
             horizontalAlignment: Text.AlignHCenter
