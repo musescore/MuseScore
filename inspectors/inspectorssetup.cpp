@@ -26,7 +26,6 @@ QString InspectorsSetup::moduleName() const
 
 void InspectorsSetup::registerExports()
 {
-
 }
 
 void InspectorsSetup::registerResources()
@@ -34,8 +33,8 @@ void InspectorsSetup::registerResources()
     Q_INIT_RESOURCE(inspectors_resources);
 }
 
-
 #include "utils/doubleinputvalidator.h"
+#include "utils/intinputvalidator.h"
 #include "models/abstractinspectormodel.h"
 #include "types/direction.h"
 #include "types/noteheadtypes.h"
@@ -48,6 +47,7 @@ void InspectorsSetup::registerResources()
 void InspectorsSetup::registerQmlTypes()
 {
     qmlRegisterType<DoubleInputValidator>("MuseScore.Inspectors", 3, 3, "DoubleInputValidator");
+    qmlRegisterType<IntInputValidator>("MuseScore.Inspectors", 3, 3, "IntInputValidator");
     qmlRegisterUncreatableType<AbstractInspectorModel>("MuseScore.Inspectors", 3, 3, "Inspector", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<StemTypes>("MuseScore.Inspectors", 3, 3, "Stem", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<NoteHeadTypes>("MuseScore.Inspectors", 3, 3, "NoteHead", "Not creatable as it is an enum type");

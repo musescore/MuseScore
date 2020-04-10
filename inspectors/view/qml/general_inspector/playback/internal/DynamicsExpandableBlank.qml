@@ -67,10 +67,18 @@ ExpandableBlank {
                 }
 
                 IncrementalPropertyControl {
+                    id: velocityControl
                     iconMode: iconModeEnum.hidden
 
                     step: 1
                     decimals: 0
+                    maxValue: 127
+                    minValue: 0
+                    validator: IntInputValidator {
+                        top: velocityControl.maxValue
+                        bottom: velocityControl.minValue
+                    }
+
                     isIndeterminate: model ? model.velocity.isUndefined : false
                     currentValue: model ? model.velocity.value : 0
 
@@ -97,12 +105,20 @@ ExpandableBlank {
                 }
 
                 IncrementalPropertyControl {
+                    id: velocityChangeControl
                     iconMode: iconModeEnum.hidden
 
                     enabled: model ? model.isVelocityChangeAvailable.isUndefined || model.isVelocityChangeAvailable.value : false
 
                     step: 1
                     decimals: 0
+                    maxValue: 127
+                    minValue: -127
+                    validator: IntInputValidator {
+                        top: velocityChangeControl.maxValue
+                        bottom: velocityChangeControl.minValue
+                    }
+
                     isIndeterminate: model ? model.velocityChange.isUndefined : false
                     currentValue: model ? model.velocityChange.value : 0
 
