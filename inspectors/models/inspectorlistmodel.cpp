@@ -4,104 +4,104 @@
 #include "notation/notationinspectorproxymodel.h"
 
 InspectorListModel::InspectorListModel(QObject *parent) : QAbstractListModel(parent)
-      {
-      m_roleNames.insert(InspectorDataRole, "inspectorData");
+{
+    m_roleNames.insert(InspectorDataRole, "inspectorData");
 
-      m_repository = new ElementRepositoryService(this);
-      }
+    m_repository = new ElementRepositoryService(this);
+}
 
 void InspectorListModel::setElementList(const QList<Ms::Element*>& elementList)
-      {
+{
 
-      if (elementList.isEmpty() && !m_modelList.isEmpty()) {
+    if (elementList.isEmpty() && !m_modelList.isEmpty()) {
 
-            beginResetModel();
+        beginResetModel();
 
-            m_repository->updateElementList(elementList);
+        m_repository->updateElementList(elementList);
 
-            qDeleteAll(m_modelList);
-            m_modelList.clear();
+        qDeleteAll(m_modelList);
+        m_modelList.clear();
 
-            endResetModel();
+        endResetModel();
 
-            return;
-      }
+        return;
+    }
 
-      for (const Ms::Element* element : elementList) {
-            createModelsByElementType(element->type());
-      }
+    for (const Ms::Element* element : elementList) {
+        createModelsByElementType(element->type());
+    }
 
-      m_repository->updateElementList(elementList);
-      }
+    m_repository->updateElementList(elementList);
+}
 
 int InspectorListModel::rowCount(const QModelIndex&) const
-      {
-      return m_modelList.count();
-      }
+{
+    return m_modelList.count();
+}
 
 QVariant InspectorListModel::data(const QModelIndex &index, int) const
-      {
-      if (!index.isValid() || index.row() >= rowCount() || m_modelList.isEmpty())
-            return QVariant();
+{
+    if (!index.isValid() || index.row() >= rowCount() || m_modelList.isEmpty())
+        return QVariant();
 
-      AbstractInspectorModel* model = m_modelList.at(index.row());
+    AbstractInspectorModel* model = m_modelList.at(index.row());
 
-      QObject* result = qobject_cast<QObject*>(model);
+    QObject* result = qobject_cast<QObject*>(model);
 
-      return QVariant::fromValue(result);
-      }
+    return QVariant::fromValue(result);
+}
 
 QHash<int, QByteArray> InspectorListModel::roleNames() const
-      {
-      return m_roleNames;
-      }
+{
+    return m_roleNames;
+}
 
 int InspectorListModel::columnCount(const QModelIndex&) const
-      {
-      return 1;
-      }
+{
+    return 1;
+}
 
 void InspectorListModel::createModelsByElementType(const Ms::ElementType elementType)
-      {
-      using ModelTypes = AbstractInspectorModel::InspectorModelType;
+{
+    using ModelTypes = AbstractInspectorModel::InspectorModelType;
 
-      QList<ModelTypes> modelTypeList = { AbstractInspectorModel::GENERAL };
+    QList<ModelTypes> modelTypeList = { AbstractInspectorModel::GENERAL };
 
-      modelTypeList << AbstractInspectorModel::modelTypeFromElementType(elementType);
+    modelTypeList << AbstractInspectorModel::modelTypeFromElementType(elementType);
 
-      for (const ModelTypes modelType : modelTypeList) {
+    for (const ModelTypes modelType : modelTypeList) {
 
-          if (modelType == AbstractInspectorModel::UNDEFINED)
-              continue;
+        if (modelType == AbstractInspectorModel::UNDEFINED)
+            continue;
 
-          if (isModelAlreadyExists(modelType))
-              continue;
+        if (isModelAlreadyExists(modelType))
+            continue;
 
-          beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
-          AbstractInspectorModel* newModel = nullptr;
-          connect(newModel, &AbstractInspectorModel::elementsModified, this, &InspectorListModel::elementsModified);
+        AbstractInspectorModel* newModel = nullptr;
 
-          switch (modelType) {
-          case AbstractInspectorModel::GENERAL: newModel = new GeneralSettingsModel(this, m_repository); break;
-          case AbstractInspectorModel::NOTATION: newModel = new NotationInspectorProxyModel(this, m_repository); break;
-          default: break;
-          }
+        switch (modelType) {
+        case AbstractInspectorModel::GENERAL: newModel = new GeneralSettingsModel(this, m_repository); break;
+        case AbstractInspectorModel::NOTATION: newModel = new NotationInspectorProxyModel(this, m_repository); break;
+        default: break;
+        }
 
-          if (newModel) {
-                m_modelList << newModel;
-          }
+        if (newModel) {
+            connect(newModel, &AbstractInspectorModel::elementsModified, this, &InspectorListModel::elementsModified);
+            m_modelList << newModel;
+        }
 
-          endInsertRows();
-      }
+        endInsertRows();
+    }
 }
 
 bool InspectorListModel::isModelAlreadyExists(const AbstractInspectorModel::InspectorModelType modelType) const
-      {
-      for (const AbstractInspectorModel* model : m_modelList) {
-            if (model->type() == modelType)
-                  return true;
-            }
+{
+    for (const AbstractInspectorModel* model : m_modelList) {
+        if (model->type() == modelType)
+            return true;
+    }
 
-      return false;
-      }
+    return false;
+}
