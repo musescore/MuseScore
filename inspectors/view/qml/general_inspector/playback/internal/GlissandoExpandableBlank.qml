@@ -27,7 +27,7 @@ ExpandableBlank {
             width: parent.width
 
             textRole: "text"
-            valueRole: "value"
+            valueRoleName: "value"
 
             model: [
                 { text: "Chromatic", value: Glissando.STYLE_CHROMATIC },
@@ -39,7 +39,7 @@ ExpandableBlank {
             currentIndex: root.model && !root.model.styleType.isUndefined ? indexOfValue(root.model.styleType.value) : -1
 
             onCurrentValueChanged: {
-                root.model.styleType.value = currentValue
+                root.model.styleType.value = value
             }
         }
     }

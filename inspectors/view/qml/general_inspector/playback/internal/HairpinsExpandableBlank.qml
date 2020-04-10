@@ -58,7 +58,7 @@ ExpandableBlank {
                 width: parent.width
 
                 textRole: "text"
-                valueRole: "value"
+                valueRoleName: "value"
 
                 model: [
                     { text: qsTr("Linear (default)"), value: Hairpin.VELOCITY_EASING_LINEAR },
@@ -71,7 +71,7 @@ ExpandableBlank {
                 currentIndex: root.model && !root.model.velocityChangeType.isUndefined ? indexOfValue(root.model.velocityChangeType.value) : -1
 
                 onCurrentValueChanged: {
-                    root.model.velocityChangeType.value = currentValue
+                    root.model.velocityChangeType.value = value
                 }
             }
         }

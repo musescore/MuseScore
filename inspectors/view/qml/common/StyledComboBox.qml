@@ -7,12 +7,12 @@ ComboBox {
 
     property bool isExpanded: false
     property bool isIndeterminate: false
-    property string valueRole: "valueRole"
-    property var currentValue
+    property string valueRoleName: "valueRole"
+    property var value
 
     function indexOfValue(value) {
         for (var i = 0; i < count; ++i) {
-            if (model[i][valueRole] === value)
+            if (model[i][valueRoleName] === value)
                 return i
         }
 
@@ -23,7 +23,7 @@ ComboBox {
         if (currentIndex === -1)
             return
 
-        root.currentValue = model[currentIndex][valueRole]
+        root.value = model[currentIndex][valueRoleName]
     }
 
     displayText: currentIndex === -1 ? "--" : currentText
