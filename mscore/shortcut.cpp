@@ -1932,6 +1932,24 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
+         "next-pane",
+         QT_TRANSLATE_NOOP("action","Focus next pane"),
+         QT_TRANSLATE_NOOP("action","Give focus to next application pane"),
+         0,
+         Icons::Invalid_ICON
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
+         "prev-pane",
+         QT_TRANSLATE_NOOP("action","Focus previous pane"),
+         QT_TRANSLATE_NOOP("action","Give focus to previous application pane"),
+         0,
+         Icons::Invalid_ICON
+         },
+      {
+         MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
          "toggle-fileoperations",
          QT_TRANSLATE_NOOP("action","File Operations"),

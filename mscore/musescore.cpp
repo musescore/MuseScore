@@ -908,32 +908,32 @@ bool MuseScore::isInstalledExtension(QString extensionId)
 
 void MuseScore::populateFileOperations()
       {
+      const bool layoutRightToLeft = qApp->layoutDirection() == Qt::LayoutDirection::RightToLeft;
       fileTools->clear();
 
-      if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
-            for (auto s : _fileOperationEntries) {
-                  if (!*s)
-                        fileTools->addSeparator();
-                  else
-                        fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(s)));
+      if (layoutRightToLeft)
+            _fileOperationEntries.reverse(); // populate in reverse order
+
+      for (auto s : _fileOperationEntries) {
+            if (!*s) {
+                  fileTools->addSeparator();
+                  continue;
                   }
+            auto button = new AccessibleToolButton(fileTools, getAction(s));
+            button->setObjectName(s);
+            fileTools->addWidget(button);
             }
-      else {
-            _fileOperationEntries.reverse();
-            for (auto s : _fileOperationEntries) {
-                  if (!*s)
-                        fileTools->addSeparator();
-                  else
-                        fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(s)));
-                  }
-            _fileOperationEntries.reverse();
-            }
+
+      if (layoutRightToLeft)
+            _fileOperationEntries.reverse(); // restore initial ordering
 
       // Currently not customizable in ToolbarEditor
       fileTools->addSeparator();
       mag = new MagBox;
+      mag->setObjectName("mag");
       connect(mag, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
       fileTools->addWidget(mag);
+      //fileTools->setFocusProxy(mag);
 
       viewModeCombo = new QComboBox(this);
 #if defined(Q_OS_MAC)
@@ -1963,6 +1963,7 @@ MuseScore::MuseScore()
             _loginManager = new LoginManager(getAction(saveOnlineMenuItem), this);
 
       connect(qApp, &QGuiApplication::focusWindowChanged, this, &MuseScore::onFocusWindowChanged);
+      connect(qApp, &QApplication::focusChanged, this, &MuseScore::focusChanged);
       }
 
 MuseScore::~MuseScore()
@@ -5281,6 +5282,122 @@ bool MuseScore::restoreSession(bool always)
       }
 
 //---------------------------------------------------------
+//   Panes
+/// Defines the ordering of the panes for the NextPrev commands.
+//---------------------------------------------------------
+
+enum class Panes {
+      Toolbars = 0,
+      Palettes,
+      ScoreTopLeft,
+      Inspector,
+      Invalid
+      };
+
+Panes& operator++(Panes &p)
+      {
+      if (p != Panes::Invalid) {
+            using IntType = typename std::underlying_type<Panes>::type;
+            p = static_cast<Panes>(static_cast<IntType>(p) + 1);
+            if (p == Panes::Invalid)
+                  p = static_cast<Panes>(0);
+            }
+      return p;
+      }
+
+Panes& operator--(Panes &p)
+      {
+      if (p != Panes::Invalid) {
+            using IntType = typename std::underlying_type<Panes>::type;
+            int i = static_cast<IntType>(p);
+            if (i == 0)
+                  i = static_cast<IntType>(Panes::Invalid);
+            p = static_cast<Panes>(--i);
+            }
+      return p;
+      }
+
+//---------------------------------------------------------
+//   pane2widget
+//---------------------------------------------------------
+
+QWidget* MuseScore::pane2widget(Panes p)
+      {
+      switch(p) {
+            case Panes::Toolbars:         return fileTools;
+            case Panes::Palettes:         return paletteWidget;
+            case Panes::ScoreTopLeft:     return ctab;
+            case Panes::Inspector:        return _inspector;
+            }
+      Q_ASSERT(false);
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   widget2pane
+//---------------------------------------------------------
+
+Panes MuseScore::widget2pane(QWidget* w)
+      {
+      if (!w)
+            return Panes::Invalid;
+
+      auto isDescendent = [] (QWidget* descendent, QWidget* ancestor) -> bool {
+            return descendent == ancestor
+               || (ancestor && ancestor->isAncestorOf(descendent));
+            };
+
+      if (isDescendent(w, fileTools)
+         || isDescendent(w, transportTools)
+         || isDescendent(w, cpitchTools)
+         || isDescendent(w, fotoTools)
+         || isDescendent(w, feedbackTools)
+         || isDescendent(w, entryTools)
+         || isDescendent(w, workspacesTools))
+            return Panes::Toolbars;
+      if (isDescendent(w, paletteWidget))
+            return Panes::Palettes;
+      if (isDescendent(w, ctab))
+            return Panes::ScoreTopLeft;
+      if (isDescendent(w, _inspector))
+            return Panes::Inspector;
+
+      Q_ASSERT(false);
+      return Panes::Invalid;
+      }
+
+//---------------------------------------------------------
+//   nextPrevPane
+//---------------------------------------------------------
+
+QWidget* MuseScore::nextPrevPane(QWidget* pane, bool next)
+      {
+      Q_ASSERT(pane && pane->isVisible());
+      Panes p = widget2pane(pane);
+      do {
+            pane = pane2widget(next ? ++p : --p);
+            } while (!pane || !pane->isVisible());
+      return pane;
+      }
+
+//---------------------------------------------------------
+//   focusNextPrevPane
+//---------------------------------------------------------
+
+void MuseScore::focusNextPrevPane(bool next)
+      {
+      QWidget* w = nextPrevPane(qApp->focusWidget(), next);
+      // PROBLEM: If we give the widget focus here then focus
+      // will return to the score view after this function
+      // exits. (Perhaps due to shortcut mechanism?)
+      // SOLUTION: Use QTimer to delay giving focus until
+      // after command processing has completed.
+      QTimer::singleShot(0, [w]() {
+            w->setFocus();
+            });
+      }
+
+//---------------------------------------------------------
 //   splitWindow
 //---------------------------------------------------------
 
@@ -6079,6 +6196,16 @@ ScoreTab* MuseScore::createScoreTab()
       }
 
 //---------------------------------------------------------
+//   focusChanged
+//---------------------------------------------------------
+
+void MuseScore::focusChanged(QWidget* old, QWidget* now)
+      {
+      auto toString = [] (QWidget* w) { return w ? w->objectName() : "nullptr"; };
+      qDebug() << "MuseScore::focusChanged: " + toString(old) + " -> " + toString(now);
+      }
+
+//---------------------------------------------------------
 //   cmd
 //---------------------------------------------------------
 
@@ -6210,6 +6337,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             importmidiPanel->setVisible(a->isChecked());
       else if (cmd == "toggle-mixer")
             showMixer(a->isChecked());
+      else if (cmd == "next-pane")
+            focusNextPrevPane(true);
+      else if (cmd == "prev-pane")
+            focusNextPrevPane(false);
       else if (cmd == "synth-control")
             showSynthControl(a->isChecked());
       else if (cmd == "toggle-selection-window")

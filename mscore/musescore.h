@@ -116,6 +116,7 @@ struct PluginDescription;
 enum class SelState : char;
 enum class IconType : signed char;
 enum class MagIdx : char;
+enum class Panes;
 
 extern QString mscoreGlobalShare;
 extern QString revision;
@@ -443,6 +444,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showSelectionWindow(bool);
       void showSearchDialog();
       void showToolbarEditor();
+      Panes widget2pane(QWidget* w);
+      QWidget* pane2widget(Panes p);
+      QWidget* nextPrevPane(QWidget* w, bool next);
+      void focusNextPrevPane(bool next);
       void splitWindow(bool horizontal);
       void removeSessionFile();
       void editChordStyle();
@@ -479,6 +484,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void scoreStateChanged(ScoreState state);
 
    private slots:
+      void focusChanged(QWidget* old, QWidget* now);
       void cmd(QAction* a, const QString& cmd);
       void autoSaveTimerTimeout();
       void helpBrowser1() const;

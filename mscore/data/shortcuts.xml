@@ -571,6 +571,14 @@
     <seq>F10</seq>
     </SC>
   <SC>
+    <key>next-pane</key>
+    <seq>F6</seq>
+    </SC>
+  <SC>
+    <key>prev-pane</key>
+    <seq>Shift+F6</seq>
+    </SC>
+  <SC>
     <key>quit</key>
     <seq>Ctrl+Q</seq>
     </SC>
@@ -757,7 +765,7 @@
     </SC>
   <SC>
     <key>toggle-selection-window</key>
-    <seq>F6</seq>
+    <seq>F7</seq>
     </SC>
 <!--
   <SC>
