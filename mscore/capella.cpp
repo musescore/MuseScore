@@ -53,6 +53,7 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/sym.h"
 #include "libmscore/articulation.h"
+#include "libmscore/harmony.h"
 
 extern QString rtf2html(const QString &);
 
@@ -337,7 +338,6 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         QPointF p(st->pos());
                         p = p / 32.0 * score->spatium();
                         // text->setUserOff(st->pos());
-                        text->setAutoplace(false);
                         text->setOffset(p);
                         // qDebug("setText %s (%f %f)(%f %f) <%s>",
                         //            qPrintable(st->font().family()),
@@ -361,6 +361,33 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         s->add(text);
                         }
                         break;
+                  case CapellaType::TRANSPOSABLE:
+                        {
+                        TransposableObj* to = static_cast<TransposableObj*>(oo);
+                        QString str = "";
+                        for (BasicDrawObj* bdo : to->variants) {
+                              SimpleTextObj* st = static_cast<SimpleTextObj*>(bdo);
+                              if (st->font().family() == "capella3") {
+                                    for (const QChar& ch : st->text()) {
+                                          if (ch == 'Q')
+                                                str += "b";
+                                          else if (ch == 'S')
+                                                str += "#";
+                                          else if (ch == 'R')
+                                                str += "natural";
+                                          else
+                                                str += ch;
+                                          }
+                                    }
+                              else
+                                    str += st->text();
+                              }
+                        Harmony* harmony = new Harmony(score);
+                        harmony->setHarmony(str);
+                        harmony->setTrack(track);
+                        s->add(harmony);
+                        break;
+                        }
                   case CapellaType::TEXT:
                         qDebug("======================Text:");
                         break;
