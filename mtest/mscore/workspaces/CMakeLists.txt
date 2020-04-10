@@ -22,3 +22,11 @@ set(TARGET tst_workspaces)
 set(MTEST_LINK_MSCOREAPP TRUE)
 
 include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
+
+if (MSVC)
+      install(DIRECTORY
+            ${CMAKE_INSTALL_PREFIX}/workspaces
+            USE_SOURCE_PERMISSIONS
+            DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+            )
+endif (MSVC)

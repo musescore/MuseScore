@@ -18,4 +18,8 @@ include_directories(
       ${SNDFILE_INCDIR}
       )
 
-target_link_libraries(tst_sfzincludes audio audiofile ${SNDFILE_LIB} testutils)
+if (MSVC OR MINGW)
+      target_link_libraries(tst_sfzincludes audio audiofile sndfiledll testutils)
+else (MSVC OR MINGW)
+      target_link_libraries(tst_sfzincludes audio audiofile ${SNDFILE_LIB} testutils)
+endif (MSVC OR MINGW)
