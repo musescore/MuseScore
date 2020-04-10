@@ -121,7 +121,7 @@ void TestTuplet::tuplet(const char* p1, const char* p2)
 
       Segment* s = m2->first(SegmentType::ChordRest);
       QVERIFY(s != 0);
-      Chord* c = toChord(s->element(0));
+      Ms::Chord* c = toChord(s->element(0));
       QVERIFY(c != 0);
 
       QVERIFY(createTuplet(3, c));
