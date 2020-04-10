@@ -7,6 +7,7 @@ ComboBox {
 
     property bool isExpanded: false
     property bool isIndeterminate: false
+    property alias textRoleName: root.textRole
     property string valueRoleName: "valueRole"
     property var value
 
