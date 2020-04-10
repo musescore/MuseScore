@@ -26,7 +26,7 @@ ExpandableBlank {
         StyledComboBox {
             width: parent.width
 
-            textRole: "text"
+            textRoleName: "text"
             valueRoleName: "value"
 
             model: [
@@ -38,7 +38,7 @@ ExpandableBlank {
 
             currentIndex: root.model && !root.model.styleType.isUndefined ? indexOfValue(root.model.styleType.value) : -1
 
-            onCurrentValueChanged: {
+            onValueChanged: {
                 root.model.styleType.value = value
             }
         }
