@@ -35,7 +35,7 @@ ExpandableBlank {
                 width: parent.width
 
                 textRole: "text"
-                valueRole: "value"
+                valueRoleName: "value"
 
                 model: [
                     { text: "Staff", value: Dynamic.SCOPE_STAFF },
@@ -46,7 +46,7 @@ ExpandableBlank {
                 currentIndex: root.model && !root.model.scopeType.isUndefined ? indexOfValue(root.model.scopeType.value) : -1
 
                 onCurrentValueChanged: {
-                    root.model.scopeType.value = currentValue
+                    root.model.scopeType.value = value
                 }
             }
         }

@@ -50,7 +50,7 @@ RadioDelegate {
     states: [
         State {
             name: "PRESSED"
-            when: clickableArea.pressed
+            when: root.pressed
 
             PropertyChanges {
                 target: selectionBackground
@@ -72,7 +72,7 @@ RadioDelegate {
 
         State {
             name: "HOVERED"
-            when: clickableArea.containsMouse && !root.checked && !clickableArea.pressed
+            when: root.hovered && !root.checked && !root.pressed
 
             PropertyChanges {
                 target: selectionBackground
