@@ -16,6 +16,7 @@ FocusableItem {
     property int decimals: 2
     property real maxValue: 999
     property real minValue: -999
+    property alias validator: valueInput.validator
     property alias measureUnitsSymbol: measureUnitsLabel.text
 
     readonly property int spacing: 8
@@ -82,7 +83,6 @@ FocusableItem {
                 family: globalStyle.font.family
                 pointSize: globalStyle.font.pointSize
             }
-            maximumLength: 6
 
             focus: false
             activeFocusOnPress: false
@@ -90,7 +90,12 @@ FocusableItem {
             visible: !root.isIndeterminate || activeFocus
 
             text: root.currentValue === undefined ? "" : root.currentValue
-            validator: DoubleInputValidator {}
+
+            validator: DoubleInputValidator {
+                top: maxValue
+                bottom: minValue
+                decimal: decimals
+            }
 
             Keys.onPressed: {
                 if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {

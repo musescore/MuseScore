@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import MuseScore.Inspectors 3.3
 import "../../../common"
 
 ExpandableBlank {
@@ -34,10 +35,18 @@ ExpandableBlank {
                 }
 
                 IncrementalPropertyControl {
+                    id: velocityControl
                     iconMode: iconModeEnum.hidden
 
                     step: 1
                     decimals: 0
+                    maxValue: 127
+                    minValue: -127
+                    validator: IntInputValidator {
+                        top: velocityControl.maxValue
+                        bottom: velocityControl.minValue
+                    }
+
                     isIndeterminate: model ? model.velocity.isUndefined : false
                     currentValue: model ? model.velocity.value : 0
 
