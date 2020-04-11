@@ -11,14 +11,16 @@
 
 #include <QtTest/QtTest>
 
+#include <sndfile.h>
+
 #include "mtest/testutils.h"
 
-#include "zerberus/instrument.h"
-#include "zerberus/zerberus.h"
-#include "zerberus/zone.h"
+#include "audio/midi/zerberus/instrument.h"
+#include "audio/midi/zerberus/zerberus.h"
+#include "audio/midi/zerberus/zone.h"
 #include "mscore/preferences.h"
-#include "synthesizer/event.h"
-#include <sndfile.h>
+#include "audio/midi/event.h"
+
 
 using namespace Ms;
 

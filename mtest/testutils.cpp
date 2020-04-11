@@ -22,7 +22,7 @@
 #include "mscore/musescore.h"
 #include "mscore/preferences.h"
 #include "libmscore/page.h"
-#include "synthesizer/msynthesizer.h"
+#include "audio/midi/msynthesizer.h"
 #include "libmscore/musescoreCore.h"
 #include "mscore/shortcut.h"
 #include "libmscore/xml.h"

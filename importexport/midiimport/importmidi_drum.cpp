@@ -6,7 +6,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_operations.h"
 #include "libmscore/score.h"
-#include "midi/midifile.h"
+#include "audio/midi/midifile.h"
 
 #include <set>
 

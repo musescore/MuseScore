@@ -30,6 +30,12 @@ add_library (audiofile STATIC
       audiofile.cpp
       )
 
+if (MSVC OR MINGW)
+ target_link_libraries(audiofile sndfiledll)
+else (MSVC OR MINGW)
+ target_link_libraries(audiofile ${SNDFILE_LIB})
+endif (MSVC OR MINGW)
+
 if (NOT MSVC)
    set_target_properties (
       audiofile

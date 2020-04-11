@@ -24,7 +24,7 @@
 #include "seq.h"
 #include "musescore.h"
 #include "libmscore/measure.h"
-#include "synthesizer/msynthesizer.h"
+#include "audio/midi/msynthesizer.h"
 
 
 namespace Ms {

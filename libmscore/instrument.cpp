@@ -20,8 +20,9 @@
 #include "mscore.h"
 #include "part.h"
 #include "score.h"
-#include "synthesizer/synthesizer.h"
-#include "synthesizer/midipatch.h"
+
+#include "audio/midi/synthesizer.h"
+#include "audio/midi/midipatch.h"
 
 namespace Ms {
 

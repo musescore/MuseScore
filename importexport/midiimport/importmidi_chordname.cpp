@@ -6,7 +6,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/harmony.h"
-#include "midi/midifile.h"
+#include "audio/midi/midifile.h"
 #include "importmidi_operations.h"
 
 
