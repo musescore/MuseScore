@@ -96,7 +96,7 @@
 #include "libmscore/fret.h"
 #include "libmscore/tie.h"
 #include "libmscore/undo.h"
-#include "libmscore/textline.h"
+#include "libmscore/textlinebase.h"
 #include "libmscore/fermata.h"
 #include "libmscore/textframe.h"
 #include "libmscore/instrchange.h"
@@ -5131,7 +5131,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                                     exp->pedal(toPedal(e), sstaff, seg->tick());
                                     break;
                               case ElementType::TEXTLINE:
-                                    exp->textLine(toTextLine(e), sstaff, seg->tick());
+                                    exp->textLine(toTextLineBase(e), sstaff, seg->tick());
                                     break;
                               case ElementType::LET_RING:
                                     exp->textLine(toLetRing(e), sstaff, seg->tick());
@@ -5185,7 +5185,7 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fract
                               exp->pedal(toPedal(e), sstaff, Fraction(-1,1));
                               break;
                         case ElementType::TEXTLINE:
-                              exp->textLine(toTextLine(e), sstaff, Fraction(-1,1));
+                              exp->textLine(toTextLineBase(e), sstaff, Fraction(-1,1));
                               break;
                         case ElementType::LET_RING:
                               exp->textLine(toLetRing(e), sstaff, Fraction(-1,1));
