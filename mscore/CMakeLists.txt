@@ -46,6 +46,7 @@ include_directories(
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
       ${PROJECT_SOURCE_DIR}/global
+      ${PROJECT_SOURCE_DIR}/importexport
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
@@ -104,7 +105,7 @@ QT5_WRAP_UI (ui_headers
       logindialog.ui uploadscoredialog.ui breaksdialog.ui
       toolbarEditor.ui workspacedialog.ui
 
-      importmidi/importmidi_panel.ui
+      importmidi_ui/importmidi_panel.ui
 
       palette/createPalette.ui
       scorecmp/scorecmp_tool.ui
@@ -309,24 +310,23 @@ add_library(mscoreapp STATIC
       ${INCS}
 
       abstractdialog.h accessibletoolbutton.h albummanager.h
-      alsa.h alsamidi.h analyse.h articulationprop.h bb.h
-      bendcanvas.h breaksdialog.h capella.h
+      alsa.h alsamidi.h analyse.h articulationprop.h
+      bendcanvas.h breaksdialog.h
       chordview.h click.h continuouspanel.h downloadUtils.h
       driver.h drumroll.h drumtools.h drumview.h editdrumset.h
       editinstrument.h editpitch.h editraster.h editstaff.h
       editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
-      exampleview.h excerptsdialog.h exportmidi.h exportmp3.h extension.h
+      exampleview.h excerptsdialog.h exportmp3.h extension.h
       file.h fotomode.h fretcanvas.h globals.h greendotbutton.h
-      harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h importgtp.h importmxml.h
-      importmxmllogger.h importmxmlnoteduration.h importmxmlnotepitch.h importmxmlpass1.h
-      importmxmlpass2.h importptb.h importxmlfirstpass.h instrdialog.h instrwidget.h jackaudio.h
+      harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h
+      instrdialog.h instrwidget.h jackaudio.h
       keycanvas.h keyedit.h layer.h licence.h
       logindialog.h network/loginmanager.h network/loginmanager_p.h
       magbox.h masterpalette.h
       measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h
-      mixer.h mixertrack.h mixertrackchannel.h mixertrackgroup.h mixertrackitem.h mixertrackpart.h mixerdetails.h musedata.h
-      musescore.h musicxml.h musicxmlfonthandler.h musicxmlsupport.h navigator.h newwizard.h noteGroups.h
-      omrpanel.h ove.h pa.h pagesettings.h palette.h partedit.h parteditbase.h
+      mixer.h mixertrack.h mixertrackchannel.h mixertrackgroup.h mixertrackitem.h mixertrackpart.h mixerdetails.h
+      musescore.h navigator.h newwizard.h noteGroups.h
+      omrpanel.h pa.h pagesettings.h palette.h partedit.h parteditbase.h
       pathlistdialog.h piano.h pianolevels.h pianolevelschooser.h  pianolevelsfilter.h
       pianokeyboard.h pianoroll.h pianoruler.h pianotools.h pianoview.h
       playpanel.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h
@@ -343,9 +343,7 @@ add_library(mscoreapp STATIC
       stringutils.h stringutils.cpp
       scoreview.cpp editharmony.cpp editfiguredbass.cpp events.cpp
       editinstrument.cpp editstyle.cpp
-      icons.cpp importbww.cpp
-      importmxmllogger.cpp importmxmlnoteduration.cpp importmxmlnotepitch.cpp
-      importmxml.cpp importmxmlpass1.cpp importmxmlpass2.cpp
+      icons.cpp
       instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
       musescore.cpp musescoredialogs.cpp navigator.cpp pagesettings.cpp palette.cpp
@@ -356,20 +354,16 @@ add_library(mscoreapp STATIC
       preferences.cpp measureproperties.cpp
       seq.cpp textpalette.cpp
       timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp
-      simplebutton.cpp musedata.cpp
+      simplebutton.cpp
       editdrumset.cpp editstaff.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       excerptsdialog.cpp metaedit.cpp magbox.cpp realizeharmonydialog.cpp
-      capella.cpp capxml.cpp exportaudio.cpp
+      exportaudio.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianokeyboard.cpp pianolevels.cpp pianolevelschooser.cpp pianolevelsfilter.cpp
       pianoruler.cpp pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
       updatechecker.cpp
-      importove.cpp
-      ove.cpp
       ruler.cpp
-      importgtp.cpp importgtp-gp4.cpp importgtp-gp5.cpp importgtp-gp6.cpp importgtp-gp7.cpp
-      importptb.cpp
       fotomode.cpp drumtools.cpp
       selinstrument.cpp editstafftype.cpp texttools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
@@ -381,7 +375,7 @@ add_library(mscoreapp STATIC
       articulationprop.cpp
       bendcanvas.cpp fretcanvas.cpp tremolobarcanvas.cpp
       file.cpp keyb.cpp osc.cpp
-      layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
+      layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp
       dragelement.cpp startupWizard.cpp
       svggenerator.cpp
       masterpalette.cpp
@@ -432,33 +426,20 @@ add_library(mscoreapp STATIC
       enableplayforwidget.cpp
       editelement.cpp
       editlyrics.cpp
-      musicxmlfonthandler.cpp
-      musicxmlsupport.cpp
-      exportxml.cpp
-      importxml.cpp
-      importxmlfirstpass.cpp
       savePositions.cpp
       driver.cpp
-      exportmidi.cpp
       noteGroups.cpp
       pathlistdialog.cpp
       exampleview.cpp
       miconengine.cpp
-      importmidi/importmidi.cpp
-      importmidi/importmidi_panel.cpp importmidi/importmidi_operations.cpp
-      importmidi/importmidi_model.cpp importmidi/importmidi_delegate.cpp
-      importmidi/importmidi_meter.cpp importmidi/importmidi_quant.cpp
-      importmidi/importmidi_tuplet.cpp importmidi/importmidi_chord.cpp
-      importmidi/importmidi_swing.cpp importmidi/importmidi_fraction.cpp
-      importmidi/importmidi_drum.cpp importmidi/importmidi_clef.cpp
-      importmidi/importmidi_lrhand.cpp importmidi/importmidi_lyrics.cpp
-      importmidi/importmidi_inner.cpp importmidi/importmidi_tie.cpp
-      importmidi/importmidi_tuplet_voice.cpp importmidi/importmidi_beat.cpp
-      importmidi/importmidi_tuplet_detect.cpp importmidi/importmidi_tuplet_filter.cpp
-      importmidi/importmidi_tuplet_tonotes.cpp importmidi/importmidi_simplify.cpp
-      importmidi/importmidi_voice.cpp importmidi/importmidi_view.cpp importmidi/importmidi_key.cpp
-      importmidi/importmidi_tempo.cpp importmidi/importmidi_instrument.cpp
-      importmidi/importmidi_chordname.cpp
+
+      importmidi_ui/importmidi_panel.cpp
+      importmidi_ui/importmidi_panel.h
+      importmidi_ui/importmidi_delegate.cpp
+      importmidi_ui/importmidi_delegate.h
+      importmidi_ui/importmidi_view.cpp
+      importmidi_ui/importmidi_view.h
+
       palette/createpalettedialog.cpp
       palette/palettedialog.cpp palette/palettecelldialog.cpp
       palette/palettemodel.cpp palette/palettetree.cpp palette/paletteworkspace.cpp palette/palettewidget.cpp
@@ -502,16 +483,13 @@ endif (MSVC OR MINGW)
 
 target_link_libraries(mscoreapp
       awl
-      bww
-      rtf2html
       ${QTSINGLEAPPLICATION_LIBRARIES}
       synthesizer
-      midi
       fluid
       effects
       libmscore
       qzip
-      beatroot
+      importexport
       )
 
 if (BUILD_CRASH_REPORTER)

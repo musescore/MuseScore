@@ -23,7 +23,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/keysig.h"
-#include "mscore/exportmidi.h"
+#include "importexport/midiexport/exportmidi.h"
 #include <QIODevice>
 
 #include "libmscore/mcursor.h"
