@@ -321,7 +321,7 @@
   <customwidget>
    <class>TracksView</class>
    <extends>QTableView</extends>
-   <header>mscore/importmidi/importmidi_view.h</header>
+   <header>mscore/importmidi_ui/importmidi_view.h</header>
   </customwidget>
  </customwidgets>
  <resources>

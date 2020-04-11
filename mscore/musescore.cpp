@@ -60,9 +60,11 @@
 #include "navigator.h"
 #include "newwizard.h"
 #include "timeline.h"
-#include "importmidi/importmidi_panel.h"
-#include "importmidi/importmidi_instrument.h"
-#include "importmidi/importmidi_operations.h"
+
+#include "importmidi_ui/importmidi_panel.h"
+#include "importexport/midiimport/importmidi_instrument.h"
+#include "importexport/midiimport/importmidi_operations.h"
+
 #include "scorecmp/scorecmp.h"
 #include "script/recorderwidget.h"
 #include "libmscore/scorediff.h"

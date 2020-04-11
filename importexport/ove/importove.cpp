@@ -19,8 +19,8 @@
 
 #include "ove.h"
 
-#include "globals.h"
-//#include "musescore.h"
+#include "mscore/preferences.h"
+
 #include "libmscore/sig.h"
 #include "libmscore/tempo.h"
 #include "libmscore/arpeggio.h"
@@ -46,7 +46,6 @@
 #include "libmscore/part.h"
 #include "libmscore/pedal.h"
 #include "libmscore/pitchspelling.h"
-#include "preferences.h"
 #include "libmscore/repeat.h"
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
