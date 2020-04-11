@@ -56,6 +56,7 @@ protected:
 
 private:
     void updateBeamHeight(const qreal& x, const qreal& y);
+    void synchronizeLockedBeamHeight(const qreal& currentX, const qreal& currentY);
     void updateFeatheringMode(const qreal& x, const qreal& y);
 
     BeamModesModel* m_beamModesModel = nullptr;

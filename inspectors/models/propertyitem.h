@@ -15,6 +15,7 @@ public:
     explicit PropertyItem(const int propertyId, QObject* parent = nullptr);
 
     void fillValues(const QVariant& currentValue, const QVariant& defaultValue);
+    void updateCurrentValue(const QVariant& currentValue);
     void resetToDefault();
 
     int propertyId() const;
