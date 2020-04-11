@@ -173,6 +173,11 @@
       </item>
       <item>
        <property name="text">
+        <string>System Text Line</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Articulations, Ornaments</string>
        </property>
       </item>
@@ -8302,6 +8307,152 @@ By default, they will be placed such as that their right end are at the same lev
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="PageSystemTextLine">
+       <layout class="QVBoxLayout" name="verticalLayout_54">
+        <item>
+         <widget class="QGroupBox" name="groupBox_46">
+          <property name="title">
+           <string>System Text Line</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_46">
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_211">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Position below:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="systemTextLinePlacement">
+             <item>
+              <property name="text">
+               <string notr="true">Above</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string notr="true">Below</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetSystemTextLinePlacement">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Placement' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetSystemTextLinePosBelow">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Position below' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_213">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Position above:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetSystemTextLinePosAbove">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Position above' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_214">
+             <property name="text">
+              <string>Placement:</string>
+             </property>
+             <property name="buddy">
+              <cstring>textLinePlacement</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_47">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="1">
+            <widget class="Ms::OffsetSelect" name="systemTextLinePosAbove" native="true"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="Ms::OffsetSelect" name="systemTextLinePosBelow" native="true"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_34">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="PageArticulationsOrnaments">
        <layout class="QVBoxLayout" name="verticalLayout_24">
         <property name="spacing">
@@ -11037,7 +11188,7 @@ By default, they will be placed such as that their right end are at the same lev
           <property name="title">
            <string>Fretboard Diagrams</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_46">
+          <layout class="QGridLayout" name="gridLayout_47">
            <item row="0" column="0">
             <widget class="QLabel" name="label_602">
              <property name="text">
@@ -12310,6 +12461,10 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetTextLinePlacement</tabstop>
   <tabstop>resetTextLinePosAbove</tabstop>
   <tabstop>resetTextLinePosBelow</tabstop>
+  <tabstop>systemTextLinePlacement</tabstop>
+  <tabstop>resetSystemTextLinePlacement</tabstop>
+  <tabstop>resetSystemTextLinePosAbove</tabstop>
+  <tabstop>resetSystemTextLinePosBelow</tabstop>
   <tabstop>propertyDistanceHead</tabstop>
   <tabstop>resetPropertyDistanceHead</tabstop>
   <tabstop>propertyDistanceStem</tabstop>

@@ -187,6 +187,7 @@ private slots:
       void tempo2() { mxmlIoTestRef("testTempo2"); }
       void tempo3() { mxmlIoTestRef("testTempo3"); }
       void tempo4() { mxmlIoTestRef("testTempo4"); }
+      void textLines() { mxmlMscxExportTestRef("testTextLines"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
       void timesig3() { mxmlIoTest("testTimesig3"); }
       void trackHandling() { mxmlIoTest("testTrackHandling"); }

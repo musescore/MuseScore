@@ -392,6 +392,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::textLinePosAbove,            false, textLinePosAbove,            resetTextLinePosAbove },
       { Sid::textLinePosBelow,            false, textLinePosBelow,            resetTextLinePosBelow },
 
+      { Sid::systemTextLinePlacement,     false, systemTextLinePlacement,     resetSystemTextLinePlacement },
+      { Sid::systemTextLinePosAbove,      false, systemTextLinePosAbove,      resetSystemTextLinePosAbove },
+      { Sid::systemTextLinePosBelow,      false, systemTextLinePosBelow,      resetSystemTextLinePosBelow },
+
       { Sid::fermataPosAbove,         false, fermataPosAbove,       resetFermataPosAbove    },
       { Sid::fermataPosBelow,         false, fermataPosBelow,       resetFermataPosBelow    },
       { Sid::fermataMinDistance,      false, fermataMinDistance,    resetFermataMinDistance },
@@ -406,7 +410,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       };
 
       for (QComboBox* cb : std::vector<QComboBox*> {
-            lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
+            lyricsPlacement, textLinePlacement, systemTextLinePlacement, hairpinPlacement, pedalLinePlacement,
             trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
             tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement,
             measureNumberVPlacement, mmRestRangeVPlacement

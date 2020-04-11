@@ -125,6 +125,22 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QCheckBox" name="systemTextLine">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="text">
+         <string>System Text Line</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

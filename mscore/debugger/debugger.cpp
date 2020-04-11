@@ -623,46 +623,46 @@ void Debugger::updateElement(Element* el)
       ShowElementBase* ew = elementViews[int(el->type())];
       if (ew == 0) {
             switch (el->type()) {
-                  case ElementType::PAGE:             ew = new ShowPageWidget;      break;
-                  case ElementType::SYSTEM:           ew = new SystemView;          break;
-                  case ElementType::MEASURE:          ew = new MeasureView;         break;
-                  case ElementType::CHORD:            ew = new ChordDebug;          break;
-                  case ElementType::NOTE:             ew = new ShowNoteWidget;      break;
-                  case ElementType::REST:             ew = new RestView;            break;
-                  case ElementType::CLEF:             ew = new ClefView;            break;
-                  case ElementType::TIMESIG:          ew = new TimeSigView;         break;
-                  case ElementType::KEYSIG:           ew = new KeySigView;          break;
-                  case ElementType::SEGMENT:          ew = new SegmentView;         break;
-                  case ElementType::HAIRPIN:          ew = new HairpinView;         break;
-                  case ElementType::BAR_LINE:         ew = new BarLineView;         break;
-                  case ElementType::DYNAMIC:          ew = new DynamicView;         break;
-                  case ElementType::TUPLET:           ew = new TupletView;          break;
-                  case ElementType::SLUR:             ew = new SlurTieView;         break;
-                  case ElementType::TIE:              ew = new TieView;             break;
-                  case ElementType::VOLTA:            ew = new VoltaView;           break;
-                  case ElementType::VOLTA_SEGMENT:    ew = new VoltaSegmentView;    break;
+                  case ElementType::PAGE:                    ew = new ShowPageWidget;      break;
+                  case ElementType::SYSTEM:                  ew = new SystemView;          break;
+                  case ElementType::MEASURE:                 ew = new MeasureView;         break;
+                  case ElementType::CHORD:                   ew = new ChordDebug;          break;
+                  case ElementType::NOTE:                    ew = new ShowNoteWidget;      break;
+                  case ElementType::REST:                    ew = new RestView;            break;
+                  case ElementType::CLEF:                    ew = new ClefView;            break;
+                  case ElementType::TIMESIG:                 ew = new TimeSigView;         break;
+                  case ElementType::KEYSIG:                  ew = new KeySigView;          break;
+                  case ElementType::SEGMENT:                 ew = new SegmentView;         break;
+                  case ElementType::HAIRPIN:                 ew = new HairpinView;         break;
+                  case ElementType::BAR_LINE:                ew = new BarLineView;         break;
+                  case ElementType::DYNAMIC:                 ew = new DynamicView;         break;
+                  case ElementType::TUPLET:                  ew = new TupletView;          break;
+                  case ElementType::SLUR:                    ew = new SlurTieView;         break;
+                  case ElementType::TIE:                     ew = new TieView;             break;
+                  case ElementType::VOLTA:                   ew = new VoltaView;           break;
+                  case ElementType::VOLTA_SEGMENT:           ew = new VoltaSegmentView;    break;
                   case ElementType::PEDAL:
                   case ElementType::LET_RING:
                   case ElementType::VIBRATO:
-                  case ElementType::TEXTLINE:         ew = new TextLineView;        break;
+                  case ElementType::TEXTLINE:           ew = new TextLineView;        break;
                   case ElementType::PEDAL_SEGMENT:
-                  case ElementType::TEXTLINE_SEGMENT: ew = new TextLineSegmentView; break;
-                  case ElementType::LYRICS:           ew = new LyricsView;          break;
-                  case ElementType::BEAM:             ew = new BeamView;            break;
-                  case ElementType::TREMOLO:          ew = new TremoloView;         break;
-                  case ElementType::OTTAVA:           ew = new OttavaView;          break;
+                  case ElementType::TEXTLINE_SEGMENT:    ew = new TextLineSegmentView; break;
+                  case ElementType::LYRICS:                  ew = new LyricsView;          break;
+                  case ElementType::BEAM:                    ew = new BeamView;            break;
+                  case ElementType::TREMOLO:                 ew = new TremoloView;         break;
+                  case ElementType::OTTAVA:                  ew = new OttavaView;          break;
                   case ElementType::LET_RING_SEGMENT:
-                  case ElementType::OTTAVA_SEGMENT:   ew = new TextLineSegmentView; break;
-                  case ElementType::SLUR_SEGMENT:     ew = new SlurSegmentView;     break;
-                  case ElementType::TIE_SEGMENT:      ew = new TieSegmentView;     break;
-                  case ElementType::ACCIDENTAL:       ew = new AccidentalView;      break;
-                  case ElementType::ARTICULATION:     ew = new ArticulationView;    break;
-                  case ElementType::STEM:             ew = new StemView;            break;
+                  case ElementType::OTTAVA_SEGMENT:          ew = new TextLineSegmentView; break;
+                  case ElementType::SLUR_SEGMENT:            ew = new SlurSegmentView;     break;
+                  case ElementType::TIE_SEGMENT:             ew = new TieSegmentView;      break;
+                  case ElementType::ACCIDENTAL:              ew = new AccidentalView;      break;
+                  case ElementType::ARTICULATION:            ew = new ArticulationView;    break;
+                  case ElementType::STEM:                    ew = new StemView;            break;
                   case ElementType::VBOX:
                   case ElementType::HBOX:
                   case ElementType::FBOX:
-                  case ElementType::TBOX:             ew = new BoxView;             break;
-                  case ElementType::TRILL:            ew = new SpannerView;         break;
+                  case ElementType::TBOX:                    ew = new BoxView;             break;
+                  case ElementType::TRILL:                   ew = new SpannerView;         break;
 
                   case ElementType::INSTRUMENT_NAME:
                   case ElementType::FINGERING:

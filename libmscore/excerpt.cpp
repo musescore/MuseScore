@@ -32,6 +32,7 @@
 #include "note.h"
 #include "lyrics.h"
 #include "segment.h"
+#include "textline.h"
 #include "tupletmap.h"
 #include "tiemap.h"
 #include "layoutbreak.h"
@@ -360,7 +361,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
 static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
       {
       // don’t clone voltas for track != 0
-      if (s->type() == ElementType::VOLTA && s->track() != 0)
+      if ((s->isVolta() || (s->isTextLine() && toTextLine(s)->systemFlag())) && s->track() != 0)
             return;
       Spanner* ns = toSpanner(s->linkedClone());
       ns->setScore(score);
@@ -368,7 +369,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
       ns->setTrack(dstTrack);
       ns->setTrack2(dstTrack2);
 
-      if (ns->type() == ElementType::SLUR) {
+      if (ns->isSlur()) {
 
             // set start/end element for slur
             ChordRest* cr1 = s->startCR();
@@ -603,7 +604,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                                 toRest(ne)->setGap(false);
 
                                           ne->setScore(score);
-                                          if (oe->type() == ElementType::BAR_LINE && adjustedBarlineSpan) {
+                                          if (oe->isBarLine() && adjustedBarlineSpan) {
                                                 BarLine* nbl = toBarLine(ne);
                                                 nbl->setSpanStaff(adjustedBarlineSpan);
                                                 }
@@ -811,7 +812,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
             int dstTrack  = -1;
             int dstTrack2 = -1;
 
-            if (s->type() == ElementType::VOLTA) {
+            if (s->isVolta() || (s->isTextLine() && toTextLine(s)->systemFlag())) {
                   //always export voltas to first staff in part
                   dstTrack  = 0;
                   dstTrack2 = 0;
@@ -950,6 +951,8 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                 continue;
                                                 }
                                           default:
+                                                if (toTextLine(e)->systemFlag())
+                                                      continue;
                                                 Element* ne1 = e->clone();
                                                 ne1->setTrack(dstTrack);
                                                 ne1->setParent(seg);
@@ -1031,7 +1034,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
             int staffIdx = s->staffIdx();
             int dstTrack = -1;
             int dstTrack2 = -1;
-            if (s->type() != ElementType::VOLTA) {
+            if (!(s->isVolta() || (s->isTextLine() && toTextLine(s)->systemFlag()))) {
                   //export other spanner if staffidx matches
                   if (srcStaffIdx == staffIdx) {
                         dstTrack = dstStaffIdx * VOICES + s->voice();
@@ -1114,7 +1117,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& stic
                         Element* oe = oseg->element(srcTrack);
                         if (oe == 0 || oe->generated())
                               continue;
-                        if (oe->type() == ElementType::TIMESIG)
+                        if (oe->isTimeSig())
                               continue;
                         Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
                         Element* ne = oe->linkedClone();
@@ -1157,6 +1160,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& stic
                                           case ElementType::LYRICS:   // not normally segment-attached
                                                 continue;
                                           default:
+                                                if (toTextLine(e)->systemFlag())
+                                                      continue;
                                                 Element* ne1 = e->clone();
                                                 ne1->setTrack(dstTrack);
                                                 ne1->setParent(ns);
@@ -1204,7 +1209,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& stic
             int staffIdx = s->staffIdx();
             int dstTrack = -1;
             int dstTrack2 = -1;
-            if (s->type() != ElementType::VOLTA) {
+            if (!(s->isVolta() || (s->isTextLine() && s->systemFlag()))) {
                   //export other spanner if staffidx matches
                   if (srcStaffIdx == staffIdx) {
                         dstTrack  = dstStaffIdx * VOICES + s->voice();
