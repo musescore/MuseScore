@@ -25,7 +25,7 @@
 #include "libmscore/note.h"
 #include "libmscore/part.h"
 #include "libmscore/mscore.h"
-#include "synthesizer/msynthesizer.h"
+#include "audio/midi/msynthesizer.h"
 #include "musescore.h"
 #include "preferences.h"
 

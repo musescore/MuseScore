@@ -24,17 +24,17 @@
 #include "seq.h"
 #include "shortcutcapturedialog.h"
 #include "scoreview.h"
-#include "pa.h"
 #include "shortcut.h"
 #include "workspace.h"
 
+#include "audio/drivers/pa.h"
 #ifdef USE_PORTMIDI
-#include "pm.h"
+#include "audio/drivers/pm.h"
 #endif
 
 #include "pathlistdialog.h"
 #include "resourceManager.h"
-#include "synthesizer/msynthesizer.h"
+#include "audio/midi/msynthesizer.h"
 
 #ifdef AVSOMR
 #include "avsomr/avsomrlocal.h"

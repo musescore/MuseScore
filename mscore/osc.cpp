@@ -34,7 +34,7 @@
 #include "playpanel.h"
 #include "preferences.h"
 #include "seq.h"
-#include "synthesizer/msynthesizer.h"
+#include "audio/midi/msynthesizer.h"
 #include "shortcut.h"
 
 #ifdef OSC

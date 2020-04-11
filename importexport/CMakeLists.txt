@@ -35,7 +35,6 @@ endif (NOT MSVC)
 
 include(${CMAKE_CURRENT_LIST_DIR}/musicxml/musicxml.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/midiimport/midiimport.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/midiexport/midiexport.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/ove/ove.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/guitarpro/guitarpro.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/musedata/musedata.cmake)
@@ -49,7 +48,6 @@ add_library (
       ${PCH}
       ${MUSICXML_SRC}
       ${MIDIIMPORT_SRC}
-      ${MIDIEXPORT_SRC}
       ${OVE_SRC}
       ${GUITARPRO_SRC}
       ${MUSEDATA_SRC}
@@ -60,7 +58,7 @@ add_library (
 
 target_link_libraries(${MODULE}
     ${QT_LIBRARIES}
-    midi        # for midi import
+    audio        # for midi import
     )
 
 if (NOT MSVC)

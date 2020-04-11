@@ -47,13 +47,13 @@
 #include "bend.h"
 #include "tremolo.h"
 #include "noteevent.h"
-#include "synthesizer/event.h"
 #include "segment.h"
 #include "undo.h"
 #include "utils.h"
 #include "sym.h"
 #include "synthesizerstate.h"
 
+#include "audio/midi/event.h"
 #include "mscore/preferences.h"
 
 namespace Ms {

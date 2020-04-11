@@ -27,7 +27,6 @@
 #include "key.h"
 #include "select.h"
 #include "instrument.h"
-#include "synthesizer/midipatch.h"
 #include "pitchvalue.h"
 #include "timesig.h"
 #include "noteevent.h"
@@ -41,6 +40,8 @@
 #include "drumset.h"
 #include "rest.h"
 #include "fret.h"
+
+#include "audio/midi/midipatch.h"
 
 Q_DECLARE_LOGGING_CATEGORY(undoRedo);
 

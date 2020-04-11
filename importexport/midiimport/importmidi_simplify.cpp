@@ -10,7 +10,7 @@
 #include "libmscore/sig.h"
 #include "libmscore/durationtype.h"
 #include "importmidi_tuplet_voice.h"
-#include "midi/midifile.h"
+#include "audio/midi/midifile.h"
 
 
 namespace Ms {

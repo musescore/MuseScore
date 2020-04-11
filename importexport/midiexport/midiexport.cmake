@@ -1,5 +1,0 @@
-
-
-file(GLOB MIDIEXPORT_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/*.*
-    )
