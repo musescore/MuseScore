@@ -78,29 +78,15 @@ void BeamSettingsModel::forceHorizontal()
 
     if (qFuzzyCompare(qAbs(currentX), maxValue)) {
         m_beamVectorY->setValue(currentX);
-        m_beamVectorX->setValue(currentX);
     } else {
-        m_beamVectorY->setValue(currentY);
         m_beamVectorX->setValue(currentY);
     }
 }
 
 void BeamSettingsModel::updateBeamHeight(const qreal& x, const qreal& y)
 {
-    qreal deltaX = x - m_cachedBeamVector.x();
-    qreal deltaY = y - m_cachedBeamVector.y();
-
-    qreal uniformDelta = 0.0;
-
-    if (qFuzzyIsNull(deltaX)) {
-        uniformDelta = deltaY;
-    } else {
-        uniformDelta = deltaX;
-    }
-
-    if (isBeamHeightLocked()) {
-        m_beamVectorX->setValue(m_cachedBeamVector.x() + uniformDelta);
-        m_beamVectorY->setValue(m_cachedBeamVector.y() + uniformDelta);
+    if (m_isBeamHeightLocked) {
+        synchronizeLockedBeamHeight(x, y);
     }
 
     onPropertyValueChanged(Ms::Pid::USER_MODIFIED, true); // TODO проверить, можно ли это перенести в DOM модель
@@ -108,6 +94,20 @@ void BeamSettingsModel::updateBeamHeight(const qreal& x, const qreal& y)
 
     m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());
     m_cachedBeamVector.setY(m_beamVectorY->value().toDouble());
+}
+
+void BeamSettingsModel::synchronizeLockedBeamHeight(const qreal& currentX, const qreal& currentY)
+{
+    qreal deltaX = currentX - m_cachedBeamVector.x();
+    qreal deltaY = currentY - m_cachedBeamVector.y();
+
+    qreal maxDelta = qMax(qAbs(deltaX), qAbs(deltaY));
+
+    if (qFuzzyCompare(qAbs(deltaX), maxDelta)) {
+        m_beamVectorY->updateCurrentValue(m_cachedBeamVector.y() + deltaX);
+    } else {
+        m_beamVectorX->updateCurrentValue(m_cachedBeamVector.x() + deltaY);
+    }
 }
 
 void BeamSettingsModel::updateFeatheringMode(const qreal &x, const qreal &y)

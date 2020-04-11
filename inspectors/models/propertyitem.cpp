@@ -7,8 +7,14 @@ PropertyItem::PropertyItem(const int propertyId, QObject* parent) : QObject(pare
 
 void PropertyItem::fillValues(const QVariant& currentValue, const QVariant& defaultValue)
 {
-    m_currentValue = currentValue;
+    updateCurrentValue(currentValue);
+
     m_defaultValue = defaultValue;
+}
+
+void PropertyItem::updateCurrentValue(const QVariant& currentValue)
+{
+    m_currentValue = currentValue;
 
     emit isUndefinedChanged(isUndefined());
     emit valueChanged(m_currentValue);
@@ -39,9 +45,8 @@ void PropertyItem::setValue(const QVariant& value)
     if (m_currentValue == value)
         return;
 
-    m_currentValue = value;
-    emit isUndefinedChanged(isUndefined());
-    emit valueChanged(m_currentValue);
+    updateCurrentValue(value);
+
     emit propertyModified(m_propertyId, m_currentValue);
 }
 
