@@ -369,6 +369,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             case ElementType::TRILL:
             case ElementType::HAIRPIN:
             case ElementType::TEXTLINE:
+            case ElementType::SYSTEM_TEXTLINE:
                   event->setAccepted(dragTimeAnchorElement(pos));
                   break;
             case ElementType::IMAGE:
@@ -460,6 +461,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::PALM_MUTE:
                   case ElementType::HAIRPIN:
                   case ElementType::TEXTLINE:
+                  case ElementType::SYSTEM_TEXTLINE:
                         {
                         Spanner* spanner = static_cast<Spanner*>(editData.dropElement);
                         score()->cmdAddSpanner(spanner, pos, firstStaffOnly);

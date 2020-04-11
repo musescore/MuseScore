@@ -1568,6 +1568,7 @@ void Score::cmdFlip()
                || e->isHairpinSegment()
                || e->isOttavaSegment()
                || e->isTextLineSegment()
+               || e->isSystemTextLineSegment()
                || e->isPedalSegment()
                || e->isLetRingSegment()
                || e->isPalmMuteSegment()
@@ -1960,6 +1961,7 @@ void Score::deleteItem(Element* el)
             case ElementType::TRILL_SEGMENT:
             case ElementType::VIBRATO_SEGMENT:
             case ElementType::TEXTLINE_SEGMENT:
+            case ElementType::SYSTEM_TEXTLINE_SEGMENT:
             case ElementType::VOLTA_SEGMENT:
             case ElementType::SLUR_SEGMENT:
             case ElementType::TIE_SEGMENT:
@@ -4454,6 +4456,7 @@ void Score::undoAddElement(Element* element)
          && et != ElementType::TRILL
          && et != ElementType::VIBRATO
          && et != ElementType::TEXTLINE
+         && et != ElementType::SYSTEM_TEXTLINE
          && et != ElementType::PEDAL
          && et != ElementType::BREATH
          && et != ElementType::DYNAMIC
@@ -4500,6 +4503,7 @@ void Score::undoAddElement(Element* element)
                 || element->isSlur()
                 || element->isVibrato()
                 || element->isTextLine()
+                || element->isSystemTextLine()
                 || element->isPedal()
                 || element->isLyrics())) {
                   tr.append(staffIdx * VOICES);
@@ -4657,6 +4661,7 @@ void Score::undoAddElement(Element* element)
                      || element->isTrill()
                      || element->isVibrato()
                      || element->isTextLine()
+                     || element->isSystemTextLine()
                      || element->isPedal()) {
                         Spanner* sp   = toSpanner(element);
                         Spanner* nsp  = toSpanner(ne);

@@ -35,6 +35,7 @@
 #include "seq.h"
 #include "libmscore/part.h"
 #include "libmscore/textline.h"
+#include "libmscore/systemtextline.h"
 #include "libmscore/measure.h"
 #include "libmscore/icon.h"
 #include "libmscore/mscore.h"
@@ -494,7 +495,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
 //             element = cell->element.get();
       if (element == 0)
             return false;
-      
+
       if (element->isSpanner())
             TourHandler::startTour("spanner-drop-apply");
 
@@ -710,7 +711,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
             else if (element->isSLine() && element->type() != ElementType::GLISSANDO) {
                   Segment* startSegment = sel.startSegment();
                   Segment* endSegment = sel.endSegment();
-                  bool firstStaffOnly = element->isVolta() && !(modifiers & Qt::ControlModifier);
+                  bool firstStaffOnly = (element->isVolta() || element->isSystemTextLine()) && !(modifiers & Qt::ControlModifier);
                   int startStaff = firstStaffOnly ? 0 : sel.staffStart();
                   int endStaff   = firstStaffOnly ? 1 : sel.staffEnd();
                   for (int i = startStaff; i < endStaff; ++i) {
@@ -1932,7 +1933,7 @@ void Palette::dropEvent(QDropEvent* event)
             event->ignore();
             return;
             }
-      
+
       if (e->isFretDiagram()) {
             name = toFretDiagram(e)->harmonyText();
             }

@@ -437,7 +437,7 @@ void System::setBracketsXPosition(const qreal xPosition)
             for (const Bracket* b2 : _brackets) {
                   bool b1FirstStaffInB2 = (b1->firstStaff() >= b2->firstStaff() && b1->firstStaff() <= b2->lastStaff());
                   bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
-                  if (b1->column() > b2->column() && 
+                  if (b1->column() > b2->column() &&
                         (b1FirstStaffInB2 || b1LastStaffInB2))
                         xOffset += b2->width() + bracketDistance;
                   }
@@ -873,6 +873,7 @@ void System::add(Element* el)
                   score()->addElement(el);
                   break;
             case ElementType::TEXTLINE_SEGMENT:
+            case ElementType::SYSTEM_TEXTLINE_SEGMENT:
             case ElementType::HAIRPIN_SEGMENT:
             case ElementType::OTTAVA_SEGMENT:
             case ElementType::TRILL_SEGMENT:
@@ -940,6 +941,7 @@ void System::remove(Element* el)
                   score()->removeElement(el);
                   break;
             case ElementType::TEXTLINE_SEGMENT:
+            case ElementType::SYSTEM_TEXTLINE_SEGMENT:
             case ElementType::HAIRPIN_SEGMENT:
             case ElementType::OTTAVA_SEGMENT:
             case ElementType::TRILL_SEGMENT:

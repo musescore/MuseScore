@@ -91,6 +91,7 @@ enum class ElementType {
       VIBRATO_SEGMENT,
       PALM_MUTE_SEGMENT,
       TEXTLINE_SEGMENT,
+      SYSTEM_TEXTLINE_SEGMENT,
       VOLTA_SEGMENT,
       PEDAL_SEGMENT,
       LYRICSLINE_SEGMENT,
@@ -117,6 +118,7 @@ enum class ElementType {
       VIBRATO,
       PALM_MUTE,
       TEXTLINE,
+      SYSTEM_TEXTLINE,
       TEXTLINE_BASE,
       NOTELINE,
       LYRICSLINE,
@@ -427,6 +429,7 @@ enum class Tid {
       REPEAT_RIGHT,      // align to end of measure
       FRAME,
       TEXTLINE,
+      SYSTEM_TEXTLINE,
       GLISSANDO,
       OTTAVA,
       VOLTA,

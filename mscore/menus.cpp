@@ -39,6 +39,7 @@
 #include "libmscore/bracket.h"
 #include "libmscore/ottava.h"
 #include "libmscore/textline.h"
+#include "libmscore/systemtextline.h"
 #include "libmscore/trill.h"
 #include "libmscore/pedal.h"
 #include "libmscore/clef.h"
@@ -1457,9 +1458,15 @@ PalettePanel* MuseScore::newLinesPalettePanel()
 
       TextLine* textLine = new TextLine(gscore);
       textLine->setLen(w);
-      textLine->setBeginText("VII");
+      textLine->setBeginText("Staff");
       textLine->setEndHookType(HookType::HOOK_90);
-      sp->append(textLine, QT_TRANSLATE_NOOP("Palette", "Text line"));
+      sp->append(textLine, QT_TRANSLATE_NOOP("Palette", "Staff Text line"));
+
+      SystemTextLine* systemTextLine = new SystemTextLine(gscore);
+      systemTextLine->setLen(w);
+      systemTextLine->setBeginText("System");
+      systemTextLine->setEndHookType(HookType::HOOK_90);
+      sp->append(systemTextLine, QT_TRANSLATE_NOOP("Palette", "System Text line"));
 
       TextLine* line = new TextLine(gscore);
       line->setLen(w);

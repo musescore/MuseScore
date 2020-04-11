@@ -113,6 +113,8 @@ class TestParts : public QObject, public MTest
 
       void measureProperties();
 
+      void textLines();
+
  // second part has system text on empty chordrest segment
       void createPart3() {
             testPartCreation("part-54346");
@@ -1046,6 +1048,14 @@ void TestParts::measureProperties()
       {
       }
 
+//---------------------------------------------------------
+//   textLines
+//---------------------------------------------------------
+
+void TestParts::textLines()
+      {
+      testPartCreation("part-textlines");
+      }
 
 QTEST_MAIN(TestParts)
 

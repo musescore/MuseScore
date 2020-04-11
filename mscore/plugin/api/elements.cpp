@@ -97,6 +97,7 @@ bool Note::isChildAllowed(Ms::ElementType elementType)
             case ElementType::TIE:
             case ElementType::ACCIDENTAL:
             case ElementType::TEXTLINE:
+            case ElementType::SYSTEM_TEXTLINE:
             case ElementType::GLISSANDO:
                   return true;
             default:

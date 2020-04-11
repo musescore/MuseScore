@@ -102,7 +102,7 @@ void SpannerSegment::setSystem(System* s)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void SpannerSegment::spatiumChanged(qreal ov, qreal nv) 
+void SpannerSegment::spatiumChanged(qreal ov, qreal nv)
       {
       Element::spatiumChanged(ov, nv);
       if (sizeIsSpatiumDependent())
@@ -618,7 +618,7 @@ void Spanner::computeEndElement()
             case Anchor::SEGMENT: {
                   if (track2() == -1)
                         setTrack2(track());
-                  if (ticks().isZero() && isTextLine() && parent())   // special case palette
+                  if (ticks().isZero() && (isTextLine() || isSystemTextLine()) && parent())   // special case palette
                         setTicks(score()->lastSegment()->tick() - _tick);
 
                   if (isLyricsLine() && toLyricsLine(this)->isEndMelisma()) {

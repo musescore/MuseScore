@@ -274,6 +274,7 @@ void Inspector::update(Score* s)
                               ie = new InspectorHairpin(this);
                               break;
                         case ElementType::TEXTLINE_SEGMENT:
+                        case ElementType::SYSTEM_TEXTLINE_SEGMENT:
                               ie = new InspectorTextLine(this);
                               break;
                         case ElementType::PEDAL_SEGMENT:

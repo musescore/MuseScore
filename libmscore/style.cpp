@@ -579,6 +579,16 @@ static const StyleType styleTypes[] {
       { Sid::textLineFrameFgColor,      "textLineFrameFgColor",       QColor(0, 0, 0, 255) },
       { Sid::textLineFrameBgColor,      "textLineFrameBgColor",       QColor(255, 255, 255, 0) },
 
+      { Sid::systemTextLinePlacement,         "systemTextLinePlacement",         int(Placement::ABOVE)  },
+      { Sid::systemTextLinePosAbove,          "systemTextLinePosAbove",          QPointF(.0, -1.0) },
+      { Sid::systemTextLinePosBelow,          "systemTextLinePosBelow",          QPointF(.0, 1.0) },
+      { Sid::systemTextLineFrameType,         "systemTextLineFrameType",          int(FrameType::NO_FRAME) },
+      { Sid::systemTextLineFramePadding,      "systemTextLineFramePadding",       0.2 },
+      { Sid::systemTextLineFrameWidth,        "systemTextLineFrameWidth",         0.1 },
+      { Sid::systemTextLineFrameRound,        "systemTextLineFrameRound",         0 },
+      { Sid::systemTextLineFrameFgColor,      "systemTextLineFrameFgColor",       QColor(0, 0, 0, 255) },
+      { Sid::systemTextLineFrameBgColor,      "systemTextLineFrameBgColor",       QColor(255, 255, 255, 0) },
+
       { Sid::tremoloBarLineWidth,       "tremoloBarLineWidth",       Spatium(0.12) },
       { Sid::jumpPosAbove,              "jumpPosAbove",              QPointF(.0, -2.0) },
       { Sid::markerPosAbove,            "markerPosAbove",            QPointF(.0, -2.0) },
@@ -950,6 +960,13 @@ static const StyleType styleTypes[] {
       { Sid::textLineColor,                 "textLineColor",                QColor(0, 0, 0, 255) },
       { Sid::textLineTextAlign,             "textLineTextAlign",            QVariant::fromValue(Align::LEFT | Align::VCENTER) },
 
+      { Sid::systemTextLineFontFace,              "systemTextLineFontFace",             "FreeSerif" },
+      { Sid::systemTextLineFontSize,              "systemTextLineFontSize",             12.0 },
+      { Sid::systemTextLineFontSpatiumDependent,  "systemTextLineFontSpatiumDependent", true },
+      { Sid::systemTextLineFontStyle,             "systemTextLineFontStyle",            int(FontStyle::Normal) },
+      { Sid::systemTextLineColor,                 "systemTextLineColor",                QColor(0, 0, 0, 255) },
+      { Sid::systemTextLineTextAlign,             "systemTextLineTextAlign",            QVariant::fromValue(Align::LEFT | Align::VCENTER) },
+
       { Sid::glissandoFontFace,             "glissandoFontFace",            "FreeSerif" },
       { Sid::glissandoFontSize,             "glissandoFontSize",            QVariant(8.0) },
       { Sid::glissandoFontSpatiumDependent, "glissandoFontSpatiumDependent", true },
@@ -1303,6 +1320,7 @@ static const StyleType styleTypes[] {
       { Sid::pedalMinDistance,              "pedalMinDistance",              Spatium(0.7)  },
       { Sid::repeatMinDistance,             "repeatMinDistance",             Spatium(0.5)  },
       { Sid::textLineMinDistance,           "textLineMinDistance",           Spatium(0.7)  },
+      { Sid::systemTextLineMinDistance,     "systemTextLineMinDistance",     Spatium(0.7)  },
       { Sid::trillMinDistance,              "trillMinDistance",              Spatium(1.0)  },
       { Sid::vibratoMinDistance,            "vibratoMinDistance",            Spatium(1.0)  },
       { Sid::voltaMinDistance,              "voltaMinDistance",              Spatium(1.0)  },
@@ -1832,6 +1850,22 @@ const TextStyle textLineTextStyle {{
       { Sid::textLineFrameBgColor,               Pid::FRAME_BG_COLOR         },
       }};
 
+const TextStyle systemTextLineTextStyle {{
+      { Sid::systemTextLineFontFace,             Pid::BEGIN_FONT_FACE        },
+      { Sid::systemTextLineFontSize,             Pid::BEGIN_FONT_SIZE        },
+      { Sid::systemTextLineFontSpatiumDependent, Pid::SIZE_SPATIUM_DEPENDENT },
+      { Sid::systemTextLineFontStyle,            Pid::BEGIN_FONT_STYLE       },
+      { Sid::systemTextLineColor,                Pid::COLOR                  },
+      { Sid::systemTextLineTextAlign,            Pid::ALIGN                  },
+      { Sid::systemTextLinePosAbove,             Pid::OFFSET                 },
+      { Sid::systemTextLineFrameType,            Pid::FRAME_TYPE             },
+      { Sid::systemTextLineFramePadding,         Pid::FRAME_PADDING          },
+      { Sid::systemTextLineFrameWidth,           Pid::FRAME_WIDTH            },
+      { Sid::systemTextLineFrameRound,           Pid::FRAME_ROUND            },
+      { Sid::systemTextLineFrameFgColor,         Pid::FRAME_FG_COLOR         },
+      { Sid::systemTextLineFrameBgColor,         Pid::FRAME_BG_COLOR         },
+      }};
+
 const TextStyle glissandoTextStyle {{
       { Sid::glissandoFontFace,                  Pid::FONT_FACE              },
       { Sid::glissandoFontSize,                  Pid::FONT_SIZE              },
@@ -2264,6 +2298,7 @@ static constexpr std::array<TextStyleName, int(Tid::TEXT_STYLES)> textStyles { {
       { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Right"),       &repeatRightTextStyle,       Tid::REPEAT_RIGHT },
       { QT_TRANSLATE_NOOP("TextStyle", "Frame"),                   &frameTextStyle,             Tid::FRAME },
       { QT_TRANSLATE_NOOP("TextStyle", "Text Line"),               &textLineTextStyle,          Tid::TEXTLINE },
+      { QT_TRANSLATE_NOOP("TextStyle", "System Text Line"),        &systemTextLineTextStyle,    Tid::SYSTEM_TEXTLINE },
       { QT_TRANSLATE_NOOP("TextStyle", "Glissando"),               &glissandoTextStyle,         Tid::GLISSANDO },
 
       { QT_TRANSLATE_NOOP("TextStyle", "Ottava"),                  &ottavaTextStyle,            Tid::OTTAVA },

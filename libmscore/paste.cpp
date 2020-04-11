@@ -531,6 +531,7 @@ void Score::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             case ElementType::OTTAVA:
             case ElementType::TRILL:
             case ElementType::TEXTLINE:
+            case ElementType::SYSTEM_TEXTLINE:
             case ElementType::VOLTA:
                   {
                   Spanner* sp = toSpanner(info->connector());

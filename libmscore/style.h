@@ -553,6 +553,16 @@ enum class Sid {
       textLineFrameFgColor,
       textLineFrameBgColor,
 
+      systemTextLinePlacement,
+      systemTextLinePosAbove,
+      systemTextLinePosBelow,
+      systemTextLineFrameType,
+      systemTextLineFramePadding,
+      systemTextLineFrameWidth,
+      systemTextLineFrameRound,
+      systemTextLineFrameFgColor,
+      systemTextLineFrameBgColor,
+
       tremoloBarLineWidth,
       jumpPosAbove,
       markerPosAbove,
@@ -924,6 +934,13 @@ enum class Sid {
       textLineColor,
       textLineTextAlign,
 
+      systemTextLineFontFace,
+      systemTextLineFontSize,
+      systemTextLineFontSpatiumDependent,
+      systemTextLineFontStyle,
+      systemTextLineColor,
+      systemTextLineTextAlign,
+
       glissandoFontFace,
       glissandoFontSize,
       glissandoFontSpatiumDependent,
@@ -1277,6 +1294,7 @@ enum class Sid {
       pedalMinDistance,
       repeatMinDistance,
       textLineMinDistance,
+      systemTextLineMinDistance,
       trillMinDistance,
       vibratoMinDistance,
       voltaMinDistance,

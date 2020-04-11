@@ -91,7 +91,9 @@ class InstrumentName;
 class DurationElement;
 class Accidental;
 class TextLine;
+class SystemTextLine;
 class TextLineSegment;
+class SystemTextLineSegment;
 class Pedal;
 class PedalSegment;
 class LedgerLine;
@@ -314,7 +316,9 @@ class ScoreElement {
       CONVERT(InstrumentName, INSTRUMENT_NAME)
       CONVERT(Accidental,    ACCIDENTAL)
       CONVERT(TextLine,      TEXTLINE)
-      CONVERT(TextLineSegment,      TEXTLINE_SEGMENT)
+      CONVERT(TextLineSegment, TEXTLINE_SEGMENT)
+      CONVERT(SystemTextLine,SYSTEM_TEXTLINE)
+      CONVERT(SystemTextLineSegment, SYSTEM_TEXTLINE_SEGMENT)
       CONVERT(Pedal,         PEDAL)
       CONVERT(PedalSegment,  PEDAL_SEGMENT)
       CONVERT(OttavaSegment, OTTAVA_SEGMENT)
@@ -369,6 +373,7 @@ class ScoreElement {
          return isHairpinSegment()
          || isLetRingSegment()
          || isTextLineSegment()
+         || isSystemTextLineSegment()
          || isOttavaSegment()
          || isPalmMuteSegment()
          || isPedalSegment()
@@ -393,6 +398,7 @@ class ScoreElement {
             || isPalmMute()
             || isPedal()
             || isTextLine()
+            || isSystemTextLine()
             || isVolta()
             ;
             }
@@ -568,6 +574,8 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(Accidental)
       CONVERT(TextLine)
       CONVERT(TextLineSegment)
+      CONVERT(SystemTextLine)
+      CONVERT(SystemTextLineSegment)
       CONVERT(Pedal)
       CONVERT(PedalSegment)
       CONVERT(OttavaSegment)

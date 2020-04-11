@@ -79,6 +79,7 @@
 #include "text.h"
 #include "measurenumber.h"
 #include "textline.h"
+#include "systemtextline.h"
 #include "tie.h"
 #include "timesig.h"
 #include "tremolobar.h"
@@ -1020,6 +1021,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::VOLTA:             return new Volta(score);
             case ElementType::OTTAVA:            return new Ottava(score);
             case ElementType::TEXTLINE:          return new TextLine(score);
+            case ElementType::SYSTEM_TEXTLINE:   return new SystemTextLine(score);
             case ElementType::NOTELINE:          return new NoteLine(score);
             case ElementType::TRILL:             return new Trill(score);
             case ElementType::LET_RING:          return new LetRing(score);
@@ -1090,6 +1092,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::LYRICSLINE:
             case ElementType::TEXTLINE_BASE:
             case ElementType::TEXTLINE_SEGMENT:
+            case ElementType::SYSTEM_TEXTLINE_SEGMENT:
             case ElementType::GLISSANDO_SEGMENT:
             case ElementType::SLUR_SEGMENT:
             case ElementType::TIE_SEGMENT:
