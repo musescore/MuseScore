@@ -132,6 +132,7 @@ class CapMeter : public NoteObj, public CapellaObj {
 //   CapExplicitBarline
 //---------------------------------------------------------
 
+class BasicDrawObj;
 class CapExplicitBarline : public NoteObj, public CapellaObj {
       BarLineType _type { BarLineType::NORMAL };
       int _barMode      { 0 };      // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
@@ -142,7 +143,7 @@ class CapExplicitBarline : public NoteObj, public CapellaObj {
       void readCapx(XmlReader& e);
       BarLineType type() const { return _type; }
       int barMode() const      { return _barMode; }
-
+      QList<BasicDrawObj*> objects;
       };
 
 //---------------------------------------------------------

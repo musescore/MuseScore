@@ -172,7 +172,7 @@ void CapExplicitBarline::readCapx(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "drawObjects") {
-                  e.skipCurrentElement();
+                  objects = cap->readCapxDrawObjectArray(e);
                   }
             else
                   e.unknown();

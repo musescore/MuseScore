@@ -206,11 +206,15 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                           case 'u':   // fermata up
                                                 addArticulationText(score, cr, track, SymId::fermataAbove);
                                                 break;
+                                          case 'n':   // segno coda
+                                                addArticulationText(score, cr, track, SymId::coda);
+                                                break;
+                                          case 'y':   // segno
+                                                addArticulationText(score, cr, track, SymId::segno);
+                                                break;
                                           case 'd':   // da capo D.C.
                                           case 'e':   // dal segno D.S.
-                                          case 'n':   // segno coda
                                           case 'o':   // segno coda (smaller)
-                                          case 'y':   // segno
                                           case '$':   // segno variation
                                           case 'a':   // pedal Ped.
                                           case 'b':   // pedal asterisk *
@@ -933,6 +937,8 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                                     score->sigmap()->add(m->tick() + m->ticks(), ne2);
 #endif
                                     }
+                              Segment* s = pm->getSegment(SegmentType::BarLine, tick);
+                              processBasicDrawObj(o->objects, s, track, nullptr);   //TODO: passing nullptr can cause issues
                               }
                         // qDebug("pm %p", pm);
 
