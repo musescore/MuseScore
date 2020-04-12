@@ -17,7 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-VERSION = `cmake -P config.cmake | grep -oP "VERSION\s+\K.*"`
+VERSION = `cmake -P config.cmake | sed -n -e "s/^.*VERSION  *//p"`
 BUILD_NUMBER = ""
 PREFIX=../applebuild
 TELEMETRY_TRACK_ID=""
