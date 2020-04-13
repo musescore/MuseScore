@@ -497,7 +497,7 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
             { Pid::STAFF_SHOW_BARLINES,    0, sl.showBarlines,    sl.resetShowBarlines    },
             { Pid::STAFF_SHOW_LEDGERLINES, 0, sl.showLedgerlines, sl.resetShowLedgerlines },
             { Pid::STAFF_STEMLESS,         0, sl.stemless,        sl.resetStemless        },
-            { Pid::STAFF_NOTEHEAD_SCHEME,  0, sl.noteheadScheme,  sl.resetNoteheadScheme  },
+            { Pid::HEAD_SCHEME,            0, sl.noteheadScheme,  sl.resetNoteheadScheme  },
             { Pid::STAFF_GEN_CLEF,         0, sl.genClefs,        sl.resetGenClefs        },
             { Pid::STAFF_GEN_TIMESIG,      0, sl.genTimesig,      sl.resetGenTimesig      },
             { Pid::STAFF_GEN_KEYSIG,       0, sl.genKeysig,       sl.resetGenKeysig       },
@@ -505,16 +505,16 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
       pList = { { sl.title, sl.panel } };
 
       sl.noteheadScheme->clear();
-      for (auto i : { NoteHeadScheme::HEAD_NORMAL,
-         NoteHeadScheme::HEAD_PITCHNAME,
-         NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
-         NoteHeadScheme::HEAD_SOLFEGE,
-         NoteHeadScheme::HEAD_SOLFEGE_FIXED,
-         NoteHeadScheme::HEAD_SHAPE_NOTE_4,
-         NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,
-         NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,
-         NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER} ) {
-            sl.noteheadScheme->addItem(StaffType::scheme2userName(i), int(i));
+      for (auto i : { NoteHead::Scheme::HEAD_NORMAL,
+         NoteHead::Scheme::HEAD_PITCHNAME,
+         NoteHead::Scheme::HEAD_PITCHNAME_GERMAN,
+         NoteHead::Scheme::HEAD_SOLFEGE,
+         NoteHead::Scheme::HEAD_SOLFEGE_FIXED,
+         NoteHead::Scheme::HEAD_SHAPE_NOTE_4,
+         NoteHead::Scheme::HEAD_SHAPE_NOTE_7_AIKIN,
+         NoteHead::Scheme::HEAD_SHAPE_NOTE_7_FUNK,
+         NoteHead::Scheme::HEAD_SHAPE_NOTE_7_WALKER} ) {
+            sl.noteheadScheme->addItem(NoteHead::scheme2userName(i), int(i));
             }
       mapSignals();
       }
