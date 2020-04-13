@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "musescore.h"
+#include "timeline.h"
 #include "preferences.h"
 #include "prefsdialog.h"
 #include "seq.h"
@@ -235,6 +236,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       advancedWidget->loadPreferences();
       connect(advancedSearch, &QLineEdit::textChanged, this, &PreferenceDialog::filterAdvancedPreferences);
       connect(resetPreference, &QPushButton::clicked, this, &PreferenceDialog::resetAdvancedPreferenceToDefault);
+      connect(this, &PreferenceDialog::preferencesChanged, mscore->timeline(),  &Timeline::updateTimelineTheme);
 
       MuseScore::restoreGeometry(this);
 #if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(FOR_WINSTORE))
