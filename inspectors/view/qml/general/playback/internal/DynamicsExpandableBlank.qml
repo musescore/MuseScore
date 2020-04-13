@@ -137,7 +137,7 @@ ExpandableBlank {
             }
 
             RadioButtonGroup {
-                id: headTypeButtonList
+                id: radioButtonList
 
                 height: 30
                 width: parent.width
@@ -151,7 +151,7 @@ ExpandableBlank {
                 delegate: FlatRadioButton {
                     id: radioButtonDelegate
 
-                    ButtonGroup.group: headTypeButtonList.radioButtonGroup
+                    ButtonGroup.group: radioButtonList.radioButtonGroup
 
                     checked: root.model && !root.model.velocityChangeSpeed.isUndefined ? root.model.velocityChangeSpeed.value === modelData["valueRole"]
                                                                                        : false

@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 import "../common"
 import "playback"
+import "appearance"
 
 FocusableItem {
     id: root
@@ -114,7 +115,8 @@ FocusableItem {
 
                     width: popupButtonsRow.width
 
-                    x: playbackButton.x
+                    arrowX: (width - playbackButton.width - popupButtonsRow.spacing) / 2
+                    x: popupButtonsRow.x
                     y: playbackButton.y + playbackButton.height
                 }
             }
@@ -127,6 +129,24 @@ FocusableItem {
                 icon: "qrc:/resources/icons/appearance.svg"
                 iconPixelSize: 16
                 text: qsTr("Appearance")
+
+                onClicked: {
+                    if (appearancePopup.isOpened) {
+                        appearancePopup.close()
+                    } else {
+                        appearancePopup.open()
+                    }
+                }
+
+                AppearancePopup {
+                    id: appearancePopup
+
+                    width: popupButtonsRow.width
+
+                    arrowX: (width + appearanceButton.width + popupButtonsRow.spacing) / 2
+                    x: appearanceButton.x - popupButtonsRow.width - popupButtonsRow.spacing
+                    y: appearanceButton.y + appearanceButton.height
+                }
             }
         }
     }
