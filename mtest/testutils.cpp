@@ -171,9 +171,6 @@ bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)
       p.start(cmd, args);
       if (!p.waitForFinished() || p.exitCode()) {
             QByteArray ba = p.readAll();
-            //qDebug("%s", qPrintable(ba));
-            //qDebug("   <diff -u %s %s failed", qPrintable(compareWith),
-            //   qPrintable(QString(root + "/" + saveName)));
             QTextStream outputText(stdout);
             outputText << QString(ba);
             outputText << "   <" << cmd << " " << args.join(" ") << " failed" << endl;
