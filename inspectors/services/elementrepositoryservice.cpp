@@ -78,10 +78,10 @@ QList<Ms::Element*> ElementRepositoryService::findChords() const
 {
     QList<Ms::Element*> resultList;
 
-    for (const Ms::Element* element : m_elementList) {
+    for (Ms::Element* element : m_elementList) {
 
         if (element->type() == Ms::ElementType::CHORD) {
-            resultList << Ms::toChord(const_cast<Ms::Element*>(element));
+            resultList << element;
         }
     }
 
