@@ -107,6 +107,12 @@
         <file>resources/icons/beams/beam_feathered_none.svg</file>
         <file>resources/icons/beams/beam_feathered_left.svg</file>
         <file>view/qml/common/StyledTextLabel.qml</file>
+        <file>view/qml/general/appearance/AppearancePopup.qml</file>
         <file>view/qml/common/SeparatorLine.qml</file>
+        <file>view/qml/general/appearance/internal/HorizontalSpacingSection.qml</file>
+        <file>view/qml/general/appearance/internal/OffsetSection.qml</file>
+        <file>view/qml/general/appearance/internal/ArrangeSection.qml</file>
+        <file>view/qml/general/appearance/internal/ColorSection.qml</file>
+        <file>view/qml/general/appearance/internal/VerticalSpacingSection.qml</file>
     </qresource>
 </RCC>
