@@ -16,7 +16,7 @@
 #include "synthesizer/msynthesizer.h"
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/synthesizergui.h"
-#include "mixer.h"
+#include "mixer/mixer.h"
 #include "file.h"
 #include "icons.h"
 #include "libmscore/score.h"

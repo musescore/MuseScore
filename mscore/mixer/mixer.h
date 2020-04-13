@@ -20,15 +20,16 @@
 #ifndef __ILEDIT_H__
 #define __ILEDIT_H__
 
+#include <QWidget>
+#include <QDockWidget>
+#include <QScrollArea>
+#include <QList>
+
 #include "ui_parteditbase.h"
 #include "ui_mixer.h"
 #include "libmscore/instrument.h"
 #include "enableplayforwidget.h"
 #include "mixertrackgroup.h"
-#include <QWidget>
-#include <QDockWidget>
-#include <QScrollArea>
-#include <QList>
 
 namespace Ms {
 

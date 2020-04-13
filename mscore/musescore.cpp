@@ -34,7 +34,7 @@
 #include "editstyle.h"
 #include "playpanel.h"
 #include "libmscore/page.h"
-#include "mixer.h"
+#include "mixer/mixer.h"
 #include "selectionwindow.h"
 #include "palette.h"
 #include "palette/palettemodel.h"
