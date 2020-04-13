@@ -41,7 +41,7 @@
 #include "libmscore/repeatlist.h"
 #include "libmscore/audio.h"
 #include "synthcontrol.h"
-#include "pianoroll.h"
+#include "pianoroll/pianoroll.h"
 #include "pianotools.h"
 
 #include "click.h"
