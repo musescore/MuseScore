@@ -41,13 +41,8 @@ FocusableItem {
             height: implicitHeight
             width: parent.width
 
-            Rectangle {
-                anchors.left: parent.left
-                anchors.right: parent.right
+            SeparatorLine {
                 anchors.margins: -10
-                height: 1
-
-                color: "#CECECE"
                 visible: featheringControlsColumn.visible
             }
 
@@ -149,13 +144,8 @@ FocusableItem {
                 }
             }
 
-            Rectangle {
-                anchors.left: parent.left
-                anchors.right: parent.right
+            SeparatorLine {
                 anchors.margins: -10
-                height: 1
-
-                color: "#CECECE"
                 visible: featheringControlsColumn.visible
             }
 
