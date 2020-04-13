@@ -221,7 +221,7 @@ void StaffType::write(XmlWriter& xml) const
       if (!_genTimesig)
             xml.tag("timesig", _genTimesig);
       if (_group == StaffGroup::STANDARD) {
-            xml.tag("noteheadScheme", StaffType::scheme2name(_noteHeadScheme), StaffType::scheme2name(NoteHeadScheme::HEAD_NORMAL));
+            xml.tag("noteheadScheme", NoteHead::scheme2name(_noteHeadScheme), NoteHead::scheme2name(NoteHead::Scheme::HEAD_NORMAL));
             }
       if (_group == StaffGroup::STANDARD || _group == StaffGroup::PERCUSSION) {
             if (!_genKeysig)
@@ -305,7 +305,7 @@ void StaffType::read(XmlReader& e)
             else if (tag == "timesig")
                   setGenTimesig(e.readInt());
             else if (tag == "noteheadScheme")
-                  setNoteHeadScheme(StaffType::name2scheme(e.readElementText()));
+                  setNoteHeadScheme(NoteHead::name2scheme(e.readElementText()));
             else if (tag == "keysig")
                   _genKeysig = e.readInt();
             else if (tag == "ledgerlines")
@@ -1314,46 +1314,6 @@ const StaffType* StaffType::getDefaultPreset(StaffGroup grp)
       {
       int _idx = _defaultPreset[int(grp)];
       return &_presets[_idx];
-      }
-
-//---------------------------------------------------------
-//   NoteHeadScheme utils
-//---------------------------------------------------------
-
-struct NoteHeadSchemeName {
-      const char* name;
-      const char* username;
-      };
-
-static NoteHeadSchemeName noteHeadSchemeNames[] = {
-      {"normal",              QT_TRANSLATE_NOOP("noteheadschemes", "Normal") },
-      {"name-pitch",          QT_TRANSLATE_NOOP("noteheadschemes", "Pitch Names") },
-      {"name-pitch-german",   QT_TRANSLATE_NOOP("noteheadschemes", "German Pitch Names") },
-      {"solfege-movable",     QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge Movable Do") }, // &egrave;
-      {"solfege-fixed",       QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge Fixed Do") },   // &egrave;
-      {"shape-4",             QT_TRANSLATE_NOOP("noteheadschemes", "4-shape (Walker)") },
-      {"shape-7-aikin",       QT_TRANSLATE_NOOP("noteheadschemes", "7-shape (Aikin)") },
-      {"shape-7-funk",        QT_TRANSLATE_NOOP("noteheadschemes", "7-shape (Funk)") },
-      {"shape-7-walker",      QT_TRANSLATE_NOOP("noteheadschemes", "7-shape (Walker)") }
-      };
-
-QString StaffType::scheme2userName(NoteHeadScheme ns)
-      {
-      return qApp->translate("noteheadschemes", noteHeadSchemeNames[int(ns)].username);
-      }
-
-QString StaffType::scheme2name(NoteHeadScheme ns)
-      {
-      return noteHeadSchemeNames[int(ns)].name;
-      }
-
-NoteHeadScheme StaffType::name2scheme(QString name)
-      {
-      for (int i = 0; i < int(NoteHeadScheme::HEAD_SCHEMES); ++i) {
-            if (noteHeadSchemeNames[i].name == name)
-                  return NoteHeadScheme(i);
-            }
-      return NoteHeadScheme::HEAD_NORMAL;
       }
 
 //---------------------------------------------------------

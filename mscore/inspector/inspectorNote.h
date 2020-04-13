@@ -35,6 +35,7 @@ class InspectorNote : public InspectorElementBase {
       void block(bool);
 
    private slots:
+      void noteHeadSchemeChanged(int val);
       void dot1Clicked();
       void dot2Clicked();
       void dot3Clicked();

@@ -138,6 +138,8 @@ class PluginAPI : public Ms::QmlPlugin {
       /// \note In MuseScore 2.X this enumeration was available in
       /// NoteHead class (e.g. NoteHead.HEAD_QUARTER).
       DECLARE_API_ENUM( NoteHeadType,     noteHeadTypeEnum        )
+      /// Contains Ms::NoteHead::Scheme enumeration values
+      DECLARE_API_ENUM( NoteHeadScheme,   noteHeadSchemeEnum      )
       /// Contains Ms::NoteHead::Group enumeration values
       /// \note In MuseScore 2.X this enumeration was available in
       /// NoteHead class (e.g. NoteHead.HEAD_TRIANGLE).

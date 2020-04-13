@@ -263,7 +263,7 @@ enum class Pid {
       STAFF_SHOW_LEDGERLINES,
       STAFF_STEMLESS,
 
-      STAFF_NOTEHEAD_SCHEME,
+      HEAD_SCHEME,
       STAFF_GEN_CLEF,
       STAFF_GEN_TIMESIG,
       STAFF_GEN_KEYSIG,
@@ -400,6 +400,7 @@ enum class P_TYPE : char {
       KEYMODE,          // enum class KeyMode
 
       PATH,             // QPainterPath
+      HEAD_SCHEME,      // enum class NoteHead::Scheme
       };
 
 extern QVariant readProperty(Pid type, XmlReader& e);
