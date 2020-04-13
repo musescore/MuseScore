@@ -54,7 +54,7 @@ FocusableItem {
                 height: implicitHeight
                 width: parent.width
 
-                enabled: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable.isUndefined || root.beamModesModel.isFeatheringAvailable.value
+                visible: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable.isUndefined || root.beamModesModel.isFeatheringAvailable.value
                                              : false
 
                 StyledTextLabel {
