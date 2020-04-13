@@ -251,6 +251,7 @@ class Instrument {
       StaffNameList _longNames;
       StaffNameList _shortNames;
       QString _trackName;
+      QColor _nameColor;
 
       char _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
       Interval _transpose;
@@ -345,6 +346,8 @@ class Instrument {
       void setSingleNoteDynamicsFromTemplate();
       bool getSingleNoteDynamicsFromTemplate() const;
       void switchExpressive(MasterScore* score, Synthesizer* synth, bool expressive, bool force = false);
+      QColor getNameColor() const                     { return _nameColor; }
+      void setNameColor(const QColor &nameColor)      { _nameColor = nameColor; }
       };
 
 //---------------------------------------------------------

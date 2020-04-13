@@ -192,6 +192,7 @@ void EditStaff::updateInstrument()
       maxPitchA->setText(midiCodeToStr(_maxPitchA));
       minPitchP->setText(midiCodeToStr(_minPitchP));
       maxPitchP->setText(midiCodeToStr(_maxPitchP));
+      color_2->setColor(instrument.getNameColor());
       singleNoteDynamics->setChecked(instrument.singleNoteDynamics());
 
       // only show string data controls if instrument has strings
@@ -337,6 +338,7 @@ void EditStaff::apply()
 
       instrument.setShortName(sn);
       instrument.setLongName(ln);
+      instrument.setNameColor(color_2->color());
 
       instrument.setSingleNoteDynamics(singleNoteDynamics->isChecked());
 

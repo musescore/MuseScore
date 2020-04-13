@@ -78,6 +78,7 @@ class Part final : public ScoreElement {
       QString instrumentName(const Fraction& tick = { -1, 1 } ) const;
       QString instrumentId(const Fraction& tick = { -1, 1 } ) const;
 
+      const QColor namesColor(const  Fraction& tick = { -1, 1 }) const { return instrument(tick)->getNameColor(); }
       const QList<StaffName>& longNames(const  Fraction& tick = { -1, 1 } ) const { return instrument(tick)->longNames();  }
       const QList<StaffName>& shortNames(const Fraction& tick = { -1, 1 } ) const { return instrument(tick)->shortNames(); }
 
