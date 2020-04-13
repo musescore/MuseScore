@@ -297,7 +297,7 @@ add_library(mscoreapp STATIC
       keycanvas.h keyedit.h layer.h licence.h
       magbox.h masterpalette.h
       measureproperties.h mediadialog.h metaedit.h miconengine.h
-      musescore.h navigator.h newwizard.h noteGroups.h
+      mssplashscreen.h musescore.h navigator.h newwizard.h noteGroups.h
       omrpanel.h pagesettings.h palette.h partedit.h parteditbase.h
       pathlistdialog.h piano.h  pianotools.h
       playpanel.h preferences.h preferenceslistwidget.h prefsdialog.h
@@ -317,7 +317,7 @@ add_library(mscoreapp STATIC
       icons.cpp
       instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
-      musescore.cpp musescoredialogs.cpp navigator.cpp pagesettings.cpp palette.cpp
+      mssplashscreen.cpp musescore.cpp musescoredialogs.cpp navigator.cpp pagesettings.cpp palette.cpp
       sessionstatusobserver.cpp
       timeline.cpp
       parteditbase.cpp playpanel.cpp selectionwindow.cpp
