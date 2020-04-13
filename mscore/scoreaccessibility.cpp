@@ -17,7 +17,7 @@
 #include "synthcontrol.h"
 #include "mixer/mixer.h"
 #include "drumroll.h"
-#include "pianoroll.h"
+#include "pianoroll/pianoroll.h"
 
 namespace Ms{
 
