@@ -157,7 +157,7 @@ Shortcut Shortcut::_sc[] = {
          "print",
          QT_TRANSLATE_NOOP("action","Print…"),
          QT_TRANSLATE_NOOP("action","Print"),
-         QT_TRANSLATE_NOOP("action","Print score"),
+         QT_TRANSLATE_NOOP("action","Print score/part"),
          Icons::print_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_SCORE
