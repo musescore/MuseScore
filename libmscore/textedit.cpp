@@ -358,7 +358,8 @@ bool TextBase::edit(EditData& ed)
 
                   case Qt::Key_A:
                         if (ctrlPressed) {
-                              selectAll(_cursor);
+                              _cursor->movePosition(QTextCursor::Start, QTextCursor::MoveMode::MoveAnchor);
+                              _cursor->movePosition(QTextCursor::End, QTextCursor::MoveMode::KeepAnchor);
                               s.clear();
                         }
                         break;
