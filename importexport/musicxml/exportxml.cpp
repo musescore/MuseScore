@@ -103,6 +103,9 @@
 #include "libmscore/fermata.h"
 #include "libmscore/textframe.h"
 #include "libmscore/instrchange.h"
+#include "libmscore/letring.h"
+#include "libmscore/palmmute.h"
+#include "libmscore/vibrato.h"
 
 namespace Ms {
 
@@ -315,7 +318,7 @@ class ExportMusicXml {
       GlissandoHandler gh;
       Fraction _tick;
       Attributes _attr;
-      TextLine const* brackets[MAX_NUMBER_LEVEL];
+      TextLineBase const* brackets[MAX_NUMBER_LEVEL];
       TextLineBase const* dashes[MAX_NUMBER_LEVEL];
       Hairpin const* hairpins[MAX_NUMBER_LEVEL];
       Ottava const* ottavas[MAX_NUMBER_LEVEL];
@@ -327,7 +330,7 @@ class ExportMusicXml {
       TrillHash _trillStop;
       MxmlInstrumentMap instrMap;
 
-      int findBracket(const TextLine* tl) const;
+      int findBracket(const TextLineBase* tl) const;
       int findDashes(const TextLineBase* tl) const;
       int findHairpin(const Hairpin* tl) const;
       int findOttava(const Ottava* tl) const;
@@ -373,7 +376,7 @@ public:
       void hairpin(Hairpin const* const hp, int staff, const Fraction& tick);
       void ottava(Ottava const* const ot, int staff, const Fraction& tick);
       void pedal(Pedal const* const pd, int staff, const Fraction& tick);
-      void textLine(TextLine const* const tl, int staff, const Fraction& tick);
+      void textLine(TextLineBase const* const tl, int staff, const Fraction& tick);
       void dynamic(Dynamic const* const dyn, int staff);
       void symbol(Symbol const* const sym, int staff);
       void tempoText(TempoText const* const text, int staff);
@@ -3437,7 +3440,8 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
             const Element* pel = 0;
             const LineSegment* seg = 0;
             if (el->type() == ElementType::HAIRPIN || el->type() == ElementType::OTTAVA
-                || el->type() == ElementType::PEDAL || el->type() == ElementType::TEXTLINE) {
+                || el->type() == ElementType::PEDAL || el->type() == ElementType::TEXTLINE
+                || el->type() == ElementType::LET_RING || el->type() == ElementType::PALM_MUTE) {
                   // handle elements derived from SLine
                   // find the system containing the first linesegment
                   const SLine* sl = static_cast<const SLine*>(el);
@@ -4138,7 +4142,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tic
 //   return -1 if not found
 //---------------------------------------------------------
 
-int ExportMusicXml::findBracket(const TextLine* tl) const
+int ExportMusicXml::findBracket(const TextLineBase* tl) const
       {
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
             if (brackets[i] == tl) return i;
@@ -4149,7 +4153,7 @@ int ExportMusicXml::findBracket(const TextLine* tl) const
 //   textLine
 //---------------------------------------------------------
 
-void ExportMusicXml::textLine(TextLine const* const tl, int staff, const Fraction& tick)
+void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fraction& tick)
       {
       int n;
       // special case: a dashed line w/o hooks is written as dashes
@@ -4945,6 +4949,12 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                               case ElementType::TEXTLINE:
                                     exp->textLine(toTextLine(e), sstaff, seg->tick());
                                     break;
+                              case ElementType::LET_RING:
+                                    exp->textLine(toLetRing(e), sstaff, seg->tick());
+                                    break;
+                              case ElementType::PALM_MUTE:
+                                    exp->textLine(toPalmMute(e), sstaff, seg->tick());
+                                    break;
                               case ElementType::TRILL:
                                     // ignore (written as <note><notations><ornaments><wavy-line>)
                                     break;
@@ -4952,8 +4962,8 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                                     // ignore (written as <note><notations><slur>)
                                     break;
                               default:
-                                    qDebug("spannerStart: direction type %s at tick %d not implemented",
-                                           Element::name(e->type()), seg->tick().ticks());
+                                    qDebug("spannerStart: direction type %d ('%s') at tick %d not implemented",
+                                           e->type(), Element::name(e->type()), seg->tick().ticks());
                                     break;
                               }
                         }
@@ -4992,6 +5002,12 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fract
                               break;
                         case ElementType::TEXTLINE:
                               exp->textLine(toTextLine(e), sstaff, Fraction(-1,1));
+                              break;
+                        case ElementType::LET_RING:
+                              exp->textLine(toLetRing(e), sstaff, Fraction(-1,1));
+                              break;
+                        case ElementType::PALM_MUTE:
+                              exp->textLine(toPalmMute(e), sstaff, Fraction(-1,1));
                               break;
                         case ElementType::TRILL:
                               // ignore (written as <note><notations><ornaments><wavy-line>
