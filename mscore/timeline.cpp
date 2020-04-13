@@ -35,7 +35,7 @@
 #include "libmscore/jump.h"
 #include "libmscore/marker.h"
 #include "texttools.h"
-#include "mixer.h"
+#include "mixer/mixer.h"
 #include "tourhandler.h"
 
 namespace Ms {
