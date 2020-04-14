@@ -331,6 +331,7 @@ class MScore {
       static QColor frameMarginColor;
       static QColor bgColor;
       static bool warnPitchRange;
+      static int pedalEventsMinTicks;
 
       static bool playRepeats;
       static bool panPlayback;
