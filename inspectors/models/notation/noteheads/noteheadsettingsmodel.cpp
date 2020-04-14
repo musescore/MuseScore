@@ -119,7 +119,11 @@ void NoteheadSettingsModel::setNoteheadTypesModel(NoteheadTypesModel* noteheadTy
     });
 
     connect(m_headGroup, &PropertyItem::valueChanged, [this] (const QVariant noteHeadGroup) {
-        m_noteheadTypesModel->init(static_cast<Ms::NoteHead::Group>(noteHeadGroup.toInt()));
+        if (m_headGroup->isUndefined()) {
+            m_noteheadTypesModel->init(Ms::NoteHead::Group::HEAD_INVALID);
+        } else {
+            m_noteheadTypesModel->init(static_cast<Ms::NoteHead::Group>(noteHeadGroup.toInt()));
+        }
     });
 
     emit noteheadTypesModelChanged(m_noteheadTypesModel);

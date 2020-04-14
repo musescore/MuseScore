@@ -44,7 +44,7 @@ private:
     QHash<int, QByteArray> m_roleNames;
 
     QVector<BeamTypesData> m_beamTypesDataList;
-    int m_selectedTypeIndex;
+    int m_selectedTypeIndex = -1;
 };
 
 #endif // BEAMTYPESMODEL_H

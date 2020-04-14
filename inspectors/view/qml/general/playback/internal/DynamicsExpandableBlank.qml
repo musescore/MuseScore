@@ -38,9 +38,9 @@ ExpandableBlank {
                 valueRoleName: "value"
 
                 model: [
-                    { text: "Staff", value: Dynamic.SCOPE_STAFF },
-                    { text: "Single instrument", value: Dynamic.SCOPE_SINGLE_INSTRUMENT },
-                    { text: "All instruments", value: Dynamic.SCOPE_ALL_INSTRUMENTS }
+                    { text: qsTr("Staff"), value: Dynamic.SCOPE_STAFF },
+                    { text: qsTr("Single instrument"), value: Dynamic.SCOPE_SINGLE_INSTRUMENT },
+                    { text: qsTr("All instruments"), value: Dynamic.SCOPE_ALL_INSTRUMENTS }
                 ]
 
                 currentIndex: root.model && !root.model.scopeType.isUndefined ? indexOfValue(root.model.scopeType.value) : -1

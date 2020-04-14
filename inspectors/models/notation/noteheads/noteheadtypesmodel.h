@@ -38,7 +38,7 @@ signals:
 
 private:
     struct HeadTypeData {
-        Ms::NoteHead::Group group;
+        Ms::NoteHead::Group group = Ms::NoteHead::Group::HEAD_INVALID;
         QString hint;
     };
 

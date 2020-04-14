@@ -26,7 +26,7 @@ QVariant BeamModeListModel::data(const QModelIndex& index, int role) const
     BeamTypesData beamTypeData = m_beamTypesDataList.at(index.row());
 
     switch (role) {
-    case BeamModeRole: return static_cast<int>(beamTypeData.mode);
+    case BeamModeRole: return beamTypeData.mode;
     case HintRole: return beamTypeData.hint;
     default: return QVariant();
     }

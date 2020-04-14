@@ -37,7 +37,6 @@ FocusableItem {
             id: noteheadGridView
 
             noteHeadTypesModel: root.model ? root.model.noteheadTypesModel : null
-            isIndeterminate: root.model ? root.model.headGroup.isUndefined : false
         }
 
         StyledTextLabel {
