@@ -957,13 +957,13 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
                         // Handle "overlapping" pedal segments (usual case for connected pedal line)
                         if (lastEvent.second.first == false && lastEvent.first >= (st + tickOffset + 2)) {
                               channelPedalEvents.at(channel).pop_back();
-                              channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(st + tickOffset + 1, std::pair<bool, int>(false, staff)));
+                              channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(st + tickOffset + (2 - MScore::pedalEventsMinTicks), std::pair<bool, int>(false, staff)));
                               }
                         int a = st + tickOffset + 2;
                         channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(a, std::pair<bool, int>(true, staff)));
                         }
                   if (s->tick2().ticks() >= tick1 && s->tick2().ticks() <= tick2) {
-                        int t = s->tick2().ticks() + tickOffset + 1;
+                        int t = s->tick2().ticks() + tickOffset + (2 - MScore::pedalEventsMinTicks);
                         const RepeatSegment& lastRepeat = *score->repeatList().back();
                         if (t > lastRepeat.utick + lastRepeat.len())
                               t = lastRepeat.utick + lastRepeat.len();

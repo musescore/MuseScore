@@ -94,6 +94,7 @@ QColor  MScore::frameMarginColor;
 QColor  MScore::bgColor;
 QColor  MScore::dropColor;
 bool    MScore::warnPitchRange;
+int     MScore::pedalEventsMinTicks;
 
 bool    MScore::playRepeats;
 bool    MScore::panPlayback;
@@ -306,6 +307,7 @@ void MScore::init()
       dropColor           = QColor("#1778db");
       defaultPlayDuration = 300;      // ms
       warnPitchRange      = true;
+      pedalEventsMinTicks = 1;
       playRepeats         = true;
       panPlayback         = true;
 
