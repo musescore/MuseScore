@@ -214,10 +214,9 @@ void MixerTrackItem::setColor(int valueRgb)
 //   isMute
 //---------------------------------------------------------
 
-bool MixerTrackItem::isMute()
+bool MixerTrackItem::isMute() const
       {
-      if (_trackType == TrackType::CHANNEL)
-            {
+      if (_trackType == TrackType::CHANNEL) {
             return _chan->mute();
             }
       const InstrumentList* il = _part->instruments();
@@ -241,11 +240,7 @@ bool MixerTrackItem::isMute()
 
 void MixerTrackItem::toggleMute()
       {
-      if(isMute()){
-            setMute(false);
-            }else {
-            setMute(true);
-            }
+      setMute(!isMute());
       }
 
 //---------------------------------------------------------

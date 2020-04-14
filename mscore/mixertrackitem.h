@@ -69,7 +69,7 @@ public:
       void setPan(char value);
       void setChorus(char value);
       void setReverb(char value);
-      bool isMute();
+      bool isMute() const;
       void setMute(bool value);
       void setSolo(bool value);
       };

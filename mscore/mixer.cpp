@@ -133,24 +133,19 @@ Mixer::Mixer(QWidget* parent)
 
 void Mixer::toggleMuteTracks()
       {
-      for (int i =0; i < trackList.length(); i++)
-            {
-            trackList.at(i)->mti()->toggleMute();
+
+      for (MixerTrack* mt: trackList) {
+            mt->mti()->toggleMute();
             }
+
       //make sure expanded tracks are toggled as well
       QSetIterator<Part *> pi(expandedParts);
 
-      while (pi.hasNext())
-            {
-            Part *p = pi.next();
-            for (Channel *chan: p->instrument()->channel()) {
-                  if(chan->mute()){
-                        chan->setMute(false);
-                        }else{
-                        chan->setMute((true));
-                        }
-                  }
-            }
+      for (Part* p : expandedParts) {
+          for (Channel* chan : p->instrument()->channel()) {
+                chan->setMute(!chan->mute());
+                }
+      }
       }
 
 //---------------------------------------------------------
