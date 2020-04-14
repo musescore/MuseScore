@@ -35,7 +35,7 @@ signals:
 
 private:
     struct BeamTypesData {
-        int mode;
+        int mode = -1;
         QString hint;
     };
 
