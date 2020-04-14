@@ -21,6 +21,8 @@ enum class InstrumentNameType : char {
       LONG, SHORT
       };
 
+class System;
+
 //---------------------------------------------------------
 //   InstrumentName
 //---------------------------------------------------------
@@ -43,6 +45,9 @@ class InstrumentName final : public TextBase  {
       void setInstrumentNameType(InstrumentNameType v);
       void setInstrumentNameType(const QString& s);
 
+      System* system() const { return toSystem(parent()); }
+
+      Fraction playTick() const override;
       bool isEditable() const override { return false; }
       QVariant getProperty(Pid propertyId) const override;
       bool setProperty(Pid propertyId, const QVariant&) override;
