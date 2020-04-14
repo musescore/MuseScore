@@ -53,17 +53,14 @@ Tremolo::Tremolo(Score* score)
    : Element(score, ElementFlag::MOVABLE)
       {
       initElementStyle(&tremoloStyle);
-      setTremoloType(TremoloType::R8);
-      _chord1 = 0;
-      _chord2 = 0;
       }
 
 Tremolo::Tremolo(const Tremolo& t)
    : Element(t)
       {
       setTremoloType(t.tremoloType());
-      _chord1 = t.chord1();
-      _chord2 = t.chord2();
+      _chord1       = t.chord1();
+      _chord2       = t.chord2();
       _durationType = t._durationType;
       }
 

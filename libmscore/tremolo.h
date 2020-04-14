@@ -41,15 +41,15 @@ enum class TremoloBeamStyle : signed char {
 //---------------------------------------------------------
 
 class Tremolo final : public Element {
-      TremoloType _tremoloType;
-      Chord* _chord1;
-      Chord* _chord2;
+      TremoloType _tremoloType { TremoloType::R8 };
+      Chord* _chord1 { nullptr };
+      Chord* _chord2 { nullptr };
       TDuration _durationType;
       QPainterPath path;
 
       int _lines;       // derived from _subtype
-      TremoloPlacement _tremoloPlacement;
-      TremoloBeamStyle _beamStyle;
+      TremoloPlacement _tremoloPlacement { TremoloPlacement::DEFAULT };
+      TremoloBeamStyle _beamStyle        { TremoloBeamStyle::DEFAULT };
 
       QPainterPath basePath() const;
       void computeShape();
