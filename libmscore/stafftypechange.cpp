@@ -132,7 +132,7 @@ QVariant StaffTypeChange::getProperty(Pid propertyId) const
                   return _staffType->showLedgerLines();
             case Pid::STAFF_STEMLESS:
                   return _staffType->stemless();
-            case Pid::STAFF_NOTEHEAD_SCHEME:
+            case Pid::HEAD_SCHEME:
                   return int(_staffType->noteHeadScheme());
             case Pid::STAFF_GEN_CLEF:
                   return _staffType->genClef();
@@ -176,8 +176,8 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
             case Pid::STAFF_STEMLESS:
                   _staffType->setStemless(v.toBool());
                   break;
-            case Pid::STAFF_NOTEHEAD_SCHEME:
-                  _staffType->setNoteHeadScheme(NoteHeadScheme(v.toInt()));
+            case Pid::HEAD_SCHEME:
+                  _staffType->setNoteHeadScheme(NoteHead::Scheme(v.toInt()));
                   break;
             case Pid::STAFF_GEN_CLEF:
                   _staffType->setGenClef(v.toBool());
@@ -236,8 +236,8 @@ QVariant StaffTypeChange::propertyDefault(Pid id) const
                   return true;
             case Pid::STAFF_STEMLESS:
                   return false;
-            case Pid::STAFF_NOTEHEAD_SCHEME:
-                  return int(NoteHeadScheme::HEAD_NORMAL);
+            case Pid::HEAD_SCHEME:
+                  return int(NoteHead::Scheme::HEAD_NORMAL);
             case Pid::STAFF_GEN_CLEF:
                   return true;
             case Pid::STAFF_GEN_TIMESIG:

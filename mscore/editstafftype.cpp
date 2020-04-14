@@ -34,16 +34,16 @@ const char* g_groupNames[STAFF_GROUP_MAX] = {
 //   noteHeadSchemes
 //---------------------------------------------------------
 
-NoteHeadScheme noteHeadSchemes[] = {
-      NoteHeadScheme::HEAD_NORMAL,
-      NoteHeadScheme::HEAD_PITCHNAME,
-      NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
-      NoteHeadScheme::HEAD_SOLFEGE,
-      NoteHeadScheme::HEAD_SOLFEGE_FIXED,
-      NoteHeadScheme::HEAD_SHAPE_NOTE_4,
-      NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,
-      NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,
-      NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER
+NoteHead::Scheme noteHeadSchemes[] = {
+      NoteHead::Scheme::HEAD_NORMAL,
+      NoteHead::Scheme::HEAD_PITCHNAME,
+      NoteHead::Scheme::HEAD_PITCHNAME_GERMAN,
+      NoteHead::Scheme::HEAD_SOLFEGE,
+      NoteHead::Scheme::HEAD_SOLFEGE_FIXED,
+      NoteHead::Scheme::HEAD_SHAPE_NOTE_4,
+      NoteHead::Scheme::HEAD_SHAPE_NOTE_7_AIKIN,
+      NoteHead::Scheme::HEAD_SHAPE_NOTE_7_FUNK,
+      NoteHead::Scheme::HEAD_SHAPE_NOTE_7_WALKER
       };
 
 //---------------------------------------------------------
@@ -89,7 +89,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       durFontName->setCurrentIndex(0);
 
       for (auto i : noteHeadSchemes)
-            noteHeadScheme->addItem(StaffType::scheme2userName(i), StaffType::scheme2name(i));
+            noteHeadScheme->addItem(NoteHead::scheme2userName(i), NoteHead::scheme2name(i));
 
       // load a sample standard score in preview
       MasterScore* sc = new MasterScore(MScore::defaultStyle());
@@ -383,7 +383,7 @@ void EditStaffType::setFromDlg()
             staffType.setGenKeysig(genKeysigPitched->isChecked());
             staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
             staffType.setStemless(stemlessPitched->isChecked());
-            staffType.setNoteHeadScheme(StaffType::name2scheme(noteHeadScheme->currentData().toString()));
+            staffType.setNoteHeadScheme(NoteHead::name2scheme(noteHeadScheme->currentData().toString()));
             }
       if (staffType.group() == StaffGroup::PERCUSSION) {
             staffType.setGenKeysig(genKeysigPercussion->isChecked());

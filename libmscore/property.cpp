@@ -253,7 +253,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::STAFF_SHOW_LEDGERLINES,  false, "",                      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "showing ledgerlines") },
       { Pid::STAFF_STEMLESS,          false, "",                      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "stemless")         },
 
-      { Pid::STAFF_NOTEHEAD_SCHEME,   false, "",                      P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "notehead scheme")  },
+      { Pid::HEAD_SCHEME,             false, "headScheme",            P_TYPE::HEAD_SCHEME,         DUMMY_QT_TRANSLATE_NOOP("propertyName", "notehead scheme")  },
       { Pid::STAFF_GEN_CLEF,          false, "",                      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "generating clefs") },
       { Pid::STAFF_GEN_TIMESIG,       false, "",                      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "generating time signature") },
       { Pid::STAFF_GEN_KEYSIG,        false, "",                      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "generating key signature")  },
@@ -533,6 +533,8 @@ QVariant propertyFromString(Pid id, QString value)
                   return QVariant();
             case P_TYPE::SYMID:
                   return QVariant::fromValue(Sym::name2id(value));
+            case P_TYPE::HEAD_SCHEME:
+                  return QVariant::fromValue(NoteHead::name2scheme(value));
             case P_TYPE::HEAD_GROUP:
                   return QVariant::fromValue(NoteHead::name2group(value));
             case P_TYPE::HEAD_TYPE:
@@ -622,6 +624,7 @@ QVariant readProperty(Pid id, XmlReader& e)
             case P_TYPE::TEXT_PLACE:
             case P_TYPE::BARLINE_TYPE:
             case P_TYPE::SYMID:
+            case P_TYPE::HEAD_SCHEME:
             case P_TYPE::HEAD_GROUP:
             case P_TYPE::HEAD_TYPE:
             case P_TYPE::SUB_STYLE:
@@ -789,6 +792,8 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
                   return Sym::id2name(SymId(value.toInt()));
             case P_TYPE::BARLINE_TYPE:
                   return BarLine::barLineTypeName(BarLineType(value.toInt()));
+            case P_TYPE::HEAD_SCHEME:
+                  return NoteHead::scheme2name(NoteHead::Scheme(value.toInt()));
             case P_TYPE::HEAD_GROUP:
                   return NoteHead::group2name(NoteHead::Group(value.toInt()));
             case P_TYPE::HEAD_TYPE:

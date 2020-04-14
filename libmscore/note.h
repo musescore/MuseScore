@@ -53,6 +53,23 @@ static const int MAX_DOTS = 4;
 class NoteHead final : public Symbol {
       Q_GADGET
    public:
+      // keep in sync with noteHeadSchemeNames array in note.cpp
+      enum class Scheme : signed char {
+            ///.\{
+            HEAD_AUTO = -1,
+            HEAD_NORMAL,
+            HEAD_PITCHNAME,
+            HEAD_PITCHNAME_GERMAN,
+            HEAD_SOLFEGE,
+            HEAD_SOLFEGE_FIXED,
+            HEAD_SHAPE_NOTE_4,
+            HEAD_SHAPE_NOTE_7_AIKIN,
+            HEAD_SHAPE_NOTE_7_FUNK,
+            HEAD_SHAPE_NOTE_7_WALKER,
+            HEAD_SCHEMES
+            ///\}
+            };
+      // keep in sync with noteHeadGroupNames array in note.cpp
       enum class Group : signed char {
             ///.\{
             HEAD_NORMAL = 0,
@@ -126,6 +143,7 @@ class NoteHead final : public Symbol {
             HEAD_INVALID = -1
             ///\}
             };
+      // keep in sync with noteHeadTypeNames array in note.cpp
       enum class Type : signed char {
             ///.\{
             HEAD_AUTO    = -1,
@@ -137,6 +155,7 @@ class NoteHead final : public Symbol {
             ///\}
             };
 
+      Q_ENUM(Scheme);
       Q_ENUM(Group);
       Q_ENUM(Type);
 
@@ -147,12 +166,15 @@ class NoteHead final : public Symbol {
 
       Group headGroup() const;
 
+      static QString scheme2userName(Scheme scheme);
       static QString group2userName(Group group);
       static QString type2userName(Type type);
+      static QString scheme2name(Scheme scheme);
       static QString group2name(Group group);
       static QString type2name(Type type);
-      static Group name2group(QString s);
-      static Type name2type(QString s);
+      static Scheme name2scheme(const QString& s);
+      static Group name2group(const QString& s);
+      static Type name2type(const QString& s);
       };
 
 //---------------------------------------------------------
@@ -186,8 +208,9 @@ static const int INVALID_LINE = -10000;
 //   @P elements         array[Element]   list of elements attached to notehead
 //   @P fret             int              fret number in tablature
 //   @P ghost            bool             ghost note (guitar: death note)
-//   @P headGroup        enum (NoteHead.HEAD_NORMAL, .HEAD_BREVIS_ALT, .HEAD_CROSS, .HEAD_DIAMOND, .HEAD_DO, .HEAD_FA, .HEAD_LA, .HEAD_MI, .HEAD_RE, .HEAD_SLASH, .HEAD_SOL, .HEAD_TI, .HEAD_XCIRCLE, .HEAD_TRIANGLE)
-//   @P headType         enum (NoteHead.HEAD_AUTO, .HEAD_BREVIS, .HEAD_HALF, .HEAD_QUARTER, .HEAD_WHOLE)
+//   @P headScheme       enum (NoteHeadScheme.HEAD_AUTO, .HEAD_NORMAL, .HEAD_PITCHNAME, .HEAD_PITCHNAME_GERMAN, .HEAD_SHAPE_NOTE_4, .HEAD_SHAPE_NOTE_7_AIKIN, .HEAD_SHAPE_NOTE_7_FUNK, .HEAD_SHAPE_NOTE_7_WALKER, .HEAD_SOLFEGE, .HEAD_SOLFEGE_FIXED)
+//   @P headGroup        enum (NoteHeadGroup.HEAD_NORMAL, .HEAD_BREVIS_ALT, .HEAD_CROSS, .HEAD_DIAMOND, .HEAD_DO, .HEAD_FA, .HEAD_LA, .HEAD_MI, .HEAD_RE, .HEAD_SLASH, .HEAD_SOL, .HEAD_TI, .HEAD_XCIRCLE, .HEAD_TRIANGLE)
+//   @P headType         enum (NoteHeadType.HEAD_AUTO, .HEAD_BREVIS, .HEAD_HALF, .HEAD_QUARTER, .HEAD_WHOLE)
 //   @P hidden           bool             hidden, not played note (read only)
 //   @P line             int              notehead position (read only)
 //   @P mirror           bool             mirror notehead on x axis (read only)
@@ -234,6 +257,7 @@ class Note final : public Element {
       MScore::DirectionH _userMirror { MScore::DirectionH::AUTO };      ///< user override of mirror
       Direction _userDotPosition     { Direction::AUTO };               ///< user override of dot position
 
+      NoteHead::Scheme _headScheme { NoteHead::Scheme::HEAD_AUTO };
       NoteHead::Group _headGroup { NoteHead::Group::HEAD_NORMAL };
       NoteHead::Type  _headType  { NoteHead::Type::HEAD_AUTO    };
 
@@ -319,8 +343,10 @@ class Note final : public Element {
       qreal bboxRightPos() const;
       qreal headBodyWidth() const;
 
+      NoteHead::Scheme headScheme() const { return _headScheme; }
       NoteHead::Group headGroup() const   { return _headGroup; }
       NoteHead::Type headType() const     { return _headType;  }
+      void setHeadScheme(NoteHead::Scheme val);
       void setHeadGroup(NoteHead::Group val);
       void setHeadType(NoteHead::Type t);
 
@@ -478,7 +504,7 @@ class Note final : public Element {
 
       void addParentheses();
 
-      static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type, int tpc, Key key, NoteHeadScheme scheme);
+      static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type, int tpc, Key key, NoteHead::Scheme scheme);
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
       NoteVal noteVal() const;
 
