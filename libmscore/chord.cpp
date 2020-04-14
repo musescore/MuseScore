@@ -1413,35 +1413,6 @@ qreal Chord::defaultStemLength() const
                   }
             }
 
-      // adjust stem len for tremolo
-      if (_tremolo && !_tremolo->twoNotes() && !_tremolo->placeMidStem()) {
-            // Use the old algorithm for stem lengthening. It not always
-            // optimal but still performs better when not placing the tremolo
-            // at stem middle. TODO: rework minAbsStemLen() to perform
-            // correctly in this case too.
-
-            // hook up odd lines
-            static const int tab1[2][2][2][4] = {
-                  { { { 0, 0, 0,  1 },  // stem - down - even - lines
-                      { 0, 0, 0,  2 }   // stem - down - odd - lines
-                      },
-                    { { 0, 0, 0, -1 },  // stem - up - even - lines
-                      { 0, 0, 0, -2 }   // stem - up - odd - lines
-                      }
-                    },
-                  { { { 0, 0, 1, 2 },   // hook - down - even - lines
-                      { 0, 0, 1, 2 }    // hook - down - odd - lines
-                      },
-                    { { 0, 0, -1, -2 }, // hook - up - even - lines
-                      { 0, 0, -1, -2 }  // hook - up - odd - lines
-                      }
-                    }
-                  };
-            int odd = (up() ? upLine() : downLine()) & 1;
-            int n = tab1[hookIdx ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
-            stemLen += n * .5;
-            }
-
       if (tab)
             stemLen *= lineDistance;
 
@@ -1456,21 +1427,45 @@ qreal Chord::defaultStemLength() const
 
 //---------------------------------------------------------
 //   minAbsStemLength
+//    get minimum stem length with tremolo
 //---------------------------------------------------------
 
 qreal Chord::minAbsStemLength() const
       {
-      if (!_tremolo || _tremolo->twoNotes() || !_tremolo->placeMidStem())
+      if (!_tremolo)
             return 0.0;
 
+      const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val();
+      const qreal td = score()->styleS(Sid::tremoloDistance).val();
       int beamLvl = beams();
-      const bool hasHook = (beamLvl > 0) && !beam();
-      if (hasHook)
-            ++beamLvl; // reserve more space for stem with both hook and tremolo
-      const qreal beamDist = beam() ? beam()->beamDist() : (0.5 * spatium());
-      const qreal tremoloSpacing = 0.5 * spatium(); // TODO: style setting
+      const qreal beamDist = beam() ? beam()->beamDist() : (sw * spatium());
 
-      return beamLvl * beamDist + _tremolo->height() + 2 * tremoloSpacing;
+      // single-note tremolo
+      if (!_tremolo->twoNotes()) {
+            _tremolo->layout(); // guarantee right "height value"
+
+            qreal height;
+            if (up())
+                  height = downPos() - _tremolo->pos().y();
+            else
+                  height = _tremolo->pos().y() + _tremolo->height() - upPos();
+            const bool hasHook = beamLvl && !beam();
+            if (hasHook)
+                  beamLvl += (up() ? 4 : 2); // reserve more space for stem with both hook and tremolo
+           
+            const qreal additionalHeight = beamLvl ? 0 : sw * spatium();
+
+            return height + beamLvl * beamDist + additionalHeight;
+            }
+
+      // two-note tremolo
+      else {
+            if (_tremolo->chord1()->up() == _tremolo->chord2()->up()) {
+                  const qreal tremoloMinHeight = ((_tremolo->lines() - 1) * td + sw) * spatium();
+                  return tremoloMinHeight + beamLvl * beamDist + 2 * td * spatium();
+                  }
+            return 0.0;
+            }
       }
 
 //---------------------------------------------------------
