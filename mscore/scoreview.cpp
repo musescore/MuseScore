@@ -2687,8 +2687,11 @@ void ScoreView::textTab(bool back)
             // TODO: for tempo text, mscore->addTempo() could be called
             // but it pre-fills the text
             // would be better to create empty tempo element
-            if (type != ElementType::TEMPO_TEXT)
-                  cmdAddText(defaultTid, tid);
+            if (type != ElementType::TEMPO_TEXT) {
+                  PropertyFlags pf = oe ? oe->propertyFlags(Pid::PLACEMENT) : PropertyFlags::STYLED;
+                  Placement oePlacement = oe ? oe->placement() : Placement::ABOVE;
+                  cmdAddText(defaultTid, tid, pf, oePlacement);
+                  }
             }
       }
 
@@ -4229,7 +4232,7 @@ void ScoreView::cmdAddChordName(HarmonyType ht)
 //   cmdAddText
 //---------------------------------------------------------
 
-void ScoreView::cmdAddText(Tid tid, Tid customTid)
+void ScoreView::cmdAddText(Tid tid, Tid customTid, PropertyFlags pf, Placement p)
       {
       if (!_score->checkHasMeasures())
             return;
@@ -4273,6 +4276,15 @@ void ScoreView::cmdAddText(Tid tid, Tid customTid)
                   if (!cr)
                         break;
                   s = new StaffText(_score, Tid::STAFF);
+                  // if the previous text is UNSTYLED or NOSTYLE
+                  // and the next text is created using text tab command
+                  // (only those created in this way can make pf not STYLED, see definition of ScoreView::textTab())
+                  // it inherits the same PropertyFlags and Placement
+                  // making it much easier to put all texts above/below staves
+                  if (pf != PropertyFlags::STYLED) {
+                        s->setPlacement(p);
+                        s->setPropertyFlags(Pid::PLACEMENT, pf);
+                        }
                   cr->undoAddAnnotation(s);
                   }
                   break;
@@ -4282,6 +4294,10 @@ void ScoreView::cmdAddText(Tid tid, Tid customTid)
                   if (!cr)
                         break;
                   s = new SystemText(_score, Tid::SYSTEM);
+                  if (pf != PropertyFlags::STYLED) {
+                        s->setPlacement(p);
+                        s->setPropertyFlags(Pid::PLACEMENT, pf);
+                        }
                   cr->undoAddAnnotation(s);
                   }
                   break;
@@ -4329,6 +4345,10 @@ void ScoreView::cmdAddText(Tid tid, Tid customTid)
                   s = new Fingering(_score, tid);
                   s->setTrack(e->track());
                   s->setParent(e);
+                  if (pf != PropertyFlags::STYLED) {
+                        s->setPlacement(p);
+                        s->setPropertyFlags(Pid::PLACEMENT, pf);
+                        }
                   _score->undoAddElement(s);
                   }
                   break;
