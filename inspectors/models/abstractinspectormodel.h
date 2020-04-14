@@ -53,6 +53,8 @@ signals:
     void modelReseted();
     void isEmptyChanged(bool isEmpty);
 
+    void requestReloadPropertyItems();
+
 protected:
     PropertyItem* buildPropertyItem(const Ms::Pid& pid,
                                     std::function<void(const int propertyId, const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
@@ -72,11 +74,9 @@ protected:
 protected slots:
     void onResetToDefaults(const QList<Ms::Pid>& pidList);
     void onPropertyValueChanged(const Ms::Pid pid, const QVariant& newValue);
-    void onRepositoryUpdated();
-
-private:
     void updateProperties();
 
+private:
     QString m_title;
     InspectorModelType m_type;
     bool m_isEmpty = false;

@@ -13,8 +13,6 @@ FocusableItem {
     implicitHeight: contentColumn.height
     width: parent.width
 
-    enabled: model ? !model.isEmpty : false
-
     Column {
         id: contentColumn
 
@@ -32,7 +30,7 @@ FocusableItem {
             id: beamTypesGridView
 
             beamTypesModel: beamModesModel ? beamModesModel.modeListModel : null
-            isIndeterminate: beamModesModel ? beamModesModel.mode.isUndefined : false
+            enabled: beamModesModel ? !beamModesModel.isEmpty : false
         }
 
         Column {
@@ -40,6 +38,8 @@ FocusableItem {
 
             height: implicitHeight
             width: parent.width
+
+            enabled: model ? !model.isEmpty : false
 
             SeparatorLine {
                 anchors.margins: -10
@@ -150,7 +150,7 @@ FocusableItem {
             }
 
             FlatButton {
-                text: qsTr("Forse horizontal")
+                text: qsTr("Force horizontal")
 
                 onClicked: {
                     if (!model)

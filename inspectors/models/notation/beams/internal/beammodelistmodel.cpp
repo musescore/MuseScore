@@ -66,5 +66,5 @@ int BeamModeListModel::indexOfBeamMode(const BeamTypes::Mode beamMode) const
             return i;
     }
 
-    return 0;
+    return -1;
 }

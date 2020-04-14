@@ -74,6 +74,6 @@ FocusableItem {
             radius: 2
         }
 
-        currentIndex: beamTypesModel && !isIndeterminate ? beamTypesModel.selectedTypeIndex : -1
+        currentIndex: beamTypesModel ? beamTypesModel.selectedTypeIndex : -1
     }
 }

@@ -43,11 +43,11 @@ void BeamSettingsModel::loadProperties()
     });
 
     loadPropertyItem(m_beamVectorX, [this] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().x();
+        return QString::number(elementPropertyValue.toPointF().x(), 'f', 2).toDouble();
     });
 
     loadPropertyItem(m_beamVectorY, [this] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().y();
+        return QString::number(elementPropertyValue.toPointF().y(), 'f', 2).toDouble();
     });
 
     m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());
@@ -71,16 +71,9 @@ void BeamSettingsModel::resetProperties()
 
 void BeamSettingsModel::forceHorizontal()
 {
-    qreal currentX = m_beamVectorX->value().toDouble();
-    qreal currentY = m_beamVectorY->value().toDouble();
+    onPropertyValueChanged(Ms::Pid::BEAM_NO_SLOPE, true);
 
-    qreal maxValue = qMax(qAbs(currentX), qAbs(currentY));
-
-    if (qFuzzyCompare(qAbs(currentX), maxValue)) {
-        m_beamVectorY->setValue(currentX);
-    } else {
-        m_beamVectorX->setValue(currentY);
-    }
+    emit requestReloadPropertyItems();
 }
 
 void BeamSettingsModel::updateBeamHeight(const qreal& x, const qreal& y)
@@ -201,11 +194,13 @@ void BeamSettingsModel::setBeamModesModel(BeamModesModel* beamModesModel)
 {
     m_beamModesModel = beamModesModel;
 
-    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::valueChanged, this, [this] (const QVariant& newValue) {
+    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified, this, [this] (const QVariant& newValue) {
         if (!newValue.toBool()) {
             setFeatheringMode(static_cast<int>(BeamTypes::FEATHERING_NONE));
         }
     });
+
+    connect(m_beamModesModel->mode(), &PropertyItem::propertyModified, this, &AbstractInspectorModel::requestReloadPropertyItems);
 
     emit beamModesModelChanged(m_beamModesModel);
 }
