@@ -23,13 +23,17 @@ class Chord;
 // Tremolo subtypes:
 enum class TremoloType : signed char {
       INVALID_TREMOLO = -1,
-      R8=0, R16, R32, R64, BUZZ_ROLL,  // one note tremolo (repeat)
+      R8 = 0, R16, R32, R64, BUZZ_ROLL,  // one note tremolo (repeat)
       C8, C16, C32, C64     // two note tremolo (change)
       };
 
 enum class TremoloPlacement : signed char {
-      DEFAULT = 0,
-      STEM_CENTER
+      DEFAULT = 0, STEM_CENTER
+      };
+
+// only appliable to minim two-note tremolo in non-TAB staves
+enum class TremoloBeamStyle : signed char {
+      DEFAULT = 0, ALL_LINES_ATTACHED
       };
 
 //---------------------------------------------------------
@@ -37,14 +41,15 @@ enum class TremoloPlacement : signed char {
 //---------------------------------------------------------
 
 class Tremolo final : public Element {
-      TremoloType _tremoloType;
-      Chord* _chord1;
-      Chord* _chord2;
+      TremoloType _tremoloType { TremoloType::R8 };
+      Chord* _chord1 { nullptr };
+      Chord* _chord2 { nullptr };
       TDuration _durationType;
       QPainterPath path;
 
       int _lines;       // derived from _subtype
-      TremoloPlacement _tremoloPlacement = TremoloPlacement::DEFAULT;
+      TremoloPlacement _tremoloPlacement { TremoloPlacement::DEFAULT };
+      TremoloBeamStyle _beamStyle        { TremoloBeamStyle::DEFAULT };
 
       QPainterPath basePath() const;
       void computeShape();
@@ -99,8 +104,15 @@ class Tremolo final : public Element {
 
       QString accessibleInfo() const override;
 
+      TremoloPlacement tremoloPlacement() const    { return _tremoloPlacement; }
+      void setTremoloPlacement(TremoloPlacement v) { _tremoloPlacement = v;    }
+
+      TremoloBeamStyle beamStyle() const    { return _beamStyle; }
+      void setBeamStyle(TremoloBeamStyle v) { _beamStyle = v;    }
+
       QVariant getProperty(Pid propertyId) const override;
       bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid propertyId) const override;
       Pid propertyId(const QStringRef& xmlName) const override;
       QString propertyUserValue(Pid) const override;
       };
