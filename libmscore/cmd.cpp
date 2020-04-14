@@ -3239,21 +3239,21 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
                   //and add the tie to score
                   const std::vector<Note*> notes = chord->notes();
                   if (addTie) {
-                        for (size_t i = 0; i < notes.size(); ++i) {
-                              tie[i]->setEndNote(notes[i]);
-                              notes[i]->setTieBack(tie[i]);
-                              undoAddElement(tie[i]);
+                        for (size_t j = 0; j < notes.size(); ++j) {
+                              tie[j]->setEndNote(notes[j]);
+                              notes[j]->setTieBack(tie[j]);
+                              undoAddElement(tie[j]);
                               }
                         addTie = false;
                         }
                   //if we're not the last element in the duration list,
                   //set tie forward
                   if (i+1 < n) {
-                        for (size_t i = 0; i < notes.size(); ++i) {
-                              tie[i] = new Tie(this);
-                              tie[i]->setStartNote(notes[i]);
-                              tie[i]->setTrack(track);
-                              notes[i]->setTieFor(tie[i]);
+                        for (size_t j = 0; j < notes.size(); ++j) {
+                              tie[j] = new Tie(this);
+                              tie[j]->setStartNote(notes[j]);
+                              tie[j]->setTrack(track);
+                              notes[j]->setTieFor(tie[j]);
                               addTie = true;
                               }
                         }

@@ -167,12 +167,12 @@ TabScoreView* ScoreTab::tabScoreView(int idx)
             return nullptr;
             }
 
-      QVariant data = tab->tabData(idx);
-      IF_ASSERT_FAILED(data.isValid()) {
+      QVariant tabData = tab->tabData(idx);
+      IF_ASSERT_FAILED(tabData.isValid()) {
             return nullptr;
             }
 
-      return static_cast<TabScoreView*>(data.value<void*>());
+      return static_cast<TabScoreView*>(tabData.value<void*>());
       }
 
 //---------------------------------------------------------
