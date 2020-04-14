@@ -107,8 +107,8 @@ void InfoPopup::showOnView(ScoreView* view
             layout->addLayout(row);
             };
 
-      addRow(_recognizedCheck, info.usedColor, QString("- recognized"));
-      addRow(_notrecognizedCheck, info.freeColor, QString("- not recognized"));
+      addRow(_recognizedCheck, info.usedColor, QObject::tr("- recognized"));
+      addRow(_notrecognizedCheck, info.freeColor, QObject::tr("- not recognized"));
 
       setLayout(layout);
 

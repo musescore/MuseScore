@@ -107,7 +107,7 @@ void RecognitionProccessDialog::setType(const QString& type)
 
 void RecognitionProccessDialog::show()
       {
-      setWindowTitle(QString("Optical Music Recognition (%1)").arg(_type));
+      setWindowTitle(QObject::tr("Optical Music Recognition (%1)").arg(_type));
       _closeBtn->setEnabled(false);
 
       _updater.start();

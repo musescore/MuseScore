@@ -59,7 +59,7 @@ AvsOmrNetRecognizer::~AvsOmrNetRecognizer()
 
 QString AvsOmrNetRecognizer::type() const
       {
-      return "cloud";
+      return QObject::tr("cloud");
       }
 
 //---------------------------------------------------------

@@ -46,7 +46,7 @@ AvsOmrLocalRecognizer::~AvsOmrLocalRecognizer()
 
 QString AvsOmrLocalRecognizer::type() const
       {
-      return "local";
+      return QObject::tr("local");
       }
 
 //---------------------------------------------------------
