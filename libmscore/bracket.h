@@ -70,6 +70,8 @@ class Bracket final : public Element {
       Measure* measure() const                  { return _measure; }
       void setMeasure(Measure* measure)         { _measure = measure; }
 
+      Fraction playTick() const override;
+
       void setHeight(qreal) override;
       qreal width() const override;
 
