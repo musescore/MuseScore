@@ -30,14 +30,23 @@ REM
 REM CLEAN:
 REM    "msvc_build.bat clean" remove all files in msvc.* folders and the folders itself
 
+SETLOCAL ENABLEEXTENSIONS
+
+CALL :FIND_GENERATOR
+
+IF "%GENERATOR_NAME%"=="" (
+   ECHO "No supported version of Microsoft Visual Studio (2017 or 2019) found."
+   GOTO :END
+)
+
 REM BUILD_64 and BUILD_FOR_WINSTORE are used in CMakeLists.txt
 SET BUILD_FOR_WINSTORE=OFF
 SET "BUILD_FOLDER=msvc.build"
 SET "INSTALL_FOLDER=msvc.install"
 
 IF "%2"=="32" (
+    SET PLATFORM_NAME=Win32
     SET "ARCH=x86"
-    SET GENERATOR_NAME="Visual Studio 15 2017"
     SET BUILD_64=OFF
 ) ELSE (
     IF NOT "%2"=="" (
@@ -45,13 +54,13 @@ IF "%2"=="32" (
             echo Invalid second argument
             GOTO :END
         ) ELSE (
+            SET PLATFORM_NAME=x64
             SET "ARCH=x64"
-            SET GENERATOR_NAME="Visual Studio 15 2017 Win64"
             SET BUILD_64=ON
         )
     ) ELSE (
+        SET PLATFORM_NAME=x64
         SET "ARCH=x64"
-        SET GENERATOR_NAME="Visual Studio 15 2017 Win64"
         SET BUILD_64=ON
     )
 )    
@@ -114,7 +123,37 @@ IF /I "%1"=="clean" (
    GOTO :END
    )
 
+:FIND_GENERATOR
+
+   REM Usage: CALL :FIND_GENERATOR
+   REM Detects the highest supported VS version installed and sets GENERATOR_NAME to the appropriate CMake generator name.
+
+   REM vswhere.exe is a helper utility that is automatically installed with VS2017 and later (and always at a fixed location).
+   SET VSWHERE="%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
+   IF NOT EXIST %VSWHERE% EXIT /B
+
+   REM Try Visual Studio 2019 first.
+   CALL :FIND_GENERATOR_VERSION %VSWHERE% 16 2019
+
+   REM Fall back to Visual Studio 2017.
+   IF "%GENERATOR_NAME%"=="" CALL :FIND_GENERATOR_VERSION %VSWHERE% 15 2017
+
+   EXIT /B
+
+:FIND_GENERATOR_VERSION
+
+   REM Usage: CALL :FIND_GENERATOR_VERSION "[path\]vswhere.exe" major_version_number year
+   REM Checks if the specified VS version is installed, and if so, sets GENERATOR_NAME to the appropriate CMake generator name.
+
+   FOR /F "usebackq delims=. tokens=1" %%I IN (`%1 -version [%2^,^) -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationVersion -format value`) DO (
+      IF "%%I"=="%2" SET GENERATOR_NAME=Visual Studio %2 %3
+   )
+
+   EXIT /B
+
 :BUILD
+   echo Generator is: %GENERATOR_NAME%
+   echo Platform is: %PLATFORM_NAME%
    SET "BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%"
    echo Build folder is: %BUILD_FOLDER%
    SET "INSTALL_FOLDER=%INSTALL_FOLDER%_%ARCH%"
@@ -136,7 +175,7 @@ IF NOT "%MSCORE_STABLE_BUILD%" == "" (
     )
 
 REM -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DCMAKE_BUILD_AUTOUPDATE=%BUILD_AUTOUPDATE% %CRASH_REPORT_URL_OPT% are used for CI only
-   cd "%BUILD_FOLDER%" & cmake -G %GENERATOR_NAME% -DCMAKE_INSTALL_PREFIX=../%INSTALL_FOLDER% -DCMAKE_BUILD_TYPE=%CONFIGURATION_STR% -DBUILD_FOR_WINSTORE=%BUILD_FOR_WINSTORE% -DBUILD_64=%BUILD_64% -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DBUILD_AUTOUPDATE=%BUILD_AUTOUPDATE% %CRASH_REPORT_URL_OPT% %TELEMETRY_TRACK_ID_OPT% ..
+   cd "%BUILD_FOLDER%" & cmake -G "%GENERATOR_NAME%" -A "%PLATFORM_NAME%" -DCMAKE_INSTALL_PREFIX=../%INSTALL_FOLDER% -DCMAKE_BUILD_TYPE=%CONFIGURATION_STR% -DBUILD_FOR_WINSTORE=%BUILD_FOR_WINSTORE% -DBUILD_64=%BUILD_64% -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DBUILD_AUTOUPDATE=%BUILD_AUTOUPDATE% %CRASH_REPORT_URL_OPT% %TELEMETRY_TRACK_ID_OPT% ..
 
    echo Building MuseScore...
    cd "%BUILD_FOLDER%" & cmake --build . --config %CONFIGURATION_STR% --target mscore
@@ -150,3 +189,5 @@ REM -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DCMAKE_BUILD_AUTOUPDATE=%BUILD_AUTOUPDA
    GOTO :END
 
 :END
+
+ENDLOCAL
