@@ -2996,14 +2996,13 @@ void Score::deselect(Element* el)
 
 void Score::select(Element* e, SelectType type, int staffIdx)
       {
-      if (e && (e->isNote() || e->isRest())) {
-            Element* ee = e;
-            if (ee->isNote())
-                  ee = ee->parent();
-            Fraction tick = toChordRest(ee)->segment()->tick();
-            if (masterScore()->playPos() != tick)
-                  masterScore()->setPlayPos(tick);
+      // Move the playhead to the selected element's preferred play position.
+      if (e) {
+            const auto playTick = e->playTick();
+            if (masterScore()->playPos() != playTick)
+                  masterScore()->setPlayPos(playTick);
             }
+
       if (MScore::debugMode)
             qDebug("select element <%s> type %d(state %d) staff %d",
                e ? e->name() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
