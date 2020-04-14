@@ -1524,39 +1524,62 @@ bool readNoteProperties206(Note* note, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   ReadStyleName206
+//    For 2.x files, the style tag could be in a different
+//    position with respect to 3.x files. Since seek
+//    position is not reliable for readline in QIODevices (for
+//    example because of non-single-byte characters in at least
+//    one of the fields; some two-byte characters are counted as
+//    two single-byte characters and thus the reading could
+//    start at the wrong position)
+//---------------------------------------------------------
+
+static QString ReadStyleName206(XmlReader& e)
+      {
+      QString s;
+      QIODevice* device = e.getDevice();
+      if (!device || device->isSequential())
+            return s;
+      if (!device->isOpen())
+            device->open(QIODevice::ReadOnly);
+      const auto pos = device->pos();
+      const auto pos1 = e.characterOffset();
+      const QString tagName = e.name().toString();
+      device->seek(0);
+      XmlReader streamReader(device);
+      QString xmltag;
+      QString name;
+      for (;;) {
+            streamReader.readNextStartElement();
+            name = streamReader.name().toString();
+            if ((name == tagName) && (streamReader.characterOffset() == pos1)) {
+                  xmltag = streamReader.readXml();
+                  if (xmltag.contains("<style>")) {
+                        QRegExp re("<style>([^<]+)</style>");
+                        if (re.indexIn(xmltag) > -1)
+                              s = re.cap(1);
+                        }
+                  break;
+                  }
+            if (streamReader.atEnd())
+                  break;
+            }
+      device->seek(pos);
+      return s;
+      }
+
+//---------------------------------------------------------
 //   readTextPropertyStyle206
 //    This reads only the 'style' tag, so that it can be read
 //    before setting anything else.
 //---------------------------------------------------------
 
-static bool readTextPropertyStyle206(XmlReader& e, TextBase* t, Element* be, QStringRef elementName)
+static bool readTextPropertyStyle206(XmlReader& e, TextBase* t, Element* be)
       {
-      QString s;
-      if (e.readAheadAvailable()) {
-            e.performReadAhead([&s, &elementName](QIODevice& dev) {
-                  const QString closeTag = QString("</").append(elementName.toString()).append(">");
-                  QByteArray arrLine = dev.readLine();
-                  while (!arrLine.isEmpty()) {
-                        QString line(arrLine);
-                        if (line.contains("<style>")) {
-                              QRegExp re("<style>([^<]+)</style>");
-                              if (re.indexIn(line) > -1)
-                                    s = re.cap(1);
-                              return;
-                              }
-                        else if (line.contains(closeTag)) {
-                              return;
-                              }
-
-                        arrLine = dev.readLine();
-                        }
-                  });
-            }
-      else
-            return false;
+      QString s = ReadStyleName206(e);
 
       if (s.isEmpty())
-            return true;
+            return false;
 
       if (!be->isTuplet()) {      // Hack
             if (excessTextStyles206.find(s) != excessTextStyles206.end()) {
@@ -1665,7 +1688,7 @@ static bool readTextProperties206(XmlReader& e, TextBase* t)
 
 static void readText206(XmlReader& e, TextBase* t, Element* be)
       {
-      readTextPropertyStyle206(e, t, be, e.name());
+      readTextPropertyStyle206(e, t, be);
       while (e.readNextStartElement()) {
             if (!readTextProperties206(e, t))
                   e.unknown();
@@ -1678,7 +1701,7 @@ static void readText206(XmlReader& e, TextBase* t, Element* be)
 
 static void readTempoText(TempoText* t, XmlReader& e)
       {
-      readTextPropertyStyle206(e, t, t, e.name());
+      readTextPropertyStyle206(e, t, t);
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "tempo")
@@ -1703,7 +1726,7 @@ static void readTempoText(TempoText* t, XmlReader& e)
 
 static void readMarker(Marker* m, XmlReader& e)
       {
-      readTextPropertyStyle206(e, m, m, e.name());
+      readTextPropertyStyle206(e, m, m);
       Marker::Type mt = Marker::Type::SEGNO;
 
       while (e.readNextStartElement()) {
@@ -1725,7 +1748,7 @@ static void readMarker(Marker* m, XmlReader& e)
 
 static void readDynamic(Dynamic* d, XmlReader& e)
       {
-      readTextPropertyStyle206(e, d, d, e.name());
+      readTextPropertyStyle206(e, d, d);
       while (e.readNextStartElement()) {
             const QStringRef& tag = e.name();
             if (tag == "subtype")
@@ -3130,25 +3153,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   // MuseScore 3 has different types for system text and
                   // staff text while MuseScore 2 didn't.
                   // We need to decide first which one we should create.
-                  QString styleName;
-                  if (e.readAheadAvailable()) {
-                        e.performReadAhead([&styleName, tag](QIODevice& dev) {
-                              const QString closeTag = QString("</").append(tag).append(">");
-                              QByteArray arrLine = dev.readLine();
-                              while (!arrLine.isEmpty()) {
-                                    QString line(arrLine);
-                                    if (line.contains("<style>")) {
-                                          QRegExp re("<style>([A-z0-9]+)</style>");
-                                          if (re.indexIn(line) > -1)
-                                                styleName = re.cap(1);
-                                          return;
-                                          }
-                                    if (line.contains(closeTag))
-                                          return;
-                                    arrLine = dev.readLine();
-                                    }
-                              });
-                        }
+                  QString styleName = ReadStyleName206(e);
                   StaffTextBase* t;
                   if (styleName == "System"   || styleName == "Tempo"
                      || styleName == "Marker" || styleName == "Jump"
