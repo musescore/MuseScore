@@ -49,7 +49,7 @@ Zerberus::Zerberus()
             }
       
       freeVoices.init(this);
-      for (int i = 0; i < MAX_CHANNEL; ++i)
+      for (int i = 0; i < MAX_CHANNELS; ++i)
             _channel[i] = new Channel(this, i);
       busy = true;      // no sf loaded yet
       }
@@ -178,9 +178,10 @@ void Zerberus::play(const Ms::PlayEvent& event)
       {
       if (busy)
             return;
-      if (event.channel() >= MAX_CHANNEL)
-            return;
-      Channel* cp = _channel[int(event.channel())];
+      static_assert(MAX_CHANNELS - 1 >= std::numeric_limits<decltype(event.channel())>::max(), "need to add a check for a channel number range");
+      //if (event.channel() >= MAX_CHANNELS)
+      //      return;
+      Channel* cp = _channel[event.channel()];
       if (cp->instrument() == 0) {
             // qDebug("Zerberus::play(): no instrument for channel %d", event.channel());
             return;
@@ -257,7 +258,7 @@ void Zerberus::updatePatchList()
       patches.clear();
       int idx = 0;
       for (ZInstrument* i : instruments) {
-            Ms::MidiPatch* p = new Ms::MidiPatch { false, name(), 0, idx, i->name() };
+            Ms::MidiPatch* p = new Ms::MidiPatch { false, name(), 0, idx, 0, i->name() };
             patches.append(p);
             ++idx;
             }
@@ -327,6 +328,19 @@ QStringList Zerberus::soundFonts() const
       }
 
 //---------------------------------------------------------
+//   soundFontsInfo
+//---------------------------------------------------------
+
+std::vector<Ms::SoundFontInfo> Zerberus::soundFontsInfo() const
+      {
+      std::vector<Ms::SoundFontInfo> sl;
+      sl.reserve(instruments.size());
+      for (ZInstrument* i : instruments)
+            sl.emplace_back(i->path());
+      return sl;
+      }
+
+//---------------------------------------------------------
 //   addSoundFont
 //---------------------------------------------------------
 
@@ -350,12 +364,12 @@ bool Zerberus::removeSoundFont(const QString& s)
                   if (it == instruments.end())
                         return false;
                   instruments.erase(it);
-                  for (int k = 0; k < MAX_CHANNEL; ++k) {
+                  for (int k = 0; k < MAX_CHANNELS; ++k) {
                         if (_channel[k]->instrument() == i)
                               _channel[k]->setInstrument(0);
                         }
                   if (!instruments.empty()) {
-                        for (int ii = 0; ii < MAX_CHANNEL; ++ii) {
+                        for (int ii = 0; ii < MAX_CHANNELS; ++ii) {
                               if (_channel[ii]->instrument() == 0)
                                     _channel[ii]->setInstrument(instruments.front());
                               }
@@ -441,7 +455,7 @@ bool Zerberus::loadInstrument(const QString& s)
                   instruments.push_back(instr);
                   instr->setRefCount(instr->refCount() + 1);
                   if (instruments.size() == 1) {
-                        for (int i = 0; i < MAX_CHANNEL; ++i)
+                        for (int i = 0; i < MAX_CHANNELS; ++i)
                               _channel[i]->setInstrument(instr);
                         }
                   busy = false;
@@ -469,7 +483,7 @@ bool Zerberus::loadInstrument(const QString& s)
                   // set default instrument for all channels:
                   //
                   if (instruments.size() == 1) {
-                        for (int i = 0; i < MAX_CHANNEL; ++i)
+                        for (int i = 0; i < MAX_CHANNELS; ++i)
                               _channel[i]->setInstrument(instr);
                         }
                   busy = false;

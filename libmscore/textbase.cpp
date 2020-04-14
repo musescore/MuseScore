@@ -107,10 +107,10 @@ void TextCursor::updateCursorFormat()
       TextBlock* block = &_text->_layout[_row];
       int col = hasSelection() ? selectColumn() : column();
       const CharFormat* format = block->formatAt(col);
-      if (format)
-            setFormat(*format);
-      else
+      if (!format || format->fontFamily() == "ScoreText")
             init();
+      else
+            setFormat(*format);
       }
 
 //---------------------------------------------------------
@@ -328,6 +328,39 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
       return true;
       }
 
+
+
+//---------------------------------------------------------
+//   doubleClickSelect
+//---------------------------------------------------------
+
+void TextCursor::doubleClickSelect()
+      {
+      clearSelection();
+
+      // if clicked on a space, select surrounding spaces
+      // otherwise select surround non-spaces
+      const bool selectSpaces = currentCharacter().isSpace();
+
+      //handle double-clicking inside a word
+      int startPosition = _column;
+
+      while (_column > 0 && currentCharacter().isSpace() == selectSpaces)
+            --_column;
+
+      if (currentCharacter().isSpace() != selectSpaces)
+            ++_column;
+
+      _selectColumn = _column;
+
+      _column = startPosition;
+      while (_column  < curLine().columns() && currentCharacter().isSpace() == selectSpaces)
+            ++_column;
+
+      updateCursorFormat();
+      _text->score()->addRefresh(_text->canvasBoundingRect());
+      }
+
 //---------------------------------------------------------
 //   set
 //---------------------------------------------------------
@@ -358,8 +391,8 @@ bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
                   clearSelection();
             if (hasSelection())
                   QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
-            updateCursorFormat();
             }
+      updateCursorFormat();
       return true;
       }
 
@@ -607,7 +640,9 @@ void TextBlock::layout(TextBase* t)
             _lineSpacing = fm.lineSpacing();
             }
       else {
-            for (TextFragment& f : _fragments) {
+            const auto fiLast = --_fragments.end();
+            for (auto fi = _fragments.begin(); fi != _fragments.end(); ++fi) {
+                  TextFragment& f = *fi;
                   f.pos.setX(x);
                   QFontMetricsF fm(f.font(t), MScore::paintDevice());
                   if (f.format.valign() != VerticalAlignment::AlignNormal) {
@@ -620,9 +655,15 @@ void TextBlock::layout(TextBase* t)
                         }
                   else
                         f.pos.setY(0.0);
-                  qreal w  = fm.width(f.text);
+
+                  // Optimization: don't calculate character position
+                  // for the next fragment if there is no next fragment
+                  if (fi != fiLast) {
+                        const qreal w  = fm.width(f.text);
+                        x += w;
+                        }
+
                   _bbox   |= fm.tightBoundingRect(f.text).translated(f.pos);
-                  x += w;
                   _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
                   }
             }
@@ -1194,7 +1235,7 @@ static qreal parseNumProperty(const QString& s)
 void TextBase::createLayout()
       {
       _layout.clear();
-      TextCursor cursor((Text*)this);
+      TextCursor cursor(this);
       cursor.init();
 
       int state = 0;
@@ -1646,6 +1687,23 @@ void TextBase::selectAll(TextCursor* _cursor)
       }
 
 //---------------------------------------------------------
+//   multiClickSelect
+//    for double and triple clicks
+//---------------------------------------------------------
+
+void TextBase::multiClickSelect(EditData& editData, MultiClick clicks)
+      {
+      switch (clicks) {
+            case MultiClick::Double:
+                  cursor(editData)->doubleClickSelect();
+                  break;
+            case MultiClick::Triple:
+                  selectAll(cursor(editData));
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -1696,6 +1754,7 @@ static constexpr std::array<Pid, 18> pids { {
       Pid::FONT_FACE,
       Pid::FONT_SIZE,
       Pid::FONT_STYLE,
+      Pid::COLOR,
       Pid::FRAME_TYPE,
       Pid::FRAME_WIDTH,
       Pid::FRAME_PADDING,
@@ -1875,17 +1934,12 @@ void TextBase::layoutEdit()
 
 bool TextBase::acceptDrop(EditData& data) const
       {
+      // do not accept the drop if this text element is not being edited
+      ElementEditData* eed = data.getData(this);
+      if (!eed || eed->type() != EditDataType::TextEditData)
+            return false;
       ElementType type = data.dropElement->type();
       return type == ElementType::SYMBOL || type == ElementType::FSYMBOL;
-      }
-
-//---------------------------------------------------------
-//   setPlainText
-//---------------------------------------------------------
-
-void TextBase::setPlainText(const QString& s)
-      {
-      setXmlText(s.toHtmlEscaped());
       }
 
 //---------------------------------------------------------
@@ -2203,7 +2257,7 @@ bool TextBase::validateText(QString& s)
       for (int i = 0; i < s.size(); ++i) {
             QChar c = s[i];
             if (c == '&') {
-                  const char* ok[] { "amp;", "lt;", "gt;", "quot" };
+                  const char* ok[] { "amp;", "lt;", "gt;", "quot;" };
                   QString t = s.mid(i+1);
                   bool found = false;
                   for (auto k : ok) {
@@ -2647,7 +2701,10 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
       QPen pen(curColor());
       pen.setJoinStyle(Qt::MiterJoin);
       p->setPen(pen);
-      p->drawRect(_cursor->cursorRect());
+
+      // Don't draw cursor if there is a selection
+      if (!_cursor->hasSelection())
+            p->drawRect(_cursor->cursorRect());
 
       QMatrix matrix = p->matrix();
       p->translate(-pos);

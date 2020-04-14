@@ -97,6 +97,16 @@ void TimeDialog::addClicked()
       sp->append(ts, "");
       sp->setSelected(sp->size() - 1);
       _dirty = true;
+      emit timeSigAdded(ts);
+      }
+
+//---------------------------------------------------------
+//   showTimePalette
+//---------------------------------------------------------
+
+void TimeDialog::showTimePalette(bool val)
+      {
+      _timePalette->setVisible(val);
       }
 
 //---------------------------------------------------------

@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+  <programVersion>3.2.3</programVersion>
+  <programRevision>d2d863f</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <staffUpperBorder>10</staffUpperBorder>
@@ -70,6 +68,18 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
@@ -342,7 +352,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="56"/>
           <synti>Fluid</synti>
           </Channel>
@@ -451,7 +461,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="arco">
           <program value="48"/>
           <synti>Fluid</synti>
           </Channel>
@@ -510,7 +520,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="arco">
           <program value="48"/>
           <synti>Fluid</synti>
           </Channel>
@@ -571,7 +581,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="arco">
           <program value="48"/>
           <synti>Fluid</synti>
           </Channel>
@@ -632,7 +642,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="arco">
           <program value="48"/>
           <synti>Fluid</synti>
           </Channel>
@@ -659,7 +669,7 @@
         <longName>Contrabasses</longName>
         <shortName>Cb.</shortName>
         <trackName>Contrabasses</trackName>
-        <minPitchP>28</minPitchP>
+        <minPitchP>24</minPitchP>
         <maxPitchP>67</maxPitchP>
         <minPitchA>28</minPitchA>
         <maxPitchA>62</maxPitchA>
@@ -696,7 +706,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="arco">
           <program value="48"/>
           <synti>Fluid</synti>
           </Channel>

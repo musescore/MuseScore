@@ -5,13 +5,14 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <doubleBarDistance>0.46</doubleBarDistance>
       <endBarDistance>0.65</endBarDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <barNoteDistance>1.2</barNoteDistance>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <harmonyFretDist>0.5</harmonyFretDist>
       <defaultFramePadding>0.5</defaultFramePadding>
       <defaultFrameWidth>0.2</defaultFrameWidth>
       <defaultFrameRound>25</defaultFrameRound>
@@ -39,7 +40,6 @@
       <partInstrumentFramePadding>0.5</partInstrumentFramePadding>
       <partInstrumentFrameWidth>0.2</partInstrumentFrameWidth>
       <partInstrumentFrameRound>25</partInstrumentFrameRound>
-      <dynamicsFontStyle>0</dynamicsFontStyle>
       <tempoFramePadding>0.5</tempoFramePadding>
       <tempoFrameWidth>0.2</tempoFrameWidth>
       <tempoFrameRound>25</tempoFrameRound>
@@ -1008,7 +1008,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <direction>down</direction>
-              <subtype>stringsUpBow</subtype>
+              <subtype>stringsUpBowTurned</subtype>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -1057,7 +1057,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <direction>down</direction>
-              <subtype>stringsDownBow</subtype>
+              <subtype>stringsDownBowTurned</subtype>
               </Articulation>
             <Note>
               <pitch>60</pitch>

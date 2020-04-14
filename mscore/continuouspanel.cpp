@@ -37,10 +37,11 @@ namespace Ms {
 
 ContinuousPanel::ContinuousPanel(ScoreView* sv)
       {
-      _sv                     = sv;
-      _active                 = true;
-      _visible                = false;
-      _width                  = 0.0;
+      _sv         = sv;
+      _score      = nullptr;
+      _active     = true;
+      _visible    = false;
+      _width      = 0.0;
       }
 
 //---------------------------------------------------------
@@ -129,7 +130,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
 
       qreal _xPosMeasure       = _currentMeasure->canvasX();
       qreal _measureWidth      = _currentMeasure->width();
-      int tick                 = _currentMeasure->tick();
+      int tick                 = _currentMeasure->tick().ticks();
       Fraction _currentTimeSig = _currentMeasure->timesig();
       //qDebug() << "_sv->xoffset()=" <<_sv->xoffset() << " _sv->mag()="<< _sv->mag() <<" s->x=" << s->x() << " width=" << _width << " currentMeasure=" << _currentMeasure->x() << " _xPosMeasure=" << _xPosMeasure;
 
@@ -156,13 +157,13 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
 
             if (e->isStaffLines()) {
                   Staff* currentStaff = _score->staff(e->staffIdx());
-                  Segment* parent = _score->tick2segment(tick);
+                  Segment* parent = _score->tick2segment(Fraction::fromTicks(tick));
 
                   // Find maximum width for the staff name
-                  QList<StaffName>& staffNamesLong = currentStaff->part()->instrument(tick)->longNames();
+                  QList<StaffName>& staffNamesLong = currentStaff->part()->instrument(Fraction::fromTicks(tick))->longNames();
                   QString staffName = staffNamesLong.isEmpty() ? " " : staffNamesLong[0].name();
                   if (staffName == "") {
-                        QList<StaffName>& staffNamesShort = currentStaff->part()->instrument(tick)->shortNames();
+                        QList<StaffName>& staffNamesShort = currentStaff->part()->instrument(Fraction::fromTicks(tick))->shortNames();
                         staffName = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name();
                         }
                   Text* newName = new Text(_score);
@@ -177,7 +178,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
 
                   // Find maximum width for the current Clef
                   Clef* newClef = new Clef(_score);
-                  ClefType currentClef = currentStaff->clef(tick);
+                  ClefType currentClef = currentStaff->clef(Fraction::fromTicks(tick));
                   newClef->setClefType(currentClef);
                   newClef->setParent(parent);
                   newClef->setTrack(e->track());
@@ -187,7 +188,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
 
                   // Find maximum width for the current KeySignature
                   KeySig* newKs = new KeySig(_score);
-                  KeySigEvent currentKeySigEvent = currentStaff->keySigEvent(tick);
+                  KeySigEvent currentKeySigEvent = currentStaff->keySigEvent(Fraction::fromTicks(tick));
                   newKs->setKeySigEvent(currentKeySigEvent);
                   // The Parent and the Track must be set to have the key signature layout adjusted to different clefs
                   // This also adds naturals to the key signature (if set in the score style)
@@ -202,7 +203,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   TimeSig* newTs = new TimeSig(_score);
 
                   // Try to get local time signature, if not, get the current measure one
-                  TimeSig* currentTimeSig = currentStaff->timeSig(tick);
+                  TimeSig* currentTimeSig = currentStaff->timeSig(Fraction::fromTicks(tick));
                   if (currentTimeSig)
                         newTs->setFrom(currentTimeSig);
                   else
@@ -279,12 +280,9 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       QPixmap* fgPixmap = _sv->fgPixmap();
       if (fgPixmap == 0 || fgPixmap->isNull())
             painter.fillRect(bg, preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
-      else {
-            painter.setMatrixEnabled(false);
+      else
             painter.drawTiledPixmap(bg, *fgPixmap, bg.topLeft()
                - QPoint(lrint(_sv->matrix().dx()), lrint(_sv->matrix().dy())));
-            painter.setMatrixEnabled(true);
-            }
 
       painter.setClipRect(_rect);
       painter.setClipping(true);
@@ -319,14 +317,14 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
             if (e->isStaffLines()) {
                   painter.save();
                   Staff* currentStaff = _score->staff(e->staffIdx());
-                  Segment* parent = _score->tick2segmentMM(tick);
+                  Segment* parent = _score->tick2segmentMM(Fraction::fromTicks(tick));
 
                   pos = QPointF (_offsetPanel, e->pagePos().y());
                   painter.translate(pos);
 
                   // Draw staff lines
                   StaffLines newStaffLines(*toStaffLines(e));
-                  newStaffLines.setParent(parent);
+                  newStaffLines.setParent(parent->measure());
                   newStaffLines.setTrack(e->track());
                   newStaffLines.layoutForWidth(bg.width());
                   newStaffLines.setColor(color);
@@ -345,10 +343,10 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   barLine.draw(&painter);
 
                   // Draw the current staff name
-                  QList<StaffName>& staffNamesLong = currentStaff->part()->instrument(tick)->longNames();
+                  QList<StaffName>& staffNamesLong = currentStaff->part()->instrument(Fraction::fromTicks(tick))->longNames();
                   QString staffName = staffNamesLong.isEmpty() ? " " : staffNamesLong[0].name();
                   if (staffName == "") {
-                        QList<StaffName>& staffNamesShort = currentStaff->part()->instrument(tick)->shortNames();
+                        QList<StaffName>& staffNamesShort = currentStaff->part()->instrument(Fraction::fromTicks(tick))->shortNames();
                         staffName = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name();
                         }
 
@@ -375,7 +373,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
 
                   // Draw the current Clef
                   Clef clef(_score);
-                  clef.setClefType(currentStaff->clef(tick));
+                  clef.setClefType(currentStaff->clef(Fraction::fromTicks(tick)));
                   clef.setParent(parent);
                   clef.setTrack(e->track());
                   clef.setColor(color);
@@ -386,7 +384,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
 
                   // Draw the current KeySignature
                   KeySig newKs(_score);
-                  newKs.setKeySigEvent(currentStaff->keySigEvent(tick));
+                  newKs.setKeySigEvent(currentStaff->keySigEvent(Fraction::fromTicks(tick)));
 
                   // The Parent and the track must be set to have the key signature layout adjusted to different clefs
                   // This also adds naturals to the key signature (if set in the score style)
@@ -404,7 +402,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   TimeSig newTs(_score);
 
                   // Try to get local time signature, if not, get the current measure one
-                  TimeSig* currentTimeSig = currentStaff->timeSig(tick);
+                  TimeSig* currentTimeSig = currentStaff->timeSig(Fraction::fromTicks(tick));
                   if (currentTimeSig) {
                         newTs.setFrom(currentTimeSig);
                         newTs.setParent(parent);

@@ -23,6 +23,7 @@
 #include "stem.h"
 #include "beam.h"
 #include "measure.h"
+#include "system.h"
 
 namespace Ms {
 
@@ -39,6 +40,8 @@ static const ElementStyle tupletStyle {
       { Sid::tupletFontSize,                     Pid::FONT_SIZE               },
       { Sid::tupletFontStyle,                    Pid::FONT_STYLE              },
       { Sid::tupletAlign,                        Pid::ALIGN                   },
+      { Sid::tupletMinDistance,                  Pid::MIN_DISTANCE            },
+      { Sid::tupletFontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT  },
       };
 
 //---------------------------------------------------------
@@ -48,11 +51,14 @@ static const ElementStyle tupletStyle {
 Tuplet::Tuplet(Score* s)
   : DurationElement(s)
       {
-      _tick         = 0;
+      _direction    = Direction::AUTO;
+      _numberType   = TupletNumberType::SHOW_NUMBER;
+      _bracketType  = TupletBracketType::AUTO_BRACKET;
       _ratio        = Fraction(1, 1);
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
+      _id           = 0;
       initElementStyle(&tupletStyle);
       }
 
@@ -75,6 +81,7 @@ Tuplet::Tuplet(const Tuplet& t)
       _p1            = t._p1;
       _p2            = t._p2;
 
+      _id            = t._id;
       // recreated on layout
       _number = 0;
       }
@@ -85,6 +92,8 @@ Tuplet::Tuplet(const Tuplet& t)
 
 Tuplet::~Tuplet()
       {
+      for (DurationElement* de : _elements)
+            de->setTuplet(nullptr);
       delete _number;
       }
 
@@ -110,6 +119,35 @@ void Tuplet::setVisible(bool f)
             _number->setVisible(f);
       }
 
+#if 0
+//---------------------------------------------------------
+//   tick
+//---------------------------------------------------------
+
+Fraction Tuplet::tick() const
+      {
+      std::vector<DurationElement*> _elements;
+
+      const DurationElement* de = this;
+      while (de->isTuplet()) {
+            const Tuplet* t = toTuplet(de);
+            if (t->_elements.empty())
+                  return Fraction(0, 1);
+            de = t->_elements.front();
+            }
+      return toChordRest(de)->tick();
+      }
+#endif
+
+//---------------------------------------------------------
+//   rtick
+//---------------------------------------------------------
+
+Fraction Tuplet::rtick() const
+      {
+      return tick() - measure()->tick();
+      }
+
 //---------------------------------------------------------
 //   resetNumberProperty
 //   reset number properties to default values
@@ -118,7 +156,7 @@ void Tuplet::setVisible(bool f)
 
 void Tuplet::resetNumberProperty()
       {
-      for (auto p : { Pid::FONT_FACE, Pid::FONT_STYLE, Pid::FONT_SIZE, Pid::ALIGN })
+      for (auto p : { Pid::FONT_FACE, Pid::FONT_STYLE, Pid::FONT_SIZE, Pid::ALIGN, Pid::SIZE_SPATIUM_DEPENDENT })
             _number->resetProperty(p);
       }
 
@@ -133,7 +171,8 @@ void Tuplet::layout()
             return;
             }
       // is in a TAB without stems, skip any format: tuplets are not shown
-      if (staff() && staff()->isTabStaff(tick()) && staff()->staffType(tick())->slashStyle())
+      const StaffType* stt = staffType();
+      if (stt && stt->isTabStaff() && stt->stemless())
             return;
 
       //
@@ -189,11 +228,13 @@ void Tuplet::layout()
       // find first and last chord of tuplet
       // (tuplets can be nested)
       //
+      bool nested = false;
       const DurationElement* cr1 = _elements.front();
       while (cr1->isTuplet()) {
             const Tuplet* t = toTuplet(cr1);
             if (t->elements().empty())
                   break;
+            nested = true;
             cr1 = t->elements().front();
             }
       const DurationElement* cr2 = _elements.back();
@@ -201,6 +242,7 @@ void Tuplet::layout()
             const Tuplet* t = toTuplet(cr2);
             if (t->elements().empty())
                   break;
+            nested = true;
             cr2 = t->elements().back();
             }
 
@@ -243,12 +285,15 @@ void Tuplet::layout()
       qreal noteRight     = score()->styleP(Sid::tupletNoteRightDistance);
 
       int move = 0;
+      setTrack(cr1->staffIdx() * VOICES + voice());
       if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
             // account for staff move when adjusting bracket to avoid staff
             // but don't attempt adjustment unless both endpoints are in same staff
-            if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove()) {
+            // and not a nested tuplet
+            if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove() && !tuplet() && !nested) {
                   move = toChordRest(cr1)->staffMove();
-                  setTrack(cr1->vStaffIdx() * VOICES + voice());
+                  if (move == 1)
+                        setTrack(cr1->vStaffIdx() * VOICES + voice());
                   }
             else
                   outOfStaff = false;
@@ -276,7 +321,7 @@ void Tuplet::layout()
       qreal beamAdjust = 0.0;
       if (cr1->beam() && cr1->beam() == cr2->beam()) {
             followBeam = true;
-            beamAdjust = score()->styleP(Sid::beamWidth) * 0.5 * mag();
+            beamAdjust = point(score()->styleS(Sid::beamWidth)) * 0.5 * mag();
             }
 
       if (_isUp) {
@@ -312,7 +357,7 @@ void Tuplet::layout()
                   if (stem && chord2->up()) {
                         if (followBeam)
                               p2.ry() = stem->abbox().top() - beamAdjust;
-                        else if (chord2->beam())
+                        else if (chord2->beam() && !chord2->staffMove() && !chord2->beam()->cross())
                               p2.ry() = chord2->beam()->abbox().top();
                         else
                               p2.ry() = stem->abbox().top();
@@ -423,7 +468,7 @@ void Tuplet::layout()
                         //      p2.setX(stem->abbox().x());
                         if (followBeam)                                          //??
                               p2.ry() = stem->abbox().bottom() + beamAdjust;     //??
-                        if (chord2->beam())
+                        if (chord2->beam() && !chord2->staffMove() && !chord2->beam()->cross())
                               p2.ry() = chord2->beam()->abbox().bottom();
                         else
                               p2.ry() = stem->abbox().bottom();
@@ -502,6 +547,11 @@ void Tuplet::layout()
 
       setPos(0.0, 0.0);
       QPointF mp(parent()->pagePos());
+      if (parent()->isMeasure()) {
+            System* s = toMeasure(parent())->system();
+            if (s)
+                  mp.ry() += s->staff(staffIdx())->y();
+            }
       p1 -= mp;
       p2 -= mp;
 
@@ -612,6 +662,9 @@ void Tuplet::layout()
             r |= b;
             }
       setbbox(r);
+
+      if (outOfStaff && !cross())
+            autoplaceMeasureElement(_isUp, /* add to skyline */ true);
       }
 
 //---------------------------------------------------------
@@ -621,7 +674,8 @@ void Tuplet::layout()
 void Tuplet::draw(QPainter* painter) const
       {
       // if in a TAB without stems, tuplets are not shown
-      if (staff() && staff()->isTabStaff(tick()) && staff()->staffType(tick())->slashStyle())
+      const StaffType* stt = staffType();
+      if (stt && stt->isTabStaff() && stt->stemless())
             return;
 
       QColor color(curColor());
@@ -708,10 +762,6 @@ void Tuplet::write(XmlWriter& xml) const
       xml.stag(this);
       Element::writeProperties(xml);
 
-      writeProperty(xml, Pid::DIRECTION);
-      writeProperty(xml, Pid::NUMBER_TYPE);
-      writeProperty(xml, Pid::BRACKET_TYPE);
-      writeProperty(xml, Pid::LINE_WIDTH);
       writeProperty(xml, Pid::NORMAL_NOTES);
       writeProperty(xml, Pid::ACTUAL_NOTES);
       writeProperty(xml, Pid::P1);
@@ -726,6 +776,9 @@ void Tuplet::write(XmlWriter& xml) const
             _number->writeProperties(xml);
             xml.etag();
             }
+
+      writeStyledProperties(xml);
+
       xml.etag();
       }
 
@@ -743,7 +796,7 @@ void Tuplet::read(XmlReader& e)
                   e.unknown();
             }
       Fraction f = _baseLen.fraction() * _ratio.denominator();
-      setDuration(f.reduced());
+      setTicks(f.reduced());
       }
 
 //---------------------------------------------------------
@@ -756,6 +809,24 @@ bool Tuplet::readProperties(XmlReader& e)
 
       if (readStyledProperty(e, tag))
             ;
+      else if (tag == "bold") { //important that these properties are read after number is created
+            bool val = e.readInt();
+            _number->setBold(val);
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "italic") {
+            bool val = e.readInt();
+            _number->setItalic(val);
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "underline") {
+            bool val = e.readInt();
+            _number->setUnderline(val);
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
       else if (tag == "normalNotes")
             _ratio.setDenominator(e.readInt());
       else if (tag == "actualNotes")
@@ -801,18 +872,15 @@ void Tuplet::add(Element* e)
 #endif
 
       switch (e->type()) {
-//            case ElementType::TEXT:
-//                  _number = toText(e);
-//                  break;
             case ElementType::CHORD:
             case ElementType::REST:
             case ElementType::TUPLET: {
                   bool found = false;
                   DurationElement* de = toDurationElement(e);
-                  int tick = de->tick();
-                  if (tick != -1) {
+                  Fraction tick = de->rtick();
+                  if (tick != Fraction(-1,1)) {
                         for (unsigned int i = 0; i < _elements.size(); ++i) {
-                              if (_elements[i]->tick() > tick) {
+                              if (_elements[i]->rtick() > tick) {
                                     _elements.insert(_elements.begin() + i, de);
                                     found = true;
                                     break;
@@ -870,14 +938,16 @@ bool Tuplet::isEditable() const
       }
 
 //---------------------------------------------------------
-//   startEdit
+//   startEditDrag
 //---------------------------------------------------------
 
-void Tuplet::startEdit(EditData& ed)
+void Tuplet::startEditDrag(EditData& ed)
       {
-      Element::startEdit(ed);
-      ed.grips   = 2;
-      ed.curGrip = Grip::END;
+      DurationElement::startEditDrag(ed);
+      ElementEditData* eed = ed.getData(this);
+
+      eed->pushProperty(Pid::P1);
+      eed->pushProperty(Pid::P2);
       }
 
 //---------------------------------------------------------
@@ -891,18 +961,19 @@ void Tuplet::editDrag(EditData& ed)
       else
             _p2 += ed.delta;
       setGenerated(false);
-      layout();
-      score()->setUpdateAll();
+      //layout();
+      //score()->setUpdateAll();
+      triggerLayout();
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Tuplet::updateGrips(EditData& ed) const
+std::vector<QPointF> Tuplet::gripsPositions(const EditData&) const
       {
-      ed.grip[0].translate(pagePos() + p1);
-      ed.grip[1].translate(pagePos() + p2);
+      const QPointF pp(pagePos());
+      return { pp + p1, pp + p2 };
       }
 
 //---------------------------------------------------------
@@ -958,6 +1029,28 @@ void Tuplet::sortElements()
       }
 
 //---------------------------------------------------------
+//   cross
+//---------------------------------------------------------
+
+bool Tuplet::cross() const
+      {
+      for (DurationElement* de : _elements) {
+            if (!de) {
+                  continue;
+                  }
+            else if (de->isChordRest()) {
+                  if (toChordRest(de)->staffMove())
+                        return true;
+                  }
+            else if (de->isTuplet()) {
+                  if (toTuplet(de)->cross())
+                        return true;
+                  }
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   elementsDuration
 ///  Get the sum of the element fraction in the tuplet,
 ///  even if the tuplet is not complete yet
@@ -967,7 +1060,7 @@ Fraction Tuplet::elementsDuration()
       {
       Fraction f;
       for (DurationElement* el : _elements)
-            f += el->duration();
+            f += el->ticks();
       return f;
       }
 
@@ -998,6 +1091,7 @@ QVariant Tuplet::getProperty(Pid propertyId) const
             case Pid::FONT_FACE:
             case Pid::FONT_STYLE:
             case Pid::ALIGN:
+            case Pid::SIZE_SPATIUM_DEPENDENT:
                   return _number ? _number->getProperty(propertyId) : QVariant();
             default:
                   break;
@@ -1040,6 +1134,7 @@ bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
             case Pid::FONT_FACE:
             case Pid::FONT_STYLE:
             case Pid::ALIGN:
+            case Pid::SIZE_SPATIUM_DEPENDENT:
                   if (_number)
                         _number->setProperty(propertyId, v);
                   break;
@@ -1080,6 +1175,8 @@ QVariant Tuplet::propertyDefault(Pid id) const
                   return score()->styleV(Sid::tupletFontSize);
             case Pid::FONT_STYLE:
                   return score()->styleV(Sid::tupletFontStyle);
+            case Pid::SIZE_SPATIUM_DEPENDENT:
+                  return score()->styleV(Sid::tupletFontSpatiumDependent);
             default:
                   {
                   QVariant v = ScoreElement::propertyDefault(id, Tid::DEFAULT);
@@ -1103,12 +1200,14 @@ void Tuplet::sanitizeTuplet()
       if (ratio().numerator() == ratio().reduced().numerator()) // return if the ratio is an irreducible fraction
             return;
       Fraction baseLenDuration = (Fraction(ratio().denominator(),1) * baseLen().fraction()).reduced();
+
       // Due to a bug present in 2.1 (and before), a tuplet with non-reduced ratio could be
       // in a corrupted state (mismatch between duration and base length).
       // A tentative will now be made to retrieve the correct duration by summing up all the
       // durations of the elements constituting the tuplet. This does not work for
       // not-completely filled tuplets, such as tuplets in voices > 0 with
       // gaps (for example, a tuplet in second voice with a deleted chordrest element)
+
       Fraction testDuration(0,1);
       for (DurationElement* de : elements()) {
             if (de == 0)
@@ -1117,23 +1216,23 @@ void Tuplet::sanitizeTuplet()
             if (de->isTuplet()){
                   Tuplet* t = toTuplet(de);
                   t->sanitizeTuplet();
-                  elementDuration = t->duration();
+                  elementDuration = t->ticks();
                   }
             else {
-                  elementDuration = de->duration();
+                  elementDuration = de->ticks();
                   }
             testDuration += elementDuration;
             }
       testDuration = testDuration / ratio();
       testDuration.reduce();
-      if (elements().back()->tick() + elements().back()->actualTicks() - elements().front()->tick() > testDuration.ticks())
+      if (elements().back()->tick() + elements().back()->actualTicks() - elements().front()->tick() > testDuration)
             return;     // this tuplet has missing elements; do not sanitize
-      if (!(testDuration == baseLenDuration && baseLenDuration == duration())) {
+      if (!(testDuration == baseLenDuration && baseLenDuration == ticks())) {
             Fraction f = testDuration * Fraction(1, ratio().denominator());
             f.reduce();
             Fraction fbl(1, f.denominator());
             if (TDuration::isValid(fbl)) {
-                  setDuration(testDuration);
+                  setTicks(testDuration);
                   setBaseLen(fbl);
                   qDebug("Tuplet %p sanitized duration %d/%d   baseLen %d/%d",this,
                         testDuration.numerator(), testDuration.denominator(),
@@ -1152,9 +1251,9 @@ void Tuplet::sanitizeTuplet()
 //     Needed for importing files that saved incomplete tuplets.
 //---------------------------------------------------------
 
-Fraction Tuplet::addMissingElement(int startTick, int endTick)
+Fraction Tuplet::addMissingElement(const Fraction& startTick, const Fraction& endTick)
       {
-      Fraction f = Fraction::fromTicks(endTick - startTick) * ratio();
+      Fraction f = (endTick - startTick) * ratio();
       TDuration d = TDuration(f, true);
       if (!d.isValid()) {
             qDebug("Tuplet::addMissingElement(): invalid duration: %d/%d", f.numerator(), f.denominator());
@@ -1163,7 +1262,7 @@ Fraction Tuplet::addMissingElement(int startTick, int endTick)
       f = d.fraction();
       Rest* rest = new Rest(score());
       rest->setDurationType(d);
-      rest->setDuration(f);
+      rest->setTicks(f);
       rest->setTrack(track());
       rest->setVisible(false);
       Segment* segment = measure()->getSegment(SegmentType::ChordRest, startTick);
@@ -1185,11 +1284,11 @@ void Tuplet::addMissingElements()
             return;     // do not correct nested tuplets
       if (voice() == 0)
             return;     // nothing to do for tuplets in voice 1
-      Fraction missingElementsDuration = duration() * ratio() - elementsDuration();
+      Fraction missingElementsDuration = ticks() * ratio() - elementsDuration();
       if (missingElementsDuration.isZero())
             return;
       // first, fill in any holes in the middle of the tuplet
-      int expectedTick = elements().front()->tick();
+      Fraction expectedTick = elements().front()->tick();
       for (DurationElement* de : elements()) {
             if (de->tick() != expectedTick) {
                   missingElementsDuration -= addMissingElement(expectedTick, de->tick());
@@ -1199,19 +1298,20 @@ void Tuplet::addMissingElements()
             expectedTick += de->actualTicks();
             }
       // calculate the tick where we would expect a tuplet of this duration to start
-      expectedTick = elements().front()->tick() - elements().front()->tick() % duration().ticks();
+      // TODO: check:
+      expectedTick = elements().front()->tick() - Fraction::fromTicks(elements().front()->tick().ticks() % ticks().ticks());
       if (expectedTick != elements().front()->tick()) {
             // try to fill a hole at the beginning of the tuplet
-            int firstAvailableTick = measure()->tick();
+            Fraction firstAvailableTick = measure()->tick();
             Segment* segment = measure()->findSegment(SegmentType::ChordRest, elements().front()->tick());
             ChordRest* prevChordRest = segment && segment->prev() ? segment->prev()->nextChordRest(track(), true) : nullptr;
             if (prevChordRest && prevChordRest->measure() == measure())
                   firstAvailableTick = prevChordRest->tick() + prevChordRest->actualTicks();
             if (firstAvailableTick != elements().front()->tick()) {
                   Fraction f = missingElementsDuration / ratio();
-                  int ticksRequired = f.ticks();
-                  int endTick = elements().front()->tick();
-                  int startTick = max(firstAvailableTick, endTick - ticksRequired);
+                  Fraction ticksRequired = f;
+                  Fraction endTick = elements().front()->tick();
+                  Fraction startTick = max(firstAvailableTick, endTick - ticksRequired);
                   if (expectedTick > startTick)
                         startTick = expectedTick;
                   missingElementsDuration -= addMissingElement(startTick, endTick);
@@ -1220,8 +1320,8 @@ void Tuplet::addMissingElements()
                   }
             }
       // now fill a hole at the end of the tuplet
-      int startTick = elements().back()->tick() + elements().back()->actualTicks();
-      int endTick = elements().front()->tick() + duration().ticks();
+      Fraction startTick = elements().back()->tick() + elements().back()->actualTicks();
+      Fraction endTick = elements().front()->tick() + ticks();
       // just to be safe, find the next ChordRest in the track, and adjust endTick if necessary
       Segment* segment = measure()->findSegment(SegmentType::ChordRest, elements().back()->tick());
       ChordRest* nextChordRest = segment && segment->next() ? segment->next()->nextChordRest(track(), false) : nullptr;

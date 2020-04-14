@@ -23,10 +23,17 @@
    <set>QDockWidget::AllDockWidgetFeatures</set>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string>Mixer</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QCheckBox" name="partOnlyCheckBox">
+      <property name="text">
+       <string>Play part only</string>
+      </property>
+     </widget>
+    </item>
     <item>
      <widget class="QWidget" name="detailsArea" native="true">
       <property name="sizePolicy">
@@ -128,7 +135,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="masterSpin"/>
+          <widget class="QDoubleSpinBox" name="masterSpin">
+           <property name="suffix">
+            <string extracomment="decibel">dB</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -144,7 +155,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>370</height>
+          <height>0</height>
          </size>
         </property>
         <property name="widgetResizable">

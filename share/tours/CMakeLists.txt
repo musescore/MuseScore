@@ -25,6 +25,7 @@ install(FILES
       noteinput.tour
       palette.tour
       select.tour
+      spanner-drop-apply.tour
       timeline.tour
       welcome.tour
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}tours

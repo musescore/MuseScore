@@ -40,8 +40,11 @@ class Breath final : public Element {
 
    public:
       Breath(Score* s);
-      virtual ElementType type() const override { return ElementType::BREATH; }
-      virtual Breath* clone() const override    { return new Breath(*this); }
+
+      ElementType type() const override { return ElementType::BREATH; }
+      Breath* clone() const override    { return new Breath(*this); }
+
+      qreal mag() const override;
 
       void setSymId(SymId id)          { _symId = id; }
       SymId symId() const              { return _symId; }
@@ -50,19 +53,19 @@ class Breath final : public Element {
 
       Segment* segment() const         { return (Segment*)parent(); }
 
-      virtual void draw(QPainter*) const override;
-      virtual void layout() override;
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
-      virtual QPointF pagePos() const override;      ///< position in page coordinates
+      void draw(QPainter*) const override;
+      void layout() override;
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
+      QPointF pagePos() const override;      ///< position in page coordinates
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
 
-      virtual Element* nextSegmentElement() override;
-      virtual Element* prevSegmentElement() override;
-      virtual QString accessibleInfo() const override;
+      Element* nextSegmentElement() override;
+      Element* prevSegmentElement() override;
+      QString accessibleInfo() const override;
 
       bool isCaesura() const;
 

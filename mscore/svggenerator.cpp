@@ -40,6 +40,9 @@
 ****************************************************************************/
 
 #include "svggenerator.h"
+#include "libmscore/element.h"
+#include "libmscore/image.h"
+#include "libmscore/imageStore.h"
 #include "libmscore/mscore.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -234,12 +237,14 @@ private:
     SvgPaintEnginePrivate *d_ptr;
 
 // Qt translates everything. These help avoid SVG transform="translate()".
-    qreal _dx;
-    qreal _dy;
+    qreal _dx { 0.0 };
+    qreal _dy { 0.0 };
 
 protected:
 // The Ms::Element being generated right now
     const Ms::Element* _element = NULL;
+
+    void writeImage(const QRectF& r, const QByteArray& imageData, const QString& mimeFormat);
 
 // SVG strings as constants
 #define SVG_SPACE    ' '
@@ -1092,13 +1097,6 @@ void SvgPaintEngine::drawImage(const QRectF  &r, const QImage &image,
     Q_UNUSED(sr);
     Q_UNUSED(flags);
 
-    stream() << SVG_IMAGE           << stateString
-             << SVG_X << SVG_QUOTE  << r.x() + _dx << SVG_QUOTE
-             << SVG_Y << SVG_QUOTE  << r.y() + _dy << SVG_QUOTE
-             << SVG_WIDTH           << r.width()   << SVG_QUOTE
-             << SVG_HEIGHT          << r.height()  << SVG_QUOTE
-             << SVG_PRESERVE_ASPECT << SVG_NONE    << SVG_QUOTE;
-
     QByteArray      data;
     QBuffer buffer(&data);
 
@@ -1106,8 +1104,43 @@ void SvgPaintEngine::drawImage(const QRectF  &r, const QImage &image,
     image.save(&buffer, "PNG");
     buffer.close();
 
-    stream() << " xlink:href=\"data:image/png;base64,"
-             << data.toBase64() << SVG_QUOTE << SVG_ELEMENT_END << endl;
+
+    // check whether we can just use the original raster image
+    // to reduce the resulting file size
+    if (_element && _element->isImage()) {
+        static const QList<QString> allowedImageTypes {
+            "image/jpeg",
+            "image/png"
+        };
+
+        const Ms::Image* img = Ms::toImage(_element);
+        const Ms::ImageStoreItem* storeItem = img->storeItem(); // holds the original image file content
+        if (img->getImageType() == Ms::ImageType::RASTER && storeItem) {
+            const QByteArray& imgData = storeItem->buffer();
+            const QMimeType type = QMimeDatabase().mimeTypeForData(imgData);
+            if (type.isValid() && allowedImageTypes.contains(type.name())
+                && imgData.size() < data.size()) {
+                // this really can save space, save the original image
+                writeImage(r, imgData, type.name());
+                return;
+            }
+        }
+    }
+
+    writeImage(r, data, "image/png");
+}
+
+void SvgPaintEngine::writeImage(const QRectF& r, const QByteArray& imageData, const QString& mimeFormat)
+{
+    stream() << SVG_IMAGE           << stateString
+             << SVG_X << SVG_QUOTE  << r.x() + _dx << SVG_QUOTE
+             << SVG_Y << SVG_QUOTE  << r.y() + _dy << SVG_QUOTE
+             << SVG_WIDTH           << r.width()   << SVG_QUOTE
+             << SVG_HEIGHT          << r.height()  << SVG_QUOTE
+             << SVG_PRESERVE_ASPECT << SVG_NONE    << SVG_QUOTE;
+
+    stream() << " xlink:href=\"data:" << mimeFormat << ";base64,"
+             << imageData.toBase64() << SVG_QUOTE << SVG_ELEMENT_END << endl;
 }
 
 void SvgPaintEngine::updateState(const QPaintEngineState &s)

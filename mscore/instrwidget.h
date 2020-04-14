@@ -45,6 +45,7 @@ class PartListItem : public QTreeWidgetItem {
 
       PartListItem(Part* p, QTreeWidget* lv);
       PartListItem(const InstrumentTemplate* i, QTreeWidget* lv);
+      PartListItem(const InstrumentTemplate* i, QTreeWidget* lv, QTreeWidgetItem* prv);
       bool visible() const;
       void setVisible(bool val);
       void updateClefs();
@@ -152,9 +153,10 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
    public:
       InstrumentsWidget(QWidget* parent = 0);
       void genPartList(Score*);
-      void writeSettings();
+      void updatePartIdx();
       void init();
       void createInstruments(Score*);
+      void numberInstrumentNames(Score*);
       QTreeWidget* getPartiturList();
       };
 

@@ -19,7 +19,6 @@
 
 #include "preferences.h"
 #include "libmscore/score.h"
-#include "musescore.h"
 #include "seq.h"
 #include "pa.h"
 
@@ -62,6 +61,8 @@ Portaudio::Portaudio(Seq* s)
       initialized = false;
       state       = Transport::STOP;
       seekflag    = false;
+      pos = 0;
+      startTime = 0.0;
       midiDriver  = 0;
       }
 
@@ -72,13 +73,12 @@ Portaudio::Portaudio(Seq* s)
 Portaudio::~Portaudio()
       {
       if (initialized) {
-            if (midiDriver)
-                  delete midiDriver;
-
             PaError err = Pa_CloseStream(stream);
             if (err != paNoError)
                   qDebug("Portaudio close stream failed: %s", Pa_GetErrorText(err));
             Pa_Terminate();
+            if (midiDriver)
+                  delete midiDriver;
             }
       }
 

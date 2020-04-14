@@ -47,26 +47,24 @@ class Image final : public BSymbol {
       bool _sizeIsSpatium;
       mutable bool _dirty;
 
-      virtual bool isEditable() const override { return true; }
-      virtual void startEdit(EditData&) override;
-      virtual void startDrag(EditData&) override;
-      virtual void editDrag(EditData& ed) override;
-      virtual void endEditDrag(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
-      virtual QPointF gripAnchor(Grip) const override { return QPointF(); }
+      bool isEditable() const override { return true; }
+      void startEditDrag(EditData&) override;
+      void editDrag(EditData& ed) override;
+      QPointF gripAnchor(Grip) const override { return QPointF(); }
 
    public:
       Image(Score* = 0);
       Image(const Image&);
       ~Image();
-      virtual Image* clone() const override     { return new Image(*this); }
-      virtual ElementType type() const override { return ElementType::IMAGE; }
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
+
+      Image* clone() const override     { return new Image(*this); }
+      ElementType type() const override { return ElementType::IMAGE; }
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
       bool load(const QString& s);
       bool loadFromData(const QString&, const QByteArray&);
-      virtual void layout() override;
-      virtual void draw(QPainter*) const override;
+      void layout() override;
+      void draw(QPainter*) const override;
 
       void setSize(const QSizeF& s)      { _size = s;    }
       QSizeF size() const                { return _size; }
@@ -78,14 +76,21 @@ class Image final : public BSymbol {
       bool sizeIsSpatium() const         { return _sizeIsSpatium; }
       void setSizeIsSpatium(bool val)    { _sizeIsSpatium = val;  }
 
-      QVariant getProperty(Pid ) const;
-      bool setProperty(Pid propertyId, const QVariant&);
-      QVariant propertyDefault(Pid id) const;
+      QVariant getProperty(Pid ) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid id) const override;
 
       QSizeF imageSize() const;
 
       void setImageType(ImageType);
+      ImageType getImageType() const { return imageType; }
       bool isValid() const           { return rasterDoc || svgDoc; }
+
+      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+      int gripsCount() const override { return 2; }
+      Grip initialEditModeGrip() const override { return Grip(1); }
+      Grip defaultGrip() const override { return Grip(1); }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
       };
 
 

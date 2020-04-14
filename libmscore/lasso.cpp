@@ -85,30 +85,22 @@ void Lasso::editDrag(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Lasso::updateGrips(EditData& ed) const
+std::vector<QPointF> Lasso::gripsPositions(const EditData&) const
       {
-      ed.grip[0].translate(bbox().topLeft());
-      ed.grip[1].translate(bbox().topRight());
-      ed.grip[2].translate(bbox().bottomRight());
-      ed.grip[3].translate(bbox().bottomLeft());
-      ed.grip[4].translate(bbox().x() + bbox().width() * .5, bbox().top());
-      ed.grip[5].translate(bbox().right(), bbox().y() + bbox().height() * .5);
-      ed.grip[6].translate(bbox().x() + bbox().width()*.5, bbox().bottom());
-      ed.grip[7].translate(bbox().left(), bbox().y() + bbox().height() * .5);
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Lasso::startEdit(EditData& ed)
-      {
-      Element::startEdit(ed);
-      ed.grips   = 8;
-      ed.curGrip = Grip(7);
+      const auto box(bbox());
+      return {
+            box.topLeft(),
+            box.topRight(),
+            box.bottomRight(),
+            box.bottomLeft(),
+            QPointF(box.x() + box.width() * .5, box.top()),
+            QPointF(box.right(), box.y() + box.height() * .5),
+            QPointF(box.x() + box.width()*.5, box.bottom()),
+            QPointF(box.left(), box.y() + box.height() * .5)
+            };
       }
 
 //---------------------------------------------------------

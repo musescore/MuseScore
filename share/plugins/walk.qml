@@ -21,21 +21,20 @@ MuseScore {
       onRun: {
             console.log("Hello Walker");
 
-            if (typeof curScore === 'undefined')
+            if (!curScore)
                   Qt.quit();
 
             var cursor = curScore.newCursor();
             cursor.voice    = 0;
             cursor.staffIdx = 0;
-            cursor.filter   = -1;
-            cursor.rewind(0);
+            cursor.rewind(Cursor.SCORE_START);
 
-            while (cursor.segment()) {
-                var e = cursor.element();
+            while (cursor.segment) {
+                var e = cursor.element;
                 if (e) {
-	              console.log("type: " + e.name + " (" + e.type + ") at  tick: " + e.tick + " color " + e.get("color"));
-                    if (e.type === Ms.REST) {
-                        var d = e.get("duration");
+                    console.log("type:", e.name, "at  tick:", e.tick, "color", e.color);
+                    if (e.type == Element.REST) {
+                        var d = e.duration;
                         console.log("   duration " + d.numerator + "/" + d.denominator);
                         }
                     }

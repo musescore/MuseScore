@@ -14,9 +14,10 @@
 #define __UPLOADSCOREDIALOG_H__
 
 #include "ui_uploadscoredialog.h"
-#include "loginmanager.h"
 
 namespace Ms {
+
+class LoginManager;
 
 //---------------------------------------------------------
 //   LoginDialog
@@ -28,9 +29,11 @@ class UploadScoreDialog : public QDialog, public Ui::UploadScoreDialog
 
       LoginManager* _loginManager;
       int _nid;
+      bool _newScore = true;
       QString _url;
 
-      virtual void hideEvent(QHideEvent*);
+      void showEvent(QShowEvent*) override;
+
    private slots:
       void buttonBoxClicked(QAbstractButton* button);
       void uploadSuccess(const QString& url, const QString& nid, const QString& vid);
@@ -39,6 +42,8 @@ class UploadScoreDialog : public QDialog, public Ui::UploadScoreDialog
       void onGetScoreError(const QString& error);
       void logout();
       void display();
+      void updateScoreData(const QString& nid, bool newScore);
+      void updateScoreData();
       void displaySuccess();
 
    private:

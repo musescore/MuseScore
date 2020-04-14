@@ -49,11 +49,11 @@ public:
       StringData() {}
       StringData(int numFrets, int numStrings, int strings[]);
       StringData(int numFrets, QList<instrString>& strings);
-      bool        convertPitch(int pitch, Staff* staff, int tick, int* string, int* fret) const;
-      int         fret(int pitch, int string, Staff* staff, int tick) const;
+      bool        convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const;
+      int         fret(int pitch, int string, Staff* staff, const Fraction& tick) const;
       void        fretChords(Chord * chord) const;
-      int         getPitch(int string, int fret, Staff* staff, int tick) const;
-      static int  pitchOffsetAt(Staff* staff, int tick);
+      int         getPitch(int string, int fret, Staff* staff, const Fraction& tick) const;
+      static int  pitchOffsetAt(Staff* staff, const Fraction& tick);
       int         strings() const                   { return stringTable.size(); }
       int         frettedStrings() const;
       const QList<instrString>&  stringList() const { return stringTable; }

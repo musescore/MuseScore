@@ -745,7 +745,7 @@ int Model::write_instr()
       Ifelm         *I;
       Addsynth      *A;
 
-    sprintf (buff, "%s/definition", _instr);
+    snprintf (buff, sizeof(buff), "%s/definition", _instr);
     if (! (F = fopen (buff, "w")))
     {
       fprintf (stderr, "Can't open '%s' for writing\n", buff);
@@ -963,7 +963,7 @@ bool Model::writePresets()
       uchar  data [256];
       FILE   *F;
 
-      sprintf (name, "%s/presets", _instr);
+      snprintf (name, sizeof(name), "%s/presets", _instr);
       if (! (F = fopen (name, "w"))) {
             fprintf (stderr, "Can't open '%s' for writing\n", name);
             return 1;

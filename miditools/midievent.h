@@ -50,6 +50,8 @@ enum {
       CTRL_LRPN               = 0x64,
 
       CTRL_MODULATION         = 0x01,
+      CTRL_BREATH             = 0x02,
+      CTRL_FOOT               = 0x04,
       CTRL_PORTAMENTO_TIME    = 0x05,
       CTRL_VOLUME             = 0x07,
       CTRL_PANPOT             = 0x0a,

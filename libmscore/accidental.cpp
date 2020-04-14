@@ -33,7 +33,7 @@ struct Acc {
       Acc(AccidentalVal o, int o2, SymId s) : offset(o), centOffset(o2), sym(s) {}
       };
 
-// NOTE: keep this in sync with with AccidentalType enum, watch out for isMicrotonal()
+// NOTE: keep this in sync with with AccidentalType enum in types.h, watch out for isMicrotonal()
 static Acc accList[] = {
       Acc(AccidentalVal::NATURAL, 0,    SymId::noSym),                // NONE
       Acc(AccidentalVal::FLAT,    0,    SymId::accidentalFlat),       // FLAT
@@ -126,8 +126,32 @@ static Acc accList[] = {
       Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalQuarterSharpEqualTempered),
 
       // Persian
-      Acc(AccidentalVal::NATURAL, 50,   SymId::accidentalSori),                          // SORI
-      Acc(AccidentalVal::NATURAL, -50,  SymId::accidentalKoron),                         // KORON
+      Acc(AccidentalVal::NATURAL, 33,   SymId::accidentalSori),                          // SORI
+      Acc(AccidentalVal::NATURAL, -67,  SymId::accidentalKoron),                         // KORON
+
+      // Wyschnegradsky
+      Acc(AccidentalVal::NATURAL, -167, SymId::accidentalWyschnegradsky10TwelfthsFlat),
+      Acc(AccidentalVal::NATURAL, 167,  SymId::accidentalWyschnegradsky10TwelfthsSharp),
+      Acc(AccidentalVal::NATURAL, -183, SymId::accidentalWyschnegradsky11TwelfthsFlat),
+      Acc(AccidentalVal::NATURAL, 183,  SymId::accidentalWyschnegradsky11TwelfthsSharp),
+      Acc(AccidentalVal::NATURAL, -17,  SymId::accidentalWyschnegradsky1TwelfthsFlat),
+      Acc(AccidentalVal::NATURAL, 17,   SymId::accidentalWyschnegradsky1TwelfthsSharp),
+      Acc(AccidentalVal::NATURAL, -33,  SymId::accidentalWyschnegradsky2TwelfthsFlat),
+      Acc(AccidentalVal::NATURAL, 33,   SymId::accidentalWyschnegradsky2TwelfthsSharp),
+      Acc(AccidentalVal::NATURAL, -50,  SymId::accidentalWyschnegradsky3TwelfthsFlat),
+      Acc(AccidentalVal::NATURAL, 50,   SymId::accidentalWyschnegradsky3TwelfthsSharp),
+      Acc(AccidentalVal::NATURAL, -67,  SymId::accidentalWyschnegradsky4TwelfthsFlat),
+      Acc(AccidentalVal::NATURAL, 67,   SymId::accidentalWyschnegradsky4TwelfthsSharp),
+      Acc(AccidentalVal::NATURAL, -83,  SymId::accidentalWyschnegradsky5TwelfthsFlat),
+      Acc(AccidentalVal::NATURAL, 83,   SymId::accidentalWyschnegradsky5TwelfthsSharp),
+      Acc(AccidentalVal::FLAT,     0,   SymId::accidentalWyschnegradsky6TwelfthsFlat),
+      Acc(AccidentalVal::SHARP,    0,   SymId::accidentalWyschnegradsky6TwelfthsSharp),
+      Acc(AccidentalVal::NATURAL, -116, SymId::accidentalWyschnegradsky7TwelfthsFlat),
+      Acc(AccidentalVal::NATURAL, 116,  SymId::accidentalWyschnegradsky7TwelfthsSharp),
+      Acc(AccidentalVal::NATURAL, -133, SymId::accidentalWyschnegradsky8TwelfthsFlat),
+      Acc(AccidentalVal::NATURAL, 133,  SymId::accidentalWyschnegradsky8TwelfthsSharp),
+      Acc(AccidentalVal::NATURAL, -150, SymId::accidentalWyschnegradsky9TwelfthsFlat),
+      Acc(AccidentalVal::NATURAL, 150,  SymId::accidentalWyschnegradsky9TwelfthsSharp),
       };
 
 //---------------------------------------------------------
@@ -191,7 +215,7 @@ void Accidental::write(XmlWriter& xml) const
       writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
       writeProperty(xml, Pid::ROLE);
       writeProperty(xml, Pid::SMALL);
-      xml.tag("subtype", subtype2name(accidentalType()));
+      writeProperty(xml, Pid::ACCIDENTAL_TYPE);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -234,6 +258,14 @@ const char* Accidental::subtype2name(AccidentalType st)
       }
 
 //---------------------------------------------------------
+//   subtype2symbol
+//---------------------------------------------------------
+
+SymId Accidental::subtype2symbol(AccidentalType st)
+      {
+      return accList[int(st)].sym;
+      }
+//---------------------------------------------------------
 //   name2subtype
 //---------------------------------------------------------
 
@@ -273,7 +305,7 @@ void Accidental::layout()
       QRectF r;
       // TODO: remove Accidental in layout()
       // don't show accidentals for tab or slash notation
-      if ((staff() && staff()->isTabStaff(tick())) || (note() && note()->fixed())) {
+      if (onTabStaff() || (note() && note()->fixed())) {
             setbbox(r);
             return;
             }
@@ -333,7 +365,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
 void Accidental::draw(QPainter* painter) const
       {
       // don't show accidentals for tab or slash notation
-      if ((staff() && staff()->isTabStaff(tick())) || (note() && note()->fixed()))
+      if (onTabStaff() || (note() && note()->fixed()))
             return;
       painter->setPen(curColor());
       for (const SymElement& e : el)
@@ -394,6 +426,7 @@ void Accidental::undoSetSmall(bool val)
 QVariant Accidental::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::ACCIDENTAL_TYPE:    return int(_accidentalType);
             case Pid::SMALL:              return _small;
             case Pid::ACCIDENTAL_BRACKET: return int(bracket());
             case Pid::ROLE:               return int(role());
@@ -409,6 +442,7 @@ QVariant Accidental::getProperty(Pid propertyId) const
 QVariant Accidental::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::ACCIDENTAL_TYPE:    return int(AccidentalType::NONE);
             case Pid::SMALL:              return false;
             case Pid::ACCIDENTAL_BRACKET: return int(AccidentalBracket::NONE);
             case Pid::ROLE:               return int(AccidentalRole::AUTO);
@@ -424,6 +458,9 @@ QVariant Accidental::propertyDefault(Pid propertyId) const
 bool Accidental::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case Pid::ACCIDENTAL_TYPE:
+                  setAccidentalType(AccidentalType(v.toInt()));
+                  break;
             case Pid::SMALL:
                   _small = v.toBool();
                   break;
@@ -441,13 +478,24 @@ bool Accidental::setProperty(Pid propertyId, const QVariant& v)
       }
 
 //---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Accidental::propertyId(const QStringRef& xmlName) const
+      {
+      if (xmlName == propertyName(Pid::ACCIDENTAL_TYPE))
+            return Pid::ACCIDENTAL_TYPE;
+      return Element::propertyId(xmlName);
+      }
+
+//---------------------------------------------------------
 //   propertyUserValue
 //---------------------------------------------------------
 
 QString Accidental::propertyUserValue(Pid pid) const
       {
       switch(pid) {
-            case Pid::SUBTYPE:
+            case Pid::ACCIDENTAL_TYPE:
                   return subtypeUserName();
             default:
                   return Element::propertyUserValue(pid);

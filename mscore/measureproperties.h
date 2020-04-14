@@ -40,7 +40,7 @@ class MeasureProperties : public QDialog, private Ui::MeasurePropertiesBase {
       bool isIrregular() const;
       int repeatCount() const;
       bool visible(int staffIdx);
-      bool slashStyle(int staffIdx);
+      bool stemless(int staffIdx);
       void setMeasure(Measure* _m);
 
       virtual void hideEvent(QHideEvent*);

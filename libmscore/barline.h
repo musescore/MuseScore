@@ -51,7 +51,7 @@ struct BarLineTableItem {
 //---------------------------------------------------------
 //   @@ BarLine
 //
-//   @P barLineType  enum  (BarLineType.NORMAL, .DOUBLE, .START_REPEAT, .END_REPEAT, .BROKEN, .END, .DOTTED)
+//   @P barLineType  enum  (BarLineType.NORMAL, .DOUBLE, .START_REPEAT, .END_REPEAT, .BROKEN, .END, .END_START_REPEAT, .DOTTED)
 //---------------------------------------------------------
 
 class BarLine final : public Element {
@@ -76,20 +76,24 @@ class BarLine final : public Element {
       BarLine(const BarLine&);
       BarLine &operator=(const BarLine&) = delete;
 
-      virtual BarLine* clone() const override     { return new BarLine(*this); }
-      virtual ElementType type() const override   { return ElementType::BAR_LINE; }
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
-      virtual void draw(QPainter*) const override;
-      virtual QPointF pagePos() const override;      ///< position in canvas coordinates
-      virtual void layout() override;
+      BarLine* clone() const override     { return new BarLine(*this); }
+      ElementType type() const override   { return ElementType::BAR_LINE; }
+      Fraction playTick() const override;
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
+      void draw(QPainter*) const override;
+      QPointF canvasPos() const override;    ///< position in canvas coordinates
+      QPointF pagePos() const override;      ///< position in page coordinates
+      void layout() override;
       void layout2();
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
-      virtual bool isEditable() const override    { return true; }
+      void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      void setTrack(int t) override;
+      void setScore(Score* s) override;
+      void add(Element*) override;
+      void remove(Element*) override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
+      bool isEditable() const override    { return true; }
 
       Segment* segment() const        { return toSegment(parent()); }
       Measure* measure() const        { return toMeasure(parent()->parent()); }
@@ -101,12 +105,11 @@ class BarLine final : public Element {
       int spanFrom() const            { return _spanFrom;     }
       int spanTo() const              { return _spanTo;       }
 
-      virtual void startEdit(EditData& ed) override;
-      virtual void endEdit(EditData&) override;
-      virtual void editDrag(EditData&) override;
-      virtual void endEditDrag(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
-      virtual Shape shape() const override;
+      void startEdit(EditData& ed) override;
+      void endEdit(EditData&) override;
+      void editDrag(EditData&) override;
+      void endEditDrag(EditData&) override;
+      Shape shape() const override;
 
       ElementList* el()                  { return &_el; }
       const ElementList* el() const      { return &_el; }
@@ -121,22 +124,30 @@ class BarLine final : public Element {
       BarLineType barLineType() const    { return _barLineType;  }
       static BarLineType barLineType(const QString&);
 
-      virtual int subtype() const override         { return int(_barLineType); }
-      virtual QString subtypeName() const override { return qApp->translate("barline", barLineTypeName().toUtf8()); }
+      int subtype() const override         { return int(_barLineType); }
+      QString subtypeName() const override { return qApp->translate("barline", barLineTypeName().toUtf8()); }
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid propertyId) const override;
-      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps);
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid propertyId) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
+      void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps);
       using ScoreElement::undoChangeProperty;
 
       static qreal layoutWidth(Score*, BarLineType);
+      QRectF layoutRect() const;
 
-      virtual Element* nextSegmentElement() override;
-      virtual Element* prevSegmentElement() override;
+      Element* nextSegmentElement() override;
+      Element* prevSegmentElement() override;
 
-      virtual QString accessibleInfo() const override;
-      virtual QString accessibleExtraInfo() const override;
+      QString accessibleInfo() const override;
+      QString accessibleExtraInfo() const override;
+
+      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+      int gripsCount() const override { return 2; }
+      Grip initialEditModeGrip() const override { return Grip::END; }
+      Grip defaultGrip() const override { return Grip::START; }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
 
       static const std::vector<BarLineTableItem> barLineTable;
       };

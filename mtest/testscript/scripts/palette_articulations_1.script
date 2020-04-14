@@ -1,0 +1,137 @@
+init init/Voice-Piano-3-4.mscx
+cmd note-input
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd escape
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+palette Fermata symbol fermataAbove
+cmd next-chord
+cmd next-chord
+cmd next-chord
+palette Articulation symbol articStaccatoAbove
+cmd next-chord
+cmd next-chord
+palette Articulation symbol articAccentAbove
+cmd next-chord
+cmd next-chord
+palette Fermata symbol fermataAbove
+cmd next-chord
+cmd prev-measure
+cmd next-measure
+cmd prev-chord
+cmd page-end
+cmd page-top
+cmd next-chord
+cmd prev-chord
+cmd next-chord
+palette Articulation symbol articAccentStaccatoAbove
+cmd note-input
+cmd note-a
+cmd escape
+palette Articulation symbol articAccentStaccatoAbove
+cmd next-chord
+cmd next-chord
+cmd note-input
+cmd pad-note-16
+cmd note-a
+cmd note-c
+cmd note-d
+cmd note-e
+cmd note-g
+cmd note-c
+cmd pitch-down-octave
+cmd note-b
+cmd note-a
+cmd pad-note-8
+cmd pad-note-4
+cmd pad-note-2
+cmd pad-dot
+cmd note-a
+cmd escape
+cmd prev-chord
+palette Fermata symbol fermataLongHenzeAbove
+cmd prev-chord
+cmd next-chord
+palette Fermata symbol fermataVeryLongAbove
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+palette Fermata symbol fermataLongAbove
+cmd prev-chord
+cmd prev-chord
+palette Fermata symbol fermataShortAbove
+cmd prev-chord
+cmd prev-chord
+palette Fermata symbol fermataShortHenzeAbove
+cmd prev-chord
+cmd prev-chord
+palette Articulation symbol articStaccatissimoAbove
+cmd prev-chord
+palette Articulation symbol articTenutoStaccatoAbove
+cmd prev-chord
+palette Articulation symbol articMarcatoAbove
+cmd prev-chord
+palette Articulation symbol articMarcatoStaccatoAbove
+cmd prev-chord
+cmd next-chord
+cmd next-chord
+cmd next-chord
+cmd next-chord
+cmd next-chord
+cmd next-chord
+cmd next-chord
+cmd next-chord
+cmd next-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd next-chord
+palette Fermata symbol fermataAbove
+cmd next-chord
+cmd prev-chord
+cmd prev-chord
+cmd next-chord
+cmd next-chord
+palette Fermata symbol fermataShortHenzeAbove
+cmd prev-chord
+cmd next-chord
+palette Articulation symbol articStaccatoAbove
+cmd prev-chord
+cmd next-chord
+palette Articulation symbol articTenutoStaccatoAbove
+cmd prev-chord
+cmd next-chord
+cmd next-chord
+cmd prev-chord
+palette Articulation symbol articSoftAccentAbove
+cmd next-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+palette Articulation symbol articSoftAccentStaccatoAbove
+cmd next-chord
+cmd next-chord
+palette Articulation symbol stringsUpBow
+test score palette_articulations_1.mscx

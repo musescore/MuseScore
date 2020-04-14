@@ -147,6 +147,7 @@ InstrumentTemplate::InstrumentTemplate()
       useDrumset         = false;
       drumset            = 0;
       extended           = false;
+      singleNoteDynamics = true;
 
       for (int i = 0; i < MAX_STAVES; ++i) {
             clefTypes[i]._concertClef = ClefType::G;
@@ -201,6 +202,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
       stringData  = t.stringData;
       midiActions = t.midiActions;
       channel     = t.channel;
+      singleNoteDynamics = t.singleNoteDynamics;
       }
 
 InstrumentTemplate::~InstrumentTemplate()
@@ -291,11 +293,15 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             xml.tag("drumset", int(useDrumset));
       if (drumset)
             drumset->save(xml);
-      foreach(const NamedEventList& a, midiActions)
+      
+      if (!singleNoteDynamics)      // default is true
+            xml.tag("singleNoteDynamics", singleNoteDynamics);
+
+      for (const NamedEventList& a : midiActions)
             a.write(xml, "MidiAction");
-      foreach(const Channel& a, channel)
+      for (const Channel& a : channel)
             a.write(xml, nullptr);
-      foreach(const MidiArticulation& ma, articulation) {
+      for (const MidiArticulation& ma : articulation) {
             bool isGlobal = false;
             for (const MidiArticulation& ga : Ms::articulation) {
                   if (ma == ga) {
@@ -496,6 +502,8 @@ void InstrumentTemplate::read(XmlReader& e)
                   QString val(e.readElementText());
                   linkGenre(val);
                   }
+            else if (tag == "singleNoteDynamics")
+                  singleNoteDynamics = e.readBool();
             else
                   e.unknown();
             }
@@ -503,7 +511,7 @@ void InstrumentTemplate::read(XmlReader& e)
             Channel a;
             a.setChorus(0);
             a.setReverb(0);
-            a.setName("normal");
+            a.setName(Channel::DEFAULT_NAME);
             a.setProgram(0);
             a.setBank(0);
             a.setVolume(90);
@@ -513,7 +521,6 @@ void InstrumentTemplate::read(XmlReader& e)
       if (useDrumset) {
             if (channel[0].bank() == 0 && channel[0].synti().toLower() != "zerberus")
                   channel[0].setBank(128);
-            channel[0].updateInitList();
             }
       if (trackName.isEmpty() && !longNames.isEmpty())
             trackName = longNames[0].name();
@@ -683,7 +690,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
 
 InstrumentTemplate* searchTemplate(const QString& name)
       {
-      foreach (InstrumentGroup* g, instrumentGroups) {
+      for (InstrumentGroup* g : instrumentGroups) {
             for (InstrumentTemplate* it : g->instrumentTemplates) {
                   if (it->id == name)
                         return it;
@@ -698,7 +705,7 @@ InstrumentTemplate* searchTemplate(const QString& name)
 
 InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId)
       {
-      foreach(InstrumentGroup* g, instrumentGroups) {
+      for (InstrumentGroup* g : instrumentGroups) {
             for (InstrumentTemplate* it : g->instrumentTemplates) {
                   if (it->musicXMLid == mxmlId)
                         return it;

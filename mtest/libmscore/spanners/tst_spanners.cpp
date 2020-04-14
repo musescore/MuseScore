@@ -23,6 +23,7 @@
 #include "libmscore/score.h"
 #include "libmscore/system.h"
 #include "libmscore/undo.h"
+#include "libmscore/line.h"
 
 #define DIR QString("libmscore/spanners/")
 
@@ -52,6 +53,8 @@ class TestSpanners : public QObject, public MTest
       void spanners12();            // remove a measure containing the middle portion of a LyricsLine and undo
 //      void spanners13();            // drop a line break at the middle of a LyricsLine and check LyricsLineSegments
       void spanners14();            // creating part from an existing grand staff containing a cross staff glissando
+      void spanners15();            // change the color & min distance of a line and save it
+      void spanners16();            // read lines with manual adjustments on a small staff and save
       };
 
 //---------------------------------------------------------
@@ -80,7 +83,7 @@ void TestSpanners::spanners01()
       // go to top note of first chord
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -174,7 +177,7 @@ void TestSpanners::spanners02()
       MasterScore* score = readScore(DIR + "glissando-crossstaff01.mscx");
       QVERIFY(score);
 
-      QVERIFY(saveCompareScore(score, "glissando-crsossstaff01.mscx", DIR + "glissando-crossstaff01-ref.mscx"));
+      QVERIFY(saveCompareScore(score, "glissando-crossstaff01.mscx", DIR + "glissando-crossstaff01-ref.mscx"));
       delete score;
       }
 
@@ -195,7 +198,7 @@ void TestSpanners::spanners03()
       // go to top note of first chord
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -266,12 +269,12 @@ void TestSpanners::spanners04()
       Staff* oldStaff   = score->staff(0);
       Staff* newStaff   = new Staff(score);
       newStaff->setPart(oldStaff->part());
-      newStaff->initFromStaffType(oldStaff->staffType(0));
+      newStaff->initFromStaffType(oldStaff->staffType(Fraction(0,1)));
       newStaff->setDefaultClefType(ClefTypeList(ClefType::G));
 
       KeySigEvent ke;
       ke.setKey(Key::C);
-      newStaff->setKey(0, ke);
+      newStaff->setKey(Fraction(0,1), ke);
 
       score->undoInsertStaff(newStaff, 1, false);
       Excerpt::cloneStaff(oldStaff, newStaff);
@@ -328,7 +331,7 @@ void TestSpanners::spanners06()
       // DROP A GLISSANDO ON FIRST NOTE
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -360,7 +363,7 @@ void TestSpanners::spanners07()
       // DROP A GLISSANDO ON FIRST NOTE
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -554,7 +557,7 @@ void TestSpanners::spanners12()
 #if 0
 //---------------------------------------------------------
 ///  spanners13
-///   Drop a line break at a bar line inthe middle of a LyricsLine and check LyricsLineSegments are correct
+///   Drop a line break at a bar line in the middle of a LyricsLine and check LyricsLineSegments are correct
 //
 //---------------------------------------------------------
 
@@ -618,6 +621,44 @@ void TestSpanners::spanners14()
       score->Score::undo(new AddExcerpt(ex));
 
       QVERIFY(saveCompareScore(score, "glissando-cloning05.mscx", DIR + "glissando-cloning05-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///  spanners15
+///   set the color of a spanner and save
+//---------------------------------------------------------
+
+void TestSpanners::spanners15()
+      {
+      MasterScore* score = readScore(DIR + "linecolor01.mscx");
+      QVERIFY(score);
+
+      for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
+            Spanner* spanner = (*it).second;
+            SLine* sl = static_cast<SLine*>(spanner);
+            sl->setProperty(Pid::COLOR, QVariant::fromValue(QColor(255, 0, 0, 255)));
+            for (auto ss : sl->spannerSegments()) {
+                  ss->setProperty(Pid::MIN_DISTANCE, 0.0);
+                  ss->setPropertyFlags(Pid::MIN_DISTANCE, PropertyFlags::UNSTYLED);
+                  }
+            }
+
+      QVERIFY(saveCompareScore(score, "linecolor01.mscx", DIR + "linecolor01-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///  spanners16
+///   read manually adjusted lines on a small staff and save
+//---------------------------------------------------------
+
+void TestSpanners::spanners16()
+      {
+      MasterScore* score = readScore(DIR + "smallstaff01.mscx");
+      QVERIFY(score);
+
+      QVERIFY(saveCompareScore(score, "smallstaff01.mscx", DIR + "smallstaff01-ref.mscx"));
       delete score;
       }
 

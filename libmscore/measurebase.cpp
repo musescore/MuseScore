@@ -143,7 +143,7 @@ void MeasureBase::add(Element* e)
                         setSectionBreak(true);
                         setNoBreak(false);
       //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
-                        score()->setLayoutAll();
+                        triggerLayoutAll();
                         break;
                   case LayoutBreak::NOBREAK:
                         setPageBreak(false);
@@ -153,8 +153,8 @@ void MeasureBase::add(Element* e)
                         break;
                   }
             if (next())
-                  score()->setLayout(next()->endTick());
-//            score()->setLayoutAll();     // TODO
+                  next()->triggerLayout();
+//            triggerLayoutAll();     // TODO
             }
       triggerLayout();
       _el.push_back(e);
@@ -179,7 +179,7 @@ void MeasureBase::remove(Element* el)
                   case LayoutBreak::SECTION:
                         setSectionBreak(false);
                         score()->setPause(endTick(), 0);
-                        score()->setLayoutAll();
+                        triggerLayoutAll();
                         break;
                   case LayoutBreak::NOBREAK:
                         setNoBreak(false);
@@ -302,6 +302,16 @@ void MeasureBase::layout()
       }
 
 //---------------------------------------------------------
+//   triggerLayout
+//---------------------------------------------------------
+
+void MeasureBase::triggerLayout() const
+      {
+      if (prev() || next()) // avoid triggering layout before getting added to a score
+            score()->setLayout(tick(), -1, this);
+      }
+
+//---------------------------------------------------------
 //   first
 //---------------------------------------------------------
 
@@ -332,6 +342,10 @@ QVariant MeasureBase::getProperty(Pid id) const
                   return repeatStart();
             case Pid::REPEAT_JUMP:
                   return repeatJump();
+            case Pid::NO_OFFSET:
+                  return noOffset();
+            case Pid::IRREGULAR:
+                  return irregular();
             default:
                   return Element::getProperty(id);
             }
@@ -353,12 +367,19 @@ bool MeasureBase::setProperty(Pid id, const QVariant& value)
             case Pid::REPEAT_JUMP:
                   setRepeatJump(value.toBool());
                   break;
+            case Pid::NO_OFFSET:
+                  setNoOffset(value.toInt());
+                  break;
+            case Pid::IRREGULAR:
+                  setIrregular(value.toBool());
+                  break;
             default:
                   if (!Element::setProperty(id, value))
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayoutAll();
+      score()->setPlaylistDirty();
       return true;
       }
 
@@ -482,6 +503,20 @@ MeasureBase* MeasureBase::nextMM() const
       }
 
 //---------------------------------------------------------
+//   prevMM
+//---------------------------------------------------------
+
+MeasureBase* MeasureBase::prevMM() const
+      {
+      if (_prev
+         && _prev->isMeasure()
+         && score()->styleB(Sid::createMultiMeasureRests)) {
+            return const_cast<Measure*>(toMeasure(_prev)->mmRest1());
+            }
+      return _prev;
+      }
+
+//---------------------------------------------------------
 //   writeProperties
 //---------------------------------------------------------
 
@@ -540,15 +575,6 @@ bool MeasureBase::readProperties(XmlReader& e)
       else
             return false;
       return true;
-      }
-
-//---------------------------------------------------------
-//   afrac
-//---------------------------------------------------------
-
-Fraction MeasureBase::afrac() const
-      {
-      return Fraction::fromTicks(_tick);
       }
 
 //---------------------------------------------------------

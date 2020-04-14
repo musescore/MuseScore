@@ -42,7 +42,7 @@ Note: this last shortcut would be noted &quot;Ctrl+A,Ctrl+B,Ctrl+C,Ctrl+D&quot;<
      </property>
      <property name="text">
       <string>Press up to four key combinations to enter shortcut sequence.
-Note: Ctrl+Shift+1 is one key combination</string>
+Note: &quot;Ctrl+Shift+1&quot; is one key combination.</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -121,11 +121,8 @@ Note: Ctrl+Shift+1 is one key combination</string>
      </property>
      <item>
       <widget class="QPushButton" name="clearButton">
-       <property name="accessibleName">
-        <string>Clear</string>
-       </property>
        <property name="accessibleDescription">
-        <string>Clear new shortcut</string>
+        <string>Clear new shortcut.</string>
        </property>
        <property name="text">
         <string>Clear</string>
@@ -147,11 +144,8 @@ Note: Ctrl+Shift+1 is one key combination</string>
      </item>
      <item>
       <widget class="QPushButton" name="addButton">
-       <property name="accessibleName">
-        <string>Add</string>
-       </property>
        <property name="accessibleDescription">
-        <string>Add the new shortcut to the list of existing shortcuts</string>
+        <string>Add the new shortcut to the list of existing shortcuts.</string>
        </property>
        <property name="text">
         <string>Add</string>
@@ -162,9 +156,6 @@ Note: Ctrl+Shift+1 is one key combination</string>
       <widget class="QPushButton" name="replaceButton">
        <property name="enabled">
         <bool>false</bool>
-       </property>
-       <property name="accessibleName">
-        <string>Replace</string>
        </property>
        <property name="accessibleDescription">
         <string>Replace the old shortcut(s) with new one.</string>
@@ -179,9 +170,6 @@ Note: Ctrl+Shift+1 is one key combination</string>
      </item>
      <item>
       <widget class="QPushButton" name="cancelButton">
-       <property name="accessibleName">
-        <string>Cancel</string>
-       </property>
        <property name="text">
         <string>Cancel</string>
        </property>

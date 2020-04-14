@@ -3,16 +3,14 @@ found:Clef (20) at 0
 found:KeySig (21) at 0
 found:TimeSig (23) at 0
 found:Chord (92) at 0
-  durationType:
   beamMode:0
   small:false
   stemDirection:AUTO
-  duration:
+  duration:1/4
 found:Rest (24) at 480
 found:Chord (92) at 960
-  durationType:
   beamMode:0
   small:false
   stemDirection:AUTO
-  duration:
+  duration:1/2
 found:BarLine (11) at 1920

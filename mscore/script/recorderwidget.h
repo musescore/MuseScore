@@ -52,9 +52,12 @@ class ScriptRecorderWidget : public QDockWidget {
 
    public:
       explicit ScriptRecorderWidget(MuseScore* mscore, QWidget* parent = nullptr);
+      ScriptRecorderWidget(const ScriptRecorder&) = delete;
+      ScriptRecorderWidget& operator=(const ScriptRecorderWidget&) = delete;
       ~ScriptRecorderWidget();
 
-      void recordCommand(const QString& cmd) { _recorder.recordCommand(cmd); }
+      ScriptRecorder& scriptRecorder() { return _recorder; }
+      const ScriptRecorder& scriptRecorder() const { return _recorder; }
       };
 
 }     // namespace Ms

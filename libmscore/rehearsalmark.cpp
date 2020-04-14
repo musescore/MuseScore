@@ -23,7 +23,7 @@ namespace Ms {
 
 static const ElementStyle rehearsalMarkStyle {
       { Sid::rehearsalMarkPlacement, Pid::PLACEMENT },
-      { Sid::rehearsalMarkPosAbove, Pid::OFFSET },
+      { Sid::rehearsalMarkMinDistance, Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------
@@ -47,21 +47,36 @@ void RehearsalMark::layout()
 
       Segment* s = segment();
       if (s) {
-            if (!s->rtick()) {
-                  // first CR of measure, decide whether to align to barline
-                  if (!s->prev() && align() & Align::CENTER) {
-                        // measure with no clef / keysig / timesig
-                        rxpos() -= s->x();
+            if (s->rtick().isZero()) {
+                  // first CR of measure, alignment is hcenter or right (the usual cases)
+                  // align with barline, point just after header, or start of measure depending on context
+
+                  Measure* m = s->measure();
+                  Segment* header = s->prev();  // possibly just a start repeat
+                  qreal measureX = -s->x();
+                  Segment* repeat = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
+                  qreal barlineX = repeat ? repeat->x() - s->x() : measureX;
+                  System* sys = m->system();
+                  bool systemFirst = (sys && m->isFirstInSystem());
+
+                  if (!header || repeat || !systemFirst) {
+                        // no header, or header with repeat, or header mid-system - align with barline
+                        rxpos() = barlineX;
                         }
-                  else if (align() & Align::RIGHT) {
-                        // measure with clef / keysig / timesig, rehearsal mark right aligned
-                        // align left edge of rehearsal to barline if that is further to left
-                        qreal leftX = bbox().x();
-                        qreal barlineX = -s->x();
-                        rxpos() += qMin(leftX, barlineX) + width();
+                  else {
+                        // header at start of system
+                        // align to a point just after the header
+                        Element* e = header->element(track());      // TODO: firstVisibleStaff
+                        qreal w = e ? e->width() : header->width();
+                        rxpos() = header->x() + w - s->x();
+
+                        // special case for right aligned rehearsal marks at start of system
+                        // left align with start of measure if that is further left
+                        if (align() & Align::RIGHT)
+                              rxpos() = qMin(rpos().x(), measureX + width());
                         }
                   }
-            autoplaceSegmentElement(styleP(Sid::rehearsalMarkMinDistance));
+            autoplaceSegmentElement();
             }
       }
 

@@ -15,14 +15,18 @@
  Implementation of class Selection plus other selection related functions.
 */
 
+#include "log.h"
+
 #include "mscore.h"
 #include "arpeggio.h"
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
+#include "dynamic.h"
 #include "element.h"
 #include "figuredbass.h"
 #include "glissando.h"
+#include "hairpin.h"
 #include "harmony.h"
 #include "fret.h"
 #include "hook.h"
@@ -69,23 +73,25 @@ Selection::Selection(Score* s)
       _staffStart    = 0;
       _staffEnd      = 0;
       _activeTrack   = 0;
+      _currentTick   = Fraction(-1, 1);
+      _currentTrack  = 0;
       }
 
 //---------------------------------------------------------
 //   tickStart
 //---------------------------------------------------------
 
-int Selection::tickStart() const
+Fraction Selection::tickStart() const
       {
       switch (_state) {
             case SelState::RANGE:
-                  return _startSegment->tick();
+                  return _startSegment ? _startSegment->tick() : Fraction(-1,1);
             case SelState::LIST: {
                   ChordRest* cr = firstChordRest();
-                  return (cr) ? cr->tick() : -1;
+                  return (cr) ? cr->tick() : Fraction(-1,1);
                   }
             default:
-                  return -1;
+                  return Fraction(-1,1);
             }
       }
 
@@ -93,26 +99,25 @@ int Selection::tickStart() const
 //   tickEnd
 //---------------------------------------------------------
 
-int Selection::tickEnd() const
+Fraction Selection::tickEnd() const
       {
       switch (_state) {
             case SelState::RANGE: {
-                  if (_endSegment) {
+                  if (_endSegment)
                         return _endSegment->tick();
-                        }
                   else { // endsegment == 0 if end of score
                       Measure* m = _score->lastMeasure();
-                      return m->tick() + m->ticks();
+                      return m->endTick();
                       }
                   break;
                   }
             case SelState::LIST: {
                   ChordRest* cr = lastChordRest();
-                  return (cr) ? cr->tick() : -1;
+                  return (cr) ? cr->segment()->tick() : Fraction(-1,1);
                   break;
                   }
             default:
-                  return -1;
+                  return Fraction(-1,1);
             }
       }
 
@@ -157,6 +162,29 @@ ChordRest* Selection::cr() const
       if (e->isChordRest())
             return toChordRest(e);
       return 0;
+      }
+
+//---------------------------------------------------------
+//   currentCR
+//---------------------------------------------------------
+
+ChordRest* Selection::currentCR() const
+      {
+      // no selection yet - start at very beginning, not first cr
+      if (_currentTick == Fraction(-1, 1))
+            return nullptr;
+      Segment* s = score()->tick2rightSegment(_currentTick, true);
+      if (!s)
+            return nullptr;
+      int track = _currentTrack;
+      // staff may have been removed - start at top
+      if (track < 0 || track >= score()->ntracks())
+            track = 0;
+      Element* e = s->element(track);
+      if (e && e->isChordRest())
+            return toChordRest(e);
+      else
+            return nullptr;
       }
 
 //---------------------------------------------------------
@@ -295,6 +323,12 @@ static QRectF changeSelection(Element* e, bool b)
 
 void Selection::clear()
       {
+
+      IF_ASSERT_FAILED(!isLocked()) {
+            LOGE() << "selection locked, reason: " << lockReason();
+            return;
+            }
+
       for (Element* e : _el) {
             if (e->isSpanner()) {   // TODO: only visible elements should be selectable?
                   Spanner* sp = toSpanner(e);
@@ -332,19 +366,24 @@ void Selection::remove(Element* el)
 
 void Selection::add(Element* el)
       {
+      IF_ASSERT_FAILED(!isLocked()) {
+            LOGE() << "selection locked, reason: " << lockReason();
+            return;
+            }
       _el.append(el);
       update();
       }
 
 //---------------------------------------------------------
 //   canSelect
+//   see also `static const char* labels[]` in selectionwindow.cpp
 //---------------------------------------------------------
 
 bool SelectionFilter::canSelect(const Element* e) const
       {
       if (e->isDynamic() || e->isHairpin())
           return isFiltered(SelectionFilterType::DYNAMIC);
-      if (e->isArticulation() || e->isTrill() || e->isVibrato())
+      if (e->isArticulation() || e->isTrill() || e->isVibrato() || e->isFermata())
           return isFiltered(SelectionFilterType::ARTICULATION);
       if (e->type() == ElementType::LYRICS)
           return isFiltered(SelectionFilterType::LYRICS);
@@ -372,7 +411,7 @@ bool SelectionFilter::canSelect(const Element* e) const
           return isFiltered(SelectionFilterType::OTHER_TEXT);
       if (e->isSLine()) // NoteLine, Volta
           return isFiltered(SelectionFilterType::OTHER_LINE);
-      if (e->isTremolo() && !toTremolo(e)->twoNotes())
+      if (e->isTremolo())
           return isFiltered(SelectionFilterType::TREMOLO);
       if (e->isChord() && toChord(e)->isGrace())
           return isFiltered(SelectionFilterType::GRACE_NOTE);
@@ -405,6 +444,10 @@ bool SelectionFilter::canSelectVoice(int track) const
 
 void Selection::appendFiltered(Element* e)
       {
+      IF_ASSERT_FAILED(!isLocked()) {
+            LOGE() << "selection locked, reason: " << lockReason();
+            return;
+            }
       if (selectionFilter().canSelect(e))
             _el.append(e);
       }
@@ -415,6 +458,10 @@ void Selection::appendFiltered(Element* e)
 
 void Selection::appendChord(Chord* chord)
       {
+      IF_ASSERT_FAILED(!isLocked()) {
+            LOGE() << "selection locked, reason: " << lockReason();
+            return;
+            }
       if (chord->beam() && !_el.contains(chord->beam()))
             _el.append(chord->beam());
       if (chord->stem())
@@ -443,6 +490,14 @@ void Selection::appendChord(Chord* chord)
                               _el.append(note->tieFor());
                         }
                   }
+            for (Spanner* sp : note->spannerFor()) {
+                  if (sp->endElement()->isNote()) {
+                        Note* endNote = toNote(sp->endElement());
+                        Segment* s = endNote->chord()->segment();
+                        if (s->tick() < tickEnd())
+                              _el.append(sp);
+                        }
+                  }
             }
       }
 
@@ -452,11 +507,15 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::updateSelectedElements()
       {
+      IF_ASSERT_FAILED(!isLocked()) {
+            LOGE() << "selection locked, reason: " << lockReason();
+            return;
+            }
       if (_state != SelState::RANGE) {
             update();
             return;
             }
-      if (_state == SelState::RANGE && _plannedTick1 != -1 && _plannedTick2 != -1) {
+      if (_state == SelState::RANGE && _plannedTick1 != Fraction(-1,1) && _plannedTick2 != Fraction(-1,1)) {
             const int staffStart = _staffStart;
             const int staffEnd = _staffEnd;
             deselectAll();
@@ -472,9 +531,11 @@ void Selection::updateSelectedElements()
                   // the first segment for them.
                   return;
                   }
+            if (s2 && s2 == s2->measure()->first())
+                  s2 = s2->prev1();   // we want the last segment of the previous measure
             setRange(s1, s2, staffStart, staffEnd);
-            _plannedTick1 = -1;
-            _plannedTick2 = -1;
+            _plannedTick1 = Fraction(-1,1);
+            _plannedTick2 = Fraction(-1,1);
             }
 
       for (Element* e : _el)
@@ -531,8 +592,8 @@ void Selection::updateSelectedElements()
                         }
                   }
             }
-      int stick = startSegment()->tick();
-      int etick = tickEnd();
+      Fraction stick = startSegment()->tick();
+      Fraction etick = tickEnd();
 
       for (auto i = _score->spanner().begin(); i != _score->spanner().end(); ++i) {
             Spanner* sp = (*i).second;
@@ -542,9 +603,9 @@ void Selection::updateSelectedElements()
             if (!canSelectVoice(sp->track()))
                   continue;
             // ignore voltas
-            if (sp->type() == ElementType::VOLTA)
+            if (sp->isVolta())
                   continue;
-            if (sp->type() == ElementType::SLUR) {
+            if (sp->isSlur()) {
                   // ignore if start & end elements not calculated yet
                   if (!sp->startElement() || !sp->endElement())
                         continue;
@@ -583,7 +644,7 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffSt
 //    creating MM rests is pending).
 //---------------------------------------------------------
 
-void Selection::setRangeTicks(int tick1, int tick2, int staffStart, int staffEnd)
+void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, int staffStart, int staffEnd)
       {
       Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= _score->nstaves());
 
@@ -637,8 +698,15 @@ void Selection::updateState()
             setState(SelState::NONE);
       else if (_state == SelState::NONE)
             setState(SelState::LIST);
-      if (!_score->noteEntryMode())
-             _score->inputState().update(e);
+      if (e) {
+            if (e->isSpannerSegment())
+                  _currentTick = toSpannerSegment(e)->spanner()->tick();
+            else
+                  _currentTick = e->tick();
+            // ignore system elements (e.g., frames)
+            if (e->track() >= 0)
+                  _currentTrack = e->track();
+            }
       }
 
 //---------------------------------------------------------
@@ -710,7 +778,7 @@ bool hasElementInTrack(Segment* startSeg, Segment* endSeg, int track)
 //   firstElementInTrack
 //---------------------------------------------------------
 
-int firstElementInTrack(Segment* startSeg, Segment* endSeg, int track)
+static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, int track)
       {
       for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
             if (!seg->enabled())
@@ -718,7 +786,7 @@ int firstElementInTrack(Segment* startSeg, Segment* endSeg, int track)
             if (seg->element(track))
                   return seg->tick();
             }
-      return -1;
+      return Fraction(-1,1);
       }
 
 //---------------------------------------------------------
@@ -734,13 +802,13 @@ QByteArray Selection::staffMimeData() const
       xml.setClipboardmode(true);
       xml.setFilter(selectionFilter());
 
-      int ticks  = tickEnd() - tickStart();
+      Fraction ticks  = tickEnd() - tickStart();
       int staves = staffEnd() - staffStart();
       if (!MScore::testMode) {
-            xml.stag(QString("StaffList version=\"" MSC_VERSION "\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(tickStart()).arg(ticks).arg(staffStart()).arg(staves));
+            xml.stag(QString("StaffList version=\"" MSC_VERSION "\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(tickStart().ticks()).arg(ticks.ticks()).arg(staffStart()).arg(staves));
             }
       else {
-            xml.stag(QString("StaffList version=\"2.00\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(tickStart()).arg(ticks).arg(staffStart()).arg(staves));
+            xml.stag(QString("StaffList version=\"2.00\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(tickStart().ticks()).arg(ticks.ticks()).arg(staffStart()).arg(staves));
             }
       Segment* seg1 = _startSegment;
       Segment* seg2 = _endSegment;
@@ -762,8 +830,8 @@ QByteArray Selection::staffMimeData() const
             for (int voice = 0; voice < VOICES; voice++) {
                   if (hasElementInTrack(seg1, seg2, startTrack + voice)
                      && xml.canWriteVoice(voice)) {
-                        int offset = firstElementInTrack(seg1, seg2, startTrack+voice) - tickStart();
-                        xml.tag(QString("voice id=\"%1\"").arg(voice), offset);
+                        Fraction offset = firstElementInTrack(seg1, seg2, startTrack+voice) - tickStart();
+                        xml.tag(QString("voice id=\"%1\"").arg(voice), offset.ticks());
                         }
                   }
             xml.etag(); // </voiceOffset>
@@ -783,8 +851,7 @@ QByteArray Selection::staffMimeData() const
 
 QByteArray Selection::symbolListMimeData() const
       {
-
-      struct MAPDATA {
+      struct MapData {
             Element* e;
             Segment* s;
             };
@@ -797,11 +864,11 @@ QByteArray Selection::symbolListMimeData() const
 
       int         topTrack    = 1000000;
       int         bottomTrack = 0;
-      Segment*    firstSeg    = nullptr;
-      int         firstTick   = 0x7FFFFFFF;
-      MAPDATA     mapData;
-      Segment*    seg         = nullptr;
-      std::multimap<qint64, MAPDATA> map;
+      Segment*    firstSeg    = 0;
+      Fraction    firstTick   = Fraction(0x7FFFFFFF,1);
+      MapData     mapData;
+      Segment*    seg         = 0;
+      std::multimap<qint64, MapData> map;
 
       // scan selection element list, inserting relevant elements in a tick-sorted map
       foreach (Element* e, _el) {
@@ -834,7 +901,6 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case ElementType::IMAGE:
                   case ElementType::TIE:
                   case ElementType::CHORDLINE:
-                  case ElementType::DYNAMIC:
                   case ElementType::BEAM:
                   case ElementType::HOOK:
                   case ElementType::MARKER:
@@ -849,7 +915,6 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case ElementType::BEND:
                   case ElementType::TREMOLOBAR:
                   case ElementType::VOLTA:
-                  case ElementType::HAIRPIN_SEGMENT:
                   case ElementType::OTTAVA_SEGMENT:
                   case ElementType::TRILL_SEGMENT:
                   case ElementType::VIBRATO_SEGMENT:
@@ -871,7 +936,6 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case ElementType::TAB_DURATION_SYMBOL:
                   case ElementType::FSYMBOL:
                   case ElementType::PAGE:
-                  case ElementType::HAIRPIN:
                   case ElementType::OTTAVA:
                   case ElementType::PEDAL:
                   case ElementType::TRILL:
@@ -923,6 +987,15 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case ElementType::LYRICS:
                         seg = toLyrics(e)->segment();
                         break;
+                  case ElementType::DYNAMIC:
+                        seg = toDynamic(e)->segment();
+                        break;
+                  case ElementType::HAIRPIN_SEGMENT:
+                        e = toHairpinSegment(e)->hairpin();
+                        // fall through
+                  case ElementType::HAIRPIN:
+                        seg = toHairpin(e)->startSegment();
+                        break;
                   default:
                         continue;
                   }
@@ -937,7 +1010,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   }
             mapData.e = e;
             mapData.s = seg;
-            map.insert(std::pair<qint64,MAPDATA>( ((qint64)track << 32) + seg->tick(), mapData));
+            map.insert(std::pair<qint64,MapData>( ((qint64)track << 32) + seg->tick().ticks(), mapData));
             }
 
       xml.stag(QString("SymbolList version=\"" MSC_VERSION "\" fromtrack=\"%1\" totrack=\"%2\"")
@@ -947,13 +1020,13 @@ Enabling copying of more element types requires enabling pasting in Score::paste
       int   currTrack = -1;
       for (auto iter = map.cbegin(); iter != map.cend(); ++iter) {
             int   numSegs;
-            int   track = (int)(iter->first >> 32);
+            int   track = static_cast<int>(iter->first >> 32);
             if (currTrack != track) {
                   xml.tag("trackOffset", track - topTrack);
                   currTrack = track;
                   seg       = firstSeg;
                   }
-            xml.tag("tickOffset", (int)(iter->first & 0xFFFFFFFF) - firstTick);
+            xml.tag("tickOffset", static_cast<int>(iter->first & 0xFFFFFFFF) - firstTick.ticks());
             numSegs = 0;
             // with figured bass, we need to look for the proper segment
             // not only according to ChordRest elements, but also annotations
@@ -1079,7 +1152,7 @@ static bool checkStart(Element* e)
 //     return true  if element is part of a tuplet, but not the end
 //---------------------------------------------------------
 
-static bool checkEnd(Element* e, int endTick)
+static bool checkEnd(Element* e, const Fraction& endTick)
       {
       if (e == 0 || !e->isChordRest())
             return false;
@@ -1119,7 +1192,7 @@ bool Selection::canCopy() const
       if (_state != SelState::RANGE)
             return true;
 
-      int endTick = _endSegment ? _endSegment->tick() : _score->lastSegment()->tick();
+      Fraction endTick = _endSegment ? _endSegment->tick() : _score->lastSegment()->tick();
 
       for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx) {
 
@@ -1259,7 +1332,7 @@ void Selection::extendRangeSelection(ChordRest* cr)
 //    extending by a chord rest.
 //---------------------------------------------------------
 
-void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, int tick, int etick)
+void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, const Fraction& tick, const Fraction& etick)
       {
       bool activeIsFirst = false;
       int activeStaff = _activeTrack / VOICES;

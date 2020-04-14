@@ -226,12 +226,20 @@
              <property name="text">
               <string notr="true"/>
              </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/timesig_allabreve.svg</normaloff>:/data/icons/timesig_allabreve.svg</iconset>
+             </property>
             </widget>
            </item>
            <item row="1" column="0">
             <widget class="QRadioButton" name="fourfourButton">
              <property name="text">
               <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/timesig_common.svg</normaloff>:/data/icons/timesig_common.svg</iconset>
              </property>
             </widget>
            </item>

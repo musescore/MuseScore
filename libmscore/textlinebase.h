@@ -32,8 +32,9 @@ class TextLineBaseSegment : public LineSegment {
    protected:
       Text* _text;
       Text* _endText;
-      QPointF points[4];
+      QPointF points[6];
       int npoints;
+      qreal lineLength;
       bool twoLines { false };
 
    public:

@@ -17,13 +17,13 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-REVISION  := `cat mscore/revision.h`
 CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
 PREFIX    = "/usr/local"
-VERSION   = "3.0b-${REVISION}"
-#VERSION = 3.0.2
+VERSION   = `cmake -P config.cmake | grep -oP "VERSION\s+\K.*"`
 BUILD_NUMBER=""
+
+TELEMETRY_TRACK_ID=""
 
 # Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
 SUFFIX=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"
@@ -32,7 +32,9 @@ LABEL=""# E.g.: LABEL="Development Build" --> "MuseScore 2" becomes "MuseScore 2
 BUILD_LAME="ON" # Non-free, required for MP3 support. Override with "OFF" to disable.
 BUILD_PULSEAUDIO="ON" # Override with "OFF" to disable.
 BUILD_JACK="ON"       # Override with "OFF" to disable.
+BUILD_ALSA="ON"       # Override with "OFF" to disable.
 BUILD_PORTAUDIO="ON"  # Override with "OFF" to disable.
+BUILD_PORTMIDI="ON"   # Override with "OFF" to disable.
 BUILD_WEBENGINE="ON"  # Override with "OFF" to disable.
 USE_SYSTEM_FREETYPE="OFF" # Override with "ON" to enable. Requires freetype >= 2.5.2.
 COVERAGE="OFF"        # Override with "ON" to enable.
@@ -44,7 +46,7 @@ NO_RPATH="FALSE"# Package maintainers may want to override this (e.g. Debian)
 #
 # change path to include your Qt5 installation
 #
-BINPATH      = ${PATH}
+BINPATH      = "${PATH}"
 
 release:
 	if test ! -d build.release; then mkdir build.release; fi; \
@@ -56,9 +58,12 @@ release:
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"      \
   	  -DMUSESCORE_LABEL="${LABEL}"             \
   	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"   \
+  	  -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}" \
+  	  -DBUILD_PORTMIDI="${BUILD_PORTMIDI}"  \
   	  -DBUILD_JACK="${BUILD_JACK}"             \
+  	  -DBUILD_ALSA="${BUILD_ALSA}"              \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"   \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"   \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
@@ -86,7 +91,9 @@ debug:
   	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"              \
   	  -DBUILD_LAME="${BUILD_LAME}"                        \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}"            \
+  	  -DBUILD_PORTMIDI="${BUILD_PORTMIDI}"             \
   	  -DBUILD_JACK="${BUILD_JACK}"                        \
+  	  -DBUILD_ALSA="${BUILD_ALSA}"                         \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"              \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"              \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
@@ -117,7 +124,7 @@ win32:
             make install;                              \
             make package;                              \
          else                                          \
-            echo "build directory win32build does alread exist, please remove first"; \
+            echo "build directory win32build does already exist, please remove first"; \
          fi
 
 #
@@ -164,9 +171,7 @@ portable: install
 	&& cp "share/applications/$${dsktp}" "$${dsktp}" \
 	&& cp "share/icons/hicolor/scalable/apps/$${icon}" "$${icon}" \
 	&& <"$${build_dir}/$${mani}" >"$${mani}" \
-	   sed -rn 's/.*(share\/)(man|mime|icons|applications)(.*)/\1\2\3/p' \
-	&& "$${build_dir}/../build/Linux+BSD/portable/copy-libs" . \
-	;  ./AppRun check-depends | tee "$${build_dir}/dependencies.txt"
+	   sed -rn 's/.*(share\/)(man|mime|icons|applications)(.*)/\1\2\3/p'
 
 installdebug: debug
 	cd build.debug \
@@ -209,7 +214,7 @@ unix:
             make -j${CPUS} -f Makefile;            \
             make package;                          \
          else                                      \
-            echo "build directory linux does alread exist, please remove first";  \
+            echo "build directory linux does already exist, please remove first";  \
          fi
 
 zip:

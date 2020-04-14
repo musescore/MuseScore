@@ -10,62 +10,16 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-include (${PROJECT_SOURCE_DIR}/build/CopyFilesMacros.cmake)
+include (${PROJECT_SOURCE_DIR}/build/functions.cmake)
 
-include_directories(
-      ${PROJECT_BINARY_DIR}
-      ${PROJECT_SOURCE_DIR}
+set(MANUAL_DEST "${PROJECT_BINARY_DIR}/share/manual/plugins/plugins3.html")
+
+fn__copy_during_build(
+      "${CMAKE_CURRENT_SOURCE_DIR}/plugins3.html"
+      "${MANUAL_DEST}"
       )
-
-if (APPLE)
-        file(GLOB_RECURSE INCS "*.h")
-else (APPLE)
-        set(INCS "")
-endif (APPLE)
-
-add_executable(
-      genManual
-      ${INCS}
-      genManual.cpp
-      )
-target_link_libraries(
-      genManual
-      ${QT_LIBRARIES}
-      )
-
-if(APPLE)
-set_target_properties (
-      genManual
-      PROPERTIES
-      COMPILE_FLAGS "-include all.h -D TESTROOT=\\\\\"${PROJECT_SOURCE_DIR}\\\\\" -g -Wall -Wextra"
-      )
-else(APPLE)
-   if (NOT MSVC)
-      set_target_properties (
-         genManual
-         PROPERTIES
-         COMPILE_FLAGS "-include all.h -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
-         )
-   else (NOT MSVC)
-      set_target_properties (
-         genManual
-         PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\""
-         )
-
-   endif (NOT MSVC)
-endif(APPLE)
-
-if(NOT MSVC)
-	ADD_DEPENDENCIES(genManual mops1)
-endif(NOT MSVC)
 
 add_custom_target(pluginDocumentation
       ALL
-      DEPENDS genManual
-      )
-
-add_custom_command(TARGET pluginDocumentation
-      POST_BUILD
-      COMMAND ${PROJECT_BINARY_DIR}/manual/${CMAKE_CFG_INTDIR}/genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}/share/manual
+      DEPENDS "${MANUAL_DEST}"
       )

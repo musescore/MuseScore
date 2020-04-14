@@ -565,11 +565,11 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
       int k = 0;
       while (i < end) {
             pitch[k] = notes[i]->pitch() % 12;
-            int tick = notes[i]->chord()->tick();
+            Fraction tick = notes[i]->chord()->tick();
             key[k]   = int(notes[i]->staff()->key(tick)) + 7;
             if (key[k] < 0 || key[k] > 14) {
                   qDebug("illegal key at tick %d: %d, window %d-%d",
-                     tick, key[k] - 7, start, end);
+                     tick.ticks(), key[k] - 7, start, end);
                   return 0;
                   // abort();
                   }
@@ -586,13 +586,13 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
             int pa    = 0;
             int pb    = 0;
             int l     = pitch[0] * 2 + (i & 1);
-            Q_ASSERT(l >= 0 && l <= (int)(sizeof(tab1)/sizeof(*tab1)));
+            Q_ASSERT(l >= 0 && l <= static_cast<int>(sizeof(tab1)/sizeof(*tab1)));
             int lof1a = tab1[l];
             int lof1b = tab2[l];
 
             for (k = 1; k < 10; ++k) {
                   int l1 = pitch[k] * 2 + ((i & (1 << k)) >> k);
-                  Q_ASSERT(l1 >= 0 && l1 <= (int)(sizeof(tab1)/sizeof(*tab1)));
+                  Q_ASSERT(l1 >= 0 && l1 <= static_cast<int>(sizeof(tab1)/sizeof(*tab1)));
                   int lof2a = tab1[l1];
                   int lof2b = tab2[l1];
                   pa += penalty(lof1a, lof2a, key[k]);
@@ -633,7 +633,7 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
 void changeAllTpcs(Note* n, int tpc1)
       {
       Interval v;
-      int tick = n && n->chord() ? n->chord()->tick() : -1;
+      Fraction tick = n && n->chord() ? n->chord()->tick() : Fraction(-1,1);
       if (n && n->part() && n->part()->instrument()) {
             v = n->part()->instrument(tick)->transpose();
             v.flip();
@@ -684,11 +684,11 @@ void Score::spellNotelist(std::vector<Note*>& notes)
                         case 3:
                               k = end - start - 3;
                               changeAllTpcs(notes[end-3], tab[(notes[end-3]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
-                              // FALLTHROUGH
+                              Q_FALLTHROUGH();
                         case 2:
                               k = end - start - 2;
                               changeAllTpcs(notes[end-2], tab[(notes[end-2]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
-                              // FALLTHROUGH
+                              Q_FALLTHROUGH();
                         case 1:
                               k = end - start - 1;
                               changeAllTpcs(notes[end-1], tab[(notes[end-1]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
@@ -803,6 +803,78 @@ int tpc2degree(int tpc, Key key)
       QString scale = scales[int(key)+7];
       QString stepName = tpc2stepName(tpc);
       return (names.indexOf(stepName) - names.indexOf(scale) +28) % 7;
+      }
+
+//---------------------------------------------------------
+//   tpcInterval
+///   Finds tpc of a note based on an altered interval
+///   from a starting note
+//---------------------------------------------------------
+
+int tpcInterval(int startTpc, int interval, int alter)
+      {
+      Q_ASSERT(interval > 0);
+      static const int intervals[7] = {
+//          1  2  3   4  5  6  7
+            0, 2, 4, -1, 1, 3, 5
+      };
+
+      int result = startTpc + intervals[(interval - 1) % 7] + alter * TPC_DELTA_SEMITONE;
+      //ensure that we don't have anything more than double sharp or double flat
+      //(I know, breaking some convention, but it's the best we can do for now)
+      while (result > Tpc::TPC_MAX)
+            result -= TPC_DELTA_ENHARMONIC;
+      while (result < Tpc::TPC_MIN)
+            result += TPC_DELTA_ENHARMONIC;
+
+      return result;
+      }
+
+//---------------------------------------------------------
+//   step2pitchInterval
+///   Finds pitch between notes a specified altered interval away
+///
+///   For example:
+///         step = 3, alter = 0 means major 3rd
+///         step = 5, alter = -1 means diminished 5
+///         step = 6, alter = 2 means augmented sixth
+//---------------------------------------------------------
+
+int step2pitchInterval(int step, int alter)
+      {
+      Q_ASSERT(step > 0);
+      static const int intervals[7] = {
+//          1  2  3  4  5  6  7
+            0, 2, 4, 5, 7, 9, 11
+      };
+
+      return intervals[(step - 1) % 7] + alter;
+      }
+
+//----------------------------------------------
+//   function2Tpc
+///   might be temporary, just used to parse nashville notation now
+///
+//----------------------------------------------
+int function2Tpc(const QString& s, Key key) {
+      //TODO - PHV: allow for alternate spellings
+      int alter = 0;
+      int step;
+      if (!s.isEmpty() && s[0].isDigit()) {
+            step = s[0].digitValue();
+            }
+      else if (s.size() > 1 && s[1].isDigit()) {
+            step = s[1].digitValue();
+            if (s[0] == 'b')
+                  alter = -1;
+            else if (s[0] == '#')
+                  alter = 1;
+            }
+      else
+            return Tpc::TPC_INVALID;
+
+      int keyTpc = int(key) + 14; //tpc of key (ex. F# major would be Tpc::F_S)
+      return tpcInterval(keyTpc, step, alter);
       }
 
 }

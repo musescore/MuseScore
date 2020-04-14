@@ -20,6 +20,7 @@ namespace Ms
             virtual void checkUpdates() {}
             virtual void checkForUpdatesNow() {}
             virtual void cleanup() {}
+            virtual ~GeneralAutoUpdater() {}
       };
 
 } //Ms

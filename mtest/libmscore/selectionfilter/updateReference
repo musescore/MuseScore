@@ -9,6 +9,7 @@ cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter6-base.xm
 cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter7-base.xml selectionfilter7-base-ref.xml
 cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter8-base.xml selectionfilter8-base-ref.xml
 cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter9-base.xml selectionfilter9-base-ref.xml
+cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter11-base.xml selectionfilter11-base-ref.xml
 cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter12-base.xml selectionfilter12-base-ref.xml
 cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter13-base.xml selectionfilter13-base-ref.xml
 cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter14-base.xml selectionfilter14-base-ref.xml

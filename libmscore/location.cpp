@@ -138,7 +138,7 @@ void Location::fillPositionForElement(const Element* e, bool absfrac)
       if (track() == absDefaults.track())
             setTrack(track(e));
       if (frac() == absDefaults.frac())
-            setFrac(absfrac ? e->afrac() : e->rfrac());
+            setFrac(absfrac ? e->tick() : e->rtick());
       if (measure() == absDefaults.measure())
             setMeasure(absfrac ? 0 : measure(e));
       }
@@ -241,12 +241,12 @@ int Location::note(const Element* e)
             const std::vector<Note*>& notes = n->chord()->notes();
             if (notes.size() == 1)
                   return 0;
-            int noteIdx;
-            for (noteIdx = 0; noteIdx < int(notes.size()); ++noteIdx) {
+            size_t noteIdx;
+            for (noteIdx = 0; noteIdx < notes.size(); ++noteIdx) {
                   if (n == notes.at(noteIdx))
                         break;
                   }
-            return noteIdx;
+            return static_cast<int>(noteIdx);
             }
       return absDefaults.note();
       }
@@ -265,9 +265,9 @@ QVariant Location::getLocationProperty(Pid pid, const Element* start, const Elem
             case Pid::LOCATION_MEASURES:
                   return measure(end) - measure(start);
             case Pid::LOCATION_FRACTIONS:
-                  return end->rfrac() - start->rfrac();
+                  return end->rtick() - start->rtick();
             case Pid::LOCATION_GRACE:
-                  return graceIndex(end) - graceIndex(end);
+                  return graceIndex(start) - graceIndex(end);
             case Pid::LOCATION_NOTE:
                   return note(start) - note(end);
             default:

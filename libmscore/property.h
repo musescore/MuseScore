@@ -68,6 +68,7 @@ enum class Pid {
       Z,
       SMALL,
       SHOW_COURTESY,
+      KEYSIG_MODE,
       LINE_TYPE,
       PITCH,
 
@@ -141,6 +142,7 @@ enum class Pid {
       TEMPO,
       TEMPO_FOLLOW_TEXT,
       ACCIDENTAL_BRACKET,
+      ACCIDENTAL_TYPE,
       NUMERATOR_STRING,
       DENOMINATOR_STRING,
       FBPREFIX,             // used for FiguredBassItem
@@ -163,13 +165,18 @@ enum class Pid {
       HAIRPIN_HEIGHT,
       HAIRPIN_CONT_HEIGHT,
       VELO_CHANGE,
+      VELO_CHANGE_METHOD,
+      VELO_CHANGE_SPEED,
+      DYNAMIC_TYPE,
       DYNAMIC_RANGE,
+//100
+      SINGLE_NOTE_DYNAMICS,
+      CHANGE_METHOD,
       PLACEMENT,
       VELOCITY,
       JUMP_TO,
       PLAY_UNTIL,
       CONTINUE_AT,
-//100
       LABEL,
       MARKER_TYPE,
       ARP_USER_LEN1,
@@ -185,7 +192,6 @@ enum class Pid {
       DIAGONAL,
       GROUPS,
       LINE_STYLE,
-      LINE_COLOR,
       LINE_WIDTH,
       LASSO_POS,
       LASSO_SIZE,
@@ -220,23 +226,22 @@ enum class Pid {
       LINE_VISIBLE,
       MAG,
       USE_DRUMSET,
-      PART_VOLUME,
-      PART_MUTE,
-      PART_PAN,
-      PART_REVERB,
-
-      PART_CHORUS,
       DURATION,
       DURATION_TYPE,
       ROLE,
       TRACK,
+
       GLISSANDO_STYLE,
       FRET_STRINGS,
       FRET_FRETS,
-      FRET_BARRE,
+      FRET_NUT,
       FRET_OFFSET,
-
       FRET_NUM_POS,
+
+      HARMONY_VOICE_LITERAL,
+      HARMONY_VOICING,
+      HARMONY_DURATION,
+
       SYSTEM_BRACKET,
       GAP,
       AUTOPLACE,
@@ -256,7 +261,7 @@ enum class Pid {
       STEP_OFFSET,
       STAFF_SHOW_BARLINES,
       STAFF_SHOW_LEDGERLINES,
-      STAFF_SLASH_STYLE,
+      STAFF_STEMLESS,
 
       STAFF_NOTEHEAD_SCHEME,
       STAFF_GEN_CLEF,
@@ -279,10 +284,10 @@ enum class Pid {
 
       FRAME_TYPE,
       FRAME_WIDTH,
-//200
       FRAME_PADDING,
       FRAME_ROUND,
       FRAME_FG_COLOR,
+//200
       FRAME_BG_COLOR,
       SIZE_SPATIUM_DEPENDENT,
       ALIGN,
@@ -328,6 +333,27 @@ enum class Pid {
       VOICE,
       POSITION,
 
+      CLEF_TYPE_CONCERT,
+      CLEF_TYPE_TRANSPOSING,
+      KEY,
+      ACTION, // for Icon
+      MIN_DISTANCE,
+
+      ARPEGGIO_TYPE,
+      CHORD_LINE_TYPE,
+      CHORD_LINE_STRAIGHT,
+      TREMOLO_TYPE,
+      TREMOLO_PLACEMENT,
+      TREMOLO_BEAM_STYLE,
+      HARMONY_TYPE,
+
+      START_WITH_LONG_NAMES,
+      START_WITH_MEASURE_ONE,
+
+      PATH, // for ChordLine to make its shape changes undoable
+      
+      PREFER_SHARP_FLAT,
+
       END
       };
 
@@ -362,25 +388,34 @@ enum class P_TYPE : char {
       INT_LIST,
       GLISSANDO_STYLE,
       BARLINE_TYPE,
-      HEAD_TYPE,         // enum class Notehead::Type
+      HEAD_TYPE,        // enum class Notehead::Type
       HEAD_GROUP,       // enum class Notehead::Group
       ZERO_INT,         // displayed with offset +1
       FONT,
       SUB_STYLE,
       ALIGN,
+      CHANGE_METHOD,    // enum class VeloChangeMethod (for single notedynamics)
+      CHANGE_SPEED,     // enum class Dynamic::Speed
+      CLEF_TYPE,        // enum class ClefType
+      DYNAMIC_TYPE,     // enum class Dynamic::Type
+      KEYMODE,          // enum class KeyMode
+
+      PATH,             // QPainterPath
       };
 
 extern QVariant readProperty(Pid type, XmlReader& e);
+extern QVariant propertyFromString(Pid type, QString value);
+extern QString propertyToString(Pid, QVariant value, bool mscx);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
-extern const char* propertyQmlName(Pid);
 extern bool propertyLink(Pid id);
-extern Pid propertyIdQml(const QString& qmlName);
-extern Pid propertyIdQml(const QStringRef& qmlName);
-extern Pid propertyIdName(const QString& name);
-extern Pid propertyIdName(const QStringRef& name);
+extern Pid propertyId(const QString& name);
+extern Pid propertyId(const QStringRef& name);
 extern QString propertyUserName(Pid);
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(QPainterPath); // for properties with P_TYPE::PATH
+
 #endif
 

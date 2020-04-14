@@ -130,7 +130,7 @@ void Image::draw(QPainter* painter) const
                         s = _size * spatium();
                   else
                         s = _size * DPMM;
-                  if (score()->printing() && !MScore::svgPrinting) {
+                  if (score() && score()->printing() && !MScore::svgPrinting) {
                         // use original image size for printing, but not for svg for reasonable file size.
                         painter->scale(s.width() / rasterDoc->width(), s.height() / rasterDoc->height());
                         painter->drawPixmap(QPointF(0, 0), QPixmap::fromImage(*rasterDoc));
@@ -354,24 +354,15 @@ bool Image::loadFromData(const QString& ss, const QByteArray& ba)
       }
 
 //---------------------------------------------------------
-//   ImageEditData
-//---------------------------------------------------------
-
-class ImageEditData : public ElementEditData {
-   public:
-      QSizeF size;
-      };
-
-//---------------------------------------------------------
 //   startDrag
 //---------------------------------------------------------
 
-void Image::startDrag(EditData& data)
+void Image::startEditDrag(EditData& data)
       {
-      ImageEditData* ed = new ImageEditData();
-      ed->e    = this;
-      ed->size = _size;
-      data.addData(ed);
+      BSymbol::startEditDrag(data);
+      ElementEditData* eed = data.getData(this);
+
+      eed->pushProperty(Pid::SIZE);
       }
 
 //---------------------------------------------------------
@@ -406,25 +397,16 @@ void Image::editDrag(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   endEditDrag
+//   gripsPositions
 //---------------------------------------------------------
 
-void Image::endEditDrag(EditData& ed)
-      {
-      ImageEditData* ied = static_cast<ImageEditData*>(ed.getData(this));
-      if (_size != ied->size)
-            score()->undoPropertyChanged(this, Pid::SIZE, ied->size);
-      }
-
-//---------------------------------------------------------
-//   updateGrips
-//---------------------------------------------------------
-
-void Image::updateGrips(EditData& ed) const
+std::vector<QPointF> Image::gripsPositions(const EditData&) const
       {
       QRectF r(pageBoundingRect());
-      ed.grip[0].translate(QPointF(r.x() + r.width(), r.y() + r.height() * .5));
-      ed.grip[1].translate(QPointF(r.x() + r.width() * .5, r.y() + r.height()));
+      return {
+            QPointF(r.x() + r.width(), r.y() + r.height() * .5),
+            QPointF(r.x() + r.width() * .5, r.y() + r.height())
+            };
       }
 
 //---------------------------------------------------------
@@ -566,17 +548,5 @@ QVariant Image::propertyDefault(Pid id) const
                   return Element::propertyDefault(id);
             }
       }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Image::startEdit(EditData& ed)
-      {
-      Element::startEdit(ed);
-      ed.grips   = 2;
-      ed.curGrip = Grip(1);
-      }
-
 }
 

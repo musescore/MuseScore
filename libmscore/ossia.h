@@ -26,8 +26,9 @@ class Ossia final : public Element {
    public:
       Ossia(Score*);
       Ossia(const Ossia&);
-      virtual Ossia* clone() const override     { return new Ossia(*this); }
-      virtual ElementType type() const override { return ElementType::OSSIA; }
+
+      Ossia* clone() const override     { return new Ossia(*this); }
+      ElementType type() const override { return ElementType::OSSIA; }
       };
 
 

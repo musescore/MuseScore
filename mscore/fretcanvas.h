@@ -25,6 +25,7 @@ namespace Ms {
 class Accidental;
 class Clef;
 class FretDiagram;
+enum class FretDotType : signed char;
 
 //---------------------------------------------------------
 //   FretCanvas
@@ -33,19 +34,32 @@ class FretDiagram;
 class FretCanvas : public QFrame {
       Q_OBJECT
 
-      FretDiagram* diagram;
-      int cstring;
-      int cfret;
+      FretDiagram* diagram { nullptr };
+      int cstring          { 0 };
+      int cfret            { 0 };
+
+      bool _automaticDotType    { true };
+      FretDotType _currentDtype;
+      bool _barreMode    { false };
+      bool _multidotMode { false };
 
       virtual void paintEvent(QPaintEvent*);
       virtual void mousePressEvent(QMouseEvent*);
       virtual void mouseMoveEvent(QMouseEvent*);
 
+      void paintDotSymbol(QPainter& p, QPen& pen, qreal y, qreal x, qreal dotd, FretDotType dtype);
       void getPosition(const QPointF& pos, int* string, int* fret);
 
    public:
       FretCanvas(QWidget* parent = 0);
       void setFretDiagram(FretDiagram* fd);
+
+      void setAutomaticDotType(bool v)              { _automaticDotType = v; }
+      void setCurrentDotType(FretDotType t)         { _currentDtype = t; }
+      void setBarreMode(bool v)                     { _barreMode = v; }
+      void setMultidotMode(bool v)                  { _multidotMode = v; }
+      void clear();
+      
       };
 
 

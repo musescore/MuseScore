@@ -13,13 +13,14 @@
 #include "toolbarEditor.h"
 #include "musescore.h"
 #include "workspace.h"
+#include "icons.h"
 
 namespace Ms {
 
 static const char* toolbars[] = {
-      "Note Input",
-      "File Operations",
-      "Playback Controls"
+      QT_TRANSLATE_NOOP("toolbar", "Note Input"),
+      QT_TRANSLATE_NOOP("toolbar", "File Operations"),
+      QT_TRANSLATE_NOOP("toolbar", "Playback Controls")
       };
 
 //---------------------------------------------------------
@@ -46,7 +47,7 @@ ToolbarEditor::ToolbarEditor(QWidget* parent)
       setupUi(this);
 
       for (auto i : toolbars)
-            toolbarList->addItem(QString(i));
+            toolbarList->addItem(qApp->translate("toolbar", i));
       toolbarList->setCurrentRow(0);
 
       new_toolbars = new std::vector<std::list<const char*>*>();
@@ -60,6 +61,11 @@ ToolbarEditor::ToolbarEditor(QWidget* parent)
       connect(up, SIGNAL(clicked()), SLOT(upAction()));
       connect(down, SIGNAL(clicked()), SLOT(downAction()));
       connect(buttonBox, SIGNAL(accepted()), SLOT(accepted()));
+      
+      up->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      down->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+      add->setIcon(*icons[int(Icons::goPrevious_ICON)]);
+      remove->setIcon(*icons[int(Icons::goNext_ICON)]);
 
       MuseScore::restoreGeometry(this);
       }
@@ -70,10 +76,10 @@ ToolbarEditor::ToolbarEditor(QWidget* parent)
 
 void ToolbarEditor::init()
       {
-      QString name = Workspace::currentWorkspace->name();
-      bool writable = !Workspace::currentWorkspace->readOnly();
+      QString name = WorkspacesManager::currentWorkspace()->name();
+      bool writable = !WorkspacesManager::currentWorkspace()->readOnly();
       if (!writable) {
-            name += tr(" (not changeable)");
+            name += " " + tr("(not changeable)");
             }
       add->setEnabled(writable);
       remove->setEnabled(writable);
@@ -94,7 +100,7 @@ void ToolbarEditor::init()
 
 void ToolbarEditor::accepted()
       {
-      if (Workspace::currentWorkspace->readOnly())
+      if (WorkspacesManager::currentWorkspace()->readOnly())
             return;
       // Updates the toolbars
       mscore->setNoteInputMenuEntries(*(new_toolbars->at(0)));
@@ -103,7 +109,7 @@ void ToolbarEditor::accepted()
       mscore->populateNoteInputMenu();
       mscore->populateFileOperations();
       mscore->populatePlaybackControls();
-      Workspace::currentWorkspace->setDirty(true);
+      WorkspacesManager::currentWorkspace()->setDirty(true);
       }
 
 //---------------------------------------------------------
@@ -121,7 +127,7 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
             if (a)
                   item = new QListWidgetItem(a->icon(), actionName);
             else if (actionName.isEmpty())
-                  item = new QListWidgetItem(tr("Spacer"));
+                  item = new QListWidgetItem(tr("Separator"));
             else
                   item = new QListWidgetItem(actionName);
             item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
@@ -149,7 +155,7 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
                         }
                   }
             }
-      QListWidgetItem* item = new QListWidgetItem(tr("Spacer"));
+      QListWidgetItem* item = new QListWidgetItem(tr("Separator"));
       item->setData(Qt::UserRole, QVariant::fromValue((void*)""));
       availableList->addItem(item);
       }

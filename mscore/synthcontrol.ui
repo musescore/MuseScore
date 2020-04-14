@@ -92,7 +92,7 @@
    <item row="0" column="1" rowspan="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="Awl::MeterSlider" name="gain" native="true">
+      <widget class="Awl::MeterSlider" name="gainSlider" native="true">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -131,7 +131,7 @@
    <item row="0" column="0" rowspan="2">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="masterEffectsTab">
       <property name="sizePolicy">
@@ -246,7 +246,7 @@
           <string>Hertz</string>
          </property>
          <property name="suffix">
-          <string extracomment="Frequency Herz">Hz</string>
+          <string extracomment="Hertz">Hz</string>
          </property>
          <property name="decimals">
           <number>1</number>
@@ -300,6 +300,138 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="dynamicsTab">
+      <attribute name="title">
+       <string>Dynamics</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0" columnstretch="1,0">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Dynamics method:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="dynamicsMethodList">
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>Velocity only (no single-note dynamics)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Default (single-note dynamics and velocity)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>CC events only (constant velocity)</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="ccToUseList">
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>CC 1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>CC 2 (default)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>CC 4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>CC 11</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>CC to use:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QGroupBox" name="advancedSettings">
+         <property name="accessibleName">
+          <string>Advanced Settings</string>
+         </property>
+         <property name="title">
+          <string>Advanced Settings</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Switch all sounds:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="switchExpr">
+            <property name="accessibleName">
+             <string>Switch all sounds to expressive</string>
+            </property>
+            <property name="text">
+             <string>To Expressive</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QPushButton" name="switchNonExpr">
+            <property name="accessibleName">
+             <string>Switch all sounds to non-expressive</string>
+            </property>
+            <property name="text">
+             <string>To Non-Expressive</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QPushButton" name="resetExpr">
+            <property name="accessibleName">
+             <string>Reset all sounds to defaults</string>
+            </property>
+            <property name="text">
+             <string>Reset All</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -327,7 +459,7 @@
   <tabstop>effectB</tabstop>
   <tabstop>masterTuning</tabstop>
   <tabstop>changeTuningButton</tabstop>
-  <tabstop>gain</tabstop>
+  <tabstop>gainSlider</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>loadButton</tabstop>
   <tabstop>storeButton</tabstop>

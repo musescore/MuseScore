@@ -40,12 +40,9 @@ class Spanner;
 enum class SegmentType;
 
 //-------------------------------------------------------------------
-//   @@ ChordRest
-///    Virtual base class. Chords and rests can be part of a beam
+//   ChordRest
+//    Virtual base class. Chords and rests can be part of a beam
 //
-//   @P beamMode      enum (Beam.AUTO, .BEGIN, .MID, .END, .NONE, .BEGIN32, .BEGIN64, .INVALID)
-//   @P durationType  int
-//   @P small         bool           small chord/rest
 //-------------------------------------------------------------------
 
 class ChordRest : public DurationElement {
@@ -92,7 +89,7 @@ class ChordRest : public DurationElement {
       Beam::Mode beamMode() const               { return _beamMode; }
 
       void setBeam(Beam* b);
-      virtual Beam* beam() const                { return _beam; }
+      virtual Beam* beam() const final          { return _beam; }
       int beams() const                         { return _durationType.hooks(); }
       virtual qreal upPos()   const = 0;
       virtual qreal downPos() const = 0;
@@ -123,14 +120,13 @@ class ChordRest : public DurationElement {
       const TDuration actualDurationType() const   { return _durationType; }
       void setDurationType(TDuration::DurationType t);
       void setDurationType(const QString& s);
-      void setDurationType(int ticks);
+      void setDurationType(const Fraction& ticks);
       void setDurationType(TDuration v);
       void setDots(int n)                       { _durationType.setDots(n); }
       int dots() const        { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.dots()
                                     : (_crossMeasure == CrossMeasure::SECOND ? 0 : _durationType.dots()); }
       int actualDots() const  { return _durationType.dots(); }
-      int durationTypeTicks() { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.ticks()
-                                    : _durationType.ticks(); }
+      Fraction durationTypeTicks() { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.ticks() : _durationType.ticks(); }
       QString durationUserName() const;
 
       virtual void setTrack(int val) override;
@@ -143,18 +139,20 @@ class ChordRest : public DurationElement {
       virtual void add(Element*);
       virtual void remove(Element*);
       void removeDeleteBeam(bool beamed);
+      void replaceBeam(Beam* newBeam);
 
       ElementList& el()                            { return _el; }
       const ElementList& el() const                { return _el; }
 
       CrossMeasure crossMeasure() const            { return _crossMeasure; }
       void setCrossMeasure(CrossMeasure val)       { _crossMeasure = val;  }
-      virtual void crossMeasureSetup(bool /*on*/)   { }
+      virtual void crossMeasureSetup(bool /*on*/)     { }
       // the following two functions should not be used, unless absolutely necessary;
       // the cross-measure duration is best managed through setDuration() and crossMeasureSetup()
       TDuration crossMeasureDurationType() const      { return _crossMeasureTDur;   }
       void setCrossMeasureDurationType(TDuration v)   { _crossMeasureTDur = v;      }
 
+      virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
@@ -180,7 +178,7 @@ class ChordRest : public DurationElement {
       bool isFullMeasureRest() const { return _durationType == TDuration::DurationType::V_MEASURE; }
       virtual void removeMarkings(bool keepTremolo = false);
 
-      bool isBefore(ChordRest*);
+      bool isBefore(const ChordRest*) const;
 
       void undoAddAnnotation(Element*);
       };

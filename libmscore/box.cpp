@@ -104,8 +104,6 @@ void Box::draw(QPainter* painter) const
 void Box::startEdit(EditData& ed)
       {
       Element::startEdit(ed);
-      ed.grips   = 1;
-      ed.curGrip = Grip::START;
       editMode   = true;
       }
 
@@ -146,7 +144,7 @@ void Box::editDrag(EditData& ed)
                   }
             bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
             system()->setHeight(height());
-            score()->setLayout(tick());
+            triggerLayout();
             }
       else {
             _boxWidth += Spatium(ed.delta.x() / spatium());
@@ -155,7 +153,7 @@ void Box::editDrag(EditData& ed)
                   int n = lrint(_boxWidth.val() / hRaster);
                   _boxWidth = Spatium(hRaster * n);
                   }
-            score()->setLayout(tick());
+            triggerLayout();
             }
       layout();
       }
@@ -171,16 +169,19 @@ void Box::endEdit(EditData&)
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Box::updateGrips(EditData& ed) const
+std::vector<QPointF> HBox::gripsPositions(const EditData&) const
       {
       QRectF r(abbox());
-      if (isHBox())
-            ed.grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
-      else if (type() == ElementType::VBOX)
-            ed.grip[0].translate(QPointF(r.x() + r.width() * .5, r.bottom()));
+      return { QPointF(r.right(), r.top() + r.height() * .5) };
+      }
+
+std::vector<QPointF> VBox::gripsPositions(const EditData&) const
+      {
+      QRectF r(abbox());
+      return { QPointF(r.x() + r.width() * .5, r.bottom()) };
       }
 
 //---------------------------------------------------------
@@ -222,22 +223,7 @@ void Box::read(XmlReader& e)
       _bottomMargin    = 0.0;
       _boxHeight       = Spatium(0);     // override default set in constructor
       _boxWidth        = Spatium(0);
-
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "HBox") {
-                  HBox* hb = new HBox(score());
-                  hb->read(e);
-                  add(hb);
-                  }
-            else if (tag == "VBox") {
-                  VBox* vb = new VBox(score());
-                  vb->read(e);
-                  add(vb);
-                  }
-            else if (!Box::readProperties(e))
-                  e.unknown();
-            }
+      MeasureBase::read(e);
       }
 
 //---------------------------------------------------------
@@ -398,7 +384,7 @@ bool Box::setProperty(Pid propertyId, const QVariant& v)
             default:
                   return MeasureBase::setProperty(propertyId, v);
             }
-      score()->setLayout(tick());
+      triggerLayout();
       return true;
       }
 
@@ -472,8 +458,11 @@ void HBox::layout()
             setPos(x, y);
             bbox().setRect(0.0, 0.0, w, h);
             }
-      else {
+      else if (system()) {
             bbox().setRect(0.0, 0.0, point(boxWidth()), system()->height());
+            }
+      else {
+            bbox().setRect(0.0, 0.0, 50, 50);
             }
       Box::layout();
       }
@@ -635,7 +624,7 @@ QRectF HBox::drag(EditData& data)
 
 void HBox::endEditDrag(EditData&)
       {
-      score()->setLayout(tick());
+      triggerLayout();
       score()->update();
       }
 
@@ -646,6 +635,32 @@ void HBox::endEditDrag(EditData&)
 bool HBox::isMovable() const
       {
       return parent() && (parent()->isHBox() || parent()->isVBox());
+      }
+
+//---------------------------------------------------------
+//   writeProperties
+//---------------------------------------------------------
+
+void HBox::writeProperties(XmlWriter& xml) const
+      {
+      writeProperty(xml, Pid::CREATE_SYSTEM_HEADER);
+      Box::writeProperties(xml);
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool HBox::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (readProperty(tag, e, Pid::CREATE_SYSTEM_HEADER))
+            ;
+      else if (Box::readProperties(e))
+            ;
+      else
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------
@@ -671,7 +686,7 @@ bool HBox::setProperty(Pid propertyId, const QVariant& v)
       switch (propertyId) {
             case Pid::CREATE_SYSTEM_HEADER:
                   setCreateSystemHeader(v.toBool());
-                  score()->setLayout(tick());
+                  triggerLayout();
                   break;
             default:
                   return Box::setProperty(propertyId, v);
@@ -748,5 +763,28 @@ void FBox::add(Element* e)
             }
       el().push_back(e);
       }
+
+//---------------------------------------------------------
+//   accessibleExtraInfo
+//---------------------------------------------------------
+
+QString Box::accessibleExtraInfo() const
+      {
+      QString rez = "";
+      for (Element* e : el())
+            rez += " " + e->screenReaderInfo();
+      return rez;
+      }
+
+//---------------------------------------------------------
+//   accessibleExtraInfo
+//---------------------------------------------------------
+
+QString TBox::accessibleExtraInfo() const
+      {
+      QString rez = _text->screenReaderInfo();
+      return rez;
+      }
+
 }
 

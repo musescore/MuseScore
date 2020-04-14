@@ -21,10 +21,12 @@
 #include "newwizard.h"
 #include "musescore.h"
 #include "preferences.h"
-#include "palette.h"
+#include "palette/palettelistview.h"
 #include "instrdialog.h"
 #include "templateBrowser.h"
 #include "extension.h"
+#include "icons.h"
+#include "scoreaccessibility.h"
 
 #include "libmscore/instrtemplate.h"
 #include "libmscore/score.h"
@@ -55,6 +57,9 @@ TimesigWizard::TimesigWizard(QWidget* parent)
       connect(tsCutTime,    SIGNAL(toggled(bool)), SLOT(cutTimeToggled(bool)));
       connect(tsFraction,   SIGNAL(toggled(bool)), SLOT(fractionToggled(bool)));
       pickupMeasure->setChecked(false); // checked in the UI file to enable screen reader on pickup duration controls
+
+      tsCommonTime->setIcon(*icons[int(Icons::timesig_common_ICON)]);
+      tsCutTime->setIcon(*icons[int(Icons::timesig_allabreve_ICON)]);
       }
 
 //---------------------------------------------------------
@@ -378,22 +383,13 @@ NewWizardKeysigPage::NewWizardKeysigPage(QWidget* parent)
       b1->setTitle(tr("Key Signature"));
       b1->setAccessibleName(b1->title());
       b1->setAccessibleDescription(tr("Choose a key signature"));
-      sp = MuseScore::newKeySigPalette();
-      sp->setMoreElements(false);
-      sp->setShowContextMenu(false);
-      sp->setSelectable(true);
-      sp->setDisableDoubleClick(true);
-      int keysigCMajorIdx = 14;
-      sp->setSelected(keysigCMajorIdx);
-      PaletteScrollArea* sa = new PaletteScrollArea(sp);
-      // set widget name to include name of selected key signature
-      // we could set the description, but some screen readers ignore it
-      sa->setAccessibleName(tr("Key Signature: %1").arg(qApp->translate("Palette", sp->cellAt(keysigCMajorIdx)->name.toUtf8())));
-      QAccessibleEvent event(sa, QAccessible::NameChanged);
-      QAccessible::updateAccessibility(&event);
+
       QVBoxLayout* l1 = new QVBoxLayout;
-      l1->addWidget(sa);
       b1->setLayout(l1);
+
+      _plv = new PaletteListView(mscore->newKeySigPalettePanel());
+      l1->addWidget(_plv);
+      _plv->setCurrentRow(14); // C Major
 
       tempoGroup = new QGroupBox;
       tempoGroup->setCheckable(true);
@@ -428,9 +424,7 @@ NewWizardKeysigPage::NewWizardKeysigPage(QWidget* parent)
 
 KeySigEvent NewWizardKeysigPage::keysig() const
       {
-      int idx    = sp->getSelectedIdx();
-      Element* e = sp->element(idx);
-      return static_cast<KeySig*>(e)->keySigEvent();
+      return static_cast<KeySig*>(_plv->currentElement())->keySigEvent();
       }
 
 //---------------------------------------------------------

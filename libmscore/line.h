@@ -33,10 +33,8 @@ class System;
 
 class LineSegment : public SpannerSegment {
    protected:
-      virtual void startEdit(EditData&) override;
       virtual void editDrag(EditData&) override;
       virtual bool edit(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
       virtual QPointF gripAnchor(Grip) const override;
       virtual void startEditDrag(EditData&) override;
 
@@ -55,6 +53,12 @@ class LineSegment : public SpannerSegment {
 
       virtual Element* propertyDelegate(Pid) override;
 
+      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+      int gripsCount() const override { return 3; }
+      Grip initialEditModeGrip() const override { return Grip::END; }
+      Grip defaultGrip() const override { return Grip::MIDDLE; }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
+
       virtual QLineF dragAnchor() const override;
       };
 
@@ -70,10 +74,6 @@ class SLine : public Spanner {
       qreal _dashLineLen      { 5.0   };
       qreal _dashGapLen       { 5.0   };
       bool _diagonal          { false };
-
-      PropertyFlags lineWidthStyle;
-      PropertyFlags lineStyleStyle;
-      PropertyFlags lineColorStyle;
 
    protected:
       virtual QPointF linePos(Grip, System** system) const;

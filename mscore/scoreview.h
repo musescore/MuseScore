@@ -19,6 +19,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/mscoreview.h"
 #include "libmscore/pos.h"
+#include "libmscore/harmony.h"
 
 namespace Ms {
 
@@ -46,6 +47,9 @@ class Tuplet;
 class FretDiagram;
 class Bend;
 class TremoloBar;
+class TimeSig;
+class StaffTextBase;
+class Articulation;
 
 #ifdef Q_OS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
@@ -120,6 +124,11 @@ class ScoreView : public QWidget, public MuseScoreView {
       QTimer* extendNoteTimer; // single-shot timer for initial advancement when a note is held
       bool allowRealtimeRests; // Allow entering rests in realtime mode? (See note above)
 
+      bool tripleClickPending = false;
+      bool popupActive = false;
+      bool modifySelection = false;
+      Element* elementToSelect = nullptr;
+
       // Loop In/Out marks in the score
       PositionCursor* _curLoopIn;
       PositionCursor* _curLoopOut;
@@ -138,6 +147,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       // By default when the view will prevent viewpoint changes if
       // it is inactive. Set this flag to true to change this behaviour.
       bool _moveWhenInactive = false;
+
+      bool _blockShowEdit = false;
 
       virtual void paintEvent(QPaintEvent*);
       void paint(const QRect&, QPainter&);
@@ -167,14 +178,16 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void keyReleaseEvent(QKeyEvent*) override;
       virtual void inputMethodEvent(QInputMethodEvent*) override;
 
+      bool handleArrowKeyPress(const QKeyEvent*);
+
       virtual void contextMenuEvent(QContextMenuEvent*) override;
 
       void mousePressEventNormal(QMouseEvent*);
       void escapeCmd();
+      bool startTextEditingOnMouseRelease(QMouseEvent*);
+      void adjustCursorForTextEditing(QMouseEvent*);
 
       void constraintCanvas(int *dxx, int *dyy);
-      void contextItem(Element*);
-      void lassoSelect();
 
       void setShadowNote(const QPointF&);
       void drawElements(QPainter& p,QList<Element*>& el, Element* editElement);
@@ -186,17 +199,16 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void lyricsUpDown(bool up, bool end) override;
       virtual void lyricsMinus() override;
       virtual void lyricsUnderscore() override;
-      void harmonyEndEdit();
+      virtual void textTab(bool back = false) override;
       void harmonyTab(bool back);
       void harmonyBeatsTab(bool noterest, bool back);
-      void harmonyTicksTab(int ticks);
+      void harmonyTicksTab(const Fraction& ticks);
       void figuredBassTab(bool meas, bool back);
-      void figuredBassTicksTab(int ticks);
-      void figuredBassEndEdit();
+      void figuredBassTicksTab(const Fraction& ticks);
       void realtimeAdvance(bool allowRests);
       void cmdAddFret(int fret);
-      void cmdAddChordName();
-      void cmdAddText(Tid tid);
+      void cmdAddChordName(HarmonyType ht);
+      void cmdAddText(Tid tid, Tid customTid = Tid::DEFAULT, PropertyFlags pf = PropertyFlags::STYLED, Placement p = Placement::ABOVE);
       void cmdEnterRest(const TDuration&);
       void cmdEnterRest();
       void cmdTuplet(int n, ChordRest*);
@@ -218,7 +230,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void paintPageBorder(QPainter& p, Page* page);
       bool dropCanvas(Element*);
       void editCmd(const QString&);
-      void setLoopCursor(PositionCursor* curLoop, int tick, bool isInPos);
+      void setLoopCursor(PositionCursor* curLoop, const Fraction& tick, bool isInPos);
       void cmdMoveCR(bool left);
       void cmdGotoElement(Element*);
       bool checkCopyOrCut();
@@ -230,7 +242,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void endFotoDragEdit();
       QImage getRectImage(const QRectF& rect, double dpi, bool transparent, bool printMode);
 
-      virtual void startEdit();
+      void startEdit(bool editMode = true);
       void endEdit();
 
       void startDrag();
@@ -252,6 +264,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdRealtimeAdvance();
       void extendCurrentNote();
       void seqStopped();
+      void tripleClickTimeOut();
 
    public slots:
       void setViewRect(const QRectF&);
@@ -265,15 +278,15 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void normalCut();
       void normalCopy();
-      void fotoModeCopy();
-      bool normalPaste();
+      void fotoModeCopy(bool includeLink = false);
+      bool normalPaste(Fraction scale = Fraction(1, 1));
       void normalSwap();
 
       void cloneElement(Element* e);
       void doFotoDragEdit(QMouseEvent* ev);
 
       void updateContinuousPanel();
-      void ticksTab(int ticks);     // helper function
+      void ticksTab(const Fraction& ticks);     // helper function
 
    signals:
       void viewRectChanged();
@@ -287,11 +300,11 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       QPixmap* fgPixmap() { return _fgPixmap; }
 
-      virtual void startEdit(Element*, Grip) override;
-      virtual void startEditMode(Element*) override;
+      void startEdit(Element*, Grip) override;
+      void startEditMode(Element*);
 
-      void moveCursor(int tick);
-      int cursorTick() const;
+      void moveCursor(const Fraction& tick);
+      Fraction cursorTick() const;
       void setCursorOn(bool);
       void setBackground(QPixmap*);
       void setBackground(const QColor&);
@@ -312,6 +325,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void zoom(qreal _mag, const QPointF& pos);
       void contextPopup(QContextMenuEvent* ev);
       bool editKeyLyrics();
+      bool editKeySticking();
       void dragScoreView(QMouseEvent* ev);
       void doDragElement(QMouseEvent* ev);
       void doDragLasso(QMouseEvent* ev);
@@ -319,13 +333,18 @@ class ScoreView : public QWidget, public MuseScoreView {
       void doDragEdit(QMouseEvent* ev);
       bool testElementDragTransition(QMouseEvent* ev);
       bool fotoEditElementDragTransition(QMouseEvent* ev);
-      void addSlur();
-      virtual void cmdAddSlur(ChordRest*, ChordRest*) override;
-      virtual void cmdAddHairpin(HairpinType) override;
+      void cmdAddSlur(const Slur* slurTemplate = nullptr);
+      void addSlur(ChordRest*, ChordRest*, const Slur*) override;
+      virtual void cmdAddHairpin(HairpinType);
       void cmdAddNoteLine();
+
+      void setEditElement(Element*);
+      void updateEditElement();
 
       bool noteEntryMode() const { return state == ViewState::NOTE_ENTRY; }
       bool editMode() const      { return state == ViewState::EDIT; }
+      bool textEditMode() const  { return editMode() && editData.element && editData.element->isTextBase(); }
+      bool hasEditGrips() const  { return editData.element && editData.grips; }
       bool fotoMode() const;
 
       virtual void setDropRectangle(const QRectF&);
@@ -340,6 +359,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       qreal yoffset() const;
       void setOffset(qreal x, qreal y);
       QSizeF fsize() const;
+      void screenNext();
+      void screenPrev();
       void pageNext();
       void pagePrev();
       void pageTop();
@@ -348,6 +369,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       QPointF toPhysical(const QPointF& p) const {return _matrix.map(p); }
       QRectF toLogical(const QRectF& r) const    { return imatrix.mapRect(r); }
       QRect toPhysical(const QRectF& r) const    { return _matrix.mapRect(r).toRect(); }
+
+      QRectF canvasViewport() const { return toLogical(geometry()); }
 
       bool searchMeasure(int i);
       bool searchPage(int i);
@@ -387,6 +410,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual QCursor cursor() const { return QWidget::cursor(); }
       void loopUpdate(bool val)   {  loopToggled(val); }
 
+      void moveViewportToLastEdit();
+
       void updateShadowNotes();
 
       OmrView* omrView() const        { return _omrView; }
@@ -396,15 +421,16 @@ class ScoreView : public QWidget, public MuseScoreView {
       void onElementDestruction(Element*) override;
 
       virtual Element* elementNear(QPointF);
-//      void editFretDiagram(FretDiagram*);
-      void editBendProperties(Bend*);
-      void editTremoloBarProperties(TremoloBar*);
+      QList<Element*> elementsNear(QPointF);
+      void editArticulationProperties(Articulation*);
+      void editTimeSigProperties(TimeSig*);
+      void editStaffTextProperties(StaffTextBase*);
+      void selectInstrument(InstrumentChange*);
       EditData& getEditData()        { return editData; }
       void changeState(ViewState);
 
       virtual const QRect geometry() const override { return QWidget::geometry(); }
 
-      bool clickOffElement;
       void updateGrips();
       bool moveWhenInactive() const { return _moveWhenInactive; }
       bool moveWhenInactive(bool move) { bool m = _moveWhenInactive; _moveWhenInactive = move; return m; }

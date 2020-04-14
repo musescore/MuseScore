@@ -11,14 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Script Recorder</string>
+   <string notr="true">Script Recorder</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="2">
      <widget class="QPushButton" name="changeFolderButton">
       <property name="text">
-       <string>Change folder</string>
+       <string notr="true">Change folder</string>
       </property>
      </widget>
     </item>
@@ -38,7 +38,7 @@
     <item row="0" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Folder:</string>
+       <string notr="true">Folder:</string>
       </property>
       <property name="buddy">
        <cstring>changeFolderButton</cstring>
@@ -48,7 +48,7 @@
     <item row="1" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>Script name:</string>
+       <string notr="true">Script name:</string>
       </property>
       <property name="buddy">
        <cstring>scriptNameEdit</cstring>
@@ -58,14 +58,14 @@
     <item row="2" column="1">
      <widget class="QPushButton" name="recordButton">
       <property name="text">
-       <string>Record</string>
+       <string notr="true">Record</string>
       </property>
      </widget>
     </item>
     <item row="2" column="2">
      <widget class="QPushButton" name="replayButton">
       <property name="text">
-       <string>Replay</string>
+       <string notr="true">Replay</string>
       </property>
      </widget>
     </item>

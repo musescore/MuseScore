@@ -92,6 +92,7 @@ void BSymbol::add(Element* e)
       {
       if (e->isSymbol() || e->isImage()) {
             e->setParent(this);
+            e->setTrack(track());
             _leafs.append(e);
             toBSymbol(e)->setZ(z() - 1);    // draw on top of parent
             }

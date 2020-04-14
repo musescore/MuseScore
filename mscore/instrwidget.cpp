@@ -246,7 +246,7 @@ void StaffListItem::staffTypeChanged(int idx)
       PartListItem* pli = static_cast<PartListItem*>(QTreeWidgetItem::parent());
       pli->updateClefs();
 
-      if (_staff && _staff->staffType(0)->name() != stfType->name()) {
+      if (_staff && _staff->staffType(Fraction(0,1))->name() != stfType->name()) {
             if (_op != ListItemOp::I_DELETE && _op != ListItemOp::ADD)
                   _op = ListItemOp::UPDATE;
             }
@@ -318,6 +318,15 @@ PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv)
       op   = ListItemOp::ADD;
       setText(0, it->trackName);
       }
+PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv, QTreeWidgetItem* prv)
+   : QTreeWidgetItem(lv, prv, PART_LIST_ITEM)
+      {
+      part = 0;
+      it   = i;
+      op   = ListItemOp::ADD;
+      setText(0, it->trackName);
+      }
+
 
 //---------------------------------------------------------
 //   InstrumentTemplateListItem
@@ -386,6 +395,9 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
       addStaffButton->setEnabled(false);
       addLinkedStaffButton->setEnabled(false);
 
+      upButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      downButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+
       instrumentSearch->setFilterableView(instrumentList);
       }
 
@@ -395,16 +407,18 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
 
 void populateGenreCombo(QComboBox* combo)
       {
+      combo->blockSignals(true);
       combo->clear();
       combo->addItem(qApp->translate("InstrumentsDialog", "All instruments"), "all");
       int i = 1;
       int defaultIndex = 0;
-      foreach (InstrumentGenre *ig, instrumentGenres) {
+      for (InstrumentGenre *ig : instrumentGenres) {
             combo->addItem(ig->name, ig->id);
             if (ig->id == "common")
                   defaultIndex = i;
             ++i;
             }
+      combo->blockSignals(false);
       combo->setCurrentIndex(defaultIndex);
       }
 
@@ -416,7 +430,7 @@ void populateInstrumentList(QTreeWidget* instrumentList)
       {
       instrumentList->clear();
       // TODO: memory leak?
-      foreach(InstrumentGroup* g, instrumentGroups) {
+      for (InstrumentGroup* g : instrumentGroups) {
             InstrumentTemplateListItem* group = new InstrumentTemplateListItem(g->name, instrumentList);
             // provide feedback to blind users that they have selected a group rather than an instrument
             group->setData(0, Qt::AccessibleTextRole, QVariant(QObject::tr("%1 category").arg(g->name))); // spoken by screen readers
@@ -449,13 +463,13 @@ void InstrumentsWidget::genPartList(Score* cs)
       {
       partiturList->clear();
 
-      foreach (Part* p, cs->parts()) {
+      for (Part* p : cs->parts()) {
             PartListItem* pli = new PartListItem(p, partiturList);
             pli->setVisible(p->show());
             for (Staff* s : *p->staves()) {
                   StaffListItem* sli = new StaffListItem(pli);
                   sli->setStaff(s);
-                  sli->setClefType(s->clefType(0));
+                  sli->setClefType(s->clefType(Fraction(0,1)));
                   sli->setDefaultClefType(s->defaultClefType());
                   sli->setPartIdx(s->rstaff());
                   const LinkedElements* ls = s->links();
@@ -470,13 +484,32 @@ void InstrumentsWidget::genPartList(Score* cs)
                               }
                         }
                   sli->setLinked(bLinked);
-                  sli->setStaffType(s->staffType(0));    // TODO
+                  sli->setStaffType(s->staffType(Fraction(0,1)));    // TODO
                   }
             pli->updateClefs();
             partiturList->setItemExpanded(pli, true);
             }
       partiturList->resizeColumnToContents(2);  // adjust width of "Clef " and "Staff type" columns
       partiturList->resizeColumnToContents(4);
+      }
+
+//---------------------------------------------------------
+//   updatePartIdx
+//---------------------------------------------------------
+
+void InstrumentsWidget::updatePartIdx()
+      {
+      for (int i = 0; i < partiturList->topLevelItemCount(); ++i) {
+            PartListItem* tli = static_cast<PartListItem*>(partiturList->topLevelItem(i));
+            int partIdx = -1;
+            for (int j = 0; j < tli->childCount(); ++j) {
+                  StaffListItem* sli = static_cast<StaffListItem*>(tli->child(j));
+                  if (!sli->isHidden()) {
+                        partIdx++;
+                        sli->setPartIdx(partIdx);
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -557,12 +590,17 @@ void InstrumentsWidget::on_instrumentList_itemActivated(QTreeWidgetItem* item, i
 
 void InstrumentsWidget::on_addButton_clicked()
       {
-      foreach(QTreeWidgetItem* i, instrumentList->selectedItems()) {
+      QTreeWidgetItem* prvItem = nullptr;
+      QList<QTreeWidgetItem*> wi = partiturList->selectedItems();
+      if (!wi.isEmpty())
+            prvItem = wi.front()->parent() ? wi.front()->parent() : wi.front();
+
+      for (QTreeWidgetItem* i : instrumentList->selectedItems()) {
             InstrumentTemplateListItem* item = static_cast<InstrumentTemplateListItem*>(i);
             const InstrumentTemplate* it     = item->instrumentTemplate();
             if (it == 0)
                   continue;
-            PartListItem* pli = new PartListItem(it, partiturList);
+            PartListItem* pli = prvItem ? new PartListItem(it, partiturList, prvItem) : new PartListItem(it, partiturList);
             pli->setFirstColumnSpanned(true);
             pli->op = ListItemOp::ADD;
 
@@ -633,6 +671,7 @@ void InstrumentsWidget::on_removeButton_clicked()
                   }
             static_cast<PartListItem*>(parent)->updateClefs();
             partiturList->setCurrentItem(parent);
+            updatePartIdx();
             }
       else {
             if (partiturList->topLevelItemCount() == 1) {
@@ -758,6 +797,7 @@ void InstrumentsWidget::on_upButton_clicked()
                         }
                   }
             }
+      updatePartIdx();
       }
 
 //---------------------------------------------------------
@@ -849,6 +889,7 @@ void InstrumentsWidget::on_downButton_clicked()
                         }
                   }
             }
+      updatePartIdx();
       }
 
 //---------------------------------------------------------
@@ -888,6 +929,7 @@ StaffListItem* InstrumentsWidget::on_addStaffButton_clicked()
       partiturList->clearSelection();           // should not be necessary
       partiturList->setCurrentItem(nsli);
       pli->updateClefs();
+      updatePartIdx();
       return nsli;
       }
 
@@ -924,6 +966,11 @@ void InstrumentsWidget::on_instrumentSearch_textChanged(const QString&)
 
 void InstrumentsWidget::on_instrumentGenreFilter_currentIndexChanged(int index)
       {
+      QSettings settings;
+      settings.beginGroup("selectInstrument");  // hard coded, since this is also used in selinstrument
+      settings.setValue("selectedGenre", instrumentGenreFilter->currentText());
+      settings.endGroup();
+
       QString id = instrumentGenreFilter->itemData(index).toString();
       // Redisplay tree, only showing items from the selected genre
       filterInstrumentsByGenre(instrumentList, id);
@@ -1019,6 +1066,7 @@ void InstrumentsWidget::createInstruments(Score* cs)
                   m->cmdAddStaves(sidx, eidx, true);
             staffIdx += rstaff;
             }
+            numberInstrumentNames(cs);
 #if 0 // TODO
       //
       // check for bar lines
@@ -1043,6 +1091,44 @@ void InstrumentsWidget::createInstruments(Score* cs)
       }
 
 //---------------------------------------------------------
+//   numberInstrumentNames
+//---------------------------------------------------------
+
+void InstrumentsWidget::numberInstrumentNames(Score* cs)
+      {
+      vector<QString> names;
+      vector<QString> firsts;
+
+      for (auto i = cs->parts().begin(); i != cs->parts().end(); ++i) {
+            auto p = *i;
+
+            QString name = p->partName();
+
+            names.push_back(name);
+            int n = 1;
+
+            for (auto j = i + 1; j != cs->parts().end(); ++j) {
+                  auto part = *j;
+                  // number 2nd and subsequent instances of instrument
+                  if (std::find(names.begin(), names.end(), part->partName()) != names.end())  {
+                        firsts.push_back(name);
+                        n++;
+                        part->setPartName((part->partName() + QStringLiteral(" %1").arg(n)));
+                        part->setLongName((part->longName() + QStringLiteral(" %1").arg(n)));
+                        part->setShortName((part->shortName() + QStringLiteral(" %1").arg(n)));
+                        }
+                  }
+
+            // now finish by adding first instances
+            if (std::find(firsts.begin(), firsts.end(), p->partName()) != firsts.end()) {
+                  p->setPartName(p->partName() + " 1");
+                  p->setLongName(p->longName() + " 1");
+                  p->setShortName(p->shortName() + " 1");
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
@@ -1056,6 +1142,16 @@ void InstrumentsWidget::init()
       downButton->setEnabled(false);
       addLinkedStaffButton->setEnabled(false);
       addStaffButton->setEnabled(false);
+
+      // get last saved, user-selected instrument genre and set filter to it
+      QSettings settings;
+      settings.beginGroup("selectInstrument");
+      if (!settings.value("selectedGenre").isNull()){
+            QString selectedGenre = settings.value("selectedGenre").value<QString>();
+            instrumentGenreFilter->setCurrentText(selectedGenre);
+            }
+      settings.endGroup();
+
       emit completeChanged(false);
       }
 

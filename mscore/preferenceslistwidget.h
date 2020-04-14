@@ -145,6 +145,7 @@ class ColorPreferenceItem : public PreferenceItem {
 //---------------------------------------------------------
 
 class PreferencesListWidget : public QTreeWidget, public PreferenceVisitor {
+      Q_OBJECT
 
       QHash<QString, PreferenceItem*> preferenceItems;
 

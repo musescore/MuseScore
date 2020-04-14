@@ -24,12 +24,17 @@ class Note;
 //---------------------------------------------------------
 
 class TextLineSegment final : public TextLineBaseSegment {
+
+      Sid getPropertyStyle(Pid) const override;
+
    public:
       TextLineSegment(Spanner* sp, Score* s);
-      virtual ElementType type() const override       { return ElementType::TEXTLINE_SEGMENT; }
-      virtual TextLineSegment* clone() const override { return new TextLineSegment(*this); }
-      TextLine* textLine() const                      { return toTextLine(spanner()); }
-      virtual void layout() override;
+
+      ElementType type() const override       { return ElementType::TEXTLINE_SEGMENT; }
+      TextLineSegment* clone() const override { return new TextLineSegment(*this); }
+
+      TextLine* textLine() const              { return toTextLine(spanner()); }
+      void layout() override;
       };
 
 //---------------------------------------------------------
@@ -37,15 +42,21 @@ class TextLineSegment final : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class TextLine final : public TextLineBase {
+
+      Sid getPropertyStyle(Pid) const override;
+
    public:
       TextLine(Score* s);
       TextLine(const TextLine&);
       ~TextLine() {}
 
-      virtual TextLine* clone() const           { return new TextLine(*this); }
-      virtual ElementType type() const          { return ElementType::TEXTLINE; }
-      virtual LineSegment* createLineSegment() override;
-      virtual QVariant propertyDefault(Pid) const override;
+      TextLine* clone() const override   { return new TextLine(*this); }
+      ElementType type() const override  { return ElementType::TEXTLINE; }
+
+      void write(XmlWriter&) const override;
+
+      LineSegment* createLineSegment() override;
+      QVariant propertyDefault(Pid) const override;
       };
 
 

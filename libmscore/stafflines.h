@@ -21,17 +21,18 @@ namespace Ms {
 //-------------------------------------------------------------------
 
 class StaffLines final : public Element {
-      qreal lw;
+      qreal lw { 0.0 };
       QVector<QLineF> lines;
 
    public:
       StaffLines(Score*);
-      virtual StaffLines* clone() const override    { return new StaffLines(*this); }
-      virtual ElementType type() const override     { return ElementType::STAFF_LINES; }
-      virtual void layout() override;
-      virtual void draw(QPainter*) const override;
-      virtual QPointF pagePos() const override;    ///< position in page coordinates
-      virtual QPointF canvasPos() const override;  ///< position in page coordinates
+
+      StaffLines* clone() const override    { return new StaffLines(*this); }
+      ElementType type() const override     { return ElementType::STAFF_LINES; }
+      void layout() override;
+      void draw(QPainter*) const override;
+      QPointF pagePos() const override;    ///< position in page coordinates
+      QPointF canvasPos() const override;  ///< position in page coordinates
 
       QVector<QLineF>& getLines() { return lines; }
       Measure* measure() const { return (Measure*)parent(); }

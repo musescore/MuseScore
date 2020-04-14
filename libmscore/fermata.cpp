@@ -31,6 +31,7 @@ namespace Ms {
 
 static const ElementStyle fermataStyle {
       { Sid::fermataPosAbove, Pid::OFFSET },
+      { Sid::fermataMinDistance, Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------
@@ -78,7 +79,7 @@ bool Fermata::readProperties(XmlReader& e)
             SymId id = Sym::name2id(s);
             setSymId(id);
             }
-      else if ( tag == "play")
+      else if (tag == "play")
             setPlay(e.readBool());
       else if (tag == "timeStretch")
             _timeStretch = e.readDouble();
@@ -109,6 +110,9 @@ void Fermata::write(XmlWriter& xml) const
       xml.tag("subtype", Sym::id2name(_symId));
       writeProperty(xml, Pid::TIME_STRETCH);
       writeProperty(xml, Pid::PLAY);
+      writeProperty(xml, Pid::MIN_DISTANCE);
+      if (!isStyled(Pid::OFFSET))
+            writeProperty(xml, Pid::OFFSET);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -222,9 +226,9 @@ void Fermata::layout()
       Element* e = s->element(track());
       if (e) {
             if (e->isChord())
-                  rxpos() += score()->noteHeadWidth() * staff()->mag(0) * .5;
+                  rxpos() += score()->noteHeadWidth() * staff()->mag(Fraction(0, 1)) * .5;
             else
-                  rxpos() += e->x() + e->width() * staff()->mag(0) * .5;
+                  rxpos() += e->x() + e->width() * staff()->mag(Fraction(0, 1)) * .5;
             }
 
       QString name = Sym::id2name(_symId);
@@ -239,7 +243,7 @@ void Fermata::layout()
             }
       QRectF b(symBbox(_symId));
       setbbox(b.translated(-0.5 * b.width(), 0.0));
-      autoplaceSegmentElement(styleP(Sid::fermataMinDistance));
+      autoplaceSegmentElement();
       }
 
 //---------------------------------------------------------
@@ -258,6 +262,8 @@ QLineF Fermata::dragAnchor() const
 QVariant Fermata::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::SYMBOL:
+                  return QVariant::fromValue(_symId);
             case Pid::TIME_STRETCH:
                   return timeStretch();
             case Pid::PLAY:
@@ -274,6 +280,9 @@ QVariant Fermata::getProperty(Pid propertyId) const
 bool Fermata::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case Pid::SYMBOL:
+                  setSymId(v.value<SymId>());
+                  break;
             case Pid::PLACEMENT: {
                   Placement p = Placement(v.toInt());
                   if (p != placement()) {
@@ -338,6 +347,17 @@ void Fermata::resetProperty(Pid id)
       }
 
 //---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Fermata::propertyId(const QStringRef& xmlName) const
+      {
+      if (xmlName == "subtype")
+            return Pid::SYMBOL;
+      return Element::propertyId(xmlName);
+      }
+
+//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 
@@ -354,7 +374,7 @@ Sid Fermata::getPropertyStyle(Pid pid) const
 
 qreal Fermata::mag() const
       {
-      return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag): 1.0;
+      return staff() ? staff()->mag(tick()) * score()->styleD(Sid::articulationMag) : 1.0;
       }
 
 //---------------------------------------------------------

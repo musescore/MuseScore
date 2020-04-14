@@ -31,21 +31,30 @@ REM CLEAN:
 REM    "msvc_build.bat clean" remove all files in msvc.* folders and the folders itself
 
 REM BUILD_64 and BUILD_FOR_WINSTORE are used in CMakeLists.txt
-SET BUILD_FOR_WINSTORE="OFF"
-SET BUILD_64="ON"
+SET BUILD_FOR_WINSTORE=OFF
+SET "BUILD_FOLDER=msvc.build"
+SET "INSTALL_FOLDER=msvc.install"
 
-SET BUILD_FOLDER="msvc.build"
-SET INSTALL_FOLDER="msvc.install"
-SET ARCH="x64"
-SET GENERATOR_NAME="Visual Studio 15 2017 Win64"
-
-IF NOT "%2"=="" (
-   IF "%2"=="32" (
-       SET ARCH="x86"
-       SET GENERATOR_NAME="Visual Studio 15 2017"
-       SET BUILD_64="OFF"
-       )
-   )
+IF "%2"=="32" (
+    SET "ARCH=x86"
+    SET GENERATOR_NAME="Visual Studio 15 2017"
+    SET BUILD_64=OFF
+) ELSE (
+    IF NOT "%2"=="" (
+        IF NOT "%2"=="64" (
+            echo Invalid second argument
+            GOTO :END
+        ) ELSE (
+            SET "ARCH=x64"
+            SET GENERATOR_NAME="Visual Studio 15 2017 Win64"
+            SET BUILD_64=ON
+        )
+    ) ELSE (
+        SET "ARCH=x64"
+        SET GENERATOR_NAME="Visual Studio 15 2017 Win64"
+        SET BUILD_64=ON
+    )
+)    
 
 IF NOT "%3"=="" (
    SET BUILD_NUMBER="%3"
@@ -68,26 +77,26 @@ IF /I "%1"=="relwithdebinfo" (
    )
 
 IF /I "%1"=="install" (
-   SET BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%
+   SET "BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%"
    SET CONFIGURATION_STR="release"
    GOTO :INSTALL
    )
 
 IF /I "%1"=="installdebug" (
-   SET BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%
+   SET "BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%"
    SET CONFIGURATION_STR="debug"
    GOTO :INSTALL
    )
 
 IF /I "%1"=="installrelwithdebinfo" (
-   SET BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%
+   SET "BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%"
    SET CONFIGURATION_STR="relwithdebinfo"
    GOTO :INSTALL
    )
 
 IF /I "%1"=="package" (
-   cd %BUILD_FOLDER%_%ARCH%
-   cmake --build . --config release --target package
+   cd "%BUILD_FOLDER%_%ARCH%"
+   cmake --build . --config RelWithDebInfo --target package
    GOTO :END
    )
 
@@ -101,44 +110,42 @@ IF /I "%1"=="clean" (
    for /d %%G in ("msvc.*") do rd /s /q "%%~G"
    GOTO :END
    ) ELSE (
-@echo on
-   echo "No valid parameters are set"
-@echo off
+   echo No valid parameters are set
    GOTO :END
    )
 
 :BUILD
-   SET BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%
-@echo on
-   echo "Build forlder is: %BUILD_FOLDER%"
-@echo off
-   SET INSTALL_FOLDER=%INSTALL_FOLDER%_%ARCH%
-@echo on
-   echo "Install forlder is: %INSTALL_FOLDER%"
-@echo off
-   if not exist %BUILD_FOLDER%\nul mkdir %BUILD_FOLDER%
-   if not exist %INSTALL_FOLDER%\nul mkdir %INSTALL_FOLDER%
-@echo on
-   echo "Building CMake configuration..."
-@echo off
-REM -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DCMAKE_BUILD_AUTOUPDATE=%BUILD_AUTOUPDATE% are used for CI only
-   cd %BUILD_FOLDER% & cmake -G %GENERATOR_NAME% -DCMAKE_INSTALL_PREFIX=../%INSTALL_FOLDER% -DCMAKE_BUILD_TYPE=%CONFIGURATION_STR% -DBUILD_FOR_WINSTORE=%BUILD_FOR_WINSTORE% -DBUILD_64=%BUILD_64% -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DBUILD_AUTOUPDATE=%BUILD_AUTOUPDATE% ..
-@echo on
-   echo "Running lrelease..."
-@echo off
-   cmake --build . --target lrelease
-@echo on
-   echo "Building MuseScore..."
-@echo off
-   cd %BUILD_FOLDER% & cmake --build . --config %CONFIGURATION_STR% --target mscore
+   SET "BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%"
+   echo Build folder is: %BUILD_FOLDER%
+   SET "INSTALL_FOLDER=%INSTALL_FOLDER%_%ARCH%"
+   echo Install folder is: %INSTALL_FOLDER%
+   if not exist "%BUILD_FOLDER%\nul" mkdir "%BUILD_FOLDER%"
+   if not exist "%INSTALL_FOLDER%\nul" mkdir "%INSTALL_FOLDER%"
+   echo Building CMake configuration...
+
+IF NOT "%MSCORE_STABLE_BUILD%" == "" (
+    IF NOT "%CRASH_LOG_SERVER_URL%" == "" (
+        IF "%BUILD_FOR_WINSTORE%" == "OFF" (
+            SET CRASH_REPORT_URL_OPT=-DCRASH_REPORT_URL=%CRASH_LOG_SERVER_URL% -DBUILD_CRASH_REPORTER=ON
+            )
+        )
+
+    IF NOT "%TELEMETRY_TRACK_ID%" == "" (
+        SET TELEMETRY_TRACK_ID_OPT=-DTELEMETRY_TRACK_ID=%TELEMETRY_TRACK_ID%
+        )
+    )
+
+REM -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DCMAKE_BUILD_AUTOUPDATE=%BUILD_AUTOUPDATE% %CRASH_REPORT_URL_OPT% are used for CI only
+   cd "%BUILD_FOLDER%" & cmake -G %GENERATOR_NAME% -DCMAKE_INSTALL_PREFIX=../%INSTALL_FOLDER% -DCMAKE_BUILD_TYPE=%CONFIGURATION_STR% -DBUILD_FOR_WINSTORE=%BUILD_FOR_WINSTORE% -DBUILD_64=%BUILD_64% -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DBUILD_AUTOUPDATE=%BUILD_AUTOUPDATE% %CRASH_REPORT_URL_OPT% %TELEMETRY_TRACK_ID_OPT% ..
+
+   echo Building MuseScore...
+   cd "%BUILD_FOLDER%" & cmake --build . --config %CONFIGURATION_STR% --target mscore
    GOTO :END
    )
 
 :INSTALL
-   cd %BUILD_FOLDER%
-@echo on
-   echo "Installing MuseScore files..."
-@echo off
+   cd "%BUILD_FOLDER%"
+   echo Installing MuseScore files...
    cmake --build . --config %CONFIGURATION_STR% --target install
    GOTO :END
 

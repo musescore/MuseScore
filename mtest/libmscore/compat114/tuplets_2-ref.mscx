@@ -5,9 +5,8 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <minMeasureWidth>4</minMeasureWidth>
-      <endBarDistance>0.3</endBarDistance>
       <bracketWidth>0.35</bracketWidth>
       <bracketDistance>0.25</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
@@ -111,14 +110,14 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <numberType>1</numberType>
-            <bracketType>1</bracketType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
               <text>3:2</text>
               </Number>
+            <numberType>1</numberType>
+            <bracketType>1</bracketType>
             </Tuplet>
           <Chord>
             <durationType>eighth</durationType>
@@ -128,7 +127,7 @@
               </Note>
             </Chord>
           <location>
-            <fractions>3/320</fractions>
+            <fractions>1/108</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -138,7 +137,7 @@
               </Note>
             </Chord>
           <location>
-            <fractions>3/320</fractions>
+            <fractions>1/108</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -149,25 +148,30 @@
             </Chord>
           <endTuplet/>
           <location>
-            <fractions>-19/960</fractions>
+            <fractions>-43/2160</fractions>
             </location>
           <Rest>
             <dots>1</dots>
             <durationType>eighth</durationType>
             </Rest>
+          <endTuplet/>
           <location>
             <fractions>-1/960</fractions>
             </location>
           <Tuplet>
-            <numberType>1</numberType>
-            <bracketType>1</bracketType>
             <normalNotes>4</normalNotes>
             <actualNotes>6</actualNotes>
             <baseNote>32nd</baseNote>
             <Number>
               <text>6:4</text>
               </Number>
+            <numberType>1</numberType>
+            <bracketType>1</bracketType>
             </Tuplet>
+          <Beam>
+            <l1>15</l1>
+            <l2>15</l2>
+            </Beam>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -175,9 +179,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/480</fractions>
-            </location>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -185,9 +186,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/480</fractions>
-            </location>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -195,9 +193,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/480</fractions>
-            </location>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -205,9 +200,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/480</fractions>
-            </location>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -215,9 +207,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/480</fractions>
-            </location>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -226,9 +215,8 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <endTuplet/>
           <location>
-            <fractions>-3/320</fractions>
+            <fractions>-11/960</fractions>
             </location>
           <Rest>
             <durationType>half</durationType>

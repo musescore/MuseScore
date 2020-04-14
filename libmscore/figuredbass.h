@@ -66,12 +66,12 @@ and it is edited (via the normalized text); so it is derived from Text.
 //   @P continuationLine   enum (FiguredBassItem.NONE, .SIMPLE, .EXTENDED)  whether item has continuation line or not, and of which type
 //   @P digit              int                              main digit(s) (0 - 9)
 //   @P displayText        string                           text displayed (depends on configured fonts) (read only)
-//   @P normalizedText     string                           conventional textual representation of item properties (= text used during input) (read ony)
-//   @P parenthesis1       enum (FiguredBassItem.NONE, .ROUNDOPEN, .ROUNDCLOSED, .SQUAREDOPEN, .SQUAREDCLOSED)  parentesis before the prefix
-//   @P parenthesis2       enum (FiguredBassItem.NONE, .ROUNDOPEN, .ROUNDCLOSED, .SQUAREDOPEN, .SQUAREDCLOSED)  parentesis after the prefix / before the digit
-//   @P parenthesis3       enum (FiguredBassItem.NONE, .ROUNDOPEN, .ROUNDCLOSED, .SQUAREDOPEN, .SQUAREDCLOSED)  parentesis after the digit / before the suffix
-//   @P parenthesis4       enum (FiguredBassItem.NONE, .ROUNDOPEN, .ROUNDCLOSED, .SQUAREDOPEN, .SQUAREDCLOSED)  parentesis after the suffix / before the cont. line
-//   @P parenthesis5       enum (FiguredBassItem.NONE, .ROUNDOPEN, .ROUNDCLOSED, .SQUAREDOPEN, .SQUAREDCLOSED)  parentesis after the cont. line
+//   @P normalizedText     string                           conventional textual representation of item properties (= text used during input) (read only)
+//   @P parenthesis1       enum (FiguredBassItem.NONE, .ROUNDOPEN, .ROUNDCLOSED, .SQUAREDOPEN, .SQUAREDCLOSED)  parenthesis before the prefix
+//   @P parenthesis2       enum (FiguredBassItem.NONE, .ROUNDOPEN, .ROUNDCLOSED, .SQUAREDOPEN, .SQUAREDCLOSED)  parenthesis after the prefix / before the digit
+//   @P parenthesis3       enum (FiguredBassItem.NONE, .ROUNDOPEN, .ROUNDCLOSED, .SQUAREDOPEN, .SQUAREDCLOSED)  parenthesis after the digit / before the suffix
+//   @P parenthesis4       enum (FiguredBassItem.NONE, .ROUNDOPEN, .ROUNDCLOSED, .SQUAREDOPEN, .SQUAREDCLOSED)  parenthesis after the suffix / before the cont. line
+//   @P parenthesis5       enum (FiguredBassItem.NONE, .ROUNDOPEN, .ROUNDCLOSED, .SQUAREDOPEN, .SQUAREDCLOSED)  parenthesis after the cont. line
 //   @P prefix             enum (FiguredBassItem.NONE, .DOUBLEFLAT, .FLAT, .NATURAL, .SHARP, .DOUBLESHARP, .PLUS, .BACKSLASH, .SLASH)  accidental before the digit
 //   @P suffix             enum (FiguredBassItem.NONE, .DOUBLEFLAT, .FLAT, .NATURAL, .SHARP, .DOUBLESHARP, .PLUS, .BACKSLASH, .SLASH)  accidental/diacritic after the digit
 //---------------------------------------------------------
@@ -152,12 +152,12 @@ class FiguredBassItem final : public Element {
       FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix) const;
 
       // standard re-implemented virtual functions
-      virtual FiguredBassItem*      clone() const override     { return new FiguredBassItem(*this); }
-      virtual ElementType         type() const override      { return ElementType::INVALID; }
-      virtual void      draw(QPainter* painter) const override;
-      virtual void      layout() override;
-      virtual void      read(XmlReader&) override;
-      virtual void      write(XmlWriter& xml) const override;
+      FiguredBassItem*  clone() const override  { return new FiguredBassItem(*this); }
+      ElementType       type() const override   { return ElementType::INVALID; }
+      void              draw(QPainter* painter) const override;
+      void              layout() override;
+      void              read(XmlReader&) override;
+      void              write(XmlWriter& xml) const override;
 
       // read / write MusicXML
       void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const;
@@ -200,9 +200,9 @@ class FiguredBassItem final : public Element {
       QString           normalizedText() const;
       QString           displayText() const           { return _displayText;  }
 
-      virtual QVariant  getProperty(Pid propertyId) const override;
-      virtual bool      setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant  propertyDefault(Pid) const override;
+      QVariant  getProperty(Pid propertyId) const override;
+      bool      setProperty(Pid propertyId, const QVariant&) override;
+      QVariant  propertyDefault(Pid) const override;
       };
 
 //---------------------------------------------------------
@@ -233,11 +233,13 @@ class FiguredBass final : public TextBase {
       std::vector<FiguredBassItem*> items;      // the individual lines of the F.B.
       QVector<qreal>    _lineLengths;           // lengths of duration indicator lines (in raster units)
       bool              _onNote;                // true if this element is on a staff note | false if it is betweee notes
-      int               _ticks;                 // the duration (used for cont. lines and for multiple F.B.
+      Fraction          _ticks;                 // the duration (used for cont. lines and for multiple F.B.
                                                 // under the same note)
       qreal             _printedLineLength;     // the length of lines actually printed (i.e. continuation lines)
       void              layoutLines();
       bool              hasParentheses() const; // read / write MusicXML support
+
+      Sid getPropertyStyle(Pid) const override;
 
    public:
       FiguredBass(Score* s = 0);
@@ -245,7 +247,7 @@ class FiguredBass final : public TextBase {
       ~FiguredBass();
 
       // a convenience static function to create/retrieve a new FiguredBass into/from its intended parent
-      static FiguredBass *    addFiguredBassToSegment(Segment *seg, int track, int extTicks, bool *pNew);
+      static FiguredBass* addFiguredBassToSegment(Segment* seg, int track, const Fraction& extTicks, bool *pNew);
 
       // static functions for font config files
       static bool       readConfigFile(const QString& fileName);
@@ -254,16 +256,16 @@ class FiguredBass final : public TextBase {
                               qreal * pSize, qreal * pLineHeight);
 
       // standard re-implemented virtual functions
-      virtual FiguredBass*    clone() const override   { return new FiguredBass(*this); }
-      virtual ElementType   type() const override      { return ElementType::FIGURED_BASS; }
-      virtual void      draw(QPainter* painter) const override;
-      virtual void      endEdit(EditData&) override;
-      virtual void      layout() override;
-      virtual void      read(XmlReader&) override;
-      virtual void      setSelected(bool f) override;
-      virtual void      setVisible(bool f) override;
-      virtual void      startEdit(EditData&) override;
-      virtual void      write(XmlWriter& xml) const override;
+      FiguredBass*  clone() const override     { return new FiguredBass(*this); }
+      ElementType   type() const override      { return ElementType::FIGURED_BASS; }
+      void      draw(QPainter* painter) const override;
+      void      endEdit(EditData&) override;
+      void      layout() override;
+      void      read(XmlReader&) override;
+      void      setSelected(bool f) override;
+      void      setVisible(bool f) override;
+      void      startEdit(EditData&) override;
+      void      write(XmlWriter& xml) const override;
 
       // read / write MusicXML
       void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
@@ -290,15 +292,15 @@ class FiguredBass final : public TextBase {
       size_t            numOfItems() const      { return items.size(); }
       void              setOnNote(bool val)     { _onNote = val;  }
       Segment *         segment() const         { return (Segment*)(parent()); }
-      int               ticks() const           { return _ticks;  }
-      void              setTicks(int val)       { _ticks = val;   }
+      Fraction          ticks() const           { return _ticks;  }
+      void              setTicks(const Fraction& v) { _ticks = v;   }
 
       qreal             additionalContLineX(qreal pagePosY) const;// returns the X coord (in page coord) of cont. line at pagePosY, if any
       FiguredBass *     nextFiguredBass() const;                  // returns next *adjacent* f.b. item, if any
 
-      virtual QVariant  getProperty(Pid propertyId) const override;
-      virtual bool      setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant  propertyDefault(Pid) const override;
+      QVariant  getProperty(Pid propertyId) const override;
+      bool      setProperty(Pid propertyId, const QVariant&) override;
+      QVariant  propertyDefault(Pid) const override;
 
       void appendItem(FiguredBassItem* item) {  items.push_back(item); }
       };

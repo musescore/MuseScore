@@ -11,6 +11,11 @@
 //=============================================================================
 
 #include "inspectorInstrchange.h"
+#include "musescore.h"
+#include "inspector.h"
+#include "libmscore/instrchange.h"
+#include "libmscore/score.h"
+#include "scoreview.h"
 
 namespace Ms {
 
@@ -26,13 +31,30 @@ InspectorInstrumentChange::InspectorInstrumentChange(QWidget* parent)
       ic.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
+            { Pid::SUB_STYLE,        0, ic.style,        ic.resetStyle        },
             { Pid::PLACEMENT,        0, ic.placement,    ic.resetPlacement    }
             };
       const std::vector<InspectorPanel> ppList = {
             { ic.title, ic.panel }
             };
       populatePlacement(ic.placement);
+      populateStyle(ic.style);
       mapSignals(il, ppList);
+      connect(ic.selectInstrument, SIGNAL(clicked()), SLOT(selectInstrumentClicked()));
+      }
+
+//---------------------------------------------------------
+//   selectInstrumentClicked
+//---------------------------------------------------------
+
+void InspectorInstrumentChange::selectInstrumentClicked()
+      {
+      InstrumentChange* i = toInstrumentChange(inspector->element());
+      Score* score = i->score();
+      score->startCmd();
+      mscore->currentScoreView()->selectInstrument(i);
+      score->setLayoutAll();
+      score->endCmd();
       }
 
 } // namespace Ms

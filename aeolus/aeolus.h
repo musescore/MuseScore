@@ -109,7 +109,7 @@ class Aeolus : public Synthesizer {
       virtual double masterTuning() const;
 
       virtual bool loadSoundFonts(const QStringList&) { return true; }
-      virtual QStringList soundFonts() const { return QStringList(); }
+      virtual std::vector<Ms::SoundFontInfo> soundFontsInfo() const { std::vector<Ms::SoundFontInfo> sl; return sl; }
 
       virtual void process(unsigned, float*, float*, float*);
       virtual void play(const PlayEvent&);
@@ -118,7 +118,7 @@ class Aeolus : public Synthesizer {
 
       // get/set synthesizer state
       virtual SynthesizerGroup state() const;
-      virtual void setState(const SynthesizerGroup&);
+      virtual bool setState(const SynthesizerGroup&);
 
       virtual void allSoundsOff(int channel) { allNotesOff(channel); }
       virtual void allNotesOff(int /*channel*/);

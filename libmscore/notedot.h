@@ -28,13 +28,14 @@ class NoteDot final : public Element {
 
    public:
       NoteDot(Score* = 0);
-      virtual NoteDot* clone() const override     { return new NoteDot(*this); }
-      virtual ElementType type() const override   { return ElementType::NOTEDOT; }
-      virtual qreal mag() const;
 
-      virtual void draw(QPainter*) const override;
-      virtual void read(XmlReader&) override;
-      virtual void layout() override;
+      NoteDot* clone() const override     { return new NoteDot(*this); }
+      ElementType type() const override   { return ElementType::NOTEDOT; }
+      qreal mag() const override;
+
+      void draw(QPainter*) const override;
+      void read(XmlReader&) override;
+      void layout() override;
 
       Note* note() const { return parent()->isNote() ? toNote(parent()) : 0; }
       Rest* rest() const { return parent()->isRest() ? toRest(parent()) : 0; }

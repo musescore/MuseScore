@@ -65,15 +65,29 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
 
 void InspectorBarLine::setAsStaffDefault()
       {
-      BarLine* bl = toBarLine(inspector->element());
-      Staff* staff = bl->staff();
-      Score* score = bl->score();
+      BarLine* ebl = toBarLine(inspector->element());
+      QVariant span = ebl->getProperty(Pid::BARLINE_SPAN);
+      QVariant spanFrom = ebl->getProperty(Pid::BARLINE_SPAN_FROM);
+      QVariant spanTo = ebl->getProperty(Pid::BARLINE_SPAN_TO);
+
+      std::set<Staff*> staffList;
+
+      Score* score = ebl->score();
       score->startCmd();
-      staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN,      bl->getProperty(Pid::BARLINE_SPAN));
-      staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_FROM, bl->getProperty(Pid::BARLINE_SPAN_FROM));
-      staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_TO,   bl->getProperty(Pid::BARLINE_SPAN_TO));
-      if (bl->barLineType() == BarLineType::NORMAL)
-            bl->setGenerated(true);
+      for (Element* el : *inspector->el()) {
+            if (!el || !el->isBarLine())
+                  continue;
+            BarLine* bl = toBarLine(el);
+            Staff* staff = bl->staff();
+            if (std::find(staffList.begin(), staffList.end(), staff) == staffList.end()) {
+                  staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN,      span);
+                  staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_FROM, spanFrom);
+                  staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_TO,   spanTo);
+                  staffList.insert(staff);
+                  }
+            if (bl->barLineType() == BarLineType::NORMAL)
+                  bl->setGenerated(true);
+            }
       score->endCmd();
       }
 
@@ -91,16 +105,16 @@ void InspectorBarLine::setElement()
       // enable / disable individual type combo items according to score and selected bar line status
       bool bMultiStaff  = bl->score()->nstaves() > 1;
       BarLineType blt   = bl->barLineType();
-//      bool isRepeat     = blt & (BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT);
-      bool isRepeat     = blt & (BarLineType::START_REPEAT | BarLineType::END_REPEAT);
+      bool isRepeat     = blt & (BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT);
+//      bool isRepeat     = blt & (BarLineType::START_REPEAT | BarLineType::END_REPEAT);
 
       const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(b.type->model());
       int i = 0;
       for (auto& k : BarLine::barLineTable) {
             QStandardItem* item = model->item(i);
             // if combo item is repeat type, should be disabled for multi-staff scores
-//            if (k.type & (BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT)) {
-            if (k.type & (BarLineType::START_REPEAT | BarLineType::END_REPEAT)) {
+            if (k.type & (BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT)) {
+//            if (k.type & (BarLineType::START_REPEAT | BarLineType::END_REPEAT)) {
                   // disable / enable
                   item->setFlags(bMultiStaff ?
                         item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled) :

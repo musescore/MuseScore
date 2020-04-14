@@ -1,3 +1,4 @@
+Tick  =      0   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
 Tick  =      0   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
 Tick  =     48   Type  =   144   Pitch  =    67   Velocity  =    80   Channel  =     0    
 Tick  =    239   Type  =   144   Pitch  =    67   Velocity  =     0   Channel  =     0    

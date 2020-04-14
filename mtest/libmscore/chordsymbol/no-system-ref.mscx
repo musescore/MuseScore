@@ -94,6 +94,9 @@
         <Channel>
           <program value="65"/>
           </Channel>
+        <Channel name="Chord symbols">
+          <program value="65"/>
+          </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
@@ -247,6 +250,8 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
+          <linked>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Flute</text>
@@ -258,24 +263,20 @@
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
               <linked>
-                <indexDiff>1</indexDiff>
                 </linked>
               </Clef>
             <TimeSig>
               <linked>
-                <indexDiff>1</indexDiff>
                 </linked>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Chord>
               <linked>
-                <indexDiff>1</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <indexDiff>1</indexDiff>
                   </linked>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -354,6 +355,9 @@
             <gateTime>100</gateTime>
             </Articulation>
           <Channel>
+            <program value="65"/>
+            </Channel>
+          <Channel name="Chord symbols">
             <program value="65"/>
             </Channel>
           </Instrument>

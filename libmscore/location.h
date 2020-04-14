@@ -25,6 +25,10 @@ class XmlWriter;
 
 enum class Pid;
 
+//---------------------------------------------------------
+//   Location
+//---------------------------------------------------------
+
 class Location {
       int _staff;
       int _voice;
@@ -43,8 +47,8 @@ class Location {
       constexpr Location(int staff, int voice, int measure, Fraction frac, int graceIndex, int note, bool rel)
          : _staff(staff), _voice(voice), _measure(measure), _frac(frac), _graceIndex(graceIndex), _note(note), _rel(rel) {}
 
-      static constexpr Location absolute() { return Location(INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, false); }
-      static constexpr Location relative() { return Location(0, 0, 0, 0, INT_MIN, 0, true); }
+      static constexpr Location absolute() { return Location(INT_MIN, INT_MIN, INT_MIN, Fraction(INT_MIN,1), INT_MIN, INT_MIN, false); }
+      static constexpr Location relative() { return Location(0, 0, 0, Fraction(0, 1), INT_MIN, 0, true); }
 
       void toAbsolute(const Location& ref);
       void toRelative(const Location& ref);

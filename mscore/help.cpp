@@ -30,7 +30,7 @@ HelpQuery::HelpQuery(QWidget* parent)
       QHBoxLayout* layout = new QHBoxLayout;
 
       QLabel* label = new QLabel;
-      label->setText(tr("Search for: "));
+      label->setText(tr("Search for:"));
       layout->addWidget(label);
 
       entry = new QLineEdit;

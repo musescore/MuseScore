@@ -40,6 +40,9 @@ class TremoloBarCanvas : public QFrame {
       const QList<PitchValue>& points() const { return _points; }
       QList<PitchValue>& points()             { return _points; }
       void setPoints(const QList<PitchValue>& p) { _points = p; }
+
+   signals:
+      void tremoloBarCanvasChanged();
       };
 }
 

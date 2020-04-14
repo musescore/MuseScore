@@ -41,6 +41,7 @@ class StyledSlider : public QWidget
       int _numMinorTicks = 4;
       double _majorTickWidth = 30;
       double _minorTickWidth = 10;
+      double _doubleClickValue = 63;
 
       QColor _backgroundColor = QColor(10, 10, 10);
       QColor _hilightColor = QColor(0, 255, 0);
@@ -76,6 +77,8 @@ public:
       QColor tickColor() const { return _tickColor; }
       QIcon sliderHeadIcon() const { return _sliderHeadIcon; }
       void addMark(double value) { marks.append(value); }
+      void mouseDoubleClickEvent(QMouseEvent*);
+      void setDoubleClickValue(double value) { _doubleClickValue = value; }
 
 signals:
       void valueChanged(double);

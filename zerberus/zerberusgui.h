@@ -67,6 +67,7 @@ class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui {
       void moveSoundfontInTheList(int currentIdx, int targetIdx);
       
    private slots:
+      void soundFontTopClicked();
       void soundFontUpClicked();
       void soundFontDownClicked();
       void soundFontAddClicked();

@@ -17,24 +17,24 @@
 */
 
 
-/*  ��� ��������� RTF � HTML, �������������, � ��������, ��� ��������� ������.
-    Copyright (C) 2003 �������� ����������, vlavrinenko@users.sourceforge.net
+/*  Это конвертер RTF в HTML, реализованный, в принципе, как текстовый фильтр.
+    Copyright (C) 2003 Валентин Лавриненко, vlavrinenko@users.sourceforge.net
 
-    ������ ���������� �������� ��������� ����������� ������������. ��
-    ������ �������������� �� �/��� �������������� � ������������ � ���������
-    ������ 2.1 ���� �� ������ ������ � ��������� ����� ������� ������
-    ����������� ������������ �������� ������������� ���������� GNU,
-    �������������� Free Software Foundation.
+    Данная библиотека является свободным программным обеспечением. Вы
+    вправе распространять ее и/или модифицировать в соответствии с условиями
+    версии 2.1 либо по вашему выбору с условиями более поздней версии
+    Стандартной Общественной Лицензии Ограниченного Применения GNU,
+    опубликованной Free Software Foundation.
 
-    �� �������������� ��� ���������� � ������� �� ��, ��� ��� ����� ���
-    ��������, ������ �� ������������� �� ��� ������� ��������, � ��� �����
-    �������� ��������� ��������� ��� ������� � ����������� ��� �������������
-    � ���������� �����. ��� ��������� ����� ��������� ���������� ������������
-    �� ����������� ������������ ��������� ������������� ���������� GNU.
+    Мы распространяем эту библиотеку в надежде на то, что она будет вам
+    полезной, однако НЕ ПРЕДОСТАВЛЯЕМ НА НЕЕ НИКАКИХ ГАРАНТИЙ, в том числе
+    ГАРАНТИИ ТОВАРНОГО СОСТОЯНИЯ ПРИ ПРОДАЖЕ и ПРИГОДНОСТИ ДЛЯ ИСПОЛЬЗОВАНИЯ
+    В КОНКРЕТНЫХ ЦЕЛЯХ. Для получения более подробной информации ознакомьтесь
+    со Стандартной Общественной Лицензией Ограниченного Применений GNU.
 
-    ������ � ������ ����������� �� ������ ���� �������� ��������� �����������
-    ������������ �������� ������������� ���������� GNU. ���� �� ��� ��
-    ��������, �������� �� ���� �� Free Software Foundation, Inc., 59 Temple
+    Вместе с данной библиотекой вы должны были получить экземпляр Стандартной
+    Общественной Лицензии Ограниченного Применения GNU. Если вы его не
+    получили, сообщите об этом во Free Software Foundation, Inc., 59 Temple
     Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
@@ -87,29 +87,15 @@ QString rtf2html(const QString& iString)
       {
          rtf_keyword kw(++buf_in);
          if (kw.is_control_char())
+         {
             switch (kw.control_char())
             {
             case '\\': case '{': case '}':
                par_html.write(kw.control_char());
                break;
             case '\'':
-            {
-               std::string stmp(1,*buf_in++);
-               stmp+=*buf_in++;
-               int code=std::strtol(stmp.c_str(), NULL, 16);
-               switch (code)
-               {
-                  case 167:
-                     par_html.write("&bull;");
-                     break;
-                  case 188:
-                     par_html.write("&hellip;");
-                     break;
-                  default:
-                     par_html.write((char)code);
-               }
+               par_html.write(char_by_code(buf_in));
                break;
-            }
             case '*':
                bAsterisk=true;
                break;
@@ -117,27 +103,38 @@ QString rtf2html(const QString& iString)
                par_html.write("&nbsp;");
                break;
             }
+         }
          else //kw.is_control_char
+         {
             if (bAsterisk)
             {
                bAsterisk=false;
                skip_group(buf_in);
+               cur_options=foStack.top();
+               foStack.pop();
             }
             else
             {
                switch (kw.keyword())
                {
-               case rtf_keyword::rkw_filetbl:
+               case rtf_keyword::rkw_unicode:
+               {
+                   char buf[128];
+                   sprintf(buf,"&#%d;",kw.parameter());
+                   par_html.write(buf);
+                   break;
+               }
+               case rtf_keyword::rkw_filetbl: 
                case rtf_keyword::rkw_stylesheet:
-               case rtf_keyword::rkw_header:
-               case rtf_keyword::rkw_footer: case rtf_keyword::rkw_headerf:
+               case rtf_keyword::rkw_header: 
+               case rtf_keyword::rkw_footer: case rtf_keyword::rkw_headerf: 
                case rtf_keyword::rkw_footerf: case rtf_keyword::rkw_pict:
                case rtf_keyword::rkw_object:
                   // we'll skip such groups
                   skip_group(buf_in);
                   break;
                // document title
-               case rtf_keyword::rkw_info:
+               case rtf_keyword::rkw_info: 
                {
                   int depth=1;
                   bool in_title=false;
@@ -149,13 +146,24 @@ QString rtf2html(const QString& iString)
                      case '\\':
                      {
                         rtf_keyword kw1(++buf_in);
-                        if (kw1.keyword()==rtf_keyword::rkw_title)
+                        if (in_title && kw1.is_control_char() && kw1.control_char() == '\'')
+                           title += char_by_code(buf_in);
+                        else if (kw1.keyword()==rtf_keyword::rkw_title)
                            in_title=true;
                         break;
                      }
-                     case '{': ++depth; ++buf_in; break;
-                     case '}': --depth; ++buf_in; in_title=false; break;
-                     default: if (in_title) title+=*buf_in; ++buf_in; break;
+                     case '{': 
+                        ++depth; ++buf_in;
+                        break;
+                     case '}':
+                        --depth; ++buf_in; 
+                        in_title=false;
+                        break;
+                     default:
+                        if (in_title)
+                            title += *buf_in;
+                        ++buf_in;
+                        break;
                      }
                   }
                   break;
@@ -200,9 +208,9 @@ QString rtf2html(const QString& iString)
                   break;
                }
                // font table
-               case rtf_keyword::rkw_fonttbl:
+               case rtf_keyword::rkw_fonttbl: 
                {
-                  font fnt;
+                    font fnt;
                   int font_num;
                   bool full_name=false;
                   bool in_font=false;
@@ -277,7 +285,7 @@ QString rtf2html(const QString& iString)
                }
                // special characters
                case rtf_keyword::rkw_line: case rtf_keyword::rkw_softline:
-                  par_html.write("<br/>");
+                  par_html.write("<br>");
                   break;
                case rtf_keyword::rkw_tab:
                   par_html.write("&nbsp;&nbsp;");  // maybe, this can be done better
@@ -309,7 +317,7 @@ QString rtf2html(const QString& iString)
                case rtf_keyword::rkw_rdblquote:
                   par_html.write("&rdquo;");
                   break;
-               // paragraph formatting
+               // paragraph formatting 
                case rtf_keyword::rkw_ql:
                   cur_options.papAlign=formatting_options::align_left;
                   break;
@@ -351,7 +359,7 @@ QString rtf2html(const QString& iString)
                   {
                      html+=t_str;
                   }
-                  else
+                  else 
                   {
                      if (cur_options.papInTbl)
                      {
@@ -381,6 +389,9 @@ QString rtf2html(const QString& iString)
                case rtf_keyword::rkw_b:
                   cur_options.chpBold=!(kw.parameter()==0);
                   break;
+               case rtf_keyword::rkw_caps:
+                  cur_options.chpAllCaps=!(kw.parameter()==0);
+                  break;
                case rtf_keyword::rkw_i:
                   cur_options.chpItalic=!(kw.parameter()==0);
                   break;
@@ -392,6 +403,12 @@ QString rtf2html(const QString& iString)
                   break;
                case rtf_keyword::rkw_fs:
                   cur_options.chpFontSize=kw.parameter();
+                  break;
+               case rtf_keyword::rkw_dn:
+                  cur_options.chpVShift = kw.parameter() == -1 ? 6 : kw.parameter();
+                  break;
+               case rtf_keyword::rkw_up:
+                  cur_options.chpVShift = kw.parameter() == -1 ? -6 : -kw.parameter();
                   break;
                case rtf_keyword::rkw_cf:
                   cur_options.chpFColor=colortbl[kw.parameter()];
@@ -406,8 +423,8 @@ QString rtf2html(const QString& iString)
                   cur_options.chpFont=fonttbl[kw.parameter()];
                   break;
                case rtf_keyword::rkw_plain:
-                  cur_options.chpBold=cur_options.chpItalic
-                        =cur_options.chpUnderline=false;
+                  cur_options.chpBold=cur_options.chpAllCaps
+                    =cur_options.chpItalic=cur_options.chpUnderline=false;
                   cur_options.chpVAlign=formatting_options::va_normal;
                   cur_options.chpFontSize=cur_options.chpHighlight=0;
                   cur_options.chpFColor=cur_options.chpBColor=color();
@@ -417,8 +434,8 @@ QString rtf2html(const QString& iString)
                case rtf_keyword::rkw_intbl:
                   cur_options.papInTbl=true;
                   break;
-               case rtf_keyword::rkw_trowd:
-                  CurCellDefs=CellDefsList.insert(CellDefsList.end(),
+               case rtf_keyword::rkw_trowd: 
+                  CurCellDefs=CellDefsList.insert(CellDefsList.end(), 
                                                   table_cell_defs());
                   // fall through
                case rtf_keyword::rkw_row:
@@ -503,6 +520,7 @@ QString rtf2html(const QString& iString)
                   break;
                }
             }
+         }
          break;
       }
       case '{':

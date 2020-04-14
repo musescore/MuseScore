@@ -12,7 +12,7 @@
 
 #include "musescore.h"
 #include "logindialog.h"
-#include "kQOAuth/kqoauthrequest_xauth.h"
+#include "network/loginmanager.h"
 
 namespace Ms {
 
@@ -45,12 +45,8 @@ LoginDialog::LoginDialog(LoginManager* loginManager)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       connect(buttonBox,   SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       _loginManager = loginManager;
-      createAccountLabel->setText(tr("%1Create an account%2")
-                                  .arg("<a href=\"https://musescore.com/user/register\">")
-                                  .arg("</a>"));
-      forgotPasswordLabel->setText(tr("%1Forgot password?%2")
-                                   .arg("<a href=\"https://musescore.com/user/password\">")
-                                   .arg("</a>"));
+      createAccountLabel->setText("<a href=\"https://musescore.com/user/register\">" + tr("Create an account") + "</a>");
+      forgotPasswordLabel->setText("<a href=\"https://musescore.com/user/password\">" + tr("Forgot password?") + "</a>");
       connect(_loginManager, SIGNAL(loginSuccess()), this, SLOT(onLoginSuccess()));
       connect(_loginManager, SIGNAL(loginError(const QString&)), this, SLOT(onLoginError(const QString&)));
 

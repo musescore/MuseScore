@@ -11,7 +11,9 @@ then
 else
     LONG_NAME=MuseScore
     LONGER_NAME="MuseScore 3"
-    VERSION=3.0.2
+
+    SCRIPT_DIR=$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)
+    VERSION=$(cmake -P "$SCRIPT_DIR/../config.cmake" | sed -n -e "s/^.*VERSION  *//p")
 fi
 
 
@@ -40,9 +42,9 @@ function set_bundle_display_options() {
             delay 1 -- sync
             set icon size of the icon view options of container window to 128
             set arrangement of the icon view options of container window to not arranged
-            set position of item "${LONGER_NAME}.app" to {400,125}
+            set position of item "${LONGER_NAME}.app" to {400,110}
             close
-            set position of item "Applications" to {150,125}
+            set position of item "Applications" to {150,110}
             open
             set background picture of the icon view options of container window to file "background.tiff" of folder "Pictures"
             set the bounds of the container window to {0, 0, 540, 300}
@@ -186,18 +188,27 @@ mkdir -p ${VOLUME}/Pictures
 cp  ${BACKGROUND} ${VOLUME}/Pictures/background.tiff
 
 echo "symlink application"
-# nssymlink applicatio
+# nssymlink application
 ln -s /Applications/ ${VOLUME}/Applications
 set_bundle_display_options ${VOLUME}
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
 
+# Most nested locations should go first
+CODE_PATHS=(
+    "${VOLUME}/${LONGER_NAME}.app/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Autoupdate.app"
+    "${VOLUME}/${LONGER_NAME}.app"
+)
+
 #codesign
 echo "Codesign"
-codesign --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
+# `codesign --deep` doesn't seem to search for code in Contents/Resources directory so sign libraries in it manually
+find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec codesign --options runtime --deep -s "Developer ID Application: MuseScore" '{}' ';'
+# Sign code in other (more conventional) locations
+codesign --options runtime --deep -s "Developer ID Application: MuseScore" "${CODE_PATHS[@]}"
 echo "spctl"
 spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
 echo "Codesign verify"
-codesign --verify --deep --strict --verbose=2 "${VOLUME}/${LONGER_NAME}.app"
+codesign --verify --deep --strict --verbose=2 "${CODE_PATHS[@]}"
 
 echo "Unmount"
 # Unmount the disk image

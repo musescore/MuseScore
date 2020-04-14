@@ -27,6 +27,7 @@
     <Spanner type="Trill">
       <Trill>
         <subtype>trill</subtype>
+        <ticks_f>1/4</ticks_f>
         </Trill>
       <next>
         <location>

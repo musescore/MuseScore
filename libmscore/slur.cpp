@@ -24,10 +24,6 @@
 
 namespace Ms {
 
-Element* SlurTie::editEndElement;
-Element* SlurTie::editStartElement;
-QList<SlurOffsets> SlurTie::editUps;
-
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -35,26 +31,28 @@ QList<SlurOffsets> SlurTie::editUps;
 void SlurSegment::draw(QPainter* painter) const
       {
       QPen pen(curColor());
+      qreal mag = staff() ? staff()->mag(slur()->tick()) : 1.0;
+
       switch (slurTie()->lineType()) {
             case 0:
                   painter->setBrush(QBrush(pen.color()));
                   pen.setCapStyle(Qt::RoundCap);
                   pen.setJoinStyle(Qt::RoundJoin);
-                  pen.setWidthF(score()->styleP(Sid::SlurEndWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurEndWidth) * mag);
                   break;
             case 1:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
                   pen.setStyle(Qt::DotLine);
                   break;
             case 2:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
                   pen.setStyle(Qt::DashLine);
                   break;
             case 3:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
                   pen.setStyle(Qt::CustomDashLine);
                   QVector<qreal> dashes { 5.0, 5.0 };
                   pen.setDashPattern(dashes);
@@ -62,18 +60,6 @@ void SlurSegment::draw(QPainter* painter) const
             }
       painter->setPen(pen);
       painter->drawPath(path);
-      }
-
-//---------------------------------------------------------
-//   updateGrips
-//    return grip rectangles in page coordinates
-//---------------------------------------------------------
-
-void SlurSegment::updateGrips(EditData& ed) const
-      {
-      QPointF p(pagePos());
-      for (int i = 0; i < ed.grips; ++i)
-            ed.grip[i].translate(_ups[i].p + _ups[i].off + p);
       }
 
 //---------------------------------------------------------
@@ -162,27 +148,74 @@ bool SlurSegment::edit(EditData& ed)
 
 void SlurSegment::changeAnchor(EditData& ed, Element* element)
       {
+      ChordRest* cr = element->isChordRest() ? toChordRest(element) : nullptr;
+      ChordRest* scr = spanner()->startCR();
+      ChordRest* ecr = spanner()->endCR();
+      if (!cr || !scr || !ecr)
+            return;
+
+      // save current start/end elements
+      for (ScoreElement* e : spanner()->linkList()) {
+            Spanner* sp = toSpanner(e);
+            score()->undoStack()->push1(new ChangeStartEndSpanner(sp, sp->startElement(), sp->endElement()));
+            }
+
       if (ed.curGrip == Grip::START) {
-            int ticks = spanner()->endElement()->tick() - element->tick();
-            spanner()->undoChangeProperty(Pid::SPANNER_TICK, element->tick());
+            spanner()->undoChangeProperty(Pid::SPANNER_TICK, cr->tick());
+            Fraction ticks = ecr->tick() - cr->tick();
             spanner()->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
-            int diff = element->track() - spanner()->track();
+            int diff = cr->track() - spanner()->track();
             for (auto e : spanner()->linkList()) {
                   Spanner* s = toSpanner(e);
                   s->undoChangeProperty(Pid::TRACK, s->track() + diff);
                   }
-
-            if (score()->spannerMap().removeSpanner(spanner()))
-                  score()->addSpanner(spanner());
+            scr = cr;
             }
       else {
-            spanner()->undoChangeProperty(Pid::SPANNER_TICKS,  element->tick() - spanner()->startElement()->tick());
-            int diff = element->track() - spanner()->track();
+            Fraction ticks = cr->tick() - scr->tick();
+            spanner()->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
+            int diff = cr->track() - spanner()->track();
             for (auto e : spanner()->linkList()) {
                   Spanner* s = toSpanner(e);
                   s->undoChangeProperty(Pid::SPANNER_TRACK2, s->track() + diff);
                   }
+            ecr = cr;
             }
+
+      // update start/end elements (which could be grace notes)
+      for (ScoreElement* lsp : spanner()->linkList()) {
+            Spanner* sp = static_cast<Spanner*>(lsp);
+            if (sp == spanner()) {
+                  score()->undo(new ChangeSpannerElements(sp, scr, ecr));
+                  }
+            else {
+                  Element* se = 0;
+                  Element* ee = 0;
+                  if (scr) {
+                        QList<ScoreElement*> sel = scr->linkList();
+                        for (ScoreElement* lcr : sel) {
+                              Element* le = toElement(lcr);
+                              if (le->score() == sp->score() && le->track() == sp->track()) {
+                                    se = le;
+                                    break;
+                                    }
+                              }
+                        }
+                  if (ecr) {
+                        QList<ScoreElement*> sel = ecr->linkList();
+                        for (ScoreElement* lcr : sel) {
+                              Element* le = toElement(lcr);
+                              if (le->score() == sp->score() && le->track() == sp->track2()) {
+                                    ee = le;
+                                    break;
+                                    }
+                              }
+                        }
+                  score()->undo(new ChangeStartEndSpanner(sp, se, ee));
+                  sp->layout();
+                  }
+            }
+
       const size_t segments  = spanner()->spannerSegments().size();
       ups(ed.curGrip).off = QPointF();
       spanner()->layout();
@@ -215,7 +248,7 @@ void SlurSegment::computeBezier(QPointF p6o)
             Measure* m1 = slur()->startCR()->segment()->measure();
             Measure* m2 = slur()->endCR()->segment()->measure();
             qDebug("zero slur at tick %d(%d) track %d in measure %d-%d  tick %d ticks %d",
-               m1->tick(), tick(), track(), m1->no(), m2->no(), slur()->tick(), slur()->ticks());
+               m1->tick().ticks(), tick().ticks(), track(), m1->no(), m2->no(), slur()->tick().ticks(), slur()->ticks().ticks());
             slur()->setBroken(true);
             return;
             }
@@ -236,7 +269,7 @@ void SlurSegment::computeBezier(QPointF p6o)
             qreal dd = log10(1.0 + (d - 2.0) * .5) * 2.0;
             if (dd > 3.0)
                   dd = 3.0;
-            shoulderH = (dd + smallH) * _spatium;
+            shoulderH = (dd + smallH) * _spatium + _extraHeight;
             if (d > 18.0)
                   shoulderW = 0.7; // 0.8;
             else if (d > 10)
@@ -260,6 +293,8 @@ void SlurSegment::computeBezier(QPointF p6o)
       QPointF p4(c2, -shoulderH);
 
       qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
+      if (staff())
+            w *= staff()->mag(slur()->tick());
       if ((c2 - c1) <= _spatium)
             w *= .5;
       QPointF th(0.0, w);    // thickness of slur
@@ -311,17 +346,13 @@ void SlurSegment::computeBezier(QPointF p6o)
       ups(Grip::DRAG).p     = t.map(p5);
       ups(Grip::SHOULDER).p = t.map(p6);
 
-      QPainterPath p;
-      p.moveTo(QPointF());
-      p.cubicTo(p3 + p3o, p4 + p4o, p2);
-      p = t.map(p);
-
       _shape.clear();
       QPointF start = pp1;
       int nbShapes  = 32;  // (pp2.x() - pp1.x()) / _spatium;
       qreal minH    = qAbs(3 * w);
+      const CubicBezier b(pp1, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
       for (int i = 1; i <= nbShapes; i++) {
-            QPointF point = p.pointAtPercent(i/float(nbShapes));
+            const QPointF point = b.pointAtPercent(i/float(nbShapes));
             QRectF re     = QRectF(start, point).normalized();
             if (re.height() < minH) {
                   qreal d1 = (minH - re.height()) * .5;
@@ -333,26 +364,6 @@ void SlurSegment::computeBezier(QPointF p6o)
       }
 
 //---------------------------------------------------------
-//   slurDistance
-//---------------------------------------------------------
-
-inline static qreal slurDistance(const Shape& shape, const QPointF& pt, qreal sdist, bool up)
-      {
-      qreal ddy;
-      if (up) {
-            ddy = -shape.bottomDistance(pt) + sdist;
-            if (ddy <= 0.0)   // assume no more collisions
-                  ddy = 0.0;
-            }
-      else {
-            ddy = shape.topDistance(pt) - sdist;
-            if (ddy >= 0.0)
-                  ddy = 0.0;
-            }
-      return ddy;
-      }
-
-//---------------------------------------------------------
 //   layoutSegment
 //---------------------------------------------------------
 
@@ -361,54 +372,66 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       setPos(QPointF());
       ups(Grip::START).p = p1;
       ups(Grip::END).p   = p2;
+      _extraHeight = 0.0;
       computeBezier();
 
-      if (MScore::autoplaceSlurs && autoplace() && system()) {
+      if (autoplace() && system()) {
             bool up = slur()->up();
-
-            qreal gdist = 0.0;
             Segment* ls = system()->lastMeasure()->last();
             Segment* fs = system()->firstMeasure()->first();
             Segment* ss = slur()->startSegment();
             Segment* es = slur()->endSegment();
             QPointF pp1 = ups(Grip::START).p;
             QPointF pp2 = ups(Grip::END).p;
+            qreal slurMaxMove = spatium();
             bool intersection = false;
-            for (Segment* s = fs; s && s != ls; s = s->next1()) {
-                  if (!s->enabled())
-                        continue;
-                  // skip start and end segments on assumption start and end points were placed well already
-                  // this avoids overcorrection on collision with own ledger lines and accidentals
-                  // it also avoids issues where slur appears to be attached to a note in a different voice
-                  if (s == ss || s == es)
-                        continue;
-                  // allow slurs to cross barlines
-                  if (s->segmentType() & SegmentType::BarLineType)
-                        continue;
-                  qreal x1 = s->x() + s->measure()->x();
-                  qreal x2 = x1 + s->width();
-                  if (pp1.x() > x2)
-                        continue;
-                  if (pp2.x() < x1)
+            qreal gdist = 0.0;
+            qreal minDistance = score()->styleS(Sid::SlurMinDistance).val() * spatium();
+            for (int tries = 1; true; ++tries) {
+                  for (Segment* s = fs; s && s != ls; s = s->next1()) {
+                        if (!s->enabled())
+                              continue;
+                        // skip start and end segments on assumption start and end points were placed well already
+                        // this avoids overcorrection on collision with own ledger lines and accidentals
+                        // it also avoids issues where slur appears to be attached to a note in a different voice
+                        if (s == ss || s == es)
+                              continue;
+                        // allow slurs to cross barlines
+                        if (s->segmentType() & SegmentType::BarLineType)
+                              continue;
+                        qreal x1 = s->x() + s->measure()->x();
+                        qreal x2 = x1 + s->width();
+                        if (pp1.x() > x2)
+                              continue;
+                        if (pp2.x() < x1)
+                              break;
+                        const Shape& segShape = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos());
+                        if (!intersection)
+                              intersection = segShape.intersects(_shape);
+                        if (up) {
+                              //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
+                              qreal dist = _shape.minVerticalDistance(segShape);
+                              if (dist > 0.0)
+                                    gdist = qMax(gdist, dist);
+                              }
+                        else {
+                              //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
+                              qreal dist = segShape.minVerticalDistance(_shape);
+                              if (dist > 0.0)
+                                    gdist = qMax(gdist, dist);
+                              }
+                        }
+                  if (!intersection || gdist <= slurMaxMove || tries >= 2)
                         break;
-                  const Shape& segShape = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos());
-                  if (!intersection)
-                        intersection = segShape.intersects(_shape);
-                  if (up) {
-                        //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
-                        qreal dist = _shape.minVerticalDistance(segShape);
-                        if (dist > 0.0)
-                              gdist = qMax(gdist, dist);
-                        }
-                  else {
-                        //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
-                        qreal dist = segShape.minVerticalDistance(_shape);
-                        if (dist > 0.0)
-                              gdist = qMax(gdist, dist);
-                        }
+                  // slur would be moved too far
+                  // try again with a steeper curve
+                  _extraHeight += gdist;
+                  computeBezier();
+                  intersection = false;
+                  gdist = 0.0;
                   }
             if (intersection && gdist > 0.0) {
-                  qreal min = score()->styleP(Sid::SlurMinDistance) + gdist;
+                  qreal min = minDistance + gdist;
                   rypos() += up ? -min : min;
                   }
             }
@@ -441,7 +464,7 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up, bool stemSide = fal
       //
 #if 1
       for (Articulation* a : c->articulations()) {
-            if (!a->layoutCloseToNote() || !a->autoplace() || !a->visible())
+            if (!a->layoutCloseToNote() || !a->addToSkyline())
                   continue;
             // skip if articulation on stem side but slur is not or vice versa
             if ((a->up() == c->up()) != stemSide)
@@ -588,6 +611,16 @@ void Slur::slurPos(SlurPos* sp)
       sp->p1 = scr->pos() + scr->segment()->pos() + scr->measure()->pos();
       sp->p2 = ecr->pos() + ecr->segment()->pos() + ecr->measure()->pos();
 
+      // adjust for cross-staff
+      if (scr->vStaffIdx() != vStaffIdx() && sp->system1) {
+            qreal diff = sp->system1->staff(scr->vStaffIdx())->y() - sp->system1->staff(vStaffIdx())->y();
+            sp->p1.ry() += diff;
+            }
+      if (ecr->vStaffIdx() != vStaffIdx() && sp->system2) {
+            qreal diff = sp->system2->staff(ecr->vStaffIdx())->y() - sp->system2->staff(vStaffIdx())->y();
+            sp->p2.ry() += diff;
+            }
+
       // account for centering or other adjustments (other than mirroring)
       if (note1 && !note1->mirror())
             sp->p1.rx() += note1->x();
@@ -618,7 +651,7 @@ void Slur::slurPos(SlurPos* sp)
       if (scr->up() == _up && stem1 && sc->hook()) {
             sa1 = SlurAnchor::STEM;
             // if end chord is in same direction, link end of slur to stem too
-            if (ecr->up() == scr->up() && stem2)
+            if (ecr->up() == scr->up() && stem2 && (!ecr->beam() || !ecr->beam()->cross()))
                   sa2 = SlurAnchor::STEM;
             }
 
@@ -690,7 +723,11 @@ void Slur::slurPos(SlurPos* sp)
 
             if (stem1) { //sc not null
                   Beam* beam1 = sc->beam();
-                  if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
+                  if (beam1 && beam1->cross()) {
+                        // TODO: stem direction is not finalized, so we cannot use it here
+                        yo = fixArticulations(yo, sc, __up, false);
+                        }
+                  else if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
                         // start chord is beamed but not the last chord of beam group
                         // and slur direction is same as start chord (stem side)
 
@@ -790,7 +827,11 @@ void Slur::slurPos(SlurPos* sp)
 
                   if (stem2) { //ec can't be null
                         Beam* beam2 = ec->beam();
-                        if ((stemPos && (scr->up() == ec->up()))
+                        if (beam2 && beam2->cross()) {
+                              // TODO: stem direction is not finalized, so we cannot use it here
+                              yo = fixArticulations(yo, ec, __up, false);
+                              }
+                        else if ((stemPos && (scr->up() == ec->up()))
                            || (beam2
                              && (!beam2->elements().empty())
                              && (beam2->elements().front() != ec)
@@ -948,8 +989,8 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 
 SpannerSegment* Slur::layoutSystem(System* system)
       {
-      int stick = system->firstMeasure()->tick();
-      int etick = system->lastMeasure()->endTick();
+      Fraction stick = system->firstMeasure()->tick();
+      Fraction etick = system->lastMeasure()->endTick();
 
       SlurSegment* slurSegment = toSlurSegment(getNextLayoutSystemSegment(system, [this]() { return new SlurSegment(score()); }));
 
@@ -963,7 +1004,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                   setTrack2(track());
             if (startCR() == 0 || startCR()->measure() == 0) {
                   qDebug("Slur::layout(): track %d-%d  %p - %p tick %d-%d null start anchor",
-                     track(), track2(), startCR(), endCR(), tick(), tick2());
+                     track(), track2(), startCR(), endCR(), tick().ticks(), tick2().ticks());
                   return slurSegment;
                   }
             if (endCR() == 0) {     // sanity check
@@ -989,6 +1030,12 @@ SpannerSegment* Slur::layoutSystem(System* system)
                               }
                         Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
                         Chord* c2 = endCR()->isChord()   ? toChord(endCR())   : 0;
+
+                        if (c1 && c1->beam() && c1->beam()->cross()) {
+                              // TODO: stem direction is not finalized, so we cannot use it here
+                              _up = true;
+                              break;
+                              }
 
                         _up = !(startCR()->up());
 
@@ -1058,7 +1105,7 @@ void Slur::layout()
 
       qreal _spatium = spatium();
 
-      if (score() == gscore || tick() == -1) {
+      if (score() == gscore || tick() == Fraction(-1,1)) {
             //
             // when used in a palette, slur has no parent and
             // tick and tick2 has no meaning so no layout is
@@ -1080,11 +1127,12 @@ void Slur::layout()
             }
 
       if (startCR() == 0 || startCR()->measure() == 0) {
-            qDebug("Slur::layout(): track %d-%d  %p - %p tick %d-%d null start anchor",
-               track(), track2(), startCR(), endCR(), tick(), tick2());
+            qDebug("track %d-%d  %p - %p tick %d-%d null start anchor",
+               track(), track2(), startCR(), endCR(), tick().ticks(), tick2().ticks());
             return;
             }
       if (endCR() == 0) {     // sanity check
+            qDebug("no end CR for %d", (tick()+ticks()).ticks());
             setEndElement(startCR());
             setTick2(tick());
             }

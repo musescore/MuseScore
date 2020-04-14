@@ -15,13 +15,15 @@ MuseScore {
 
             score.addText("title", "==Test-Score==");
             score.addText("subtitle", "subtitle");
+            score.addText("composer", "Composer");
+            score.addText("lyricist", "Lyricist");
 
             var cursor = score.newCursor();
             cursor.track = 0;
 
             cursor.rewind(0);
             var ts = newElement(Element.TIMESIG);
-            ts.setSig(numerator, denominator);
+            ts.timesig = fraction(numerator, denominator);
             cursor.add(ts);
 
             cursor.rewind(0);

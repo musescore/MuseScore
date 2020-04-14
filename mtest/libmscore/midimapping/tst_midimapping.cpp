@@ -120,7 +120,7 @@ void TestMidiMapping::testReadChangeWrite2(const char* f1, const char* ref)
       QVERIFY(score);
       score->rebuildMidiMapping();
       MeasureBase* mb = score->measures()->last();
-      while (mb && mb->type() != Element::Type::MEASURE)
+      while (mb && mb->type() != ElementType::MEASURE)
             mb = mb->prev();
       score->deleteItem(static_cast<Measure*>(mb));
       score->rebuildMidiMapping();
@@ -166,8 +166,9 @@ void TestMidiMapping::testReadChangeOrderWrite(const char* f1, const char* ref, 
 void TestMidiMapping::testReadWriteMusicXML(const char* file, const char* ref)
       {
       MScore::debugMode = true;
-      preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
-      preferences.musicxmlImportBreaks = true;
+      preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);
+      preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, true);
       MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
       score->rebuildMidiMapping();

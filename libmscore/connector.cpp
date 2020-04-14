@@ -24,7 +24,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac)
-   : _current(current), _currentLoc(Location::absolute())
+   : _current(current), _score(current->score()), _currentLoc(Location::absolute())
       {
       if (!current)
             qFatal("ConnectorInfo::ConnectorInfo(): invalid argument: %p", current);
@@ -34,7 +34,7 @@ ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac)
       // it may be corrected later.
       if (track >= 0)
             _currentLoc.setTrack(track);
-      if (frac >= 0)
+      if (frac >= Fraction(0,1))
             _currentLoc.setFrac(frac);
       }
 
@@ -42,8 +42,8 @@ ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac)
 //   ConnectorInfo
 //---------------------------------------------------------
 
-ConnectorInfo::ConnectorInfo(const Location& currentLocation)
-   : _currentLoc(currentLocation)
+ConnectorInfo::ConnectorInfo(const Score* score, const Location& currentLocation)
+   : _score(score), _currentLoc(currentLocation)
       {}
 
 //---------------------------------------------------------
@@ -59,11 +59,12 @@ void ConnectorInfo::updateLocation(const Element* e, Location& l, bool clipboard
 //   ConnectorInfo::updateCurrentInfo
 //---------------------------------------------------------
 
-void ConnectorInfo::updateCurrentInfo(bool clipboardmode) {
+void ConnectorInfo::updateCurrentInfo(bool clipboardmode)
+      {
       if (!currentUpdated() && _current)
             updateLocation(_current, _currentLoc, clipboardmode);
       setCurrentUpdated(true);
-}
+      }
 
 //---------------------------------------------------------
 //   ConnectorInfo::connect
@@ -73,7 +74,7 @@ bool ConnectorInfo::connect(ConnectorInfo* other)
       {
       if (!other || (this == other))
             return false;
-      if (_type != other->_type)
+      if (_type != other->_type || _score != other->_score)
             return false;
       if (hasPrevious() && _prev == nullptr
          && other->hasNext() && other->_next == nullptr
@@ -151,7 +152,7 @@ int ConnectorInfo::orderedConnectionDistance(const ConnectorInfo& c1, const Conn
 
 int ConnectorInfo::connectionDistance(const ConnectorInfo& other) const
       {
-      if (_type != other._type)
+      if (_type != other._type || _score != other._score)
             return INT_MAX;
       int distThisOther = INT_MAX;
       int distOtherThis = INT_MAX;
@@ -276,7 +277,7 @@ ConnectorInfo* ConnectorInfo::end()
 //---------------------------------------------------------
 
 ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Element* current, int track)
-   : ConnectorInfo(current, track), _reader(&e), _connector(nullptr), _currentElement(current), _connectorReceiver(current)
+   : ConnectorInfo(current, track), _reader(&e), _connector(nullptr), _connectorReceiver(current)
       {}
 
 //---------------------------------------------------------
@@ -294,7 +295,7 @@ static Location readPositionInfo(const XmlReader& e, int track) {
 //---------------------------------------------------------
 
 ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Score* current, int track)
-   : ConnectorInfo(readPositionInfo(e, track)), _reader(&e), _connector(nullptr), _currentElement(nullptr), _connectorReceiver(current)
+   : ConnectorInfo(current, readPositionInfo(e, track)), _reader(&e), _connector(nullptr), _connectorReceiver(current)
       {
       setCurrentUpdated(true);
       }

@@ -26,30 +26,22 @@ else (APPLE)
         set(INCS "")
 endif (APPLE)
 
-add_library(bww STATIC
-   ${INCS}
-   lexer.cpp
-   parser.cpp
-   symbols.cpp
-   )
+set (BWW_DIR ${PROJECT_SOURCE_DIR}/importexport/bww)
 
-if (MSVC)
-   set_target_properties (
-      bww
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE}"
+include_directories(
+      ${BWW_DIR}
       )
-endif (MSVC)
 
 if (NOT MINGW AND NOT APPLE AND NOT MSVC)
    add_executable(bww2mxml
       ${INCS}
-      lexer.cpp
+      ${BWW_SRC}
       main.cpp
       mxmlwriter.cpp
-      parser.cpp
-      symbols.cpp
-      writer.cpp
+      ${BWW_DIR}/writer.cpp
+      ${BWW_DIR}/lexer.cpp
+      ${BWW_DIR}/parser.cpp
+      ${BWW_DIR}/symbols.cpp
       )
 
    set_target_properties (
@@ -65,13 +57,3 @@ if (NOT MINGW AND NOT APPLE AND NOT MSVC)
    ADD_DEPENDENCIES(bww2mxml mops2)
 endif (NOT MINGW AND NOT APPLE AND NOT MSVC)
 
-xcode_pch(bww all)
-
-# Use MSVC pre-compiled headers
-vstudio_pch( bww )
-
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-   ADD_DEPENDENCIES(bww mops1)
-   ADD_DEPENDENCIES(bww mops2)
-endif (NOT MSVC)

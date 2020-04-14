@@ -109,10 +109,12 @@ Ruler::Ruler(QWidget* parent)
             markIcon[2] = new QPixmap(rmark_xpm);
             }
       setMouseTracking(true);
-      magStep = 0;
-      _xpos   = 0;
-      _xmag   = 0.1;
-      _timeType = TType::TICKS;
+      _score      = nullptr;
+      _locator    = nullptr;
+      magStep     = 0;
+      _xpos       = 0;
+      _xmag       = 0.1;
+      _timeType   = TType::TICKS;
       _font2.setPixelSize(14);
       _font2.setBold(true);
       _font1.setPixelSize(10);

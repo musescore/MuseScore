@@ -44,27 +44,38 @@ class ChordLine final : public Element {
       ChordLine(Score*);
       ChordLine(const ChordLine&);
 
-      virtual ChordLine* clone() const override { return new ChordLine(*this); }
-      virtual ElementType type() const override { return ElementType::CHORDLINE; }
+      ChordLine* clone() const override { return new ChordLine(*this); }
+      ElementType type() const override { return ElementType::CHORDLINE; }
 
-      virtual void setChordLineType(ChordLineType);
+      void setChordLineType(ChordLineType);
       ChordLineType chordLineType() const       { return _chordLineType; }
       Chord* chord() const                      { return (Chord*)(parent()); }
-      virtual bool isStraight() const           { return _straight; }
-      virtual void setStraight(bool straight)   { _straight =  straight; }
-      virtual void setLengthX(qreal length)     { _lengthX = length; }
-      virtual void setLengthY(qreal length)     { _lengthY = length; }
+      bool isStraight() const           { return _straight; }
+      void setStraight(bool straight)   { _straight =  straight; }
+      void setLengthX(qreal length)     { _lengthX = length; }
+      void setLengthY(qreal length)     { _lengthY = length; }
 
-      virtual void read(XmlReader&) override;
-      virtual void write(XmlWriter& xml) const override;
-      virtual void layout() override;
-      virtual void draw(QPainter*) const override;
+      void read(XmlReader&) override;
+      void write(XmlWriter& xml) const override;
+      void layout() override;
+      void draw(QPainter*) const override;
 
-      virtual void startEdit(EditData&) override;
-      virtual void editDrag(EditData&) override;
-      virtual void updateGrips(EditData&) const override;
+      void startEditDrag(EditData&) override;
+      void editDrag(EditData&) override;
 
-      virtual QString accessibleInfo() const override;
+      QString accessibleInfo() const override;
+
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
+
+      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+      int gripsCount() const override { return _straight ? 1 : path.elementCount(); }
+      Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
+      Grip defaultGrip() const override { return initialEditModeGrip(); }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
+
       };
 
 extern const char* scorelineNames[];

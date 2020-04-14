@@ -53,6 +53,8 @@
           </Articulation>
         <Channel>
           </Channel>
+        <Channel name="Chord symbols">
+          </Channel>
         </Instrument>
       </Part>
     <Staff id="1">

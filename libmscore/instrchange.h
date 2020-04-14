@@ -15,6 +15,7 @@
 
 #include "text.h"
 #include "instrument.h"
+#include "clef.h"
 
 namespace Ms {
 
@@ -22,8 +23,10 @@ namespace Ms {
 //   @@ InstrumentChange
 //---------------------------------------------------------
 
-class InstrumentChange final : public TextBase  {
+class InstrumentChange final : public TextBase {
+      Q_DECLARE_TR_FUNCTIONS(InstrumentChange)
       Instrument* _instrument;  // Staff holds ownership if part of score
+      bool _init = false; // Set if the instrument has been set by the user, as there is no other way to tell.
 
    public:
       InstrumentChange(Score*);
@@ -31,20 +34,31 @@ class InstrumentChange final : public TextBase  {
       InstrumentChange(const InstrumentChange&);
       ~InstrumentChange();
 
-      virtual InstrumentChange* clone() const override { return new InstrumentChange(*this); }
-      virtual ElementType type() const override        { return ElementType::INSTRUMENT_CHANGE; }
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
-      virtual void layout() override;
+      InstrumentChange* clone() const override { return new InstrumentChange(*this); }
+      ElementType type() const override        { return ElementType::INSTRUMENT_CHANGE; }
+
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
+
+      void layout() override;
 
       Instrument* instrument() const        { return _instrument;  }
       void setInstrument(Instrument* i)     { _instrument = i;     }
       void setInstrument(Instrument&& i)    { *_instrument = i;    }
       void setInstrument(const Instrument& i);
+      void setupInstrument(const Instrument* instrument);
+
+      std::vector<KeySig*> keySigs() const;
+      std::vector<Clef*> clefs() const;
+
+      bool init() const                     { return _init; }
+      void setInit(bool init)               { _init = init; }
 
       Segment* segment() const              { return toSegment(parent()); }
 
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant propertyDefault(Pid) const override;
+
+      bool placeMultiple() const override    { return false; }
       };
 
 

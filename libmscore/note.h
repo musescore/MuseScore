@@ -40,6 +40,7 @@ class Accidental;
 class NoteDot;
 class Spanner;
 class StaffType;
+class NoteEditData;
 enum class SymId;
 enum class AccidentalType : char;
 
@@ -50,8 +51,10 @@ static const int MAX_DOTS = 4;
 //---------------------------------------------------------
 
 class NoteHead final : public Symbol {
+      Q_GADGET
    public:
       enum class Group : signed char {
+            ///.\{
             HEAD_NORMAL = 0,
             HEAD_CROSS,
             HEAD_PLUS,
@@ -121,20 +124,26 @@ class NoteHead final : public Symbol {
             HEAD_CUSTOM,
             HEAD_GROUPS,
             HEAD_INVALID = -1
+            ///\}
             };
       enum class Type : signed char {
+            ///.\{
             HEAD_AUTO    = -1,
             HEAD_WHOLE   = 0,
             HEAD_HALF    = 1,
             HEAD_QUARTER = 2,
             HEAD_BREVIS  = 3,
             HEAD_TYPES
+            ///\}
             };
+
+      Q_ENUM(Group);
+      Q_ENUM(Type);
 
       NoteHead(Score* s = 0) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&) = delete;
-      virtual NoteHead* clone() const override    { return new NoteHead(*this); }
-      virtual ElementType type() const override { return ElementType::NOTEHEAD; }
+      NoteHead* clone() const override    { return new NoteHead(*this); }
+      ElementType type() const override { return ElementType::NOTEHEAD; }
 
       Group headGroup() const;
 
@@ -148,7 +157,8 @@ class NoteHead final : public Symbol {
 
 //---------------------------------------------------------
 //   NoteVal
-//    helper structure
+///    helper structure
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 struct NoteVal {
@@ -200,8 +210,10 @@ static const int INVALID_LINE = -10000;
 //---------------------------------------------------------------------------------------
 
 class Note final : public Element {
+      Q_GADGET
    public:
       enum class ValueType : char { OFFSET_VAL, USER_VAL };
+      Q_ENUM(ValueType);
 
    private:
       bool _ghost         { false };      ///< ghost note (guitar: death note)
@@ -256,18 +268,23 @@ class Note final : public Element {
       SymId _cachedSymNull; // additional symbol for some transparent notehead
 
       QString _fretString;
-      bool _fretHidden = false;
 
-      virtual void startDrag(EditData&) override;
-      virtual QRectF drag(EditData&) override;
-      virtual void endDrag(EditData&) override;
-      virtual void editDrag(EditData&) override;
+      void startDrag(EditData&) override;
+      QRectF drag(EditData&ed) override;
+      void endDrag(EditData&) override;
+      void editDrag(EditData &editData) override;
+
+      void verticalDrag(EditData& ed);
+      void horizontalDrag(EditData& ed);
+
       void addSpanner(Spanner*);
       void removeSpanner(Spanner*);
       int concertPitchIdx() const;
       void updateRelLine(int relLine, bool undoable);
       bool isNoteName() const;
       SymId noteHead() const;
+
+      void normalizeLeftDragDelta(Segment* seg, EditData &ed, NoteEditData* ned);
 
    public:
       Note(Score* s = 0);
@@ -278,16 +295,16 @@ class Note final : public Element {
       virtual Note* clone() const override  { return new Note(*this, false); }
       ElementType type() const override   { return ElementType::NOTE; }
 
-      virtual void undoUnlink() override;
+      void undoUnlink() override;
 
-      virtual qreal mag() const override;
+      qreal mag() const override;
 
-      void layout();
+      void layout() override;
       void layout2();
       //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
       void setCachedNoteheadSym(SymId i) { _cachedNoteheadSym = i; };
-      void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      void setTrack(int val);
+      void scanElements(void* data, void (*func)(void*, Element*), bool all = true) override;
+      void setTrack(int val) override;
 
       int playTicks() const;
 
@@ -307,13 +324,13 @@ class Note final : public Element {
       void setHeadGroup(NoteHead::Group val);
       void setHeadType(NoteHead::Type t);
 
-      virtual int subtype() const override { return (int) _headGroup; }
-      virtual QString subtypeName() const override;
+      int subtype() const override { return int(_headGroup); }
+      QString subtypeName() const override;
 
       void setPitch(int val);
-      void undoSetPitch(int val);
       void setPitch(int pitch, int tpc1, int tpc2);
       int pitch() const                   { return _pitch;    }
+      int ottaveCapoFret() const;
       int ppitch() const;           ///< playback pitch
       int epitch() const;           ///< effective pitch
       qreal tuning() const                { return _tuning;   }
@@ -357,8 +374,8 @@ class Note final : public Element {
       bool fretConflict() const       { return _fretConflict; }
       void setFretConflict(bool val)  { _fretConflict = val; }
 
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
+      void add(Element*) override;
+      void remove(Element*) override;
 
       bool mirror() const             { return _mirror;  }
       void setMirror(bool val)        { _mirror = val;   }
@@ -375,20 +392,22 @@ class Note final : public Element {
       void setTieBack(Tie* t)         { _tieBack = t;    }
       Note* firstTiedNote() const;
       const Note* lastTiedNote() const;
+      Note* lastTiedNote()            { return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote()); }
+      int unisonIndex() const;
       void disconnectTiedNotes();
       void connectTiedNotes();
 
       Chord* chord() const            { return (Chord*)parent(); }
       void setChord(Chord* a)         { setParent((Element*)a);  }
-      virtual void draw(QPainter*) const override;
+      void draw(QPainter*) const override;
 
-      virtual void read(XmlReader&) override;
-      virtual bool readProperties(XmlReader&) override;
-      virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
-      virtual void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
+      bool readProperties(XmlReader&) override;
+      void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
+      void write(XmlWriter&) const override;
 
       bool acceptDrop(EditData&) const override;
-      Element* drop(EditData&);
+      Element* drop(EditData&) override;
 
       bool hidden() const                       { return _hidden; }
       void setHidden(bool val)                  { _hidden = val;  }
@@ -411,7 +430,7 @@ class Note final : public Element {
       void setUserDotPosition(Direction d)      { _userDotPosition = d;    }
       bool dotIsUp() const;               // actual dot position
 
-      void reset();
+      void reset() override;
 
       ValueType veloType() const            { return _veloType;          }
       void setVeloType(ValueType v)         { _veloType = v;             }
@@ -429,7 +448,7 @@ class Note final : public Element {
       int qmlDotsCount();
       void updateAccidental(AccidentalState*);
       void updateLine();
-      void setNval(const NoteVal&, int tick = -1);
+      void setNval(const NoteVal&, Fraction = { -1, 1} );
       NoteEventList& playEvents()                { return _playEvents; }
       const NoteEventList& playEvents() const    { return _playEvents; }
       NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }
@@ -445,30 +464,16 @@ class Note final : public Element {
 
       void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 
-      void undoSetFret(int);
-      void undoSetString(int);
-      void undoSetGhost(bool);
-      void undoSetMirror(bool);
-      void undoSetSmall(bool);
-      void undoSetPlay(bool);
-      void undoSetTuning(qreal);
-      void undoSetVeloType(ValueType);
-      void undoSetVeloOffset(int);
-      void undoSetOnTimeUserOffset(int);
-      void undoSetOffTimeUserOffset(int);
-      void undoSetUserMirror(MScore::DirectionH);
-      void undoSetUserDotPosition(Direction);
-      void undoSetHeadGroup(NoteHead::Group);
-      void undoSetHeadType(NoteHead::Type);
-
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
-      virtual QString propertyUserValue(Pid) const override;
+      void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      void undoChangeDotsVisible(bool v);
+      QVariant propertyDefault(Pid) const override;
+      QString propertyUserValue(Pid) const override;
 
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }
-      virtual void setScore(Score* s) override;
+      void setScore(Score* s) override;
       void setDotY(Direction);
 
       void addParentheses();
@@ -479,17 +484,17 @@ class Note final : public Element {
 
       Element* nextInEl(Element* e);
       Element* prevInEl(Element* e);
-      virtual Element* nextElement() override;
-      virtual Element* prevElement() override;
+      Element* nextElement() override;
+      Element* prevElement() override;
       virtual Element* lastElementBeforeSegment();
-      virtual Element* nextSegmentElement() override;
-      virtual Element* prevSegmentElement() override;
+      Element* nextSegmentElement() override;
+      Element* prevSegmentElement() override;
 
-      virtual QString accessibleInfo() const override;
-      virtual QString screenReaderInfo() const override;
-      virtual QString accessibleExtraInfo() const override;
+      QString accessibleInfo() const override;
+      QString screenReaderInfo() const override;
+      QString accessibleExtraInfo() const override;
 
-      virtual Shape shape() const override;
+      Shape shape() const override;
       std::vector<Note*> tiedNotes() const;
 
       void setOffTimeType(int v) { _offTimeType = v; }
@@ -499,10 +504,4 @@ class Note final : public Element {
       };
 
 }     // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::NoteHead::Group);
-Q_DECLARE_METATYPE(Ms::NoteHead::Type);
-Q_DECLARE_METATYPE(Ms::Note::ValueType);
-
 #endif
-

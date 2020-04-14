@@ -11,9 +11,7 @@
 //=============================================================================
 
 #include "inspectorFingering.h"
-#include "musescore.h"
 #include "libmscore/fingering.h"
-#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -22,20 +20,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorFingering::InspectorFingering(QWidget* parent)
-   : InspectorTextBase(parent)
+   : InspectorStaffText(parent)
       {
-      f.setupUi(addWidget());
-
-      const std::vector<InspectorItem> iiList = {
-            { Pid::SUB_STYLE, 0, f.style,     f.resetStyle     },
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { f.title, f.panel }
-            };
-
-      populateStyle(f.style);
-
-      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -54,7 +40,13 @@ const std::vector<Tid>& InspectorFingering::allowedTextStyles()
             Tid::USER3,
             Tid::USER4,
             Tid::USER5,
-            Tid::USER6
+            Tid::USER6,
+            Tid::USER7,
+            Tid::USER8,
+            Tid::USER9,
+            Tid::USER10,
+            Tid::USER11,
+            Tid::USER12,
             };
 
       return _fingeringTextStyles;

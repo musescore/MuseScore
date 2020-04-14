@@ -14,7 +14,9 @@
 #include "xml.h"
 #include "style.h"
 #include "utils.h"
+#include "measure.h"
 #include "staff.h"
+#include "system.h"
 #include "score.h"
 #include "system.h"
 #include "sym.h"
@@ -30,15 +32,35 @@ namespace Ms {
 Bracket::Bracket(Score* s)
    : Element(s)
       {
+      ay1          = 0;
       h2           = 3.5 * spatium();
       _firstStaff  = 0;
       _lastStaff   = 0;
       _bi          = 0;
+      _braceSymbol = SymId::noSym;
+      _magx        = 1.;
       setGenerated(true);     // brackets are not saved
       }
 
 Bracket::~Bracket()
       {
+      }
+
+//---------------------------------------------------------
+//   playTick
+//---------------------------------------------------------
+
+Fraction Bracket::playTick() const
+      {
+      // Brackets always have a tick value of zero, so play from the start of the first measure in the system that the bracket belongs to.
+      const auto sys = system();
+      if (sys) {
+            const auto firstMeasure = sys->firstMeasure();
+            if (firstMeasure)
+                  return firstMeasure->tick();
+            }
+
+      return tick();
       }
 
 //---------------------------------------------------------
@@ -152,6 +174,8 @@ void Bracket::layout()
                         _shape.add(bbox());
                         }
                   else {
+                        if (_braceSymbol == SymId::noSym)
+                              _braceSymbol = SymId::brace;
                         qreal h = h2 * 2;
                         qreal w = symWidth(_braceSymbol) * _magx;
                         bbox().setRect(0, 0, w, h);
@@ -277,17 +301,15 @@ void Bracket::startEdit(EditData& ed)
       {
       Element::startEdit(ed);
       ay1 = pagePos().y();
-      ed.grips   = 1;
-      ed.curGrip = Grip::START;
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Bracket::updateGrips(EditData& ed) const
+std::vector<QPointF> Bracket::gripsPositions(const EditData&) const
       {
-      ed.grip[0].translate(QPointF(0.0, h2 * 2) + pagePos());
+      return { QPointF(0.0, h2 * 2) + pagePos() };
       }
 
 //---------------------------------------------------------
@@ -297,7 +319,7 @@ void Bracket::updateGrips(EditData& ed) const
 void Bracket::endEdit(EditData& ed)
       {
 //      endEditDrag(ed);
-      score()->setLayoutAll();
+      triggerLayoutAll();
       score()->update();
       ed.element = 0;         // score layout invalidates element
       }
@@ -456,6 +478,27 @@ void Bracket::setSelected(bool f)
       }
 
 //---------------------------------------------------------
+//   Bracket::bracketTypeName
+//---------------------------------------------------------
+
+const char* Bracket::bracketTypeName(BracketType type)
+      {
+      switch(type) {
+            case BracketType::BRACE:
+                  return "Brace";
+            case BracketType::NORMAL:
+                  return "Normal";
+            case BracketType::SQUARE:
+                  return "Square";
+            case BracketType::LINE:
+                  return "Line";
+            case BracketType::NO_BRACKET:
+                  return "NoBracket";
+            }
+      Q_UNREACHABLE();
+      }
+
+//---------------------------------------------------------
 //   Bracket::write
 //    used only for palettes
 //---------------------------------------------------------
@@ -464,16 +507,15 @@ void Bracket::write(XmlWriter& xml) const
       {
       switch (_bi->bracketType()) {
             case BracketType::BRACE:
-                  xml.stag(this, "type=\"Brace\"");
+            case BracketType::SQUARE:
+            case BracketType::LINE:
+                  {
+                  const char* type = bracketTypeName(_bi->bracketType());
+                  xml.stag(this, QString("type=\"%1\"").arg(type));
+                  }
                   break;
             case BracketType::NORMAL:
                   xml.stag(this);
-                  break;
-            case BracketType::SQUARE:
-                  xml.stag(this, "type=\"Square\"");
-                  break;
-            case BracketType::LINE:
-                  xml.stag(this, "type=\"Line\"");
                   break;
             case BracketType::NO_BRACKET:
                   break;

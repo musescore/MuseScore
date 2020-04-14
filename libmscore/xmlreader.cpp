@@ -11,17 +11,12 @@
 //=============================================================================
 
 #include "xml.h"
-#include "layoutbreak.h"
 #include "measure.h"
 #include "score.h"
 #include "spanner.h"
 #include "staff.h"
 #include "beam.h"
 #include "tuplet.h"
-#include "sym.h"
-#include "note.h"
-#include "barline.h"
-#include "style.h"
 
 namespace Ms {
 
@@ -189,8 +184,10 @@ Fraction XmlReader::readFraction()
       const QString& s(readElementText());
       if (!s.isEmpty()) {
             int i = s.indexOf('/');
-            if (i == -1)
-                  qFatal("illegal fraction <%s>", qPrintable(s));
+            if (i == -1) {
+                  qDebug("reading ticks <%s>", qPrintable(s));
+                  return Fraction::fromTicks(s.toInt());
+                  }
             else {
                   z = s.left(i).toInt();
                   n = s.mid(i+1).toInt();
@@ -214,28 +211,6 @@ void XmlReader::unknown()
       else
             qDebug("line %lld col %lld: %s", lineNumber(), columnNumber(), name().toUtf8().data());
       skipCurrentElement();
-      }
-
-//---------------------------------------------------------
-//   rfrac
-//    return relative position in measure
-//---------------------------------------------------------
-
-Fraction XmlReader::rfrac() const
-      {
-      if (_currMeasure)
-            return Fraction::fromTicks(tick() - _currMeasure->tick());
-      return afrac();
-      }
-
-//---------------------------------------------------------
-//   afrac
-//    return absolute position
-//---------------------------------------------------------
-
-Fraction XmlReader::afrac() const
-      {
-      return Fraction::fromTicks(tick());
       }
 
 //---------------------------------------------------------
@@ -265,7 +240,7 @@ void XmlReader::fillLocation(Location& l, bool forceAbsFrac) const
       if (l.track() == defaults.track())
             l.setTrack(track());
       if (l.frac() == defaults.frac())
-            l.setFrac(absFrac ? afrac() : rfrac());
+            l.setFrac(absFrac ? tick() : rtick());
       if (l.measure() == defaults.measure())
             l.setMeasure(absFrac ? 0 : currentMeasureIndex());
       }
@@ -281,16 +256,21 @@ void XmlReader::setLocation(const Location& l)
       if (l.isRelative()) {
             Location newLoc = l;
             newLoc.toAbsolute(location());
+            int intTicks = l.frac().ticks();
+            if (_tick == Fraction::fromTicks(_intTick + intTicks)) {
+                  _intTick += intTicks;
+                  setTrack(newLoc.track() - _trackOffset);
+                  return;
+                  }
             setLocation(newLoc); // recursion
             return;
             }
       setTrack(l.track() - _trackOffset);
-      int tick = l.frac().ticks() - _tickOffset;
+      setTick(l.frac() - _tickOffset);
       if (!pasteMode()) {
             Q_ASSERT(l.measure() == currentMeasureIndex());
-            tick += currentMeasure()->tick();
+            incTick(currentMeasure()->tick());
             }
-      initTick(tick);
       }
 
 //---------------------------------------------------------
@@ -535,6 +515,18 @@ Tid XmlReader::addUserTextStyle(const QString& name)
             id = Tid::USER5;
       else if (userTextStyles.size() == 5)
             id = Tid::USER6;
+      else if (userTextStyles.size() == 6)
+            id = Tid::USER7;
+      else if (userTextStyles.size() == 7)
+            id = Tid::USER8;
+      else if (userTextStyles.size() == 8)
+            id = Tid::USER9;
+      else if (userTextStyles.size() == 9)
+            id = Tid::USER10;
+      else if (userTextStyles.size() == 10)
+            id = Tid::USER11;
+      else if (userTextStyles.size() == 11)
+            id = Tid::USER12;
       else
             qDebug("too many user defined textstyles");
       if (id != Tid::TEXT_STYLES)
@@ -553,27 +545,6 @@ Tid XmlReader::lookupUserTextStyle(const QString& name)
                   return i.ss;
             }
       return Tid::TEXT_STYLES;       // not found
-      }
-
-//---------------------------------------------------------
-//   performReadAhead
-//    If f is called, the device will be non-sequential and
-//    open. Reading position equals to the current value of
-//    characterOffset(), but it is possible to seek for any
-//    other position inside f.
-//---------------------------------------------------------
-
-void XmlReader::performReadAhead(std::function<void(QIODevice&)> f)
-      {
-      if (!_readAheadDevice || _readAheadDevice->isSequential())
-            return;
-      if (!_readAheadDevice->isOpen())
-            _readAheadDevice->open(QIODevice::ReadOnly);
-
-      const auto pos = _readAheadDevice->pos();
-      _readAheadDevice->seek(characterOffset());
-      f(*_readAheadDevice);
-      _readAheadDevice->seek(pos);
       }
 
 //---------------------------------------------------------
@@ -646,8 +617,8 @@ void XmlReader::reconnectBrokenConnectors()
             return;
       qDebug("Reconnecting broken connectors (%d nodes)", int(_connectors.size()));
       QList<QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*>>> brokenPairs;
-      for (int i = 1; i < int(_connectors.size()); ++i) {
-            for (int j = 0; j < i; ++j) {
+      for (size_t i = 1; i < _connectors.size(); ++i) {
+            for (size_t j = 0; j < i; ++j) {
                   ConnectorInfoReader* c1 = _connectors[i].get();
                   ConnectorInfoReader* c2 = _connectors[j].get();
                   int d = c1->connectionDistance(*c2);
@@ -714,6 +685,14 @@ LinkedElements* XmlReader::getLink(bool masterScore, const Location& l, int loca
             staff *= -1;
       const int localIndex = _linksIndexer.assignLocalIndex(l) + localIndexDiff;
       QList<QPair<LinkedElements*, Location>>& staffLinks = _staffLinkedElements[staff];
+
+      if (!staffLinks.isEmpty() && staffLinks.constLast().second == l) {
+            // This element potentially affects local index for "main"
+            // elements that may go afterwards at the same tick, so
+            // append it to staffLinks as well.
+            staffLinks.push_back(staffLinks.constLast()); // nothing should reference exactly this local index, so it shouldn't matter what to append
+            }
+
       for (int i = 0; i < staffLinks.size(); ++i) {
             if (staffLinks[i].second == l) {
                   if (localIndex == 0)
@@ -740,6 +719,37 @@ int LinksIndexer::assignLocalIndex(const Location& mainElementLocation)
       _lastLocalIndex = 0;
       _lastLinkedElementLoc = mainElementLocation;
       return 0;
+      }
+
+//---------------------------------------------------------
+//   rtick
+//    return relative position in measure
+//---------------------------------------------------------
+
+Fraction XmlReader::rtick() const
+      {
+      return _curMeasure ? _tick - _curMeasure->tick() : _tick;
+      }
+
+//---------------------------------------------------------
+//   setTick
+//---------------------------------------------------------
+
+void XmlReader::setTick(const Fraction& f)
+      {
+      _tick = f.reduced();
+      _intTick = _tick.ticks();
+      }
+
+//---------------------------------------------------------
+//   incTick
+//---------------------------------------------------------
+
+void XmlReader::incTick(const Fraction& f)
+      {
+      _tick += f;
+      _tick.reduce();
+      _intTick += f.ticks();
       }
 }
 

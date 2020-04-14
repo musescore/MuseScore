@@ -32,6 +32,7 @@ class TestClef : public QObject, public MTest
       void initTestCase();
       void clef1();
       void clef2();
+      void clef3();
       };
 
 //---------------------------------------------------------
@@ -72,6 +73,22 @@ void TestClef::clef2()
 
       score->doLayout();
       QVERIFY(saveCompareScore(score, "clef-2.mscx", DIR + "clef-2-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   clef3
+//    change the first clef of a score by changing the first measure's clef
+//---------------------------------------------------------
+
+void TestClef::clef3()
+      {
+      MasterScore* score = readScore(DIR + "clef-3.mscx");
+      Measure* m = score->firstMeasure();
+      score->undoChangeClef(score->staff(0), m, ClefType::F);
+
+      score->doLayout();
+      QVERIFY(saveCompareScore(score, "clef-3.mscx", DIR + "clef-3-ref.mscx"));
       delete score;
       }
 

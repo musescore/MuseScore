@@ -59,7 +59,6 @@ void Symbol::layout()
       // foreach(Element* e, leafs())     done in BSymbol::layout() ?
       //      e->layout();
       setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
-      QPointF o(offset());
       qreal w = width();
       QPointF p;
       if (align() & Align::BOTTOM)
@@ -153,6 +152,37 @@ void Symbol::read(XmlReader& e)
                   e.unknown();
             }
       setPos(pos);
+      }
+
+//---------------------------------------------------------
+//   Symbol::getProperty
+//---------------------------------------------------------
+
+QVariant Symbol::getProperty(Pid propertyId) const
+      {
+      switch (propertyId) {
+            case Pid::SYMBOL:
+                  return QVariant::fromValue(_sym);
+            default:
+                  break;
+            }
+      return BSymbol::getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   Symbol::setProperty
+//---------------------------------------------------------
+
+bool Symbol::setProperty(Pid propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case Pid::SYMBOL:
+                  _sym = v.value<SymId>();
+                  break;
+            default:
+                  break;
+            }
+      return BSymbol::setProperty(propertyId, v);
       }
 
 //---------------------------------------------------------

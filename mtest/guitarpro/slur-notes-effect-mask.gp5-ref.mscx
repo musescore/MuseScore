@@ -33,6 +33,7 @@
       <Instrument>
         <longName>Bass</longName>
         <trackName></trackName>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>32</frets>
           <string>28</string>
@@ -343,6 +344,7 @@
         <Instrument>
           <longName>Bass</longName>
           <trackName></trackName>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>32</frets>
             <string>28</string>

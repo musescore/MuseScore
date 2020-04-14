@@ -47,6 +47,7 @@
 #include "stringdata.h"
 #include "beam.h"
 #include "slur.h"
+#include "fingering.h"
 
 namespace Ms {
 
@@ -70,11 +71,11 @@ Note* Chord::upNote() const
       Q_ASSERT(!_notes.empty());
 
       Note* result = _notes.back();
-      if (!staff())
+      const Staff* stf = staff();
+      if (!stf)
             return result;
 
-      const Staff* stf = staff();
-      const StaffType* st  = stf->staffType(tick());
+      const StaffType* st  = stf->staffTypeForElement(this);
       if (st->isDrumStaff()) {
             for (Note* n : _notes) {
                   if (n->line() < result->line()) {
@@ -107,11 +108,11 @@ Note* Chord::downNote() const
       Q_ASSERT(!_notes.empty());
 
       Note* result = _notes.front();
-      if (!staff())
+      const Staff* stf = staff();
+      if (!stf)
             return result;
 
-      const Staff* stf = staff();
-      const StaffType* st  = stf->staffType(tick());
+      const StaffType* st  = stf->staffTypeForElement(this);
       if (st->isDrumStaff()) {
             for (Note* n : _notes) {
                   if (n->line() > result->line()) {
@@ -141,12 +142,12 @@ Note* Chord::downNote() const
 
 int Chord::upLine() const
       {
-      return (staff() && staff()->isTabStaff(tick())) ? upString()*2 : upNote()->line();
+      return onTabStaff() ? upString()*2 : upNote()->line();
       }
 
 int Chord::downLine() const
       {
-      return (staff() && staff()->isTabStaff(tick())) ? downString()*2 : downNote()->line();
+      return onTabStaff() ? downString()*2 : downNote()->line();
       }
 
 //---------------------------------------------------------
@@ -163,10 +164,14 @@ int Chord::downLine() const
 int Chord::upString() const
       {
       // if no staff or staff not a TAB, return 0 (=topmost line)
-      if(!staff() || !staff()->isTabStaff(tick()))
-            return 0;
       const Staff* st = staff();
-      const StaffType* tab = st->staffType(tick());
+      if (!st)
+            return 0;
+
+      const StaffType* tab = st->staffTypeForElement(this);
+      if (!tab->isTabStaff())
+            return 0;
+
       int       line = tab->lines() - 1;      // start at bottom line
       int                     noteLine;
       // scan each note: if TAB strings are not in sequential order,
@@ -182,12 +187,14 @@ int Chord::upString() const
 
 int Chord::downString() const
       {
-      if (!staff())                              // if no staff, return 0
-            return 0;
-      if (!staff()->isTabStaff(tick()))                // if staff not a TAB, return bottom line
-            return staff()->lines(tick())-1;
       const Staff* st = staff();
-      const StaffType* tab = st->staffType(tick());
+      if (!st)                                         // if no staff, return 0
+            return 0;
+
+      const StaffType* tab = st->staffTypeForElement(this);
+      if (!tab->isTabStaff())                // if staff not a TAB, return bottom line
+            return st->lines(tick())-1;
+
       int line = 0;         // start at top line
       int noteLine;
       size_t n = _notes.size();
@@ -217,6 +224,8 @@ Chord::Chord(Score* s)
       _stemSlash        = 0;
       _noStem           = false;
       _playEventType    = PlayEventType::Auto;
+      _spaceLw          = 0.;
+      _spaceRw          = 0.;
       _crossMeasure     = CrossMeasure::UNKNOWN;
       _graceIndex   = 0;
       }
@@ -272,14 +281,13 @@ Chord::Chord(const Chord& c, bool link)
             }
       if (c._tremolo) {
             Tremolo* t = new Tremolo(*(c._tremolo));
-            if (link) {
+            if (link)
                   score()->undo(new Link(t, const_cast<Tremolo*>(c._tremolo)));
-                  if (c._tremolo->twoNotes()) {
-                        if (c._tremolo->chord1() == &c)
-                              t->setChords(this, nullptr);
-                        else
-                              t->setChords(nullptr, this);
-                        }
+            if (c._tremolo->twoNotes()) {
+                  if (c._tremolo->chord1() == &c)
+                        t->setChords(this, nullptr);
+                  else
+                        t->setChords(nullptr, this);
                   }
             add(t);
             }
@@ -329,10 +337,15 @@ Chord::~Chord()
       {
       qDeleteAll(_articulations);
       delete _arpeggio;
-      if (_tremolo && _tremolo->chord1() == this) {
-            if (_tremolo->chord2())
-                  _tremolo->chord2()->setTremolo(0);
-            delete _tremolo;
+      if (_tremolo) {
+            if (_tremolo->chord1() == this) {
+                  Tremolo* tremoloPointer = _tremolo; // setTremolo(0) loses reference to the current pointer
+                  if (_tremolo->chord2())
+                        _tremolo->chord2()->setTremolo(0);
+                  delete tremoloPointer;
+                  }
+            else if (!(_tremolo->chord1())) // delete orphaned tremolo
+                  delete _tremolo;
             }
       delete _stemSlash;
       delete _stem;
@@ -366,7 +379,7 @@ qreal Chord::noteHeadWidth() const
 qreal Chord::stemPosX() const
       {
       const Staff* stf = staff();
-      const StaffType* st = stf ? stf->staffType(tick()) : 0;
+      const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
       if (st && st->isTabStaff())
             return st->chordStemPosX(this) * spatium();
       return _up ? noteHeadWidth() : 0.0;
@@ -382,7 +395,7 @@ QPointF Chord::stemPos() const
       QPointF p(pagePos());
 
       const Staff* stf = staff();
-      const StaffType* st = stf ? stf->staffType(tick()) : 0;
+      const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
       if (st && st->isTabStaff())
             return st->chordStemPos(this) * spatium() + p;
 
@@ -408,7 +421,7 @@ QPointF Chord::stemPosBeam() const
       QPointF p(pagePos());
 
       const Staff* stf = staff();
-      const StaffType* st = stf ? stf->staffType(tick()) : 0;
+      const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
 
       if (st && st->isTabStaff())
             return st->chordStemPosBeam(this) * _spatium + p;
@@ -430,13 +443,13 @@ QPointF Chord::stemPosBeam() const
 
 void Chord::setTremolo(Tremolo* tr)
       {
-      if (tr == _tremolo)
+      if (_tremolo && tr && tr == _tremolo)
             return;
 
       if (_tremolo) {
             if (_tremolo->twoNotes()) {
                   TDuration d;
-                  const Fraction f = duration();
+                  const Fraction f = ticks();
                   if (f.numerator() > 0)
                         d = TDuration(f);
                   else {
@@ -476,6 +489,9 @@ void Chord::setTremolo(Tremolo* tr)
             else
                   _tremolo = tr;
             }
+      else {
+            _tremolo = nullptr;
+            }
       }
 
 //---------------------------------------------------------
@@ -498,7 +514,7 @@ void Chord::add(Element* e)
 
                   for (unsigned idx = 0; idx < _notes.size(); ++idx) {
                         if (note->pitch() <= _notes[idx]->pitch()) {
-                              if (note->pitch() == _notes[idx]->pitch() && note->line() > _notes[idx]->line())
+                              if (note->pitch() == _notes[idx]->pitch() && note->line() >= _notes[idx]->line())
                                     _notes.insert(_notes.begin()+idx+1, note);
                               else
                                     _notes.insert(_notes.begin()+idx, note);
@@ -512,6 +528,7 @@ void Chord::add(Element* e)
                   if (voice() && measure() && note->visible())
                         measure()->setHasVoices(staffIdx(), true);
                   }
+                  score()->setPlaylistDirty();
                   break;
             case ElementType::ARPEGGIO:
                   _arpeggio = toArpeggio(e);
@@ -593,6 +610,7 @@ void Chord::remove(Element* e)
                         qDebug("Chord::remove() note %p not found!", e);
                   if (voice() && measure() && note->visible())
                         measure()->checkMultiVoices(staffIdx());
+                  score()->setPlaylistDirty();
                   }
                   break;
 
@@ -672,14 +690,14 @@ void Chord::addLedgerLines()
       bool staffVisible  = true;
 
       if (segment()) { //not palette
-            int tick     = segment()->tick();
-            int idx      = staffIdx() + staffMove();
-            track        = staff2track(idx);
-            Staff* st    = score()->staff(idx);
-            lineBelow    = (st->lines(tick) - 1) * 2;
-            lineDistance = st->lineDistance(tick);
-            mag         = staff()->mag(tick);
-            staffVisible = !staff()->invisible();
+            Fraction tick = segment()->tick();
+            int idx       = staffIdx() + staffMove();
+            track         = staff2track(idx);
+            Staff* st     = score()->staff(idx);
+            lineBelow     = (st->lines(tick) - 1) * 2;
+            lineDistance  = st->lineDistance(tick);
+            mag           = staff()->mag(tick);
+            staffVisible  = !staff()->invisible();
             }
 
       // need ledger lines?
@@ -688,7 +706,7 @@ void Chord::addLedgerLines()
 
       // the extra length of a ledger line with respect to notehead (half of it on each side)
       qreal extraLen = score()->styleP(Sid::ledgerLineLength) * mag * 0.5;
-      qreal hw = _notes[0]->headWidth();
+      qreal hw;
       qreal minX, maxX;                         // note extrema in raster units
       int   minLine, maxLine;
       bool  visible = false;
@@ -702,6 +720,7 @@ void Chord::addLedgerLines()
       for (size_t j = 0; j < 2; j++) {             // notes are scanned twice...
             int from, delta;
             vector<LedgerLineData> vecLines;
+            hw = 0.0;
             minX  = maxX = 0;
             minLine = 0;
             maxLine = lineBelow;
@@ -728,6 +747,7 @@ void Chord::addLedgerLines()
 
                   if (note->visible())          // if one note is visible,
                         visible = true;         // all lines between it and the staff are visible
+                  hw = qMax(hw, note->headWidth());
 
                   //
                   // Experimental:
@@ -847,19 +867,19 @@ void Chord::computeUp()
       {
       Q_ASSERT(!_notes.empty());
       const Staff* st = staff();
-      const StaffType* tab = st ? st->staffType(tick()) : 0;
+      const StaffType* tab = st ? st->staffTypeForElement(this) : 0;
       bool tabStaff  = tab && tab->isTabStaff();
       // TAB STAVES
       if (tabStaff) {
             // if no stems or stem beside staves
-            if (tab->slashStyle() || !tab->stemThrough()) {
+            if (tab->stemless() || !tab->stemThrough()) {
                   // if measure has voices, set stem direction according to voice
                   if (measure()->hasVoices(staffIdx()))
                         _up = !(track() % 2);
                   else                          // if only voice 1,
                         // unconditionally set to down if not stems or according to TAB stem direction otherwise
                         // (even with no stems, stem direction controls position of slurs and ties)
-                        _up = tab->slashStyle() ? false : !tab->stemsDown();
+                        _up = tab->stemless() ? false : !tab->stemsDown();
                   return;
                   }
             // if TAB has stems through staves, chain into standard processing
@@ -1139,8 +1159,9 @@ qreal Chord::centerX() const
       {
       // TAB 'notes' are always centered on the stem
       const Staff* st = staff();
-      if (st->isTabStaff(tick()))
-            return st->staffType(tick())->chordStemPosX(this) * spatium();
+      const StaffType* stt = st->staffTypeForElement(this);
+      if (stt->isTabStaff())
+            return stt->chordStemPosX(this) * spatium();
 
       const Note* note = up() ? upNote() : downNote();
       qreal x = note->pos().x() + note->noteheadCenterX();
@@ -1231,7 +1252,7 @@ void Chord::setScore(Score* s)
 
 //-----------------------------------------------------------------------------
 //   hookAdjustment
-//    Adjustment to the length of the stem in order to accomodate hooks
+//    Adjustment to the length of the stem in order to accommodate hooks
 //    This function replaces this bit of code:
 //      switch (hookIdx) {
 //            case 3: normalStemLen += small() ? .5  : 0.75; break; //32nd notes
@@ -1286,7 +1307,7 @@ qreal hookAdjustment(QString font, int hooks, bool up, bool small)
 ///   Get the default stem length for this chord
 //-----------------------------------------------------------------------------
 
-qreal Chord::defaultStemLength()
+qreal Chord::defaultStemLength() const
       {
       Note* downnote;
       qreal stemLen;
@@ -1298,10 +1319,11 @@ qreal Chord::defaultStemLength()
       const Staff* st    = staff();
       qreal lineDistance = st ? st->lineDistance(tick()) : 1.0;
 
-      const StaffType* tab = (st && st->isTabStaff(tick())) ? st->staffType(tick()) : nullptr;
+      const StaffType* stt = st ? st->staffTypeForElement(this) : nullptr;
+      const StaffType* tab = (stt && stt->isTabStaff()) ? stt : nullptr;
       if (tab) {
             // require stems only if TAB is not stemless and this chord has a stem
-            if (!tab->slashStyle() && _stem) {
+            if (!tab->stemless() && _stem) {
                   // if stems are beside staff, apply special formatting
                   if (!tab->stemThrough()) {
                         // process stem:
@@ -1391,30 +1413,59 @@ qreal Chord::defaultStemLength()
                   }
             }
 
-      // adjust stem len for tremolo
-      if (_tremolo && !_tremolo->twoNotes()) {
-            // hook up odd lines
-            static const int tab1[2][2][2][4] = {
-                  { { { 0, 0, 0,  1 },  // stem - down - even - lines
-                      { 0, 0, 0,  2 }   // stem - down - odd - lines
-                      },
-                    { { 0, 0, 0, -1 },  // stem - up - even - lines
-                      { 0, 0, 0, -2 }   // stem - up - odd - lines
-                      }
-                    },
-                  { { { 0, 0, 1, 2 },   // hook - down - even - lines
-                      { 0, 0, 1, 2 }    // hook - down - odd - lines
-                      },
-                    { { 0, 0, -1, -2 }, // hook - up - even - lines
-                      { 0, 0, -1, -2 }  // hook - up - odd - lines
-                      }
-                    }
-                  };
-            int odd = (up() ? upLine() : downLine()) & 1;
-            int n = tab1[hookIdx ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
-            stemLen += n * .5;
+      if (tab)
+            stemLen *= lineDistance;
+
+      const qreal sgn = up() ? -1.0 : 1.0;
+      qreal stemLenPoints = stemLen * _spatium;
+      const qreal minAbsStemLen = minAbsStemLength();
+      if (sgn * stemLenPoints < minAbsStemLen)
+            stemLenPoints = sgn * minAbsStemLen;
+
+      return stemLenPoints;
+      }
+
+//---------------------------------------------------------
+//   minAbsStemLength
+//    get minimum stem length with tremolo
+//---------------------------------------------------------
+
+qreal Chord::minAbsStemLength() const
+      {
+      if (!_tremolo)
+            return 0.0;
+
+      const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val();
+      const qreal td = score()->styleS(Sid::tremoloDistance).val();
+      int beamLvl = beams();
+      const qreal beamDist = beam() ? beam()->beamDist() : (sw * spatium());
+
+      // single-note tremolo
+      if (!_tremolo->twoNotes()) {
+            _tremolo->layout(); // guarantee right "height value"
+
+            qreal height;
+            if (up())
+                  height = downPos() - _tremolo->pos().y();
+            else
+                  height = _tremolo->pos().y() + _tremolo->height() - upPos();
+            const bool hasHook = beamLvl && !beam();
+            if (hasHook)
+                  beamLvl += (up() ? 4 : 2); // reserve more space for stem with both hook and tremolo
+           
+            const qreal additionalHeight = beamLvl ? 0 : sw * spatium();
+
+            return height + beamLvl * beamDist + additionalHeight;
             }
-      return stemLen * _spatium * lineDistance;
+
+      // two-note tremolo
+      else {
+            if (_tremolo->chord1()->up() == _tremolo->chord2()->up()) {
+                  const qreal tremoloMinHeight = ((_tremolo->lines() - 1) * td + sw) * spatium();
+                  return tremoloMinHeight + beamLvl * beamDist + 2 * td * spatium();
+                  }
+            return 0.0;
+            }
       }
 
 //---------------------------------------------------------
@@ -1428,8 +1479,8 @@ qreal Chord::defaultStemLength()
 void Chord::layoutStem1()
       {
       const Staff* stf = staff();
-      const StaffType* st = stf ? stf->staffType(tick()) : 0;
-      if (durationType().hasStem() && !(_noStem || (measure() && measure()->slashStyle(staffIdx())) || (st && st->isTabStaff() && st->slashStyle()))) {
+      const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
+      if (durationType().hasStem() && !(_noStem || (measure() && measure()->stemless(staffIdx())) || (st && st->isTabStaff() && st->stemless()))) {
             if (!_stem) {
                   Stem* stem = new Stem(score());
                   stem->setParent(this);
@@ -1443,7 +1494,7 @@ void Chord::layoutStem1()
             else if (_stemSlash)
                   remove(_stemSlash);
 
-            qreal stemWidth5 = _stem->lineWidth() * .5;
+            qreal stemWidth5 = _stem->lineWidth() * .5 * mag();
             _stem->rxpos()   = stemPosX() + (up() ? -stemWidth5 : +stemWidth5);
             _stem->setLen(defaultStemLength());
             }
@@ -1473,7 +1524,7 @@ void Chord::layoutStem()
 
       int hookIdx  = durationType().hooks();
 
-      if (hookIdx && !(noStem() || measure()->slashStyle(staffIdx()))) {
+      if (hookIdx && !(noStem() || measure()->stemless(staffIdx()))) {
             if (!hook()) {
                   Hook* hook = new Hook(score());
                   hook->setParent(this);
@@ -1489,10 +1540,10 @@ void Chord::layoutStem()
       // TAB
       //
       const Staff* st = staff();
-      const StaffType* tab = st ? st->staffType(tick()) : 0;
+      const StaffType* tab = st ? st->staffTypeForElement(this) : 0;
       if (tab && tab->isTabStaff()) {
             // if stemless TAB
-            if (tab->slashStyle()) {
+            if (tab->stemless()) {
                   // if 'grid' duration symbol of MEDIALFINAL type, it is time to compute its width
                   if (_tabDur != nullptr && _tabDur->beamGrid() == TabBeamGrid::MEDIALFINAL)
                         _tabDur->layout2();
@@ -1594,7 +1645,7 @@ void Chord::layout2()
       for (Chord* c : _graceNotes)
             c->layout2();
 
-      qreal mag = staff()->mag(tick());
+      const qreal mag = staff()->mag(this);
 
       //
       // position after-chord grace notes
@@ -1613,7 +1664,8 @@ void Chord::layout2()
                   s = nullptr;
             // start from the right (if next segment found, x of it relative to this chord;
             // chord right space otherwise)
-            qreal xOff =  s ? s->pos().x() - (segment()->pos().x() + pos().x()) : _spaceRw;
+            Chord* last = gna.last();
+            qreal xOff =  s ? (s->pos().x() - s->staffShape(last->vStaffIdx()).left()) - (segment()->pos().x() + pos().x()) : _spaceRw;
             // final distance: if near to another chord, leave minNoteDist at right of last grace
             // else leave note-to-barline distance;
             xOff -= (s != nullptr && s->segmentType() != SegmentType::ChordRest)
@@ -1628,6 +1680,8 @@ void Chord::layout2()
                   xOff -= minNoteDist + g->_spaceLw;    // move to left by grace note right space and inter-grace distance
                   }
             }
+      if (_tabDur)
+            _tabDur->layout2();
       }
 
 //---------------------------------------------------------
@@ -1666,7 +1720,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       // in the context of the all of the chords of the whole segment
 
       const Staff* st = staff();
-      StaffGroup staffGroup = st->staffType(tick())->group();
+      StaffGroup staffGroup = st->staffTypeForElement(this)->group();
       if (staffGroup == StaffGroup::TAB) {
             const Instrument* instrument = part()->instrument();
             for (Chord* ch : graceNotes())
@@ -1678,7 +1732,8 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       // PITCHED_ and PERCUSSION_STAFF can go note by note
 
       if (staffGroup == StaffGroup::STANDARD) {
-            for (Chord* ch : graceNotesBefore()) {
+            const QVector<Chord*> gnb(graceNotesBefore());
+            for (Chord* ch : gnb) {
                   std::vector<Note*> notes(ch->notes());  // we need a copy!
                   for (Note* note : notes)
                         note->updateAccidental(as);
@@ -1697,7 +1752,8 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                         }
                   note->updateAccidental(as);
                   }
-            for (Chord* ch : graceNotesAfter()) {
+            const QVector<Chord*> gna(graceNotesAfter());
+            for (Chord* ch : gna) {
                   std::vector<Note*> notes(ch->notes());  // we need a copy!
                   for (Note* note : notes)
                         note->updateAccidental(as);
@@ -1745,7 +1801,7 @@ void Chord::layout()
       {
       if (_notes.empty())
             return;
-      if (staff() && staff()->isTabStaff(tick()))
+      if (onTabStaff())
             layoutTablature();
       else
             layoutPitched();
@@ -1758,25 +1814,25 @@ void Chord::layout()
 void Chord::layoutPitched()
       {
       int gi = 0;
-      for (Chord* c : _graceNotes) {
+      for (Chord* c : qAsConst(_graceNotes)) {
             // HACK: graceIndex is not well-maintained on add & remove
             // so rebuild now
             c->setGraceIndex(gi++);
             if (c->isGraceBefore())
                   c->layoutPitched();
             }
-      QVector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
-      int gnb = graceNotesBefore.size();
+      const QVector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
+      const int gnb = graceNotesBefore.size();
 
       // lay out grace notes after separately so they are processed left to right
       // (they are normally stored right to left)
 
-      QVector<Chord*> gna = graceNotesAfter();
+      const QVector<Chord*> gna = graceNotesAfter();
       for (Chord* c : gna)
             c->layoutPitched();
 
       qreal _spatium         = spatium();
-      qreal mag_             = staff() ? staff()->mag(tick()) : 1.0;    // palette elements do not have a staff
+      qreal mag_             = staff() ? staff()->mag(this) : 1.0;    // palette elements do not have a staff
       qreal dotNoteDistance  = score()->styleP(Sid::dotNoteDistance)  * mag_;
       qreal minNoteDistance  = score()->styleP(Sid::minNoteDistance)  * mag_;
       qreal minTieLength     = score()->styleP(Sid::MinTieLength)     * mag_;
@@ -1893,6 +1949,18 @@ void Chord::layoutPitched()
                         lll = qMax(lll, d);
                         }
                   }
+
+            // clear layout for note-based fingerings
+            for (Element* e : note->el()) {
+                  if (e->isFingering()) {
+                        Fingering* f = toFingering(e);
+                        if (f->layoutType() == ElementType::NOTE) {
+                              f->setPos(QPointF());
+                              f->setbbox(QRectF());
+                              }
+                        }
+                  }
+
             }
 
       //-----------------------------------------
@@ -1905,9 +1973,11 @@ void Chord::layoutPitched()
             qreal arpeggioDistance = score()->styleP(Sid::ArpeggioNoteDistance) * mag_;
             _arpeggio->layout();    // only for width() !
             _arpeggio->setHeight(0.0);
-            lll        += _arpeggio->width() + arpeggioDistance + chordX;
+            qreal extraX = _arpeggio->width() + arpeggioDistance + chordX;
             qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
-            _arpeggio->setPos(-lll, y1);
+            _arpeggio->setPos(-(lll + extraX), y1);
+            if (_arpeggio->visible())
+                  lll += extraX;
             // _arpeggio->layout() called in layoutArpeggio2()
 
             // handle the special case of _arpeggio->span() > 1
@@ -1917,10 +1987,20 @@ void Chord::layoutPitched()
 
       // allocate enough room for glissandi
       if (_endsGlissando) {
-            if (rtick()                                     // if not at beginning of measure
-                        || graceNotesBefore.size() > 0)     // or there are graces before
-                  lll += _spatium * 0.5 + minTieLength;
-            // special case of system-initial glissando final note is handled in Glissando::layout() itself
+            for (const Note* note : notes()) {
+                  for (const Spanner* sp : note->spannerBack()) {
+                        if (sp->isGlissando()) {
+                              if (toGlissando(sp)->visible()) {
+                                    if (!rtick().isZero()                 // if not at beginning of measure
+                                       || graceNotesBefore.size() > 0) {  // or there are graces before
+                                          lll += _spatium * 0.5 + minTieLength;
+                                          break;
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            // special case of system-initial glissando final note is handled in Glissando::layout() itself 
             }
 
       if (dots()) {
@@ -1942,6 +2022,21 @@ void Chord::layoutPitched()
                         }
                   }
             }
+
+#if 0
+      if (!_articulations.isEmpty()) {
+            // TODO: allocate space to avoid "staircase" effect
+            // but we would need to determine direction in order to get correct symid & bbox
+            // another alternative is to limit the width contribution of the articulation in layoutArticulations2()
+            //qreal aWidth = 0.0;
+            for (Articulation* a : articulations())
+                  a->layout();      // aWidth = qMax(aWidth, a->width());
+            //qreal w = width();
+            //qreal aExtra = (qMax(aWidth, w) - w) * 0.5;
+            //lll = qMax(lll, aExtra);
+            //rrr = qMax(rrr, aExtra);
+            }
+#endif
 
       _spaceLw = lll;
       _spaceRw = rrr;
@@ -1985,6 +2080,28 @@ void Chord::layoutPitched()
 
       for (Note* note : _notes)
             note->layout2();
+
+      // align note-based fingerings
+      std::vector<Fingering*> alignNote;
+      qreal xNote = 10000.0;
+      for (Note* note : _notes) {
+            bool leftFound = false;
+            for (Element* e : note->el()) {
+                  if (e->isFingering() && e->autoplace()) {
+                        Fingering* f = toFingering(e);
+                        if (f->layoutType() == ElementType::NOTE && f->tid() == Tid::LH_GUITAR_FINGERING) {
+                              alignNote.push_back(f);
+                              if (!leftFound) {
+                                    leftFound = true;
+                                    qreal xf = f->ipos().x();
+                                    xNote = qMin(xNote, xf);
+                                    }
+                              }
+                        }
+                  }
+            }
+      for (Fingering* f : alignNote)
+            f->rxpos() = xNote;
       }
 
 //---------------------------------------------------------
@@ -2012,7 +2129,7 @@ void Chord::layoutTablature()
       Note* upnote      = upNote();
       qreal headWidth   = symWidth(SymId::noteheadBlack);
       const Staff* st   = staff();
-      const StaffType* tab = st->staffType(tick());
+      const StaffType* tab = st->staffTypeForElement(this);
       qreal lineDist    = tab->lineDistance().val() *_spatium;
       qreal stemX       = tab->chordStemPosX(this) *_spatium;
       int   ledgerLines = 0;
@@ -2120,12 +2237,14 @@ void Chord::layoutTablature()
       // or measure is stemless
       // or duration longer than half (if halves have stems) or duration longer than crochet
       // remove stems
-      if (tab->slashStyle() || _noStem || measure()->slashStyle(staffIdx()) || durationType().type() <
+      if (tab->stemless() || _noStem || measure()->stemless(staffIdx()) || durationType().type() <
          (tab->minimStyle() != TablatureMinimStyle::NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER) ) {
             if (_stem)
                   score()->undo(new RemoveElement(_stem));
             if (_hook)
                   score()->undo(new RemoveElement(_hook));
+            if (_beam)
+                  score()->undo(new RemoveElement(_beam));
             }
       // if stem is required but missing, add it;
       // set stem position (stem length is set in Chord:layoutStem() )
@@ -2169,8 +2288,6 @@ void Chord::layoutTablature()
             //
             // tab duration symbols
             //
-            // check duration of prev. CR segm
-            ChordRest * prevCR = prevChordRest(this);
             // if no previous CR
             // OR symbol repeat set to ALWAYS
             // OR symbol repeat condition is triggered
@@ -2180,23 +2297,35 @@ void Chord::layoutTablature()
             // AND no not-stem
             // set a duration symbol (trying to re-use existing symbols where existing to minimize
             // symbol creation and deletion)
-            TablatureSymbolRepeat symRepeat = tab->symRepeat();
-            if (  (prevCR == 0
-                  || symRepeat == TablatureSymbolRepeat::ALWAYS
-                  || (symRepeat == TablatureSymbolRepeat::MEASURE && measure() != prevCR->measure())
-                  || (symRepeat == TablatureSymbolRepeat::SYSTEM && measure()->system() != prevCR->measure()->system())
-                  || beamMode() != Beam::Mode::AUTO
-                  || prevCR->durationType().type() != durationType().type()
-                  || prevCR->dots() != dots()
-                  || prevCR->tuplet() != tuplet()
-                  || prevCR->type() == ElementType::REST)
-                        && !noStem() ) {
+            bool needTabDur = false;
+            bool repeat = false;
+            if (!noStem()) {
+                  // check duration of prev. CR segm
+                  ChordRest * prevCR = prevChordRest(this);
+                  if (prevCR == 0)
+                        needTabDur = true;
+                  else if (beamMode() != Beam::Mode::AUTO
+                        || prevCR->durationType().type() != durationType().type()
+                        || prevCR->dots() != dots()
+                        || prevCR->tuplet() != tuplet()
+                        || prevCR->type() == ElementType::REST)
+                        needTabDur = true;
+                  else if (tab->symRepeat() == TablatureSymbolRepeat::ALWAYS
+                        || ((tab->symRepeat() == TablatureSymbolRepeat::MEASURE ||
+                              tab->symRepeat() == TablatureSymbolRepeat::SYSTEM)
+                              && measure() != prevCR->measure())) {
+                        needTabDur = true;
+                        repeat = true;
+                        }
+                  }
+            if (needTabDur) {
                   // symbol needed; if not exist, create; if exists, update duration
                   if (!_tabDur)
                         _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
                   else
                         _tabDur->setDuration(durationType().type(), dots(), tab);
                   _tabDur->setParent(this);
+                  _tabDur->setRepeat(repeat);
 //                  _tabDur->setMag(mag());           // useless to set grace mag: graces have no dur. symbol
                   _tabDur->layout();
                   if (minY < 0) {                     // if some fret extends above tab body (like bass strings)
@@ -2226,7 +2355,7 @@ void Chord::layoutTablature()
 
       // allocate enough room for glissandi
       if (_endsGlissando) {
-            if (rtick())                        // if not at beginning of measure
+            if (!rtick().isZero())                        // if not at beginning of measure
                   lll += (0.5 + score()->styleS(Sid::MinTieLength).val()) * _spatium;
             // special case of system-initial glissando final note is handled in Glissando::layout() itself
             }
@@ -2264,6 +2393,14 @@ void Chord::layoutTablature()
             x += symWidth(SymId::augmentationDot);
             rrr = qMax(rrr, x);
             }
+
+#if 0
+      if (!_articulations.isEmpty()) {
+            // TODO: allocate space? see layoutPitched()
+            for (Articulation* a : articulations())
+                  a->layout();
+            }
+#endif
 
       _spaceLw = lll;
       _spaceRw = rrr;
@@ -2415,16 +2552,52 @@ void Chord::layoutArpeggio2()
       }
 
 //---------------------------------------------------------
+//   layoutNotesSpanners
+//---------------------------------------------------------
+
+void Chord::layoutSpanners()
+      {
+      for (const Note* n : notes()) {
+            Tie* tie = n->tieFor();
+            if (tie)
+                  tie->layout();
+            for (Spanner* sp : n->spannerBack())
+                  sp->layout();
+            }
+      }
+
+void Chord::layoutSpanners(System* system, const Fraction& stick)
+      {
+      //! REVIEW Needs explanation
+      for (const Note* note : notes()) {
+            Tie* t = note->tieFor();
+            if (t)
+                  t->layoutFor(system);
+            t = note->tieBack();
+            if (t) {
+                  if (t->startNote()->tick() < stick)
+                        t->layoutBack(system);
+                  }
+            for (Spanner* sp : note->spannerBack())
+                  sp->layout();
+            }
+      }
+
+//---------------------------------------------------------
 //   findNote
 //---------------------------------------------------------
 
-Note* Chord::findNote(int pitch) const
+Note* Chord::findNote(int pitch, int skip) const
       {
       size_t ns = _notes.size();
       for (size_t i = 0; i < ns; ++i) {
             Note* n = _notes.at(i);
-            if (n->pitch() == pitch)
-                  return n;
+            if (n->pitch() == pitch) {
+                  if (skip == 0)
+                        return n;
+                  else
+                        --skip;
+                  }
             }
       return 0;
       }
@@ -2478,7 +2651,7 @@ Element* Chord::drop(EditData& data)
                               return 0;
                               }
                         Chord* ch2 = toChord(s->element(track()));
-                        if (ch2->duration() != duration()) {
+                        if (ch2->ticks() != ticks()) {
                               qDebug("no matching chord for second note of tremolo found");
                               delete e;
                               return 0;
@@ -2520,6 +2693,31 @@ qreal Chord::dotPosX() const
       if (parent())
             return segment()->dotPosX(staffIdx());
       return -1000.0;
+      }
+
+//---------------------------------------------------------
+//   localSpatiumChanged
+//---------------------------------------------------------
+
+void Chord::localSpatiumChanged(qreal oldValue, qreal newValue)
+      {
+      ChordRest::localSpatiumChanged(oldValue, newValue);
+      for (Element* e : graceNotes())
+            e->localSpatiumChanged(oldValue, newValue);
+      if (_hook)
+            _hook->localSpatiumChanged(oldValue, newValue);
+      if (_stem)
+            _stem->localSpatiumChanged(oldValue, newValue);
+      if (_stemSlash)
+            _stemSlash->localSpatiumChanged(oldValue, newValue);
+      if (arpeggio())
+            arpeggio()->localSpatiumChanged(oldValue, newValue);
+      if (_tremolo && (tremoloChordType() != TremoloChordType::TremoloSecondNote))
+            _tremolo->localSpatiumChanged(oldValue, newValue);
+      for (Element* e : articulations())
+            e->localSpatiumChanged(oldValue, newValue);
+      for (Note* note : notes())
+            note->localSpatiumChanged(oldValue, newValue);
       }
 
 //---------------------------------------------------------
@@ -2742,7 +2940,8 @@ void Chord::removeMarkings(bool keepTremolo)
 
 qreal Chord::mag() const
       {
-      qreal m = staff() ? staff()->mag(tick()) : 1.0;
+      const Staff* st = staff();
+      qreal m = st ? st->mag(this) : 1.0;
       if (small())
             m *= score()->styleD(Sid::smallNoteMag);
       if (_noteType != NoteType::NORMAL)
@@ -2815,12 +3014,37 @@ QVector<Chord*> Chord::graceNotesAfter() const
 //   sortNotes
 //---------------------------------------------------------
 
+static bool noteIsBefore(const Note* n1, const Note* n2)
+      {
+      const int l1 = n1->line();
+      const int l2 = n2->line();
+      if (l1 != l2)
+            return l1 > l2;
+
+      const int p1 = n1->pitch();
+      const int p2 = n2->pitch();
+      if (p1 != p2)
+            return p1 < p2;
+
+      if (n1->tieBack()) {
+            if (n2->tieBack()) {
+                  const Note* sn1 = n1->tieBack()->startNote();
+                  const Note* sn2 = n2->tieBack()->startNote();
+                  if (sn1->chord() == sn2->chord())
+                        return sn1->unisonIndex() < sn2->unisonIndex();
+                  return sn1->chord()->isBefore(sn2->chord());
+                  }
+            else
+                  return true; // place tied notes before
+            }
+
+      return false;
+      }
+
 void Chord::sortNotes()
       {
-      std::sort(notes().begin(), notes().end(),
-         [](const Note* a,const Note* b)->bool { return b->line() < a->line(); }
-         );
-     }
+      std::sort(notes().begin(), notes().end(), noteIsBefore);
+      }
 
 //---------------------------------------------------------
 //   nextTiedChord
@@ -2881,7 +3105,7 @@ TremoloChordType Chord::tremoloChordType() const
             else if (_tremolo->chord2() == this)
                   return TremoloChordType::TremoloSecondNote;
             else
-                  qFatal("Chord::tremoloChordType(): inconsistency %p - %p", _tremolo->chord1(), _tremolo->chord2());
+                  qFatal("Chord::tremoloChordType(): inconsistency %p - %p, this is %p", _tremolo->chord1(), _tremolo->chord2(), this);
             }
       return TremoloChordType::TremoloSingle;
       }
@@ -3091,6 +3315,12 @@ QString Chord::accessibleExtraInfo() const
                   rez = QString("%1 %2").arg(rez).arg(n->screenReaderInfo());
             }
 
+      for (Articulation* a : articulations()) {
+            if (!score()->selectionFilter().canSelect(a))
+                  continue;
+            rez = QString("%1 %2").arg(rez).arg(a->screenReaderInfo());
+            }
+
       if (arpeggio() && score()->selectionFilter().canSelect(arpeggio()))
             rez = QString("%1 %2").arg(rez).arg(arpeggio()->screenReaderInfo());
 
@@ -3108,26 +3338,36 @@ QString Chord::accessibleExtraInfo() const
 
 //---------------------------------------------------------
 //   shape
-//    does not contain ledger lines and articulations
+//    does not contain articulations
 //---------------------------------------------------------
 
 Shape Chord::shape() const
       {
       Shape shape;
-      if (_hook && _hook->autoplace() && _hook->visible())
+      if (_hook && _hook->addToSkyline())
             shape.add(_hook->shape().translated(_hook->pos()));
-      if (_stem && _stem->autoplace() && _stem->visible())
-            shape.add(_stem->shape().translated(_stem->pos()));
-      if (_stemSlash && _stemSlash->autoplace() && _stemSlash->visible())
+      if (_stem && _stem->addToSkyline()) {
+            // stem direction is not known soon enough for cross staff beamed notes
+            if (!(beam() && (staffMove() || beam()->cross())))
+                  shape.add(_stem->shape().translated(_stem->pos()));
+            }
+      if (_stemSlash && _stemSlash->addToSkyline())
             shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
-      if (_arpeggio && _arpeggio->autoplace() && _arpeggio->visible())
+      if (_arpeggio && _arpeggio->addToSkyline())
             shape.add(_arpeggio->shape().translated(_arpeggio->pos()));
 //      if (_tremolo)
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
-      for (Note* note : _notes)
+      for (Note* note : _notes) {
             shape.add(note->shape().translated(note->pos()));
+            for (Element* e : note->el()) {
+                  if (!e->addToSkyline())
+                        continue;
+                  if (e->isFingering() && toFingering(e)->layoutType() == ElementType::CHORD && e->bbox().isValid())
+                        shape.add(e->bbox().translated(e->pos() + note->pos()));
+                  }
+            }
       for (Element* e : el()) {
-            if (e->autoplace() && e->visible())
+            if (e->addToSkyline())
                   shape.add(e->shape().translated(e->pos()));
             }
       for (Chord* chord : _graceNotes)    // process grace notes last, needed for correct shape calculation
@@ -3148,10 +3388,13 @@ Shape Chord::shape() const
 
 void Chord::layoutArticulations()
       {
+      for (Chord* gc : graceNotes())
+            gc->layoutArticulations();
+
       if (_articulations.empty())
             return;
       const Staff* st = staff();
-      const StaffType* staffType = st->staffType(tick());
+      const StaffType* staffType = st->staffTypeForElement(this);
       qreal mag            = (staffType->small() ? score()->styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
       qreal _spatium       = score()->spatium() * mag;
       qreal _spStaff       = _spatium * staffType->lineDistance().val();
@@ -3164,11 +3407,13 @@ void Chord::layoutArticulations()
       Articulation* prevArticulation = nullptr;
       for (Articulation* a : _articulations) {
             if (a->anchor() == ArticulationAnchor::CHORD) {
-			if (measure()->hasVoices(a->staffIdx()))
-				a->setUp(up()); // if there are voices place articulation at stem
-			else if (a->symId() >= SymId::articMarcatoAbove && a->symId() <= SymId::articMarcatoTenutoBelow)
-				a->setUp(true); // Gould, p. 117: strong accents above staff
-			else
+                  if (measure()->hasVoices(a->staffIdx()))
+                        a->setUp(up()); // if there are voices place articulation at stem
+                  else if (a->symId() >= SymId::articMarcatoAbove && a->symId() <= SymId::articMarcatoTenutoBelow)
+                        a->setUp(true); // Gould, p. 117: strong accents above staff
+                  else if (isGrace() && up() && !a->layoutCloseToNote() && downNote()->line() < 6)
+                        a->setUp(true); // keep articulation close to grace note
+                  else
                         a->setUp(!up()); // place articulation at note head
                   }
             else
@@ -3178,7 +3423,7 @@ void Chord::layoutArticulations()
                   continue;
 
             bool bottom = !a->up();  // true: articulation is below chord;  false: articulation is above chord
-            a->layout();
+            a->layout();             // must be done after assigning direction, or else symId is not reliable
 
             bool headSide = bottom == up();
             qreal x = centerX();
@@ -3258,6 +3503,9 @@ void Chord::layoutArticulations()
 
 void Chord::layoutArticulations2()
       {
+      for (Chord* gc : graceNotes())
+            gc->layoutArticulations2();
+
       if (_articulations.empty())
             return;
       qreal _spatium  = spatium();
@@ -3303,7 +3551,8 @@ void Chord::layoutArticulations2()
                         a->setPos(x, chordTopY);
                         a->doAutoplace();
                         }
-                  chordTopY = a->y() - a->height() - 0.5 * _spatium;
+                  if (a->visible())
+                        chordTopY = a->y() - a->height() - 0.5 * _spatium;
                   }
             else {
                   if (!a->layoutCloseToNote()) {
@@ -3311,7 +3560,8 @@ void Chord::layoutArticulations2()
                         a->setPos(x, chordBotY);
                         a->doAutoplace();
                         }
-                  chordBotY = a->y() + a->height() + 0.5 * _spatium;
+                  if (a->visible())
+                        chordBotY = a->y() + a->height() + 0.5 * _spatium;
                   }
             }
       //
@@ -3326,23 +3576,36 @@ void Chord::layoutArticulations2()
                   a->layout();
                   if (a->up()) {
                         a->setPos(x, staffTopY);
-                        staffTopY -= distance0;
+                        if (a->visible())
+                              staffTopY -= distance0;
                         }
                   else {
                         a->setPos(x, staffBotY);
-                        staffBotY += distance0;
+                        if (a->visible())
+                              staffBotY += distance0;
                         }
                   a->doAutoplace();
                   }
             }
       for (Articulation* a : _articulations) {
-            if (a->autoplace() && a->visible()) {
+            if (a->addToSkyline()) {
+                  // the segment shape has already been calculated
+                  // so measure width and spacing is already determined
+                  // in line mode, we cannot add to segment shape without throwing this off
+                  // but adding to skyline is always good
                   Segment* s = segment();
                   Measure* m = s->measure();
                   QRectF r = a->bbox().translated(a->pos() + pos());
-                  s->staffShape(staffIdx()).add(r);
-                  r = a->bbox().translated(a->pos() + pos() + s->pos() + m->pos());
-                  m->system()->staff(staffIdx())->skyline().add(r);
+                  // TODO: limit to width of chord
+                  // this avoids "staircase" effect due to space not having been allocated already
+                  // ANOTHER alternative is to allocate the space in layoutPitched() / layoutTablature()
+                  //qreal w = qMin(r.width(), width());
+                  //r.translate((r.width() - w) * 0.5, 0.0);
+                  //r.setWidth(w);
+                  if (!score()->lineMode())
+                        s->staffShape(staffIdx()).add(r);
+                  r.translate(s->pos() + m->pos());
+                  m->system()->staff(vStaffIdx())->skyline().add(r);
                   }
             }
       }
@@ -3364,14 +3627,14 @@ void Chord::layoutArticulations3(Slur* slur)
             return;
       Segment* s = segment();
       Measure* m = measure();
-      SysStaff* sstaff = m->system() ? m->system()->staff(staffIdx()) : nullptr;
+      SysStaff* sstaff = m->system() ? m->system()->staff(vStaffIdx()) : nullptr;
       for (Articulation* a : _articulations) {
-            if (a->layoutCloseToNote() || !a->autoplace() || !slur->autoplace() || !slur->visible())
+            if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline())
                   continue;
             Shape aShape = a->shape().translated(a->pos() + pos() + s->pos() + m->pos());
             Shape sShape = ss->shape().translated(ss->pos());
             if (aShape.intersects(sShape)) {
-                  qreal d = score()->styleP(Sid::dynamicsMinDistance);
+                  qreal d = score()->styleS(Sid::articulationMinDistance).val() * spatium();
                   if (slur->up()) {
                         d += qMax(aShape.minVerticalDistance(sShape), 0.0);
                         a->rypos() -= d;
@@ -3382,10 +3645,44 @@ void Chord::layoutArticulations3(Slur* slur)
                         a->rypos() += d;
                         aShape.translateY(d);
                         }
-                  if (sstaff)
+                  if (sstaff && a->addToSkyline())
                         sstaff->skyline().add(aShape);
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   getNoteEventLists
+//    Get contents of all NoteEventLists for all notes in
+//    the chord.
+//---------------------------------------------------------
+
+QList<NoteEventList> Chord::getNoteEventLists()
+      {
+      QList<NoteEventList> ell;
+      if (notes().empty())
+            return ell;
+      for (size_t i = 0; i < notes().size(); ++i) {
+            ell.append(NoteEventList(notes()[i]->playEvents()));
+            }
+      return ell;
+      }
+
+   //---------------------------------------------------------
+   //   setNoteEventLists
+   //    Set contents of all NoteEventLists for all notes in
+   //    the chord.
+   //---------------------------------------------------------
+
+void Chord::setNoteEventLists(QList<NoteEventList>& ell)
+      {
+      if (notes().empty())
+            return;
+      Q_ASSERT(ell.size() == int(notes().size()));
+      for (size_t i = 0; int(i) < ell.size(); i++) {
+            notes()[i]->setPlayEvents(ell[int(i)]);
+            }
+
       }
 
 }

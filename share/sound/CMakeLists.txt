@@ -29,13 +29,13 @@ else ()
       )
 endif ()
 
-if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/MuseScore_General-License.md)
+if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/MuseScore_General_License.md)
   install (FILES FluidR3Mono_License.md
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
-      RENAME MuseScore_General-License.md)
+      RENAME MuseScore_General_License.md)
 else ()
   install(FILES
-      MuseScore_General-License.md
+      MuseScore_General_License.md
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
       )
 endif ()

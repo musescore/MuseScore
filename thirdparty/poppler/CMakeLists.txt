@@ -1,5 +1,5 @@
 
-add_library(poppler STATIC
+add_library(poppler-qt5 STATIC
    poppler/Annot.cc
    poppler/Array.cc
    poppler/BuiltinFont.cc
@@ -155,12 +155,12 @@ else (APPLE)
          # -Woverloaded-virtual  -> /Wall enabled all warnings, no need to enable particularly
          # -Wno-missing-field-initializers -> ???
          # -Wno-unused-but-set-variable -> Warning C4189: 'identifier': local variable is initialized but not referenced
-         set (POPPLER_COMPILE_FLAGS "/wd4065 /wd4100 /wd4121 /wd4127 /wd4189 /wd4244 /wd4245 /wd4310 /wd4255 /wd4267 /wd4309 /wd4334 /wd4456 /wd4458 /wd4459 /wd4701 /wd4702 /wd4703 /wd4706 /wd4805 /wd4996")
+         set (POPPLER_COMPILE_FLAGS "/wd4065 /wd4100 /wd4121 /wd4127 /wd4189 /wd4244 /wd4245 /wd4310 /wd4255 /wd4267 /wd4309 /wd4334 /wd4456 /wd4458 /wd4459 /wd4701 /wd4702 /wd4703 /wd4706 /wd4805 /wd4828 /wd4996")
       endif (NOT MSVC)
    endif(MINGW)
 endif(APPLE)
 
-set_target_properties(poppler
+set_target_properties(poppler-qt5
       PROPERTIES
          COMPILE_FLAGS
             ${POPPLER_COMPILE_FLAGS}

@@ -29,17 +29,21 @@ class VibratoSegment final : public LineSegment {
 
       void symbolLine(SymId start, SymId fill);
       void symbolLine(SymId start, SymId fill, SymId end);
+      virtual Sid getPropertyStyle(Pid) const override;
 
    protected:
    public:
       VibratoSegment(Spanner* sp, Score* s) : LineSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)      {}
-      Vibrato* vibrato() const                       { return toVibrato(spanner()); }
-      virtual ElementType type() const override      { return ElementType::VIBRATO_SEGMENT; }
-      virtual VibratoSegment* clone() const override { return new VibratoSegment(*this); }
-      virtual void draw(QPainter*) const override;
-      virtual void layout() override;
 
-      virtual Element* propertyDelegate(Pid) override;
+      ElementType type() const override      { return ElementType::VIBRATO_SEGMENT; }
+      VibratoSegment* clone() const override { return new VibratoSegment(*this); }
+
+      Vibrato* vibrato() const               { return toVibrato(spanner()); }
+
+      void draw(QPainter*) const override;
+      void layout() override;
+
+      Element* propertyDelegate(Pid) override;
 
       Shape shape() const override;
       std::vector<SymId> symbols() const           { return _symbols; }
@@ -51,6 +55,9 @@ class VibratoSegment final : public LineSegment {
 //---------------------------------------------------------
 
 class Vibrato final : public SLine {
+
+      Sid getPropertyStyle(Pid) const override;
+
    public:
       enum class Type : char {
             GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
@@ -61,14 +68,16 @@ class Vibrato final : public SLine {
 
    public:
       Vibrato(Score* s);
-      virtual ~Vibrato();
-      virtual Vibrato* clone() const override   { return new Vibrato(*this);   }
-      virtual ElementType type() const override { return ElementType::VIBRATO; }
+      ~Vibrato();
 
-      virtual void layout() override;
-      virtual LineSegment* createLineSegment() override;
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
+      Vibrato* clone() const override   { return new Vibrato(*this);   }
+      ElementType type() const override { return ElementType::VIBRATO; }
+
+      void layout() override;
+      LineSegment* createLineSegment() override;
+
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
 
       void setVibratoType(const QString& s);
       void undoSetVibratoType(Type val);
@@ -76,15 +85,17 @@ class Vibrato final : public SLine {
       Type vibratoType() const              { return _vibratoType; }
       void setPlayArticulation(bool val)  { _playArticulation = val;}
       bool playArticulation() const       { return _playArticulation; }
+      static QString type2name(Vibrato::Type t);
       QString vibratoTypeName() const;
       QString vibratoTypeUserName() const;
 
       Segment* segment() const          { return (Segment*)parent(); }
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
-      virtual QString accessibleInfo() const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
+      QString accessibleInfo() const override;
       };
 
 //---------------------------------------------------------

@@ -100,7 +100,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <style>default</style>
+            <style>Default</style>
             <text>System Text</text>
             </StaffText>
           <Rest>

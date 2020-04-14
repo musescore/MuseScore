@@ -22,6 +22,7 @@
 #include "musescore.h"
 
 #include "synthesizer/msynthesizer.h"
+#include "libmscore/rendermidi.h"
 #include "libmscore/slur.h"
 #include "libmscore/tie.h"
 #include "libmscore/score.h"
@@ -64,6 +65,8 @@ static const int guiRefresh   = 10;       // Hz
 static const int peakHoldTime = 1400;     // msec
 static const int peakHold     = (peakHoldTime * guiRefresh) / 1000;
 static OggVorbis_File vf;
+
+static constexpr int minUtickBufferSize = 480 * 4 * 10; // about 10 measures of 4/4 time signature
 
 #if 0 // yet(?) unused
 static const int AUDIO_BUFFER_SIZE = 1024 * 512;  // 2 MB
@@ -142,6 +145,7 @@ static long ovTell(void* datasource)
 //---------------------------------------------------------
 
 Seq::Seq()
+   : midi(nullptr)
       {
       running         = false;
       playlistChanged = false;
@@ -216,6 +220,8 @@ void Seq::setScoreView(ScoreView* v)
       if (cs)
             disconnect(cs, SIGNAL(playlistChanged()), this, SLOT(setPlaylistChanged()));
       cs = cv ? cv->score()->masterScore() : 0;
+      midi = MidiRenderer(cs);
+      midi.setMinChunkSize(10);
 
       if (!heartBeatTimer->isActive())
             heartBeatTimer->start(20);    // msec
@@ -226,6 +232,41 @@ void Seq::setScoreView(ScoreView* v)
             initInstruments();
             connect(cs, SIGNAL(playlistChanged()), this, SLOT(setPlaylistChanged()));
             }
+      }
+
+//---------------------------------------------------------
+//   Seq::CachedPreferences::update
+//---------------------------------------------------------
+
+void Seq::CachedPreferences::update()
+      {
+      portMidiOutputLatencyMilliseconds = preferences.getInt(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS);
+      jackTimeBaseMaster = preferences.getBool(PREF_IO_JACK_TIMEBASEMASTER);
+      useJackTransport = preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT);
+      useJackMidi = preferences.getBool(PREF_IO_JACK_USEJACKMIDI);
+      useJackAudio = preferences.getBool(PREF_IO_JACK_USEJACKAUDIO);
+      useAlsaAudio = preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO);
+      usePortAudio = preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO);
+      usePulseAudio = preferences.getBool(PREF_IO_PULSEAUDIO_USEPULSEAUDIO);
+      }
+
+//---------------------------------------------------------
+//   startTransport
+//---------------------------------------------------------
+
+void Seq::startTransport()
+      {
+      cachedPrefs.update();
+      _driver->startTransport();
+      }
+
+//---------------------------------------------------------
+//   stopTransport
+//---------------------------------------------------------
+
+void Seq::stopTransport()
+      {
+      _driver->stopTransport();
       }
 
 //---------------------------------------------------------
@@ -240,6 +281,7 @@ bool Seq::init(bool hotPlug)
             running = false;
             return false;
             }
+      cachedPrefs.update();
       running = true;
       return true;
       }
@@ -287,8 +329,7 @@ bool Seq::canStart()
       {
       if (!_driver)
             return false;
-      if (playlistChanged)
-            collectEvents();
+      collectEvents(getPlayStartUtick());
       return (!events.empty() && endUTick != 0);
       }
 
@@ -304,8 +345,8 @@ void Seq::start()
             return;
             }
 
-      if (playlistChanged)
-            collectEvents();
+      allowBackgroundRendering = true;
+      collectEvents(getPlayStartUtick());
       if (cs->playMode() == PlayMode::AUDIO) {
             if (!oggInit) {
                   vorbisData.pos  = 0;
@@ -317,23 +358,17 @@ void Seq::start()
                   oggInit = true;
                   }
             }
-      if ((mscore->loop())) {
-            if (cs->selection().isRange())
-                  setLoopSelection();
-            if (!preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) || (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && state == Transport::STOP))
-                  seek(cs->repeatList()->tick2utick(cs->loopInTick()));
-            }
-      else {
-            if (!preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) || (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && state == Transport::STOP))
-                  seek(cs->repeatList()->tick2utick(cs->playPos()));
-            }
+
+      if (!preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) || (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && state == Transport::STOP))
+            seek(getPlayStartUtick());
+
       if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && mscore->countIn() && state == Transport::STOP) {
             // Ready to start playing count in, switching to fake transport
             // to prevent playing in other applications with our ticks simultaneously
             useJackTransportSavedFlag    = true;
             preferences.setPreference(PREF_IO_JACK_USEJACKTRANSPORT, false);
             }
-      _driver->startTransport();
+      startTransport();
       }
 
 //---------------------------------------------------------
@@ -343,9 +378,12 @@ void Seq::start()
 
 void Seq::stop()
       {
-      if (state == Transport::STOP)
+      const bool seqStopped = (state == Transport::STOP);
+      const bool driverStopped = !_driver || _driver->getState() == Transport::STOP;
+      if (seqStopped && driverStopped)
             return;
 
+      allowBackgroundRendering = false;
       if (oggInit) {
             ov_clear(&vf);
             oggInit = false;
@@ -353,9 +391,11 @@ void Seq::stop()
       if (!_driver)
             return;
       if (!preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) || (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && _driver->getState() == Transport::PLAY))
-            _driver->stopTransport();
+            stopTransport();
       if (cv)
             cv->setCursorOn(false);
+      if (midiRenderFuture.isRunning())
+            midiRenderFuture.waitForFinished();
       if (cs) {
             cs->setUpdateAll();
             cs->update();
@@ -417,7 +457,7 @@ void Seq::unmarkNotes()
       markedNotes.clear();
       PianoTools* piano = mscore->pianoTools();
       if (piano && piano->isVisible())
-            piano->heartBeat(markedNotes);
+            piano->setPlaybackNotes(markedNotes);
       }
 
 //---------------------------------------------------------
@@ -433,7 +473,8 @@ void Seq::guiStop()
       if (!cs)
             return;
 
-      cs->setPlayPos(cs->repeatList()->utick2tick(cs->utime2utick(qreal(playFrame) / qreal(MScore::sampleRate))));
+      int tck = cs->repeatList().utick2tick(cs->utime2utick(qreal(playFrame) / qreal(MScore::sampleRate)));
+      cs->setPlayPos(Fraction::fromTicks(tck));
       cs->update();
       emit stopped();
       }
@@ -449,10 +490,10 @@ void Seq::seqMessage(int msg, int arg)
       switch(msg) {
             case '5': {
                   // Update the screen after seeking from the realtime thread
-                  Segment* seg = cs->tick2segment(arg);
+                  Segment* seg = cs->tick2segment(Fraction::fromTicks(arg));
                   if (seg)
                         mscore->currentScoreView()->moveCursor(seg->tick());
-                  cs->setPlayPos(arg);
+                  cs->setPlayPos(Fraction::fromTicks(arg));
                   cs->update();
                   break;
                   }
@@ -460,7 +501,7 @@ void Seq::seqMessage(int msg, int arg)
                   loopStart();
                   break;
             case '3':   // Loop restart while playing
-                  seek(cs->repeatList()->tick2utick(cs->loopInTick()));
+                  seek(cs->repeatList().tick2utick(cs->loopInTick().ticks()));
                   break;
             case '2':
                   guiStop();
@@ -510,16 +551,7 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       {
       int type = event.type();
       if (type == ME_NOTEON) {
-            bool mute = false;
-
-            const Note* note = event.note();
-            if (note) {
-                  Staff* staff      = note->staff();
-                  Instrument* instr = staff->part()->instrument(note->chord()->tick());
-                  const Channel* a = instr->channel(note->subchannel());
-                  mute = a->mute() || a->soloMute() || !staff->playbackVoice(note->voice());
-                  }
-            if (!mute) {
+            if (!event.isMuted()) {
                   if (event.discard()) { // ignore noteoff but restrike noteon
                         if (event.velo() > 0)
                               putEvent(NPlayEvent(ME_NOTEON, event.channel(), event.pitch(), 0) ,framePos);
@@ -529,7 +561,7 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
                   putEvent(event, framePos);
                   }
             }
-      else if (type == ME_CONTROLLER || type == ME_PITCHBEND)
+      else if (type == ME_CONTROLLER || type == ME_PITCHBEND || type == ME_AFTERTOUCH || type == ME_POLYAFTER)
             putEvent(event, framePos);
       }
 
@@ -571,12 +603,12 @@ void Seq::processMessages()
                               int utick = cs->utime2utick(qreal(playFrame) / qreal(MScore::sampleRate));
                               cs->tempomap()->setRelTempo(msg.realVal);
                               playFrame = cs->utick2utime(utick) * MScore::sampleRate;
-                              if (preferences.getBool(PREF_IO_JACK_TIMEBASEMASTER) && preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT))
+                              if (cachedPrefs.jackTimeBaseMaster && cachedPrefs.useJackTransport)
                                     _driver->seekTransport(utick + 2 * cs->utime2utick(qreal((_driver->bufferSize()) + 1) / qreal(MScore::sampleRate)));
                               }
                         else
                               cs->tempomap()->setRelTempo(msg.realVal);
-                        cs->repeatList()->update();
+                        cs->masterScore()->updateRepeatListTempo();
                         prevTempo = curTempo();
                         emit tempoChanged();
                         }
@@ -586,6 +618,9 @@ void Seq::processMessages()
                         break;
                   case SeqMsgId::SEEK:
                         setPos(msg.intVal);
+                        break;
+                  case SeqMsgId::ALL_NOTE_OFF:
+                        _synti->allNotesOff(msg.intVal);
                         break;
                   default:
                         break;
@@ -635,24 +670,24 @@ void Seq::metronome(unsigned n, float* p, bool force)
 
 void Seq::addCountInClicks()
       {
-      const int   plPos       = cs->playPos();
-      Measure*    m           = cs->tick2measure(plPos);
-      const int   msrTick     = m->tick();
-      const qreal tempo       = cs->tempomap()->tempo(msrTick);
-      TimeSigFrac timeSig     = cs->sigmap()->timesig(msrTick).nominal();
+      const Fraction plPos = cs->playPos();
+      Measure*    m        = cs->tick2measure(plPos);
+      Fraction   msrTick   = m->tick();
+      qreal tempo          = cs->tempomap()->tempo(msrTick.ticks());
+      TimeSigFrac timeSig  = cs->sigmap()->timesig(m->tick()).nominal();
 
       const int clickTicks = timeSig.isBeatedCompound(tempo) ? timeSig.beatTicks() : timeSig.dUnitTicks();
 
       // add at least one full measure of just clicks.
-      int endTick = timeSig.ticksPerMeasure();
+      Fraction endTick = Fraction::fromTicks(timeSig.ticksPerMeasure());
 
       // add extra clicks if...
       endTick += plPos - msrTick;   // ...not starting playback at beginning of measure
 
       if (m->isAnacrusis())         // ...measure is incomplete (anacrusis)
-            endTick += timeSig.ticksPerMeasure() - m->ticks();
+            endTick += Fraction::fromTicks(timeSig.ticksPerMeasure()) - m->ticks();
 
-      for (int t = 0; t < endTick; t += clickTicks) {
+      for (int t = 0; t < endTick.ticks(); t += clickTicks) {
             const int rtick = t % timeSig.ticksPerMeasure();
             countInEvents.insert(std::pair<int,NPlayEvent>(t, NPlayEvent(timeSig.rtick2beatType(rtick))));
             }
@@ -660,7 +695,7 @@ void Seq::addCountInClicks()
       NPlayEvent event;
       event.setType(ME_INVALID);
       event.setPitch(0);
-      countInEvents.insert( std::pair<int,NPlayEvent>(endTick, event));
+      countInEvents.insert( std::pair<int,NPlayEvent>(endTick.ticks(), event));
       // initialize play parameters to count-in events
       countInPlayPos  = countInEvents.cbegin();
       countInPlayFrame = 0;
@@ -684,7 +719,7 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
       if (driverState != state) {
             // Got a message from JACK Transport panel: Play
             if (state == Transport::STOP && driverState == Transport::PLAY) {
-                  if ((preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_JACK_USEJACKAUDIO)) && !getAction("play")->isChecked()) {
+                  if ((cachedPrefs.useJackMidi || cachedPrefs.useJackAudio) && !getAction("play")->isChecked()) {
                         // Do not play while editing elements
                         if (mscore->state() != STATE_NORMAL || !isRunning() || !canStart())
                               return;
@@ -693,18 +728,18 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
 
                         // If we just launch MuseScore and press "Play" on JACK Transport with time 0:00
                         // MuseScore doesn't seek to 0 and guiPos is uninitialized, so let's make it manually
-                        if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && getCurTick() == 0)
+                        if (cachedPrefs.useJackTransport && getCurTick() == 0)
                               seekRT(0);
 
                         // Switching to fake transport while playing count in
                         // to prevent playing in other applications with our ticks simultaneously
-                        if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && mscore->countIn()) {
+                        if (cachedPrefs.useJackTransport && mscore->countIn()) {
                               // Stopping real JACK Transport
-                              _driver->stopTransport();
+                              stopTransport();
                               // Starting fake transport
                               useJackTransportSavedFlag = preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT);
                               preferences.setPreference(PREF_IO_JACK_USEJACKTRANSPORT, false);
-                              _driver->startTransport();
+                              startTransport();
                               }
                         }
                   // Initializing instruments every time we start playback.
@@ -725,9 +760,9 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                   // Muting all notes
                   stopNotes(-1, true);
                   initInstruments(true);
-                  if (playPos == events.cend()) {
+                  if (playPos == eventsEnd) {
                         if (mscore->loop()) {
-                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d, cs->pos() = %d", playPos->first, cs->pos());
+                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d, cs->pos() = %d", playPos->first, cs->pos().ticks());
                               emit toGui('4');
                               return;
                               }
@@ -755,12 +790,12 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
 
             // if currently in count-in, these pointers will reference data in the count-in
             EventMap::const_iterator* pPlayPos   = &playPos;
-            EventMap*                 pEvents    = &events;
+            EventMap::const_iterator  pEventsEnd = eventsEnd;
             int*                      pPlayFrame = &playFrame;
             if (inCountIn) {
                   if (countInEvents.size() == 0)
                         addCountInClicks();
-                  pEvents    = &countInEvents;
+                  pEventsEnd = countInEvents.cend();
                   pPlayPos   = &countInPlayPos;
                   pPlayFrame = &countInPlayFrame;
                   }
@@ -770,8 +805,8 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
             //
             unsigned framePos = 0; // frame currently being processed relative to the first frame of this call to Seq::process
             int periodEndFrame = *pPlayFrame + framesPerPeriod; // the ending frame (relative to start of playback) of the period being processed by this call to Seq::process
-            int scoreEndUTick = cs->repeatList()->tick2utick(cs->lastMeasure()->endTick());
-            while (*pPlayPos != pEvents->cend()) {
+            int scoreEndUTick = cs->repeatList().tick2utick(cs->lastMeasure()->endTick().ticks());
+            while (*pPlayPos != pEventsEnd) {
                   int playPosUTick = (*pPlayPos)->first;
                   int n; // current frame (relative to start of playback) that is being synthesized
 
@@ -799,14 +834,14 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                               n = 0;
                               }
                         if (mscore->loop()) {
-                              int loopOutUTick = cs->repeatList()->tick2utick(cs->loopOutTick());
+                              int loopOutUTick = cs->repeatList().tick2utick(cs->loopOutTick().ticks());
                               if (loopOutUTick < scoreEndUTick) {
                                     // Also make sure we are not "before" the loop
-                                    if (playPosUTick >= loopOutUTick || cs->repeatList()->utick2tick(playPosUTick) < cs->loopInTick()) {
-                                          qDebug ("Process: playPosUTick = %d, cs->loopInTick() = %d, cs->loopOutTick() = %d, getCurTick() = %d, loopOutUTick = %d, playFrame = %d",
-                                                            playPosUTick,      cs->loopInTick(),      cs->loopOutTick(),      getCurTick(),      loopOutUTick,    *pPlayFrame);
-                                          if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT)) {
-                                                int loopInUTick = cs->repeatList()->tick2utick(cs->loopInTick());
+                                    if (playPosUTick >= loopOutUTick || cs->repeatList().utick2tick(playPosUTick) < cs->loopInTick().ticks()) {
+                                          qDebug ("Process: playPosUTick = %d, cs->loopInTick().ticks() = %d, cs->loopOutTick().ticks() = %d, getCurTick() = %d, loopOutUTick = %d, playFrame = %d",
+                                                            playPosUTick,      cs->loopInTick().ticks(),      cs->loopOutTick().ticks(),      getCurTick(),      loopOutUTick,    *pPlayFrame);
+                                          if (cachedPrefs.useJackTransport) {
+                                                int loopInUTick = cs->repeatList().tick2utick(cs->loopInTick().ticks());
                                                 _driver->seekTransport(loopInUTick);
                                                 if (loopInUTick != 0) {
                                                       int seekto = loopInUTick - 2 * cs->utime2utick((qreal)_driver->bufferSize() / MScore::sampleRate);
@@ -888,20 +923,20 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                               }
                         }
                   }
-            if (*pPlayPos == pEvents->cend()) {
+            if (*pPlayPos == pEventsEnd) {
                   if (inCountIn) {
                         inCountIn = false;
                         // Connecting to JACK Transport if MuseScore was temporarily disconnected from it
                         if (useJackTransportSavedFlag) {
                               // Stopping fake driver
-                              _driver->stopTransport();
+                              stopTransport();
                               preferences.setPreference(PREF_IO_JACK_USEJACKTRANSPORT, true);
                               // Starting the real JACK Transport. All applications play in sync now
-                              _driver->startTransport();
+                              startTransport();
                               }
                         }
                   else
-                        _driver->stopTransport();
+                        stopTransport();
                   }
             }
       else {
@@ -956,7 +991,7 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
 void Seq::initInstruments(bool realTime)
       {
       // Add midi out ports if necessary
-      if (cs && (preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO))) {
+      if (cs && (cachedPrefs.useJackMidi || cachedPrefs.useAlsaAudio)) {
             // Increase the maximum number of midi ports if user adds staves/instruments
             int scoreMaxMidiPort = cs->masterScore()->midiPortCount();
             if (maxMidiOutPort < scoreMaxMidiPort)
@@ -966,9 +1001,9 @@ void Seq::initInstruments(bool realTime)
                   _driver->updateOutPortCount(maxMidiOutPort + 1);
             }
 
-      foreach(const MidiMapping& mm, *cs->midiMapping()) {
-            Channel* channel = mm.articulation;
-            for (const MidiCoreEvent& e : channel->init) {
+      for (const MidiMapping& mm : cs->midiMapping()) {
+            const Channel* channel = mm.articulation();
+            for (const MidiCoreEvent& e : channel->initList()) {
                   if (e.type() == ME_INVALID)
                         continue;
                   NPlayEvent event(e.type(), channel->channel(), e.dataA(), e.dataB());
@@ -978,7 +1013,7 @@ void Seq::initInstruments(bool realTime)
                         sendEvent(event);
                   }
             // Setting pitch bend sensitivity to 12 semitones for external synthesizers
-            if ((preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO)) && mm.channel != 9) {
+            if ((cachedPrefs.useJackMidi || cachedPrefs.useAlsaAudio) && mm.channel() != 9) {
                   if (realTime) {
                         putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 0));
                         putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 0));
@@ -998,29 +1033,101 @@ void Seq::initInstruments(bool realTime)
       }
 
 //---------------------------------------------------------
+//   renderChunk
+//---------------------------------------------------------
+
+void Seq::renderChunk(const MidiRenderer::Chunk& ch, EventMap* eventMap)
+      {
+      MidiRenderer::Context ctx(mscore->synthesizerState());
+      ctx.metronome = true;
+      ctx.renderHarmony = preferences.getBool(PREF_SCORE_HARMONY_PLAY);
+      midi.renderChunk(ch, eventMap, ctx);
+      renderEventsStatus.setOccupied(ch.utick1(), ch.utick2());
+      }
+
+//---------------------------------------------------------
+//   updateEventsEnd
+//---------------------------------------------------------
+
+void Seq::updateEventsEnd()
+      {
+      auto end = events.cend();
+      eventsEnd = end;
+      endUTick = events.empty() ? 0 : (--end)->first;
+      }
+
+//---------------------------------------------------------
 //   collectEvents
 //---------------------------------------------------------
 
-void Seq::collectEvents()
+void Seq::collectEvents(int utick)
       {
       //do not collect even while playing
-      if (state ==  Transport::PLAY)
+      if (state == Transport::PLAY && playlistChanged)
             return;
+
       mutex.lock();
-      events.clear();
 
-      cs->renderMidi(&events);
-      endUTick = 0;
+      if (midiRenderFuture.isRunning())
+            midiRenderFuture.waitForFinished();
 
-      if (!events.empty()) {
-            auto e = events.cend();
-            --e;
-            endUTick = e->first;
+      if (playlistChanged) {
+            midi.setScoreChanged();
+            events.clear();
+            renderEvents.clear();
+            renderEventsStatus.clear();
             }
-      playPos  = events.cbegin();
-      mutex.unlock();
+      else if (!renderEvents.empty()) {
+            events.insert(renderEvents.begin(), renderEvents.end());
+            renderEvents.clear();
+            }
 
+      int unrenderedUtick = renderEventsStatus.occupiedRangeEnd(utick);
+      while (unrenderedUtick - utick < minUtickBufferSize) {
+            const MidiRenderer::Chunk chunk = midi.getChunkAt(unrenderedUtick);
+            if (!chunk)
+                  break;
+            renderChunk(chunk, &events);
+            unrenderedUtick = renderEventsStatus.occupiedRangeEnd(utick);
+            }
+
+      updateEventsEnd();
+      playPos = events.cbegin();
       playlistChanged = false;
+      mutex.unlock();
+      }
+
+//---------------------------------------------------------
+//   ensureBufferAsync
+//---------------------------------------------------------
+
+void Seq::ensureBufferAsync(int utick)
+      {
+      if (mutex.tryLock()) { // sync with possible collectEvents calls
+
+            if (midiRenderFuture.isRunning() || !allowBackgroundRendering) {
+                  mutex.unlock();
+                  return;
+                  }
+
+            if (!renderEvents.empty()) {
+                  // TODO: use C++17 map::merge()?
+                  events.insert(renderEvents.begin(), renderEvents.end());
+                  updateEventsEnd();
+                  renderEvents.clear();
+                  }
+
+            const int unrenderedUtick = renderEventsStatus.occupiedRangeEnd(utick);
+            if (unrenderedUtick - utick < minUtickBufferSize) {
+                  const MidiRenderer::Chunk chunk = midi.getChunkAt(unrenderedUtick);
+                  if (chunk) {
+                        midiRenderFuture = QtConcurrent::run([this, chunk]() {
+                              renderChunk(chunk, &renderEvents);
+                              });
+                        }
+                  }
+            mutex.unlock();
+            }
       }
 
 //---------------------------------------------------------
@@ -1057,7 +1164,7 @@ void Seq::setPos(int utick)
       int ucur;
       mutex.lock();
       if (playPos != events.end())
-            ucur = cs->repeatList()->utick2tick(playPos->first);
+            ucur = cs->repeatList().utick2tick(playPos->first);
       else
             ucur = utick - 1;
       if (utick != ucur)
@@ -1066,6 +1173,21 @@ void Seq::setPos(int utick)
       playFrame = cs->utick2utime(utick) * MScore::sampleRate;
       playPos   = events.lower_bound(utick);
       mutex.unlock();
+      }
+
+//---------------------------------------------------------
+//   getPlayStartUtick
+//---------------------------------------------------------
+
+int Seq::getPlayStartUtick()
+      {
+      if ((mscore->loop())) {
+            if (preferences.getBool(PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY)) {
+                  setLoopSelection();
+                  }
+            return cs->repeatList().tick2utick(cs->loopInTick().ticks());
+            }
+      return cs->repeatList().tick2utick(cs->playPos().ticks());
       }
 
 //---------------------------------------------------------
@@ -1080,8 +1202,7 @@ void Seq::seekCommon(int utick)
       if (cs == 0)
             return;
 
-      if (playlistChanged)
-            collectEvents();
+      collectEvents(utick);
 
       if (cs->playMode() == PlayMode::AUDIO) {
             ogg_int64_t sp = cs->utick2utime(utick) * MScore::sampleRate;
@@ -1089,7 +1210,7 @@ void Seq::seekCommon(int utick)
             }
 
       guiPos = events.lower_bound(utick);
-      mscore->setPos(cs->repeatList()->utick2tick(utick));
+      mscore->setPos(Fraction::fromTicks(cs->repeatList().utick2tick(utick)));
       unmarkNotes();
       }
 
@@ -1110,11 +1231,11 @@ void Seq::seek(int utick)
             }
       seekCommon(utick);
 
-      int t = cs->repeatList()->utick2tick(utick);
-      Segment* seg = cs->tick2segment(t);
+      int t = cs->repeatList().utick2tick(utick);
+      Segment* seg = cs->tick2segment(Fraction::fromTicks(t));
       if (seg)
             mscore->currentScoreView()->moveCursor(seg->tick());
-      cs->setPlayPos(t);
+      cs->setPlayPos(Fraction::fromTicks(t));
       cs->update();
       guiToSeq(SeqMsg(SeqMsgId::SEEK, utick));
       }
@@ -1126,12 +1247,12 @@ void Seq::seek(int utick)
 
 void Seq::seekRT(int utick)
       {
-      if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && utick > endUTick)
+      if (cachedPrefs.useJackTransport && utick > endUTick)
                   utick = 0;
       seekCommon(utick);
       setPos(utick);
       // Update the screen in GUI thread
-      emit toGui('5', cs->repeatList()->utick2tick(utick));
+      emit toGui('5', cs->repeatList().utick2tick(utick));
       }
 
 //---------------------------------------------------------
@@ -1140,7 +1261,7 @@ void Seq::seekRT(int utick)
 
 void Seq::startNote(int channel, int pitch, int velo, double nt)
       {
-      if (state != Transport::STOP)
+      if (state != Transport::STOP && state != Transport::PLAY)
             return;
       NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
       ev.setTuning(nt);
@@ -1199,11 +1320,18 @@ void Seq::stopNotes(int channel, bool realTime)
                   putEvent(event);
             else
                   sendEvent(event);
-      };
+            };
+      // For VSTs/devices that do not support All Notes Off
+      // CTRL_ALL_NOTES_OFF should still be evoked after calling this function, even if it seems redundant
+      auto turnAllNotesOff = [send](int channel) {
+            for (unsigned note = 0; note < 128; note++)
+                  send(NPlayEvent(ME_NOTEOFF, channel, note, 0));
+            };
       // Stop notes in all channels
       if (channel == -1) {
-            for(int ch = 0; ch < cs->midiMapping()->size(); ch++) {
+            for(unsigned ch = 0; ch < cs->midiMapping().size(); ch++) {
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
+                  turnAllNotesOff(ch);
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_ALL_NOTES_OFF, 0));
                   if (cs->midiChannel(ch) != 9)
                         send(NPlayEvent(ME_PITCHBEND,  ch, 0, 64));
@@ -1211,12 +1339,14 @@ void Seq::stopNotes(int channel, bool realTime)
             }
       else {
             send(NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0));
+            turnAllNotesOff(channel);
             send(NPlayEvent(ME_CONTROLLER, channel, CTRL_ALL_NOTES_OFF, 0));
             if (cs->midiChannel(channel) != 9)
                   send(NPlayEvent(ME_PITCHBEND,  channel, 0, 64));
             }
-      if (preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO) || preferences.getBool(PREF_IO_JACK_USEJACKAUDIO) || preferences.getBool(PREF_IO_PULSEAUDIO_USEPULSEAUDIO) || preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO))
-            _synti->allNotesOff(channel);
+      if (cachedPrefs.useAlsaAudio || cachedPrefs.useJackAudio || cachedPrefs.usePulseAudio || cachedPrefs.usePortAudio) {
+            guiToSeq(SeqMsg(SeqMsgId::ALL_NOTE_OFF, channel));
+            }
       }
 
 //---------------------------------------------------------
@@ -1246,11 +1376,11 @@ void Seq::sendEvent(const NPlayEvent& ev)
 
 void Seq::nextMeasure()
       {
-      Measure* m = cs->tick2measure(guiPos->first);
+      Measure* m = cs->tick2measure(Fraction::fromTicks(guiPos->first));
       if (m) {
             if (m->nextMeasure())
                   m = m->nextMeasure();
-            seek(m->tick());
+            seek(m->tick().ticks());
             }
       }
 
@@ -1261,7 +1391,7 @@ void Seq::nextMeasure()
 void Seq::nextChord()
       {
       int t = guiPos->first;
-      for (auto i = guiPos; i != events.cend(); ++i) {
+      for (auto i = guiPos; i != eventsEnd; ++i) {
             if (i->second.type() == ME_NOTEON && i->first > t && i->second.velo()) {
                   seek(i->first);
                   break;
@@ -1279,11 +1409,11 @@ void Seq::prevMeasure()
       if (i == events.begin())
             return;
       --i;
-      Measure* m = cs->tick2measure(i->first);
+      Measure* m = cs->tick2measure(Fraction::fromTicks(i->first));
       if (m) {
-            if ((i->first == m->tick()) && m->prevMeasure())
+            if ((i->first == m->tick().ticks()) && m->prevMeasure())
                   m = m->prevMeasure();
-            seek(m->tick());
+            seek(m->tick().ticks());
             }
       }
 
@@ -1295,7 +1425,7 @@ void Seq::prevChord()
       {
       int t  = playPos->first;
       //find the chord just before playpos
-      EventMap::const_iterator i = events.upper_bound(cs->repeatList()->tick2utick(t));
+      EventMap::const_iterator i = events.upper_bound(cs->repeatList().tick2utick(t));
       for (;;) {
             if (i->second.type() == ME_NOTEON) {
                   const NPlayEvent& n = i->second;
@@ -1421,17 +1551,17 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
       if (!cs)
             return;
       int channel = event.channel();
-      if (channel >= cs->midiMapping()->size()) {
-            qDebug("bad channel value %d >= %d", channel, cs->midiMapping()->size());
+      if (channel >= int(cs->midiMapping().size())) {
+            qDebug("bad channel value %d >= %d", channel, int(cs->midiMapping().size()));
             return;
             }
 
       // audio
-      int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti());
+      int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation()->synti());
       _synti->play(event, syntiIdx);
 
       // midi
-      if (_driver != 0 && (preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO) || preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO)))
+      if (_driver != 0 && (cachedPrefs.useJackMidi || cachedPrefs.useAlsaAudio || cachedPrefs.usePortAudio))
             _driver->putEvent(event, framePos);
       }
 
@@ -1475,6 +1605,8 @@ void Seq::heartBeatTimeout()
             --ppos;
       mutex.unlock();
 
+      ensureBufferAsync(ppos->first);
+
       if (cs && cs->sigmap()->timesig(getCurTick()).nominal()!=prevTimeSig) {
             prevTimeSig = cs->sigmap()->timesig(getCurTick()).nominal();
             emit timeSigChanged();
@@ -1485,11 +1617,11 @@ void Seq::heartBeatTimeout()
             }
 
       QRectF r;
-      for (;guiPos != events.cend(); ++guiPos) {
+      for (;guiPos != eventsEnd; ++guiPos) {
             if (guiPos->first > ppos->first)
                   break;
             if (mscore->loop())
-                  if (guiPos->first >= cs->repeatList()->tick2utick(cs->loopOutTick()))
+                  if (guiPos->first >= cs->repeatList().tick2utick(cs->loopOutTick().ticks()))
                         break;
             const NPlayEvent& n = guiPos->second;
             if (n.type() == ME_NOTEON) {
@@ -1523,9 +1655,9 @@ void Seq::heartBeatTimeout()
                   }
             }
       int utick = ppos->first;
-      int t = cs->repeatList()->utick2tick(utick);
-      mscore->currentScoreView()->moveCursor(t);
-      mscore->setPos(t);
+      int t = cs->repeatList().utick2tick(utick);
+      mscore->currentScoreView()->moveCursor(Fraction::fromTicks(t));
+      mscore->setPos(Fraction::fromTicks(t));
 
       emit(heartBeat(t, utick, endFrame));
 
@@ -1535,7 +1667,7 @@ void Seq::heartBeatTimeout()
 
       PianoTools* piano = mscore->pianoTools();
       if (piano && piano->isVisible())
-            piano->heartBeat(markedNotes);
+            piano->setPlaybackNotes(markedNotes);
 
       cv->update(cv->toPhysical(r));
       }
@@ -1581,16 +1713,16 @@ double Seq::curTempo() const
 
 void Seq::setLoopIn()
       {
-      int t;
-      if (state == Transport::PLAY) {      // If in playback mode, set the In position where note is being played
+      Fraction t;
+      if (state == Transport::PLAY) {     // If in playback mode, set the In position where note is being played
             auto ppos = playPos;
             if (ppos != events.cbegin())
                   --ppos;                 // We have to go back one pos to get the correct note that has just been played
-            t = cs->repeatList()->utick2tick(ppos->first);
+            t = Fraction::fromTicks(cs->repeatList().utick2tick(ppos->first));
             }
       else
-            t = cs->pos();             // Otherwise, use the selected note.
-      if (t >= cs->loopOutTick())   // If In pos >= Out pos, reset Out pos to end of score
+            t = cs->pos();        // Otherwise, use the selected note.
+      if (t >= cs->loopOutTick())         // If In pos >= Out pos, reset Out pos to end of score
             cs->setPos(POS::RIGHT, cs->lastMeasure()->endTick());
       cs->setPos(POS::LEFT, t);
       }
@@ -1601,20 +1733,20 @@ void Seq::setLoopIn()
 
 void Seq::setLoopOut()
       {
-      int t;
+      Fraction t;
       if (state == Transport::PLAY) {    // If in playback mode, set the Out position where note is being played
-            t = cs->repeatList()->utick2tick(playPos->first);
+            t = Fraction::fromTicks(cs->repeatList().utick2tick(playPos->first));
             }
       else
             t = cs->pos() + cs->inputState().ticks();   // Otherwise, use the selected note.
-      if (t <= cs->loopInTick())   // If Out pos <= In pos, reset In pos to beginning of score
-            cs->setPos(POS::LEFT, 0);
+      if (t <= cs->loopInTick())                        // If Out pos <= In pos, reset In pos to beginning of score
+            cs->setPos(POS::LEFT, Fraction(0,1));
       else
           if (t > cs->lastMeasure()->endTick())
               t = cs->lastMeasure()->endTick();
       cs->setPos(POS::RIGHT, t);
       if (state == Transport::PLAY)
-            guiToSeq(SeqMsg(SeqMsgId::SEEK, t));
+            guiToSeq(SeqMsg(SeqMsgId::SEEK, t.ticks()));
       }
 
 void Seq::setPos(POS, unsigned t)
@@ -1628,8 +1760,13 @@ void Seq::setPos(POS, unsigned t)
 
 void Seq::setLoopSelection()
       {
-      cs->setLoopInTick(cs->selection().tickStart());
-      cs->setLoopOutTick(cs->selection().tickEnd());
+      const Score* score = mscore->currentScore();
+      Q_ASSERT(!score || score->masterScore() == cs);
+
+      if (score && score->selection().isRange()) {
+            cs->setLoopInTick(score->selection().tickStart());
+            cs->setLoopOutTick(score->selection().tickEnd());
+            }
       }
 
 //---------------------------------------------------------
@@ -1652,7 +1789,7 @@ void Seq::handleTimeSigTempoChanged()
 void Seq::setInitialMillisecondTimestampWithLatency()
       {
      #ifdef USE_PORTMIDI
-           initialMillisecondTimestampWithLatency = Pt_Time() + preferences.getInt(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS);
+           initialMillisecondTimestampWithLatency = Pt_Time() + cachedPrefs.portMidiOutputLatencyMilliseconds;
            //qDebug("PortMidi initialMillisecondTimestampWithLatency: %d = %d + %d", initialMillisecondTimestampWithLatency, unsigned(Pt_Time()), preferences.getInt(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS));
      #endif
      }

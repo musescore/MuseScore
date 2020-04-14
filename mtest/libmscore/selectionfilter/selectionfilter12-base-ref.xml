@@ -12,6 +12,7 @@
         <Spanner type="Glissando">
           <Glissando>
             <text>gliss.</text>
+            <ticks_f>1/4</ticks_f>
             <diagonal>1</diagonal>
             <anchor>3</anchor>
             </Glissando>
@@ -46,6 +47,7 @@
           <Glissando>
             <text>gliss.</text>
             <subtype>1</subtype>
+            <ticks_f>1/4</ticks_f>
             <diagonal>1</diagonal>
             <anchor>3</anchor>
             </Glissando>

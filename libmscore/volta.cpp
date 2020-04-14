@@ -18,8 +18,8 @@
 #include "system.h"
 #include "measure.h"
 #include "score.h"
-#include"tempo.h"
-#include "velo.h"
+#include "tempo.h"
+#include "changeMap.h"
 #include "staff.h"
 
 namespace Ms {
@@ -51,7 +51,7 @@ static const ElementStyle voltaStyle {
 //   VoltaSegment
 //---------------------------------------------------------
 
-VoltaSegment::VoltaSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+VoltaSegment::VoltaSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
       {
       }
 
@@ -62,7 +62,7 @@ VoltaSegment::VoltaSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, E
 void VoltaSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * 1.0);
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -98,7 +98,7 @@ Volta::Volta(Score* s)
       resetProperty(Pid::BEGIN_HOOK_TYPE);
       resetProperty(Pid::END_HOOK_TYPE);
 
-      setAnchor(Anchor::MEASURE);
+      setAnchor(VOLTA_ANCHOR);
       }
 
 //---------------------------------------------------------
@@ -138,9 +138,27 @@ void Volta::read(XmlReader& e)
                         _endings.append(i);
                         }
                   }
-            else if (!TextLineBase::readProperties(e))
+            else if (!readProperties(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Volta::readProperties(XmlReader& e)
+      {
+      if (!TextLineBase::readProperties(e))
+            return false;
+
+      if (anchor() != VOLTA_ANCHOR) {
+            // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
+            qWarning("Correcting volta anchor type from %d to %d", int(anchor()), int(VOLTA_ANCHOR));
+            setAnchor(VOLTA_ANCHOR);
+            }
+
+      return true;
       }
 
 //---------------------------------------------------------
@@ -167,6 +185,7 @@ void Volta::write(XmlWriter& xml) const
 
 static const ElementStyle voltaSegmentStyle {
       { Sid::voltaPosAbove,                      Pid::OFFSET                  },
+      { Sid::voltaMinDistance,                   Pid::MIN_DISTANCE            },
       };
 
 LineSegment* Volta::createLineSegment()
@@ -245,7 +264,7 @@ QVariant Volta::propertyDefault(Pid propertyId) const
             case Pid::VOLTA_ENDING:
                   return QVariant::fromValue(QList<int>());
             case Pid::ANCHOR:
-                  return int(Anchor::MEASURE);
+                  return int(VOLTA_ANCHOR);
             case Pid::BEGIN_HOOK_TYPE:
                   return int(HookType::HOOK_90);
             case Pid::END_HOOK_TYPE:
@@ -273,7 +292,8 @@ QVariant Volta::propertyDefault(Pid propertyId) const
 //   layoutSystem
 //---------------------------------------------------------
 
-SpannerSegment * Volta::layoutSystem(System * system) {
+SpannerSegment * Volta::layoutSystem(System * system)
+      {
       SpannerSegment* voltaSegment= SLine::layoutSystem(system);
 
       // we need set tempo in layout because all tempos of score is set in layout
@@ -287,20 +307,21 @@ SpannerSegment * Volta::layoutSystem(System * system) {
 //   setVelocity
 //---------------------------------------------------------
 
-void Volta::setVelocity() const {
+void Volta::setVelocity() const
+      {
       Measure* startMeasure = Spanner::startMeasure();
       Measure* endMeasure = Spanner::endMeasure();
 
       if (startMeasure && endMeasure) {
             if (!endMeasure->repeatEnd())
-            return;
+                  return;
 
-            auto startTick = startMeasure->tick() - 1;
-            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
-            Staff* st = staff();
-            VeloList& velo = st->velocities();
-            auto prevVelo = velo.velo(startTick);
-            velo.setVelo(endTick, prevVelo);
+            Fraction startTick  = Fraction::fromTicks(startMeasure->tick().ticks() - 1);
+            Fraction endTick    = Fraction::fromTicks((endMeasure->tick() + endMeasure->ticks()).ticks() - 1);
+            Staff* st      = staff();
+            ChangeMap& velo = st->velocities();
+            auto prevVelo  = velo.val(startTick);
+            velo.addFixed(endTick, prevVelo);
             }
       }
 
@@ -308,16 +329,17 @@ void Volta::setVelocity() const {
 //   setChannel
 //---------------------------------------------------------
 
-void Volta::setChannel() const {
+void Volta::setChannel() const
+      {
       Measure* startMeasure = Spanner::startMeasure();
       Measure* endMeasure = Spanner::endMeasure();
 
       if (startMeasure && endMeasure) {
             if (!endMeasure->repeatEnd())
-            return;
+                  return;
 
-            auto startTick = startMeasure->tick() - 1;
-            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
+            Fraction startTick = startMeasure->tick() - Fraction::fromTicks(1);
+            Fraction endTick  = endMeasure->endTick() - Fraction::fromTicks(1);
             Staff* st = staff();
             for (int voice = 0; voice < VOICES; ++voice) {
                   int channel = st->channel(startTick, voice);
@@ -330,17 +352,17 @@ void Volta::setChannel() const {
 //   setTempo
 //---------------------------------------------------------
 
-void Volta::setTempo() const {
+void Volta::setTempo() const
+      {
       Measure* startMeasure = Spanner::startMeasure();
       Measure* endMeasure = Spanner::endMeasure();
 
       if (startMeasure && endMeasure) {
             if (!endMeasure->repeatEnd())
-            return;
-
-            auto startTick = startMeasure->tick() - 1;
-            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
-            qreal tempoBeforeVolta = score()->tempomap()->tempo(startTick);
+                  return;
+            Fraction startTick = startMeasure->tick() - Fraction::fromTicks(1);
+            Fraction endTick  = endMeasure->endTick() - Fraction::fromTicks(1);
+            qreal tempoBeforeVolta = score()->tempomap()->tempo(startTick.ticks());
             score()->setTempo(endTick, tempoBeforeVolta);
             }
       }

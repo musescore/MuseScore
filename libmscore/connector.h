@@ -36,6 +36,7 @@ class XmlWriter;
 class ConnectorInfo {
       const Element* _current    { 0      };
       bool _currentUpdated       { false  };
+      const Score* _score;
 
       bool finishedLeft() const;
       bool finishedRight() const;
@@ -62,8 +63,8 @@ class ConnectorInfo {
       const ConnectorInfo* findLast() const;
 
    public:
-      ConnectorInfo(const Element* current, int track = -1, Fraction frac = -1);
-      ConnectorInfo(const Location& currentLocation);
+      ConnectorInfo(const Element* current, int track = -1, Fraction = { -1, 1});
+      ConnectorInfo(const Score* score, const Location& currentLocation);
 
       ConnectorInfo* prev() const   { return _prev; }
       ConnectorInfo* next() const   { return _next; }
@@ -95,7 +96,6 @@ class ConnectorInfo {
 class ConnectorInfoReader final : public ConnectorInfo {
       XmlReader* _reader;
       Element* _connector;
-      Element* _currentElement;
       ScoreElement* _connectorReceiver;
 
       void readEndpointLocation(Location& l);
@@ -135,7 +135,7 @@ class ConnectorInfoWriter : public ConnectorInfo {
       virtual const char* tagName() const = 0;
 
    public:
-      ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track = -1, Fraction frac = -1);
+      ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track = -1, Fraction = { -1, 1});
 
       ConnectorInfoWriter* prev() const   { return static_cast<ConnectorInfoWriter*>(_prev); }
       ConnectorInfoWriter* next() const   { return static_cast<ConnectorInfoWriter*>(_next); }

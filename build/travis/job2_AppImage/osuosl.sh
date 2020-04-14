@@ -1,11 +1,9 @@
 #!/bin/bash
 
 # Do not upload artifacts generated as part of a pull request
-if [ $(env | grep TRAVIS_PULL_REQUEST) == "TRAVIS_PULL_REQUEST" ] ; then
-  if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then
+if test x"${TRAVIS_PULL_REQUEST-false}" != x"false"; then
     echo "Not uploading AppImage since this is a pull request."
     exit 0
-  fi
 fi
 
 FILE="$1"

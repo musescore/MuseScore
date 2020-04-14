@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>VoicingSelect</class>
+ <widget class="QWidget" name="VoicingSelect">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>221</width>
+    <height>72</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Duration:</string>
+     </property>
+     <property name="buddy">
+      <cstring>durationBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Interpretation:</string>
+     </property>
+     <property name="buddy">
+      <cstring>interpretBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Voicing:</string>
+     </property>
+     <property name="buddy">
+      <cstring>voicingBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="interpretBox">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <item>
+      <property name="text">
+       <string extracomment="adding 9th and 13th as desired">Jazz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string extracomment="Literally following the chord symbols text">Literal</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QComboBox" name="voicingBox">
+     <item>
+      <property name="text">
+       <string>Auto</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Root Only</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string extracomment="all notes within an octave">Close</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string extracomment="2nd note an octave down">Drop Two</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string extracomment="6 note chord">Six Note</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string extracomment="4 note chord">Four Note</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string extracomment="3 note chord">Three Note</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QComboBox" name="durationBox">
+     <item>
+      <property name="text">
+       <string>Until Next Chord Symbol</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Until Measure End</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Chord/Rest Duration</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

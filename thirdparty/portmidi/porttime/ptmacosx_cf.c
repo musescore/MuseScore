@@ -17,7 +17,7 @@
 
 static int time_started_flag = FALSE;
 static CFAbsoluteTime startTime = 0.0;
-static CFRunLoopRef timerRunLoop;
+static CFRunLoopRef timerRunLoop = 0;
 
 typedef struct {
     int resolution;
@@ -115,7 +115,10 @@ PtError Pt_Stop()
 {
     printf("Pt_Stop called\n");
 
-    CFRunLoopStop(timerRunLoop);
+    if (timerRunLoop) {
+        CFRunLoopStop(timerRunLoop);
+        timerRunLoop = 0;
+        }
     time_started_flag = FALSE;
     return ptNoError;
 }

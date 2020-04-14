@@ -12,9 +12,6 @@ MuseScore {
     height: 75
     onRun: {
         console.log(qsTr("hello world"));
-        if (typeof curScore === 'undefined')
-            Qt.quit();
-
         var score = curScore
         console.log(curScore)
         console.log(score.name)
@@ -26,10 +23,10 @@ MuseScore {
             while (segment) {
                 var element
                 element = segment.elementAt(0)
-                if (element() && element().type == Ms.CHORD) {
+                if (element && element.type == Element.CHORD) {
                     console.log(qsTr("    element"))
-                    console.log(element().beamMode)
-                    if (element().beamMode == BeamMode.NO)
+                    console.log(element.beamMode)
+                    if (element.beamMode == BeamMode.NO)
                         console.log("  beam no")
                     }
                 segment = segment.next()

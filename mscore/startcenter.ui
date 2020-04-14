@@ -68,7 +68,7 @@
        <item>
         <widget class="QPushButton" name="openScore">
          <property name="text">
-          <string>Open a score…</string>
+          <string>Open a Score…</string>
          </property>
         </widget>
        </item>

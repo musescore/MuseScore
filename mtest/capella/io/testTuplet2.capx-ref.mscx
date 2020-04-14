@@ -227,9 +227,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -237,9 +234,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -247,9 +241,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -257,9 +248,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -267,9 +255,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -277,9 +262,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -288,9 +270,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>1/640</fractions>
-            </location>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -343,9 +322,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -353,9 +329,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -363,9 +336,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -373,9 +343,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -383,9 +350,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -393,9 +357,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -403,9 +364,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -413,9 +371,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -424,9 +379,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>1/384</fractions>
-            </location>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -941,9 +893,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -951,9 +900,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -961,9 +907,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -971,9 +914,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -981,9 +921,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -991,9 +928,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1001,9 +935,10 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
+          <Beam>
+            <l1>8</l1>
+            <l2>8</l2>
+            </Beam>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1011,9 +946,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1021,9 +953,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1031,9 +960,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1041,9 +967,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1051,9 +974,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1061,9 +981,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1072,9 +989,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>11/1920</fractions>
-            </location>
           <Beam>
             <l1>8</l1>
             <l2>8</l2>
@@ -1231,9 +1145,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>1/384</fractions>
-            </location>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -1413,9 +1324,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1423,9 +1331,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1433,9 +1338,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1443,9 +1345,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1453,9 +1352,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1463,9 +1359,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1473,9 +1366,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1483,9 +1373,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1493,9 +1380,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1503,9 +1387,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1513,9 +1394,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1523,9 +1401,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1534,9 +1409,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>1/192</fractions>
-            </location>
           <Beam>
             <l1>8</l1>
             <l2>8</l2>

@@ -3,10 +3,8 @@ FretDiagram
 userMag:1
 strings:6
 frets:5
-barre:0
 fretOffset:0
 set userMag:2.2
 set strings:8
 set frets:7
-set barre:2
 set fretOffset:4

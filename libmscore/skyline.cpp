@@ -38,6 +38,46 @@ void Skyline::add(const QRectF& r)
       }
 
 //---------------------------------------------------------
+//   insert
+//---------------------------------------------------------
+
+SkylineLine::SegIter SkylineLine::insert(SegIter i, qreal x, qreal y, qreal w)
+      {
+      const qreal xr = x + w;
+      // Only x coordinate change is handled here as width change gets handled
+      // in SkylineLine::add().
+      if (i != seg.end() && xr > i->x)
+            i->x = xr;
+      return seg.emplace(i, x, y, w);
+      }
+
+//---------------------------------------------------------
+//   append
+//---------------------------------------------------------
+
+void SkylineLine::append(qreal x, qreal y, qreal w)
+      {
+      seg.emplace_back(x, y, w);
+      }
+
+//---------------------------------------------------------
+//   getApproxPosition
+//---------------------------------------------------------
+
+SkylineLine::SegIter SkylineLine::find(qreal x)
+      {
+      auto it = std::upper_bound(seg.begin(), seg.end(), x, [](qreal x, const SkylineSegment& s) { return x < s.x; });
+      if (it == seg.begin())
+            return it;
+      return (--it);
+      }
+
+SkylineLine::SegConstIter SkylineLine::find(qreal x) const
+      {
+      return const_cast<SkylineLine*>(this)->find(x);
+      }
+
+//---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
@@ -72,8 +112,10 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
             }
 
       DP("===add  %f %f %f\n", x, y, w);
-      qreal cx = 0.0;
-      for (auto i = begin(); i != end(); ++i) {
+
+      SegIter i = find(x);
+      qreal cx = seg.empty() ? 0.0 : i->x;
+      for (; i != seg.end(); ++i) {
             qreal cy = i->y;
             if ((x + w) <= cx)                                          // A
                   return; // break;
@@ -93,7 +135,7 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
                   if (w1 > 0.0000001) {
                         i->w = w1;
                         ++i;
-                        i = insert(i, SkylineSegment(y, w2));
+                        i = insert(i, x, y, w2);
                         DP("       A w1 %f w2 %f\n", w1, w2);
                         }
                   else {
@@ -104,7 +146,7 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
                   if (w3 > 0.0000001) {
                         ++i;
                         DP("       C w3 %f\n", w3);
-                        insert(i, SkylineSegment(cy, w3));
+                        insert(i, x + w2, cy, w3);
                         }
                   return;
                   }
@@ -116,7 +158,7 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
                   qreal w1 = x + w - cx;
                   i->w    -= w1;
                   DP("    add(C) cx %f y %f w %f w1 %f\n", cx, y, w1, i->w);
-                  insert(i, SkylineSegment(y, w1));
+                  insert(i, cx, y, w1);
                   return;
                   }
             else {                                                      // D
@@ -127,7 +169,7 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
                         cx  += w1;
                         DP("    add(D) %f %f\n", y, w2);
                         ++i;
-                        i = insert(i, SkylineSegment(y, w2));
+                        i = insert(i, cx, y, w2);
                         }
                   }
             cx += i->w;
@@ -136,13 +178,13 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
             if (x > cx) {
                   qreal cy = north ? MAXIMUM_Y : MINIMUM_Y;
                   DP("    append1 %f %f\n", cy, x - cx);
-                  push_back(SkylineSegment(cy, x - cx));
+                  append(cx, cy, x - cx);
                   }
             DP("    append2 %f %f\n", y, w);
-            push_back(SkylineSegment(y, w));
+            append(x, y, w);
             }
       else if (x + w > cx)
-            push_back(SkylineSegment(y, x + w - cx));
+            append(cx, y, x + w - cx);
       }
 
 //---------------------------------------------------------

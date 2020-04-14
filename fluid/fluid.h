@@ -223,12 +223,12 @@ class Channel {
 
    public:
       int channum;
-      short key_pressure;
       short channel_pressure;
       short pitch_bend;
       short pitch_wheel_sensitivity;
 
-      short cc[128];          // controller values
+      short cc[128];                // controller values
+      short key_pressure[128];      // MIDI polyphonic key pressure from [0;127]
 
       /* cached values of last MSB values of MSB/LSB controllers */
       unsigned char bank_msb;
@@ -240,7 +240,7 @@ class Channel {
       /* The values of the generators, set by NRPN messages, or by
        * fluid_synth_set_gen(), are cached in the channel so they can be
        * applied to future notes. They are copied to a voice's generators
-       * in fluid_voice_init(), wihich calls fluid_gen_init().  */
+       * in fluid_voice_init(), which calls fluid_gen_init().  */
 
       float gen[GEN_LAST];
 
@@ -283,6 +283,10 @@ class Channel {
       int getNum() const                  { return channum;    }
       void setInterpMethod(int m)         { interp_method = m; }
       int getInterpMethod() const         { return interp_method; }
+      void setChannelPressure(int val);
+      int channelPressure() const         { return channel_pressure; }
+      void setKeyPressure(int key, int val);
+      int keyPressure(int key) const      { return key_pressure[key]; }
       };
 
 // subsystems:
@@ -382,7 +386,8 @@ class Fluid : public Synthesizer {
       virtual bool loadSoundFonts(const QStringList& s);
       virtual bool addSoundFont(const QString& s);
       virtual bool removeSoundFont(const QString& s);
-      virtual QStringList soundFonts() const;
+      QStringList soundFonts() const;
+      std::vector<SoundFontInfo> soundFontsInfo() const override;
 
       void start_voice(Voice* voice);
       Voice* alloc_voice(unsigned id, Sample* sample, int chan, int key, int vel, double vt);
@@ -598,8 +603,8 @@ enum fluid_mod_src {
       FLUID_MOD_NONE             = 0,
       FLUID_MOD_VELOCITY         = 2,
       FLUID_MOD_KEY              = 3,
-      FLUID_MOD_KEYPRESSURE      = 10,
-      FLUID_MOD_CHANNELPRESSURE  = 13,
+      FLUID_MOD_KEYPRESSURE      = 10,          // polyphonic aftertouch
+      FLUID_MOD_CHANNELPRESSURE  = 13,          // channel aftertouch
       FLUID_MOD_PITCHWHEEL       = 14,
       FLUID_MOD_PITCHWHEELSENS   = 16
       };

@@ -40,6 +40,9 @@ class RepeatSegment {
       int len() const;
       int playbackCount(Measure * const) const;
 
+      Measure* firstMeasure() const { return measureList.empty() ? nullptr : measureList.front().first; }
+      Measure* lastMeasure() const  { return measureList.empty() ? nullptr : measureList.back().first;  }
+
       friend class RepeatList;
       };
 
@@ -52,7 +55,9 @@ class RepeatList: public QList<RepeatSegment*>
       Score* _score;
       mutable unsigned idx1, idx2;   // cached values
 
-      RepeatSegment* rs;            // tmp value during unwind()
+      bool _expanded = false;
+      bool _scoreChanged = true;
+
       std::map<Volta*, Measure*> _voltaRanges; // open volta possibly ends past the end of its spanner, used during unwind
       std::set<Jump*> _jumpsTaken;   // take the jumps only once, so track them during unwind
 
@@ -63,16 +68,24 @@ class RepeatList: public QList<RepeatSegment*>
       int findStartFromRepeatCount(Measure * const startFrom) const;
       bool isFinalPlaythrough(Measure * const measure, QList<RepeatSegment*>::const_iterator repeatSegmentIt) const;
 
+      void unwind();
+      void flatten();
+
    public:
       RepeatList(Score* s);
-      void unwind();
+      RepeatList(const RepeatList&) = delete;
+      RepeatList& operator=(const RepeatList&) = delete;
+      ~RepeatList();
+      void update(bool expand);
+      void setScoreChanged() { _scoreChanged = true; }
+      const Score* score() const { return _score; }
       int utick2tick(int tick) const;
       int tick2utick(int tick) const;
       void dump() const;
       int utime2utick(qreal) const;
       qreal utick2utime(int) const;
-      void update();
-      int ticks();
+      void updateTempo();
+      int ticks() const;
       };
 
 

@@ -29,7 +29,7 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>s.guit.</trackName>
+      <trackName>Steel Guitar</trackName>
       <Instrument>
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>
@@ -43,6 +43,7 @@
         <instrumentId>pluck.guitar.acoustic</instrumentId>
         <concertClef>G8vb</concertClef>
         <transposingClef>G</transposingClef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
           <string>52</string>
@@ -77,6 +78,18 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
@@ -266,7 +279,6 @@
         <voice>
           <Tuplet>
             <linkedMain/>
-            <numberType>1</numberType>
             <normalNotes>8</normalNotes>
             <actualNotes>15</actualNotes>
             <baseNote>16th</baseNote>
@@ -274,6 +286,7 @@
               <style>Tuplet</style>
               <text>15:8</text>
               </Number>
+            <numberType>1</numberType>
             </Tuplet>
           <Beam>
             <l1>19</l1>
@@ -576,6 +589,7 @@
           <instrumentId>pluck.guitar.acoustic</instrumentId>
           <concertClef>G8vb</concertClef>
           <transposingClef>G</transposingClef>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>24</frets>
             <string>52</string>
@@ -610,6 +624,18 @@
             <gateTime>67</gateTime>
             </Articulation>
           <Articulation name="sforzato">
+            <velocity>150</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="sforzatoStaccato">
+            <velocity>150</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="marcatoStaccato">
+            <velocity>120</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="marcatoTenuto">
             <velocity>120</velocity>
             <gateTime>100</gateTime>
             </Articulation>
@@ -832,7 +858,6 @@
             <Tuplet>
               <linked>
                 </linked>
-              <numberType>1</numberType>
               <normalNotes>8</normalNotes>
               <actualNotes>15</actualNotes>
               <baseNote>16th</baseNote>
@@ -840,6 +865,7 @@
                 <style>Tuplet</style>
                 <text>15:8</text>
                 </Number>
+              <numberType>1</numberType>
               </Tuplet>
             <Beam>
               <l1>19</l1>
@@ -1311,7 +1337,6 @@
             <Tuplet>
               <linked>
                 </linked>
-              <numberType>1</numberType>
               <normalNotes>8</normalNotes>
               <actualNotes>15</actualNotes>
               <baseNote>16th</baseNote>
@@ -1319,6 +1344,7 @@
                 <style>Tuplet</style>
                 <text>15:8</text>
                 </Number>
+              <numberType>1</numberType>
               </Tuplet>
             <Beam>
               <l1>46</l1>
@@ -1605,7 +1631,7 @@
             </voice>
           </Measure>
         </Staff>
-      <name>s.guit.</name>
+      <name>Steel Guitar</name>
       </Score>
     </Score>
   </museScore>

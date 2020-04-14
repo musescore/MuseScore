@@ -29,7 +29,7 @@ namespace Ms {
 struct MidiPatch {
       bool drum;
       QString synti;
-      int bank, prog;
+      int bank, prog, sfid;
       QString name;
       };
 

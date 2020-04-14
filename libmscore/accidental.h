@@ -18,6 +18,10 @@
  Definition of class Accidental
 */
 
+#include <QString>
+#include <QList>
+#include <QVariant>
+
 #include "config.h"
 #include "element.h"
 
@@ -47,107 +51,6 @@ enum class AccidentalBracket : char {
       };
 
 //---------------------------------------------------------
-//   AccidentalType
-//---------------------------------------------------------
-// NOTE: keep this in sync with with accList array
-enum class AccidentalType : char {
-      NONE,
-      FLAT,
-      NATURAL,
-      SHARP,
-      SHARP2,
-      FLAT2,
-      //SHARP3,
-      //FLAT3,
-      NATURAL_FLAT,
-      NATURAL_SHARP,
-      SHARP_SHARP,
-
-      // Gould arrow quartertone
-      FLAT_ARROW_UP,
-      FLAT_ARROW_DOWN,
-      NATURAL_ARROW_UP,
-      NATURAL_ARROW_DOWN,
-      SHARP_ARROW_UP,
-      SHARP_ARROW_DOWN,
-      SHARP2_ARROW_UP,
-      SHARP2_ARROW_DOWN,
-      FLAT2_ARROW_UP,
-      FLAT2_ARROW_DOWN,
-
-      // Stein-Zimmermann
-      MIRRORED_FLAT,
-      MIRRORED_FLAT2,
-      SHARP_SLASH,
-      SHARP_SLASH4,
-
-      // Arel-Ezgi-Uzdilek (AEU)
-      FLAT_SLASH2,
-      FLAT_SLASH,
-      SHARP_SLASH3,
-      SHARP_SLASH2,
-
-      // Extended Helmholtz-Ellis accidentals (just intonation)
-      DOUBLE_FLAT_ONE_ARROW_DOWN,
-      FLAT_ONE_ARROW_DOWN,
-      NATURAL_ONE_ARROW_DOWN,
-      SHARP_ONE_ARROW_DOWN,
-      DOUBLE_SHARP_ONE_ARROW_DOWN,
-      DOUBLE_FLAT_ONE_ARROW_UP,
-
-      FLAT_ONE_ARROW_UP,
-      NATURAL_ONE_ARROW_UP,
-      SHARP_ONE_ARROW_UP,
-      DOUBLE_SHARP_ONE_ARROW_UP,
-      DOUBLE_FLAT_TWO_ARROWS_DOWN,
-      FLAT_TWO_ARROWS_DOWN,
-
-      NATURAL_TWO_ARROWS_DOWN,
-      SHARP_TWO_ARROWS_DOWN,
-      DOUBLE_SHARP_TWO_ARROWS_DOWN,
-      DOUBLE_FLAT_TWO_ARROWS_UP,
-      FLAT_TWO_ARROWS_UP,
-      NATURAL_TWO_ARROWS_UP,
-
-      SHARP_TWO_ARROWS_UP,
-      DOUBLE_SHARP_TWO_ARROWS_UP,
-      DOUBLE_FLAT_THREE_ARROWS_DOWN,
-      FLAT_THREE_ARROWS_DOWN,
-      NATURAL_THREE_ARROWS_DOWN,
-      SHARP_THREE_ARROWS_DOWN,
-
-      DOUBLE_SHARP_THREE_ARROWS_DOWN,
-      DOUBLE_FLAT_THREE_ARROWS_UP,
-      FLAT_THREE_ARROWS_UP,
-      NATURAL_THREE_ARROWS_UP,
-      SHARP_THREE_ARROWS_UP,
-      DOUBLE_SHARP_THREE_ARROWS_UP,
-
-      LOWER_ONE_SEPTIMAL_COMMA,
-      RAISE_ONE_SEPTIMAL_COMMA,
-      LOWER_TWO_SEPTIMAL_COMMAS,
-      RAISE_TWO_SEPTIMAL_COMMAS,
-      LOWER_ONE_UNDECIMAL_QUARTERTONE,
-      RAISE_ONE_UNDECIMAL_QUARTERTONE,
-
-      LOWER_ONE_TRIDECIMAL_QUARTERTONE,
-      RAISE_ONE_TRIDECIMAL_QUARTERTONE,
-
-      DOUBLE_FLAT_EQUAL_TEMPERED,
-      FLAT_EQUAL_TEMPERED,
-      NATURAL_EQUAL_TEMPERED,
-      SHARP_EQUAL_TEMPERED,
-      DOUBLE_SHARP_EQUAL_TEMPERED,
-      QUARTER_FLAT_EQUAL_TEMPERED,
-      QUARTER_SHARP_EQUAL_TEMPERED,
-
-      // Persian
-      SORI,
-      KORON,
-      END
-      };
-
-//---------------------------------------------------------
 //   SymElement
 //---------------------------------------------------------
 
@@ -172,8 +75,9 @@ class Accidental final : public Element {
 
    public:
       Accidental(Score* s = 0);
-      virtual Accidental* clone() const override  { return new Accidental(*this); }
-      virtual ElementType type() const override   { return ElementType::ACCIDENTAL; }
+
+      Accidental* clone() const override  { return new Accidental(*this); }
+      ElementType type() const override   { return ElementType::ACCIDENTAL; }
 
       QString subtypeUserName() const;
       void setSubtype(const QString& s);
@@ -182,15 +86,15 @@ class Accidental final : public Element {
       AccidentalType accidentalType() const        { return _accidentalType; }
       AccidentalRole role() const                  { return _role;           }
 
-      virtual int subtype() const override         { return (int)_accidentalType; }
-      virtual QString subtypeName() const override { return QString(subtype2name(_accidentalType)); }
+      int subtype() const override         { return (int)_accidentalType; }
+      QString subtypeName() const override { return QString(subtype2name(_accidentalType)); }
 
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
-      virtual void layout() override;
-      virtual void draw(QPainter*) const override;
-      virtual bool isEditable() const override               { return true; }
-      virtual void startEdit(EditData&) override { setGenerated(false); }
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
+      void layout() override;
+      void draw(QPainter*) const override;
+      bool isEditable() const override               { return true; }
+      void startEdit(EditData&) override { setGenerated(false); }
 
       SymId symbol() const;
       Note* note() const                        { return (parent() && parent()->isNote()) ? toNote(parent()) : 0; }
@@ -205,15 +109,17 @@ class Accidental final : public Element {
 
       void undoSetSmall(bool val);
 
-      virtual void read(XmlReader&) override;
-      virtual void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
+      void write(XmlWriter& xml) const override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid propertyId) const override;
-      virtual QString propertyUserValue(Pid) const;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid propertyId) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
+      QString propertyUserValue(Pid) const override;
 
       static AccidentalVal subtype2value(AccidentalType);             // return effective pitch offset
+      static SymId subtype2symbol(AccidentalType);
       static const char* subtype2name(AccidentalType);
       static AccidentalType value2subtype(AccidentalVal);
       static AccidentalType name2subtype(const QString&);
@@ -227,7 +133,6 @@ extern AccidentalVal sym2accidentalVal(SymId id);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::AccidentalRole);
-Q_DECLARE_METATYPE(Ms::AccidentalType);
 
 
 #endif

@@ -25,8 +25,14 @@ namespace Ms {
 class LyricsLine;
 
 class Lyrics final : public TextBase {
+      Q_GADGET
    public:
-      enum class Syllabic : char { SINGLE, BEGIN, END, MIDDLE };
+      enum class Syllabic : char {
+            ///.\{
+            SINGLE, BEGIN, END, MIDDLE
+            ///\}
+            };
+      Q_ENUM(Syllabic);
 
       // MELISMA FIRST UNDERSCORE:
       // used as_ticks value to mark a melisma for which only the first chord has been spanned so far
@@ -40,13 +46,13 @@ class Lyrics final : public TextBase {
       // static constexpr qreal  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
 
    private:
-      int _ticks;             ///< if > 0 then draw an underline to tick() + _ticks
+      Fraction _ticks;        ///< if > 0 then draw an underline to tick() + _ticks
                               ///< (melisma)
       Syllabic _syllabic;
       LyricsLine* _separator;
 
       bool isMelisma() const;
-      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+      void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
    protected:
       int _no;                ///< row index
@@ -56,49 +62,51 @@ class Lyrics final : public TextBase {
       Lyrics(Score* = 0);
       Lyrics(const Lyrics&);
       ~Lyrics();
-      virtual Lyrics* clone() const override          { return new Lyrics(*this); }
-      virtual ElementType type() const override       { return ElementType::LYRICS; }
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
+
+      Lyrics* clone() const override          { return new Lyrics(*this); }
+      ElementType type() const override       { return ElementType::LYRICS; }
+      void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
 
       Segment* segment() const                        { return toSegment(parent()->parent()); }
       Measure* measure() const                        { return toMeasure(parent()->parent()->parent()); }
       ChordRest* chordRest() const                    { return toChordRest(parent()); }
 
-      virtual void layout() override;
+      void layout() override;
       void layout2(int);
 
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
-      virtual bool readProperties(XmlReader&);
-      virtual int subtype() const override            { return _no; }
-      virtual QString subtypeName() const override    { return QObject::tr("Verse %1").arg(_no + 1); }
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
+      bool readProperties(XmlReader&) override;
+      int subtype() const override            { return _no; }
+      QString subtypeName() const override    { return QObject::tr("Verse %1").arg(_no + 1); }
       void setNo(int n)                               { _no = n; }
       int no() const                                  { return _no; }
       bool isEven() const                             { return _no % 1; }
       void setSyllabic(Syllabic s)                    { _syllabic = s; }
       Syllabic syllabic() const                       { return _syllabic; }
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
-      virtual void endEdit(EditData&) override;
+      void add(Element*) override;
+      void remove(Element*) override;
+      void endEdit(EditData&) override;
 
-      int ticks() const                               { return _ticks;    }
-      void setTicks(int tick)                         { _ticks = tick;    }
-      int endTick() const;
+      Fraction ticks() const                          { return _ticks;    }
+      void setTicks(const Fraction& tick)             { _ticks = tick;    }
+      Fraction endTick() const;
       void removeFromScore();
 
       using ScoreElement::undoChangeProperty;
-      using TextBase::paste;
-      virtual void paste(EditData&) override;
+      void paste(EditData&) override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid id) const override;
+      Sid getPropertyStyle(Pid) const override;
       };
 
 //---------------------------------------------------------
 //   LyricsLine
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 class LyricsLine final : public SLine {
@@ -109,43 +117,42 @@ class LyricsLine final : public SLine {
       LyricsLine(Score*);
       LyricsLine(const LyricsLine&);
 
-      virtual LyricsLine* clone() const override      { return new LyricsLine(*this); }
-      virtual ElementType type() const override       { return ElementType::LYRICSLINE; }
-      virtual void layout() override;
-      virtual LineSegment* createLineSegment() override;
-      virtual void removeUnmanaged() override;
-      virtual void styleChanged() override;
+      LyricsLine* clone() const override      { return new LyricsLine(*this); }
+      ElementType type() const override       { return ElementType::LYRICSLINE; }
+      void layout() override;
+      LineSegment* createLineSegment() override;
+      void removeUnmanaged() override;
+      void styleChanged() override;
 
       Lyrics* lyrics() const                          { return toLyrics(parent());   }
       Lyrics* nextLyrics() const                      { return _nextLyrics;         }
-      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
-      virtual SpannerSegment* layoutSystem(System*) override;
+      bool isEndMelisma() const                       { return lyrics()->ticks().isNotZero(); }
+      bool isDash() const                             { return !isEndMelisma(); }
+      bool setProperty(Pid propertyId, const QVariant& v) override;
+      SpannerSegment* layoutSystem(System*) override;
       };
 
 //---------------------------------------------------------
 //   LyricsLineSegment
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 class LyricsLineSegment final : public LineSegment {
    protected:
-      int   _numOfDashes;
-      qreal _dashLength;
+      int   _numOfDashes = 0;
+      qreal _dashLength = 0;
 
    public:
       LyricsLineSegment(Spanner*, Score*);
 
-      virtual LyricsLineSegment* clone() const override     { return new LyricsLineSegment(*this); }
-      virtual ElementType type() const override             { return ElementType::LYRICSLINE_SEGMENT; }
-      virtual void draw(QPainter*) const override;
-      virtual void layout() override;
+      LyricsLineSegment* clone() const override     { return new LyricsLineSegment(*this); }
+      ElementType type() const override             { return ElementType::LYRICSLINE_SEGMENT; }
+      void draw(QPainter*) const override;
+      void layout() override;
       // helper functions
       LyricsLine* lyricsLine() const                        { return toLyricsLine(spanner()); }
       Lyrics* lyrics() const                                { return lyricsLine()->lyrics(); }
       };
 
 }     // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::Lyrics::Syllabic);
-
 #endif
-

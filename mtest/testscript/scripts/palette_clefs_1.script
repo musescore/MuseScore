@@ -1,0 +1,18 @@
+init init/Treble.mscx
+cmd note-input
+cmd escape
+cmd next-chord
+palette Clef concertClefType G8va
+cmd next-chord
+palette Clef concertClefType G15ma
+cmd next-chord
+palette Clef concertClefType G8vb
+cmd next-chord
+palette Clef concertClefType G15mb
+cmd next-chord
+palette Clef concertClefType G8vbo
+cmd next-chord
+palette Clef concertClefType G8vbp
+cmd next-chord
+palette Clef concertClefType G1
+test score palette_clefs_1.mscx

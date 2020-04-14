@@ -42,7 +42,7 @@ struct ElementPattern {
       int voice;
       const System* system;
       bool subtypeValid;
-      int durationTicks;
+      Fraction durationTicks;
       };
 
 //---------------------------------------------------------
@@ -55,7 +55,8 @@ struct NotePattern {
       int string = STRING_NONE;
       int tpc = Tpc::TPC_INVALID;;
       NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
-      TDuration duration = TDuration();
+      TDuration durationType = TDuration();
+      Fraction durationTicks;
       NoteType type = NoteType::INVALID;
       int staffStart;
       int staffEnd; // exclusive
@@ -73,6 +74,12 @@ enum class SelState : char {
       RANGE,  // adjacent selection, a range in one or more staves
                   // is selected
       };
+
+//---------------------------------------------------------
+//   SelectionFilterType
+//   see also `static const char* labels[]` in mscore/selectionwindow.cpp
+//   need to keep those in sync!
+//---------------------------------------------------------
 
 enum class SelectionFilterType {
       NONE                    = 0,
@@ -100,12 +107,18 @@ enum class SelectionFilterType {
       ALL                     = -1
       };
 
+
+//---------------------------------------------------------
+//   SelectionFilter
+//---------------------------------------------------------
+
 class SelectionFilter {
       Score* _score;
       int _filtered;
 
 public:
       SelectionFilter()                      { _score = 0; _filtered = (int)SelectionFilterType::ALL;}
+      SelectionFilter(SelectionFilterType f) : _score(nullptr), _filtered(int(f)) {}
       SelectionFilter(Score* score)          { _score = score; _filtered = (int)SelectionFilterType::ALL;}
       int& filtered()                        { return _filtered; }
       void setFiltered(SelectionFilterType type, bool set);
@@ -130,13 +143,18 @@ class Selection {
       Segment* _startSegment;
       Segment* _endSegment;         // next segment after selection
 
-      int _plannedTick1 = -1; // Will be actually selected on updateSelectedElements() call.
-      int _plannedTick2 = -1; // Used by setRangeTicks() to restore proper selection after
+      Fraction _plannedTick1 { -1, 1 }; // Will be actually selected on updateSelectedElements() call.
+      Fraction _plannedTick2 { -1, 1 }; // Used by setRangeTicks() to restore proper selection after
                               // command end in case some changes are expected to segments'
                               // structure (e.g. MMRests reconstruction).
 
       Segment* _activeSegment;
       int _activeTrack;
+
+      Fraction _currentTick;  // tracks the most recent selection
+      int _currentTrack;
+
+      QString _lockReason;
 
       QByteArray staffMimeData() const;
       QByteArray symbolListMimeData() const;
@@ -155,6 +173,12 @@ class Selection {
       bool isRange() const             { return _state == SelState::RANGE; }
       bool isList() const              { return _state == SelState::LIST; }
       void setState(SelState s);
+
+      //! NOTE If locked, the selected items should not be changed.
+      void lock(const QString& reason)    { _lockReason = reason; }
+      void unlock(const QString& reason)  { Q_UNUSED(reason); _lockReason.clear(); } // reason for clarity
+      bool isLocked() const               { return  !_lockReason.isEmpty(); }
+      const QString& lockReason() const   { return _lockReason; }
 
       const QList<Element*>& elements() const { return _el; }
       std::vector<Note*> noteList(int track = -1) const;
@@ -185,14 +209,15 @@ class Selection {
       void setStartSegment(Segment* s)  { _startSegment = s; }
       void setEndSegment(Segment* s)    { _endSegment = s; }
       void setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd);
-      void setRangeTicks(int tick1, int tick2, int staffStart, int staffEnd);
+      void setRangeTicks(const Fraction& tick1, const Fraction& tick2, int staffStart, int staffEnd);
       Segment* activeSegment() const    { return _activeSegment; }
       void setActiveSegment(Segment* s) { _activeSegment = s; }
       ChordRest* activeCR() const;
       bool isStartActive() const;
       bool isEndActive() const;
-      int tickStart() const;
-      int tickEnd() const;
+      ChordRest* currentCR() const;
+      Fraction tickStart() const;
+      Fraction tickEnd() const;
       int staffStart() const            { return _staffStart;  }
       int staffEnd() const              { return _staffEnd;    }
       int activeTrack() const           { return _activeTrack; }
@@ -203,7 +228,7 @@ class Selection {
       void updateSelectedElements();
       bool measureRange(Measure** m1, Measure** m2) const;
       void extendRangeSelection(ChordRest* cr);
-      void extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, int tick, int etick);
+      void extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, const Fraction& tick, const Fraction& etick);
       };
 
 

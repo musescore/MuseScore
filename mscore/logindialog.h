@@ -14,12 +14,15 @@
 #define __LOGINDIALOG_H__
 
 #include "ui_logindialog.h"
-#include "loginmanager.h"
 
 namespace Ms {
 
+class LoginManager;
+
 //---------------------------------------------------------
 //   LoginDialog
+//    Old-style login dialog in case QtWebEngine is
+//    unavailable.
 //---------------------------------------------------------
 
 class LoginDialog : public QDialog, public Ui::LoginDialog

@@ -93,6 +93,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <ticks>1440</ticks>
+              <ticks_f>3/4</ticks_f>
               <text>A</text>
               </Lyrics>
             <Note>

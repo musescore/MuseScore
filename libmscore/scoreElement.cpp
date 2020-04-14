@@ -16,6 +16,7 @@
 #include "xml.h"
 #include "bracket.h"
 #include "bracketItem.h"
+#include "measure.h"
 #include "spanner.h"
 #include "musescoreCore.h"
 
@@ -131,7 +132,8 @@ static const ElementName elementNames[] = {
       { ElementType::FBOX,                 "FBox",                 QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram Frame") },
       { ElementType::ICON,                 "Icon",                 QT_TRANSLATE_NOOP("elementName", "Icon") },
       { ElementType::OSSIA,                "Ossia",                QT_TRANSLATE_NOOP("elementName", "Ossia") },
-      { ElementType::BAGPIPE_EMBELLISHMENT,"BagpipeEmbellishment", QT_TRANSLATE_NOOP("elementName", "Bagpipe Embellishment") }
+      { ElementType::BAGPIPE_EMBELLISHMENT,"BagpipeEmbellishment", QT_TRANSLATE_NOOP("elementName", "Bagpipe Embellishment") },
+      { ElementType::STICKING,             "Sticking",             QT_TRANSLATE_NOOP("elementName", "Sticking") }
       };
 
 //---------------------------------------------------------
@@ -295,8 +297,18 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
             // first set property, then set offset for above/below if styled
             changeProperties(this, id, v, ps);
 
-            if (isStyled(Pid::OFFSET))
-                  ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * score()->spatium());
+            if (isStyled(Pid::OFFSET)) {
+                  // TODO: maybe it just makes more sense to do this in Element::undoChangeProperty,
+                  // but some of the overrides call ScoreElement explicitly
+                  qreal sp;
+                  if (isElement())
+                        sp = toElement(this)->spatium();
+                  else
+                        sp = score()->spatium();
+                  ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * sp);
+                  Element* e = toElement(this);
+                  e->setOffsetChanged(false);
+                  }
             doUpdateInspector = true;
             }
       else if (id == Pid::SUB_STYLE) {
@@ -311,7 +323,21 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
                   changeProperties(this, p.pid, score()->styleV(p.sid), PropertyFlags::STYLED);
                   }
             }
+      else if (id == Pid::OFFSET) {
+            // TODO: do this in caller?
+            if (isElement()) {
+                  Element* e = toElement(this);
+                  if (e->offset().y() != v.toPointF().y())
+                        e->setOffsetChanged(true, false, v.toPointF() - e->offset());
+                  }
+            }
       changeProperties(this, id, v, ps);
+      if (id == Pid::VISIBLE) {
+            if (isNote())
+                  toNote(this)->undoChangeDotsVisible(v.toBool());
+            else if (isRest())
+                  toRest(this)->undoChangeDotsVisible(v.toBool());
+            }
       if (id != Pid::GENERATED)
             changeProperties(this, Pid::GENERATED, QVariant(false), PropertyFlags::NOSTYLE);
       if (doUpdateInspector)
@@ -379,7 +405,7 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
             return;
       QVariant p = getProperty(pid);
       if (!p.isValid()) {
-            qDebug("%s invalid property %d <%s><%s>", name(), int(pid), propertyName(pid), propertyQmlName(pid));
+            qDebug("%s invalid property %d <%s>", name(), int(pid), propertyName(pid));
             return;
             }
       PropertyFlags f = propertyFlags(pid);
@@ -434,7 +460,7 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
 
 Pid ScoreElement::propertyId(const QStringRef& xmlName) const
       {
-      return propertyIdName(xmlName);
+      return Ms::propertyId(xmlName);
       }
 
 //---------------------------------------------------------
@@ -450,6 +476,10 @@ QString ScoreElement::propertyUserValue(Pid id) const
                   QPointF p = val.toPointF();
                   return QString("(%1, %2)").arg(p.x()).arg(p.y());
                   }
+            case P_TYPE::DIRECTION:
+                  return toUserString(val.value<Direction>());
+            case P_TYPE::SYMID:
+                  return Sym::id2userName(val.value<SymId>());
             default:
                   break;
             }
@@ -617,20 +647,61 @@ ScoreElement* LinkedElements::mainElement()
             return nullptr;
       MasterScore* ms = at(0)->masterScore();
       const bool elements = at(0)->isElement();
-      return *std::min_element(begin(), end(), [ms, elements](ScoreElement* s1, ScoreElement* s2) {
+      const bool staves = at(0)->isStaff();
+      return *std::min_element(begin(), end(), [ms, elements, staves](ScoreElement* s1, ScoreElement* s2) {
             if (s1->score() == ms && s2->score() != ms)
                   return true;
+            if (s1->score() != s2->score())
+                  return false;
+            if (staves)
+                  return toStaff(s1)->idx() < toStaff(s2)->idx();
             if (elements) {
-                  if (s1->score() != s2->score())
-                        return false;
                   // Now we compare either two elements from master score
                   // or two elements from excerpt.
                   Element* e1 = toElement(s1);
                   Element* e2 = toElement(s2);
-                  if (e1->track() < e2->track())
-                        return true;
-                  if (e1->track() == e2->track() && e1->tick() < e2->tick())
-                        return true;
+                  const int tr1 = e1->track();
+                  const int tr2 = e2->track();
+                  if (tr1 == tr2) {
+                        const Fraction tick1 = e1->tick();
+                        const Fraction tick2 = e2->tick();
+                        if (tick1 == tick2) {
+                              Measure* m1 = e1->findMeasure();
+                              Measure* m2 = e2->findMeasure();
+                              if (!m1 || !m2)
+                                    return false;
+
+                              // MM rests are written to MSCX in the following order:
+                              // 1) first measure of MM rest (m->hasMMRest() == true);
+                              // 2) MM rest itself (m->isMMRest() == true);
+                              // 3) other measures of MM rest (m->hasMMRest() == false).
+                              //
+                              // As mainElement() must find the first element that
+                              // is going to be written to a file, MM rest writing
+                              // order should also be considered.
+
+                              if (m1->isMMRest() == m2->isMMRest()) {
+                                    // no difference if both are MM rests or both are usual measures
+                                    return false;
+                                    }
+
+                              // MM rests may be generated but not written (e.g. if
+                              // saving a file right after disabling MM rests)
+                              const bool mmRestsWritten = e1->score()->styleB(Sid::createMultiMeasureRests);
+
+                              if (m1->isMMRest()) {
+                                    // m1 is earlier if m2 is *not* the first MM rest measure
+                                    return mmRestsWritten && !m2->hasMMRest();
+                                    }
+                              if (m2->isMMRest()) {
+                                    // m1 is earlier if it *is* the first MM rest measure
+                                    return !mmRestsWritten || m1->hasMMRest();
+                                    }
+                              return false;
+                              }
+                        return tick1 < tick2;
+                        }
+                  return tr1 < tr2;
                   }
             return false;
             });
@@ -786,6 +857,7 @@ bool ScoreElement::isTextBase() const
          || type() == ElementType::TEMPO_TEXT
          || type() == ElementType::INSTRUMENT_NAME
          || type() == ElementType::MEASURE_NUMBER
+         || type() == ElementType::STICKING
          ;
       }
 
@@ -798,14 +870,28 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
       switch (propertyType(pid)) {
             case P_TYPE::SP_REAL:
                   return score()->styleP(sid);
-            case P_TYPE::POINT_SP:
-                  return score()->styleV(sid).toPointF() * score()->spatium();
+            case P_TYPE::POINT_SP: {
+                  QPointF val = score()->styleV(sid).toPointF() * score()->spatium();
+                  if (isElement()) {
+                        const Element* e = toElement(this);
+                        if (e->staff() && !e->systemFlag())
+                              val *= e->staff()->mag(e->tick());
+                        }
+                  return val;
+                  }
             case P_TYPE::POINT_SP_MM: {
                   QPointF val = score()->styleV(sid).toPointF();
-                  if (sizeIsSpatiumDependent())
+                  if (sizeIsSpatiumDependent()) {
                         val *= score()->spatium();
-                  else
+                        if (isElement()) {
+                              const Element* e = toElement(this);
+                              if (e->staff() && !e->systemFlag())
+                                    val *= e->staff()->mag(e->tick());
+                              }
+                        }
+                  else {
                         val *= DPMM;
+                        }
                   return val;
                   }
             default:

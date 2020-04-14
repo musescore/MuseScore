@@ -17,19 +17,17 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-
-REVISION  = $(shell type mscore\revision.h)
-VERSION   = 3.0b-${REVISION}
-#VERSION = 3.0.2
+VERSION = `cmake -P config.cmake | sed -n -e "s/^.*VERSION  *//p"`
 BUILD_NUMBER=""
 CPUS = %NUMBER_OF_PROCESSORS%
 BUILD_FOR_WINSTORE="OFF"     # Override with "ON" to enable.
+TELEMETRY_TRACK_ID=""
 
 
 release:
 	if not exist build.release\nul mkdir build.release
 	if not exist win32install\nul mkdir win32install
-	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE="${BUILD_FOR_WINSTORE}" ..
+	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE="${BUILD_FOR_WINSTORE}" -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" ..
 	cd build.release & $(MAKE) lrelease
 	cd build.release & $(MAKE) -j ${CPUS}
 

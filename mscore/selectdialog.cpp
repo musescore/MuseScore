@@ -101,7 +101,7 @@ void SelectDialog::setPattern(ElementPattern* p)
             p->durationTicks = r->actualTicks();
             }
       else
-            p->durationTicks = -1;
+            p->durationTicks = Fraction(-1,1);
 
       p->voice   = sameVoice->isChecked() ? e->voice() : -1;
       p->subtypeValid = sameSubtype->isChecked();

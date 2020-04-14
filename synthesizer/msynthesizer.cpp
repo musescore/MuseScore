@@ -29,6 +29,7 @@ extern QString dataPath;
 MasterSynthesizer::MasterSynthesizer()
    : QObject(0)
       {
+      defaultGainAsDecibels = convertGainToDecibels(defaultGain);
       }
 
 //---------------------------------------------------------
@@ -182,6 +183,23 @@ Synthesizer* MasterSynthesizer::synthesizer(const QString& name)
                   return s;
             }
       return 0;
+      }
+
+//---------------------------------------------------------
+//   hasSoundFontsLoaded
+///   Checks whether any of the synthesizers in use has
+///   at least one sound font loaded. \p false value may
+///   indicate some errors in the used synthesizer state
+///   as such configuration will produce no sound.
+//---------------------------------------------------------
+
+bool MasterSynthesizer::hasSoundFontsLoaded() const
+      {
+      for (const Synthesizer* s : _synthesizer) {
+            if (!s->soundFontsInfo().empty())
+                  return true;
+            }
+      return false;
       }
 
 //---------------------------------------------------------
@@ -339,6 +357,12 @@ bool MasterSynthesizer::setState(const SynthesizerState& ss)
                               case 3:
                                     setMasterTuning(v.data.toDouble());
                                     break;
+                              case 4:
+                                    setDynamicsMethod(v.data.toInt());
+                                    break;
+                              case 5:
+                                    setCcToUseIndex(v.data.toInt());
+                                    break;
                               default:
                                     qDebug("MasterSynthesizer::setState: unknown master id <%d>", v.id);
                               }
@@ -376,6 +400,8 @@ SynthesizerState MasterSynthesizer::state() const
       g.push_back(IdValue(1, QString("%1").arg(_effect[1] ? _effect[1]->name() : "NoEffect")));
       g.push_back(IdValue(2, QString("%1").arg(gain())));
       g.push_back(IdValue(3, QString("%1").arg(masterTuning())));
+      g.push_back(IdValue(4, QString("%1").arg(dynamicsMethod())));
+      g.push_back(IdValue(5, QString("%1").arg(ccToUseIndex())));
       ss.push_back(g);
       for (Synthesizer* s : _synthesizer)
             ss.push_back(s->state());
@@ -400,7 +426,9 @@ bool MasterSynthesizer::storeState()
             }
       XmlWriter xml(0, &f);
       xml.header();
-      state().write(xml);
+      // force the write, since the msynth state is created when state() is called and so will
+      // automatically have _isDefault = true, when in fact we need to write the state here, default or not
+      state().write(xml, true);
       return true;
       }
 
@@ -416,6 +444,39 @@ void MasterSynthesizer::setGain(float f)
             }
       }
 
+
+//---------------------------------------------------------
+//   setGainAsDecibels
+//---------------------------------------------------------
+
+void MasterSynthesizer::setGainAsDecibels(float decibelValue)
+      {
+      if (decibelValue == minGainAsDecibels)
+            setGain(MUTE);
+      else
+            setGain(pow(10, ((decibelValue + N) / N )));
+      }
+
+//---------------------------------------------------------
+//   convertGainToDecibels
+//---------------------------------------------------------
+
+float MasterSynthesizer::convertGainToDecibels(float gain) const
+      {
+      if (gain == MUTE)
+            return minGainAsDecibels; // return a usable value instead of -∞
+      return ((N * std::log10(gain)) - N);
+      }
+
+//---------------------------------------------------------
+//   gainAsDecibels
+//---------------------------------------------------------
+
+float MasterSynthesizer::gainAsDecibels() const
+      {
+      return convertGainToDecibels(_gain);
+      }
+
 //---------------------------------------------------------
 //   setMasterTuning
 //---------------------------------------------------------
@@ -426,5 +487,4 @@ void MasterSynthesizer::setMasterTuning(double val)
       for (Synthesizer* s : _synthesizer)
             s->setMasterTuning(_masterTuning);
       }
-}
-
+} // namespace Ms

@@ -1,15 +1,15 @@
 {
-"Window":        "#525252",
-"WindowText":    "#FFFFFF",
+"Window":        "#2C2C2C",
+"WindowText":    "#EFF0F1",
 "Base":          "#424242",
 "AlternateBase": "#626262",
-"Text":          "#FFFFFF",
-"Button":        "#525252",
-"ButtonText":    "#FFFFFF",
+"Text":          "#EFF0F1",
+"Button":        "#2C2C2C",
+"ButtonText":    "#EFF0F1",
 "BrightText":    "#000000",
-"Highlight":     "#88bff6",
+"ToolTipBase":   "#fefac2",
+"ToolTipText":   "#000000",
 "Link":          "#00ffff",
 "LinkVisited":   "#00ffff",
-"ToolTipBase":   "#808080",
-"ToolTipText":   "#000000"
+"Highlight":     "#0065BF"
 }

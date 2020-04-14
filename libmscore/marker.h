@@ -50,29 +50,30 @@ class Marker final : public TextBase {
       QString markerTypeUserName() const;
       Type markerType(const QString&) const;
 
-      virtual Marker* clone() const override    { return new Marker(*this); }
-      virtual ElementType type() const override { return ElementType::MARKER; }
+      Marker* clone() const override    { return new Marker(*this); }
+      ElementType type() const override { return ElementType::MARKER; }
+      int subtype() const override      { return int(_markerType); }
 
       Measure* measure() const         { return (Measure*)parent(); }
 
-      virtual void layout() override;
-      virtual void read(XmlReader&) override;
-      virtual void write(XmlWriter& xml) const override;
+      void layout() override;
+      void read(XmlReader&) override;
+      void write(XmlWriter& xml) const override;
 
       QString label() const            { return _label; }
       void setLabel(const QString& s)  { _label = s; }
       void undoSetLabel(const QString& s);
       void undoSetMarkerType(Type t);
 
-      virtual void styleChanged() override;
+      void styleChanged() override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
 
-      virtual Element* nextSegmentElement() override;
-      virtual Element* prevSegmentElement() override;
-      virtual QString accessibleInfo() const override;
+      Element* nextSegmentElement() override;
+      Element* prevSegmentElement() override;
+      QString accessibleInfo() const override;
       };
 
 //---------------------------------------------------------

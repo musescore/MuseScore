@@ -11,13 +11,21 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-            - env: "JOB=AppImage_x86_64"
-            - env: "JOB=AppImage_i686"
-            - env: "JOB=AppImage_armhf"
-            - env: "JOB=MacOSX"
             - env: "JOB=MacOS_lupdate"
+            - env: "JOB=AppImage_x86_64"
+            - env: "JOB=MacOSX"
   include:
-    # 1st parallel build job - debug build on Ubuntu
+    # 1st parallel build job - update translations on macOS, the shortest and quickest of this set
+    - env: "JOB=MacOS_lupdate"
+      os: osx
+      before_install:
+        - source build/travis/job_macos_lupdate/before_install.sh
+      install:
+        - source ./build/travis/job_macos_lupdate/install.sh
+      script:
+        - "./build/travis/job_macos_lupdate/script.sh"
+
+    # 2nd parallel build job - debug build on Ubuntu
     - env: "JOB=Tests"
       sudo: true
       dist: trusty
@@ -63,72 +71,27 @@ matrix:
         - ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
         - 'ARTIFACTS_PATHS="$(ls vtest/html | tr "\n" ":")" artifacts upload'
 
-    # 2nd parallel build job - portable Linux AppImage 64-bit x86 build on CentOS
+    # 3rd parallel build job - portable Linux AppImage (x86_64)
     - env: "JOB=AppImage_x86_64"
       addons:
         apt:
           packages:
-          - bsdtar
           - curl
-          - zsync
           - expect
       services:
         - docker
       script:
-        - "if [[ $APPIMAGE_BUILD_ARCHS == *x86_64* ]]; then ./build/travis/job2_AppImage/build.sh --x86_64 --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
+        - "if [[ $APPIMAGE_BUILD_ARCHS == *x86_64* ]]; then TARGET_ARCH=x86_64 ./build/travis/job2_AppImage/build.sh --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
 
-    # 3rd parallel build job - portable Linux AppImage 32-bit x86 build on CentOS
-    #- env: "JOB=AppImage_i686"
-    #  addons:
-    #    apt:
-    #      packages:
-    #      - bsdtar
-    #      - curl
-    #      - zsync
-    #      - expect
-    #  services:
-    #    - docker
-    #  script:
-    #    - "if [[ $APPIMAGE_BUILD_ARCHS == *i686* ]]; then ./build/travis/job2_AppImage/build.sh --i686 --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
-
-    # 4th parallel build job - portable Linux AppImage armhf build on Debian crosscompiler
-    #- env: "JOB=AppImage_armhf"
-    #  addons:
-    #    apt:
-    #      packages:
-    #      - bsdtar
-    #      - curl
-    #      - zsync
-    #      - expect
-    #  services:
-    #    - docker
-    #  before_script:
-    #    - "sudo ./build/travis/job2_AppImage/set-binfmt-misc.sh"
-    #  script:
-    #    - "if [[ $APPIMAGE_BUILD_ARCHS == *armhf* ]]; then ./build/travis/job2_AppImage/build.sh --armhf --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
-
-    # 5th parallel build job - mac osx build
     - env: "JOB=MacOSX"
       os: osx
       osx_image: xcode9.4
-      #cache:
-      #  directories:
-      #    - /usr/local/Cellar
       before_install:
         - source build/travis/job_macos/before_install.sh
       install:
         - source ./build/travis/job_macos/install.sh
       script:
         - "./build/travis/job_macos/script.sh"
-
-    - env: "JOB=MacOS_lupdate"
-      os: osx
-      before_install:
-        - source build/travis/job_macos_lupdate/before_install.sh
-      install:
-        - source ./build/travis/job_macos_lupdate/install.sh
-      script:
-        - "./build/travis/job_macos_lupdate/script.sh"
 
 notifications:
   email:
@@ -147,3 +110,4 @@ notifications:
     - https://buildtimetrend.herokuapp.com/travis
     # telegram webhooks
     - http://jamespi.hopto.org/testwebhooks/travishooks.php
+    - https://musebot.k8s.wsmgroup.ru/webhook/travis/

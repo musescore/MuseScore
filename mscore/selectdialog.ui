@@ -171,6 +171,7 @@
   <tabstop>inSelection</tabstop>
   <tabstop>sameVoice</tabstop>
   <tabstop>sameSystem</tabstop>
+  <tabstop>sameDuration</tabstop>
   <tabstop>replace</tabstop>
   <tabstop>add</tabstop>
   <tabstop>fromSelection</tabstop>

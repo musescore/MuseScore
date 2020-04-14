@@ -58,6 +58,18 @@
             <gateTime>67</gateTime>
       </Articulation>
       <Articulation name="sforzato">
+            <velocity>150</velocity>
+            <gateTime>100</gateTime>
+      </Articulation>
+      <Articulation name="sforzatoStaccato">
+            <velocity>150</velocity>
+            <gateTime>50</gateTime>
+      </Articulation>
+      <Articulation name="marcatoStaccato">
+            <velocity>120</velocity>
+            <gateTime>50</gateTime>
+      </Articulation>
+      <Articulation name="marcatoTenuto">
             <velocity>120</velocity>
             <gateTime>100</gateTime>
       </Articulation>
@@ -902,20 +914,6 @@
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
             </Instrument>
-            <Instrument id="tin-whistle">
-                  <longName>Tin Whistle</longName>
-                  <shortName>Tin Wh.</shortName>
-                  <description>same as 6 hole Flageolet but metal construction</description>
-                  <musicXMLid>wind.flutes.whistle.tin</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-96</aPitchRange>
-                  <pPitchRange>72-102</pPitchRange>
-                  <Channel>
-                        <program value="78"/> <!--Whistle-->
-                  </Channel>
-                  <genre>classroom</genre>
-            </Instrument>
             <Instrument id="bflat-tin-whistle">
                   <longName>B♭ Tin Whistle</longName>
                   <shortName>B♭ Tin Wh.</shortName>
@@ -928,6 +926,20 @@
                   <Channel>
                         <program value="78"/> <!--Whistle-->
                   </Channel>
+            </Instrument>
+            <Instrument id="c-tin-whistle">
+                  <longName>C Tin Whistle</longName>
+                  <shortName>C Tin Wh.</shortName>
+                  <description>same as 6 hole Flageolet but metal construction</description>
+                  <musicXMLid>wind.flutes.whistle.tin</musicXMLid>
+                  <clef>G8va</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>72-96</aPitchRange>
+                  <pPitchRange>72-102</pPitchRange>
+                  <Channel>
+                        <program value="78"/> <!--Whistle-->
+                  </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="d-tin-whistle">
                   <longName>D Tin Whistle</longName>
@@ -1035,10 +1047,10 @@
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
             </Instrument>
-            <Instrument id="baritone-oboe">
-                  <longName>Baritone Oboe</longName>
-                  <shortName>Bar. Ob.</shortName>
-                  <description>Baritone Oboe</description>
+            <Instrument id="bass-oboe">
+                  <longName>Bass Oboe</longName>
+                  <shortName>B. Ob.</shortName>
+                  <description>Bass Oboe</description>
                   <musicXMLid>wind.reed.oboe.bass</musicXMLid>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
@@ -1714,7 +1726,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>47-86</aPitchRange>
                   <pPitchRange>47-91</pPitchRange>
-                  <transposeDiatonic>-2</transposeDiatonic>
+                  <transposeDiatonic>-3</transposeDiatonic>
                   <transposeChromatic>-5</transposeChromatic>
                   <Channel>
                         <program value="71"/>
@@ -1908,6 +1920,76 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
+            </Instrument>
+            <Instrument id="xaphoon">
+                  <longName>Pocket Sax in C</longName>
+                  <shortName>C Pkt. Sax</shortName>
+                  <description>Xaphoon/Pocket Sax in C</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>60-77</aPitchRange>
+                  <pPitchRange>59-84</pPitchRange>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="bb-xaphoon">
+                  <longName>Pocket Sax in B♭</longName>
+                  <shortName>B♭ Pkt. Sax</shortName>
+                  <description>Xaphoon/Pocket Sax in B♭</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>58-75</aPitchRange>
+                  <pPitchRange>57-83</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="d-xaphoon">
+                  <longName>Pocket Sax in D</longName>
+                  <shortName>D Pkt. Sax</shortName>
+                  <description>Xaphoon/Pocket Sax in D</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>62-79</aPitchRange>
+                  <pPitchRange>61-86</pPitchRange>
+                  <transposeDiatonic>1</transposeDiatonic>
+                  <transposeChromatic>2</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="g-xaphoon">
+                  <longName>Pocket Sax in G</longName>
+                  <shortName>G Pkt. Sax</shortName>
+                  <description>Xaphoon/Pocket Sax in G</description>
+                  <musicXMLid>wind.reed.xaphoon</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>55-72</aPitchRange>
+                  <pPitchRange>54-79</pPitchRange>
+                  <transposeDiatonic>-3</transposeDiatonic>
+                  <transposeChromatic>-5</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="chalumeau">
                   <longName>Chalumeau</longName>
@@ -2489,8 +2571,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>60-96</aPitchRange>
-                  <pPitchRange>60-96</pPitchRange>
+                  <aPitchRange>60-98</aPitchRange>
+                  <pPitchRange>60-98</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2502,8 +2584,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>55-96</aPitchRange>
-                  <pPitchRange>55-96</pPitchRange>
+                  <aPitchRange>55-98</aPitchRange>
+                  <pPitchRange>55-98</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2515,8 +2597,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>55-91</aPitchRange>
-                  <pPitchRange>55-91</pPitchRange>
+                  <aPitchRange>55-93</aPitchRange>
+                  <pPitchRange>55-93</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2528,8 +2610,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>48-96</aPitchRange>
-                  <pPitchRange>48-96</pPitchRange>
+                  <aPitchRange>48-98</aPitchRange>
+                  <pPitchRange>48-98</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2541,8 +2623,8 @@
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>48-84</aPitchRange>
-                  <pPitchRange>48-84</pPitchRange>
+                  <aPitchRange>48-86</aPitchRange>
+                  <pPitchRange>48-86</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2658,8 +2740,8 @@
                   <musicXMLid>wind.reed.harmonica.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-40</aPitchRange>
-                  <pPitchRange>28-60</pPitchRange>
+                  <aPitchRange>40-64</aPitchRange>
+                  <pPitchRange>40-64</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2671,8 +2753,8 @@
                   <musicXMLid>wind.reed.harmonica.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-60</aPitchRange>
-                  <pPitchRange>28-60</pPitchRange>
+                  <aPitchRange>40-72</aPitchRange>
+                  <pPitchRange>40-72</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2684,8 +2766,8 @@
                   <musicXMLid>wind.reed.harmonica.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-40</aPitchRange>
-                  <pPitchRange>28-40</pPitchRange>
+                  <aPitchRange>40-65</aPitchRange>
+                  <pPitchRange>40-65</pPitchRange>
                   <Channel>
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
@@ -2866,10 +2948,10 @@
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
-            <Instrument id="high-c-horn">
-                  <longName>High C Horn</longName>
-                  <shortName>H. C Hn.</shortName>
-                  <description>High C Horn</description>
+            <Instrument id="c-horn-alto">
+                  <longName>Horn in C alto</longName>
+                  <shortName>C Hn.</shortName>
+                  <description>Horn in C alto</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -2879,10 +2961,10 @@
                         <program value="60"/> <!--French Horn-->
                   </Channel>
             </Instrument>
-            <Instrument id="high-bb-horn">
-                  <longName>Horn in B♭</longName>
+            <Instrument id="bb-horn-alto">
+                  <longName>Horn in B♭ alto</longName>
                   <shortName>B♭ Hn.</shortName>
-                  <description>High B♭ Horn</description>
+                  <description>Horn in B♭ alto</description>
                   <musicXMLid>brass.french-horn</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -2940,7 +3022,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="e-horn">
-                  <longName>E Horn</longName>
+                  <longName>Horn in E</longName>
                   <shortName>E Hn.</shortName>
                   <description>E Horn</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
@@ -2971,8 +3053,8 @@
             </Instrument>
             <Instrument id="d-horn">
                   <longName>Horn in D</longName>
-                  <shortName>Hn.</shortName>
-                  <description>Horn</description>
+                  <shortName>D Hn.</shortName>
+                  <description>D Horn</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -2984,15 +3066,47 @@
                         <program value="60"/> <!--French Horn-->
                   </Channel>
             </Instrument>
-            <Instrument id="low-c-horn">
+            <Instrument id="c-horn">
                   <longName>Horn in C</longName>
                   <shortName>C Hn.</shortName>
-                  <description>Low C Horn</description>
+                  <description>Horn in C</description>
+                  <musicXMLid>brass.natural-horn</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>34-67</aPitchRange>
+                  <pPitchRange>30-72</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
+                  <Channel>
+                        <program value="60"/> <!--French Horn-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="c-horn-bass">
+                  <trackName>Horn in C (Bass Clef)</trackName>
+                  <longName>Horn in C</longName>
+                  <shortName>C Hn.</shortName>
+                  <description>Horn in C</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>34-67</aPitchRange>
                   <pPitchRange>30-72</pPitchRange>
+                  <Channel>
+                        <program value="60"/> <!--French Horn-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="bb-horn-basso">
+                  <longName>Horn in B♭ basso</longName>
+                  <shortName>B♭ Hn.</shortName>
+                  <description>Horn in B♭ basso</description>
+                  <musicXMLid>brass.natural-horn</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>32-65</aPitchRange>
+                  <pPitchRange>28-70</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-14</transposeChromatic>
                   <Channel>
                         <program value="60"/> <!--French Horn-->
                   </Channel>
@@ -3008,21 +3122,6 @@
                   <pPitchRange>29-77</pPitchRange>
                   <transposeDiatonic>-4</transposeDiatonic>
                   <transposeChromatic>-7</transposeChromatic>
-                  <Channel>
-                        <program value="60"/> <!--French Horn-->
-                  </Channel>
-            </Instrument>
-            <Instrument id="low-bb-horn">
-                  <longName>Horn in B♭ basso</longName>
-                  <shortName>B♭ ba Hn.</shortName>
-                  <description>Low B♭ Horn</description>
-                  <musicXMLid>brass.natural-horn</musicXMLid>
-                  <clef>F</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>32-65</aPitchRange>
-                  <pPitchRange>28-70</pPitchRange>
-                  <transposeDiatonic>-1</transposeDiatonic>
-                  <transposeChromatic>-2</transposeChromatic>
                   <Channel>
                         <program value="60"/> <!--French Horn-->
                   </Channel>
@@ -3147,6 +3246,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="baritone-horn">
+                  <trackName>Baritone Horn</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
                   <description>Baritone Horn</description>
@@ -3178,6 +3278,41 @@
                         <program value="60"/> <!--French Horn-->
                   </Channel>
                   <genre>concertband</genre>
+            </Instrument>
+            <Instrument id="baritone-horn-central-europe">
+                  <trackName>Baritone Horn (Central Europe)</trackName>
+                  <longName>Baritone Horn</longName>
+                  <shortName>Bar. Hn.</shortName>
+                  <description>Baritone Horn (Central Europe)</description>
+                  <musicXMLid>brass.baritone-horn</musicXMLid>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-67</aPitchRange>
+                  <pPitchRange>34-70</pPitchRange>
+                  <Channel>
+                        <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+            </Instrument>
+            <Instrument id="baritone-horn-central-europe-treble">
+                  <trackName>Baritone Horn (Central Europe, Treble Clef)</trackName>
+                  <longName>Baritone Horn</longName>
+                  <shortName>Bar. Hn.</shortName>
+                  <description>Baritone Horn (Central Europe, Treble Clef)</description>
+                  <musicXMLid>brass.baritone-horn</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-67</aPitchRange>
+                  <pPitchRange>34-70</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-14</transposeChromatic>
+                  <Channel>
+                        <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="posthorn">
                   <longName>Posthorn</longName>
@@ -3258,8 +3393,6 @@
                   <Channel name="mute">
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
-                  <genre>orchestra</genre>
-                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="a-piccolo-trumpet">
                   <longName>Piccolo Trumpet in A</longName>
@@ -3388,6 +3521,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>popular</genre>
+                  <genre>orchestra</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
@@ -4167,7 +4301,7 @@
                   <aPitchRange>26-64</aPitchRange>
                   <pPitchRange>24-72</pPitchRange>
                   <Channel>
-                        <program value="58"/> <!--Tuba-->
+                        <program value="57"/> <!--Trombone-->
                   </Channel>
             </Instrument>
             <Instrument id="euphonium">
@@ -4521,6 +4655,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>38-60</aPitchRange>
                   <pPitchRange>36-62</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="47"/> <!--Timpani-->
                   </Channel>
@@ -4538,6 +4673,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-76</aPitchRange>
                   <pPitchRange>40-76</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="117"/> <!--Melodic Tom-->
                   </Channel>
@@ -4554,6 +4690,7 @@
                   <pPitchRange>76-108</pPitchRange>
                   <transposeDiatonic>14</transposeDiatonic>
                   <transposeChromatic>24</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="9"/> <!--Glockenspiel-->
                   </Channel>
@@ -4573,6 +4710,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>84-105</aPitchRange>
                   <pPitchRange>84-105</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="9"/> <!--Glockenspiel-->
                   </Channel>
@@ -4587,6 +4725,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>72-93</aPitchRange>
                   <pPitchRange>72-93</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="9"/> <!--Glockenspiel-->
                   </Channel>
@@ -4604,6 +4743,7 @@
                   <pPitchRange>84-108</pPitchRange>
                   <transposeDiatonic>14</transposeDiatonic>
                   <transposeChromatic>24</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="10"/> <!--Music Box-->
                   </Channel>
@@ -4619,6 +4759,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>84-108</aPitchRange>
                   <pPitchRange>84-108</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="47"/> <!--Timpani-->
                   </Channel>
@@ -4636,6 +4777,7 @@
                   <clef staff="2">F15ma</clef>
                   <aPitchRange>60-105</aPitchRange>
                   <pPitchRange>60-105</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="108"/> <!--Kalimba-->
                   </Channel>
@@ -4649,6 +4791,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>53-89</aPitchRange>
                   <pPitchRange>48-96</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="11"/> <!--Vibraphone-->
                   </Channel>
@@ -4667,6 +4810,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-81</aPitchRange>
                   <pPitchRange>60-81</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="11"/> <!--Vibraphone-->
                   </Channel>
@@ -4681,6 +4825,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>72-93</aPitchRange>
                   <pPitchRange>72-93</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="11"/> <!--Vibraphone-->
                   </Channel>
@@ -4695,6 +4840,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-81</aPitchRange>
                   <pPitchRange>60-81</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="11"/> <!--Vibraphone-->
                   </Channel>
@@ -4709,6 +4855,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-69</aPitchRange>
                   <pPitchRange>48-69</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="11"/> <!--Vibraphone-->
                   </Channel>
@@ -4723,6 +4870,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-79</aPitchRange>
                   <pPitchRange>53-79</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="14"/> <!--Tubular Bells-->
                   </Channel>
@@ -4743,6 +4891,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>36-88</aPitchRange>
                   <pPitchRange>36-88</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="114"/> <!--Steel Drums-->
                   </Channel>
@@ -4757,6 +4906,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-88</aPitchRange>
                   <pPitchRange>60-88</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="114"/> <!--Steel Drums-->
                   </Channel>
@@ -4770,6 +4920,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>56-85</aPitchRange>
                   <pPitchRange>56-85</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="114"/> <!--Steel Drums-->
                   </Channel>
@@ -4783,6 +4934,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>54-81</aPitchRange>
                   <pPitchRange>54-81</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="114"/> <!--Steel Drums-->
                   </Channel>
@@ -4796,6 +4948,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>52-69</aPitchRange>
                   <pPitchRange>52-69</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="114"/> <!--Steel Drums-->
                   </Channel>
@@ -4809,6 +4962,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>47-67</aPitchRange>
                   <pPitchRange>47-67</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="114"/> <!--Steel Drums-->
                   </Channel>
@@ -4822,6 +4976,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-53</aPitchRange>
                   <pPitchRange>36-53</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="114"/> <!--Steel Drums-->
                   </Channel>
@@ -4840,6 +4995,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-97</aPitchRange>
                   <pPitchRange>36-97</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="112"/> <!--Tinkle Bell-->
                   </Channel>
@@ -4855,6 +5011,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>45-57</aPitchRange>
                   <pPitchRange>45-57</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="14"/> <!--Tubular Bells-->
                   </Channel>
@@ -4868,6 +5025,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>76-93</aPitchRange>
                   <pPitchRange>76-93</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="14"/> <!--Tubular Bells-->
                   </Channel>
@@ -4923,6 +5081,7 @@
                   <pPitchRange>60-108</pPitchRange>
                   <transposeDiatonic>7</transposeDiatonic>
                   <transposeChromatic>12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="13"/> <!--Xylophone-->
                   </Channel>
@@ -4942,6 +5101,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>72-93</aPitchRange>
                   <pPitchRange>72-93</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="12"/> <!--Marimba-->
                   </Channel>
@@ -4956,6 +5116,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-81</aPitchRange>
                   <pPitchRange>60-81</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="12"/> <!--Marimba-->
                   </Channel>
@@ -4970,6 +5131,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-69</aPitchRange>
                   <pPitchRange>48-69</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="12"/> <!--Marimba-->
                   </Channel>
@@ -4988,6 +5150,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>48-108</aPitchRange>
                   <pPitchRange>48-108</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="12"/> <!--Marimba-->
                   </Channel>
@@ -5008,6 +5171,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>45-96</aPitchRange>
                   <pPitchRange>36-96</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="12"/> <!--Marimba-->
                   </Channel>
@@ -5028,6 +5192,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>45-96</aPitchRange>
                   <pPitchRange>36-96</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="12"/> <!--Marimba-->
                   </Channel>
@@ -5047,6 +5212,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-65</aPitchRange>
                   <pPitchRange>33-72</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="12"/> <!--Marimba-->
                   </Channel>
@@ -5062,6 +5228,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>21-60</aPitchRange>
                   <pPitchRange>21-60</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="12"/> <!--Marimba-->
                   </Channel>
@@ -5107,6 +5274,7 @@
                   <musicXMLid>pitched-percussion.kalimba</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="108"/> <!--Kalimba-->
                   </Channel>
@@ -5119,6 +5287,7 @@
                   <musicXMLid>pitched-percussion.kalimba</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="108"/> <!--Kalimba-->
                   </Channel>
@@ -5131,8 +5300,28 @@
                   <musicXMLid>pitched-percussion.kalimba</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="108"/> <!--Kalimba-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="carillon">
+                  <longName>Carillon</longName>
+                  <shortName>Car.</shortName>
+                  <description>Carillon</description>
+                  <musicXMLid>metal.bells.carillon</musicXMLid>
+                  <staves>2</staves>
+                  <clef>G</clef>
+                  <bracket>1</bracket>
+                  <bracketSpan>2</bracketSpan>
+                  <barlineSpan>2</barlineSpan>
+                  <clef staff="2">F</clef>
+                  <aPitchRange>48-96</aPitchRange>
+                  <pPitchRange>48-96</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <program value="14"/> <!-- Tubular Bells -->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
@@ -5148,6 +5337,7 @@
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <controller ctrl="0" value="1"/>
                         <program value="0"/> <!--Standard Kit-->
@@ -5168,6 +5358,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="37"> <!--Side Stick-->
                         <head>cross</head>
                         <line>0</line>
@@ -5203,6 +5394,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="35"> <!--Bass Drum 2-->
                         <head>normal</head>
                         <line>0</line>
@@ -5229,6 +5421,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="37"> <!--Side Stick-->
                         <head>cross</head>
                         <line>0</line>
@@ -5259,6 +5452,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="37"> <!--Side Stick-->
                         <head>cross</head>
                         <line>0</line>
@@ -5289,6 +5483,7 @@
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="41"> <!--Low Tom 2-->
                         <head>normal</head>
                         <line>6</line>
@@ -5348,6 +5543,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="61"> <!--Low Bongo-->
                         <head>normal</head>
                         <line>0</line>
@@ -5371,6 +5567,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="60"> <!--High Bongo-->
                         <head>normal</head>
                         <line>-1</line>
@@ -5407,6 +5604,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="62"> <!--Mute High Conga-->
                         <head>cross</head>
                         <line>-1</line>
@@ -5450,6 +5648,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="65">
                         <head>normal</head>
                         <line>-1</line>
@@ -5483,6 +5682,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="45"> <!--Mid Tom 1-->
                         <head>normal</head>
                         <line>0</line>
@@ -5506,6 +5706,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="62">
                         <head>normal</head>
                         <line>-1</line>
@@ -5537,6 +5738,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="78">
                         <head>cross</head>
                         <line>0</line>
@@ -5568,6 +5770,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="81">
                         <head>normal</head>
                         <line>0</line>
@@ -5591,6 +5794,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="42">
                         <head>cross</head>
                         <line>0</line>
@@ -5629,6 +5833,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="52">
                         <head>cross</head>
                         <line>0</line>
@@ -5653,6 +5858,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="53">
                         <head>cross</head>
                         <line>0</line>
@@ -5675,6 +5881,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="83">
                         <head>normal</head>
                         <line>0</line>
@@ -5698,6 +5905,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="58">
                         <head>normal</head>
                         <line>0</line>
@@ -5720,6 +5928,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="52">
                         <head>normal</head>
                         <line>0</line>
@@ -5742,6 +5951,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="82">
                         <head>normal</head>
                         <line>0</line>
@@ -5785,6 +5995,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="67">
                         <head>normal</head>
                         <line>0</line>
@@ -5809,6 +6020,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="68">
                         <head>normal</head>
                         <line>0</line>
@@ -5832,6 +6044,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="68">
                         <head>normal</head>
                         <line>0</line>
@@ -5853,6 +6066,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="69">
                         <head>normal</head>
                         <line>0</line>
@@ -5875,6 +6089,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="53">
                         <head>normal</head>
                         <line>0</line>
@@ -5898,6 +6113,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="76">
                         <head>normal</head>
                         <line>-1</line>
@@ -5933,6 +6149,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="76">
                         <head>normal</head>
                         <line>-1</line>
@@ -5966,6 +6183,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="80">
                         <head>cross</head> <!--Mute Triangle-->
                         <line>0</line>
@@ -6001,6 +6219,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="57"> <!--Crash Cymbal 2-->
                         <head>normal</head>
                         <line>0</line>
@@ -6029,6 +6248,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="51">
                         <head>normal</head>
                         <line>0</line>
@@ -6059,6 +6279,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="52">
                         <head>normal</head>
                         <line>0</line>
@@ -6083,6 +6304,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="57">
                         <head>normal</head>
                         <line>0</line>
@@ -6107,6 +6329,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="55">
                         <head>normal</head>
                         <line>0</line>
@@ -6131,6 +6354,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="56">
                         <head>normal</head>
                         <line>0</line>
@@ -6154,6 +6378,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="75">
                         <head>normal</head>
                         <line>0</line>
@@ -6181,6 +6406,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="85">
                         <head>normal</head>
                         <line>0</line>
@@ -6204,6 +6430,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="73">
                         <head>normal</head>
                         <line>0</line>
@@ -6229,6 +6456,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="70">
                         <head>normal</head>
                         <line>0</line>
@@ -6254,6 +6482,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="69">
                         <head>normal</head>
                         <line>0</line>
@@ -6277,6 +6506,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="69">
                         <head>normal</head>
                         <line>0</line>
@@ -6300,6 +6530,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="58">
                         <head>normal</head>
                         <line>0</line>
@@ -6324,6 +6555,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="77">
                         <head>normal</head>
                         <line>0</line>
@@ -6346,6 +6578,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="76">
                         <head>normal</head>
                         <line>0</line>
@@ -6371,6 +6604,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="73">
                         <head>normal</head>
                         <line>0</line>
@@ -6393,6 +6627,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="49">
                         <head>normal</head>
                         <line>0</line>
@@ -6415,6 +6650,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="70">
                         <head>normal</head>
                         <line>0</line>
@@ -6438,6 +6674,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="69">
                         <head>normal</head>
                         <line>0</line>
@@ -6460,6 +6697,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="69">
                         <head>normal</head>
                         <line>0</line>
@@ -6482,6 +6720,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="69">
                         <head>normal</head>
                         <line>0</line>
@@ -6507,6 +6746,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="69">
                         <head>normal</head>
                         <line>0</line>
@@ -6529,6 +6769,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="69">
                         <head>normal</head>
                         <line>0</line>
@@ -6551,6 +6792,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="67">
                         <head>normal</head>
                         <line>0</line>
@@ -6573,6 +6815,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="54">
                         <head>normal</head>
                         <line>0</line>
@@ -6601,6 +6844,7 @@
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="27">
                         <head>cross</head>
                         <line>-1</line>
@@ -6776,6 +7020,7 @@
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="48">
                         <head>diamond</head>
                         <line>4</line>
@@ -6872,6 +7117,7 @@
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="36">
                         <head>normal</head>
                         <line>7</line>
@@ -7077,6 +7323,7 @@
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="37">
                         <head>normal</head>
                         <line>7</line>
@@ -7184,6 +7431,7 @@
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="72">
                         <head>normal</head>
                         <line>4</line>
@@ -7296,6 +7544,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="75">
                         <head>normal</head>
                         <line>0</line>
@@ -7322,6 +7571,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="39">
                         <head>normal</head>
                         <line>0</line>
@@ -7348,6 +7598,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="41">
                         <head>normal</head>
                         <line>0</line>
@@ -7374,6 +7625,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="35">
                         <head>normal</head>
                         <line>0</line>
@@ -7703,6 +7955,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>21-108</aPitchRange>
                   <pPitchRange>21-108</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="0"/> <!--Acoustic Grand Piano-->
                   </Channel>
@@ -7730,6 +7983,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>21-108</aPitchRange>
                   <pPitchRange>21-108</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="0"/> <!--Acoustic Grand Piano-->
                   </Channel>
@@ -7753,6 +8007,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>21-108</aPitchRange>
                   <pPitchRange>21-108</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="0"/> <!--Acoustic Grand Piano-->
                   </Channel>
@@ -7774,6 +8029,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>21-108</aPitchRange>
                   <pPitchRange>21-108</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="3"/> <!--Honky-tonk Piano-->
                   </Channel>
@@ -7797,6 +8053,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>21-108</aPitchRange>
                   <pPitchRange>21-108</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="0"/> <!--Acoustic Grand Piano-->
                   </Channel>
@@ -7819,6 +8076,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>29-89</aPitchRange>
                   <pPitchRange>29-89</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="7"/> <!--Clavi-->
                   </Channel>
@@ -7837,6 +8095,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>29-89</aPitchRange>
                   <pPitchRange>29-89</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="6"/> <!--Harpsichord-->
                   </Channel>
@@ -7857,6 +8116,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>29-89</aPitchRange>
                   <pPitchRange>29-89</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="6"/> <!--Harpsichord-->
                   </Channel>
@@ -7879,6 +8139,7 @@
                   <pPitchRange>48-113</pPitchRange>
                   <transposeDiatonic>7</transposeDiatonic>
                   <transposeChromatic>12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="8"/> <!--Celesta-->
                   </Channel>
@@ -7897,6 +8158,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>21-108</aPitchRange>
                   <pPitchRange>21-108</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="4"/> <!--Electric Piano 1-->
                   </Channel>
@@ -7916,6 +8178,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>29-89</aPitchRange>
                   <pPitchRange>29-89</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="7"/> <!--Clavi-->
                   </Channel>
@@ -8033,6 +8296,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>29-89</aPitchRange>
                   <pPitchRange>29-89</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="20"/> <!--Reed Organ-->
                   </Channel>
@@ -8689,6 +8953,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-87</aPitchRange>
                   <pPitchRange>48-87</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="105"/> <!--Banjo-->
                   </Channel>
@@ -8722,6 +8987,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-83</aPitchRange>
                   <pPitchRange>48-83</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="105"/> <!--Banjo-->
                   </Channel>
@@ -8743,6 +9009,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>43-69</aPitchRange>
                   <pPitchRange>43-76</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="105"/>
                   </Channel>
@@ -8772,6 +9039,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>64-86</aPitchRange>
                   <pPitchRange>64-86</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="107"/> <!--Koto-->
                   </Channel>
@@ -8793,6 +9061,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>71-98</aPitchRange>
                   <pPitchRange>71-98</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="107"/> <!--Koto-->
                   </Channel>
@@ -8813,6 +9082,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>64-86</aPitchRange>
                   <pPitchRange>64-86</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="107"/> <!--Koto-->
                   </Channel>
@@ -8833,6 +9103,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>57-79</aPitchRange>
                   <pPitchRange>57-79</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="107"/> <!--Koto-->
                   </Channel>
@@ -8853,6 +9124,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>52-74</aPitchRange>
                   <pPitchRange>52-74</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="107"/> <!--Koto-->
                   </Channel>
@@ -8873,6 +9145,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-67</aPitchRange>
                   <pPitchRange>40-67</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="107"/> <!--Koto-->
                   </Channel>
@@ -8893,6 +9166,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-55</aPitchRange>
                   <pPitchRange>28-55</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="107"/> <!--Koto-->
                   </Channel>
@@ -8913,6 +9187,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>50-89</aPitchRange>
                   <pPitchRange>50-90</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -8935,6 +9210,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-88</aPitchRange>
                   <pPitchRange>48-90</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -8958,6 +9234,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>52-93</aPitchRange>
                   <pPitchRange>52-93</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -8983,6 +9260,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>47-88</aPitchRange>
                   <pPitchRange>47-88</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9008,6 +9286,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-83</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9039,6 +9318,7 @@
                   <pPitchRange>40-83</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9074,6 +9354,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>35-83</aPitchRange>
                   <pPitchRange>35-83</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/>
                   </Channel>
@@ -9104,6 +9385,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>62-93</aPitchRange>
                   <pPitchRange>62-93</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/>
                   </Channel>
@@ -9136,6 +9418,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>35-78</aPitchRange>
                   <pPitchRange>35-78</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/>
                   </Channel>
@@ -9167,6 +9450,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>31-83</aPitchRange>
                   <pPitchRange>31-83</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9193,6 +9477,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-84</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9229,6 +9514,7 @@
                   <pPitchRange>40-84</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/>
                   </Channel>
@@ -9270,6 +9556,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>34-86</aPitchRange>
                   <pPitchRange>34-86</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9315,6 +9602,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>35-84</aPitchRange>
                   <pPitchRange>35-84</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9346,6 +9634,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-86</aPitchRange>
                   <pPitchRange>40-88</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="27"/> <!--Electric Guitar (clean)-->
                   </Channel>
@@ -9384,12 +9673,14 @@
                         <string>59</string>
                         <string>64</string>
                   </StringData>
-                  <clef>G8vb</clef>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-86</aPitchRange>
                   <pPitchRange>40-88</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="27"/>
                   </Channel>
@@ -9416,6 +9707,7 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>23-104</aPitchRange>
                   <pPitchRange>23-104</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="46"/> <!--Orchestral Harp-->
                   </Channel>
@@ -9437,6 +9729,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>43-83</aPitchRange>
                   <pPitchRange>43-83</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="107"/> <!--Koto-->
                   </Channel>
@@ -9463,6 +9756,7 @@
                   <pPitchRange>36-75</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/>
                   </Channel>
@@ -9487,6 +9781,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>33-79</aPitchRange>
                   <pPitchRange>33-79</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9519,6 +9814,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-79</aPitchRange>
                   <pPitchRange>48-79</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9543,6 +9839,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>43-79</aPitchRange>
                   <pPitchRange>43-79</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9568,6 +9865,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>38-79</aPitchRange>
                   <pPitchRange>38-79</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9594,6 +9892,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>38-79</aPitchRange>
                   <pPitchRange>38-79</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9621,6 +9920,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-79</aPitchRange>
                   <pPitchRange>36-79</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9649,6 +9949,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-79</aPitchRange>
                   <pPitchRange>36-79</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9680,6 +9981,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>33-77</aPitchRange>
                   <pPitchRange>33-77</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9711,6 +10013,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>29-77</aPitchRange>
                   <pPitchRange>29-77</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9742,6 +10045,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>31-71</aPitchRange>
                   <pPitchRange>31-71</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -9763,6 +10067,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>55-85</aPitchRange>
                   <pPitchRange>55-100</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9793,6 +10098,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-87</aPitchRange>
                   <pPitchRange>48-93</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9813,6 +10119,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-87</aPitchRange>
                   <pPitchRange>48-93</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9833,6 +10140,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-87</aPitchRange>
                   <pPitchRange>48-93</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9853,6 +10161,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-75</aPitchRange>
                   <pPitchRange>36-81</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9873,6 +10182,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>43-73</aPitchRange>
                   <pPitchRange>36-88</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9886,6 +10196,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>50-83</aPitchRange>
                   <pPitchRange>50-83</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="106"/> <!--Shamisen-->
                   </Channel>
@@ -9900,6 +10211,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-84</aPitchRange>
                   <pPitchRange>36-84</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="104"/> <!--Sitar-->
                   </Channel>
@@ -9921,6 +10233,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-81</aPitchRange>
                   <pPitchRange>60-81</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9955,6 +10268,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>55-81</aPitchRange>
                   <pPitchRange>55-81</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9975,6 +10289,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-81</aPitchRange>
                   <pPitchRange>60-81</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -9995,6 +10310,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>50-76</aPitchRange>
                   <pPitchRange>50-76</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -10018,6 +10334,7 @@
                   <pPitchRange>28-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="34"/> <!--Electric Bass (pick)-->
                   </Channel>
@@ -10026,12 +10343,6 @@
                   </Channel>
                   <Channel name="pop">
                         <program value="37"/> <!--Slap Bass 2-->
-                  </Channel>
-                  <Channel name="slap">
-                        <program value="36"/>
-                  </Channel>
-                  <Channel name="pop">
-                        <program value="37"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -10069,6 +10380,7 @@
                   <pPitchRange>28-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel name="pizzicato">
                         <program value="32"/> <!--Acoustic Bass-->
                   </Channel>
@@ -10106,6 +10418,7 @@
                   <pPitchRange>28-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="33"/> <!--Electric Bass (finger)-->
                   </Channel>
@@ -10148,6 +10461,7 @@
                   <pPitchRange>28-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="35"/> <!--Fretless Bass-->
                   </Channel>
@@ -10180,6 +10494,7 @@
                   <pPitchRange>23-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="33"/> <!--Electric Bass (finger)-->
                   </Channel>
@@ -10223,6 +10538,7 @@
                   <pPitchRange>23-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="33"/>
                   </Channel>
@@ -10263,6 +10579,7 @@
                   <pPitchRange>23-72</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="33"/>
                   </Channel>
@@ -10300,6 +10617,7 @@
                   <pPitchRange>64-91</pPitchRange>
                   <transposeDiatonic>7</transposeDiatonic>
                   <transposeChromatic>12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -10321,6 +10639,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>52-79</aPitchRange>
                   <pPitchRange>52-79</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -10344,6 +10663,7 @@
                   <pPitchRange>3-60</pPitchRange>
                   <transposeDiatonic>-14</transposeDiatonic>
                   <transposeChromatic>-24</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -10367,6 +10687,7 @@
                   <pPitchRange>43-66</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -10390,11 +10711,78 @@
                   <pPitchRange>28-66</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="32"/> <!--Acoustic Bass-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
+            <Instrument id="bandurria">
+                   <longName>Bandurria</longName>
+                   <shortName>Band.</shortName>
+                   <description>Spanish Bandurria</description>
+                   <musicXMLid>pluck.bandurria</musicXMLid>
+                   <StringData>
+                         <frets>17</frets>
+                         <string>56</string>
+                         <string>61</string>
+                         <string>66</string>
+                         <string>71</string>
+                         <string>76</string>
+                         <string>81</string>
+                   </StringData>
+                   <clef>G</clef>
+                   <barlineSpan>1</barlineSpan>
+                   <aPitchRange>56-98</aPitchRange>
+                   <pPitchRange>56-98</pPitchRange>
+                   <singleNoteDynamics>0</singleNoteDynamics>
+                   <Channel>
+                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                   </Channel>
+                   <genre>popular</genre>
+             </Instrument>
+             <Instrument id="bandurria-tablature">
+                   <trackName>Bandurria (Tablature)</trackName>
+                   <init>bandurria</init>
+                   <description>Bandurria (Tablature)</description>
+                   <musicXMLid>pluck.bandurria</musicXMLid>
+                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
+                   <!--                  <clef>TAB</clef> -->
+                   <genre>popular</genre>
+             </Instrument>
+             <Instrument id="laud">
+                   <longName>Laúd</longName>
+                   <shortName>Laúd</shortName>
+                   <description>Spanish Laúd</description>
+                   <musicXMLid>pluck.laud</musicXMLid>
+                   <StringData>
+                         <frets>22</frets>
+                         <string>44</string>
+                         <string>49</string>
+                         <string>54</string>
+                         <string>59</string>
+                         <string>64</string>
+                         <string>69</string>
+                   </StringData>
+                   <clef>G8vb</clef>
+                   <barlineSpan>1</barlineSpan>
+                   <aPitchRange>44-91</aPitchRange>
+                   <pPitchRange>44-91</pPitchRange>
+                   <singleNoteDynamics>0</singleNoteDynamics>
+                   <Channel>
+                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                   </Channel>
+                   <genre>popular</genre>
+             </Instrument>
+             <Instrument id="laud-tablature">
+                   <trackName>Laúd (Tablature)</trackName>
+                   <init>laud</init>
+                   <description>Spanish Laúd (Tablature)</description>
+                   <musicXMLid>pluck.laud</musicXMLid>
+                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
+                   <!--                  <clef>TAB</clef> -->
+                   <genre>popular</genre>
+             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="strings">
             <name>Strings - Bowed</name>
@@ -10412,13 +10800,13 @@
                   <aPitchRange>24-108</aPitchRange>
                   <pPitchRange>24-108</pPitchRange>
                   <Channel name="arco">
-                        <program value="48"/>
+                        <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <program value="45"/>
+                        <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
-                        <program value="44"/>
+                        <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
             </Instrument>
             <Instrument id="erhu">
@@ -10456,13 +10844,13 @@
                   <aPitchRange>48-79</aPitchRange>
                   <pPitchRange>48-93</pPitchRange>
                   <Channel name="arco">
-                        <program value="41"/>
+                        <program value="41"/> <!--Viola-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <program value="45"/>
+                        <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
-                        <program value="44"/>
+                        <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
@@ -10499,12 +10887,15 @@
                   <aPitchRange>55-88</aPitchRange>
                   <pPitchRange>55-103</pPitchRange>
                   <Channel name="arco">
+                        <controller ctrl="32" value="21"/> <!--Violins Fast Expr.-->.
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
+                        <controller ctrl="32" value="20"/> <!--Violins Pizzicato-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
+                        <controller ctrl="32" value="21"/> <!--Violins Tremolo Expr.-->.
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>orchestra</genre>
@@ -10541,12 +10932,15 @@
                   <aPitchRange>48-79</aPitchRange>
                   <pPitchRange>48-93</pPitchRange>
                   <Channel name="arco">
+                        <controller ctrl="32" value="31"/> <!--Violas Fast Expr.-->.
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
+                        <controller ctrl="32" value="30"/> <!--Violas Pizzicato-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
+                        <controller ctrl="32" value="31"/> <!--Violas Tremolo Expr.-->.
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>orchestra</genre>
@@ -10560,8 +10954,8 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-67</aPitchRange>
                   <pPitchRange>36-90</pPitchRange>
-                  <Channel name="arco"> <!--Cello-->
-                        <program value="42"/>
+                  <Channel name="arco">
+                        <program value="42"/> <!--Cello-->
                   </Channel>
                   <Channel name="pizzicato">
                         <program value="45"/> <!--Pizzicato Strings-->
@@ -10584,12 +10978,15 @@
                   <aPitchRange>36-67</aPitchRange>
                   <pPitchRange>36-90</pPitchRange>
                   <Channel name="arco">
+                        <controller ctrl="32" value="41"/> <!--Celli Fast Expr.-->.
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
+                        <controller ctrl="32" value="40"/> <!--Celli Pizzicato-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
+                        <controller ctrl="32" value="41"/> <!--Celli Tremolo Expr.-->.
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>orchestra</genre>
@@ -10606,8 +11003,8 @@
                   <pPitchRange>24-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <Channel name="arco"> <!--Contrabass-->
-                        <program value="43"/>
+                  <Channel name="arco">
+                        <program value="43"/> <!--Contrabass-->
                   </Channel>
                   <Channel name="pizzicato">
                         <program value="32"/> <!--Accoustic Bass-->
@@ -10629,16 +11026,19 @@
                   <concertClef>F8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-62</aPitchRange>
-                  <pPitchRange>28-67</pPitchRange>
+                  <pPitchRange>24-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
                   <Channel name="arco">
+                        <controller ctrl="32" value="51"/> <!--Basses Fast Expr.-->.
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
+                        <controller ctrl="32" value="50"/> <!--Basses Pizzicato-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
+                        <controller ctrl="32" value="51"/> <!--Basses Tremolo Expr.-->.
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>orchestra</genre>
@@ -10647,6 +11047,28 @@
                   <init>contrabass</init>
                   <longName>Double Bass</longName>
                   <shortName>Db.</shortName>
+            </Instrument>
+            <Instrument id="octobass">
+                  <longName>Octobass</longName>
+                  <shortName>Otb.</shortName>
+                  <description>Octobass</description>
+                  <musicXMLid>strings.octobass</musicXMLid>
+                  <transposingClef>F</transposingClef>
+                  <concertClef>F15mb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>21-31</aPitchRange>
+                  <pPitchRange>12-33</pPitchRange>
+                  <transposeDiatonic>-14</transposeDiatonic>
+                  <transposeChromatic>-24</transposeChromatic>
+                  <Channel name="arco">
+                        <program value="43"/> <!--Contrabass-->
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="32"/> <!--Accoustic Bass-->
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/> <!--Tremolo Strings-->
+                  </Channel>
             </Instrument>
             <Instrument id="pardessus-de-viole">
                   <longName>Pardessus de viole</longName>
@@ -10814,13 +11236,13 @@
                   <aPitchRange>33-74</aPitchRange>
                   <pPitchRange>33-79</pPitchRange>
                   <Channel name="arco">
-                        <program value="42"/>
+                        <program value="42"/> <!--Cello-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <program value="15"/>
+                        <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
-                        <program value="44"/>
+                        <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>

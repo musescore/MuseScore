@@ -25,40 +25,46 @@ namespace Ms {
 
 static std::vector<NoteGroup> noteGroups {
       { Fraction(2,2),
-            Groups( { { 4, 512}, { 8, 272}, {12, 512}, {16, 273}, {20, 512}, {24, 272}, {28, 512} })
-            },
-      { Fraction(4,4),
-            Groups( { { 4, 0x200}, { 8, 0x110}, {12, 0x200}, {16, 0x111}, {20, 0x200}, {24, 0x110}, {28, 0x200} })
-            },
-      { Fraction(3,4),
-            Groups( { { 4, 512}, { 8, 273}, { 12, 512}, {16, 273}, { 20, 512} })
-            },
-      { Fraction(2,4),
-            Groups( { { 4, 512}, { 8, 273}, { 12, 512}, {0, 0} })
-            },
-      { Fraction(6,8),
-            Groups( { { 4, 512}, { 8, 512}, { 12, 273}, { 16, 512}, { 20, 512}, {0, 0} })
-            },
-      { Fraction(9,8),
-            Groups( { { 4, 512}, { 8, 512}, { 12, 273}, { 16, 512}, { 20, 512}, {24, 273}, { 18, 512}, { 32, 512} })
-            },
-      { Fraction(12,8),
-            Groups( { { 4, 512}, { 8, 512}, { 12, 273}, { 16, 512}, { 20, 512}, {24, 273}, { 18, 512}, { 32, 512}, {36, 273}, { 40, 512}, { 44, 512} })
-            },
-      { Fraction(6,4),
-            Groups( { { 4, 512}, { 8, 512}, { 12, 512}, { 16, 512}, { 20, 512}, { 24, 273}, { 28, 512}, { 32, 512}, { 36, 512}, { 40, 512}, { 44, 512} })
+            Groups( { {4, 0x200}, {8, 0x110}, {12, 0x200}, {16, 0x111}, {20, 0x200}, {24, 0x110}, {28, 0x200} })
             },
       { Fraction(3,2),
-            Groups( { { 4, 512}, { 8, 272}, { 12, 512}, { 16, 273}, { 20, 512}, { 24, 272}, { 28, 512}, { 32, 273}, { 36, 512}, { 40, 272}, { 44, 512} })
+            Groups( { {4, 0x200}, {8, 0x110}, {12, 0x200}, {16, 0x111}, {20, 0x200}, {24, 0x110}, {28, 0x200}, {32, 0x111}, {36, 0x200}, {40, 0x110}, {44, 0x200} })
+            },
+      { Fraction(4,2),
+            Groups( { {4, 0x200}, {8, 0x110}, {12, 0x200}, {16, 0x111}, {20, 0x200}, {24, 0x110}, {28, 0x200}, {32, 0x111}, {36, 0x200}, {40, 0x110}, {44, 0x200}, {48, 0x111}, {52, 0x200}, {56, 0x110}, {60, 0x200} })
+            },
+      { Fraction(2,4),
+            Groups( { {4, 0x200}, {8, 0x111}, {12, 0x200} })
+            },
+      { Fraction(3,4),
+            Groups( { {4, 0x200}, {8, 0x111}, {12, 0x200}, {16, 0x111}, {20, 0x200} })
+            },
+      { Fraction(4,4),
+            Groups( { {4, 0x200}, {8, 0x110}, {12, 0x200}, {16, 0x111}, {20, 0x200}, {24, 0x110}, {28, 0x200} })
             },
       { Fraction(5,4),
-            Groups( { { 4, 512}, { 8, 512}, { 12, 512}, { 16, 512}, { 20, 512}, { 24, 273}, { 28, 512}, { 32, 512}, { 36, 512} })
+            Groups( { {4, 0x200}, {8, 0x110}, {12, 0x200}, {16, 0x110}, {20, 0x200}, {24, 0x111}, {28, 0x200}, {32, 0x110}, {36, 0x200} })
             },
-      { Fraction(7,8),
-            Groups( { { 4, 512}, { 8, 512}, { 12, 273}, { 16, 512}, { 20, 273}, { 24, 512} })
+      { Fraction(6,4),
+            Groups( { {4, 0x200}, {8, 0x110}, {12, 0x200}, {16, 0x110}, {20, 0x200}, {24, 0x111}, {28, 0x200}, {32, 0x110}, {36, 0x200}, {40, 0x110}, {44, 0x200} })
+            },
+      { Fraction(3,8),
+            Groups( { {4, 0x200}, {8, 0x200} })
             },
       { Fraction(5,8),
-            Groups( { { 4, 512}, { 8, 512}, { 12, 273}, { 16, 512} })
+            Groups( { {4, 0x200}, {8, 0x200}, {12, 0x111}, {16, 0x200} })
+            },
+      { Fraction(6,8),
+            Groups( { {4, 0x200}, {8, 0x200}, {12, 0x111}, {16, 0x200}, {20, 0x200} })
+            },
+      { Fraction(7,8),
+            Groups( { {4, 0x200}, {8, 0x200}, {12, 0x111}, {16, 0x200}, {20, 0x111}, {24, 0x200} })
+            },
+      { Fraction(9,8),
+            Groups( { {4, 0x200}, {8, 0x200}, {12, 0x111}, {16, 0x200}, {20, 0x200}, {24, 0x111}, {28, 0x200}, {32, 0x200} })
+            },
+      { Fraction(12,8),
+            Groups( { {4, 0x200}, {8, 0x200}, {12, 0x111}, {16, 0x200}, {20, 0x200}, {24, 0x111}, {28, 0x200}, {32, 0x200}, {36, 0x111}, {40, 0x200}, {44, 0x200} })
             },
       };
 
@@ -75,21 +81,21 @@ Beam::Mode Groups::endBeam(ChordRest* cr, ChordRest* prev)
       TDuration d      = cr->durationType();
       const Groups& g  = cr->staff()->group(cr->tick());
       Fraction stretch = cr->staff()->timeStretch(cr->tick());
-      int tick         = (cr->rtick() * stretch.numerator()) / stretch.denominator();
+      Fraction tick    = cr->rtick() * stretch;
 
-      Beam::Mode val = g.beamMode(tick, d.type());
+      Beam::Mode val = g.beamMode(tick.ticks(), d.type());
 
       // context-dependent checks
-      if (val == Beam::Mode::AUTO && tick) {
+      if (val == Beam::Mode::AUTO && tick.isNotZero()) {
             // if current or previous cr is in tuplet (but not both in same tuplet):
             // consider it as if this were next shorter duration
             if (prev && (cr->tuplet() != prev->tuplet()) && (d == prev->durationType())) {
                   if (d >= TDuration::DurationType::V_EIGHTH)
-                        val = g.beamMode(tick, TDuration::DurationType::V_16TH);
+                        val = g.beamMode(tick.ticks(), TDuration::DurationType::V_16TH);
                   else if (d == TDuration::DurationType::V_16TH)
-                        val = g.beamMode(tick, TDuration::DurationType::V_32ND);
+                        val = g.beamMode(tick.ticks(), TDuration::DurationType::V_32ND);
                   else
-                        val = g.beamMode(tick, TDuration::DurationType::V_64TH);
+                        val = g.beamMode(tick.ticks(), TDuration::DurationType::V_64TH);
                   }
             // if there is a hole between previous and current cr, break beam
             // exclude tuplets from this check; tick calculations can be unreliable

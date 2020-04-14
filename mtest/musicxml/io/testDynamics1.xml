@@ -321,6 +321,7 @@
             <fp/>
             </dynamics>
           </direction-type>
+        <sound dynamics="106.67"/>
         </direction>
       <note>
         <pitch>
@@ -339,6 +340,7 @@
             <sf/>
             </dynamics>
           </direction-type>
+        <sound dynamics="124.44"/>
         </direction>
       <note>
         <pitch>
@@ -358,6 +360,7 @@
             <sfz/>
             </dynamics>
           </direction-type>
+        <sound dynamics="124.44"/>
         </direction>
       <note>
         <pitch>
@@ -376,6 +379,7 @@
             <other-dynamics>sff</other-dynamics>
             </dynamics>
           </direction-type>
+        <sound dynamics="140.00"/>
         </direction>
       <note>
         <pitch>
@@ -394,6 +398,7 @@
             <sffz/>
             </dynamics>
           </direction-type>
+        <sound dynamics="140.00"/>
         </direction>
       <note>
         <pitch>
@@ -412,6 +417,7 @@
             <sfp/>
             </dynamics>
           </direction-type>
+        <sound dynamics="124.44"/>
         </direction>
       <note>
         <pitch>
@@ -430,6 +436,7 @@
             <sfpp/>
             </dynamics>
           </direction-type>
+        <sound dynamics="124.44"/>
         </direction>
       <note>
         <pitch>
@@ -448,6 +455,7 @@
             <rfz/>
             </dynamics>
           </direction-type>
+        <sound dynamics="124.44"/>
         </direction>
       <note>
         <pitch>
@@ -466,6 +474,7 @@
             <rf/>
             </dynamics>
           </direction-type>
+        <sound dynamics="124.44"/>
         </direction>
       <note>
         <pitch>
@@ -484,6 +493,7 @@
             <fz/>
             </dynamics>
           </direction-type>
+        <sound dynamics="124.44"/>
         </direction>
       <note>
         <pitch>
@@ -503,6 +513,7 @@
             <other-dynamics>m</other-dynamics>
             </dynamics>
           </direction-type>
+        <sound dynamics="106.67"/>
         </direction>
       <note>
         <pitch>
@@ -521,6 +532,7 @@
             <other-dynamics>r</other-dynamics>
             </dynamics>
           </direction-type>
+        <sound dynamics="124.44"/>
         </direction>
       <note>
         <pitch>
@@ -539,6 +551,7 @@
             <other-dynamics>s</other-dynamics>
             </dynamics>
           </direction-type>
+        <sound dynamics="124.44"/>
         </direction>
       <note>
         <pitch>
@@ -557,6 +570,7 @@
             <other-dynamics>z</other-dynamics>
             </dynamics>
           </direction-type>
+        <sound dynamics="88.89"/>
         </direction>
       <note>
         <pitch>
@@ -575,6 +589,7 @@
             <other-dynamics>n</other-dynamics>
             </dynamics>
           </direction-type>
+        <sound dynamics="54.44"/>
         </direction>
       <note>
         <pitch>

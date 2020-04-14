@@ -71,7 +71,7 @@ void ScoreView::updateGrips()
                   score()->addRefresh(grip.adjusted(-dx, -dy, dx, dy));
                   }
 
-            QPointF anchor = editData.element->gripAnchor(editData.curGrip);
+            QPointF anchor = (editData.curGrip != Grip::NO_GRIP) ? editData.element->gripAnchor(editData.curGrip) : QPointF();
             if (!anchor.isNull())
                   setDropAnchor(QLineF(anchor + pageOffset, editData.grip[int(editData.curGrip)].center()));
             else
@@ -86,12 +86,21 @@ void ScoreView::updateGrips()
 
 void ScoreView::startEditMode(Element* e)
       {
+      if (score()->selection().elements().size() != 1)
+            score()->select(e);
       if (!e || !e->isEditable()) {
             qDebug("The element cannot be edited");
             return;
             }
+      if (textEditMode()) {
+            // leave text edit mode before starting editing another element
+            changeState(ViewState::NORMAL);
+            }
       if (score()->undoStack()->active())
             score()->endCmd();
+      // Restart edit mode to reinit edit values
+      if (editMode())
+            changeState(ViewState::NORMAL);
       editData.element = e;
       changeState(ViewState::EDIT);
       }
@@ -111,7 +120,7 @@ void ScoreView::startEdit(Element* element, Grip startGrip)
       editData.element = element;
       if (forceStartEdit) // call startEdit() forcibly to reinitialize edit mode.
             startEdit();
-      else
+      else if (state != ViewState::DRAG_EDIT)
             changeState(ViewState::EDIT);
 
       if (startGrip != Grip::NO_GRIP)
@@ -123,14 +132,16 @@ void ScoreView::startEdit(Element* element, Grip startGrip)
 //    enter state EDIT
 //---------------------------------------------------------
 
-void ScoreView::startEdit()
+void ScoreView::startEdit(bool editMode)
       {
       if (editData.element->isTBox())
             editData.element = toTBox(editData.element)->text();
+
+      Element* e = editData.element;
       setFocus();
-      editData.grips   = 0;
-      editData.curGrip = Grip(0);
       editData.clearData();
+      editData.grips   = e->gripsCount();
+      editData.curGrip = editMode ? e->initialEditModeGrip() : Grip::NO_GRIP;
 
       editData.element->startEdit(editData);
       updateGrips();
@@ -156,16 +167,12 @@ void ScoreView::endEdit()
       for (int i = 0; i < editData.grips; ++i)
             score()->addRefresh(editData.grip[i]);
       editData.element->endEdit(editData);
-
+      //! NOTE After endEdit, the element may be null
       if (editData.element) {
             _score->addRefresh(editData.element->canvasBoundingRect());
             ElementType tp = editData.element->type();
             if (tp == ElementType::LYRICS)
                   lyricsEndEdit();
-            else if (tp == ElementType::HARMONY)
-                  harmonyEndEdit();
-            else if (tp == ElementType::FIGURED_BASS)
-                  figuredBassEndEdit();
             }
       editData.clearData();
       mscore->updateInspector();
@@ -211,11 +218,11 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
             editData.hRaster = false;
             editData.vRaster = false;
             editData.element->editDrag(editData);
-            updateGrips();
             }
       QRectF r(editData.element->canvasBoundingRect());
       _score->addRefresh(r);
       _score->update();
+      updateGrips();
       }
 
 //---------------------------------------------------------
@@ -227,10 +234,10 @@ void ScoreView::endDragEdit()
       _score->addRefresh(editData.element->canvasBoundingRect());
 
       editData.element->endEditDrag(editData);
+      score()->endCmd();            // calls update()
       updateGrips();
       _score->addRefresh(editData.element->canvasBoundingRect());
       setDropTarget(0);
-      score()->endCmd();            // calls update()
       _score->rebuildBspTree();
       }
 }

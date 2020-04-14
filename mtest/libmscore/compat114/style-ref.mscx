@@ -10,11 +10,10 @@
       <staffDistance>6</staffDistance>
       <akkoladeDistance>6.4</akkoladeDistance>
       <minSystemDistance>8.2</minSystemDistance>
-      <lyricsMinBottomDistance>5.5</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <systemFrameDistance>6</systemFrameDistance>
       <frameSystemDistance>6</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
-      <endBarDistance>0.3</endBarDistance>
       <repeatBarTips>1</repeatBarTips>
       <startBarlineSingle>1</startBarlineSingle>
       <startBarlineMultiple>0</startBarlineMultiple>
@@ -146,6 +145,7 @@
             <transposingClefType>G</transposingClefType>
             </Clef>
           <TimeSig>
+            <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -159,6 +159,9 @@
         <multiMeasureRest>32</multiMeasureRest>
         <voice>
           <TimeSig>
+            <linked>
+              <indexDiff>-1</indexDiff>
+              </linked>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -168,6 +171,7 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <linkedMain/>
             </BarLine>
           </voice>
         </Measure>
@@ -419,6 +423,9 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <linked>
+              <indexDiff>-1</indexDiff>
+              </linked>
             </BarLine>
           </voice>
         </Measure>

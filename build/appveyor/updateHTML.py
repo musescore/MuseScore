@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # This Python file uses the following encoding: utf-8
 import sys
 import os
@@ -102,7 +104,7 @@ def main():
         if len(sys.argv) == 2:
             sshKey = sys.argv[1].lower()
         else:
-            print "Need SSH key"
+            print("Need SSH key")
             exit(0)
 
         pathname = os.path.abspath(os.path.dirname(sys.argv[0]))
@@ -114,10 +116,10 @@ def main():
         generateRSS(pathname, l)
 
     except:
-        print "Unexpected error:", sys.exc_info()[0], "\n"
-        print sys.exc_info()[1], "\n"
+        print("Unexpected error:", sys.exc_info()[0], "\n")
+        print(sys.exc_info()[1], "\n")
         import traceback
-        print traceback.print_tb(sys.exc_info()[2]), "\n"
+        print(traceback.print_tb(sys.exc_info()[2]), "\n")
 
 if __name__ == '__main__':
     main()

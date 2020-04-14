@@ -5,8 +5,9 @@
 //  Note Names Plugin
 //
 //  Copyright (C) 2012 Werner Schweer
-//  Copyright (C) 2013 - 2017 Joachim Schmitz
+//  Copyright (C) 2013 - 2020 Joachim Schmitz
 //  Copyright (C) 2014 Jörn Eichler
+//  Copyright (C) 2020 Johan Temmerman
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -14,20 +15,24 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-import QtQuick 2.0
+import QtQuick 2.2
 import MuseScore 3.0
 
 MuseScore {
-   version: "3.0"
+   version: "3.4.2.1"
    description: qsTr("This plugin names notes as per your language setting")
-   menuPath: "Plugins.Notes." + qsTr("Note Names") // this does not work, why?
+   menuPath: "Plugins.Notes." + qsTr("Note Names")
 
-   function nameChord (notes, text) {
+   // Small note name size is fraction of the full font size.
+   property var fontSizeMini: 0.7;
+
+   function nameChord (notes, text, small) {
       for (var i = 0; i < notes.length; i++) {
-         var sep = ","; // change to "\n" if you want them vertically
+         var sep = "\n";   // change to "," if you want them horizontally (anybody?)
          if ( i > 0 )
             text.text = sep + text.text; // any but top note
-
+         if (small)
+             text.fontSize *= fontSizeMini
          if (typeof notes[i].tpc === "undefined") // like for grace notes ?!?
             return
          switch (notes[i].tpc) {
@@ -75,6 +80,9 @@ MuseScore {
          //text.text += (Math.floor(notes[i].pitch / 12) - 1)
          // or
          //text.text += (Math.floor(notes[i].ppitch / 12) - 1)
+         // or even this, similar to the Helmholtz system but one octave up
+         //var octaveTextPostfix = [",,,,,", ",,,,", ",,,", ",,", ",", "", "'", "''", "'''", "''''", "'''''"];
+         //text.text += octaveTextPostfix[Math.floor(notes[i].pitch / 12)];
 
 // change below false to true for courtesy- and microtonal accidentals
 // you might need to come up with suitable translations
@@ -109,22 +117,41 @@ MuseScore {
                case 25: text.text = qsTranslate("accidental", "Sori") + text.text; break;
                case 26: text.text = qsTranslate("accidental", "Koron") + text.text; break;
                default: text.text = qsTr("?") + text.text; break;
-            } // end switch userAccidental
-         } // end if courtesy- and microtonal accidentals
-      } // end for note
+            }  // end switch userAccidental
+         }  // end if courtesy- and microtonal accidentals
+      }  // end for note
+   }
+
+   function renderGraceNoteNames (cursor, list, text, small) {
+      if (list.length > 0) {     // Check for existence.
+         // Now render grace note's names...
+         for (var chordNum = 0; chordNum < list.length; chordNum++) {
+            // iterate through all grace chords
+            var chord = list[chordNum];
+            // Set note text, grace notes are shown a bit smaller
+            nameChord(chord.notes, text, small)
+            cursor.add(text)
+            // X position the note name over the grace chord
+            text.offsetX = chord.posX
+            switch (cursor.voice) {
+               case 1: case 3: text.placement = Placement.BELOW; break;
+            }
+
+            // If we consume a STAFF_TEXT we must manufacture a new one.
+            text = newElement(Element.STAFF_TEXT);    // Make another STAFF_TEXT
+         }
+      }
+      return text
    }
 
    onRun: {
-      if (typeof curScore === 'undefined')
-         Qt.quit();
-
       var cursor = curScore.newCursor();
       var startStaff;
       var endStaff;
       var endTick;
       var fullScore = false;
       cursor.rewind(1);
-      if (!cursor.segment()) { // no selection
+      if (!cursor.segment) { // no selection
          fullScore = true;
          startStaff = 0; // start with 1st staff
          endStaff  = curScore.nstaves - 1; // and end with last
@@ -152,43 +179,44 @@ MuseScore {
 
             if (fullScore)  // no selection
                cursor.rewind(0); // beginning of score
+            while (cursor.segment && (fullScore || cursor.tick < endTick)) {
+               if (cursor.element && cursor.element.type === Element.CHORD) {
+                  var text = newElement(Element.STAFF_TEXT);      // Make a STAFF_TEXT
 
-            while (cursor.segment() && (fullScore || cursor.tick < endTick)) {
-               if (cursor.element() && cursor.element().type === Ms.CHORD) {
-                  var text = newElement(Ms.STAFF_TEXT);
-
-                  var graceChords = cursor.element().graceNotes;
-                  for (var i = 0; i < graceChords.length; i++) {
-                     // iterate through all grace chords
-                     var graceNotes = graceChords[i].notes;
-                     nameChord(graceNotes, text);
-                     // there seems to be no way of knowing the exact horizontal pos.
-                     // of a grace note, so we have to guess:
-                     text.pos.x = -2.5 * (graceChords.length - i);
-                     switch (voice) {
-                        case 0: text.pos.y =  1; break;
-                        case 1: text.pos.y = 10; break;
-                        case 2: text.pos.y = -1; break;
-                        case 3: text.pos.y = 12; break;
+                  // First...we need to scan grace notes for existence and break them
+                  // into their appropriate lists with the correct ordering of notes.
+                  var leadingLifo = new Array();   // List for leading grace notes
+                  var trailingFifo = new Array();  // List for trailing grace notes
+                  var graceChords = cursor.element.graceNotes;
+                  // Build separate lists of leading and trailing grace note chords.
+                  if (graceChords.length > 0) {
+                     for (var chordNum = 0; chordNum < graceChords.length; chordNum++) {
+                        var noteType = graceChords[chordNum].notes[0].noteType
+                        if (noteType === NoteType.GRACE8_AFTER || noteType === NoteType.GRACE16_AFTER ||
+                              noteType === NoteType.GRACE32_AFTER) {
+                           trailingFifo.unshift(graceChords[chordNum])
+                        } else {
+                           leadingLifo.push(graceChords[chordNum])
+                        }
                      }
-
-                     cursor.add(text);
-                     // new text for next element
-                     text  = newElement(Ms.STAFF_TEXT);
                   }
 
-                  var notes = cursor.element().notes;
-                  nameChord(notes, text);
+                  // Next process the leading grace notes, should they exist...
+                  text = renderGraceNoteNames(cursor, leadingLifo, text, true)
 
-                  switch (voice) {
-                     case 0: text.pos.y =  1; break;
-                     case 1: text.pos.y = 10; break;
-                     case 2: text.pos.y = -1; break;
-                     case 3: text.pos.y = 12; break;
-                  }
-                  if ((voice == 0) && (notes[0].pitch > 83))
-                     text.pos.x = 1;
+                  // Now handle the note names on the main chord...
+                  var notes = cursor.element.notes;
+                  nameChord(notes, text, false);
                   cursor.add(text);
+
+                  switch (cursor.voice) {
+                     case 1: case 3: text.placement = Placement.BELOW; break;
+                  }
+
+                  text = newElement(Element.STAFF_TEXT) // Make another STAFF_TEXT object
+
+                  // Finally process trailing grace notes if they exist...
+                  text = renderGraceNoteNames(cursor, trailingFifo, text, true)
                } // end if CHORD
                cursor.next();
             } // end while segment

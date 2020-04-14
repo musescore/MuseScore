@@ -1,0 +1,14 @@
+init init/Treble.mscx
+cmd note-input
+cmd escape
+palette KeySig accidental 2
+cmd next-chord
+cmd next-chord
+palette KeySig accidental 3
+cmd next-chord
+cmd next-chord
+palette KeySig accidental -3
+cmd next-chord
+cmd next-chord
+palette KeySig accidental 0
+test score palette_keysigs_2.mscx

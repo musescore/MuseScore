@@ -30,7 +30,9 @@ class Listener {
       Listener(Notifier<Data>* n) : _notifier(n) {}
       // do not copy notifier attachment
       Listener(const Listener<Data>&) {}
+      Listener(Listener<Data>&&);
       Listener& operator=(const Listener<Data>&) { return *this; }
+      Listener& operator=(Listener&&);
       ~Listener();
 
       void setNotifier(Notifier<Data>* n);
@@ -41,6 +43,9 @@ class Listener {
       const Notifier<Data>* notifier() const { return _notifier; }
 
       virtual void receive(Data d) = 0;
+
+      template<typename T>
+      friend void swap(Listener<T>& l1, Listener<T>& l2);
       };
 
 //---------------------------------------------------------
@@ -92,6 +97,28 @@ class Notifier {
       };
 
 template<typename Data>
+Listener<Data>::Listener(Listener<Data>&& other)
+      {
+      if (Notifier<Data>* n = other.notifier()) {
+            n->removeListener(other);
+            setNotifier(n);
+            }
+      }
+
+template<typename Data>
+Listener<Data>& Listener<Data>::operator=(Listener<Data>&& other)
+      {
+      if (Notifier<Data>* n = other.notifier()) {
+            n->removeListener(other);
+            setNotifier(n);
+            }
+      else
+            setNotifier(nullptr);
+
+      return *this;
+      }
+
+template<typename Data>
 Listener<Data>::~Listener()
       {
       if (_notifier)
@@ -109,6 +136,15 @@ void Listener<Data>::setNotifier(Notifier<Data>* n)
             oldNotifier->removeListener(this);
       if (_notifier)
             _notifier->addListener(this);
+      }
+
+template<typename Data>
+void swap(Listener<Data>& l1, Listener<Data>& l2)
+      {
+      Notifier<Data>* n1 = l1.notifier();
+      Notifier<Data>* n2 = l2.notifier();
+      l1.setNotifier(n2);
+      l2.setNotifier(n1);
       }
 
 }     // namespace Ms

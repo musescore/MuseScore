@@ -23,7 +23,6 @@
 namespace Ms {
 
 class Seq;
-class Event;
 class NPlayEvent;
 enum class Transport : char;
 

@@ -28,21 +28,6 @@ enum class SpannerSegmentType {
       };
 
 //---------------------------------------------------------
-//   SpannerEditData
-//---------------------------------------------------------
-
-class SpannerEditData : public ElementEditData {
-   public:
-      Element* editStartElement;
-      Element* editEndElement;
-      int editTick;
-      int editTick2;
-      int editTrack2;
-      QList<QPointF> userOffsets;
-      QList<QPointF> userOffsets2;
-      };
-
-//---------------------------------------------------------
 //   @@ SpannerSegment
 //!    parent: System
 //---------------------------------------------------------
@@ -60,6 +45,9 @@ class SpannerSegment : public Element {
       SpannerSegment(Score* s, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
       SpannerSegment(const SpannerSegment&);
       virtual SpannerSegment* clone() const = 0;
+
+      virtual qreal mag() const override;
+      virtual Fraction tick() const override;
 
       Spanner* spanner() const              { return _spanner;            }
       Spanner* setSpanner(Spanner* val)     { return _spanner = val;      }
@@ -93,6 +81,10 @@ class SpannerSegment : public Element {
 
       virtual bool isEditable() const override { return true; }
 
+      QByteArray mimeData(const QPointF& dragOffset) const override;
+
+      virtual void spatiumChanged(qreal ov, qreal nv) override;
+
       virtual QVariant getProperty(Pid id) const override;
       virtual bool setProperty(Pid id, const QVariant& v) override;
       virtual QVariant propertyDefault(Pid id) const override;
@@ -114,7 +106,7 @@ class SpannerSegment : public Element {
       virtual Element* prevSegmentElement() override;
       virtual QString accessibleInfo() const override;
       virtual void triggerLayout() const override;
-      void autoplaceSpannerSegment(qreal minDistance);
+      void autoplaceSpannerSegment();
       };
 
 //----------------------------------------------------------------------------------
@@ -129,19 +121,20 @@ class SpannerSegment : public Element {
 //----------------------------------------------------------------------------------
 
 class Spanner : public Element {
-
+      Q_GADGET
    public:
       enum class Anchor {
             SEGMENT, MEASURE, CHORD, NOTE
             };
+      Q_ENUM(Anchor);
    private:
 
       Element* _startElement { 0  };
       Element* _endElement   { 0  };
 
       Anchor _anchor         { Anchor::SEGMENT };
-      int _tick              { -1 };
-      int _ticks             {  0 };
+      Fraction _tick         { Fraction(-1, 1) };
+      Fraction _ticks        { Fraction(0, 1) };
       int _track2            { -1 };
       bool _broken           { false };
 
@@ -166,29 +159,30 @@ class Spanner : public Element {
       Spanner(const Spanner&);
       ~Spanner();
 
+      virtual qreal mag() const override;
+
       virtual ElementType type() const = 0;
       virtual void setScore(Score* s) override;
 
-      void writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac = -1) const;
-      void writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction frac = -1) const;
-      void writeSpannerStart(XmlWriter& xml, const Element* current, int track, int tick) const;
-      void writeSpannerEnd(XmlWriter& xml, const Element* current, int track, int tick) const;
+      bool readProperties(XmlReader&) override;
+      void writeProperties(XmlWriter&) const override;
+
+      void writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac = { -1, 1 }) const;
+      void writeSpannerEnd(XmlWriter& xml,   const Element* current, int track, Fraction frac = { -1, 1 }) const;
       static void readSpanner(XmlReader& e, Element* current, int track);
       static void readSpanner(XmlReader& e, Score* current, int track);
 
-      virtual int tick() const override { return _tick;          }
-      int tick2() const                 { return _tick + _ticks; }
-      int ticks() const                 { return _ticks;         }
+      virtual Fraction tick() const override { return _tick;          }
+      Fraction tick2() const                 { return _tick + _ticks; }
+      Fraction ticks() const                 { return _ticks;         }
 
-      void setTick(int v);
-      void setTick2(int v);
-      void setTicks(int v);
+      void setTick(const Fraction&);
+      void setTick2(const Fraction&);
+      void setTicks(const Fraction&);
 
       int track2() const       { return _track2;   }
       void setTrack2(int v)    { _track2 = v;      }
-
-      Fraction rfrac() const override;
-      Fraction afrac() const override;
+      int effectiveTrack2() const { return _track2 == -1 ? track() : _track2; }
 
       bool broken() const      { return _broken;   }
       void setBroken(bool v)   { _broken = v;      }
@@ -211,12 +205,13 @@ class Spanner : public Element {
       virtual void layoutSystemsDone();
 
       virtual void triggerLayout() const override;
+      virtual void triggerLayoutAll() const override;
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       bool removeSpannerBack();
       virtual void removeUnmanaged();
-      virtual void insertTimeUnmanaged(int tick, int len);
+      virtual void insertTimeUnmanaged(const Fraction& tick, const Fraction& len);
 
       QVariant getProperty(Pid propertyId) const;
       bool setProperty(Pid propertyId, const QVariant& v);
@@ -249,6 +244,7 @@ class Spanner : public Element {
 
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
+      virtual void setAutoplace(bool f) override;
       virtual void setColor(const QColor& col) override;
       Spanner* nextSpanner(Element* e, int activeStaff);
       Spanner* prevSpanner(Element* e, int activeStaff);
@@ -260,8 +256,4 @@ class Spanner : public Element {
       };
 
 }     // namespace Ms
-
-// Q_DECLARE_METATYPE(Ms::Spanner::Anchor);
-
 #endif
-

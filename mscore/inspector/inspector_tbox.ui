@@ -30,6 +30,16 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QToolButton" name="title">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -49,32 +59,22 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::HLine</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="lineWidth">
-      <number>2</number>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="panel" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>
       </property>
+      <property name="topMargin">
+       <number>3</number>
+      </property>
       <property name="rightMargin">
        <number>3</number>
       </property>
-      <property name="horizontalSpacing">
+      <property name="bottomMargin">
        <number>3</number>
       </property>
-      <property name="verticalSpacing">
-       <number>0</number>
+      <property name="spacing">
+       <number>3</number>
       </property>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
@@ -82,7 +82,7 @@
          <string>Bottom gap:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>bottomGap</cstring>
@@ -95,7 +95,7 @@
          <string>Top margin:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>topMargin</cstring>
@@ -104,6 +104,12 @@
       </item>
       <item row="3" column="1">
        <widget class="QDoubleSpinBox" name="leftMargin">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Left margin</string>
         </property>
@@ -124,7 +130,7 @@
          <string>Bottom margin:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>bottomMargin</cstring>
@@ -137,7 +143,7 @@
          <string>Right margin:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>rightMargin</cstring>
@@ -146,6 +152,12 @@
       </item>
       <item row="4" column="1">
        <widget class="QDoubleSpinBox" name="rightMargin">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Right margin</string>
         </property>
@@ -162,6 +174,12 @@
       </item>
       <item row="6" column="1">
        <widget class="QDoubleSpinBox" name="bottomMargin">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Bottom margin</string>
         </property>
@@ -185,6 +203,12 @@
       </item>
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="topGap">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="whatsThis">
          <string/>
         </property>
@@ -211,7 +235,7 @@
          <string>Top gap:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>topGap</cstring>
@@ -220,6 +244,12 @@
       </item>
       <item row="1" column="1">
        <widget class="QDoubleSpinBox" name="bottomGap">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Bottom gap</string>
         </property>
@@ -243,7 +273,7 @@
          <string>Left margin:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>leftMargin</cstring>
@@ -252,6 +282,12 @@
       </item>
       <item row="5" column="1">
        <widget class="QDoubleSpinBox" name="topMargin">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Top margin</string>
         </property>
@@ -267,22 +303,82 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetTopGap"/>
+       <widget class="Ms::ResetButton" name="resetTopGap" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Top gap' value</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetBottomGap"/>
+       <widget class="Ms::ResetButton" name="resetBottomGap" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Bottom gap' value</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetLeftMargin"/>
+       <widget class="Ms::ResetButton" name="resetLeftMargin" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Left margin' value</string>
+        </property>
+       </widget>
       </item>
       <item row="4" column="2">
-       <widget class="Ms::ResetButton" name="resetRightMargin"/>
+       <widget class="Ms::ResetButton" name="resetRightMargin" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Right margin' value</string>
+        </property>
+       </widget>
       </item>
       <item row="5" column="2">
-       <widget class="Ms::ResetButton" name="resetTopMargin"/>
+       <widget class="Ms::ResetButton" name="resetTopMargin" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Top margin' value</string>
+        </property>
+       </widget>
       </item>
       <item row="6" column="2">
-       <widget class="Ms::ResetButton" name="resetBottomMargin"/>
+       <widget class="Ms::ResetButton" name="resetBottomMargin" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Bottom margin' value</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -306,8 +402,6 @@
   <tabstop>topMargin</tabstop>
   <tabstop>bottomMargin</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

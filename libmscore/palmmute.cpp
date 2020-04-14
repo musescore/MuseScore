@@ -37,6 +37,12 @@ static const ElementStyle palmMuteStyle {
       { Sid::palmMuteHookHeight,                    Pid::BEGIN_HOOK_HEIGHT      },
       { Sid::palmMuteHookHeight,                    Pid::END_HOOK_HEIGHT        },
       { Sid::palmMutePosBelow,                      Pid::OFFSET                 },
+      { Sid::palmMuteLineStyle,                     Pid::LINE_STYLE             },
+      { Sid::palmMuteBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET      },
+      { Sid::palmMuteEndHookType,                   Pid::END_HOOK_TYPE          },
+      { Sid::palmMuteLineWidth,                     Pid::LINE_WIDTH             },
+      { Sid::palmMutePlacement,                     Pid::PLACEMENT              },
+      { Sid::palmMutePosBelow,                      Pid::OFFSET                 },
       };
 
 //---------------------------------------------------------
@@ -46,7 +52,7 @@ static const ElementStyle palmMuteStyle {
 void PalmMuteSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7);
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -76,6 +82,13 @@ PalmMute::PalmMute(Score* s)
       {
       initElementStyle(&palmMuteStyle);
       resetProperty(Pid::LINE_VISIBLE);
+
+      resetProperty(Pid::BEGIN_TEXT_PLACE);
+      resetProperty(Pid::BEGIN_TEXT);
+      resetProperty(Pid::CONTINUE_TEXT_PLACE);
+      resetProperty(Pid::CONTINUE_TEXT);
+      resetProperty(Pid::END_TEXT_PLACE);
+      resetProperty(Pid::END_TEXT);
       }
 
 //---------------------------------------------------------
@@ -87,27 +100,39 @@ void PalmMute::read(XmlReader& e)
       if (score()->mscVersion() < 301)
             e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement()) {
-            if (!TextLineBase::readProperties(e))
+            if (readProperty(e.name(), e, Pid::LINE_WIDTH))
+                  setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
+            else if (!TextLineBase::readProperties(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
 //   write
+//   
+//   The removal of this function is potentially a temporary
+//   change. For now, the intended behavior does no more than
+//   the base write function and so we will just use that.
+//   
+//   also see letring.cpp
 //---------------------------------------------------------
 
+/*
 void PalmMute::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
       xml.stag(this);
 
-      for (const StyledProperty& spp : *styledProperties())
-            writeProperty(xml, spp.pid);
+      for (const StyledProperty& spp : *styledProperties()) {
+            if(!isStyled(spp.pid))
+                  writeProperty(xml, spp.pid);
+            }
 
-      Element::writeProperties(xml);
+      TextLineBase::writeProperties(xml);
       xml.etag();
       }
+*/
 
 //---------------------------------------------------------
 //   createLineSegment
@@ -115,6 +140,7 @@ void PalmMute::write(XmlWriter& xml) const
 
 static const ElementStyle palmMuteSegmentStyle {
       { Sid::palmMutePosBelow,                      Pid::OFFSET                 },
+      { Sid::palmMuteMinDistance,                   Pid::MIN_DISTANCE           },
       };
 
 LineSegment* PalmMute::createLineSegment()
@@ -144,26 +170,26 @@ QVariant PalmMute::propertyDefault(Pid propertyId) const
             case Pid::LINE_VISIBLE:
                   return true;
 
-            case Pid::BEGIN_TEXT_OFFSET:
-                  return score()->styleV(Sid::palmMuteBeginTextOffset).toPointF();
-
-            case Pid::BEGIN_TEXT_ALIGN:
-            case Pid::CONTINUE_TEXT_ALIGN:
-            case Pid::END_TEXT_ALIGN:
-                  return score()->styleV(Sid::palmMuteTextAlign);
-
-            case Pid::BEGIN_HOOK_HEIGHT:
-            case Pid::END_HOOK_HEIGHT:
-                  return score()->styleV(Sid::palmMuteHookHeight);
+            case Pid::CONTINUE_TEXT_OFFSET:
+            case Pid::END_TEXT_OFFSET:
+                  return QPointF(0, 0);
 
 //TODOws            case Pid::BEGIN_FONT_ITALIC:
 //                  return score()->styleV(Sid::palmMuteFontItalic);
 
             case Pid::BEGIN_TEXT:
                   return score()->styleV(Sid::palmMuteText);
+            case Pid::CONTINUE_TEXT:
+            case Pid::END_TEXT:
+                  return "";
 
-            case Pid::END_HOOK_TYPE:
-                  return int(HookType::HOOK_90T);
+            case Pid::BEGIN_HOOK_TYPE:
+                  return int(HookType::NONE);
+
+            case Pid::BEGIN_TEXT_PLACE:
+            case Pid::CONTINUE_TEXT_PLACE:
+            case Pid::END_TEXT_PLACE:
+                  return int(PlaceText::AUTO);
 
             default:
                   return TextLineBase::propertyDefault(propertyId);
@@ -182,6 +208,8 @@ QPointF PalmMute::linePos(Grip grip, System** sys) const
       System* s = nullptr;
       if (grip == Grip::START) {
             ChordRest* c = toChordRest(startElement());
+            if (!c)
+                  return QPointF();
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
             if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE)
@@ -231,7 +259,7 @@ QPointF PalmMute::linePos(Grip grip, System** sys) const
                         x -= c->x();
                   }
             if (!s) {
-                  int t = tick2();
+                  Fraction t = tick2();
                   Measure* m = score()->tick2measure(t);
                   s = m->system();
                   x = m->tick2pos(t);

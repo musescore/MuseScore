@@ -20,6 +20,7 @@ namespace Ms {
 
 class Inspector;
 class Element;
+class InspectorScrollPreventer;
 
 //---------------------------------------------------------
 //   InspectorPanel
@@ -53,6 +54,7 @@ class InspectorBase : public QWidget {
       void checkDifferentValues(const InspectorItem&);
       bool compareValues(const InspectorItem& ii, QVariant a, QVariant b);
       Element* effectiveElement(const InspectorItem&) const;
+      InspectorScrollPreventer* scrollPreventer;
 
    signals:
       void elementChanged();
@@ -83,8 +85,48 @@ class InspectorBase : public QWidget {
       virtual void setElement();
       virtual void postInit() {} // called in setElement and valueChanged
       QWidget* addWidget();
+
+      friend class InspectorScriptEntry;
       };
 
+//---------------------------------------------------------
+//   InspectorScrollPreventer
+//---------------------------------------------------------
+
+class InspectorScrollPreventer : public QObject {
+      Q_OBJECT
+
+   protected:
+      bool eventFilter(QObject* watched, QEvent* event) override;
+
+   public:
+      InspectorScrollPreventer(QObject* parent) : QObject(parent) {};
+      };
+
+//---------------------------------------------------------
+//   InspectorEventObserver
+//---------------------------------------------------------
+
+class InspectorEventObserver {
+      static std::unique_ptr<InspectorEventObserver> i;
+
+      InspectorEventObserver() = default;
+
+   public:
+      enum EventType {
+            PropertyChange,
+            PropertyReset,
+            PropertySetStyle,
+            };
+      void event(EventType evtType, const InspectorItem& ii, const Element* e);
+
+      static InspectorEventObserver* instance()
+            {
+            if (!i)
+                  i.reset(new InspectorEventObserver());
+            return i.get();
+            }
+      };
 
 } // namespace Ms
 #endif

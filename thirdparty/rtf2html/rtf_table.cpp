@@ -71,7 +71,7 @@ std::string table::make()
    {
       if ((*row)->CellDefs->size()!=(*row)->Cells.size())
          throw std::logic_error("Number of Cells and number of CellDefs are unequal!");
-      for (cell_def=(*row)->CellDefs->begin(), cell=(*row)->Cells.begin();
+      for (cell_def=(*row)->CellDefs->begin(), cell=(*row)->Cells.begin(); 
            cell!=(*row)->Cells.end();
            ++cell, prev_cell_def=cell_def++
           )
@@ -82,15 +82,13 @@ std::string table::make()
             (*cell_def)->Left=(*prev_cell_def)->Right;
          if ((*cell_def)->FirstMerged)
          {
-            for (span_row=row, ++span_row; span_row!=end();
+            for (span_row=row, ++span_row; span_row!=end(); 
                  ++span_row)
             {
                cell_def_2=
                    std::find_if((*span_row)->CellDefs->begin(),
                                 (*span_row)->CellDefs->end(),
-                                std::bind2nd(
-                                   std::mem_fun(&table_cell_def::right_equals),
-                                                (*cell_def)->Right));
+                                [cell_def](table_cell_def* def) { return def->right_equals((*cell_def)->Right); });
                if (cell_def_2==(*span_row)->CellDefs->end())
                   break;
                if (!(*cell_def_2)->Merged)
@@ -113,7 +111,7 @@ std::string table::make()
          result+=from_int(std::distance(pts.begin(), pt));
          result+="></td>";
       }
-      for (cell_def=(*row)->CellDefs->begin(), cell=(*row)->Cells.begin();
+      for (cell_def=(*row)->CellDefs->begin(), cell=(*row)->Cells.begin(); 
            cell!=(*row)->Cells.end(); ++cell, ++cell_def)
       {
          ptp=pts.find((*cell_def)->Right);
@@ -139,9 +137,7 @@ std::string table::make()
                cell_def_2=
                    std::find_if((*row2)->CellDefs->begin(),
                                 (*row2)->CellDefs->end(),
-                                std::bind2nd(
-                                   std::mem_fun(&table_cell_def::right_equals),
-                                                left));
+                                [left](table_cell_def* def) { return def->right_equals(left); } );
                if (cell_def_2!=(*row2)->CellDefs->end())
                {
                   bleft=bleft && (*cell_def_2)->BorderRight;
@@ -149,9 +145,7 @@ std::string table::make()
                cell_def_2=
                    std::find_if((*row2)->CellDefs->begin(),
                                 (*row2)->CellDefs->end(),
-                                std::bind2nd(
-                                   std::mem_fun(&table_cell_def::left_equals),
-                                                right));
+                                [right](table_cell_def* def) { return def->left_equals(right); } );
                if (cell_def_2!=(*row2)->CellDefs->end())
                {
                   bright=bright && (*cell_def_2)->BorderLeft;
@@ -200,7 +194,7 @@ std::string table::make()
                result+=" valign=bottom";
                break;
             case table_cell_def::valign_center:
-                break;
+               break;
             }
 
             result+=">";

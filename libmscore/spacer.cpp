@@ -62,7 +62,7 @@ void Spacer::layout0()
       path    = QPainterPath();
       qreal w = _spatium;
       qreal b = w * .5;
-      qreal h = _gap;
+      qreal h = parent() ? _gap : qMin(_gap, spatium() * 4.0);    // limit length for palette
 
       switch (spacerType()) {
             case SpacerType::DOWN:
@@ -116,15 +116,15 @@ void Spacer::spatiumChanged(qreal ov, qreal nv)
       _gap = (_gap / ov) * nv;
       layout0();
       }
+
 //---------------------------------------------------------
-//   startEdit
+//   startEditDrag
 //---------------------------------------------------------
 
-void Spacer::startEdit(EditData& ed)
+void Spacer::startEditDrag(EditData& ed)
       {
-      Element::startEdit(ed);
-      ed.grips   = 1;
-      ed.curGrip = Grip::START;
+      ElementEditData* eed = ed.getData(this);
+      eed->pushProperty(Pid::SPACE);
       }
 
 //---------------------------------------------------------
@@ -147,14 +147,14 @@ void Spacer::editDrag(EditData& ed)
       if (_gap < spatium() * 2.0)
             _gap = spatium() * 2;
       layout0();
-      score()->setLayoutAll();
+      triggerLayout();
       }
 
 //---------------------------------------------------------
-//   updateGrips
+//   gripsPositions
 //---------------------------------------------------------
 
-void Spacer::updateGrips(EditData& ed) const
+std::vector<QPointF> Spacer::gripsPositions(const EditData&) const
       {
       qreal _spatium = spatium();
       QPointF p;
@@ -167,7 +167,7 @@ void Spacer::updateGrips(EditData& ed) const
                   p = QPointF(_spatium * .5, 0.0);
                   break;
             }
-      ed.grip[0].translate(pagePos() + p);
+      return { pagePos() + p };
       }
 
 //---------------------------------------------------------
@@ -231,7 +231,7 @@ bool Spacer::setProperty(Pid propertyId, const QVariant& v)
                   break;
             }
       layout0();
-      score()->setLayoutAll();
+      triggerLayout();
       setGenerated(false);
       return true;
       }

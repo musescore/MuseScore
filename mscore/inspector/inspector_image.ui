@@ -30,6 +30,16 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QToolButton" name="title">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -49,32 +59,22 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::HLine</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="lineWidth">
-      <number>2</number>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="panel" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>
       </property>
+      <property name="topMargin">
+       <number>3</number>
+      </property>
       <property name="rightMargin">
        <number>3</number>
       </property>
-      <property name="horizontalSpacing">
+      <property name="bottomMargin">
        <number>3</number>
       </property>
-      <property name="verticalSpacing">
-       <number>0</number>
+      <property name="spacing">
+       <number>3</number>
       </property>
       <item row="2" column="0">
        <widget class="QLabel" name="label_2">
@@ -82,7 +82,7 @@
          <string>Size:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -127,16 +127,56 @@
        </widget>
       </item>
       <item row="1" column="3">
-       <widget class="Ms::ResetButton" name="resetAutoscale"/>
+       <widget class="Ms::ResetButton" name="resetAutoscale" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Scale to frame size' value</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="3">
-       <widget class="Ms::ResetButton" name="resetSize"/>
+       <widget class="Ms::ResetButton" name="resetSize" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Size' values</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="3">
-       <widget class="Ms::ResetButton" name="resetSizeIsSpatium"/>
+       <widget class="Ms::ResetButton" name="resetSizeIsSpatium" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Size in staff space units' value</string>
+        </property>
+       </widget>
       </item>
       <item row="4" column="3">
-       <widget class="Ms::ResetButton" name="resetLockAspectRatio"/>
+       <widget class="Ms::ResetButton" name="resetLockAspectRatio" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Lock aspect ratio' value</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -163,8 +203,6 @@
   <tabstop>sizeIsSpatium</tabstop>
   <tabstop>lockAspectRatio</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

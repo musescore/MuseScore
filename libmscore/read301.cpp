@@ -79,6 +79,8 @@ bool Score::read(XmlReader& e)
                   _currentLayer = e.readInt();
             else if (tag == "Synthesizer")
                   _synthesizerState.read(e);
+            else if (tag == "page-offset")
+                  _pageNumberOffset = e.readInt();
             else if (tag == "Division")
                   _fileDivision = e.readInt();
             else if (tag == "showInvisible")
@@ -89,6 +91,8 @@ bool Score::read(XmlReader& e)
                   _showFrames = e.readInt();
             else if (tag == "showMargins")
                   _showPageborders = e.readInt();
+            else if (tag == "markIrregularMeasures")
+                  _markIrregularMeasures = e.readInt();
             else if (tag == "Style") {
                   qreal sp = style().value(Sid::spatium).toDouble();
                   style().load(e);
@@ -164,13 +168,13 @@ bool Score::read(XmlReader& e)
                   else {
                         e.tracks().clear();     // ???
                         MasterScore* m = masterScore();
-                        Score* s       = new Score(m);
+                        Score* s       = new Score(m, MScore::baseStyle());
                         Excerpt* ex    = new Excerpt(m);
 
                         ex->setPartScore(s);
-                        ex->setTracks(e.tracks());
                         e.setLastMeasure(nullptr);
                         s->read(e);
+                        ex->setTracks(e.tracks());
                         m->addExcerpt(ex);
                         }
                   }
@@ -258,8 +262,14 @@ bool Score::read(XmlReader& e)
             masterScore()->setShowOmr(false);
 
       fixTicks();
+
+      for (Part* p : _parts) {
+            p->updateHarmonyChannels(false);
+            }
+
       masterScore()->rebuildMidiMapping();
       masterScore()->updateChannel();
+
 //      createPlayEvents();
       return true;
       }

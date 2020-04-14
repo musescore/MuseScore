@@ -11,9 +11,7 @@
 //=============================================================================
 
 #include "inspectorMarker.h"
-#include "musescore.h"
 #include "libmscore/marker.h"
-#include "libmscore/score.h"
 
 namespace Ms {
 

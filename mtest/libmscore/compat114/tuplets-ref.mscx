@@ -5,9 +5,8 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <minMeasureWidth>4</minMeasureWidth>
-      <endBarDistance>0.3</endBarDistance>
       <bracketWidth>0.35</bracketWidth>
       <bracketDistance>0.25</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
@@ -330,13 +329,13 @@
       <Measure>
         <voice>
           <Tuplet>
-            <direction>up</direction>
             <normalNotes>8</normalNotes>
             <actualNotes>9</actualNotes>
             <baseNote>16th</baseNote>
             <Number>
               <text>9</text>
               </Number>
+            <direction>up</direction>
             </Tuplet>
           <Beam>
             <l1>31</l1>
@@ -415,7 +414,7 @@
             </Chord>
           <endTuplet/>
           <location>
-            <fractions>-1/384</fractions>
+            <fractions>-1/720</fractions>
             </location>
           <Chord>
             <durationType>16th</durationType>
@@ -454,7 +453,7 @@
             </Chord>
           <endTuplet/>
           <location>
-            <fractions>1/1920</fractions>
+            <fractions>1/720</fractions>
             </location>
           <Rest>
             <durationType>half</durationType>

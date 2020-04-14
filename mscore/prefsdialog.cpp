@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "musescore.h"
+#include "timeline.h"
 #include "preferences.h"
 #include "prefsdialog.h"
 #include "seq.h"
@@ -26,7 +27,6 @@
 #include "pa.h"
 #include "shortcut.h"
 #include "workspace.h"
-#include "palettebox.h"
 
 #ifdef USE_PORTMIDI
 #include "pm.h"
@@ -35,6 +35,10 @@
 #include "pathlistdialog.h"
 #include "resourceManager.h"
 #include "synthesizer/msynthesizer.h"
+
+#ifdef AVSOMR
+#include "avsomr/avsomrlocal.h"
+#endif
 
 namespace Ms {
 
@@ -149,14 +153,24 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(fgWallpaperSelect,  SIGNAL(clicked()), SLOT(selectFgWallpaper()));
       connect(bgWallpaperSelect,  SIGNAL(clicked()), SLOT(selectBgWallpaper()));
 
+      bgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      fgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+
       connect(myScoresButton, SIGNAL(clicked()), SLOT(selectScoresDirectory()));
       connect(myStylesButton, SIGNAL(clicked()), SLOT(selectStylesDirectory()));
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
-      connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
-       connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
+      connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
+      connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
 
+      myScoresButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myStylesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myTemplatesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myPluginsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      mySoundfontsButton->setIcon(*icons[int(Icons::edit_ICON)]);
+      myImagesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myExtensionsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
@@ -166,6 +180,13 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(instrumentList1Button,  SIGNAL(clicked()), SLOT(selectInstrumentList1()));
       connect(instrumentList2Button,  SIGNAL(clicked()), SLOT(selectInstrumentList2()));
       connect(startWithButton,        SIGNAL(clicked()), SLOT(selectStartWith()));
+
+      defaultStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      partStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      styleFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      instrumentList1Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      instrumentList2Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      startWithButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       connect(shortcutList,   SIGNAL(itemActivated(QTreeWidgetItem*, int)), SLOT(defineShortcutClicked()));
       connect(resetShortcut,  SIGNAL(clicked()), SLOT(resetShortcutClicked()));
@@ -215,6 +236,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       advancedWidget->loadPreferences();
       connect(advancedSearch, &QLineEdit::textChanged, this, &PreferenceDialog::filterAdvancedPreferences);
       connect(resetPreference, &QPushButton::clicked, this, &PreferenceDialog::resetAdvancedPreferenceToDefault);
+      connect(this, &PreferenceDialog::preferencesChanged, mscore->timeline(),  &Timeline::updateTimelineTheme);
 
       MuseScore::restoreGeometry(this);
 #if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(FOR_WINSTORE))
@@ -349,6 +371,9 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       playNotes->setChecked(preferences.getBool(PREF_SCORE_NOTE_PLAYONCLICK));
       playChordOnAddNote->setChecked(preferences.getBool(PREF_SCORE_CHORD_PLAYONADDNOTE));
 
+      playHarmony->setChecked(preferences.getBool(PREF_SCORE_HARMONY_PLAY));
+      playHarmonyOnEdit->setChecked(preferences.getBool(PREF_SCORE_HARMONY_PLAY_ONEDIT));
+
       checkUpdateStartup->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_CHECKUPDATE));
 
       navigatorShow->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWNAVIGATOR));
@@ -356,6 +381,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       showSplashScreen->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN));
       showStartcenter->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER));
       showTours->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
+      collectTelemetry->setChecked(preferences.getBool(PREF_APP_TELEMETRY_ALLOWED));
 
       alsaDriver->setChecked(preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO));
       jackDriver->setChecked(preferences.getBool(PREF_IO_JACK_USEJACKAUDIO) || preferences.getBool(PREF_IO_JACK_USEJACKMIDI));
@@ -377,7 +403,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       alsaFragments->setValue(preferences.getInt(PREF_IO_ALSA_FRAGMENTS));
       drawAntialiased->setChecked(preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
       limitScrollArea->setChecked(preferences.getBool(PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA));
-      switch(preferences.sessionStart()) {
+      switch (preferences.sessionStart()) {
             case SessionStart::EMPTY:  emptySession->setChecked(true); break;
             case SessionStart::LAST:   lastSession->setChecked(true); break;
             case SessionStart::NEW:    newSession->setChecked(true); break;
@@ -392,11 +418,39 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       importLayout->setChecked(preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT));
       importBreaks->setChecked(preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTBREAKS));
-      exportLayout->setChecked(preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT));
-      switch(preferences.musicxmlExportBreaks()) {
-            case MusicxmlExportBreaks::ALL:     exportAllBreaks->setChecked(true); break;
-            case MusicxmlExportBreaks::MANUAL:  exportManualBreaks->setChecked(true); break;
-            case MusicxmlExportBreaks::NO:      exportNoBreaks->setChecked(true); break;
+
+#ifdef AVSOMR
+      useLocalAvsOmr->setChecked(preferences.getBool(PREF_IMPORT_AVSOMR_USELOCAL));
+      Avs::AvsOmrLocal::instance()->isInstalledAsync([this](bool isInstalled) {
+            QString text = QObject::tr("Use local OMR engine");
+            if (isInstalled)
+                  text += " (" + QObject::tr("Installed") + ")";
+            else
+                  text += " (" + QObject::tr("Not installed, needs internet connection for installing") + ")";
+
+            useLocalAvsOmr->setText(text);
+            });
+#else
+      groupBox_omr->setVisible(false);
+#endif
+
+      QString resPref = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
+      if (resPref == "No")
+            resetElementPositionsNo->setChecked(true);
+      else if (resPref == "Yes")
+            resetElementPositionsYes->setChecked(true);
+      else // "Ask" or unset (or anything else)
+            resetElementPositionsAlwaysAsk->setChecked(true);
+
+      if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
+            exportAllLayouts->setChecked(true);
+            }
+      else {
+            switch(preferences.musicxmlExportBreaks()) {
+                  case MusicxmlExportBreaks::ALL:     exportAllBreaks->setChecked(true); break;
+                  case MusicxmlExportBreaks::MANUAL:  exportManualBreaks->setChecked(true); break;
+                  case MusicxmlExportBreaks::NO:      exportNoBreaks->setChecked(true); break;
+                  }
             }
 
       rememberLastMidiConnections->setChecked(preferences.getBool(PREF_IO_JACK_REMEMBERLASTCONNECTIONS));
@@ -690,11 +744,7 @@ void  PreferenceDialog::filterShortcutsTextChanged(const QString &query )
       QTreeWidgetItem *item;
       for(int i = 0; i < shortcutList->topLevelItemCount(); i++) {
           item = shortcutList->topLevelItem(i);
-
-          if(item->text(0).toLower().contains(query.toLower()))
-              item->setHidden(false);
-          else
-              item->setHidden(true);
+          item->setHidden(!(item->text(0).contains(query, Qt::CaseInsensitive) || item->text(1).contains(query, Qt::CaseInsensitive)));
           }
       }
 
@@ -839,8 +889,10 @@ void PreferenceDialog::updateFgView(bool useColor)
       {
       fgColorButton->setChecked(useColor);
       fgWallpaperButton->setChecked(!useColor);
+      fgUseColorInPalettes->setChecked(preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES));
       fgWallpaper->setEnabled(!useColor);
       fgWallpaperSelect->setEnabled(!useColor);
+      fgUseColorInPalettes->setEnabled(useColor);
 
       if (useColor) {
             fgColorLabel->setColor(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
@@ -923,12 +975,21 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_APP_STARTUP_STARTSCORE, sessionScore->text());
       preferences.setPreference(PREF_EXPORT_AUDIO_SAMPLERATE, exportAudioSampleRate->currentData().toInt());
       preferences.setPreference(PREF_EXPORT_MP3_BITRATE, exportMp3BitRate->currentData().toInt());
-      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, exportLayout->isChecked());
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, exportAllLayouts->isChecked());
       preferences.setPreference(PREF_EXPORT_PDF_DPI, exportPdfDpi->value());
       preferences.setPreference(PREF_EXPORT_PNG_RESOLUTION, pngResolution->value());
       preferences.setPreference(PREF_EXPORT_PNG_USETRANSPARENCY, pngTransparent->isChecked());
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, importBreaks->isChecked());
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTLAYOUT, importLayout->isChecked());
+      if (resetElementPositionsAlwaysAsk->isChecked())
+            preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "Ask");
+      else if (resetElementPositionsYes->isChecked())
+            preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "Yes");
+      else if (resetElementPositionsNo->isChecked())
+            preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "No");
+#ifdef AVSOMR
+      preferences.setPreference(PREF_IMPORT_AVSOMR_USELOCAL, useLocalAvsOmr->isChecked());
+#endif
       preferences.setPreference(PREF_IO_MIDI_ADVANCEONRELEASE, advanceOnRelease->isChecked());
       preferences.setPreference(PREF_IO_MIDI_ENABLEINPUT, enableMidiInput->isChecked());
       preferences.setPreference(PREF_IO_MIDI_EXPANDREPEATS, expandRepeats->isChecked());
@@ -939,6 +1000,8 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_IO_OSC_PORTNUMBER, oscPort->value());
       preferences.setPreference(PREF_IO_OSC_USEREMOTECONTROL, oscServer->isChecked());
       preferences.setPreference(PREF_SCORE_CHORD_PLAYONADDNOTE, playChordOnAddNote->isChecked());
+      preferences.setPreference(PREF_SCORE_HARMONY_PLAY, playHarmony->isChecked());
+      preferences.setPreference(PREF_SCORE_HARMONY_PLAY_ONEDIT, playHarmonyOnEdit->isChecked());
       preferences.setPreference(PREF_SCORE_NOTE_DEFAULTPLAYDURATION, defaultPlayDuration->value());
       preferences.setPreference(PREF_SCORE_NOTE_PLAYONCLICK, playNotes->isChecked());
       preferences.setPreference(PREF_UI_APP_STARTUP_CHECKUPDATE, checkUpdateStartup->isChecked());
@@ -947,9 +1010,11 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN, showSplashScreen->isChecked());
       preferences.setPreference(PREF_UI_APP_STARTUP_SHOWSTARTCENTER, showStartcenter->isChecked());
       preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, showTours->isChecked());
+      preferences.setPreference(PREF_APP_TELEMETRY_ALLOWED, collectTelemetry->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_BG_USECOLOR, bgColorButton->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_BG_COLOR, bgColorLabel->color());
       preferences.setPreference(PREF_UI_CANVAS_FG_USECOLOR, fgColorButton->isChecked());
+      preferences.setPreference(PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES, fgUseColorInPalettes->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_FG_COLOR, fgColorLabel->color());
       preferences.setPreference(PREF_UI_CANVAS_BG_WALLPAPER, bgWallpaper->text());
       preferences.setPreference(PREF_UI_CANVAS_FG_WALLPAPER, fgWallpaper->text());
@@ -1028,7 +1093,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS, portMidiOutputLatencyMilliseconds->value());
 #endif
 
-      if (exportAllBreaks->isChecked())
+      if (exportAllLayouts->isChecked() || exportAllBreaks->isChecked())
             preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::ALL);
       else if (exportManualBreaks->isChecked())
             preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
@@ -1110,10 +1175,10 @@ void PreferenceDialog::apply()
             MScore::defaultStyleForPartsHasChanged();
             }
       
-      Workspace::retranslate();
-      preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
-      mscore->changeWorkspace(Workspace::currentWorkspace);
-      mscore->getPaletteBox()->updateWorkspaces();
+      WorkspacesManager::retranslateAll();
+      preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->name());
+      mscore->changeWorkspace(WorkspacesManager::currentWorkspace());
+      emit mscore->workspacesChanged();
       
       emit preferencesChanged();
       preferences.save();

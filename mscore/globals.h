@@ -109,7 +109,5 @@ static constexpr qreal DPI_DISPLAY     = 96.0;  // 96 DPI nominal resolution
 static constexpr qreal DPMM_DISPLAY    = DPI_DISPLAY / 25.4;
 static constexpr qreal PALETTE_SPATIUM = 1.764 * DPMM_DISPLAY;
 
-extern QPaintDevice* pdev;
-
 } // namespace Ms
 #endif

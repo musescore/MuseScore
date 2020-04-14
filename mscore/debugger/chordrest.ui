@@ -139,13 +139,6 @@
         <property name="verticalSpacing">
          <number>0</number>
         </property>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="duration">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_4">
           <property name="toolTip">
@@ -263,19 +256,6 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QSpinBox" name="tick">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::NoButtons</enum>
-          </property>
-          <property name="maximum">
-           <number>2000000000</number>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_5">
           <property name="toolTip">
@@ -289,19 +269,6 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="3" colspan="2">
-         <widget class="QSpinBox" name="ticks">
-          <property name="toolTip">
-           <string notr="true"/>
-          </property>
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::NoButtons</enum>
-          </property>
-          <property name="maximum">
-           <number>9999999</number>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="7">
          <widget class="QComboBox" name="beamMode"/>
         </item>
@@ -312,6 +279,27 @@
           </property>
           <property name="text">
            <string notr="true">Beam Mode:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="duration">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3" colspan="2">
+         <widget class="QLineEdit" name="ticks">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="tick">
+          <property name="readOnly">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

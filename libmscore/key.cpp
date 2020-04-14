@@ -17,6 +17,7 @@
 #include "pitchspelling.h"
 #include "keylist.h"
 #include "accidental.h"
+#include "part.h"
 
 namespace Ms {
 
@@ -30,6 +31,7 @@ KeySigEvent::KeySigEvent(const KeySigEvent& k)
       _mode       = k._mode;
       _custom     = k._custom;
       _keySymbols = k._keySymbols;
+      _forInstrumentChange = k._forInstrumentChange;
       }
 
 //---------------------------------------------------------
@@ -86,7 +88,7 @@ void KeySigEvent::setKey(Key v)
 
 bool KeySigEvent::operator==(const KeySigEvent& e) const
       {
-      if (e._custom != _custom || e._mode != _mode)
+      if (e._custom != _custom || e._mode != _mode || e._forInstrumentChange != _forInstrumentChange)
             return false;
       if (_custom && !isAtonal()) {
             if (e._keySymbols.size() != _keySymbols.size())
@@ -105,16 +107,43 @@ bool KeySigEvent::operator==(const KeySigEvent& e) const
 //   transposeKey
 //---------------------------------------------------------
 
-Key transposeKey(Key key, const Interval& interval)
+Key transposeKey(Key key, const Interval& interval, PreferSharpFlat prefer)
       {
       int tpc = int(key) + 14;
       tpc     = transposeTpc(tpc, interval, false);
+
+      // change between 5/6/7 sharps and 7/6/5 flats
+      // other key signatures cannot be changed enharmonically
+      // without causing double-sharp/flat
+      // (-7 <=) tpc-14 <= -5, which has Cb, Gb, Db
+      if (tpc <= 9 && prefer == PreferSharpFlat::SHARPS)
+            tpc += 12;
+      
+      // 5 <= tpc-14 <= 7, which has B, F#, C#, enharmonic with Cb, Gb, Db respectively
+      if (tpc >= 19 && tpc <= 21 && prefer == PreferSharpFlat::FLATS)
+            tpc -= 12;
+
       // check for valid key sigs
       if (tpc > 21)
             tpc -= 12; // no more than 7 sharps in keysig
       if (tpc < 7)
             tpc += 12; // no more than 7 flats in keysig
+
       return Key(tpc - 14);
+      }
+
+//---------------------------------------------------------
+//   calculateInterval
+//    Calculates the interval to move from one key to another
+//---------------------------------------------------------
+
+Interval calculateInterval(Key key1, Key key2)
+      {
+      int chromatic = 7 * ((int)key2 - (int)key1);
+      chromatic = chromatic % 12;
+      if (chromatic < 0)
+            chromatic += 12;
+      return Interval(chromatic);
       }
 
 //---------------------------------------------------------

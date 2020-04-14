@@ -97,9 +97,6 @@
             <property name="focusPolicy">
              <enum>Qt::TabFocus</enum>
             </property>
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
            </widget>
           </item>
          </layout>
@@ -317,7 +314,7 @@
      <property name="title">
       <string>Part Properties</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0,0,0">
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0,0,0,0">
       <item>
        <layout class="QGridLayout" name="grid_PartProps">
         <property name="leftMargin">
@@ -420,6 +417,9 @@
             <height>40</height>
            </size>
           </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="1" column="1">
@@ -429,6 +429,9 @@
             <width>0</width>
             <height>40</height>
            </size>
+          </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -572,200 +575,273 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="hLayout_Transposition">
+       <layout class="QVBoxLayout" name="vLayout_Transposition">
         <item>
-         <widget class="QLabel" name="labelTransp">
-          <property name="text">
-           <string>Transpose written pitches to sound:</string>
-          </property>
-          <property name="buddy">
-           <cstring>iList</cstring>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="transp_Main">
+          <item>
+           <widget class="QLabel" name="labelTransp">
+            <property name="toolTip">
+             <string>Interval from written to sounding pitch</string>
+            </property>
+            <property name="text">
+             <string>Transposition:</string>
+            </property>
+            <property name="buddy">
+             <cstring>iList</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="octave">
+            <property name="accessibleName">
+             <string>Octave</string>
+            </property>
+            <property name="maximum">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Octave(s) +</string>
+            </property>
+            <property name="buddy">
+             <cstring>octave</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="iList">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Interval</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>0 - Perfect Unison</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1 - Augmented Unison</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0 - Diminished Second</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1 - Minor Second</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2 - Major Second</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3 - Augmented Second</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2 - Diminished Third</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3 - Minor Third</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>4 - Major Third</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5 - Augmented Third</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>4 - Diminished Fourth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5 - Perfect Fourth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>6 - Augmented Fourth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>6 - Diminished Fifth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>7 - Perfect Fifth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>8 - Augmented Fifth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>7 - Diminished Sixth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>8 - Minor Sixth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>9 - Major Sixth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>10 - Augmented Sixth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>9 - Diminished Seventh</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>10 - Minor Seventh</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>11 - Major Seventh</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>12 - Augmented Seventh</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>11 - Diminished Octave</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>12 - Perfect Octave</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="up">
+            <property name="text">
+             <string>Up</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="down">
+            <property name="text">
+             <string>Down</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_1">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>17</width>
+              <height>18</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QSpinBox" name="octave">
-          <property name="maximum">
-           <number>10</number>
-          </property>
+         <widget class="QWidget" name="transp_PreferSharpFlat" native="true">
+          <layout class="QHBoxLayout" name="transp_PreferSharpFlat_Layout">
+           <property name="spacing">
+            <number>6</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="labelPreferSharpFlat">
+             <property name="text">
+              <string>Prefer sharps or flats for transposed key signatures:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="preferSharpFlat">
+             <item>
+              <property name="text">
+               <string>Default</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Sharps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Flats</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_7">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_11">
-          <property name="text">
-           <string>Octave(s) +</string>
-          </property>
-          <property name="buddy">
-           <cstring>octave</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="iList">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <item>
-           <property name="text">
-            <string>0 - Perfect Unison</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>1 - Augmented Unison</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>0 - Diminished Second</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>1 - Minor Second</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>2 - Major Second</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>3 - Augmented Second</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>2 - Diminished Third</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>3 - Minor Third</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>4 - Major Third</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>5 - Augmented Third</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>4 - Diminished Fourth</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>5 - Perfect Fourth</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>6 - Augmented Fourth</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>6 - Diminished Fifth</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>7 - Perfect Fifth</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>8 - Augmented Fifth</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>7 - Diminished Sixth</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>8 - Minor Sixth</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>9 - Major Sixth</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>10 - Augmented Sixth</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>9 - Diminished Seventh</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>10 - Minor Seventh</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>11 - Major Seventh</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>12 - Augmented Seventh</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>11 - Diminished Octave</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>12 - Perfect Octave</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="up">
-          <property name="text">
-           <string>Up</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="down">
-          <property name="text">
-           <string>Down</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_1">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>17</width>
-            <height>18</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </item>
@@ -821,6 +897,16 @@
           </spacer>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="singleNoteDynamics">
+        <property name="accessibleName">
+         <string>Use single note dynamics</string>
+        </property>
+        <property name="text">
+         <string>Use single note dynamics</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -898,7 +984,7 @@
  <customwidgets>
   <customwidget>
    <class>Awl::ColorLabel</class>
-   <extends>QFrame</extends>
+   <extends>QPushButton</extends>
    <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>
@@ -909,17 +995,18 @@
   <tabstop>spinExtraDistance</tabstop>
   <tabstop>mag</tabstop>
   <tabstop>hideMode</tabstop>
+  <tabstop>showIfEmpty</tabstop>
   <tabstop>showClef</tabstop>
   <tabstop>showTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
   <tabstop>hideSystemBarLine</tabstop>
-  <tabstop>showIfEmpty</tabstop>
   <tabstop>small</tabstop>
   <tabstop>invisible</tabstop>
   <tabstop>color</tabstop>
   <tabstop>cutaway</tabstop>
   <tabstop>changeStaffType</tabstop>
   <tabstop>changeInstrument</tabstop>
+  <tabstop>partName</tabstop>
   <tabstop>longName</tabstop>
   <tabstop>shortName</tabstop>
   <tabstop>minPitchA</tabstop>
@@ -930,13 +1017,19 @@
   <tabstop>minPitchPSelect</tabstop>
   <tabstop>maxPitchP</tabstop>
   <tabstop>maxPitchPSelect</tabstop>
+  <tabstop>octave</tabstop>
   <tabstop>iList</tabstop>
   <tabstop>up</tabstop>
   <tabstop>down</tabstop>
+  <tabstop>preferSharpFlat</tabstop>
   <tabstop>numOfStrings</tabstop>
   <tabstop>editStringData</tabstop>
+  <tabstop>singleNoteDynamics</tabstop>
+  <tabstop>previousButton</tabstop>
+  <tabstop>nextButton</tabstop>
  </tabstops>
  <resources>
+  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

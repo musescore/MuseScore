@@ -12,8 +12,6 @@
 
 #include "inspector.h"
 #include "inspectorTextLine.h"
-#include "musescore.h"
-#include "libmscore/score.h"
 
 namespace Ms {
 

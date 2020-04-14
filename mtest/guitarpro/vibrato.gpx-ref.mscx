@@ -29,7 +29,7 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>E-Gt</trackName>
+      <trackName>Electric Guitar</trackName>
       <Instrument>
         <longName>Electric Guitar</longName>
         <shortName>El. Guit.</shortName>
@@ -41,7 +41,9 @@
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
         <instrumentId>pluck.guitar.electric</instrumentId>
-        <clef>G8vb</clef>
+        <concertClef>G8vb</concertClef>
+        <transposingClef>G</transposingClef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
           <string>52</string>
@@ -76,6 +78,18 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
@@ -350,7 +364,9 @@
           <transposeDiatonic>-7</transposeDiatonic>
           <transposeChromatic>-12</transposeChromatic>
           <instrumentId>pluck.guitar.electric</instrumentId>
-          <clef>G8vb</clef>
+          <concertClef>G8vb</concertClef>
+          <transposingClef>G</transposingClef>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>24</frets>
             <string>52</string>
@@ -385,6 +401,18 @@
             <gateTime>67</gateTime>
             </Articulation>
           <Articulation name="sforzato">
+            <velocity>150</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="sforzatoStaccato">
+            <velocity>150</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="marcatoStaccato">
+            <velocity>120</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="marcatoTenuto">
             <velocity>120</velocity>
             <gateTime>100</gateTime>
             </Articulation>
@@ -852,7 +880,7 @@
             </voice>
           </Measure>
         </Staff>
-      <name>E-Gt</name>
+      <name>Electric Guitar</name>
       </Score>
     </Score>
   </museScore>

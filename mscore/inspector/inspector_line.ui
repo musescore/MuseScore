@@ -30,6 +30,19 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QToolButton" name="title">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -49,32 +62,22 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::HLine</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="lineWidth">
-      <number>2</number>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="panel" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>
       </property>
+      <property name="topMargin">
+       <number>3</number>
+      </property>
       <property name="rightMargin">
        <number>3</number>
       </property>
-      <property name="horizontalSpacing">
+      <property name="bottomMargin">
        <number>3</number>
       </property>
-      <property name="verticalSpacing">
-       <number>0</number>
+      <property name="spacing">
+       <number>3</number>
       </property>
       <item row="2" column="0">
        <widget class="QLabel" name="label_4">
@@ -82,7 +85,7 @@
          <string>Line color:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>lineColor</cstring>
@@ -95,7 +98,7 @@
          <string>Line thickness:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>lineWidth</cstring>
@@ -108,7 +111,7 @@
          <string>Line style:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>lineStyle</cstring>
@@ -135,9 +138,6 @@
         </property>
         <property name="accessibleName">
          <string>Line color</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
         </property>
        </widget>
       </item>
@@ -200,7 +200,7 @@
          <string>Dash gap width:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>dashGapLength</cstring>
@@ -213,7 +213,7 @@
          <string>Dash line length:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>dashLineLength</cstring>
@@ -272,25 +272,95 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetLineVisible"/>
+       <widget class="Ms::ResetButton" name="resetLineVisible" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Line visible' value</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetDiagonal"/>
+       <widget class="Ms::ResetButton" name="resetDiagonal" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Allow diagonal' value</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetLineColor"/>
+       <widget class="Ms::ResetButton" name="resetLineColor" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Color' values</string>
+        </property>
+       </widget>
       </item>
       <item row="4" column="2">
-       <widget class="Ms::ResetButton" name="resetLineWidth"/>
+       <widget class="Ms::ResetButton" name="resetLineWidth" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Line thickness' value</string>
+        </property>
+       </widget>
       </item>
       <item row="5" column="2">
-       <widget class="Ms::ResetButton" name="resetLineStyle"/>
+       <widget class="Ms::ResetButton" name="resetLineStyle" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Line style' value</string>
+        </property>
+       </widget>
       </item>
       <item row="6" column="2">
-       <widget class="Ms::ResetButton" name="resetDashLineLength"/>
+       <widget class="Ms::ResetButton" name="resetDashLineLength" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Dash line length' value</string>
+        </property>
+       </widget>
       </item>
       <item row="7" column="2">
-       <widget class="Ms::ResetButton" name="resetDashGapLength"/>
+       <widget class="Ms::ResetButton" name="resetDashGapLength" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Dash gap width' value</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -299,15 +369,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Awl::ColorLabel</class>
-   <extends>QFrame</extends>
-   <header>awl/colorlabel.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Ms::ResetButton</class>
    <extends>QWidget</extends>
    <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Awl::ColorLabel</class>
+   <extends>QPushButton</extends>
+   <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -320,8 +390,6 @@
   <tabstop>dashLineLength</tabstop>
   <tabstop>dashGapLength</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

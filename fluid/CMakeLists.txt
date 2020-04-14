@@ -37,6 +37,10 @@ else (NOT MSVC)
    set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
 endif (NOT MSVC)
 
+include_directories (
+      ${PROJECT_SOURCE_DIR}/global
+      )
+
 add_library (fluid STATIC
       ${_all_h_file}
       ${PCH}
@@ -61,6 +65,8 @@ else (NOT MSVC)
          COMPILE_FLAGS "${PCH_INCLUDE}"
       )
 endif (NOT MSVC)   
+
+target_link_libraries(fluid synthesizer)
 
 xcode_pch(fluid all)
 

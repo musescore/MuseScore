@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorLasso</class>
  <widget class="QWidget" name="InspectorLasso">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>169</width>
+    <height>93</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Lasso Inspector</string>
   </property>
@@ -22,6 +30,16 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QToolButton" name="title">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -36,37 +54,27 @@
       </font>
      </property>
      <property name="text">
-      <string>Lasso</string>
+      <string>Image Capture</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::HLine</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="lineWidth">
-      <number>2</number>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QWidget" name="widget" native="true">
+    <widget class="QWidget" name="panel" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
+       <number>3</number>
+      </property>
+      <property name="topMargin">
        <number>3</number>
       </property>
       <property name="rightMargin">
        <number>3</number>
       </property>
-      <property name="horizontalSpacing">
+      <property name="bottomMargin">
        <number>3</number>
       </property>
-      <property name="verticalSpacing">
-       <number>0</number>
+      <property name="spacing">
+       <number>3</number>
       </property>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
@@ -74,7 +82,7 @@
          <string>Position:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -84,14 +92,14 @@
          <string>Size:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
       <item row="2" column="1" colspan="2">
        <widget class="Ms::OffsetSelect" name="pos" native="true">
         <property name="accessibleName">
-         <string>Offset</string>
+         <string>Position</string>
         </property>
        </widget>
       </item>
@@ -109,15 +117,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::SizeSelect</class>
-   <extends>QWidget</extends>
-   <header>inspector/sizeSelect.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
    <header>inspector/offsetSelect.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::SizeSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/sizeSelect.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

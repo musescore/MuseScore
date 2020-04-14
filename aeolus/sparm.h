@@ -21,7 +21,7 @@
 #define __SPARM_H__
 
 namespace Ms {
-      class Xml;
+      class XmlWriter;
       class Synth;
       }
 
@@ -54,7 +54,7 @@ class SyntiParameter {
 
       SyntiParameterType type() const;
 
-      void write(Ms::Xml&) const;
+      void write(Ms::XmlWriter&) const;
 
       const QString& name() const;
       void setName(const QString& s);

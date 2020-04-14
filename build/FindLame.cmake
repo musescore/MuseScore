@@ -1,13 +1,8 @@
-find_path(LAME_INCLUDE_DIR lame/lame.h PATHS /opt/local/include /usr/local/Cellar/lame/*/include)
+find_path(LAME_INCLUDE_DIR lame/lame.h PATHS /opt/local/include /usr/local/Cellar/lame/*/include ${PROJECT_SOURCE_DIR}/dependencies/include)
 find_path(LAME_INCLUDE_DIR lame/lame.h)
 
-find_library(LAME_LIBRARY NAMES mp3lame PATHS /opt/local/lib /usr/local/Cellar/lame/*/lib NO_DEFAULT_PATH)
+find_library(LAME_LIBRARY NAMES mp3lame lame_enc PATHS /opt/local/lib /usr/local/Cellar/lame/*/lib ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 find_library(LAME_LIBRARY NAMES mp3lame)
-
-if (MINGW)
-  set(LAME_INCLUDE_DIR "")
-  set(LAME_LIBRARY "")
-endif(MINGW)
 
 if (LAME_INCLUDE_DIR AND LAME_LIBRARY)
       set(LAME_FOUND TRUE)

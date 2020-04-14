@@ -61,6 +61,7 @@ class Rest;
 class LayoutBreak;
 class Tremolo;
 class System;
+class Sticking;
 class Lyrics;
 class LyricsLine;
 class LyricsLineSegment;
@@ -117,6 +118,7 @@ class SystemText;
 class BracketItem;
 class Spanner;
 class SpannerSegment;
+class Lasso;
 class BagpipeEmbellishment;
 class LineSegment;
 class BSymbol;
@@ -192,6 +194,7 @@ class ScoreElement {
       virtual ElementType type() const = 0;
 
       static ElementType name2type(const QStringRef&, bool silent = false);
+      static ElementType name2type(const QString& s) { return name2type(QStringRef(&s)); }
       static const char* name(ElementType);
 
       virtual QVariant getProperty(Pid) const = 0;
@@ -214,7 +217,7 @@ class ScoreElement {
       bool isStyled(Pid pid) const;
       QVariant styleValue(Pid, Sid) const;
 
-      virtual void setPropertyFlags(Pid, PropertyFlags);
+      void setPropertyFlags(Pid, PropertyFlags);
 
       virtual Sid getPropertyStyle(Pid) const;
       bool readProperty(const QStringRef&, XmlReader&, Pid);
@@ -349,14 +352,17 @@ class ScoreElement {
       CONVERT(Staff,         STAFF)
       CONVERT(Part,          PART)
       CONVERT(BagpipeEmbellishment, BAGPIPE_EMBELLISHMENT)
+      CONVERT(Lasso,         LASSO)
+      CONVERT(Sticking,      STICKING)
 #undef CONVERT
 
-      virtual bool isElement() const { return false; } // overriden in element.h
+      virtual bool isElement() const { return false; } // overridden in element.h
       bool isChordRest() const       { return isRest() || isChord() || isRepeatMeasure(); }
       bool isDurationElement() const { return isChordRest() || isTuplet(); }
       bool isSlurTieSegment() const  { return isSlurSegment() || isTieSegment(); }
       bool isSLineSegment() const;
       bool isBox() const { return isVBox() || isHBox() || isTBox() || isFBox(); }
+      bool isVBoxBase() const { return isVBox() || isTBox() || isFBox(); }
       bool isMeasureBase() const { return isMeasure() || isBox(); }
       bool isTextBase() const;
       bool isTextLineBaseSegment() const {
@@ -468,6 +474,10 @@ static inline SpannerSegment* toSpannerSegment(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isSpannerSegment());
       return (SpannerSegment*)e;
       }
+static inline const SpannerSegment* toSpannerSegment(const ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isSpannerSegment());
+      return (const SpannerSegment*)e;
+      }
 static inline BSymbol* toBSymbol(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isBSymbol());
       return (BSymbol*)e;
@@ -479,6 +489,10 @@ static inline TextLineBase* toTextLineBase(ScoreElement* e) {
 static inline TextBase* toTextBase(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isTextBase());
       return (TextBase*)e;
+      }
+static inline const TextBase* toTextBase(const ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isTextBase());
+      return (const TextBase*)e;
       }
 static inline StaffTextBase* toStaffTextBase(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isStaffTextBase());
@@ -584,10 +598,11 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(Page)
       CONVERT(SystemText)
       CONVERT(BracketItem)
-      CONVERT(Score)
       CONVERT(Staff)
       CONVERT(Part)
+      CONVERT(Lasso)
       CONVERT(BagpipeEmbellishment)
+      CONVERT(Sticking)
 #undef CONVERT
 
 }

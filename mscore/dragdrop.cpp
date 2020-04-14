@@ -28,6 +28,7 @@
 #include "musescore.h"
 #include "scoreview.h"
 #include "continuouspanel.h"
+#include "tourhandler.h"
 
 namespace Ms {
 
@@ -171,16 +172,25 @@ bool ScoreView::dragTimeAnchorElement(const QPointF& pos)
 
 bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
       {
-      Measure* m = _score->searchMeasure(pos);
-      if (m) {
-            QRectF b(m->canvasBoundingRect());
+      int staffIdx;
+      Segment* seg;
+      MeasureBase* mb = _score->pos2measure(pos, &staffIdx, 0, &seg, 0);
+      if (!(editData.modifiers & Qt::ControlModifier))
+            staffIdx = 0;
+      int track = staffIdx * VOICES;
 
-            QPointF anchor;
-            if (pos.x() < (b.x() + b.width() * .5) || m == _score->lastMeasureMM())
-                  anchor = m->canvasBoundingRect().topLeft();
-            else
-                  anchor = m->canvasBoundingRect().topRight();
+      if (mb && mb->isMeasure()) {
+            Measure* m = toMeasure(mb);
+            System* s  = m->system();
+            qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
+            QRectF b(m->canvasBoundingRect());
+            if (pos.x() >= (b.x() + b.width() * .5) && m != _score->lastMeasureMM() && m->nextMeasure()->system() == m->system())
+                  m = m->nextMeasure();
+            QPointF anchor(m->canvasBoundingRect().x(), y);
             setDropAnchor(QLineF(pos, anchor));
+            editData.dropElement->score()->addRefresh(editData.dropElement->canvasBoundingRect());
+            editData.dropElement->setTrack(track);
+            editData.dropElement->score()->addRefresh(editData.dropElement->canvasBoundingRect());
             return true;
             }
       editData.dropElement->score()->addRefresh(editData.dropElement->canvasBoundingRect());
@@ -200,12 +210,20 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
       const QMimeData* dta = event->mimeData();
 
       if (dta->hasFormat(mimeSymbolListFormat) || dta->hasFormat(mimeStaffListFormat)) {
-            event->accept();
+            if (event->possibleActions() & Qt::CopyAction)
+                  event->setDropAction(Qt::CopyAction);
+            if (event->dropAction() == Qt::CopyAction)
+                  event->accept();
             return;
             }
 
       if (dta->hasFormat(mimeSymbolFormat)) {
-            event->accept();
+            if (event->possibleActions() & Qt::CopyAction)
+                  event->setDropAction(Qt::CopyAction);
+            if (event->dropAction() == Qt::CopyAction)
+                  event->accept();
+
+            mscore->notifyElementDraggedToScoreView();
 
             QByteArray a = dta->data(mimeSymbolFormat);
 
@@ -326,6 +344,14 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             return;
             }
 
+      const QMimeData* dta = event->mimeData();
+      if (dta->hasFormat(mimeSymbolFormat)
+         || dta->hasFormat(mimeSymbolListFormat)
+         || dta->hasFormat(mimeStaffListFormat)) {
+            if (event->possibleActions() & Qt::CopyAction)
+                  event->setDropAction(Qt::CopyAction);
+            }
+
       // convert window to canvas position
       QPointF pos(imatrix.map(QPointF(event->pos())));
       editData.pos       = pos;
@@ -333,6 +359,8 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
       switch (editData.dropElement->type()) {
             case ElementType::VOLTA:
+                  event->setAccepted(dragMeasureAnchorElement(pos));
+                  break;
             case ElementType::PEDAL:
             case ElementType::LET_RING:
             case ElementType::VIBRATO:
@@ -345,6 +373,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   break;
             case ElementType::IMAGE:
             case ElementType::SYMBOL:
+            case ElementType::FSYMBOL:
             case ElementType::DYNAMIC:
             case ElementType::KEYSIG:
             case ElementType::CLEF:
@@ -411,13 +440,18 @@ void ScoreView::dropEvent(QDropEvent* event)
       editData.modifiers = event->keyboardModifiers();
 
       if (editData.dropElement) {
+            bool firstStaffOnly = false;
             bool applyUserOffset = false;
+            bool triggerSpannerDropApplyTour = editData.dropElement->isSpanner();
             editData.dropElement->styleChanged();
             _score->startCmd();
             Q_ASSERT(editData.dropElement->score() == score());
             _score->addRefresh(editData.dropElement->canvasBoundingRect());
             switch (editData.dropElement->type()) {
                   case ElementType::VOLTA:
+                        // voltas drop to first staff by default, or closest staff if Control is held
+                        firstStaffOnly = !(editData.modifiers & Qt::ControlModifier);
+                        // fall-thru
                   case ElementType::OTTAVA:
                   case ElementType::TRILL:
                   case ElementType::PEDAL:
@@ -428,12 +462,13 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::TEXTLINE:
                         {
                         Spanner* spanner = static_cast<Spanner*>(editData.dropElement);
-                        score()->cmdAddSpanner(spanner, pos);
+                        score()->cmdAddSpanner(spanner, pos, firstStaffOnly);
                         score()->setUpdateAll();
                         event->acceptProposedAction();
                         }
                         break;
                   case ElementType::SYMBOL:
+                  case ElementType::FSYMBOL:
                   case ElementType::IMAGE:
                         applyUserOffset = true;
                         // fall-thru
@@ -449,7 +484,13 @@ void ScoreView::dropEvent(QDropEvent* event)
                               el = _score->pos2measure(pos, &staffIdx, 0, &seg, &offset);
                               if (el && el->isMeasure()) {
                                     editData.dropElement->setTrack(staffIdx * VOICES);
-                                    editData.dropElement->setParent(seg);
+                                    if (editData.dropElement->isImage()) {
+                                          editData.dropElement->setParent(el);
+                                          offset = pos - el->canvasPos();
+                                          }
+                                    else {
+                                          editData.dropElement->setParent(seg);
+                                          }
                                     if (applyUserOffset)
                                           editData.dropElement->setOffset(offset);
                                     score()->undoAddElement(editData.dropElement);
@@ -535,6 +576,9 @@ void ScoreView::dropEvent(QDropEvent* event)
                               }
 
                         Element* dropElement = el->drop(editData);
+                        if (dropElement && dropElement->isInstrumentChange()) {
+                              mscore->currentScoreView()->selectInstrument(toInstrumentChange(dropElement));
+                              }
                         _score->addRefresh(el->canvasBoundingRect());
                         if (dropElement) {
                               if (!_score->noteEntryMode())
@@ -554,6 +598,8 @@ void ScoreView::dropEvent(QDropEvent* event)
             // update input cursor position (must be done after layout)
             if (noteEntryMode())
                   moveCursor();
+            if (triggerSpannerDropApplyTour)
+                  TourHandler::startTour("spanner-drop-apply");
             return;
             }
 

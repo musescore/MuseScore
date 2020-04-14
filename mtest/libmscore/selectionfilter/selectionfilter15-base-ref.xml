@@ -7,6 +7,7 @@
     <Spanner type="TextLine">
       <TextLine>
         <beginText>VII</beginText>
+        <ticks_f>1/1</ticks_f>
         </TextLine>
       <next>
         <location>

@@ -17,6 +17,8 @@
 
 #include <assert.h>
 
+#include "log.h"
+
 #include "note.h"
 #include "score.h"
 #include "chord.h"
@@ -55,6 +57,9 @@
 #include "bagpembell.h"
 #include "hairpin.h"
 #include "textline.h"
+#include <QPointF>
+#include <QtMath>
+#include <QVector2D>
 
 namespace Ms {
 
@@ -594,7 +599,7 @@ Note::Note(const Note& n, bool link)
 
       // types in _el: SYMBOL, IMAGE, FINGERING, TEXT, BEND
       const Staff* stf = staff();
-      bool tabFingering = stf->staffType(tick())->showTabFingering();
+      bool tabFingering = stf->staffTypeForElement(this)->showTabFingering();
       for (Element* e : n._el) {
             if (e->isFingering() && staff()->isTabStaff(tick()) && !tabFingering)    // tablature has no fingering
                   continue;
@@ -634,7 +639,7 @@ inline int Note::concertPitchIdx() const
 
 void Note::setPitch(int val)
       {
-      Q_ASSERT(val >= 0 && val <= 127);
+      Q_ASSERT(pitchIsValid(val));
       if (_pitch != val) {
             _pitch = val;
             score()->setPlaylistDirty();
@@ -651,15 +656,6 @@ void Note::setPitch(int pitch, int tpc1, int tpc2)
       }
 
 //---------------------------------------------------------
-//   undoSetPitch
-//---------------------------------------------------------
-
-void Note::undoSetPitch(int p)
-      {
-      undoChangeProperty(Pid::PITCH, p);
-      }
-
-//---------------------------------------------------------
 //   tpc1default
 //---------------------------------------------------------
 
@@ -667,7 +663,7 @@ int Note::tpc1default(int p) const
       {
       Key key = Key::C;
       if (staff() && chord()) {
-            int tick = chord()->tick();
+            Fraction tick = chord()->tick();
             key = staff()->key(tick);
             if (!concertPitch()) {
                   Interval interval = part()->instrument(tick)->transpose();
@@ -688,7 +684,7 @@ int Note::tpc2default(int p) const
       {
       Key key = Key::C;
       if (staff() && chord()) {
-            int tick = chord()->tick();
+            Fraction tick = chord()->tick();
             key = staff()->key(tick);
             if (concertPitch()) {
                   Interval interval = part()->instrument(tick)->transpose();
@@ -706,7 +702,7 @@ int Note::tpc2default(int p) const
 void Note::setTpcFromPitch()
       {
       // works best if note is already added to score, otherwise we can't determine transposition or key
-      int tick = chord() ? chord()->tick() : -1;
+      Fraction tick = chord() ? chord()->tick() : Fraction(-1,1);
       Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
       Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
       // convert key to concert pitch
@@ -769,7 +765,7 @@ int Note::tpc() const
 QString Note::tpcUserName(bool explicitAccidental) const
       {
       QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental);
-      QString octaveName = QString::number((epitch() / 12) - 1);
+      QString octaveName = QString::number(((epitch() + ottaveCapoFret() - static_cast<int>(tpc2alter(tpc()))) / 12) - 1);
       return pitchName + (explicitAccidental ? " " : "") + octaveName;
       }
 
@@ -782,7 +778,7 @@ QString Note::tpcUserName(bool explicitAccidental) const
 
 int Note::transposeTpc(int tpc)
       {
-      int tick = chord() ? chord()->tick() : -1;
+      Fraction tick = chord() ? chord()->tick() : Fraction(-1,1);
       Interval v = part()->instrument(tick)->transpose();
       if (v.isZero())
             return tpc;
@@ -813,10 +809,11 @@ SymId Note::noteHead() const
       if (_headType != NoteHead::Type::HEAD_AUTO)
             ht = _headType;
 
+      const Staff* st = chord() ? chord()->staff() : nullptr;
+
       if (_headGroup == NoteHead::Group::HEAD_CUSTOM) {
-            if (chord() && chord()->staff()) {
-                  const Staff* st = chord()->staff();
-                  if (st->staffType(chord()->tick())->isDrumStaff())
+            if (st) {
+                  if (st->staffTypeForElement(chord())->isDrumStaff())
                         return st->part()->instrument(chord()->tick())->drumset()->noteHeads(_pitch, ht);
                   }
             else {
@@ -826,12 +823,11 @@ SymId Note::noteHead() const
 
       Key key = Key::C;
       NoteHeadScheme scheme = NoteHeadScheme::HEAD_NORMAL;
-      if (chord() && chord()->staff()){
-            int tick = chord()->tick();
-            if (tick >= 0) {
-                  const Staff* st = chord()->staff();
+      if (st) {
+            Fraction tick = chord()->tick();
+            if (tick >= Fraction(0,1)) {
                   key    = st->key(tick);
-                  scheme = st->staffType(tick)->noteHeadScheme();
+                  scheme = st->staffTypeForElement(chord())->noteHeadScheme();
                   }
             }
       SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);
@@ -961,9 +957,9 @@ QPointF Note::stemUpSE() const
 
 int Note::playTicks() const
       {
-      int stick = firstTiedNote()->chord()->tick();
+      Fraction stick = firstTiedNote()->chord()->tick();
       const Note* note = lastTiedNote();
-      return note->chord()->tick() + note->chord()->actualTicks() - stick;
+      return (note->chord()->tick() + note->chord()->actualTicks() - stick).ticks();
       }
 
 //---------------------------------------------------------
@@ -1016,9 +1012,9 @@ void Note::add(Element* e)
             case ElementType::NOTEDOT:
                   _dots.append(toNoteDot(e));
                   break;
+            case ElementType::FINGERING:
             case ElementType::SYMBOL:
             case ElementType::IMAGE:
-            case ElementType::FINGERING:
             case ElementType::TEXT:
             case ElementType::BEND:
                   _el.push_back(e);
@@ -1043,7 +1039,7 @@ void Note::add(Element* e)
                   qDebug("Note::add() not impl. %s", e->name());
                   break;
             }
-      score()->setLayout(tick());
+      triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -1086,7 +1082,7 @@ void Note::remove(Element* e)
                   qDebug("Note::remove() not impl. %s", e->name());
                   break;
             }
-      score()->setLayout(tick());
+      triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -1097,7 +1093,7 @@ bool Note::isNoteName() const
       {
       if (chord() && chord()->staff()) {
             const Staff* st = staff();
-            NoteHeadScheme s = st->staffType(tick())->noteHeadScheme();
+            NoteHeadScheme s = st->staffTypeForElement(this)->noteHeadScheme();
             return s == NoteHeadScheme::HEAD_PITCHNAME || s == NoteHeadScheme::HEAD_PITCHNAME_GERMAN || s == NoteHeadScheme::HEAD_SOLFEGE || s == NoteHeadScheme::HEAD_SOLFEGE_FIXED;
             }
       return false;
@@ -1109,7 +1105,7 @@ bool Note::isNoteName() const
 
 void Note::draw(QPainter* painter) const
       {
-      if (_hidden || _fretHidden)
+      if (_hidden)
             return;
 
       QColor c(curColor());
@@ -1119,7 +1115,12 @@ void Note::draw(QPainter* painter) const
       // tablature
       if (tablature) {
             const Staff* st = staff();
-            const StaffType* tab = st->staffType(tick());
+            const StaffType* tab = st->staffTypeForElement(this);
+            if (tieBack() && !tab->showBackTied()) {
+                  if (chord()->measure()->system() == tieBack()->startNote()->chord()->measure()->system() && el().size() == 0)
+                        // fret should be hidden, so return without drawing it
+                        return;
+                  }
             // draw background, if required (to hide a segment of string line or to show a fretting conflict)
             if (!tab->linesThrough() || fretConflict()) {
                   qreal d  = spatium() * .1;
@@ -1152,18 +1153,18 @@ void Note::draw(QPainter* painter) const
 
       else {
             // skip drawing, if second note of a cross-measure value
-            if (chord()->crossMeasure() == CrossMeasure::SECOND)
+            if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND)
                   return;
             // warn if pitch extends usable range of instrument
             // by coloring the notehead
-            if (chord() && chord()->segment() && staff() && !selected()
+            if (chord() && chord()->segment() && staff()
                && !score()->printing() && MScore::warnPitchRange && !staff()->isDrumStaff(chord()->tick())) {
                   const Instrument* in = part()->instrument(chord()->tick());
                   int i = ppitch();
                   if (i < in->minPitchP() || i > in->maxPitchP())
-                        painter->setPen(Qt::red);
+                        painter->setPen(selected() ? Qt::darkRed : Qt::red);
                   else if (i < in->minPitchA() || i > in->maxPitchA())
-                        painter->setPen(Qt::darkYellow);
+                        painter->setPen(selected() ? QColor("#565600") : Qt::darkYellow);
                   }
             // draw blank notehead to avoid staff and ledger lines
             if (_cachedSymNull != SymId::noSym) {
@@ -1249,7 +1250,7 @@ void Note::read(XmlReader& e)
                   _tpc[1] = tpc;
             }
       if (!(tpcIsValid(_tpc[0]) && tpcIsValid(_tpc[1]))) {
-            int tick = chord() ? chord()->tick() : -1;
+            Fraction tick = chord() ? chord()->tick() : Fraction(-1,1);
             Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
             if (tpcIsValid(_tpc[0])) {
                   v.flip();
@@ -1433,32 +1434,22 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                         sp->setTrack(l.track());
                         sp->setTick(tick());
                         if (sp->isTie()) {
+                              Note* n = this;
+                              while (n->tieFor())
+                                    n = n->tieFor()->endNote();
                               Tie* tie = toTie(sp);
-                              tie->setParent(this);
-                              tie->setStartNote(this);
-                              _tieFor = tie;
+                              tie->setParent(n);
+                              tie->setStartNote(n);
+                              n->_tieFor = tie;
                               }
                         else {
-                              // DISABLE pasting of glissandi into staves with other lionked staves
-                              // because the glissando is not properly cloned into the linked staves
-                              if (pasteMode && staff() && staff()->links() && !staff()->links()->empty()) {
-                                    // Do nothing. The spanner is no longer needed.
-                                    info->releaseConnector();
-                                    delete sp;
-                                    }
-                              else {
-                                    sp->setAnchor(Spanner::Anchor::NOTE);
-                                    sp->setStartElement(this);
-                                    addSpannerFor(sp);
-                                    sp->setParent(this);
-                                    }
+                              sp->setAnchor(Spanner::Anchor::NOTE);
+                              sp->setStartElement(this);
+                              addSpannerFor(sp);
+                              sp->setParent(this);
                               }
                         }
                   else if (info->isEnd()) {
-                        // We might have deleted a spanner (see "DISABLE pasting
-                        // of glissandi..." note above)
-                        if (!sp)
-                              break;
                         sp->setTrack2(l.track());
                         sp->setTick2(tick());
                         sp->setEndElement(this);
@@ -1469,6 +1460,12 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                                     toChord(parent())->setEndsGlissando(true);
                               addSpannerBack(sp);
                               }
+
+                        // As spanners get added after being fully read, they
+                        // do not get cloned with the note when pasting to
+                        // linked staves. So add this spanner explicitly.
+                        if (pasteMode)
+                              score()->undoAddElement(sp);
                         }
                   }
             default:
@@ -1482,7 +1479,7 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 
 int Note::transposition() const
       {
-      int tick = chord() ? chord()->tick() : -1;
+      Fraction tick = chord() ? chord()->tick() : Fraction(-1,1);
       return staff() ? part()->instrument(tick)->transpose().chromatic : 0;
       }
 
@@ -1492,92 +1489,42 @@ int Note::transposition() const
 
 class NoteEditData : public ElementEditData {
    public:
-      int line;
-      int string;
+      enum EditMode {
+            EditMode_ChangePitch = 0,
+            EditMode_AddSpacing,
+            EditMode_Undefined,
+            };
+
+      int line = 0;
+      int string = 0;
+      EditMode mode = EditMode_Undefined;
+      QPointF delta;
+
+      virtual EditDataType type() override      { return EditDataType::NoteEditData; }
+
+      static constexpr double MODE_TRANSITION_LIMIT_DEGREES = 15.0;
+
+      static inline EditMode editModeByDragDirection(const qreal& deltaX, const qreal& deltaY)
+            {
+            qreal x = qAbs(deltaX);
+            qreal y = qAbs(deltaY);
+
+            QVector2D normalizedVector(x, y);
+
+            normalizedVector.normalize();
+
+            float radians = QVector2D::dotProduct(normalizedVector, QVector2D(1, 0));
+
+            qreal degrees = (qAcos(radians) * 180.0) / M_PI;
+
+            qDebug() << "NOTE DRAG DEGREES " << degrees;
+
+            if (degrees >= MODE_TRANSITION_LIMIT_DEGREES)
+                  return NoteEditData::EditMode_ChangePitch;
+            else
+                  return NoteEditData::EditMode_AddSpacing;
+            }
       };
-
-//---------------------------------------------------------
-//   startDrag
-//---------------------------------------------------------
-
-void Note::startDrag(EditData& ed)
-      {
-      NoteEditData* ned = new NoteEditData();
-      ned->e      = this;
-      ned->line   = _line;
-      ned->string = _string;
-      ned->pushProperty(Pid::PITCH);
-      ned->pushProperty(Pid::TPC1);
-      ned->pushProperty(Pid::TPC2);
-      ned->pushProperty(Pid::FRET);
-      ned->pushProperty(Pid::STRING);
-
-      ed.addData(ned);
-      }
-
-//---------------------------------------------------------
-//   drag
-//---------------------------------------------------------
-
-QRectF Note::drag(EditData& ed)
-      {
-      int _tick           = chord()->tick();
-      const Staff* stf    = staff();
-      const StaffType* st = stf->staffType(_tick);
-      if (st->isDrumStaff())
-            return QRect();
-
-      NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this));
-      qreal _spatium      = spatium();
-      bool tab            = st->isTabStaff();
-      qreal step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
-      int lineOffset      = lrint(ed.delta.y() / step);
-
-      if (tab) {
-            const StringData* strData = staff()->part()->instrument()->stringData();
-            int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
-            int nFret   = strData->fret(_pitch, nString, staff(), _tick);
-            if (nFret >= 0) {                      // no fret?
-                  if (fret() != nFret || string() != nString) {
-                        for (Note* nn : tiedNotes()) {
-                              nn->setFret(nFret);
-                              nn->setString(nString);
-                              strData->fretChords(nn->chord());
-                              nn->triggerLayout();
-                              }
-                        }
-                  }
-            }
-      else {
-            Key key = staff()->key(_tick);
-            int newPitch = line2pitch(ned->line + lineOffset, staff()->clef(_tick), key);
-            if (!concertPitch()) {
-                  Interval interval = staff()->part()->instrument(_tick)->transpose();
-                  newPitch += interval.chromatic;
-                  }
-            int newTpc1 = pitch2tpc(newPitch, key, Prefer::NEAREST);
-            int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
-            for (Note* nn : tiedNotes()) {
-                  nn->setPitch(newPitch, newTpc1, newTpc2);
-                  nn->triggerLayout();
-                  }
-            }
-      return QRectF();
-      }
-
-//---------------------------------------------------------
-//   endDrag
-//---------------------------------------------------------
-
-void Note::endDrag(EditData& ed)
-      {
-      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
-      for (Note* nn : tiedNotes()) {
-            for (PropertyData pd : ned->propertyData) {
-                  score()->undoPropertyChanged(nn, pd.id, pd.data);
-                  }
-            }
-      }
 
 //---------------------------------------------------------
 //   acceptDrop
@@ -1596,7 +1543,7 @@ bool Note::acceptDrop(EditData& data) const
             }
       const Staff* st   = staff();
       bool isTablature  = st->isTabStaff(tick());
-      bool tabFingering = st->staffType(tick())->showTabFingering();
+      bool tabFingering = st->staffTypeForElement(this)->showTabFingering();
       return (type == ElementType::ARTICULATION
          || type == ElementType::FERMATA
          || type == ElementType::CHORDLINE
@@ -1640,6 +1587,7 @@ bool Note::acceptDrop(EditData& data) const
          || (type == ElementType::HAIRPIN)
          || (type == ElementType::STAFF_TEXT)
          || (type == ElementType::SYSTEM_TEXT)
+         || (type == ElementType::STICKING)
          || (type == ElementType::TEMPO_TEXT)
          || (type == ElementType::BEND)
          || (type == ElementType::TREMOLOBAR)
@@ -1658,7 +1606,7 @@ Element* Note::drop(EditData& data)
 
       const Staff* st = staff();
       bool isTablature = st->isTabStaff(tick());
-      bool tabFingering = st->staffType(tick())->showTabFingering();
+      bool tabFingering = st->staffTypeForElement(this)->showTabFingering();
       Chord* ch = chord();
 
       switch(e->type()) {
@@ -1682,17 +1630,13 @@ Element* Note::drop(EditData& data)
                   return 0;
 
             case ElementType::SLUR:
-                  data.view->cmdAddSlur(chord(), nullptr);
+                  data.view->addSlur(chord(), nullptr, toSlur(e));
                   delete e;
                   return 0;
 
             case ElementType::HAIRPIN:
-                  {
-                  Hairpin* hairpin = toHairpin(e);
-                  data.view->cmdAddHairpin(hairpin->hairpinType());
-                  delete e;
-                  }
-                  return 0;
+                  // forward this event to a chord
+                  return chord()->drop(data);
 
             case ElementType::LYRICS:
                   e->setParent(ch);
@@ -1797,10 +1741,6 @@ Element* Note::drop(EditData& data)
 
             case ElementType::NOTE:
                   {
-                  if (ch->noteType() != NoteType::NORMAL) {
-                        delete e;
-                        return 0;
-                        }
                   // calculate correct transposed tpc
                   Note* n = toNote(e);
                   Interval v = part()->instrument(ch->tick())->transpose();
@@ -1905,7 +1845,7 @@ void Note::setDotY(Direction pos)
             // with TAB's, dotPosX is not set:
             // get dot X from width of fret text and use TAB default spacing
             const Staff* st = staff();
-            const StaffType* tab = st->staffType(tick());
+            const StaffType* tab = st->staffTypeForElement(this);
             if (tab->stemThrough() ) {
                   // if fret mark on lines, use standard processing
                   if (tab->onLines())
@@ -1971,16 +1911,12 @@ void Note::layout()
       bool useTablature = staff() && staff()->isTabStaff(chord()->tick());
       if (useTablature) {
             const Staff* st = staff();
-            const StaffType* tab = st->staffType(tick());
+            const StaffType* tab = st->staffTypeForElement(this);
             qreal mags = magS();
             bool paren = false;
-            _fretHidden = false;
             if (tieBack() && !tab->showBackTied()) {
-                  _fretHidden = false;
-                  if (el().size() > 0)
+                  if (chord()->measure() != tieBack()->startNote()->chord()->measure() || el().size() > 0)
                         paren = true;
-                  else
-                        _fretHidden = true;
                   }
             // not complete but we need systems to be layouted to add parenthesis
             if (fixed())
@@ -2019,24 +1955,6 @@ void Note::layout2()
       // for standard staves this is done in Score::layoutChords3()
       // so that the results are available there
 
-      if (staff()->isTabStaff(chord()->tick())) {
-            const Staff* st = staff();
-            const StaffType* tab = st->staffType(tick());
-            qreal mags = magS();
-            bool paren = false;
-            _fretHidden = false;
-            if (tieBack() && !tab->showBackTied() && !_fretString.startsWith("(")) {   // skip back-tied notes if not shown but between () if on another system
-                  if (chord()->measure()->system() != tieBack()->startNote()->chord()->measure()->system() || el().size() > 0)
-                        paren = true;
-                  else
-                        _fretHidden = true;
-                  }
-            if (paren)
-                  _fretString = QString("(%1)").arg(_fretString);
-            qreal w = tabHeadWidth(tab); // !! use _fretString
-            bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
-            }
-
       int dots = chord()->dots();
       if (dots) {
             qreal d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * mag();
@@ -2045,7 +1963,7 @@ void Note::layout2()
             // if TAB and stems through staff
             if (staff()->isTabStaff(chord()->tick())) {
                   const Staff* st = staff();
-                  const StaffType* tab = st->staffType(tick());
+                  const StaffType* tab = st->staffTypeForElement(this);
                   if (tab->stemThrough()) {
                         // with TAB's, dot Y is not calculated during layoutChords3(),
                         // as layoutChords3() is not even called for TAB's;
@@ -2077,7 +1995,7 @@ void Note::layout2()
                   if (sym->sym() == SymId::noteheadParenthesisRight) {
                         if (staff()->isTabStaff(chord()->tick())) {
                               const Staff* st = staff();
-                              const StaffType* tab = st->staffType(tick());
+                              const StaffType* tab = st->staffTypeForElement(this);
                               w = tabHeadWidth(tab);
                               }
                         e->rxpos() += w;
@@ -2086,8 +2004,18 @@ void Note::layout2()
                         e->rxpos() -= symWidth(SymId::noteheadParenthesisLeft);
                         }
                   }
-            else
+            else if (e->isFingering()) {
+                  Fingering* f = toFingering(e);
+                  if (f->propertyFlags(Pid::PLACEMENT) == PropertyFlags::STYLED)
+                        f->setPlacement(f->calculatePlacement());
+                  // layout fingerings that are placed relative to notehead
+                  // fingerings placed relative to chord will be laid out later
+                  if (f->layoutType() == ElementType::NOTE)
+                        f->layout();
+                  }
+            else {
                   e->layout();
+                  }
             }
       }
 
@@ -2122,13 +2050,14 @@ void Note::updateAccidental(AccidentalState* as)
 
             AccidentalVal accVal = tpc2alter(tpc());
             bool error = false;
-            AccidentalVal relLineAccVal = as->accidentalVal(relLine, error);
+            int eRelLine = absStep(tpc(), epitch()+ottaveCapoFret());
+            AccidentalVal relLineAccVal = as->accidentalVal(eRelLine, error);
             if (error) {
                   qDebug("error accidetalVal");
                   return;
                   }
-            if ((accVal != relLineAccVal) || hidden() || as->tieContext(relLine)) {
-                  as->setAccidentalVal(relLine, accVal, _tieBack != 0 && _accidental == 0);
+            if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine)) {
+                  as->setAccidentalVal(eRelLine, accVal, _tieBack != 0 && _accidental == 0);
                   acci = Accidental::value2subtype(accVal);
                   // if previous tied note has same tpc, don't show accidental
                   if (_tieBack && _tieBack->startNote()->tpc1() == tpc1())
@@ -2177,7 +2106,8 @@ void Note::updateAccidental(AccidentalState* as)
             // ultimetely, they should probably get their own state
             // for now, at least change state to natural, so subsequent notes playback as might be expected
             // this is an incompatible change, but better to break it for 2.0 than wait until later
-            as->setAccidentalVal(relLine, AccidentalVal::NATURAL, _tieBack != 0 && _accidental == 0);
+            AccidentalVal accVal = Accidental::subtype2value(_accidental->accidentalType());
+            as->setAccidentalVal(relLine, accVal, _tieBack != 0 && _accidental == 0);
             }
 
       updateRelLine(relLine, true);
@@ -2309,7 +2239,7 @@ void Note::setSmall(bool val)
 
 int Note::line() const
       {
-      return _fixed ? _fixedLine : _line;
+      return fixed() ? _fixedLine : _line;
       }
 
 //---------------------------------------------------------
@@ -2333,6 +2263,21 @@ void Note::setHeadGroup(NoteHead::Group val)
       }
 
 //---------------------------------------------------------
+//   ottaveCapoFret
+//    offset added by Ottava's and Capo Fret.
+//---------------------------------------------------------
+
+int Note::ottaveCapoFret() const
+      {
+      Chord* ch = chord();
+      int capoFretId = staff()->capo(ch->segment()->tick());
+      if (capoFretId != 0)
+            capoFretId -= 1;
+
+      return staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
+      }
+
+//---------------------------------------------------------
 //   ppitch
 //    playback pitch
 //---------------------------------------------------------
@@ -2350,11 +2295,8 @@ int Note::ppitch() const
                         return div.pitch;
                   }
             }
-      int capoFretId = staff()->capo(ch->segment()->tick());
-      if (capoFretId != 0)
-            capoFretId -= 1;
 
-      return _pitch + staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
+      return _pitch + ottaveCapoFret();
       }
 
 //---------------------------------------------------------
@@ -2387,21 +2329,205 @@ int Note::customizeVelocity(int velo) const
       }
 
 //---------------------------------------------------------
+//   startDrag
+//---------------------------------------------------------
+
+void Note::startDrag(EditData& ed)
+      {
+      NoteEditData* ned = new NoteEditData();
+      ned->e      = this;
+      ned->line   = _line;
+      ned->string = _string;
+      ned->pushProperty(Pid::PITCH);
+      ned->pushProperty(Pid::TPC1);
+      ned->pushProperty(Pid::TPC2);
+      ned->pushProperty(Pid::FRET);
+      ned->pushProperty(Pid::STRING);
+
+      ed.addData(ned);
+      }
+
+//---------------------------------------------------------
+//   drag
+//---------------------------------------------------------
+
+QRectF Note::drag(EditData& ed)
+      {
+      NoteEditData* noteEditData = static_cast<NoteEditData*>(ed.getData(this));
+      IF_ASSERT_FAILED(noteEditData) {
+            return QRectF();
+            }
+
+      QPointF delta = ed.pos - ed.lastPos;
+      noteEditData->delta = delta;
+
+      if (noteEditData->mode == NoteEditData::EditMode_Undefined) {
+            noteEditData->mode = NoteEditData::editModeByDragDirection(delta.x(), delta.y());
+            }
+
+      if (noteEditData->mode == NoteEditData::EditMode_AddSpacing)
+            horizontalDrag(ed);
+      else if (noteEditData->mode == NoteEditData::EditMode_ChangePitch)
+            verticalDrag(ed);
+
+      return QRectF();
+      }
+
+//---------------------------------------------------------
+//   endDrag
+//---------------------------------------------------------
+
+void Note::endDrag(EditData& ed)
+      {
+      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
+      IF_ASSERT_FAILED(ned) {
+            return;
+            }
+      for (Note* nn : tiedNotes()) {
+            for (const PropertyData& pd : ned->propertyData) {
+                  setPropertyFlags(pd.id, pd.f); // reset initial property flags state
+                  score()->undoPropertyChanged(nn, pd.id, pd.data);
+                  }
+          }
+      }
+
+//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
-void Note::editDrag(EditData& ed)
+void Note::editDrag(EditData& editData)
       {
       Chord* ch = chord();
+
       if (ch->notes().size() == 1) {
             // if the chord contains only this note, then move the whole chord
             // including stem, flag etc.
-            ch->undoChangeProperty(Pid::OFFSET, ch->offset() + offset() + ed.delta);
+            ch->undoChangeProperty(Pid::OFFSET, ch->offset() + offset() + editData.delta);
             setOffset(QPointF());
             }
-      else {
-            setOffset(offset() + ed.delta);
+      else
+            setOffset(offset() + editData.delta);
+
+      triggerLayout();
+      }
+
+//---------------------------------------------------------
+//   verticalDrag
+//---------------------------------------------------------
+
+void Note::verticalDrag(EditData &ed)
+      {
+      Fraction _tick      = chord()->tick();
+      const Staff* stf    = staff();
+      const StaffType* st = stf->staffType(_tick);
+
+      if (st->isDrumStaff())
+            return;
+
+      NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this));
+
+      qreal _spatium      = spatium();
+      bool tab            = st->isTabStaff();
+      qreal step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
+      int lineOffset      = lrint(ed.delta.y() / step);
+
+      if (tab) {
+            const StringData* strData = staff()->part()->instrument()->stringData();
+            int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
+            int nFret   = strData->fret(_pitch, nString, staff(), _tick);
+
+            if (nFret >= 0) {                    // no fret?
+                  if (fret() != nFret || string() != nString) {
+                        for (Note* nn : tiedNotes()) {
+                              nn->setFret(nFret);
+                              nn->setString(nString);
+                              strData->fretChords(nn->chord());
+                              nn->triggerLayout();
+                              }
+                        }
+                  }
             }
+      else {
+            Key key = staff()->key(_tick);
+            int idx = chord()->vStaffIdx();
+            int newPitch = line2pitch(ned->line + lineOffset, score()->staff(idx)->clef(_tick), key);
+
+            if (!concertPitch()) {
+                  Interval interval = staff()->part()->instrument(_tick)->transpose();
+                  newPitch += interval.chromatic;
+                  }
+
+            int newTpc1 = pitch2tpc(newPitch, key, Prefer::NEAREST);
+            int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
+            for (Note* nn : tiedNotes()) {
+                  nn->setPitch(newPitch, newTpc1, newTpc2);
+                  nn->triggerLayout();
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   normalizeLeftDragDelta
+//---------------------------------------------------------
+
+void Note::normalizeLeftDragDelta(Segment* seg, EditData &ed, NoteEditData* ned)
+      {
+      Segment* previous = seg->prev();
+
+      if (previous) {
+
+            qreal minDist = previous->minHorizontalCollidingDistance(seg);
+
+            qreal diff = (ed.pos.x()) - (previous->pageX() + minDist);
+
+            qreal distanceBetweenSegments = (previous->pageX() + minDist) - seg->pageX();
+
+            if (diff < 0)
+                  ned->delta.setX(distanceBetweenSegments);
+            }
+      else {
+            Measure* measure = seg->measure();
+
+            qreal minDist = score()->styleP(Sid::barNoteDistance);
+
+            qreal diff = (ed.pos.x()) - (measure->pageX() + minDist);
+
+            qreal distanceBetweenSegments = (measure->pageX() + minDist) - seg->pageX();
+
+            if (diff < 0)
+                  ned->delta.setX(distanceBetweenSegments);
+            }
+      }
+
+//---------------------------------------------------------
+//   horizontalDrag
+//---------------------------------------------------------
+
+void Note::horizontalDrag(EditData &ed)
+      {
+      Chord* ch = chord();
+      Segment* seg = ch->segment();
+
+      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
+
+      // adjust segment on plain drag or Shift+cursor,
+      // adjust note/chord for Ctrl+drag or plain cursor
+      if (seg &&
+          (((ed.buttons & Qt::LeftButton) && !(ed.modifiers & Qt::ControlModifier))
+           || (ed.modifiers & Qt::ShiftModifier))) {
+
+            if (ed.delta.x() < 0)
+                  normalizeLeftDragDelta(seg, ed, ned);
+            }
+
+      const Spatium deltaSp = Spatium(ned->delta.x() / spatium());
+
+      if (seg->extraLeadingSpace() + deltaSp < Spatium(0)) {
+          return;
+      }
+
+      seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
+
       triggerLayout();
       }
 
@@ -2420,14 +2546,14 @@ void Note::updateRelLine(int relLine, bool undoable)
       int idx      = chord()->vStaffIdx();
 
       const Staff* staff  = score()->staff(idx);
-      const StaffType* st = staff->staffType(tick());
+      const StaffType* st = staff->staffTypeForElement(this);
 
       if (chord()->staffMove()) {
             // check that destination staff makes sense (might have been deleted)
             int minStaff = part()->startTrack() / VOICES;
             int maxStaff = part()->endTrack() / VOICES;
             const Staff* stf = this->staff();
-            if (idx < minStaff || idx >= maxStaff || st->group() != stf->staffType(tick())->group()) {
+            if (idx < minStaff || idx >= maxStaff || st->group() != stf->staffTypeForElement(this)->group()) {
                   qDebug("staffMove out of scope %d + %d min %d max %d",
                      staffIdx(), chord()->staffMove(), minStaff, maxStaff);
                   chord()->undoChangeProperty(Pid::STAFF_MOVE, 0);
@@ -2462,7 +2588,7 @@ void Note::updateLine()
 //    set note properties from NoteVal
 //---------------------------------------------------------
 
-void Note::setNval(const NoteVal& nval, int tick)
+void Note::setNval(const NoteVal& nval, Fraction tick)
       {
       setPitch(nval.pitch);
       _fret   = nval.fret;
@@ -2471,7 +2597,7 @@ void Note::setNval(const NoteVal& nval, int tick)
       _tpc[0] = nval.tpc1;
       _tpc[1] = nval.tpc2;
 
-      if (tick == -1 && chord())
+      if (tick == Fraction(-1,1) && chord())
             tick = chord()->tick();
       Interval v = part()->instrument(tick)->transpose();
       if (nval.tpc1 == Tpc::TPC_INVALID) {
@@ -2490,6 +2616,23 @@ void Note::setNval(const NoteVal& nval, int tick)
             }
 
       _headGroup = NoteHead::Group(nval.headGroup);
+      }
+
+//---------------------------------------------------------
+//   localSpatiumChanged
+//---------------------------------------------------------
+
+void Note::localSpatiumChanged(qreal oldValue, qreal newValue)
+      {
+      Element::localSpatiumChanged(oldValue, newValue);
+      for (Element* e : dots())
+            e->localSpatiumChanged(oldValue, newValue);
+      for (Element* e : el())
+            e->localSpatiumChanged(oldValue, newValue);
+      for (Spanner* spanner : spannerBack()) {
+            for (auto k : spanner->spannerSegments())
+                  k->localSpatiumChanged(oldValue, newValue);
+            }
       }
 
 //---------------------------------------------------------
@@ -2570,7 +2713,7 @@ bool Note::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::DOT_POSITION:
                   setUserDotPosition(v.value<Direction>());
-                  score()->setLayout(tick());
+                  triggerLayout();
                   return true;
             case Pid::HEAD_GROUP:
                   setHeadGroup(NoteHead::Group(v.toInt()));
@@ -2599,13 +2742,8 @@ bool Note::setProperty(Pid propertyId, const QVariant& v)
                   setVeloType(ValueType(v.toInt()));
                   score()->setPlaylistDirty();
                   break;
-            case Pid::VISIBLE: {                     // Pid::VISIBLE requires reflecting property on dots
+            case Pid::VISIBLE: {
                   setVisible(v.toBool());
-                  int dots = chord()->dots();
-                  for (int i = 0; i < dots; ++i) {
-                        if (_dots[i])
-                              _dots[i]->setVisible(visible());
-                        }
                   if (m)
                         m->checkMultiVoices(chord()->staffIdx());
                   break;
@@ -2627,6 +2765,16 @@ bool Note::setProperty(Pid propertyId, const QVariant& v)
             }
       triggerLayout();
       return true;
+      }
+
+//---------------------------------------------------------
+//   undoChangeDotsVisible
+//---------------------------------------------------------
+
+void Note::undoChangeDotsVisible(bool v)
+      {
+      for (NoteDot* dot : _dots)
+            dot->undoChangeProperty(Pid::VISIBLE, QVariant(v));
       }
 
 //---------------------------------------------------------
@@ -2695,120 +2843,12 @@ QString Note::propertyUserValue(Pid pid) const
       }
 
 //---------------------------------------------------------
-//   undoSetFret
-//---------------------------------------------------------
-
-void Note::undoSetFret(int val)
-      {
-      undoChangeProperty(Pid::FRET, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetString
-//---------------------------------------------------------
-
-void Note::undoSetString(int val)
-      {
-      undoChangeProperty(Pid::STRING, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetGhost
-//---------------------------------------------------------
-
-void Note::undoSetGhost(bool val)
-      {
-      undoChangeProperty(Pid::GHOST, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetSmall
-//---------------------------------------------------------
-
-void Note::undoSetSmall(bool val)
-      {
-      undoChangeProperty(Pid::SMALL, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetPlay
-//---------------------------------------------------------
-
-void Note::undoSetPlay(bool val)
-      {
-      undoChangeProperty(Pid::PLAY, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetTuning
-//---------------------------------------------------------
-
-void Note::undoSetTuning(qreal val)
-      {
-      undoChangeProperty(Pid::TUNING, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetVeloType
-//---------------------------------------------------------
-
-void Note::undoSetVeloType(ValueType val)
-      {
-      undoChangeProperty(Pid::VELO_TYPE, int(val));
-      }
-
-//---------------------------------------------------------
-//   undoSetVeloOffset
-//---------------------------------------------------------
-
-void Note::undoSetVeloOffset(int val)
-      {
-      undoChangeProperty(Pid::VELO_OFFSET, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetUserMirror
-//---------------------------------------------------------
-
-void Note::undoSetUserMirror(MScore::DirectionH val)
-      {
-      undoChangeProperty(Pid::MIRROR_HEAD, int(val));
-      }
-
-//---------------------------------------------------------
-//   undoSetUserDotPosition
-//---------------------------------------------------------
-
-void Note::undoSetUserDotPosition(Direction val)
-      {
-      undoChangeProperty(Pid::DOT_POSITION, QVariant::fromValue<Direction>(val));
-      }
-
-//---------------------------------------------------------
-//   undoSetHeadGroup
-//---------------------------------------------------------
-
-void Note::undoSetHeadGroup(NoteHead::Group val)
-      {
-      undoChangeProperty(Pid::HEAD_GROUP, int(val));
-      }
-
-//---------------------------------------------------------
 //   setHeadType
 //---------------------------------------------------------
 
 void Note::setHeadType(NoteHead::Type t)
       {
       _headType = t;
-      }
-
-//---------------------------------------------------------
-//   undoSetHeadType
-//---------------------------------------------------------
-
-void Note::undoSetHeadType(NoteHead::Type val)
-      {
-      undoChangeProperty(Pid::HEAD_TYPE, int(val));
       }
 
 //---------------------------------------------------------
@@ -2842,6 +2882,8 @@ void Note::setScore(Score* s)
             _tieFor->setScore(s);
       if (_accidental)
             _accidental->setScore(s);
+      for (NoteDot* dot : _dots)
+            dot->setScore(s);
       for (Element* el : _el)
             el->setScore(s);
       }
@@ -2860,6 +2902,8 @@ QString Note::accessibleInfo() const
             pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
       else if (staff()->isDrumStaff(tick()) && drumset)
             pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
+      else if (staff()->isTabStaff(tick()))
+            pitchName = QObject::tr("%1; String %2; Fret %3").arg(tpcUserName(false)).arg(QString::number(string() + 1)).arg(QString::number(fret()));
       else
             pitchName = tpcUserName(false);
       return QObject::tr("%1; Pitch: %2; Duration: %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
@@ -2872,13 +2916,17 @@ QString Note::accessibleInfo() const
 QString Note::screenReaderInfo() const
       {
       QString duration = chord()->durationUserName();
-      QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      Measure* m = chord()->measure();
+      bool voices = m ? m->hasVoices(staffIdx()) : false;
+      QString voice = voices ? QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1)) : "";
       QString pitchName;
       const Drumset* drumset = part()->instrument()->drumset();
       if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
             pitchName = chord()->noStem() ? QObject::tr("Beat Slash") : QObject::tr("Rhythm Slash");
       else if (staff()->isDrumStaff(tick()) && drumset)
             pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
+      else if (staff()->isTabStaff(tick()))
+            pitchName = QObject::tr("%1 String %2 Fret %3").arg(tpcUserName(true)).arg(QString::number(string() + 1)).arg(QString::number(fret()));
       else
             pitchName = tpcUserName(true);
       return QString("%1 %2 %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
@@ -2921,7 +2969,11 @@ QString Note::accessibleExtraInfo() const
                   }
             }
 
-      rez = QString("%1 %2").arg(rez).arg(chord()->accessibleExtraInfo());
+      // only read extra information for top note of chord
+      // (it is reached directly on next/previous element)
+      if (this == chord()->upNote())
+            rez = QString("%1 %2").arg(rez).arg(chord()->accessibleExtraInfo());
+
       return rez;
       }
 
@@ -2970,6 +3022,8 @@ Element* Note::nextInEl(Element* e)
       if (e == _el.back())
             return nullptr;
       auto i = std::find(_el.begin(), _el.end(), e);
+      if (i == _el.end())
+            return nullptr;
       return *(i+1);
       }
 
@@ -2983,7 +3037,14 @@ Element* Note::prevInEl(Element* e)
       if (e == _el.front())
             return nullptr;
       auto i = std::find(_el.begin(), _el.end(), e);
+      if (i == _el.end())
+            return nullptr;
       return *(i-1);
+      }
+
+static bool tieValid(Tie* tie)
+      {
+      return (tie && !tie->segmentsEmpty());
       }
 
 //---------------------------------------------------------
@@ -3004,7 +3065,7 @@ Element* Note::nextElement()
                   Element* next = nextInEl(e); // return next element in _el
                   if (next)
                         return next;
-                  else if (_tieFor)
+                  else if (tieValid(_tieFor))
                         return _tieFor->frontSegment();
                   else if (!_spannerFor.empty()) {
                         for (auto i : _spannerFor) {
@@ -3030,7 +3091,7 @@ Element* Note::nextElement()
             case ElementType::ACCIDENTAL:
                   if (!_el.empty())
                         return _el[0];
-                  if (_tieFor)
+                  if (tieValid(_tieFor))
                         return _tieFor->frontSegment();
                   if (!_spannerFor.empty()) {
                         for (auto i : _spannerFor) {
@@ -3043,7 +3104,7 @@ Element* Note::nextElement()
             case ElementType::NOTE:
                   if (!_el.empty())
                         return _el[0];
-                  if (_tieFor)
+                  if (tieValid(_tieFor))
                         return _tieFor->frontSegment();
                   if (!_spannerFor.empty()) {
                         for (auto i : _spannerFor) {
@@ -3083,7 +3144,7 @@ Element* Note::prevElement()
                         return _el.back();
                   return this;
             case ElementType::GLISSANDO_SEGMENT:
-                  if (_tieFor)
+                  if (tieValid(_tieFor))
                         return _tieFor->frontSegment();
                   else if (!_el.empty())
                         return _el.back();
@@ -3107,7 +3168,7 @@ Element* Note::lastElementBeforeSegment()
                         return i->spannerSegments().front();
                   }
             }
-      if (_tieFor)
+      if (tieValid(_tieFor))
             return _tieFor->frontSegment();
       if (!_el.empty())
             return _el.back();
@@ -3197,12 +3258,31 @@ std::vector<Note*> Note::tiedNotes() const
 
       notes.push_back(note);
       while (note->tieFor()) {
-            if (std::find(notes.begin(), notes.end(), note->tieFor()->endNote()) != notes.end())
+            Note* endNote = note->tieFor()->endNote();
+            if (!endNote || std::find(notes.begin(), notes.end(), endNote) != notes.end())
                   break;
-            note = note->tieFor()->endNote();
+            note = endNote;
             notes.push_back(note);
             }
       return notes;
+      }
+
+//---------------------------------------------------------
+//   unisonIndex
+//---------------------------------------------------------
+
+int Note::unisonIndex() const
+      {
+      int index = 0;
+      for (Note* n : chord()->notes()) {
+            if (n->pitch() == pitch()) {
+                  if (n == this)
+                        return index;
+                  else
+                        ++index;
+                  }
+            }
+      return 0;
       }
 
 //---------------------------------------------------------
@@ -3261,11 +3341,6 @@ void Note::setAccidentalType(AccidentalType type)
 Shape Note::shape() const
       {
       QRectF r(bbox());
-      qreal extraTieDistance = score()->styleP(Sid::MinTieLength) * .5;       // make room for ties
-      if (_tieFor)
-            r.adjust(0.0, 0.0, extraTieDistance, 0.0);
-      if (_tieBack)
-            r.adjust(-extraTieDistance, 0.0, 0.0, 0.0);
 
 #ifndef NDEBUG
       Shape shape(r, name());
@@ -3274,8 +3349,11 @@ Shape Note::shape() const
       if (_accidental)
             shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->name());
       for (auto e : _el) {
-            if (e->autoplace() && e->visible())
+            if (e->autoplace() && e->visible()) {
+                  if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE)
+                        continue;
                   shape.add(e->bbox().translated(e->pos()), e->name());
+                  }
             }
 #else
       Shape shape(r);
@@ -3283,8 +3361,13 @@ Shape Note::shape() const
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
       if (_accidental)
             shape.add(_accidental->bbox().translated(_accidental->pos()));
-      for (auto e : _el)
-            shape.add(e->bbox().translated(e->pos()));
+      for (auto e : _el) {
+            if (e->autoplace() && e->visible()) {
+                  if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE)
+                        continue;
+                  shape.add(e->bbox().translated(e->pos()));
+                  }
+            }
 #endif
       return shape;
       }

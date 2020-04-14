@@ -51,7 +51,7 @@ class SysStaff {
       bool _show  { true };         // derived from Staff or false if empty
                                     // staff is hidden
    public:
-      int idx     { 0    };
+      //int idx     { 0    };
       QList<InstrumentName*> instrumentNames;
 
       const QRectF& bbox() const    { return _bbox; }
@@ -77,34 +77,39 @@ class SysStaff {
 //---------------------------------------------------------
 
 class System final : public Element {
-      SystemDivider* _systemDividerLeft    { 0 };     // to the next system
-      SystemDivider* _systemDividerRight   { 0 };
+      SystemDivider* _systemDividerLeft    { nullptr };     // to the next system
+      SystemDivider* _systemDividerRight   { nullptr };
 
       std::vector<MeasureBase*> ml;
       QList<SysStaff*> _staves;
       QList<Bracket*> _brackets;
       QList<SpannerSegment*> _spannerSegments;
 
-      qreal _leftMargin              { 0.0    };     ///< left margin for instrument name, brackets etc.
-      mutable bool fixedDownDistance { false  };
-      qreal _distance;                               // temp. variable used during layout
+      qreal _leftMargin              { 0.0   };     ///< left margin for instrument name, brackets etc.
+      mutable bool fixedDownDistance { false };
+      qreal _distance                { 0.0   };     // temp. variable used during layout
 
-      SysStaff* firstVisibleSysStaff() const;
-      SysStaff* lastVisibleSysStaff() const;
+      int firstVisibleSysStaff() const;
+      int lastVisibleSysStaff() const;
 
-   public:
+      int getBracketsColumnsCount();
+      void setBracketsXPosition(const qreal xOffset);
+      Bracket* createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket *>& bl, Measure* measure);
+
+public:
       System(Score*);
       ~System();
-      virtual System* clone() const override      { return new System(*this); }
-      virtual ElementType type() const override   { return ElementType::SYSTEM; }
 
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
-      virtual void change(Element* o, Element* n) override;
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
+      System* clone() const override      { return new System(*this); }
+      ElementType type() const override   { return ElementType::SYSTEM; }
 
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      void add(Element*) override;
+      void remove(Element*) override;
+      void change(Element* o, Element* n) override;
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
+
+      void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
       void appendMeasure(MeasureBase*);
       void removeMeasure(MeasureBase*);
@@ -113,6 +118,8 @@ class System final : public Element {
       Page* page() const                    { return (Page*)parent(); }
 
       void layoutSystem(qreal);
+
+      void addBrackets(Measure* measure);
 
       void layout2();                     ///< Called after Measure layout.
       void clear();                       ///< Clear measure list.
@@ -128,20 +135,20 @@ class System final : public Element {
 
       SysStaff* insertStaff(int);
       void removeStaff(int);
+      void adjustStavesNumber(int);
 
       int y2staff(qreal y) const;
-      void setInstrumentNames(bool longName, int tick = 0);
-      int snap(int tick, const QPointF p) const;
-      int snapNote(int tick, const QPointF p, int staff) const;
+      void setInstrumentNames(bool longName, Fraction tick = {0,1});
+      Fraction snap(const Fraction& tick, const QPointF p) const;
+      Fraction snapNote(const Fraction& tick, const QPointF p, int staff) const;
 
       const std::vector<MeasureBase*>& measures() const { return ml; }
 
       MeasureBase* measure(int idx)          { return ml[idx]; }
       Measure* firstMeasure() const;
       Measure* lastMeasure() const;
-      int endTick() const;
+      Fraction endTick() const;
 
-      MeasureBase* prevMeasure(const MeasureBase*) const;
       MeasureBase* nextMeasure(const MeasureBase*) const;
 
       qreal leftMargin() const    { return _leftMargin; }
@@ -155,14 +162,15 @@ class System final : public Element {
       SystemDivider* systemDividerLeft() const  { return _systemDividerLeft; }
       SystemDivider* systemDividerRight() const { return _systemDividerRight; }
 
-      virtual Element* nextSegmentElement() override;
-      virtual Element* prevSegmentElement() override;
+      Element* nextSegmentElement() override;
+      Element* prevSegmentElement() override;
 
       qreal minDistance(System*) const;
       qreal topDistance(int staffIdx, const SkylineLine&) const;
       qreal bottomDistance(int staffIdx, const SkylineLine&) const;
       qreal minTop() const;
       qreal minBottom() const;
+      qreal spacerDistance(bool up) const;
 
       void moveBracket(int staffIdx, int srcCol, int dstCol);
       bool hasFixedDownDistance() const { return fixedDownDistance; }

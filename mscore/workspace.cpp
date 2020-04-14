@@ -26,31 +26,90 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "preferences.h"
 #include "palette.h"
-#include "palettebox.h"
+#include "palette/paletteworkspace.h"
 #include "extension.h"
+
+#if defined(FOR_WINSTORE)  // or even just Q_OS_WIN ?
+extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+#else
+int qt_ntfs_permission_lookup;
+#endif
 
 namespace Ms {
 
-bool Workspace::workspacesRead = false;
-//std::unordered_map<std::string, QVariant> Workspace::localPreferences {};
-Workspace* Workspace::currentWorkspace = nullptr;
-
-QList<Workspace*> Workspace::_workspaces {};
+bool WorkspacesManager::isWorkspacesListDirty = true;
+Workspace* WorkspacesManager::m_currentWorkspace = nullptr;
+QList<Workspace*> WorkspacesManager::m_workspaces {};
+QList<Workspace*> WorkspacesManager::m_visibleWorkspaces {};
 
 QList<QPair<QAction*, QString>> Workspace::actionToStringList {};
 QList<QPair<QMenu*  , QString>> Workspace::menuToStringList   {};
 
-const char* Workspace::advancedWorkspaceTranslatableName{ QT_TRANSLATE_NOOP("Ms::Workspace", "Advanced") };
-const char* Workspace::basicWorkspaceTranslatableName{ QT_TRANSLATE_NOOP("Ms::Workspace", "Basic") };
+std::vector<QString> WorkspacesManager::defaultWorkspaces {
+      QT_TRANSLATE_NOOP("Ms::Workspace", "Basic"),
+      QT_TRANSLATE_NOOP("Ms::Workspace", "Advanced"),
+      };
+
+std::vector<QString> WorkspacesManager::defaultEditedWorkspaces {
+      QT_TRANSLATE_NOOP("Ms::Workspace", "Basic edited"),
+      QT_TRANSLATE_NOOP("Ms::Workspace", "Advanced edited"),
+      };
 
 //---------------------------------------------------------
-//   undoWorkspace
+//   editedWorkspaceName
 //---------------------------------------------------------
 
-void MuseScore::undoWorkspace()
+static QString editedWorkspaceTranslatableName(const QString& oldWorkspaceTranslatableName)
       {
-      Workspace::currentWorkspace->read();
-      Workspace::currentWorkspace->setDirty(false);
+      if (oldWorkspaceTranslatableName.isEmpty())
+            return QString();
+
+      const auto it = std::find(WorkspacesManager::defaultWorkspaces.begin(), WorkspacesManager::defaultWorkspaces.end(), oldWorkspaceTranslatableName);
+
+      if (it != WorkspacesManager::defaultWorkspaces.end()) {
+            const int idx = it - WorkspacesManager::defaultWorkspaces.begin();
+            if (idx < int(WorkspacesManager::defaultEditedWorkspaces.size()))
+                  return WorkspacesManager::defaultEditedWorkspaces[idx];
+            }
+
+      return QString();
+      }
+
+//---------------------------------------------------------
+//   editedWorkspaceName
+//---------------------------------------------------------
+
+QString WorkspacesManager::defaultWorkspaceTranslatableName(const QString& editedWorkspaceName)
+      {
+      const auto it = std::find(WorkspacesManager::defaultEditedWorkspaces.begin(), WorkspacesManager::defaultEditedWorkspaces.end(), editedWorkspaceName);
+
+      if (it != WorkspacesManager::defaultEditedWorkspaces.end()) {
+            const int idx = it - WorkspacesManager::defaultEditedWorkspaces.begin();
+            if (idx < int(WorkspacesManager::defaultWorkspaces.size()))
+                  return WorkspacesManager::defaultWorkspaces[idx];
+            }
+
+      return QString();
+      }
+
+/**
+ *   Reverts current workspace to the state of the `source` workspace
+ */
+void MuseScore::resetWorkspace()
+      {
+      //if currentWorkspace is the `edited` Basic or Advanced one, remove the edited and show the source one
+      if (WorkspacesManager::isDefaultEditedWorkspace(WorkspacesManager::currentWorkspace())) {
+            const QString& currWorkspaceName = WorkspacesManager::currentWorkspace()->translatableName();
+            const QString& defaultWorkspaceName = WorkspacesManager::defaultWorkspaceTranslatableName(currWorkspaceName);
+            Q_ASSERT(!defaultWorkspaceName.isEmpty());
+            Workspace* defaultWorkspace = WorkspacesManager::findByTranslatableName(defaultWorkspaceName);
+            Workspace* currWorkspace = WorkspacesManager::currentWorkspace();
+            changeWorkspace(defaultWorkspace);
+            WorkspacesManager::remove(currWorkspace);
+            }
+      //else if currentWorkspace is a custom workspace, reset all palettes, toolbars, menus and GUI to the values defined in the source workspace
+      else
+            WorkspacesManager::currentWorkspace()->reset();
       }
 
 //---------------------------------------------------------
@@ -70,8 +129,7 @@ void MuseScore::showWorkspaceMenu()
             }
       menuWorkspaces->clear();
 
-      const QList<Workspace*> pl = Workspace::workspaces();
-      for (Workspace* p : pl) {
+      for (Workspace* p : WorkspacesManager::visibleWorkspaces()) {
             QAction* a = workspaces->addAction(qApp->translate("Ms::Workspace", p->name().toUtf8()));
             a->setCheckable(true);
             a->setData(p->path());
@@ -85,18 +143,17 @@ void MuseScore::showWorkspaceMenu()
       menuWorkspaces->addAction(a);
 
       a = new QAction(tr("Edit"), this);
-      a->setDisabled(Workspace::currentWorkspace->readOnly());
+      a->setDisabled(WorkspacesManager::currentWorkspace()->readOnly());
       connect(a, SIGNAL(triggered()), SLOT(editWorkspace()));
       menuWorkspaces->addAction(a);
 
       a = new QAction(tr("Delete"), this);
-      a->setDisabled(Workspace::currentWorkspace->readOnly());
+      a->setDisabled(WorkspacesManager::currentWorkspace()->readOnly());
       connect(a, SIGNAL(triggered()), SLOT(deleteWorkspace()));
       menuWorkspaces->addAction(a);
 
-      a = new QAction(tr("Undo Changes"), this);
-      a->setDisabled(Workspace::currentWorkspace->readOnly());
-      connect(a, SIGNAL(triggered()), SLOT(undoWorkspace()));
+      a = new QAction(tr("Reset workspace"), this);
+      connect(a, SIGNAL(triggered()), SLOT(resetWorkspace()));
       menuWorkspaces->addAction(a);
       }
 
@@ -106,23 +163,14 @@ void MuseScore::showWorkspaceMenu()
 
 void MuseScore::deleteWorkspace()
       {
-      if (!workspaces)
-            return;
-      QAction* a = workspaces->checkedAction();
-      if (!a)
-            return;
-      Workspace* workspace = 0;
-      for (Workspace* p : Workspace::workspaces()) {
-            if (p->name() == a->text()) {
-                  workspace = p;
-                  break;
-                  }
-            }
+      Workspace* workspace = WorkspacesManager::currentWorkspace();
       if (!workspace)
             return;
 
-      QMessageBox::StandardButton reply;
-      reply = QMessageBox::question(0,
+      QMessageBox::StandardButton reply =
+         (MScore::noGui && MScore::testMode)
+         ? QMessageBox::Yes
+         : QMessageBox::question(0,
                  QWidget::tr("Are you sure?"),
                  QWidget::tr("Do you really want to delete the '%1' workspace?").arg(workspace->name()),
                  QMessageBox::Yes | QMessageBox::No,
@@ -131,17 +179,9 @@ void MuseScore::deleteWorkspace()
       if (reply != QMessageBox::Yes)
             return;
 
-      Workspace::workspaces().removeOne(workspace);
-      QFile f(workspace->path());
-      f.remove();
-      delete workspace;
-      PaletteBox* pb = mscore->getPaletteBox();
-      pb->clear();
-      Workspace::currentWorkspace = Workspace::workspaces().first();
-      preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
-      changeWorkspace(Workspace::currentWorkspace);
-      pb = mscore->getPaletteBox();
-      pb->updateWorkspaces();
+      WorkspacesManager::remove(workspace);
+      WorkspacesManager::setCurrentWorkspace(WorkspacesManager::workspaces().first());
+      changeWorkspace(WorkspacesManager::currentWorkspace());
       updateIcons();
       }
 
@@ -151,17 +191,22 @@ void MuseScore::deleteWorkspace()
 
 void MuseScore::changeWorkspace(QAction* a)
       {
-      for (Workspace* p :Workspace::workspaces()) {
-            if (qApp->translate("Ms::Workspace", p->name().toUtf8()) == a->text()) {
+      changeWorkspace(a->text());
+      }
+
+//---------------------------------------------------------
+//   changeWorkspace
+//---------------------------------------------------------
+
+void MuseScore::changeWorkspace(const QString& name)
+      {
+      for (Workspace* p : WorkspacesManager::workspaces()) {
+            if (qApp->translate("Ms::Workspace", p->name().toUtf8()) == name) {
                   changeWorkspace(p);
-                  preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
-                  PaletteBox* pb = mscore->getPaletteBox();
-                  pb->updateWorkspaces();
-                  updateIcons();
                   return;
                   }
             }
-      qDebug("   workspace \"%s\" not found", qPrintable(a->text()));
+      qDebug("   workspace \"%s\" not found", qPrintable(name));
       }
 
 //---------------------------------------------------------
@@ -170,13 +215,23 @@ void MuseScore::changeWorkspace(QAction* a)
 
 void MuseScore::changeWorkspace(Workspace* p, bool first)
       {
-      Workspace::currentWorkspace->save();
+      if (!first)
+            WorkspacesManager::currentWorkspace()->save();
+
+      if (WorkspacesManager::currentWorkspace())
+            disconnect(getPaletteWorkspace(), &PaletteWorkspace::userPaletteChanged, WorkspacesManager::currentWorkspace(), QOverload<>::of(&Workspace::setDirty));
+
       p->read();
-      Workspace::currentWorkspace = p;
+      WorkspacesManager::setCurrentWorkspace(p);
       if (!first) {
             updateIcons();
             preferencesChanged(true);
             }
+
+      connect(getPaletteWorkspace(), &PaletteWorkspace::userPaletteChanged, WorkspacesManager::currentWorkspace(), QOverload<>::of(&Workspace::setDirty), Qt::UniqueConnection);
+
+      preferences.setPreference(PREF_APP_WORKSPACE, p->name());
+      emit mscore->workspacesChanged();
       }
 
 //---------------------------------------------------------
@@ -193,23 +248,45 @@ void MuseScore::updateIcons()
                   widget->setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
                   // apparently needed for viewModeCombo, see MuseScore::populateFileOperations
             }
+      for (QAction* a : cpitchTools->actions()) {
+            QWidget* widget = cpitchTools->widgetForAction(a);
+            if (widget->property("iconic-text") == true)
+                  widget->setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
+                  // so that toolbar buttons with text but no icon can match
+                  // the height of other toolbar buttons
+            }
       }
 
-//---------------------------------------------------------
-//   initWorkspace
-//---------------------------------------------------------
-
-void Workspace::initWorkspace()
+bool WorkspacesManager::isDefaultWorkspace(Workspace* workspace)
       {
-      for (Workspace* p : Workspace::workspaces()) {
-            if (p->name() == preferences.getString(PREF_APP_WORKSPACE)) {
-                  currentWorkspace = p;
-                  break;
-                  }
-            }
-      Q_ASSERT(!Workspace::workspaces().empty());
-      if (currentWorkspace == 0)
-            currentWorkspace = Workspace::workspaces().at(0);
+      //returns true if @workspace's name is one of the "Basic/Advanced"
+      return std::find(defaultWorkspaces.begin(), defaultWorkspaces.end(), workspace->translatableName()) != defaultWorkspaces.end();
+      }
+
+bool WorkspacesManager::isDefaultEditedWorkspace(Workspace* workspace)
+      {
+      //returns true if @workspace's name is one of the "Basic edited/Advanced edited"
+      return std::find(WorkspacesManager::defaultEditedWorkspaces.begin(), WorkspacesManager::defaultEditedWorkspaces.end(), workspace->translatableName()) != WorkspacesManager::defaultEditedWorkspaces.end();
+      }
+
+void WorkspacesManager::initCurrentWorkspace()
+      {
+      initWorkspaces();
+      m_currentWorkspace = findByName(preferences.getString(PREF_APP_WORKSPACE));
+      Q_ASSERT(!workspaces().empty());
+      if (m_currentWorkspace == 0)
+            m_currentWorkspace = workspaces().at(0);
+      }
+
+void WorkspacesManager::remove(Workspace* workspace)
+      {
+      m_workspaces.removeOne(findByName(workspace->name()));
+      QFile f(workspace->path());
+      f.remove();
+      delete workspace;
+      isWorkspacesListDirty = true;
+      initWorkspaces();
+      emit mscore->workspacesChanged();
       }
 
 //---------------------------------------------------------
@@ -234,6 +311,27 @@ Workspace::Workspace()
       saveComponents = false;
       saveToolbars = false;
       saveMenuBar = false;
+
+      _saveTimer.setInterval(0);
+      _saveTimer.setSingleShot(true);
+      connect(&_saveTimer, &QTimer::timeout, this, &Workspace::ensureWorkspaceSaved);
+      }
+
+//---------------------------------------------------------
+//   makeUserWorkspacePath
+///   Returns path for the workspace with the given \p name
+///   creating all the necessary directories.
+//---------------------------------------------------------
+
+QString WorkspacesManager::makeUserWorkspacePath(const QString& name)
+      {
+      const QString ext(".workspace");
+      QDir dir;
+      dir.mkpath(dataPath);
+      QString path(dataPath + "/workspaces");
+      dir.mkpath(path);
+      path += "/" + name + ext;
+      return path;
       }
 
 //---------------------------------------------------------
@@ -242,14 +340,9 @@ Workspace::Workspace()
 
 void Workspace::write()
       {
-      if (_path.isEmpty()) {
-            QString ext(".workspace");
-            QDir dir;
-            dir.mkpath(dataPath);
-            _path = dataPath + "/workspaces";
-            dir.mkpath(_path);
-            _path += "/" + _name + ext;
-            }
+      if (_path.isEmpty())
+            _path = WorkspacesManager::makeUserWorkspacePath(_name);
+
       MQZipWriter f(_path);
       f.setCreationPermissions(
          QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
@@ -294,8 +387,10 @@ void Workspace::write()
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       xml.stag("Workspace");
       // xml.tag("name", _name);
-      PaletteBox* pb = mscore->getPaletteBox();
-      pb->write(xml);
+      if (!_sourceWorkspaceName.isEmpty())
+            xml.tag("source", _sourceWorkspaceName);
+      const PaletteWorkspace* w = mscore->getPaletteWorkspace();
+      w->write(xml);
 
       // write toolbar settings
       if (saveToolbars) {
@@ -492,12 +587,18 @@ void Workspace::writeMenuBar(XmlWriter& xml, QMenuBar* mb)
             if (action->isSeparator())
                   xml.tag("action", "");
             else if (action->menu()) {
-                  xml.stag("Menu name=\"" + findStringFromMenu(action->menu()) + "\"");
-                  writeMenu(xml, action->menu());
-                  xml.etag();
+                  const QString menuString = findStringFromMenu(action->menu());
+                  if (!menuString.isEmpty()) {
+                        xml.stag("Menu name=\"" + menuString + "\"");
+                        writeMenu(xml, action->menu());
+                        xml.etag();
+                        }
                   }
-            else
-                  xml.tag("action", findStringFromAction(action));
+            else {
+                  const QString actionString = findStringFromAction(action);
+                  if (!actionString.isEmpty())
+                        xml.tag("action", actionString);
+                  }
 
             }
       xml.etag();
@@ -514,12 +615,17 @@ void Workspace::writeMenu(XmlWriter& xml, QMenu* menu)
             if (action->isSeparator())
                   xml.tag("action", "");
             else if (action->menu()) {
-                  xml.stag("Menu name=\"" + findStringFromMenu(action->menu()) + "\"");
-                  writeMenu(xml, action->menu());
-                  xml.etag();
+                  const QString menuString = findStringFromMenu(action->menu());
+                  if (!menuString.isEmpty()) {
+                        xml.stag("Menu name=\"" + menuString + "\"");
+                        writeMenu(xml, action->menu());
+                        xml.etag();
+                        }
                   }
             else {
-                  xml.tag("action", findStringFromAction(action));
+                  const QString actionString = findStringFromAction(action);
+                  if (!actionString.isEmpty())
+                        xml.tag("action", actionString);
                   }
             }
       }
@@ -529,6 +635,37 @@ extern QString readRootFile(MQZipReader*, QList<QString>&);
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
+
+void WorkspacesManager::readWorkspaceFile(const QString& path, std::function<void(XmlReader&)> readWorkspace)
+      {
+      MQZipReader f(path);
+      QList<QString> images;
+      QString rootfile = readRootFile(&f, images);
+      //
+      // load images
+      //
+      for (const QString& s : images)
+            imageStore.add(s, f.fileData(s));
+
+      if (rootfile.isEmpty()) {
+            qDebug("can't find rootfile in: %s", qPrintable(path));
+            return;
+            }
+
+      QByteArray ba = f.fileData(rootfile);
+      XmlReader e(ba);
+
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Workspace")
+                              readWorkspace(e);
+                        else
+                              e.unknown();
+                        }
+                  }
+            }
+      }
 
 void Workspace::read()
       {
@@ -544,37 +681,41 @@ void Workspace::read()
             return;
             }
       QFileInfo fi(_path);
+      qt_ntfs_permission_lookup++;
       _readOnly = !fi.isWritable();
-
-      MQZipReader f(_path);
-      QList<QString> images;
-      QString rootfile = readRootFile(&f, images);
-      //
-      // load images
-      //
-      for (const QString& s : images)
-            imageStore.add(s, f.fileData(s));
-
-      if (rootfile.isEmpty()) {
-            qDebug("can't find rootfile in: %s", qPrintable(_path));
-            return;
-            }
-
-      QByteArray ba = f.fileData(rootfile);
-      XmlReader e(ba);
+      qt_ntfs_permission_lookup--;
 
       preferences.updateLocalPreferences();
 
-      while (e.readNextStartElement()) {
-            if (e.name() == "museScore") {
-                  while (e.readNextStartElement()) {
-                        if (e.name() == "Workspace")
-                              read(e);
-                        else
-                              e.unknown();
-                        }
+      WorkspacesManager::readWorkspaceFile(_path, [this](XmlReader& e) { read(e); });
+      }
+
+/**
+      Reset the workspace to the state of the source workspace.
+      Works for Custom workspaces ONLY!
+ */
+void Workspace::reset()
+      {
+      saveToolbars = saveMenuBar = saveComponents = false;
+      preferences.setUseLocalPreferences(false);
+      preferences.updateLocalPreferences();
+      const Workspace* srcWorkspace = sourceWorkspace();
+      WorkspacesManager::readWorkspaceFile(srcWorkspace->path(), [this](XmlReader& e) { read(e); });
+      save();
+      }
+
+std::unique_ptr<PaletteTree> Workspace::getPaletteTree() const
+      {
+      std::unique_ptr<PaletteTree> paletteTree(new PaletteTree);
+      WorkspacesManager::readWorkspaceFile(_path, [&](XmlReader& e) {
+            while (e.readNextStartElement()) {
+                  if (e.name() == "PaletteBox")
+                        paletteTree->read(e);
+                  else
+                        e.skipCurrentElement();
                   }
-            }
+            });
+      return paletteTree;
       }
 
 void Workspace::read(XmlReader& e)
@@ -586,15 +727,11 @@ void Workspace::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "name")
                   e.readElementText();
+            else if (tag == "source")
+                  _sourceWorkspaceName = e.readElementText();
             else if (tag == "PaletteBox") {
-                  PaletteBox* paletteBox = mscore->getPaletteBox();
-                  paletteBox->clear();
-                  paletteBox->read(e);
-                  QList<Palette*> pl = paletteBox->palettes();
-                  foreach (Palette* p, pl) {
-                        p->setSystemPalette(_readOnly);
-                        connect(paletteBox, SIGNAL(changed()), SLOT(setDirty()));
-                        }
+                  PaletteWorkspace* w = mscore->getPaletteWorkspace();
+                  w->read(e);
                   }
             else if (tag == "Toolbar") {
                   saveToolbars = true;
@@ -684,21 +821,22 @@ void Workspace::read(XmlReader& e)
             else if (tag == "MenuBar") {
                   saveMenuBar = true;
                   QMenuBar* mb = mscore->menuBar();
+                  const QObjectList menus(mb->children()); // need a copy
+                  for (QObject* m : menus) {
+                        QMenu* menu = qobject_cast<QMenu*>(m);
+                        if (menu) {
+                              menu->setParent(nullptr);
+                              menu->deleteLater();
+                              }
+                        }
                   mb->clear();
+                  menuToStringList.clear();
                   while (e.readNextStartElement()) {
                         if (e.hasAttribute("name")) { // is a menu
                               QString menu_id = e.attribute("name");
-                              QMenu* menu = findMenuFromString(menu_id);
-                              if (menu) {
-                                    menu->clear();
-                                    mb->addMenu(menu);
-                                    readMenu(e, menu);
-                                    }
-                              else {
-                                    menu = new QMenu(menu_id);
-                                    mb->addMenu(menu);
-                                    readMenu(e, menu);
-                                    }
+                              QMenu* menu = mb->addMenu(menu_id);
+                              addMenuAndString(menu, menu_id);
+                              readMenu(e, menu);
                               }
                         else { // is an action
                               QString action_id = e.readXml();
@@ -710,6 +848,7 @@ void Workspace::read(XmlReader& e)
                                     }
                               }
                         }
+                  mscore->updateMenus();
                   }
             else if (tag == "State") {
                   saveComponents = true;
@@ -742,6 +881,9 @@ void Workspace::read(XmlReader& e)
             readGlobalMenuBar();
       if (!saveComponents)
             readGlobalGUIState();
+
+      if (const Workspace* src = sourceWorkspace())
+            mscore->getPaletteWorkspace()->setDefaultPaletteTree(src->getPaletteTree());
       }
 
 //---------------------------------------------------------
@@ -753,17 +895,9 @@ void Workspace::readMenu(XmlReader& e, QMenu* menu)
       while (e.readNextStartElement()) {
             if (e.hasAttribute("name")) { // is a menu
                   QString menu_id = e.attribute("name");
-                  QMenu* new_menu = findMenuFromString(menu_id);
-                  if (new_menu) {
-                        new_menu->clear();
-                        menu->addMenu(new_menu);
-                        readMenu(e, new_menu);
-                        }
-                  else {
-                        new_menu = new QMenu(menu_id);
-                        menu->addMenu(new_menu);
-                        readMenu(e, new_menu);
-                        }
+                  QMenu* new_menu = menu->addMenu(menu_id);
+                  addMenuAndString(new_menu, menu_id);
+                  readMenu(e, new_menu);
                   }
             else { // is an action
                   QString action_id = e.readXml();
@@ -796,21 +930,22 @@ void Workspace::readGlobalMenuBar()
                   while (e.readNextStartElement()) {
                         if (e.name() == "MenuBar") {
                               QMenuBar* mb = mscore->menuBar();
+                              const QObjectList menus(mb->children()); // need a copy
+                              for (QObject* m : menus) {
+                                    QMenu* menu = qobject_cast<QMenu*>(m);
+                                    if (menu) {
+                                          menu->setParent(nullptr);
+                                          menu->deleteLater();
+                                          }
+                                    }
                               mb->clear();
+                              menuToStringList.clear();
                               while (e.readNextStartElement()) {
                                     if (e.hasAttribute("name")) { // is a menu
                                           QString menu_id = e.attribute("name");
-                                          QMenu* menu = findMenuFromString(menu_id);
-                                          if (menu) {
-                                                menu->clear();
-                                                mb->addMenu(menu);
-                                                readMenu(e, menu);
-                                                }
-                                          else {
-                                                menu = new QMenu(menu_id);
-                                                mb->addMenu(menu);
-                                                readMenu(e, menu);
-                                                }
+                                          QMenu* menu = mb->addMenu(menu_id);
+                                          addMenuAndString(menu, menu_id);
+                                          readMenu(e, menu);
                                           }
                                     else { // is an action
                                           QString action_id = e.readXml();
@@ -822,6 +957,7 @@ void Workspace::readGlobalMenuBar()
                                                 }
                                           }
                                     }
+                              mscore->updateMenus();
                               }
                         else
                               e.unknown();
@@ -925,6 +1061,53 @@ void Workspace::readGlobalGUIState()
       }
 
 //---------------------------------------------------------
+//   ensureWorkspaceSaved
+//---------------------------------------------------------
+
+void Workspace::ensureWorkspaceSaved()
+      {
+      if (!_dirty)
+            return;
+
+      if (_readOnly) {
+            setTranslatableName(editedWorkspaceTranslatableName(translatableName()));
+
+            if (translatableName().isEmpty()) {
+                  /*: Name of the edited read-only workspace, %1 is replaced with the old workspace name */
+                  setName(tr("%1 edited").arg(name()));
+                  }
+            else
+                  setName(tr(translatableName().toUtf8()));
+
+            _path = WorkspacesManager::makeUserWorkspacePath(translatableName().isEmpty() ? name() : translatableName());
+
+            write();
+
+            const QFileInfo fi(_path);
+            qt_ntfs_permission_lookup++;
+            _readOnly = !fi.isWritable();
+            qt_ntfs_permission_lookup--;
+            Q_ASSERT(!_readOnly);
+
+            WorkspacesManager::refreshWorkspaces();
+            preferences.setPreference(PREF_APP_WORKSPACE, name());
+            emit mscore->workspacesChanged();
+            }
+      else
+            write();
+      }
+
+//---------------------------------------------------------
+//   setDirty
+//---------------------------------------------------------
+
+void Workspace::setDirty(bool val)
+      {
+      _dirty = val;
+      _saveTimer.start();
+      }
+
+//---------------------------------------------------------
 //   save
 //---------------------------------------------------------
 
@@ -937,107 +1120,168 @@ void Workspace::save()
 
       if (_readOnly)
             return;
-      PaletteBox* pb = mscore->getPaletteBox();
-      if (pb)
-            write();
+
+      write();
       }
 
-//---------------------------------------------------------
-//   workspaces
-//---------------------------------------------------------
-
-QList<Workspace*>& Workspace::workspaces()
+static QStringList findWorkspaceFiles()
       {
-      if (!workspacesRead) {
-            // Remove all workspaces but Basic and Advanced
-            QMutableListIterator<Workspace*> it(_workspaces);
-            int index = 0;
-            while (it.hasNext()) {
-                  Workspace* w = it.next();
-                  if (index >= 2) {
-                        delete w;
-                        it.remove();
-                        }
-                  index++;
+      QStringList path;
+      path << mscoreGlobalShare + "workspaces";
+      path << dataPath + "/workspaces";
+
+      QStringList extensionsDir = Extension::getDirectoriesByType(Extension::workspacesDir);
+      path.append(extensionsDir);
+
+      QStringList nameFilters;
+      nameFilters << "*.workspace";
+
+      QStringList workspaces;
+
+      for (const QString& s : path) {
+            QDir dir(s);
+            QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
+
+            for (const QString& entry : pl) {
+                  const QString workspacePath(s + "/" + entry);
+                  workspaces << workspacePath;
                   }
-            QStringList path;
-            path << mscoreGlobalShare + "workspaces";
-            path << dataPath + "/workspaces";
+            }
 
-            QStringList extensionsDir = Extension::getDirectoriesByType(Extension::workspacesDir);
-            path.append(extensionsDir);
+      return workspaces;
+      }
 
-            QStringList nameFilters;
-            nameFilters << "*.workspace";
+void WorkspacesManager::initWorkspaces()
+      {
+      if (!isWorkspacesListDirty)
+            return;
+      
+      QList<Workspace*> oldWorkspaces(m_workspaces);
+      QList<Workspace*> editedWorkpaces;
+      
+      for (const QString& path : findWorkspaceFiles()) {
+            Workspace* p = 0;
+            QFileInfo fi(path);
+            QString name(fi.completeBaseName());
 
-            for (const QString& s : path) {
-                  QDir dir(s);
-                  bool translate = (s == mscoreGlobalShare + "workspaces");
-                  QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
+            const bool isDefault = std::find(WorkspacesManager::defaultWorkspaces.begin(), WorkspacesManager::defaultWorkspaces.end(), name) != WorkspacesManager::defaultWorkspaces.end();
+            const bool isEditedDefault = std::find(WorkspacesManager::defaultEditedWorkspaces.begin(), WorkspacesManager::defaultEditedWorkspaces.end(), name) != WorkspacesManager::defaultEditedWorkspaces.end();
 
-                  foreach (const QString& entry, pl) {
-                        Workspace* p = 0;
-                        QFileInfo fi(s + "/" + entry);
-                        QString name(fi.completeBaseName());
-                        for (Workspace* w : _workspaces) {
-                              if (w->name() == name) {
-                                    p = w;
-                                    break;
-                                    }
-                              }
-                        if (!p)
-                              p = new Workspace;
-                        p->setPath(s + "/" + entry);
-                        p->setName(name);
-                        if (translate)
-                              p->setTranslatableName(name);
-                        p->setReadOnly(!fi.isWritable());
-                        _workspaces.append(p);
-                        }
-                  }
-            // hack
-            for (int i = 0; i < _workspaces.size(); i++) {
-                  if (_workspaces[i]->translatableName() == basicWorkspaceTranslatableName) {
-                        _workspaces.move(i, 0);
+            const bool translate = isDefault || isEditedDefault;
+
+            for (Workspace* w : m_workspaces) {
+                  if (w->name() == name || (translate && w->translatableName() == name)) {
+                        p = w;
                         break;
                         }
                   }
-            retranslate(&_workspaces);
-            workspacesRead = true;
+
+            if (p)
+                  oldWorkspaces.removeOne(p);
+            else {
+                  p = new Workspace;
+                  m_workspaces.append(p);
+                  }
+
+            p->setPath(path);
+            p->setName(name);
+
+            if (translate)
+                  p->setTranslatableName(name);
+
+            qt_ntfs_permission_lookup++;
+            p->setReadOnly(!fi.isWritable());
+            qt_ntfs_permission_lookup--;
+
+            if (isEditedDefault)
+                  editedWorkpaces.push_back(p);
             }
 
-      return _workspaces;
+      for (Workspace* old : oldWorkspaces)
+            m_workspaces.removeOne(old);
+
+      if (m_workspaces.empty())
+            qFatal("No workspaces found");
+
+      if (oldWorkspaces.contains(WorkspacesManager::currentWorkspace()))
+            WorkspacesManager::setCurrentWorkspace(m_workspaces.first());
+
+      qDeleteAll(oldWorkspaces);
+
+      // hack
+      for (int i = 0; i < m_workspaces.size(); i++) {
+            const QString& trName = m_workspaces[i]->translatableName();
+            if (trName == WorkspacesManager::defaultWorkspaces[0] || trName == WorkspacesManager::defaultEditedWorkspaces[0]) {
+                  m_workspaces.move(i, 0);
+                  break;
+                  }
+            }
+      
+      retranslate(m_workspaces);
+      
+      // Delete default workspaces if there are corresponding user-edited ones
+      m_visibleWorkspaces = m_workspaces;
+      for (Workspace* ew : editedWorkpaces) {
+            const QString uneditedName = defaultWorkspaceTranslatableName(ew->translatableName());
+            if (uneditedName.isEmpty())
+                  continue;
+
+            for (auto it = m_visibleWorkspaces.begin(); it != m_visibleWorkspaces.end(); ++it) {
+                  Workspace* w = *it;
+                  if (w->translatableName() == uneditedName) {
+                        m_visibleWorkspaces.erase(it);
+                        break;
+                        }
+                  }
+            }
+      
+      isWorkspacesListDirty = false;
       }
 
 //---------------------------------------------------------
 //   refreshWorkspaces
 //---------------------------------------------------------
 
-QList<Workspace*>& Workspace::refreshWorkspaces()
+void WorkspacesManager::refreshWorkspaces()
       {
-      workspacesRead = false;
-      return workspaces();
+      isWorkspacesListDirty = true;
+      initWorkspaces();
       }
 
-//---------------------------------------------------------
-//   retranslate
-//---------------------------------------------------------
-
-void Workspace::retranslate(QList<Workspace*>* workspacesList)
+const Workspace* Workspace::sourceWorkspace() const
       {
-      if (!workspacesList)
-            workspacesList = &workspaces();
-      for (auto w : *workspacesList) {
-            if (!w->translatableName().isEmpty())
-                  w->setName(tr(w->translatableName().toLatin1().constData()));
+      const QString sourceName = _sourceWorkspaceName.isEmpty() ? WorkspacesManager::defaultWorkspaces[0] : _sourceWorkspaceName;
+
+      if (translatableName() == sourceName || name() == sourceName)
+            return this;
+
+      Workspace* sourceWorkspace = WorkspacesManager::findByName(sourceName);
+      if (!sourceWorkspace)
+            sourceWorkspace = WorkspacesManager::findByTranslatableName(sourceName);
+      
+      return !!sourceWorkspace ? sourceWorkspace : WorkspacesManager::workspaces()[0];
+      }
+
+void WorkspacesManager::retranslate(QList<Workspace*>& workspacesList)
+      {
+      for (auto w : workspacesList) {
+            if (!w->translatableName().isEmpty()) {
+                  auto transName = qApp->translate("Ms::Workspace", w->translatableName().toLatin1().constData());
+                  w->setName(transName);
+                  }
             }
+      }
+
+void WorkspacesManager::retranslateAll()
+      {
+      retranslate(m_workspaces);
       }
 
 //---------------------------------------------------------
 //   createNewWorkspace
 //---------------------------------------------------------
 
-Workspace* Workspace::createNewWorkspace(const QString& name)
+Workspace* WorkspacesManager::createNewWorkspace(const QString& name)
       {
       Workspace* w = new Workspace;
       w->setName(name);
@@ -1045,19 +1289,25 @@ Workspace* Workspace::createNewWorkspace(const QString& name)
       w->setDirty(false);
       w->setReadOnly(false);
       w->write();
+      w->setSourceWorkspaceName(WorkspacesManager::currentWorkspace()->sourceWorkspaceName());
 
-      // all palettes in new workspace are editable
-
-      PaletteBox* paletteBox = mscore->getPaletteBox();
-      QList<Palette*> pl = paletteBox->palettes();
-      for (Palette* p : pl) {
-            p->setSystemPalette(false);
-            for (int i = 0; i < p->size(); ++i)
-                  p->setCellReadOnly(i, false);
-            }
-
-      _workspaces.append(w);
+      m_workspaces.append(w);
+      m_visibleWorkspaces.append(w);
       return w;
+      }
+
+//---------------------------------------------------------
+//   clearWorkspaces
+//---------------------------------------------------------
+
+void WorkspacesManager::clearWorkspaces()
+      {
+      m_currentWorkspace = nullptr;
+      for (Workspace* w : m_workspaces)
+            w->deleteLater();
+      m_workspaces.clear();
+      m_visibleWorkspaces.clear();
+      isWorkspacesListDirty = true;
       }
 
 //---------------------------------------------------------
@@ -1176,10 +1426,14 @@ QString Workspace::findStringFromMenu(QMenu* menu)
 
 void Workspace::rename(const QString& s)
       {
-      QFile file (_path);
-      file.remove();
+      const QString newPath = WorkspacesManager::makeUserWorkspacePath(s);
+
+      QFile file(_path);
+      if (file.exists())
+            file.rename(newPath);
+
       setName(s);
-      _path = "";
+      _path = newPath;
       save();
       }
 }

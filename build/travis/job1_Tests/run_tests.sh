@@ -6,6 +6,7 @@ cd build.debug/mtest
 # vnc is the only tested platform plugin that allows to run
 # mscore executable in the used Travis environment.
 export QT_QPA_PLATFORM=vnc
+export ASAN_OPTIONS=detect_leaks=0
 
 xvfb-run -a ctest -j2 --output-on-failure
 
@@ -36,7 +37,7 @@ rm -f /tmp/$$ # Cleanup
 
 #pwd == build.debug/mtest
 cd ../../vtest
-VTEST_BROWSER=ls xvfb-run ./gen
+VTEST_BROWSER=ls VTEST_GEN_METADATA=1 xvfb-run ./gen
 cd -
 
 #make reporthtml
@@ -51,8 +52,8 @@ cd -
 
 cd ..
 cd ..
-if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
-then # Build is marked UNSTABLE inside CMakeLists.txt
+if [ "$(cmake -P config.cmake | grep -P 'MSCORE_UNSTABLE\s+TRUE')" ]
+then # Build is marked UNSTABLE
   echo "Unstable version: do not upload source zip file"
 else
   make clean

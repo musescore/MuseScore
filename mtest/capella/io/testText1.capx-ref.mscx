@@ -46,7 +46,7 @@
       <VBox>
         <height>14</height>
         </VBox>
-      <Measure len="1/2">
+      <Measure len="2/4">
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -57,11 +57,9 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <autoplace>0</autoplace>
             <text>Test text 1</text>
             </StaffText>
           <StaffText>
-            <autoplace>0</autoplace>
             <text>This is the subtitle</text>
             </StaffText>
           <Chord>
@@ -178,7 +176,6 @@
               </Note>
             </Chord>
           <StaffText>
-            <autoplace>0</autoplace>
             <text>MuseScore testfile
 Leon Vinken</text>
             </StaffText>

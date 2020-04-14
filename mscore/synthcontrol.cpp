@@ -24,6 +24,8 @@
 #include "libmscore/xml.h"
 #include "libmscore/undo.h"
 #include "effects/effectgui.h"
+#include "libmscore/part.h"
+#include "libmscore/instrument.h"
 
 namespace Ms {
 
@@ -83,26 +85,39 @@ SynthControl::SynthControl(QWidget* parent)
       recallButton->setEnabled(false);
       changeTuningButton->setEnabled(false);
 
+      gainSlider->setLog(false);
+      gainSlider->setRange(synti->minGainAsDecibels, synti->maxGainAsDecibels);
+      gainSlider->setDclickValue1(synti->defaultGainAsDecibels);
+      gainSlider->setDclickValue2(synti->defaultGainAsDecibels);
+      gainSlider->setValue(synti->gainAsDecibels());
+
       enablePlay = new EnablePlayForWidget(this);
       connect(effectA,      SIGNAL(currentIndexChanged(int)), SLOT(effectAChanged(int)));
       connect(effectB,      SIGNAL(currentIndexChanged(int)), SLOT(effectBChanged(int)));
-      connect(gain,         SIGNAL(valueChanged(double,int)), SLOT(gainChanged(double,int)));
+      connect(gainSlider,   SIGNAL(valueChanged(double,int)), SLOT(gainChanged(double,int)));
       connect(masterTuning, SIGNAL(valueChanged(double)),     SLOT(masterTuningChanged(double)));
       connect(changeTuningButton, SIGNAL(clicked()),          SLOT(changeMasterTuning()));
       connect(loadButton,   SIGNAL(clicked()),                SLOT(loadButtonClicked()));
       connect(saveButton,   SIGNAL(clicked()),                SLOT(saveButtonClicked()));
       connect(storeButton,  SIGNAL(clicked()),                SLOT(storeButtonClicked()));
       connect(recallButton, SIGNAL(clicked()),                SLOT(recallButtonClicked()));
-      connect(gain,         SIGNAL(valueChanged(double,int)), SLOT(setDirty()));
+      connect(gainSlider,         SIGNAL(valueChanged(double,int)), SLOT(setDirty()));
+      connect(dynamicsMethodList, SIGNAL(currentIndexChanged(int)), SLOT(dynamicsMethodChanged(int)));
+      connect(ccToUseList,        SIGNAL(currentIndexChanged(int)), SLOT(ccToUseChanged(int)));
+      connect(switchExpr,   SIGNAL(clicked()),                SLOT(switchExprButtonClicked()));
+      connect(switchNonExpr,SIGNAL(clicked()),                SLOT(switchNonExprButtonClicked()));
+      connect(resetExpr,    SIGNAL(clicked()),                SLOT(resetExprButtonClicked()));
       }
 
 //---------------------------------------------------------
 //   setGain
 //---------------------------------------------------------
 
+// synthesizer has signalled a gain change - update the slider
 void SynthControl::setGain(float val)
       {
-      gain->setValue(val);
+      Q_UNUSED(val);
+      gainSlider->setValue(synti->gainAsDecibels());
       }
 
 //---------------------------------------------------------
@@ -170,9 +185,10 @@ void MuseScore::showSynthControl(bool val)
 //   gainChanged
 //---------------------------------------------------------
 
+// user has moved the gain control on this widget - update the synthesizer
 void SynthControl::gainChanged(double val, int)
       {
-      emit gainChanged(val);
+      synti->setGainAsDecibels(val);
       }
 
 //---------------------------------------------------------
@@ -201,8 +217,8 @@ void SynthControl::changeMasterTuning()
 
 void SynthControl::setMeter(float l, float r, float left_peak, float right_peak)
       {
-      gain->setMeterVal(0, l, left_peak);
-      gain->setMeterVal(1, r, right_peak);
+      gainSlider->setMeterVal(0, l, left_peak);
+      gainSlider->setMeterVal(1, r, right_peak);
       }
 
 //---------------------------------------------------------
@@ -221,8 +237,8 @@ void SynthControl::setScore(Score* s) {
 
 void SynthControl::stop()
       {
-      gain->setMeterVal(0, .0, .0);
-      gain->setMeterVal(1, .0, .0);
+      gainSlider->setMeterVal(0, .0, .0);
+      gainSlider->setMeterVal(1, .0, .0);
       }
 
 //---------------------------------------------------------
@@ -245,6 +261,79 @@ void SynthControl::effectBChanged(int idx)
       synti->setEffect(1, idx);
       effectStackB->setCurrentIndex(idx);
       setDirty();
+      }
+
+//---------------------------------------------------------
+//   dynamicsMethodChanged
+//---------------------------------------------------------
+
+void SynthControl::dynamicsMethodChanged(int val)
+      {
+      ccToUseList->setEnabled(val != 0);
+      synti->setDynamicsMethod(val);
+      setDirty();
+      }
+
+//---------------------------------------------------------
+//   ccToUseChanged
+//---------------------------------------------------------
+
+void SynthControl::ccToUseChanged(int val)
+      {
+      synti->setCcToUseIndex(val);
+      setDirty();
+      }
+
+//---------------------------------------------------------
+//   switchExprButtonClicked
+//---------------------------------------------------------
+
+void SynthControl::switchExprButtonClicked()
+      {
+      _score->masterScore()->updateExpressive(MuseScore::synthesizer("Fluid"), true, true);
+      setAllUserBankController(true);
+      updateMixer();
+      }
+
+//---------------------------------------------------------
+//   switchNonExprButtonClicked
+//---------------------------------------------------------
+
+void SynthControl::switchNonExprButtonClicked()
+      {
+      _score->masterScore()->updateExpressive(MuseScore::synthesizer("Fluid"), false, true);
+      setAllUserBankController(true);
+      updateMixer();
+      }
+
+//---------------------------------------------------------
+//   resetExprButtonClicked
+//---------------------------------------------------------
+
+void SynthControl::resetExprButtonClicked()
+      {
+      setAllUserBankController(false);
+      _score->masterScore()->updateExpressive(MuseScore::synthesizer("Fluid"));
+      updateMixer();
+      }
+
+//---------------------------------------------------------
+//   setAllUserBankController
+//---------------------------------------------------------
+
+void SynthControl::setAllUserBankController(bool val)
+      {
+      _score->startCmd();
+      for (Part* p : _score->parts()) {
+            const InstrumentList* il = p->instruments();
+            for (auto it = il->begin(); it != il->end(); it++) {
+                  Instrument* i = it->second;
+                  for (Channel* c : i->channel()) {
+                        _score->undo(new SetUserBankController(c, val));
+                        }
+                  }
+            }
+      _score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -275,13 +364,18 @@ void SynthControl::saveButtonClicked()
       if (!_score)
             return;
       _score->startCmd();
-      _score->undo(new ChangeSynthesizerState(_score, synti->state()));
+      SynthesizerState ss = synti->state();
+      if (_dirty || !_score->synthesizerState().isDefault())
+            ss.setIsDefault(false);
+      _score->undo(new ChangeSynthesizerState(_score, ss));
       _score->endCmd();
 
+      updateExpressivePatches();
       loadButton->setEnabled(false);
       saveButton->setEnabled(false);
       storeButton->setEnabled(true);
       recallButton->setEnabled(true);
+      _dirty = false;
       }
 
 //---------------------------------------------------------
@@ -310,6 +404,7 @@ void SynthControl::recallButtonClicked()
             else
                   e.unknown();
             }
+      state.setIsDefault(true);
       synti->setState(state);
       updateGui();
 
@@ -333,8 +428,10 @@ void SynthControl::storeButtonClicked()
             return;
             }
       synti->storeState();
+      updateExpressivePatches();
       storeButton->setEnabled(false);
       recallButton->setEnabled(false);
+      _dirty = false;
       }
 
 //---------------------------------------------------------
@@ -345,6 +442,13 @@ void SynthControl::updateGui()
       {
       masterTuning->setValue(synti->masterTuning());
       setGain(synti->gain());
+
+      dynamicsMethodList->setCurrentIndex(synti->dynamicsMethod());
+      ccToUseList->setCurrentIndex(synti->ccToUseIndex());
+      if (dynamicsMethodList->currentIndex() == 0)
+            ccToUseList->setEnabled(false);
+      else
+            ccToUseList->setEnabled(true);
 
       int idx = synti->indexOfEffect(0);
       effectA->setCurrentIndex(idx);
@@ -365,11 +469,32 @@ void SynthControl::updateGui()
       }
 
 //---------------------------------------------------------
+//   updateExpressivePatches
+//---------------------------------------------------------
+
+void SynthControl::updateExpressivePatches()
+      {
+      _score->masterScore()->rebuildAndUpdateExpressive(MuseScore::synthesizer("Fluid"));
+      updateMixer();
+      }
+
+//---------------------------------------------------------
+//   updateMixer
+//---------------------------------------------------------
+
+void SynthControl::updateMixer()
+      {
+      if (mscore->getMixer())
+            mscore->getMixer()->updateTracks();
+      }
+
+//---------------------------------------------------------
 //   setDirty
 //---------------------------------------------------------
 
 void SynthControl::setDirty()
       {
+      _dirty = true;
       loadButton->setEnabled(true);
       saveButton->setEnabled(true);
       storeButton->setEnabled(true);

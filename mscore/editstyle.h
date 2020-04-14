@@ -28,6 +28,7 @@
 namespace Ms {
 
 class Score;
+class EditStyle;
 
 //---------------------------------------------------------
 //   StyleWidget
@@ -39,6 +40,14 @@ struct StyleWidget {
       QObject* widget;
       QToolButton* reset;
       };
+
+//---------------------------------------------------------
+//   EditStylePage
+///   This is a type for a pointer to any QWidget that is a member of EditStyle.
+///   It's used to create static references to the pointers to pages.
+//---------------------------------------------------------
+
+typedef QWidget* EditStyle::* EditStylePage;
 
 //---------------------------------------------------------
 //   EditStyle
@@ -53,13 +62,18 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       QVector<StyleWidget> styleWidgets;
       QButtonGroup* keySigNatGroup;
       QButtonGroup* clefTypeGroup;
+      bool isTooBig;
+      bool hasShown;
 
+      virtual void showEvent(QShowEvent*);
       virtual void hideEvent(QHideEvent*);
       QVariant getValue(Sid idx);
       void setValues();
 
       void applyToAllParts();
       const StyleWidget& styleWidget(Sid) const;
+
+      static const std::map<ElementType, EditStylePage> PAGES;
 
    private slots:
       void selectChordDescriptionFile();
@@ -68,6 +82,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void toggleFooterOddEven(bool);
       void buttonClicked(QAbstractButton*);
       void setSwingParams(bool);
+      void concertPitchToggled(bool);
       void lyricsDashMinLengthValueChanged(double);
       void lyricsDashMaxLengthValueChanged(double);
       void systemMinDistanceValueChanged(double);
@@ -83,10 +98,13 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void endEditUserStyleName();
       void resetUserStyleName();
 
-public:
-      static const int PAGE_NOTE = 6;
+   public:
       EditStyle(Score*, QWidget*);
       void setPage(int no);
+      void setScore(Score* s) { cs = s; }
+
+      void gotoElement(Element* e);
+      static bool elementHasPage(Element* e);
       };
 
 

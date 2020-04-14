@@ -19,7 +19,7 @@
 */
 
 #include "mscore.h"
-#include "velo.h"
+#include "changeMap.h"
 #include "pitch.h"
 #include "cleflist.h"
 #include "keylist.h"
@@ -93,21 +93,21 @@ class Staff final : public ScoreElement {
       QMap<int,int> _capoList;
       bool _playbackVoice[VOICES] { true, true, true, true };
 
-      VeloList _velocities;         ///< cached value
+      ChangeMap _velocities;         ///< cached value
       PitchList _pitchOffsets;      ///< cached value
 
-      void scaleChanged(double oldValue, double newValue);
       void fillBrackets(int);
       void cleanBrackets();
 
+      qreal mag(const StaffType*) const;
+
    public:
       Staff(Score* score = 0);
-      ~Staff();
       void init(const InstrumentTemplate*, const StaffType *staffType, int);
       void initFromStaffType(const StaffType* staffType);
       void init(const Staff*);
 
-      virtual ElementType type() const override { return ElementType::STAFF; }
+      ElementType type() const override { return ElementType::STAFF; }
 
       bool isTop() const;
       QString partName() const;
@@ -132,36 +132,39 @@ class Staff final : public ScoreElement {
       int bracketLevels() const;
 
       ClefList& clefList()                           { return clefs;  }
-      ClefTypeList clefType(int tick) const;
+      ClefTypeList clefType(const Fraction&) const;
       ClefTypeList defaultClefType() const           { return _defaultClefType; }
       void setDefaultClefType(const ClefTypeList& l) { _defaultClefType = l; }
-      ClefType clef(int tick) const;
-      int nextClefTick(int tick) const;
+      ClefType clef(const Fraction&) const;
+      Fraction nextClefTick(const Fraction&) const;
+      Fraction currentClefTick(const Fraction&) const;
 
       void setClef(Clef*);
-      void removeClef(Clef*);
+      void removeClef(const Clef*);
 
       void addTimeSig(TimeSig*);
       void removeTimeSig(TimeSig*);
       void clearTimeSig();
-      Fraction timeStretch(int tick) const;
-      TimeSig* timeSig(int tick) const;
-      TimeSig* nextTimeSig(int tick) const;
-      bool isLocalTimeSignature(int tick) { return timeStretch(tick) != Fraction(1, 1); }
+      Fraction timeStretch(const Fraction&) const;
+      TimeSig* timeSig(const Fraction&) const;
+      TimeSig* nextTimeSig(const Fraction&) const;
+      Fraction currentTimeSigTick(const Fraction&) const;
 
-      const Groups& group(int tick) const;
+      bool isLocalTimeSignature(const Fraction& tick) { return timeStretch(tick) != Fraction(1, 1); }
 
-      KeyList* keyList()               { return &_keys;                  }
-      Key key(int tick) const          { return keySigEvent(tick).key(); }
-      KeySigEvent keySigEvent(int tick) const;
-      int nextKeyTick(int tick) const;
-      int currentKeyTick(int tick) const;
-      KeySigEvent prevKey(int tick) const;
-      void setKey(int tick, KeySigEvent);
-      void removeKey(int tick);
+      const Groups& group(const Fraction&) const;
+
+      KeyList* keyList()                      { return &_keys;                  }
+      Key key(const Fraction& tick) const     { return keySigEvent(tick).key(); }
+      KeySigEvent keySigEvent(const Fraction&) const;
+      Fraction nextKeyTick(const Fraction&) const;
+      Fraction currentKeyTick(const Fraction&) const;
+      KeySigEvent prevKey(const Fraction&) const;
+      void setKey(const Fraction&, KeySigEvent);
+      void removeKey(const Fraction&);
 
       bool show() const;
-      bool slashStyle(int tick) const;
+      bool stemless(const Fraction&) const;
       bool invisible() const         { return _invisible;   }
       void setInvisible(bool val)    { _invisible = val;    }
       bool cutaway() const           { return _cutaway;     }
@@ -182,74 +185,70 @@ class Staff final : public ScoreElement {
       void setBarLineTo(int val)     { _barLineTo = val;    }
       qreal height() const;
 
-      int channel(int tick, int voice) const;
+      int channel(const Fraction&, int voice) const;
       void clearChannelList(int voice)                               { _channelList[voice].clear(); }
-      void insertIntoChannelList(int voice, int tick, int channelId) { _channelList[voice].insert(tick, channelId); }
+      void insertIntoChannelList(int voice, const Fraction& tick, int channelId) { _channelList[voice].insert(tick.ticks(), channelId); }
 
-      SwingParameters swing(int tick)  const;
+      SwingParameters swing(const Fraction&)  const;
       void clearSwingList()                                  { _swingList.clear(); }
-      void insertIntoSwingList(int tick, SwingParameters sp) { _swingList.insert(tick, sp); }
+      void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { _swingList.insert(tick.ticks(), sp); }
 
-      int capo(int tick) const;
+      int capo(const Fraction&) const;
       void clearCapoList()                             { _capoList.clear(); }
-      void insertIntoCapoList(int tick, int fretId)    { _capoList.insert(tick, fretId); }
+      void insertIntoCapoList(const Fraction& tick, int fretId)    { _capoList.insert(tick.ticks(), fretId); }
 
-      //==== staff type
-      const StaffType* staffType(int tick) const;
-      const StaffType* constStaffType(int tick) const;
-      StaffType* staffType(int tick);
-      StaffType* setStaffType(int tick, const StaffType&);
-      void staffTypeListChanged(int tick);
+      //==== staff type helper function
+      const StaffType* staffType(const Fraction&) const;
+      const StaffType* constStaffType(const Fraction&) const;
+      const StaffType* staffTypeForElement(const Element*) const;
+      StaffType* staffType(const Fraction&);
+      StaffType* setStaffType(const Fraction&, const StaffType&);
+      void removeStaffType(const Fraction&);
+      void staffTypeListChanged(const Fraction&);
 
-      bool isPitchedStaff(int tick) const;
-      bool isTabStaff(int tick) const;
-      bool isDrumStaff(int tick) const;
+      bool isPitchedStaff(const Fraction&) const;
+      bool isTabStaff(const Fraction&) const;
+      bool isDrumStaff(const Fraction&) const;
 
-      int lines(int tick) const;
-      void setLines(int tick, int lines);
-      qreal lineDistance(int tick) const;
+      int lines(const Fraction&) const;
+      void setLines(const Fraction&, int lines);
+      qreal lineDistance(const Fraction&) const;
 
-      void setSlashStyle(int tick, bool val);
-      int middleLine(int tick) const;
-      int bottomLine(int tick) const;
+      void setSlashStyle(const Fraction&, bool val);
+      int middleLine(const Fraction&) const;
+      int bottomLine(const Fraction&) const;
 
-      qreal userMag(int tick) const;
-      void setUserMag(int tick, qreal m);
-      qreal mag(int tick) const;
-      bool small(int tick) const;
-      void setSmall(int tick, bool val);
-      qreal spatium(int tick) const;
+      qreal mag(const Fraction&) const;
+      qreal mag(const Element*) const;
+      qreal spatium(const Fraction&) const;
+      qreal spatium(const Element*) const;
       //===========
 
-      VeloList& velocities()           { return _velocities;     }
+      ChangeMap& velocities()           { return _velocities;     }
       PitchList& pitchOffsets()        { return _pitchOffsets;   }
 
-      int pitchOffset(int tick)        { return _pitchOffsets.pitchOffset(tick);   }
+      int pitchOffset(const Fraction& tick) { return _pitchOffsets.pitchOffset(tick.ticks());   }
       void updateOttava();
 
-//      LinkedStaves* linkedStaves() const    { return _linkedStaves; }
-//      void setLinkedStaves(LinkedStaves* l) { _linkedStaves = l;    }
       QList<Staff*> staffList() const;
-//      void linkTo(Staff* staff);
-//      bool isLinked(Staff* staff);
-//      void unlink(Staff* staff);
       bool primaryStaff() const;
 
       qreal userDist() const        { return _userDist;  }
       void setUserDist(qreal val)   { _userDist = val;   }
 
       void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+      void localSpatiumChanged(double oldVal, double newVal, Fraction tick);
       bool genKeySig();
-      bool showLedgerLines(int tick) const;
+      bool showLedgerLines(const Fraction&) const;
 
       QColor color() const                { return _color; }
       void setColor(const QColor& val)    { _color = val;    }
       void undoSetColor(const QColor& val);
-      void insertTime(int tick, int len);
+      void insertTime(const Fraction&, const Fraction& len);
 
-      virtual QVariant getProperty(Pid) const override;
-      virtual bool setProperty(Pid, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant getProperty(Pid) const override;
+      bool setProperty(Pid, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
 
       BracketType innerBracket() const;
 
@@ -265,6 +264,9 @@ class Staff final : public ScoreElement {
       void dumpKeys(const char*) const {}
       void dumpTimeSigs(const char*) const {}
 #endif
+
+      void triggerLayout();
+      void triggerLayout(const Fraction& tick);
       };
 
 }     // namespace Ms

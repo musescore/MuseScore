@@ -117,8 +117,8 @@ ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
             instrumentList->addItem(item);
             }
 
-      connect(newButton, SIGNAL(clicked()), SLOT(newClicked()));
-      connect(newAllButton, SIGNAL(clicked()), SLOT(newAllClicked()));
+      connect(singlePartButton, SIGNAL(clicked()), SLOT(singlePartClicked()));
+      connect(allPartsButton, SIGNAL(clicked()), SLOT(allPartsClicked()));
       connect(deleteButton, SIGNAL(clicked()), SLOT(deleteClicked()));
       connect(moveUpButton, SIGNAL(clicked()), SLOT(moveUpClicked()));
       connect(moveDownButton, SIGNAL(clicked()), SLOT(moveDownClicked()));
@@ -134,6 +134,9 @@ ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
               SLOT(addButtonClicked()));
       connect(title, SIGNAL(textChanged(const QString&)), SLOT(titleChanged(const QString&)));
 
+      moveUpButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      moveDownButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+      
       for (int i = 1; i <= VOICES; i++) {
             //partList->model()->setHeaderData(i, Qt::Horizontal, MScore::selectColor[i-1], Qt::BackgroundRole);
             partList->header()->resizeSection(i, 30);
@@ -165,10 +168,10 @@ void MuseScore::startExcerptsDialog()
       }
 
 //---------------------------------------------------------
-//   newClicked
+//   singlePartClicked
 //---------------------------------------------------------
 
-void ExcerptsDialog::newClicked()
+void ExcerptsDialog::singlePartClicked()
       {
       QString name = createName("Part");
       Excerpt* e   = new Excerpt(score);
@@ -191,10 +194,10 @@ void ExcerptsDialog::newClicked()
       }
 
 //---------------------------------------------------------
-//   newAllClicked
+//   allPartsClicked
 //---------------------------------------------------------
 
-void ExcerptsDialog::newAllClicked()
+void ExcerptsDialog::allPartsClicked()
       {
       QList<Excerpt*> excerpts = Excerpt::createAllExcerpt(score);
       ExcerptItem* ei = 0;
@@ -268,7 +271,7 @@ void ExcerptsDialog::addButtonClicked()
 
       Excerpt* cur = ((ExcerptItem*)(excerptList->currentItem()))->excerpt();
 
-      foreach(QListWidgetItem* i, instrumentList->selectedItems()) {
+      for (QListWidgetItem* i : instrumentList->selectedItems()) {
             InstrumentItem* item = static_cast<InstrumentItem*>(i);
             const PartItem* it   = item->partItem();
             if (it == 0)

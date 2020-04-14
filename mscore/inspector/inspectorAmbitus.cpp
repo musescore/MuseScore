@@ -33,8 +33,8 @@ enum AmbitusControl : char {
 InspectorAmbitus::InspectorAmbitus(QWidget* parent)
    : InspectorElementBase(parent)
       {
-      r.setupUi(addWidget());
       s.setupUi(addWidget());
+      r.setupUi(addWidget());
 
       static const NoteHead::Group heads[] = {
             NoteHead::Group::HEAD_NORMAL,
@@ -66,13 +66,13 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       //
       // fix order of noteheads and tpc's
       //
-      for (int i = 0; i < int(sizeof(heads)/sizeof(*heads)); ++i)
+      for (unsigned i = 0; i < sizeof(heads)/sizeof(*heads); ++i)
             r.noteHeadGroup->setItemData(i, int(heads[i]));
       // noteHeadType starts at -1
       for (int i = 0; i < 5; ++i)
             r.noteHeadType->setItemData(i, i-1);
       // set proper itemdata for TPC combos
-      for (int i = 0; i < int(sizeof(tpcs)/sizeof(*tpcs)); ++i) {
+      for (unsigned i = 0; i < sizeof(tpcs)/sizeof(*tpcs); ++i) {
             r.topTpc->   setItemData(i, tpcs[i]);
             r.bottomTpc->setItemData(i, tpcs[i]);
             }
@@ -119,6 +119,17 @@ void InspectorAmbitus::setElement()
 //      InspectorBase::setElement();
       }
 */
+
+void InspectorAmbitus::setElement()
+      {
+      InspectorElementBase::setElement();
+      if (!r.hasLine->isChecked()) {
+            r.labelLineWidth->setEnabled(false);
+            r.lineWidth->setEnabled(false);
+            r.resetLineWidth->setEnabled(false);
+            }
+      }
+
 //---------------------------------------------------------
 //   valueChanged
 //---------------------------------------------------------
@@ -133,18 +144,22 @@ void InspectorAmbitus::valueChanged(int idx)
             }
       }
 
-}
-
 //---------------------------------------------------------
-//   on updateRange clicked
+//   updateRange
+//    Automatically adjust range based on the score
 //---------------------------------------------------------
 
-void Ms::InspectorAmbitus::updateRange()
-{
+void InspectorAmbitus::updateRange()
+      {
       Ambitus* range = toAmbitus(inspector->element());
       range->updateRange();
-      range->layout();              // redo layout
-      setElement();                 // set Inspector values to range properties
-      valueChanged(AmbitusControl::TOPTPC);         // force score to notice new range properties
-}
 
+      range->score()->startCmd();
+      range->triggerLayout();
+      range->score()->endCmd();
+
+      setElement(); // set Inspector values to range properties
+      valueChanged(AmbitusControl::TOPTPC); // force score to notice new range properties
+      }
+
+}

@@ -23,6 +23,7 @@ namespace Ms {
 
 static const ElementStyle jumpStyle {
       { Sid::repeatRightPlacement, Pid::PLACEMENT },
+      { Sid::repeatMinDistance,    Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------
@@ -101,7 +102,7 @@ QString Jump::jumpTypeUserName() const
 void Jump::layout()
       {
       TextBase::layout();
-      autoplaceMeasureElement(0.5 * spatium());
+      autoplaceMeasureElement();
       }
 
 //---------------------------------------------------------

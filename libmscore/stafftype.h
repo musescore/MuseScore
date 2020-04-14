@@ -187,7 +187,7 @@ class StaffType {
 
       bool _showBarlines    = true;
       bool _showLedgerLines = true;
-      bool _slashStyle      = false;      // do not show stems
+      bool _stemless        = false;      // do not show stems
 
       bool _genClef         = true;       // create clef at beginning of system
       bool _genTimesig      = true;       // whether time signature is shown or not
@@ -300,8 +300,8 @@ class StaffType {
       void write(XmlWriter& xml) const;
       void read(XmlReader&);
 
-      void setSlashStyle(bool val)             { _slashStyle = val;       }
-      bool slashStyle() const                  { return _slashStyle;      }
+      void setStemless(bool val)               { _stemless = val;       }
+      bool stemless() const                    { return _stemless;      }
       bool genTimesig() const                  { return _genTimesig;      }
       void setGenTimesig(bool val)             { _genTimesig = val;       }
       qreal doty1() const;
@@ -418,28 +418,31 @@ enum class TabBeamGrid : char {
       };
 
 class TabDurationSymbol final : public Element {
-      qreal       _beamLength;      // if _grid==MEDIALFINAL, length of the beam toward previous grid element
-      int         _beamLevel;       // if _grid==MEDIALFINAL, the number of beams
-      TabBeamGrid _beamGrid;        // value for special 'English' grid display
-      const StaffType*  _tab;
+      qreal       _beamLength { 0.0 };      // if _grid==MEDIALFINAL, length of the beam toward previous grid element
+      int         _beamLevel  { 0 };       // if _grid==MEDIALFINAL, the number of beams
+      TabBeamGrid _beamGrid   { TabBeamGrid::NONE };        // value for special 'English' grid display
+      const StaffType*  _tab  { nullptr};
       QString     _text;
+      bool        _repeat     { false };
 
    public:
       TabDurationSymbol(Score* s);
       TabDurationSymbol(Score* s, const StaffType* tab, TDuration::DurationType type, int dots);
       TabDurationSymbol(const TabDurationSymbol&);
-      virtual TabDurationSymbol* clone() const  { return new TabDurationSymbol(*this); }
-      virtual void draw(QPainter*) const;
-      virtual bool isEditable() const           { return false; }
-      virtual void layout();
-      virtual ElementType type() const        { return ElementType::TAB_DURATION_SYMBOL; }
+      TabDurationSymbol* clone() const override  { return new TabDurationSymbol(*this); }
+      void draw(QPainter*) const override;
+      bool isEditable() const override           { return false; }
+      void layout() override;
+      ElementType type() const override          { return ElementType::TAB_DURATION_SYMBOL; }
 
-      TabBeamGrid beamGrid()                    { return _beamGrid; }
+      TabBeamGrid beamGrid()                     { return _beamGrid; }
       void layout2();               // second step of layout: after horiz. pos. are defined, compute width of 'grid beams'
       void setDuration(TDuration::DurationType type, int dots, const StaffType* tab) {
             _tab = tab;
             _text = tab->durationString(type, dots);
             }
+      bool isRepeat() const                     { return _repeat; }
+      void setRepeat(bool val)                  { _repeat = val;  }
       };
 
 }     // namespace Ms

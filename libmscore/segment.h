@@ -25,40 +25,6 @@ class ChordRest;
 class Spanner;
 class System;
 
-//-------------------------------------------------------------------
-//   SegmentType
-//
-//    Type values determine the order of segments for a given tick
-//-------------------------------------------------------------------
-
-enum class SegmentType {
-      Invalid            = 0x0,
-      BeginBarLine       = 0x1,
-      HeaderClef         = 0x2,
-      KeySig             = 0x4,
-      Ambitus            = 0x8,
-      TimeSig            = 0x10,
-      Clef               = 0x20,
-      StartRepeatBarLine = 0x40,
-      BarLine            = 0x80,
-      Breath             = 0x100,
-      //--
-      ChordRest          = 0x200,
-      //--
-      EndBarLine         = 0x400,
-      KeySigAnnounce     = 0x800,
-      TimeSigAnnounce    = 0x1000,
-      All                = -1,
-      BarLineType        = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine
-      };
-
-constexpr SegmentType operator| (const SegmentType t1, const SegmentType t2) {
-      return static_cast<SegmentType>(static_cast<int>(t1) | static_cast<int>(t2));
-      }
-constexpr bool operator& (const SegmentType t1, const SegmentType t2) {
-      return static_cast<int>(t1) & static_cast<int>(t2);
-      }
-
 //------------------------------------------------------------------------
 //   @@ Segment
 //    A segment holds all vertical aligned staff elements.
@@ -88,8 +54,8 @@ class Segment final : public Element {
       Spatium _extraLeadingSpace;
       qreal _stretch;
 
-      Segment* _next;                     // linked list of segments inside a measure
-      Segment* _prev;
+      Segment* _next = nullptr;                     // linked list of segments inside a measure
+      Segment* _prev = nullptr;
 
       std::vector<Element*> _annotations;
       std::vector<Element*> _elist;       // Element storage, size = staves * VOICES.
@@ -107,22 +73,24 @@ class Segment final : public Element {
 
    public:
       Segment(Measure* m = 0);
-      Segment(Measure*, SegmentType, int tick);
+      Segment(Measure*, SegmentType, const Fraction&);
       Segment(const Segment&);
       ~Segment();
 
-      virtual Segment* clone() const      { return new Segment(*this); }
-      virtual ElementType type() const    { return ElementType::SEGMENT; }
+      Segment* clone() const override      { return new Segment(*this); }
+      ElementType type() const override    { return ElementType::SEGMENT; }
 
-      virtual void setScore(Score*) override;
+      void setScore(Score*) override;
 
       Segment* next() const               { return _next;   }
       Segment* next(SegmentType) const;
+      Segment* nextActive() const;
       Segment* nextEnabled() const;
       void setNext(Segment* e)            { _next = e;      }
 
       Segment* prev() const               { return _prev;   }
       Segment* prev(SegmentType) const;
+      Segment* prevActive() const;
       Segment* prevEnabled() const;
       void setPrev(Segment* e)            { _prev = e;      }
 
@@ -149,25 +117,25 @@ class Segment final : public Element {
 
       // a variant of the above function, specifically designed to be called from QML
       //@ returns the element at track 'track' (null if none)
-      Q_INVOKABLE Ms::Element* elementAt(int track) const;
+      Ms::Element* elementAt(int track) const;
 
       const std::vector<Element*>& elist() const { return _elist; }
       std::vector<Element*>& elist()             { return _elist; }
 
       void removeElement(int track);
       void setElement(int track, Element* el);
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
       Measure* measure() const                   { return toMeasure(parent()); }
       System* system() const                     { return toSystem(parent()->parent()); }
-      qreal x() const                            { return ipos().x();         }
+      qreal x() const override                   { return ipos().x();         }
       void setX(qreal v)                         { rxpos() = v;               }
 
       void insertStaff(int staff);
       void removeStaff(int staff);
 
-      virtual void add(Element*);
-      virtual void remove(Element*);
+      void add(Element*) override;
+      void remove(Element*) override;
       void swapElements(int i1, int i2);
 
       void sortStaves(QList<int>& dst);
@@ -188,14 +156,12 @@ class Segment final : public Element {
       qreal stretch() const                      { return _stretch; }
       void setStretch(qreal v)                   { _stretch = v;    }
 
-      void setTick(int t);
-      virtual int tick() const override;
-      virtual int rtick() const override;
-      Fraction rfrac() const;
-      Fraction afrac() const;
-      void setRtick(int val);
-      int ticks() const;
-      void setTicks(int val);
+      Fraction rtick() const override    { return _tick;    }
+      void setRtick(const Fraction& v)           { Q_ASSERT(v >= Fraction(0,1));  _tick = v;       }
+      Fraction tick() const override;
+
+      Fraction ticks() const                     { return _ticks;   }
+      void setTicks(const Fraction& v)           { _ticks = v;      }
 
       bool splitsTuplet() const;
 
@@ -214,18 +180,17 @@ class Segment final : public Element {
       Spatium extraLeadingSpace() const          { return _extraLeadingSpace;  }
       void setExtraLeadingSpace(Spatium v)       { _extraLeadingSpace = v;     }
 
-      virtual void write(XmlWriter&) const;
-      virtual void read(XmlReader&);
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
 
-      virtual QVariant getProperty(Pid propertyId) const;
-      virtual bool setProperty(Pid propertyId, const QVariant&);
-      virtual QVariant propertyDefault(Pid) const;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
 
       bool operator<(const Segment&) const;
       bool operator>(const Segment&) const;
 
       virtual QString accessibleExtraInfo() const override;
-
 
       Element* firstInNextSegments(int activeStaff); //<
       Element* lastInPrevSegments(int activeStaff);   //<
@@ -278,14 +243,38 @@ class Segment final : public Element {
       };
 
 //---------------------------------------------------------
+//   nextActive
+//---------------------------------------------------------
+
+inline Segment* Segment::nextActive() const
+      {
+      Segment* ns = next();
+      while (ns && !(ns->enabled() && ns->visible()))
+            ns = ns->next();
+      return ns;
+      }
+
+//---------------------------------------------------------
 //   nextEnabled
 //---------------------------------------------------------
 
 inline Segment* Segment::nextEnabled() const
       {
-      Segment* ps = next();
-      while (ps && !ps->enabled())
-            ps = ps->next();
+      Segment* ns = next();
+      while (ns && !ns->enabled())
+            ns = ns->next();
+      return ns;
+      }
+
+//---------------------------------------------------------
+//   prevActive
+//---------------------------------------------------------
+
+inline Segment* Segment::prevActive() const
+      {
+      Segment* ps = prev();
+      while (ps && !(ps->enabled() && ps->visible()))
+            ps = ps->prev();
       return ps;
       }
 

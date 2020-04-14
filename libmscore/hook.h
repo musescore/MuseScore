@@ -24,18 +24,19 @@ class Chord;
 //---------------------------------------------------------
 
 class Hook final : public Symbol {
-      int _hookType;
+      int _hookType { 0 };
 
    public:
       Hook(Score* = 0);
-      virtual Hook* clone() const override        { return new Hook(*this); }
-      virtual qreal mag() const override          { return parent()->mag(); }
-      virtual ElementType type() const override   { return ElementType::HOOK; }
+
+      Hook* clone() const override        { return new Hook(*this); }
+      qreal mag() const override          { return parent()->mag(); }
+      ElementType type() const override   { return ElementType::HOOK; }
       void setHookType(int v);
-      int hookType() const                        { return _hookType; }
-      virtual void layout() override;
-      virtual void draw(QPainter*) const override;
-      Chord* chord() const                         { return (Chord*)parent(); }
+      int hookType() const                { return _hookType; }
+      void layout() override;
+      void draw(QPainter*) const override;
+      Chord* chord() const                { return (Chord*)parent(); }
       };
 
 

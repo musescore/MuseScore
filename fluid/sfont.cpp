@@ -52,6 +52,7 @@ SFont::SFont(Fluid* f)
       synth       = f;
       samplepos   = 0;
       samplesize  = 0;
+      _id         = 0;
       _bankOffset = 0;
       }
 
@@ -831,9 +832,9 @@ unsigned char SFont::READB()
 //   READC
 //---------------------------------------------------------
 
-char SFont::READC()
+signed char SFont::READC()
       {
-      char var;
+      signed char var;
       safe_fread(&var, 1);
       return var;
       }
@@ -908,6 +909,9 @@ void SFont::process_info(int size)
                   /* force terminate info item (don't forget uint8 info ID) */
                   *(item + chunk.size) = '\0';
                   infos.append(item);
+
+                  if (id == INAM_ID)
+                        _fontName = QString(reinterpret_cast<char*>(item + 1));
                   }
             else
                   throw(QString("Invalid chunk id in INFO chunk"));
@@ -1707,7 +1711,7 @@ void SFont::safe_fread(void* buf, int count)
       {
       if (f.read((char*)buf, count) != count) {
             if (f.atEnd())
-                  throw(QString("EOF while attemping to read %1 bytes").arg(count));
+                  throw(QString("EOF while attempting to read %1 bytes").arg(count));
             else
                   throw(QString("File read failed"));
             }

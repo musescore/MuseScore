@@ -16,6 +16,7 @@
 #include "sym.h"
 #include "rest.h"
 #include "mscore.h"
+#include "accidental.h"
 
 namespace Ms {
 
@@ -114,6 +115,15 @@ void ShadowNote::draw(QPainter* painter) const
       QPen pen(MScore::selectColor[_voice].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::RoundCap);
       painter->setPen(pen);
 
+      // draw the accidental
+      SymId acc = Accidental::subtype2symbol(score()->inputState().accidentalType());
+      if (acc != SymId::noSym) {
+            QPointF posAcc;
+            posAcc.rx() -= symWidth(acc) + score()->styleP(Sid::accidentalNoteDistance) * mag();
+            drawSymbol(acc, painter, posAcc);
+            }
+
+      // draw the notehead
       drawSymbol(_notehead, painter);
 
       // draw the dots

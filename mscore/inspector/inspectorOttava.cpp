@@ -13,10 +13,7 @@
 #include "inspector.h"
 #include "inspectorOttava.h"
 #include "inspectorTextLine.h"
-#include "musescore.h"
 #include "libmscore/ottava.h"
-#include "libmscore/score.h"
-#include "icons.h"
 
 namespace Ms {
 

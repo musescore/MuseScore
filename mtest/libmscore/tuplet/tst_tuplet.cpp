@@ -42,6 +42,7 @@ class TestTuplet : public QObject, public MTest
       void split2() { split("split2.mscx",   "split2-ref.mscx");  }
       void split3() { split("split3.mscx",   "split3-ref.mscx");  }
       void split4() { split("split4.mscx",   "split4-ref.mscx");  }
+      void saveLoad();
       void addStaff();
       };
 
@@ -63,16 +64,16 @@ bool TestTuplet::createTuplet(int n, ChordRest* cr)
       if (cr->durationType() < TDuration(TDuration::DurationType::V_128TH))
             return false;
 
-      Fraction f(cr->duration());
-      int tick    = cr->tick();
-      Tuplet* ot  = cr->tuplet();
+      Fraction f(cr->ticks());
+      Fraction tick = cr->tick();
+      Tuplet* ot    = cr->tuplet();
 
       f.reduce();       //measure duration might not be reduced
       Fraction ratio(n, f.numerator());
       Fraction fr(1, f.denominator());
-      while (ratio.numerator() >= ratio.denominator()*2) {
-            ratio /= 2;
-            fr    /= 2;
+      while (ratio.numerator() >= ratio.denominator() * 2) {
+            ratio *= Fraction(1,2);
+            fr    *= Fraction(1,2);
             }
 
       Tuplet* tuplet = new Tuplet(cr->score());
@@ -87,7 +88,7 @@ bool TestTuplet::createTuplet(int n, ChordRest* cr)
       //             (assume tpq = 480)
       //
 
-      tuplet->setDuration(f);
+      tuplet->setTicks(f);
       TDuration baseLen(fr);
       tuplet->setBaseLen(baseLen);
 
@@ -98,7 +99,9 @@ bool TestTuplet::createTuplet(int n, ChordRest* cr)
 
       if (ot)
             tuplet->setTuplet(ot);
+      cr->score()->startCmd();
       cr->score()->cmdCreateTuplet(cr, tuplet);
+      cr->score()->endCmd();
       return true;
       }
 
@@ -118,7 +121,7 @@ void TestTuplet::tuplet(const char* p1, const char* p2)
 
       Segment* s = m2->first(SegmentType::ChordRest);
       QVERIFY(s != 0);
-      Ms::Chord* c = static_cast<Ms::Chord*>(s->element(0));
+      Chord* c = toChord(s->element(0));
       QVERIFY(c != 0);
 
       QVERIFY(createTuplet(3, c));
@@ -134,17 +137,18 @@ void TestTuplet::tuplet(const char* p1, const char* p2)
 void TestTuplet::split(const char* p1, const char* p2)
       {
       MasterScore* score = readScore(DIR + p1);
-      Measure* m = score->firstMeasure();
-      TimeSig* ts = new TimeSig(score);
+      Measure* m         = score->firstMeasure();
+      TimeSig* ts        = new TimeSig(score);
       ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
+      score->startCmd();
       EditData dd(0);
       dd.dropElement = ts;
       dd.modifiers = 0;
       dd.dragOffset = QPointF();
       dd.pos = m->pagePos();
       m->drop(dd);
-      score->doLayout();
+      score->endCmd();
 
       QVERIFY(saveCompareScore(score, p1, DIR + p2));
       delete score;
@@ -166,13 +170,26 @@ void TestTuplet::addStaff()
       Staff* oldStaff   = score->staff(0);
       Staff* newStaff   = new Staff(score);
       newStaff->setPart(oldStaff->part());
-      newStaff->initFromStaffType(oldStaff->staffType(0));
+      newStaff->initFromStaffType(oldStaff->staffType(Fraction(0,1)));
       newStaff->setDefaultClefType(ClefTypeList(ClefType::F));
-      KeySigEvent ke = oldStaff->keySigEvent(0);
-      newStaff->setKey(0, ke);
+      KeySigEvent ke = oldStaff->keySigEvent(Fraction(0,1));
+      newStaff->setKey(Fraction(0,1), ke);
       score->undoInsertStaff(newStaff, 0, true);
 
       QVERIFY(saveCompareScore(score, "nestedTuplets_addStaff.mscx", DIR + "nestedTuplets_addStaff-ref.mscx"));
+      delete score;
+      }
+
+//-----------------------------------------
+//    saveLoad
+//     checks that properties persist after loading and saving
+//-----------------------------------------
+void TestTuplet::saveLoad()
+      {
+      MasterScore* score = readScore(DIR + "save-load.mscx");
+      QVERIFY(score);
+      //simply load and save
+      QVERIFY(saveCompareScore(score, "save-load.mscx", DIR + "save-load.mscx"));
       delete score;
       }
 

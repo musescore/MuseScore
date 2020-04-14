@@ -17,6 +17,9 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#ifndef MUSESCORE_CONFIG_H
+#define MUSESCORE_CONFIG_H
+
 #cmakedefine USE_ALSA
 #cmakedefine USE_JACK
 #cmakedefine USE_PORTAUDIO
@@ -34,12 +37,19 @@
 #cmakedefine HAS_AUDIOFILE
 #cmakedefine USE_SSE
 
+#cmakedefine BUILD_CRASH_REPORTER
+#define CRASHREPORTER_EXECUTABLE "${CRASHREPORTER_EXECUTABLE}"
+#define CRASH_REPORT_URL        "${CRASH_REPORT_URL}"
 #define MUSESCORE_NAME_VERSION  "${MUSESCORE_NAME_VERSION}"
 #define INSTALL_NAME            "${Mscore_INSTALL_NAME}"
 #define INSTPREFIX              "${CMAKE_INSTALL_PREFIX}"
 #define VERSION                 "${MUSESCORE_VERSION_FULL}"
+#define VERSION_LABEL           "${MUSESCORE_VERSION_LABEL}"
 #define BUILD_NUMBER            "${CMAKE_BUILD_NUMBER}"
 #define WIN_SPARKLE_APPCAST_URL "${WIN_SPARKLE_APPCAST_URL}"
+
+#cmakedefine BUILD_TELEMETRY_MODULE
+#define TELEMETRY_TRACK_ID "${TELEMETRY_TRACK_ID}"
 
 #cmakedefine WIN_SPARKLE_ENABLED
 #cmakedefine MAC_SPARKLE_ENABLED
@@ -47,6 +57,7 @@
 #cmakedefine ZERBERUS
 #cmakedefine OMR
 #cmakedefine OCR
+#cmakedefine AVSOMR
 #cmakedefine OSC
 #cmakedefine OPENGL
 #cmakedefine SOUNDFONT3
@@ -58,3 +69,4 @@
 // does not work on windows/mac:
 //#define USE_GLYPHS  true
 
+#endif /* MUSESCORE_CONFIG_H */

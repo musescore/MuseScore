@@ -88,7 +88,8 @@ Element* chordRestAtBeat(Score* score, int beat, int half = 0)
       {
       qDebug("Chordrest at beat %i,%i",beat,half);
       int division = MScore::division;
-      return score->tick2segment(beat * division + half * division/2,false,SegmentType::ChordRest,false)->element(0);
+      int tick = beat * division + half * division/2;
+      return score->tick2segment(Fraction::fromTicks(tick), false, SegmentType::ChordRest,false)->element(0);
       }
 
 //---------------------------------------------------------

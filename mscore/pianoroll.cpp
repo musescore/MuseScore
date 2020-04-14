@@ -321,7 +321,7 @@ void PianorollEditor::focusOnPosition(Position* p)
             return;
 
       //Move view so that view is centered on this element
-      pianoView->ensureVisible(p->segment->tick());
+      pianoView->ensureVisible(p->segment->tick().ticks());
       }
 
 //---------------------------------------------------------
@@ -345,9 +345,9 @@ void PianorollEditor::setStaff(Staff* st)
             _score = st ? st->score() : nullptr;
             if (_score) {
                   _score->addViewer(this);
-                  setLocator(POS::CURRENT, _score->pos(POS::CURRENT));
-                  setLocator(POS::LEFT,    _score->pos(POS::LEFT));
-                  setLocator(POS::RIGHT,   _score->pos(POS::RIGHT));
+                  setLocator(POS::CURRENT, _score->pos(POS::CURRENT).ticks());
+                  setLocator(POS::LEFT,    _score->pos(POS::LEFT).ticks());
+                  setLocator(POS::RIGHT,   _score->pos(POS::RIGHT).ticks());
                   connect(_score, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
                   connect(_score, SIGNAL(playlistChanged()), SLOT(playlistChanged()));
                   }
@@ -501,15 +501,15 @@ void PianorollEditor::veloTypeChanged(int val)
             return;
 
       int newVelocity = note->veloOffset();
-      int dynamicsVel = staff->velocities().velo(note->tick());
+      int dynamicsVel = staff->velocities().val(note->tick());
 
-      //Change velocity to equivilent in new metric
+      //Change velocity to equivalent in new metric
       switch (Note::ValueType(val)) {
             case Note::ValueType::USER_VAL:
-                  newVelocity = (int)(dynamicsVel * (1 + newVelocity / 100.0));
+                  newVelocity = static_cast<int>(dynamicsVel * (1 + newVelocity / 100.0));
                   break;
             case Note::ValueType::OFFSET_VAL:
-                  newVelocity = (int)((newVelocity / (qreal)dynamicsVel - 1) * 100);
+                  newVelocity = static_cast<int>((newVelocity / (qreal)dynamicsVel - 1) * 100);
                   break;
             }
 
@@ -598,8 +598,8 @@ void PianorollEditor::keyReleased(int /*p*/)
 void PianorollEditor::heartBeat(Seq* s)
       {
       unsigned tick = s->getCurTick();
-      if (score()->repeatList())
-            tick = score()->repeatList()->utick2tick(tick);
+      if (score()->masterScore())
+            tick = score()->masterScore()->repeatList().utick2tick(tick);
       if (locator[0].tick() != tick) {
             posChanged(POS::CURRENT, tick);
             if (preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG))
@@ -614,7 +614,7 @@ void PianorollEditor::heartBeat(Seq* s)
 void PianorollEditor::moveLocator(int i, const Pos& p)
       {
       if (locator[i].valid())
-            score()->setPos(POS(i), p.tick());
+            score()->setPos(POS(i), Fraction::fromTicks(p.tick()));
       }
 
 //---------------------------------------------------------
@@ -674,15 +674,6 @@ void PianorollEditor::setCursor(const QCursor&)
       }
 
 //---------------------------------------------------------
-//   gripCount
-//---------------------------------------------------------
-
-int PianorollEditor::gripCount() const
-      {
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   matrix
 //---------------------------------------------------------
 
@@ -690,22 +681,6 @@ const QTransform& PianorollEditor::matrix() const
       {
       static QTransform t;
       return t;
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void PianorollEditor::startEdit()
-      {
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void PianorollEditor::startEdit(Element*, Grip)
-      {
       }
 
 //---------------------------------------------------------

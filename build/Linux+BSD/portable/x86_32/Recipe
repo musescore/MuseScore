@@ -54,7 +54,7 @@ yum -y install \
 # get Qt
 if [ ! -d "qt5" ]; then
   mkdir qt5
-  wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt542-x86.zip
+  wget -q -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt542-x86.zip
   unzip -qq qt5.zip -d qt5
   rm -f qt5.zip
 fi

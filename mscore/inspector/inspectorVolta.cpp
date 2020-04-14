@@ -11,10 +11,7 @@
 //=============================================================================
 
 #include "inspectorVolta.h"
-#include "musescore.h"
 #include "libmscore/volta.h"
-#include "libmscore/score.h"
-#include "icons.h"
 
 namespace Ms {
 

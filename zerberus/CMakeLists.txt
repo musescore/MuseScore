@@ -49,6 +49,8 @@ else (NOT MSVC)
       )
 endif (NOT MSVC)   
 
+target_link_libraries(zerberus synthesizer)
+
 xcode_pch(zerberus all)
 
 # Use MSVC pre-compiled headers

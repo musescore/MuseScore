@@ -184,6 +184,7 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newFingeringPalette());
       addPalette(MuseScore::newRepeatsPalette());
       addPalette(MuseScore::newFretboardDiagramPalette());
+      addPalette(MuseScore::newAccordionPalette());
       addPalette(MuseScore::newBagpipeEmbellishmentPalette());
       addPalette(MuseScore::newBreaksPalette());
       addPalette(MuseScore::newFramePalette());

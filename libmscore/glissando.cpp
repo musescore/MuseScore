@@ -19,6 +19,8 @@ NICE-TO-HAVE TODO:
       and SlurSegment::changeAnchor() in slur.cpp as models)
 */
 
+#include "log.h"
+
 #include "arpeggio.h"
 #include "glissando.h"
 #include "chord.h"
@@ -29,6 +31,7 @@ NICE-TO-HAVE TODO:
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
+#include "measure.h"
 #include "style.h"
 #include "sym.h"
 #include "xml.h"
@@ -73,7 +76,7 @@ void GlissandoSegment::draw(QPainter* painter) const
       painter->save();
       qreal _spatium = spatium();
 
-      QPen pen(glissando()->curColor());
+      QPen pen(curColor(visible(), glissando()->lineColor()));
       pen.setWidthF(glissando()->lineWidth());
       pen.setCapStyle(Qt::RoundCap);
       painter->setPen(pen);
@@ -92,7 +95,7 @@ void GlissandoSegment::draw(QPainter* painter) const
       else if (glissando()->glissandoType() == GlissandoType::WAVY) {
             QRectF b = symBbox(SymId::wiggleTrill);
             qreal a  = symAdvance(SymId::wiggleTrill);
-            int n    = (int)(l / a);      // always round down (truncate) to avoid overlap
+            int n    = static_cast<int>(l / a);      // always round down (truncate) to avoid overlap
             qreal x  = (l - n*a) * 0.5;   // centre line in available space
             std::vector<SymId> ids;
             for (int i = 0; i < n; ++i)
@@ -274,7 +277,7 @@ void Glissando::layout()
 
       // FINAL SYSTEM-INITIAL NOTE
       // if the last gliss. segment attaches to a system-initial note, some extra width has to be added
-      if (cr2->segment()->measure() == cr2->segment()->system()->firstMeasure() && cr2->rtick() == 0
+      if (cr2->segment()->measure()->isFirstInSystem() && cr2->rtick().isZero()
          // but ignore graces after, as they are not the first note of the system,
          // even if their segment is the first segment of the system
          && !(cr2->noteType() == NoteType::GRACE8_AFTER
@@ -300,7 +303,7 @@ void Glissando::layout()
       // interpolate y-coord of intermediate points across total width and height
       qreal xCurr = 0.0;
       qreal yCurr;
-      for (int i = 0; i < int(spannerSegments().size()-1); i++) {
+      for (unsigned i = 0; i + 1 < spannerSegments().size(); i++) {
             SpannerSegment* segm = segmentAt(i);
             xCurr += segm->ipos2().x();
             yCurr = y0 + ratio * xCurr;
@@ -348,7 +351,14 @@ void Glissando::layout()
 
       // compute glissando bbox as the bbox of the last segment, relative to the end anchor note
       QPointF anchor2PagePos = anchor2->pagePos();
-      QPointF system2PagePos = cr2->segment()->system()->pagePos();
+      QPointF system2PagePos;
+      IF_ASSERT_FAILED(cr2->segment()->system()) {
+            system2PagePos = segm2->pos();
+            }
+      else {
+            system2PagePos = cr2->segment()->system()->pagePos();
+            }
+
       QPointF anchor2SystPos = anchor2PagePos - system2PagePos;
       QRectF r = QRectF(anchor2SystPos - segm2->pos(), anchor2SystPos - segm2->pos() - segm2->pos2()).normalized();
       qreal lw = lineWidth() * .5;
@@ -637,11 +647,11 @@ bool Glissando::setProperty(Pid propertyId, const QVariant& v)
                   setShowText(v.toBool());
                   break;
             case Pid::GLISSANDO_STYLE:
-                 setGlissandoStyle(GlissandoStyle(v.toInt()));
-                 break;
+                  setGlissandoStyle(GlissandoStyle(v.toInt()));
+                  break;
             case Pid::PLAY:
-                 setPlayGlissando(v.toBool());
-                 break;
+                  setPlayGlissando(v.toBool());
+                  break;
             case Pid::FONT_FACE:
                   setFontFace(v.toString());
                   break;
@@ -649,14 +659,14 @@ bool Glissando::setProperty(Pid propertyId, const QVariant& v)
                   setFontSize(v.toReal());
                   break;
             case Pid::FONT_STYLE:
-                  setFontStyle(FontStyle(v.toBool()));
+                  setFontStyle(FontStyle(v.toInt()));
                   break;
             default:
                   if (!SLine::setProperty(propertyId, v))
                         return false;
                   break;
             }
-      score()->setLayoutAll();
+      triggerLayoutAll();
       return true;
       }
 
@@ -679,6 +689,17 @@ QVariant Glissando::propertyDefault(Pid propertyId) const
                   break;
             }
       return SLine::propertyDefault(propertyId);
+      }
+
+//---------------------------------------------------------
+//   Glissando::propertyId
+//---------------------------------------------------------
+
+Pid Glissando::propertyId(const QStringRef& name) const
+      {
+      if (name == propertyName(Pid::GLISS_TYPE))
+            return Pid::GLISS_TYPE;
+      return SLine::propertyId(name);
       }
 }
 

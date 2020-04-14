@@ -92,7 +92,9 @@ class Rest : public ChordRest {
       virtual qreal stemPosX() const;
       virtual QPointF stemPosBeam() const;
 
+      virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
       virtual bool setProperty(Pid propertyId, const QVariant& v) override;
+      void undoChangeDotsVisible(bool v);
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual QVariant propertyDefault(Pid) const override;
 

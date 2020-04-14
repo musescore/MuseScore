@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //
 //  Color notehead plugin
-//	Noteheads are colored according to pitch. User can change to color by
+//  Noteheads are colored according to pitch. User can change to color by
 //  modifying the colors array. First element is C, second C# etc...
 //
 //  Copyright (C)2012 Werner Schweer and others
@@ -27,7 +27,7 @@ import MuseScore 3.0
 MuseScore {
       menuPath: "Plugins.run"
       version:  "3.0"
-      description: "This demo plugin runs an external command. Probably this will only work on Linux."
+      description: "This demo plugin runs an external command."
       requiresScore: false
 
       QProcess {
@@ -36,7 +36,8 @@ MuseScore {
 
       onRun: {
             console.log("run ls");
-            proc.start("/bin/ls");
+            //proc.start("/bin/ls"); // Linux, Mac(?)
+            proc.start("cmd.exe /c dir"); // Windows
             var val = proc.waitForFinished(30000);
             if (val)
                   console.log(proc.readAllStandardOutput());

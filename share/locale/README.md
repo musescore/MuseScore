@@ -19,7 +19,7 @@ In [MuseScore source](https://github.com/musescore/MuseScore)
 ------
 * Add the language in share/locale/languages.xml
 
-* Add the share/locale/mscore_XX.ts file, tx pull can help (`tx pull -t language_code)
+* Add the share/locale/mscore_XX.ts file, tx pull can help (`tx pull -t language_code`)
 * Add the share/locale/instruments_XX.ts file, see above
 * Add the share/locale/tours_XX.ts file, see above
 

@@ -196,7 +196,7 @@ std::vector<TextDiff> MscxModeDiff::mscxModeDiff(const QString& s1, const QStrin
 
 void MscxModeDiff::adjustSemanticsMscx(std::vector<TextDiff>& diffs)
       {
-      for (int i = 0; i < int(diffs.size()); ++i)
+      for (unsigned i = 0; i < diffs.size(); ++i)
             i = adjustSemanticsMscxOneDiff(diffs, i);
       }
 
@@ -211,7 +211,6 @@ int MscxModeDiff::adjustSemanticsMscxOneDiff(std::vector<TextDiff>& diffs, int i
       int iScore;
       switch(diff->type) {
             case DiffType::EQUAL:
-                  /* FALLTROUGH */
             case DiffType::REPLACE:
                   // TODO: split a REPLACE diff, though they should not be here
                   return index;
@@ -219,7 +218,6 @@ int MscxModeDiff::adjustSemanticsMscxOneDiff(std::vector<TextDiff>& diffs, int i
                   iScore = 1;
                   break;
             case DiffType::DELETE:
-                  /* FALLTROUGH */
             default:
                   iScore = 0;
                   break;
@@ -405,14 +403,17 @@ int MscxModeDiff::performShiftDiff(std::vector<TextDiff>& diffs, int index, int 
       std::copy(chunkEnd, chunkEnd + 2, eqDiff.end);
 
       const int prevDiffIdx = index + (down ? -1 : 1);
+      bool merged = false;
       if (diffs[prevDiffIdx].type == DiffType::EQUAL)
-            diffs[prevDiffIdx].merge(eqDiff);
-      else {
+            merged = diffs[prevDiffIdx].merge(eqDiff);
+
+      if (!merged) {
             const int insertIdx = down ? index : (index + 1);
             diffs.insert(diffs.begin() + insertIdx, eqDiff);
             if (down)
                   ++index;
             }
+
       return index;
       }
 
@@ -1172,7 +1173,7 @@ QString ScoreDiff::userDiff() const
 //   TextDiff::merge
 //---------------------------------------------------------
 
-void TextDiff::merge(const TextDiff& other)
+bool TextDiff::merge(const TextDiff& other)
       {
       if (type == other.type) {
             if (other.end[0] == (start[0] - 1) && other.end[1] == (start[1] - 1)) {
@@ -1187,8 +1188,10 @@ void TextDiff::merge(const TextDiff& other)
                   text[0].append(other.text[0]);
                   text[1].append(other.text[1]);
                   }
-            else
-                  qFatal("TextDiff:merge: invalid argument: wrong line numbers");
+            else {
+                  qWarning("TextDiff:merge: invalid argument: wrong line numbers");
+                  return false;
+                  }
             }
       else if ((type == DiffType::INSERT && other.type == DiffType::DELETE)
          || (type == DiffType::DELETE && other.type == DiffType::INSERT)
@@ -1199,8 +1202,12 @@ void TextDiff::merge(const TextDiff& other)
             end[iOther] = other.end[iOther];
             text[iOther] = other.text[iOther];
             }
-      else
-            qFatal("TextDiff:merge: invalid argument: wrong types");
+      else {
+            qWarning("TextDiff:merge: invalid argument: wrong types");
+            return false;
+            }
+
+      return true;
       }
 
 //---------------------------------------------------------
@@ -1216,7 +1223,7 @@ static QString addLinePrefix(const QString& str, const QString& prefix)
             lines.pop_back();
       QStringList processedLines;
       for (QStringRef& line : lines)
-            processedLines.push_back(prefix + line);
+            processedLines.push_back(QString(prefix).append(line));
       return processedLines.join('\n');
       }
 
@@ -1283,17 +1290,17 @@ Fraction BaseDiff::afrac(int score) const
       {
       Q_ASSERT(score == 0 || score == 1);
       if (ctx[score] && ctx[score]->isElement())
-            return toElement(ctx[score])->afrac();
+            return toElement(ctx[score])->tick();
       if (before[score] && before[score]->isElement()) {
             const Element* bef = toElement(before[score]);
-            Fraction f = bef->afrac();
+            Fraction f = bef->tick();
             if (bef->isDurationElement()) {
                   const DurationElement* de = toDurationElement(bef);
-                  return f + de->actualFraction();
+                  return f + de->actualTicks();
                   }
             return f;
             }
-      return 0;
+      return Fraction(0,1);
       }
 
 //---------------------------------------------------------
@@ -1349,7 +1356,7 @@ Fraction ElementDiff::afrac(int score) const
       Q_ASSERT(score == 0 || score == 1);
       const ScoreElement* se = el[score];
       if (se && se->isElement())
-            return toElement(se)->afrac();
+            return toElement(se)->tick();
       return BaseDiff::afrac(score);
       }
 

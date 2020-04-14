@@ -1,5 +1,9 @@
 *:disabled {
- color: gray
+ color: gray;
+}
+
+QMenu::disabled {
+ background-color: palette(base);
 }
 
 QGroupBox {
@@ -12,16 +16,25 @@ QGroupBox::title {
 
 QDockWidget {
  border: 1px solid lightgray;
- titlebar-close-icon: url(:/data/icons/png/window-close.png);
- titlebar-normal-icon: url(:/data/icons/png/window-float.png);
+ titlebar-close-icon: url(:/data/icons/png/window-close-dark.png);
+ titlebar-normal-icon: url(:/data/icons/png/window-float-dark.png);
 }
 
 QTabBar::close-button {
- image: url(:/data/icons/png/window-close.png);
+ image: url(:/data/icons/png/window-close-dark.png);
 }
 
 QTabBar::close-button:hover {
- image: url(:/data/icons/png/window-close-hover.png);
+ image: url(:/data/icons/png/window-close-hover-dark.png);
+}
+
+/* Inspector buttons */
+QPushButton:flat:hover {
+ border: 1px solid dimgray;
+ border-radius: 3px;
+}
+QPushButton:flat:hover:checked {
+ background: dimgray;
 }
 
 QToolButton#palette {
@@ -41,5 +54,22 @@ QToolButton[voice4="true"]:checked, QToolButton[voice4="true"]:pressed { color: 
 /* Toolbar voice selector */
 QToolButton#voice:checked, QToolButton#voice:pressed { color: white; }
 
+/* ToolbarButton text to match ToolbarButton icons */
+QToolButton[iconic-text="true"] { color: $buttonHighlightEnabledOff; }
+QToolButton[iconic-text="true"]:enabled:checked { color: $buttonHighlightEnabledOn; }
+QToolButton[iconic-text="true"]:disabled { color: $buttonHighlightDisabledOff; }
+QToolButton[iconic-text="true"]:disabled:checked { color: $buttonHighlightDisabledOn; }
+
 /* Mainly in midi import */
 QTableView { border: none; }
+
+/* dock and main area separator */
+QMainWindow::separator {
+    background: #C8C8C8;
+    width: 1px; /* when vertical */
+    height: 1px; /* when horizontal */
+}
+
+QMainWindow::separator:hover {
+    background: gray;
+}

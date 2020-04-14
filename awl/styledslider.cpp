@@ -36,6 +36,15 @@ StyledSlider::StyledSlider(QWidget *parent) : QWidget(parent)
       setFocusPolicy(Qt::StrongFocus);
       }
 
+
+
+void StyledSlider::mouseDoubleClickEvent(QMouseEvent*)
+      {
+      setValue(_doubleClickValue);
+      }
+
+
+
 //---------------------------------------------------------
 //   wheelEvent
 //---------------------------------------------------------

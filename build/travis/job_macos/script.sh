@@ -19,11 +19,9 @@ if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
 then
 cp -f build/travis/resources/splash-nightly.png  mscore/data/splash.png
 cp -f build/travis/resources/mscore-nightly.icns mscore/data/mscore.icns
-else
-python build/add-mc-keys.py $MC_CONSUMER_KEY $MC_CONSUMER_SECRET
 fi
 
-make -f Makefile.osx ci BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
+make -f Makefile.osx ci BUILD_NUMBER=${TRAVIS_BUILD_NUMBER} TELEMETRY_TRACK_ID=${TELEMETRY_TRACK_ID}
 
 
 mkdir -p applebuild/mscore.app/Contents/Resources/Frameworks
@@ -37,7 +35,7 @@ mkdir -p applebuild/mscore.app/Contents/Frameworks
 cp -Rf ~/Library/Frameworks/Sparkle.framework applebuild/mscore.app/Contents/Frameworks
 
 if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
-then # Build is marked UNSTABLE inside CMakeLists.txt
+then # Build is marked UNSTABLE
 build/package_mac $BRANCH-$REVISION
 PACKAGE_NAME=MuseScoreNightly
 DMGFILE=applebuild/$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
@@ -66,13 +64,11 @@ scp -C -i $SSH_INDENTITY build/travis/job_macos/web/nightly.xml musescore-nightl
 ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
 
 # send nightly update to S3
-VERSION_MAJOR=$(grep 'SET(MUSESCORE_VERSION_MAJOR' CMakeLists.txt | cut -d \" -f2)
-VERSION_MINOR=$(grep 'SET(MUSESCORE_VERSION_MINOR' CMakeLists.txt | cut -d \" -f2)
-VERSION_PATCH=$(grep 'SET(MUSESCORE_VERSION_PATCH' CMakeLists.txt | cut -d \" -f2)
+MUSESCORE_VERSION_FULL=$(cmake -P config.cmake | sed -n -e 's/^.*MUSESCORE_VERSION_FULL  *//p')
 BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
-MUSESCORE_VERSION=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${BUILD_NUMBER}
+MUSESCORE_VERSION=${MUSESCORE_VERSION_FULL}.${BUILD_NUMBER}
 SHORT_DATE="$(date -u +%Y-%m-%d)"
-#date -R is not supporte !?
+#date -R is not supported !?
 RSS_DATE="$(LANG=C date +'%a, %d %b %Y %H:%M:%S %z')"
 FILESIZE="$(wc -c $DMGFILE | awk '{print $1}')"
 APPCAST_URL=$(defaults read `pwd`/applebuild/mscore.app/Contents/Info.plist SUFeedURL)
@@ -132,7 +128,7 @@ export ARTIFACTS_REGION=us-east-1
 export ARTIFACTS_BUCKET=sparkle.musescore.org
 export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
 export ARTIFACTS_PERMISSIONS=public-read
-export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/macos"
+export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/prebuild/macos"
 export ARTIFACTS_PATHS=appcast.xml
 artifacts upload
 

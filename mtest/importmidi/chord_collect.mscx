@@ -40,6 +40,7 @@
         <maxPitchA>83</maxPitchA>
         <instrumentId>pluck.guitar.acoustic</instrumentId>
         <clef>G8vb</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>20</frets>
           <string>40</string>
@@ -74,6 +75,18 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>

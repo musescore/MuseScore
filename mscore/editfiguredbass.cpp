@@ -22,20 +22,6 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   ScoreView::figuredBassEndEdit
-//    derived from harmonyEndEdit()
-//    remove the FB if empty
-//---------------------------------------------------------
-
-void ScoreView::figuredBassEndEdit()
-      {
-      FiguredBass* fb = static_cast<FiguredBass*>(editData.element);
-
-      if (fb->empty())
-            _score->undoRemoveElement(fb);
-      }
-
-//---------------------------------------------------------
 //   ScoreView::figuredBassTab
 //    derived from harmonyTab() (for Harmony)
 //    manages [Space] / [Shift][Space] keys, moving editing to FB of next/prev ChordRest
@@ -100,7 +86,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
 
       bool bNew;
       // add a (new) FB element, using chord duration as default duration
-      FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, 0, &bNew);
+      FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, Fraction(0,1), &bNew);
       if (bNew) {
             _score->startCmd();
             _score->undoAddElement(fbNew);
@@ -120,7 +106,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
 //    manages [Ctrl] [1]-[9], extending current FB of the given number of ticks
 //---------------------------------------------------------
 
-void ScoreView::figuredBassTicksTab(int ticks)
+void ScoreView::figuredBassTicksTab(const Fraction& ticks)
       {
       FiguredBass* fb   = toFiguredBass(editData.element);
       int track         = fb->track();
@@ -131,7 +117,7 @@ void ScoreView::figuredBassTicksTab(int ticks)
             }
       Measure* measure = segm->measure();
 
-      int nextSegTick   = segm->tick() + ticks;
+      Fraction nextSegTick   = segm->tick() + ticks;
 
       // find the measure containing the target tick
       while (nextSegTick >= measure->tick() + measure->ticks()) {
@@ -141,6 +127,8 @@ void ScoreView::figuredBassTicksTab(int ticks)
                   return;
                   }
             }
+
+      changeState(ViewState::NORMAL);
 
       // look for a segment at this tick; if none, create one
       Segment * nextSegm = segm;
@@ -156,8 +144,6 @@ void ScoreView::figuredBassTicksTab(int ticks)
             _score->undoAddElement(nextSegm);
             _score->endCmd();
             }
-
-      changeState(ViewState::NORMAL);
 
       bool bNew;
       FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, ticks, &bNew);

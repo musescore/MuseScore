@@ -15,7 +15,7 @@ cp $S/clefs-test.mscx           clefs-ref.mscx
 cp $S/drumset-test.mscx         drumset-ref.mscx
 cp $S/markers-test.mscx         markers-ref.mscx
 cp $S/noteheads-test.mscx       noteheads-ref.mscx
-cp $S/textstyles-test.mscx      textstyles-ref.mscx
+# cp $S/textstyles-test.mscx      textstyles-ref.mscx
 cp $S/tuplets-test.mscx         tuplets-ref.mscx
 cp $S/hairpin-test.mscx         hairpin-ref.mscx
 cp $S/barlines-test.mscx        barlines-ref.mscx

@@ -23,6 +23,18 @@ class Synth;
 class SynthesizerGui;
 
 //---------------------------------------------------------
+//   SoundFontInfo
+//---------------------------------------------------------
+
+struct SoundFontInfo {
+      QString fileName;
+      QString fontName;
+
+      SoundFontInfo(QString _fileName) : fileName(_fileName), fontName(_fileName) {}
+      SoundFontInfo(QString _fileName, QString _fontName) : fileName(_fileName), fontName(_fontName) {}
+      };
+
+//---------------------------------------------------------
 //   Synthesizer
 //---------------------------------------------------------
 
@@ -30,8 +42,8 @@ class Synthesizer {
       bool _active;
 
    protected:
-      float _sampleRate;
-      SynthesizerGui* _gui;
+      float _sampleRate { 44100.0f };
+      SynthesizerGui* _gui { nullptr };
 
    public:
       Synthesizer() : _active(false) { _gui = 0; }
@@ -48,7 +60,7 @@ class Synthesizer {
       virtual bool addSoundFont(const QString&)    { return false; }
       virtual bool removeSoundFont(const QString&) { return false; }
 
-      virtual QStringList soundFonts() const = 0;
+      virtual std::vector<SoundFontInfo> soundFontsInfo() const = 0;
 
       virtual void process(unsigned, float*, float*, float*) = 0;
       virtual void play(const PlayEvent&) = 0;

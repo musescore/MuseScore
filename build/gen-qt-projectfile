@@ -20,4 +20,10 @@ for a in $uis; do
       echo "    " $a \\;
       done
 echo
+
+echo "RESOURCES = \\"
+echo "    ./mscore/qml.qrc \\"
+echo "    ./telemetry/telemetry_resources.qrc \\"
+echo
+
 echo

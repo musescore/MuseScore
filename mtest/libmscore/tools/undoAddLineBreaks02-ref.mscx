@@ -973,6 +973,7 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <linkedMain/>
             </BarLine>
           </voice>
         </Measure>
@@ -985,6 +986,9 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <linked>
+              <indexDiff>-1</indexDiff>
+              </linked>
             </BarLine>
           </voice>
         </Measure>

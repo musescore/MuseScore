@@ -12,8 +12,13 @@
 
 #include "libmscore/xml.h"
 #include "libmscore/note.h"
+#include "libmscore/harmony.h"
 #include "libmscore/sig.h"
 #include "event.h"
+#include "libmscore/staff.h"
+#include "libmscore/instrument.h"
+#include "libmscore/part.h"
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -161,6 +166,31 @@ NPlayEvent::NPlayEvent(BeatType beatType)
                   setVelo(15);
                   break;
             }
+      }
+
+//---------------------------------------------------------
+//   isMuted
+//---------------------------------------------------------
+
+bool NPlayEvent::isMuted() const
+      {
+      const Note* n = note();
+      if (n) {
+            MasterScore* cs = n->masterScore();
+            Staff* staff = n->staff();
+            Instrument* instr = staff->part()->instrument(n->tick());
+            const Channel* a = instr->playbackChannel(n->subchannel(), cs);
+            return a->mute() || a->soloMute() || !staff->playbackVoice(n->voice());
+            }
+
+      const Harmony* h = harmony();
+      if (h) {
+            const Channel* hCh = h->part()->harmonyChannel();
+            if (hCh) //if there is a harmony channel
+                  return hCh->mute() || hCh->soloMute();
+            }
+
+      return false;
       }
 
 //---------------------------------------------------------
@@ -391,25 +421,26 @@ void EventMap::fixupMIDI()
 
       auto it = begin();
       while (it != end()) {
+            NPlayEvent& event = it->second;
             /* ME_NOTEOFF is never emitted, no need to check for it */
-            if (it->second.type() == ME_NOTEON) {
-                  unsigned short np = info[it->second.channel()].nowPlaying[it->second.pitch()];
-                  if (it->second.velo() == 0) {
+            if (event.type() == ME_NOTEON && !event.isMuted()) {
+                  unsigned short np = info[event.channel()].nowPlaying[event.pitch()];
+                  if (event.velo() == 0) {
                         /* already off (should not happen) or still playing? */
                         if (np == 0 || --np > 0)
-                              it->second.setDiscard(1);
+                              event.setDiscard(1);
                         else {
                               /* hoist NOTEOFF to same track as NOTEON */
-                              it->second.setOriginatingStaff(info[it->second.channel()].event[it->second.pitch()]->getOriginatingStaff());
+                              event.setOriginatingStaff(info[event.channel()].event[event.pitch()]->getOriginatingStaff());
                               }
                         }
                   else {
                         if (++np > 1)
                               /* restrike, possibly on different track */
-                              it->second.setDiscard(info[it->second.channel()].event[it->second.pitch()]->getOriginatingStaff() + 1);
-                        info[it->second.channel()].event[it->second.pitch()] = &(it->second);
+                              event.setDiscard(info[event.channel()].event[event.pitch()]->getOriginatingStaff() + 1);
+                        info[event.channel()].event[event.pitch()] = &event;
                         }
-                  info[it->second.channel()].nowPlaying[it->second.pitch()] = np;
+                  info[event.channel()].nowPlaying[event.pitch()] = np;
                   }
 
             ++it;

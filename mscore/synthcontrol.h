@@ -36,6 +36,7 @@ class SynthControl : public QWidget, Ui::SynthControl {
 
       Score* _score;
       EnablePlayForWidget* enablePlay;
+      bool _dirty    { false };
 
       virtual void closeEvent(QCloseEvent*);
       virtual void showEvent(QShowEvent*);
@@ -43,6 +44,9 @@ class SynthControl : public QWidget, Ui::SynthControl {
       virtual void keyPressEvent(QKeyEvent*) override;
       void updateGui();
       void readSettings();
+      void updateExpressivePatches();
+      void updateMixer();
+      void setAllUserBankController(bool val);
 
    private slots:
       void gainChanged(double, int);
@@ -54,10 +58,14 @@ class SynthControl : public QWidget, Ui::SynthControl {
       void saveButtonClicked();
       void storeButtonClicked();
       void recallButtonClicked();
+      void dynamicsMethodChanged(int);
+      void ccToUseChanged(int);
+      void switchExprButtonClicked();
+      void switchNonExprButtonClicked();
+      void resetExprButtonClicked();
       void setDirty();
 
    signals:
-      void gainChanged(float);
       void soundFontChanged();
       void closed(bool);
 

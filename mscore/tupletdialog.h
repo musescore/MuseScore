@@ -35,6 +35,7 @@ class TupletDialog : public QDialog, Ui::TupletDialog {
       virtual void hideEvent(QHideEvent*);
    public:
       TupletDialog(QWidget* parent = 0);
+      void defaultToStyleSettings(Score* score);
       void setupTuplet(Tuplet* tuplet);
       int getNormalNotes() const { return normalNotes->value(); }
       };

@@ -194,6 +194,22 @@ void Fluid::play(const PlayEvent& event)
             int midiPitch = event.dataB() * 128 + event.dataA();  // msb * 128 + lsb
             cp->pitchBend(midiPitch);
             }
+      /*
+       *    MIDI spec.: One data byte follows the Status. It is the pressure amount, a value
+       *    from 0 to 127 (where 127 is the most pressure).
+       */
+      else if (type == ME_AFTERTOUCH){
+            cp->setChannelPressure(event.dataA());
+            }
+      /*
+       *    MIDI spec.: Two data bytes follow the Status. The first data is the note number.
+       *    This indicates to which note the pressure is being applied. The second data byte is the
+       *    pressure amount, a value from 0 to 127 (where 127 is the most pressure).
+       */
+      else if (type == ME_POLYAFTER){
+            cp->setKeyPressure(event.dataA(), event.dataB());
+            }
+
       if (err) {
             // TODO: distinguish between types of error code.
             // Lack of a soundfont should not produce qDebug messages, because user could deliberately be using MIDI out only.
@@ -571,9 +587,8 @@ void Fluid::updatePatchList()
       qDeleteAll(patches);
       patches.clear();
 
-      QMap<int, QList<MidiPatch*>> patchNums;
-
       int bankOffset = 0;
+      int sfid = 0;
       for (SFont* sf : sfonts) {
             sf->setBankOffset(bankOffset);
             int banks = 0;
@@ -586,15 +601,11 @@ void Fluid::updatePatchList()
                   patch->bank = p->get_banknum() + bankOffset;
                   patch->prog = p->get_num();
                   patch->name = p->get_name();
-                  patchNums[patch->prog].append(patch);
+                  patch->sfid = sfid;
+                  patches.append(patch);
                   }
+            sfid++;
             bankOffset += (banks + 1);
-            }
-
-      // Order by patch number first instead of by bank first
-      for (QList<MidiPatch*> num : patchNums) {
-            for (MidiPatch* p : num)
-                  patches.append(p);
             }
 
       /* try to set the correct presets */
@@ -613,6 +624,19 @@ QStringList Fluid::soundFonts() const
       for (SFont* f : sfonts)
             sf.append(QFileInfo(f->get_name()).fileName());
       return sf;
+      }
+
+//---------------------------------------------------------
+//   soundFontsInfo
+//---------------------------------------------------------
+
+std::vector<SoundFontInfo> Fluid::soundFontsInfo() const
+      {
+      std::vector<SoundFontInfo> sl;
+      sl.reserve(sfonts.size());
+      for (SFont* f : sfonts)
+            sl.emplace_back(QFileInfo(f->get_name()).fileName(), f->fontName());
+      return sl;
       }
 
 //---------------------------------------------------------
@@ -690,6 +714,9 @@ bool Fluid::removeSoundFont(const QString& s)
       for(Voice* v : activeVoices)
             v->off();
       SFont* sf = get_sfont_by_name(s);
+      if (!sf)
+            return false;
+      
       sfunload(sf->id());
       return true;
       }

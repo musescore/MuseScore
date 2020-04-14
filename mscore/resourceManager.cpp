@@ -45,6 +45,45 @@ ResourceManager::ResourceManager(QWidget *parent) :
       MuseScore::restoreGeometry(this);
       }
 
+//---------------------------------------------------------
+//   ExtensionFileSize
+//---------------------------------------------------------
+
+ExtensionFileSize::ExtensionFileSize(const int i)
+   : QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(i), QTableWidgetItem::UserType)
+     , _size(i)
+      {}
+
+//---------------------------------------------------------
+//   operator<
+//---------------------------------------------------------
+
+bool ExtensionFileSize::operator<(const QTableWidgetItem& nextItem) const
+      {
+      if (nextItem.type() != type())
+            return false;
+      return getSize() < static_cast<const ExtensionFileSize&>(nextItem).getSize();
+      }
+
+//---------------------------------------------------------
+//   LanguageFileSize
+//---------------------------------------------------------
+
+LanguageFileSize::LanguageFileSize(const double d)
+   : QTableWidgetItem(ResourceManager::tr("%1 KB").arg(d), QTableWidgetItem::UserType)
+     , _size(d)
+      {}
+
+//---------------------------------------------------------
+//   operator<
+//---------------------------------------------------------
+
+bool LanguageFileSize::operator<(const QTableWidgetItem& nextItem) const
+      {
+      if (nextItem.type() != type())
+            return false;
+      return getSize() < static_cast<const LanguageFileSize&>(nextItem).getSize();
+      }
 
 //---------------------------------------------------------
 //   selectLanguagesTab
@@ -111,7 +150,7 @@ void ResourceManager::displayExtensions()
 
             extensionsTable->setItem(row, col++, new QTableWidgetItem(name));
             extensionsTable->setItem(row, col++, new QTableWidgetItem(version));
-            extensionsTable->setItem(row, col++, new QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(fileSize)));
+            extensionsTable->setItem(row, col++, new ExtensionFileSize(fileSize));
             buttonInstall = new QPushButton(tr("Install"));
             buttonUninstall = new QPushButton(tr("Uninstall"));
 
@@ -184,7 +223,7 @@ void ResourceManager::displayLanguages()
       QStringList langs = result.object().keys();
       QString lang = mscore->getLocaleISOCode();
       int index = langs.indexOf(lang);
-      if (index < 0 &&  lang.size() > 2) {
+      if (index < 0 && lang.size() > 2) {
             lang = lang.left(2);
             index = langs.indexOf(lang);
             }
@@ -199,17 +238,17 @@ void ResourceManager::displayLanguages()
             QJsonObject value = result.object().value(key).toObject();
             col = 0;
             QString test = value.value("file_name").toString();
-            if(test.length() == 0)
+            if (test.length() == 0)
                   continue;
 
             QString filename = value.value("file_name").toString();
             QString name = value.value("name").toString();
-            QString fileSize = value.value("file_size").toString();
+            double fileSize = value.value("file_size").toString().toDouble();
             QString hashValue = value.value("hash").toString();
 
             languagesTable->setItem(row, col++, new QTableWidgetItem(name));
             languagesTable->setItem(row, col++, new QTableWidgetItem(filename));
-            languagesTable->setItem(row, col++, new QTableWidgetItem(tr("%1 kB").arg(fileSize)));
+            languagesTable->setItem(row, col++, new LanguageFileSize(fileSize));
             updateButtons[row] = new QPushButton(tr("Update"));
 
             temp = updateButtons[row];

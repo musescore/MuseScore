@@ -28,7 +28,9 @@ LedgerLine::LedgerLine(Score* s)
    : Element(s)
       {
       setSelectable(false);
-      _next = 0;
+      _width      = 0.;
+      _len        = 0.;
+      _next       = 0;
       }
 
 //---------------------------------------------------------

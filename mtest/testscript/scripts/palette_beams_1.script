@@ -1,0 +1,67 @@
+init init/Treble.mscx
+cmd note-input
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd pad-note-32
+cmd pad-note-16
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd escape
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+palette Icon action no-beam
+cmd next-chord
+cmd next-chord
+cmd next-chord
+cmd next-chord
+cmd next-chord
+palette Icon action beam-start
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+palette Icon action beam-start
+cmd next-chord
+palette Icon action beam-mid
+cmd next-chord
+palette Icon action beam-mid
+cmd next-chord
+palette Icon action beam-start
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+palette Icon action beam-start
+test score palette_beams_1.mscx

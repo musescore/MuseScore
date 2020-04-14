@@ -83,7 +83,7 @@ void ScriptRecorderWidget::updateActions()
       {
       QDir dir(scriptDir());
       QFileInfo script(scriptFileName());
-      _ui->recordButton->setEnabled(dir.exists() && !script.baseName().isEmpty() && !script.exists());
+      _ui->recordButton->setEnabled(dir.exists() && !script.completeBaseName().isEmpty() && !script.exists());
       _ui->replayButton->setEnabled(script.isFile());
       }
 
@@ -129,7 +129,7 @@ void ScriptRecorderWidget::on_recordButton_clicked()
             }
       else {
             QFileInfo scriptInfo(scriptFileName());
-            QString scoreName(scriptInfo.baseName() + ".mscx");
+            QString scoreName(scriptInfo.completeBaseName() + ".mscx");
             _recorder.recordScoreTest(scoreName);
             _recorder.close();
             }

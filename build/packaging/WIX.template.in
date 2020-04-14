@@ -32,6 +32,9 @@
         <WixVariable Id="WixUILicenseRtf" Value="$(var.CPACK_WIX_LICENSE_RTF)"/>
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALL_ROOT"/>
 
+        <!-- See https://docs.microsoft.com/ru-ru/windows/win32/msi/reinstallmode that explains different modes -->
+        <Property Id='REINSTALLMODE' Value='dmus'/>
+
         <?ifdef CPACK_WIX_PRODUCT_ICON?>
         <Property Id="ARPPRODUCTICON">ProductIcon.ico</Property>
         <Icon Id="ProductIcon.ico" SourceFile="$(var.CPACK_WIX_PRODUCT_ICON)"/>
@@ -94,6 +97,7 @@
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mxl" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".cap" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".capx" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".scw" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".bww" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mid" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".midi" Value="" Type="string" />
@@ -107,6 +111,8 @@
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gp4" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gp5" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gpx" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gp" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".ptb" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".sf2" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".sf3" Value="" Type="string" />
             

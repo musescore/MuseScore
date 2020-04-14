@@ -43,7 +43,7 @@ Lyrics::Lyrics(Score* s)
       _even       = false;
       initElementStyle(&lyricsElementStyle);
       _no         = 0;
-      _ticks      = 0;
+      _ticks      = Fraction(0,1);
       _syllabic   = Syllabic::SINGLE;
       _separator  = 0;
       }
@@ -93,6 +93,7 @@ void Lyrics::write(XmlWriter& xml) const
                   };
             xml.tag("syllabic", sl[int(_syllabic)]);
             }
+      xml.tag("ticks", _ticks.ticks(), 0); // pre-3.1 compatibility: write integer ticks under <ticks> tag
       writeProperty(xml, Pid::LYRIC_TICKS);
 
       TextBase::writeProperties(xml);
@@ -108,6 +109,15 @@ void Lyrics::read(XmlReader& e)
       while (e.readNextStartElement()) {
             if (!readProperties(e))
                   e.unknown();
+            }
+      if (!isStyled(Pid::OFFSET) && !e.pasteMode()) {
+            // fix offset for pre-3.1 scores
+            // 3.0: y offset was meaningless if autoplace is set
+            QString version = masterScore()->mscoreVersion();
+            if (autoplace() && !version.isEmpty() && version < "3.1") {
+                  QPointF off = propertyDefault(Pid::OFFSET).toPointF();
+                  ryoffset() = off.y();
+                  }
             }
       }
 
@@ -134,8 +144,10 @@ bool Lyrics::readProperties(XmlReader& e)
             else
                   qDebug("bad syllabic property");
             }
-      else if (tag == "ticks")
-            _ticks = e.readInt();
+      else if (tag == "ticks")            // obsolete
+            _ticks = e.readFraction(); // will fall back to reading integer ticks on older scores
+      else if (tag == "ticks_f")
+            _ticks = e.readFraction();
       else if (readProperty(tag, e, Pid::PLACEMENT))
             ;
       else if (!TextBase::readProperties(e))
@@ -186,7 +198,7 @@ void Lyrics::remove(Element* el)
 bool Lyrics::isMelisma() const
       {
       // entered as melisma using underscore?
-      if (_ticks > 0)
+      if (_ticks > Fraction(0,1))
             return true;
 
       // hyphenated?
@@ -223,8 +235,6 @@ void Lyrics::layout()
       // parse leading verse number and/or punctuation, so we can factor it into layout separately
       //
       bool hasNumber     = false; // _verseNumber;
-      qreal centerAdjust = 0.0;
-      qreal leftAdjust   = 0.0;
 
       // find:
       // 1) string of numbers and non-word characters at start of syllable
@@ -232,29 +242,20 @@ void Lyrics::layout()
       // 3) string of non-word characters at end of syllable
       //QRegularExpression leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
 
+      const QString text = plainText();
+      QString leading;
+      QString trailing;
+
       if (score()->styleB(Sid::lyricsAlignVerseNumber)) {
-            QString s = plainText();
             QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)", QRegularExpression::UseUnicodePropertiesOption);
-            QRegularExpressionMatch punctuationMatch = punctuationPattern.match(s);
+            QRegularExpressionMatch punctuationMatch = punctuationPattern.match(text);
             if (punctuationMatch.hasMatch()) {
                   // leading and trailing punctuation
-                  QString lp = punctuationMatch.captured(1);
-                  QString tp = punctuationMatch.captured(3);
-                  // actual lyric
+                  leading = punctuationMatch.captured(1);
+                  trailing = punctuationMatch.captured(3);
                   //QString actualLyric = punctuationMatch.captured(2);
-                  if (!lp.isEmpty() || !tp.isEmpty()) {
-//                        qDebug("create leading, trailing <%s> -- <%s><%s>", qPrintable(s), qPrintable(lp), qPrintable(tp));
-                        Lyrics leading(*this);
-                        leading.setPlainText(lp);
-                        leading.layout1();
-                        Lyrics trailing(*this);
-                        trailing.setPlainText(tp);
-                        trailing.layout1();
-                        leftAdjust = leading.width();
-                        centerAdjust = leading.width() - trailing.width();
-                        if (!lp.isEmpty() && lp[0].isDigit())
-                              hasNumber = true;
-                        }
+                  if (!leading.isEmpty() && leading[0].isDigit())
+                        hasNumber = true;
                   }
             }
 
@@ -282,6 +283,26 @@ void Lyrics::layout()
       qreal x = pos().x();
       TextBase::layout1();
 
+      qreal centerAdjust = 0.0;
+      qreal leftAdjust   = 0.0;
+
+      if (score()->styleB(Sid::lyricsAlignVerseNumber)) {
+            // Calculate leading and trailing parts widths. Lyrics
+            // should have text layout to be able to do it correctly.
+            Q_ASSERT(rows() != 0);
+            if (!leading.isEmpty() || !trailing.isEmpty()) {
+//                   qDebug("create leading, trailing <%s> -- <%s><%s>", qPrintable(text), qPrintable(leading), qPrintable(trailing));
+                  const TextBlock& tb = textBlock(0);
+
+                  const qreal leadingWidth = tb.xpos(leading.length(), this) - tb.boundingRect().x();
+                  const int trailingPos = text.length() - trailing.length();
+                  const qreal trailingWidth = tb.boundingRect().right() - tb.xpos(trailingPos, this);
+
+                  leftAdjust = leadingWidth;
+                  centerAdjust = leadingWidth - trailingWidth;
+                  }
+            }
+
       ChordRest* cr = chordRest();
 
       if (align() & Align::HCENTER) {
@@ -300,7 +321,7 @@ void Lyrics::layout()
 
       rxpos() = x;
 
-      if (_ticks > 0 || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
+      if (_ticks > Fraction(0,1) || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
             if (!_separator) {
                   _separator = new LyricsLine(score());
                   _separator->setTick(cr->tick());
@@ -311,9 +332,10 @@ void Lyrics::layout()
             // HACK separator should have non-zero length to get its layout
             // always triggered. A proper ticks length will be set later on the
             // separator layout.
-            _separator->setTicks(1);
+            _separator->setTicks(Fraction::fromTicks(1));
             _separator->setTrack(track());
             _separator->setTrack2(track());
+            _separator->setVisible(visible());
             // bbox().setWidth(bbox().width());  // ??
             }
       else {
@@ -336,11 +358,11 @@ void Lyrics::layout2(int nAbove)
 
       if (placeBelow()) {
             qreal yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
-            rypos()  = lh * (_no - nAbove) + yo;
+            rypos()  = lh * (_no - nAbove) + yo - chordRest()->y();
             rpos()  += styleValue(Pid::OFFSET, Sid::lyricsPosBelow).toPointF();
             }
       else {
-            rypos() = -lh * (nAbove - _no - 1);
+            rypos() = -lh * (nAbove - _no - 1) - chordRest()->y();
             rpos() += styleValue(Pid::OFFSET, Sid::lyricsPosAbove).toPointF();
             }
       }
@@ -421,7 +443,7 @@ void Lyrics::paste(EditData& ed)
 //   endTick
 //---------------------------------------------------------
 
-int Lyrics::endTick() const
+Fraction Lyrics::endTick() const
       {
       return segment()->tick() + ticks();
       }
@@ -464,7 +486,7 @@ Element* Lyrics::drop(EditData& data)
 void Lyrics::endEdit(EditData& ed)
       {
       TextBase::endEdit(ed);
-      score()->setLayoutAll();
+      triggerLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -512,7 +534,7 @@ bool Lyrics::setProperty(Pid propertyId, const QVariant& v)
                   _syllabic = Syllabic(v.toInt());
                   break;
             case Pid::LYRIC_TICKS:
-                  _ticks = v.toInt();
+                  _ticks = v.value<Fraction>();
                   break;
             case Pid::VERSE:
                   _no = v.toInt();
@@ -540,6 +562,7 @@ QVariant Lyrics::propertyDefault(Pid id) const
             case Pid::SYLLABIC:
                   return int(Syllabic::SINGLE);
             case Pid::LYRIC_TICKS:
+                  return Fraction(0,1);
             case Pid::VERSE:
                   return 0;
             case Pid::ALIGN:
@@ -549,6 +572,17 @@ QVariant Lyrics::propertyDefault(Pid id) const
             default:
                   return TextBase::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid Lyrics::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::lyricsPosAbove : Sid::lyricsPosBelow;
+      return TextBase::getPropertyStyle(pid);
       }
 
 //---------------------------------------------------------
@@ -588,6 +622,25 @@ void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
             TextBase::undoChangeProperty(id, v, ps);
             return;
             }
+      else if (id == Pid::AUTOPLACE && v.toBool() != autoplace()) {
+            if (v.toBool()) {
+                  // setting autoplace
+                  // reset offset
+                  undoResetProperty(Pid::OFFSET);
+                  }
+            else {
+                  // unsetting autoplace
+                  // rebase offset
+                  QPointF off = offset();
+                  qreal y = pos().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+                  off.ry() = placeAbove() ? y : y - staff()->height();
+                  undoChangeProperty(Pid::OFFSET, off, PropertyFlags::UNSTYLED);
+                  }
+            TextBase::undoChangeProperty(id, v, ps);
+            return;
+            }
+#if 0
+      // TODO: create new command to do this
       if (id == Pid::PLACEMENT) {
             if (Placement(v.toInt()) == Placement::ABOVE) {
                   // change placment of all verse for the same voice upto this one to ABOVE
@@ -605,6 +658,7 @@ void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
                   }
             return;
             }
+#endif
 
       TextBase::undoChangeProperty(id, v, ps);
       }

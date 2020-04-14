@@ -18,7 +18,9 @@
 namespace Ms {
 
 class Note;
+class Harmony;
 class XmlWriter;
+class Score;
 
 enum class BeatType : char;
 
@@ -99,6 +101,8 @@ enum {
       CTRL_LRPN               = 0x64,
 
       CTRL_MODULATION         = 0x01,
+      CTRL_BREATH             = 0x02,
+      CTRL_FOOT               = 0x04,
       CTRL_PORTAMENTO_TIME    = 0x05,
       CTRL_VOLUME             = 0x07,
       CTRL_PANPOT             = 0x0a,
@@ -192,9 +196,9 @@ class MidiCoreEvent {
 class MidiEvent : public MidiCoreEvent {
 
    protected:
-      uchar* _edata;           // always zero terminated (_data[_len] == 0; )
-      int _len;
-      int _metaType;
+      uchar* _edata { nullptr };           // always zero terminated (_data[_len] == 0; )
+      int _len { 0 };
+      int _metaType { 0 };
 
    public:
       MidiEvent() {}
@@ -234,7 +238,8 @@ class PlayEvent : public MidiCoreEvent {
 //---------------------------------------------------------
 
 class NPlayEvent : public PlayEvent {
-      const Note* _note = 0;
+      const Note* _note{nullptr};
+      const Harmony* _harmony{nullptr};
       int _origin = -1;
       int _discard = 0;
 
@@ -245,13 +250,16 @@ class NPlayEvent : public PlayEvent {
       NPlayEvent(const MidiCoreEvent& e) : PlayEvent(e) {}
       NPlayEvent(BeatType beatType);
 
-      const Note* note() const       { return _note; }
-      void setNote(const Note* v)    { _note = v; }
+      const Note* note() const            { return _note;    }
+      void setNote(const Note* v)         { _note = v;       }
+      const Harmony* harmony() const      { return _harmony; }
+      void setHarmony(const Harmony* v)   { _harmony = v;    }
 
       int getOriginatingStaff() const { return _origin; }
       void setOriginatingStaff(int i) { _origin = i; }
       void setDiscard(int d) { _discard = d; }
       int discard() const { return _discard; }
+      bool isMuted() const;
       };
 
 //---------------------------------------------------------

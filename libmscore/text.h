@@ -26,10 +26,10 @@ class Text final : public TextBase {
    public:
       Text(Score* s = 0, Tid tid = Tid::DEFAULT);
 
-      virtual ElementType type() const override    { return ElementType::TEXT; }
-      virtual Text* clone() const override         { return new Text(*this); }
-      virtual void read(XmlReader&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      ElementType type() const override    { return ElementType::TEXT; }
+      Text* clone() const override         { return new Text(*this); }
+      void read(XmlReader&) override;
+      QVariant propertyDefault(Pid id) const override;
       };
 
 }     // namespace Ms

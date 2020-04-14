@@ -45,16 +45,19 @@ PianoLevels::PianoLevels(QWidget *parent)
     : QWidget(parent)
        {
        setMouseTracking(true);
-       _xpos   = 0;
-       _xZoom = X_ZOOM_INITIAL;
-       _tuplet = 1;
-       _subdiv = 0;
+       _score     = nullptr;
+       _xpos      = 0;
+       _xZoom     = X_ZOOM_INITIAL;
+       _locator   = nullptr;
+       _staff     = nullptr;
+       _tuplet    = 1;
+       _subdiv    = 0;
        _levelsIndex = 0;
        minBeatGap = 20;
-       vMargin = 10;
-       levelLen = 20;
-       mouseDown = false;
-       dragging = false;
+       vMargin    = 10;
+       levelLen   = 20;
+       mouseDown  = false;
+       dragging   = false;
        }
 
 //---------------------------------------------------------
@@ -95,7 +98,7 @@ void PianoLevels::setXpos(int val)
 //---------------------------------------------------------
 
 int PianoLevels::pixelXToTick(int pixX) {
-      return (int)((pixX + _xpos) / _xZoom) - MAP_OFFSET;
+      return static_cast<int>((pixX + _xpos) / _xZoom) - MAP_OFFSET;
       }
 
 
@@ -104,7 +107,7 @@ int PianoLevels::pixelXToTick(int pixX) {
 //---------------------------------------------------------
 
 int PianoLevels::tickToPixelX(int tick) {
-      return (int)(tick + MAP_OFFSET) * _xZoom - _xpos;
+      return static_cast<int>(tick + MAP_OFFSET) * _xZoom - _xpos;
       }
 
 
@@ -284,12 +287,12 @@ void PianoLevels::paintEvent(QPaintEvent* e)
 //   noteStartTick
 //---------------------------------------------------------
 
-int PianoLevels::noteStartTick(Note* note, NoteEvent* evt) {
+int PianoLevels::noteStartTick(Note* note, NoteEvent* evt)
+      {
       Chord* chord = note->chord();
-      int ticks = chord->duration().ticks();
+      int ticks = chord->ticks().ticks();
 
-      return note->chord()->tick()
-            + (evt ? evt->ontime() * ticks / 1000 : 0);
+      return note->chord()->tick().ticks() + (evt ? evt->ontime() * ticks / 1000 : 0);
       }
 
 
@@ -303,7 +306,7 @@ int PianoLevels::valToPixelY(int value) {
       int range = filter->maxRange() - filter->minRange();
       qreal frac = (value - filter->minRange()) / (qreal)range;
 
-      return (int)(height() - vMargin * 2) * (1 - frac) + vMargin;
+      return static_cast<int>(height() - vMargin * 2) * (1 - frac) + vMargin;
       }
 
 
@@ -316,7 +319,7 @@ int PianoLevels::pixelYToVal(int pix) {
 
       PianoLevelsFilter* filter = PianoLevelsFilter::FILTER_LIST[_levelsIndex];
       int range = filter->maxRange() - filter->minRange();
-      return (int)(frac * range + filter->minRange());
+      return static_cast<int>(frac * range + filter->minRange());
       }
 
 //---------------------------------------------------------
@@ -416,7 +419,8 @@ void PianoLevels::adjustLevelLerp(int tick0, int value0, int tick1, int value1, 
             else {
                   int tick = noteStartTick(note, 0);
                   if (tick0 <= tick && tick <= tick1) {
-                        int value = (value1 - value0) * (tick - tick0) / (tick1 - tick0) + value0;
+                        int value = tick0 == tick1 ? value0
+                              : (value1 - value0) * (tick - tick0) / (tick1 - tick0) + value0;
                         filter->setValue(_staff, note, 0, value);
                         hitNote = true;
                         }

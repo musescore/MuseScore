@@ -36,12 +36,15 @@ class ShadowNote final : public Element {
 
    public:
       ShadowNote(Score*);
-      virtual ShadowNote* clone() const  { return new ShadowNote(*this); }
-      virtual ElementType type() const   { return ElementType::SHADOW_NOTE; }
-      virtual void layout();
+
+      ShadowNote* clone() const override { return new ShadowNote(*this); }
+      ElementType type() const override  { return ElementType::SHADOW_NOTE; }
+
+      void layout() override;
       int line() const                   { return _line;   }
       void setLine(int n)                { _line = n;      }
-      virtual void draw(QPainter*) const;
+
+      void draw(QPainter*) const override;
 
       void setState(SymId noteSymbol, int voice, TDuration duration, bool rest = false);
 

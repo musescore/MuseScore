@@ -161,11 +161,10 @@ void MixerDetails::updateFromTrack()
       Channel* chan = _mti->focusedChan();
 
       //Check if drumkit
-      bool drum = midiMap->part->instrument()->useDrumset();
+      const bool drum = midiMap->part()->instrument()->useDrumset();
       drumkitCheck->blockSignals(true);
       drumkitCheck->setChecked(drum);
       drumkitCheck->blockSignals(false);
-
 
       //Populate patch combo
       patchCombo->blockSignals(true);
@@ -173,13 +172,33 @@ void MixerDetails::updateFromTrack()
       const auto& pl = synti->getPatchInfo();
       int patchIndex = 0;
 
-      for (const MidiPatch* p : pl) {
-            if (p->drum == drum || p->synti != "Fluid") {
-                  patchCombo->addItem(p->name, QVariant::fromValue<void*>((void*)p));
-                  if (p->synti == chan->synti() &&
-                      p->bank == chan->bank() &&
-                      p->prog == chan->program())
-                        patchIndex = patchCombo->count() - 1;
+      // Order by program number instead of bank, so similar instruments
+      // appear next to each other, but ordered primarily by soundfont
+      std::map<int, std::map<int, std::vector<const MidiPatch*>>> orderedPl;
+
+      for (const MidiPatch* p : pl)
+            orderedPl[p->sfid][p->prog].push_back(p);
+
+      std::vector<QString> usedNames;
+      for (auto const& sf : orderedPl) {
+            for (auto const& pn : sf.second) {
+                  for (const MidiPatch* p : pn.second) {
+                        if (p->drum == drum || p->synti != "Fluid") {
+                              QString pName = p->name;
+                              if (std::find(usedNames.begin(), usedNames.end(), p->name) != usedNames.end()) {
+                                    QString addNum = QString(" (%1)").arg(p->sfid);
+                                    pName.append(addNum);
+                                    }
+                              else
+                                    usedNames.push_back(p->name);
+
+                              patchCombo->addItem(pName, QVariant::fromValue<void*>((void*)p));
+                              if (p->synti == chan->synti() &&
+                                  p->bank == chan->bank() &&
+                                  p->prog == chan->program())
+                                    patchIndex = patchCombo->count() - 1;
+                              }
+                        }
                   }
             }
       patchCombo->setCurrentIndex(patchIndex);
@@ -205,6 +224,9 @@ void MixerDetails::updateFromTrack()
       chorusSlider->blockSignals(true);
       chorusSpinBox->blockSignals(true);
 
+      portSpinBox->blockSignals(true);
+      channelSpinBox->blockSignals(true);
+
       trackColorLabel->setColor(QColor(_mti->color() | 0xff000000));
 
       volumeSlider->setValue((int)chan->volume());
@@ -216,8 +238,8 @@ void MixerDetails::updateFromTrack()
       chorusSlider->setValue((int)chan->chorus());
       chorusSpinBox->setValue(chan->chorus());
 
-      portSpinBox->setValue(part->masterScore()->midiMapping(chan->channel())->port + 1);
-      channelSpinBox->setValue(part->masterScore()->midiMapping(chan->channel())->channel + 1);
+      portSpinBox->setValue(part->masterScore()->midiMapping(chan->channel())->port() + 1);
+      channelSpinBox->setValue(part->masterScore()->midiMapping(chan->channel())->channel() + 1);
 
       trackColorLabel->blockSignals(false);
       volumeSlider->blockSignals(false);
@@ -228,6 +250,9 @@ void MixerDetails::updateFromTrack()
       reverbSpinBox->blockSignals(false);
       chorusSlider->blockSignals(false);
       chorusSpinBox->blockSignals(false);
+
+      portSpinBox->blockSignals(false);
+      channelSpinBox->blockSignals(false);
 
       //Set up mute per voice buttons
       mutePerVoiceHolder = new QWidget();
@@ -332,7 +357,7 @@ void MixerDetails::propertyChanged(Channel::Prop property)
             return;
 
       MidiMapping* _midiMap = _mti->midiMap();
-      Channel* chan = _midiMap->articulation;
+      Channel* chan = _midiMap->articulation();
 
       switch (property) {
             case Channel::Prop::VOLUME: {
@@ -461,16 +486,16 @@ void MixerDetails::patchChanged(int n)
             return;
             }
 
-      Part* part = _mti->midiMap()->part;
-      Channel* channel = _mti->midiMap()->articulation;
+      Part* part = _mti->midiMap()->part();
+      Channel* channel = _mti->midiMap()->articulation();
       Score* score = part->score();
       if (score) {
             score->startCmd();
             score->undo(new ChangePatch(score, channel, p));
+            score->undo(new SetUserBankController(channel, true));
             score->setLayoutAll();
             score->endCmd();
             }
-      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -490,7 +515,7 @@ void MixerDetails::drumkitToggled(bool val)
       if (_mti->trackType() == MixerTrackItem::TrackType::CHANNEL)
             instr = _mti->instrument();
       else
-            instr = part->instrument(0);
+            instr = part->instrument(Fraction(0,1));
 
       if (instr->useDrumset() == val)
             return;
@@ -512,7 +537,6 @@ void MixerDetails::drumkitToggled(bool val)
             score->setLayoutAll();
             score->endCmd();
             }
-      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -533,10 +557,8 @@ void MixerDetails::midiChannelChanged(int)
       int c = channelSpinBox->value() - 1;
 
       MidiMapping* midiMap = _mti->midiMap();
-      midiMap->port = p;
-      midiMap->channel = c;
+      part->masterScore()->updateMidiMapping(midiMap->articulation(), part, p, c);
 
-//      channel->updateInitList();
       part->score()->setInstrumentsChanged(true);
       part->score()->setLayoutAll();
       seq->initInstruments();

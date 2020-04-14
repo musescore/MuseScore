@@ -10,10 +10,24 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "log.h"
 #include "textedit.h"
 #include "score.h"
 
 namespace Ms {
+
+//---------------------------------------------------------
+//   ~TextEditData
+//---------------------------------------------------------
+
+TextEditData::~TextEditData()
+      {
+      if (deleteText) {
+            TextBase* text = cursor.text();
+            for (ScoreElement* se : text->linkList())
+                  toTextBase(se)->deleteLater();
+            }
+      }
 
 //---------------------------------------------------------
 //   editInsertText
@@ -42,7 +56,6 @@ void TextBase::editInsertText(TextCursor* cursor, const QString& s)
 
 void TextBase::startEdit(EditData& ed)
       {
-      ed.grips = 0;
       TextEditData* ted = new TextEditData(this);
       ted->e = this;
       ted->cursor.setRow(0);
@@ -71,54 +84,91 @@ void TextBase::startEdit(EditData& ed)
 void TextBase::endEdit(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      score()->undoStack()->remove(ted->startUndoIdx);           // remove all undo/redo records
+      IF_ASSERT_FAILED(ted) {
+            return;
+            }
+
+      UndoStack* undo = score()->undoStack();
+      IF_ASSERT_FAILED(undo) {
+            return;
+            }
+
+      const QString actualXmlText = xmlText();
+      const QString actualPlainText = plainText();
 
       // replace all undo/redo records collected during text editing with
       // one property change
 
-      QString actualText = xmlText();
+      using Filter = UndoCommand::Filter;
+      const bool textWasEdited = (undo->getCurIdx() != ted->startUndoIdx);
+
+      if (textWasEdited) {
+            undo->mergeCommands(ted->startUndoIdx);
+            undo->last()->filterChildren(Filter::TextEdit, this);
+            }
+      else {
+            // No text changes in "undo" part of undo stack,
+            // hence nothing to merge and filter.
+            undo->cleanRedoStack(); // prevent text editing commands from remaining in undo stack
+            }
+
+      bool newlyAdded = false;
+
       if (ted->oldXmlText.isEmpty()) {
-            UndoStack* us = score()->undoStack();
-            UndoCommand* ucmd = us->last();
-            if (ucmd) {
-                  const QList<UndoCommand*>& cl = ucmd->commands();
-                  const UndoCommand* cmd = cl.back();
-                  if (strncmp(cmd->name(), "Add:", 4) == 0) {
-                        const AddElement* ae = static_cast<const AddElement*>(cmd);
-                        if (ae->getElement() == this) {
-                              if (actualText.isEmpty()) {
-                                    // we just created this empty text, rollback that operation
-                                    us->rollback();
-                                    score()->update();
-                                    ed.element = 0;
-                                    }
-                              else {
-                                    setXmlText(ted->oldXmlText);  // reset text to value before editing
-                                    us->reopen();
-                                    // combine undo records of text creation with text editing
-                                    undoChangeProperty(Pid::TEXT, actualText);
-                                    layout1();
-                                    score()->endCmd();
-                                    }
-                              return;
-                              }
-                        }
+            UndoCommand* ucmd = textWasEdited ? undo->prev() : undo->last();
+            if (ucmd && ucmd->hasFilteredChildren(Filter::AddElement, this)) {
+                  // We have just added this element to a score.
+                  // Combine undo records of text creation with text editing.
+                  newlyAdded = true;
+                  undo->mergeCommands(ted->startUndoIdx - 1);
                   }
             }
-      if (actualText.isEmpty()) {
+
+      if (actualPlainText.isEmpty()) {
             qDebug("actual text is empty");
-            score()->startCmd();
+
+            // If this assertion fails, no undo command relevant to this text
+            // resides on undo stack and reopen() would corrupt the previous
+            // command. Text shouldn't happen to be empty in other cases though.
+            Q_ASSERT(newlyAdded || textWasEdited);
+
+            undo->reopen();
             score()->undoRemoveElement(this);
             ed.element = 0;
-            score()->endCmd();
+
+            static const std::vector<Filter> filters {
+                  Filter::AddElementLinked,
+                  Filter::RemoveElementLinked,
+                  Filter::ChangePropertyLinked,
+                  Filter::Link,
+                  };
+
+            if (newlyAdded && !undo->current()->hasUnfilteredChildren(filters, this)) {
+                  for (Filter f : filters)
+                        undo->current()->filterChildren(f, this);
+
+                  score()->endCmd();
+                  ted->setDeleteText(true); // mark this text element for deletion
+                  }
+            else {
+                  score()->endCmd();
+                  }
+
             return;
             }
-      setXmlText(ted->oldXmlText);                    // reset text to value before editing
-      score()->startCmd();
-      undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
-                                                      // this also changes text of linked elements
-      layout1();
-      score()->endCmd();
+
+      if (textWasEdited) {
+            setXmlText(ted->oldXmlText);                    // reset text to value before editing
+            undo->reopen();
+            undoChangeProperty(Pid::TEXT, actualXmlText);   // change property to set text to actual value again
+                                                            // this also changes text of linked elements
+            layout1();
+            triggerLayout();                                // force relayout even if text did not change
+            score()->endCmd();
+            }
+      else {
+            triggerLayout();
+            }
 
       static const qreal w = 2.0;
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
@@ -301,10 +351,17 @@ bool TextBase::edit(EditData& ed)
                         break;
 
                   case Qt::Key_Space:
-                        if (ed.modifiers & CONTROL_MODIFIER)
+                        if (ed.modifiers & CONTROL_MODIFIER) {
                               s = QString(QChar(0xa0)); // non-breaking space
-                        else
+                              }
+                        else {
+                              if (isFingering() && ed.view) {
+                                    score()->endCmd();
+                                    ed.view->textTab(ed.modifiers & Qt::ShiftModifier);
+                                    return true;
+                                    }
                               s = " ";
+                              }
                         ed.modifiers = 0;
                         break;
 
@@ -336,15 +393,15 @@ bool TextBase::edit(EditData& ed)
                                     }
                               break;
                         case Qt::Key_B:
-                              insertSym(ed, SymId::accidentalFlat);
-                              return true;
+                              s = "\u266d"; // Unicode flat
+                              break;
                         case Qt::Key_NumberSign:
-                              insertSym(ed, SymId::accidentalSharp);
-                              return true;
+                              s = "\u266f"; // Unicode sharp
+                              break;
                         case Qt::Key_H:
-                              insertSym(ed, SymId::accidentalNatural);
-                              return true;
-                        case Qt::Key_Space:
+                              s = "\u266e"; // Unicode natural
+                              break;
+                         case Qt::Key_Space:
                               insertSym(ed, SymId::space);
                               return true;
                         case Qt::Key_F:

@@ -29,7 +29,7 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>N-Gt</trackName>
+      <trackName>Guitar</trackName>
       <Instrument>
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>
@@ -43,6 +43,7 @@
         <instrumentId>pluck.guitar.nylon-string</instrumentId>
         <concertClef>G8vb</concertClef>
         <transposingClef>G</transposingClef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
           <string>52</string>
@@ -77,6 +78,18 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
@@ -773,6 +786,7 @@ solo concert</text>
           <instrumentId>pluck.guitar.nylon-string</instrumentId>
           <concertClef>G8vb</concertClef>
           <transposingClef>G</transposingClef>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>24</frets>
             <string>52</string>
@@ -807,6 +821,18 @@ solo concert</text>
             <gateTime>67</gateTime>
             </Articulation>
           <Articulation name="sforzato">
+            <velocity>150</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="sforzatoStaccato">
+            <velocity>150</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="marcatoStaccato">
+            <velocity>120</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="marcatoTenuto">
             <velocity>120</velocity>
             <gateTime>100</gateTime>
             </Articulation>
@@ -2188,7 +2214,7 @@ solo concert</text>
             </voice>
           </Measure>
         </Staff>
-      <name>N-Gt</name>
+      <name>Guitar</name>
       </Score>
     </Score>
   </museScore>

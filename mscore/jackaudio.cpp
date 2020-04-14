@@ -27,12 +27,13 @@
 #include "jackaudio.h"
 #include "musescore.h"
 #include "libmscore/mscore.h"
+#include "libmscore/sig.h"
 #include "preferences.h"
 // #include "msynth/synti.h"
 #include "seq.h"
 #include "libmscore/score.h"
 #include "libmscore/repeatlist.h"
-#include "mscore/playpanel.h"
+#include "playpanel.h"
 #include <jack/midiport.h>
 
 // Prevent killing sequencer with wrong data
@@ -148,7 +149,8 @@ QList<QString> JackAudio::inputPorts()
             if (!(flags & JackPortIsInput))
                   continue;
             char buffer[128];
-            strncpy(buffer, *p, 128);
+            strncpy(buffer, *p, sizeof(buffer) - 1);
+            buffer[sizeof(buffer) - 1] = 0;
             if (strncmp(buffer, "Mscore", 6) == 0)
                   continue;
             clientList.append(QString(buffer));
@@ -320,11 +322,11 @@ void JackAudio::timebase(jack_transport_state_t state, jack_nframes_t /*nframes*
                   audio->stopTransport();
             }
       else if (audio->seq->isRunning()) {
-            if (!audio->seq->score()->repeatList() || !audio->seq->score()->sigmap())
+            if (!audio->seq->score()->masterScore())
                   return;
 
             pos->valid = JackPositionBBT;
-            int curTick = audio->seq->score()->repeatList()->utick2tick(audio->seq->getCurTick());
+            int curTick = audio->seq->score()->repeatList().utick2tick(audio->seq->getCurTick());
             int bar,beat,tick;
             audio->seq->score()->sigmap()->tickValues(curTick, &bar, &beat, &tick);
             // Providing the final tempo

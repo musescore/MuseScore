@@ -31,9 +31,7 @@ namespace Ms {
 
 void FotoLasso::startEdit(EditData& ed)
       {
-      Element::startEdit(ed);
-      ed.grips   = 8;
-      ed.curGrip = Grip(0);
+      Lasso::startEdit(ed);
       QRectF view = ((ScoreView*)ed.view)->toLogical(QRect(0.0, 0.0, ed.view->geometry().width(), ed.view->geometry().height()));
       if (bbox().isEmpty() || !view.intersects(bbox())) {
             // rect not found - construct new rect with default size & relative position
@@ -53,15 +51,6 @@ void FotoLasso::startEdit(EditData& ed)
 void FotoLasso::endEdit(EditData&)
       {
       setVisible(false);
-      }
-
-//---------------------------------------------------------
-//   updateGrips
-//---------------------------------------------------------
-
-void FotoLasso::updateGrips(EditData& ed) const
-      {
-      Lasso::updateGrips(ed);
       }
 
 //---------------------------------------------------------
@@ -99,7 +88,7 @@ void ScoreView::startFotomode()
       _foto->setFlag(ElementFlag::MOVABLE, true);
       _foto->setVisible(true);
       _score->select(_foto);
-      editData.element = _foto;
+      setEditElement(_foto);
       QAction* a = getAction("fotomode");
       a->setChecked(true);
       startEdit();
@@ -166,7 +155,7 @@ void ScoreView::endFotoDrag()
       editData.grip.resize(8);
       for (int i = 0; i < 8; ++i)
             editData.grip[i] = r;
-      editData.element = _foto;
+      setEditElement(_foto);
       updateGrips();
       _score->setUpdateAll();
       _score->update();
@@ -325,6 +314,9 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
 
       a = getAction("copy");
       popup->addAction(a);
+      a = new QAction(tr("Copy with Link to Score"), this);
+      a->setData("copy-link");
+      popup->addAction(a);
 
       popup->addSeparator();
       a = popup->addAction(tr("Resolution (%1 DPI)…").arg(preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION)));
@@ -369,6 +361,8 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             saveFotoAs(false, _foto->canvasBoundingRect());
       else if (cmd == "copy")
             ;
+      else if (cmd == "copy-link")
+            fotoModeCopy(true);
       else if (cmd == "set-res") {
             bool ok;
             double resolution = QInputDialog::getDouble(this,
@@ -438,7 +432,7 @@ QImage ScoreView::getRectImage(const QRectF& rect, double dpi, bool transparent,
 //   fotoModeCopy
 //---------------------------------------------------------
 
-void ScoreView::fotoModeCopy()
+void ScoreView::fotoModeCopy(bool includeLink)
       {
 #if defined(Q_OS_WIN)
       // See https://bugreports.qt.io/browse/QTBUG-11463
@@ -452,7 +446,25 @@ void ScoreView::fotoModeCopy()
       QRectF r(_foto->canvasBoundingRect());
 
       QImage printer(getRectImage(r, convDpi, transparent, /* printMode */ true));
-      QApplication::clipboard()->setImage(printer);
+      QApplication::clipboard()->clear();
+
+      if (includeLink) {
+            QUrl url = QUrl::fromLocalFile(score()->masterScore()->fileInfo()->canonicalFilePath());
+            QByteArray imageData;
+            QBuffer buffer(&imageData);
+            buffer.open(QIODevice::WriteOnly);
+            printer.save(&buffer, "PNG");
+            buffer.close();
+            QString html = "<a href=\"" + url.toString() + "\"><img src=\"data:image/png," + imageData.toPercentEncoding() + "\" /></a>";
+            QMimeData *mdata = new QMimeData;
+            mdata->setHtml(html);
+            QApplication::clipboard()->setMimeData(mdata);
+            // TODO: add both, with priority to html
+            //QApplication::clipboard()->setImage(printer);
+            }
+      else {
+            QApplication::clipboard()->setImage(printer);
+            }
       }
 
 //---------------------------------------------------------
@@ -608,7 +620,7 @@ void ScoreView::fotoDragDrop(QMouseEvent*)
       QRectF r(_foto->bbox());
 
       QTemporaryFile tf(QDir::tempPath() + QString("/imgXXXXXX.svg"));
-      tf.setAutoRemove(false);
+      tf.setAutoRemove(false);  // TODO: find out whether, where, when and how to delete it
       tf.open();
       tf.close();
       qDebug("Temp File <%s>", qPrintable(tf.fileName()));

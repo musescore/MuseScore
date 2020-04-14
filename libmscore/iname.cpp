@@ -12,7 +12,9 @@
 
 #include "score.h"
 #include "iname.h"
+#include "measure.h"
 #include "staff.h"
+#include "system.h"
 #include "part.h"
 #include "undo.h"
 
@@ -81,6 +83,23 @@ void InstrumentName::setInstrumentNameType(InstrumentNameType st)
             setTid(Tid::INSTRUMENT_LONG);
             initElementStyle(&longInstrumentStyle);
             }
+      }
+
+//---------------------------------------------------------
+//   playTick
+//---------------------------------------------------------
+
+Fraction InstrumentName::playTick() const
+      {
+      // Instrument names always have a tick value of zero, so play from the start of the first measure in the system that the instrument name belongs to.
+      const auto sys = system();
+      if (sys) {
+            const auto firstMeasure = sys->firstMeasure();
+            if (firstMeasure)
+                  return firstMeasure->tick();
+            }
+
+      return tick();
       }
 
 //---------------------------------------------------------

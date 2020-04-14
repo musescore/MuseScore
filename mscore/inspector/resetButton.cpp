@@ -22,15 +22,21 @@ namespace Ms {
 ResetButton::ResetButton(QWidget* parent)
    : QWidget(parent)
       {
-      reset    = new QToolButton(this);
+      reset = new QPushButton(this);
       reset->setToolTip(tr("Reset to style default"));
       reset->setIcon(*icons[int(Icons::reset_ICON)]);
+      reset->setMinimumSize(QSize(24,24));
+      reset->setMaximumSize(QSize(24,24));
       reset->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+      reset->setFlat(true);
 
-      setStyle = new QToolButton(this);
-      setStyle->setText(tr("S"));
+      setStyle = new QPushButton(this);
+      setStyle->setText(tr("S", "set as style"));
       setStyle->setToolTip(tr("Set as style"));
+      setStyle->setMinimumSize(QSize(24,24));
+      setStyle->setMaximumSize(QSize(24,24));
       setStyle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+      setStyle->setFlat(true);
 
       QHBoxLayout* l = new QHBoxLayout;
       l->setSpacing(0);

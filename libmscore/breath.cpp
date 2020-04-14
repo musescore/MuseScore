@@ -17,6 +17,7 @@
 #include "measure.h"
 #include "score.h"
 #include "xml.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -25,10 +26,10 @@ const std::vector<BreathType> Breath::breathList {
       { SymId::breathMarkTick,       false, 0.0 },
       { SymId::breathMarkSalzedo,    false, 0.0 },
       { SymId::breathMarkUpbow,      false, 0.0 },
-      { SymId::caesuraCurved,        true,  0.0 },
-      { SymId::caesura,              true,  0.0 },
-      { SymId::caesuraShort,         true,  0.0 },
-      { SymId::caesuraThick,         true,  0.0 },
+      { SymId::caesuraCurved,        true,  2.0 },
+      { SymId::caesura,              true,  2.0 },
+      { SymId::caesuraShort,         true,  2.0 },
+      { SymId::caesuraThick,         true,  2.0 },
       };
 
 //---------------------------------------------------------
@@ -61,10 +62,15 @@ bool Breath::isCaesura() const
 
 void Breath::layout()
       {
-      if (isCaesura())
-            setPos(x(), spatium());
-      else
-            setPos(x(), 0.5 * spatium());
+      bool palette = (track() == -1);
+      if (!palette) {
+            if (isCaesura())
+                  setPos(rxpos(), spatium());
+            else if ((score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler") && (symId() == SymId::breathMarkComma))
+                  setPos(rxpos(), 0.5 * spatium());
+            else
+                  setPos(rxpos(), -0.5 * spatium());
+            }
       setbbox(symBbox(_symId));
       }
 
@@ -112,6 +118,15 @@ void Breath::read(XmlReader& e)
             else if (!Element::readProperties(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal Breath::mag() const
+      {
+      return staff() ? staff()->mag(tick()) : 1.0;
       }
 
 //---------------------------------------------------------

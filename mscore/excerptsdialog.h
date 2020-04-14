@@ -96,8 +96,8 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
 
    private slots:
       void deleteClicked();
-      void newClicked();
-      void newAllClicked();
+      void singlePartClicked();
+      void allPartsClicked();
       void moveUpClicked();
       void moveDownClicked();
       void excerptChanged(QListWidgetItem* cur, QListWidgetItem* prev);

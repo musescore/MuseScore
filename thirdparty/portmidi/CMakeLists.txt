@@ -17,9 +17,10 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(CMAKE_C_FLAGS "-DNEWBUFFER -DPMNULL")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNEWBUFFER -DPMNULL")
 
 if (APPLE)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations -Wno-macro-redefined")
   file(GLOB_RECURSE INCS "*.h")
 
   add_library (
@@ -53,9 +54,11 @@ if (MSVC)
   )
 else (MSVC)
   if (MINGW)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-incompatible-pointer-types")
     if (BUILD_64)
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-pointer-to-int-cast")
       set_target_properties( portmidi PROPERTIES
-        COMPILE_FLAGS "-Wno-int-to-pointer-cast -Wno-pointer-to-int-cast -Wno-incompatible-pointer-types"
+        COMPILE_FLAGS "-Wno-int-to-pointer-cast"
       )
     endif (BUILD_64)
   endif (MINGW)

@@ -39,9 +39,10 @@ class ZitaEffectGui : public EffectGui {
       std::vector<QPixmap> pm;
       std::vector<Rotary> rotary;
 
-      int mx, my;
-      int r;
-      qreal oval;
+      int mx { 0 };
+      int my { 0 };
+      int r { 0 };
+      qreal oval { 0.0 };
 
       void paintEvent(QPaintEvent*);
       void mousePressEvent(QMouseEvent*);

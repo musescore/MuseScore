@@ -162,9 +162,6 @@
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -174,7 +171,7 @@
                 <next>
                   <location>
                     <measures>1</measures>
-                    <fractions>-107/108</fractions>
+                    <fractions>-20/27</fractions>
                     </location>
                   </next>
                 </Spanner>
@@ -227,7 +224,7 @@
                 <prev>
                   <location>
                     <measures>-1</measures>
-                    <fractions>107/108</fractions>
+                    <fractions>20/27</fractions>
                     </location>
                   </prev>
                 </Spanner>
@@ -243,9 +240,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>eighth</durationType>
             <Note>

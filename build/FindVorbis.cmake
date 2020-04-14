@@ -1,12 +1,11 @@
 find_path(VORBIS_INCLUDE_DIR vorbisenc.h PATHS ${PROJECT_SOURCE_DIR}/dependencies/include/vorbis;)
 
-set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
-find_library(VORBIS_LIBRARY NAMES libvorbis PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-
 if (MINGW)
-  set(VORBIS_INCLUDE_DIR "")
-  set(VORBIS_LIBRARY "")
-endif(MINGW)
+      set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
+else (MINGW)
+      set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
+endif (MINGW)
+find_library(VORBIS_LIBRARY NAMES libvorbis PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
 message(STATUS ${VORBIS_LIBRARY})
 

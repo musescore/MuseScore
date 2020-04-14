@@ -17,7 +17,9 @@
 #include "range.h"
 #include "tuplet.h"
 #include "spanner.h"
+#include "tie.h"
 #include "undo.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -39,7 +41,7 @@ void Score::cmdSplitMeasure(ChordRest* cr)
 
 void Score::splitMeasure(Segment* segment)
       {
-      if (segment->rtick() == 0) {
+      if (segment->rtick().isZero()) {
             MScore::setError(CANNOT_SPLIT_MEASURE_FIRST_BEAT);
             return;
             }
@@ -52,10 +54,10 @@ void Score::splitMeasure(Segment* segment)
       ScoreRange range;
       range.read(measure->first(), measure->last());
 
-      int stick = measure->tick();
-      int etick = measure->endTick();
+      Fraction stick = measure->tick();
+      Fraction etick = measure->endTick();
 
-      std::list<std::tuple<Spanner*, int, int>> sl;
+      std::list<std::tuple<Spanner*, Fraction, Fraction>> sl;
       for (auto i : spanner()) {
             Spanner* s = i.second;
             Element* start = s->startElement();
@@ -70,31 +72,50 @@ void Score::splitMeasure(Segment* segment)
                   sl.push_back(make_tuple(s, s->tick(), s->ticks()));
             }
 
+      // Make sure ties are the beginning the split measure are restored.
+      std::vector<Tie*> ties;
+      for (int track = 0; track < ntracks(); track++) {
+            Chord* chord = measure->findChord(stick, track);
+            if (chord)
+                  for (Note* note : chord->notes()) {
+                        Tie* tie = note->tieBack();
+                        if (tie)
+                              ties.push_back(tie->clone());
+                        }
+                  }
+
       MeasureBase* nm = measure->next();
+
       undoRemoveMeasures(measure, measure);
       undoInsertTime(measure->tick(), -measure->ticks());
 
       // create empty measures:
-      insertMeasure(ElementType::MEASURE, nm, true);
+      insertMeasure(ElementType::MEASURE, nm, true, false);
       Measure* m2 = toMeasure(nm ? nm->prev() : lastMeasure());
-      insertMeasure(ElementType::MEASURE, m2, true);
+      insertMeasure(ElementType::MEASURE, m2, true, false);
       Measure* m1 = toMeasure(m2->prev());
 
-      int tick = segment->tick();
+      Fraction tick = segment->tick();
       m1->setTick(measure->tick());
       m2->setTick(tick);
-      int ticks1 = segment->tick() - measure->tick();
-      int ticks2 = measure->ticks() - ticks1;
+      Fraction ticks1 = segment->tick() - measure->tick();
+      Fraction ticks2 = measure->ticks() - ticks1;
       m1->setTimesig(measure->timesig());
       m2->setTimesig(measure->timesig());
-      m1->adjustToLen(Fraction::fromTicks(ticks1), false);
-      m2->adjustToLen(Fraction::fromTicks(ticks2), false);
+      m1->adjustToLen(ticks1.reduced(), false);
+      m2->adjustToLen(ticks2.reduced(), false);
       range.write(this, m1->tick());
 
+      // Restore ties the the beginning of the split measure.
+      for (auto tie : ties) {
+            tie->setEndNote(searchTieNote(tie->startNote()));
+            undoAddElement(tie);
+            }
+
       for (auto i : sl) {
-            Spanner* s = std::get<0>(i);
-            int t      = std::get<1>(i);
-            int ticks  = std::get<2>(i);
+            Spanner* s      = std::get<0>(i);
+            Fraction t      = std::get<1>(i);
+            Fraction ticks  = std::get<2>(i);
             if (s->tick() != t)
                   s->undoChangeProperty(Pid::SPANNER_TICK, t);
             if (s->ticks() != ticks)

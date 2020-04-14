@@ -22,18 +22,18 @@ namespace Ms {
 //---------------------------------------------------------
 //   @@ LayoutBreak
 ///    symbols for line break, page break etc.
-//
-//   @P layoutBreakType  enum (LayoutBreak.PAGE, LayoutBreak.LINE, LayoutBreak.SECTION)
 //---------------------------------------------------------
 
 class LayoutBreak final : public Element {
+      Q_GADGET
    public:
       enum Type {
+            ///.\{
             PAGE, LINE, SECTION, NOBREAK
+            ///\}
             };
    private:
-      Q_PROPERTY(Ms::LayoutBreak::Type layoutBreakType READ layoutBreakType WRITE undoSetLayoutBreakType)
-      Q_ENUMS(Type)
+      Q_ENUM(Type);
 
       qreal lw;
       QPainterPath path;
@@ -43,25 +43,24 @@ class LayoutBreak final : public Element {
       bool _startWithMeasureOne;
       Type _layoutBreakType;
 
-      virtual void draw(QPainter*) const override;
+      void draw(QPainter*) const override;
       void layout0();
-      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
+      void spatiumChanged(qreal oldValue, qreal newValue) override;
 
    public:
       LayoutBreak(Score* = 0);
       LayoutBreak(const LayoutBreak&);
-      virtual LayoutBreak* clone() const override { return new LayoutBreak(*this); }
 
-      virtual ElementType type() const override   { return ElementType::LAYOUT_BREAK; }
+      LayoutBreak* clone() const override { return new LayoutBreak(*this); }
+      ElementType type() const override   { return ElementType::LAYOUT_BREAK; }
 
       void setLayoutBreakType(Type);
       Type layoutBreakType() const  { return _layoutBreakType; }
-      void undoSetLayoutBreakType(Type);
 
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
+      void write(XmlWriter&) const override;
+      void read(XmlReader&) override;
 
       Measure* measure() const            { return (Measure*)parent();   }
       qreal pause() const                 { return _pause;               }
@@ -76,14 +75,13 @@ class LayoutBreak final : public Element {
       bool isSectionBreak() const { return _layoutBreakType == SECTION; }
       bool isNoBreak() const      { return _layoutBreakType == NOBREAK; }
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid) const override;
+      Pid propertyId(const QStringRef& xmlName) const override;
       };
 
 
 }     // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::LayoutBreak::Type);
 
 #endif

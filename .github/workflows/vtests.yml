@@ -1,0 +1,125 @@
+name: CI_vtests
+
+on:
+  pull_request:
+    branches:
+    - master
+  push:
+    branches:
+    - master
+
+jobs:
+  run_vtests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Retrieve base commit for PR
+      if: github.event_name == 'pull_request'
+      run: |
+        export BASEREF=${{ github.event.pull_request.base.sha }}
+        if [ -z "$BASEREF" ]; then
+        export found=0
+        else
+        export found=1
+        fi
+        echo "::set-env name=BASEREF::${BASEREF}"
+        echo "::set-env name=found::${found}"
+    - name: Retrieve base commit for push commit
+      if: github.event_name == 'push'
+      run: |
+        export BASEREF=$( git show -s --pretty=%P ${{ github.sha }} | head -c 10 )
+        if [ -z "$BASEREF" ]; then
+        export found=0
+        else
+        export found=1
+        fi
+        echo "::set-env name=BASEREF::${BASEREF}"
+        echo "::set-env name=found::${found}"
+    - name: Install dependencies
+      if: contains( env.found, '1')
+      run: |
+        sudo apt-get update
+        sudo apt-get install libasound2-dev portaudio19-dev libmp3lame-dev libsndfile1-dev libportmidi-dev
+        sudo apt-get install libssl-dev libpulse-dev libfreetype6-dev libfreetype6
+        sudo apt-get install libdrm-dev libgl1-mesa-dev libegl1-mesa-dev
+        sudo apt-get install ccache
+    - name: Setup the environment
+      if: contains( env.found, '1')
+      run: |
+        sed -i 's/travis_retry//g' build/travis/job1_Tests/environment.sh
+        source build/travis/job1_Tests/environment.sh
+        echo "::set-env name=PATH::${PATH}"
+        echo "::set-env name=QT_PLUGIN_PATH::${QT_PLUGIN_PATH}"
+        echo "::set-env name=QML2_IMPORT_PATH::${QML2_IMPORT_PATH}"
+        git checkout -- build/travis/job1_Tests/environment.sh
+    - name: Build
+      if: contains( env.found, '1')
+      run: |
+        make installdebug CPUS=2 PREFIX="$HOME/software" COVERAGE=ON
+    - name: Build reference branch
+      if: contains( env.found, '1')
+      run: |
+        mkdir -p "$HOME/softwarebase"
+        git checkout $BASEREF
+        make clean
+        make installdebug CPUS=2 PREFIX="$HOME/softwarebase" COVERAGE=ON 2>/dev/null
+    - name: Run reference vtests
+      if: contains( env.found, '1')
+      run: |
+        cd vtest
+        export VTEST_MSCORE="$HOME/softwarebase/bin/mscore"
+        export VTEST_BROWSER=ls
+        export VTEST_DIR=$(pwd)
+        xvfb-run ./gen
+    - name: Run vtests
+      if: contains( env.found, '1')
+      run: |
+        git checkout -
+        cd vtest
+        mkdir -p compare
+        find ./html -name "*-1.png" -exec mv '{}' ./compare \;
+        rm -rf html 2>/dev/null
+        export VTEST_MSCORE="$HOME/software/bin/mscore"
+        export VTEST_BROWSER=ls
+        export VTEST_DIR=$(pwd)
+        xvfb-run ./gen
+    - name: Compare vtests
+      if: contains( env.found, '1')
+      run: |
+        cd vtest
+        export VTEST_DIR=$(pwd)
+        ./gen_compare
+    - name: Upload artifact
+      if: contains( env.found, '1') && contains( env.VTEST_DIFF_FOUND, 'true')
+      uses: actions/upload-artifact@v1
+      with:
+        name: compare
+        path: ./vtest/compare
+    - name: Comment PR
+      if: github.event_name == 'pull_request' && contains( env.found, '1') && contains( env.VTEST_DIFF_FOUND, 'true')
+      uses: thollander/actions-comment-pull-request@1.0.0
+      with:
+        message: 'This is an automatic message. This PR appears to change some of the visual tests.
+          Please carefully review the new visual test results in the uploaded artifact that can be found
+          [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})'
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Emit failure signal for PR if differences are found
+      if: github.event_name == 'pull_request' && contains( env.found, '1') && contains( env.VTEST_DIFF_FOUND, 'true')
+      run: |
+        echo "This PR appears to change some of the visual tests."
+        echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        exit 1
+    - name: Comment push commit
+      if: github.event_name == 'push' && contains( env.found, '1') && contains( env.VTEST_DIFF_FOUND, 'true')
+      uses: peter-evans/commit-comment@v1.1.0
+      with:
+        body: |
+          This is an automatic message. This commit appears to change some of the visual tests.
+          Please carefully review the new visual test results in the uploaded artifact that can be found
+          [here][1]
+          
+          [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        token: ${{ secrets.GITHUB_TOKEN }}

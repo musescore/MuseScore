@@ -361,5 +361,26 @@
         <stem>down</stem>
         </note>
       </measure>
+    <measure number="7">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <ornaments>
+            <trill-mark/>
+            <wavy-line type="start" number="1"/>
+            <wavy-line type="stop" number="1"/>
+            </ornaments>
+          </notations>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
     </part>
   </score-partwise>

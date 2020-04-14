@@ -34,7 +34,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       c.setTimeSig(_sig);
       c.createScore("");
       c.addPart("voice");
-      c.move(0, 0);
+      c.move(0, Fraction(0,1));
       c.addKeySig(Key::C);
       TimeSig* nts = c.addTimeSig(_sig);
       if (!_z.isEmpty())
@@ -48,12 +48,12 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
 
       for (int i = 0; i < n; ++i) {
             Chord* chord = c.addChord(77, t);
-            int tick = chord->rtick();
-            chord->setBeamMode(_groups.beamMode(tick, t));
+            Fraction tick = chord->rtick();
+            chord->setBeamMode(_groups.beamMode(tick.ticks(), t));
             chord->setStemDirection(Direction::UP);
             chords->push_back(chord);
             }
-      c.score()->style().set(Sid::pageOddTopMargin, 16.0/INCH);
+      //c.score()->style().set(Sid::pageOddTopMargin, 16.0/INCH);
       c.score()->style().set(Sid::pageOddLeftMargin, 0.0);
 
       c.score()->parts().front()->setLongName("");
@@ -62,7 +62,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       c.score()->style().set(Sid::MusicalTextFont, QString("Bravura Text"));
       c.score()->style().set(Sid::startBarlineSingle, true);
 
-      StaffType* st = c.score()->staff(0)->staffType(0);
+      StaffType* st = c.score()->staff(0)->staffType(Fraction(0,1));
       st->setLines(1);          // single line only
       st->setGenClef(false);    // no clef
 //      st->setGenTimesig(false); // don't display time sig since ExampleView is unable to reflect custom time sig text/symbols
@@ -87,11 +87,15 @@ NoteGroups::NoteGroups(QWidget* parent)
             };
 
       iconPalette->setName(QT_TRANSLATE_NOOP("Palette", "Beam Properties"));
+      iconPalette->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+      //iconPalette->setMag(.5);
       iconPalette->setGrid(27, 40);
-      iconPalette->setMag(.5);
+      iconPalette->setMinimumWidth(27 * 4 * Palette::guiMag() + 1);     // enough room for all icons, with roundoff
       iconPalette->setDrawGrid(true);
       populateIconPalette(iconPalette, bpa);
       iconPalette->setReadOnly(true);
+      iconPalette->setFixedHeight(iconPalette->heightForWidth(iconPalette->width()));
+      iconPalette->updateGeometry();
 
       connect(resetGroups, SIGNAL(clicked()), SLOT(resetClicked()));
       connect(view8,  SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));
@@ -135,11 +139,11 @@ Groups NoteGroups::groups()
       {
       Groups g;
       for (Chord* chord : chords8)
-            g.addStop(chord->rtick(), chord->durationType().type(), chord->beamMode());
+            g.addStop(chord->rtick().ticks(), chord->durationType().type(), chord->beamMode());
       for (Chord* chord : chords16)
-            g.addStop(chord->rtick(), chord->durationType().type(), chord->beamMode());
+            g.addStop(chord->rtick().ticks(), chord->durationType().type(), chord->beamMode());
       for (Chord* chord : chords32)
-            g.addStop(chord->rtick(), chord->durationType().type(), chord->beamMode());
+            g.addStop(chord->rtick().ticks(), chord->durationType().type(), chord->beamMode());
       return g;
       }
 
@@ -200,7 +204,7 @@ void NoteGroups::updateBeams(Chord* chord, Beam::Mode m)
       chord->score()->doLayout();
 
       if (changeShorterCheckBox->checkState() == Qt::Checked) {
-            int tick = chord->tick();
+            Fraction tick = chord->tick();
             bool foundChord = false;
             for (Chord* c : chords8) {
                   if (c == chord) {

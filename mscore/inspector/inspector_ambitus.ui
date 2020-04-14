@@ -30,6 +30,16 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QToolButton" name="title">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -49,139 +59,46 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::HLine</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="lineWidth">
-      <number>2</number>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="panel" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>
       </property>
+      <property name="topMargin">
+       <number>3</number>
+      </property>
       <property name="rightMargin">
        <number>3</number>
       </property>
-      <property name="horizontalSpacing">
+      <property name="bottomMargin">
        <number>3</number>
       </property>
-      <property name="verticalSpacing">
-       <number>0</number>
+      <property name="spacing">
+       <number>3</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_6">
+      <item row="4" column="2">
+       <widget class="Ms::ResetButton" name="resetLineWidth" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Line thickness' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label">
         <property name="text">
-         <string>Head group:</string>
+         <string>Direction:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>noteHeadGroup</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="noteHeadGroup">
-        <property name="accessibleName">
-         <string>Head group</string>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
-        <item>
-         <property name="text">
-          <string>Normal</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Cross</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Diamond</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Triangle</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Slash</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>XCircle</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Do</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Re</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Mi</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Fa</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Sol</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>La</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Ti</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Alt. Brevis</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QDoubleSpinBox" name="lineWidth">
-        <property name="accessibleName">
-         <string>Line thickness</string>
-        </property>
-        <property name="suffix">
-         <string>sp</string>
-        </property>
-        <property name="maximum">
-         <double>10.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.100000000000000</double>
+         <cstring>direction</cstring>
         </property>
        </widget>
       </item>
@@ -191,15 +108,142 @@
          <string>Bottom note:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>bottomTpc</cstring>
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Head type:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>noteHeadType</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="direction">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Direction</string>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>Upright</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Leaning Left</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Leaning Right</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="noteHeadType">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Head type</string>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>Auto</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Whole</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Half</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Quarter</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Breve</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Top note:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>topTpc</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetHasLine" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Has line' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="labelLineWidth">
+        <property name="text">
+         <string>Line thickness:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>lineWidth</cstring>
+        </property>
+       </widget>
+      </item>
       <item row="6" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>3</number>
+        </property>
         <item>
          <widget class="QComboBox" name="bottomTpc">
           <property name="accessibleName">
@@ -397,19 +441,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string extracomment="Octave">Oct.:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="buddy">
-           <cstring>bottomOctave</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QSpinBox" name="bottomOctave">
           <property name="accessibleName">
            <string>Bottom octave</string>
@@ -424,34 +455,181 @@
         </item>
        </layout>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_10">
-        <property name="text">
-         <string>Line thickness:</string>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetNoteHeadType" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>lineWidth</cstring>
+        <property name="accessibleName">
+         <string>Reset 'Head type' value</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_8">
+      <item row="0" column="1">
+       <widget class="QComboBox" name="noteHeadGroup">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Head group</string>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>Normal</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Cross</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Diamond</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Triangle</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Slash</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>XCircle</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Do</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Re</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Mi</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Fa</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Sol</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>La</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ti</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Alt. Brevis</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QCheckBox" name="hasLine">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
         <property name="text">
-         <string>Top note:</string>
+         <string>Has line</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetNoteHeadGroup" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Head group' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetDirection" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Head group:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>topTpc</cstring>
+         <cstring>noteHeadGroup</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QDoubleSpinBox" name="lineWidth">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Line thickness</string>
+        </property>
+        <property name="suffix">
+         <string>sp</string>
+        </property>
+        <property name="maximum">
+         <double>10.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
         </property>
        </widget>
       </item>
       <item row="5" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="spacing">
+         <number>3</number>
+        </property>
         <item>
          <widget class="QComboBox" name="topTpc">
           <property name="accessibleName">
@@ -649,19 +827,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string extracomment="Octave">Oct.:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="buddy">
-           <cstring>topOctave</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QSpinBox" name="topOctave">
           <property name="accessibleName">
            <string>Top octave</string>
@@ -676,156 +841,15 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="noteHeadType">
-        <property name="accessibleName">
-         <string>Head type</string>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
-        <item>
-         <property name="text">
-          <string>Auto</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Whole</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Half</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Quarter</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Breve</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Head type:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>noteHeadType</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="7" column="0" colspan="3">
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="updateRange">
-          <property name="focusPolicy">
-           <enum>Qt::TabFocus</enum>
-          </property>
-          <property name="text">
-           <string>Update Range</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Direction:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>direction</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="direction">
-        <property name="accessibleName">
-         <string>Direction</string>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
-        <item>
-         <property name="text">
-          <string>Upright</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Leaning Left</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Leaning Right</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QCheckBox" name="hasLine">
+       <widget class="QPushButton" name="updateRange">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
         <property name="text">
-         <string>Has line</string>
+         <string>Update Range</string>
         </property>
        </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetNoteHeadGroup"/>
-      </item>
-      <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetNoteHeadType"/>
-      </item>
-      <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetDirection"/>
-      </item>
-      <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetHasLine"/>
-      </item>
-      <item row="4" column="2">
-       <widget class="Ms::ResetButton" name="resetLineWidth"/>
       </item>
      </layout>
     </widget>
@@ -837,6 +861,7 @@
    <class>Ms::ResetButton</class>
    <extends>QWidget</extends>
    <header>inspector/resetButton.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -850,10 +875,56 @@
   <tabstop>topOctave</tabstop>
   <tabstop>bottomTpc</tabstop>
   <tabstop>bottomOctave</tabstop>
-  <tabstop>updateRange</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
- <connections/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>hasLine</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_10</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>44</x>
+     <y>137</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>50</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hasLine</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>lineWidth</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>135</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>129</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hasLine</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>resetLineWidth</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>163</x>
+     <y>134</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>242</x>
+     <y>152</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

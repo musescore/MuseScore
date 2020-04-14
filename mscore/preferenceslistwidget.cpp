@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "preferenceslistwidget.h"
+#include <cfloat>
 
 namespace Ms {
 
@@ -213,6 +214,8 @@ DoublePreferenceItem::DoublePreferenceItem(QString name)
       _editor->setMaximum(DBL_MAX);
       _editor->setMinimum(DBL_MIN);
       _editor->setValue(_initialValue);
+      if (qAbs(_initialValue) < 2.0)
+          _editor->setSingleStep(0.1);
       }
 
 void DoublePreferenceItem::save()

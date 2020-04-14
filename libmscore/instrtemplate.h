@@ -84,6 +84,8 @@ class InstrumentTemplate {
 
       bool extended;          // belongs to extended instrument set if true
 
+      bool singleNoteDynamics;
+
       InstrumentTemplate();
       InstrumentTemplate(const InstrumentTemplate&);
       ~InstrumentTemplate();

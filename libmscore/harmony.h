@@ -15,6 +15,7 @@
 
 #include "text.h"
 #include "pitchspelling.h"
+#include "realizedharmony.h"
 
 namespace Ms {
 
@@ -63,6 +64,12 @@ struct TextSegment {
 struct RenderAction;
 class HDegree;
 
+enum class HarmonyType {
+      STANDARD,
+      ROMAN,
+      NASHVILLE
+      };
+
 class Harmony final : public TextBase {
       int _rootTpc;                       // root note for chord
       int _baseTpc;                       // bass note or chord base; used for "slash" chords
@@ -70,16 +77,21 @@ class Harmony final : public TextBase {
       int _id;                            // >0 = id of matched chord from chord list, if applicable
                                           // -1 = invalid chord
                                           // <-10000 = private id of generated chord or matched chord with no id
+      QString _function;                  // numeric representation of root for RNA or Nashville
       QString _userName;                  // name as typed by user if applicable
       QString _textName;                  // name recognized from chord list, read from score file, or constructed from imported source
       ParsedChord* _parsedForm;           // parsed form of chord
       bool showSpell = false;             // show spell check warning
+      HarmonyType _harmonyType;           // used to control rendering, transposition, export, etc.
+
+      RealizedHarmony _realizedHarmony;    //the realized harmony used for playback
 
       QList<HDegree> _degreeList;
       QList<QFont> fontList;              // temp values used in render()
       QList<TextSegment*> textList;       // rendered chord
 
       bool _leftParen, _rightParen;       // include opening and/or closing parenthesis
+      bool _play;                         // whether or not to play back the harmony
 
       mutable QRectF _tbbox;
 
@@ -88,22 +100,25 @@ class Harmony final : public TextBase {
       NoteCaseType _rootRenderCase, _baseRenderCase;  // case to render
 
       void determineRootBaseSpelling();
-      virtual void draw(QPainter*) const override;
-      virtual void drawEditMode(QPainter* p, EditData& ed) override;
+      void draw(QPainter*) const override;
+      void drawEditMode(QPainter* p, EditData& ed) override;
       void render(const QString&, qreal&, qreal&);
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
-      virtual void styleChanged() override     { render(); }
-      virtual Sid getPropertyStyle(Pid) const override;
+      Sid getPropertyStyle(Pid) const override;
 
    public:
       Harmony(Score* = 0);
       Harmony(const Harmony&);
       ~Harmony();
-      virtual Harmony* clone() const override     { return new Harmony(*this); }
-      virtual ElementType type() const override   { return ElementType::HARMONY; }
+
+      Harmony* clone() const override     { return new Harmony(*this); }
+      ElementType type() const override   { return ElementType::HARMONY; }
 
       void setId(int d)                        { _id = d;       }
       int id() const                           { return _id;    }
+
+      void setPlay(bool p)                     { _play = p; }
+      bool play() const                        { return _play; }
 
       void setBaseCase(NoteCaseType c)         { _baseCase = c; }
       void setRootCase(NoteCaseType c)         { _rootCase = c; }
@@ -113,23 +128,34 @@ class Harmony final : public TextBase {
       void setLeftParen(bool leftParen)        { _leftParen = leftParen; }
       void setRightParen(bool rightParen)      { _rightParen = rightParen; }
 
+      Harmony* findNext() const;
+      Harmony* findPrev() const;
+      Fraction ticksTilNext(bool stopAtMeasureEnd = false) const;
+
       const ChordDescription* descr() const;
       const ChordDescription* descr(const QString&, const ParsedChord* pc = 0) const;
       const ChordDescription* getDescription();
       const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
       const ChordDescription* generateDescription();
 
+      RealizedHarmony& realizedHarmony();
+      const RealizedHarmony& getRealizedHarmony();
+
       void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
          NoteSpellingType& baseSpelling, NoteCaseType& baseCase);
 
       void textChanged();
-      virtual void layout() override;
+      void layout() override;
+      void layout1() override;
 
-      virtual bool isEditable() const override { return true; }
-      virtual void startEdit(EditData&) override;
-      virtual bool edit(EditData&) override;
-      virtual void endEdit(EditData&) override;
+      bool isEditable() const override { return true; }
+      void startEdit(EditData&) override;
+      bool edit(EditData&) override;
+      void endEdit(EditData&) override;
 
+      bool isRealizable() const;
+
+      QString hFunction() const                { return _function;     }
       QString hUserName() const                { return _userName;     }
       QString hTextName() const                { return _textName;     }
       int baseTpc() const                      { return _baseTpc;      }
@@ -137,6 +163,7 @@ class Harmony final : public TextBase {
       int rootTpc() const                      { return _rootTpc;      }
       void setRootTpc(int val)                 { _rootTpc = val;       }
       void setTextName(const QString& s)       { _textName = s;        }
+      void setFunction(const QString& s)       { _function = s;        }
       QString rootName();
       QString baseName();
       void addDegree(const HDegree& d);
@@ -145,9 +172,11 @@ class Harmony final : public TextBase {
       void clearDegrees();
       const QList<HDegree>& degreeList() const;
       const ParsedChord* parsedForm();
+      HarmonyType harmonyType() const          { return _harmonyType;  }
+      void setHarmonyType(HarmonyType val);
 
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
+      void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
       QString harmonyName() const;
       void render();
 
@@ -163,25 +192,26 @@ class Harmony final : public TextBase {
 
       void resolveDegreeList();
 
-      virtual qreal baseLine() const override;
+      qreal baseLine() const override;
 
       const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&);
       const ChordDescription* fromXml(const QString& s, const QList<HDegree>&);
       const ChordDescription* fromXml(const QString& s);
-      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
-      virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+      void spatiumChanged(qreal oldValue, qreal newValue) override;
+      void localSpatiumChanged(qreal oldValue, qreal newValue) override;
       void setHarmony(const QString& s);
       void calculateBoundingRect();
 
-      virtual QString accessibleInfo() const override;
-      virtual QString screenReaderInfo() const override;
+      QString userName() const override;
+      QString accessibleInfo() const override;
+      QString screenReaderInfo() const override;
 
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant& v) override;
+      QVariant propertyDefault(Pid id) const override;
       };
 
 }     // namespace Ms

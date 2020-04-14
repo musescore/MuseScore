@@ -41,7 +41,34 @@ struct UP {
       QPointF p;            // layout position relative to pos()
       QPointF off;          // user offset in point units
 
+      QPointF pos() const { return p + off; }
       bool operator!=(const UP& up) const { return p != up.p || off != up.off; }
+      };
+
+//---------------------------------------------------------
+//   CubicBezier
+//    Helper class to optimize cubic Bezier curve points
+//    calculation.
+//---------------------------------------------------------
+
+class CubicBezier {
+      QPointF p1;
+      QPointF p2;
+      QPointF p3;
+      QPointF p4;
+
+   public:
+      CubicBezier(QPointF _p1, QPointF _p2, QPointF _p3, QPointF _p4)
+         : p1(_p1), p2(_p2), p3(_p3), p4(_p4) {}
+
+      QPointF pointAtPercent(qreal t) const
+            {
+            Q_ASSERT(t >= 0.0 && t <= 1.0);
+            const qreal r = 1.0 - t;
+            const QPointF B123 = r * (r*p1 + t*p2) + t * (r*p2 + t*p3);
+            const QPointF B234 = r * (r*p2 + t*p3) + t * (r*p3 + t*p4);
+            return r*B123 + t*B234;
+            }
       };
 
 class SlurTie;
@@ -67,8 +94,6 @@ class SlurTieSegment : public SpannerSegment {
       virtual void spatiumChanged(qreal, qreal) override;
       SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 
-      virtual void startEdit(EditData&) override;
-      virtual void endEdit(EditData&) override;
       virtual void startEditDrag(EditData& ed) override;
       virtual void endEditDrag(EditData& ed) override;
       virtual void editDrag(EditData&) override;
@@ -86,6 +111,12 @@ class SlurTieSegment : public SpannerSegment {
       struct UP& ups(Grip i)                         { return _ups[int(i)]; }
       virtual Shape shape() const override           { return _shape; }
 
+      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+      int gripsCount() const override { return int(Grip::GRIPS); }
+      Grip initialEditModeGrip() const override{ return Grip::END; }
+      Grip defaultGrip() const override { return Grip::DRAG; }
+      std::vector<QPointF> gripsPositions(const EditData&) const override;
+
       void writeSlur(XmlWriter& xml, int no) const;
       void read(XmlReader&);
       virtual void drawEditMode(QPainter*, EditData&) override;
@@ -100,10 +131,6 @@ class SlurTieSegment : public SpannerSegment {
 
 class SlurTie : public Spanner {
       int _lineType;    // 0 = solid, 1 = dotted, 2 = dashed, 3 = wide dashed
-
-      static Element* editStartElement;
-      static Element* editEndElement;
-      static QList<SlurOffsets> editUps;
 
    protected:
       bool _up;               // actual direction

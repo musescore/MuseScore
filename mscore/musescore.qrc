@@ -17,7 +17,7 @@
         <file alias="themes/palette_dark_fusion.json">../share/themes/palette_dark_fusion.json</file>
         <file>data/splash.png</file>
         <file>data/splash@2x.png</file>
-        <file alias="data/My_First_Score.mscz">../share/templates/My_First_Score.mscz</file>
+        <file alias="data/My_First_Score.mscx">../share/templates/My_First_Score.mscx</file>
         <file alias="data/Create_New_Score.mscz">../share/templates/Create_New_Score.mscz</file>
         <file alias="data/Empty_Score.mscx">../share/templates/01-General/00-Blank.mscx</file>
         <file>data/tab_sample.mscx</file>
@@ -31,6 +31,12 @@
         <file>data/icons/png/window-close-hover@2x.png</file>
         <file>data/icons/png/window-float.png</file>
         <file>data/icons/png/window-float@2x.png</file>
+        <file>data/icons/png/window-close-dark.png</file>
+        <file>data/icons/png/window-close-dark@2x.png</file>
+        <file>data/icons/png/window-close-hover-dark.png</file>
+        <file>data/icons/png/window-close-hover-dark@2x.png</file>
+        <file>data/icons/png/window-float-dark.png</file>
+        <file>data/icons/png/window-float-dark@2x.png</file>
         <file>revision.h</file>
         <file>data/musescore-logo-transbg-m.png</file>
         <file>data/musescore_logo_full.png</file>
@@ -66,6 +72,7 @@
         <file>data/icons/frame-fretboard.svg</file>
         <file>data/icons/measure.svg</file>
         <file>data/icons/object-select.svg</file>
+        <file>data/icons/mscz-icon.svg</file>
         <file>schema/musicxml.xsd</file>
         <file>schema/xlink.xsd</file>
         <file>schema/xml.xsd</file>
@@ -176,5 +183,7 @@
         <file>data/icons/mixer-slider-handle-vertical.svg</file>
         <file>data/icons/triangleDown.svg</file>
         <file>data/icons/triangleUp.svg</file>
+        <file>data/icons/arrowsMoveToTop.svg</file>
+        <file>data/win_opengl_buglist.json</file>
     </qresource>
 </RCC>

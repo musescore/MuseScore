@@ -1,0 +1,64 @@
+init init/Treble.mscx
+cmd note-input
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd escape
+cmd prev-measure
+cmd prev-measure
+palette NoteHead symbol noteheadHalf
+cmd next-chord
+palette NoteHead symbol noteheadXHalf
+cmd next-chord
+palette NoteHead symbol noteheadPlusHalf
+cmd next-chord
+palette NoteHead symbol noteheadCircleXHalf
+cmd next-chord
+palette NoteHead symbol noteheadHalfWithX
+cmd next-chord
+palette NoteHead symbol noteheadTriangleUpHalf
+cmd next-chord
+palette NoteHead symbol noteheadTriangleDownHalf
+cmd next-chord
+palette NoteHead symbol noteheadSlashedHalf1
+cmd note-input
+cmd next-chord
+cmd pad-note-2
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd escape
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+palette NoteHead symbol noteheadTriangleDownHalf
+cmd next-chord
+palette NoteHead symbol noteheadSlashedHalf2
+cmd next-chord
+palette NoteHead symbol noteheadDiamondHalf
+cmd next-chord
+palette NoteHead symbol noteheadDiamondHalfOld
+cmd next-chord
+palette NoteHead symbol noteheadCircledHalf
+cmd next-chord
+palette NoteHead symbol noteheadDoubleWholeSquare
+cmd next-chord
+palette NoteHead symbol noteheadLargeArrowUpHalf
+cmd next-chord
+palette NoteHead symbol noteShapeMoonWhite
+palette Icon action add-parentheses
+test score palette_noteheads_1.mscx

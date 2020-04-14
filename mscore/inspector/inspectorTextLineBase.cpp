@@ -13,7 +13,7 @@
 #include "inspector.h"
 #include "inspectorTextLineBase.h"
 #include "libmscore/textlinebase.h"
-#include "icons.h"
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -24,10 +24,10 @@ namespace Ms {
 void populateHookType(QComboBox* b)
       {
       b->clear();
-      b->addItem(b->QObject::tr("None"), int(HookType::NONE));
-      b->addItem(b->QObject::tr("90\u00b0"), int(HookType::HOOK_90)); // &deg;
-      b->addItem(b->QObject::tr("45\u00b0"), int(HookType::HOOK_45)); // &deg;
-      b->addItem(b->QObject::tr("90\u00b0 centered"), int(HookType::HOOK_90T)); // &deg;
+      b->addItem(b->QObject::tr("None", "no hook type"), int(HookType::NONE));
+      b->addItem(b->QObject::tr("90\u00b0"),             int(HookType::HOOK_90)); // &deg;
+      b->addItem(b->QObject::tr("45\u00b0"),             int(HookType::HOOK_45)); // &deg;
+      b->addItem(b->QObject::tr("90\u00b0 centered"),    int(HookType::HOOK_90T)); // &deg;
       }
 
 //---------------------------------------------------------
@@ -57,7 +57,7 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { Pid::DIAGONAL,                0, l.diagonal,                l.resetDiagonal              },
             { Pid::LINE_VISIBLE,            0, l.lineVisible,             l.resetLineVisible           },
-            { Pid::LINE_COLOR,              0, l.lineColor,               l.resetLineColor             },
+            { Pid::COLOR,                   0, l.lineColor,               l.resetLineColor             },
             { Pid::LINE_WIDTH,              0, l.lineWidth,               l.resetLineWidth             },
             { Pid::LINE_STYLE,              0, l.lineStyle,               l.resetLineStyle             },
             { Pid::DASH_LINE_LEN,           0, l.dashLineLength,          l.resetDashLineLength        },
@@ -70,9 +70,9 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
             { Pid::BEGIN_FONT_SIZE,         0, tl.beginFontSize,         tl.resetBeginFontSize         },
             { Pid::BEGIN_FONT_STYLE,        0, tl.beginFontStyle,        tl.resetBeginFontStyle        },
             { Pid::BEGIN_TEXT_OFFSET,       0, tl.beginTextOffset,       tl.resetBeginTextOffset       },
-
             { Pid::BEGIN_HOOK_TYPE,         0, tl.beginHookType,         tl.resetBeginHookType         },
             { Pid::BEGIN_HOOK_HEIGHT,       0, tl.beginHookHeight,       tl.resetBeginHookHeight       },
+
             { Pid::CONTINUE_TEXT,           0, tl.continueText,          tl.resetContinueText          },
             { Pid::CONTINUE_TEXT_PLACE,     0, tl.continueTextPlacement, tl.resetContinueTextPlacement },
             { Pid::CONTINUE_TEXT_ALIGN,     0, tl.continueTextAlign,     tl.resetContinueTextAlign     },
@@ -106,6 +106,10 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
       populateTextPlace(tl.beginTextPlacement);
       populateTextPlace(tl.continueTextPlacement);
       populateTextPlace(tl.endTextPlacement);
+
+      connect(tl.hasBeginText,    &QCheckBox::clicked, this, &InspectorTextLineBase::hasBeginTextClicked);
+      connect(tl.hasContinueText, &QCheckBox::clicked, this, &InspectorTextLineBase::hasContinueTextClicked);
+      connect(tl.hasEndText,      &QCheckBox::clicked, this, &InspectorTextLineBase::hasEndTextClicked);
       }
 
 //---------------------------------------------------------
@@ -163,9 +167,8 @@ void InspectorTextLineBase::updateBeginHookType()
       TextLineBase* t = ts->textLineBase();
       bool hook = t->beginHookType() != HookType::NONE;
 
-      tl.beginHookHeight->setVisible(hook);
+      tl.beginHookHeightWidget->setVisible(hook);
       tl.resetBeginHookHeight->setVisible(hook);
-      tl.beginHookHeightLabel->setVisible(hook);
       }
 
 //---------------------------------------------------------
@@ -178,9 +181,8 @@ void InspectorTextLineBase::updateEndHookType()
       TextLineBase* t = ts->textLineBase();
       bool hook = t->endHookType() != HookType::NONE;
 
-      tl.endHookHeight->setVisible(hook);
+      tl.endHookHeightWidget->setVisible(hook);
       tl.resetEndHookHeight->setVisible(hook);
-      tl.endHookHeightLabel->setVisible(hook);
       }
 
 //---------------------------------------------------------
@@ -196,8 +198,77 @@ void InspectorTextLineBase::valueChanged(int idx)
             updateBeginHookType();
       else if (iList[idx].t == Pid::END_HOOK_TYPE)
             updateEndHookType();
+      else if (iList[idx].t == Pid::COLOR)
+            inspector->update();
       }
 
+//---------------------------------------------------------
+//   hasBeginTextClicked
+//---------------------------------------------------------
+
+void InspectorTextLineBase::hasBeginTextClicked(bool checked)
+      {
+      if (!checked) {
+            TextLineBaseSegment* ts = static_cast<TextLineBaseSegment*>(inspector->element());
+            TextLineBase* t = ts->textLineBase();
+
+            t->score()->startCmd();
+            t->undoChangeProperty(Pid::BEGIN_TEXT, QString());
+            t->undoResetProperty(Pid::BEGIN_TEXT_PLACE);
+            t->undoResetProperty(Pid::BEGIN_TEXT_ALIGN);
+            t->undoResetProperty(Pid::BEGIN_FONT_FACE);
+            t->undoResetProperty(Pid::BEGIN_FONT_SIZE);
+            t->undoResetProperty(Pid::BEGIN_FONT_STYLE);
+            t->undoResetProperty(Pid::BEGIN_TEXT_OFFSET);
+            t->triggerLayout();
+            t->score()->endCmd();
+            }
+      }
+
+//---------------------------------------------------------
+//   hasContinueTextClicked
+//---------------------------------------------------------
+
+void InspectorTextLineBase::hasContinueTextClicked(bool checked)
+      {
+      if (!checked) {
+            TextLineBaseSegment* ts = static_cast<TextLineBaseSegment*>(inspector->element());
+            TextLineBase* t = ts->textLineBase();
+
+            t->score()->startCmd();
+            t->undoChangeProperty(Pid::CONTINUE_TEXT, QString());
+            t->undoResetProperty(Pid::CONTINUE_TEXT_PLACE);
+            t->undoResetProperty(Pid::CONTINUE_TEXT_ALIGN);
+            t->undoResetProperty(Pid::CONTINUE_FONT_FACE);
+            t->undoResetProperty(Pid::CONTINUE_FONT_SIZE);
+            t->undoResetProperty(Pid::CONTINUE_FONT_STYLE);
+            t->undoResetProperty(Pid::CONTINUE_TEXT_OFFSET);
+            t->triggerLayout();
+            t->score()->endCmd();
+            }
+      }
+
+//---------------------------------------------------------
+//   hasEndTextClicked
+//---------------------------------------------------------
+
+void InspectorTextLineBase::hasEndTextClicked(bool checked)
+      {
+      if (!checked) {
+            TextLineBaseSegment* ts = static_cast<TextLineBaseSegment*>(inspector->element());
+            TextLineBase* t = ts->textLineBase();
+
+            t->score()->startCmd();
+            t->undoChangeProperty(Pid::END_TEXT, QString());
+            t->undoResetProperty(Pid::END_TEXT_PLACE);
+            t->undoResetProperty(Pid::END_TEXT_ALIGN);
+            t->undoResetProperty(Pid::END_FONT_FACE);
+            t->undoResetProperty(Pid::END_FONT_SIZE);
+            t->undoResetProperty(Pid::END_FONT_STYLE);
+            t->undoResetProperty(Pid::END_TEXT_OFFSET);
+            t->triggerLayout();
+            t->score()->endCmd();
+            }
+      }
 
 } // namespace Ms
-

@@ -11,8 +11,6 @@
 //=============================================================================
 
 #include "sizeSelect.h"
-#include "icons.h"
-#include "musescore.h"
 
 namespace Ms {
 
