@@ -90,6 +90,6 @@ FocusableItem {
             radius: 2
         }
 
-        currentIndex: noteHeadTypesModel && !isIndeterminate ? noteHeadTypesModel.selectedHeadTypeIndex : -1
+        currentIndex: noteHeadTypesModel ? noteHeadTypesModel.selectedHeadTypeIndex : -1
     }
 }

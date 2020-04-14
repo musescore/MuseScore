@@ -207,6 +207,9 @@ public:
       const Measure* findMeasure() const;
       MeasureBase* findMeasureBase();
       const MeasureBase* findMeasureBase() const;
+
+      //!Note Returns basic representative for the current element.
+      //!     For example: notes->chord, chords->beam, etc.
       virtual Element* elementBase() const { return const_cast<Element*>(this); }
 
     virtual bool isElement() const override { return true; }

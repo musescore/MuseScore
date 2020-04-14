@@ -3,8 +3,8 @@ import QtQml.Models 2.3
 import MuseScore.Inspectors 3.3
 
 import "common"
-import "general_inspector"
-import "notation_inspector"
+import "general"
+import "notation"
 
 FocusableItem {
     id: root
