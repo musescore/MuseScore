@@ -64,7 +64,7 @@ scp -C -i $SSH_INDENTITY build/travis/job_macos/web/nightly.xml musescore-nightl
 ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
 
 # send nightly update to S3
-MUSESCORE_VERSION_FULL=$(cmake -P config.cmake | grep -oP 'MUSESCORE_VERSION_FULL\s+\K.*')
+MUSESCORE_VERSION_FULL=$(cmake -P config.cmake | sed -n -e 's/^.*MUSESCORE_VERSION_FULL  *//p')
 BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
 MUSESCORE_VERSION=${MUSESCORE_VERSION_FULL}.${BUILD_NUMBER}
 SHORT_DATE="$(date -u +%Y-%m-%d)"
