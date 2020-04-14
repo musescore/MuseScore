@@ -3599,7 +3599,7 @@ static bool doConvert(Score *cs, const QString& fn)
             return saveXml(cs, fn);
       else if (fn.endsWith(".mxl"))
             return saveMxl(cs, fn);
-      else if (fn.endsWith(".mid"))
+      else if (fn.endsWith(".mid") || fn.endsWith(".midi"))
             return mscore->saveMidi(cs, fn);
       else if (fn.endsWith(".pdf")) {
             if (!exportScoreParts)
@@ -3673,6 +3673,7 @@ static bool doConvert(Score *cs, const QString& fn)
       else if (fn.endsWith(".metajson"))
             return mscore->saveMetadataJSON(cs, fn);
       // unknown file type
+      fprintf(stderr, "Unknown file type!\n");
       return false;
       }
 
