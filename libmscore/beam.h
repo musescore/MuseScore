@@ -125,6 +125,7 @@ public:
     void setId(int i) const { _id = i; }
     int id() const { return _id; }
     bool isNoSlope() const;
+    void alignBeamPosition();
 
     void setBeamDirection(Direction d);
     Direction beamDirection() const { return _direction; }

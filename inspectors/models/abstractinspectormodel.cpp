@@ -8,7 +8,8 @@ AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementReposito
     if (!m_repository)
         return;
 
-    connect(m_repository->getQObject(), SIGNAL(elementsUpdated()), this, SLOT(onRepositoryUpdated()));
+    connect(m_repository->getQObject(), SIGNAL(elementsUpdated()), this, SLOT(updateProperties()));
+    connect(this, &AbstractInspectorModel::requestReloadPropertyItems, this, &AbstractInspectorModel::updateProperties);
 }
 
 void AbstractInspectorModel::requestResetToDefaults()
@@ -99,18 +100,13 @@ void AbstractInspectorModel::setIsEmpty(bool isEmpty)
     emit isEmptyChanged(m_isEmpty);
 }
 
-void AbstractInspectorModel::onRepositoryUpdated()
-{
-    updateProperties();
-
-    setIsEmpty(!hasAcceptableElements());
-}
-
 void AbstractInspectorModel::updateProperties()
 {
     requestElements();
 
-    if (hasAcceptableElements()) {
+    setIsEmpty(!hasAcceptableElements());
+
+    if (!isEmpty()) {
         loadProperties();
     } else {
         resetProperties();

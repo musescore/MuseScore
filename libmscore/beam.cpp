@@ -255,6 +255,26 @@ bool Beam::isNoSlope() const
 }
 
 //---------------------------------------------------------
+//   alignBeamPosition
+//---------------------------------------------------------
+
+void Beam::alignBeamPosition()
+{
+    QPointF currentBeamPos = beamPos();
+
+    qreal currentX = currentBeamPos.x();
+    qreal currentY = currentBeamPos.y();
+
+    qreal maxValue = qMax(qAbs(currentX), qAbs(currentY));
+
+    if (qFuzzyCompare(qAbs(currentX), maxValue)) {
+        setBeamPos(QPointF(currentX, currentX));
+    } else {
+        setBeamPos(QPointF(currentY, currentY));
+    }
+}
+
+//---------------------------------------------------------
 //   move
 //---------------------------------------------------------
 
@@ -2478,9 +2498,14 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
         if (userModified())
             setBeamPos(v.toPointF());
         break;
+    case Pid::BEAM_NO_SLOPE:
+        if (v.toBool())
+            alignBeamPosition();
+        break;
     default:
-        if (!Element::setProperty(propertyId, v))
+        if (!Element::setProperty(propertyId, v)) {
             return false;
+        }
         break;
     }
     triggerLayout();
