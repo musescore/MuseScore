@@ -903,7 +903,7 @@ Score::FileError MasterScore::loadMsc(QString name, QIODevice* io, bool ignoreVe
       ScoreLoad sl;
       fileInfo()->setFile(name);
 
-      if (name.endsWith(".mscz"))
+      if (name.endsWith(".mscz") || name.endsWith(".mscz,"))
             return loadCompressedMsc(io, ignoreVersionError);
       else {
             XmlReader r(io);
