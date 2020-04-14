@@ -46,6 +46,7 @@ Enum* PluginAPI::alignEnum;
 Enum* PluginAPI::noteTypeEnum;
 Enum* PluginAPI::playEventTypeEnum;
 Enum* PluginAPI::noteHeadTypeEnum;
+Enum* PluginAPI::noteHeadSchemeEnum;
 Enum* PluginAPI::noteHeadGroupEnum;
 Enum* PluginAPI::noteValueTypeEnum;
 Enum* PluginAPI::segmentTypeEnum;
@@ -76,6 +77,7 @@ void PluginAPI::initEnums() {
       PluginAPI::noteTypeEnum = wrapEnum<Ms::NoteType>();
       PluginAPI::playEventTypeEnum = wrapEnum<Ms::PlayEventType>();
       PluginAPI::noteHeadTypeEnum = wrapEnum<Ms::NoteHead::Type>();
+      PluginAPI::noteHeadSchemeEnum = wrapEnum<Ms::NoteHead::Scheme>();
       PluginAPI::noteHeadGroupEnum = wrapEnum<Ms::NoteHead::Group>();
       PluginAPI::noteValueTypeEnum = wrapEnum<Ms::Note::ValueType>();
       PluginAPI::segmentTypeEnum = wrapEnum<Ms::SegmentType>();

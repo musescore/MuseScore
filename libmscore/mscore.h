@@ -179,19 +179,6 @@ enum class StaffGroup : char {
       };
 const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avoid compiler complains about not handled switch cases
 
-enum class NoteHeadScheme : char {
-      HEAD_NORMAL = 0,
-      HEAD_PITCHNAME,
-      HEAD_PITCHNAME_GERMAN,
-      HEAD_SOLFEGE,
-      HEAD_SOLFEGE_FIXED,
-      HEAD_SHAPE_NOTE_4,
-      HEAD_SHAPE_NOTE_7_AIKIN,
-      HEAD_SHAPE_NOTE_7_FUNK,
-      HEAD_SHAPE_NOTE_7_WALKER,
-      HEAD_SCHEMES
-      };
-
 //---------------------------------------------------------
 //   BarLineType
 //---------------------------------------------------------

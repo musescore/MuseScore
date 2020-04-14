@@ -142,6 +142,8 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( fixedLine,               FIXED_LINE                )
       /** Notehead type, one of PluginAPI::PluginAPI::NoteHeadType values */
       API_PROPERTY( headType,                HEAD_TYPE                 )
+      /** Notehead scheme, one of PluginAPI::PluginAPI::NoteHeadScheme values */
+      API_PROPERTY( headScheme,              HEAD_SCHEME               )
       /** Notehead group, one of PluginAPI::PluginAPI::NoteHeadGroup values */
       API_PROPERTY( headGroup,               HEAD_GROUP                )
       API_PROPERTY( articulationAnchor,      ARTICULATION_ANCHOR       )
@@ -306,7 +308,6 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( staffShowBarlines,       STAFF_SHOW_BARLINES       )
       API_PROPERTY( staffShowLedgerlines,    STAFF_SHOW_LEDGERLINES    )
       API_PROPERTY( staffStemless,           STAFF_STEMLESS            )
-      API_PROPERTY( staffNoteheadScheme,     STAFF_NOTEHEAD_SCHEME     )
       API_PROPERTY( staffGenClef,            STAFF_GEN_CLEF            )
       API_PROPERTY( staffGenTimesig,         STAFF_GEN_TIMESIG         )
       API_PROPERTY( staffGenKeysig,          STAFF_GEN_KEYSIG          )
