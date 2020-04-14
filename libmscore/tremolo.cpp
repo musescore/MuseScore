@@ -483,7 +483,13 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
             }
       QTransform shearTransform;
       qreal dy = y2 - y1;
-      if (_chord1->up() != _chord2->up() && !crossStaffBeamBetween())
+      // Make tremolo strokes less deep if two chords have the opposite stem direction,
+      // except for two cases:
+      // 1. The tremolo doesn't have the default beam style.
+      // In this case tremolo strokes should attach to the ends of both stems, so no adjustment needed;
+      // 2. The chords are on different staves and the tremolo is between them.
+      // The layout should be improved by extending both stems, so changes are not needed here.
+      if (_chord1->up() != _chord2->up() && defaultStyle && !crossStaffBeamBetween())
             dy = qMin(qMax(dy, -1.0 * _spatium), 1.0 * _spatium);
       qreal dx = x2 - x1;
       if (_chord1->beams() == 0 && _chord2->beams() == 0) {
