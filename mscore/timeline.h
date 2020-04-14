@@ -72,8 +72,8 @@ class TRowLabels : public QGraphicsView {
             };
 
    private:
-      TDockWidget* _scrollArea;
-      Timeline* parent;
+      TDockWidget* _scrollArea { nullptr };
+      Timeline* parent { nullptr };
 
       QPoint _oldLoc;
 
@@ -136,23 +136,23 @@ class Timeline : public QGraphicsView {
       std::tuple<QGraphicsItem*, int, QColor> _oldHoverInfo;
 
       std::map<QString, QPixmap*> _barlines;
-      bool _isBarline = false;
+      bool _isBarline { false };
 
-      TDockWidget* _scrollArea;
-      TRowLabels* _rowNames;
+      TDockWidget* _scrollArea { nullptr };
+      TRowLabels* _rowNames { nullptr };
 
-      Score* _score;
-      ScoreView* _cv = nullptr;
+      Score* _score { nullptr };
+      ScoreView* _cv { nullptr };
 
-      QGraphicsRectItem* _selectionBox;
+      QGraphicsRectItem* _selectionBox { nullptr };
       std::vector<std::pair<QGraphicsItem*, int>> _metaRows;
 
       QPainterPath _selectionPath;
       QRectF _oldSelectionRect;
-      bool _mousePressed = false;
+      bool _mousePressed { false };
       QPoint _oldLoc;
 
-      bool _collapsedMeta = false;
+      bool _collapsedMeta { false };
 
       std::vector<std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool>> _metas;
       void tempoMeta(Segment* seg, int* stagger, int pos);
@@ -203,7 +203,7 @@ class Timeline : public QGraphicsView {
       void moved(QPointF);
 
    public:
-      Timeline(TDockWidget* dockWidget, QWidget* parent = 0);
+      Timeline(TDockWidget* dockWidget, QWidget* parent = nullptr);
       int correctPart(int stave);
 
       void drawSelection();
