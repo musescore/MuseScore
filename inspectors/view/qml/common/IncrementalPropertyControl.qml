@@ -103,6 +103,14 @@ FocusableItem {
                 }
             }
 
+            onActiveFocusChanged: {
+                if (activeFocus) {
+                    selectAll()
+                } else {
+                    deselect()
+                }
+            }
+
             onTextChanged: {
                 if (!acceptableInput)
                     return;
