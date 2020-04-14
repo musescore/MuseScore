@@ -103,7 +103,7 @@ TRowLabels::TRowLabels(TDockWidget* dock_widget, Timeline* time, QGraphicsView* 
       scrollArea = dock_widget;
       parent = time;
       setScene(new QGraphicsScene);
-      scene()->setBackgroundBrush(Qt::lightGray);
+      scene()->setBackgroundBrush(time->activeTheme().backgroundColor);
       setSceneRect(0, 0, 50, time->height());
 
       setMinimumWidth(0);
@@ -377,11 +377,11 @@ void TRowLabels::updateLabels(std::vector<std::pair<QString, bool>> labels, int 
             graphics_text_item->setX(0);
             graphics_text_item->setY(ypos);
             if (labels[row].second)
-                  graphics_text_item->setDefaultTextColor(QColor(Qt::black));
+                  graphics_text_item->setDefaultTextColor(parent->activeTheme().labelsColor1);
             else
-                  graphics_text_item->setDefaultTextColor(QColor(150, 150, 150));
-            graphics_rect_item->setPen(QPen(QColor(150, 150, 150)));
-            graphics_rect_item->setBrush(QBrush(QColor(211, 211, 211)));
+                  graphics_text_item->setDefaultTextColor(parent->activeTheme().labelsColor2);
+            graphics_rect_item->setPen(QPen(parent->activeTheme().labelsColor2));
+            graphics_rect_item->setBrush(QBrush(parent->activeTheme().labelsColor3));
             graphics_text_item->setZValue(-1);
             graphics_rect_item->setZValue(-1);
 
@@ -728,6 +728,35 @@ Timeline::Timeline(TDockWidget* dock_widget, QWidget* parent)
       setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));
       setAttribute(Qt::WA_NoBackground);
 
+      // theming
+      _lightTheme.backgroundColor = QColor(192, 192, 192);
+      _lightTheme.labelsColor1 = QColor(Qt::black);
+      _lightTheme.labelsColor2 = QColor(150, 150, 150);
+      _lightTheme.labelsColor3 = QColor(211, 211, 211);
+      _lightTheme.gridColor1 = QColor(150, 150, 150);
+      _lightTheme.gridColor2 = QColor(211, 211, 211);
+      _lightTheme.measureMetaColor = QColor(0, 0, 0);
+      _lightTheme.selectionColor = QColor(173, 216, 230);
+      _lightTheme.nonVisiblePenColor = QColor(100, 150, 250);
+      _lightTheme.nonVisibleBrushColor = QColor(192, 192, 192);
+      _lightTheme.colorBoxColor = QColor(Qt::darkGray);
+      _lightTheme.metaValuePenColor = QColor(Qt::black);
+      _lightTheme.metaValueBrushColor = QColor(Qt::gray);
+
+      _darkTheme.backgroundColor = QColor(35, 35, 35);
+      _darkTheme.labelsColor1 = QColor(225, 225, 225);
+      _darkTheme.labelsColor2 = QColor(55, 55, 55);
+      _darkTheme.labelsColor3 = QColor(70, 70, 70);
+      _darkTheme.gridColor1 = QColor(50, 50, 50);
+      _darkTheme.gridColor2 = QColor(75, 75, 75);
+      _darkTheme.measureMetaColor = QColor(200, 200, 200);
+      _darkTheme.selectionColor = QColor(55, 70, 75);
+      _darkTheme.nonVisiblePenColor = QColor(40, 60, 80);
+      _darkTheme.nonVisibleBrushColor = QColor(55, 55, 55);
+      _darkTheme.colorBoxColor = QColor(Qt::gray);
+      _darkTheme.metaValuePenColor = QColor(Qt::lightGray);
+      _darkTheme.metaValueBrushColor = QColor(Qt::darkGray);
+
       scrollArea = dock_widget;
       QSplitter* split = static_cast<QSplitter*>(scrollArea->widget());
 
@@ -742,7 +771,7 @@ Timeline::Timeline(TDockWidget* dock_widget, QWidget* parent)
 
       setScene(new QGraphicsScene);
       setSceneRect(0, 0, 100, 100);
-      scene()->setBackgroundBrush(Qt::lightGray);
+      scene()->setBackgroundBrush(QBrush(activeTheme().backgroundColor));
 
       connect(verticalScrollBar(),SIGNAL(valueChanged(int)),row_names->verticalScrollBar(),SLOT(setValue(int)));
       connect(verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(handle_scroll(int)));
@@ -900,7 +929,7 @@ void Timeline::drawGrid(int global_rows, int global_cols)
                         part_name = part_list.at(row)->instrumentName();
 
                   graphics_rect_item->setToolTip(initial_letter + QString(" ") + QString::number(curr_measure->no() + 1) + QString(", ") + part_name);
-                  graphics_rect_item->setPen(QPen(QColor(Qt::lightGray)));
+                  graphics_rect_item->setPen(QPen(activeTheme().backgroundColor));
                   graphics_rect_item->setBrush(QBrush(colorBox(graphics_rect_item)));
                   graphics_rect_item->setZValue(-3);
                   scene()->addItem(graphics_rect_item);
@@ -915,7 +944,7 @@ void Timeline::drawGrid(int global_rows, int global_cols)
                                                                               grid_height * num_metas + verticalScrollBar()->value() + 1,
                                                                               getWidth() - 1,
                                                                               grid_height * num_metas + verticalScrollBar()->value() + 1);
-      graphics_line_item_separator->setPen(QPen(QColor(150, 150, 150), 4));
+      graphics_line_item_separator->setPen(QPen(activeTheme().gridColor1, 4));
       graphics_line_item_separator->setZValue(-2);
       scene()->addItem(graphics_line_item_separator);
       std::pair<QGraphicsItem*, int> pair_graphics_int_separator(graphics_line_item_separator, num_metas);
@@ -926,8 +955,8 @@ void Timeline::drawGrid(int global_rows, int global_cols)
                                                                 grid_height * row + verticalScrollBar()->value(),
                                                                 getWidth(),
                                                                 grid_height);
-            meta_row->setBrush(QBrush(QColor(211,211,211)));
-            meta_row->setPen(QPen(QColor(150, 150, 150)));
+            meta_row->setBrush(QBrush(activeTheme().gridColor2));
+            meta_row->setPen(QPen(activeTheme().gridColor1));
             meta_row->setData(0, QVariant::fromValue<int>(-1));
 
             scene()->addItem(meta_row);
@@ -1359,7 +1388,7 @@ void Timeline::measure_meta(Segment* , int* , int pos)
       //Add measure number
       QString measure_number = (curr_measure->irregular())? "( )" : QString::number(curr_measure->no() + 1);
       QGraphicsTextItem* graphics_text_item = new QGraphicsTextItem(measure_number);
-      graphics_text_item->setDefaultTextColor(QColor(0, 0, 0));
+      graphics_text_item->setDefaultTextColor(activeTheme().measureMetaColor);
       graphics_text_item->setX(pos);
       graphics_text_item->setY(grid_height * row + verticalScrollBar()->value());
 
@@ -1517,8 +1546,8 @@ bool Timeline::addMetaValue(int x, int pos, QString meta_text, int row, ElementT
       graphics_rect_item->setZValue(global_z_value);
       item_to_add->setZValue(global_z_value);
 
-      graphics_rect_item->setPen(QPen(Qt::black));
-      graphics_rect_item->setBrush(QBrush(Qt::gray));
+      graphics_rect_item->setPen(QPen(activeTheme().metaValuePenColor));
+      graphics_rect_item->setBrush(QBrush(activeTheme().metaValueBrushColor));
 
       scene()->addItem(graphics_rect_item);
       scene()->addItem(item_to_add);
@@ -1556,7 +1585,7 @@ void Timeline::setMetaData(QGraphicsItem* gi, int staff, ElementType et, Measure
 //   getWidth
 //---------------------------------------------------------
 
-int Timeline::getWidth()
+int Timeline::getWidth() const
       {
       if (_score)
             return int(_score->nmeasures() * grid_width);
@@ -1568,7 +1597,7 @@ int Timeline::getWidth()
 //   getHeight
 //---------------------------------------------------------
 
-int Timeline::getHeight()
+int Timeline::getHeight() const
       {
       if (_score)
             return int((nstaves() + nmetas()) * grid_height + 3);
@@ -1827,7 +1856,7 @@ void Timeline::drawSelection()
                               if (element == target_element) {
                                     QGraphicsRectItem* graphics_rect_item = qgraphicsitem_cast<QGraphicsRectItem*>(graphics_item);
                                     if (graphics_rect_item)
-                                          graphics_rect_item->setBrush(QBrush(QColor(173,216,230)));
+                                          graphics_rect_item->setBrush(QBrush(activeTheme().selectionColor));
                                     }
                               }
                         }
@@ -1837,17 +1866,18 @@ void Timeline::drawSelection()
                               if (graphics_rect_item) {
                                     for (int track = 0; track < _score->nstaves() * VOICES; track++) {
                                           if (element == seg->element(track))
-                                                graphics_rect_item->setBrush(QBrush(QColor(173,216,230)));
+                                                graphics_rect_item->setBrush(QBrush(activeTheme().selectionColor));
                                           }
                                     }
                               }
                         }
                   else {
                         QGraphicsRectItem* graphics_rect_item = qgraphicsitem_cast<QGraphicsRectItem*>(graphics_item);
-                        if (graphics_rect_item)
-                              graphics_rect_item->setBrush(QBrush(QColor(173,216,230)));
+                        if (graphics_rect_item) {
+                              graphics_rect_item->setBrush(QBrush(activeTheme().selectionColor));
                         }
                   }
+            }
             //Change color from gray to only blue
             else if (it != meta_labels_set.end()) {
                   QGraphicsRectItem* graphics_rect_item = qgraphicsitem_cast<QGraphicsRectItem*>(graphics_item);
@@ -2410,8 +2440,8 @@ void Timeline::updateView()
 
             QGraphicsPathItem* non_visible_path_item = new QGraphicsPathItem(non_visible_painter_path.simplified());
 
-            QPen non_visible_pen = QPen(QColor(100, 150, 250));
-            QBrush non_visible_brush = QBrush(QColor(192, 192, 192, 180));
+            QPen non_visible_pen = QPen(activeTheme().nonVisiblePenColor);
+            QBrush non_visible_brush = QBrush(activeTheme().nonVisibleBrushColor);
             non_visible_path_item->setPen(QPen(non_visible_brush.color()));
             non_visible_path_item->setBrush(non_visible_brush);
             non_visible_path_item->setZValue(-3);
@@ -2441,7 +2471,7 @@ void Timeline::updateView()
 //   nstaves
 //---------------------------------------------------------
 
-int Timeline::nstaves()
+int Timeline::nstaves() const
       {
       return _score->staves().size();
       }
@@ -2462,7 +2492,7 @@ QColor Timeline::colorBox(QGraphicsRectItem* item)
                   if (chord_rest) {
                         ElementType crt = chord_rest->type();
                         if (crt == ElementType::CHORD || crt == ElementType::REPEAT_MEASURE)
-                              return QColor(Qt::gray);
+                              return activeTheme().colorBoxColor;
                         }
                   }
             }
@@ -2635,12 +2665,12 @@ void Timeline::mouseOver(QPointF pos)
       if (graphics_rect_item1) {
             std::get<2>(old_hover_info) = graphics_rect_item1->brush().color();
             if (std::get<2>(old_hover_info) != QColor(173,216,230))
-                  graphics_rect_item1->setBrush(QBrush(Qt::lightGray));
+                  graphics_rect_item1->setBrush(QBrush(activeTheme().backgroundColor));
             }
       if (graphics_rect_item2) {
             std::get<2>(old_hover_info) = graphics_rect_item2->brush().color();
             if (std::get<2>(old_hover_info) != QColor(173,216,230))
-                  graphics_rect_item2->setBrush(QBrush(Qt::lightGray));
+                  graphics_rect_item2->setBrush(QBrush(activeTheme().backgroundColor));
             }
       }
 
@@ -2781,7 +2811,7 @@ void Timeline::toggleMetaRow()
 //   nmetas
 //---------------------------------------------------------
 
-unsigned int Timeline::nmetas()
+unsigned int Timeline::nmetas() const
       {
       unsigned int total = 0;
       if (collapsed_meta)
@@ -2840,6 +2870,30 @@ QString Timeline::cursorIsOn()
             }
       else
             return "";
+      }
+
+//---------------------------------------------------------
+//   activeTheme
+//---------------------------------------------------------
+
+const TimelineTheme& Timeline::activeTheme() const {
+      if (preferences.isThemeDark())
+            return  _darkTheme;
+      else
+            return  _lightTheme;
+}
+
+//---------------------------------------------------------
+//   updateTimelineTheme
+//---------------------------------------------------------
+
+void  Timeline::updateTimelineTheme()
+      {
+      scene()->setBackgroundBrush(QBrush(activeTheme().backgroundColor));
+      updateView();
+      updateGrid();
+      drawSelection();
+      // does not change the bottom left box, restart for changes to apply fully :^)
       }
 
 //---------------------------------------------------------
