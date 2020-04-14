@@ -109,6 +109,16 @@ class TRowLabels : public QGraphicsView {
       };
 
 //---------------------------------------------------------
+//   Timeline theme
+//---------------------------------------------------------
+
+struct TimelineTheme {
+      QColor backgroundColor, labelsColor1, labelsColor2, labelsColor3, gridColor1, gridColor2;
+      QColor measureMetaColor, selectionColor, nonVisiblePenColor, nonVisibleBrushColor, colorBoxColor;
+      QColor metaValuePenColor, metaValueBrushColor;
+      };
+
+//---------------------------------------------------------
 //   Timeline
 //---------------------------------------------------------
 
@@ -120,6 +130,8 @@ class Timeline : public QGraphicsView {
       int max_zoom = 50;
       int min_zoom = 5;
       int spacing = 5;
+
+      TimelineTheme _lightTheme, _darkTheme;
 
       std::tuple<int, qreal, Element*, Element*, bool> repeat_info;
       std::tuple<QGraphicsItem*, int, QColor> old_hover_info;
@@ -186,6 +198,7 @@ class Timeline : public QGraphicsView {
       virtual void contextMenuEvent(QContextMenuEvent* event) override;
       void requestInstrumentDialog();
       void toggleMetaRow();
+      void updateTimelineTheme();
 
    signals:
       void moved(QPointF);
@@ -200,10 +213,11 @@ class Timeline : public QGraphicsView {
       void setScore(Score* s);
       void setScoreView(ScoreView* sv);
 
-      int nstaves();
+      int nstaves() const;
 
-      int getWidth();
-      int getHeight();
+      int getWidth() const;
+      int getHeight() const;
+      const TimelineTheme& activeTheme() const;
 
       void updateGrid();
 
@@ -211,7 +225,7 @@ class Timeline : public QGraphicsView {
 
       std::vector<std::pair<QString, bool>> getLabels();
 
-      unsigned int nmetas();
+      unsigned int nmetas() const;
 
       bool collapsed() { return collapsed_meta; }
       void setCollapsed(bool st) { collapsed_meta = st; }
