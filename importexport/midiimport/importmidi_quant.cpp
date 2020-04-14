@@ -818,7 +818,7 @@ void findChordRangeEnds(
             const ReducedFraction &beatLen)
       {
 #ifdef NDEBUG
-      (void)rangeStart;
+      Q_UNUSED(rangeStart);
 #endif
       for (auto it = data.rbegin(); it != data.rend(); ++it) {
             QuantData &d = *it;
