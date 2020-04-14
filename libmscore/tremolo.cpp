@@ -233,71 +233,38 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal _spatium)
       {
       Q_ASSERT(!twoNotes());
 
-      bool up = _chord1->up();
-      int line = up ? _chord1->upLine() : _chord1->downLine();
+      bool up = chord()->up();
+      int line = up ? chord()->upLine() : chord()->downLine();
 
       if (!placeMidStem()) {
-            static const qreal t[3][2][4][2] = {
-                  // normal stem
-                  {
-                     // DOWN
-                     {
-                        // even line   odd line
-                        { 6,           5          },  // line 1
-                        { 6 - 2 * .8,  5 - 2 * .8 },  // line 2
-                        { 6 - 4 * .8,  3          },  // line 3
-                        { 2         ,  3          }   // line 4
-                        },
-                     // UP
-                     {
-                        // even line   odd line
-                        { -6,          -5          },  // line 1
-                        { -6,          -5          },  // line 2
-                        { -6,          -3 - 4 * .8 },  // line 3
-                        { -2 - 6 * .8, -3 - 6 * .8 }   // line 4
-                        }
-                     },
-                  // stem with hook
-                  {
-                     // DOWN
-                     {
-                        // even line   odd line
-                        { 3,           3          },  // line 1
-                        { 2,           2          },  // line 2
-                        { 2,           2          },  // line 3
-                        { 2,           2          }   // line 4
-                        },
-                     // UP
-                     {
-                        // even line   odd line
-                        { -3,          -3          },  // line 1
-                        { -2 - 2 * .8, -2 - 2 * .8 },  // line 2
-                        { -2 - 4 * .8, -2 - 4 * .8 },  // line 3
-                        { -2 - 6 * .8, -2 - 6 * .8 }   // line 4
-                        }
-                     },
-                  // stem with beam
-                  {
-                     // DOWN
-                     {
-                        // even line   odd line
-                        { 3,           3          },  // line 1
-                        { 2,           2          },  // line 2
-                        { 2,           2          },  // line 3
-                        { 2,           2          }   // line 4
-                        },
-                     // UP
-                     {
-                        // even line   odd line
-                        { -3,          -3          },  // line 1
-                        { -2 - 2 * .8, -2 - 2 * .8 },  // line 2
-                        { -2 - 4 * .8, -2 - 4 * .8 },  // line 3
-                        { -2 - 6 * .8, -2 - 6 * .8 }   // line 4
-                        }
-                     },
-                  };
-            int idx = _chord1->hook() ? 1 : (_chord1->beam() ? 2 : 0);
-            y = (line + t[idx][up][_lines-1][line & 1]) * .5 * _spatium;
+            const qreal td = score()->styleS(Sid::tremoloDistance).val();
+            const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val();
+
+            qreal t = 0.0;
+            // nearest distance between note and tremolo stroke should be no less than 3.0
+            if (chord()->hook() || chord()->beam()) {
+                  t = up ? -3.0 - (2.0 * (lines() - 1)) * td - 2.0 * sw : 3.0;
+                  }
+            else { 
+                  if      (!up && !(line & 1)) // stem is down; even line
+                        t = qMax(6.0  - (2.0 * (lines() - 1)) * td - 2.0 * sw, 3.0);
+                  else if (!up &&  (line & 1)) // stem is down; odd line
+                        t = qMax(5.0  - (2.0 * (lines() - 1)) * td - 2.0 * sw, 3.0);
+                  else if ( up && !(line & 1)) // stem is up; even line
+                        t = qMin(-3.0 - (2.0 * (lines() - 1)) * td - 2.0 * sw, -6.0);
+                  else /*if ( up &&  (line & 1))*/ // stem is up; odd line
+                        t = qMin(-3.0 - (2.0 * (lines() - 1)) * td - 2.0 * sw, -5.0);
+                  }
+
+            qreal yLine = line + t;
+            // prevent stroke from going out of staff at the top while stem direction is down
+            if (!chord()->up())
+                  yLine = qMax(yLine, 0.0);
+            // prevent stroke from going out of staff at the bottom while stem direction is up
+            else
+                  yLine = qMin(yLine, (staff()->lines(tick()) - 1) * 2 - (2.0 * (lines() - 1)) * td - 2.0 * sw);
+
+            y = yLine * .5 * _spatium;
             }
       else {
             const Note* n = up ? chord()->downNote() : chord()->upNote();
@@ -387,6 +354,8 @@ void Tremolo::layout()
             layoutOneNoteTremolo(x, y, _spatium);
       }
 
+extern std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal, qreal);
+
 //---------------------------------------------------------
 //   layoutTwoNotesTremolo
 //---------------------------------------------------------
@@ -437,14 +406,16 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
             }
       else {
             firstChordStaffY = _chord1->pagePos().y() - _chord1->y();  // y coordinate of the staff of the first chord
-            y1 = _chord1->stemPosBeam().y() - firstChordStaffY + _chord1->defaultStemLength();
-            y2 = _chord2->stemPosBeam().y() - firstChordStaffY + _chord2->defaultStemLength();
+            const std::pair<qreal, qreal> extendedLen 
+               = extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength());
+            y1 = _chord1->stemPos().y() - firstChordStaffY + extendedLen.first;
+            y2 = _chord2->stemPos().y() - firstChordStaffY + extendedLen.second;
             }
-      
+
       qreal lw = _spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
       if (_chord1->beams() == 0 && _chord2->beams() == 0) {
             // improve the case when one stem is up and another is down
-            if (defaultStyle && _chord1->up() != _chord2->up()) {
+            if (defaultStyle && _chord1->up() != _chord2->up() && !crossStaffBeamBetween()) {
                   qreal meanNote1Y = .5 * (_chord1->upNote()->pagePos().y() - firstChordStaffY + _chord1->downNote()->pagePos().y() - firstChordStaffY);
                   qreal meanNote2Y = .5 * (_chord2->upNote()->pagePos().y() - firstChordStaffY + _chord2->downNote()->pagePos().y() - firstChordStaffY);
                   y1 = .5 * (y1 + meanNote1Y);
@@ -512,6 +483,14 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
             }
       QTransform shearTransform;
       qreal dy = y2 - y1;
+      // Make tremolo strokes less deep if two chords have the opposite stem direction,
+      // except for two cases:
+      // 1. The tremolo doesn't have the default beam style.
+      // In this case tremolo strokes should attach to the ends of both stems, so no adjustment needed;
+      // 2. The chords are on different staves and the tremolo is between them.
+      // The layout should be improved by extending both stems, so changes are not needed here.
+      if (_chord1->up() != _chord2->up() && defaultStyle && !crossStaffBeamBetween())
+            dy = qMin(qMax(dy, -1.0 * _spatium), 1.0 * _spatium);
       qreal dx = x2 - x1;
       if (_chord1->beams() == 0 && _chord2->beams() == 0) {
             if (_chord1->up() && !_chord2->up()) {
@@ -531,6 +510,20 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
 
       setbbox(path.boundingRect());
       setPos(x, y + beamYOffset);
+      }
+
+//---------------------------------------------------------
+//   crossStaffBeamBetween
+//    Return true if tremolo is two-note cross-staff and beams between staves
+//---------------------------------------------------------
+
+bool Tremolo::crossStaffBeamBetween() const
+      {
+      if (!twoNotes())
+            return false;
+
+      return ((_chord1->staffMove() > _chord2->staffMove()) && _chord1->up() && !_chord2->up())
+         ||  ((_chord1->staffMove() < _chord2->staffMove()) && !_chord1->up() && _chord2->up());
       }
 
 //---------------------------------------------------------
