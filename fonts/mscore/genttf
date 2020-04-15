@@ -1,6 +1,17 @@
-#!/usr/bin/fontforge -lang=ff
+#!/bin/sh
 
+# ensure that user preferences don't leak into the fonts
+FONTFORGE_LOADPREFS=Never
+FONTFORGE_VERBOSE=1
+LC_ALL=C
+export FONTFORGE_LOADPREFS FONTFORGE_VERBOSE LC_ALL
+
+# docs for Generate():
+# https://fontforge.org/docs/scripting/scripting-alpha.html#Generate
+
+# batch convert, with options suitably set
+# (0x800 means “generate an old-style kerning table”)
+fontforge -lang=ff -script - "$1" <<'EOF'
 Open($1)
-Generate($1:r + ".ttf")
-
-
+Generate($1:r + ".ttf", "", 0x800)
+EOF
