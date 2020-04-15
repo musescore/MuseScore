@@ -28,7 +28,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/undo.h"
-#include "mixer.h"
+#include "mixer/mixer.h"
 #include "parteditbase.h"
 #include "scoreview.h"
 #include "playpanel.h"

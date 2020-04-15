@@ -17,21 +17,24 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "mixer.h"
+
+#include <QtGlobal>
+#include <qmessagebox.h>
+#include <accessibletoolbutton.h>
+
 #include "musescore.h"
 #include "parteditbase.h"
 
 #include "libmscore/excerpt.h"
 #include "libmscore/score.h"
 #include "libmscore/part.h"
-#include "mixer.h"
 #include "seq.h"
 #include "libmscore/undo.h"
 #include "synthcontrol.h"
 #include "synthesizer/msynthesizer.h"
 #include "preferences.h"
-#include <QtGlobal>
-#include <qmessagebox.h>
-#include <accessibletoolbutton.h>
+
 #include "mixerdetails.h"
 #include "mixertrack.h"
 #include "mixertrackchannel.h"
