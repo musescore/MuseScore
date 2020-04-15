@@ -114,5 +114,6 @@
         <file>view/qml/general/appearance/internal/ArrangeSection.qml</file>
         <file>view/qml/general/appearance/internal/ColorSection.qml</file>
         <file>view/qml/general/appearance/internal/VerticalSpacingSection.qml</file>
+        <file>view/qml/common/ColorPicker.qml</file>
     </qresource>
 </RCC>

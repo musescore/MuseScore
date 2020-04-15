@@ -5,6 +5,8 @@ import "../../../common"
 Column {
     id: root
 
+    property alias color: colorPicker.color
+
     height: implicitHeight
     width: parent.width
 
@@ -14,27 +16,7 @@ Column {
         text: qsTr("Colour")
     }
 
-    Rectangle {
-        id: colorPreviewRect
-
-        height: 26
-        width: parent.width
-        color: "#000000"
-
-        MouseArea {
-            anchors.fill: parent
-
-            onClicked: {
-                colorDialog.open()
-            }
-        }
-
-        ColorDialog {
-            id: colorDialog
-
-            onAccepted: {
-                colorPreviewRect.color = colorDialog.color
-            }
-        }
+    ColorPicker {
+        id: colorPicker
     }
 }
