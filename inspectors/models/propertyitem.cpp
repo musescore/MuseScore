@@ -40,6 +40,11 @@ bool PropertyItem::isUndefined() const
     return !m_currentValue.isValid();
 }
 
+bool PropertyItem::isEnabled() const
+{
+    return m_isEnabled;
+}
+
 void PropertyItem::setValue(const QVariant& value)
 {
     if (m_currentValue == value)
@@ -53,4 +58,13 @@ void PropertyItem::setValue(const QVariant& value)
 void PropertyItem::setDefaultValue(const QVariant& defaultValue)
 {
     m_defaultValue = defaultValue;
+}
+
+void PropertyItem::setIsEnabled(bool isEnabled)
+{
+    if (m_isEnabled == isEnabled)
+        return;
+
+    m_isEnabled = isEnabled;
+    emit isEnabledChanged(m_isEnabled);
 }

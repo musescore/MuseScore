@@ -267,6 +267,12 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::f
         QVariant elementCurrentValue = valueFromElementUnits(pid, element->getProperty(pid), element);
         QVariant elementDefaultValue = valueFromElementUnits(pid, element->propertyDefault(pid), element);
 
+        bool isPropertySupportedByElement = elementCurrentValue.isValid();
+
+        if (!isPropertySupportedByElement) {
+            continue;
+        }
+
         if (convertElementPropertyValueFunc) {
             elementCurrentValue = convertElementPropertyValueFunc(elementCurrentValue);
             elementDefaultValue = convertElementPropertyValueFunc(elementDefaultValue);
@@ -282,6 +288,10 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::f
         if (isUndefined)
             break;
     }
+
+    //@note Some elements may support the property, some don't. If element doesn't support property it'll return invalid value.
+    //      So we use that knowledge here
+    propertyItem->setIsEnabled(propertyValue.isValid());
 
     if (isUndefined) {
         propertyValue = QVariant();
