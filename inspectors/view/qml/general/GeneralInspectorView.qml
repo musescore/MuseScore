@@ -34,7 +34,7 @@ FocusableItem {
                 text: qsTr("Visible")
 
                 isIndeterminate: model ? model.isVisible.isUndefined : false
-                checked: model && !isIndeterminate ? model.isVisible.value : false
+                checked: model && !model.isVisible.isUndefined ? model.isVisible.value : false
 
                 onClicked: { model.isVisible.value = !checked }
             }
@@ -45,9 +45,9 @@ FocusableItem {
 
                 text: qsTr("Cue size")
 
-                enabled: model ? model.isSmallModeAvailable.isUndefined || model.isSmallModeAvailable.value : false
+                enabled: model ? model.isSmall.isEnabled : false
                 isIndeterminate: model && enabled ? model.isSmall.isUndefined : false
-                checked: model && !isIndeterminate ? model.isSmall.value : false
+                checked: model && !model.isSmall.isUndefined ? model.isSmall.value : false
 
                 onClicked: { model.isSmall.value = !checked }
             }
@@ -64,7 +64,7 @@ FocusableItem {
                 text: qsTr("Auto-place")
 
                 isIndeterminate: model ? model.isAutoPlaceAllowed.isUndefined : false
-                checked: model && !isIndeterminate ? model.isAutoPlaceAllowed.value : false
+                checked: model && !model.isAutoPlaceAllowed.isUndefined ? model.isAutoPlaceAllowed.value : false
 
                 onClicked: { model.isAutoPlaceAllowed.value = !checked }
             }
@@ -75,9 +75,9 @@ FocusableItem {
 
                 text: qsTr("Play")
 
-                enabled: model ? model.isPlayModeAvailable.isUndefined || model.isPlayModeAvailable.value : false
+                enabled: model ? model.isPlayable.isEnabled : false
                 isIndeterminate: model && enabled ? model.isPlayable.isUndefined : false
-                checked: model && !isIndeterminate && enabled ? model.isPlayable.value : false
+                checked: model && !model.isPlayable.isUndefined && enabled ? model.isPlayable.value : false
 
                 onClicked: { model.isPlayable.value = !checked }
             }

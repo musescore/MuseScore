@@ -11,9 +11,7 @@ class GeneralSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem* isVisible READ isVisible CONSTANT)
     Q_PROPERTY(PropertyItem* isAutoPlaceAllowed READ isAutoPlaceAllowed CONSTANT)
     Q_PROPERTY(PropertyItem* isPlayable READ isPlayable CONSTANT)
-    Q_PROPERTY(PropertyItem* isPlayModeAvailable READ isPlayModeAvailable CONSTANT)
     Q_PROPERTY(PropertyItem* isSmall READ isSmall CONSTANT)
-    Q_PROPERTY(PropertyItem* isSmallModeAvailable READ isSmallModeAvailable CONSTANT)
 
     Q_PROPERTY(QObject* playbackProxyModel READ playbackProxyModel NOTIFY playbackProxyModelChanged)
 
@@ -23,9 +21,7 @@ class GeneralSettingsModel : public AbstractInspectorModel
     PropertyItem* isVisible() const;
     PropertyItem* isAutoPlaceAllowed() const;
     PropertyItem* isPlayable() const;
-    PropertyItem* isPlayModeAvailable() const;
     PropertyItem* isSmall() const;
-    PropertyItem* isSmallModeAvailable() const;
 
     QObject* playbackProxyModel() const;
 
@@ -45,9 +41,7 @@ private:
     PropertyItem* m_isVisible = nullptr;
     PropertyItem* m_isAutoPlaceAllowed = nullptr;
     PropertyItem* m_isPlayable = nullptr;
-    PropertyItem* m_isPlayModeAvailable = nullptr;
     PropertyItem* m_isSmall = nullptr;
-    PropertyItem* m_isSmallModeAvailable = nullptr;
 
     PlaybackProxyModel* m_playbackProxyModel = nullptr;
 };

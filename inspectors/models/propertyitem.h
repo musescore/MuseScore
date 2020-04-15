@@ -10,6 +10,7 @@ class PropertyItem : public QObject
 
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(bool isUndefined READ isUndefined NOTIFY isUndefinedChanged)
+    Q_PROPERTY(bool isEnabled READ isEnabled NOTIFY isEnabledChanged)
 
 public:
     explicit PropertyItem(const int propertyId, QObject* parent = nullptr);
@@ -21,14 +22,17 @@ public:
     int propertyId() const;
     QVariant value() const;
     bool isUndefined() const;
+    bool isEnabled() const;
 
 public slots:
     void setValue(const QVariant& value);
     void setDefaultValue(const QVariant& defaultValue);
+    void setIsEnabled(bool isEnabled);
 
 signals:
     void valueChanged(QVariant value);
     void isUndefinedChanged(bool isUndefined);
+    void isEnabledChanged(bool isEnabled);
 
     void propertyModified(int propertyId, QVariant newValue);
 
@@ -37,6 +41,7 @@ private:
 
     QVariant m_defaultValue = 0;
     QVariant m_currentValue = 0;
+    bool m_isEnabled = false;
 };
 
 #endif // INSPECTORPROPERTY_H
