@@ -7829,7 +7829,6 @@ void MuseScore::init(QStringList& argv)
             sc->setWindowFlags(Qt::FramelessWindowHint);
 #endif
             sc->show();
-            qApp->processEvents();
             }
 
       if (!MScore::noGui)
@@ -8050,15 +8049,13 @@ void MuseScore::init(QStringList& argv)
             //otherwise, welcome tour will appear on closing StartCenter
             }
 
-      if (sc) {
-            sc->close();
-            qApp->processEvents();
-            }
-
       mscore->showPlayPanel(preferences.getBool(PREF_UI_APP_STARTUP_SHOWPLAYPANEL));
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())
             mscore->showSynthControl(true);
+
+      if (sc)
+            sc->close();
       }
 
 //---------------------------------------------------------
