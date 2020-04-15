@@ -22,7 +22,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class RehearsalMark final : public TextBase  {
-      Sid getPropertyStyle(Pid) const override;
 
    public:
       RehearsalMark(Score* score);
