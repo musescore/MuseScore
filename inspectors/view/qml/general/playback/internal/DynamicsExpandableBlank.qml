@@ -108,7 +108,7 @@ ExpandableBlank {
                     id: velocityChangeControl
                     iconMode: iconModeEnum.hidden
 
-                    enabled: model ? model.isVelocityChangeAvailable.isUndefined || model.isVelocityChangeAvailable.value : false
+                    enabled: model ? model.velocityChange.isEnabled : false
 
                     step: 1
                     decimals: 0
@@ -119,7 +119,7 @@ ExpandableBlank {
                         bottom: velocityChangeControl.minValue
                     }
 
-                    isIndeterminate: model ? model.velocityChange.isUndefined : false
+                    isIndeterminate: model && enabled ? model.velocityChange.isUndefined : false
                     currentValue: model ? model.velocityChange.value : 0
 
                     onValueEdited: { model.velocityChange.value = newValue }

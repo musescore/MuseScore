@@ -10,7 +10,6 @@ class DynamicPlaybackModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem* scopeType READ scopeType CONSTANT)
     Q_PROPERTY(PropertyItem* velocity READ velocity CONSTANT)
     Q_PROPERTY(PropertyItem* velocityChange READ velocityChange CONSTANT)
-    Q_PROPERTY(PropertyItem* isVelocityChangeAvailable READ isVelocityChangeAvailable CONSTANT)
     Q_PROPERTY(PropertyItem* velocityChangeSpeed READ velocityChangeSpeed CONSTANT)
 
 public:
@@ -19,7 +18,6 @@ public:
     PropertyItem* scopeType() const;
     PropertyItem* velocity() const;
     PropertyItem* velocityChange() const;
-    PropertyItem* isVelocityChangeAvailable() const;
     PropertyItem* velocityChangeSpeed() const;
 
 protected:
@@ -31,7 +29,6 @@ protected:
 private:
     PropertyItem* m_velocity = nullptr;
     PropertyItem* m_velocityChange = nullptr;
-    PropertyItem* m_isVelocityChangeAvailable = nullptr;
     PropertyItem* m_velocityChangeSpeed = nullptr;
     PropertyItem* m_scopeType = nullptr;
 };
