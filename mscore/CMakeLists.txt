@@ -87,9 +87,12 @@ if (SCRIPT_INTERFACE)
             )
 endif (SCRIPT_INTERFACE)
 
+include(${CMAKE_CURRENT_LIST_DIR}/mixer/mixer.cmake)
+
 QT5_WRAP_UI (ui_headers
+      ${MSCORE_MIXER_UI}
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
-      measuresdialog.ui pagesettings.ui mixer.ui mixertrackchannel.ui mixertrackpart.ui mixerdetails.ui parteditbase.ui
+      measuresdialog.ui pagesettings.ui parteditbase.ui
       playpanel.ui prefsdialog.ui measureproperties.ui
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
       editstaff.ui timesigproperties.ui
@@ -324,7 +327,6 @@ add_library(mscoreapp STATIC
       logindialog.h network/loginmanager.h network/loginmanager_p.h
       magbox.h masterpalette.h
       measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h
-      mixer.h mixertrack.h mixertrackchannel.h mixertrackgroup.h mixertrackitem.h mixertrackpart.h mixerdetails.h
       musescore.h navigator.h newwizard.h noteGroups.h
       omrpanel.h pa.h pagesettings.h palette.h partedit.h parteditbase.h
       pathlistdialog.h piano.h pianolevels.h pianolevelschooser.h  pianolevelsfilter.h
@@ -349,7 +351,6 @@ add_library(mscoreapp STATIC
       musescore.cpp musescoredialogs.cpp navigator.cpp pagesettings.cpp palette.cpp
       sessionstatusobserver.cpp
       timeline.cpp
-      mixer.cpp mixertrackchannel.cpp mixertrackitem.cpp mixertrackpart.cpp mixerdetails.cpp
       parteditbase.cpp playpanel.cpp selectionwindow.cpp
       preferences.cpp measureproperties.cpp
       seq.cpp textpalette.cpp
@@ -461,6 +462,7 @@ add_library(mscoreapp STATIC
       qml/msqmlengine.cpp qml/nativemenu.cpp qml/nativetooltip.cpp
       qmldockwidget.cpp
 
+      ${MSCORE_MIXER_SRC}
       ${WIDGETS_SOURCE_FILES}
       ${COCOABRIDGE}
       ${OMR_FILES}
