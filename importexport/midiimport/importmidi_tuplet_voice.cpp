@@ -456,7 +456,7 @@ void setVoicesFromPrevBars(
             const ReducedFraction &barStart)
       {
 #ifdef NDEBUG
-      (void)pendingNonTuplets;
+      Q_UNUSED(pendingNonTuplets);
 #endif
       bool loopAgain = false;
       do {
