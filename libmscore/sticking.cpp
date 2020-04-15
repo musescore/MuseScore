@@ -91,15 +91,5 @@ QVariant Sticking::propertyDefault(Pid id) const
             }
       }
 
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid Sticking::getPropertyStyle(Pid pid) const
-      {
-      if (pid == Pid::OFFSET)
-            return placeAbove() ? Sid::stickingPosAbove : Sid::stickingPosBelow;
-      return TextBase::getPropertyStyle(pid);
-      }
 }
 

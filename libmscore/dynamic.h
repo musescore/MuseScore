@@ -89,7 +89,6 @@ class Dynamic final : public TextBase {
       Speed _velChangeSpeed         { Speed::NORMAL };
 
       QRectF drag(EditData&) override;
-      Sid getPropertyStyle(Pid) const override;
 
    public:
       Dynamic(Score*);

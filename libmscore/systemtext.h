@@ -23,7 +23,6 @@ namespace Ms {
 
 class SystemText final : public StaffTextBase  {
       void layout() override;
-      Sid getPropertyStyle(Pid) const override;
       QVariant propertyDefault(Pid id) const override;
 
    public:
