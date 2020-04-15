@@ -208,7 +208,7 @@ const bool MetaEditDialog::save()
                                     return false;
                                     }
                               QMessageBox::warning(this, tr("MuseScore"),
-                                                   tr("You have multiple fields with the same name."),
+                                                   tr("You have multiple tags with the same name."),
                                                    QMessageBox::Ok, QMessageBox::Ok);
                               tag->setFocus();
                               return false;
