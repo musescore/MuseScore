@@ -32,7 +32,6 @@ else (NOT MSVC)
    set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
 endif (NOT MSVC)
 
-
 include(${CMAKE_CURRENT_LIST_DIR}/musicxml/musicxml.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/midiimport/midiimport.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/ove/ove.cmake)
@@ -56,9 +55,14 @@ add_library (
       ${BWW_SRC}
       )
 
+add_subdirectory(../thirdparty/beatroot beatroot) # for midiimport
+add_subdirectory(../thirdparty/rtf2html rtf2html) # for capella
+
 target_link_libraries(${MODULE}
     ${QT_LIBRARIES}
-    audio        # for midi import
+    audio       # for midiimport
+    beatroot    # for midiimport
+    rtf2html    # for capella
     )
 
 if (NOT MSVC)

@@ -71,20 +71,28 @@ set (SOURCE_LIB
       ${PROJECT_SOURCE_DIR}/mscore/preferences.cpp
       ${PROJECT_SOURCE_DIR}/mscore/shortcut.cpp
       ${PROJECT_SOURCE_DIR}/mscore/stringutils.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/fmt_opts.cpp        # Required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf2html.cpp        # Required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_keyword.cpp     # Required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_table.cpp       # Required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Agent.cpp           # Required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/AgentList.cpp       # Required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/BeatTracker.cpp     # Required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Induction.cpp       # Required by importmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/extension.cpp # required by zerberus tests
       ${OMR_SRC}
       omr
 	)
 
 if (MSVC)
-	add_library(
+    add_library(
       testutils STATIC
 	  ${_all_h_file}
 	  ${PCH}
 	  ${SOURCE_LIB}
 	  )
 else (MSVC)
-	add_library(
+    add_library(
       testutils STATIC
 	  ${SOURCE_LIB}
 	  )

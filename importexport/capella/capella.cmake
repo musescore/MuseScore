@@ -1,13 +1,7 @@
 
 
-set (RTF2HTML_SRC
-    ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/fmt_opts.cpp
-    ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf2html.cpp
-    ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_keyword.cpp
-    ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_table.cpp
-    )
-
-file(GLOB CAPELLA_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/*.*
-    ${RTF2HTML_SRC}
+set (CAPELLA_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/capella.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/capella.h
+    ${CMAKE_CURRENT_LIST_DIR}/capxml.cpp
     )
