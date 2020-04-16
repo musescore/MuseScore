@@ -88,6 +88,7 @@ if (SCRIPT_INTERFACE)
 endif (SCRIPT_INTERFACE)
 
 include(${CMAKE_CURRENT_LIST_DIR}/mixer/mixer.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/pianoroll/pianoroll.cmake)
 
 QT5_WRAP_UI (ui_headers
       ${MSCORE_MIXER_UI}
@@ -329,8 +330,7 @@ add_library(mscoreapp STATIC
       measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h
       musescore.h navigator.h newwizard.h noteGroups.h
       omrpanel.h pa.h pagesettings.h palette.h partedit.h parteditbase.h
-      pathlistdialog.h piano.h pianolevels.h pianolevelschooser.h  pianolevelsfilter.h
-      pianokeyboard.h pianoroll.h pianoruler.h pianotools.h pianoview.h
+      pathlistdialog.h piano.h  pianotools.h
       playpanel.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h
       recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
@@ -360,9 +360,8 @@ add_library(mscoreapp STATIC
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       excerptsdialog.cpp metaedit.cpp magbox.cpp realizeharmonydialog.cpp
       exportaudio.cpp
-      synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
-      pianokeyboard.cpp pianolevels.cpp pianolevelschooser.cpp pianolevelsfilter.cpp
-      pianoruler.cpp pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
+      synthcontrol.cpp drumroll.cpp piano.cpp
+      drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
       updatechecker.cpp
       ruler.cpp
       fotomode.cpp drumtools.cpp
@@ -463,6 +462,7 @@ add_library(mscoreapp STATIC
       qmldockwidget.cpp
 
       ${MSCORE_MIXER_SRC}
+      ${PIANOROLL_SRC}
       ${WIDGETS_SOURCE_FILES}
       ${COCOABRIDGE}
       ${OMR_FILES}

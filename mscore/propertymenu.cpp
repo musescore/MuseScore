@@ -23,7 +23,7 @@
 #include "timesigproperties.h"
 #include "stafftextproperties.h"
 #include "selinstrument.h"
-#include "pianoroll.h"
+#include "pianoroll/pianoroll.h"
 #include "editstyle.h"
 #include "editstaff.h"
 #include "measureproperties.h"

@@ -51,7 +51,7 @@
 #include "libmscore/sig.h"
 #include "libmscore/undo.h"
 #include "synthcontrol.h"
-#include "pianoroll.h"
+#include "pianoroll/pianoroll.h"
 #include "drumroll.h"
 #include "scoretab.h"
 #include "timedialog.h"
