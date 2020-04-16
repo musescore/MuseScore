@@ -1950,6 +1950,10 @@ void Measure::read(XmlReader& e, int staffIdx)
             else
                   qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
             irregular = true;
+            if (_len.numerator() <= 0 || _len.denominator() <= 0) {
+                  e.raiseError(QObject::tr("MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(_len.toString()));
+                  return;
+                  }
             score()->sigmap()->add(tick().ticks(), SigEvent(_len, _timesig));
             score()->sigmap()->add((tick() + ticks()).ticks(), SigEvent(_timesig));
             }
