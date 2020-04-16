@@ -12,22 +12,22 @@
 
 #include "scoreview.h"
 #include "musescore.h"
-#include "libmscore/undo.h"
-
-#include "libmscore/score.h"
-#include "libmscore/element.h"
 #include "seq.h"
-#include "libmscore/mscore.h"
 
 #include "articulationprop.h"
 #include "timesigproperties.h"
 #include "stafftextproperties.h"
 #include "selinstrument.h"
 #include "pianoroll/pianoroll.h"
-#include "editstyle.h"
-#include "editstaff.h"
 #include "measureproperties.h"
 
+#include "edit/editstyle.h"
+#include "edit/editstaff.h"
+
+#include "libmscore/undo.h"
+#include "libmscore/score.h"
+#include "libmscore/element.h"
+#include "libmscore/mscore.h"
 #include "libmscore/staff.h"
 #include "libmscore/segment.h"
 #include "libmscore/bend.h"

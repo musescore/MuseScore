@@ -89,20 +89,22 @@ endif (SCRIPT_INTERFACE)
 
 include(${CMAKE_CURRENT_LIST_DIR}/mixer/mixer.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/pianoroll/pianoroll.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/edit/edit.cmake)
 
 QT5_WRAP_UI (ui_headers
       ${MSCORE_MIXER_UI}
-      insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
+      ${MSCORE_EDIT_UI}
+
+      insertmeasuresdialog.ui instrdialog.ui instrwidget.ui
       measuresdialog.ui pagesettings.ui parteditbase.ui
       playpanel.ui prefsdialog.ui measureproperties.ui
-      textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
-      editstaff.ui timesigproperties.ui
+      textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui
+      timesigproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
       transposedialog.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
       articulation.ui metaedit.ui paletteProperties.ui paletteCellProperties.ui selectdialog.ui selectnotedialog.ui
       synthcontrol.ui splitstaff.ui keyedit.ui selectinstr.ui
-      editstafftype.ui
-      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui realizeharmonydialog.ui
+      mediadialog.ui albummanager.ui layer.ui realizeharmonydialog.ui
       omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
@@ -317,9 +319,8 @@ add_library(mscoreapp STATIC
       alsa.h alsamidi.h analyse.h articulationprop.h
       bendcanvas.h breaksdialog.h
       chordview.h click.h continuouspanel.h downloadUtils.h
-      driver.h drumroll.h drumtools.h drumview.h editdrumset.h
-      editinstrument.h editpitch.h editraster.h editstaff.h
-      editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
+      driver.h drumroll.h drumtools.h drumview.h
+      enableplayforwidget.h
       exampleview.h excerptsdialog.h exportmp3.h extension.h
       file.h fotomode.h fretcanvas.h globals.h greendotbutton.h
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h
@@ -343,8 +344,7 @@ add_library(mscoreapp STATIC
 
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
       stringutils.h stringutils.cpp
-      scoreview.cpp editharmony.cpp editfiguredbass.cpp events.cpp
-      editinstrument.cpp editstyle.cpp
+      scoreview.cpp events.cpp
       icons.cpp
       instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
@@ -356,7 +356,6 @@ add_library(mscoreapp STATIC
       seq.cpp textpalette.cpp
       timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp
       simplebutton.cpp
-      editdrumset.cpp editstaff.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       excerptsdialog.cpp metaedit.cpp magbox.cpp realizeharmonydialog.cpp
       exportaudio.cpp
@@ -365,8 +364,8 @@ add_library(mscoreapp STATIC
       updatechecker.cpp
       ruler.cpp
       fotomode.cpp drumtools.cpp
-      selinstrument.cpp editstafftype.cpp texttools.cpp
-      editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
+      selinstrument.cpp texttools.cpp
+      pianotools.cpp mediadialog.cpp
       workspace.cpp workspacedialog.cpp chordview.cpp
       workspacecombobox.cpp
       albummanager.cpp
@@ -424,8 +423,6 @@ add_library(mscoreapp STATIC
       inspector/inspectorElementBase.cpp
       inspector/resetButton.cpp
       enableplayforwidget.cpp
-      editelement.cpp
-      editlyrics.cpp
       savePositions.cpp
       driver.cpp
       noteGroups.cpp
@@ -461,6 +458,7 @@ add_library(mscoreapp STATIC
       qml/msqmlengine.cpp qml/nativemenu.cpp qml/nativetooltip.cpp
       qmldockwidget.cpp
 
+      ${MSCORE_EDIT_SRC}
       ${MSCORE_MIXER_SRC}
       ${PIANOROLL_SRC}
       ${WIDGETS_SOURCE_FILES}

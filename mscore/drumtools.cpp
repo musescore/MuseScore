@@ -20,13 +20,15 @@
 #include "drumtools.h"
 #include "musescore.h"
 #include "palette.h"
+#include "preferences.h"
+#include "seq.h"
+
+#include "edit/editdrumset.h"
+
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/drumset.h"
 #include "libmscore/score.h"
-#include "preferences.h"
-#include "seq.h"
-#include "editdrumset.h"
 #include "libmscore/staff.h"
 #include "libmscore/part.h"
 #include "libmscore/stem.h"

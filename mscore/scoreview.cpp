@@ -14,11 +14,12 @@
 
 #include "scoreview.h"
 
+#include "edit/editdrumset.h"
+#include "edit/editstaff.h"
+
 #include "breaksdialog.h"
 #include "continuouspanel.h"
 #include "drumroll.h"
-#include "editdrumset.h"
-#include "editstaff.h"
 #include "globals.h"
 #include "magbox.h"
 #include "measureproperties.h"
