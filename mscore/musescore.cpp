@@ -5879,6 +5879,12 @@ void MuseScore::cmd(QAction* a)
                tr("Command %1 not valid in current state").arg(cmdn));
             return;
             }
+      if (sc->assignedWidget() == MsWidget::SCORE_TAB
+         && QApplication::focusWidget()
+         && !ctab->isAncestorOf(QApplication::focusWidget())) {
+            qDebug("MuseScore::cmd(): not on score tab <%s>", qPrintable(cmdn));
+            return;
+            }
       if (cmdn == "toggle-palette") {
             showPalette(a->isChecked());
             if (a->isChecked()) {
