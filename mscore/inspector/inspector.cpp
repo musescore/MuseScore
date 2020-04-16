@@ -1023,8 +1023,8 @@ InspectorTremolo::InspectorTremolo(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::TREMOLO_PLACEMENT,  0, g.tremoloPlacement, g.resetTremoloPlacement },
-            { Pid::TREMOLO_BEAM_STYLE, 0, g.beamStyle,        g.resetBeamStyle        }
+            { Pid::TREMOLO_PLACEMENT,    0, g.tremoloPlacement, g.resetTremoloPlacement },
+            { Pid::TREMOLO_STROKE_STYLE, 0, g.strokeStyle,      g.resetStrokeStyle      }
             };
       const std::vector<InspectorPanel> ppList = { { g.title, g.panel } };
 
@@ -1052,9 +1052,9 @@ void InspectorTremolo::setElement()
             }
       // beam style setting is only appliable to minim two-note tremolo in non-TAB staves
       if (hasNonMinimTwoNoteTremolo || hasTabStaffTremolo) {
-            g.labelBeamStyle->setVisible(false);
-            g.beamStyle->setVisible(false);
-            g.resetBeamStyle->setVisible(false);
+            g.labelStrokeStyle->setVisible(false);
+            g.strokeStyle->setVisible(false);
+            g.resetStrokeStyle->setVisible(false);
             }
       }
 
