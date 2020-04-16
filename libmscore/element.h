@@ -137,7 +137,7 @@ class EditData {
       Element* element                 { 0     };
       Element* dropElement             { 0     };
 
-      EditData(MuseScoreView* v) : view(v) {}
+      EditData(MuseScoreView* v = nullptr) : view(v) {}
       void clearData();
 
       ElementEditData* getData(const Element*) const;
@@ -193,6 +193,10 @@ class Element : public ScoreElement {
 
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
+
+      Element* findAncestor(ElementType t);
+      const Element* findAncestor(ElementType t) const;
+
       Measure* findMeasure();
       const Measure* findMeasure() const;
       MeasureBase* findMeasureBase();
@@ -292,7 +296,18 @@ class Element : public ScoreElement {
       virtual void startDrag(EditData&);
       virtual QRectF drag(EditData&);
       virtual void endDrag(EditData&);
-      virtual QLineF dragAnchor() const       { return QLineF(); }
+      /** Returns anchor lines displayed while dragging element in page coordinates. */
+      virtual QVector<QLineF> dragAnchorLines() const       { return QVector<QLineF>(); }
+      /**
+       * A generic \ref dragAnchorLines() implementation which can be used in
+       * dragAnchorLines() overrides in descendants. It is not made its default
+       * implementation in Element class since showing anchor lines is not
+       * desirable for most element types.
+       * TODO: maybe Annotation class could be extracted which would be a base
+       * class of various annotation types and which would have this
+       * dragAnchorLines() implementation by default.
+       */
+      QVector<QLineF> genericDragAnchorLines() const;
 
       virtual bool isEditable() const         { return !flag(ElementFlag::GENERATED); }
 
@@ -309,13 +324,15 @@ class Element : public ScoreElement {
       void updateGrips(EditData&) const;
       virtual bool nextGrip(EditData&) const;
       virtual bool prevGrip(EditData&) const;
-      virtual QPointF gripAnchor(Grip) const     { return QPointF(); }
+      /** Returns anchor lines displayed while dragging element's grip in page coordinates. */
+      virtual QVector<QLineF> gripAnchorLines(Grip) const     { return QVector<QLineF>(); }
 
       virtual EditBehavior normalModeEditBehavior() const { return EditBehavior::SelectOnly; }
       virtual int gripsCount() const { return 0; }
       virtual Grip initialEditModeGrip() const { return Grip::NO_GRIP; }
       virtual Grip defaultGrip() const { return Grip::NO_GRIP; }
-      virtual std::vector<QPointF> gripsPositions(const EditData&) const { return std::vector<QPointF>(); }
+      /** Returns grips positions in page coordinates. */
+      virtual std::vector<QPointF> gripsPositions(const EditData& = EditData()) const { return std::vector<QPointF>(); }
 
       int track() const                       { return _track; }
       virtual void setTrack(int val)          { _track = val;  }

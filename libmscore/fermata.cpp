@@ -247,12 +247,14 @@ void Fermata::layout()
       }
 
 //---------------------------------------------------------
-//   dragAnchor
+//   dragAnchorLines
 //---------------------------------------------------------
 
-QLineF Fermata::dragAnchor() const
+QVector<QLineF> Fermata::dragAnchorLines() const
       {
-      return QLineF(canvasPos(), parent()->canvasPos());
+      QVector<QLineF> result;
+      result << QLineF(canvasPos(), parent()->canvasPos());
+      return result;
       }
 
 //---------------------------------------------------------

@@ -646,13 +646,11 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
 
 //---------------------------------------------------------
 //   dragPosition
-//    on input:
-//          p   - canvas relative drag position
-//          rst - current staff index
-//          seg - current segment
-//    on output:
-//          rst - new staff index for drag position
-//          seg - new segment for drag position
+///   \param p   drag position in canvas coordinates
+///   \param rst \b input: current staff index \n
+///              \b output: new staff index for drag position
+///   \param seg \b input: current segment \n
+///              \b output: new segment for drag position
 //---------------------------------------------------------
 
 void Score::dragPosition(const QPointF& p, int* rst, Segment** seg) const

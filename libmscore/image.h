@@ -50,7 +50,7 @@ class Image final : public BSymbol {
       bool isEditable() const override { return true; }
       void startEditDrag(EditData&) override;
       void editDrag(EditData& ed) override;
-      QPointF gripAnchor(Grip) const override { return QPointF(); }
+      QVector<QLineF> gripAnchorLines(Grip) const override { return QVector<QLineF>(); }
 
    public:
       Image(Score* = 0);

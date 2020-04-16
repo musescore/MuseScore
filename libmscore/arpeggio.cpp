@@ -290,37 +290,44 @@ void Arpeggio::editDrag(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   dragAnchor
+//   dragAnchorLines
 //---------------------------------------------------------
 
-QLineF Arpeggio::dragAnchor() const
+QVector<QLineF> Arpeggio::dragAnchorLines() const
       {
+      QVector<QLineF> result;
+
       Chord* c = chord();
       if (c)
-            return QLineF(pagePos(), c->upNote()->pagePos());
-      return QLineF();
+            result << QLineF(pagePos(), c->upNote()->pagePos());
+      return QVector<QLineF>();
       }
 
 //---------------------------------------------------------
-//   gripAnchor
+//   gripAnchorLines
 //---------------------------------------------------------
 
-QPointF Arpeggio::gripAnchor(Grip n) const
+QVector<QLineF> Arpeggio::gripAnchorLines(Grip grip) const
       {
-      Chord* c = chord();
-      if (c == 0)
-            return QPointF();
-      if (n == Grip::START)
-            return c->upNote()->pagePos();
-      else if (n == Grip::END) {
-            Note* dnote = c->downNote();
+      QVector<QLineF> result;
+
+      Chord* _chord = chord();
+      if (!_chord)
+            return result;
+
+      QPointF gripPosition = gripsPositions()[static_cast<int>(grip)];
+
+      if (grip == Grip::START)
+            result << QLineF(_chord->upNote()->pagePos(), gripPosition);
+      else if (grip == Grip::END) {
+            Note* downNote = _chord->downNote();
             int btrack  = track() + (_span - 1) * VOICES;
-            Element* e = c->segment()->element(btrack);
+            Element* e = _chord->segment()->element(btrack);
             if (e && e->isChord())
-                  dnote = toChord(e)->downNote();
-            return dnote->pagePos();
+                  downNote = toChord(e)->downNote();
+            result << QLineF(downNote->pagePos(), gripPosition);
             }
-      return QPointF();
+      return result;
       }
 
 //---------------------------------------------------------

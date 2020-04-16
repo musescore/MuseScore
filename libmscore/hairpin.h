@@ -66,7 +66,7 @@ class HairpinSegment final : public TextLineBaseSegment {
       Shape shape() const override;
 
       int gripsCount() const override { return 4; }
-      std::vector<QPointF> gripsPositions(const EditData&) const override;
+      std::vector<QPointF> gripsPositions(const EditData& = EditData()) const override;
       };
 
 //---------------------------------------------------------

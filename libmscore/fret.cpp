@@ -154,23 +154,12 @@ QPointF FretDiagram::pagePos() const
       }
 
 //---------------------------------------------------------
-//   dragAnchor
+//   dragAnchorLines
 //---------------------------------------------------------
 
-QLineF FretDiagram::dragAnchor() const
+QVector<QLineF> FretDiagram::dragAnchorLines() const
       {
-      qreal xp = 0.0;
-      for (Element* e = parent(); e; e = e->parent())
-            xp += e->x();
-      qreal yp;
-      if (parent()->isSegment()) {
-            System* system = toSegment(parent())->measure()->system();
-            yp = system->staffCanvasYpage(staffIdx());
-            }
-      else
-            yp = parent()->canvasPos().y();
-      QPointF p1(xp, yp);
-      return QLineF(p1, canvasPos());
+      return genericDragAnchorLines();
 #if 0 // TODOxx
       if (parent()->isSegment()) {
             Segment* s     = toSegment(parent());
