@@ -10,12 +10,16 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <fenv.h>
-#include "network/loginmanager.h"
-#include "uploadscoredialog.h"
-#include <QStyleFactory>
-#include "config.h"
 #include "musescore.h"
+
+#include <fenv.h>
+#include <QStyleFactory>
+
+#include "config.h"
+
+#include "cloud/loginmanager.h"
+#include "cloud/uploadscoredialog.h"
+
 #include "musescoredialogs.h"
 #include "scoreview.h"
 #include "libmscore/style.h"
