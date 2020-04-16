@@ -171,6 +171,8 @@ class MuseScoreApplication : public QtSingleApplication {
             };
       static CommandLineParseResult parseCommandLineArguments(MuseScoreApplication* app);
       static MuseScoreApplication* initApplication(int& argc, char** argv);
+
+      static bool setCustomConfigFolder(const QString& path);
       };
 
 
