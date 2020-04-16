@@ -643,11 +643,10 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
       # Prepare portable scripts:
       configure_file(build/Linux+BSD/portable/AppRun.in          AppRun         @ONLY)
       configure_file(build/Linux+BSD/portable/portable-utils.in  portable-utils @ONLY)
-      set(SCRIPT_PERMS PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ WORLD_READ)
-      install(PROGRAMS ${PROJECT_BINARY_DIR}/AppRun     DESTINATION .   COMPONENT portable ${SCRIPT_PERMS})
+      install(PROGRAMS ${PROJECT_BINARY_DIR}/AppRun     DESTINATION .   COMPONENT portable)
       install(PROGRAMS ${PROJECT_BINARY_DIR}/portable-utils
                        build/Linux+BSD/portable/ldd-recursive
-                       build/rm-empty-dirs              DESTINATION bin COMPONENT portable ${SCRIPT_PERMS})
+                       build/rm-empty-dirs              DESTINATION bin COMPONENT portable)
       install(FILES    build/Linux+BSD/portable/qt.conf DESTINATION bin COMPONENT portable)
     else (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
       set(MAN_PORTABLE .\\\") # comment out lines in man page that are only relevant to the portable version
