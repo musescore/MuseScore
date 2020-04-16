@@ -77,7 +77,7 @@
        <number>3</number>
       </property>
       <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="labelTremoloPlacement">
         <property name="text">
          <string>Placement:</string>
         </property>

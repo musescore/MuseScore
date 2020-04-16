@@ -1038,24 +1038,34 @@ InspectorTremolo::InspectorTremolo(QWidget* parent)
 void InspectorTremolo::setElement()
       {
       InspectorElementBase::setElement();
-      bool hasNonMinimTwoNoteTremolo = false;
-      bool hasTabStaffTremolo = false;
+
+      bool hasMinimTwoNoteTremoloOnNonTabStaves = false;
       for (Element* ee : *(inspector->el())) {
-            if (toTremolo(ee)->durationType().type() != TDuration::DurationType::V_HALF) {
-                  hasNonMinimTwoNoteTremolo = true;
-                  break;
-                  }
-            if (toTremolo(ee)->staffType()->group() == StaffGroup::TAB) {
-                  hasTabStaffTremolo = true;
+            if (  toTremolo(ee)->twoNotes()
+               && toTremolo(ee)->durationType().type() == TDuration::DurationType::V_HALF
+               && toTremolo(ee)->staffType()->group() != StaffGroup::TAB) {
+                  hasMinimTwoNoteTremoloOnNonTabStaves = true;
                   break;
                   }
             }
-      // beam style setting is only appliable to minim two-note tremolo in non-TAB staves
-      if (hasNonMinimTwoNoteTremolo || hasTabStaffTremolo) {
-            g.labelStrokeStyle->setVisible(false);
-            g.strokeStyle->setVisible(false);
-            g.resetStrokeStyle->setVisible(false);
+      // beam style setting is only applicable to minim two-notes tremolos in non-TAB staves
+      // one of those in the selection is enough reason to show that part of the dialog
+      g.labelStrokeStyle->setVisible(hasMinimTwoNoteTremoloOnNonTabStaves);
+      g.strokeStyle->setVisible(hasMinimTwoNoteTremoloOnNonTabStaves);
+      g.resetStrokeStyle->setVisible(hasMinimTwoNoteTremoloOnNonTabStaves);
+
+      bool hasOneNotesTremolos = false;
+      for (Element* ee : *(inspector->el())) {
+             if (!toTremolo(ee)->twoNotes()) {
+                   hasOneNotesTremolos = true;
+                   break;
+                  }
             }
+      // placement setting is only applicable to one-notes tremolos
+      // one of those in the selection is enough reason to show that part of the dialog
+      g.labelTremoloPlacement->setVisible(hasOneNotesTremolos);
+      g.tremoloPlacement->setVisible(hasOneNotesTremolos);
+      g.resetTremoloPlacement->setVisible(hasOneNotesTremolos);
       }
 
 //---------------------------------------------------------
