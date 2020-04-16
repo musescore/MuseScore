@@ -1869,26 +1869,19 @@ void TextBase::dragTo(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   dragAnchor
+//   dragAnchorLines
 //---------------------------------------------------------
 
-QLineF TextBase::dragAnchor() const
+QVector<QLineF> TextBase::dragAnchorLines() const
       {
-      qreal xp = 0.0;
-      for (Element* e = parent(); e; e = e->parent())
-            xp += e->x();
-      qreal yp;
-      if (parent()->isSegment()) {
-            System* system = toSegment(parent())->measure()->system();
-            yp = system->staffCanvasYpage(staffIdx());
+      QVector<QLineF> result(genericDragAnchorLines());
+
+      if (layoutToParentWidth() && !result.empty()) {
+            QLineF& line = result[0];
+            line.setP2(line.p2() + bbox().topLeft());
             }
-      else
-            yp = parent()->canvasPos().y();
-      QPointF p1(xp, yp);
-      QPointF p2 = canvasPos();
-      if (layoutToParentWidth())
-            p2 += bbox().topLeft();
-      return QLineF(p1, p2);
+
+      return result;
       }
 
 //---------------------------------------------------------

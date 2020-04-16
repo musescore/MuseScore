@@ -1414,6 +1414,26 @@ bool Element::isPrintable() const
       }
 
 //---------------------------------------------------------
+//   findAncestor
+//---------------------------------------------------------
+
+Element* Element::findAncestor(ElementType t)
+      {
+      Element* e = this;
+      while (e && e->type() != t)
+            e = e->parent();
+      return e;
+      }
+
+const Element* Element::findAncestor(ElementType t) const
+      {
+      const Element* e = this;
+      while (e && e->type() != t)
+            e = e->parent();
+      return e;
+      }
+
+//---------------------------------------------------------
 //   findMeasure
 //---------------------------------------------------------
 
@@ -2021,6 +2041,30 @@ void Element::endDrag(EditData& ed)
             score()->undoPropertyChanged(this, pd.id, pd.data, f);
             setGenerated(false);
             }
+      }
+
+//---------------------------------------------------------
+//   genericDragAnchorLines
+//---------------------------------------------------------
+
+QVector<QLineF> Element::genericDragAnchorLines() const
+      {
+      qreal xp = 0.0;
+      for (Element* e = parent(); e; e = e->parent())
+            xp += e->x();
+      qreal yp;
+      if (parent()->isSegment()) {
+            System* system = toSegment(parent())->measure()->system();
+            const int stIdx = staffIdx();
+            yp = system->staffCanvasYpage(stIdx);
+            if (placement() == Placement::BELOW)
+                  yp += system->staff(stIdx)->bbox().height();
+            }
+      else
+            yp = parent()->canvasPos().y();
+      QPointF p1(xp, yp);
+      QLineF anchorLine(p1, canvasPos());
+      return { anchorLine };
       }
 
 //---------------------------------------------------------

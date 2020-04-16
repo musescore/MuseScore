@@ -61,19 +61,21 @@ void ScoreView::updateGrips()
             // updateGrips returns grips in page coordinates,
             // transform to view coordinates:
 
-            Element* page = editData.element;
-            while (page->parent())
-                  page = page->parent();
-            QPointF pageOffset(page->pos());
+            const QPointF pageOffset(editData.element->findAncestor(ElementType::PAGE)->pos());
 
             for (QRectF& grip : editData.grip) {
                   grip.translate(pageOffset);
                   score()->addRefresh(grip.adjusted(-dx, -dy, dx, dy));
                   }
 
-            QPointF anchor = (editData.curGrip != Grip::NO_GRIP) ? editData.element->gripAnchor(editData.curGrip) : QPointF();
-            if (!anchor.isNull())
-                  setDropAnchor(QLineF(anchor + pageOffset, editData.grip[int(editData.curGrip)].center()));
+            const Grip anchorLinesGrip = editData.curGrip == Grip::NO_GRIP ? editData.element->defaultGrip() : editData.curGrip;
+            QVector<QLineF> anchorLines = editData.element->gripAnchorLines(anchorLinesGrip);
+
+            if (!anchorLines.isEmpty()) {
+                  for (QLineF& l : anchorLines)
+                        l.translate(pageOffset);
+                  setDropAnchorLines(anchorLines);
+                  }
             else
                   setDropTarget(0); // this also resets dropAnchor
             }

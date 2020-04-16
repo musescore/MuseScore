@@ -170,7 +170,7 @@ class FretDiagram final : public Element {
       void writeOld(XmlWriter& xml) const;
       void read(XmlReader&) override;
       void readNew(XmlReader&);
-      QLineF dragAnchor() const override;
+      QVector<QLineF> dragAnchorLines() const override;
       QPointF pagePos() const override;
 
       // read / write MusicXML

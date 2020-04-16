@@ -87,46 +87,89 @@ std::vector<QPointF> LineSegment::gripsPositions(const EditData&) const
       }
 
 //---------------------------------------------------------
-//   gripAnchor
+//   leftAnchorPosition
+//---------------------------------------------------------
+
+QPointF LineSegment::leftAnchorPosition(const qreal& systemPositionY) const
+      {
+
+      if (isMiddleType() || isEndType())
+            return QPointF(system()->firstMeasure()->abbox().left(), systemPositionY);
+
+      QPointF result;
+
+      System* s;
+      result = line()->linePos(Grip::START, &s);
+      result.ry() += systemPositionY - system()->pos().y();
+
+      if (s)
+            result += s->pos();  // to page coordinates
+
+      return result;
+      }
+
+//---------------------------------------------------------
+//   rightAnchorPosition
+//---------------------------------------------------------
+
+QPointF LineSegment::rightAnchorPosition(const qreal& systemPositionY) const
+    {
+
+    if (isMiddleType() || isBeginType())
+          return QPointF(system()->lastMeasure()->abbox().right(), systemPositionY);
+
+    QPointF result;
+
+    System* s;
+    result = line()->linePos(Grip::END, &s);
+    result.ry() += systemPositionY - system()->pos().y();
+
+    if (s)
+          result += s->pos();  // to page coordinates
+
+    return result;
+    }
+
+//---------------------------------------------------------
+//   gripAnchorLines
 //    return page coordinates
 //---------------------------------------------------------
 
-QPointF LineSegment::gripAnchor(Grip grip) const
+QVector<QLineF> LineSegment::gripAnchorLines(Grip grip) const
       {
+      QVector<QLineF> result;
+
       // Middle or aperture grip have no anchor
-      if (!system() || grip == Grip::MIDDLE || grip == Grip::APERTURE)
-            return QPointF(0, 0);
+      if (!system() || grip == Grip::APERTURE)
+            return result;
+
       // note-anchored spanners are relative to the system
-      qreal y = spanner()->anchor() == Spanner::Anchor::NOTE ?
-                  system()->pos().y() : system()->staffYpage(staffIdx());
-      if (isMiddleType()) {
-            qreal x;
-            switch (grip) {
-                  case Grip::START:
-                        x = system()->firstMeasure()->abbox().left();
-                        break;
-                  case Grip::END:
-                        x = system()->lastMeasure()->abbox().right();
-                        break;
-                  default:
-                        x = 0; // No Anchor
-                        y = 0;
-                        break;
-                  }
-            return QPointF(x, y);
-            }
+      qreal y;
+      if (spanner()->anchor() == Spanner::Anchor::NOTE)
+            y = system()->pos().y();
       else {
-            if ((grip == Grip::END && isBeginType()) || (grip == Grip::START && isEndType()))
-                  return QPointF(0, 0);
-            else {
-                  System* s;
-                  QPointF p(line()->linePos(grip, &s));
-                  p.ry() += y - system()->pos().y();
-                  if (s)
-                        p += s->pos();    // to page coordinates
-                  return p;
-                  }
+            const int stIdx = staffIdx();
+            y = system()->staffYpage(stIdx);
+            if (line()->placement() == Placement::BELOW)
+                  y += system()->staff(stIdx)->bbox().height();
             }
+
+      switch (grip) {
+      case Grip::START:
+            result << QLineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START)));
+            break;
+      case Grip::END:
+            result << QLineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END)));
+            break;
+      case Grip::MIDDLE:
+            result << QLineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START)));
+            result << QLineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END)));
+            break;
+      default:
+            break;
+            }
+
+      return result;
       }
 
 //---------------------------------------------------------
@@ -416,18 +459,12 @@ Element* LineSegment::propertyDelegate(Pid pid)
       }
 
 //---------------------------------------------------------
-//   dragAnchor
+//   dragAnchorLines
 //---------------------------------------------------------
 
-QLineF LineSegment::dragAnchor() const
+QVector<QLineF> LineSegment::dragAnchorLines() const
       {
-      if (spannerSegmentType() != SpannerSegmentType::SINGLE && spannerSegmentType() != SpannerSegmentType::BEGIN)
-            return QLineF();
-      System* s;
-      QPointF p = line()->linePos(Grip::START, &s);
-      p += QPointF(s->canvasPos().x(), s->staffCanvasYpage(line()->staffIdx()));
-
-      return QLineF(p, canvasPos());
+      return gripAnchorLines(Grip::MIDDLE);
       }
 
 //---------------------------------------------------------
