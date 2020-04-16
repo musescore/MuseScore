@@ -213,6 +213,7 @@ subdirs (
 #        libmscore/text        work in progress...
         libmscore/utils
         mscore/workspaces
+        importmidi
         capella
         biab
         musicxml
