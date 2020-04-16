@@ -200,6 +200,10 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
                   detailedMsg = MScore::lastError;
                   canIgnore = true;
                   break;
+            case Score::FileError::FILE_CRITICALLY_CORRUPTED:
+                  msg = QObject::tr("File \"%1\" is critically corrupted and cannot be processed.").arg(name);
+                  detailedMsg = MScore::lastError;
+                  break;
             case Score::FileError::FILE_OLD_300_FORMAT:
                   msg += QObject::tr("It was last saved with a developer version of 3.0.\n");
                   canIgnore = true;

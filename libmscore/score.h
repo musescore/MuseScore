@@ -411,6 +411,7 @@ class Score : public QObject, public ScoreElement {
             FILE_TOO_NEW,
             FILE_OLD_300_FORMAT,
             FILE_CORRUPTED,
+            FILE_CRITICALLY_CORRUPTED,
             FILE_USER_ABORT,
             FILE_IGNORE_ERROR
             };
