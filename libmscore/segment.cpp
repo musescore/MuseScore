@@ -293,6 +293,21 @@ Segment* Segment::next(SegmentType types) const
       }
 
 //---------------------------------------------------------
+//   nextInStaff
+///   Returns next \c Segment in the staff with given index
+//---------------------------------------------------------
+
+Segment* Segment::nextInStaff(int staffIdx, SegmentType type) const
+      {
+      Segment* s = next(type);
+      const int minTrack = staffIdx * VOICES;
+      const int maxTrack = (staffIdx + 1) * VOICES - 1;
+      while (s && !s->hasElements(minTrack, maxTrack))
+            s = s->next(type);
+      return s;
+      }
+
+//---------------------------------------------------------
 //   prev
 //    got to previous segment which has subtype in types
 //---------------------------------------------------------
@@ -911,6 +926,49 @@ bool Segment::setProperty(Pid propertyId, const QVariant& v)
       }
 
 //---------------------------------------------------------
+//   widthInStaff
+//---------------------------------------------------------
+
+qreal Segment::widthInStaff(int staffIdx, SegmentType t) const
+      {
+      const qreal segX = x();
+      qreal nextSegX = segX;
+
+      Segment* nextSeg = nextInStaff(staffIdx, t);
+      if (nextSeg)
+            nextSegX = nextSeg->x();
+      else {
+            Segment* lastSeg = measure()->last();
+            if (lastSeg->segmentType() & t)
+                  nextSegX = lastSeg->x() + lastSeg->width();
+            else
+                  nextSegX = lastSeg->x();
+            }
+
+      return nextSegX - segX;
+      }
+
+//---------------------------------------------------------
+//   ticksInStaff
+//---------------------------------------------------------
+
+Fraction Segment::ticksInStaff(int staffIdx) const
+      {
+      const Fraction segTick = tick();
+      Fraction nextSegTick = segTick;
+
+      Segment* nextSeg = nextInStaff(staffIdx, durationSegmentsMask);
+      if (nextSeg)
+            nextSegTick = nextSeg->tick();
+      else {
+            Segment* lastSeg = measure()->last();
+            nextSegTick = lastSeg->tick() + lastSeg->ticks();
+            }
+
+      return nextSegTick - segTick;
+      }
+
+//---------------------------------------------------------
 //   splitsTuplet
 //---------------------------------------------------------
 
@@ -982,6 +1040,19 @@ bool Segment::hasElements() const
       }
 
 //---------------------------------------------------------
+//   hasElements
+///  return true if an annotation of type type or and element is found in the track range
+//---------------------------------------------------------
+
+bool Segment::hasElements(int minTrack, int maxTrack) const
+      {
+      for (int curTrack = minTrack; curTrack <= maxTrack; curTrack++)
+            if (element(curTrack))
+                  return true;
+      return false;
+      }
+
+//---------------------------------------------------------
 //   hasAnnotationOrElement
 ///  return true if an annotation of type type or and element is found in the track range
 //---------------------------------------------------------
@@ -991,10 +1062,7 @@ bool Segment::hasAnnotationOrElement(ElementType type, int minTrack, int maxTrac
       for (const Element* e : _annotations)
             if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack)
                   return true;
-      for (int curTrack = minTrack; curTrack <= maxTrack; curTrack++)
-            if (element(curTrack))
-                  return true;
-      return false;
+      return hasElements(minTrack, maxTrack);
       }
 
 //---------------------------------------------------------

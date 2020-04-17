@@ -553,19 +553,6 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
       }
 
 //---------------------------------------------------------
-//   validSegment
-//---------------------------------------------------------
-
-static bool validSegment(Segment* s, int startTrack, int endTrack)
-      {
-      for (int track = startTrack; track < endTrack; ++track) {
-            if (s->element(track))
-                  return true;
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
 //   pos2measure
 //     Return measure for canvas relative position \a p.
 //---------------------------------------------------------
@@ -579,34 +566,7 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
       System* s = m->system();
       qreal y   = p.y() - s->canvasPos().y();
 
-      int i = 0;
-      for (; i < nstaves();) {
-            SysStaff* stff = s->staff(i);
-            if (!stff->show() || !staff(i)->show()) {
-                  ++i;
-                  continue;
-                  }
-            int ni = i;
-            for (;;) {
-                  ++ni;
-                  if (ni == nstaves() || (s->staff(ni)->show() && staff(ni)->show()))
-                        break;
-                  }
-
-            qreal sy2;
-            if (ni != nstaves()) {
-                  SysStaff* nstaff = s->staff(ni);
-                  qreal s1y2 = stff->bbox().y() + stff->bbox().height();
-                  sy2 = s1y2 + (nstaff->bbox().y() - s1y2)/2;
-                  }
-            else
-                  sy2 = s->page()->height() - s->pos().y();   // s->height();
-            if (y > sy2) {
-                  i   = ni;
-                  continue;
-                  }
-            break;
-            }
+      const int i = s->searchStaff(y);
 
       // search for segment + offset
       QPointF pppp = p - m->canvasPos();
@@ -616,31 +576,24 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
 //      int etrack = staff(i)->part()->nstaves() * VOICES + strack;
       int etrack = VOICES + strack;
 
-      SysStaff* sstaff = m->system()->staff(i);
-      SegmentType st = SegmentType::ChordRest;
-      for (Segment* segment = m->first(st); segment; segment = segment->next(st)) {
-            if (!validSegment(segment, strack, etrack))
-                  continue;
-            Segment* ns = segment->next(st);
-            for (; ns; ns = ns->next(st)) {
-                  if (validSegment(ns, strack, etrack))
-                        break;
+      constexpr SegmentType st = SegmentType::ChordRest;
+      Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack);
+      if (segment) {
+            SysStaff* sstaff = m->system()->staff(i);
+            *rst = i;
+            if (pitch) {
+                  Staff* s1 = _staves[i];
+                  Fraction tick  = segment->tick();
+                  ClefType clef = s1->clef(tick);
+                  *pitch = y2pitch(pppp.y() - sstaff->bbox().y(), clef, s1->spatium(tick));
                   }
-            if (!ns || (pppp.x() < (segment->x() + (ns->x() - segment->x())/2.0))) {
-                  *rst = i;
-                  if (pitch) {
-                        Staff* s1 = _staves[i];
-                        Fraction tick  = segment->tick();
-                        ClefType clef = s1->clef(tick);
-                        *pitch = y2pitch(pppp.y() - sstaff->bbox().y(), clef, s1->spatium(tick));
-                        }
-                  if (offset)
-                        *offset = pppp - QPointF(segment->x(), sstaff->bbox().y());
-                  if (seg)
-                        *seg = segment;
-                  return m;
-                  }
+            if (offset)
+                  *offset = pppp - QPointF(segment->x(), sstaff->bbox().y());
+            if (seg)
+                  *seg = segment;
+            return m;
             }
+
       return 0;
       }
 
@@ -653,92 +606,33 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
 ///              \b output: new segment for drag position
 //---------------------------------------------------------
 
-void Score::dragPosition(const QPointF& p, int* rst, Segment** seg) const
+void Score::dragPosition(const QPointF& p, int* rst, Segment** seg, qreal spacingFactor) const
       {
-      Measure* m = searchMeasure(p);
+      const System* preferredSystem = (*seg) ? (*seg)->system() : nullptr;
+      Measure* m = searchMeasure(p, preferredSystem, spacingFactor);
       if (m == 0)
             return;
 
       System* s = m->system();
       qreal y   = p.y() - s->canvasPos().y();
 
-      int i;
-      for (i = 0; i < nstaves();) {
-            SysStaff* stff = s->staff(i);
-            if (!stff->show() || !staff(i)->show()) {
-                  ++i;
-                  continue;
-                  }
-            int ni = i;
-            for (;;) {
-                  ++ni;
-                  if (ni == nstaves() || (s->staff(ni)->show() && staff(ni)->show()))
-                        break;
-                  }
-
-            qreal sy2;
-            if (ni != nstaves()) {
-                  SysStaff* nstaff = s->staff(ni);
-                  qreal s1y2       = stff->bbox().y() + stff->bbox().height();
-                  if (i == *rst)
-                        sy2 = s1y2 + (nstaff->bbox().y() - s1y2);
-                  else if (ni == *rst)
-                        sy2 = s1y2;
-                  else
-                        sy2 = s1y2 + (nstaff->bbox().y() - s1y2) * .5;
-                  }
-            else
-                  sy2 = s->page()->height() - s->pos().y();
-            if (y > sy2) {
-                  i   = ni;
-                  continue;
-                  }
-            break;
-            }
+      const int i = s->searchStaff(y, *rst, spacingFactor);
 
       // search for segment + offset
       QPointF pppp = p - m->canvasPos();
-      int strack   = i * VOICES;
+      int strack = staff2track(i);
       if (!staff(i))
             return;
-      int etrack = staff(i)->part()->nstaves() * VOICES + strack;
+      int etrack = staff2track(i + 1);
 
-      SegmentType st = SegmentType::ChordRest;
-      for (Segment* segment = m->first(st); segment; segment = segment->next(st)) {
-            if (!validSegment(segment, strack, etrack))
-                  continue;
-            Segment* ns = segment->next(st);
-            for (; ns; ns = ns->next(st)) {
-                  if (validSegment(ns, strack, etrack))
-                        break;
-                  }
-            if (!ns) {
-                  *rst = i;
-                  *seg = segment;
-                  return;
-                  }
-            if (*seg == segment) {
-                  if (pppp.x() < (segment->x() + (ns->x() - segment->x()))) {
-                        *rst = i;
-                        *seg = segment;
-                        return;
-                        }
-                  }
-            else if (*seg == ns) {
-                  if (pppp.x() <= segment->x()) {
-                        *rst = i;
-                        *seg = segment;
-                        return;
-                        }
-                  }
-            else {
-                  if (pppp.x() < (segment->x() + (ns->x() - segment->x())/2.0)) {
-                        *rst = i;
-                        *seg = segment;
-                        return;
-                        }
-                  }
+      constexpr SegmentType st = SegmentType::ChordRest;
+      Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack, *seg, spacingFactor);
+      if (segment) {
+            *rst = i;
+            *seg = segment;
+            return;
             }
+
       return;
       }
 
@@ -1004,12 +898,16 @@ Page* Score::searchPage(const QPointF& p) const
 
 //---------------------------------------------------------
 //   searchSystem
-//    return list of systems as there may be more than
-//    one system in a row
-//    p is in canvas coordinates
+///   Returns list of systems as there may be more than
+///   one system in a row
+///   \param pos Position in canvas coordinates
+///   \param preferredSystem If not nullptr, will give more
+///   space to the given system when searching it by its
+///   coordinate.
+///   \returns List of found systems.
 //---------------------------------------------------------
 
-QList<System*> Score::searchSystem(const QPointF& pos) const
+QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSystem, qreal spacingFactor) const
       {
       QList<System*> systems;
       Page* page = searchPage(pos);
@@ -1032,7 +930,12 @@ QList<System*> Score::searchSystem(const QPointF& pos) const
                   y2 = page->height();
             else {
                   qreal sy2 = s->y() + s->bbox().height();
-                  y2         = sy2 + (ns->y() - sy2) * .5;
+                  if (s == preferredSystem)
+                        y2 = ns->y();
+                  else if (ns == preferredSystem)
+                        y2 = sy2;
+                  else
+                        y2 = sy2 + (ns->y() - sy2) * spacingFactor;
                   }
             if (y < y2) {
                   systems.append(s);
@@ -1049,12 +952,14 @@ QList<System*> Score::searchSystem(const QPointF& pos) const
 
 //---------------------------------------------------------
 //   searchMeasure
-//    p is in canvas coordinates
+///   \param p Position in canvas coordinates
+///   \param preferredSystem If not nullptr, will give more
+///   space to measures in this system when searching.
 //---------------------------------------------------------
 
-Measure* Score::searchMeasure(const QPointF& p) const
+Measure* Score::searchMeasure(const QPointF& p, const System* preferredSystem, qreal spacingFactor) const
       {
-      QList<System*> systems = searchSystem(p);
+      QList<System*> systems = searchSystem(p, preferredSystem, spacingFactor);
       for (System* system : systems) {
             qreal x = p.x() - system->canvasPos().x();
             for (MeasureBase* mb : system->measures()) {

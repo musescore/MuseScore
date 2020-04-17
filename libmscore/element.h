@@ -13,6 +13,7 @@
 #ifndef __ELEMENT_H__
 #define __ELEMENT_H__
 
+#include "elementgroup.h"
 #include "spatium.h"
 #include "fraction.h"
 #include "scoreElement.h"
@@ -120,9 +121,12 @@ class EditData {
 
       QPointF pos;
       QPointF startMove;
+      QPointF normalizedStartMove; ///< Introduced for transition of drag logic. Don't use in new code.
       QPoint  startMovePixel;
       QPointF lastPos;
-      QPointF delta;
+      QPointF delta; ///< This property is deprecated, use evtDelta or moveDelta instead. In normal drag equals to moveDelta, in edit drag - to evtDelta
+      QPointF evtDelta; ///< Mouse offset for the last mouse move event
+      QPointF moveDelta; ///< Mouse offset from the start of mouse move
       bool hRaster                     { false };
       bool vRaster                     { false };
 
@@ -249,6 +253,9 @@ class Element : public ScoreElement {
       qreal pageX() const;
       qreal canvasX() const;
 
+      QPointF mapFromCanvas(const QPointF& p) const { return p - canvasPos(); }
+      QPointF mapToCanvas(const QPointF& p) const { return p + canvasPos(); }
+
       const QPointF& offset() const               { return _offset;  }
       virtual void setOffset(const QPointF& o)    { _offset = o;     }
       void setOffset(qreal x, qreal y)            { _offset.rx() = x, _offset.ry() = y; }
@@ -292,6 +299,9 @@ class Element : public ScoreElement {
 
       virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
+
+//       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
+      virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const Element*)> isDragged) { Q_UNUSED(isDragged); return std::unique_ptr<ElementGroup>(new SingleElementGroup(this)); }
 
       virtual void startDrag(EditData&);
       virtual QRectF drag(EditData&);
@@ -535,6 +545,7 @@ class ElementEditData {
    public:
       Element* e;
       QList<PropertyData> propertyData;
+      QPointF initOffset; ///< for dragging: difference between actual offset and editData.moveDelta
 
       virtual ~ElementEditData() = default;
       void pushProperty(Pid pid) { propertyData.push_back(PropertyData({ pid, e->getProperty(pid), e->propertyFlags(pid) })); }

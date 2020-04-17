@@ -603,7 +603,7 @@ Element* Box::drop(EditData& data)
 QRectF HBox::drag(EditData& data)
       {
       QRectF r(canvasBoundingRect());
-      qreal diff = data.delta.x();
+      qreal diff = data.evtDelta.x();
       qreal x1   = offset().x() + diff;
       if (parent()->type() == ElementType::VBOX) {
             VBox* vb = toVBox(parent());

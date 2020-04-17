@@ -37,6 +37,7 @@ class LineSegment : public SpannerSegment {
       virtual bool edit(EditData&) override;
       QVector<QLineF> gripAnchorLines(Grip) const override;
       virtual void startEditDrag(EditData&) override;
+      void startDrag(EditData&) override;
 
    public:
       LineSegment(Spanner* sp, Score* s, ElementFlags f = ElementFlag::NOTHING) : SpannerSegment(sp, s, f) {}
@@ -60,9 +61,17 @@ class LineSegment : public SpannerSegment {
       std::vector<QPointF> gripsPositions(const EditData& = EditData()) const override;
 
       virtual QVector<QLineF> dragAnchorLines() const override;
+      QRectF drag(EditData &ed) override;
 private:
       QPointF leftAnchorPosition(const qreal& systemPositionY) const;
       QPointF rightAnchorPosition(const qreal& systemPositionY) const;
+
+      Segment* findSegmentForGrip(Grip grip, QPointF pos) const;
+      static QPointF deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg);
+      static QPointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, int staffIdx);
+      static Fraction lastSegmentEndTick(const Segment* lastSeg, const Spanner* s);
+      LineSegment* rebaseAnchor(Grip grip, Segment* newSeg);
+      void rebaseAnchors(EditData&, Grip);
       };
 
 //---------------------------------------------------------

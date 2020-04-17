@@ -118,7 +118,10 @@ void ScoreView::startEdit(Element* element, Grip startGrip)
             return;
             }
 
-      const bool forceStartEdit = (state == ViewState::EDIT && element != editData.element);
+      const bool forceStartEdit = (
+         (state == ViewState::EDIT || state == ViewState::DRAG_EDIT)
+         && element != editData.element
+         );
       editData.element = element;
       if (forceStartEdit) // call startEdit() forcibly to reinitialize edit mode.
             startEdit();
@@ -198,6 +201,9 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
                   editData.pos.setY(editData.lastPos.y());
             }
       editData.delta = editData.pos - editData.lastPos;
+      editData.evtDelta = editData.pos - editData.lastPos;
+      editData.moveDelta = editData.pos - editData.startMove;
+
       score()->addRefresh(editData.element->canvasBoundingRect());
 
       if (editData.element->isTextBase()) {
@@ -237,9 +243,9 @@ void ScoreView::endDragEdit()
 
       editData.element->endEditDrag(editData);
       score()->endCmd();            // calls update()
-      updateGrips();
       _score->addRefresh(editData.element->canvasBoundingRect());
       setDropTarget(0);
+      updateGrips();
       _score->rebuildBspTree();
       }
 }

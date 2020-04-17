@@ -135,7 +135,7 @@ Segment* Score::tick2segment(const Fraction& t, bool first, SegmentType st, bool
       if (useMMrest) {
             m = tick2measureMM(tick);
             // When mmRest force tick to the first segment of mmRest.
-            if (m && m->isMMRest())
+            if (m && m->isMMRest() && tick != m->endTick())
                   tick = m->tick();
             }
       else
