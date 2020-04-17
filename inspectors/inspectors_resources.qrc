@@ -115,5 +115,6 @@
         <file>view/qml/general/appearance/internal/ColorSection.qml</file>
         <file>view/qml/general/appearance/internal/VerticalSpacingSection.qml</file>
         <file>view/qml/common/ColorPicker.qml</file>
+        <file>resources/icons/question_mark.svg</file>
     </qresource>
 </RCC>
