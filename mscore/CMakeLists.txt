@@ -440,8 +440,6 @@ add_library(mscoreapp STATIC
       sparkle/autoUpdater.h sparkle/sparkleAutoUpdater.h sparkle/winSparkleAutoUpdater.h
       )
 
-
-
 if (MSVC OR MINGW)
 	target_link_libraries(mscoreapp vorbisfiledll)
 else (MSVC OR MINGW)
