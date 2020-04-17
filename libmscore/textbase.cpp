@@ -2477,7 +2477,7 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
       }
 
 //---------------------------------------------------------
-//   offsetTid
+//   offsetSid
 //---------------------------------------------------------
 
 Sid TextBase::offsetSid() const
