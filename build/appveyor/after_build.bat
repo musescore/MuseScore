@@ -121,14 +121,14 @@ IF DEFINED ENCRYPT_SECRET_SSH (
   scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% %ARTIFACT_NAME% musescore-nightlies@ftp-osl.osuosl.org:~/ftp/windows/
   ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/windows; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
   rem create and upload index.html and RSS
-  python build/appveyor/updateHTML.py %SSH_IDENTITY%
+  python3 build/appveyor/updateHTML.py %SSH_IDENTITY%
   scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% build/appveyor/web/index.html musescore-nightlies@ftp-osl.osuosl.org:ftp/windows
   scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% build/appveyor/web/nightly.xml musescore-nightlies@ftp-osl.osuosl.org:ftp/windows
   rem trigger distribution
   ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
   rem notify IRC channel
-  pip install irc
-  python build/appveyor/irccat.py "%APPVEYOR_REPO_BRANCH%-%MSREVISION% (Win) compiled successfully https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%"
+  pip3 install irc
+  python3 build/appveyor/irccat.py "%APPVEYOR_REPO_BRANCH%-%MSREVISION% (Win) compiled successfully https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%"
   )
 
 
