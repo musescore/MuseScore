@@ -5,6 +5,10 @@ import QtQuick.Dialogs 1.2
 Rectangle {
     id: root
 
+    property bool isIndeterminate: false
+
+    signal newColorSelected(var newColor)
+
     height: 26
     width: parent.width
     radius: 2
@@ -19,7 +23,19 @@ Rectangle {
         radius: 2
         color: "transparent"
         border.width: 1
-        border.color: globalStyle.button
+    }
+
+    StyledIcon {
+        anchors.centerIn: parent
+
+        icon: "qrc:/resources/icons/question_mark.svg"
+
+        pixelSize: 12
+
+        sourceSize.height: 12
+        sourceSize.width: 12
+
+        visible: isIndeterminate
     }
 
     MouseArea {
@@ -41,11 +57,18 @@ Rectangle {
         modality: Qt.ApplicationModal
 
         onAccepted: {
-            root.color = colorDialog.color
+            root.newColorSelected(colorDialog.color)
         }
     }
 
     states: [
+        State {
+            name: "NORMAL"
+            when: !cliickableArea.containsMouse && !colorDialog.visible
+
+            PropertyChanges { target: backgroundRect; border.color: globalStyle.button }
+        },
+
         State {
             name: "HOVERED"
             when: cliickableArea.containsMouse && !cliickableArea.pressed && !colorDialog.visible
