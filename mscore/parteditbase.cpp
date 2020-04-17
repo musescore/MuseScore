@@ -25,7 +25,7 @@
 #include "seq.h"
 #include "libmscore/undo.h"
 #include "synthcontrol.h"
-#include "synthesizer/msynthesizer.h"
+#include "audio/midi/msynthesizer.h"
 #include "preferences.h"
 #include <qmessagebox.h>
 #include <accessibletoolbutton.h>

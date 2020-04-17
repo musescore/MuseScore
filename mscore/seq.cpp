@@ -21,7 +21,7 @@
 #include "seq.h"
 #include "musescore.h"
 
-#include "synthesizer/msynthesizer.h"
+#include "audio/midi/msynthesizer.h"
 #include "libmscore/rendermidi.h"
 #include "libmscore/slur.h"
 #include "libmscore/tie.h"

@@ -13,14 +13,16 @@
 #ifndef __INSTRUMENT_H__
 #define __INSTRUMENT_H__
 
+#include <QtGlobal>
+#include <QString>
+
 #include "stringdata.h"
 #include "mscore.h"
 #include "notifier.hpp"
-#include "synthesizer/event.h"
 #include "interval.h"
 #include "clef.h"
-#include <QtGlobal>
-#include <QString>
+
+#include "audio/midi/event.h"
 
 namespace Ms {
 

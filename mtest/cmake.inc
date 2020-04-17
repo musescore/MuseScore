@@ -28,8 +28,7 @@ target_link_libraries(
       ${QT_QTTEST_LIBRARY}
       testResources
       libmscore
-      synthesizer
-      midi
+      audio
       qzip
       z
       )

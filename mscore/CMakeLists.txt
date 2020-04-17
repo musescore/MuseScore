@@ -238,38 +238,6 @@ else (APPLE)
             shortcut.qrc)
 endif (APPLE)
 
-
-set (AUDIO "")
-if ( NOT MINGW AND NOT MSVC )
-      if (USE_ALSA)
-            set (AUDIO ${AUDIO} alsa.cpp)
-      endif (USE_ALSA)
-endif ( NOT MINGW AND NOT MSVC )
-
-if (USE_PORTAUDIO)
-      set (AUDIO ${AUDIO} pa.cpp)
-endif (USE_PORTAUDIO)
-
-if (USE_PULSEAUDIO)
-      set (AUDIO ${AUDIO} pulseaudio.cpp)
-endif (USE_PULSEAUDIO)
-
-if (USE_PORTMIDI)
-      set (AUDIO ${AUDIO} pm.cpp)
-endif (USE_PORTMIDI)
-
-if (USE_LAME)
-      set (AUDIO ${AUDIO} exportmp3.cpp)
-endif (USE_LAME)
-
-if (USE_JACK)
-      set (AUDIO ${AUDIO} jackaudio.cpp jackweakapi.cpp)
-endif (USE_JACK)
-
-if (USE_ALSA OR USE_PORTMIDI)
-      set (AUDIO ${AUDIO} mididriver.cpp)
-endif (USE_ALSA OR USE_PORTMIDI)
-
 if (${CMAKE_SYSTEM} MATCHES "GNU-0.3")
       # Include some cmake support file
       INCLUDE (Platform/GNU)
@@ -314,24 +282,24 @@ add_library(mscoreapp STATIC
       ${INCS}
 
       abstractdialog.h accessibletoolbutton.h albummanager.h
-      alsa.h alsamidi.h analyse.h articulationprop.h
+      analyse.h articulationprop.h
       bendcanvas.h breaksdialog.h
       chordview.h click.h continuouspanel.h downloadUtils.h
-      driver.h drumroll.h drumtools.h drumview.h editdrumset.h
+      drumroll.h drumtools.h drumview.h editdrumset.h
       editinstrument.h editpitch.h editraster.h editstaff.h
       editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
-      exampleview.h excerptsdialog.h exportmp3.h extension.h
+      exampleview.h excerptsdialog.h extension.h
       file.h fotomode.h fretcanvas.h globals.h greendotbutton.h
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h
-      instrdialog.h instrwidget.h jackaudio.h
+      instrdialog.h instrwidget.h
       keycanvas.h keyedit.h layer.h licence.h
       logindialog.h network/loginmanager.h network/loginmanager_p.h
       magbox.h masterpalette.h
-      measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h
+      measureproperties.h mediadialog.h metaedit.h miconengine.h
       musescore.h navigator.h newwizard.h noteGroups.h
-      omrpanel.h pa.h pagesettings.h palette.h partedit.h parteditbase.h
+      omrpanel.h pagesettings.h palette.h partedit.h parteditbase.h
       pathlistdialog.h piano.h  pianotools.h
-      playpanel.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h
+      playpanel.h preferences.h preferenceslistwidget.h prefsdialog.h
       recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
       selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h
@@ -427,7 +395,6 @@ add_library(mscoreapp STATIC
       editelement.cpp
       editlyrics.cpp
       savePositions.cpp
-      driver.cpp
       noteGroups.cpp
       pathlistdialog.cpp
       exampleview.cpp
@@ -466,10 +433,8 @@ add_library(mscoreapp STATIC
       ${WIDGETS_SOURCE_FILES}
       ${COCOABRIDGE}
       ${OMR_FILES}
-      ${AUDIO}
       ${SCRIPT_FILES}
       ${MAC_SPARKLE_FILES}
-      driver.h
       tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
 
       sparkle/autoUpdater.h sparkle/sparkleAutoUpdater.h sparkle/winSparkleAutoUpdater.h
@@ -486,8 +451,7 @@ endif (MSVC OR MINGW)
 target_link_libraries(mscoreapp
       awl
       ${QTSINGLEAPPLICATION_LIBRARIES}
-      synthesizer
-      fluid
+      audio
       effects
       libmscore
       qzip
@@ -507,9 +471,6 @@ if (USE_SYSTEM_FREETYPE)
       target_link_libraries(mscoreapp ${FREETYPE_LIBRARIES})
 endif (USE_SYSTEM_FREETYPE)
 
-if (ZERBERUS)
-      target_link_libraries(mscoreapp zerberus synthesizer)
-endif (ZERBERUS)
 if (AEOLUS)
       target_link_libraries(mscoreapp aeolus)
 endif (AEOLUS)

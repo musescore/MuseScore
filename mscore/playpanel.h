@@ -22,7 +22,7 @@
 
 #include "ui_playpanel.h"
 #include "enableplayforwidget.h"
-
+#include "iplaypanel.h"
 
 namespace Ms {
 
@@ -32,7 +32,7 @@ class Score;
 //   PlayPanel
 //---------------------------------------------------------
 
-class PlayPanel : public QDockWidget, private Ui::PlayPanelBase {
+class PlayPanel : public QDockWidget, private Ui::PlayPanelBase, public IPlayPanel {
       Q_OBJECT
       int cachedTickPosition;
       int cachedTimePosition;
@@ -77,12 +77,12 @@ class PlayPanel : public QDockWidget, private Ui::PlayPanelBase {
       PlayPanel(QWidget* parent = 0);
       ~PlayPanel();
 
-      void setTempo(double);
-      void setRelTempo(qreal);
+      void setTempo(double) override;
+      void setRelTempo(qreal) override;
 
       void setEndpos(int);
       void setScore(Score* s);
-      bool isTempoSliderPressed() {return tempoSliderIsPressed;}
+      bool isTempoSliderPressed() const override { return tempoSliderIsPressed; }
       };
 
 

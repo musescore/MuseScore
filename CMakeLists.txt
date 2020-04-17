@@ -812,10 +812,11 @@ configure_file (
 ## Add subdirs
 ##
 add_subdirectory(effects)
-add_subdirectory(synthesizer)
+add_subdirectory(audio)
+add_subdirectory(audiofile)
 
 subdirs(
-      awl bww2mxml share midi audiofile fluid libmscore
+      awl bww2mxml share libmscore
       thirdparty/qzip
       )
 
@@ -845,10 +846,6 @@ endif (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
 if (AEOLUS)
       add_subdirectory(aeolus)
 endif (AEOLUS)
-
-if (ZERBERUS)
-      add_subdirectory(zerberus)
-endif (ZERBERUS)
 
 if (AVSOMR)
     add_subdirectory(avsomr)
