@@ -83,7 +83,7 @@ if (SCRIPT_INTERFACE)
             )
 
       set (SCRIPT_UI
-            plugin/pluginCreator.ui plugin/pluginManager.ui
+            plugin/pluginCreator.ui
             )
 endif (SCRIPT_INTERFACE)
 
@@ -427,6 +427,7 @@ add_library(mscoreapp STATIC
       script/script.cpp script/scriptentry.cpp script/testscript.cpp script/recorderwidget.cpp
       qml/msqmlengine.cpp qml/nativemenu.cpp qml/nativetooltip.cpp
       qmldockwidget.cpp
+      plugin/pluginUpdater.cpp plugin/pluginUpdater.h
 
       ${CLOUD_SRC}
       ${MSCORE_MIXER_SRC}

@@ -24,16 +24,48 @@ extern QString dataPath;
 extern QString mscoreGlobalShare;
 extern QString localeName;
 
+bool ResourceManager::firstLaunch = true;
+
 ResourceManager::ResourceManager(QWidget *parent) :
       QDialog(parent)
       {
       setObjectName("ResourceManager");
       setupUi(this);
+      connect(checkUpdate, SIGNAL(clicked()), this, SLOT(scanPluginUpdate()));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
       dir.mkpath(dataPath + "/locale");
-      displayExtensions();
-      displayLanguages();
+      /* Here, a large max thread count is reasonable, even if it exceeds the CPU thread count. 
+         That's because many threads are needed for various jobs, as shown in class PluginWorker, 
+         and a thread doesn't cost much most of the time(it just blocks until the download finishes) */
+      workerThreads.setMaxThreadCount(10);
+      // display "loading" in extensionsTable
+      extensionsTable->setRowCount(1);
+      extensionsTable->setSpan(0, 0, 1, extensionsTable->columnCount());
+      extensionsTable->setItem(0, 0, new QTableWidgetItem(tr("Loading…")));
+      PluginWorker* worker = new PluginWorker(this);
+      QtConcurrent::run(&workerThreads, worker, &PluginWorker::fetchExtensions);
+      // display "loading" in languagesTable
+      languagesTable->setRowCount(1);
+      languagesTable->setSpan(0, 0, 1, languagesTable->columnCount());
+      languagesTable->setItem(0, 0, new QTableWidgetItem(tr("Loading…")));
+      worker = new PluginWorker(this);
+      QtConcurrent::run(&workerThreads, worker, &PluginWorker::fetchLanguages);
+      // display "loading" in pluginsTable
+      pluginsTable->setRowCount(1);
+      pluginsTable->setSpan(0, 0, 1, pluginsTable->columnCount());
+      pluginsTable->setItem(0, 0, new QTableWidgetItem(tr("Loading…")));
+      worker = new PluginWorker(this);
+      QtConcurrent::run(&workerThreads, worker, &PluginWorker::fetchPluginRepo);
+      // plugin manager's display
+      mscore->getPluginManager()->setupUI(pluginName, pluginPath, pluginVersion, pluginShortcut, pluginDescription,
+            pluginTreeWidget, label_shortcut, label_version, definePluginShortcut, clearPluginShortcut);
+      mscore->getPluginManager()->init();
+      QObject::connect(definePluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(definePluginShortcutClicked()));
+      QObject::connect(clearPluginShortcut, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(clearPluginShortcutClicked()));
+      QObject::connect(reloadPlugins, SIGNAL(clicked()), mscore->getPluginManager(), SLOT(reloadPluginsClicked()));
+      QObject::connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(filterPluginList()));
+      QObject::connect(categories, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ResourceManager::filterPluginList);
       languagesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
       languagesTable->verticalHeader()->hide();
       extensionsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -42,6 +74,8 @@ ResourceManager::ResourceManager(QWidget *parent) :
       extensionsTable->verticalHeader()->hide();
       extensionsTable->setColumnWidth(1, 50);
       extensionsTable->setColumnWidth(1, 100);
+      pluginsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+      pluginsTable->verticalHeader()->hide();
       MuseScore::restoreGeometry(this);
       }
 
@@ -85,6 +119,7 @@ bool LanguageFileSize::operator<(const QTableWidgetItem& nextItem) const
       return getSize() < static_cast<const LanguageFileSize&>(nextItem).getSize();
       }
 
+
 //---------------------------------------------------------
 //   selectLanguagesTab
 //---------------------------------------------------------
@@ -103,18 +138,11 @@ void ResourceManager::selectExtensionsTab()
       tabs->setCurrentIndex(tabs->indexOf(extensions));
       }
 
-
 //---------------------------------------------------------
-//   displayExtensions
+//   parseExtensions
 //---------------------------------------------------------
-
-void ResourceManager::displayExtensions()
+void ResourceManager::parseExtensions(QByteArray json)
       {
-      DownloadUtils js(this);
-      js.setTarget(baseAddr() + "extensions/details.json");
-      js.download();
-      QByteArray json = js.returnData();
-
       // parse the json file
       QJsonParseError err;
       QJsonDocument result = QJsonDocument::fromJson(json, &err);
@@ -124,13 +152,14 @@ void ResourceManager::displayExtensions()
             }
       int rowCount = result.object().keys().size();
       rowCount -= 2; //version and type
+      extensionsTable->clearSpans();
       extensionsTable->setRowCount(rowCount);
 
       int row = 0;
       int col = 0;
       QPushButton* buttonInstall;
       QPushButton* buttonUninstall;
-      extensionsTable->verticalHeader()->show();
+      //extensionsTable->verticalHeader()->show();
 
       QStringList exts = result.object().keys();
       for (QString key : exts) {
@@ -184,18 +213,11 @@ void ResourceManager::displayExtensions()
       }
 
 //---------------------------------------------------------
-//   displayLanguages
+//   parseLanguages
 //---------------------------------------------------------
 
-void ResourceManager::displayLanguages()
+void ResourceManager::parseLanguages(QByteArray json)
       {
-      // Download details.json
-      DownloadUtils js(this);
-      js.setTarget(baseAddr() + "languages/details.json");
-      js.download();
-      QByteArray json = js.returnData();
-      qDebug() << json;
-
       // parse the json file
       QJsonParseError err;
       QJsonDocument result = QJsonDocument::fromJson(json, &err);
@@ -205,6 +227,7 @@ void ResourceManager::displayLanguages()
             }
       int rowCount = result.object().keys().size();
       rowCount -= 2; //version and type
+      languagesTable->clearSpans();
       languagesTable->setRowCount(rowCount);
 
       int row = 0;
@@ -217,8 +240,7 @@ void ResourceManager::displayLanguages()
       std::vector<QPushButton*> updateButtons(rowCount);
 #endif
       QPushButton* temp;
-      languagesTable->verticalHeader()->show();
-
+      //languagesTable->verticalHeader()->show();
       // move current language to first row
       QStringList langs = result.object().keys();
       QString lang = mscore->getLocaleISOCode();
@@ -297,7 +319,7 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
       QString global = mscoreGlobalShare + "locale/" + filename;
       QFileInfo fileLocal(local);
       QFileInfo fileGlobal(global);
-      if(!fileLocal.exists() || (fileLocal.lastModified() <= fileGlobal.lastModified()) )
+      if (!fileLocal.exists() || (fileLocal.lastModified() <= fileGlobal.lastModified()))
             local = mscoreGlobalShare + "locale/" + filename;
 
       return verifyFile(local, hash);
@@ -456,6 +478,30 @@ void ResourceManager::hideEvent(QHideEvent* event)
       {
       MuseScore::saveGeometry(this);
       QWidget::hideEvent(event);
+      }
+
+//---------------------------------------------------------
+//   done
+//---------------------------------------------------------
+
+void ResourceManager::done(int status)
+      {
+      workerThreads.clear();
+      mscore->getPluginManager()->disAttachUI();
+      // installed packages need to be stored even if we don't click OK
+      mscore->getPluginManager()->writePluginPackageList();
+      QDialog::done(status);
+      }
+
+//---------------------------------------------------------
+//   accept
+//   Triggered by the "OK" button
+//---------------------------------------------------------
+
+void ResourceManager::accept()
+      {
+      mscore->getPluginManager()->accept();
+      QDialog::accept();
       }
 
 }

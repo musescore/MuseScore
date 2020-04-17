@@ -25,19 +25,23 @@ class DownloadUtils : public QObject
       QString _localFile;
 
       QProgressDialog* progressDialog = nullptr;
+      QNetworkReply* reply = nullptr;
 
    public:
       explicit DownloadUtils(QWidget *parent=0);
+      explicit DownloadUtils(QNetworkRequest::RedirectPolicy policy, QWidget* parent = 0);
 
       void setTarget(const QString& t)      { _target = t; }
       void setLocalFile(const QString& t)   { _localFile = t; }
       bool saveFile();
       QByteArray returnData();
+      QVariant getHeader(QNetworkRequest::KnownHeaders header) const;
 
    signals:
       void done();
 
    public slots:
+      void cancel();
       void download(bool showProgress = false);
       void downloadFinished(QNetworkReply* data);
       void downloadProgress(qint64 received, qint64 total);

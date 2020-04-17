@@ -19,6 +19,12 @@ DownloadUtils::DownloadUtils(QWidget *parent)
       {
       }
 
+DownloadUtils::DownloadUtils(QNetworkRequest::RedirectPolicy policy, QWidget* parent)
+   : DownloadUtils(parent)
+      {
+      manager.setRedirectPolicy(policy);
+      }
+
 bool DownloadUtils::saveFile()
       {
       QFile localFile(_localFile);
@@ -31,6 +37,12 @@ bool DownloadUtils::saveFile()
       localFile.write(sdata);
       localFile.close();
       return true;
+      }
+
+void DownloadUtils::cancel()
+      {
+      if (reply && !reply->isFinished())
+            reply->abort();
       }
 
 void DownloadUtils::downloadFinished(QNetworkReply *data)
@@ -49,11 +61,12 @@ void DownloadUtils::download(bool showProgress)
       QUrl url = QUrl::fromEncoded(_target.toLocal8Bit());
       QNetworkRequest request(url);
       QEventLoop loop;
-      QNetworkReply* reply = manager.get(request);
+      reply = manager.get(request);
 
       QObject::connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
       QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
       QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+      QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()));
 
       if (showProgress) {
             progressDialog = new QProgressDialog(static_cast<QWidget*>(parent()));
@@ -79,6 +92,13 @@ void DownloadUtils::downloadProgress(qint64 received, qint64 total)
       double curVal = (double(received)/total)*100;
       if (progressDialog && progressDialog->isVisible())
             progressDialog->setValue(curVal);
+      }
+
+QVariant DownloadUtils::getHeader(QNetworkRequest::KnownHeaders header) const
+      {
+      if (!reply)
+            return QVariant();
+      return reply->header(header);
       }
 
 }

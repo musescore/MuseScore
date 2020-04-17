@@ -15,36 +15,54 @@
 
 #include "ui_resourceManager.h"
 #include "downloadUtils.h"
+#include "plugin/pluginManager.h"
+#include "plugin/pluginUpdater.h"
 
 namespace Ms {
 
 class ResourceManager : public QDialog, public Ui::Resource
-      {
-      Q_OBJECT
+   {
+    Q_OBJECT
 
-      virtual void hideEvent(QHideEvent*);
-      QByteArray txt;
-      void displayLanguages();
-      void displayExtensions();
-      bool verifyFile(QString path, QString hash);
-      bool verifyLanguageFile(QString filename, QString hash);
-      
-   public:
-      explicit ResourceManager(QWidget *parent = 0);
-      void selectLanguagesTab();
-      void selectExtensionsTab();
-      
-      static inline QString baseAddr() { return "http://extensions.musescore.org/3.5/"; }
+    virtual void hideEvent(QHideEvent*);
+    QByteArray txt;
+    static QThreadPool workerThreads;
+    static bool firstLaunch;
+    bool verifyFile(QString path, QString hash);
+    bool verifyLanguageFile(QString filename, QString hash);
+    void refreshPluginButton(int row, bool updated = true);
 
-   private:
-      QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
-      QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
+public:
+    explicit ResourceManager(QWidget *parent = 0);
+    void selectLanguagesTab();
+    void selectExtensionsTab();
 
-   private slots:
-      void downloadLanguage();
-      void downloadExtension();
-      void uninstallExtension();
-      };
+    static inline QString baseAddr() { return "http://extensions.musescore.org/3.5/"; }
+    static inline QString pluginRepoAddr() { return "https://musescore.org/en/plugins"; }
+    static inline QString pluginPageAddr(QString& name) { return "https://musescore.org/project/" + name; }
+
+public slots:
+    virtual void done(int) override;
+    virtual void accept();
+
+private:
+    QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
+    QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
+
+private slots:
+    void filterPluginList();
+    void parsePluginRepo(QByteArray repo_page);
+    void parseLanguages(QByteArray json);
+    void parseExtensions(QByteArray json);
+    void downloadLanguage();
+    void scanPluginUpdate();
+    void downloadExtension();
+    void downloadInstallPlugin();
+    void updatePlugin();
+    void uninstallPluginPackage();
+    void uninstallExtension();
+    void refreshPluginButton(int row, PluginStatus status);
+   };
 
 class ExtensionFileSize : public QTableWidgetItem
       {
