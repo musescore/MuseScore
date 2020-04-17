@@ -141,6 +141,8 @@ FocusableItem {
                 AppearancePopup {
                     id: appearancePopup
 
+                    model: root.model ? root.model.appearanceSettingsModel : null
+
                     width: popupButtonsRow.width
 
                     arrowX: (width + appearanceButton.width + popupButtonsRow.spacing) / 2

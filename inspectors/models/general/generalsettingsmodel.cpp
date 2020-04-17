@@ -7,6 +7,7 @@ GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositorySe
     setTitle(tr("General"));
     setType(GENERAL);
     setPlaybackProxyModel(new PlaybackProxyModel(this, repository));
+    setAppearanceSettingsModel(new AppearanceSettingsModel(this, repository));
 }
 
 void GeneralSettingsModel::createProperties()
@@ -63,8 +64,19 @@ QObject* GeneralSettingsModel::playbackProxyModel() const
     return m_playbackProxyModel;
 }
 
-void GeneralSettingsModel::setPlaybackProxyModel(PlaybackProxyModel *playbackProxyModel)
+QObject* GeneralSettingsModel::appearanceSettingsModel() const
+{
+    return m_appearanceSettingsModel;
+}
+
+void GeneralSettingsModel::setPlaybackProxyModel(PlaybackProxyModel* playbackProxyModel)
 {
     m_playbackProxyModel = playbackProxyModel;
     emit playbackProxyModelChanged(m_playbackProxyModel);
+}
+
+void GeneralSettingsModel::setAppearanceSettingsModel(AppearanceSettingsModel* appearanceSettingsModel)
+{
+    m_appearanceSettingsModel = appearanceSettingsModel;
+    emit appearanceSettingsModelChanged(m_appearanceSettingsModel);
 }

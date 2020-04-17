@@ -178,6 +178,7 @@ public:
     static const QHash<QByteArray, Shortcut*>& shortcuts() { return _shortcuts; }
     static QActionGroup* getActionGroupForWidget(MsWidget w);
     static QActionGroup* getActionGroupForWidget(MsWidget w, Qt::ShortcutContext newShortcutContext);
+    static QAction* getActionByName(const char* id);
 
     static QString keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt,
                                   bool escapeKeyStr = false);
