@@ -10,12 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QMessageBox>
+
 #include "musescore.h"
 #include "downloadUtils.h"
 #include "icons.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
-#include "network/loginmanager.h"
+#include "loginmanager.h"
 #include "uploadscoredialog.h"
 
 namespace Ms {

@@ -12,7 +12,7 @@
 
 #include "musescore.h"
 #include "logindialog.h"
-#include "network/loginmanager.h"
+#include "loginmanager.h"
 
 namespace Ms {
 

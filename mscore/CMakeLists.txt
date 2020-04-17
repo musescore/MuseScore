@@ -89,9 +89,11 @@ endif (SCRIPT_INTERFACE)
 
 include(${CMAKE_CURRENT_LIST_DIR}/mixer/mixer.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/pianoroll/pianoroll.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/cloud/cloud.cmake)
 
 QT5_WRAP_UI (ui_headers
       ${MSCORE_MIXER_UI}
+      ${CLOUD_UI}
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
       measuresdialog.ui pagesettings.ui parteditbase.ui
       playpanel.ui prefsdialog.ui measureproperties.ui
@@ -106,7 +108,7 @@ QT5_WRAP_UI (ui_headers
       omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
-      logindialog.ui uploadscoredialog.ui breaksdialog.ui
+      breaksdialog.ui
       toolbarEditor.ui workspacedialog.ui
 
       importmidi_ui/importmidi_panel.ui
@@ -293,7 +295,6 @@ add_library(mscoreapp STATIC
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h
       instrdialog.h instrwidget.h
       keycanvas.h keyedit.h layer.h licence.h
-      logindialog.h network/loginmanager.h network/loginmanager_p.h
       magbox.h masterpalette.h
       measureproperties.h mediadialog.h metaedit.h miconengine.h
       musescore.h navigator.h newwizard.h noteGroups.h
@@ -307,7 +308,7 @@ add_library(mscoreapp STATIC
       startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
       templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
       toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h realizeharmonydialog.h
-      tupletdialog.h updatechecker.h uploadscoredialog.h waveview.h webpage.h workspace.h
+      tupletdialog.h updatechecker.h waveview.h webpage.h workspace.h
 
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
       stringutils.h stringutils.cpp
@@ -415,7 +416,6 @@ add_library(mscoreapp STATIC
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
       startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp templateBrowser.cpp
-      logindialog.cpp network/loginmanager.cpp uploadscoredialog.cpp
       breaksdialog.cpp searchComboBox.cpp
       help.cpp help.h
       toolbarEditor.cpp toolbarEditor.h
@@ -428,6 +428,7 @@ add_library(mscoreapp STATIC
       qml/msqmlengine.cpp qml/nativemenu.cpp qml/nativetooltip.cpp
       qmldockwidget.cpp
 
+      ${CLOUD_SRC}
       ${MSCORE_MIXER_SRC}
       ${PIANOROLL_SRC}
       ${WIDGETS_SOURCE_FILES}
