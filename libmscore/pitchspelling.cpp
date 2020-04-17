@@ -14,7 +14,6 @@
 //  algorithmus from Emilios Cambouropoulos as published in:
 //  "Automatic Pitch Spelling: From Numbers to Sharps and Flats"
 
-#include "synthesizer/event.h"
 #include "note.h"
 #include "key.h"
 #include "pitchspelling.h"
@@ -23,6 +22,8 @@
 #include "score.h"
 #include "part.h"
 #include "utils.h"
+
+#include "audio/midi/event.h"
 
 namespace Ms {
 

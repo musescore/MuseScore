@@ -45,7 +45,6 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/note.h"
 #include "libmscore/staff.h"
-#include "driver.h"
 #include "libmscore/harmony.h"
 #include "magbox.h"
 #include "libmscore/sig.h"
@@ -110,16 +109,17 @@
 #include "libmscore/utils.h"
 #include "libmscore/icon.h"
 
-#include "driver.h"
+#include "audio/drivers/driver.h"
 
 #include "effects/zita1/zita.h"
 #include "effects/compressor/compressor.h"
 #include "effects/noeffect/noeffect.h"
-#include "synthesizer/synthesizer.h"
-#include "synthesizer/synthesizergui.h"
-#include "synthesizer/msynthesizer.h"
-#include "synthesizer/event.h"
-#include "fluid/fluid.h"
+#include "audio/midi/synthesizer.h"
+#include "audio/midi/synthesizergui.h"
+#include "audio/midi/msynthesizer.h"
+#include "audio/midi/event.h"
+#include "audio/midi/fluid/fluid.h"
+
 #include "plugin/qmlplugin.h"
 #include "accessibletoolbutton.h"
 #include "toolbuttonmenu.h"
@@ -138,7 +138,7 @@
 #endif
 
 #ifdef USE_LAME
-#include "exportmp3.h"
+#include "audio/exports/exportmp3.h"
 #endif
 #ifdef Q_OS_MAC
 #include "macos/cocoabridge.h"
@@ -1981,6 +1981,15 @@ MuseScore::~MuseScore()
       // be deleted before paletteWorkspace.
       delete paletteWidget;
       paletteWidget = nullptr;
+      }
+
+//---------------------------------------------------------
+//   playPanelInterface
+//---------------------------------------------------------
+
+IPlayPanel* MuseScore::playPanelInterface() const
+      {
+      return playPanel;
       }
 
 //---------------------------------------------------------

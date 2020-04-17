@@ -45,6 +45,7 @@ class Instrument;
 class MidiFile;
 class TextStyleDialog;
 class PlayPanel;
+class IPlayPanel;
 class Mixer;
 class Debugger;
 class MeasureListEditor;
@@ -575,6 +576,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       MuseScore();
       ~MuseScore();
       bool checkDirty(MasterScore*);
+      IPlayPanel* playPanelInterface() const;
       PlayPanel* getPlayPanel() const { return playPanel; }
       Mixer* getMixer() const { return mixer; }
       QMenu* genCreateMenu(QWidget* parent = 0);

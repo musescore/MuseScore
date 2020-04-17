@@ -21,7 +21,7 @@
 #include "musescore.h"
 #include "scoreview.h"
 
-#include "importexport/midiexport/exportmidi.h"
+#include "audio/exports/exportmidi.h"
 
 #include "libmscore/xml.h"
 #include "libmscore/element.h"
@@ -75,7 +75,7 @@
 #include "libmscore/sym.h"
 #include "libmscore/image.h"
 #include "libmscore/stafflines.h"
-#include "synthesizer/msynthesizer.h"
+#include "audio/midi/msynthesizer.h"
 #include "svggenerator.h"
 #include "scorePreview.h"
 #include "scorecmp/scorecmp.h"

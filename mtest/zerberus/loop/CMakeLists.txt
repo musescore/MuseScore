@@ -18,4 +18,4 @@ include_directories(
       ${SNDFILE_INCDIR}
       )
 
-target_link_libraries(tst_sfzloop zerberus synthesizer audiofile ${SNDFILE_LIB} testutils)
+target_link_libraries(tst_sfzloop audio audiofile ${SNDFILE_LIB} testutils)

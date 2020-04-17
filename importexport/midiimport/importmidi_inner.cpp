@@ -3,7 +3,7 @@
 #include "importmidi_chord.h"
 #include "mscore/preferences.h"
 #include "libmscore/durationtype.h"
-#include "midi/midifile.h"
+#include "audio/midi/midifile.h"
 
 
 namespace Ms {
