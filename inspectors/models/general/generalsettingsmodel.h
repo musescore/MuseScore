@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 #include "playback/playbackproxymodel.h"
+#include "appearance/appearancesettingsmodel.h"
 
 class GeneralSettingsModel : public AbstractInspectorModel
 {
@@ -14,6 +15,7 @@ class GeneralSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem* isSmall READ isSmall CONSTANT)
 
     Q_PROPERTY(QObject* playbackProxyModel READ playbackProxyModel NOTIFY playbackProxyModelChanged)
+    Q_PROPERTY(QObject* appearanceSettingsModel READ appearanceSettingsModel NOTIFY appearanceSettingsModelChanged)
 
     public:
         explicit GeneralSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -24,12 +26,15 @@ class GeneralSettingsModel : public AbstractInspectorModel
     PropertyItem* isSmall() const;
 
     QObject* playbackProxyModel() const;
+    QObject* appearanceSettingsModel() const;
 
 public slots:
     void setPlaybackProxyModel(PlaybackProxyModel* playbackProxyModel);
+    void setAppearanceSettingsModel(AppearanceSettingsModel* appearanceSettingsModel);
 
 signals:
     void playbackProxyModelChanged(QObject* playbackProxyModel);
+    void appearanceSettingsModelChanged(QObject* appearanceSettingsModel);
 
 protected:
     void createProperties() override;
@@ -44,6 +49,7 @@ private:
     PropertyItem* m_isSmall = nullptr;
 
     PlaybackProxyModel* m_playbackProxyModel = nullptr;
+    AppearanceSettingsModel* m_appearanceSettingsModel = nullptr;
 };
 
 #endif // GENERALSETTINGSMODEL_H
