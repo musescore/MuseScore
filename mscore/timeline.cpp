@@ -1957,6 +1957,12 @@ void Timeline::drawSelection()
                                                              255)));
                   _selectionPath.addRect(graphicsRectItem->rect());
                   }
+            else {
+                  // Ensure unselected measures are not marked selected
+                  QGraphicsRectItem* graphicsRectItem = qgraphicsitem_cast<QGraphicsRectItem*>(graphicsItem);
+                  if (graphicsRectItem && graphicsRectItem->data(keyItemType).value<ItemType>() == ItemType::TYPE_MEASURE)
+                        graphicsRectItem->setBrush(QBrush(colorBox(graphicsRectItem)));
+                  }
             }
 
       if (selectionItem) {
@@ -2772,12 +2778,12 @@ void Timeline::mouseOver(QPointF pos)
       QGraphicsRectItem* graphicsRectItem2 = qgraphicsitem_cast<QGraphicsRectItem*>(pairItem);
       if (graphicsRectItem1) {
             std::get<2>(_oldHoverInfo) = graphicsRectItem1->brush().color();
-            if (std::get<2>(_oldHoverInfo) != QColor(173,216,230))
+            if (std::get<2>(_oldHoverInfo) != activeTheme().selectionColor)
                   graphicsRectItem1->setBrush(QBrush(activeTheme().backgroundColor));
             }
       if (graphicsRectItem2) {
             std::get<2>(_oldHoverInfo) = graphicsRectItem2->brush().color();
-            if (std::get<2>(_oldHoverInfo) != QColor(173,216,230))
+            if (std::get<2>(_oldHoverInfo) != activeTheme().selectionColor)
                   graphicsRectItem2->setBrush(QBrush(activeTheme().backgroundColor));
             }
       }
