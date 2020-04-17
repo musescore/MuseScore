@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>348</width>
+    <width>371</width>
     <height>126</height>
    </rect>
   </property>
@@ -126,17 +126,17 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="labelBeamStyle">
+       <widget class="QLabel" name="labelStrokeStyle">
         <property name="text">
-         <string>Beam style:</string>
+         <string>Stroke style:</string>
         </property>
         <property name="buddy">
-         <cstring>beamStyle</cstring>
+         <cstring>strokeStyle</cstring>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="beamStyle">
+       <widget class="QComboBox" name="strokeStyle">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -150,13 +150,13 @@
         </item>
         <item>
          <property name="text">
-          <string>All lines attached to stem</string>
+          <string>All strokes attached to stems</string>
          </property>
         </item>
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetBeamStyle" native="true">
+       <widget class="Ms::ResetButton" name="resetStrokeStyle" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -164,7 +164,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Beam style' value</string>
+         <string>Reset 'Stroke style' value</string>
         </property>
        </widget>
       </item>
@@ -184,7 +184,7 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>tremoloPlacement</tabstop>
-  <tabstop>beamStyle</tabstop>
+  <tabstop>strokeStyle</tabstop>
  </tabstops>
  <resources/>
  <connections/>

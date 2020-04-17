@@ -29,8 +29,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle tremoloStyle {
-      { Sid::tremoloPlacement, Pid::TREMOLO_PLACEMENT },
-      { Sid::tremoloBeamStyle, Pid::TREMOLO_BEAM_STYLE }
+      { Sid::tremoloPlacement,   Pid::TREMOLO_PLACEMENT    },
+      { Sid::tremoloStrokeStyle, Pid::TREMOLO_STROKE_STYLE }
       };
 
 //---------------------------------------------------------
@@ -362,7 +362,7 @@ extern std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal
 
 void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
       {
-      bool defaultStyle = (beamStyle() == TremoloBeamStyle::DEFAULT);
+      bool defaultStyle = (strokeStyle() == TremoloStrokeStyle::DEFAULT);
 
       // non-default beam styles are only appliable to minim two-note tremolo in non-TAB staves
       if (durationType().type() != TDuration::DurationType::V_HALF
@@ -537,7 +537,7 @@ void Tremolo::write(XmlWriter& xml) const
       xml.stag(this);
       writeProperty(xml, Pid::TREMOLO_TYPE);
       writeProperty(xml, Pid::TREMOLO_PLACEMENT);
-      writeProperty(xml, Pid::TREMOLO_BEAM_STYLE);
+      writeProperty(xml, Pid::TREMOLO_STROKE_STYLE);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -554,8 +554,8 @@ void Tremolo::read(XmlReader& e)
                   setTremoloType(e.readElementText());
             else if (tag == "tremoloPlacement")
                   setTremoloPlacement(TremoloPlacement(e.readInt()));
-            else if (tag == "beamStyle")
-                  setBeamStyle(TremoloBeamStyle(e.readInt()));
+            else if (tag == "strokeStyle")
+                  setStrokeStyle(TremoloStrokeStyle(e.readInt()));
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -675,8 +675,8 @@ QVariant Tremolo::getProperty(Pid propertyId) const
                   return int(_tremoloType);
             case Pid::TREMOLO_PLACEMENT:
                   return int(_tremoloPlacement);
-            case Pid::TREMOLO_BEAM_STYLE:
-                  return int(_beamStyle);
+            case Pid::TREMOLO_STROKE_STYLE:
+                  return int(_strokeStyle);
             default:
                   break;
             }
@@ -696,8 +696,8 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
             case Pid::TREMOLO_PLACEMENT:
                   setTremoloPlacement(TremoloPlacement(val.toInt()));
                   break;
-            case Pid::TREMOLO_BEAM_STYLE:
-                  setBeamStyle(TremoloBeamStyle(val.toInt()));
+            case Pid::TREMOLO_STROKE_STYLE:
+                  setStrokeStyle(TremoloStrokeStyle(val.toInt()));
                   break;
             default:
                   return Element::setProperty(propertyId, val);
@@ -715,8 +715,8 @@ QVariant Tremolo::propertyDefault(Pid propertyId) const
       switch (propertyId) {
             case Pid::TREMOLO_PLACEMENT:
                   return score()->styleI(Sid::tremoloPlacement);
-            case Pid::TREMOLO_BEAM_STYLE:
-                  return score()->styleI(Sid::tremoloBeamStyle);
+            case Pid::TREMOLO_STROKE_STYLE:
+                  return score()->styleI(Sid::tremoloStrokeStyle);
             default:
                   return Element::propertyDefault(propertyId);
             }
