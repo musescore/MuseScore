@@ -7,16 +7,17 @@ Item {
     property alias icon: image.source
     property alias sourceSize: image.sourceSize
     property alias color: colorOverlay.color
+    property var pixelSize: 16
 
-    implicitHeight: root.icon == "" ? 0 : 16
-    implicitWidth: root.icon == "" ? 0 : 16
+    implicitHeight: root.icon == "" ? 0 : pixelSize
+    implicitWidth: root.icon == "" ? 0 : pixelSize
 
     Image {
         id: image
 
         anchors.centerIn: parent
 
-        height: 16
+        height: pixelSize
         width: implicitWidth
 
         fillMode: Image.PreserveAspectFit

@@ -4,6 +4,13 @@ import "../../../common"
 Column {
     id: root
 
+    property QtObject horizontalOffset: undefined
+    property QtObject verticalOffset: undefined
+    property bool isSnappedToGrid: false
+
+    signal snapToGridToggled(var snap)
+    signal configureGridRequested()
+
     height: implicitHeight
     width: parent.width
 
@@ -31,6 +38,12 @@ Column {
                 anchors.rightMargin: 4
 
                 icon: "qrc:/resources/icons/horizontal_adjustment.svg"
+
+                enabled: horizontalOffset ? horizontalOffset.isEnabled : false
+                isIndeterminate: horizontalOffset && enabled ? horizontalOffset.isUndefined : false
+                currentValue: horizontalOffset ? horizontalOffset.value : 0
+
+                onValueEdited: { horizontalOffset.value = newValue }
             }
 
             IncrementalPropertyControl {
@@ -39,6 +52,12 @@ Column {
                 anchors.right: parent.right
 
                 icon: "qrc:/resources/icons/vertical_adjustment.svg"
+
+                enabled: verticalOffset ? verticalOffset.isEnabled : false
+                isIndeterminate: verticalOffset && enabled ? verticalOffset.isUndefined : false
+                currentValue: verticalOffset ? verticalOffset.value : 0
+
+                onValueEdited: { verticalOffset.value = newValue }
             }
         }
     }
@@ -47,11 +66,19 @@ Column {
         id: snapToGridCheckbox
 
         text: qsTr("Snap to grid")
+
+        checked: isSnappedToGrid
+
+        onClicked: { root.snapToGridToggled(!checked) }
     }
 
     FlatButton {
         text: qsTr("Configure grid")
 
         visible: snapToGridCheckbox.checked
+
+        onClicked: {
+            root.configureGridRequested()
+        }
     }
 }

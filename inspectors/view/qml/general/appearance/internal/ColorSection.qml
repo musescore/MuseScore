@@ -5,7 +5,7 @@ import "../../../common"
 Column {
     id: root
 
-    property alias color: colorPicker.color
+    property QtObject color: undefined
 
     height: implicitHeight
     width: parent.width
@@ -18,5 +18,15 @@ Column {
 
     ColorPicker {
         id: colorPicker
+
+        enabled: root.color ? root.color.isEnabled : false
+        isIndeterminate: root.color && enabled ? root.color.isUndefined : false
+        color: root.color && !root.color.isUndefined ? root.color.value : globalStyle.window
+
+        onNewColorSelected: {
+            if (root.color) {
+                root.color.value = newColor
+            }
+        }
     }
 }

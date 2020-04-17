@@ -5,6 +5,9 @@ import "../../../common"
 Column {
     id: root
 
+    signal pushBackRequested()
+    signal pushFrontRequested()
+
     height: implicitHeight
     width: parent.width
 
@@ -19,46 +22,33 @@ Column {
             text: qsTr("Arrange")
         }
 
-        RadioButtonGroup {
-            id: radioButtonList
-
-            height: 30
+        Item {
+            height: childrenRect.height
             width: parent.width
 
-            model: [
-                { textRole: "Backwards", valueRole: 1 },
-                { textRole: "Forwards", valueRole: 2 }
-            ]
+            FlatButton {
+                anchors.left: parent.left
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: 4
 
-            delegate: FlatRadioButton {
-                id: radioButtonDelegate
+                text: qsTr("Backwards")
 
-                ButtonGroup.group: radioButtonList.radioButtonGroup
-
-                StyledTextLabel {
-                    text: modelData["textRole"]
-
-                    elide: Text.ElideRight
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
+                onClicked: {
+                    root.pushBackRequested()
                 }
             }
-        }
-    }
 
-    Column {
-        anchors.left: parent.left
-        anchors.right: parent.horizontalCenter
-        anchors.rightMargin: 2
+            FlatButton {
+                anchors.left: parent.horizontalCenter
+                anchors.leftMargin: 4
+                anchors.right: parent.right
 
-        spacing: 8
+                text: qsTr("Forwards")
 
-        StyledTextLabel {
-            text: qsTr("Arrange order")
-        }
-
-        IncrementalPropertyControl {
-            iconMode: iconModeEnum.hidden
+                onClicked: {
+                    root.pushFrontRequested()
+                }
+            }
         }
     }
 }
