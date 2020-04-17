@@ -260,8 +260,20 @@ bool TextBase::edit(EditData& ed)
                         return true;
 
                   case Qt::Key_Delete:
-                        if (!deleteSelectedText(ed))
-                              score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
+                        if (!deleteSelectedText(ed)) {
+                              // check for move down
+                              if (_cursor->column() == _cursor->columns()) { // if you are on the end of the line, delete the newline char
+                                    int cursorRow = _cursor->row();
+                                    _cursor->movePosition(QTextCursor::Down);
+                                    if (_cursor->row() != cursorRow) {
+                                          _cursor->movePosition(QTextCursor::StartOfLine);
+                                          score()->undo(new JoinText(_cursor), &ed);
+                                          }
+                                    }
+                              else {
+                                    score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
+                                    }
+                              }
                         return true;
 
                   case Qt::Key_Backspace:
