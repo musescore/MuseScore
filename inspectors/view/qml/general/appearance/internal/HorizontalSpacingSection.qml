@@ -4,6 +4,9 @@ import "../../../common"
 Item {
     id: root
 
+    property QtObject leadingSpace: undefined
+    property QtObject barWidth: undefined
+
     height: childrenRect.height
     width: parent.width
 
@@ -20,6 +23,12 @@ Item {
 
         IncrementalPropertyControl {
             icon: "qrc:/resources/icons/horizontal_adjustment.svg"
+
+            enabled: leadingSpace ? leadingSpace.isEnabled : false
+            isIndeterminate: leadingSpace && enabled ? leadingSpace.isUndefined : false
+            currentValue: leadingSpace ? leadingSpace.value : 0
+
+            onValueEdited: { leadingSpace.value = newValue }
         }
     }
 
@@ -36,6 +45,12 @@ Item {
 
         IncrementalPropertyControl {
             icon: "qrc:/resources/icons/horizontal_adjustment.svg"
+
+            enabled: barWidth ? barWidth.isEnabled : false
+            isIndeterminate: barWidth && enabled ? barWidth.isUndefined : false
+            currentValue: barWidth ? barWidth.value : 0
+
+            onValueEdited: { barWidth.value = newValue }
         }
     }
 }
