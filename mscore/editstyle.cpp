@@ -576,6 +576,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(styleName, &QLineEdit::textEdited, [=]() { editUserStyleName(); });
       connect(styleName, &QLineEdit::editingFinished, [=]() { endEditUserStyleName(); });
 
+      // change multiple text fonts
+      connect(textToComboBox, &QFontComboBox::currentFontChanged, this, &EditStyle::changeChosenTextFonts);
+      connect(pageList, &QListWidget::currentRowChanged, this, &EditStyle::setFromFontToMostUsed);
+
       // font face
       resetTextStyleFontFace->setIcon(*icons[int(Icons::reset_ICON)]);
       connect(resetTextStyleFontFace, &QToolButton::clicked,
@@ -676,6 +680,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             this->setMinimumSize(scr.width() / 2, scr.height() / 2);
       hasShown = false;
       MuseScore::restoreGeometry(this);
+      setFromFontToMostUsed();
       }
 
 //---------------------------------------------------------
@@ -1476,6 +1481,41 @@ void EditStyle::textStyleChanged(int row)
       styleName->setText(cs->getTextStyleUserName(tid));
       styleName->setEnabled(int(tid) >= int(Tid::USER1));
       resetTextStyleName->setEnabled(styleName->text() != textStyleUserName(tid));
+      }
+
+//---------------------------------------------------------
+//   changeChosenTextFonts
+//---------------------------------------------------------
+
+void EditStyle::changeChosenTextFonts(const QFont& newFont)
+      {
+      int curRow = textStyles->currentRow();
+      for(int i = 0; i < textStyles->count(); i++){
+            textStyles->setCurrentRow(i);
+            if(textStyleFontFace->currentFont().family() == textFromComboBox->currentFont().family() && textStyles->item(i)->data(Qt::UserRole) != static_cast<int>(Tid::HARMONY_ROMAN))
+                  textStyleFontFace->setCurrentFont(newFont);
+            }
+      textStyles->setCurrentRow(curRow); //reset the row to the previously selected
+      }
+
+//---------------------------------------------------------
+//   setFromFontToMostUsed
+//---------------------------------------------------------
+
+void EditStyle::setFromFontToMostUsed()
+      {
+      map<QFont, int> fontOccurences;
+      for (int i = 0; i < textStyles->count(); i++) {
+            textStyles->setCurrentRow(i);
+            if (fontOccurences.find(textStyleFontFace->currentFont()) != fontOccurences.end())
+                  fontOccurences.at(textStyleFontFace->currentFont())++;
+            else
+                  fontOccurences.insert(std::pair<QFont, int>(textStyleFontFace->currentFont(), 1));
+            }
+      auto comp = [](pair<QFont, int> x, pair<QFont, int> y) { return x.second < y.second; };
+      auto mostUsedFont = max_element(fontOccurences.begin(), fontOccurences.end(), comp);
+      textFromComboBox->setCurrentFont(mostUsedFont->first);
+      textFromComboBox->setCurrentText(mostUsedFont->first.family());
       }
 
 //---------------------------------------------------------
