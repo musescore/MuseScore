@@ -818,6 +818,16 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
       }
 
 //---------------------------------------------------------
+//   insertEmptyFragment
+//---------------------------------------------------------
+
+void TextBlock::insertEmptyFragment(TextCursor* cursor)
+      {
+      if (_fragments.size() == 0 || _fragments.at(0).text != "")
+            _fragments.insert(0, TextFragment(cursor, ""));
+      }
+
+//---------------------------------------------------------
 //   fragment
 //    inputs:
 //      column is the column relative to the start of the TextBlock.
@@ -1248,6 +1258,8 @@ void TextBase::createLayout()
                   else if (c == '\n') {
                         if (rows() <= cursor.row())
                               _layout.append(TextBlock());
+                        if(_layout[cursor.row()].fragments().size() == 0)
+                              _layout[cursor.row()].insertEmptyFragment(&cursor); // used to preserve the Font size of the line (font info is held in TextFragments, see PR #5881)
                         _layout[cursor.row()].setEol(true);
                         cursor.setRow(cursor.row() + 1);
                         cursor.setColumn(0);
