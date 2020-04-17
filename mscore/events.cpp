@@ -729,8 +729,14 @@ void ScoreView::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
 
       Element* clickedElement = elementNear(toLogical(mouseEvent->pos()));
 
-      if (!(clickedElement && clickedElement->isEditable()))
+      if (!clickedElement)
             return;
+
+      if (!clickedElement->isEditable()) {
+            if (clickedElement->isInstrumentName()) // double-click an instrument name to open the edit staff/part properties menu
+                  elementPropertyAction("staff-props", clickedElement);
+            return;
+            }
 
       startEditMode(clickedElement);
 
