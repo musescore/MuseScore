@@ -1,3 +1,4 @@
+#!/bin/sh
 # $1 - artifact name
 # $2 - artifact ftp path
 # $3 - MuseScore version
