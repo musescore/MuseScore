@@ -67,6 +67,8 @@ class HairpinSegment final : public TextLineBaseSegment {
 
       int gripsCount() const override { return 4; }
       std::vector<QPointF> gripsPositions(const EditData& = EditData()) const override;
+
+      std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const Element*)> isDragged) override;
       };
 
 //---------------------------------------------------------

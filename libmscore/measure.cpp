@@ -3066,6 +3066,51 @@ Fraction Measure::snapNote(const Fraction& /*tick*/, const QPointF p, int staff)
       }
 
 //---------------------------------------------------------
+//   searchSegment
+///   Finds a segment which x position is most close to the
+///   given \p x.
+///   \param x The x coordinate in measure coordinates.
+///   \param st Type of segments to search.
+///   \param strack start of track range (strack included)
+///   in which the found segment should contain elements.
+///   \param etrack end of track range (etrack excluded)
+///   in which the found segment should contain elements.
+///   \param preferredSegment If not nullptr, will give
+///   more space to the given segment when searching it by
+///   coordinate.
+///   \returns The segment that was found.
+//---------------------------------------------------------
+
+Segment* Measure::searchSegment(qreal x, SegmentType st, int strack, int etrack, const Segment* preferredSegment, qreal spacingFactor) const
+      {
+      const int lastTrack = etrack - 1;
+      for (Segment* segment = first(st); segment; segment = segment->next(st)) {
+            if (!segment->hasElements(strack, lastTrack))
+                  continue;
+            Segment* ns = segment->next(st);
+            for (; ns; ns = ns->next(st)) {
+                  if (ns->hasElements(strack, lastTrack))
+                        break;
+                  }
+            if (!ns)
+                  return segment;
+            if (preferredSegment == segment) {
+                  if (x < (segment->x() + (ns->x() - segment->x())))
+                        return segment;
+                  }
+            else if (preferredSegment == ns) {
+                  if (x <= segment->x())
+                        return segment;
+                  }
+            else {
+                  if (x < (segment->x() + (ns->x() - segment->x()) * spacingFactor))
+                        return segment;
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "dynamic.h"
+#include "dynamichairpingroup.h"
 #include "xml.h"
 #include "score.h"
 #include "measure.h"
@@ -345,6 +346,19 @@ void Dynamic::reset()
       }
 
 //---------------------------------------------------------
+//   getDragGroup
+//---------------------------------------------------------
+
+std::unique_ptr<ElementGroup> Dynamic::getDragGroup(std::function<bool(const Element*)> isDragged)
+      {
+      if (auto g = HairpinWithDynamicsDragGroup::detectFor(this, isDragged))
+            return g;
+      if (auto g = DynamicNearHairpinsDragGroup::detectFor(this, isDragged))
+            return g;
+      return TextBase::getDragGroup(isDragged);
+      }
+
+//---------------------------------------------------------
 //   drag
 //---------------------------------------------------------
 
@@ -359,15 +373,18 @@ QRectF Dynamic::drag(EditData& ed)
       if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
             int si       = staffIdx();
             Segment* seg = segment();
-            score()->dragPosition(ed.pos, &si, &seg);
+            score()->dragPosition(canvasPos(), &si, &seg);
             if (seg != segment() || staffIdx() != si) {
+                  const QPointF oldOffset = offset();
                   QPointF pos1(canvasPos());
                   score()->undo(new ChangeParent(this, seg, si));
                   setOffset(QPointF());
                   layout();
                   QPointF pos2(canvasPos());
-                  setOffset(pos1 - pos2);
-                  ed.startMove = pos2;
+                  const QPointF newOffset = pos1 - pos2;
+                  setOffset(newOffset);
+                  ElementEditData* eed = ed.getData(this);
+                  eed->initOffset += newOffset - oldOffset;
                   }
             }
       return f;

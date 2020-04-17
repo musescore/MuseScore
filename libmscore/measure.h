@@ -163,6 +163,8 @@ class Measure final : public MeasureBase {
       Fraction snap(const Fraction& tick, const QPointF p) const;
       Fraction snapNote(const Fraction& tick, const QPointF p, int staff) const;
 
+      Segment* searchSegment(qreal x, SegmentType st, int strack, int etrack, const Segment* preferredSegment = nullptr, qreal spacingFactor = 0.5) const;
+
       void insertStaff(Staff*, int staff);
       void insertMStaff(MStaff* staff, int idx);
       void removeMStaff(MStaff* staff, int idx);
