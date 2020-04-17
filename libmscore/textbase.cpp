@@ -2480,24 +2480,28 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
 //   offsetTid
 //---------------------------------------------------------
 
-Sid offsetTid(Tid tid, bool placeAbove)
+Sid TextBase::offsetSid() const
       {
-      switch (tid) {
+      Tid defaultTid = Tid(propertyDefault(Pid::SUB_STYLE).toInt());
+      if (tid() != defaultTid)
+            return Sid::NOSTYLE;
+      bool above = placeAbove();
+      switch (tid()) {
             case Tid::DYNAMICS:
-                  return placeAbove ? Sid::dynamicsPosAbove : Sid::dynamicsPosBelow;
+                  return above ? Sid::dynamicsPosAbove : Sid::dynamicsPosBelow;
             case Tid::LYRICS_ODD:
             case Tid::LYRICS_EVEN:
-                  return placeAbove ? Sid::lyricsPosAbove : Sid::lyricsPosBelow;
+                  return above ? Sid::lyricsPosAbove : Sid::lyricsPosBelow;
             case Tid::REHEARSAL_MARK:
-                  return placeAbove ? Sid::rehearsalMarkPosAbove : Sid::rehearsalMarkPosBelow;
+                  return above ? Sid::rehearsalMarkPosAbove : Sid::rehearsalMarkPosBelow;
             case Tid::STAFF:
-                  return placeAbove ? Sid::staffTextPosAbove : Sid::staffTextPosBelow;
+                  return above ? Sid::staffTextPosAbove : Sid::staffTextPosBelow;
             case Tid::STICKING:
-                  return placeAbove ? Sid::stickingPosAbove : Sid::stickingPosBelow;
+                  return above ? Sid::stickingPosAbove : Sid::stickingPosBelow;
             case Tid::SYSTEM:
-                  return placeAbove ? Sid::systemTextPosAbove : Sid::systemTextPosBelow;
+                  return above ? Sid::systemTextPosAbove : Sid::systemTextPosBelow;
             case Tid::TEMPO:
-                  return placeAbove ? Sid::tempoPosAbove : Sid::tempoPosBelow;
+                  return above ? Sid::tempoPosAbove : Sid::tempoPosBelow;
             default:
                   break;
             }
@@ -2511,12 +2515,9 @@ Sid offsetTid(Tid tid, bool placeAbove)
 Sid TextBase::getPropertyStyle(Pid id) const
       {
       if (id == Pid::OFFSET) {
-            Tid defaultTid = Tid(propertyDefault(Pid::SUB_STYLE).toInt());
-            if (tid() == defaultTid) {
-                  Sid sid = offsetTid(defaultTid, placeAbove());
-                  if (sid != Sid::NOSTYLE)
-                        return sid;
-                  }
+            Sid sid = offsetSid();
+            if (sid != Sid::NOSTYLE)
+                  return sid;
             }
       for (const StyledProperty& p : *_elementStyle) {
             if (p.pid == id)

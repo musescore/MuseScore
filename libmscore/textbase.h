@@ -248,6 +248,7 @@ class TextBase : public Element {
       void genText() const;
       virtual int getPropertyFlagsIdx(Pid id) const override;
       QString stripText(bool, bool, bool) const;
+      Sid offsetSid() const;
 
    protected:
       QColor textColor() const;
