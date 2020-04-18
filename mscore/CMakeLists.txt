@@ -55,45 +55,24 @@ if (BUILD_TELEMETRY_MODULE)
 endif (BUILD_TELEMETRY_MODULE)
 
 if (SCRIPT_INTERFACE)
-      set (SCRIPT_FILES
-            plugin/pluginCreator.h plugin/pluginManager.h plugin/qmledit.h
-            plugin/qmlplugin.h plugin/qmlpluginengine.h
-            plugin/qmliconview.h
-            plugin/api/qmlpluginapi.h plugin/api/cursor.h plugin/api/scoreelement.h plugin/api/elements.h
-            plugin/api/part.h
-            plugin/api/score.h
-            plugin/api/fraction.h
-            plugin/api/excerpt.h
-            plugin/api/util.h
-            plugin/api/selection.h
-            plugin/api/tie.h
-            plugin/api/playevent.h
-
-            plugin/api/enums.cpp
-            plugin/mscorePlugins.cpp plugin/pluginCreator.cpp plugin/pluginManager.cpp plugin/qmledit.cpp
-            plugin/qmlplugin.cpp plugin/qmlpluginengine.cpp
-            plugin/qmliconview.cpp
-            plugin/api/qmlpluginapi.cpp plugin/api/cursor.cpp plugin/api/scoreelement.cpp plugin/api/elements.cpp
-            plugin/api/score.cpp
-            plugin/api/excerpt.cpp
-            plugin/api/util.cpp
-            plugin/api/selection.cpp
-            plugin/api/tie.cpp
-            plugin/api/playevent.cpp
-            )
-
-      set (SCRIPT_UI
-            plugin/pluginCreator.ui plugin/pluginManager.ui
-            )
+    include(${CMAKE_CURRENT_LIST_DIR}/plugin/plugin.cmake)
 endif (SCRIPT_INTERFACE)
 
 include(${CMAKE_CURRENT_LIST_DIR}/mixer/mixer.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/pianoroll/pianoroll.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/cloud/cloud.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/debugger/debugger.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/inspector/inspector.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/importmidi_ui/importmidi_ui.cmake)
 
 QT5_WRAP_UI (ui_headers
       ${MSCORE_MIXER_UI}
       ${CLOUD_UI}
+      ${DEBUGGER_UI}
+      ${INSPECTOR_UI}
+      ${IMPORTMIDIUI_UI}
+      ${PLUGIN_UI}
+
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
       measuresdialog.ui pagesettings.ui parteditbase.ui
       playpanel.ui prefsdialog.ui measureproperties.ui
@@ -111,115 +90,9 @@ QT5_WRAP_UI (ui_headers
       breaksdialog.ui
       toolbarEditor.ui workspacedialog.ui
 
-      importmidi_ui/importmidi_panel.ui
-
       palette/createPalette.ui
       scorecmp/scorecmp_tool.ui
       script/script_recorder.ui
-
-      debugger/barline.ui
-      debugger/harmony.ui
-      debugger/box.ui
-      debugger/keysig.ui
-      debugger/rest.ui
-      debugger/articulationbase.ui
-      debugger/accidental.ui
-      debugger/clef.ui
-      debugger/slursegment.ui
-      debugger/tiesegment.ui
-      debugger/spanner.ui
-      debugger/tremolo.ui
-      debugger/beam.ui
-      debugger/lyrics.ui
-      debugger/linesegment.ui
-      debugger/textline.ui
-      debugger/line.ui
-      debugger/slurtie.ui
-      debugger/tie.ui
-      debugger/tuplet.ui
-      debugger/dynamic.ui
-      debugger/hairpin.ui
-      debugger/chord.ui
-      debugger/chordrest.ui
-      debugger/segment.ui
-      debugger/measure.ui
-      debugger/element.ui
-      debugger/debugger.ui
-      debugger/note.ui
-      debugger/page.ui
-      debugger/text.ui
-      debugger/stem.ui
-      debugger/system.ui
-      debugger/timesig.ui
-      debugger/bracket.ui
-
-      inspector/inspector_element.ui
-      inspector/inspector_vbox.ui
-      inspector/inspector_tbox.ui
-      inspector/inspector_articulation.ui
-      inspector/inspector_spacer.ui
-      inspector/inspector_hbox.ui
-      inspector/inspector_segment.ui
-      inspector/inspector_beam.ui
-      inspector/inspector_note.ui
-      inspector/inspector_notedot.ui
-      inspector/inspector_rest.ui
-      inspector/inspector_chord.ui
-      inspector/inspector_group_element.ui
-      inspector/inspector_image.ui
-      inspector/inspector_harmony.ui
-      inspector/inspector_lasso.ui
-      inspector/inspector_volta.ui
-      inspector/inspector_ottava.ui
-      inspector/inspector_trill.ui
-      inspector/inspector_vibrato.ui
-      inspector/inspector_hairpin.ui
-      inspector/inspector_jump.ui
-      inspector/inspector_marker.ui
-      inspector/inspector_glissando.ui
-      inspector/inspector_clef.ui
-      inspector/inspector_timesig.ui
-      inspector/inspector_keysig.ui
-      inspector/inspector_barline.ui
-      inspector/inspector_tuplet.ui
-      inspector/inspector_accidental.ui
-      inspector/inspector_tempotext.ui
-      inspector/inspector_dynamic.ui
-      inspector/inspector_instrchange.ui
-      inspector/inspector_lyric.ui
-      inspector/inspector_line.ui
-      inspector/inspector_textline.ui
-      inspector/inspector_letring.ui
-      inspector/inspector_palmmute.ui
-      inspector/inspector_pedal.ui
-      inspector/inspector_textlinebase.ui
-      inspector/inspector_slur.ui
-      inspector/inspector_text.ui
-      inspector/inspector_stafftext.ui
-      inspector/inspector_ambitus.ui
-      inspector/inspector_empty.ui
-      inspector/inspector_fret.ui
-      inspector/inspector_break.ui
-      inspector/inspector_sectionbreak.ui
-      inspector/inspector_stafftypechange.ui
-      inspector/inspector_bend.ui
-      inspector/inspector_arpeggio.ui
-      inspector/inspector_tremolo.ui
-      inspector/inspector_tremolobar.ui
-      inspector/inspector_caesura.ui
-      inspector/inspector_bracket.ui
-      inspector/inspector_iname.ui
-      inspector/inspector_fingering.ui
-      inspector/inspector_frametext.ui
-      inspector/inspector_fermata.ui
-      inspector/align_select.ui
-      inspector/font_style_select.ui
-      inspector/offset_select.ui
-      inspector/voicing_select.ui
-      inspector/scale_select.ui
-      inspector/size_select.ui
-      inspector/inspector_stem.ui
-      ${SCRIPT_UI}
       )
 
 if (APPLE)
@@ -350,48 +223,6 @@ add_library(mscoreapp STATIC
       masterpalette.cpp
       dragdrop.cpp
       waveview.cpp helpBrowser.cpp
-      inspector/inspector.cpp
-      inspector/inspectorBase.cpp
-      inspector/inspectorBeam.cpp
-      inspector/inspectorBend.cpp
-      inspector/inspectorGroupElement.cpp
-      inspector/inspectorImage.cpp
-      inspector/inspectorHarmony.cpp
-      inspector/inspectorFret.cpp
-      inspector/inspectorText.cpp
-      inspector/inspectorMeasureNumber.cpp
-      inspector/inspectorLasso.cpp
-      inspector/inspectorBarline.cpp
-      inspector/inspectorVolta.cpp
-      inspector/inspectorOttava.cpp
-      inspector/inspectorTrill.cpp
-      inspector/inspectorVibrato.cpp
-      inspector/inspectorHairpin.cpp
-      inspector/inspectorJump.cpp
-      inspector/inspectorMarker.cpp
-      inspector/inspectorGlissando.cpp
-      inspector/inspectorNote.cpp
-      inspector/inspectorNoteDot.cpp
-      inspector/inspectorAmbitus.cpp
-      inspector/inspectorArpeggio.cpp
-      inspector/inspectorFingering.cpp
-      inspector/alignSelect.cpp
-      inspector/fontStyleSelect.cpp
-      inspector/offsetSelect.cpp
-      inspector/voicingSelect.cpp
-      inspector/scaleSelect.cpp
-      inspector/sizeSelect.cpp
-      inspector/inspectorTextBase.cpp
-      inspector/inspectorTextLineBase.cpp
-      inspector/inspectorTextLine.cpp
-      inspector/inspectorLetRing.cpp
-      inspector/inspectorPalmMute.cpp
-      inspector/inspectorPedal.cpp
-      inspector/inspectorDynamic.cpp
-      inspector/inspectorInstrchange.cpp
-      inspector/inspectorTremoloBar.cpp
-      inspector/inspectorElementBase.cpp
-      inspector/resetButton.cpp
       enableplayforwidget.cpp
       editelement.cpp
       editlyrics.cpp
@@ -400,13 +231,6 @@ add_library(mscoreapp STATIC
       pathlistdialog.cpp
       exampleview.cpp
       miconengine.cpp
-
-      importmidi_ui/importmidi_panel.cpp
-      importmidi_ui/importmidi_panel.h
-      importmidi_ui/importmidi_delegate.cpp
-      importmidi_ui/importmidi_delegate.h
-      importmidi_ui/importmidi_view.cpp
-      importmidi_ui/importmidi_view.h
 
       palette/createpalettedialog.cpp
       palette/palettedialog.cpp palette/palettecelldialog.cpp
@@ -429,12 +253,15 @@ add_library(mscoreapp STATIC
       qmldockwidget.cpp
 
       ${CLOUD_SRC}
+      ${IMPORTMIDIUI_SRC}
+      ${INSPECTOR_SRC}
+      ${DEBUGGER_SRC}
       ${MSCORE_MIXER_SRC}
       ${PIANOROLL_SRC}
       ${WIDGETS_SOURCE_FILES}
       ${COCOABRIDGE}
       ${OMR_FILES}
-      ${SCRIPT_FILES}
+      ${PLUGIN_SRC}
       ${MAC_SPARKLE_FILES}
       tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
 
