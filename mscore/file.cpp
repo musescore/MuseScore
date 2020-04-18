@@ -2957,8 +2957,6 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
       if (trimMargin >= 0 && score->npages() == 1)
             p.translate(-r.topLeft());
       MScore::pixelRatio = DPI / printer.logicalDpiX();
-      if (trimMargin >= 0)
-             p.translate(-r.topLeft());
 
       if (drawPageBackground)
             p.fillRect(r, Qt::white);
