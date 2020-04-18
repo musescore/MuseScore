@@ -814,7 +814,7 @@ void FretDiagram::read(XmlReader& e)
             else if (tag == "Harmony") {
                   Harmony* h = new Harmony(score());
                   h->read(e);
-                  add(h);
+                  addLoaded(h);
                   }
             else if (!Element::readProperties(e))
                   e.unknown();
@@ -1199,8 +1199,26 @@ void FretDiagram::add(Element* e)
             _harmony->setProperty(Pid::ALIGN, int(Align::HCENTER | Align::TOP));
             _harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
             }
-      else
+      else {
             qWarning("FretDiagram: cannot add <%s>\n", e->name());
+            }
+      }
+
+//---------------------------------------------------------
+//   addLoaded
+//    used to add harmonies in read()
+//---------------------------------------------------------
+
+void FretDiagram::addLoaded(Element* e)
+      {
+      e->setParent(this);
+      if (e->isHarmony()) {
+            _harmony = toHarmony(e);
+            _harmony->setTrack(track());
+            }
+      else {
+            qWarning("FretDiagram: cannot add <%s>\n", e->name());
+            }
       }
 
 //---------------------------------------------------------
