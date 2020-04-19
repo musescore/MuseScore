@@ -954,33 +954,7 @@
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="2" column="0">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QRadioButton" name="fgWallpaperButton">
-              <property name="text">
-               <string>Wallpaper:</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="2">
+          <item row="4" column="2">
            <layout class="QHBoxLayout">
             <property name="spacing">
              <number>6</number>
@@ -1016,15 +990,14 @@
             </item>
            </layout>
           </item>
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="fgColorButton">
-            <property name="text">
-             <string>Color:</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
            <widget class="Awl::ColorLabel" name="fgColorLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
             </property>
@@ -1036,7 +1009,47 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="4" column="0">
+           <layout class="QHBoxLayout">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QRadioButton" name="fgWallpaperButton">
+              <property name="text">
+               <string>Wallpaper:</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="fgColorButton">
+            <property name="text">
+             <string>Color:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QCheckBox" name="fgUseColorInPalettes">
+            <property name="text">
+             <string>Use the same color in palettes</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
            <widget class="QLineEdit" name="fgWallpaper">
             <property name="accessibleName">
              <string>Paper wallpaper path</string>
@@ -1046,10 +1059,13 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QCheckBox" name="fgUseColorInPalettes">
+          <item row="5" column="0">
+           <widget class="QCheckBox" name="fgUseInExport">
+            <property name="toolTip">
+             <string>When this is checked the color/wallpapr is exported.</string>
+            </property>
             <property name="text">
-             <string>Use the same color in palettes</string>
+             <string>Export to PDF/PNG/SVG</string>
             </property>
            </widget>
           </item>

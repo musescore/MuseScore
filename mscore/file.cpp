@@ -2080,6 +2080,28 @@ bool MuseScore::saveMidi(Score* score, QIODevice* device)
       return em.write(device, preferences.getBool(PREF_IO_MIDI_EXPANDREPEATS), preferences.getBool(PREF_IO_MIDI_EXPORTRPNS), synthesizerState());
       }
 
+
+//---------------------------------------------------------
+//   drawPageColor
+//---------------------------------------------------------
+
+void drawPageColor(QPainter& p, Page& page)
+      {
+      p.setPen(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
+      p.fillRect(page.pageBoundingRect(), preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
+      p.drawRect(page.pageBoundingRect());
+      }
+
+//---------------------------------------------------------
+//   drawPageWallpaper
+//---------------------------------------------------------
+
+void drawPageWallpaper(QPainter &p, Page& page)
+      {
+      QPixmap pm(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER));
+      p.drawTiledPixmap(page.pageBoundingRect(), pm);
+      }
+
 //---------------------------------------------------------
 //   savePdf
 //---------------------------------------------------------
@@ -2143,10 +2165,19 @@ bool MuseScore::savePdf(Score* cs_, QPrinter& printer)
       const QList<Page*> pl = cs_->pages();
       int pages = pl.size();
       bool firstPage = true;
+      bool useCustomPage = preferences.getBool(PREF_UI_CANVAS_FG_USE_COLOR_WALLPAPER_IN_EXPORT);
       for (int n = 0; n < pages; ++n) {
             if (!firstPage)
                   printer.newPage();
             firstPage = false;
+
+            if (useCustomPage) {
+                  if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR))
+                        drawPageColor(p, *pl.at(n));
+                  else
+                        drawPageWallpaper(p, *pl.at(n));
+                  }
+
             cs_->print(&p, n);
             }
       p.end();
@@ -2177,7 +2208,7 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
 #else
       printer.setOutputFormat(QPrinter::PdfFormat);
 #endif
-      
+
       printer.setCreator("MuseScore Version: " VERSION);
       if (!printer.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
@@ -2198,6 +2229,7 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       double pr = MScore::pixelRatio;
 
       bool firstPage = true;
+      bool useCustomPage = preferences.getBool(PREF_UI_CANVAS_FG_USE_COLOR_WALLPAPER_IN_EXPORT);
       for (Score* s : cs_) {
             LayoutMode layoutMode = s->layoutMode();
             if (layoutMode != LayoutMode::PAGE) {
@@ -2225,6 +2257,14 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
                   if (!firstPage)
                         printer.newPage();
                   firstPage = false;
+
+                  if (useCustomPage) {
+                        if(preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR))
+                              drawPageColor(p, *pl.at(n));
+                        else
+                              drawPageWallpaper(p, *pl.at(n));
+                        }
+
                   s->print(&p, n);
                   }
             MScore::pixelRatio = pr;
@@ -2700,7 +2740,6 @@ bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool dr
       printer.setDotsPerMeterX(lrint((convDpi * 1000) / INCH));
       printer.setDotsPerMeterY(lrint((convDpi * 1000) / INCH));
 
-      printer.fill(transparent ? 0 : 0xffffffff);
       double mag_ = convDpi / DPI;
       MScore::pixelRatio = 1.0 / mag_;
 
@@ -2710,6 +2749,17 @@ bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool dr
       p.scale(mag_, mag_);
       if (localTrimMargin >= 0)
             p.translate(-r.topLeft());
+
+      bool useCustomPage = preferences.getBool(PREF_UI_CANVAS_FG_USE_COLOR_WALLPAPER_IN_EXPORT);
+
+      if (transparent)
+            printer.fill(0);
+      else if (useCustomPage && preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR))
+            drawPageColor(p, *page);
+      else if (useCustomPage)
+            drawPageWallpaper(p, *page);
+      else
+            printer.fill(0xffffffff);
 
       QList< Element*> pel = page->elements();
       qStableSort(pel.begin(), pel.end(), elementLessThan);
@@ -2927,8 +2977,18 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
       if (trimMargin >= 0)
              p.translate(-r.topLeft());
 
-      if (drawPageBackground)
-            p.fillRect(r, Qt::white);
+      bool useCustomPage = preferences.getBool(PREF_UI_CANVAS_FG_USE_COLOR_WALLPAPER_IN_EXPORT);
+      if (drawPageBackground) {
+            if (useCustomPage) {
+                  if(preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR))
+                        drawPageColor(p, *page);
+                  else
+                        drawPageWallpaper(p, *page);
+                  }
+            else {
+                  p.fillRect(r, Qt::white);
+                  }
+            }
 
       // 1st pass: StaffLines
       for  (System* s : page->systems()) {

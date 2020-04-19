@@ -110,6 +110,7 @@
 #define PREF_UI_CANVAS_BG_USECOLOR                          "ui/canvas/background/useColor"
 #define PREF_UI_CANVAS_FG_USECOLOR                          "ui/canvas/foreground/useColor"
 #define PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES              "ui/canvas/foreground/useColorInPalettes"
+#define PREF_UI_CANVAS_FG_USE_COLOR_WALLPAPER_IN_EXPORT     "ui/canvas/foreground/useColorWallpaperInExport"
 #define PREF_UI_CANVAS_BG_COLOR                             "ui/canvas/background/color"
 #define PREF_UI_CANVAS_FG_COLOR                             "ui/canvas/foreground/color"
 #define PREF_UI_CANVAS_BG_WALLPAPER                         "ui/canvas/background/wallpaper"
