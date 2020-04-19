@@ -225,6 +225,26 @@ void TestParts::voicesExcerpt()
       Excerpt::createExcerpt(ex);
       QVERIFY(nscore);
 
+      //
+      // create second part
+      //
+      parts.clear();
+      parts.append(score->parts().at(1));
+      nscore = new Score(score);
+
+      trackList.clear();
+      trackList.insert(8, 0);
+
+      ex = new Excerpt(score);
+      ex->setPartScore(nscore);
+      nscore->setExcerpt(ex);
+      score->excerpts().append(ex);
+      ex->setTitle(parts.front()->longName());
+      ex->setParts(parts);
+      ex->setTracks(trackList);
+      Excerpt::createExcerpt(ex);
+      QVERIFY(nscore);
+
 //      nscore->setName(parts.front()->partName());
 
       score->setExcerptsChanged(true);

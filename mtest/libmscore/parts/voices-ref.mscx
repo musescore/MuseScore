@@ -135,6 +135,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="57"/>
           <midiPort>0</midiPort>
           <midiChannel>0</midiChannel>
@@ -420,9 +422,14 @@
         </Measure>
       <Measure>
         <voice>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Rest>
             <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <duration>2/4</duration>
             </Rest>
           </voice>
         <voice>
@@ -435,7 +442,8 @@
                 </Slur>
               <next>
                 <location>
-                  <fractions>3/4</fractions>
+                  <measures>1</measures>
+                  <fractions>1/4</fractions>
                   </location>
                 </next>
               </Spanner>
@@ -454,6 +462,16 @@
               <tpc>11</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
+        <voice>
           <Chord>
             <linkedMain/>
             <durationType>quarter</durationType>
@@ -469,7 +487,8 @@
             <Spanner type="Slur">
               <prev>
                 <location>
-                  <fractions>-3/4</fractions>
+                  <measures>-1</measures>
+                  <fractions>-1/4</fractions>
                   </location>
                 </prev>
               </Spanner>
@@ -480,19 +499,16 @@
               </Note>
             </Chord>
           </voice>
-        <voice>
-          <Rest>
-            <linkedMain/>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
         </Measure>
       <Measure>
         <voice>
+          <KeySig>
+            <linkedMain/>
+            <accidental>1</accidental>
+            </KeySig>
           <Rest>
             <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <duration>2/4</duration>
             </Rest>
           </voice>
         <voice>
@@ -501,6 +517,9 @@
             <durationType>quarter</durationType>
             <Note>
               <linkedMain/>
+              <Accidental>
+                <subtype>accidentalFlat</subtype>
+                </Accidental>
               <Spanner type="Tie">
                 <Tie>
                   <linkedMain/>
@@ -531,6 +550,25 @@
               <tpc>11</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <linkedMain/>
+            <accidental>-3</accidental>
+            </KeySig>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        <voice>
           <Chord>
             <linkedMain/>
             <durationType>quarter</durationType>
@@ -542,14 +580,11 @@
             </Chord>
           <Rest>
             <linkedMain/>
-            <durationType>quarter</durationType>
+            <durationType>half</durationType>
             </Rest>
-          </voice>
-        <voice>
           <Rest>
             <linkedMain/>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
@@ -615,15 +650,51 @@
         </Measure>
       <Measure>
         <voice>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Rest>
             <linkedMain/>
             <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <duration>2/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
         <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <linkedMain/>
+            <accidental>1</accidental>
+            </KeySig>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <linkedMain/>
+            <accidental>-3</accidental>
+            </KeySig>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Rest>
             <linkedMain/>
             <durationType>measure</durationType>
@@ -641,6 +712,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <linkedMain/>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -684,6 +756,7 @@
       <Measure>
         <voice>
           <Rest>
+            <linkedMain/>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -740,10 +813,24 @@
         </Measure>
       <Measure>
         <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Chord>
+            <linkedMain/>
+            <durationType>half</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>half</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
           </voice>
         <voice/>
         <voice/>
@@ -788,10 +875,20 @@
         </Measure>
       <Measure>
         <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <linkedMain/>
+            <durationType>half</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
           </voice>
         <voice/>
         <voice/>
@@ -805,7 +902,8 @@
                 </Slur>
               <next>
                 <location>
-                  <fractions>3/4</fractions>
+                  <measures>1</measures>
+                  <fractions>1/4</fractions>
                   </location>
                 </next>
               </Spanner>
@@ -824,6 +922,19 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
+        <voice/>
+        <voice/>
+        <voice>
           <Chord>
             <linkedMain/>
             <durationType>quarter</durationType>
@@ -839,7 +950,8 @@
             <Spanner type="Slur">
               <prev>
                 <location>
-                  <fractions>-3/4</fractions>
+                  <measures>-1</measures>
+                  <fractions>-1/4</fractions>
                   </location>
                 </prev>
               </Spanner>
@@ -853,9 +965,14 @@
         </Measure>
       <Measure>
         <voice>
+          <KeySig>
+            <linkedMain/>
+            <accidental>1</accidental>
+            </KeySig>
           <Rest>
+            <linkedMain/>
             <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <duration>2/4</duration>
             </Rest>
           </voice>
         <voice/>
@@ -896,6 +1013,28 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <linkedMain/>
+            <accidental>-3</accidental>
+            </KeySig>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        <voice/>
+        <voice/>
+        <voice>
           <Chord>
             <linkedMain/>
             <durationType>quarter</durationType>
@@ -905,6 +1044,10 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <Rest>
+            <linkedMain/>
+            <durationType>half</durationType>
+            </Rest>
           <Rest>
             <linkedMain/>
             <durationType>quarter</durationType>
@@ -1418,6 +1561,12 @@
           </Measure>
         <Measure>
           <voice>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>2</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
             <Chord>
               <linked>
                 <location>
@@ -1435,7 +1584,8 @@
                   </Slur>
                 <next>
                   <location>
-                    <fractions>3/4</fractions>
+                    <measures>1</measures>
+                    <fractions>1/4</fractions>
                     </location>
                   </next>
                 </Spanner>
@@ -1466,6 +1616,10 @@
                 <tpc>11</tpc>
                 </Note>
               </Chord>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
             <Chord>
               <linked>
                 <location>
@@ -1493,7 +1647,8 @@
               <Spanner type="Slur">
                 <prev>
                   <location>
-                    <fractions>-3/4</fractions>
+                    <measures>-1</measures>
+                    <fractions>-1/4</fractions>
                     </location>
                   </prev>
                 </Spanner>
@@ -1508,20 +1663,14 @@
                 </Note>
               </Chord>
             </voice>
-          <voice>
-            <Rest>
-              <linked>
-                <location>
-                  <voices>1</voices>
-                  </location>
-                </linked>
-              <durationType>measure</durationType>
-              <duration>4/4</duration>
-              </Rest>
-            </voice>
           </Measure>
         <Measure>
           <voice>
+            <KeySig>
+              <linked>
+                </linked>
+              <accidental>1</accidental>
+              </KeySig>
             <Chord>
               <linked>
                 <location>
@@ -1535,6 +1684,9 @@
                     <voices>1</voices>
                     </location>
                   </linked>
+                <Accidental>
+                  <subtype>accidentalFlat</subtype>
+                  </Accidental>
                 <Spanner type="Tie">
                   <Tie>
                     <linked>
@@ -1577,6 +1729,21 @@
                 <tpc>11</tpc>
                 </Note>
               </Chord>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <KeySig>
+              <linked>
+                </linked>
+              <accidental>-3</accidental>
+              </KeySig>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
             <Chord>
               <linked>
                 <location>
@@ -1600,18 +1767,15 @@
                   <voices>1</voices>
                   </location>
                 </linked>
-              <durationType>quarter</durationType>
+              <durationType>half</durationType>
               </Rest>
-            </voice>
-          <voice>
             <Rest>
               <linked>
                 <location>
                   <voices>1</voices>
                   </location>
                 </linked>
-              <durationType>measure</durationType>
-              <duration>4/4</duration>
+              <durationType>quarter</durationType>
               </Rest>
             </voice>
           </Measure>
@@ -1687,16 +1851,58 @@
           </Measure>
         <Measure>
           <voice>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>2</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
             <Rest>
               <linked>
                 </linked>
               <durationType>measure</durationType>
-              <duration>4/4</duration>
+              <duration>2/4</duration>
               </Rest>
             </voice>
           </Measure>
         <Measure>
           <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <KeySig>
+              <linked>
+                </linked>
+              <accidental>1</accidental>
+              </KeySig>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <KeySig>
+              <linked>
+                </linked>
+              <accidental>-3</accidental>
+              </KeySig>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
             <Rest>
               <linked>
                 </linked>
@@ -1771,6 +1977,8 @@
             <gateTime>100</gateTime>
             </Articulation>
           <Channel>
+            <controller ctrl="0" value="0"/>
+            <controller ctrl="32" value="17"/>
             <program value="57"/>
             </Channel>
           </Instrument>
@@ -2029,6 +2237,12 @@
           </Measure>
         <Measure>
           <voice>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>2</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
             <Chord>
               <linked>
                 <location>
@@ -2046,7 +2260,8 @@
                   </Slur>
                 <next>
                   <location>
-                    <fractions>3/4</fractions>
+                    <measures>1</measures>
+                    <fractions>1/4</fractions>
                     </location>
                   </next>
                 </Spanner>
@@ -2077,6 +2292,10 @@
                 <tpc>15</tpc>
                 </Note>
               </Chord>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
             <Chord>
               <linked>
                 <location>
@@ -2104,7 +2323,8 @@
               <Spanner type="Slur">
                 <prev>
                   <location>
-                    <fractions>-3/4</fractions>
+                    <measures>-1</measures>
+                    <fractions>-1/4</fractions>
                     </location>
                   </prev>
                 </Spanner>
@@ -2122,6 +2342,11 @@
           </Measure>
         <Measure>
           <voice>
+            <KeySig>
+              <linked>
+                </linked>
+              <accidental>1</accidental>
+              </KeySig>
             <Chord>
               <linked>
                 <location>
@@ -2177,6 +2402,21 @@
                 <tpc>15</tpc>
                 </Note>
               </Chord>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <KeySig>
+              <linked>
+                </linked>
+              <accidental>-3</accidental>
+              </KeySig>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
             <Chord>
               <linked>
                 <location>
@@ -2200,7 +2440,244 @@
                   <voices>3</voices>
                   </location>
                 </linked>
+              <durationType>half</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                <location>
+                  <voices>3</voices>
+                  </location>
+                </linked>
               <durationType>quarter</durationType>
+              </Rest>
+            </voice>
+          </Measure>
+        </Staff>
+      <name>Trombone</name>
+      </Score>
+    <Score>
+      <Tracklist sTrack="8" dstTrack="0"/>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <lastSystemFillLimit>0</lastSystemFillLimit>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <metaTag name="partName">Trombone</metaTag>
+      <Part>
+        <Staff id="1">
+          <linkedTo>3</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <defaultClef>F</defaultClef>
+          </Staff>
+        <trackName>Trombone</trackName>
+        <Instrument>
+          <longName>Trombone</longName>
+          <shortName>Tbn.</shortName>
+          <trackName>Trombone</trackName>
+          <minPitchP>35</minPitchP>
+          <maxPitchP>74</maxPitchP>
+          <minPitchA>35</minPitchA>
+          <maxPitchA>70</maxPitchA>
+          <instrumentId>brass.trombone</instrumentId>
+          <clef>F</clef>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <controller ctrl="0" value="0"/>
+            <controller ctrl="32" value="17"/>
+            <program value="57"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <linked>
+            <location>
+              <staves>-2</staves>
+              </location>
+            </linked>
+          <Text>
+            <linked>
+              <location>
+                <staves>-2</staves>
+                </location>
+              </linked>
+            <style>Title</style>
+            <text>voices</text>
+            </Text>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Trombone</text>
+            </Text>
+          </VBox>
+        <Measure>
+          <voice>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>4/4</duration>
+              </Rest>
+            </voice>
+          </Measure>
+        <Measure len="8/4">
+          <multiMeasureRest>2</multiMeasureRest>
+          <voice>
+            <TimeSig>
+              <linked>
+                <indexDiff>-2</indexDiff>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Rest>
+              <durationType>measure</durationType>
+              <duration>8/4</duration>
+              </Rest>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>4/4</duration>
+              </Rest>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>half</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>55</pitch>
+                <tpc>15</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>half</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>55</pitch>
+                <tpc>15</tpc>
+                </Note>
+              </Chord>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>2</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>half</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>59</pitch>
+                <tpc>19</tpc>
+                </Note>
+              </Chord>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <KeySig>
+              <linked>
+                </linked>
+              <accidental>1</accidental>
+              </KeySig>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
+          </Measure>
+        <Measure>
+          <voice>
+            <KeySig>
+              <linked>
+                </linked>
+              <accidental>-3</accidental>
+              </KeySig>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>4/4</duration>
               </Rest>
             </voice>
           </Measure>
