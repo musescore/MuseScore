@@ -1108,6 +1108,10 @@ bool TablatureDurationFont::read(XmlReader& e)
                         zeroBeamLevel = TDuration::DurationType::V_128TH;
                   else if (val == "256")
                         zeroBeamLevel = TDuration::DurationType::V_256TH;
+                  else if (val == "512")
+                        zeroBeamLevel = TDuration::DurationType::V_512TH;
+                  else if (val == "1024")
+                        zeroBeamLevel = TDuration::DurationType::V_1024TH;
                   else
                         e.unknown();
                   }
@@ -1137,6 +1141,10 @@ bool TablatureDurationFont::read(XmlReader& e)
                         displayValue[int(TabVal::VAL_128)] = chr;
                   else if (val == "256")
                         displayValue[int(TabVal::VAL_256)] = chr;
+                  else if (val == "512")
+                        displayValue[int(TabVal::VAL_512)] = chr;
+                  else if (val == "1024")
+                        displayValue[int(TabVal::VAL_1024)] = chr;
                   else if (val == "dot")
                         displayDot = chr;
                   else

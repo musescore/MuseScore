@@ -116,6 +116,8 @@ enum class TabVal : char {
       VAL_64,
       VAL_128,
       VAL_256,
+      VAL_512,
+      VAL_1024,
       NUM_OF
       };
 

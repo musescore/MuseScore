@@ -1776,6 +1776,8 @@ void NoteContainer::setNoteType(NoteType type) {
             case NoteType::Note_64:
             case NoteType::Note_128:
             case NoteType::Note_256: {
+//            case NoteType::Note_512:
+//            case NoteType::Note_1024: {
                   noteType_ = type;
                   break;
                   }
@@ -1935,6 +1937,14 @@ int NoteContainer::getDuration() const {
                   duration = static_cast<int>(NoteDuration::D_256);
                   break;
                   }
+//            case NoteType::Note_512: {
+//                  duration = static_cast<int>(NoteDuration::D_512);
+//                  break;
+//                  }
+//            case NoteType::Note_1024: {
+//                  duration = static_cast<int>(NoteDuration::D_1024);
+//                  break;
+//                  }
             default:
                   break;
             }

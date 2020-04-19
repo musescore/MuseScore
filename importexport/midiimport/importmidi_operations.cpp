@@ -74,6 +74,15 @@ static void setOperationsFromFile(const QString &fileName, Opers &opers)
                                     case 5:
                                           opers.quantValue.setDefaultValue(QuantValue::Q_128, false);
                                           break;
+                                    case 6:
+                                          opers.quantValue.setDefaultValue(QuantValue::Q_256, false);
+                                          break;
+                                    case 7:
+                                          opers.quantValue.setDefaultValue(QuantValue::Q_512, false);
+                                          break;
+                                    case 8:
+                                          opers.quantValue.setDefaultValue(QuantValue::Q_1024, false);
+                                          break;
                                     default:
                                           qDebug("Load MIDI import operations from file: "
                                                  "unknown max quantization value");
