@@ -61,6 +61,7 @@ class PianoKeyboard : public QWidget {
       void pitchChanged(int);
       void keyPressed(int pitch);
       void keyReleased(int pitch);
+      void pitchHighlightToggled(int pitch);
 
    public slots:
       void setYpos(int val);
