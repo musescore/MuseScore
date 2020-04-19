@@ -3586,8 +3586,17 @@ void Score::cmdPadNoteDecreaseTAB(const EditData& ed)
             case TDuration::DurationType::V_64TH:
                   padToggle(Pad::NOTE128, ed);
                   break;
+            case TDuration::DurationType::V_128TH:
+                  padToggle(Pad::NOTE256, ed);
+                  break;
+            case TDuration::DurationType::V_256TH:
+                  padToggle(Pad::NOTE512, ed);
+                  break;
+            case TDuration::DurationType::V_512TH:
+                  padToggle(Pad::NOTE1024, ed);
+                  break;
 // cycle back from shortest to longest?
-//          case TDuration::DurationType::V_128TH:
+//          case TDuration::DurationType::V_1024TH:
 //                padToggle(Pad::NOTE00, ed);
 //                break;
             default:
@@ -4054,6 +4063,12 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "pad-note-64-TAB",            [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE64, ed);                              }},
             { "pad-note-128",               [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE128, ed);                             }},
             { "pad-note-128-TAB",           [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE128, ed);                             }},
+            { "pad-note-256",               [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE256, ed);                             }},
+            { "pad-note-256-TAB",           [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE256, ed);                             }},
+            { "pad-note-512",               [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE512, ed);                             }},
+            { "pad-note-512-TAB",           [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE512, ed);                             }},
+            { "pad-note-1024",              [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE1024, ed);                             }},
+            { "pad-note-1024-TAB",          [](Score* cs, EditData& ed){ cs->padToggle(Pad::NOTE1024, ed);                             }},
             { "reset-style",                [](Score* cs, EditData&){ cs->cmdResetStyle();                                            }},
             { "reset-beammode",             [](Score* cs, EditData&){ cs->cmdResetBeamMode();                                         }},
             { "reset-groupings",            [](Score* cs, EditData&){ cs->cmdResetNoteAndRestGroupings();                             }},

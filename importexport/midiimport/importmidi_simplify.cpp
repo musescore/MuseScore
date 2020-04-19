@@ -22,7 +22,10 @@ bool hasComplexBeamedDurations(const QList<std::pair<ReducedFraction, TDuration>
             if (d.second == TDuration::DurationType::V_16TH
                         || d.second == TDuration::DurationType::V_32ND
                         || d.second == TDuration::DurationType::V_64TH
-                        || d.second == TDuration::DurationType::V_128TH) {
+                        || d.second == TDuration::DurationType::V_128TH
+                        || d.second == TDuration::DurationType::V_256TH
+                        || d.second == TDuration::DurationType::V_512TH
+                        || d.second == TDuration::DurationType::V_1024TH) {
                   return true;
                   }
             }

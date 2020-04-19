@@ -116,7 +116,7 @@ Tuplet* MuseScore::tupletDialog()
             cr = cs->getSelectedChordRest();
       if (cr == 0)
             return 0;
-      if (cr->durationType() < TDuration(TDuration::DurationType::V_128TH) && cr->durationType() != TDuration(TDuration::DurationType::V_MEASURE)) {
+      if (cr->durationType() < TDuration(TDuration::DurationType::V_512TH) && cr->durationType() != TDuration(TDuration::DurationType::V_MEASURE)) {
             noteTooShortForTupletDialog();
             return 0;
             }

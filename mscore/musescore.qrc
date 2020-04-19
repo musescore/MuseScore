@@ -109,6 +109,9 @@
         <file>data/icons/note-32.svg</file>
         <file>data/icons/note-64.svg</file>
         <file>data/icons/note-128.svg</file>
+        <file>data/icons/note-256.svg</file>
+        <file>data/icons/note-512.svg</file>
+        <file>data/icons/note-1024.svg</file>
         <file>data/icons/note-breve.svg</file>
         <file>data/icons/note-dot.svg</file>
         <file>data/icons/note-dot3.svg</file>

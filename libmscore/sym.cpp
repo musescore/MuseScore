@@ -5344,6 +5344,9 @@ QVector<oldName> oldNames = {
       {"32' rest",                              SymId::rest32nd },            // rests.5
       {"64' rest",                              SymId::rest64th },            // rests.6
       {"128' rest",                             SymId::rest128th },           // rests.7
+//      {"256' rest",                             SymId::rest256th },           // rests.8
+//      {"512' rest",                             SymId::rest512th },           // rests.9
+//      {"1024' rest",                            SymId::rest1024th },          // rests.10
 
       {"sharp",                                 SymId::accidentalSharp },                       // accidentals.sharp
       {"sharp arrow up",                        SymId::accidentalThreeQuarterTonesSharpArrowUp },             // accidentals.sharp.arrowup - typo in 1.3
@@ -5513,6 +5516,9 @@ QVector<oldName> oldNames = {
       {"thirtysecond flag",                     SymId::flag32ndUp },                // flags.u5
       {"sixtyfour flag",                        SymId::flag64thUp },                // flags.u6
       {"128flag",                               SymId::flag128thUp },               // flags.u7
+//      {"256flag",                               SymId::flag256thUp },               // flags.u8
+//      {"512flag",                               SymId::flag512thUp },               // flags.u9
+//      {"1024flag",                              SymId::flag1024thUp },             // flags.u10
       {"deight flag",                           SymId::flag8thDown },               // flags.d3
       {"grace dash",                            SymId::graceNoteSlashStemUp },      // flags.ugrace
       {"dgrace dash",                           SymId::graceNoteSlashStemDown },    // flags.dgrace
@@ -5520,6 +5526,9 @@ QVector<oldName> oldNames = {
       {"dthirtysecond flag",                    SymId::flag32ndDown },              // flags.d5
       {"dsixtyfourth flag",                     SymId::flag16thDown },              // flags.d6
       {"d128flag",                              SymId::flag128thDown },             // flags.d7
+//      {"d256flag",                              SymId::flag256thDown },             // flags.d8
+//      {"d512flag",                              SymId::flag512thDown },             // flags.d9
+//      {"d1024flag",                             SymId::flag1024thDown },            // flags.d10
 
       {"alto clef",                       SymId::cClef },                     // clefs.C
       {"calto clef",                      SymId::cClefChange },               // clefs.C_change

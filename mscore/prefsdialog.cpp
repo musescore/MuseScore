@@ -544,14 +544,29 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       defaultPlayDuration->setValue(preferences.getInt(PREF_SCORE_NOTE_DEFAULTPLAYDURATION));
 
-      int shortestNoteIndex = 2;
-      int nn = (preferences.getInt(PREF_IO_MIDI_SHORTESTNOTE) * 16)/MScore::division;
-      switch(nn) {
-            case 16: shortestNoteIndex = 0; break;
-            case 8:  shortestNoteIndex = 1; break;
-            case 4:  shortestNoteIndex = 2; break;
-            case 2:  shortestNoteIndex = 3; break;
-            case 1:  shortestNoteIndex = 4; break;
+      int shortestNoteIndex;
+      int nn = preferences.getInt(PREF_IO_MIDI_SHORTESTNOTE);
+      if (nn == MScore::division)
+            shortestNoteIndex = 0;           // Quarter
+      else if (nn == MScore::division / 2)
+            shortestNoteIndex = 1;  // Eighth
+      else if (nn == MScore::division / 4)
+            shortestNoteIndex = 2;  // etc.
+      else if (nn == MScore::division / 8)
+            shortestNoteIndex = 3;
+      else if (nn == MScore::division / 16)
+            shortestNoteIndex = 4;
+      else if (nn == MScore::division / 32)
+            shortestNoteIndex = 5;
+      else if (nn == MScore::division / 64)
+            shortestNoteIndex = 6;
+      else if (nn == MScore::division / 128)
+            shortestNoteIndex = 7;
+      else if (nn == MScore::division / 256)
+            shortestNoteIndex = 8;
+      else {
+            qDebug("Unknown shortestNote value of %d, defaulting to 16th", nn);
+            shortestNoteIndex = 2;
             }
       shortestNote->setCurrentIndex(shortestNoteIndex);
 
@@ -1144,13 +1159,22 @@ void PreferenceDialog::apply()
       else
             preferences.setPreference(PREF_IMPORT_STYLE_STYLEFILE, "");
 
-      int ticks = MScore::division/4;
-      switch(shortestNote->currentIndex()) {
-            case 0: ticks = MScore::division;    break;
-            case 1: ticks = MScore::division/2;  break;
-            case 2: ticks = MScore::division/4;  break;
-            case 3: ticks = MScore::division/8;  break;
-            case 4: ticks = MScore::division/16; break;
+      int ticks = MScore::division / 4;
+      switch (shortestNote->currentIndex()) {
+            case 0: ticks = MScore::division;       break;
+            case 1: ticks = MScore::division / 2;   break;
+            case 2: ticks = MScore::division / 4;   break;
+            case 3: ticks = MScore::division / 8;   break;
+            case 4: ticks = MScore::division / 16;  break;
+            case 5: ticks = MScore::division / 32;  break;
+            case 6: ticks = MScore::division / 64;  break;
+            case 7: ticks = MScore::division / 128; break;
+            case 8: ticks = MScore::division / 256; break;
+            default: {
+                  qDebug("Unknown index for shortestNote: %d, defaulting to 16th",
+                         shortestNote->currentIndex());
+                  ticks = MScore::division / 4;
+                  }
             }
       preferences.setPreference(PREF_IO_MIDI_SHORTESTNOTE, ticks);
 

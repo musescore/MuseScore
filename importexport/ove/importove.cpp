@@ -988,6 +988,14 @@ TDuration OveNoteType_To_Duration(OVE::NoteType noteType){
                   d.setType(TDuration::DurationType::V_256TH);
                   break;
                   }
+//            case OVE::NoteType::Note_512: {
+//                  d.setType(TDuration::DurationType::V_512TH);
+//                  break;
+//                  }
+//            case OVE::NoteType::Note_1024: {
+//                  d.setType(TDuration::DurationType::V_1024TH);
+//                  break;
+//                  }
             default:
                   d.setType(TDuration::DurationType::V_QUARTER);
                   break;
