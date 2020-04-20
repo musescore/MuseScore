@@ -79,7 +79,7 @@ Placement Fingering::calculatePlacement() const
       Staff* staff = chord->staff();
       Part* part   = staff->part();
       int nstaves  = part->nstaves();
-      bool voices  = chord->measure()->hasVoices(staff->idx());
+      bool voices  = chord->measure()->hasVoices(staff->idx(), chord->tick(), chord->actualTicks());
       bool below   = voices ? !chord->up() : (nstaves > 1) && (staff->rstaff() == nstaves - 1);
       return below ? Placement::BELOW : Placement::ABOVE;
       }
@@ -105,7 +105,7 @@ void Fingering::layout()
       if (autoplace() && note()) {
             Note* n      = note();
             Chord* chord = n->chord();
-            bool voices  = chord->measure()->hasVoices(chord->staffIdx());
+            bool voices  = chord->measure()->hasVoices(chord->staffIdx(), chord->tick(), chord->actualTicks());
             bool tight   = voices && chord->notes().size() == 1 && !chord->beam() && tid() != Tid::STRING_NUMBER;
 
             qreal headWidth = n->bboxRightPos();
