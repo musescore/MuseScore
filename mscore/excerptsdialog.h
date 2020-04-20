@@ -29,17 +29,27 @@ class MasterScore;
 class Excerpt;
 class Part;
 class Staff;
+class PartItem;
 
 //---------------------------------------------------------
-//   ExcerptItem
+//   StaffListItem
 //---------------------------------------------------------
 
-class ExcerptItem : public QListWidgetItem {
-      Excerpt* _excerpt;
+class StaffItem : public QTreeWidgetItem {
+      int               _firstTrack;
+      QList<StaffItem*> _linked;
 
    public:
-      ExcerptItem(Excerpt*, QListWidget* parent = 0);
-      Excerpt* excerpt() { return _excerpt; }
+      StaffItem();
+      StaffItem(int, int, int, const QMultiMap<int, int>, bool, PartItem* li);
+
+      void setLink(StaffItem*);
+
+      void setData(int column, int role, const QVariant& value) override;
+
+      QMultiMap<int, int> tracks(int&) const;
+
+      void dump();
       };
 
 //---------------------------------------------------------
@@ -47,39 +57,63 @@ class ExcerptItem : public QListWidgetItem {
 //---------------------------------------------------------
 
 class PartItem : public QTreeWidgetItem {
-      Part* _part;
+      Part*             _part;
+      QList<StaffItem*> _staffItems;
 
    public:
-      PartItem(Part*, QTreeWidget* parent = 0);
-      Part* part() const                    { return _part;   }
+      PartItem(Part*, const QMultiMap<int, int>, int&, bool, QTreeWidget* parent = 0);
+      ~PartItem();
+
+      Part* part() const                   { return _part;       }
+      QList<StaffItem*> staffItems() const { return _staffItems; }
+
+      StaffItem* findStaffItem(QTreeWidgetItem*) const;
+      QMultiMap<int, int> tracks(int&) const;
+
+      void dump();
       };
 
 //---------------------------------------------------------
-//   ScorePartsItem
+//   ExcerptItem
+//---------------------------------------------------------
+
+class ExcerptItem : public QListWidgetItem {
+      Excerpt*            _excerpt;
+      QList<PartItem*>    _partItems;
+      QMultiMap<int, int> _tracks;
+
+   public:
+      ExcerptItem(Excerpt*, QListWidget* parent = 0);
+      ~ExcerptItem();
+
+      Excerpt* excerpt() { return _excerpt; }
+
+      void addPartItem(PartItem*);
+      void removePartItem(PartItem*);
+      QList<PartItem*> partItems() const              { return _partItems; }
+      PartItem* findPartItem(QTreeWidgetItem*) const;
+      bool isEmpty() const                            { return _partItems.isEmpty(); }
+      bool isPartScore() const                        { return _excerpt->partScore(); }
+
+      QString title() const                           { return text(); }
+      void setTitle(const QString);
+
+      QMultiMap<int, int> tracks() const;
+
+      void dump(const char*);
+      };
+
+//---------------------------------------------------------
+//   InstrumentItem
 //---------------------------------------------------------
 
 class InstrumentItem : public QListWidgetItem {
-      PartItem* _partItem;
+      Part* _part;
 
    public:
-      InstrumentItem(PartItem*, QListWidget* parent = 0);
-      PartItem* partItem() const { return _partItem; }
-      };
+      InstrumentItem(Part*, QListWidget* parent = 0);
 
-//---------------------------------------------------------
-//   StaffListItem
-//---------------------------------------------------------
-
-class StaffItem : public QTreeWidgetItem {
-      Staff* _staff { 0 };
-
-   public:
-      StaffItem();
-      StaffItem(PartItem* li);
-
-      Staff* staff() const        { return _staff;    }
-      void setStaff(Staff* s)     { _staff = s;       }
-      void setData(int column, int role, const QVariant& value) override;
+      PartItem* newPartItem(int) const;
       };
 
 //---------------------------------------------------------
@@ -91,6 +125,12 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
       MasterScore* score;
 
       QString createName(const QString&);
+      PartItem* getCurrentPartItem() const;
+      ExcerptItem* getCurrentExcerptItem() const;
+      ExcerptItem* getExcerptItemAt(int) const;
+      InstrumentItem* getCurrentInstrumentItem() const;
+      void clearPartList();
+      void setWidgetState();
 
       virtual void accept();
 
@@ -101,14 +141,12 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
       void moveUpClicked();
       void moveDownClicked();
       void excerptChanged(QListWidgetItem* cur, QListWidgetItem* prev);
+      void instrumentChanged(QListWidgetItem* cur, QListWidgetItem* prev);
+      void partChanged(QTreeWidgetItem* cur, QTreeWidgetItem* prev);
       void partDoubleClicked(QTreeWidgetItem*, int);
-      void partClicked(QTreeWidgetItem*, int);
-      void createExcerptClicked(QListWidgetItem*);
+      void createNewExcerpt(ExcerptItem*);
       void titleChanged(const QString&);
-      ExcerptItem* isInPartsList(Excerpt* e);
-
-      QMultiMap<int, int> mapTracks();
-      void assignTracks(QMultiMap<int, int> );
+      ExcerptItem* getExcerptItem(Excerpt* e);
 
       void doubleClickedInstrument(QTreeWidgetItem*);
       void addButtonClicked();
@@ -116,6 +154,7 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
 
    public:
       ExcerptsDialog(MasterScore*, QWidget* parent = 0);
+      ~ExcerptsDialog();
       };
 
 

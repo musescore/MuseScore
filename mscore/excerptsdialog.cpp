@@ -27,6 +27,163 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   StaffItem
+//---------------------------------------------------------
+
+StaffItem::StaffItem(int firstTrack, int idx1, int idx2, const QMultiMap<int, int> tracks, bool disabled, PartItem* parent)
+   : QTreeWidgetItem(parent)
+      {
+      _firstTrack = -1; // Indicates initialising.
+
+      setFlags(Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable));
+
+      for (int i = 0; i < VOICES; ++i) {
+            bool inRange { true };
+            if (idx1 >= 0) {
+                  int checkTrack = tracks.value(firstTrack + i, -1);
+                  inRange = ((idx1 * VOICES) <= checkTrack) && ((checkTrack < (idx2 + 1) * VOICES));
+                  }
+            setCheckState(i + 1, inRange ? Qt::Checked : Qt::Unchecked);
+            setDisabled(disabled);
+            }
+
+       // By setting _firstTrack the check in setData is no longer bypassed.
+       _firstTrack = firstTrack;
+      }
+
+//---------------------------------------------------------
+//   setLinkMaster
+//---------------------------------------------------------
+
+void StaffItem::setLink(StaffItem* si)
+      {
+      _linked.append(si);
+      si->setDisabled(true);
+      }
+
+//---------------------------------------------------------
+//   setData
+//---------------------------------------------------------
+
+void StaffItem::setData(int column, int role, const QVariant& value)
+      {
+      QTreeWidgetItem::setData(column, role, value);
+
+      if (_firstTrack < 0)
+            // Is initially set to -1 in the constructor to bypass
+            // the checked for all unchecked items during initialisation.
+            return;
+
+      // Make sure there is always one voice selected.
+      // Is bypassed during initialisation.
+
+      int unchecked = 0;
+      for (int i = 1; i <= VOICES; i++) {
+            if (checkState(i) == Qt::Unchecked)
+                  unchecked += 1;
+            }
+      if (unchecked == VOICES)
+            setCheckState(column, Qt::Checked);
+
+      for (auto si : _linked)
+            si->setData(column, role, value);
+      }
+
+//---------------------------------------------------------
+//   tracks
+//---------------------------------------------------------
+
+QMultiMap<int, int> StaffItem::tracks(int& staff) const
+      {
+      QMultiMap<int, int> tracks;
+      int voice = 0;
+      for (int i = 0; i < VOICES; ++i) {
+            if (checkState(i + 1) == Qt::Checked)
+                  tracks.insert(_firstTrack + i, staff * VOICES + voice++);
+            }
+      staff++;
+      return tracks;
+      }
+
+//---------------------------------------------------------
+//   PartItem
+//---------------------------------------------------------
+
+PartItem::PartItem(Part* part, const QMultiMap<int, int> tracks, int& staffIdx, bool disabled, QTreeWidget* parent)
+   : QTreeWidgetItem(parent)
+      {
+      setFlags(Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable));
+      _part   = part;
+      setText(0, _part->partName());
+
+      Staff* master { nullptr };
+      StaffItem* msli { nullptr };
+      int firstTrack = _part->startTrack();
+      for (int i = 0; i < _part->nstaves(); ++i) {
+            StaffItem* sli = new StaffItem(firstTrack, staffIdx, staffIdx + _part->nstaves() - 1, tracks, disabled, this);
+            _staffItems.append(sli);
+
+            // If the part contains linked staves they all must have the same
+            // selection. Make only the first editable.
+            Staff* s = _part->staves()->at(i);
+            if (!master) {
+                  if  (s->staffList().length() > 1) {
+                        master = s;
+                        msli = sli;
+                        }
+                  }
+            else if (master && !s->staffList().length()) {
+                  master = nullptr;
+                  msli = nullptr;
+                  }
+            else {
+                  if (master->staffList().contains(s))
+                        msli->setLink(sli);
+                  }
+            firstTrack += VOICES;
+            }
+
+      if (staffIdx >= 0)
+            staffIdx += _part->nstaves();
+      }
+
+//---------------------------------------------------------
+//   ~PartItem
+//---------------------------------------------------------
+
+PartItem::~PartItem()
+      {
+      while (!_staffItems.isEmpty())
+            delete _staffItems.takeFirst();
+      _staffItems.clear();
+      }
+
+//---------------------------------------------------------
+//   findStaffItem
+//---------------------------------------------------------
+
+StaffItem* PartItem::findStaffItem(QTreeWidgetItem* widget) const
+      {
+      for (StaffItem* si : _staffItems) {
+            if (si == widget)
+                  return si;
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   tracks
+//---------------------------------------------------------
+
+QMultiMap<int, int> PartItem::tracks(int& staff) const
+      {
+      QMultiMap<int, int> tracks;
+      for (StaffItem* si : _staffItems)
+            tracks += si->tracks(staff);
+      return tracks;
+      }
+
+//---------------------------------------------------------
 //   ExcerptItem
 //---------------------------------------------------------
 
@@ -34,62 +191,107 @@ ExcerptItem::ExcerptItem(Excerpt* e, QListWidget* parent)
    : QListWidgetItem(parent)
       {
       _excerpt = e;
-      setText(e->title());
+      _tracks = _excerpt->tracks();
+      setText(_excerpt->title());
+
+      int staffIdx { 0 };
+      for (Part* part : _excerpt->parts())
+            _partItems.append(new PartItem(part, _excerpt->tracks(), staffIdx, _excerpt->partScore(), 0));
       }
 
 //---------------------------------------------------------
-//   PartItem
+//   ExcerptItem
 //---------------------------------------------------------
 
-PartItem::PartItem(Part* p, QTreeWidget* parent)
-   : QTreeWidgetItem(parent)
+ExcerptItem::~ExcerptItem()
       {
-      setFlags(Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable));
-      _part   = p;
-      setText(0, p->partName().replace("/", "_"));
+      while (!_partItems.isEmpty())
+            delete _partItems.takeFirst();
+      _partItems.clear();
+      }
+
+//---------------------------------------------------------
+//   addPartItem
+//---------------------------------------------------------
+
+void ExcerptItem::addPartItem(PartItem* pi)
+      {
+      _excerpt->parts().append(pi->part());
+      _partItems.append(pi);
+      }
+
+//---------------------------------------------------------
+//   removePartItem
+//---------------------------------------------------------
+
+void ExcerptItem::removePartItem(PartItem* pi)
+      {
+      if (_partItems.contains(pi))
+            _partItems.removeAll(pi);
+      }
+
+//---------------------------------------------------------
+//   findPartItem
+//---------------------------------------------------------
+
+PartItem* ExcerptItem::findPartItem(QTreeWidgetItem* widget) const
+      {
+      for (PartItem* pi : _partItems) {
+            if ((pi == widget) || pi->findStaffItem(widget))
+                  return pi;
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   tracks
+//---------------------------------------------------------
+
+QMultiMap<int, int> ExcerptItem::tracks() const
+      {
+      QMultiMap<int, int> tracks;
+      int staff = 0;
+
+      for (PartItem* pi : _partItems)
+            tracks += pi->tracks(staff);
+      return tracks;
+      }
+
+//---------------------------------------------------------
+//   setTitle
+//---------------------------------------------------------
+
+void ExcerptItem::setTitle(const QString name)
+      {
+      setText(name);
+      if (!isPartScore())
+            _excerpt->setTitle(name);
       }
 
 //---------------------------------------------------------
 //   InstrumentItem
 //---------------------------------------------------------
 
-InstrumentItem::InstrumentItem(PartItem* p, QListWidget* parent)
+InstrumentItem::InstrumentItem(Part* part, QListWidget* parent)
    : QListWidgetItem(parent)
       {
+      _part = part;
       setFlags(Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
-      _partItem = p;
-      setText(p->part()->partName().replace("/", "_"));
+      setText(_part->partName().replace("/", "_"));
       }
 
 //---------------------------------------------------------
-//   StaffItem
+//   newPartItem
 //---------------------------------------------------------
 
-StaffItem::StaffItem(PartItem* li)
-   : QTreeWidgetItem(li)
+PartItem* InstrumentItem::newPartItem(int count) const
       {
-      setFlags(Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable));
-      for (int i = 1; i <= VOICES; i++) {
-            setCheckState(i, Qt::Checked);
-            }
-      }
+      QMultiMap<int, int> tracks;
+      for (int track = _part->startTrack(); track < _part->endTrack(); ++track)
+            tracks.insert(track, count * VOICES + track - _part->startTrack());
 
-void StaffItem::setData(int column, int role, const QVariant& value)
-      {
-      const bool isCheckChange = column > 0
-         && role == Qt::CheckStateRole
-         && data(column, role).isValid() // Don't "change" during initialization
-         && checkState(column) != value;
-      QTreeWidgetItem::setData(column, role, value);
-      if (isCheckChange) {
-            int unchecked = 0;
-            for (int i = 1; i <= VOICES; i++) {
-                  if (checkState(i) == Qt::Unchecked)
-                        unchecked += 1;
-                  }
-            if (unchecked == VOICES)
-                  setCheckState(column, Qt::Checked);
-            }
+      int staffIdx { -1 };
+      return new PartItem(_part, tracks, staffIdx, false, 0);
       }
 
 //---------------------------------------------------------
@@ -106,16 +308,12 @@ ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
 
       score = s->masterScore();
 
-      for (Excerpt* e : score->excerpts()) {
-            ExcerptItem* ei = new ExcerptItem(e);
-            excerptList->addItem(ei);
-            }
-      QMultiMap<int, int> t;
-      for (Part* p : score->parts()) {
-            PartItem* pI = new PartItem(p);
-            InstrumentItem* item = new InstrumentItem(pI);
-            instrumentList->addItem(item);
-            }
+      for (Part* p : score->parts())
+            instrumentList->addItem(new InstrumentItem(p));
+
+      for (Excerpt* e : score->excerpts())
+            excerptList->addItem(new ExcerptItem(e));
+
 
       connect(singlePartButton, SIGNAL(clicked()), SLOT(singlePartClicked()));
       connect(allPartsButton, SIGNAL(clicked()), SLOT(allPartsClicked()));
@@ -129,26 +327,35 @@ ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
          SLOT(excerptChanged(QListWidgetItem*, QListWidgetItem*)));
       connect(partList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
          SLOT(partDoubleClicked(QTreeWidgetItem*, int)));
-      connect(partList, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(partClicked(QTreeWidgetItem*,int)));
+      connect(partList, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
+         SLOT(partChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
       connect(instrumentList, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
               SLOT(addButtonClicked()));
+      connect(instrumentList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
+         SLOT(instrumentChanged(QListWidgetItem*, QListWidgetItem*)));
       connect(title, SIGNAL(textChanged(const QString&)), SLOT(titleChanged(const QString&)));
 
       moveUpButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
       moveDownButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
-      
-      for (int i = 1; i <= VOICES; i++) {
-            //partList->model()->setHeaderData(i, Qt::Horizontal, MScore::selectColor[i-1], Qt::BackgroundRole);
-            partList->header()->resizeSection(i, 30);
-            }
 
-      int n = score->excerpts().size();
-      if (n > 0)
+      for (int i = 1; i <= VOICES; i++)
+            partList->header()->resizeSection(i, 30);
+
+      if (excerptList->count())
             excerptList->setCurrentRow(0);
-      moveDownButton->setEnabled(n > 1);
-      moveUpButton->setEnabled(false);
-      bool flag = excerptList->currentItem() != 0;
-      deleteButton->setEnabled(flag);
+      }
+
+//---------------------------------------------------------
+//   ~ExcerptsDialog
+//---------------------------------------------------------
+
+ExcerptsDialog::~ExcerptsDialog()
+      {
+      // A delete of a QTreeWidget includes a delete of all item. But PartItem's in the
+      // partList are owned by ExcerptItem. So deleting excerptList will delete ExcerptItem's
+      // in the list **and** all its children (in ExcerptItem), leaving invalid pointer.
+      // So, just remove the item from partList and leave the delete to the owner.
+      clearPartList();
       }
 
 //---------------------------------------------------------
@@ -180,16 +387,12 @@ void ExcerptsDialog::singlePartClicked()
       excerptList->addItem(ei);
       excerptList->selectionModel()->clearSelection();
       excerptList->setCurrentItem(ei, QItemSelectionModel::SelectCurrent);
+
       for (int i = 0; i < excerptList->count(); ++i) {
-            ExcerptItem* eii = (ExcerptItem*)excerptList->item(i);
-            if (eii->excerpt()->title() != eii->text()) {
-                  // if except score not created yet, change the UI title
-                  // if already created, change back(see createName) the excerpt title
-                  if (!eii->excerpt()->partScore())
-                        eii->setText(eii->excerpt()->title());
-                  else
-                        eii->excerpt()->setTitle(eii->text());
-                  }
+            // if except score not created yet, change the UI title
+            // if already created, change back(see createName) the excerpt title
+            ExcerptItem* eii = getExcerptItemAt(i);
+            eii->setText(eii->excerpt()->title());
             }
       }
 
@@ -199,9 +402,8 @@ void ExcerptsDialog::singlePartClicked()
 
 void ExcerptsDialog::allPartsClicked()
       {
-      QList<Excerpt*> excerpts = Excerpt::createAllExcerpt(score);
       ExcerptItem* ei = 0;
-      for (Excerpt* e : excerpts) {
+      for (Excerpt* e : Excerpt::createAllExcerpt(score)) {
             ei = new ExcerptItem(e);
             excerptList->addItem(ei);
             }
@@ -217,11 +419,12 @@ void ExcerptsDialog::allPartsClicked()
 
 void ExcerptsDialog::deleteClicked()
       {
-      QListWidgetItem* cur = excerptList->currentItem();
-      if (cur == 0)
+      ExcerptItem* ei = getCurrentExcerptItem();
+      if (ei == 0)
             return;
 
-      delete cur;
+      delete ei;
+      setWidgetState();
       }
 
 //---------------------------------------------------------
@@ -230,9 +433,6 @@ void ExcerptsDialog::deleteClicked()
 
 void ExcerptsDialog::moveUpClicked()
       {
-      QListWidgetItem* cur = excerptList->currentItem();
-      if (cur == 0)
-            return;
       int currentRow = excerptList->currentRow();
       if (currentRow <= 0)
             return;
@@ -247,12 +447,8 @@ void ExcerptsDialog::moveUpClicked()
 
 void ExcerptsDialog::moveDownClicked()
       {
-      QListWidgetItem* cur = excerptList->currentItem();
-      if (cur == 0)
-            return;
       int currentRow = excerptList->currentRow();
-      int nbRows = excerptList->count();
-      if (currentRow >= nbRows - 1)
+      if (currentRow >= excerptList->count() - 1)
             return;
       QListWidgetItem* currentItem = excerptList->takeItem(currentRow);
       excerptList->insertItem(currentRow + 1, currentItem);
@@ -266,30 +462,15 @@ void ExcerptsDialog::moveDownClicked()
 
 void ExcerptsDialog::addButtonClicked()
       {
-      if (!excerptList->currentItem() || !partList->isEnabled())
+      InstrumentItem* ii = getCurrentInstrumentItem();
+      ExcerptItem* ei = getCurrentExcerptItem();
+
+      if (!ii || !ei || !partList->isEnabled())
             return;
 
-      Excerpt* cur = ((ExcerptItem*)(excerptList->currentItem()))->excerpt();
-
-      for (QListWidgetItem* i : instrumentList->selectedItems()) {
-            InstrumentItem* item = static_cast<InstrumentItem*>(i);
-            const PartItem* it   = item->partItem();
-            if (it == 0)
-                  continue;
-            PartItem* pi = new PartItem(it->part(), 0);
-            pi->setText(0, pi->part()->name());
-            cur->parts().append(pi->part());
-            partList->addTopLevelItem(pi);
-            for (Staff* s : *pi->part()->staves()) {
-                  StaffItem* sli = new StaffItem(pi);
-                  sli->setStaff(s);
-                  for (int j = 0; j < VOICES; j++)
-                        sli->setCheckState(j + 1, Qt::Checked);
-                  }
-            pi->setText(0, pi->part()->partName());
-            }
-
-      cur->setTracks(mapTracks());
+      PartItem* pi = ii->newPartItem(partList->topLevelItemCount());
+      ei->addPartItem(pi);
+      partList->addTopLevelItem(pi);
       partList->resizeColumnToContents(0);
       }
 
@@ -300,66 +481,54 @@ void ExcerptsDialog::addButtonClicked()
 
 void ExcerptsDialog::removeButtonClicked()
       {
-      QList<QTreeWidgetItem*> wi = partList->selectedItems();
-      if (wi.isEmpty())
+      ExcerptItem* ei = getCurrentExcerptItem();
+      PartItem* pi = getCurrentPartItem();
+      if (!ei || !pi)
             return;
 
-      Excerpt* cur = ((ExcerptItem*)(excerptList->currentItem()))->excerpt();
-      QTreeWidgetItem* item = wi.first();
+      ei->removePartItem(pi);
+      partList->takeTopLevelItem(partList->indexOfTopLevelItem(pi));
 
-      cur->parts().removeAt(partList->indexOfTopLevelItem(item));
-      delete item;
-
-      cur->setTracks(mapTracks());
       partList->resizeColumnToContents(0);
+//       removeButton->setEnabled(partList->topLevelItemCount() > 0);
       }
 
 //---------------------------------------------------------
 //   excerptChanged
 //---------------------------------------------------------
 
-void ExcerptsDialog::excerptChanged(QListWidgetItem* cur, QListWidgetItem*)
+void ExcerptsDialog::excerptChanged(QListWidgetItem*, QListWidgetItem*)
       {
-      bool b = true;
-      if (cur) {
-            ExcerptItem* curItem = static_cast<ExcerptItem*>(cur);
-            Excerpt* e = curItem->excerpt();
-            title->setText(curItem->text());
-            b = e->partScore() == 0;
-
-            // set selection:
-            QList<Part*>& pl = e->parts();
-            QMultiMap<int, int> tracks = e->tracks();
-            partList->clear();
-            for (Part* p: pl) {
-                  PartItem* pi = new PartItem(p, partList);
+      clearPartList();
+      ExcerptItem* ei = getCurrentExcerptItem();
+      if (ei) {
+            title->setText(ei->text());
+            for (PartItem* pi : ei->partItems())
                   partList->addTopLevelItem(pi);
-                  for (Staff* s : *p->staves()) {
-                        StaffItem* sli = new StaffItem(pi);
-                        sli->setStaff(s);
-                        sli->setDisabled(!b);
-                        }
-                  pi->setText(0, p->partName());
-                  partList->setItemExpanded(pi, false);
-                  }
-            assignTracks(tracks);
             }
       else {
             title->setText("");
-            partList->clear();
-            b = false;
             }
-      instrumentList->setEnabled(b);
-      title->setEnabled(true);
-      addButton->setEnabled(b);
-      removeButton->setEnabled(b);
 
-      bool flag = excerptList->currentItem() != 0;
-      int n = excerptList->count();
-      int idx = excerptList->currentIndex().row();
-      moveUpButton->setEnabled(idx > 0);
-      moveDownButton->setEnabled(idx < (n-1));
-      deleteButton->setEnabled(flag);
+      setWidgetState();
+      }
+
+//---------------------------------------------------------
+//   partChanged
+//---------------------------------------------------------
+
+void ExcerptsDialog::partChanged(QTreeWidgetItem*, QTreeWidgetItem*)
+      {
+      removeButton->setEnabled(getCurrentPartItem());
+      }
+
+//---------------------------------------------------------
+//   instrumentChanged
+//---------------------------------------------------------
+
+void ExcerptsDialog::instrumentChanged(QListWidgetItem*, QListWidgetItem*)
+      {
+      addButton->setEnabled(getCurrentInstrumentItem());
       }
 
 //---------------------------------------------------------
@@ -369,25 +538,11 @@ void ExcerptsDialog::excerptChanged(QListWidgetItem* cur, QListWidgetItem*)
 void ExcerptsDialog::partDoubleClicked(QTreeWidgetItem* item, int)
       {
       if (!item->parent()) { // top level items are PartItem
-            PartItem* pi = (PartItem*)item;
+            PartItem* pi = static_cast<PartItem*>(item); // TODO
             QString s = pi->part()->partName();
             title->setText(s);
             titleChanged(s);
             }
-      }
-
-//---------------------------------------------------------
-//   partClicked
-//---------------------------------------------------------
-
-void ExcerptsDialog::partClicked(QTreeWidgetItem*, int)
-      {
-      QListWidgetItem* cur = excerptList->currentItem();
-      if (cur == 0)
-            return;
-
-      Excerpt* excerpt = static_cast<ExcerptItem*>(cur)->excerpt();
-      excerpt->setTracks(mapTracks());
       }
 
 //---------------------------------------------------------
@@ -405,11 +560,9 @@ void ExcerptsDialog::doubleClickedInstrument(QTreeWidgetItem*)
 
 void ExcerptsDialog::titleChanged(const QString& s)
       {
-      ExcerptItem* cur = static_cast<ExcerptItem*>(excerptList->currentItem());
-      if (cur == 0)
-            return;
-      cur->excerpt()->setTitle(s);
-      cur->setText(s);
+      ExcerptItem* ei = getCurrentExcerptItem();
+      if (ei)
+            ei->setTitle(s);
       }
 
 //---------------------------------------------------------
@@ -420,95 +573,106 @@ QString ExcerptsDialog::createName(const QString& partName)
       {
       int count = excerptList->count();
       QList<Excerpt*> excerpts;
-      for (int i = 0; i < count; ++i) {
-            Excerpt* ee = static_cast<ExcerptItem*>(excerptList->item(i))->excerpt();
-            excerpts.append(ee);
-            }
+      for (int i = 0; i < count; ++i)
+            excerpts.append(getExcerptItemAt(i)->excerpt());
+
       return Excerpt::createName(partName, excerpts);
       }
 
 //---------------------------------------------------------
-//   mapTracks
+//   getCurrentPartItem
 //---------------------------------------------------------
 
-QMultiMap<int, int> ExcerptsDialog::mapTracks()
+PartItem* ExcerptsDialog::getCurrentPartItem() const
       {
-      QMultiMap<int, int> tracks;
-      int track = 0;
-
-      for (QTreeWidgetItem* pwi = partList->itemAt(0,0); pwi; pwi = partList->itemBelow(pwi)) {
-            PartItem* pi = (PartItem*)pwi;
-            Part* p = pi->part();
-            for (int j = 0; j < pwi->childCount(); j++) {
-                  for (int k = 0; k < VOICES; k++) {
-                        if (pwi->child(j)->checkState(k+1) == Qt::Checked) {
-                              int voiceOff = 0;
-                              int srcTrack = p->startTrack() + j * VOICES + k;
-                              for (int i = srcTrack & ~3; i < srcTrack; i++) {
-                                    QList<int> t = tracks.values(i);
-                                    for (int ti : t) {
-                                          if (ti >= (track & ~3))
-                                                voiceOff++;
-                                          }
-                                    }
-                              tracks.insert(srcTrack, (track & ~3) + voiceOff);
-                              }
-                        track++;
-                        }
-                  }
-            }
-      return tracks;
+      return static_cast<PartItem*>(partList->currentItem());
       }
 
 //---------------------------------------------------------
-//   assignTracks
+//   getCurrentExcerptItem
 //---------------------------------------------------------
 
-void ExcerptsDialog::assignTracks(QMultiMap<int, int> tracks)
+ExcerptItem* ExcerptsDialog::getCurrentExcerptItem() const
       {
-      int track = 0;
-      for (QTreeWidgetItem* pwi = partList->itemAt(0,0); pwi; pwi = partList->itemBelow(pwi)) {
-            for (int j = 0; j < pwi->childCount(); j++) {
-                  for (int k = 0; k < VOICES; k++) {
-                        int checkTrack = tracks.key(track, -1);
-                        if (checkTrack != -1)
-                              pwi->child(j)->setCheckState((checkTrack % VOICES) + 1, Qt::Checked);
-                        else
-                              pwi->child(j)->setCheckState((track % VOICES) + 1, Qt::Unchecked);
-                        track++;
-                        }
-                  }
-            }
+      return static_cast<ExcerptItem*>(excerptList->currentItem());
       }
 
 //---------------------------------------------------------
-//   isInPartList
+//   getExcerptItemAt
 //---------------------------------------------------------
 
-ExcerptItem* ExcerptsDialog::isInPartsList(Excerpt* e)
+ExcerptItem* ExcerptsDialog::getExcerptItemAt(int index) const
       {
-      int n = excerptList->count();
-      for (int i = 0; i < n; ++i) {
-            excerptList->setCurrentRow(i);
-            // ExcerptItem* cur = static_cast<ExcerptItem*>(excerptList->currentItem());
-            ExcerptItem* cur = static_cast<ExcerptItem*>(excerptList->item(i));
-            if (cur == 0)
-                  continue;
-//            if (((ExcerptItem*)cur)->excerpt() == ExcerptItem(e).excerpt())
-            if (cur->excerpt() == e)
-                  return cur;
+      return static_cast<ExcerptItem*>(excerptList->item(index));
+      }
+
+//---------------------------------------------------------
+//   getInstrumentItemAt
+//---------------------------------------------------------
+
+InstrumentItem* ExcerptsDialog::getCurrentInstrumentItem() const
+      {
+      return static_cast<InstrumentItem*>(instrumentList->currentItem());
+      }
+
+//---------------------------------------------------------
+//   clearPartList
+//---------------------------------------------------------
+
+void ExcerptsDialog::clearPartList()
+      {
+      // The clear method of QTreeWidget cannot be used because it will delete
+      // all items, leaving behind invalid pointer.
+      // takeTopLevelItem on the other hand will remove the item from the tree
+      // but will not delete it.
+      while (partList->takeTopLevelItem(0)) {}
+      }
+
+
+//---------------------------------------------------------
+//   setWidgetState
+//---------------------------------------------------------
+
+void ExcerptsDialog::setWidgetState()
+      {
+      ExcerptItem* ei = getCurrentExcerptItem();
+
+      const bool enable = ei && !ei->isPartScore();
+
+      instrumentList->setEnabled(enable);
+      title->setEnabled(ei);
+      deleteButton->setEnabled(ei);
+
+      addButton->setEnabled(ei && getCurrentInstrumentItem());
+      removeButton->setEnabled(ei && getCurrentPartItem());
+
+      int idx = excerptList->currentIndex().row();
+      moveUpButton->setEnabled(ei && (idx > 0));
+      moveDownButton->setEnabled(ei && (idx < (excerptList->count() - 1)));
+      }
+
+//---------------------------------------------------------
+//   getExcerptItem
+//---------------------------------------------------------
+
+ExcerptItem* ExcerptsDialog::getExcerptItem(Excerpt* e)
+      {
+      for (int i = 0; i < excerptList->count(); ++i) {
+            ExcerptItem* ei = getExcerptItemAt(i);
+            if (ei && (ei->excerpt() == e))
+                  return ei;
             }
       return 0;
       }
 
 //---------------------------------------------------------
-//   createExcerpt
+//   createNewExcerpt
 //---------------------------------------------------------
 
-void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
+void ExcerptsDialog::createNewExcerpt(ExcerptItem* ei)
       {
-      Excerpt* e = static_cast<ExcerptItem*>(cur)->excerpt();
-      e->setTitle(title->text());
+      Excerpt* e = ei->excerpt();
+      e->setTitle(ei->text());
       if (e->partScore())
             return;
       if (e->parts().isEmpty()) {
@@ -521,6 +685,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
 
       qDebug() << " + Add part : " << e->title();
       score->undo(new AddExcerpt(e));
+      e->setTracks(ei->tracks());
       Excerpt::createExcerpt(e);
 
       // a new excerpt is created in AddExcerpt, make sure the parts are filed
@@ -541,27 +706,26 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
 
 void ExcerptsDialog::accept()
       {
+      for (int i = 0; i < excerptList->count(); ++i)
+            excerptList->setCurrentRow(i);
+
       score->startCmd();
 
-      // first pass : see if actual parts needs to be deleted
+      // first pass : see if actual parts needs to be deleted or renamed
       foreach (Excerpt* e, score->excerpts()) {
             Score* partScore  = e->partScore();
-            ExcerptItem* item = isInPartsList(e);
-            if (!isInPartsList(e) && partScore)      // Delete it because not in the list anymore
+            ExcerptItem* ei = getExcerptItem(e);
+            if (!getExcerptItem(e) && partScore)      // Delete it because not in the list anymore
                   score->deleteExcerpt(e);
-            else {
-                  if (item->text() != e->title())
-                        score->undo(new ChangeExcerptTitle(e, item->text()));
-                  }
+            else if (ei->text() != e->title())
+                  score->undo(new ChangeExcerptTitle(e, ei->text()));
             }
+
       // Second pass : Create new parts
-      int n = excerptList->count();
-      for (int i = 0; i < n; ++i) {
-            excerptList->setCurrentRow(i);
-            QListWidgetItem* cur = excerptList->currentItem();
-            if (cur == 0)
-                  continue;
-            createExcerptClicked(cur);
+      for (int i = 0; i < excerptList->count(); ++i) {
+            ExcerptItem* ei = getExcerptItemAt(i);
+            if (ei && !ei->isEmpty())
+                  createNewExcerpt(ei);
             }
 
       // Third pass : Remove empty parts.
@@ -569,24 +733,21 @@ void ExcerptsDialog::accept()
       while (i < excerptList->count()) {
             // This new part is empty, so we don't create an excerpt but remove it from the list.
             // Necessary to order the parts later on.
-            excerptList->setCurrentRow(i);
-            QListWidgetItem* cur = excerptList->currentItem();
-            Excerpt* e = static_cast<ExcerptItem*>(cur)->excerpt();
-            if (e->parts().isEmpty() && !e->partScore()) {
-                  qDebug() << " - Deleting empty parts : " << cur->text();
-                  delete cur;
+            ExcerptItem* ei = getExcerptItemAt(i);
+            if (ei->excerpt()->parts().isEmpty() && !ei->excerpt()->partScore()) {
+                  qDebug() << " - Deleting empty parts : " << ei->text();
+                  delete ei;
                   }
             else
                   i++;
             }
 
-      // Update the score parts order following excerpList widget
+      // Update the score parts order following excerptList widget
       // The reference is the excerpt list. So we iterate following it and swap parts in the score accordingly
+      for (int i = 0; i < excerptList->count(); ++i) {
+            ExcerptItem* ei = getExcerptItemAt(i);
 
-      for (int j = 0; j < excerptList->count(); ++j) {
-            excerptList->setCurrentRow(j);
-            QListWidgetItem* cur = excerptList->currentItem();
-            if (cur == 0)
+            if (!ei || ei->isEmpty())
                   continue;
 
             int position = 0;  // Actual order position in score
@@ -594,14 +755,14 @@ void ExcerptsDialog::accept()
 
             // Looks for the excerpt and its position.
             foreach(Excerpt* e, score->excerpts()) {
-                  if (((ExcerptItem*)cur)->excerpt() == ExcerptItem(e).excerpt()) {
+                  if (ei->excerpt() == e) {
                         found = true;
                         break;
                         }
                   position++;
                   }
-            if ((found) && (position != j))
-                  score->undo(new SwapExcerpt(score, j, position));
+            if (found && (position != i))
+                  score->undo(new SwapExcerpt(score, i, position));
             }
       score->endCmd();
       QDialog::accept();
