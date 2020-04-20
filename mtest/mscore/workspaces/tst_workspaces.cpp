@@ -79,6 +79,8 @@ void TestWorkspaces::initTestCase()
       {
       qputenv("QML_DISABLE_DISK_CACHE", "true");
       qSetMessagePattern("%{function}: %{message}");
+      // Force INI settings format to store settings in a temporary directory
+      QSettings::setDefaultFormat(QSettings::IniFormat);
       MScore::noGui = true;
       MScore::testMode = true;
       initMuseScoreResources();
@@ -90,7 +92,7 @@ void TestWorkspaces::initTestCase()
 
 void TestWorkspaces::initMuseScore()
       {
-      Ms::dataPath = tmpDataDir->path();
+      MuseScoreApplication::setCustomConfigFolder(tmpDataDir->path());
       QStringList temp;
       MuseScore::init(temp);
       WorkspacesManager::initCurrentWorkspace();
