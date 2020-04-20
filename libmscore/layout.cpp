@@ -3794,6 +3794,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
       //-------------------------------------------------------------
 
       for (Segment* s : sl) {
+            std::set<int> recreateShapes;
             for (Element* e : s->elist()) {
                   if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show())
                         continue;
@@ -3836,9 +3837,12 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                     QRectF r = f->bbox().translated(f->pos() + n->pos() + n->chord()->pos() + s->pos() + s->measure()->pos());
                                     system->staff(f->note()->chord()->vStaffIdx())->skyline().add(r);
                                     }
+                              recreateShapes.insert(f->staffIdx());
                               }
                         }
                   }
+            for (auto staffIdx : recreateShapes)
+                  s->createShape(staffIdx);
             }
 
       //-------------------------------------------------------------
