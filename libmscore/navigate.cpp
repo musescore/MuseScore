@@ -641,6 +641,9 @@ Element* Score::nextElement()
                               return mb;
                               }
                         }
+                  case ElementType::LAYOUT_BREAK: {
+                        staffId = 0; // otherwise it will equal -1, which breaks the navigation
+                        }
                   default:
                         break;
                   }
@@ -775,6 +778,9 @@ Element* Score::prevElement()
                         else {
                               return mb;
                               }
+                        }
+                  case ElementType::LAYOUT_BREAK: {
+                        staffId = 0; // otherwise it will equal -1, which breaks the navigation
                         }
                   default:
                         break;
