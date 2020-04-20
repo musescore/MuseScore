@@ -4,9 +4,13 @@
 
 To build all tests:
 
-| Linux | OSX | Windows |
-| ----- | --- | ------- |
+| Linux | OSX | Windows (MinGW) |
+| ----- | --- | --------------- |
 | make debug<br>sudo make installdebug<br>cd build.debug/mtest<br>make</pre> | make -f Makefile.osx debug<br>make -f Makefile.osx installdebug<br>cd build.debug/mtest<br>make -f Makefile.osx | mingw32-make -f Makefile.mingw debug<br>mingw32-make -f Makefile.mingw installdebug<br>cd build.debug\mtest<br>mingw32-make -f Makefile.mingw |
+
+| Windows (MSVC) |
+| -------------- |
+| (Compile MuseScore in debug mode)<br>(Install MuseScore)<br>cd msvc.build_x64\mtest<br>cmake --build .<br>cmake --build . --target INSTALL |
 
 To run all tests:
 
@@ -20,6 +24,8 @@ To run only one test (for debugging purposes):
 To see how the CI environment is doing it check `.travis.yml` and `build/run_tests.sh`
 
 **Note: You need to have `diff` in your path. For Windows, get a copy of [diffutils for Windows](http://gnuwin32.sourceforge.net/packages/diffutils.htm "diffutils for Windows").**
+
+**Note-2: For Windows MSVC, you also need MuseScore installation bin folder (for example C:\MuseScore\msvc.install_x64\bin) in your path.**
 
 ## Test case conventions
 

@@ -7398,6 +7398,24 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
       }
 
 //---------------------------------------------------------
+//   setCustomConfigFolder
+//---------------------------------------------------------
+
+bool MuseScoreApplication::setCustomConfigFolder(const QString& path)
+      {
+      const QFileInfo pinfo(path);
+
+      if (pinfo.exists() && pinfo.isDir()) {
+            QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, path);
+            QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, path);
+            dataPath = path;
+            return true;
+            }
+
+      return false;
+      }
+
+//---------------------------------------------------------
 //   parseCommandLineArguments
 //---------------------------------------------------------
 
@@ -7557,12 +7575,7 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
             QString path = parser.value("c");
             if (path.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
-            QDir dir;
-            if (dir.exists(path)) {
-                  QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, path);
-                  QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, path);
-                  dataPath = path;
-                  }
+            setCustomConfigFolder(path);
             }
       MScore::testMode = parser.isSet("t");
       if (parser.isSet("M")) {

@@ -13,6 +13,12 @@
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 enable_testing()
 
+if (MSVC)
+      project(mtest)
+      set (PROJECT_BINARY_DIR ${PROJECT_BINARY_DIR}/..)
+      set (PROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR}/..)
+endif (MSVC)
+
 include_directories(
       ${PROJECT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
@@ -82,7 +88,7 @@ set (SOURCE_LIB
       ${PROJECT_SOURCE_DIR}/mscore/extension.cpp # required by zerberus tests
       ${OMR_SRC}
       omr
-	)
+      )
 
 if (MSVC)
     add_library(
@@ -146,7 +152,7 @@ endif (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
 set_target_properties(testutils PROPERTIES COMPILE_FLAGS "${TESTUTILS_COMPILE_FLAGS}")
 set_target_properties(testutils_mscoreapp PROPERTIES COMPILE_FLAGS "${TESTUTILS_COMPILE_FLAGS}")
 
-
+if (NOT MSVC)
 add_custom_target(report
       COMMAND ant -f ${PROJECT_SOURCE_DIR}/mtest/build.xml -Droot.dir=${PROJECT_BINARY_DIR}/mtest report
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
@@ -156,6 +162,7 @@ add_custom_target(reporthtml
       COMMAND ant -f ${PROJECT_SOURCE_DIR}/mtest/build.xml -Droot.dir=${PROJECT_BINARY_DIR}/mtest reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
+endif (NOT MSVC)
 
 subdirs (
         libmscore/compat114
@@ -206,6 +213,7 @@ subdirs (
 #        libmscore/text        work in progress...
         libmscore/utils
         mscore/workspaces
+        importmidi
         capella
         biab
         musicxml
@@ -223,7 +231,7 @@ subdirs (
         testscript
         )
 
-
+if (NOT MSVC)
 install(FILES
       ../share/styles/chords_std.xml
       ../share/styles/chords_jazz.xml
@@ -236,7 +244,7 @@ install(FILES
       ../share/styles/cchords_sym.xml
       DESTINATION ${PROJECT_BINARY_DIR}/mtest/styles
       )
-
+endif (NOT MSVC)
 
 if (OMR)
 subdirs(omr)
