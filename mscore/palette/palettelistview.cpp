@@ -12,6 +12,7 @@
 #include "palettelistview.h"
 
 #include "palettemodel.h"
+#include "preferences.h"
 
 namespace Ms {
 
@@ -36,6 +37,8 @@ PaletteListView::PaletteListView(PalettePanel* panel, QWidget* parent)
 
       setModel(model);
       setRootIndex(parentCategory);
+
+      setupStyle();
       }
 
 //---------------------------------------------------------
@@ -105,4 +108,38 @@ void PaletteListView::keyPressEvent(QKeyEvent* event)
                         QListView::keyPressEvent(event);
             }
       }
-}
+
+//---------------------------------------------------------
+//   PaletteListView::setupStyle
+//---------------------------------------------------------
+
+void PaletteListView::setupStyle()
+      {
+      QPalette pal = palette(); // color palette
+      QColor c;
+      if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR)
+         && preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES))
+            c = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
+      else
+            c = preferences.defaultValue(PREF_UI_CANVAS_FG_COLOR).value<QColor>();
+      pal.setColor(QPalette::Base, c);
+      setPalette(pal);
+      }
+
+//---------------------------------------------------------
+//   PaletteListView::changeEvent
+//---------------------------------------------------------
+
+void PaletteListView::changeEvent(QEvent* event)
+      {
+      QListView::changeEvent(event);
+      switch (event->type()) {
+            case QEvent::StyleChange:
+                  setupStyle();
+                  break;
+            default:
+                  break;
+            }
+      }
+
+} // namespace Ms

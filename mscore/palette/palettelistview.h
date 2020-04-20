@@ -53,7 +53,10 @@ class PaletteListView : public QListView // see also QListWidget
 
    protected:
       virtual void keyPressEvent(QKeyEvent* event) override;
+      virtual void changeEvent(QEvent* event) override;
 
+   private:
+      void setupStyle();
       };
 }
 
