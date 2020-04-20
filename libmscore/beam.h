@@ -92,6 +92,7 @@ class Beam final : public Element {
 
       Fraction tick() const override;
       Fraction rtick() const override;
+      Fraction ticks() const;
 
       void write(XmlWriter& xml) const override;
       void read(XmlReader&) override;

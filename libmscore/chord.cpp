@@ -874,7 +874,7 @@ void Chord::computeUp()
             // if no stems or stem beside staves
             if (tab->stemless() || !tab->stemThrough()) {
                   // if measure has voices, set stem direction according to voice
-                  if (measure()->hasVoices(staffIdx()))
+                  if (measure()->hasVoices(staffIdx(), tick(), actualTicks()))
                         _up = !(track() % 2);
                   else                          // if only voice 1,
                         // unconditionally set to down if not stems or according to TAB stem direction otherwise
@@ -895,14 +895,14 @@ void Chord::computeUp()
             //
             // stem direction for grace notes
             //
-            if (measure()->hasVoices(staffIdx()))
+            if (measure()->hasVoices(staffIdx(), tick(), actualTicks()))
                   _up = !(track() % 2);
             else
                   _up = true;
             }
       else if (staffMove())
             _up = staffMove() > 0;
-      else if (measure()->hasVoices(staffIdx()))
+      else if (measure()->hasVoices(staffIdx(), tick(), actualTicks()))
             _up = !(track() % 2);
       else {
             int   dnMaxLine   = staff()->middleLine(tick());
@@ -3407,7 +3407,7 @@ void Chord::layoutArticulations()
       Articulation* prevArticulation = nullptr;
       for (Articulation* a : _articulations) {
             if (a->anchor() == ArticulationAnchor::CHORD) {
-                  if (measure()->hasVoices(a->staffIdx()))
+                  if (measure()->hasVoices(a->staffIdx(), tick(), actualTicks()))
                         a->setUp(up()); // if there are voices place articulation at stem
                   else if (a->symId() >= SymId::articMarcatoAbove && a->symId() <= SymId::articMarcatoTenutoBelow)
                         a->setUp(true); // Gould, p. 117: strong accents above staff

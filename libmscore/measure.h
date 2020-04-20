@@ -117,6 +117,7 @@ class Measure final : public MeasureBase {
       void spatiumChanged(qreal oldValue, qreal newValue) override;
 
       System* system() const                      { return (System*)parent(); }
+      bool hasVoices(int staffIdx, Fraction stick, Fraction len) const;
       bool hasVoices(int staffIdx) const;
       void setHasVoices(int staffIdx, bool v);
 
@@ -229,7 +230,6 @@ class Measure final : public MeasureBase {
       bool empty() const;
       bool isOnlyRests(int track) const;
       bool isOnlyDeletedRests(int track) const;
-      bool isOnlyDeletedRests(int track, const Fraction& stick, const Fraction& etick) const;
 
       int playbackCount() const      { return _playbackCount; }
       void setPlaybackCount(int val) { _playbackCount = val; }
