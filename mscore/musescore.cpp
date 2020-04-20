@@ -7737,6 +7737,8 @@ int runApplication(int& argc, char** av)
             return ok ? EXIT_SUCCESS : EXIT_FAILURE;
             }
 
+      QDir::setCurrent(app->applicationDirPath());
+
       return qApp->exec();
       }
 
