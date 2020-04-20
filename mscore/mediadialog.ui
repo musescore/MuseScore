@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string notr="true">Additional Media</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_6">
    <item>
