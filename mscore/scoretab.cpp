@@ -43,6 +43,31 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   MsTabBar::mousePressEvent
+//---------------------------------------------------------
+
+void MsTabBar::mousePressEvent(QMouseEvent* e)
+      {
+      QTabBar::mousePressEvent(e);
+      if (e->button() == Qt::MiddleButton)
+            _middleClickedTab = tabAt(e->pos());
+      }
+
+//---------------------------------------------------------
+//   MsTabBar::mouseReleaseEvent
+//---------------------------------------------------------
+
+void MsTabBar::mouseReleaseEvent(QMouseEvent* e)
+      {
+      QTabBar::mouseReleaseEvent(e);
+      if (e->button() == Qt::MiddleButton) {
+            if (tabAt(e->pos()) == _middleClickedTab)
+                  emit tabCloseRequested(_middleClickedTab);
+            _middleClickedTab = -1; // reset
+            }
+      }
+
+//---------------------------------------------------------
 //   ScoreTab
 //---------------------------------------------------------
 
@@ -64,7 +89,7 @@ ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
 
       connect(ag, SIGNAL(triggered(QAction*)), this, SIGNAL(actionTriggered(QAction*)));
 
-      tab = new QTabBar(this);
+      tab = new MsTabBar(this);
       tab->setObjectName("primarytab");
       tab->setAccessibleName("");
       tab->setExpanding(false);
@@ -73,7 +98,7 @@ ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
       tab->setTabsClosable(true);
       tab->setMovable(true);
 
-      tab2 = new QTabBar(this);
+      tab2 = new MsTabBar(this);
       tab2->setObjectName("secondarytab");
       tab2->setAccessibleName("");
       tab2->setExpanding(false);
