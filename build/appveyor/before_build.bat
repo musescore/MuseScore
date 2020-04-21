@@ -44,6 +44,8 @@ CD breakpad_tools
 SET TOOLS_ARCHIVE=dump_syms.7z
 IF NOT EXIST %TOOLS_ARCHIVE% ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dump_syms.7z" -O %TOOLS_ARCHIVE% )
 START " " /wait "7z" x -y %TOOLS_ARCHIVE% > nul
+::Register msdia140.dll contained in the dump_syms.7z archive (required to run dump_syms.exe)
+regsvr32 msdia140.dll
 CD C:\MuseScore
 
 :: is MuseScore stable? Check here, no grep in PATH later on
