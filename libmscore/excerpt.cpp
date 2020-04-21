@@ -519,7 +519,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                               for (int track : t) {
                                     //Clone KeySig TimeSig and Clefs if voice 1 of source staff is not mapped to a track
                                     Element* oef = oseg->element(srcTrack & ~3);
-                                    if (oef && (oef->isTimeSig() || oef->isKeySig()) && oef->tick().isZero()
+                                    if (oef && (oef->isTimeSig() || oef->isKeySig()) && oseg->rtick().isZero()
                                         && !(trackList.size() == (score->excerpt()->parts().size() * VOICES))) {
                                           Element* ne = oef->linkedClone();
                                           ne->setTrack(track & ~3);

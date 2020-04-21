@@ -81,6 +81,11 @@
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>
+        <Channel name="Chord symbols">
+          <program value="0"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
         </Instrument>
       </Part>
     <Part>
@@ -130,6 +135,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="57"/>
           <midiPort>0</midiPort>
           <midiChannel>0</midiChannel>
@@ -268,7 +275,7 @@
             <durationType>quarter</durationType>
             <Note>
               <Fingering>
-                <pos x="1.05809" y="-4.67501"/>
+                <offset x="1.05809" y="-4.67501"/>
                 <text>2</text>
                 </Fingering>
               <pitch>63</pitch>
@@ -278,7 +285,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articAccentAbove</subtype>
+              <subtype>articAccentBelow</subtype>
               </Articulation>
             <Note>
               <pitch>63</pitch>
@@ -298,7 +305,7 @@
           <Harmony>
             <root>11</root>
             <name>7</name>
-            <pos x="0" y="-3.22581"/>
+            <offset x="0" y="-3.22581"/>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
@@ -368,9 +375,13 @@
         </Measure>
       <Measure>
         <voice>
+          <TimeSig>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Rest>
             <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <duration>2/4</duration>
             </Rest>
           </voice>
         <voice>
@@ -381,7 +392,8 @@
                 </Slur>
               <next>
                 <location>
-                  <fractions>3/4</fractions>
+                  <measures>1</measures>
+                  <fractions>1/4</fractions>
                   </location>
                 </next>
               </Spanner>
@@ -397,6 +409,16 @@
               <tpc>11</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
+        <voice>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -409,7 +431,8 @@
             <Spanner type="Slur">
               <prev>
                 <location>
-                  <fractions>-3/4</fractions>
+                  <measures>-1</measures>
+                  <fractions>-1/4</fractions>
                   </location>
                 </prev>
               </Spanner>
@@ -419,24 +442,24 @@
               </Note>
             </Chord>
           </voice>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
         </Measure>
       <Measure>
         <voice>
+          <KeySig>
+            <accidental>1</accidental>
+            </KeySig>
           <Rest>
             <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <duration>2/4</duration>
             </Rest>
           </voice>
         <voice>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
+              <Accidental>
+                <subtype>accidentalFlat</subtype>
+                </Accidental>
               <Spanner type="Tie">
                 <Tie>
                   </Tie>
@@ -464,6 +487,23 @@
               <tpc>11</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <accidental>-3</accidental>
+            </KeySig>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        <voice>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -472,13 +512,10 @@
               </Note>
             </Chord>
           <Rest>
-            <durationType>quarter</durationType>
+            <durationType>half</durationType>
             </Rest>
-          </voice>
-        <voice>
           <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
@@ -534,14 +571,44 @@
         </Measure>
       <Measure>
         <voice>
+          <TimeSig>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Rest>
             <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <duration>2/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
         <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <accidental>1</accidental>
+            </KeySig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <accidental>-3</accidental>
+            </KeySig>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -618,7 +685,7 @@
             <durationType>quarter</durationType>
             <Note>
               <Fingering>
-                <pos x="1.05809" y="-4.67501"/>
+                <offset x="1.05809" y="-4.67501"/>
                 <text>2</text>
                 </Fingering>
               <pitch>43</pitch>
@@ -628,7 +695,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articAccentAbove</subtype>
+              <subtype>articAccentBelow</subtype>
               </Articulation>
             <Note>
               <pitch>43</pitch>
@@ -639,10 +706,20 @@
         </Measure>
       <Measure>
         <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
           </voice>
         <voice/>
         <voice/>
@@ -679,10 +756,17 @@
         </Measure>
       <Measure>
         <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <TimeSig>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
           </voice>
         <voice/>
         <voice/>
@@ -694,7 +778,8 @@
                 </Slur>
               <next>
                 <location>
-                  <fractions>3/4</fractions>
+                  <measures>1</measures>
+                  <fractions>1/4</fractions>
                   </location>
                 </next>
               </Spanner>
@@ -710,6 +795,18 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
+        <voice/>
+        <voice/>
+        <voice>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -722,7 +819,8 @@
             <Spanner type="Slur">
               <prev>
                 <location>
-                  <fractions>-3/4</fractions>
+                  <measures>-1</measures>
+                  <fractions>-1/4</fractions>
                   </location>
                 </prev>
               </Spanner>
@@ -735,9 +833,12 @@
         </Measure>
       <Measure>
         <voice>
+          <KeySig>
+            <accidental>1</accidental>
+            </KeySig>
           <Rest>
             <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <duration>2/4</duration>
             </Rest>
           </voice>
         <voice/>
@@ -773,6 +874,25 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <accidental>-3</accidental>
+            </KeySig>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        <voice/>
+        <voice/>
+        <voice>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -780,6 +900,9 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
