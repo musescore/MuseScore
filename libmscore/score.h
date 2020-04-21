@@ -116,6 +116,9 @@ enum class Pad : char {
       NOTE32,
       NOTE64,
       NOTE128,
+      NOTE256,
+      NOTE512,
+      NOTE1024,
       //--------------------
       REST,
       DOT,

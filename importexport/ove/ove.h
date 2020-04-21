@@ -351,6 +351,8 @@ enum class NoteType : char {
       Note_64          = 0x7,
       Note_128         = 0x8,
       Note_256         = 0x9,
+//      Note_512         = 0xa,
+//      Note_1024        = 0xb,
 
       Note_None
       };

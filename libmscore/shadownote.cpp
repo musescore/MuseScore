@@ -55,7 +55,7 @@ SymId ShadowNote::getNoteFlag() const
       if (_rest)
             return flag;
       TDuration::DurationType type = _duration.type();
-      switch(type) {
+      switch (type) {
             case TDuration::DurationType::V_LONG:
                   flag = SymId::lastSym;
                   break;
@@ -85,6 +85,15 @@ SymId ShadowNote::getNoteFlag() const
                   break;
             case TDuration::DurationType::V_128TH:
                   flag = computeUp() ? SymId::flag128thUp : SymId::flag128thDown;
+                  break;
+            case TDuration::DurationType::V_256TH:
+                  flag = computeUp() ? SymId::flag256thUp : SymId::flag256thDown;
+                  break;
+            case TDuration::DurationType::V_512TH:
+                  flag = computeUp() ? SymId::flag512thUp : SymId::flag512thDown;
+                  break;
+            case TDuration::DurationType::V_1024TH:
+                  flag = computeUp() ? SymId::flag1024thUp : SymId::flag1024thDown;
                   break;
             default:
                   flag = SymId::noSym;
@@ -151,9 +160,10 @@ void ShadowNote::draw(QPainter* painter) const
             QPointF pos;
             pos.rx() = up == 1 ? (noteheadWidth - (lw / 2)) : lw / 2;
             qreal yOffset = up == 1 ? symStemUpSE(_notehead).y() * magS() : symStemDownNW(_notehead).y() * magS();
-            if(flag != SymId::lastSym) {
-                  pos.ry() -= up * (symHeight(flag) + (posDot.y() != 0 ? posDot.y() + spatium() : 0) + 0.5*spatium());
-                  painter->drawLine(QLineF(pos.x(), yOffset, pos.x(), pos.y() - up * (yOffset + lw/2)));
+            if (flag != SymId::lastSym) {
+                  qreal flagHeight = (_duration.type() < TDuration::DurationType::V_256TH) ? symHeight(flag) : symHeight(flag) / 2;
+                  pos.ry() -= up * (flagHeight + (posDot.y() != 0 ? posDot.y() + spatium() : 0) + 0.5 * spatium());
+                  painter->drawLine(QLineF(pos.x(), yOffset, pos.x(), pos.y() - up * (yOffset + lw / 2)));
                   pos.rx() -= (lw / 2); // flag offset?
                   drawSymbol(flag, painter, pos, 1);
                   }

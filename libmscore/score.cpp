@@ -2726,6 +2726,15 @@ void Score::padToggle(Pad n, const EditData& ed)
             case Pad::NOTE128:
                   _is.setDuration(TDuration::DurationType::V_128TH);
                   break;
+            case Pad::NOTE256:
+                  _is.setDuration(TDuration::DurationType::V_256TH);
+                  break;
+            case Pad::NOTE512:
+                  _is.setDuration(TDuration::DurationType::V_512TH);
+                  break;
+            case Pad::NOTE1024:
+                  _is.setDuration(TDuration::DurationType::V_1024TH);
+                  break;
             case Pad::REST:
                   if (noteEntryMode()) {
                         _is.setRest(!_is.rest());
@@ -2777,7 +2786,7 @@ void Score::padToggle(Pad n, const EditData& ed)
                         _is.setDots(4);
                   break;
             }
-      if (n >= Pad::NOTE00 && n <= Pad::NOTE128) {
+      if (n >= Pad::NOTE00 && n <= Pad::NOTE1024) {
             _is.setDots(0);
             //
             // if in "note enter" mode, reset

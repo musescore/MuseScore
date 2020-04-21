@@ -1501,6 +1501,39 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "pad-note-256",
+         QT_TRANSLATE_NOOP("action","256th Note"),
+         QT_TRANSLATE_NOOP("action","Note duration: 256th"),
+         QT_TRANSLATE_NOOP("action","256th note"),
+         Icons::note256_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "pad-note-512",
+         QT_TRANSLATE_NOOP("action","512th Note"),
+         QT_TRANSLATE_NOOP("action","Note duration: 512th"),
+         QT_TRANSLATE_NOOP("action","512th note"),
+         Icons::note512_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "pad-note-1024",
+         QT_TRANSLATE_NOOP("action","1024th Note"),
+         QT_TRANSLATE_NOOP("action","Note duration: 1024th"),
+         QT_TRANSLATE_NOOP("action","1024th note"),
+         Icons::note1024_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
          STATE_NOTE_ENTRY,
          "pad-note-increase",
          QT_TRANSLATE_NOOP("action","Increase Active Duration"),
@@ -3225,6 +3258,36 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Note duration: 128th (TAB)"),
          QT_TRANSLATE_NOOP("action","128th note"),
          Icons::note128_ICON,
+         Qt::WindowShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NEVER,
+         "pad-note-256-TAB",
+         QT_TRANSLATE_NOOP("action","256th Note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: 256th (TAB)"),
+         QT_TRANSLATE_NOOP("action","256th note"),
+         Icons::note256_ICON,
+         Qt::WindowShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NEVER,
+         "pad-note-512-TAB",
+         QT_TRANSLATE_NOOP("action","512th Note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: 512th (TAB)"),
+         QT_TRANSLATE_NOOP("action","512th note"),
+         Icons::note512_ICON,
+         Qt::WindowShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NEVER,
+         "pad-note-1024-TAB",
+         QT_TRANSLATE_NOOP("action","1024th Note (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: 1024th (TAB)"),
+         QT_TRANSLATE_NOOP("action","1024th note"),
+         Icons::note1024_ICON,
          Qt::WindowShortcut
          },
       {
