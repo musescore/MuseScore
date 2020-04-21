@@ -57,12 +57,16 @@ class Glissando final : public SLine {
       M_PROPERTY(bool, playGlissando, setPlayGlissando)
       M_PROPERTY(FontStyle, fontStyle, setFontStyle)
 
+      static const std::array<const char *, 2> glissandoTypeNames;
+
    public:
       Glissando(Score* s);
       Glissando(const Glissando&);
 
       static Note* guessInitialNote(Chord* chord);
       static Note* guessFinalNote(Chord* chord);
+
+      QString glissandoTypeName() { return qApp->translate("Palette", glissandoTypeNames[int(glissandoType())]); }
 
       // overridden inherited methods
       Glissando* clone() const override     { return new Glissando(*this);   }
