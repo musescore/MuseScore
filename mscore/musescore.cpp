@@ -724,7 +724,7 @@ bool MuseScore::importExtension(QString path)
       infoMsgBox->setMinimumSize(300, 100);
       infoMsgBox->setMaximumSize(300, 100);
       infoMsgBox->setStandardButtons(0);
-      infoMsgBox->setText(QString("<p align='center'>") + tr("Please wait, unpacking extension…") + QString("</p>"));
+      infoMsgBox->setText(QString("<p align='center'>") + tr("Please wait; unpacking extension…") + QString("</p>"));
 
       //setup async run of long operations
       QFutureWatcher<bool> futureWatcherUnzip;
@@ -803,7 +803,7 @@ bool MuseScore::importExtension(QString path)
             QFutureWatcher<void> futureWatcherLoadSFs;
             futureWatcherLoadSFs.setFuture(futureLoadSFs);
             connect(&futureWatcherLoadSFs, SIGNAL(finished()), this, SLOT(onLongOperationFinished()));
-            infoMsgBox->setText(QString("<p align='center'>") + tr("Please wait, loading soundfonts…") + QString("</p>"));
+            infoMsgBox->setText(QString("<p align='center'>") + tr("Please wait; loading SoundFonts…") + QString("</p>"));
             if (!MScore::noGui)
                   infoMsgBox->exec();
             else
