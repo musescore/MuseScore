@@ -20,6 +20,7 @@
 #include "scoreaccessibility.h"
 #include "libmscore/score.h"
 #include "libmscore/keysig.h"
+#include "libmscore/timesig.h"
 #include "libmscore/segment.h"
 #include "libmscore/utils.h"
 #include "libmscore/text.h"
@@ -375,6 +376,18 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
             if (e->isKeySig() && (keyState != Qt::ControlModifier) && st == SelectType::SINGLE) {
                   // special case: select for all staves
                   Segment* s = toKeySig(e)->segment();
+                  bool first = true;
+                  for (int staffIdx = 0; staffIdx < _score->nstaves(); ++staffIdx) {
+                        Element* ee = s->element(staffIdx * VOICES);
+                        if (ee) {
+                              ee->score()->select(ee, first ? SelectType::SINGLE : SelectType::ADD);
+                              first = false;
+                              }
+                        }
+                  }
+            else if (e->isTimeSig() && !toTimeSig(e)->isLocal() && (keyState != Qt::ControlModifier) && st == SelectType::SINGLE) {
+                  // special case: select for all staves except when TimeSig is local.
+                  Segment* s = toTimeSig(e)->segment();
                   bool first = true;
                   for (int staffIdx = 0; staffIdx < _score->nstaves(); ++staffIdx) {
                         Element* ee = s->element(staffIdx * VOICES);
