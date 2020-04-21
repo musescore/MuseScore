@@ -2264,7 +2264,7 @@ int LayoutContext::adjustMeasureNo(MeasureBase* m)
 //    helper function
 //---------------------------------------------------------
 
-void Score::createBeams(Measure* measure)
+void Score::createBeams(LayoutContext& lc, Measure* measure)
       {
       bool crossMeasure = styleB(Sid::crossMeasureValues);
 
@@ -2322,6 +2322,7 @@ void Score::createBeams(Measure* measure)
                                     const Measure* pm = prevCR->measure();
                                     if (!beamNoContinue(prevCR->beamMode())
                                         && !pm->lineBreak() && !pm->pageBreak() && !pm->sectionBreak()
+                                        && lc.prevMeasure
                                         && prevCR->durationType().type() >= TDuration::DurationType::V_EIGHTH
                                         && prevCR->durationType().type() <= TDuration::DurationType::V_1024TH) {
                                           beam = prevCR->beam();
@@ -2762,7 +2763,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                   }
             }
 
-      createBeams(measure);
+      createBeams(lc, measure);
 
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             for (Segment& segment : measure->segments()) {
