@@ -1551,7 +1551,7 @@ void MusicXMLParserPass2::scorePart()
 void MusicXMLParserPass2::part()
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "part");
-      const QString id = _e.attributes().value("id").toString();
+      const QString id = _e.attributes().value("id").toString().trimmed();
 
       if (!_pass1.hasPart(id)) {
             _logger->logError(QString("MusicXMLParserPass2::part cannot find part '%1'").arg(id), &_e);
