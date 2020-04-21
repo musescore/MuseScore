@@ -1,35 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter1-base.xml selectionfilter1-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter2-base.xml selectionfilter2-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter3-base.xml selectionfilter3-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter4-base.xml selectionfilter4-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter5-base.xml selectionfilter5-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter6-base.xml selectionfilter6-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter7-base.xml selectionfilter7-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter8-base.xml selectionfilter8-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter9-base.xml selectionfilter9-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter11-base.xml selectionfilter11-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter12-base.xml selectionfilter12-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter13-base.xml selectionfilter13-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter14-base.xml selectionfilter14-base-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter15-base.xml selectionfilter15-base-ref.xml
-# cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter1.xml selectionfilter1-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter2.xml selectionfilter2-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter3.xml selectionfilter3-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter4.xml selectionfilter4-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter5.xml selectionfilter5-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter6.xml selectionfilter6-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter7.xml selectionfilter7-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter8.xml selectionfilter8-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter9.xml selectionfilter9-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter10.xml selectionfilter10-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter11.xml selectionfilter11-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter12.xml selectionfilter12-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter13.xml selectionfilter13-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter14.xml selectionfilter14-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter15.xml selectionfilter15-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter16.xml selectionfilter16-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter17.xml selectionfilter17-ref.xml
-cp ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter18.xml selectionfilter18-ref.xml
+for f in ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter*.xml
+do
+      cp "$f" $(basename "$f" .xml)-ref.xml
+done
 
