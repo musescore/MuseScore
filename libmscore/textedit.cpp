@@ -497,7 +497,7 @@ void ChangeText::removeText(EditData* ed)
       int column    = c.column();
 
       for (int n = 0; n < s.size(); ++n)
-            l.remove(column);
+            l.remove(column, &c);
       c.text()->triggerLayout();
       if (ed)
             *c.text()->cursor(*ed) = tc;
@@ -699,7 +699,7 @@ void TextBase::inputTransition(EditData& ed, QInputMethodEvent* ie)
       while (n--) {
             if (_cursor->movePosition(QTextCursor::Left)) {
                   TextBlock& l  = _cursor->curLine();
-                   l.remove(_cursor->column());
+                   l.remove(_cursor->column(), _cursor);
                   _cursor->text()->triggerLayout();
                   _cursor->text()->setTextInvalid();
                   }
@@ -763,7 +763,7 @@ void TextBase::endHexState(EditData& ed)
                   int c1 = c2 - (hexState + 1);
 
                   TextBlock& t = _layout[_cursor->row()];
-                  QString ss   = t.remove(c1, hexState + 1);
+                  QString ss   = t.remove(c1, hexState + 1, _cursor);
                   bool ok;
                   int code     = ss.mid(1).toInt(&ok, 16);
                   _cursor->setColumn(c1);
