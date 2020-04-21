@@ -149,7 +149,7 @@ void MetaEditDialog::newClicked() {
 ///   see also MasterScore::MasterScore()
 //---------------------------------------------------------
 
-const bool MetaEditDialog::isBuiltinTag(const QString& tag) const {
+bool MetaEditDialog::isBuiltinTag(const QString& tag) const {
       return (tag ==  "platform"      || tag ==  "movementNumber" || tag ==  "movementTitle"
               || tag ==  "workNumber" || tag ==  "workTitle"      || tag ==  "arranger"
               || tag ==  "composer"   || tag ==  "lyricist"       || tag ==  "poet"
@@ -178,7 +178,7 @@ void MetaEditDialog::setDirty(const bool dirty)
 ///   Save the currently displayed metatags
 //---------------------------------------------------------
 
-const bool MetaEditDialog::save()
+bool MetaEditDialog::save()
       {
       if (m_dirty) {
             const int idx = scrollAreaLayout->rowCount();

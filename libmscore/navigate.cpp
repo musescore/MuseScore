@@ -779,6 +779,7 @@ Element* Score::prevElement()
                               return mb;
                               }
                         }
+                        break;
                   case ElementType::LAYOUT_BREAK: {
                         staffId = 0; // otherwise it will equal -1, which breaks the navigation
                         }

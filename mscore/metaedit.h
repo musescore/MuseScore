@@ -44,10 +44,10 @@ class MetaEditDialog : public QDialog, public Ui::MetaEditDialog {
 
       virtual void closeEvent(QCloseEvent*) override;
 
-      const bool isBuiltinTag(const QString& tag) const;
+      bool isBuiltinTag(const QString& tag) const;
       QPair<QLineEdit*, QLineEdit*> addTag(const QString& key, const QString& value, const bool builtinTag);
 
-      const bool save();
+      bool save();
       void newClicked();
       void setDirty(const bool dirty = true);
 
