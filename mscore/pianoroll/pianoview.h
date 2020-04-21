@@ -163,6 +163,8 @@ private:
       QList<PianoItem*> getSelectedItems();
       QList<PianoItem*> getItems();
       
+      void zoomView(int step, bool horizontal, int centerX, int centerY);
+
       bool playEventsView() { return _playEventsView; }
       };
 
