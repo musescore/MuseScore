@@ -2553,8 +2553,6 @@ void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, q
 std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, qreal stemLen1, qreal stemLen2)
       {
       const qreal spatium = tremolo->score()->spatium();
-      const qreal sw = tremolo->score()->styleS(Sid::tremoloStrokeWidth).val();
-      const qreal td = tremolo->score()->styleS(Sid::tremoloDistance).val();
       Chord* c1 = tremolo->chord1();
       Chord* c2 = tremolo->chord2();
       Stem*  s1 = c1->stem();
@@ -2579,6 +2577,8 @@ std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, qrea
 #if 0
       // cross-staff & beam between staves: extend both stems by the same length
       else if (tremolo->crossStaffBeamBetween()) {
+            const qreal sw = tremolo->score()->styleS(Sid::tremoloStrokeWidth).val();
+            const qreal td = tremolo->score()->styleS(Sid::tremoloDistance).val();
             const qreal tremoloMinHeight = ((tremolo->lines() - 1) * td + sw) * spatium;
             const qreal dy = c1->up() ? tremoloMinHeight - stemTipDistance : tremoloMinHeight + stemTipDistance;
             const bool tooShort = dy > 1.0 * spatium;
