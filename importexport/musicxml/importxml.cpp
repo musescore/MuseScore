@@ -48,6 +48,8 @@ static void tupletAssert()
             && int(TDuration::DurationType::V_64TH)    == int(TDuration::DurationType::V_32ND)    + 1
             && int(TDuration::DurationType::V_128TH)   == int(TDuration::DurationType::V_64TH)    + 1
             && int(TDuration::DurationType::V_256TH)   == int(TDuration::DurationType::V_128TH)   + 1
+            && int(TDuration::DurationType::V_512TH)   == int(TDuration::DurationType::V_256TH)   + 1
+            && int(TDuration::DurationType::V_1024TH)  == int(TDuration::DurationType::V_512TH)   + 1
             )) {
             qFatal("tupletAssert() failed");
             }

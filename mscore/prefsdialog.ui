@@ -3455,7 +3455,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
              <string>Choose the shortest note value</string>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>0</number>
             </property>
             <item>
              <property name="text">
@@ -3480,6 +3480,26 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             <item>
              <property name="text">
               <string>64th</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>128th</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>256th</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>512th</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1024th</string>
              </property>
             </item>
            </widget>

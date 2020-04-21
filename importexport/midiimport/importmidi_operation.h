@@ -19,7 +19,11 @@ enum class QuantValue {
       Q_16,
       Q_32,
       Q_64,
-      Q_128
+      Q_128,
+      Q_256,
+      Q_512,
+      Q_1024,
+      Q_INVALID = -1
       };
 
 enum class VoiceCount {

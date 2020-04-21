@@ -120,6 +120,9 @@ static const TempoPattern tp[] = {
       TempoPattern("\uECA0",                     1.0/7.5,    TDuration::DurationType::V_BREVE),      // double whole
       TempoPattern("\uECAD",                     1.0/960.0,  TDuration::DurationType::V_64TH),       // 1/64
       TempoPattern("\uECAF",                     1.0/1920.0, TDuration::DurationType::V_128TH),      // 1/128
+      TempoPattern("\uECB1",                     1.0/1920.0, TDuration::DurationType::V_256TH),      // 1/256
+      TempoPattern("\uECB3",                     1.0/1920.0, TDuration::DurationType::V_512TH),      // 1/512
+      TempoPattern("\uECB5",                     1.0/1920.0, TDuration::DurationType::V_1024TH),     // 1/1024
       };
 
 //---------------------------------------------------------
@@ -155,7 +158,7 @@ static const TempoPattern tpSym[] = {
       TempoPattern("<sym>metNote8thUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",         1.75/120.0, TDuration::DurationType::V_EIGHTH, 2), // double dotted 1/8
       TempoPattern("<sym>metNote8thUp</sym>\\s*<sym>metAugmentationDot</sym>",              1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
       TempoPattern("<sym>metNote8thUp</sym>",                                               1.0/120.0, TDuration::DurationType::V_EIGHTH),   // 1/8
-      TempoPattern("<sym>metNoteWhole</sym>\\s*<sym>metAugmentationDot</sym>",              1.5/15.0, TDuration::DurationType::V_WHOLE, 1),    // dotted whole
+      TempoPattern("<sym>metNoteWhole</sym>\\s*<sym>metAugmentationDot</sym>",              1.5/15.0,  TDuration::DurationType::V_WHOLE, 1),    // dotted whole
       TempoPattern("<sym>metNoteWhole</sym>",                                               1.0/15.0,  TDuration::DurationType::V_WHOLE),    // whole
       TempoPattern("<sym>metNote16thUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5/240.0, TDuration::DurationType::V_16TH, 1),  // dotted 1/16
       TempoPattern("<sym>metNote16thUp</sym>",                                              1.0/240.0, TDuration::DurationType::V_16TH),     // 1/16
@@ -165,6 +168,9 @@ static const TempoPattern tpSym[] = {
       TempoPattern("<sym>metNoteDoubleWhole</sym>",                                         1.0/7.5,   TDuration::DurationType::V_BREVE),    // double whole
       TempoPattern("<sym>metNote64thUp</sym>",                                              1.0/960.0, TDuration::DurationType::V_64TH),     // 1/64
       TempoPattern("<sym>metNote128thUp</sym>",                                             1.0/1920.0,TDuration::DurationType::V_128TH),    // 1/128
+      TempoPattern("<sym>metNote256thUp</sym>",                                             1.0/3840.0,TDuration::DurationType::V_256TH),    // 1/256
+      TempoPattern("<sym>metNote512thUp</sym>",                                             1.0/7680.0,TDuration::DurationType::V_512TH),    // 1/512
+      TempoPattern("<sym>metNote1024thUp</sym>",                                            1.0/15360.0,TDuration::DurationType::V_1024TH),  // 1/1024
       };
 
 //---------------------------------------------------------
