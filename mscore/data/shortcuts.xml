@@ -756,6 +756,10 @@
     <seq>F8</seq>
     </SC>
   <SC>
+    <key>synth-control</key>
+    <seq>Shift+F10</seq>
+    </SC>
+   <SC>
     <key>toggle-selection-window</key>
     <seq>F6</seq>
     </SC>
