@@ -450,7 +450,7 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
       {
       updateExternalValuesFromPreferences();
 
-      setPlayRepeats(MScore::playRepeats);
+      getAction("repeat")->setChecked(MScore::playRepeats);
       getAction("pan")->setChecked(MScore::panPlayback);
       getAction("follow")->setChecked(preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG));
       getAction("midi-on")->setChecked(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
@@ -6068,6 +6068,13 @@ void MuseScore::setPlayRepeats(bool repeat)
             }
       }
 
+void MuseScore::setPanPlayback(bool pan)
+      {
+      getAction("pan")->setChecked(pan);
+      preferences.setPreference(PREF_APP_PLAYBACK_PANPLAYBACK, pan);
+      MScore::panPlayback = pan;
+      }
+
 //---------------------------------------------------------
 //   setPlayPartOnly
 //---------------------------------------------------------
@@ -6345,7 +6352,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "repeat")
             setPlayRepeats(a->isChecked());
       else if (cmd == "pan")
-            MScore::panPlayback = !MScore::panPlayback;
+            setPanPlayback(a->isChecked());
       else if (cmd == "show-invisible") {
             cs->setShowInvisible(a->isChecked());
             cs->update();
