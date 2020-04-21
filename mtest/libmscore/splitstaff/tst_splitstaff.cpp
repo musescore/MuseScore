@@ -38,6 +38,7 @@ class TestSplitStaff : public QObject, public MTest
       void splitstaff03() { splitstaff(3, 1); } //non-top staff
       void splitstaff04() { splitstaff(4, 0); } //slur up
       void splitstaff05() { splitstaff(5, 0); } //slur down
+      void splitstaff06() { splitstaff(6, 0); } //tuplet
       };
 
 //---------------------------------------------------------

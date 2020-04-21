@@ -2211,113 +2211,124 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       int strack = staffIdx * VOICES;
       int dtrack = (staffIdx + 1) * VOICES;
 
+      // Keep track of ties to be reconnected.
+      struct OldTie {
+            Tie* tie;
+            Note* nnote;
+            };
+      QMap<Note*, OldTie> oldTies;
+
+      // Notes under the split point can be part of a tuplet, so keep track
+      // of the tuplet mapping too!
+      QMap<Tuplet*, Tuplet*> tupletMapping;
+      Tuplet* tupletSrc[VOICES] = { };
+      Tuplet* tupletDst[VOICES] = { };
+
       for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             for (int voice = 0; voice < VOICES; ++voice) {
                   Element* e = s->element(strack + voice);
-                  if (!(e && e->isChord()))
+
+                  if (!e)
                         continue;
-                  Chord* c = toChord(e);
-                  QList<Note*> removeNotes;
-                  foreach(Note* note, c->notes()) {
-                        if (note->pitch() >= splitPoint)
-                              continue;
-                        Chord* chord = toChord(s->element(dtrack + voice));
-                        Q_ASSERT(!chord || (chord->isChord()));
-                        if (chord == 0) {
-                              chord = new Chord(*c);
-                              qDeleteAll(chord->notes());
-                              chord->notes().clear();
-                              chord->setTrack(dtrack + voice);
-                              undoAddElement(chord);
+                  if (toDurationElement(e)->tuplet()) {
+                        tupletSrc[voice] = toDurationElement(e)->tuplet();
+                        if (tupletMapping.contains(tupletSrc[voice]))
+                              tupletDst[voice] = tupletMapping[tupletSrc[voice]];
+                        else {
+                              tupletDst[voice] = new Tuplet(*tupletSrc[voice]);
+                              tupletDst[voice]->setTrack(dtrack);
+                              tupletMapping.insert(tupletSrc[voice], tupletDst[voice]);
                               }
-                        Note* nnote = new Note(*note);
-                        nnote->setTrack(dtrack + voice);
-                        chord->add(nnote);
-                        nnote->updateLine();
-                        removeNotes.append(note);
                         }
-                  c->sortNotes();
-                  for (Note* note : removeNotes) {
-                        undoRemoveElement(note);
-                        Chord* chord = note->chord();
-                        if (chord->notes().empty()) {
-                              for (auto sp : spanner()) {
-                                    Slur* slur = toSlur(sp.second);
-                                    if (slur->type() != ElementType::SLUR)
-                                          continue;
-                                    if (slur->startCR() == chord) {
-                                          slur->undoChangeProperty(Pid::TRACK, slur->track()+VOICES);
-                                          for (ScoreElement* ee : slur->linkList()) {
-                                                Slur* lslur = toSlur(ee);
-                                                lslur->setStartElement(0);
-                                                }
+                  else {
+                        tupletSrc[voice] = nullptr;
+                        tupletDst[voice] = nullptr;
+                        }
+
+                  bool createRestDst = true;
+                  bool createRestSrc = false;
+                  TDuration lengthDst = toChordRest(e)->actualDurationType();
+                  TDuration lengthSrc = TDuration();
+
+                  if (e->isChord()) {
+                        Chord* c = toChord(e);
+                        QList<Note*> removeNotes;
+                        for(Note* note : c->notes()) {
+                              if (note->pitch() >= splitPoint)
+                                    continue;
+                              else {
+                                    Chord* chord = toChord(s->element(dtrack + voice));
+                                    Q_ASSERT(!chord || (chord->isChord()));
+                                    if (!chord) {
+                                          chord = new Chord(*c);
+                                          qDeleteAll(chord->notes());
+                                          chord->notes().clear();
+                                          chord->setTuplet(tupletDst[voice]);
+                                          chord->setTrack(dtrack + voice);
+                                          undoAddElement(chord);
                                           }
-                                    if (slur->endCR() == chord) {
-                                          slur->undoChangeProperty(Pid::SPANNER_TRACK2, slur->track2()+VOICES);
-                                          for (ScoreElement* ee : slur->linkList()) {
-                                                Slur* lslur = toSlur(ee);
-                                                lslur->setEndElement(0);
-                                                }
+                                    Note* nnote = new Note(*note);
+                                    if (note->tieFor())
+                                          // Save the note and the tie for processing later.
+                                          // Use the end note as index in the map so, when this is found
+                                          // we know the tie has to be recreated.
+                                          oldTies.insert(note->tieFor()->endNote(), OldTie{note->tieFor(), nnote});
+                                    nnote->setTrack(dtrack + voice);
+                                    chord->add(nnote);
+                                    nnote->updateLine();
+                                    removeNotes.append(note);
+                                    createRestDst = false;
+                                    lengthDst = chord->actualDurationType();
+
+                                    // Is the note the last note of a tie?
+                                    if (oldTies.contains(note)) {
+                                          // Yes! Create a tie between the new notes and remove the
+                                          // old tie.
+                                          Tie* tie = oldTies[note].tie->clone();
+                                          tie->setStartNote(oldTies[note].nnote);
+                                          tie->setEndNote(nnote);
+                                          tie->setTrack(nnote->track());
+                                          undoAddElement(tie);
+                                          undoRemoveElement(oldTies[note].tie);
+                                          oldTies.remove(note);
                                           }
                                     }
-                              undoRemoveElement(chord);
+                              }
+                        createRestSrc = false;
+                        for (Note* note : removeNotes) {
+                              undoRemoveElement(note);
+                              Chord* chord = note->chord();
+                              if (chord->notes().empty()) {
+                                    for (auto sp : spanner()) {
+                                          Slur* slur = toSlur(sp.second);
+                                          if (slur->type() != ElementType::SLUR)
+                                                continue;
+                                          if (slur->startCR() == chord) {
+                                                slur->undoChangeProperty(Pid::TRACK, slur->track()+VOICES);
+                                                for (ScoreElement* ee : slur->linkList()) {
+                                                      Slur* lslur = toSlur(ee);
+                                                      lslur->setStartElement(0);
+                                                      }
+                                                }
+                                          if (slur->endCR() == chord) {
+                                                slur->undoChangeProperty(Pid::SPANNER_TRACK2, slur->track2()+VOICES);
+                                                for (ScoreElement* ee : slur->linkList()) {
+                                                      Slur* lslur = toSlur(ee);
+                                                      lslur->setEndElement(0);
+                                                      }
+                                                }
+                                          }
+                                    createRestSrc = true;
+                                    lengthSrc = chord->actualDurationType();
+                                    undoRemoveElement(chord);
+                                    }
                               }
                         }
-                  }
-            }
-      //
-      // make sure that the timeline for dtrack
-      // has no gaps
-      //
-      Fraction ctick  = Fraction(0,1);
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-                  ChordRest* cr = toChordRest(s->element(dtrack));
-                  if (cr == 0)
-                        continue;
-                  Fraction rest = s->tick() - ctick;
-                  if (rest.isNotZero()) {
-                        // insert Rest
-                        Segment* s1 = tick2segment(ctick);
-                        if (s1 == 0) {
-                              qDebug("no segment at %d", ctick.ticks());
-                              continue;
-                              }
-                        setRest(ctick, dtrack, rest, false, 0);
-                        }
-                  ctick = s->tick() + cr->actualTicks();
-                  }
-            Fraction rest = m->tick() + m->ticks() - ctick;
-            if (rest.isNotZero()) {
-                  setRest(ctick, dtrack, rest, false, 0);
-                  ctick += rest;
-                  }
-            }
-      //
-      // same for strack
-      //
-      ctick  = Fraction(0,1);
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-                  ChordRest* cr = toChordRest(s->element(strack));
-                  if (cr == 0)
-                        continue;
-                  Fraction rest = s->tick() - ctick;
-                  if (rest.isNotZero()) {
-                        // insert Rest
-                        Segment* s1 = tick2segment(ctick);
-                        if (s1 == 0) {
-                              qDebug("no segment at %d", ctick.ticks());
-                              continue;
-                              }
-                        setRest(ctick, strack, rest, false, 0);
-                        }
-                  ctick = s->tick() + cr->actualTicks();
-                  }
-            Fraction rest = m->tick() + m->ticks() - ctick;
-            if (rest.isNotZero()) {
-                  setRest(ctick, strack, rest, false, 0);
-                  ctick += rest;
+
+                  if (createRestSrc)
+                        addRest(s, strack + voice, lengthSrc, tupletSrc[voice]);
+                  if (createRestDst)
+                        addRest(s, dtrack + voice, lengthDst, tupletDst[voice]);
                   }
             }
       }
