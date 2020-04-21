@@ -826,14 +826,10 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
       }
 
 //---------------------------------------------------------
-//
-//   insertEmptyFragmentIfNeeded
-//   used to insert an empty TextFragment in TextBlocks that have none
-//   that way, the formatting information (most importantly the font size) of the line is preserved
-//
+//   insertEmptyFragment
 //---------------------------------------------------------
 
-void TextBlock::insertEmptyFragmentIfNeeded(TextCursor* cursor)
+void TextBlock::insertEmptyFragment(TextCursor* cursor)
       {
       if (_fragments.size() == 0 || _fragments.at(0).text != "")
             _fragments.insert(0, TextFragment(cursor, ""));
@@ -872,7 +868,7 @@ QList<TextFragment>::iterator TextBlock::fragment(int column, int* rcol, int* ri
 //   remove
 //---------------------------------------------------------
 
-QString TextBlock::remove(int column, TextCursor* cursor)
+QString TextBlock::remove(int column)
       {
       int col = 0;
       QString s;
@@ -892,7 +888,6 @@ QString TextBlock::remove(int column, TextCursor* cursor)
                         if (i->text.isEmpty())
                               _fragments.erase(i);
                         simplify();
-                        insertEmptyFragmentIfNeeded(cursor); // without this, cursorRect can't calculate the y position of the cursor correctly
                         return s;
                         }
                   ++idx;
@@ -902,7 +897,6 @@ QString TextBlock::remove(int column, TextCursor* cursor)
                   ++rcol;
                   }
             }
-      insertEmptyFragmentIfNeeded(cursor); // without this, cursorRect can't calculate the y position of the cursor correctly
       return s;
 //      qDebug("TextBlock::remove: column %d not found", column);
       }
@@ -933,7 +927,7 @@ void TextBlock::simplify()
 //   remove
 //---------------------------------------------------------
 
-QString TextBlock::remove(int start, int n, TextCursor* cursor)
+QString TextBlock::remove(int start, int n)
       {
       if (n == 0)
             return QString();
@@ -957,10 +951,8 @@ QString TextBlock::remove(int start, int n, TextCursor* cursor)
                               inc = false;
                               }
                         --n;
-                        if (n == 0) {
-                              insertEmptyFragmentIfNeeded(cursor); // without this, cursorRect can't calculate the y position of the cursor correctly
+                        if (n == 0)
                               return s;
-                              }
                         continue;
                         }
                   ++idx;
@@ -972,7 +964,6 @@ QString TextBlock::remove(int start, int n, TextCursor* cursor)
             if (inc)
                   ++i;
             }
-      insertEmptyFragmentIfNeeded(cursor); // without this, cursorRect can't calculate the y position of the cursor correctly
       return s;
       }
 
@@ -1275,7 +1266,8 @@ void TextBase::createLayout()
                   else if (c == '\n') {
                         if (rows() <= cursor.row())
                               _layout.append(TextBlock());
-                        _layout[cursor.row()].insertEmptyFragmentIfNeeded(&cursor); // used to preserve the Font size of the line (font info is held in TextFragments, see PR #5881)
+                        if(_layout[cursor.row()].fragments().size() == 0)
+                              _layout[cursor.row()].insertEmptyFragment(&cursor); // used to preserve the Font size of the line (font info is held in TextFragments, see PR #5881)
                         _layout[cursor.row()].setEol(true);
                         cursor.setRow(cursor.row() + 1);
                         cursor.setColumn(0);

@@ -193,9 +193,9 @@ class TextBlock {
       QRectF boundingRect(int col1, int col2, const TextBase*) const;
       int columns() const;
       void insert(TextCursor*, const QString&);
-      void insertEmptyFragmentIfNeeded(TextCursor*);
-      QString remove(int column, TextCursor*);
-      QString remove(int start, int n, TextCursor*);
+      void insertEmptyFragment(TextCursor*);
+      QString remove(int column);
+      QString remove(int start, int n);
       int column(qreal x, TextBase*) const;
       TextBlock split(int column);
       qreal xpos(int col, const TextBase*) const;
