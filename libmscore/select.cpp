@@ -381,40 +381,44 @@ void Selection::add(Element* el)
 
 bool SelectionFilter::canSelect(const Element* e) const
       {
-      if (e->isDynamic() || e->isHairpin())
-          return isFiltered(SelectionFilterType::DYNAMIC);
-      if (e->isArticulation() || e->isTrill() || e->isVibrato() || e->isFermata())
-          return isFiltered(SelectionFilterType::ARTICULATION);
+      if (e->isDynamic())
+            return isFiltered(SelectionFilterType::DYNAMIC);
+      if (e->isHairpin())
+            return isFiltered(SelectionFilterType::HAIRPIN);
+      if ((e->isArticulation() && !toArticulation(e)->isOrnament()) || e->isVibrato() || e->isFermata())
+            return isFiltered(SelectionFilterType::ARTICULATION);
+      if ((e->isArticulation() && toArticulation(e)->isOrnament()) || e->isTrill())
+            return isFiltered(SelectionFilterType::ORNAMENT);
       if (e->type() == ElementType::LYRICS)
-          return isFiltered(SelectionFilterType::LYRICS);
+            return isFiltered(SelectionFilterType::LYRICS);
       if (e->type() == ElementType::FINGERING)
-          return isFiltered(SelectionFilterType::FINGERING);
+            return isFiltered(SelectionFilterType::FINGERING);
       if (e->type() == ElementType::HARMONY)
-          return isFiltered(SelectionFilterType::CHORD_SYMBOL);
+            return isFiltered(SelectionFilterType::CHORD_SYMBOL);
       if (e->type() == ElementType::SLUR)
-          return isFiltered(SelectionFilterType::SLUR);
+            return isFiltered(SelectionFilterType::SLUR);
       if (e->type() == ElementType::FIGURED_BASS)
-          return isFiltered(SelectionFilterType::FIGURED_BASS);
+            return isFiltered(SelectionFilterType::FIGURED_BASS);
       if (e->type() == ElementType::OTTAVA)
-          return isFiltered(SelectionFilterType::OTTAVA);
+            return isFiltered(SelectionFilterType::OTTAVA);
       if (e->type() == ElementType::PEDAL)
-          return isFiltered(SelectionFilterType::PEDAL_LINE);
+            return isFiltered(SelectionFilterType::PEDAL_LINE);
       if (e->type() == ElementType::ARPEGGIO)
-          return isFiltered(SelectionFilterType::ARPEGGIO);
+            return isFiltered(SelectionFilterType::ARPEGGIO);
       if (e->type() == ElementType::GLISSANDO)
-          return isFiltered(SelectionFilterType::GLISSANDO);
+            return isFiltered(SelectionFilterType::GLISSANDO);
       if (e->type() == ElementType::FRET_DIAGRAM)
-          return isFiltered(SelectionFilterType::FRET_DIAGRAM);
+            return isFiltered(SelectionFilterType::FRET_DIAGRAM);
       if (e->type() == ElementType::BREATH)
-          return isFiltered(SelectionFilterType::BREATH);
+            return isFiltered(SelectionFilterType::BREATH);
       if (e->isTextBase()) // only TEXT, INSTRCHANGE and STAFFTEXT are caught here, rest are system thus not in selection
-          return isFiltered(SelectionFilterType::OTHER_TEXT);
+            return isFiltered(SelectionFilterType::OTHER_TEXT);
       if (e->isSLine()) // NoteLine, Volta
-          return isFiltered(SelectionFilterType::OTHER_LINE);
+            return isFiltered(SelectionFilterType::OTHER_LINE);
       if (e->isTremolo())
-          return isFiltered(SelectionFilterType::TREMOLO);
+            return isFiltered(SelectionFilterType::TREMOLO);
       if (e->isChord() && toChord(e)->isGrace())
-          return isFiltered(SelectionFilterType::GRACE_NOTE);
+            return isFiltered(SelectionFilterType::GRACE_NOTE);
       return true;
       }
 

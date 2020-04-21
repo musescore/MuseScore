@@ -49,6 +49,11 @@ class TestSelectionFilter : public QObject, public MTest
       void filterTremolo()          { testFilter(16,SelectionFilterType::TREMOLO); }
       void filterVoice1()           { testFilter(17,SelectionFilterType::FIRST_VOICE); }
       void filterVoice2()           { testFilter(18,SelectionFilterType::SECOND_VOICE); }
+      void filterVoice3()           { testFilter(19,SelectionFilterType::THIRD_VOICE); }
+      void filterVoice4()           { testFilter(20,SelectionFilterType::FOURTH_VOICE); }
+    //void filterGrace()            { testFilter(21,SelectionFilterType::GRACE_NOTE); } TODO: create test files
+      void filterHairpin()          { testFilter(22,SelectionFilterType::HAIRPIN); }
+      void filterOrnament()         { testFilter(23,SelectionFilterType::ORNAMENT); }
       };
 
 //---------------------------------------------------------
