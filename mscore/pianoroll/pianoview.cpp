@@ -292,6 +292,8 @@ PianoView::PianoView()
       _mouseDown   = false;
       _dragStyle   = DragStyle::NONE;
       _inProgressUndoEvent = false;
+
+      memset(_pitchHighlight, 0, 128);
       }
 
 //---------------------------------------------------------
@@ -319,6 +321,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
       QColor colWhiteKeyBg;
       QColor colGutter;
       QColor colBlackKeyBg;
+      QColor colHilightKeyBg;
 
       QColor colGridLine;
 
@@ -326,6 +329,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             case MuseScoreStyleType::DARK_FUSION:
                   colSelectionBox = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR));
 
+                  colHilightKeyBg = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_BG_KEY_HIGHLIGHT_COLOR));
                   colWhiteKeyBg = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_BG_KEY_WHITE_COLOR));
                   colGutter = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_BG_BASE_COLOR));
                   colBlackKeyBg = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_BG_KEY_BLACK_COLOR));
@@ -335,6 +339,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             default:
                   colSelectionBox = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_SELECTION_BOX_COLOR));
 
+                  colHilightKeyBg = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_BG_KEY_HIGHLIGHT_COLOR));
                   colWhiteKeyBg = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_BG_KEY_WHITE_COLOR));
                   colGutter = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_BG_BASE_COLOR));
                   colBlackKeyBg = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_BG_KEY_BLACK_COLOR));
@@ -382,14 +387,15 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
 
             int degree = (pitch - transp.chromatic + 60) % 12;
             const BarPattern& pat = barPatterns[_barPattern];
-//            if (degree == 1 || degree == 3 || degree == 6 || degree == 8 || degree == 10) {
-              if (!pat.isWhiteKey[degree]) {
+
+            if (!pat.isWhiteKey[degree] || _pitchHighlight[pitch]) {
                   qreal px0 = qMax(r.x(), (qreal)tickToPixelX(0));
                   qreal px1 = qMin(r.x() + r.width(), (qreal)tickToPixelX(_ticks));
                   QRectF hbar;
 
                   hbar.setCoords(px0, y, px1, y + _noteHeight);
-                  p->fillRect(hbar, colBlackKeyBg);
+                  p->fillRect(hbar,
+                        _pitchHighlight[pitch] ? colHilightKeyBg : colBlackKeyBg);
             }
 
             //Lines between rows
@@ -1236,6 +1242,16 @@ void PianoView::setBarPattern(int value)
             scene()->update();
             emit barPatternChanged(_barPattern);
             }
+      }
+
+//---------------------------------------------------------
+//   setBarPattern
+//---------------------------------------------------------
+
+void PianoView::togglePitchHighlight(int pitch)
+      {
+      _pitchHighlight[pitch] = _pitchHighlight[pitch] ? 0 : 1;
+      scene()->update();
       }
 
 //---------------------------------------------------------
