@@ -41,8 +41,9 @@ extern bool ignoreWarnings;
 //---------------------------------------------------------
 
 enum MsWidget {
-      MAIN_WINDOW = 0,
-      SCORE_TAB   = 1 << 0
+      MAIN_WINDOW       = 0,
+      SCORE_TAB         = 1,
+      PIANO_ROLL_EDITOR = 2,
       };
 
 //---------------------------------------------------------

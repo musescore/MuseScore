@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "pianoroll.h"
+#include "shortcut.h"
 #include "config.h"
 #include "pianokeyboard.h"
 #include "pianoruler.h"
@@ -48,6 +49,11 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       waveView = 0;
       _score   = 0;
       staff    = 0;
+
+      QActionGroup* ag = Shortcut::getActionGroupForWidget(MsWidget::PIANO_ROLL_EDITOR);
+      ag->setParent(this);
+      addActions(ag->actions());
+      connect(ag, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
 
       QWidget* mainWidget = new QWidget;
       QToolBar* tb = addToolBar("Toolbar 1");
@@ -311,8 +317,29 @@ PianorollEditor::~PianorollEditor()
             action->disconnect(this);
       }
 
+
 //---------------------------------------------------------
-//   focucOnElement
+//   handleAction
+//---------------------------------------------------------
+
+void PianorollEditor::handleAction(QAction* a)
+    {
+    QString cmd(a->data().toString());
+
+    if (cmd == "zoom-in-horiz-pre")
+          zoom(1, true);
+    else if (cmd == "zoom-out-horiz-pre")
+          zoom(-1, true);
+    else if (cmd == "zoom-in-vert-pre")
+          zoom(1, false);
+    else if (cmd == "zoom-out-vert-pre")
+          zoom(-1, false);
+
+    }
+
+
+//---------------------------------------------------------
+//   focusOnElement
 //---------------------------------------------------------
 
 void PianorollEditor::focusOnPosition(Position* p)
@@ -814,6 +841,18 @@ void PianorollEditor::tickLenChanged(int val)
 
       pianoView->updateNotes();
       pianoLevels->updateNotes();
+      }
+
+//---------------------------------------------------------
+//   zoom
+//---------------------------------------------------------
+
+void PianorollEditor::zoom(int amount, bool horiz)
+      {
+      int cx = pianoView->width() / 2;
+      int cy = pianoView->height() / 2;
+
+      pianoView->zoomView(amount, horiz, cx, cy);
       }
 
 }
