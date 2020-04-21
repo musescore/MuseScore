@@ -54,6 +54,7 @@ class TimesigWizard : public QWidget, private Ui::TimesigWizard {
       int measures() const;
       Fraction timesig() const;
       bool pickup(int* z, int* n) const;
+      bool tempo(double* t) const;
       TimeSigType type() const;
       };
 
@@ -125,6 +126,7 @@ class NewWizardTimesigPage : public QWizardPage {
       Fraction timesig() const                 { return w->timesig();    }
       bool pickupMeasure(int* z, int* n) const { return w->pickup(z, n); }
       TimeSigType timesigType() const          { return w->type();       }
+      bool tempo(double* t) const              { return w->tempo(t);     }
       };
 
 //---------------------------------------------------------
@@ -159,15 +161,11 @@ class NewWizardKeysigPage : public QWizardPage {
       Q_OBJECT
 
       PaletteListView* _plv;
-      QDoubleSpinBox* _tempo;
-      QGroupBox* tempoGroup;
 
    public:
       NewWizardKeysigPage(QWidget* parent = 0);
       virtual bool isComplete() const override { return true; }
       KeySigEvent keysig() const;
-      double tempo() const            { return _tempo->value(); }
-      bool createTempo() const        { return tempoGroup->isChecked(); }
       void init();
       };
 
@@ -206,11 +204,10 @@ class NewWizard : public QWizard {
       QString composer() const           { return infoPage->composer();    }
       QString poet() const               { return infoPage->poet();        }
       QString copyright() const          { return infoPage->copyright();   }
-      KeySigEvent keysig() const         { return keysigPage->keysig();      }
+      KeySigEvent keysig() const         { return keysigPage->keysig();    }
       bool pickupMeasure(int* z, int* n) const { return timesigPage->pickupMeasure(z, n); }
-      TimeSigType timesigType() const     { return timesigPage->timesigType();       }
-      double tempo() const                { return keysigPage->tempo();       }
-      bool createTempo() const            { return keysigPage->createTempo(); }
+      TimeSigType timesigType() const    { return timesigPage->timesigType();}
+      bool tempo(double* t) const        { return timesigPage->tempo(t);   }
       bool emptyScore() const;
       void updateValues() const;
       };
