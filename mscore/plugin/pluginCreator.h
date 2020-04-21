@@ -18,7 +18,6 @@
 namespace Ms {
 
 class QmlPlugin;
-class HelpBrowser;
 
 //---------------------------------------------------------
 //   PluginCreator
@@ -33,8 +32,6 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
 
       QString path;
       QmlPlugin* item;
-      HelpBrowser* helpBrowser;
-      QDockWidget* manualDock;
       QPointer<QQuickView> view;
       QPointer<QDockWidget> dock;
 
@@ -42,7 +39,6 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       virtual void closeEvent(QCloseEvent*);
       void readSettings();
       void setTitle(const QString&);
-      QString manualPath();
       void doSavePlugin(bool saveas);
 
    private slots:

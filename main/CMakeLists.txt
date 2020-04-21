@@ -375,8 +375,6 @@ else (MINGW)
 
       COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
 
-      add_dependencies(mscore pluginDocumentation)
-
       # Keep dependencies in alphabetical order. Changes made to this list
       # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
       get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
