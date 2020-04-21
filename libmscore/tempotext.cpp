@@ -120,9 +120,9 @@ static const TempoPattern tp[] = {
       TempoPattern("\uECA0",                     1.0/7.5,    TDuration::DurationType::V_BREVE),      // double whole
       TempoPattern("\uECAD",                     1.0/960.0,  TDuration::DurationType::V_64TH),       // 1/64
       TempoPattern("\uECAF",                     1.0/1920.0, TDuration::DurationType::V_128TH),      // 1/128
-      TempoPattern("\uECB1",                     1.0/1920.0, TDuration::DurationType::V_256TH),      // 1/256
-      TempoPattern("\uECB3",                     1.0/1920.0, TDuration::DurationType::V_512TH),      // 1/512
-      TempoPattern("\uECB5",                     1.0/1920.0, TDuration::DurationType::V_1024TH),     // 1/1024
+      TempoPattern("\uECB1",                     1.0/3840.0, TDuration::DurationType::V_256TH),      // 1/256
+      TempoPattern("\uECB3",                     1.0/7680.0, TDuration::DurationType::V_512TH),      // 1/512
+      TempoPattern("\uECB5",                     1.0/15360.0,TDuration::DurationType::V_1024TH),     // 1/1024
       };
 
 //---------------------------------------------------------
