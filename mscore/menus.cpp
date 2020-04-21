@@ -332,6 +332,7 @@ void MuseScore::showPalette(bool visible)
 
 struct TempoPattern {
       QString pattern;
+      const char* name;
       double f;
       bool relative;
       bool italian;
@@ -339,7 +340,7 @@ struct TempoPattern {
       bool basic;
       bool masterOnly;
 
-      TempoPattern(const QString& s, double v, bool r, bool i, bool f, bool b, bool m) : pattern(s), f(v), relative(r), italian(i), followText(f), basic(b), masterOnly(m) {}
+      TempoPattern(const QString& s, const char* n, double v, bool r, bool i, bool f, bool b, bool m) : pattern(s), name(n), f(v), relative(r), italian(i), followText(f), basic(b), masterOnly(m) {}
       };
 
 //---------------------------------------------------------
@@ -878,7 +879,7 @@ PalettePanel* MuseScore::newNoteHeadsPalettePanel()
       QAction* action = s->action();
       QIcon icon(action->icon());
       ik->setAction("add-parentheses", icon);
-      sp->append(ik, s->help());
+      sp->append(ik, QT_TRANSLATE_NOOP("action", "Add parentheses to notehead"));
       return sp;
       }
 
@@ -1099,10 +1100,10 @@ PalettePanel* MuseScore::newBracketsPalettePanel()
       sp->setDrawGrid(true);
 
       for (auto t : std::array<std::pair<BracketType,const char*>, 4> {
-         {{ BracketType::NORMAL, QT_TRANSLATE_NOOP("Palette", "Bracket") },
-          { BracketType::BRACE,  QT_TRANSLATE_NOOP("Palette", "Brace")   },
-          { BracketType::SQUARE, QT_TRANSLATE_NOOP("Palette", "Square")  },
-          { BracketType::LINE,   QT_TRANSLATE_NOOP("Palette", "Line")    }}
+         {{ BracketType::NORMAL, QT_TRANSLATE_NOOP("Palette", "Bracket")          },
+          { BracketType::BRACE,  QT_TRANSLATE_NOOP("Palette", "Brace")            },
+          { BracketType::SQUARE, QT_TRANSLATE_NOOP("Palette", "Square")           },
+          { BracketType::LINE,   QT_TRANSLATE_NOOP("Palette", "Straight Line")    }}
          } ) {
             Bracket* b1      = new Bracket(gscore);
             BracketItem* bi1 = new BracketItem(gscore);
@@ -1148,12 +1149,12 @@ PalettePanel* MuseScore::newArpeggioPalettePanel()
       for (int i = 0; i < 6; ++i) {
             Arpeggio* a = new Arpeggio(gscore);
             a->setArpeggioType(ArpeggioType(i));
-            sp->append(a, QT_TRANSLATE_NOOP("Palette", "Arpeggio"));
+            sp->append(a, a->arpeggioTypeName());
             }
       for (int i = 0; i < 2; ++i) {
             Glissando* a = new Glissando(gscore);
             a->setGlissandoType(GlissandoType(i));
-            sp->append(a, QT_TRANSLATE_NOOP("Palette", "Glissando"));
+            sp->append(a, a->glissandoTypeName());
             }
 
       //fall and doits
@@ -1414,7 +1415,7 @@ PalettePanel* MuseScore::newLinesPalettePanel()
       pedal->setBeginText("<sym>keyboardPedalPed</sym>");
       pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
       pedal->setEndHookType(HookType::HOOK_90);
-      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
+      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal (with ped and line)"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
@@ -1422,31 +1423,31 @@ PalettePanel* MuseScore::newLinesPalettePanel()
       pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
       pedal->setEndText("<sym>keyboardPedalUp</sym>");
       pedal->setLineVisible(false);
-      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
+      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal (with ped and asterisk)"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
       pedal->setBeginHookType(HookType::HOOK_90);
       pedal->setEndHookType(HookType::HOOK_90);
-      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
+      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal (straight hooks)"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
       pedal->setBeginHookType(HookType::HOOK_90);
       pedal->setEndHookType(HookType::HOOK_45);
-      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
+      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal (angled end hook)"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
       pedal->setBeginHookType(HookType::HOOK_45);
       pedal->setEndHookType(HookType::HOOK_45);
-      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
+      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal (both hooks angled)"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
       pedal->setBeginHookType(HookType::HOOK_45);
       pedal->setEndHookType(HookType::HOOK_90);
-      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
+      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal (angled start hook)"));
 
       for (int i = 0; i < trillTableSize(); i++) {
             Trill* trill = new Trill(gscore);
@@ -1503,35 +1504,35 @@ PalettePanel* MuseScore::newTempoPalettePanel(bool defaultPalettePanel)
       sp->setDrawGrid(true);
 
       static const TempoPattern tps[] = {
-            TempoPattern("<sym>metNoteHalfUp</sym> = 80",    80.0/ 30.0, false, false, true, true, false),                // 1/2
-            TempoPattern("<sym>metNoteQuarterUp</sym> = 80", 80.0/ 60.0, false, false, true, true, false),                // 1/4
-            TempoPattern("<sym>metNote8thUp</sym> = 80",     80.0/120.0, false, false, true, true, false),                // 1/8
-            TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",    120/ 30.0, false, false, true, false, false),   // dotted 1/2
-            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/ 60.0, false, false, true, true, false),   // dotted 1/4
-            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",     120/120.0, false, false, true, false, false),   // dotted 1/8
+            TempoPattern("<sym>metNoteHalfUp</sym> = 80",    QT_TRANSLATE_NOOP("Palette", "Half note = 80 BPM"),    80.0/ 30.0, false, false, true, true, false),                // 1/2
+            TempoPattern("<sym>metNoteQuarterUp</sym> = 80", QT_TRANSLATE_NOOP("Palette", "Quarter note = 80 BPM"), 80.0/ 60.0, false, false, true, true, false),                // 1/4
+            TempoPattern("<sym>metNote8thUp</sym> = 80",     QT_TRANSLATE_NOOP("Palette", "Eighth note = 80 BPM"),  80.0/120.0, false, false, true, true, false),                // 1/8
+            TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",    QT_TRANSLATE_NOOP("Palette", "Dotted half note = 80 BPM"),    120/ 30.0, false, false, true, false, false),   // dotted 1/2
+            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", QT_TRANSLATE_NOOP("Palette", "Dotted quarter note = 80 BPM"), 120/ 60.0, false, false, true, true,  false),   // dotted 1/4
+            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",     QT_TRANSLATE_NOOP("Palette", "Dotted eighth note = 80 BPM"),  120/120.0, false, false, true, false, false),   // dotted 1/8
 
-            TempoPattern("Grave",             35.0/60.0, false, true, false, false, false),
-            TempoPattern("Largo",             50.0/60.0, false, true, false, false, false),
-            TempoPattern("Lento",             52.5/60.0, false, true, false, false, false),
-            TempoPattern("Larghetto",         63.0/60.0, false, true, false, false, true),
-            TempoPattern("Adagio",            71.0/60.0, false, true, false, false, false),
-            TempoPattern("Andante",           92.0/60.0, false, true, false, false, false),
-            TempoPattern("Andantino",         94.0/60.0, false, true, false, false, true),
-            TempoPattern("Moderato",         114.0/60.0, false, true, false, false, false),
-            TempoPattern("Allegretto",       116.0/60.0, false, true, false, false, false),
-            TempoPattern("Allegro moderato", 118.0/60.0, false, true, false, false, true),
-            TempoPattern("Allegro",          144.0/60.0, false, true, false, false, false),
-            TempoPattern("Vivace",           172.0/60.0, false, true, false, false, false),
-            TempoPattern("Presto",           187.0/60.0, false, true, false, false, false),
-            TempoPattern("Prestissimo",      200.0/60.0, false, true, false, false, true),
+            TempoPattern("Grave",            "Grave",             35.0/60.0, false, true, false, false, false),
+            TempoPattern("Largo",            "Largo",             50.0/60.0, false, true, false, false, false),
+            TempoPattern("Lento",            "Lento",             52.5/60.0, false, true, false, false, false),
+            TempoPattern("Larghetto",        "Larghetto",         63.0/60.0, false, true, false, false, true),
+            TempoPattern("Adagio",           "Adagio",            71.0/60.0, false, true, false, false, false),
+            TempoPattern("Andante",          "Andante",           92.0/60.0, false, true, false, false, false),
+            TempoPattern("Andantino",        "Andantino",         94.0/60.0, false, true, false, false, true),
+            TempoPattern("Moderato",         "Moderato",         114.0/60.0, false, true, false, false, false),
+            TempoPattern("Allegretto",       "Allegretto",       116.0/60.0, false, true, false, false, false),
+            TempoPattern("Allegro moderato", "Allegro moderato", 118.0/60.0, false, true, false, false, true),
+            TempoPattern("Allegro",          "Allegro",          144.0/60.0, false, true, false, false, false),
+            TempoPattern("Vivace",           "Vivace",           172.0/60.0, false, true, false, false, false),
+            TempoPattern("Presto",           "Presto",           187.0/60.0, false, true, false, false, false),
+            TempoPattern("Prestissimo",      "Prestissimo",      200.0/60.0, false, true, false, false, true),
 
-            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>", 3.0/2.0, true, false, true, false, false),
-            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>", 2.0/3.0, true, false, true, false, false),
-            TempoPattern("<sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym>",    1.0/2.0, true, false, true, false, false),
-            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteHalfUp</sym>",    2.0/1.0, true, false, true, false, false),
-            TempoPattern("<sym>metNote8thUp</sym> = <sym>metNote8thUp</sym>",         1.0/1.0, true, false, true, false, false),
-            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym>", 1.0/1.0, true, false, true, false, false),
-            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>", 2.0/3.0, true, false, true, false, false),
+            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>", QT_TRANSLATE_NOOP("Palette", "Quarter note = dotted quarter note metric modulation"), 3.0/2.0, true, false, true, false, false),
+            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>", QT_TRANSLATE_NOOP("Palette", "Dotted quarter note = quarter note metric modulation"), 2.0/3.0, true, false, true, false, false),
+            TempoPattern("<sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym>",    QT_TRANSLATE_NOOP("Palette", "Half note = quarter note metric modulation"),    1.0/2.0, true, false, true, false, false),
+            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteHalfUp</sym>",    QT_TRANSLATE_NOOP("Palette", "Quarter note = half note metric modulation"),    2.0/1.0, true, false, true, false, false),
+            TempoPattern("<sym>metNote8thUp</sym> = <sym>metNote8thUp</sym>",         QT_TRANSLATE_NOOP("Palette", "Eighth note = eighth note metric modulation"),   1.0/1.0, true, false, true, false, false),
+            TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym>", QT_TRANSLATE_NOOP("Palette", "Quarter note = quarter note metric modulation"), 1.0/1.0, true, false, true, false, false),
+            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",     QT_TRANSLATE_NOOP("Palette", "Dotted eighth note = quarter note metric modulation"),  2.0/3.0, true, false, true, false, false),
             };
       for (TempoPattern tp : tps) {
             TempoText* tt = new TempoText(gscore);
@@ -1539,15 +1540,15 @@ PalettePanel* MuseScore::newTempoPalettePanel(bool defaultPalettePanel)
             tt->setXmlText(tp.pattern);
             if (tp.relative) {
                   tt->setRelative(tp.f);
-                  sp->append(tt, QT_TRANSLATE_NOOP("Palette", "Metric modulation"), QString(), 1.5);
+                  sp->append(tt, qApp->translate("Palette", tp.name), QString(), 1.5);
                   }
             else if (tp.italian) {
                   tt->setTempo(tp.f);
-                  sp->append(tt, QT_TRANSLATE_NOOP("Palette", "Tempo text"), QString(), 1.3);
+                  sp->append(tt, tp.name, QString(), 1.3);
                   }
             else {
                   tt->setTempo(tp.f);
-                  sp->append(tt, QT_TRANSLATE_NOOP("Palette", "Tempo text"), QString(), 1.5);
+                  sp->append(tt, qApp->translate("Palette", tp.name), QString(), 1.5);
                   }
             }
       sp->setMoreElements(false);

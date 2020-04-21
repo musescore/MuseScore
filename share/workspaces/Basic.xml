@@ -609,7 +609,7 @@
             <text><sym>metNote8thUp</sym> = 80</text>
             </Tempo>
           </Cell>
-        <Cell name="Dotted Quarter note = 80 BPM">
+        <Cell name="Dotted quarter note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2</tempo>
