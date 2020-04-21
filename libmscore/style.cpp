@@ -502,7 +502,7 @@ static const StyleType styleTypes[] {
       { Sid::ottavaLineStyle,         "ottavaLineStyle",         QVariant(int(Qt::DashLine)) },
       { Sid::ottavaNumbersOnly,       "ottavaNumbersOnly",       true },
       { Sid::ottavaFontFace,          "ottavaFontFace",          "FreeSerif" },
-      { Sid::ottavaFontSize,          "ottavaFontSize",          12.0 },
+      { Sid::ottavaFontSize,          "ottavaFontSize",          10.0 },
       { Sid::ottavaFontSpatiumDependent, "ottavaFontSpatiumDependent", true },
       { Sid::ottavaFontStyle,         "ottavaFontStyle",         int(FontStyle::Normal) },
       { Sid::ottavaColor,             "ottavaColor",             QColor(0, 0, 0, 255) },
