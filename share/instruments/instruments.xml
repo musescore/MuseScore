@@ -116,7 +116,7 @@
             <Instrument id="db-piccolo">
                   <longName>D♭ Piccolo</longName>
                   <shortName>D♭ Picc.</shortName>
-                  <description>Piccolo Flute in Db</description>
+                  <description>Piccolo Flute in D♭</description>
                   <musicXMLid>wind.flutes.flute.piccolo</musicXMLid>
                   <transposingClef>G</transposingClef>
                   <concertClef>G8va</concertClef>
@@ -126,7 +126,23 @@
                   <transposeDiatonic>8</transposeDiatonic>
                   <transposeChromatic>13</transposeChromatic>
                   <Channel>
-                        <program value="72"/>
+                        <program value="72"/> <!--Piccolo-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="eb-piccolo">
+                  <longName>E♭ Piccolo</longName>
+                  <shortName>E♭ Picc.</shortName>
+                  <description>Piccolo Flute in E♭</description>
+                  <musicXMLid>wind.flutes.flute.piccolo</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8va</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>77-108</aPitchRange>
+                  <pPitchRange>77-111</pPitchRange>
+                  <transposeDiatonic>9</transposeDiatonic>
+                  <transposeChromatic>15</transposeChromatic>
+                  <Channel>
+                        <program value="72"/> <!--Piccolo-->
                   </Channel>
             </Instrument>
             <Instrument id="flute">
