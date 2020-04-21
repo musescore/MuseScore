@@ -1067,8 +1067,11 @@ bool Score::makeGap1(const Fraction& baseTick, int staffIdx, const Fraction& len
 
             if (newLen > Fraction(0,1)) {
                   const Fraction endTick = tick + newLen;
-                  deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, selectionFilter());
-                  deleteSpannersFromRange(tick, endTick, track, track + 1, selectionFilter());
+                  typedef SelectionFilterType Sel;
+                  // chord symbols can exist without chord/rest so they should not be removed
+                  constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
+                  deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, filter);
+                  deleteSpannersFromRange(tick, endTick, track, track + 1, filter);
                   }
 
             seg = m->undoGetSegment(SegmentType::ChordRest, tick);
