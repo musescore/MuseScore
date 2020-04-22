@@ -8,7 +8,7 @@ SET MUSESCORE_VERSION=%MUSESCORE_VERSION_FULL%.%APPVEYOR_BUILD_NUMBER%
 
 SET DEBUG_SYMS_FILE=musescore_win%TARGET_PROCESSOR_BITS%.sym
 REM Add one of the directories containing msdia140.dll (x86 version), for dump_syms.exe
-SET PATH=%PATH%;C:\Program Files\dotnet\sdk\3.1.200\TestHost\x86
+SET PATH=%PATH%;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\DIA SDK\bin
 @echo on
 C:\MuseScore\breakpad_tools\dump_syms.exe %APPVEYOR_BUILD_FOLDER%\msvc.build_%PLATFORM%\main\RelWithDebInfo\MuseScore3.pdb > %DEBUG_SYMS_FILE%
 @echo off
