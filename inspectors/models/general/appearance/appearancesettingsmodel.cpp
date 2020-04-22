@@ -51,11 +51,11 @@ void AppearanceSettingsModel::loadProperties()
     loadPropertyItem(m_arrangeOrder);
 
     loadPropertyItem(m_horizontalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toPointF().x(), 'f', 2);
+        return QString::number(elementPropertyValue.toPointF().x(), 'f', 2).toDouble();
     });
 
     loadPropertyItem(m_verticalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toPointF().y(), 'f', 2);
+        return QString::number(elementPropertyValue.toPointF().y(), 'f', 2).toDouble();
     });
 }
 
