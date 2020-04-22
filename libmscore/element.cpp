@@ -1414,21 +1414,21 @@ bool Element::isPrintable() const
       }
 
 //---------------------------------------------------------
-//   findAncestor
+//   findOldestAncestor
 //---------------------------------------------------------
 
-Element* Element::findAncestor(ElementType t)
+Element* Element::findOldestAncestor()
       {
       Element* e = this;
-      while (e && e->type() != t)
+      while (e->parent())
             e = e->parent();
       return e;
       }
 
-const Element* Element::findAncestor(ElementType t) const
+const Element* Element::findOldestAncestor() const
       {
       const Element* e = this;
-      while (e && e->type() != t)
+      while (e->parent())
             e = e->parent();
       return e;
       }

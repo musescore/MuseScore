@@ -198,8 +198,8 @@ class Element : public ScoreElement {
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
 
-      Element* findAncestor(ElementType t);
-      const Element* findAncestor(ElementType t) const;
+      Element* findOldestAncestor();
+      const Element* findOldestAncestor() const;
 
       Measure* findMeasure();
       const Measure* findMeasure() const;

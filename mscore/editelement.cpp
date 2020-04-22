@@ -61,7 +61,7 @@ void ScoreView::updateGrips()
             // updateGrips returns grips in page coordinates,
             // transform to view coordinates:
 
-            const QPointF pageOffset(editData.element->findAncestor(ElementType::PAGE)->pos());
+            const QPointF pageOffset(editData.element->findOldestAncestor()->pos());
 
             for (QRectF& grip : editData.grip) {
                   grip.translate(pageOffset);
