@@ -54,15 +54,15 @@ FocusableItem {
 
         delegate: ExpandableBlank {
 
-            function viewByType() {
+            function viewBySectionType() {
 
-                switch (inspectorData.type) {
-                case Inspector.GENERAL: return generalInspector
-                case Inspector.NOTATION: return notationInspector
+                switch (inspectorData.sectionType) {
+                case Inspector.SECTION_GENERAL: return generalInspector
+                case Inspector.SECTION_NOTATION: return notationInspector
                 }
             }
 
-            contentItemComponent: viewByType()
+            contentItemComponent: viewBySectionType()
 
             menuItemComponent: InspectorMenu {
                 onResetToDefaultsRequested: {

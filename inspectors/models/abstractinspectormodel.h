@@ -1,4 +1,4 @@
-#ifndef ABSTRACTINSPECTORMODEL_H
+﻿#ifndef ABSTRACTINSPECTORMODEL_H
 #define ABSTRACTINSPECTORMODEL_H
 
 #include <QList>
@@ -15,15 +15,25 @@ class AbstractInspectorModel : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString title READ title CONSTANT)
-    Q_PROPERTY(InspectorModelType type READ type CONSTANT)
+    Q_PROPERTY(InspectorSectionType sectionType READ sectionType CONSTANT)
+    Q_PROPERTY(InspectorModelType modelType READ modelType CONSTANT)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 
+    Q_ENUMS(InspectorSectionType)
     Q_ENUMS(InspectorModelType)
 public:
+    enum InspectorSectionType {
+        SECTION_UNDEFINED = -1,
+        SECTION_GENERAL,
+        SECTION_NOTATION
+    };
+
     enum InspectorModelType {
-        UNDEFINED = -1,
-        GENERAL,
-        NOTATION
+        TYPE_UNDEFINED = -1,
+        TYPE_NOTE,
+        TYPE_FERMATA,
+        TYPE_TEMPO,
+        TYPE_GLISSANDO
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
@@ -31,10 +41,12 @@ public:
     Q_INVOKABLE virtual void requestResetToDefaults();
 
     QString title() const;
-    InspectorModelType type() const;
+    InspectorSectionType sectionType() const;
+    InspectorModelType modelType() const;
+
     bool isEmpty() const;
 
-    static InspectorModelType modelTypeFromElementType(const Ms::ElementType elementType);
+    static InspectorSectionType modelTypeFromElementType(const Ms::ElementType elementType);
 
     virtual bool hasAcceptableElements() const;
 
@@ -45,7 +57,8 @@ public:
 
 public slots:
     void setTitle(QString title);
-    void setType(InspectorModelType modelType);
+    void setSectionType(InspectorSectionType sectionType);
+    void setModelType(InspectorModelType modelType);
     void setIsEmpty(bool isEmpty);
 
 signals:
@@ -78,7 +91,8 @@ protected slots:
 
 private:
     QString m_title;
-    InspectorModelType m_type;
+    InspectorSectionType m_sectionType = SECTION_UNDEFINED;
+    InspectorModelType m_modelType = TYPE_UNDEFINED;
     bool m_isEmpty = false;
 };
 

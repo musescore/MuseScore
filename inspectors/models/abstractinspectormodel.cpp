@@ -22,12 +22,17 @@ QString AbstractInspectorModel::title() const
     return m_title;
 }
 
-AbstractInspectorModel::InspectorModelType AbstractInspectorModel::type() const
+AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionType() const
 {
-    return m_type;
+    return m_sectionType;
 }
 
-AbstractInspectorModel::InspectorModelType AbstractInspectorModel::modelTypeFromElementType(const Ms::ElementType elementType)
+AbstractInspectorModel::InspectorModelType AbstractInspectorModel::modelType() const
+{
+    return m_modelType;
+}
+
+AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::modelTypeFromElementType(const Ms::ElementType elementType)
 {
     switch (elementType) {
     case Ms::ElementType::NOTE:
@@ -38,10 +43,14 @@ AbstractInspectorModel::InspectorModelType AbstractInspectorModel::modelTypeFrom
     case Ms::ElementType::SHADOW_NOTE:
     case Ms::ElementType::HOOK:
     case Ms::ElementType::BEAM:
-        return NOTATION;
+    case Ms::ElementType::GLISSANDO:
+    case Ms::ElementType::GLISSANDO_SEGMENT:
+    case Ms::ElementType::TEMPO_TEXT:
+    case Ms::ElementType::FERMATA:
+        return SECTION_NOTATION;
 
     default:
-        return UNDEFINED;
+        return SECTION_UNDEFINED;
     }
 }
 
@@ -58,9 +67,14 @@ void AbstractInspectorModel::setTitle(QString title)
     m_title = title;
 }
 
-void AbstractInspectorModel::setType(AbstractInspectorModel::InspectorModelType modelType)
+void AbstractInspectorModel::setSectionType(AbstractInspectorModel::InspectorSectionType sectionType)
 {
-    m_type = modelType;
+    m_sectionType = sectionType;
+}
+
+void AbstractInspectorModel::setModelType(AbstractInspectorModel::InspectorModelType modelType)
+{
+    m_modelType = modelType;
 }
 
 void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVariant& newValue)
