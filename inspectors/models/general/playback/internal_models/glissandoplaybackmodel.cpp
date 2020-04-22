@@ -14,7 +14,7 @@ void GlissandoPlaybackModel::createProperties()
 
 void GlissandoPlaybackModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::GLISSANDO_SEGMENT);
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN);
 }
 
 void GlissandoPlaybackModel::loadProperties()

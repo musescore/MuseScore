@@ -15,7 +15,7 @@ void HairpinPlaybackModel::createProperties()
 
 void HairpinPlaybackModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN_SEGMENT);
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN);
 }
 
 void HairpinPlaybackModel::loadProperties()
