@@ -32,8 +32,8 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     case Ms::ElementType::STEM: return findStems();
     case Ms::ElementType::HOOK: return findHooks();
     case Ms::ElementType::BEAM: return findBeams();
-    case Ms::ElementType::GLISSANDO_SEGMENT: return findGlissandos();
-    case Ms::ElementType::HAIRPIN_SEGMENT: return findHairpins();
+    case Ms::ElementType::GLISSANDO: return findGlissandos();
+    case Ms::ElementType::HAIRPIN: return findHairpins();
     default:
         QList<Ms::Element*> resultList;
 
