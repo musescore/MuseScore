@@ -119,6 +119,8 @@
         <file>resources/icons/fermata.svg</file>
         <file>view/qml/notation/tempos/TempoPopup.qml</file>
         <file>resources/icons/tempo.svg</file>
+        <file>resources/icons/glissando.svg</file>
+        <file>view/qml/notation/glissandos/GlissandoPopup.qml</file>
         <file>view/qml/notation/notes/NotePopup.qml</file>
     </qresource>
 </RCC>
