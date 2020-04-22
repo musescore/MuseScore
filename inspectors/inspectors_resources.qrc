@@ -116,5 +116,7 @@
         <file>view/qml/general/appearance/internal/VerticalSpacingSection.qml</file>
         <file>view/qml/common/ColorPicker.qml</file>
         <file>resources/icons/question_mark.svg</file>
+        <file>view/qml/notation/fermatas/FermataPopup.qml</file>
+        <file>resources/icons/fermata.svg</file>
     </qresource>
 </RCC>
