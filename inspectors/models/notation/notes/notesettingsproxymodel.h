@@ -7,7 +7,7 @@
 #include "beams/beamsettingsmodel.h"
 #include "hooks/hooksettingsmodel.h"
 
-class NotationInspectorProxyModel : public AbstractInspectorModel
+class NoteSettingsProxyModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
@@ -17,7 +17,7 @@ class NotationInspectorProxyModel : public AbstractInspectorModel
     Q_PROPERTY(QObject* hookSettingsModel READ hookSettingsModel NOTIFY hookSettingsModelChanged)
 
 public:
-    explicit NotationInspectorProxyModel(QObject* parent, IElementRepositoryService* repository);
+    explicit NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
 
     void requestResetToDefaults() override;
     bool hasAcceptableElements() const override;
