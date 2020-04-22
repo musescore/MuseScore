@@ -36,7 +36,11 @@ FocusableItem {
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
 
-            visible: root.model && root.model.noteSettingsModel ? !root.model.noteSettingsModel.isEmpty : false
+            visible: root.model && root.model.noteSettingsModel ? !root.model.noteSettingsModel.beamSettingsModel.isEmpty ||
+                                                                  !root.model.noteSettingsModel.headSettingsModel.isEmpty ||
+                                                                  !root.model.noteSettingsModel.stemSettingsModel.isEmpty ||
+                                                                  !root.model.noteSettingsModel.hookSettingsModel.isEmpty
+                                                                : false
 
             onVisibleChanged: {
                 if (!visible) {
