@@ -42,6 +42,7 @@ class Clef;
 class TimeSig;
 class Ottava;
 class BracketItem;
+class Note;
 
 enum class Key;
 
@@ -186,6 +187,10 @@ class Staff final : public ScoreElement {
       qreal height() const;
 
       int channel(const Fraction&, int voice) const;
+
+      QList<Note*> getNotes() const;
+      void addChord(QList<Note*>& list, Chord* chord, int voice) const;
+
       void clearChannelList(int voice)                               { _channelList[voice].clear(); }
       void insertIntoChannelList(int voice, const Fraction& tick, int channelId) { _channelList[voice].insert(tick.ticks(), channelId); }
 

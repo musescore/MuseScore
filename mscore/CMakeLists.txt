@@ -67,6 +67,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/importmidi_ui/importmidi_ui.cmake)
 
 QT5_WRAP_UI (ui_headers
       ${MSCORE_MIXER_UI}
+      ${PIANOROLL_UI}
       ${CLOUD_UI}
       ${DEBUGGER_UI}
       ${INSPECTOR_UI}
