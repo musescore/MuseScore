@@ -31,19 +31,18 @@
         <file>view/qml/common/StyledIcon.qml</file>
         <file>view/qml/common/RadioButtonGroup.qml</file>
         <file>view/qml/common/FlatButton.qml</file>
-        <file>view/qml/notation/NoteSettingsPopup.qml</file>
-        <file>view/qml/notation/StemSettings.qml</file>
-        <file>view/qml/notation/NoteSettingsTabPanel.qml</file>
+        <file>view/qml/notation/notes/StemSettings.qml</file>
+        <file>view/qml/notation/notes/NoteSettingsTabPanel.qml</file>
         <file>resources/icons/horizontal_adjustment.svg</file>
         <file>resources/icons/note.svg</file>
         <file>resources/icons/orientation_arrow_down.svg</file>
         <file>resources/icons/orientation_arrow_up.svg</file>
         <file>resources/icons/vertical_adjustment.svg</file>
         <file>resources/icons/orientation_auto.svg</file>
-        <file>view/qml/notation/HeadSettings.qml</file>
+        <file>view/qml/notation/notes/HeadSettings.qml</file>
         <file>resources/icons/orientation_arrow_left.svg</file>
         <file>resources/icons/orientation_arrow_right.svg</file>
-        <file>view/qml/notation/internal/NoteheadsGrid.qml</file>
+        <file>view/qml/notation/notes/internal/NoteheadsGrid.qml</file>
         <file>resources/icons/notehead_brevis_alt.svg</file>
         <file>resources/icons/notehead_circled.svg</file>
         <file>resources/icons/notehead_circled_large.svg</file>
@@ -74,12 +73,12 @@
         <file>resources/icons/notehead_whole.svg</file>
         <file>resources/icons/dot_position_above.svg</file>
         <file>resources/icons/dot_position_below.svg</file>
-        <file>view/qml/notation/BeamSettings.qml</file>
+        <file>view/qml/notation/notes/BeamSettings.qml</file>
         <file>resources/icons/beam_hight_left.svg</file>
         <file>resources/icons/beam_hight_right.svg</file>
         <file>resources/icons/feathering_height_left.svg</file>
         <file>resources/icons/feathering_height_right.svg</file>
-        <file>view/qml/notation/internal/BeamTypesGrid.qml</file>
+        <file>view/qml/notation/notes/internal/BeamTypesGrid.qml</file>
         <file>resources/icons/beams/beam_32_sub.svg</file>
         <file>resources/icons/beams/beam_16_sub.svg</file>
         <file>resources/icons/beams/beam_middle.svg</file>
@@ -118,5 +117,8 @@
         <file>resources/icons/question_mark.svg</file>
         <file>view/qml/notation/fermatas/FermataPopup.qml</file>
         <file>resources/icons/fermata.svg</file>
+        <file>view/qml/notation/tempos/TempoPopup.qml</file>
+        <file>resources/icons/tempo.svg</file>
+        <file>view/qml/notation/notes/NotePopup.qml</file>
     </qresource>
 </RCC>
