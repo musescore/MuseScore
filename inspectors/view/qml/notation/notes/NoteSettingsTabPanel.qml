@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 1.5
 import QtQuick.Layouts 1.3
-import "../common"
+import "../../common"
 
 TabPanel {
     id: root
@@ -11,7 +11,7 @@ TabPanel {
     implicitHeight: Math.max(beamTab.visible ? beamTab.implicitHeight : 0,
                              headTab.visible ? headTab.implicitHeight : 0,
                              stemTab.visible ? stemTab.implicitHeight : 0) + tabBarHeight + 24
-    width: parent.width
+    width: parent ? parent.width : 0
 
     Tab {
         id: beamTab

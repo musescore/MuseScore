@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import MuseScore.Inspectors 3.3
-import "../../common"
+import "../../../common"
 
 FocusableItem {
     id: root
