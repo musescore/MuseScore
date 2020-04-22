@@ -720,7 +720,7 @@ class Score : public QObject, public ScoreElement {
       void addElement(Element*);
       void removeElement(Element*);
 
-      Note* addPitch(NoteVal&, bool addFlag);
+      Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
       void addPitch(int pitch, bool addFlag, bool insert);
       Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
       Note* addMidiPitch(int pitch, bool addFlag);

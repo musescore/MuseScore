@@ -170,7 +170,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Undo"),
          QT_TRANSLATE_NOOP("action","Undo last change"),
          Icons::undo_ICON,
-         Qt::ApplicationShortcut
+         Qt::ApplicationShortcut,
+         ShortcutFlags::A_UNDO_REDO
          },
       {
          MsWidget::MAIN_WINDOW,
@@ -180,7 +181,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Redo"),
          QT_TRANSLATE_NOOP("action","Redo last undo"),
          Icons::redo_ICON,
-         Qt::ApplicationShortcut
+         Qt::ApplicationShortcut,
+         ShortcutFlags::A_UNDO_REDO
          },
       {
          MsWidget::SCORE_TAB,

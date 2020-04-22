@@ -16,6 +16,7 @@
 namespace Ms {
 
 class Element;
+class InputState;
 class Score;
 class Chord;
 class Rest;
@@ -74,9 +75,16 @@ class Cursor : public QObject {
       /** Current element at track, read only */
       Q_PROPERTY(Ms::PluginAPI::Element* element READ element)
       /** Current segment, read only */
-      Q_PROPERTY(Ms::PluginAPI::Segment*  segment READ segment)
+      Q_PROPERTY(Ms::PluginAPI::Segment*  segment READ qmlSegment)
       /** Current measure, read only */
       Q_PROPERTY(Ms::PluginAPI::Measure*  measure READ measure)
+      /**
+       * A physical string number where this cursor currently at. This is useful
+       * in conjunction with \ref InputStateMode.INPUT_STATE_SYNC_WITH_SCORE
+       * cursor mode.
+       * \since MuseScore 3.5
+       */
+      Q_PROPERTY(int stringNumber READ inputStateString WRITE setInputStateString)
 
    public:
       enum RewindMode {
@@ -86,20 +94,42 @@ class Cursor : public QObject {
             };
       Q_ENUM(RewindMode);
 
-   private:
-      Ms::Score* _score = nullptr;
-      int _track = 0;
-//       bool _expandRepeats; // used?
+      /** \since MuseScore 3.5 */
+      enum InputStateMode {
+            INPUT_STATE_INDEPENDENT, ///< Input state of cursor is independent of score input state (default)
+            INPUT_STATE_SYNC_WITH_SCORE ///< Input state of cursor is synchronized with score input state
+            };
+      Q_ENUM(InputStateMode);
 
-      //state
-      Ms::Segment* _segment = nullptr;
+   private:
+      /**
+       * Behavior of input state (position, notes duration etc.) of this cursor
+       * with respect to input state of the score. By default any changes in
+       * score and in this Cursor are not synchronized.
+       * \since MuseScore 3.5
+       */
+      Q_PROPERTY(InputStateMode inputStateMode READ inputStateMode WRITE setInputStateMode)
+
+      Ms::Score* _score = nullptr;
+//       bool _expandRepeats; // used?
       SegmentType _filter;
+      std::unique_ptr<InputState> is;
+      InputStateMode _inputStateMode = INPUT_STATE_INDEPENDENT;
 
       // utility methods
       void prevInTrack();
       void nextInTrack();
       void setScore(Ms::Score* s);
       Ms::Element* currentElement() const;
+
+      InputState& inputState();
+      const InputState& inputState() const { return const_cast<Cursor*>(this)->inputState(); }
+
+      Ms::Segment* segment() const;
+      void setSegment(Ms::Segment* seg);
+
+      int inputStateString() const;
+      void setInputStateString(int);
 
    public:
       /// \cond MS_INTERNAL
@@ -109,7 +139,7 @@ class Cursor : public QObject {
       Score* score() const;
       void setScore(Score* s);
 
-      int track() const             { return _track;    }
+      int track() const;
       void setTrack(int v);
 
       int staffIdx() const;
@@ -121,8 +151,11 @@ class Cursor : public QObject {
       int filter() const            { return int(_filter); }
       void setFilter(int f)         { _filter = SegmentType(f); }
 
+      InputStateMode inputStateMode() const { return _inputStateMode; }
+      void setInputStateMode(InputStateMode val);
+
       Element* element() const;
-      Segment* segment() const;
+      Segment* qmlSegment() const;
       Measure* measure() const;
 
       int tick();
@@ -133,6 +166,7 @@ class Cursor : public QObject {
       /// \endcond
 
       Q_INVOKABLE void rewind(RewindMode mode);
+      Q_INVOKABLE void rewindToTick(int tick);
 
       Q_INVOKABLE bool next();
       Q_INVOKABLE bool nextMeasure();

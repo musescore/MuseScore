@@ -175,6 +175,9 @@ class PluginAPI : public Ms::QmlPlugin {
        * - \p instrumentsChanged
        * - \p startLayoutTick
        * - \p endLayoutTick
+       * - \p undoRedo - whether this onScoreStateChanged invokation results
+       *   from user undo/redo action. It is usualy not recommended to modify
+       *   score from plugins in this case. Available since MuseScore 3.5.
        *
        * If a plugin modifies score in this handler, then it should:
        * 1. enclose all modifications within Score::startCmd() / Score::endCmd()

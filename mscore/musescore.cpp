@@ -5941,7 +5941,7 @@ void MuseScore::cmd(QAction* a)
       cmd(a, cmdn);
       if (lastShortcut->isCmd())
             cs->endCmd();
-      else
+      else if (!lastShortcut->isUndoRedo()) // undoRedo() calls endCmd() itself
             endCmd();
       TourHandler::startTour(cmdn);
       }
