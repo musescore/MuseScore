@@ -22,6 +22,7 @@
 
 namespace Ms {
 
+// generates the icons array
 extern void genIcons();
 
 enum class Icons : short { Invalid_ICON = -1,
@@ -61,9 +62,10 @@ enum class Icons : short { Invalid_ICON = -1,
       noteTimewise_ICON,
       arrowsMoveToTop_ICON,
       voice1_ICON, voice2_ICON, voice3_ICON, voice4_ICON,
-      ICONS
+      ICONS // last item
       };
 
+/// generated with genIcons icons.cpp
 extern QIcon* icons[];
 
 } // namespace Ms

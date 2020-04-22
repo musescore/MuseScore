@@ -26,11 +26,14 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   BendCanvas
+///   As shown in in the inspector for bend properties
+///   A graphic showing a list of points with lines between them
+///   to describe a bend
 //---------------------------------------------------------
 
 class BendCanvas : public QFrame {
       Q_OBJECT
-      QList<PitchValue> _points;
+      QList<PitchValue> _points; /// the list of points describing the bend
 
       virtual void paintEvent(QPaintEvent*);
       virtual void mousePressEvent(QMouseEvent*);

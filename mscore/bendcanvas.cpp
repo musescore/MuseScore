@@ -103,6 +103,7 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
 
 //---------------------------------------------------------
 //   mousePressEvent
+///   when clicked add a point if there is none at position, remove it if there is already one.
 //---------------------------------------------------------
 
 void BendCanvas::mousePressEvent(QMouseEvent* ev)

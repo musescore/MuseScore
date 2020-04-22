@@ -15,19 +15,23 @@
 
 namespace Ms {
 
+
+/// Class for managing downloads
+/// Warning: For this class to show a progress dialog, it needs a QWidget as parent
+
 class DownloadUtils : public QObject
       {
       Q_OBJECT
 
-      QByteArray sdata;
+      QByteArray sdata; /// the final data received
       QNetworkAccessManager manager;
-      QString _target;
-      QString _localFile;
+      QString _target; /// the URL of to-be-downloaded contents
+      QString _localFile; /// the file to which the data will be saved when saveFile() is called.
 
       QProgressDialog* progressDialog = nullptr;
 
    public:
-      explicit DownloadUtils(QWidget *parent=0);
+      explicit DownloadUtils(QWidget *parent = nullptr);
 
       void setTarget(const QString& t)      { _target = t; }
       void setLocalFile(const QString& t)   { _localFile = t; }
@@ -35,14 +39,15 @@ class DownloadUtils : public QObject
       QByteArray returnData();
 
    signals:
-      void done();
+      void done(); /// emitted when the download is complete
 
    public slots:
       void download(bool showProgress = false);
       void downloadFinished(QNetworkReply* data);
       void downloadProgress(qint64 received, qint64 total);
       };
-}
+
+} // namepace Ms
 
 #endif
 

@@ -26,6 +26,11 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   BreaksDialog
+///   a dialog asking for adding or removing system breaks
+///   options are:
+///         at interval (provide the interval in this case)
+///         remove the current breaks
+///         add a system break where systems currently break
 //---------------------------------------------------------
 
 class BreaksDialog : public QDialog, public Ui::BreaksDialog {

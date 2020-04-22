@@ -19,6 +19,11 @@ DownloadUtils::DownloadUtils(QWidget *parent)
       {
       }
 
+/// writes the final data to a file
+/// Caution: if the operation is not yet over,
+/// it will write whatever previous final data there was,
+/// may it be nothing
+
 bool DownloadUtils::saveFile()
       {
       QFile localFile(_localFile);
@@ -33,16 +38,25 @@ bool DownloadUtils::saveFile()
       return true;
       }
 
+/// sets sdata to the final data and notifies that the download is over
+
 void DownloadUtils::downloadFinished(QNetworkReply *data)
       {
       sdata = data->readAll();
       emit done();
       }
 
+/// returns the result of the download operation.
+
 QByteArray DownloadUtils::returnData()
       {
       return sdata;
       }
+
+/// Where the actual download is done.
+/// If show progress is true, it shows a QProgressDialog with the progress.
+/// Because of this progress Dialog, downloadUtils needs a QWidget parent
+///   to prevent memory leaks
 
 void DownloadUtils::download(bool showProgress)
       {
@@ -74,11 +88,14 @@ void DownloadUtils::download(bool showProgress)
       QObject::disconnect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
       }
 
+/// Sets the current value in the QProgressDialog,
+/// in case download(true) was called. (not download(false))
+
 void DownloadUtils::downloadProgress(qint64 received, qint64 total)
       {
-      double curVal = (double(received)/total)*100;
+      double curVal = (double(received)/total) * 100; // put in percentage
       if (progressDialog && progressDialog->isVisible())
             progressDialog->setValue(curVal);
       }
 
-}
+} // namespace Ms

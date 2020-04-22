@@ -24,6 +24,7 @@ class NoteEvent;
 class ChordItem;
 class ChordView;
 
+/// add types to the QGraphicsItem list of types
 enum { GripTypeItem = QGraphicsItem::UserType, ChordTypeItem };
 
 //---------------------------------------------------------

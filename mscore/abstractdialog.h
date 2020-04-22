@@ -24,6 +24,8 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   AbstractDialog
+///   A dialog that provides that automatically retranslates itself
+///   when it receives a LanguageChange event.
 //---------------------------------------------------------
 
 class AbstractDialog : public QDialog

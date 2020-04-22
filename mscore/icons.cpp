@@ -33,7 +33,11 @@ QIcon* icons[int(Icons::ICONS)];
 
 //---------------------------------------------------------
 //   genIcons
-//    create some icons
+///   create some icons
+///   to be kept in sync with Icons enum
+///   Associates the corresponding enum member to the file
+///   Note that the four voices icons are not included
+///     because they are manually generated
 //---------------------------------------------------------
 
 static const char* iconNames[] = {
@@ -169,10 +173,12 @@ static const char* iconNames[] = {
 
 //---------------------------------------------------------
 //   genIcons
+///   generates the icons array
 //---------------------------------------------------------
 
 void genIcons()
       {
+      // stop at Icons::voiceI_ICON to generate the voices icon manually
       for (int i = 0; i < int(Icons::voice1_ICON); ++i) {
             QIcon* icon = new QIcon(new MIconEngine);
             icon->addFile(iconPath + iconNames[i]);
@@ -182,6 +188,7 @@ void genIcons()
                   }
             }
 
+      // note that modifying the VOICES macro will not work here, but will fail at compile time
       static const char* vtext[VOICES] = { "1","2","3","4" };
       int iw = preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * 2 / 3; // 16;
       int ih = preferences.getInt(PREF_UI_THEME_ICONHEIGHT);   // 24;

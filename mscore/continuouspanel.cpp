@@ -45,7 +45,10 @@ ContinuousPanel::ContinuousPanel(ScoreView* sv)
       }
 
 //---------------------------------------------------------
-//   paintContinousPanel
+//   paint
+///   Paints the continuous panel
+///   Needs to do things like painting the instrument name, the key,
+///   the timesig and the measure number on the left if needed
 //---------------------------------------------------------
 
 void ContinuousPanel::paint(const QRect&, QPainter& painter)
@@ -419,4 +422,4 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       _visible = true;
       }
 
-}
+} // namespace MS

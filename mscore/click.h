@@ -16,6 +16,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/// sound of tack as heard in a metronome. Used in seq.cpp
 static const double tack[] = {
   -0.0019836426, 0.0097045898, 0.019165039, 0.028594971, 0.036102295,
    0.040679932, 0.040649414, 0.036560059, 0.029693604, 0.016967773,
@@ -522,6 +523,7 @@ static const double tack[] = {
    -0.001739502, -0.002166748, 0
    };
 
+/// sound of tick as heard in a metronome. Used in seq.cpp
 static const double tick[] = {
   0.002166748, 0.0023193359, 0.001739502, 0.002166748, 0.0021362305,
   0.0018615723, 0.0020446777, 0.002166748, 0.0019836426, 0.0022277832,

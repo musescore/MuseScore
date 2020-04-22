@@ -19,6 +19,7 @@ class ScoreView;
 
 //---------------------------------------------------------
 //   ContinuousPanel
+///   Panel used in continuous view.
 //---------------------------------------------------------
 
 class ContinuousPanel {
