@@ -31,7 +31,7 @@ signals:
 private:
     void createModelsByElementType(const Ms::ElementType elementType);
 
-    bool isModelAlreadyExists(const AbstractInspectorModel::InspectorModelType modelType) const;
+    bool isModelAlreadyExists(const AbstractInspectorModel::InspectorSectionType modelType) const;
 
     QHash<int, QByteArray> m_roleNames;
     QList<AbstractInspectorModel*> m_modelList;

@@ -5,7 +5,7 @@ GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositorySe
     createProperties();
 
     setTitle(tr("General"));
-    setType(GENERAL);
+    setSectionType(SECTION_GENERAL);
     setPlaybackProxyModel(new PlaybackProxyModel(this, repository));
     setAppearanceSettingsModel(new AppearanceSettingsModel(this, repository));
 }

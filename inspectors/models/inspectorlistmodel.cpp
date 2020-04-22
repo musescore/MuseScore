@@ -1,7 +1,7 @@
 #include "inspectorlistmodel.h"
 
 #include "general/generalsettingsmodel.h"
-#include "notation/notationinspectorproxymodel.h"
+#include "notation/notationsettingsproxymodel.h"
 
 InspectorListModel::InspectorListModel(QObject *parent) : QAbstractListModel(parent)
 {
@@ -63,15 +63,15 @@ int InspectorListModel::columnCount(const QModelIndex&) const
 
 void InspectorListModel::createModelsByElementType(const Ms::ElementType elementType)
 {
-    using ModelTypes = AbstractInspectorModel::InspectorModelType;
+    using SectionType = AbstractInspectorModel::InspectorSectionType;
 
-    QList<ModelTypes> modelTypeList = { AbstractInspectorModel::GENERAL };
+    QList<SectionType> sectionTypeList = { SectionType::SECTION_GENERAL };
 
-    modelTypeList << AbstractInspectorModel::modelTypeFromElementType(elementType);
+    sectionTypeList << AbstractInspectorModel::modelTypeFromElementType(elementType);
 
-    for (const ModelTypes modelType : modelTypeList) {
+    for (const SectionType modelType : sectionTypeList) {
 
-        if (modelType == AbstractInspectorModel::UNDEFINED)
+        if (modelType == SectionType::SECTION_UNDEFINED)
             continue;
 
         if (isModelAlreadyExists(modelType))
@@ -82,8 +82,8 @@ void InspectorListModel::createModelsByElementType(const Ms::ElementType element
         AbstractInspectorModel* newModel = nullptr;
 
         switch (modelType) {
-        case AbstractInspectorModel::GENERAL: newModel = new GeneralSettingsModel(this, m_repository); break;
-        case AbstractInspectorModel::NOTATION: newModel = new NotationInspectorProxyModel(this, m_repository); break;
+        case SectionType::SECTION_GENERAL: newModel = new GeneralSettingsModel(this, m_repository); break;
+        case SectionType::SECTION_NOTATION: newModel = new NotationSettingsProxyModel(this, m_repository); break;
         default: break;
         }
 
@@ -96,10 +96,10 @@ void InspectorListModel::createModelsByElementType(const Ms::ElementType element
     }
 }
 
-bool InspectorListModel::isModelAlreadyExists(const AbstractInspectorModel::InspectorModelType modelType) const
+bool InspectorListModel::isModelAlreadyExists(const AbstractInspectorModel::InspectorSectionType modelType) const
 {
     for (const AbstractInspectorModel* model : m_modelList) {
-        if (model->type() == modelType)
+        if (model->sectionType() == modelType)
             return true;
     }
 
