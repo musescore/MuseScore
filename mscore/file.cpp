@@ -801,11 +801,11 @@ MasterScore* MuseScore::getNewFile()
       double tempo = Score::defaultTempo() * 60; // quarter notes per minute
       if (newWizard->tempo(&tempo)) {
 
-            Fraction timesig = newWizard->timesig();
+            Fraction ts = newWizard->timesig();
 
             QString text("<sym>metNoteQuarterUp</sym> = %1");
             double bpm = tempo;
-            switch (timesig.denominator()) {
+            switch (ts.denominator()) {
                   case 1:
                         text = "<sym>metNoteWhole</sym> = %1";
                         bpm /= 4;
@@ -818,7 +818,7 @@ MasterScore* MuseScore::getNewFile()
                         text = "<sym>metNoteQuarterUp</sym> = %1";
                         break;
                   case 8:
-                        if (timesig.numerator() % 3 == 0) {
+                        if (ts.numerator() % 3 == 0) {
                               text = "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
                               bpm /= 1.5;
                               }
@@ -828,7 +828,7 @@ MasterScore* MuseScore::getNewFile()
                               }
                         break;
                   case 16:
-                        if (timesig.numerator() % 3 == 0) {
+                        if (ts.numerator() % 3 == 0) {
                               text = "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
                               bpm *= 1.5;
                               }
@@ -838,7 +838,7 @@ MasterScore* MuseScore::getNewFile()
                               }
                         break;
                   case 32:
-                        if (timesig.numerator() % 3 == 0) {
+                        if (ts.numerator() % 3 == 0) {
                               text = "<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
                               bpm *= 3;
                               }
@@ -848,7 +848,7 @@ MasterScore* MuseScore::getNewFile()
                               }
                         break;
                   case 64:
-                        if (timesig.numerator() % 3 == 0) {
+                        if (ts.numerator() % 3 == 0) {
                               text = "<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
                               bpm *= 6;
                               }
