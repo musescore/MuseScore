@@ -7,7 +7,7 @@ StyledPopup {
 
     property alias model: noteSettingsTabPanel.proxyModel
 
-    implicitHeight: noteSettingsTabPanel.implicitHeight + topPadding + bottomPadding
+    height: noteSettingsTabPanel.implicitHeight + topPadding + bottomPadding
     width: parent.width
 
     NoteSettingsTabPanel {
