@@ -1,16 +1,16 @@
-#include "notationinspectorproxymodel.h"
+#include "notesettingsproxymodel.h"
 
-NotationInspectorProxyModel::NotationInspectorProxyModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent)
+NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent)
 {
-    setTitle(QStringLiteral("Notation"));
-    setType(NOTATION);
+    setSectionType(SECTION_NOTATION);
+    setModelType(TYPE_NOTE);
     setStemSettingsModel(new StemSettingsModel(this, repository));
     setHeadSettingsModel(new NoteheadSettingsModel(this, repository));
     setBeamSettingsModel(new BeamSettingsModel(this, repository));
     setHookSettingsModel(new HookSettingsModel(this, repository));
 }
 
-void NotationInspectorProxyModel::requestResetToDefaults()
+void NoteSettingsProxyModel::requestResetToDefaults()
 {
     m_stemSettingsModel->requestResetToDefaults();
     m_headSettingsModel->requestResetToDefaults();
@@ -18,7 +18,7 @@ void NotationInspectorProxyModel::requestResetToDefaults()
     m_hookSettingsModel->requestResetToDefaults();
 }
 
-bool NotationInspectorProxyModel::hasAcceptableElements() const
+bool NoteSettingsProxyModel::hasAcceptableElements() const
 {
     return m_stemSettingsModel->hasAcceptableElements() ||
            m_headSettingsModel->hasAcceptableElements() ||
@@ -26,45 +26,45 @@ bool NotationInspectorProxyModel::hasAcceptableElements() const
            m_hookSettingsModel->hasAcceptableElements();
 }
 
-QObject* NotationInspectorProxyModel::beamSettingsModel() const
+QObject* NoteSettingsProxyModel::beamSettingsModel() const
 {
     return m_beamSettingsModel;
 }
 
-QObject* NotationInspectorProxyModel::headSettingsModel() const
+QObject* NoteSettingsProxyModel::headSettingsModel() const
 {
     return m_headSettingsModel;
 }
 
-QObject* NotationInspectorProxyModel::stemSettingsModel() const
+QObject* NoteSettingsProxyModel::stemSettingsModel() const
 {
     return m_stemSettingsModel;
 }
 
-QObject* NotationInspectorProxyModel::hookSettingsModel() const
+QObject* NoteSettingsProxyModel::hookSettingsModel() const
 {
     return m_hookSettingsModel;
 }
 
-void NotationInspectorProxyModel::setBeamSettingsModel(BeamSettingsModel* beamSettingsModel)
+void NoteSettingsProxyModel::setBeamSettingsModel(BeamSettingsModel* beamSettingsModel)
 {
     m_beamSettingsModel = beamSettingsModel;
     emit beamSettingsModelChanged(m_beamSettingsModel);
 }
 
-void NotationInspectorProxyModel::setHeadSettingsModel(NoteheadSettingsModel* headSettingsModel)
+void NoteSettingsProxyModel::setHeadSettingsModel(NoteheadSettingsModel* headSettingsModel)
 {
     m_headSettingsModel = headSettingsModel;
     emit headSettingsModelChanged(m_headSettingsModel);
 }
 
-void NotationInspectorProxyModel::setStemSettingsModel(StemSettingsModel* stemSettingsModel)
+void NoteSettingsProxyModel::setStemSettingsModel(StemSettingsModel* stemSettingsModel)
 {
     m_stemSettingsModel = stemSettingsModel;
     emit stemSettingsModelChanged(m_stemSettingsModel);
 }
 
-void NotationInspectorProxyModel::setHookSettingsModel(HookSettingsModel* hookSettingsModel)
+void NoteSettingsProxyModel::setHookSettingsModel(HookSettingsModel* hookSettingsModel)
 {
     m_hookSettingsModel = hookSettingsModel;
     emit hookSettingsModelChanged(m_hookSettingsModel);
