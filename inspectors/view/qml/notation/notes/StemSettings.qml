@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import MuseScore.Inspectors 3.3
-import "../common"
+import "../../common"
 
 
 FocusableItem {
