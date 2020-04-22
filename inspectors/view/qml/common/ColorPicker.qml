@@ -66,7 +66,7 @@ Rectangle {
             name: "NORMAL"
             when: !cliickableArea.containsMouse && !colorDialog.visible
 
-            PropertyChanges { target: backgroundRect; border.color: globalStyle.button }
+            PropertyChanges { target: backgroundRect; border.color: "#CECECE" }
         },
 
         State {
