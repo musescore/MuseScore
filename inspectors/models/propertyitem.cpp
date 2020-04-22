@@ -35,6 +35,11 @@ QVariant PropertyItem::value() const
     return m_currentValue;
 }
 
+QVariant PropertyItem::defaultValue() const
+{
+    return m_defaultValue;
+}
+
 bool PropertyItem::isUndefined() const
 {
     return !m_currentValue.isValid();

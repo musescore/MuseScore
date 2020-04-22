@@ -9,6 +9,7 @@ class PropertyItem : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
+    Q_PROPERTY(QVariant defaultValue READ defaultValue NOTIFY defaultValueChanged)
     Q_PROPERTY(bool isUndefined READ isUndefined NOTIFY isUndefinedChanged)
     Q_PROPERTY(bool isEnabled READ isEnabled NOTIFY isEnabledChanged)
 
@@ -21,6 +22,7 @@ public:
 
     int propertyId() const;
     QVariant value() const;
+    QVariant defaultValue() const;
     bool isUndefined() const;
     bool isEnabled() const;
 
@@ -31,6 +33,7 @@ public slots:
 
 signals:
     void valueChanged(QVariant value);
+    void defaultValueChanged(QVariant defaultValue);
     void isUndefinedChanged(bool isUndefined);
     void isEnabledChanged(bool isEnabled);
 
