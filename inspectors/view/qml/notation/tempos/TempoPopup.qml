@@ -23,7 +23,7 @@ StyledPopup {
 
             isIndeterminate: model ? model.isDefaultTempoForced.isUndefined : false
             checked: model && !isIndeterminate ? model.isDefaultTempoForced.value : false
-            text: qsTr("Follow written temp")
+            text: qsTr("Follow written tempo")
 
             onClicked: { model.isDefaultTempoForced.value = !checked }
         }
