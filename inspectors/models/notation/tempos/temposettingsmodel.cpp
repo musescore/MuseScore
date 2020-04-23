@@ -28,7 +28,7 @@ void TempoSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isDefaultTempoForced);
     loadPropertyItem(m_tempo, [this] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2);
+        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
     });
 }
 
