@@ -131,19 +131,31 @@ private:
 
 //---------------------------------------------------------
 //   Notation
+//      Most with text base attributes (font-*, placement)
 //---------------------------------------------------------
 
 class Notation {
 public:
-      Notation(const QString& name) { _name = name; }
+      Notation(const QString& name, const QString& parent = "",
+                        const SymId& symId = SymId::noSym) { _name = name; _parent = parent; _symId = symId; }
       void addAttribute(const QStringRef name, const QStringRef value);
       QString attribute(const QString& name) const;
       QString name() const { return _name; }
+      QString parent() const { return _parent; }
+      void setSymId(const SymId& symId) { _symId = symId; }
+      SymId symId() const { return _symId; }
+      void setSubType(const QString& subType) { _subType = subType; }
+      QString subType() const { return _subType; }
       QString print() const;
       void setText(const QString& text) { _text = text; }
       QString text() const { return _text; }
+      static Notation notationWithAttributes(const QString& name, const QXmlStreamAttributes attributes,
+                                const QString& parent = "", const SymId& symId = SymId::noSym);
 private:
       QString _name;
+      QString _parent;
+      SymId _symId { SymId::noSym };
+      QString _subType;
       QString _text;
       std::map<QString, QString> _attributes;
       };
@@ -183,7 +195,9 @@ public:
       int tremoloNr() const { return _tremoloNr; }
       bool mustStopGraceAFter() const { return _slurStop || _wavyLineStop; }
 private:
-      void addTechnical(Note* note);
+      void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);
+      void addTechnical(const Notation& notation, Note* note);
+      void harmonic();
       void articulations();
       void dynamics();
       void fermata();
@@ -199,26 +213,14 @@ private:
       Score* const _score;                      // the score
       MxmlLogger* _logger;                            // the error logger
       MusicXmlTupletDesc _tupletDesc;
-      QString _tiedType;
-      QString _tiedOrientation;
-      QString _tiedLineType;
       QString _dynamicsPlacement;
       QStringList _dynamicsList;
-      std::vector<SymId> _articulationSymbols;
-      SymId _breath { SymId::noSym };
       std::vector<Notation> _notations;
+      SymId _breath { SymId::noSym };
       QString _tremoloType;
       int _tremoloNr { 0 };
       QString _wavyLineType;
       int _wavyLineNo { 0 };
-      QString _chordLineType;
-      QString _fermataType;
-      SymId _fermataSymbol { SymId::noSym };
-      QString _technicalFingering;
-      QString _technicalFret;
-      QString _technicalPluck;
-      QString _technicalString;
-      QString _strongAccentType;
       QString _arpeggioType;
       bool _slurStop { false };
       bool _wavyLineStop { false };
