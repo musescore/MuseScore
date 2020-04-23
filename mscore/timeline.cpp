@@ -1757,6 +1757,9 @@ void Timeline::changeSelection(SelState)
 
 void Timeline::drawSelection()
       {
+      if (!_score)
+            return;
+
       _selectionPath = QPainterPath();
       _selectionPath.setFillRule(Qt::WindingFill);
 
@@ -2882,11 +2885,10 @@ const TimelineTheme& Timeline::activeTheme() const
 
 void Timeline::updateTimelineTheme()
       {
-      scene()->setBackgroundBrush(QBrush(activeTheme().backgroundColor));
-      updateView();
+      const QBrush backgroundBrush = QBrush(activeTheme().backgroundColor);
+      scene()->setBackgroundBrush(backgroundBrush);
+      _rowNames->scene()->setBackgroundBrush(backgroundBrush);
       updateGrid();
-      drawSelection();
-      // does not change the bottom left box, restart for changes to apply fully :^)
       }
 
 //---------------------------------------------------------
