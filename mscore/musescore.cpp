@@ -5895,6 +5895,12 @@ void MuseScore::cmd(QAction* a)
                tr("Command %1 not valid in current state").arg(cmdn));
             return;
             }
+      if (qApp->focusWidget()
+         && (!isAncestorOf(qApp->focusWidget()) || menuBar()->isAncestorOf(qApp->focusWidget()))
+         ) {
+            qDebug("MuseScore::cmd(): not on main window <%s>", qPrintable(cmdn));
+            return;
+            }
       if (cmdn == "toggle-palette") {
             showPalette(a->isChecked());
             if (a->isChecked()) {
