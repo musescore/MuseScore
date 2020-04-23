@@ -59,8 +59,9 @@ FocusableItem {
             NotePopup {
                 id: notePopup
 
-                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(noteSettingsButton.x, noteSettingsButton.y).x
-                y: noteSettingsButton.height
+                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
+                y: parent.height
+                arrowX: parent.x + parent.width / 2
 
                 width: root.width
 
@@ -96,8 +97,9 @@ FocusableItem {
             FermataPopup {
                 id: fermataPopup
 
-                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(fermataSettingsButton.x, fermataSettingsButton.y).x
-                y: fermataSettingsButton.height
+                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
+                y: parent.height
+                arrowX: parent.x + parent.width / 2
 
                 width: root.width
 
@@ -134,8 +136,10 @@ FocusableItem {
             GlissandoPopup {
                 id: glissandoPopup
 
-                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(glissandoSettingsButton.x, glissandoSettingsButton.y).x
-                y: glissandoSettingsButton.height
+                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
+                y: parent.height
+                arrowX: parent.x + parent.width / 2
+
                 width: root.width
 
                 model: root.model ? root.model.glissandoSettingsModel : null
@@ -171,8 +175,9 @@ FocusableItem {
             TempoPopup {
                 id: tempoPopup
 
-                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(tempoSettingsButton.x, tempoSettingsButton.y).x
-                y: tempoSettingsButton.height
+                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
+                y: parent.height
+                arrowX: parent.x + parent.width / 2
                 width: root.width
 
                 model: root.model ? root.model.tempoSettingsModel : null
