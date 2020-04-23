@@ -9,7 +9,7 @@ void PropertyItem::fillValues(const QVariant& currentValue, const QVariant& defa
 {
     updateCurrentValue(currentValue);
 
-    m_defaultValue = defaultValue;
+    setDefaultValue(defaultValue);
 }
 
 void PropertyItem::updateCurrentValue(const QVariant& currentValue)
@@ -63,6 +63,7 @@ void PropertyItem::setValue(const QVariant& value)
 void PropertyItem::setDefaultValue(const QVariant& defaultValue)
 {
     m_defaultValue = defaultValue;
+    emit defaultValueChanged(m_defaultValue);
 }
 
 void PropertyItem::setIsEnabled(bool isEnabled)
