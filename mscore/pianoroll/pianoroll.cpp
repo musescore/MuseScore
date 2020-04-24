@@ -56,117 +56,265 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(ag, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
 
       QWidget* mainWidget = new QWidget;
-      QToolBar* tb = addToolBar("Toolbar 1");
+      QToolBar* tbMain = addToolBar("Toolbar Main");
       if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
-            tb->addAction(getAction("undo"));
-            tb->addAction(getAction("redo"));
+            tbMain->addAction(getAction("undo"));
+            tbMain->addAction(getAction("redo"));
             }
       else {
-            tb->addAction(getAction("redo"));
-            tb->addAction(getAction("undo"));
+            tbMain->addAction(getAction("redo"));
+            tbMain->addAction(getAction("undo"));
             }
-      tb->addSeparator();
+      tbMain->addSeparator();
 #ifdef HAS_MIDI
-      tb->addAction(getAction("midi-on"));
+      tbMain->addAction(getAction("midi-on"));
 #endif
-      tb->addSeparator();
+      tbMain->addSeparator();
 
-      tb->addAction(getAction("rewind"));
-      tb->addAction(getAction("play"));
-      tb->addSeparator();
+      tbMain->addAction(getAction("rewind"));
+      tbMain->addAction(getAction("play"));
+      tbMain->addSeparator();
 
-      tb->addAction(getAction("loop"));
-      tb->addSeparator();
-      tb->addAction(getAction("repeat"));
+      tbMain->addAction(getAction("loop"));
+      tbMain->addSeparator();
+      tbMain->addAction(getAction("repeat"));
       QAction* followAction = getAction("follow");
       followAction->setChecked(preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG));
-      tb->addAction(followAction);
-      tb->addSeparator();
-      tb->addAction(getAction("metronome"));
+      tbMain->addAction(followAction);
+      tbMain->addSeparator();
+      tbMain->addAction(getAction("metronome"));
 
-      showWave = new QAction(tr("Wave"), tb);
+      showWave = new QAction(tr("Wave"), tbMain);
       showWave->setToolTip(tr("Show wave display"));
       showWave->setCheckable(true);
       showWave->setChecked(false);
       connect(showWave, SIGNAL(toggled(bool)), SLOT(showWaveView(bool)));
-      tb->addAction(showWave);
+      tbMain->addAction(showWave);
 
-      tb->addSeparator();
-      for (int i = 0; i < VOICES; ++i) {
-            QToolButton* b = new QToolButton(this);
-            b->setToolButtonStyle(Qt::ToolButtonTextOnly);
-            QPalette p(b->palette());
-            p.setColor(QPalette::Base, MScore::selectColor[i]);
-            b->setPalette(p);
-            QAction* a = getAction(voiceActions[i]);
-            b->setDefaultAction(a);
-            tb->addWidget(b);
-            }
-
-      tb->addSeparator();
+      tbMain->addSeparator();
 
       partLabel = new QLabel("Part:");
-      tb->addWidget(partLabel);
+      tbMain->addWidget(partLabel);
 
-      tb = addToolBar("Toolbar 2");
+      // --------------------------------------------------
+      // empty area for spacing
 
-      tb->addWidget(new QLabel(tr("Cursor:")));
+      struct LenIconData
+      {
+          QString _icon;
+          int _measureFrac;  //Note length is 2^n of a measure
+          bool _selected;
+      };
+      LenIconData _iconData[] = {
+            { QStringLiteral(":/data/icons/note-longa.svg"), 2, false },
+            { QStringLiteral(":/data/icons/note-breve.svg"), 1, false },
+            { QStringLiteral(":/data/icons/note-1.svg"), 0, true },
+            { QStringLiteral(":/data/icons/note-2.svg"), -1, false },
+            { QStringLiteral(":/data/icons/note-4.svg"), -2, false },
+            { QStringLiteral(":/data/icons/note-8.svg"), -3, false },
+            { QStringLiteral(":/data/icons/note-16.svg"), -4, false },
+            { QStringLiteral(":/data/icons/note-32.svg"), -5, false },
+            { QStringLiteral(":/data/icons/note-64.svg"), -6, false },
+            { QStringLiteral(":/data/icons/note-128.svg"), -7, false },
+            { QStringLiteral(":/data/icons/note-256.svg"), -8, false },
+            { QStringLiteral(":/data/icons/note-512.svg"), -9, false },
+            { QStringLiteral(":/data/icons/note-1024.svg"), -10, false },
+            { "", 0, false },
+            };
+
+      QToolBar* tbNoteLen = addToolBar("Toolbar Note Length");
+      QButtonGroup* bngrpNoteLen = new QButtonGroup();
+
+      for (LenIconData* p = _iconData; !p->_icon.isEmpty(); ++p) {
+            QToolButton* bnLen = new QToolButton();
+            QIcon icon;
+            icon.addFile(p->_icon, QSize(), QIcon::Normal, QIcon::Off);
+            bnLen->setIcon(icon);
+            bnLen->setCheckable(true);
+            int length = p->_measureFrac;
+            connect(bnLen, &QToolButton::clicked, this, [=](){this->setEditNoteLength(length);});
+
+            if (p->_selected)
+                  bnLen->setChecked(true);
+            bngrpNoteLen->addButton(bnLen);
+            tbNoteLen->addWidget(bnLen);
+            }
+
+      //----
+
+      QToolBar* tbDots = addToolBar("Toolbar Dots");
+      QButtonGroup* bngrpNoteDot = new QButtonGroup();
+
+      struct DotIconData
+      {
+          QString _icon;
+          int _len;
+          bool _selected;
+      };
+      DotIconData _iconDotData[] = {
+            { QStringLiteral(":/data/icons/note-dot.svg"), 1, false },
+            { QStringLiteral(":/data/icons/note-double-dot.svg"), 2, false },
+            { QStringLiteral(":/data/icons/note-dot3.svg"), 3, false },
+            { QStringLiteral(":/data/icons/note-dot4.svg"), 4, false },
+            { "", -1, false },
+            };
+
+
+      for (DotIconData* p = _iconDotData; p->_len != -1; ++p) {
+            QToolButton* bn = new QToolButton();
+            QIcon icon;
+            icon.addFile(p->_icon, QSize(), QIcon::Normal, QIcon::Off);
+            bn->setIcon(icon);
+            bn->setCheckable(true);
+            int length = p->_len;
+            connect(bn, &QToolButton::clicked, this, [=](){this->setEditNoteDots(length, bn);});
+
+            if (p->_selected)
+                  bn->setChecked(true);
+            bngrpNoteDot->addButton(bn);
+            tbDots->addWidget(bn);
+            }
+
+      //----
+
+      QToolBar* tbTool = addToolBar("Toolbar Edit Tool");
+      bngrpNoteLen = new QButtonGroup();
+
+      struct ToolIconData
+      {
+          QString _icon;
+          PianoRollEditTool _tool;
+          QString _tooltip;
+          bool _selected;
+      };
+      ToolIconData _iconDataTool[] = {
+            { QStringLiteral(":/data/icons/preEdit-select.svg"), PianoRollEditTool::SELECT, tr("Select Notes"), true },
+            { QStringLiteral(":/data/icons/preEdit-insertNote.svg"), PianoRollEditTool::INSERT_NOTE, tr("Insert Note"), false },
+            { QStringLiteral(":/data/icons/preEdit-appendChord.svg"), PianoRollEditTool::APPEND_NOTE, tr("Append Note to Chord"), false },
+            { QStringLiteral(":/data/icons/preEdit-cutNote.svg"), PianoRollEditTool::CUT_CHORD, tr("Cut Chord"), false },
+            { QStringLiteral(":/data/icons/preEdit-eraseNote.svg"), PianoRollEditTool::ERASE, tr("Erase Note"), false },
+            { QStringLiteral(":/data/icons/preEdit-changeLength.svg"), PianoRollEditTool::CHANGE_LENGTH, tr("Change Chord Length"), false },
+            { QStringLiteral(":/data/icons/preEdit-tie.svg"), PianoRollEditTool::TIE, tr("Toggle Tie"), false },
+            { "", PianoRollEditTool::LAST, "", false },
+            };
+
+      for (ToolIconData* p = _iconDataTool; p->_tool != PianoRollEditTool::LAST; ++p) {
+            QToolButton* bn = new QToolButton();
+            QIcon icon;
+            icon.addFile(p->_icon, QSize(), QIcon::Normal, QIcon::Off);
+            bn->setIcon(icon);
+            bn->setCheckable(true);
+            bn->setToolTip(p->_tooltip);
+            PianoRollEditTool tool = p->_tool;
+            connect(bn, &QToolButton::clicked, this, [=](){this->setEditNoteTool(tool);});
+
+            if (p->_selected)
+                  bn->setChecked(true);
+            bngrpNoteLen->addButton(bn);
+            tbTool->addWidget(bn);
+            }
+
+
+      //----
+
+      QToolBar* tbVoices = addToolBar("Toolbar Voices");
+      bngrpNoteLen = new QButtonGroup();
+
+      struct VoiceIconData
+      {
+          QString _icon;
+          int _voice;
+          QString _tooltip;
+          bool _selected;
+      };
+      VoiceIconData _iconDataVoice[] = {
+            { QStringLiteral(":/data/icons/voice-1.svg"), 0, tr("Voice 1"), true },
+            { QStringLiteral(":/data/icons/voice-2.svg"), 1, tr("Voice 2"), false },
+            { QStringLiteral(":/data/icons/voice-3.svg"), 2, tr("Voice 3"), false },
+            { QStringLiteral(":/data/icons/voice-4.svg"), 3, tr("Voice 4"), false },
+            { "", -1, "", false },
+            };
+
+      for (VoiceIconData* p = _iconDataVoice; p->_voice != -1; ++p) {
+            QToolButton* bn = new QToolButton();
+            QIcon icon;
+            icon.addFile(p->_icon, QSize(), QIcon::Normal, QIcon::Off);
+            bn->setIcon(icon);
+            bn->setCheckable(true);
+            bn->setToolTip(p->_tooltip);
+            int voice = p->_voice;
+            connect(bn, &QToolButton::clicked, this, [=](){this->setEditNoteVoice(voice);});
+
+            if (p->_selected)
+                  bn->setChecked(true);
+            bngrpNoteLen->addButton(bn);
+            tbVoices->addWidget(bn);
+            }
+
+      // --------------------------------------------------
+      // empty area for spacing
+
+      addToolBarBreak();
+      QToolBar* tbTweak = addToolBar("Toolbar Tweak");
+
+      tbTweak->addWidget(new QLabel(tr("Cursor:")));
       pos = new Awl::PosLabel;
       pos->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
 
-      tb->addWidget(pos);
+      tbTweak->addWidget(pos);
       Awl::PitchLabel* pl = new Awl::PitchLabel();
       pl->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
-      tb->addWidget(pl);
+      tbTweak->addWidget(pl);
 
-      tb->addSeparator();
+      tbTweak->addSeparator();
 
-      tb->addWidget(new QLabel(tr("Subdiv.:")));
+      tbTweak->addWidget(new QLabel(tr("Subdiv.:")));
       subdiv = new QSpinBox;
       subdiv->setToolTip(tr("Subdivide the beat this many times"));
       subdiv->setMinimum(0);
       subdiv->setValue(0);
-      tb->addWidget(subdiv);
+      tbTweak->addWidget(subdiv);
 
-      tb->addWidget(new QLabel(tr("Tuplet:")));
+      tbTweak->addWidget(new QLabel(tr("Tuplet:")));
       tuplet = new QSpinBox;
       tuplet->setToolTip(tr("Edit notes aligned to tuplets of this many beats"));
       tuplet->setMinimum(1);
       tuplet->setValue(1);
-      tb->addWidget(tuplet);
+      tbTweak->addWidget(tuplet);
 
-      tb->addWidget(new QLabel(tr("Stripe Pattern:")));
+      tbTweak->addWidget(new QLabel(tr("Stripe Pattern:")));
       barPattern = new QComboBox;
       barPattern->setToolTip(tr("White stripes show the tones of this chord."));
       for (int i = 0; !PianoView::barPatterns[i].name.isEmpty(); ++i) {
             barPattern->addItem(PianoView::barPatterns[i].name, i);
             }
-      tb->addWidget(barPattern);
+      tbTweak->addWidget(barPattern);
 
-      tb->addSeparator();
-      tb->addWidget(new QLabel(tr("Velocity:")));
+      tbTweak->addSeparator();
+      tbTweak->addWidget(new QLabel(tr("Velocity:")));
       veloType = new QComboBox;
       veloType->addItem(tr("Offset"), int(Note::ValueType::OFFSET_VAL));
       veloType->addItem(tr("User"),   int (Note::ValueType::USER_VAL));
-      tb->addWidget(veloType);
+      tbTweak->addWidget(veloType);
 
       velocity = new QSpinBox;
       velocity->setRange(-1000, 1000);
       velocity->setReadOnly(true);
-      tb->addWidget(velocity);
+      tbTweak->addWidget(velocity);
 
-      tb->addWidget(new QLabel(tr("Pitch:")));
+      tbTweak->addWidget(new QLabel(tr("Pitch:")));
       pitch = new Awl::PitchEdit;
       pitch->setReadOnly(true);
-      tb->addWidget(pitch);
+      tbTweak->addWidget(pitch);
 
-      tb->addWidget(new QLabel(tr("OnTime:")));
-      tb->addWidget((onTime = new QSpinBox));
+      tbTweak->addWidget(new QLabel(tr("OnTime:")));
+      tbTweak->addWidget((onTime = new QSpinBox));
       onTime->setRange(-2000, 2000);
 
-      tb->addWidget(new QLabel(tr("Len:")));
-      tb->addWidget((tickLen = new QSpinBox));
+      tbTweak->addWidget(new QLabel(tr("Len:")));
+      tbTweak->addWidget((tickLen = new QSpinBox));
       tickLen->setRange(-2000, 2000);
+
 
       // --------------------------------------------------
       // empty area for spacing
@@ -235,7 +383,6 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       layout->setContentsMargins(0, 0, 0, 0);
       layout->setSpacing(0);
       layout->setColumnMinimumWidth(0, PIANO_KEYBOARD_WIDTH);
-      layout->addWidget(tb,    0, 0, 1, 1);
       layout->addWidget(editAreaSplitter, 1, 0, 1, 1);
 
       mainWidget->setLayout(layout);
@@ -303,6 +450,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       setXpos(0);
       }
 
+
 //---------------------------------------------------------
 //   ~PianorollEditor
 //---------------------------------------------------------
@@ -315,25 +463,66 @@ PianorollEditor::~PianorollEditor()
             action->disconnect(this);
       }
 
+//---------------------------------------------------------
+//   setEditNoteLength
+//---------------------------------------------------------
+
+void PianorollEditor:: setEditNoteLength(int len)
+      {
+            pianoView->setEditNoteLength(len);
+      }
+
+//---------------------------------------------------------
+//   setEditNoteVoice
+//---------------------------------------------------------
+
+void PianorollEditor:: setEditNoteVoice(int voice)
+      {
+            pianoView->setEditNoteVoice(voice);
+      }
+
+//---------------------------------------------------------
+//   setEditNoteDots
+//---------------------------------------------------------
+
+void PianorollEditor::setEditNoteDots(int value, QToolButton* bn)
+      {
+      if (pianoView->editNoteDots() == value) {
+            bn->group()->setExclusive(false);
+            bn->setChecked(false);
+            bn->group()->setExclusive(true);
+            pianoView->setEditNoteDots(0);
+            }
+      else
+            pianoView->setEditNoteDots(value);
+      }
+
+//---------------------------------------------------------
+//   setEditNoteTool
+//---------------------------------------------------------
+
+void PianorollEditor::setEditNoteTool(PianoRollEditTool value)
+      {
+      pianoView->setEditNoteTool(value);
+      }
 
 //---------------------------------------------------------
 //   handleAction
 //---------------------------------------------------------
 
 void PianorollEditor::handleAction(QAction* a)
-    {
-    QString cmd(a->data().toString());
+      {
+      QString cmd(a->data().toString());
 
-    if (cmd == "zoom-in-horiz-pre")
-          zoom(1, true);
-    else if (cmd == "zoom-out-horiz-pre")
-          zoom(-1, true);
-    else if (cmd == "zoom-in-vert-pre")
-          zoom(1, false);
-    else if (cmd == "zoom-out-vert-pre")
-          zoom(-1, false);
-
-    }
+      if (cmd == "zoom-in-horiz-pre")
+            zoom(1, true);
+      else if (cmd == "zoom-out-horiz-pre")
+            zoom(-1, true);
+      else if (cmd == "zoom-in-vert-pre")
+            zoom(1, false);
+      else if (cmd == "zoom-out-vert-pre")
+            zoom(-1, false);
+      }
 
 
 //---------------------------------------------------------
