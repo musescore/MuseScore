@@ -42,5 +42,18 @@ InspectorHarmony::InspectorHarmony(QWidget* parent)
       mapSignals(iiList, ppList);
       }
 
+//---------------------------------------------------------
+//   valueChanged
+//---------------------------------------------------------
+
+void InspectorHarmony::valueChanged(int idx, bool b)
+      {
+      InspectorTextBase::valueChanged(idx, b);
+      if (iList[idx].t == Pid::PLAY) {
+            bool playChecked = h.play->isChecked();
+            h.voicingSelect->setVisible(playChecked);
+            h.resetVoicing->setVisible(playChecked);
+            }
+      }
 }
 
