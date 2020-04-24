@@ -26,6 +26,7 @@
 #include <QMenu>
 #include <QToolButton>
 #include "shortcut.h"
+#include "globals.h"
 
 //---------------------------------------------------------
 //   ActionEventObserver
@@ -85,24 +86,22 @@ QPair<QString, QString> ActionEventObserver::extractActionData(QObject* watched)
 
 bool ActionEventObserver::eventFilter(QObject *watched, QEvent *event)
       {
-      if (event->type() == QEvent::MouseButtonRelease) {
+      //if Shortcuts and Menus data IS the enabled telemetry data
+      if (Ms::enabledTelemetryDataTypes & Ms::TelemetryDataCollectionType::COLLECT_SHORTCUT_AND_MENU_DATA) {
+            if (event->type() == QEvent::MouseButtonRelease) {
+                  QPair<QString, QString> actionData = extractActionData(watched);
+                  telemetryService()->sendEvent(actionData.first, actionData.second);
+                  }
+            else if (event->type() == QEvent::Shortcut) {
+                  QShortcutEvent* shortCutEvent = static_cast<QShortcutEvent*>(event);
+                  Ms::Shortcut* shortcut = Ms::Shortcut::getShortcutByKeySequence(shortCutEvent->key(), m_scoreState);
 
-            QPair<QString, QString> actionData = extractActionData(watched);
+                  if (!shortcut)
+                        return false;
 
-            telemetryService()->sendEvent(actionData.first, actionData.second);
-
+                  telemetryService()->sendEvent("shortcut", shortcut->key());
+                  }
             }
-      else if (event->type() == QEvent::Shortcut) {
-            QShortcutEvent* shortCutEvent = static_cast<QShortcutEvent*>(event);
-
-            Ms::Shortcut* shortcut = Ms::Shortcut::getShortcutByKeySequence(shortCutEvent->key(), m_scoreState);
-
-            if (!shortcut)
-                return false;
-
-            telemetryService()->sendEvent("shortcut", shortcut->key());
-            }
-
       return false;
       }
 
