@@ -369,7 +369,7 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
 //   addNote from NoteVal
 //---------------------------------------------------------
 
-Note* Score::addNote(Chord* chord, NoteVal& noteVal, bool forceAccidental)
+Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental)
       {
       Note* note = new Note(this);
       note->setParent(chord);

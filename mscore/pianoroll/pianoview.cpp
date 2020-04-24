@@ -30,6 +30,7 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/segment.h"
 #include "libmscore/noteevent.h"
+#include "libmscore/utils.h"
 
 namespace Ms {
 
@@ -195,15 +196,18 @@ void PianoItem::paintNoteBlock(QPainter* painter, NoteEvent* evt)
 
       QColor noteDeselected;
       QColor noteSelected;
+      QColor tieColor;
 
       switch (preferences.globalStyle()) {
             case MuseScoreStyleType::DARK_FUSION:
                   noteDeselected = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_NOTE_UNSEL_COLOR));
                   noteSelected = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_NOTE_SEL_COLOR));
+                  tieColor = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_BG_TIE_COLOR));
                   break;
             default:
                   noteDeselected = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_NOTE_UNSEL_COLOR));
                   noteSelected = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_NOTE_SEL_COLOR));
+                  tieColor = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_BG_TIE_COLOR));
                   break;
             }
 
@@ -213,6 +217,18 @@ void PianoItem::paintNoteBlock(QPainter* painter, NoteEvent* evt)
       painter->setPen(QPen(noteColor.darker(250)));
       QRectF bounds = boundingRectPixels(evt);
       painter->drawRoundedRect(bounds, roundRadius, roundRadius);
+
+      //Tie markings
+      painter->setPen(QPen(tieColor));
+
+      for (Note* note = _note; note->tieFor(); note = note->tieFor()->endNote()) {
+            Chord* chord = note->chord();
+            int start = chord->tick().ticks();
+            int duration = chord->ticks().ticks();
+            int xpos = _pianoView->tickToPixelX(start + duration);
+
+            painter->drawLine(QLineF(xpos, bounds.y(), xpos, bounds.y() + bounds.height()));
+            }
 
       //Pitch name
       if (bounds.width() >= 20 && bounds.height() >= 12) {
@@ -471,7 +487,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             }
 
       //Draw drag selection box
-      if (_dragStarted && _dragStyle == DragStyle::SELECTION_RECT) {
+      if (_dragStarted && _dragStyle == DragStyle::SELECTION_RECT && _editNoteTool == PianoRollEditTool::SELECT) {
             int minX = qMin(_mouseDownPos.x(), _lastMousePos.x());
             int minY = qMin(_mouseDownPos.y(), _lastMousePos.y());
             int maxX = qMax(_mouseDownPos.x(), _lastMousePos.x());
@@ -660,7 +676,7 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
 
                   selectNotes(startTick, endTick, lowPitch, highPitch, selType);
                   }
-            else if (_dragStyle == DragStyle::MOVE_NOTES) {
+            else if (_dragStyle == DragStyle::NOTES) {
                   //Keep last note drag event, if any
                   if (_inProgressUndoEvent)
                         _inProgressUndoEvent = false;
@@ -669,135 +685,32 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
             _dragStarted = false;
             }
       else {
-            Score* score = _staff->score();
-
-            int pickTick = pixelXToTick((int)_mouseDownPos.x());
-            int pickPitch = pixelYToPitch(_mouseDownPos.y());
-
-            PianoItem *pn = pickNote(pickTick, pickPitch);
-            if (pn) {
-                  if (selType == NoteSelectType::REPLACE)
-                        selType = NoteSelectType::FIRST;
-
-                  mscore->play(pn->note());
-                  score->setPlayNote(false);
-
-                  selectNotes(pickTick, pickTick + 1, pickPitch, pickPitch, selType);
-                  }
-            else {
-                  if (!bnShift && !bnCtrl) {
-                        //Select an empty pixel - should clear selection
-                        selectNotes(pickTick, pickTick + 1, pickPitch, pickPitch, selType);
-                        }
-                  else if (!bnShift && bnCtrl) {
-
-                        //Insert a new note at nearest subbeat
-                        int subbeats = _tuplet * (1 << _subdiv);
-                        int subbeatTicks = MScore::division / subbeats;
-                        int roundedTick = (pickTick / subbeatTicks) * subbeatTicks;
-
-                        InputState& is = score->inputState();
-                        int voice = score->inputState().voice();
-                        int track = _staff->idx() * VOICES + voice;
-
-                        NoteVal nv(pickPitch);
-
-                        Fraction t = Fraction::fromTicks(roundedTick);
-                        Segment* seg = score->tick2segment(t);
-                        score->expandVoice(seg, track);
-
-                        ChordRest* e = score->findCR(t, track);
-                        if (e && !e->tuplet() && _tuplet == 1) {
-                              //Ignore tuplets
-                              score->startCmd();
-
-                              ChordRest* cr0;
-                              ChordRest* cr1;
-                              Fraction frac = is.duration().fraction();
-
-                              //Default to quarter note if faction is invalid
-                              if (!frac.isValid() || frac.isZero())
-                                    frac.set(1, 4);
-
-                              if (cutChordRest(e, track, roundedTick, cr0, cr1)) {
-                                    score->setNoteRest(cr1->segment(), track, nv, frac);
-                                    }
-                              else {
-                                    if (cr0->isChord() && cr0->ticks().ticks() == frac.ticks()) {
-                                          Chord* ch = toChord(cr0);
-                                          score->addNote(ch, nv);
-                                          }
-                                    else {
-                                          score->setNoteRest(cr0->segment(), track, nv, frac);
-                                          }
-                                    }
-
-                              score->endCmd();
-                              }
-
-                        }
-                  else if (bnShift && !bnCtrl) {
-                        //Append a pitch to our current chord/rest
-                        int voice = score->inputState().voice();
-
-                        //Find best chord to add to
-                        int track = _staff->idx() * VOICES + voice;
-
-                        Fraction pt = Fraction::fromTicks(pickTick);
-                        Segment* seg = score->tick2segment(pt);
-                        score->expandVoice(seg, track);
-
-                        ChordRest* e = score->findCR(pt, track);
-
-                        if (e && e->isChord()) {
-                              Chord* ch = toChord(e);
-
-                              if (pt >= e->tick() && pt < (ch->tick() + ch->ticks())) {
-                                    NoteVal nv(pickPitch);
-                                    score->startCmd();
-                                    score->addNote(ch, nv);
-                                    score->endCmd();
-                                    }
-
-                              }
-                        else if (e && e->isRest()) {
-                              Rest* r = toRest(e);
-                              NoteVal nv(pickPitch);
-                              score->startCmd();
-                              score->setNoteRest(r->segment(), track, nv, r->ticks());
-                              score->endCmd();
-                              }
-                        }
-                  else if (bnShift && bnCtrl) {
-                        //Cut the chord/rest at the nearest subbeat
-                        int voice = score->inputState().voice();
-
-                        //Find best chord to add to
-                        int track = _staff->idx() * VOICES + voice;
-
-                        int subbeats = _tuplet * (1 << _subdiv);
-
-                        int subbeatTicks = MScore::division / subbeats;
-                        int roundedTick = (pickTick / subbeatTicks) * subbeatTicks;
-
-                        Fraction rt = Fraction::fromTicks(roundedTick);
-                        Segment* seg = score->tick2segment(rt);
-                        score->expandVoice(seg, track);
-
-                        ChordRest* e = score->findCR(rt, track);
-                        if (e && !e->tuplet() && _tuplet == 1) {
-                              score->startCmd();
-                              int startTick = e->tick().ticks();
-
-                              if (roundedTick != startTick) {
-                                    ChordRest* cr0;
-                                    ChordRest* cr1;
-                                    cutChordRest(e, track, roundedTick, cr0, cr1);
-                                    }
-                              score->endCmd();
-                              }
-                        }
-                  }
+            //This was just a click, not a drag
+            switch (_editNoteTool) {
+            case SELECT:
+                  handleSelectionClick();
+                  break;
+            case CHANGE_LENGTH:
+                  changeChordLength(_mouseDownPos);
+                  break;
+            case ERASE:
+                  eraseNote(_mouseDownPos);
+                  break;
+            case INSERT_NOTE:
+                  insertNote(modifiers);
+                  break;
+            case APPEND_NOTE:
+                  appendNoteToChord(_mouseDownPos);
+                  break;
+            case CUT_CHORD:
+                  cutChord(_mouseDownPos);
+                  break;
+            case TIE:
+                  toggleTie(_mouseDownPos);
+                  break;
+            default:
+                break;
+                }
             }
 
 
@@ -805,7 +718,6 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
       _mouseDown = false;
       scene()->update();
       }
-
 
 
 //---------------------------------------------------------
@@ -832,7 +744,7 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
                         if (!pi->note()->selected()) {
                               selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
                               }
-                        _dragStyle = DragStyle::MOVE_NOTES;
+                        _dragStyle = DragStyle::NOTES;
                         _lastDragPitch = mouseDownPitch;
                         }
                   else {
@@ -842,27 +754,21 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
             }
 
       if (_dragStarted) {
-            if (_dragStyle == DragStyle::MOVE_NOTES) {
-                  int curPitch = pixelYToPitch(_lastMousePos.y());
-                  if (curPitch != _lastDragPitch) {
-                        int pitchDelta = curPitch - _lastDragPitch;
-
-                        Score* score = _staff->score();
-                        if (_inProgressUndoEvent) {
-//                              score->undoRedo(true, 0, false);
-                              _inProgressUndoEvent = false;
-                              }
-
-                        score->startCmd();
-                        score->upDownDelta(pitchDelta);
-                        score->endCmd();
-
-                        _inProgressUndoEvent = true;
-                        _lastDragPitch = curPitch;
-                        }
-                  }
-
-            scene()->update();
+          switch (_editNoteTool) {
+          case SELECT:
+                if (_dragStyle == DragStyle::NOTES)
+                      dragSelectionNoteGroup();
+                scene()->update();
+                break;
+          case CHANGE_LENGTH:
+                changeChordLength(_lastMousePos);
+                break;
+          case ERASE:
+                eraseNote(_lastMousePos);
+                break;
+          default:
+                break;
+                }
             }
 
 
@@ -882,14 +788,467 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
       emit trackingPosChanged(trackingPos);
       }
 
+
+//---------------------------------------------------------
+//   dragSelectionNoteGroup
+//---------------------------------------------------------
+
+void PianoView::dragSelectionNoteGroup() {
+      int curPitch = pixelYToPitch(_lastMousePos.y());
+      if (curPitch != _lastDragPitch) {
+            int pitchDelta = curPitch - _lastDragPitch;
+
+            Score* score = _staff->score();
+            if (_inProgressUndoEvent) {
+                  _inProgressUndoEvent = false;
+                  }
+
+            score->startCmd();
+            score->upDownDelta(pitchDelta);
+            score->endCmd();
+
+            _inProgressUndoEvent = true;
+            _lastDragPitch = curPitch;
+            }
+      scene()->update();
+
+      }
+
+
+//---------------------------------------------------------
+//   eraseNote
+//---------------------------------------------------------
+
+void PianoView::eraseNote(const QPointF& pos) {
+      Score* score = _staff->score();
+      int pickTick = pixelXToTick((int)pos.x());
+      int pickPitch = pixelYToPitch(pos.y());
+      PianoItem *pn = pickNote(pickTick, pickPitch);
+
+      if (pn) {
+            score->startCmd();
+            score->deleteItem(pn->note());
+            score->endCmd();
+            }
+      }
+
+//---------------------------------------------------------
+//   changeChordLength
+//---------------------------------------------------------
+
+void PianoView::changeChordLength(const QPointF& pos) {
+      Score* score = _staff->score();
+      int pickTick = pixelXToTick((int)pos.x());
+      int pickPitch = pixelYToPitch(pos.y());
+      PianoItem *pn = pickNote(pickTick, pickPitch);
+
+      if (pn) {
+            Note* note = pn->note();
+            int track = _staff->idx() * VOICES + note->voice();
+            Fraction frac = noteEditLength();
+            Chord* chord = note->chord();
+            if (chord->ticks() != frac) {
+                  //Copy existing cord
+                  QList<NoteVal> nvList;
+                  for (Note* n: chord->notes())
+                      nvList.push_back(n->noteVal());
+
+                  //Rebuild chord
+                  score->startCmd();
+                  score->deleteItem(chord);
+                  Fraction startTick = chord->segment()->tick();
+
+                  for (int i = 0; i < nvList.length(); ++i) {
+                        if (i == 0) {
+                              ChordRest* cr = score->findCR(startTick, track);
+                              score->setNoteRest(cr->segment(), track, nvList.at(i), frac);
+                              chord = toChord(score->findCR(startTick, track));
+                              }
+                        else
+                              score->addNote(chord, nvList.at(i));
+                        }
+                  score->endCmd();
+                  }
+            }
+      }
+
+
+//---------------------------------------------------------
+//   roundToStartBeat
+//---------------------------------------------------------
+
+Fraction PianoView::roundToStartBeat(int tick)  const
+      {
+      Score* _score = _staff->score();
+      Pos barPos(_score->tempomap(), _score->sigmap(), tick, TType::TICKS);
+
+      int beatsInBar = barPos.timesig().timesig().numerator();
+
+      //Number of smaller pieces the beat is divided into
+      int subbeats = _tuplet * (1 << _subdiv);
+      int divisions = beatsInBar * subbeats;
+
+      //Round down to nearest division
+      Fraction pickFrac = Fraction::fromTicks(tick);
+      int numDiv = (int)floor((pickFrac.numerator() * divisions / (double)pickFrac.denominator()));
+      return Fraction(numDiv, divisions);
+      }
+
+
+//---------------------------------------------------------
+//   noteEditLength
+//---------------------------------------------------------
+
+Fraction PianoView::noteEditLength() const
+      {
+      //Find n, d such that n/d = 2^_editNoteLength
+      int n = _editNoteLength > 0 ? (1 << _editNoteLength) : 1;
+      int d = _editNoteLength < 0 ? (1 << -_editNoteLength) : 1;
+
+      //dots multiplier is (2^(n + 1) - 1)/(2^n) where n is the number of dots
+      int dotN = (1 << (_editNoteDots + 1)) - 1;
+      int dotD = 1 << _editNoteDots;
+
+      return Fraction(n * dotN, d * dotD);
+      }
+
+
+//---------------------------------------------------------
+//   appendNoteToChord
+//---------------------------------------------------------
+
+void PianoView::appendNoteToChord(const QPointF& pos) {
+      Score* score = _staff->score();
+
+      int pickTick = pixelXToTick((int)pos.x());
+      int pickPitch = pixelYToPitch(_mouseDownPos.y());
+      int voice = _editNoteVoice;
+
+      //Find best chord to add to
+      int track = _staff->idx() * VOICES + voice;
+
+      Fraction pt = Fraction::fromTicks(pickTick);
+      Segment* seg = score->tick2segment(pt);
+      score->expandVoice(seg, track);
+
+      ChordRest* e = score->findCR(pt, track);
+
+      if (e && e->isChord()) {
+            Chord* ch = toChord(e);
+
+            if (pt >= e->tick() && pt < (ch->tick() + ch->ticks())) {
+                  NoteVal nv(pickPitch);
+                  score->startCmd();
+                  score->addNote(ch, nv);
+                  score->endCmd();
+                  }
+            }
+      else if (e && e->isRest()) {
+            Rest* r = toRest(e);
+            NoteVal nv(pickPitch);
+            score->startCmd();
+            score->setNoteRest(r->segment(), track, nv, r->ticks());
+            score->endCmd();
+            }
+      }
+
+//---------------------------------------------------------
+//   insertNote
+//---------------------------------------------------------
+
+void PianoView::insertNote(int modifiers)
+      {
+      bool bnShift = modifiers & Qt::ShiftModifier;
+
+      Score* score = _staff->score();
+
+      int pickTick = pixelXToTick((int)_mouseDownPos.x());
+      int pickPitch = pixelYToPitch(_mouseDownPos.y());
+
+
+      if (bnShift) {
+            //If shift is held, select note instead
+            PianoItem *pn = pickNote(pickTick, pickPitch);
+            if (pn) {
+                  mscore->play(pn->note());
+                  score->setPlayNote(false);
+
+                  selectNotes(pickTick, pickTick + 1, pickPitch, pickPitch, NoteSelectType::REPLACE);
+                  }
+            return;
+            }
+
+
+      Fraction insertPosition = roundToStartBeat(pickTick);
+
+      int voice = _editNoteVoice;
+      int track = _staff->idx() * VOICES + voice;
+
+      NoteVal nv(pickPitch);
+
+      Segment* seg = score->tick2segment(insertPosition);
+      score->expandVoice(seg, track);
+
+      ChordRest* e = score->findCR(insertPosition, track);
+      if (e) {
+
+            score->startCmd();
+
+            ChordRest* cr0;
+            ChordRest* cr1;
+
+            Fraction noteLen = noteEditLength();
+
+            //Default to quarter note if faction is invalid
+            if (!noteLen.isValid() || noteLen.isZero())
+                  noteLen.set(1, 4);
+
+            if (cutChordRest(e, track, insertPosition, cr0, cr1)) {
+                  score->setNoteRest(cr1->segment(), track, nv, noteLen);
+                  }
+            else {
+                  if (cr0->isChord() && cr0->ticks() == noteLen) {
+                        Chord* ch = toChord(cr0);
+                        score->addNote(ch, nv);
+                        }
+                  else {
+                        score->setNoteRest(cr0->segment(), track, nv, noteLen);
+                        }
+                  }
+
+            score->endCmd();
+            }
+      }
+
+
+//---------------------------------------------------------
+//   toggleTie
+//---------------------------------------------------------
+
+void PianoView::toggleTie(const QPointF& pos) {
+      Score* score = _staff->score();
+
+      int pickTick = pixelXToTick((int)pos.x());
+      int pickPitch = pixelYToPitch(pos.y());
+      PianoItem *pn = pickNote(pickTick, pickPitch);
+
+      if (pn) {
+            score->startCmd();
+            toggleTie(pn->note());
+            score->endCmd();
+            }
+      }
+
+
+//---------------------------------------------------------
+//   toggleTie
+//---------------------------------------------------------
+
+void PianoView::toggleTie(Note* note) {
+      //Based on Score::cmdToggleTie()
+
+      Score* score = _staff->score();
+
+      Tie* tie = note->tieFor();
+      if (tie)
+            score->undoRemoveElement(tie);
+      else {
+            Note* note2 = searchTieNote(note);
+
+            if (note2) {
+                  Tie* tie = new Tie(score);
+                  tie->setStartNote(note);
+                  tie->setEndNote(note2);
+                  tie->setTrack(note->track());
+                  tie->setTick(note->chord()->segment()->tick());
+                  tie->setTicks(note2->chord()->segment()->tick() - note->chord()->segment()->tick());
+                  score->undoAddElement(tie);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   cutChord
+//---------------------------------------------------------
+
+void PianoView::cutChord(const QPointF& pos) {
+      Score* score = _staff->score();
+
+      int pickTick = pixelXToTick((int)pos.x());
+      int pickPitch = pixelYToPitch(pos.y());
+      PianoItem *pn = pickNote(pickTick, pickPitch);
+
+      int voice = pn ? pn->note()->voice() : _editNoteVoice;
+
+      //Find best chord to add to
+      int track = _staff->idx() * VOICES + voice;
+
+      Fraction insertPosition = roundToStartBeat(pickTick);
+
+      Segment* seg = score->tick2segment(insertPosition);
+      score->expandVoice(seg, track);
+
+      ChordRest* e = score->findCR(insertPosition, track);
+      if (e && !e->tuplet() && _tuplet == 1) {
+            score->startCmd();
+            Fraction startTick = e->tick();
+
+            if (insertPosition != startTick) {
+                  ChordRest* cr0;
+                  ChordRest* cr1;
+                  cutChordRest(e, track, insertPosition, cr0, cr1);
+                  }
+            score->endCmd();
+            }
+      }
+
+
+//---------------------------------------------------------
+//   handleSelectionClick
+//---------------------------------------------------------
+
+void PianoView::handleSelectionClick()
+{
+      int modifiers = QGuiApplication::keyboardModifiers();
+      bool bnShift = modifiers & Qt::ShiftModifier;
+      bool bnCtrl = modifiers & Qt::ControlModifier;
+      NoteSelectType selType = bnShift ? (bnCtrl ? NoteSelectType::SUBTRACT : NoteSelectType::XOR)
+              : (bnCtrl ? NoteSelectType::ADD : NoteSelectType::REPLACE);
+
+      Score* score = _staff->score();
+
+      int pickTick = pixelXToTick((int)_mouseDownPos.x());
+      int pickPitch = pixelYToPitch(_mouseDownPos.y());
+
+      PianoItem *pn = pickNote(pickTick, pickPitch);
+
+      if (pn) {
+            if (selType == NoteSelectType::REPLACE)
+                  selType = NoteSelectType::FIRST;
+
+            mscore->play(pn->note());
+            score->setPlayNote(false);
+
+            selectNotes(pickTick, pickTick + 1, pickPitch, pickPitch, selType);
+            }
+      else {
+            if (!bnShift && !bnCtrl) {
+                  //Select an empty pixel - should clear selection
+                  selectNotes(pickTick, pickTick + 1, pickPitch, pickPitch, selType);
+                  }
+            else if (!bnShift && bnCtrl) {
+
+                  //Insert a new note at nearest subbeat
+                  Fraction insertPosition = roundToStartBeat(pickTick);
+
+                  InputState& is = score->inputState();
+                  int voice = _editNoteVoice;
+                  int track = _staff->idx() * VOICES + voice;
+
+                  NoteVal nv(pickPitch);
+
+                  Segment* seg = score->tick2segment(insertPosition);
+                  score->expandVoice(seg, track);
+
+                  ChordRest* e = score->findCR(insertPosition, track);
+                  if (e && !e->tuplet() && _tuplet == 1) {
+                        //Ignore tuplets
+                        score->startCmd();
+
+                        ChordRest* cr0;
+                        ChordRest* cr1;
+                        Fraction frac = is.duration().fraction();
+
+                        //Default to quarter note if faction is invalid
+                        if (!frac.isValid() || frac.isZero())
+                              frac.set(1, 4);
+
+                        if (cutChordRest(e, track, insertPosition, cr0, cr1)) {
+                              score->setNoteRest(cr1->segment(), track, nv, frac);
+                              }
+                        else {
+                              if (cr0->isChord() && cr0->ticks().ticks() == frac.ticks()) {
+                                    Chord* ch = toChord(cr0);
+                                    score->addNote(ch, nv);
+                                    }
+                              else {
+                                    score->setNoteRest(cr0->segment(), track, nv, frac);
+                                    }
+                              }
+
+                        score->endCmd();
+                        }
+
+                  }
+            else if (bnShift && !bnCtrl) {
+                  //Append a pitch to our current chord/rest
+                  int voice = _editNoteVoice;
+
+                  //Find best chord to add to
+                  int track = _staff->idx() * VOICES + voice;
+
+                  Fraction pt = Fraction::fromTicks(pickTick);
+                  Segment* seg = score->tick2segment(pt);
+                  score->expandVoice(seg, track);
+
+                  ChordRest* e = score->findCR(pt, track);
+
+                  if (e && e->isChord()) {
+                        Chord* ch = toChord(e);
+
+                        if (pt >= e->tick() && pt < (ch->tick() + ch->ticks())) {
+                              NoteVal nv(pickPitch);
+                              score->startCmd();
+                              score->addNote(ch, nv);
+                              score->endCmd();
+                              }
+
+                        }
+                  else if (e && e->isRest()) {
+                        Rest* r = toRest(e);
+                        NoteVal nv(pickPitch);
+                        score->startCmd();
+                        score->setNoteRest(r->segment(), track, nv, r->ticks());
+                        score->endCmd();
+                        }
+                  }
+            else if (bnShift && bnCtrl) {
+                  //Cut the chord/rest at the nearest subbeat
+                  int voice = _editNoteVoice;
+
+                  //Find best chord to add to
+                  int track = _staff->idx() * VOICES + voice;
+
+                  Fraction insertPosition = roundToStartBeat(pickTick);
+
+                  Segment* seg = score->tick2segment(insertPosition);
+                  score->expandVoice(seg, track);
+
+                  ChordRest* e = score->findCR(insertPosition, track);
+                  if (e && !e->tuplet() && _tuplet == 1) {
+                        score->startCmd();
+                        Fraction startTick = e->tick();
+
+                        if (insertPosition != startTick) {
+                              ChordRest* cr0;
+                              ChordRest* cr1;
+                              cutChordRest(e, track, insertPosition, cr0, cr1);
+                              }
+                        score->endCmd();
+                        }
+                  }
+            }
+      }
+
+
 //---------------------------------------------------------
 //   cutChordRest
 //---------------------------------------------------------
 
-bool PianoView::cutChordRest(ChordRest* e, int track, int cutTick, ChordRest*& cr0, ChordRest*& cr1)
+bool PianoView::cutChordRest(ChordRest* e, int track, Fraction cutTick, ChordRest*& cr0, ChordRest*& cr1)
       {
-      int startTick = e->segment()->tick().ticks();
-      int tcks = e->ticks().ticks();
+      Fraction startTick = e->segment()->tick();
+      Fraction tcks = e->ticks();
       if (cutTick <= startTick || cutTick > startTick + tcks) {
             cr0 = e;
             cr1 = 0;
@@ -913,10 +1272,9 @@ bool PianoView::cutChordRest(ChordRest* e, int track, int cutTick, ChordRest*& c
       NoteVal nv(-1);
 
       Score* score = _staff->score();
-      score->setNoteRest(e->segment(), track, nv, Fraction::fromTicks(cutTick) - e->tick());
-      ChordRest *nextCR = score->findCR(Fraction::fromTicks(cutTick), track);
+      score->setNoteRest(e->segment(), track, nv, cutTick - e->tick());
+      ChordRest *nextCR = score->findCR(cutTick, track);
 
-//      nextCR->segment()->setTick(cutTick);
       Chord* ch0 = 0;
 
       if (nextCR->isChord()) {
@@ -926,9 +1284,9 @@ bool PianoView::cutChordRest(ChordRest* e, int track, int cutTick, ChordRest*& c
             for (Note* n: ch1->notes()) {
                   NoteVal nx = n->noteVal();
                   if (!ch0) {
-                        ChordRest* cr = score->findCR(Fraction::fromTicks(startTick), track);
+                        ChordRest* cr = score->findCR(startTick, track);
                         score->setNoteRest(cr->segment(), track, nx, cr->ticks());
-                        ch0 = toChord(score->findCR(Fraction::fromTicks(startTick), track));
+                        ch0 = toChord(score->findCR(startTick, track));
                         }
                   else {
                         score->addNote(ch0, nx);
@@ -1189,7 +1547,7 @@ QList<PianoItem*> PianoView::getSelectedItems()
       {
       QList<PianoItem*> list;
       for (int i = 0; i < _noteList.size(); ++i) {
-            if (_noteList[i]->note()->selected())
+            if (_noteList.at(i)->note()->selected())
                   list.append(_noteList[i]);
             }
       return list;
@@ -1281,3 +1639,5 @@ void PianoView::setSubdiv(int value)
       }
 
 }
+
+
