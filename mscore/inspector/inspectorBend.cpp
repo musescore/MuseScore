@@ -68,7 +68,7 @@ InspectorBend::InspectorBend(QWidget* parent)
       Bend* b = toBend(inspector->element());
       g.bendCanvas->setPoints(b->points());
       connect(g.bendType,    SIGNAL(currentIndexChanged(int)),  SLOT(bendTypeChanged(int)));
-      connect(g.bendCanvas,  SIGNAL(bendCanvasChanged()),       SLOT(updateBend())        );
+      connect(g.bendCanvas,  SIGNAL(canvasChanged()),           SLOT(updateBend())        );
       }
 
 //---------------------------------------------------------

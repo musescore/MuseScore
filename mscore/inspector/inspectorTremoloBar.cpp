@@ -69,7 +69,7 @@ InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
       TremoloBar* tb = toTremoloBar(inspector->element());
       g.tremoloBarCanvas->setPoints(tb->points());
       connect(g.tremoloBarType,   SIGNAL(currentIndexChanged(int)),  SLOT(tremoloBarTypeChanged(int)));
-      connect(g.tremoloBarCanvas, SIGNAL(tremoloBarCanvasChanged()), SLOT(updateTremoloBar())        );
+      connect(g.tremoloBarCanvas, SIGNAL(canvasChanged()), SLOT(updateTremoloBar())        );
       }
 
 //---------------------------------------------------------
