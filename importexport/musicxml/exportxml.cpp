@@ -579,6 +579,22 @@ static QString color2xml(const Element* el)
       }
 
 //---------------------------------------------------------
+//   fontStyleToXML
+//---------------------------------------------------------
+
+static QString fontStyleToXML(const FontStyle style, bool allowUnderline = true)
+      {
+      QString res;
+      if (style & FontStyle::Bold)
+            res += " font-weight=\"bold\"";
+      if (style & FontStyle::Italic)
+            res += " font-style=\"italic\"";
+      if (allowUnderline && style & FontStyle::Underline)
+            res += " underline=\"1\"";
+      return res;
+      }
+
+//---------------------------------------------------------
 //   slurHandler
 //---------------------------------------------------------
 
@@ -2277,7 +2293,7 @@ static QString symIdToTechn(const SymId sid)
                   return "stopped";
                   break;
             case SymId::stringsHarmonic:
-                  return "x"; // will be overruled but must be non-empty
+                  return "harmonic";
                   break;
             case SymId::stringsUpBow:
                   return "up-bow";
@@ -2403,21 +2419,38 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
       // and finally the attributes whose elements are children of <technical>
       for (const Articulation* a : na) {
             auto sid = a->symId();
+            QString placement;
+            QString direction;
 
-            if (sid == SymId::stringsHarmonic) {
+            QString attr;
+            if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::CHORD) {
+                  placement = (a->anchor() == ArticulationAnchor::BOTTOM_STAFF || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) ? "below" : "above";
+                  }
+            else if (!a->isStyled(Pid::DIRECTION) && a->direction() != Direction::AUTO) {
+                  direction = (a->direction() == Direction::DOWN) ? "down" : "up";
+                  }
+            /* For future use if/when implemented font details for articulation
+            if (!a->isStyled(Pid::FONT_FACE))
+                  attr += QString(" font-family=\"%1\"").arg(a->getProperty(Pid::FONT_FACE).toString());
+            if (!a->isStyled(Pid::FONT_SIZE))
+                  attr += QString(" font-size=\"%1\"").arg(a->getProperty(Pid::FONT_SIZE).toReal());
+            if (!a->isStyled(Pid::FONT_STYLE))
+                  attr += fontStyleToXML(static_cast<FontStyle>(a->getProperty(Pid::FONT_STYLE).toInt()), false);
+            */
+
+            auto mxmlTechn = symIdToTechn(sid);
+            if (mxmlTechn != "") {
                   notations.tag(_xml);
                   technical.tag(_xml);
-                  _xml.stag("harmonic");
-                  _xml.tagE("natural");
-                  _xml.etag();
-                  }
-            else {
-                  auto mxmlTechn = symIdToTechn(sid);
-                  if (mxmlTechn != "") {
-                        notations.tag(_xml);
-                        technical.tag(_xml);
-                        _xml.tagE(mxmlTechn);
+                  if (sid == SymId::stringsHarmonic) {
+                        if (placement != "")
+                              attr += QString(" placement=\"%1\"").arg(placement);
+                        _xml.stag(mxmlTechn + attr);
+                        _xml.tagE("natural");
+                        _xml.etag();
                         }
+                  else // TODO: check additional modifier (attr) for other symbols
+                        _xml.tagE(mxmlTechn);
                   }
             }
 
@@ -2677,27 +2710,37 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                   notations.tag(xml);
                   technical.tag(xml);
                   QString t = MScoreTextToMXML::toPlainText(f->xmlText());
+                  QString attr;
+                  if (!f->isStyled(Pid::PLACEMENT) || f->placement() == Placement::BELOW)
+                        attr = QString(" placement=\"%1\"").arg((f->placement() == Placement::BELOW) ? "below" : "above");
+                  if (!f->isStyled(Pid::FONT_FACE))
+                        attr += QString(" font-family=\"%1\"").arg(f->getProperty(Pid::FONT_FACE).toString());
+                  if (!f->isStyled(Pid::FONT_SIZE))
+                        attr += QString(" font-size=\"%1\"").arg(f->getProperty(Pid::FONT_SIZE).toReal());
+                  if (!f->isStyled(Pid::FONT_STYLE))
+                        attr += fontStyleToXML(static_cast<FontStyle>(f->getProperty(Pid::FONT_STYLE).toInt()), false);
+
                   if (f->tid() == Tid::RH_GUITAR_FINGERING)
-                        xml.tag("pluck", t);
+                        xml.tag("pluck" + attr, t);
                   else if (f->tid() == Tid::LH_GUITAR_FINGERING)
-                        xml.tag("fingering", t);
+                        xml.tag("fingering" + attr, t);
                   else if (f->tid() == Tid::FINGERING) {
                         // for generic fingering, try to detect plucking
                         // (backwards compatibility with MuseScore 1.x)
                         // p, i, m, a, c represent the plucking finger
                         if (t == "p" || t == "i" || t == "m" || t == "a" || t == "c")
-                              xml.tag("pluck", t);
+                              xml.tag("pluck" + attr, t);
                         else
-                              xml.tag("fingering", t);
+                              xml.tag("fingering" + attr, t);
                         }
                   else if (f->tid() == Tid::STRING_NUMBER) {
                         bool ok;
                         int i = t.toInt(&ok);
                         if (ok) {
                               if (i == 0)
-                                    xml.tagE("open-string");
+                                    xml.tagE("open-string" + attr);
                               else if (i > 0)
-                                    xml.tag("string", t);
+                                    xml.tag("string" + attr, t);
                               }
                         if (!ok || i < 0)
                               qDebug("invalid string number '%s'", qPrintable(t));
@@ -3733,22 +3776,6 @@ int ExportMusicXml::findHairpin(const Hairpin* hp) const
       }
 
 //---------------------------------------------------------
-//   fontSyleToXML
-//---------------------------------------------------------
-
-static QString fontSyleToXML(const FontStyle style)
-      {
-      QString res;
-      if (style & FontStyle::Bold)
-            res += " font-weight=\"bold\"";
-      else if (style & FontStyle::Italic)
-            res += " font-style=\"italic\"";
-      else if (style & FontStyle::Underline)
-            res += " underline=\"1\"";
-      return res;
-      }
-
-//---------------------------------------------------------
 //   hairpin
 //---------------------------------------------------------
 
@@ -3792,7 +3819,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
                   QString tag = "words";
                   tag += QString(" font-family=\"%1\"").arg(hp->getProperty(Pid::BEGIN_FONT_FACE).toString());
                   tag += QString(" font-size=\"%1\"").arg(hp->getProperty(Pid::BEGIN_FONT_SIZE).toReal());
-                  tag += fontSyleToXML(static_cast<FontStyle>(hp->getProperty(Pid::BEGIN_FONT_STYLE).toInt()));
+                  tag += fontStyleToXML(static_cast<FontStyle>(hp->getProperty(Pid::BEGIN_FONT_STYLE).toInt()));
                   tag += positioningAttributes(hp, hp->tick() == tick);
                   _xml.tag(tag, hp->getProperty(Pid::BEGIN_TEXT));
                   _xml.etag();

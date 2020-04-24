@@ -408,7 +408,7 @@
         <stem>up</stem>
         <notations>
           <technical>
-            <fingering>2</fingering>
+            <fingering font-style="italic">2</fingering>
             </technical>
           </notations>
         </note>
@@ -423,7 +423,7 @@
         <stem>up</stem>
         <notations>
           <technical>
-            <pluck>p</pluck>
+            <pluck placement="below">p</pluck>
             </technical>
           </notations>
         </note>
@@ -650,6 +650,13 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations>
+          <technical>
+            <harmonic>
+              <natural/>
+              </harmonic>
+            </technical>
+          </notations>
         </note>
       <note>
         <pitch>
