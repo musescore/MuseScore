@@ -1,10 +1,11 @@
 import QtQuick 2.9
 import QtGraphicalEffects 1.0
+import MuseScore.Inspectors 3.3
 
 FocusableItem {
     id: root
 
-    property alias icon: expandButtonIcon.source
+    property alias icon: expandButtonIcon.iconCode
     property int iconPixelSize: 16
 
     property alias title: titleLabel.text
@@ -32,25 +33,13 @@ FocusableItem {
 
             color: "transparent"
 
-            Image {
+            StyledIconLabel {
                 id: expandButtonIcon
 
-                anchors.centerIn: parent
-
-                source: "qrc:/resources/icons/arrow_down.svg"
-
-                sourceSize.height: iconPixelSize
-                sourceSize.width: iconPixelSize
-
+                anchors.fill: parent
                 rotation: root.isExpanded ? 0 : -90
 
-                ColorOverlay {
-                    id: expandButtonColorOverlay
-
-                    anchors.fill: expandButtonIcon
-                    source: expandButtonIcon
-                    color: globalStyle.buttonText
-                }
+                iconCode: IconNameTypes.SMALL_ARROW_DOWN
 
                 Behavior on rotation {
                     NumberAnimation {

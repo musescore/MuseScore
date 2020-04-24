@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import MuseScore.Inspectors 3.3
 
 FocusableItem {
     id: root
@@ -35,13 +36,9 @@ FocusableItem {
             color: Qt.rgba(globalStyle.button.r, globalStyle.button.g, globalStyle.button.b, 0.75)
             border.color: "#A2A2A2"
 
-            Image {
-                anchors.centerIn: parent
-
-                sourceSize.width: 12
-                sourceSize.height: 12
-
-                source: root.isIndeterminate ? "qrc:/resources/icons/indeterminate_check_mark.svg" : "qrc:/resources/icons/check-mark.svg"
+            StyledIconLabel {
+                anchors.fill: parent
+                iconCode: root.isIndeterminate ? IconNameTypes.MINUS : IconNameTypes.TICK_RIGHT_ANGLE
 
                 visible: root.checked || root.isIndeterminate
             }

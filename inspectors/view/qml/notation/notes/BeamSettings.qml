@@ -114,7 +114,7 @@ FocusableItem {
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 4
 
-                        icon: "qrc:/resources/icons/feathering_height_left.svg"
+                        icon: IconNameTypes.FEATHERED_LEFT_HEIGHT
                         enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
                         isIndeterminate: model ? model.featheringHeightLeft.isUndefined : false
                         currentValue: model ? model.featheringHeightLeft.value : 0
@@ -130,7 +130,7 @@ FocusableItem {
                         anchors.leftMargin: 4
                         anchors.right: parent.right
 
-                        icon: "qrc:/resources/icons/feathering_height_right.svg"
+                        icon: IconNameTypes.FEATHERED_RIGHT_HEIGHT
                         enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
                         isIndeterminate: model ? model.featheringHeightRight.isUndefined : false
                         iconMode: iconModeEnum.right
@@ -190,7 +190,7 @@ FocusableItem {
                             anchors.right: lockButton.left
                             anchors.rightMargin: 6
 
-                            icon: "qrc:/resources/icons/beam_hight_left.svg"
+                            icon: IconNameTypes.BEAM_RIGHT_Y_POSITION
                             isIndeterminate: model ? model.beamVectorX.isUndefined : false
                             currentValue: model ? model.beamVectorX.value : 0
 
@@ -205,7 +205,7 @@ FocusableItem {
 
                             iconPixelSize: 12
 
-                            icon: "qrc:/resources/icons/beams/beam_pos_lock.svg"
+                            icon: pressed ? IconNameTypes.LOCK_CLOSED : IconNameTypes.LOCK_OPEN
 
                             pressed: model ? model.isBeamHeightLocked : false
 
@@ -219,7 +219,7 @@ FocusableItem {
                             anchors.leftMargin: 6
                             anchors.right: parent.right
 
-                            icon: "qrc:/resources/icons/beam_hight_right.svg"
+                            icon: IconNameTypes.BEAM_LEFT_Y_POSITION
                             iconMode: iconModeEnum.right
                             isIndeterminate: model ? model.beamVectorY.isUndefined : false
                             currentValue: model ? model.beamVectorY.value : 0

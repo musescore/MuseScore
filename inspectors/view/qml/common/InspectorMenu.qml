@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
+import MuseScore.Inspectors 3.3
 
 Rectangle {
     id: root
@@ -19,10 +20,9 @@ Rectangle {
     opacity: menuButtonMouseArea.containsMouse || root.opened
              || isMenuButtonVisible
 
-    StyledIcon {
-        anchors.centerIn: parent
-
-        icon: "qrc:/resources/icons/menu_dots.svg"
+    StyledIconLabel {
+        anchors.fill: parent
+        iconCode: IconNameTypes.MENU_THREE_DOTS
     }
 
     MouseArea {

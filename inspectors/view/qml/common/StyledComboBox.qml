@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
+import MuseScore.Inspectors 3.3
 
 ComboBox {
     id: root
@@ -121,13 +122,9 @@ ComboBox {
 
         color: root.pressed || root.isExpanded ? globalStyle.highlight : globalStyle.button
 
-        StyledIcon {
-            anchors.centerIn: parent
-
-            icon: "qrc:/resources/icons/arrow_down.svg"
-
-            sourceSize.height: 16
-            sourceSize.width: 16
+        StyledIconLabel {
+            anchors.fill: parent
+            iconCode: IconNameTypes.SMALL_ARROW_DOWN
         }
 
         Rectangle {

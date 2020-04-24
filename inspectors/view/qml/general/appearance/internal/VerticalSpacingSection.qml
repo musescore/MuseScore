@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import MuseScore.Inspectors 3.3
 import "../../../common"
 
 Column {
@@ -17,7 +18,7 @@ Column {
     }
 
     IncrementalPropertyControl {
-        icon: "qrc:/resources/icons/vertical_adjustment.svg"
+        icon: IconNameTypes.VERTICAL
 
         isIndeterminate: minimumDistance ? minimumDistance.isUndefined : false
         currentValue: minimumDistance ? minimumDistance.value : 0

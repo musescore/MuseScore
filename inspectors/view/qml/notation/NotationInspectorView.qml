@@ -29,7 +29,7 @@ FocusableItem {
         FlatButton {
             id: noteSettingsButton
 
-            icon: "qrc:/resources/icons/note.svg"
+            icon: IconNameTypes.MUSIC_NOTES
             iconPixelSize: 16
             text: qsTr("Note settings")
 
@@ -72,7 +72,7 @@ FocusableItem {
         FlatButton {
             id: fermataSettingsButton
 
-            icon: "qrc:/resources/icons/fermata.svg"
+            icon: IconNameTypes.FERMATA
             iconPixelSize: 16
             text: qsTr("Fermata")
 
@@ -110,7 +110,7 @@ FocusableItem {
         FlatButton {
             id: glissandoSettingsButton
 
-            icon: "qrc:/resources/icons/glissando.svg"
+            icon: IconNameTypes.GLISSANDO
             iconPixelSize: 16
             text: qsTr("Glissando")
 
@@ -149,7 +149,7 @@ FocusableItem {
         FlatButton {
             id: tempoSettingsButton
 
-            icon: "qrc:/resources/icons/tempo.svg"
+            icon: IconNameTypes.METRONOME
             iconPixelSize: 16
             text: qsTr("Tempo")
 

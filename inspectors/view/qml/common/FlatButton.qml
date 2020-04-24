@@ -3,9 +3,9 @@ import QtQuick 2.8
 FocusableItem {
     id: root
 
-    property alias icon: buttonIcon.icon
+    property alias icon: buttonIcon.iconCode
     property alias text: textLabel.text
-    property int iconPixelSize: root.icon == "" ? 0 : 16
+    property int iconPixelSize: buttonIcon.isEmpty ? 0 : 16
 
     signal clicked
 
@@ -32,13 +32,10 @@ FocusableItem {
 
         spacing: 4
 
-        StyledIcon {
+        StyledIconLabel {
             id: buttonIcon
 
             anchors.horizontalCenter: parent.horizontalCenter
-
-            sourceSize.height: root.iconPixelSize
-            sourceSize.width: root.iconPixelSize
         }
 
         StyledTextLabel {

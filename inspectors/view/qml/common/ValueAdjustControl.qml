@@ -3,7 +3,7 @@ import QtQuick 2.0
 Item {
     id: root
 
-    property string icon: ""
+    property var icon
     property int iconPixelSize: 16
 
     signal increaseButtonClicked
@@ -113,15 +113,11 @@ Item {
 
             color: "transparent"
 
-            Image {
+            StyledIconLabel {
                 id: buttonIcon
 
-                anchors.centerIn: parent
-
-                sourceSize.height: iconPixelSize
-                sourceSize.width: iconPixelSize
-
-                source: icon
+                anchors.fill: parent
+                iconCode: root.icon
             }
         }
     }

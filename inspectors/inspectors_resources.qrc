@@ -1,27 +1,14 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/icons/align-vertical-bottom.svg</file>
-        <file>resources/icons/align-vertical-baseline.svg</file>
-        <file>resources/icons/align-vertical-center.svg</file>
-        <file>resources/icons/align-vertical-top.svg</file>
-        <file>resources/icons/format-justify-right.svg</file>
-        <file>resources/icons/format-justify-center.svg</file>
-        <file>resources/icons/format-justify-left.svg</file>
-        <file>resources/icons/format-text-bold.svg</file>
-        <file>resources/icons/format-text-italic.svg</file>
-        <file>resources/icons/format-text-underline.svg</file>
         <file>resources/icons/raster-vertical.svg</file>
         <file>resources/icons/raster-horizontal.svg</file>
         <file>view/qml/general/GeneralInspectorView.qml</file>
         <file>view/qml/InspectorForm.qml</file>
-        <file>resources/icons/arrow_down.svg</file>
         <file>view/qml/common/CheckBox.qml</file>
         <file>view/qml/common/IncrementalPropertyControl.qml</file>
         <file>view/qml/common/ValueAdjustControl.qml</file>
         <file>view/qml/common/ExpandableBlank.qml</file>
         <file>view/qml/common/InspectorMenu.qml</file>
-        <file>resources/icons/menu_dots.svg</file>
-        <file>resources/icons/check-mark.svg</file>
         <file>view/qml/common/FocusableItem.qml</file>
         <file>view/qml/common/ExpandableBlankSection.qml</file>
         <file>view/qml/common/TabPanel.qml</file>
@@ -33,15 +20,7 @@
         <file>view/qml/common/FlatButton.qml</file>
         <file>view/qml/notation/notes/StemSettings.qml</file>
         <file>view/qml/notation/notes/NoteSettingsTabPanel.qml</file>
-        <file>resources/icons/horizontal_adjustment.svg</file>
-        <file>resources/icons/note.svg</file>
-        <file>resources/icons/orientation_arrow_down.svg</file>
-        <file>resources/icons/orientation_arrow_up.svg</file>
-        <file>resources/icons/vertical_adjustment.svg</file>
-        <file>resources/icons/orientation_auto.svg</file>
         <file>view/qml/notation/notes/HeadSettings.qml</file>
-        <file>resources/icons/orientation_arrow_left.svg</file>
-        <file>resources/icons/orientation_arrow_right.svg</file>
         <file>view/qml/notation/notes/internal/NoteheadsGrid.qml</file>
         <file>resources/icons/notehead_brevis_alt.svg</file>
         <file>resources/icons/notehead_circled.svg</file>
@@ -71,13 +50,7 @@
         <file>resources/icons/notehead_half.svg</file>
         <file>resources/icons/notehead_quarter.svg</file>
         <file>resources/icons/notehead_whole.svg</file>
-        <file>resources/icons/dot_position_above.svg</file>
-        <file>resources/icons/dot_position_below.svg</file>
         <file>view/qml/notation/notes/BeamSettings.qml</file>
-        <file>resources/icons/beam_hight_left.svg</file>
-        <file>resources/icons/beam_hight_right.svg</file>
-        <file>resources/icons/feathering_height_left.svg</file>
-        <file>resources/icons/feathering_height_right.svg</file>
         <file>view/qml/notation/notes/internal/BeamTypesGrid.qml</file>
         <file>resources/icons/beams/beam_32_sub.svg</file>
         <file>resources/icons/beams/beam_16_sub.svg</file>
@@ -91,8 +64,6 @@
         <file>view/qml/general/playback/PlaybackTabPanel.qml</file>
         <file>view/qml/general/playback/GeneralSettingsTab.qml</file>
         <file>view/qml/general/playback/internal/NoteExpandableBlank.qml</file>
-        <file>resources/icons/playback.svg</file>
-        <file>resources/icons/appearance.svg</file>
         <file>view/qml/general/playback/internal/FermataExpandableBlank.qml</file>
         <file>view/qml/common/StyledComboBox.qml</file>
         <file>view/qml/general/playback/internal/PausesExpandableBlank.qml</file>
@@ -101,7 +72,6 @@
         <file>view/qml/general/playback/DynamicsSettingsTab.qml</file>
         <file>view/qml/general/playback/internal/HairpinsExpandableBlank.qml</file>
         <file>view/qml/general/playback/internal/ArpeggioExpandableBlank.qml</file>
-        <file>resources/icons/indeterminate_check_mark.svg</file>
         <file>resources/icons/beams/beam_feathered_right.svg</file>
         <file>resources/icons/beams/beam_feathered_none.svg</file>
         <file>resources/icons/beams/beam_feathered_left.svg</file>
@@ -116,11 +86,10 @@
         <file>view/qml/common/ColorPicker.qml</file>
         <file>resources/icons/question_mark.svg</file>
         <file>view/qml/notation/fermatas/FermataPopup.qml</file>
-        <file>resources/icons/fermata.svg</file>
         <file>view/qml/notation/tempos/TempoPopup.qml</file>
-        <file>resources/icons/tempo.svg</file>
-        <file>resources/icons/glissando.svg</file>
         <file>view/qml/notation/glissandos/GlissandoPopup.qml</file>
         <file>view/qml/notation/notes/NotePopup.qml</file>
+        <file>view/qml/common/StyledIconLabel.qml</file>
+        <file>resources/icons/orientation_auto.svg</file>
     </qresource>
 </RCC>
