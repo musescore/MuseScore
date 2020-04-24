@@ -1236,102 +1236,103 @@ bool Element::autoplace() const
 //---------------------------------------------------------
 
 QVariant Element::getProperty(Pid propertyId) const
-      {
-      switch (propertyId) {
-            case Pid::TICK:
-                  return tick();
-            case Pid::TRACK:
-                  return track();
-            case Pid::VOICE:
-                  return voice();
-            case Pid::POSITION:
-                  return rtick();
-            case Pid::GENERATED:
-                  return generated();
-            case Pid::COLOR:
-                  return color();
-            case Pid::VISIBLE:
-                  return visible();
-            case Pid::SELECTED:
-                  return selected();
-            case Pid::OFFSET:
-                  return _offset;
-            case Pid::MIN_DISTANCE:
-                  return _minDistance;
-            case Pid::PLACEMENT:
-                  return int(placement());
-            case Pid::AUTOPLACE:
-                  return autoplace();
-            case Pid::Z:
-                  return z();
-            case Pid::SYSTEM_FLAG:
-                  return systemFlag();
-            case Pid::SIZE_SPATIUM_DEPENDENT:
-                  return sizeIsSpatiumDependent();
-            default:
-                  if (parent())
-                        return parent()->getProperty(propertyId);
+{
+    switch (propertyId) {
+    case Pid::TICK:
+        return tick();
+    case Pid::TRACK:
+        return track();
+    case Pid::VOICE:
+        return voice();
+    case Pid::POSITION:
+        return rtick();
+    case Pid::GENERATED:
+        return generated();
+    case Pid::COLOR:
+        return color();
+    case Pid::VISIBLE:
+        return visible();
+    case Pid::SELECTED:
+        return selected();
+    case Pid::OFFSET:
+        return _offset;
+    case Pid::MIN_DISTANCE:
+        return _minDistance;
+    case Pid::PLACEMENT:
+        return int(placement());
+    case Pid::AUTOPLACE:
+        return autoplace();
+    case Pid::Z:
+        return z();
+    case Pid::SYSTEM_FLAG:
+        return systemFlag();
+    case Pid::SIZE_SPATIUM_DEPENDENT:
+        return sizeIsSpatiumDependent();
+    default:
+        if (parent())
+            return parent()->getProperty(propertyId);
 
-                  return QVariant();
-            }
-      }
+        return QVariant();
+    }
+}
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
 bool Element::setProperty(Pid propertyId, const QVariant& v)
-      {
-      switch (propertyId) {
-            case Pid::TRACK:
-                  setTrack(v.toInt());
-                  break;
-            case Pid::VOICE:
-                  setVoice(v.toInt());
-                  break;
-            case Pid::GENERATED:
-                  setGenerated(v.toBool());
-                  break;
-            case Pid::COLOR:
-                  setColor(v.value<QColor>());
-                  break;
-            case Pid::VISIBLE:
-                  setVisible(v.toBool());
-                  break;
-            case Pid::SELECTED:
-                  setSelected(v.toBool());
-                  break;
-            case Pid::OFFSET:
-                  _offset = v.toPointF();
-                  break;
-            case Pid::MIN_DISTANCE:
-                  setMinDistance(v.value<Spatium>());
-                  break;
-            case Pid::PLACEMENT:
-                  setPlacement(Placement(v.toInt()));
-                  break;
-            case Pid::AUTOPLACE:
-                  setAutoplace(v.toBool());
-                  break;
-            case Pid::Z:
-                  setZ(v.toInt());
-                  break;
-            case Pid::SYSTEM_FLAG:
-                  setSystemFlag(v.toBool());
-                  break;
-            case Pid::SIZE_SPATIUM_DEPENDENT:
-                  setSizeIsSpatiumDependent(v.toBool());
-                  break;
-            default:
-                  if (parent())
-                        return parent()->setProperty(propertyId, v);
+{
+    switch (propertyId) {
+    case Pid::TRACK:
+        setTrack(v.toInt());
+        break;
+    case Pid::VOICE:
+        setVoice(v.toInt());
+        break;
+    case Pid::GENERATED:
+        setGenerated(v.toBool());
+        break;
+    case Pid::COLOR:
+        setColor(v.value<QColor>());
+        break;
+    case Pid::VISIBLE:
+        setVisible(v.toBool());
+        break;
+    case Pid::SELECTED:
+        setSelected(v.toBool());
+        break;
+    case Pid::OFFSET:
+        _offset = v.toPointF();
+        break;
+    case Pid::MIN_DISTANCE:
+        setMinDistance(v.value<Spatium>());
+        break;
+    case Pid::PLACEMENT:
+        setPlacement(Placement(v.toInt()));
+        break;
+    case Pid::AUTOPLACE:
+        setAutoplace(v.toBool());
+        break;
+    case Pid::Z:
+        setZ(v.toInt());
+        break;
+    case Pid::SYSTEM_FLAG:
+        setSystemFlag(v.toBool());
+        break;
+    case Pid::SIZE_SPATIUM_DEPENDENT:
+        setSizeIsSpatiumDependent(v.toBool());
+        break;
+    default:
+        if (parent()) {
+            return parent()->setProperty(propertyId, v);
+        }
 
-                  qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
-                  return false;
-            }
-      triggerLayout();
-      return true;
-      }
+        qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+        return false;
+    }
+    triggerLayout();
+    return true;
+}
 
 //---------------------------------------------------------
 //   undoChangeProperty
@@ -1353,45 +1354,49 @@ void Element::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
 //---------------------------------------------------------
 
 QVariant Element::propertyDefault(Pid pid) const
-      {
-      switch (pid) {
-            case Pid::GENERATED:
-                  return false;
-            case Pid::VISIBLE:
-                  return true;
-            case Pid::COLOR:
-                  return MScore::defaultColor;
-            case Pid::PLACEMENT: {
-                  QVariant v = ScoreElement::propertyDefault(pid);
-                  if (v.isValid())        // if it's a styled property
-                        return v;
-                  return int(Placement::BELOW);
-                  }
-            case Pid::SELECTED:
-                  return false;
-            case Pid::OFFSET: {
-                  QVariant v = ScoreElement::propertyDefault(pid);
-                  if (v.isValid())        // if it's a styled property
-                        return v;
-                  return QPointF();
-                  }
-            case Pid::MIN_DISTANCE: {
-                  QVariant v = ScoreElement::propertyDefault(pid);
-                  if (v.isValid())
-                        return v;
-                  return 0.0;
-                  }
-            case Pid::AUTOPLACE:
-                  return true;
-            case Pid::Z:
-                  return int(type()) * 100;
-            default:
-                  if (parent())
-                        return parent()->propertyDefault(pid);
+{
+    switch (pid) {
+    case Pid::GENERATED:
+        return false;
+    case Pid::VISIBLE:
+        return true;
+    case Pid::COLOR:
+        return MScore::defaultColor;
+    case Pid::PLACEMENT: {
+        QVariant v = ScoreElement::propertyDefault(pid);
+        if (v.isValid()) {        // if it's a styled property
+            return v;
+        }
+        return int(Placement::BELOW);
+    }
+    case Pid::SELECTED:
+        return false;
+    case Pid::OFFSET: {
+        QVariant v = ScoreElement::propertyDefault(pid);
+        if (v.isValid()) {        // if it's a styled property
+            return v;
+        }
+        return QPointF();
+    }
+    case Pid::MIN_DISTANCE: {
+        QVariant v = ScoreElement::propertyDefault(pid);
+        if (v.isValid()) {
+            return v;
+        }
+        return 0.0;
+    }
+    case Pid::AUTOPLACE:
+        return true;
+    case Pid::Z:
+        return int(type()) * 100;
+    default:
+        if (parent()) {
+            return parent()->propertyDefault(pid);
+        }
 
-                  return ScoreElement::propertyDefault(pid);
-            }
-      }
+        return ScoreElement::propertyDefault(pid);
+    }
+}
 
 //---------------------------------------------------------
 //   propertyId
