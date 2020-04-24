@@ -17,7 +17,7 @@ FocusableItem {
 
         width: parent.width
 
-        spacing: 12
+        spacing: 16
 
         CheckBox {
             isIndeterminate: model ? model.isHeadHidden.isUndefined : false
@@ -52,9 +52,9 @@ FocusableItem {
             width: parent.width
 
             model: [
-                { iconRole: "qrc:/resources/icons/orientation_auto.svg", typeRole: NoteHead.DOT_POSITION_AUTO },
-                { iconRole: "qrc:/resources/icons/dot_position_below.svg", typeRole: NoteHead.DOT_POSITION_DOWN },
-                { iconRole: "qrc:/resources/icons/dot_position_above.svg", typeRole: NoteHead.DOT_POSITION_UP }
+                { iconRole: IconNameTypes.AUTO, typeRole: NoteHead.DOT_POSITION_AUTO },
+                { iconRole: IconNameTypes.DOT_ABOVE_LINE, typeRole: NoteHead.DOT_POSITION_DOWN },
+                { iconRole: IconNameTypes.DOT_BELOW_LINE, typeRole: NoteHead.DOT_POSITION_UP }
             ]
 
             delegate: FlatRadioButton {
@@ -68,8 +68,8 @@ FocusableItem {
                     root.model.dotPosition.value = modelData["typeRole"]
                 }
 
-                StyledIcon {
-                    icon: modelData["iconRole"]
+                StyledIconLabel {
+                    iconCode: modelData["iconRole"]
                 }
             }
         }
@@ -152,9 +152,9 @@ FocusableItem {
                         width: parent.width
 
                         model: [
-                            { iconRole: "qrc:/resources/icons/orientation_auto.svg", typeRole: NoteHead.DIRECTION_H_AUTO },
-                            { iconRole: "qrc:/resources/icons/orientation_arrow_left.svg", typeRole: NoteHead.DIRECTION_H_LEFT },
-                            { iconRole: "qrc:/resources/icons/orientation_arrow_right.svg", typeRole: NoteHead.DIRECTION_H_RIGHT }
+                            { iconRole: IconNameTypes.AUTO, typeRole: NoteHead.DIRECTION_H_AUTO },
+                            { iconRole: IconNameTypes.ARROW_LEFT, typeRole: NoteHead.DIRECTION_H_LEFT },
+                            { iconRole: IconNameTypes.ARROW_RIGHT, typeRole: NoteHead.DIRECTION_H_RIGHT }
                         ]
 
                         delegate: FlatRadioButton {
@@ -168,10 +168,8 @@ FocusableItem {
                                 root.model.headDirection.value = modelData["typeRole"]
                             }
 
-                            StyledIcon {
-                                anchors.fill: parent
-
-                                icon: modelData["iconRole"]
+                            StyledIconLabel {
+                                iconCode: modelData["iconRole"]
                             }
                         }
                     }
@@ -198,7 +196,7 @@ FocusableItem {
                             anchors.right: parent.horizontalCenter
                             anchors.rightMargin: 4
 
-                            icon: "qrc:/resources/icons/horizontal_adjustment.svg"
+                            icon: IconNameTypes.HORIZONTAL
                             enabled: model ? !model.isEmpty : false
                             isIndeterminate: model ? model.horizontalOffset.isUndefined : false
                             currentValue: model ? model.horizontalOffset.value : 0
@@ -211,7 +209,7 @@ FocusableItem {
                             anchors.leftMargin: 4
                             anchors.right: parent.right
 
-                            icon: "qrc:/resources/icons/vertical_adjustment.svg"
+                            icon: IconNameTypes.VERTICAL
                             enabled: model ? !model.isEmpty : false
                             isIndeterminate: model ? model.verticalOffset.isUndefined : false
                             currentValue: model ? model.verticalOffset.value : 0

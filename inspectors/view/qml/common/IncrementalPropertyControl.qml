@@ -6,8 +6,8 @@ FocusableItem {
 
     property alias iconModeEnum: _iconModeEnum
     property int iconMode: iconModeEnum.left
-    property int iconSize: 16
-    property alias icon: iconImage.icon
+    property int iconBackgroundSize: 20
+    property alias icon: iconImage.iconCode
 
     property bool isIndeterminate: false
     readonly property string indeterminateText: "--"
@@ -39,21 +39,19 @@ FocusableItem {
 
         anchors.verticalCenter: parent.verticalCenter
 
-        height: root.iconSize
-        width: root.iconSize
+        height: root.iconBackgroundSize
+        width: root.iconBackgroundSize
 
         color: globalStyle.button
 
         opacity: root.enabled ? 1.0 : 0.3
 
-        visible: String(iconImage.icon) !== ""
+        visible: !iconImage.isEmpty
 
-        StyledIcon {
+        StyledIconLabel {
             id: iconImage
 
-            anchors.centerIn: parent
-            sourceSize.height: iconSize
-            sourceSize.width: iconSize
+            anchors.fill: parent
         }
     }
 
@@ -173,7 +171,7 @@ FocusableItem {
             anchors.verticalCenter: propertyEditorRect.verticalCenter
             anchors.right: propertyEditorRect.right
 
-            icon: "qrc:/resources/icons/arrow_down.svg"
+            icon: IconNameTypes.SMALL_ARROW_DOWN
 
             onIncreaseButtonClicked: {
                 var value = root.isIndeterminate ? 0.0 : currentValue
@@ -228,7 +226,7 @@ FocusableItem {
 
         State {
             name: "ICON_MODE_HIDDEN"
-            when: String(root.icon) === ""
+            when: root.iconMode === iconModeEnum.hidden
 
             AnchorChanges { target: propertyEditorRect; anchors.left: root.left }
 

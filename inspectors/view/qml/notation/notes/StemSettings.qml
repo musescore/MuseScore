@@ -49,9 +49,9 @@ FocusableItem {
             width: parent.width
 
             model: [
-                { iconRole: "qrc:/resources/icons/orientation_auto.svg", typeRole: Stem.AUTO },
-                { iconRole: "qrc:/resources/icons/orientation_arrow_down.svg", typeRole: Stem.DOWN },
-                { iconRole: "qrc:/resources/icons/orientation_arrow_up.svg", typeRole: Stem.UP }
+                { iconRole: IconNameTypes.AUTO, typeRole: Stem.AUTO },
+                { iconRole: IconNameTypes.ARROW_DOWN, typeRole: Stem.DOWN },
+                { iconRole: IconNameTypes.ARROW_UP, typeRole: Stem.UP }
             ]
 
             delegate: FlatRadioButton {
@@ -65,13 +65,8 @@ FocusableItem {
                     root.stemModel.stemDirection.value = modelData["typeRole"]
                 }
 
-                StyledIcon {
-                    anchors.centerIn: parent
-
-                    height: 16
-                    width: 16
-
-                    icon: modelData["iconRole"]
+                StyledIconLabel {
+                    iconCode: modelData["iconRole"]
                 }
             }
         }
@@ -159,7 +154,7 @@ FocusableItem {
                             anchors.right: parent.horizontalCenter
                             anchors.rightMargin: 4
 
-                            icon: "qrc:/resources/icons/horizontal_adjustment.svg"
+                            icon: IconNameTypes.HORIZONTAL
                             enabled: stemModel ? !stemModel.isEmpty : false
                             isIndeterminate: stemModel ? stemModel.horizontalOffset.isUndefined : false
                             currentValue: stemModel ? stemModel.horizontalOffset.value : 0
@@ -172,7 +167,7 @@ FocusableItem {
                             anchors.leftMargin: 4
                             anchors.right: parent.right
 
-                            icon: "qrc:/resources/icons/vertical_adjustment.svg"
+                            icon: IconNameTypes.VERTICAL
                             enabled: stemModel ? !stemModel.isEmpty : false
                             isIndeterminate: stemModel ? stemModel.verticalOffset.isUndefined : false
                             currentValue: stemModel ? stemModel.verticalOffset.value : 0
@@ -205,7 +200,7 @@ FocusableItem {
 
                             enabled: hookModel ? !hookModel.isEmpty : false
                             isIndeterminate: hookModel ? hookModel.horizontalOffset.isUndefined : false
-                            icon: "qrc:/resources/icons/horizontal_adjustment.svg"
+                            icon: IconNameTypes.HORIZONTAL
                             currentValue: hookModel ? hookModel.horizontalOffset.value : 0.00
 
                             onValueEdited: { hookModel.horizontalOffset.value = newValue }
@@ -218,7 +213,7 @@ FocusableItem {
 
                             enabled: hookModel ? !hookModel.isEmpty : false
                             isIndeterminate: hookModel ? hookModel.verticalOffset.isUndefined : false
-                            icon: "qrc:/resources/icons/vertical_adjustment.svg"
+                            icon: IconNameTypes.VERTICAL
                             currentValue: hookModel ? hookModel.verticalOffset.value : 0.00
 
                             onValueEdited: { hookModel.verticalOffset.value = newValue }

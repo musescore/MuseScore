@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import MuseScore.Inspectors 3.3
 import "../../../common"
 
 Column {
@@ -37,7 +38,7 @@ Column {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 4
 
-                icon: "qrc:/resources/icons/horizontal_adjustment.svg"
+                icon: IconNameTypes.HORIZONTAL
 
                 enabled: horizontalOffset ? horizontalOffset.isEnabled : false
                 isIndeterminate: horizontalOffset && enabled ? horizontalOffset.isUndefined : false
@@ -51,7 +52,7 @@ Column {
                 anchors.leftMargin: 4
                 anchors.right: parent.right
 
-                icon: "qrc:/resources/icons/vertical_adjustment.svg"
+                icon: IconNameTypes.VERTICAL
 
                 enabled: verticalOffset ? verticalOffset.isEnabled : false
                 isIndeterminate: verticalOffset && enabled ? verticalOffset.isUndefined : false

@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
+import MuseScore.Inspectors 3.3
 import "../common"
 import "playback"
 import "appearance"
@@ -96,7 +97,7 @@ FocusableItem {
 
                 width: (parent.width - popupButtonsRow.spacing)/ 2
 
-                icon: "qrc:/resources/icons/playback.svg"
+                icon: IconNameTypes.AUDIO
                 iconPixelSize: 16
                 text: qsTr("Playback")
 
@@ -126,7 +127,7 @@ FocusableItem {
 
                 width: (parent.width - popupButtonsRow.spacing)/ 2
 
-                icon: "qrc:/resources/icons/appearance.svg"
+                icon: IconNameTypes.POSITION_ARROWS
                 iconPixelSize: 16
                 text: qsTr("Appearance")
 

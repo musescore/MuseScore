@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import MuseScore.Inspectors 3.3
 import "../../../common"
 
 Item {
@@ -22,7 +23,7 @@ Item {
         }
 
         IncrementalPropertyControl {
-            icon: "qrc:/resources/icons/horizontal_adjustment.svg"
+            icon: IconNameTypes.HORIZONTAL
 
             enabled: leadingSpace ? leadingSpace.isEnabled : false
             isIndeterminate: leadingSpace && enabled ? leadingSpace.isUndefined : false
@@ -44,7 +45,7 @@ Item {
         }
 
         IncrementalPropertyControl {
-            icon: "qrc:/resources/icons/horizontal_adjustment.svg"
+            icon: IconNameTypes.HORIZONTAL
 
             enabled: barWidth ? barWidth.isEnabled : false
             isIndeterminate: barWidth && enabled ? barWidth.isUndefined : false

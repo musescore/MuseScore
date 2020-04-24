@@ -3,7 +3,7 @@ import QtQuick 2.8
 FocusableItem {
     id: root
 
-    property alias icon: buttonIcon.icon
+    property alias icon: buttonIcon.iconCode
     property int iconPixelSize: 16
     property bool pressed: false
 
@@ -22,13 +22,10 @@ FocusableItem {
         radius: 2
     }
 
-    StyledIcon {
+    StyledIconLabel {
         id: buttonIcon
 
-        anchors.centerIn: parent
-
-        sourceSize.height: root.iconPixelSize
-        sourceSize.width: root.iconPixelSize
+        anchors.fill: parent
     }
 
     MouseArea {
