@@ -21,6 +21,7 @@
 #define __TREMOLOBARCANVAS_H__
 
 #include "libmscore/pitchvalue.h"
+#include "squarecanvas.h"
 
 namespace Ms {
 
@@ -28,21 +29,11 @@ namespace Ms {
 //   TremoloBarCanvas
 //---------------------------------------------------------
 
-class TremoloBarCanvas : public QFrame {
+class TremoloBarCanvas : public SquareCanvas {
       Q_OBJECT
-      QList<PitchValue> _points;
-
-      virtual void paintEvent(QPaintEvent*);
-      virtual void mousePressEvent(QMouseEvent*);
 
    public:
-      TremoloBarCanvas(QWidget* parent = 0);
-      const QList<PitchValue>& points() const { return _points; }
-      QList<PitchValue>& points()             { return _points; }
-      void setPoints(const QList<PitchValue>& p) { _points = p; }
-
-   signals:
-      void tremoloBarCanvasChanged();
+      TremoloBarCanvas(QWidget* parent = nullptr);
       };
 }
 

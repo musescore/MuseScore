@@ -17,7 +17,7 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   PitchValue
-//    used in class Bend, BendCanvas
+//    used in class Bend, SquareCanvas
 //
 //    - time is 0 - 60 for 0-100% of the chord duration the
 //      bend is attached to

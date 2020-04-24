@@ -217,7 +217,7 @@ add_library(mscoreapp STATIC
       stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
       articulationprop.cpp
-      bendcanvas.cpp fretcanvas.cpp tremolobarcanvas.cpp
+      squarecanvas.cpp bendcanvas.cpp fretcanvas.cpp tremolobarcanvas.cpp
       file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp
       dragelement.cpp startupWizard.cpp
@@ -265,15 +265,15 @@ add_library(mscoreapp STATIC
       ${OMR_FILES}
       ${PLUGIN_SRC}
       ${MAC_SPARKLE_FILES}
-      tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
+      squarecanvas.cpp tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
 
       sparkle/autoUpdater.h sparkle/sparkleAutoUpdater.h sparkle/winSparkleAutoUpdater.h
       )
 
 if (MSVC OR MINGW)
-	target_link_libraries(mscoreapp vorbisfiledll)
+      target_link_libraries(mscoreapp vorbisfiledll)
 else (MSVC OR MINGW)
-	target_link_libraries(mscoreapp vorbisfile)
+      target_link_libraries(mscoreapp vorbisfile)
 endif (MSVC OR MINGW)
 
 target_link_libraries(mscoreapp
