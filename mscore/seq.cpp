@@ -1767,7 +1767,15 @@ void Seq::setLoopSelection()
 
       if (score && score->selection().isRange()) {
             cs->setLoopInTick(score->selection().tickStart());
-            cs->setLoopOutTick(score->selection().tickEnd());
+            cs->setLoopOutTick(score->selection().tickEnd());      
+            }
+      
+      // add a dummy event to loop end if it is not already there
+      // this is to let the playback reach the end completely before starting again
+      if (!events.count(cs->loopOutTick().ticks())) {
+            NPlayEvent ev;
+            ev.setValue(ME_INVALID);
+            events.insert(std::pair<int, Ms::NPlayEvent>(cs->loopOutTick().ticks(), ev));
             }
       }
 
