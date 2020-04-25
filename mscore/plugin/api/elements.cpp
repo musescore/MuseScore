@@ -220,6 +220,15 @@ void Chord::addInternal(Ms::Chord* chord, Ms::Element* s)
       }
 
 //---------------------------------------------------------
+//   Page::pagenumber
+//---------------------------------------------------------
+
+int Page::pagenumber() const
+      {
+      return page()->no();
+      }
+
+//---------------------------------------------------------
 //   Chord::remove
 //---------------------------------------------------------
 
@@ -259,6 +268,8 @@ Element* wrap(Ms::Element* e, Ownership own)
                   return wrap<Segment>(toSegment(e), own);
             case ElementType::MEASURE:
                   return wrap<Measure>(toMeasure(e), own);
+            case ElementType::PAGE:
+                  return wrap<Page>(toPage(e), own);
             default:
                   break;
             }
