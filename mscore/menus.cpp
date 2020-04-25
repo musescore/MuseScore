@@ -1636,6 +1636,42 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
             no->setChannelName(0, "open");
             /*: For brass instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music) */
             sp->append(no, QT_TRANSLATE_NOOP("Palette", "Open"))->setElementTranslated(true);
+
+            StaffText* sa = new StaffText(gscore);
+            sa->setXmlText(QT_TRANSLATE_NOOP("Palette", "S/A"));
+            sa->setChannelName(0, "Soprano");
+            sa->setChannelName(1, "Alto");
+            sa->setChannelName(2, "Soprano");
+            sa->setChannelName(3, "Alto");
+            sa->setVisible(false);
+            sp->append(sa, QT_TRANSLATE_NOOP("Palette", "Soprano/Alto"))->setElementTranslated(true);
+
+            StaffText* tb = new StaffText(gscore);
+            tb->setXmlText(QT_TRANSLATE_NOOP("Palette", "T/B"));
+            tb->setChannelName(0, "Tenor");
+            tb->setChannelName(1, "Bass");
+            tb->setChannelName(2, "Tenor");
+            tb->setVisible(false);
+            tb->setChannelName(3, "Bass");
+            sp->append(tb, QT_TRANSLATE_NOOP("Palette", "Tenor/Bass"))->setElementTranslated(true);
+
+            StaffText* tl = new StaffText(gscore);
+            tl->setXmlText(QT_TRANSLATE_NOOP("Palette", "T/L"));
+            tl->setChannelName(0, "TENOR");
+            tl->setChannelName(1, "LEAD");
+            tl->setChannelName(2, "TENOR");
+            tl->setChannelName(3, "LEAD");
+            tl->setVisible(false);
+            sp->append(tl, QT_TRANSLATE_NOOP("Palette", "Tenor/Lead"))->setElementTranslated(true);
+
+            StaffText* bb = new StaffText(gscore);
+            bb->setXmlText(QT_TRANSLATE_NOOP("Palette", "B/B"));
+            bb->setChannelName(0, "BARI");
+            bb->setChannelName(1, "BASS");
+            bb->setChannelName(2, "BARI");
+            bb->setChannelName(3, "BASS");
+            bb->setVisible(false);
+            sp->append(bb, QT_TRANSLATE_NOOP("Palette", "Bari/Bass"))->setElementTranslated(true);
             }
 
       return sp;
