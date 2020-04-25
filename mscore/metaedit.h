@@ -50,6 +50,7 @@ class MetaEditDialog : public QDialog, public Ui::MetaEditDialog {
       bool save();
       void newClicked();
       void setDirty(const bool dirty = true);
+      void openFileLocation();
 
    public:
       MetaEditDialog(Score* score, QWidget* parent = nullptr);
