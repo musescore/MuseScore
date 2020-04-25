@@ -17,21 +17,54 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef RADIOBUTTONGROUPBOX_H
-#define RADIOBUTTONGROUPBOX_H
+#ifndef MU_FRAMEWORK_UIENGINE_H
+#define MU_FRAMEWORK_UIENGINE_H
 
-namespace Ms {
-class RadioButtonGroupBox : public QGroupBox
+#include <QObject>
+#include <memory>
+
+#include "interfaces/iuiengine.h"
+#include "qmltheme.h"
+
+class QQmlEngine;
+
+namespace mu {
+namespace framework {
+class UiEngine : public QObject, public IUiEngine
 {
     Q_OBJECT
 
-    void paintEvent(QPaintEvent* event) override;
+    Q_PROPERTY(QmlTheme * theme READ theme NOTIFY themeChanged)
 
 public:
-    explicit RadioButtonGroupBox(QWidget* parent = nullptr) : QGroupBox(parent) { }
-    explicit RadioButtonGroupBox(const QString& title, QWidget* parent = nullptr) : QGroupBox(title, parent) { }
+    ~UiEngine();
 
+    static const std::shared_ptr<UiEngine>& instance();
+
+    QmlTheme* theme() const;
+
+    // IUiEngine
+    void updateTheme() override;
+    QQmlEngine* qmlEngine() const override;
+    void clearComponentCache() override;
+    // ---
+
+    void moveQQmlEngine(QQmlEngine* e);
+
+signals:
+    void themeChanged(QmlTheme* theme);
+
+private:
+
+    UiEngine();
+
+    QQmlEngine* engine();
+    void setup(QQmlEngine* e);
+
+    QQmlEngine* _engine = nullptr;
+    QmlTheme* _theme = nullptr;
 };
 }
+}
 
-#endif
+#endif // MU_FRAMEWORK_UIENGINE_H

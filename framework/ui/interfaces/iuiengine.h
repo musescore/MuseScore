@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 Werner Schweer and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,33 +17,26 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "msqmlengine.h"
+#ifndef MU_FRAMEWORK_IUIENGINE_H
+#define MU_FRAMEWORK_IUIENGINE_H
 
-#include <QQmlEngine>
+#include "framework/global/modularity/imoduleexport.h"
 
-namespace Ms {
-extern QString mscoreGlobalShare;
-
-//---------------------------------------------------------
-//   MsQmlEngine
-//---------------------------------------------------------
-
-MsQmlEngine::MsQmlEngine(QObject* parent) :
-    QQmlEngine(parent)
+class QQmlEngine;
+namespace mu {
+namespace framework {
+class IUiEngine : MODULE_EXPORT_INTERFACE
 {
-#ifdef Q_OS_WIN
-    QStringList importPaths;
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-    importPaths.append(dir.absolutePath());
-    setImportPathList(importPaths);
-#endif
-#ifdef Q_OS_MAC
-    QStringList importPaths;
-    QDir dir(mscoreGlobalShare + QString("/qml"));
-    importPaths.append(dir.absolutePath());
-    setImportPathList(importPaths);
-#endif
+    INTERFACE_ID(muf::IUiEngine)
 
-    addImportPath(":/qml");
+public:
+    virtual ~IUiEngine() {}
+
+    virtual void updateTheme() = 0;
+    virtual QQmlEngine* qmlEngine() const = 0;
+    virtual void clearComponentCache() = 0;
+};
 }
 }
+
+#endif // MU_FRAMEWORK_UIENGINEMODULE_H

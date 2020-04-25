@@ -17,21 +17,34 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef RADIOBUTTONGROUPBOX_H
-#define RADIOBUTTONGROUPBOX_H
+#ifndef MU_FRAMEWORK_IMODULEEXPORT_H
+#define MU_FRAMEWORK_IMODULEEXPORT_H
 
-namespace Ms {
-class RadioButtonGroupBox : public QGroupBox
+#include <memory>
+
+#define INTERFACE_ID(cls)               \
+public:                                 \
+    static const char* interfaceId() {  \
+        static const char* id = #cls;   \
+        return id;                      \
+    }                                   \
+
+namespace mu {
+namespace framework {
+class IModuleExportInterface
 {
-    Q_OBJECT
-
-    void paintEvent(QPaintEvent* event) override;
-
 public:
-    explicit RadioButtonGroupBox(QWidget* parent = nullptr) : QGroupBox(parent) { }
-    explicit RadioButtonGroupBox(const QString& title, QWidget* parent = nullptr) : QGroupBox(title, parent) { }
+    virtual ~IModuleExportInterface() {}
+};
 
+struct IModuleExportCreator {
+    virtual ~IModuleExportCreator() {}
+    virtual std::shared_ptr<IModuleExportInterface> create() = 0;
 };
 }
+}
 
-#endif
+#define MODULE_EXPORT_INTERFACE public mu::framework::IModuleExportInterface
+#define MODULE_EXPORT_CREATOR public mu::framework::IModuleExportCreator
+
+#endif // MU_FRAMEWORK_IMODULEEXPORT_H

@@ -30,7 +30,7 @@ include_directories (
       ${PROJECT_SOURCE_DIR}
       ${CMAKE_CURRENT_BINARY_DIR}
       ${CMAKE_CURRENT_LIST_DIR}
-      ${PROJECT_SOURCE_DIR}/global
+      ${PROJECT_SOURCE_DIR}/framework/global
       ${PROJECT_SOURCE_DIR}/thirdparty  # because include "mscore/musescore.h"
       )
 

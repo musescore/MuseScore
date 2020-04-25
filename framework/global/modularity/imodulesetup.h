@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 Werner Schweer and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,33 +17,30 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "msqmlengine.h"
+#ifndef MU_FRAMEWORK_IMODULESETUP_H
+#define MU_FRAMEWORK_IMODULESETUP_H
 
-#include <QQmlEngine>
+#include <string>
 
-namespace Ms {
-extern QString mscoreGlobalShare;
-
-//---------------------------------------------------------
-//   MsQmlEngine
-//---------------------------------------------------------
-
-MsQmlEngine::MsQmlEngine(QObject* parent) :
-    QQmlEngine(parent)
+namespace mu {
+namespace framework {
+class IModuleSetup
 {
-#ifdef Q_OS_WIN
-    QStringList importPaths;
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-    importPaths.append(dir.absolutePath());
-    setImportPathList(importPaths);
-#endif
-#ifdef Q_OS_MAC
-    QStringList importPaths;
-    QDir dir(mscoreGlobalShare + QString("/qml"));
-    importPaths.append(dir.absolutePath());
-    setImportPathList(importPaths);
-#endif
+public:
 
-    addImportPath(":/qml");
+    virtual ~IModuleSetup() {}
+
+    virtual std::string moduleName() const = 0;
+
+    virtual void registerExports() {}
+    virtual void resolveImports() {}
+
+    virtual void registerResources() {}
+    virtual void registerUiTypes() {}
+
+    virtual void onStartInit() {}
+};
 }
 }
+
+#endif // MU_FRAMEWORK_IMODULESETUP_H

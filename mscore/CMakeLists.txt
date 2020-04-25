@@ -45,13 +45,13 @@ include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
-      ${PROJECT_SOURCE_DIR}/global
+      ${PROJECT_SOURCE_DIR}/framework/global
       ${PROJECT_SOURCE_DIR}/importexport
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
 if (BUILD_TELEMETRY_MODULE)
-      include_directories(${PROJECT_SOURCE_DIR}/telemetry)
+      include_directories(${PROJECT_SOURCE_DIR}/framework/telemetry)
 endif (BUILD_TELEMETRY_MODULE)
 
 if (SCRIPT_INTERFACE)

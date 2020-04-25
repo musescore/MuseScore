@@ -17,57 +17,43 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "modulessetup.h"
-#include "config.h"
-
-#include "framework/ui/uimodule.h"
-#include "framework/uicomponents/uicomponentsmodule.h"
-
-#ifdef BUILD_TELEMETRY_MODULE
-#include "framework/telemetry/telemetrysetup.h"
-#endif
-
-#ifdef AVSOMR
-#include "avsomr/avsomrsetup.h"
-#endif
+#include "telemetrypermissionmodel.h"
+#include "framework/preferencekeys.h"
+#include <QDesktopServices>
+#include <QUrl>
 
 //---------------------------------------------------------
-//   ModulesSetup
+//   TelemetryPermissionModel
 //---------------------------------------------------------
 
-ModulesSetup::ModulesSetup()
+TelemetryPermissionModel::TelemetryPermissionModel(QObject* parent) : QObject(parent)
 {
-    m_modulesSetupList
-        << new mu::framework::UiModule()
-        << new mu::framework::UiComponentsModule()
-#ifdef BUILD_TELEMETRY_MODULE
-        << new TelemetrySetup()
-#endif
-#ifdef AVSOMR
-        << new Ms::Avs::AvsOmrSetup()
-#endif
-    ;
+    m_settings.setValue(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, true);
 }
 
 //---------------------------------------------------------
-//   setup
+//   accept
 //---------------------------------------------------------
 
-void ModulesSetup::setup()
+void TelemetryPermissionModel::accept()
 {
-    for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
-        m->registerExports();
-    }
+    m_settings.setValue(PREF_APP_TELEMETRY_ALLOWED, true);
+}
 
-    for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
-        m->resolveImports();
+//---------------------------------------------------------
+//   reject
+//---------------------------------------------------------
 
-        m->registerResources();
-        m->registerUiTypes();
-    }
+void TelemetryPermissionModel::reject()
+{
+    m_settings.setValue(PREF_APP_TELEMETRY_ALLOWED, false);
+}
 
-    //! NOTE Need to move to the place where the application finishes initializing
-    for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
-        m->onStartInit();
-    }
+//---------------------------------------------------------
+//   openLink
+//---------------------------------------------------------
+
+void TelemetryPermissionModel::openLink(const QString& link)
+{
+    QDesktopServices::openUrl(QUrl(link));
 }

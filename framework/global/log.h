@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 Werner Schweer and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,33 +17,26 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "msqmlengine.h"
+#ifndef MU_FRAMEWORK_LOG_H
+#define MU_FRAMEWORK_LOG_H
 
-#include <QQmlEngine>
+#include <QDebug>
 
-namespace Ms {
-extern QString mscoreGlobalShare;
+#define LOGD() qDebug()
+#define LOGI() qInfo()
+#define LOGW() qWarning()
+#define LOGE() qCritical()
 
-//---------------------------------------------------------
-//   MsQmlEngine
-//---------------------------------------------------------
+#define IF_ASSERT_FAILED(cond) if (!(cond)) { \
+        LOGE() << "\"ASSERT FAILED!\":" << #cond << __FILE__ << __LINE__; \
+        Q_ASSERT(cond); \
+} \
+    if (!(cond)) \
 
-MsQmlEngine::MsQmlEngine(QObject* parent) :
-    QQmlEngine(parent)
-{
-#ifdef Q_OS_WIN
-    QStringList importPaths;
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-    importPaths.append(dir.absolutePath());
-    setImportPathList(importPaths);
-#endif
-#ifdef Q_OS_MAC
-    QStringList importPaths;
-    QDir dir(mscoreGlobalShare + QString("/qml"));
-    importPaths.append(dir.absolutePath());
-    setImportPathList(importPaths);
-#endif
+#define IF_FAILED(cond) if (!(cond)) { \
+        LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
+} \
+    if (!(cond)) \
 
-    addImportPath(":/qml");
-}
-}
+
+#endif // MU_FRAMEWORK_LOG_H

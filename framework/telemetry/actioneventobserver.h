@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 Werner Schweer and others
+//  Copyright (C) 2019 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,33 +17,47 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "msqmlengine.h"
+#ifndef MENUBAR_H
+#define MENUBAR_H
 
-#include <QQmlEngine>
+#include <QObject>
+#include <QAction>
+#include <QPair>
 
-namespace Ms {
-extern QString mscoreGlobalShare;
+#include "globals.h"
+
+#include "modularity/ioc.h"
+#include "interfaces/itelemetryservice.h"
 
 //---------------------------------------------------------
-//   MsQmlEngine
+//   ActionEventObserver
 //---------------------------------------------------------
 
-MsQmlEngine::MsQmlEngine(QObject* parent) :
-    QQmlEngine(parent)
+class ActionEventObserver : public QObject
 {
-#ifdef Q_OS_WIN
-    QStringList importPaths;
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-    importPaths.append(dir.absolutePath());
-    setImportPathList(importPaths);
-#endif
-#ifdef Q_OS_MAC
-    QStringList importPaths;
-    QDir dir(mscoreGlobalShare + QString("/qml"));
-    importPaths.append(dir.absolutePath());
-    setImportPathList(importPaths);
-#endif
+    Q_OBJECT
 
-    addImportPath(":/qml");
-}
-}
+    INJECT(telemetry, ITelemetryService, telemetryService)
+
+public:
+    static ActionEventObserver* instance()
+    {
+        static ActionEventObserver s;
+        return &s;
+    }
+
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+public slots:
+    void setScoreState(const Ms::ScoreState state);
+
+private:
+    Q_DISABLE_COPY(ActionEventObserver)
+
+    explicit ActionEventObserver(QObject* parent = nullptr);
+    QPair<QString, QString> extractActionData(QObject* watched);
+
+    Ms::ScoreState m_scoreState { Ms::STATE_INIT };
+};
+
+#endif // MENUBAR_H
