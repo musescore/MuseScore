@@ -461,7 +461,8 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
       // TODO const qreal MAX_H_LENGTH = _spatium * score()->styleS(Sid::tremoloBeamLengthMultiplier).val();
       const qreal MAX_H_LENGTH = _spatium * 12.0;
 
-      qreal xScaleFactor = defaultStyle ? qMin(H_MULTIPLIER * (x2 - x1), MAX_H_LENGTH) : H_MULTIPLIER * (x2 - x1);
+      qreal defaultLength = qMin(H_MULTIPLIER * (x2 - x1), MAX_H_LENGTH);
+      qreal xScaleFactor = defaultStyle ? defaultLength : H_MULTIPLIER * (x2 - x1);
       const qreal w2 = _spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
       xScaleFactor /= (2.0 * w2);
 
@@ -483,14 +484,6 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
             }
       QTransform shearTransform;
       qreal dy = y2 - y1;
-      // Make tremolo strokes less deep if two chords have the opposite stem direction,
-      // except for two cases:
-      // 1. The tremolo doesn't have the default beam style.
-      // In this case tremolo strokes should attach to the ends of both stems, so no adjustment needed;
-      // 2. The chords are on different staves and the tremolo is between them.
-      // The layout should be improved by extending both stems, so changes are not needed here.
-      if (_chord1->up() != _chord2->up() && defaultStyle && !crossStaffBeamBetween())
-            dy = qMin(qMax(dy, -1.0 * _spatium), 1.0 * _spatium);
       qreal dx = x2 - x1;
       if (_chord1->beams() == 0 && _chord2->beams() == 0) {
             if (_chord1->up() && !_chord2->up()) {
@@ -504,6 +497,14 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
                         dy -= lw;
                   }
             }
+      // Make tremolo strokes less steep if two chords have the opposite stem directions,
+      // except for two cases:
+      // 1. The tremolo doesn't have the default beam style.
+      // In this case tremolo strokes should attach to the ends of both stems, so no adjustment needed;
+      // 2. The chords are on different staves and the tremolo is between them.
+      // The layout should be improved by extending both stems, so changes are not needed here.
+      if (_chord1->up() != _chord2->up() && defaultStyle && !crossStaffBeamBetween())
+            dy = qMin(qMax(dy, -1.0 * _spatium / defaultLength * dx), 1.0 * _spatium / defaultLength * dx);
       qreal ds = dy / dx;
       shearTransform.shear(0.0, ds);
       path = shearTransform.map(path);
