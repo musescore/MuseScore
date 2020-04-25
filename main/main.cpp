@@ -60,7 +60,15 @@ int main(int argc, char** argv)
 
     initResources();
 
+#ifndef BUILD_UI_MU4
     ModulesSetup::instance()->setup();
+#else
+    //! HACK A temporary hack is required because some modules
+    //! can only be initialized after the creation of the QApplication
+    auto moduleSetup = []() {
+                           ModulesSetup::instance()->setup();
+                       };
+#endif
 
 #if (defined (_MSCVER) || defined (_MSC_VER))
     // On MSVC under Windows, we need to manually retrieve the command-line arguments and convert them from UTF-16 to UTF-8.
@@ -98,7 +106,7 @@ int main(int argc, char** argv)
 
 #ifdef BUILD_UI_MU4
     mu::appshell::AppShell app;
-    return app.run(argcFinal, argvFinal);
+    return app.run(argcFinal, argvFinal, moduleSetup);
 #else
     return Ms::runApplication(argcFinal, argvFinal);
 #endif
