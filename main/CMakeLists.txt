@@ -77,17 +77,19 @@ target_include_directories(mscore PRIVATE
       ${PROJECT_SOURCE_DIR}/thirdparty
       )
 
-target_link_libraries(mscore
-    mscoreapp
-    global
-    global_old #todo remove
-    ui
-    uicomponents
-    appshell
-    scores
-    extensions
-)
 
+set(LINK_LIB mscoreapp global global_old ui uicomponents)
+if (BUILD_UI_MU4)
+    set(LINK_LIB ${LINK_LIB}
+        appshell
+        scores
+        extensions
+        notation
+        notation_scene
+        )
+endif(BUILD_UI_MU4)
+
+target_link_libraries(mscore ${LINK_LIB} )
 
 if (APPLE)
       set_target_properties (mscore

@@ -8,6 +8,8 @@
 #include "qmltheme.h"
 #include "iconcodes.h"
 
+#include "uiinteractive.h"
+
 using namespace mu::framework;
 
 std::string UiModule::moduleName() const
@@ -19,6 +21,7 @@ std::string UiModule::moduleName() const
 void UiModule::registerExports()
 {
     ioc()->registerExport<IUiEngine>(moduleName(), UiEngine::instance());
+    ioc()->registerExport<IInteractive>(moduleName(), new UiInteractive());
 }
 
 void UiModule::registerUiTypes()

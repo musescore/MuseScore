@@ -940,8 +940,11 @@ if (MSVC)
 endif (MSVC)
 
 add_subdirectory(framework)
-add_subdirectory(mu4)
 add_subdirectory(global) #todo remove
+
+if (BUILD_UI_MU4)
+    add_subdirectory(mu4)
+endif(BUILD_UI_MU4)
 
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")

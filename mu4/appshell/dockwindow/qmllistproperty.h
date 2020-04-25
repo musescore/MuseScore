@@ -44,9 +44,9 @@ template<typename T>
 class QmlListProperty
 {
 public:
+
     explicit QmlListProperty(QObject* parent)
-        : _parent(parent),
-        _notifier(new QmlListPropertyNotifier())
+        : _parent(parent), _notifier(new QmlListPropertyNotifier())
     {}
     ~QmlListProperty() { delete _notifier; }
 

@@ -1,4 +1,4 @@
-import QtQuick 2.9
+import QtQuick 2.7
 import MuseScore.Dock 1.0
 
 import "./HomePage"
@@ -12,7 +12,7 @@ DockWindow {
 
     color: ui.theme.window
 
-    currentPageName: "notation"
+    currentPageName: "home"
 
     toolbar: DockToolBar {
 

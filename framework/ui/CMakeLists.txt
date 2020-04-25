@@ -28,6 +28,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/qmltheme.cpp
     ${CMAKE_CURRENT_LIST_DIR}/qmltheme.h
     ${CMAKE_CURRENT_LIST_DIR}/iconcodes.h
+    ${CMAKE_CURRENT_LIST_DIR}/uiinteractive.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/uiinteractive.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
