@@ -846,8 +846,11 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
+        <property name="toolTip">
+         <string>Adjust the range of the ambitus to match the range of the notes that are currently on the staff.</string>
+        </property>
         <property name="text">
-         <string>Update Range</string>
+         <string comment="Adjust the range of the ambitus to match the range of the notes that are currently on the staff.">Match Staff</string>
         </property>
        </widget>
       </item>
