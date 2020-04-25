@@ -17,34 +17,22 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MODULESSETUP_H
-#define MODULESSETUP_H
-
-#include <QList>
+#ifndef TELEMETRYSETUP_H
+#define TELEMETRYSETUP_H
 
 #include "framework/global/modularity/imodulesetup.h"
 
-//---------------------------------------------------------
-//   ModulesSetup
-//---------------------------------------------------------
-
-class ModulesSetup
+class TelemetrySetup : public mu::framework::IModuleSetup
 {
 public:
-    static ModulesSetup* instance()
-    {
-        static ModulesSetup s;
-        return &s;
-    }
+    TelemetrySetup();
 
-    void setup();
+    std::string moduleName() const override;
 
-private:
-    Q_DISABLE_COPY(ModulesSetup)
+    void registerExports() override;
 
-    ModulesSetup();
-
-    QList<mu::framework::IModuleSetup*> m_modulesSetupList;
+    void registerResources() override;
+    void registerUiTypes() override;
 };
 
-#endif // MODULESSETUP_H
+#endif // TELEMETRYSETUP_H

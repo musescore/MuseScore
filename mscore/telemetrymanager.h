@@ -22,7 +22,7 @@
 
 #ifdef BUILD_TELEMETRY_MODULE
 
-#include "serviceinjector.h"
+#include "modularity/ioc.h"
 #include "interfaces/itelemetryservice.h"
 
 namespace Ms {
@@ -30,9 +30,9 @@ namespace Ms {
 //   TelemetryManager
 //---------------------------------------------------------
 
-class TelemetryManager : public ServiceInjector<ITelemetryService>
+class TelemetryManager
 {
-    INJECT(ITelemetryService, _telemetryService)
+    INJECT(telemetry, ITelemetryService, _telemetryService)
     static std::unique_ptr<TelemetryManager> mgr;
 
     static TelemetryManager* instance()
@@ -46,9 +46,10 @@ class TelemetryManager : public ServiceInjector<ITelemetryService>
 public:
     static ITelemetryService* telemetryService()
     {
-        return instance()->_telemetryService();
+        return instance()->_telemetryService().get();
     }
 };
+
 } // namespace Ms
 
 #endif // BUILD_TELEMETRY_MODULE

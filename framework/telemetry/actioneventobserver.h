@@ -17,34 +17,47 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MODULESSETUP_H
-#define MODULESSETUP_H
+#ifndef MENUBAR_H
+#define MENUBAR_H
 
-#include <QList>
+#include <QObject>
+#include <QAction>
+#include <QPair>
 
-#include "framework/global/modularity/imodulesetup.h"
+#include "globals.h"
+
+#include "modularity/ioc.h"
+#include "interfaces/itelemetryservice.h"
 
 //---------------------------------------------------------
-//   ModulesSetup
+//   ActionEventObserver
 //---------------------------------------------------------
 
-class ModulesSetup
+class ActionEventObserver : public QObject
 {
+    Q_OBJECT
+
+    INJECT(telemetry, ITelemetryService, telemetryService)
+
 public:
-    static ModulesSetup* instance()
+    static ActionEventObserver* instance()
     {
-        static ModulesSetup s;
+        static ActionEventObserver s;
         return &s;
     }
 
-    void setup();
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+public slots:
+    void setScoreState(const Ms::ScoreState state);
 
 private:
-    Q_DISABLE_COPY(ModulesSetup)
+    Q_DISABLE_COPY(ActionEventObserver)
 
-    ModulesSetup();
+    explicit ActionEventObserver(QObject* parent = nullptr);
+    QPair<QString, QString> extractActionData(QObject* watched);
 
-    QList<mu::framework::IModuleSetup*> m_modulesSetupList;
+    Ms::ScoreState m_scoreState { Ms::STATE_INIT };
 };
 
-#endif // MODULESSETUP_H
+#endif // MENUBAR_H

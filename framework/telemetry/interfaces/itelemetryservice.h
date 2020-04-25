@@ -17,34 +17,36 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MODULESSETUP_H
-#define MODULESSETUP_H
+#ifndef ITELEMETRYSERVICE_H
+#define ITELEMETRYSERVICE_H
 
-#include <QList>
+#include <QString>
+#include <QVariant>
+#include <QVariantMap>
 
-#include "framework/global/modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
 
 //---------------------------------------------------------
-//   ModulesSetup
+//   ITelemetryService
 //---------------------------------------------------------
 
-class ModulesSetup
+class ITelemetryService : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(ITelemetryService)
+
 public:
-    static ModulesSetup* instance()
-    {
-        static ModulesSetup s;
-        return &s;
-    }
 
-    void setup();
+    virtual ~ITelemetryService() = default;
 
-private:
-    Q_DISABLE_COPY(ModulesSetup)
+    virtual void sendEvent(const QString& category,const QString& action,
+                           const QString& label = QString(),
+                           const QVariant& value = QVariant(),const QVariantMap& customValues = QVariantMap()) = 0;
 
-    ModulesSetup();
+    virtual void sendException(const QString& exceptionDescription,bool exceptionFatal = true,
+                               const QVariantMap& customValues = QVariantMap()) = 0;
 
-    QList<mu::framework::IModuleSetup*> m_modulesSetupList;
+    virtual void startSession() = 0;
+    virtual void endSession() = 0;
 };
 
-#endif // MODULESSETUP_H
+#endif // ITELEMETRYSERVICE_H
