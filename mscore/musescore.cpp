@@ -366,18 +366,16 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       unloadPlugins();
       QList<MasterScore*> removeList;
       for (MasterScore* score : scoreList) {
-            if (!score->created() && !score->dirty())
-                  removeList.append(score);
-            else {
-                  if (checkDirty(score)) {      // ask user if file is dirty
-                        ev->ignore();
-                        return;
-                        }
-                  // If the score has never been saved or is still dirty (or both), the user has discarded the score and we can remove it from the list.
-                  // Note that it's necessary to consider either flag in case we're dealing with a newly created score that hasn't been edited at all.
-                  if (score->created() || score->dirty())
-                        removeList.append(score);
+            // Prompt the user to save the score if it's "dirty" (has unsaved changes) or if it's newly created.
+            if (checkDirty(score)) {
+                  // The user has canceled out entirely, so ignore the close event.
+                  ev->ignore();
+                  return;
                   }
+            // If the score is still flagged as newly created at this point, it means that the user has just chosen to discard it,
+            // so we need to remove it from the list of scores to be saved to the session file.
+            if (score->created())
+                  removeList.append(score);
             }
 
       // remove all new created/not save score so they are
