@@ -27,8 +27,8 @@ namespace Ms {
 
 void MsSplashScreen::drawContents(QPainter* painter)
       {
-      qreal width  = static_cast<qreal>(pixmap().width());
-      qreal height = static_cast<qreal>(pixmap().height());
+      qreal width  = static_cast<qreal>(QWidget::width());
+      qreal height = static_cast<qreal>(QWidget::height());
       QRectF rect  = QRectF(0.0, 0.65 * height, width, 0.35 * height);
 
       painter->setPen(QColor(255, 255, 255, 255 * 0.8));
