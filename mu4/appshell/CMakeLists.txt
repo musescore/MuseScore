@@ -17,20 +17,19 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE uicomponents)
+set(MODULE appshell)
 
-set(MODULE_QRC uicomponents.qrc)
+set(MODULE_QRC appshell.qrc)
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
+include(${CMAKE_CURRENT_LIST_DIR}/dockwindow/dockwindow.cmake)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/uicomponentsmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/uicomponentsmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/cpp/sampleobject.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/cpp/sampleobject.h
+    ${DOCKWINDOW_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/appshell.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/appshell.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
-
-
 

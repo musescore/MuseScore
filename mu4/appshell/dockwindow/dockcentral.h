@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,20 +17,37 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef TELEMETRYSETUP_H
-#define TELEMETRYSETUP_H
+#ifndef MU_DOCK_DOCKCENTRAL_H
+#define MU_DOCK_DOCKCENTRAL_H
 
-#include "framework/global/modularity/imodulesetup.h"
+#include <QObject>
 
-class TelemetrySetup : public mu::framework::IModuleSetup
+#include "dockview.h"
+
+class QWidget;
+
+namespace mu {
+namespace dock {
+class DockCentral : public DockView
 {
+    Q_OBJECT
 public:
-    TelemetrySetup();
+    explicit DockCentral(QQuickItem* parent = nullptr);
+    ~DockCentral();
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
+    struct Widget {
+        QWidget* widget = nullptr;
+    };
+
+    Widget widget() const;
+
+private:
+
+    void onComponentCompleted() override;
+
+    Widget _widget;
 };
+}
+}
 
-#endif // TELEMETRYSETUP_H
+#endif // MU_DOCK_DOCKCENTRAL_H

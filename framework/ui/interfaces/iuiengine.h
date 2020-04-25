@@ -23,11 +23,12 @@
 #include "framework/global/modularity/imoduleexport.h"
 
 class QQmlEngine;
+
 namespace mu {
 namespace framework {
 class IUiEngine : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(muf::IUiEngine)
+    INTERFACE_ID(mu::framework::IUiEngine)
 
 public:
     virtual ~IUiEngine() {}

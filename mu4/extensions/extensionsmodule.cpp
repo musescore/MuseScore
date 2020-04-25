@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,21 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "extensionsmodule.h"
 
-#ifndef TELEMETRYSETUP_H
-#define TELEMETRYSETUP_H
+using namespace mu::extensions;
 
-#include "framework/global/modularity/imodulesetup.h"
-
-class TelemetrySetup : public mu::framework::IModuleSetup
+static void extensions_init_qrc()
 {
-public:
-    TelemetrySetup();
+    Q_INIT_RESOURCE(extensions);
+}
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-};
+std::string ExtensionsModule::moduleName() const
+{
+    return "extensions";
+}
 
-#endif // TELEMETRYSETUP_H
+void ExtensionsModule::registerResources()
+{
+    extensions_init_qrc();
+}
+
+void ExtensionsModule::registerUiTypes()
+{
+}

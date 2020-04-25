@@ -22,6 +22,9 @@
 
 #include "framework/ui/uimodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
+#include "mu4/appshell/appshellmodule.h"
+#include "mu4/scores/scoresmodule.h"
+#include "mu4/extensions/extensionsmodule.h"
 
 #ifdef BUILD_TELEMETRY_MODULE
 #include "framework/telemetry/telemetrysetup.h"
@@ -42,13 +45,20 @@ ModulesSetup::ModulesSetup()
     m_modulesSetupList
         << new mu::framework::UiModule()
         << new mu::framework::UiComponentsModule()
+        << new mu::appshell::AppShellModule()
+        << new mu::scores::ScoresModule()
+        << new mu::extensions::ExtensionsModule()
+
 #ifdef BUILD_TELEMETRY_MODULE
         << new TelemetrySetup()
 #endif
 #ifdef AVSOMR
         << new Ms::Avs::AvsOmrSetup()
 #endif
-        << new InspectorsSetup();
+#ifndef BUILD_UI_MU4
+        << new InspectorsSetup()
+#endif
+    ;
 }
 
 //---------------------------------------------------------
@@ -63,13 +73,13 @@ void ModulesSetup::setup()
 
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
         m->resolveImports();
-
         m->registerResources();
         m->registerUiTypes();
+        m->onInit();
     }
 
     //! NOTE Need to move to the place where the application finishes initializing
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
-        m->onStartInit();
+        m->onStartApp();
     }
 }
