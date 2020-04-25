@@ -782,12 +782,6 @@ if (OMR)
  endif (NOT USE_SYSTEM_POPPLER)
 endif (OMR)
 
-if (BUILD_TELEMETRY_MODULE)
-      add_subdirectory(telemetry)
-      add_subdirectory(thirdparty/google_analytics)
-endif (BUILD_TELEMETRY_MODULE)
-
-add_subdirectory(global)
 add_subdirectory(importexport)
 add_subdirectory(mscore)
 add_subdirectory(main)
@@ -936,6 +930,8 @@ if (MSVC)
    endif ()
 
 endif (MSVC)
+
+add_subdirectory(framework)
 
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")
