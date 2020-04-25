@@ -23,6 +23,7 @@
 #include "musescore.h"
 #include "preferences.h"
 #include "icons.h"
+#include "openfilelocation.h"
 
 namespace Ms {
 
@@ -69,8 +70,15 @@ MetaEditDialog::MetaEditDialog(Score* score, QWidget* parent)
 
       scrollAreaLayout->setColumnStretch(1, 1); // The 'value' column should be expanding
 
-      connect(newButton,  &QPushButton::clicked, this, [this]() { newClicked(); });
+      connect(newButton,  &QPushButton::clicked, this, &MetaEditDialog::newClicked);
       connect(saveButton, &QPushButton::clicked, this, &MetaEditDialog::save);
+      if (!QFileInfo::exists(score->importedFilePath()))
+            revealButton->setEnabled(false);
+
+      revealButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      revealButton->setToolTip(OpenFileLocation::platformText());
+
+      connect(revealButton, &QPushButton::clicked, this, &MetaEditDialog::openFileLocation);
       MuseScore::restoreGeometry(this);
       }
 
@@ -174,6 +182,18 @@ void MetaEditDialog::setDirty(const bool dirty)
       }
 
 //---------------------------------------------------------
+//   setDirty
+///    Opens the file location with a QMessageBox::warning on failure
+//---------------------------------------------------------
+
+void MetaEditDialog::openFileLocation()
+      {
+      if (!OpenFileLocation::openFileLocation(filePath->text()))
+          QMessageBox::warning(this, QString(QT_TR_NOOP("Open Containing Folder Error")),
+                                     QString(QT_TR_NOOP("Could not open containing folder")));
+      }
+
+//---------------------------------------------------------
 //   save
 ///   Save the currently displayed metatags
 //---------------------------------------------------------
@@ -265,4 +285,3 @@ void MetaEditDialog::closeEvent(QCloseEvent* event)
       }
 
 } // namespace Ms
-

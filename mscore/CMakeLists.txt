@@ -173,6 +173,7 @@ add_library(mscoreapp STATIC
       musescore.h navigator.h newwizard.h noteGroups.h
       omrpanel.h pagesettings.h palette.h partedit.h parteditbase.h
       pathlistdialog.h piano.h  pianotools.h
+      openfilelocation.h
       playpanel.h preferences.h preferenceslistwidget.h prefsdialog.h
       recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
@@ -198,6 +199,7 @@ add_library(mscoreapp STATIC
       seq.cpp textpalette.cpp
       timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp
       simplebutton.cpp
+      openfilelocation.cpp
       editdrumset.cpp editstaff.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       excerptsdialog.cpp metaedit.cpp magbox.cpp realizeharmonydialog.cpp

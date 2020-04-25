@@ -22,7 +22,7 @@
      <property name="topMargin">
       <number>0</number>
      </property>
-     <item row="1" column="4">
+     <item row="3" column="4">
       <widget class="QLabel" name="labelLevel">
        <property name="text">
         <string>API-Level:</string>
@@ -32,8 +32,59 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1" colspan="6">
-      <widget class="QLabel" name="filePath">
+     <item row="3" column="0">
+      <widget class="QLabel" name="labelVersion">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>MuseScore Version:</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::NoTextInteraction</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <widget class="QLabel" name="revision">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Panel</enum>
+       </property>
+       <property name="text">
+        <string>No revision</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::TextSelectableByMouse</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="labelFilePath">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>File Path:</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::NoTextInteraction</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="version">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -41,23 +92,33 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Where this score is saved on your computer.</string>
+        <string>The MuseScore version with which this score was last saved.</string>
        </property>
        <property name="accessibleDescription">
-        <string>Where this score is saved on your computer.</string>
+        <string>The MuseScore version with which this score was last saved.</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::Panel</enum>
        </property>
        <property name="text">
-        <string>The score has not been saved yet.</string>
+        <string>No version</string>
        </property>
        <property name="textInteractionFlags">
         <set>Qt::TextSelectableByMouse</set>
        </property>
       </widget>
      </item>
-     <item row="1" column="5">
+     <item row="3" column="2">
+      <widget class="QLabel" name="labelRevision">
+       <property name="text">
+        <string>Revision:</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::NoTextInteraction</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="5">
       <widget class="QLabel" name="level">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -85,8 +146,8 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="version">
+     <item row="2" column="1" colspan="5">
+      <widget class="QLabel" name="filePath">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -94,82 +155,24 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>The MuseScore version with which this score was last saved.</string>
+        <string>Where this score is saved on your computer.</string>
        </property>
        <property name="accessibleDescription">
-        <string>The MuseScore version with which this score was last saved.</string>
+        <string>Where this score is saved on your computer.</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::Panel</enum>
        </property>
        <property name="text">
-        <string>No version</string>
+        <string>The score has not been saved yet.</string>
        </property>
        <property name="textInteractionFlags">
         <set>Qt::TextSelectableByMouse</set>
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="labelRevision">
-       <property name="text">
-        <string>Revision:</string>
-       </property>
-       <property name="textInteractionFlags">
-        <set>Qt::NoTextInteraction</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="labelVersion">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>MuseScore Version:</string>
-       </property>
-       <property name="textInteractionFlags">
-        <set>Qt::NoTextInteraction</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="labelFilePath">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>File Path:</string>
-       </property>
-       <property name="textInteractionFlags">
-        <set>Qt::NoTextInteraction</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QLabel" name="revision">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Panel</enum>
-       </property>
-       <property name="text">
-        <string>No revision</string>
-       </property>
-       <property name="textInteractionFlags">
-        <set>Qt::TextSelectableByMouse</set>
-       </property>
-      </widget>
+     <item row="2" column="6">
+      <widget class="QToolButton" name="revealButton"/>
      </item>
     </layout>
    </item>
@@ -184,7 +187,7 @@
         <x>0</x>
         <y>0</y>
         <width>662</width>
-        <height>302</height>
+        <height>300</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="scrollAreaLayout">
