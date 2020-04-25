@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,20 +17,29 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef TELEMETRYSETUP_H
-#define TELEMETRYSETUP_H
+#include "docksetup.h"
 
-#include "framework/global/modularity/imodulesetup.h"
+#include <QtQml>
 
-class TelemetrySetup : public mu::framework::IModuleSetup
+#include "dockwindow.h"
+#include "dockpage.h"
+#include "docktoolbar.h"
+#include "dockpanel.h"
+#include "dockcentral.h"
+#include "dockstatusbar.h"
+
+using namespace mu::dock;
+
+DockSetup::DockSetup()
 {
-public:
-    TelemetrySetup();
+}
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-};
-
-#endif // TELEMETRYSETUP_H
+void DockSetup::registerQmlTypes()
+{
+    qmlRegisterType<DockWindow>("MuseScore.Dock", 1, 0, "DockWindow");
+    qmlRegisterType<DockPage>("MuseScore.Dock", 1, 0, "DockPage");
+    qmlRegisterType<DockToolBar>("MuseScore.Dock", 1, 0, "DockToolBar");
+    qmlRegisterType<DockPanel>("MuseScore.Dock", 1, 0, "DockPanel");
+    qmlRegisterType<DockCentral>("MuseScore.Dock", 1, 0, "DockCentral");
+    qmlRegisterType<DockStatusBar>("MuseScore.Dock", 1, 0, "DockStatusBar");
+}

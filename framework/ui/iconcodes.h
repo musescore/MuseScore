@@ -35,6 +35,7 @@ class IconCode
     Q_ENUMS(Code)
 
 public:
+
     enum class Code : char16_t {
         SMALL_ARROW_UP = 0xEF10,
         SMALL_ARROW_RIGHT = 0xEF11,

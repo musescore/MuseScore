@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,20 +17,17 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef TELEMETRYSETUP_H
-#define TELEMETRYSETUP_H
+#include "eventswatcher.h"
 
-#include "framework/global/modularity/imodulesetup.h"
+using namespace mu::dock;
 
-class TelemetrySetup : public mu::framework::IModuleSetup
+EventsWatcher::EventsWatcher(QObject* parent) :
+    QObject(parent)
 {
-public:
-    TelemetrySetup();
+}
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-};
-
-#endif // TELEMETRYSETUP_H
+bool EventsWatcher::eventFilter(QObject* obj, QEvent* ev)
+{
+    emit eventReceived(ev);
+    return QObject::eventFilter(obj, ev);
+}
