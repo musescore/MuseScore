@@ -101,6 +101,7 @@
 #include "scoreaccessibility.h"
 #include "startupWizard.h"
 #include "tourhandler.h"
+#include "mssplashscreen.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -7774,6 +7775,18 @@ int runApplication(int& argc, char** av)
       }
 
 //---------------------------------------------------------
+//   showSplashMessage
+//---------------------------------------------------------
+
+inline static void showSplashMessage(MsSplashScreen* sc, QString&& message)
+      {
+      if (sc)
+            sc->showMessage(message);
+      else
+            qInfo(message.toStdString().c_str());
+      }
+
+//---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
@@ -7861,13 +7874,13 @@ void MuseScore::init(QStringList& argv)
       if (!MScore::testMode)
             MScore::readDefaultStyle(preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE));
 
-      QSplashScreen* sc = 0;
+      MsSplashScreen* sc = nullptr;
       if (!MScore::noGui && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN)) {
             QString pictureScaling;
             if (QGuiApplication::primaryScreen()->devicePixelRatio() >= 2)
                   pictureScaling = "@2x";
             QPixmap pm(":/data/splash" + pictureScaling + ".png");
-            sc = new QSplashScreen(pm);
+            sc = new MsSplashScreen(pm);
             sc->setWindowTitle(QString("MuseScore Startup"));
 #ifdef Q_OS_MAC // to have session dialog on top of splashscreen on mac
             sc->setWindowFlags(Qt::FramelessWindowHint);
@@ -7876,8 +7889,12 @@ void MuseScore::init(QStringList& argv)
             qApp->processEvents();
             }
 
-      if (!MScore::noGui)
+      // Best not to show this since the font used to display the message
+      // isn't updated till updateUiStyleAndTheme()
+      // showSplashMessage(sc, tr("Updating user interface and theme…"));
+      if (!MScore::noGui) {
             MuseScore::updateUiStyleAndTheme();
+            }
       else {
             genIcons(); // in GUI mode generated in updateUiStyleAndTheme()
             noSeq = true;
@@ -7885,6 +7902,7 @@ void MuseScore::init(QStringList& argv)
 
       // Do not create sequencer and audio drivers if run with '-s'
       if (!noSeq) {
+            showSplashMessage(sc, tr("Initializing sequencer and audio driver…"));
             seq            = new Seq();
             MScore::seq    = seq;
             Driver* driver = driverFactory(seq, audioDriver);
@@ -7892,6 +7910,8 @@ void MuseScore::init(QStringList& argv)
             if (driver) {
                   MScore::sampleRate = driver->sampleRate();
                   synti->setSampleRate(MScore::sampleRate);
+
+                  showSplashMessage(sc, tr("Loading SoundFonts…"));
                   synti->init();
 
                   seq->setDriver(driver);
@@ -7934,9 +7954,11 @@ void MuseScore::init(QStringList& argv)
 #ifndef Q_OS_MAC
             qApp->setWindowIcon(*icons[int(Icons::window_ICON)]);
 #endif
+            showSplashMessage(sc, tr("Initializing workspace…"));
             WorkspacesManager::initCurrentWorkspace();
             }
 
+      showSplashMessage(sc, tr("Creating main window…"));
       mscore = new MuseScore();
       // create a score for internal use
       gscore = new MasterScore();
@@ -7953,12 +7975,14 @@ void MuseScore::init(QStringList& argv)
       tryToRequestTelemetryPermission();
 #endif
 
+      showSplashMessage(sc, tr("Reading translations…"));
       //read languages list
       mscore->readLanguages(mscoreGlobalShare + "locale/languages.xml");
 
       if (!MScore::noGui) {
             if (preferences.getBool(PREF_APP_STARTUP_FIRSTSTART)) {
                   mscoreFirstStart = true;
+                  showSplashMessage(sc, tr("Initializing startup wizard…"));
                   StartupWizard* sw = new StartupWizard;
                   sw->exec();
                   preferences.setPreference(PREF_APP_STARTUP_FIRSTSTART, false);
@@ -7974,6 +7998,7 @@ void MuseScore::init(QStringList& argv)
                   preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, sw->showTours());
                   delete sw;
 
+                  showSplashMessage(sc, tr("Initializing preferences…"));
                   // reinitialize preferences so some default values are calculated based on chosen language
                   preferences.init();
                   // store preferences with locale-dependent default values
@@ -8013,6 +8038,7 @@ void MuseScore::init(QStringList& argv)
       if (MScore::noGui)
             return;
       else {
+            showSplashMessage(sc, tr("Initializing main window…"));
             mscore->readSettings();
             QObject::connect(qApp, SIGNAL(messageReceived(const QString&)),
                mscore, SLOT(handleMessage(const QString&)));
@@ -8037,6 +8063,7 @@ void MuseScore::init(QStringList& argv)
             //
             // TODO: delete old session backups
             //
+            showSplashMessage(sc, tr("Restoring session…"));
             restoredSession = mscore->restoreSession((preferences.sessionStart() == SessionStart::LAST && (files == 0)));
             }
 
@@ -8058,9 +8085,11 @@ void MuseScore::init(QStringList& argv)
 
       mscore->changeState(mscore->noScore() ? STATE_DISABLED : STATE_NORMAL);
       mscore->show();
-
-      if (!restoredSession || files)
+      
+      if (!restoredSession || files) {
+            showSplashMessage(sc, tr("Loading scores…"));
             loadScores(argv);
+            }
 
       if (mscore->hasToCheckForExtensionsUpdate())
             mscore->checkForExtensionsUpdate();
@@ -8069,11 +8098,12 @@ void MuseScore::init(QStringList& argv)
             TourHandler::addWidgetToTour("welcome", menubar, "menubar");
 
       if (!scoresOnCommandline && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER) && (!restoredSession || mscore->scores().size() == 0)) {
+            showSplashMessage(sc, tr("Initializing start center…"));
 #ifdef Q_OS_MAC
 // ugly, but on mac we get an event when a file is open.
 // We can't get the event when the startcenter is shown.
 // So we let the event loop run a bit before showing the start center.
-            QTimer *timer = new QTimer();
+            QTimer* timer = new QTimer();
             timer->setSingleShot(true);
             QObject::connect(timer, &QTimer::timeout, [=]() {
                   if (!scoresOnCommandline) {
@@ -8090,6 +8120,7 @@ void MuseScore::init(QStringList& argv)
 #endif
             }
       else {
+            showSplashMessage(sc, tr("Initializing tours…"));
             mscore->tourHandler()->startTour("welcome");
             //otherwise, welcome tour will appear on closing StartCenter
             }
