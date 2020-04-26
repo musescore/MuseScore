@@ -75,7 +75,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
 
       static const std::map<ElementType, EditStylePage> PAGES;
 
-   private slots:
+private slots:
       void selectChordDescriptionFile();
       void setChordStyle(bool);
       void toggleHeaderOddEven(bool);
@@ -90,6 +90,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void resetStyleValue(int);
       void valueChanged(int);
       void textStyleChanged(int);
+      void changeChosenTextFonts(const QFont&);
       void resetTextStyle(Pid);
       void textStyleValueChanged(Pid, QVariant);
       void on_comboFBFont_currentIndexChanged(int index);
@@ -97,8 +98,9 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void editUserStyleName();
       void endEditUserStyleName();
       void resetUserStyleName();
+      void setFromFontToMostUsed();
 
-   public:
+public:
       EditStyle(Score*, QWidget*);
       void setPage(int no);
       void setScore(Score* s) { cs = s; }
