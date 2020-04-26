@@ -20,6 +20,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
 #include "libmscore/notedot.h"
+#include "libmscore/page.h"
 #include "libmscore/segment.h"
 #include "libmscore/accidental.h"
 #include "libmscore/musescoreCore.h"
@@ -114,6 +115,11 @@ class Element : public Ms::PluginAPI::ScoreElement {
        * \since MuseScore 3.3
        */
       Q_PROPERTY(qreal posY READ posY)
+      /**
+       * Position of this element in page coordinates, in spatium units.
+       * \since MuseScore 3.5
+       */
+      Q_PROPERTY(QPointF pagePos READ pagePos)
 
       /**
        * Bounding box of this element.
@@ -368,6 +374,8 @@ class Element : public Ms::PluginAPI::ScoreElement {
 
       qreal posX() const { return element()->pos().x() / element()->spatium(); }
       qreal posY() const { return element()->pos().y() / element()->spatium(); }
+
+      QPointF pagePos() const { return element()->pagePos() / element()->spatium(); }
 
       Ms::PluginAPI::Element* parent() const { return wrap(element()->parent()); }
 
@@ -668,6 +676,38 @@ class Measure : public Element {
       Measure* nextMeasure() { return wrap<Measure>(measure()->nextMeasure(), Ownership::SCORE); }
 
       QQmlListProperty<Element> elements() { return wrapContainerProperty<Element>(this, measure()->el()); }
+      /// \endcond
+      };
+
+//---------------------------------------------------------
+//   Page
+//---------------------------------------------------------
+
+class Page : public Element {
+      Q_OBJECT
+      /**
+       * \brief Page number, counting from 0.
+       * Number of this page in the score counting from 0, i.e.
+       * for the first page its \p pagenumber value will be equal to 0.
+       * User-visible page number can be calculated as
+       * \code
+       * page.pagenumber + 1 + score.pageNumberOffset
+       * \endcode
+       * where \p score is the relevant \ref Score object.
+       * \since MuseScore 3.5
+       * \see Score::pageNumberOffset
+       */
+      Q_PROPERTY(int pagenumber READ pagenumber)
+
+   public:
+      /// \cond MS_INTERNAL
+      Page(Ms::Page* p = nullptr, Ownership own = Ownership::SCORE)
+         : Element(p, own) {}
+
+      Ms::Page* page() { return toPage(e); }
+      const Ms::Page* page() const { return toPage(e); }
+
+      int pagenumber() const;
       /// \endcond
       };
 
