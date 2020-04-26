@@ -175,7 +175,7 @@ add_library(mscoreapp STATIC
       pathlistdialog.h piano.h  pianotools.h
       openfilelocation.h
       playpanel.h preferences.h preferenceslistwidget.h prefsdialog.h
-      recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
+      radiobuttongroupbox.h recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
       selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
@@ -198,7 +198,7 @@ add_library(mscoreapp STATIC
       preferences.cpp measureproperties.cpp
       seq.cpp textpalette.cpp
       timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp
-      simplebutton.cpp
+      radiobuttongroupbox.cpp simplebutton.cpp
       openfilelocation.cpp
       editdrumset.cpp editstaff.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp

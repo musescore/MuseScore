@@ -2704,7 +2704,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
-        <widget class="QGroupBox" name="pulseaudioDriver">
+        <widget class="Ms::RadioButtonGroupBox" name="pulseaudioDriver">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -2729,7 +2729,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="portaudioDriver">
+        <widget class="Ms::RadioButtonGroupBox" name="portaudioDriver">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -2909,7 +2909,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="alsaDriver">
+        <widget class="Ms::RadioButtonGroupBox" name="alsaDriver">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -3125,7 +3125,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="jackDriver">
+        <widget class="Ms::RadioButtonGroupBox" name="jackDriver">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -4279,6 +4279,11 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
    <class>Ms::RecordButton</class>
    <extends>QToolButton</extends>
    <header>recordbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Ms::RadioButtonGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>radiobuttongroupbox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
