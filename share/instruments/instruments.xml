@@ -9353,7 +9353,7 @@
                   <aPitchRange>52-93</aPitchRange>
                   <pPitchRange>52-93</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
+                  <Channel name="open">
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
                   <Channel name="mute">
@@ -9379,7 +9379,7 @@
                   <aPitchRange>47-88</aPitchRange>
                   <pPitchRange>47-88</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
+                  <Channel name="open">
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
                   <Channel name="mute">
@@ -9405,7 +9405,7 @@
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-83</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
+                  <Channel name="open">
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
                   <Channel name="mute">
@@ -9437,7 +9437,7 @@
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
+                  <Channel name="open">
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
                   <Channel name="mute">
@@ -9569,7 +9569,7 @@
                   <aPitchRange>31-83</aPitchRange>
                   <pPitchRange>31-83</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
+                  <Channel name="open">
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
                   <Channel name="mute">
@@ -9596,7 +9596,7 @@
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-84</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
+                  <Channel name="open">
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <Channel name="mute">
@@ -9675,7 +9675,7 @@
                   <aPitchRange>34-86</aPitchRange>
                   <pPitchRange>34-86</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
+                  <Channel name="open">
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
                   <Channel name="mute">
@@ -9700,7 +9700,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-85</pPitchRange>
-                  <Channel>
+                  <Channel name="open">
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <Channel name="mute">
@@ -9721,7 +9721,7 @@
                   <aPitchRange>35-84</aPitchRange>
                   <pPitchRange>35-84</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
+                  <Channel name="open">
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <Channel name="mute">
@@ -9753,7 +9753,7 @@
                   <aPitchRange>40-86</aPitchRange>
                   <pPitchRange>40-88</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
+                  <Channel name="open">
                         <program value="27"/> <!--Electric Guitar (clean)-->
                   </Channel>
                   <Channel name="harmonics">

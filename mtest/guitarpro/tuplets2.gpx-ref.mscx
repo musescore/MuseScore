@@ -93,7 +93,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="24"/>
           </Channel>
         <Channel name="mute">
@@ -836,7 +836,7 @@ solo concert</text>
             <velocity>120</velocity>
             <gateTime>100</gateTime>
             </Articulation>
-          <Channel>
+          <Channel name="open">
             <program value="24"/>
             </Channel>
           <Channel name="mute">
