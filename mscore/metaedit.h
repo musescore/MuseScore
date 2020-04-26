@@ -40,7 +40,7 @@ class MetaEditDialog : public QDialog, public Ui::MetaEditDialog {
       Q_OBJECT
 
       Score* m_score; /// the current score
-      bool m_dirty;   /// wheter the editor has unsaved changes or not
+      bool m_dirty;   /// whether the editor has unsaved changes or not
 
       virtual void closeEvent(QCloseEvent*) override;
 
@@ -55,7 +55,7 @@ class MetaEditDialog : public QDialog, public Ui::MetaEditDialog {
    public:
       MetaEditDialog(Score* score, QWidget* parent = nullptr);
       virtual void accept();
-};
+      };
 
 
 } // namespace Ms
