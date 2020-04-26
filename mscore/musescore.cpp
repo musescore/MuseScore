@@ -7783,7 +7783,7 @@ inline static void showSplashMessage(MsSplashScreen* sc, QString&& message)
       if (sc)
             sc->showMessage(message);
       else
-            qInfo(message.toStdString().c_str());
+            qInfo("%s", qPrintable(message));
       }
 
 //---------------------------------------------------------
