@@ -27,23 +27,11 @@ namespace Ms {
 
 void MsSplashScreen::drawContents(QPainter* painter)
       {
-      qreal width  = static_cast<qreal>(pixmap().width());
-      qreal height = static_cast<qreal>(pixmap().height());
-      QRectF rect  = QRectF(0.0, 0.65 * height, width, 0.35 * height);
+      static const QRectF rect(0.0, 0.65 * height(), width(), 0.35 * height());
+      static const QColor color(255, 255, 255, 255 * 0.8);
 
-      painter->setPen(QColor(255, 255, 255, 255 * 0.8));
-      painter->drawText(rect, Qt::AlignTop | Qt::AlignHCenter, _message);
-      }
-
-//---------------------------------------------------------
-//   showMessage
-//---------------------------------------------------------
-
-void MsSplashScreen::showMessage(const QString& message)
-      {
-      _message = message;
-      // The align flags and color don't matter here as drawContents() is overwritten
-      QSplashScreen::showMessage(message, Qt::AlignTop | Qt::AlignHCenter, QColor(255, 255, 255, 255 * 0.8));
+      painter->setPen(color);
+      painter->drawText(rect, Qt::AlignTop | Qt::AlignHCenter, message());
       }
 
 }
