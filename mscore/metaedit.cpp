@@ -90,7 +90,7 @@ MetaEditDialog::MetaEditDialog(Score* score, QWidget* parent)
 //---------------------------------------------------------
 
 QPair<QLineEdit*, QLineEdit*> MetaEditDialog::addTag(const QString& key, const QString& value, const bool builtinTag)
-{
+      {
       QLineEdit* tagWidget = new QLineEdit(key);
       QLineEdit* valueWidget = new QLineEdit(value);
 
@@ -135,7 +135,8 @@ QPair<QLineEdit*, QLineEdit*> MetaEditDialog::addTag(const QString& key, const Q
 ///   and focus is set to the QLineEdit corresponding to its name.
 //---------------------------------------------------------
 
-void MetaEditDialog::newClicked() {
+void MetaEditDialog::newClicked()
+      {
       QPair<QLineEdit*, QLineEdit*> pair = addTag("", "", false);
 
       pair.first->setFocus();
@@ -157,7 +158,8 @@ void MetaEditDialog::newClicked() {
 ///   see also MasterScore::MasterScore()
 //---------------------------------------------------------
 
-bool MetaEditDialog::isBuiltinTag(const QString& tag) const {
+bool MetaEditDialog::isBuiltinTag(const QString& tag) const
+      {
       return (tag ==  "platform"      || tag ==  "movementNumber" || tag ==  "movementTitle"
               || tag ==  "workNumber" || tag ==  "workTitle"      || tag ==  "arranger"
               || tag ==  "composer"   || tag ==  "lyricist"       || tag ==  "poet"
@@ -182,15 +184,15 @@ void MetaEditDialog::setDirty(const bool dirty)
       }
 
 //---------------------------------------------------------
-//   setDirty
+//   openFileLocation
 ///    Opens the file location with a QMessageBox::warning on failure
 //---------------------------------------------------------
 
 void MetaEditDialog::openFileLocation()
       {
       if (!OpenFileLocation::openFileLocation(filePath->text()))
-          QMessageBox::warning(this, QString(QT_TR_NOOP("Open Containing Folder Error")),
-                                     QString(QT_TR_NOOP("Could not open containing folder")));
+            QMessageBox::warning(this, tr("Open Containing Folder Error"),
+                                       tr("Could not open containing folder"));
       }
 
 //---------------------------------------------------------
