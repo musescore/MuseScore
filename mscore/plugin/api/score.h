@@ -86,6 +86,15 @@ class Score : public Ms::PluginAPI::ScoreElement {
       Q_PROPERTY(QString                        mscoreRevision    READ mscoreRevision)
       /** Current selections for the score. \since MuseScore 3.3 */
       Q_PROPERTY(Ms::PluginAPI::Selection*      selection         READ selection)
+      /**
+       * Page numbering offset. The user-visible number of the given \p page is defined as
+       * \code
+       * page.pagenumber + 1 + score.pageNumberOffset
+       * \endcode
+       * \since MuseScore 3.5
+       * \see Page::pagenumber
+       */
+      Q_PROPERTY(int pageNumberOffset READ pageNumberOffset WRITE setPageNumberOffset)
 
    public:
       /// \cond MS_INTERNAL
@@ -105,6 +114,9 @@ class Score : public Ms::PluginAPI::ScoreElement {
       QString lyricist() { return score()->metaTag("lyricist"); } // not the meanwhile obsolete "poet"
       QString title() { return score()->metaTag("workTitle"); }
       Ms::PluginAPI::Selection* selection() { return selectionWrap(&score()->selection()); }
+
+      int pageNumberOffset() const { return score()->pageNumberOffset(); }
+      void setPageNumberOffset(int offset) { score()->undoChangePageNumberOffset(offset); }
 
       /// \endcond
 
