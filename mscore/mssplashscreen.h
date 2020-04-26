@@ -24,17 +24,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 class MsSplashScreen : public QSplashScreen {
-      QString _message;
-
    public:
       MsSplashScreen(const QPixmap& pixmap) : QSplashScreen(pixmap) {}
-
-      void setMessage(QString& message) { _message = message; }
-
       void drawContents(QPainter* painter) override;
-
-   public slots:
-      void showMessage(const QString& message);
       };
 
 }
