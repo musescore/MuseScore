@@ -143,6 +143,7 @@ static const StyleType styleTypes[] {
       { Sid::repeatBarTips,           "repeatBarTips",           QVariant(false) },
       { Sid::startBarlineSingle,      "startBarlineSingle",      QVariant(false) },
       { Sid::startBarlineMultiple,    "startBarlineMultiple",    QVariant(true) },
+
       { Sid::bracketWidth,            "bracketWidth",            Spatium(0.45) },
       { Sid::bracketDistance,         "bracketDistance",         Spatium(0.1) },
       { Sid::akkoladeWidth,           "akkoladeWidth",           Spatium(1.6) },
@@ -402,7 +403,9 @@ static const StyleType styleTypes[] {
       { Sid::minMMRestWidth,          "minMMRestWidth",          Spatium(4) },
       { Sid::hideEmptyStaves,         "hideEmptyStaves",         QVariant(false) },
       { Sid::dontHideStavesInFirstSystem,
-                                 "dontHidStavesInFirstSystm",         QVariant(true) },
+                                 "dontHidStavesInFirstSystm",    QVariant(true) },
+      { Sid::alwaysShowBracketsWhenEmptyStavesAreHidden,
+                                 "alwaysShowBracketsWhenEmptyStavesAreHidden", QVariant(false) },
       { Sid::hideInstrumentNameIfOneInstrument,
                                  "hideInstrumentNameIfOneInstrument", QVariant(true) },
       { Sid::gateTime,                "gateTime",                QVariant(100) },
