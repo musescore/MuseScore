@@ -166,7 +166,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::minEmptyMeasures,        false, minEmptyMeasures,        0 },
       { Sid::minMMRestWidth,          false, minMeasureWidth,         resetMinMMRestWidth },
       { Sid::hideEmptyStaves,         false, hideEmptyStaves,         0 },
-      { Sid::dontHideStavesInFirstSystem, false, dontHideStavesInFirstSystem,             0 },
+      { Sid::dontHideStavesInFirstSystem, false, dontHideStavesInFirstSystem, 0 },
+      { Sid::alwaysShowBracketsWhenEmptyStavesAreHidden, false, alwaysShowBrackets, 0 },
       { Sid::hideInstrumentNameIfOneInstrument, false, hideInstrumentNameIfOneInstrument, 0 },
       { Sid::accidentalNoteDistance,  false, accidentalNoteDistance,  0 },
       { Sid::accidentalDistance,      false, accidentalDistance,      0 },
@@ -501,7 +502,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(swingSixteenth,      SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
 
       connect(concertPitch,        SIGNAL(toggled(bool)),             SLOT(concertPitchToggled(bool)));
-      connect(hideEmptyStaves,     SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
       connect(lyricsDashMinLength, SIGNAL(valueChanged(double)),      SLOT(lyricsDashMinLengthValueChanged(double)));
       connect(lyricsDashMaxLength, SIGNAL(valueChanged(double)),      SLOT(lyricsDashMaxLengthValueChanged(double)));
       connect(minSystemDistance,   SIGNAL(valueChanged(double)),      SLOT(systemMinDistanceValueChanged(double)));
@@ -1090,8 +1090,6 @@ void EditStyle::setValues()
             chordDescriptionGroup->setEnabled(true);
             }
       //formattingGroup->setEnabled(lstyle.chordList()->autoAdjust());
-
-      dontHideStavesInFirstSystem->setEnabled(hideEmptyStaves->isChecked());
 
       // figured bass
       for (int i = 0; i < comboFBFont->count(); i++)
