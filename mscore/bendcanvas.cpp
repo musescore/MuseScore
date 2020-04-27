@@ -18,11 +18,6 @@
 //=============================================================================
 
 #include "bendcanvas.h"
-#include "libmscore/bend.h"
-#include "libmscore/staff.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "preferences.h"
 
 namespace Ms {
 
@@ -31,7 +26,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 BendCanvas::BendCanvas(QWidget* parent)
-   : SquareCanvas(parent)
+   : GridCanvas(parent)
       {
       setRows(13);
       setColumns(13);

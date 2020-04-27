@@ -17,16 +17,16 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "squarecanvas.h"
+#include "gridcanvas.h"
 #include "preferences.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   SquareCanvas
+//   GridCanvas
 //---------------------------------------------------------
 
-SquareCanvas::SquareCanvas(QWidget* parent)
+GridCanvas::GridCanvas(QWidget* parent)
    : QFrame(parent)
       {
       setFrameStyle(QFrame::NoFrame);
@@ -36,8 +36,8 @@ SquareCanvas::SquareCanvas(QWidget* parent)
 //   paintEvent
 //---------------------------------------------------------
 
-void SquareCanvas::paintEvent(QPaintEvent* ev)
-{
+void GridCanvas::paintEvent(QPaintEvent* ev)
+      {
       if (!(m_rows && m_columns)) {
             qDebug("SqareCanvas::paintEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows, m_columns);
             return;
@@ -129,10 +129,10 @@ void SquareCanvas::paintEvent(QPaintEvent* ev)
 //   mousePressEvent
 //---------------------------------------------------------
 
-void SquareCanvas::mousePressEvent(QMouseEvent* ev)
+void GridCanvas::mousePressEvent(QMouseEvent* ev)
       {
       if (!(m_rows && m_columns)) {
-            qDebug("SquareCanvas::mousePressEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows, m_columns);
+            qDebug("GridCanvas::mousePressEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows, m_columns);
             return;
             }
       const qreal columnWidth = qreal(width()) / m_columns;
@@ -172,9 +172,9 @@ void SquareCanvas::mousePressEvent(QMouseEvent* ev)
                   found = true;
                   break;
                   }
-            if(round(qreal(m_points[i].time) / 60 * (m_columns - 1)) == column) {
+            if (round(qreal(m_points[i].time) / 60 * (m_columns - 1)) == column) {
                   if (round(qreal(m_points[i].pitch) / (100 * (m_rows / m_primaryRowsInterval)) * (m_rows - 1)) == row
-                      && i > 0 && i < (numberOfPoints - 1)) {
+                     && i > 0 && i < (numberOfPoints - 1)) {
                         m_points.removeAt(i);
                         }
                   else {
@@ -189,6 +189,6 @@ void SquareCanvas::mousePressEvent(QMouseEvent* ev)
 
       update();
       emit canvasChanged();
-}
+      }
 
 } // namespace Ms

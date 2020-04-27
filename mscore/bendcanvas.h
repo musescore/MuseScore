@@ -20,7 +20,7 @@
 #ifndef __BENDCANVAS_H__
 #define __BENDCANVAS_H__
 
-#include "squarecanvas.h"
+#include "gridcanvas.h"
 
 namespace Ms {
 
@@ -28,7 +28,7 @@ namespace Ms {
 //   BendCanvas
 //---------------------------------------------------------
 
-class BendCanvas : public SquareCanvas {
+class BendCanvas : public GridCanvas {
       Q_OBJECT
 
    public:
