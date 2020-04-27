@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>912</width>
-    <height>660</height>
+    <height>692</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -481,17 +481,32 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="hideEmptyStaves">
-             <property name="text">
+            <widget class="QGroupBox" name="hideEmptyStaves">
+             <property name="title">
               <string>Hide empty staves within systems</string>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="dontHideStavesInFirstSystem">
-             <property name="text">
-              <string>Don't hide empty staves in first system</string>
+             <property name="checkable">
+              <bool>true</bool>
              </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <widget class="QCheckBox" name="dontHideStavesInFirstSystem">
+                <property name="text">
+                 <string>Don't hide empty staves in first system</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="alwaysShowBrackets">
+                <property name="text">
+                 <string>Always show brackets which span to single staff</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
            <item>
@@ -9354,7 +9369,7 @@
               <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="extensionAdjust">
                 <property name="minimum">
-                 <double>-99.99</double>
+                 <double>-99.989999999999995</double>
                 </property>
                </widget>
               </item>
@@ -9388,7 +9403,7 @@
               <item row="1" column="4">
                <widget class="QDoubleSpinBox" name="modifierAdjust">
                 <property name="minimum">
-                 <double>-99.99</double>
+                 <double>-99.989999999999995</double>
                 </property>
                </widget>
               </item>
@@ -10201,8 +10216,7 @@
                   <number>0</number>
                  </property>
                  <item row="0" column="1">
-                  <widget class="Awl::ColorLabel" name="textStyleFrameForeground">
-                  </widget>
+                  <widget class="Awl::ColorLabel" name="textStyleFrameForeground"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="label_205">
@@ -10287,8 +10301,7 @@
                   <widget class="QDoubleSpinBox" name="textStyleFramePadding"/>
                  </item>
                  <item row="1" column="1">
-                  <widget class="Awl::ColorLabel" name="textStyleFrameBackground">
-                  </widget>
+                  <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
                  </item>
                  <item row="3" column="2">
                   <widget class="QToolButton" name="resetTextStyleFramePadding">
@@ -10348,8 +10361,7 @@
             </widget>
            </item>
            <item row="6" column="1">
-            <widget class="Awl::ColorLabel" name="textStyleColor">
-            </widget>
+            <widget class="Awl::ColorLabel" name="textStyleColor"/>
            </item>
            <item row="7" column="1">
             <widget class="Ms::OffsetSelect" name="textStyleOffset" native="true"/>
@@ -10545,6 +10557,7 @@
   <tabstop>resetMinMMRestWidth</tabstop>
   <tabstop>hideEmptyStaves</tabstop>
   <tabstop>dontHideStavesInFirstSystem</tabstop>
+  <tabstop>alwaysShowBrackets</tabstop>
   <tabstop>crossMeasureValues</tabstop>
   <tabstop>hideInstrumentNameIfOneInstrument</tabstop>
   <tabstop>swingOff</tabstop>
