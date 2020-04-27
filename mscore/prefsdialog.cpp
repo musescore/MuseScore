@@ -50,10 +50,10 @@ void MuseScore::startPreferenceDialog()
       {
       if (!preferenceDialog) {
             preferenceDialog = new PreferenceDialog(this);
-            connect(preferenceDialog, SIGNAL(preferencesChanged()),
-               SLOT(preferencesChanged()));
-            connect(preferenceDialog, SIGNAL(mixerPreferencesChanged(bool)),
-               SLOT(mixerPreferencesChanged(bool)));
+            connect(preferenceDialog, &PreferenceDialog::preferencesChangedWithBool, this,
+               &MuseScore::preferencesChanged);
+            connect(preferenceDialog, &PreferenceDialog::mixerPreferencesChanged, this,
+               &MuseScore::mixerPreferencesChanged);
             }
       preferenceDialog->start();
       }
@@ -141,28 +141,28 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       fgButtons->setExclusive(true);
       fgButtons->addButton(fgColorButton);
       fgButtons->addButton(fgWallpaperButton);
-      connect(fgColorButton, SIGNAL(toggled(bool)), SLOT(updateFgView(bool)));
+      connect(fgColorButton, &QRadioButton::toggled, this, &PreferenceDialog::updateFgView);
 
       QButtonGroup* bgButtons = new QButtonGroup(this);
       bgButtons->setExclusive(true);
       bgButtons->addButton(bgColorButton);
       bgButtons->addButton(bgWallpaperButton);
-      connect(bgColorButton, SIGNAL(toggled(bool)), SLOT(updateBgView(bool)));
+      connect(bgColorButton, &QRadioButton::toggled, this, &PreferenceDialog::updateBgView);
 
-      connect(buttonBox,          SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
-      connect(fgWallpaperSelect,  SIGNAL(clicked()), SLOT(selectFgWallpaper()));
-      connect(bgWallpaperSelect,  SIGNAL(clicked()), SLOT(selectBgWallpaper()));
+      connect(buttonBox,            &QDialogButtonBox::clicked, this, &PreferenceDialog::buttonBoxClicked);
+      connect(fgWallpaperSelect,    &QToolButton::clicked, this, &PreferenceDialog::selectFgWallpaper);
+      connect(bgWallpaperSelect,    &QToolButton::clicked, this, &PreferenceDialog::selectBgWallpaper);
 
       bgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       fgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
-      connect(myScoresButton, SIGNAL(clicked()), SLOT(selectScoresDirectory()));
-      connect(myStylesButton, SIGNAL(clicked()), SLOT(selectStylesDirectory()));
-      connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
-      connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
-      connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
-      connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
-      connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
+      connect(myScoresButton, &QToolButton::clicked, this, &PreferenceDialog::selectScoresDirectory);
+      connect(myStylesButton, &QToolButton::clicked, this, &PreferenceDialog::selectStylesDirectory);
+      connect(myTemplatesButton, &QToolButton::clicked, this, &PreferenceDialog::selectTemplatesDirectory);
+      connect(myPluginsButton, &QToolButton::clicked, this, &PreferenceDialog::selectPluginsDirectory);
+      connect(mySoundfontsButton, &QToolButton::clicked, this, &PreferenceDialog::changeSoundfontPaths);
+      connect(myImagesButton, &QToolButton::clicked, this, &PreferenceDialog::selectImagesDirectory);
+      connect(myExtensionsButton, &QToolButton::clicked, this, &PreferenceDialog::selectExtensionsDirectory);
 
       myScoresButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       myStylesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
@@ -172,14 +172,14 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       myImagesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       myExtensionsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
-      connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
+      connect(updateTranslation, &QToolButton::clicked, this, &PreferenceDialog::updateTranslationClicked);
 
-      connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
-      connect(partStyleButton,        SIGNAL(clicked()), SLOT(selectPartStyle()));
-      connect(styleFileButton,        SIGNAL(clicked()), SLOT(styleFileButtonClicked()));
-      connect(instrumentList1Button,  SIGNAL(clicked()), SLOT(selectInstrumentList1()));
-      connect(instrumentList2Button,  SIGNAL(clicked()), SLOT(selectInstrumentList2()));
-      connect(startWithButton,        SIGNAL(clicked()), SLOT(selectStartWith()));
+      connect(defaultStyleButton,     &QToolButton::clicked, this, &PreferenceDialog::selectDefaultStyle);
+      connect(partStyleButton,        &QToolButton::clicked, this, &PreferenceDialog::selectPartStyle);
+      connect(styleFileButton,        &QToolButton::clicked, this, &PreferenceDialog::styleFileButtonClicked);
+      connect(instrumentList1Button,  &QToolButton::clicked, this, &PreferenceDialog::selectInstrumentList1);
+      connect(instrumentList2Button,  &QToolButton::clicked, this, &PreferenceDialog::selectInstrumentList2);
+      connect(startWithButton,        &QToolButton::clicked, this, &PreferenceDialog::selectStartWith);
 
       defaultStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       partStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
@@ -188,15 +188,15 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       instrumentList2Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       startWithButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
-      connect(shortcutList,   SIGNAL(itemActivated(QTreeWidgetItem*, int)), SLOT(defineShortcutClicked()));
-      connect(resetShortcut,  SIGNAL(clicked()), SLOT(resetShortcutClicked()));
-      connect(saveShortcutList,  SIGNAL(clicked()), SLOT(saveShortcutListClicked()));
-      connect(loadShortcutList,  SIGNAL(clicked()), SLOT(loadShortcutListClicked()));
-      connect(clearShortcut,  SIGNAL(clicked()), SLOT(clearShortcutClicked()));
-      connect(defineShortcut, SIGNAL(clicked()), SLOT(defineShortcutClicked()));
-      connect(resetToDefault, SIGNAL(clicked()), SLOT(resetAllValues()));
-      connect(filterShortcuts, SIGNAL(textChanged(const QString&)), SLOT(filterShortcutsTextChanged(const QString &)));
-      connect(printShortcuts, SIGNAL(clicked()), SLOT(printShortcutsClicked()));
+      connect(shortcutList,   &QTreeWidget::itemActivated, this, &PreferenceDialog::defineShortcutClicked);
+      connect(resetShortcut,  &QToolButton::clicked, this, &PreferenceDialog::resetShortcutClicked);
+      connect(saveShortcutList,  &QToolButton::clicked, this, &PreferenceDialog::saveShortcutListClicked);
+      connect(loadShortcutList,  &QToolButton::clicked, this, &PreferenceDialog::loadShortcutListClicked);
+      connect(clearShortcut, &QToolButton::clicked, this, &PreferenceDialog::clearShortcutClicked);
+      connect(defineShortcut, &QToolButton::clicked, this, &PreferenceDialog::defineShortcutClicked);
+      connect(resetToDefault, &QToolButton::clicked, this, &PreferenceDialog::resetAllValues);
+      connect(filterShortcuts, &QLineEdit::textChanged, this, &PreferenceDialog::filterShortcutsTextChanged);
+      connect(printShortcuts, &QToolButton::clicked, this, &PreferenceDialog::printShortcutsClicked);
 
       recordButtons = new QButtonGroup(this);
       recordButtons->setExclusive(false);
@@ -219,15 +219,15 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       recordButtons->addButton(recordEditMode, RMIDI_NOTE_EDIT_MODE);
       recordButtons->addButton(recordRealtimeAdvance, RMIDI_REALTIME_ADVANCE);
 
-      connect(recordButtons,          SIGNAL(buttonClicked(int)), SLOT(recordButtonClicked(int)));
-      connect(midiRemoteControlClear, SIGNAL(clicked()), SLOT(midiRemoteControlClearClicked()));
-      connect(portaudioDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
-      connect(pulseaudioDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
-      connect(alsaDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
-      connect(jackDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
-      connect(useJackAudio, SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
-      connect(useJackMidi,  SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
-      connect(rescanDrivers, SIGNAL(clicked()), this, SLOT(restartAudioEngine()));
+      connect(recordButtons,              QOverload<int>::of(&QButtonGroup::buttonClicked), this, &PreferenceDialog::recordButtonClicked);
+      connect(midiRemoteControlClear,     &QToolButton::clicked, this, &PreferenceDialog::midiRemoteControlClearClicked);
+      connect(portaudioDriver,            &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
+      connect(pulseaudioDriver,           &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
+      connect(alsaDriver,                 &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
+      connect(jackDriver,                 &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
+      connect(useJackAudio,               &QRadioButton::toggled, this, &PreferenceDialog::nonExclusiveJackDriver);
+      connect(useJackMidi,                &QRadioButton::toggled, this, &PreferenceDialog::nonExclusiveJackDriver);
+      connect(rescanDrivers,              &QToolButton::clicked, this, &PreferenceDialog::restartAudioEngine);
       updateRemote();
 
       advancedWidget = new PreferencesListWidget();
@@ -499,7 +499,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
                   portaudioDevice->addItems(devices);
                   portaudioDevice->setCurrentIndex(audio->currentDevice());
 
-                  connect(portaudioApi, SIGNAL(activated(int)), SLOT(portaudioApiActivated(int)));
+                  connect(portaudioApi, QOverload<int>::of(&QComboBox::activated), this, &PreferenceDialog::portaudioApiActivated);
 #ifdef USE_PORTMIDI
                   PortMidiDriver* midiDriver = static_cast<PortMidiDriver*>(audio->mididriver());
                   if (midiDriver) {
@@ -576,7 +576,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       useImportStyleFile->setChecked(!styleFile.isEmpty());
 
       QList<QByteArray> charsets = QTextCodec::availableCodecs();
-      qSort(charsets.begin(), charsets.end());
+      std::sort(charsets.begin(), charsets.end());
       int idx = 0;
       importCharsetListOve->clear();
       importCharsetListGP->clear();
@@ -1204,7 +1204,7 @@ void PreferenceDialog::apply()
       mscore->changeWorkspace(WorkspacesManager::currentWorkspace());
       emit mscore->workspacesChanged();
       
-      emit preferencesChanged();
+      emit preferencesChangedWithBool(false);
       preferences.save();
       mscore->startAutoSave();
       }
