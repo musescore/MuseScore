@@ -20,8 +20,7 @@
 #ifndef __TREMOLOBARCANVAS_H__
 #define __TREMOLOBARCANVAS_H__
 
-#include "libmscore/pitchvalue.h"
-#include "squarecanvas.h"
+#include "gridcanvas.h"
 
 namespace Ms {
 
@@ -29,7 +28,7 @@ namespace Ms {
 //   TremoloBarCanvas
 //---------------------------------------------------------
 
-class TremoloBarCanvas : public SquareCanvas {
+class TremoloBarCanvas : public GridCanvas {
       Q_OBJECT
 
    public:

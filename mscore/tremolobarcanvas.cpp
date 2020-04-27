@@ -18,11 +18,6 @@
 //=============================================================================
 
 #include "tremolobarcanvas.h"
-#include "squarecanvas.h"
-#include "libmscore/tremolobar.h"
-#include "libmscore/staff.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
 
 namespace Ms {
 
@@ -31,7 +26,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 TremoloBarCanvas::TremoloBarCanvas(QWidget* parent)
-   : SquareCanvas(parent)
+   : GridCanvas(parent)
       {
       setRows(33);
       setColumns(13);
