@@ -217,7 +217,7 @@ add_library(mscoreapp STATIC
       stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
       articulationprop.cpp
-      squarecanvas.cpp bendcanvas.cpp fretcanvas.cpp tremolobarcanvas.cpp
+      gridcanvas.cpp bendcanvas.cpp fretcanvas.cpp tremolobarcanvas.cpp
       file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp
       dragelement.cpp startupWizard.cpp
@@ -265,7 +265,7 @@ add_library(mscoreapp STATIC
       ${OMR_FILES}
       ${PLUGIN_SRC}
       ${MAC_SPARKLE_FILES}
-      squarecanvas.cpp tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
+      gridcanvas.h tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
 
       sparkle/autoUpdater.h sparkle/sparkleAutoUpdater.h sparkle/winSparkleAutoUpdater.h
       )
