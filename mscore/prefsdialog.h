@@ -87,6 +87,7 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
 
    signals:
       void preferencesChanged();
+      void preferencesChangedWithBool(bool b);
       void mixerPreferencesChanged(bool showMidiControls);
 
    protected:
