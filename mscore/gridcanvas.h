@@ -17,19 +17,20 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __SQUARECANVAS_H__
-#define __SQUARECANVAS_H__
+#ifndef __GRIDCANVAS_H__
+#define __GRIDCANVAS_H__
 
 #include "libmscore/pitchvalue.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   SqareCanvas
+//   GridCanvas
 //---------------------------------------------------------
 
-class SquareCanvas : public QFrame {
+class GridCanvas : public QFrame {
       Q_OBJECT
+
       QList<PitchValue> m_points;
 
       /// The number of rows and columns.
@@ -48,30 +49,28 @@ class SquareCanvas : public QFrame {
       virtual void paintEvent(QPaintEvent*) override;
       virtual void mousePressEvent(QMouseEvent*) override;
 
-
-
    public:
-      SquareCanvas(QWidget* parent = nullptr);
-      const QList<PitchValue>& points() const { return m_points; }
-      QList<PitchValue>& points()             { return m_points; }
-      void setPoints(const QList<PitchValue>& p) { m_points = p; }
+      GridCanvas(QWidget* parent = nullptr);
+      const QList<PitchValue>& points() const    { return m_points; }
+      QList<PitchValue>& points()                { return m_points; }
+      void setPoints(const QList<PitchValue>& p) { m_points = p;    }
 
-      int rows() const { return m_rows; }
-      /// set the number of lines to draw vertically.
-      void setRows(int rows) { m_rows = rows; }
-      int columns() const { return m_columns; }
-      /// set the number of lines to draw horizontally.
+      /// number of lines to draw vertically
+      int rows() const             { return m_rows;       }
+      void setRows(int rows)       { m_rows = rows;       }
+      /// number of lines to draw horizontally
+      int columns() const          { return m_columns;    }
       void setColumns(int columns) { m_columns = columns; }
 
-      int primaryColumnsInterval() const { return m_primaryColumnsInterval; }
-      /// set the number of secondary lines between primary ones when drawing the columns.
-      void setPrimaryColumnsInterval(int primaryColumnsInterval) { m_primaryColumnsInterval = primaryColumnsInterval; }
-      int primaryRowsInterval() const { return m_primaryRowsInterval; }
-      /// set the number of secondary lines between primary ones when drawing the rows.
-      void setPrimaryRowsInterval(int primaryRowsInterval) { m_primaryRowsInterval = primaryRowsInterval; }
+      /// number of secondary lines between primary ones when drawing the columns
+      int primaryColumnsInterval() const           { return m_primaryColumnsInterval;     }
+      void setPrimaryColumnsInterval(int interval) { m_primaryColumnsInterval = interval; }
+      /// number of secondary lines between primary ones when drawing the rows
+      int primaryRowsInterval() const              { return m_primaryRowsInterval;        }
+      void setPrimaryRowsInterval(int interval)    { m_primaryRowsInterval = interval;    }
 
-      bool showNegativeRows() const { return m_showNegativeRows; }
-      /// sets wheter the canvas should allow negative pitches.
+      /// whether the canvas should allow negative pitches
+      bool showNegativeRows() const                   { return m_showNegativeRows;             }
       void setShowNegativeRows(bool showNegativeRows) { m_showNegativeRows = showNegativeRows; }
 
    signals:
