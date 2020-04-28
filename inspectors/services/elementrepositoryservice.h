@@ -32,6 +32,7 @@ private:
     QList<Ms::Element*> findBeams() const;
     QList<Ms::Element*> findGlissandos() const;
     QList<Ms::Element*> findHairpins() const;
+    QList<Ms::Element*> findStaffs() const;
 };
 
 #endif // ELEMENTREPOSITORYSERVICE_H
