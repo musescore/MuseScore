@@ -1,8 +1,8 @@
 //=============================================================================
-//  MusE Score
-//  Linux Music Score Editor
+//  MuseScore
+//  Music Composition & Notation
 //
-//  Copyright (C) 2009 Werner Schweer and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,43 +17,50 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __PIANOLEVELSCHOOSER_H__
-#define __PIANOLEVELSCHOOSER_H__
 
-#include "ui_pianolevelschooser.h"
+#ifndef NOTETWEAKERDIALOG_H
+#define NOTETWEAKERDIALOG_H
 
-#include "libmscore/staff.h"
+#include "ui_notetweakerdialog.h"
+
+namespace Ui {
+class NoteTweakerDialog;
+}
 
 namespace Ms {
 
+class Staff;
+class Note;
+class Chord;
 
-//---------------------------------------------------------
-//   PianoLevelsChooser
-//---------------------------------------------------------
-
-class PianoLevelsChooser : public QWidget, public Ui::PianoLevelsChooser
-{
+class NoteTweakerDialog : public QDialog
+      {
       Q_OBJECT
 
-      int _levelsIndex;
       Staff* _staff;
+      QList<Note*> noteList;
 
-public:
-      Staff* staff() { return _staff; }
-      void setStaff(Staff* staff) { _staff = staff; }
+   public:
+      explicit NoteTweakerDialog(QWidget *parent = nullptr);
+      ~NoteTweakerDialog();
 
-signals:
-      void levelsIndexChanged(int);
+      void setStaff(Staff* s);
+
+   signals:
       void notesChanged();
 
-public slots:
-      void setLevelsIndex(int index);
-      void setEventDataPressed();
+   public slots:
+      void setNoteOffTime();
 
-public:
-    explicit PianoLevelsChooser(QWidget *parent = 0);
-};
+   private:
+      void addChord(Chord* chord, int voice);
+      void updateNotes();
+      void clearNoteData();
+
+
+      Ui::NoteTweakerDialog *ui;
+      };
 
 }
 
-#endif // __PIANOLEVELSCHOOSER_H__
+#endif // NOTETWEAKERDIALOG_H

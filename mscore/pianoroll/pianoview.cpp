@@ -600,7 +600,6 @@ void PianoView::wheelEvent(QWheelEvent* event)
             }
       }
 
-
 //---------------------------------------------------------
 //   showPopupMenu
 //---------------------------------------------------------
@@ -608,10 +607,14 @@ void PianoView::wheelEvent(QWheelEvent* event)
 void PianoView::showPopupMenu(const QPoint& pos)
       {
       QMenu popup(this);
-//      popup.addAction(getAction("cut"));
-//      popup.addAction(getAction("copy"));
+
+      QAction*  act;
+
+      act = new QAction(tr("Note Tweaker"));
+      connect(act, &QAction::triggered, this, &PianoView::showNoteTweaker);
+      popup.addAction(act);
+
       popup.addAction(getAction("paste"));
-//      popup.addAction(getAction("swap"));
       popup.addAction(getAction("delete"));
 
       popup.exec(pos);
@@ -1574,6 +1577,15 @@ QAction* PianoView::getAction(const char* id)
       {
       Shortcut* s = Shortcut::getShortcut(id);
       return s ? s->action() : 0;
+      }
+
+//---------------------------------------------------------
+//   showNoteTweaker
+//---------------------------------------------------------
+
+void PianoView::showNoteTweaker()
+      {
+      emit showNoteTweakerRequest();
       }
 
 //---------------------------------------------------------
