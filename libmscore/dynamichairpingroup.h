@@ -10,7 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __DYNAMICHAIPRINGROUP_H__
+#ifndef __DYNAMICHAIRPINGROUP_H__
 #define __DYNAMICHAIRPINGROUP_H__
 
 #include "elementgroup.h"
