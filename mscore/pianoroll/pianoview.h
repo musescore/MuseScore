@@ -14,6 +14,7 @@
 #define __PIANOVIEW_H__
 
 #include "libmscore/pos.h"
+#include "pianorolledittool.h"
 
 namespace Ms {
 
@@ -36,7 +37,7 @@ enum class NoteSelectType {
 enum class DragStyle {
     NONE = 0,
     SELECTION_RECT,
-    MOVE_NOTES
+    NOTES
       };
 
 struct BarPattern {
@@ -101,7 +102,14 @@ private:
       DragStyle _dragStyle;
       int _lastDragPitch;
       bool _inProgressUndoEvent;
-      
+
+      //The length of the note we are using for editng purposes, expressed as a fraction of the measure.
+      // Note length will be (2^_editNoteLength) of a measure
+      int _editNoteLength = 0;
+      int _editNoteDots = 0;
+      int _editNoteVoice = 0;
+      PianoRollEditTool _editNoteTool = PianoRollEditTool::SELECT;
+
       QList<PianoItem*> _noteList;
       quint8 _pitchHighlight[128];
 
@@ -112,7 +120,18 @@ private:
       void clearNoteData();
       void selectNotes(int startTick, int endTick, int lowPitch, int highPitch, NoteSelectType selType);
       void showPopupMenu(const QPoint& pos);
-      bool cutChordRest(ChordRest* e, int track, int cutTick, ChordRest*& cr0, ChordRest*& cr1);
+      bool cutChordRest(ChordRest* e, int track, Fraction cutTick, ChordRest*& cr0, ChordRest*& cr1);
+      void handleSelectionClick();
+      void insertNote(int modifiers);
+      Fraction roundToStartBeat(int tick) const;
+      Fraction noteEditLength() const;
+      void changeChordLength(const QPointF& pos);
+      void eraseNote(const QPointF& pos);
+      void appendNoteToChord(const QPointF& pos);
+      void cutChord(const QPointF& pos);
+      void toggleTie(const QPointF& pos);
+      void toggleTie(Note*);
+      void dragSelectionNoteGroup();
 
       QAction* getAction(const char* id);
 
@@ -154,7 +173,14 @@ private:
       int tuplet() { return _tuplet; }
       int subdiv() { return _subdiv; }
       int barPattern() { return _barPattern; }
+      PianoRollEditTool editTool() const { return _editNoteTool; }
       QList<QGraphicsItem*> items() { return scene()->selectedItems(); }
+      int editNoteDots() const { return _editNoteDots; }
+
+      void setEditNoteLength(int len) { _editNoteLength = len; }
+      void setEditNoteVoice(int voice) { _editNoteVoice = voice; }
+      void setEditNoteDots(int dot) { _editNoteDots = dot; }
+      void setEditNoteTool(PianoRollEditTool tool) { _editNoteTool = tool; }
 
       int pixelXToTick(int pixX);
       int tickToPixelX(int tick);
