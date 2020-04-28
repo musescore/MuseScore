@@ -10,6 +10,7 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     setFermataSettingsModel(new FermataSettingsModel(this, repository));
     setTempoSettingsModel(new TempoSettingsModel(this, repository));
     setGlissandoSettingsModel(new GlissandoSettingsModel(this, repository));
+    setBarlineSettingsModel(new BarlineSettingsModel(this, repository));
 }
 
 bool NotationSettingsProxyModel::hasAcceptableElements() const
@@ -37,6 +38,10 @@ QObject* NotationSettingsProxyModel::glissandoSettingsModel() const
     return m_glissandoSettingsModel;
 }
 
+QObject* NotationSettingsProxyModel::barlineSettingsModel() const
+{
+    return m_barlineSettingsModel;
+}
 void NotationSettingsProxyModel::setNoteSettingsModel(NoteSettingsProxyModel* noteSettingsModel)
 {
     m_noteSettingsModel = noteSettingsModel;
@@ -55,4 +60,9 @@ void NotationSettingsProxyModel::setTempoSettingsModel(TempoSettingsModel* tempo
 void NotationSettingsProxyModel::setGlissandoSettingsModel(GlissandoSettingsModel* glissandoSettingsModel)
 {
     m_glissandoSettingsModel = glissandoSettingsModel;
+}
+
+void NotationSettingsProxyModel::setBarlineSettingsModel(BarlineSettingsModel* barlineSettingsModel)
+{
+    m_barlineSettingsModel = barlineSettingsModel;
 }

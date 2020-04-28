@@ -7,6 +7,7 @@
 #include "fermatas/fermatasettingsmodel.h"
 #include "tempos/temposettingsmodel.h"
 #include "glissandos/glissandosettingsmodel.h"
+#include "barlines/barlinesettingsmodel.h"
 
 class NotationSettingsProxyModel : public AbstractInspectorModel
 {
@@ -16,6 +17,7 @@ class NotationSettingsProxyModel : public AbstractInspectorModel
     Q_PROPERTY(QObject* fermataSettingsModel READ fermataSettingsModel CONSTANT)
     Q_PROPERTY(QObject* tempoSettingsModel READ tempoSettingsModel CONSTANT)
     Q_PROPERTY(QObject* glissandoSettingsModel READ glissandoSettingsModel CONSTANT)
+    Q_PROPERTY(QObject* barlineSettingsModel READ barlineSettingsModel CONSTANT)
 public:
     explicit NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -30,18 +32,21 @@ public:
     QObject* fermataSettingsModel() const;
     QObject* tempoSettingsModel() const;
     QObject* glissandoSettingsModel() const;
+    QObject* barlineSettingsModel() const;
 
 public slots:
     void setNoteSettingsModel(NoteSettingsProxyModel* noteSettingsModel);
     void setFermataSettingsModel(FermataSettingsModel* fermataSettingsModel);
     void setTempoSettingsModel(TempoSettingsModel* tempoSettingsModel);
     void setGlissandoSettingsModel(GlissandoSettingsModel* glissandoSettingsModel);
+    void setBarlineSettingsModel(BarlineSettingsModel* barlineSettingsModel);
 
 private:
     NoteSettingsProxyModel* m_noteSettingsModel = nullptr;
     FermataSettingsModel* m_fermataSettingsModel = nullptr;
-    QObject* m_tempoSettingsModel = nullptr;
-    QObject* m_glissandoSettingsModel = nullptr;
+    TempoSettingsModel* m_tempoSettingsModel = nullptr;
+    GlissandoSettingsModel* m_glissandoSettingsModel = nullptr;
+    BarlineSettingsModel* m_barlineSettingsModel = nullptr;
 };
 
 #endif // NOTATIONSETTINGSPROXYMODEL_H
