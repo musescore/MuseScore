@@ -114,7 +114,26 @@ ListView {
         Utils.removeSelectedItems(paletteController, paletteSelectionModel, parentIndex);
     }
 
+    Keys.onShortcutOverride: {
+        // Intercept all keys that we want to use with Keys.onPressed
+        // in case they are assigned as shortcuts in Preferences.
+        event.accepted = true; // intercept everything
+        switch (event.key) {
+            case Qt.Key_Down:
+            case Qt.Key_Up:
+            case Qt.Key_Home:
+            case Qt.Key_End:
+            case Qt.Key_PageUp:
+            case Qt.Key_PageDown:
+            case Qt.Key_Backspace:
+            case Qt.Key_Delete:
+                return;
+        }
+        event.accepted = false; // allow key to function as shortcut (don't intercept)
+    }
+
     Keys.onPressed: {
+        // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
         switch (event.key) {
             case Qt.Key_Down:
                 focusNextItem();
@@ -407,7 +426,31 @@ ListView {
                 paletteTree.paletteController.remove(modelIndex);
             }
 
+            Keys.onShortcutOverride: {
+                // Intercept all keys that we want to use with Keys.onPressed
+                // in case they are assigned as shortcuts in Preferences.
+                event.accepted = true; // intercept everything
+                switch (event.key) {
+                    case Qt.Key_Right:
+                    case Qt.Key_Plus:
+                    case Qt.Key_Left:
+                    case Qt.Key_Minus:
+                    case Qt.Key_Space:
+                    case Qt.Key_Enter:
+                    case Qt.Key_Return:
+                    case Qt.Key_Menu:
+                    case Qt.Key_Asterisk:
+                        return;
+                }
+                if (event.key === Qt.Key_F10 && event.modifiers & Qt.ShiftModifier)
+                    return;
+                if (event.text.match(/[^\x00-\x20\x7F]+$/) !== null)
+                    return;
+                event.accepted = false; // allow key to function as shortcut (don't intercept)
+            }
+
             Keys.onPressed: {
+                // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
                 switch (event.key) {
                     case Qt.Key_Right:
                     case Qt.Key_Plus:
