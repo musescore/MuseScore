@@ -371,6 +371,7 @@ enum class Sid {
       createMultiMeasureRests,
       minEmptyMeasures,
       minMMRestWidth,
+      mmRestNumberPos,
       hideEmptyStaves,
       dontHideStavesInFirstSystem,
       alwaysShowBracketsWhenEmptyStavesAreHidden,

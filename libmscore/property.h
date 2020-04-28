@@ -208,6 +208,7 @@ enum class Pid {
       SPANNER_TRACK2,
       OFFSET2,
       BREAK_MMR,
+      MMREST_NUMBER_POS,
       REPEAT_COUNT,
 
       USER_STRETCH,
