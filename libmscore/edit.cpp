@@ -1954,6 +1954,8 @@ void Score::deleteItem(Element* el)
                               else
                                     mea->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::AUTO));
                               break;
+                        case MeasureNumberMode::HIDE:
+                              break;
                         }
                   }
                   break;
