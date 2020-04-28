@@ -338,6 +338,9 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         undoTransposeHarmony(h, rootTpc, baseTpc);
                         }
                   else if (e->isKeySig() && mode != TransposeMode::DIATONICALLY && trKeys) {
+                        // TODO: this currently is disabled in dialog
+                        // if we enabled it, then it will need work
+                        // probably the code should look more like the range selection code
                         KeySig* ks     = toKeySig(e);
                         if (!ks->isCustom() && !ks->isAtonal()) {
                               Key key        = st->key(ks->tick());
@@ -381,7 +384,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
       Segment* s1 = _selection.startSegment();
       // if range start on mmRest, get the actual segment instead
       if (s1->measure()->isMMRest())
-      	s1 = tick2segment(s1->tick(), true, s1->segmentType(), false);
+            s1 = tick2segment(s1->tick(), true, s1->segmentType(), false);
       // if range starts with first CR of measure
       // then start looping from very beginning of measure
       // so we include key signature and can transpose that if requested
@@ -421,17 +424,29 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               }
                         }
                   else if (e->isKeySig() && trKeys && mode != TransposeMode::DIATONICALLY) {
-                        bool startKey = segment->tick() == s1->tick();
-                        QList<ScoreElement*> ll = e->linkList();
-                        for (ScoreElement* scoreElement : ll) {
-                              KeySig* ks = toKeySig(scoreElement);
-                              bool addKey = ks->isChange();
-                              if (!ks->isCustom() && !ks->isAtonal()) {
-                                    Key nKey = transposeKey(ks->key(), interval, ks->part()->preferSharpFlat());
-                                    KeySigEvent ke = ks->keySigEvent();
-                                    ke.setKey(nKey);
-                                    undo(new ChangeKeySig(ks, ke, ks->showCourtesy(), startKey || addKey));
+                        KeySig* ks = toKeySig(e);
+                        Fraction tick = segment->tick();
+                        bool startKey = tick == s1->tick();
+                        bool addKey = ks->isChange();
+                        if ((startKey || addKey) && !ks->isCustom() && !ks->isAtonal()) {
+                              Staff* staff = ks->staff();
+                              Key oKey = ks->key();
+                              if (!styleB(Sid::concertPitch)) {
+                                    Interval i = staff->part()->instrument(tick)->transpose();
+                                    // TODO: here we are converting the instrument-transposed key to concert pitch
+                                    // ideally, we would figure out how to get the original concert pitch key,
+                                    // since the current key may be affected by preferSharpsFlats() setting
+                                    // but ultimately it should not matter,
+                                    // because undoChangeKeySig() is going to change this again
+                                    oKey = transposeKey(oKey, i);
                                     }
+                              Key nKey = transposeKey(oKey, interval);
+                              KeySigEvent ke = ks->keySigEvent();
+                              ke.setKey(nKey);
+                              // undoChangeKey handles linked staves/parts and generating new keysigs as needed
+                              // it always sets the keysig non-generated
+                              // so only call it when needed
+                              undoChangeKeySig(staff, tick, ke);
                               }
                         }
                   }
@@ -520,7 +535,26 @@ void Score::transposeKeys(int staffStart, int staffEnd, const Fraction& ts, cons
                         createKey = false;
                   if (!ks->isCustom() && !ks->isAtonal()) {
                         KeySigEvent ke = st->keySigEvent(s->tick());
-                        Key nKey = transposeKey(ke.key(), segmentInterval, ks->part()->preferSharpFlat());
+                        PreferSharpFlat pref = ks->part()->preferSharpFlat();
+                        // TODO: if we are transposing to concert pitch,
+                        // then instead of using the part preferSharpFlat() setting,
+                        // we should somehow determine the actual concert pitch key
+                        // eg, if concert pitch for the score as a whole is B, Eb instruments transpose to Ab
+                        // it would be nice if when toggling concert pitch, those instruments were B, not Cb
+                        // the code below makes a bold but unwarranted assumption:
+                        // if you are using the prefer flats option,
+                        // it's because you have sharps in your concert key signatures
+                        // (and vice versa)
+                        // better would be to check other non-transposing staves,
+                        // but ideally we would record and save transposed and concert keys separately
+                        // (like we do tpc1 & tpc2 for notes)
+                        //if (useInstrument && !flip) {
+                        //      if (pref == PreferSharpFlat::FLATS)
+                        //            pref = PreferSharpFlat::SHARPS;
+                        //      else if (pref == PreferSharpFlat::SHARPS)
+                        //            pref = PreferSharpFlat::FLATS;
+                        //      }
+                        Key nKey = transposeKey(ke.key(), segmentInterval, pref);
                         // remove initial C major key signatures
                         if (nKey == Key::C && s->tick().isZero()) {
                               undo(new RemoveElement(ks));
