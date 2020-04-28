@@ -46,17 +46,17 @@ int step2tpc(int step, AccidentalVal alter)
       //    "line of fifth's" LOF
 
       static const int spellings[] = {
-      //     bb  b   -   #  ##
-             0,  7, 14, 21, 28,  // C
-             2,  9, 16, 23, 30,  // D
-             4, 11, 18, 25, 32,  // E
-            -1,  6, 13, 20, 27,  // F
-             1,  8, 15, 22, 29,  // G
-             3, 10, 17, 24, 31,  // A
-             5, 12, 19, 26, 33,  // B
-             };
+      //    bbb  bb  b   -   #  ##  ###
+            -7,  0,  7, 14, 21, 28, 35,  // C
+            -5,  2,  9, 16, 23, 30, 37,  // D
+            -3,  4, 11, 18, 25, 32, 39,  // E
+            -8, -1,  6, 13, 20, 27, 34,  // F
+            -6,  1,  8, 15, 22, 29, 36,  // G
+            -4,  3, 10, 17, 24, 31, 38,  // A
+            -2,  5, 12, 19, 26, 33, 40,  // B
+            };
 
-      int i = step*5 + int(alter)+2;
+      int i = (step * TPCS_PER_STEP) + (int(alter) - int(AccidentalVal::MIN));
       Q_ASSERT(i >= 0 && (i < int(sizeof(spellings)/sizeof(*spellings))));
       return spellings[i];
       }
@@ -111,10 +111,9 @@ int tpc2step(int tpc)
 //   tpc2stepByKey
 //---------------------------------------------------------
 
-int tpc2stepByKey(int tpc, Key key, int* pAlter)
+int tpc2stepByKey(int tpc, Key key, int& alter)
       {
-      if (pAlter)
-            *pAlter = tpc2alterByKey(tpc, key);
+      alter = tpc2alterByKey(tpc, key);
       return tpc2step(tpc);
       }
 
@@ -189,13 +188,15 @@ int tpc2pitch(int tpc)
 
       static int pitches[] = {
 //step:     F   C   G   D   A   E   B
+            2, -3,  4, -1,  6,  1,  8,     // bbb
             3, -2,  5,  0,  7,  2,  9,     // bb
             4, -1,  6,  1,  8,  3, 10,     // b
             5,  0,  7,  2,  9,  4, 11,     // -
             6,  1,  8,  3, 10,  5, 12,     // #
-            7,  2,  9,  4, 11,  6, 13      // ##
+            7,  2,  9,  4, 11,  6, 13,     // ##
+            8,  3, 10,  5, 12,  7, 14      // ###
             };
-      return pitches[tpc + 1];
+      return pitches[tpc - Tpc::TPC_MIN];
       }
 
 //---------------------------------------------------------
@@ -220,7 +221,7 @@ int tpc2pitch(int tpc)
 //---------------------------------------------------------
 
 int tpc2alterByKey(int tpc, Key key) {
-      return (tpc - int(key) - int(Tpc::TPC_MIN) + int(Key::MAX)) / TPC_DELTA_SEMITONE - 3;
+      return (tpc - int(key) - int(Tpc::TPC_MIN) + int(Key::MAX)) / TPC_DELTA_SEMITONE - (int(AccidentalVal::MAX) + 1);
       }
 
 //---------------------------------------------------------
@@ -242,10 +243,25 @@ QString tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, 
 
 void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, QString& acc, bool explicitAccidental)
       {
-      int n;
-      tpc2name(tpc, noteSpelling, noteCase, s, n);
-      switch (n) {
-            case -2:
+      AccidentalVal accVal;
+      tpc2name(tpc, noteSpelling, noteCase, s, accVal);
+      switch (accVal) {
+            case AccidentalVal::FLAT3:
+                  if (explicitAccidental) {
+                        acc = QObject::tr("triple ♭");
+                        }
+                  else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
+                        switch (tpc) {
+                              case TPC_A_BBB: acc = "sasas"; break;
+                              case TPC_E_BBB: acc = "seses"; break;
+                              default: acc = "eseses";
+                              }
+                        }
+                  else {
+                        acc = "bbb";
+                        }
+                  break;
+            case AccidentalVal::FLAT2:
                   if (explicitAccidental) {
                         acc = QObject::tr("double ♭");
                         }
@@ -260,7 +276,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
                         acc = "bb";
                         }
                   break;
-            case -1:
+            case AccidentalVal::FLAT:
                   if (explicitAccidental)
                         acc = QObject::tr("♭");
                   else if (noteSpelling == NoteSpellingType::GERMAN_PURE)
@@ -268,22 +284,24 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
                   else
                         acc = "b";
                   break;
-            case  0: acc = ""; break;
-            case  1:
+            case  AccidentalVal::NATURAL: acc = ""; break;
+            case  AccidentalVal::SHARP:
                   if (explicitAccidental)
                         acc = QObject::tr("♯");
                   else
                         acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "is" : "#";
                   break;
-            case  2:
+            case  AccidentalVal::SHARP2:
                   if (explicitAccidental)
                         acc = QObject::tr("double ♯");
                   else
                         acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "isis" : "##";
                   break;
-            default:
-                  qDebug("tpc2name(%d): acc %d", tpc, n);
-                  acc = "";
+            case AccidentalVal::SHARP3:
+                  if (explicitAccidental)
+                        acc = QObject::tr("triple ♯");
+                  else
+                        acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "isisis" : "###";
                   break;
             }
       }
@@ -292,22 +310,22 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
 //   tpc2name
 //---------------------------------------------------------
 
-void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, int& acc)
+void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, AccidentalVal& acc)
       {
       const char names[]  = "FCGDAEB";
       const char gnames[] = "FCGDAEH";
       const QString snames[] = { "Fa", "Do", "Sol", "Re", "La", "Mi", "Si" };
 
-      acc = ((tpc+1) / 7) - 2;
-      int idx = (tpc + 1) % 7;
+      acc = tpc2alter(tpc);
+      int idx = (tpc - Tpc::TPC_MIN) % TPC_DELTA_SEMITONE;
       switch (noteSpelling) {
             case NoteSpellingType::GERMAN:
             case NoteSpellingType::GERMAN_PURE:
                   s = gnames[idx];
-                  if (s == "H" && acc == -1) {
+                  if (s == "H" && acc == AccidentalVal::FLAT) {
                         s = "B";
                         if (noteSpelling == NoteSpellingType::GERMAN_PURE)
-                              acc = 0;
+                              acc = AccidentalVal::NATURAL;
                         }
                   break;
             case NoteSpellingType::SOLFEGGIO:
@@ -339,7 +357,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
 QString tpc2stepName(int tpc)
       {
       const char names[] = "FCGDAEB";
-      return QString(names[(tpc + 1) % 7]);
+      return QString(names[(tpc - Tpc::TPC_MIN) % 7]);
       }
 
 // table of alternative spellings for one octave
@@ -743,7 +761,7 @@ int pitch2tpc(int pitch, Key key, Prefer prefer)
 //    key: between Key::MIN and Key::MAX
 //---------------------------------------------------------
 
-int pitch2absStepByKey(int pitch, int tpc, Key key, int *pAlter)
+int pitch2absStepByKey(int pitch, int tpc, Key key, int& alter)
       {
       // sanitize input data
       if (pitch < 0)
@@ -759,14 +777,9 @@ int pitch2absStepByKey(int pitch, int tpc, Key key, int *pAlter)
       if (key > Key::MAX)
             key   -= Key::DELTA_ENHARMONIC;
 
-      int octave = pitch / PITCH_DELTA_OCTAVE;
-      if (tpc == Tpc::TPC_C_BB || tpc == Tpc::TPC_C_B)
-            ++octave;
-      else if (tpc == Tpc::TPC_B_S || tpc == Tpc::TPC_B_SS)
-            --octave;
+      int octave = (pitch - int(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE;
       int step = tpc2step(tpc);
-      if (pAlter)
-            *pAlter = tpc2alterByKey(tpc, key);
+      alter = tpc2alterByKey(tpc, key);
       return octave * STEP_DELTA_OCTAVE + step;
       }
 

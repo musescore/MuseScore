@@ -337,7 +337,7 @@ void Ambitus::layout()
             if (_topTpc - int(key) >= 13 && _topTpc - int(key) <= 19)
                   accidType = AccidentalType::NONE;
             else {
-                  AccidentalVal accidVal = AccidentalVal( (_topTpc - Tpc::TPC_MIN) / TPC_DELTA_SEMITONE - 2 );
+                  AccidentalVal accidVal = tpc2alter(_topTpc);
                   accidType = Accidental::value2subtype(accidVal);
                   if (accidType == AccidentalType::NONE)
                         accidType = AccidentalType::NATURAL;
@@ -362,7 +362,7 @@ void Ambitus::layout()
             if (_bottomTpc - int(key) >= 13 && _bottomTpc - int(key) <= 19)
                   accidType = AccidentalType::NONE;
             else {
-                  AccidentalVal accidVal = AccidentalVal( (_bottomTpc - Tpc::TPC_MIN) / TPC_DELTA_SEMITONE - 2 );
+                  AccidentalVal accidVal = tpc2alter(_bottomTpc);
                   accidType = Accidental::value2subtype(accidVal);
                   if (accidType == AccidentalType::NONE)
                         accidType = AccidentalType::NATURAL;

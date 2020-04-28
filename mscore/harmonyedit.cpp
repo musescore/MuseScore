@@ -359,7 +359,7 @@ void HarmonyCanvas::render(const QList<RenderAction>& /*renderList*/, double& /*
                   }
             else if (a.type == RenderAction::RenderActionType::NOTE) {
                   QString c;
-                  int acc;
+                  AccidentalVal acc;
                   tpc2name(tpc, noteSpelling, noteCase, c, acc);
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   QString lookup = "note" + c;

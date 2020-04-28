@@ -148,11 +148,15 @@ enum class SelectType : char {
 //---------------------------------------------------------
 
 enum class AccidentalVal : signed char {
+      SHARP3  = 3,
       SHARP2  = 2,
       SHARP   = 1,
       NATURAL = 0,
       FLAT    = -1,
-      FLAT2   = -2
+      FLAT2   = -2,
+      FLAT3   = -3,
+      MIN     = FLAT3,
+      MAX     = SHARP3
       };
 
 //---------------------------------------------------------
