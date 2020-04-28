@@ -35,11 +35,11 @@ class Rest : public ChordRest {
       bool _gap      { false };     // invisible and not selectable for user
       std::vector<NoteDot*> _dots;
 
-      virtual QRectF drag(EditData&) override;
-      virtual qreal upPos()   const override;
-      virtual qreal downPos() const override;
-      virtual void setOffset(const QPointF& o) override;
-      virtual Sid getPropertyStyle(Pid pid) const override; 
+      QRectF drag(EditData&) override;
+      qreal upPos() const override;
+      qreal downPos() const override;
+      void setOffset(const QPointF& o) override;
+      Sid getPropertyStyle(Pid pid) const override;
 
 
    public:
@@ -51,28 +51,28 @@ class Rest : public ChordRest {
       virtual ElementType type() const override { return ElementType::REST; }
       Rest &operator=(const Rest&) = delete;
 
-      virtual Rest* clone() const override        { return new Rest(*this, false); }
-      virtual Element* linkedClone()              { return new Rest(*this, true); }
-      virtual Measure* measure() const override   { return parent() ? (Measure*)(parent()->parent()) : 0; }
-      virtual qreal mag() const override;
-      virtual void draw(QPainter*) const override;
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      Rest* clone() const override        { return new Rest(*this, false); }
+      Element* linkedClone() override     { return new Rest(*this, true); }
+      Measure* measure() const override   { return parent() ? toMeasure(parent()->parent()) : 0; }
+      qreal mag() const override;
+      void draw(QPainter*) const override;
+      void scanElements(void* data, void (*func)(void*, Element*), bool all = true) override;
       void setTrack(int val);
 
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
-      virtual void layout() override;
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&) override;
+      void layout() override;
 
       bool isGap() const               { return _gap;     }
       virtual void setGap(bool v)      { _gap = v;        }
 
-      virtual void reset() override;
+      void reset() override;
 
       virtual void add(Element*);
       virtual void remove(Element*);
 
-      virtual void read(XmlReader&) override;
-      virtual void write(XmlWriter& xml) const override;
+      void read(XmlReader&) override;
+      void write(XmlWriter& xml) const override;
 
       void layoutMMRest(qreal val);
       qreal mmWidth() const        { return _mmWidth; }
@@ -94,17 +94,17 @@ class Rest : public ChordRest {
       virtual qreal stemPosX() const;
       virtual QPointF stemPosBeam() const;
 
-      virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+      QVariant propertyDefault(Pid) const override;
       void resetProperty(Pid id);
-      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
-      virtual QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant& v) override;
+      QVariant getProperty(Pid propertyId) const override;
       void undoChangeDotsVisible(bool v);
 
-      virtual Element* nextElement() override;
-      virtual Element* prevElement() override;
-      virtual QString accessibleInfo() const override;
-      virtual QString screenReaderInfo() const override;
+      Element* nextElement() override;
+      Element* prevElement() override;
+      QString accessibleInfo() const override;
+      QString screenReaderInfo() const override;
       Shape shape() const override;
       };
 
