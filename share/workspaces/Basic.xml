@@ -556,24 +556,36 @@
         <Cell name="Pizzicato" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="pizzicato"/>
+            <channelSwitch voice="1" name="pizzicato"/>
+            <channelSwitch voice="2" name="pizzicato"/>
+            <channelSwitch voice="3" name="pizzicato"/>
             <text>pizz.</text>
             </StaffText>
           </Cell>
         <Cell name="Arco" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="arco"/>
+            <channelSwitch voice="1" name="arco"/>
+            <channelSwitch voice="2" name="arco"/>
+            <channelSwitch voice="3" name="arco"/>
             <text>arco</text>
             </StaffText>
           </Cell>
         <Cell name="Mute" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="mute"/>
+            <channelSwitch voice="1" name="mute"/>
+            <channelSwitch voice="2" name="mute"/>
+            <channelSwitch voice="3" name="mute"/>
             <text>mute</text>
             </StaffText>
           </Cell>
         <Cell name="Open" trElement="1">
           <StaffText>
             <channelSwitch voice="0" name="open"/>
+            <channelSwitch voice="1" name="open"/>
+            <channelSwitch voice="2" name="open"/>
+            <channelSwitch voice="3" name="open"/>
             <text>open</text>
             </StaffText>
           </Cell>
