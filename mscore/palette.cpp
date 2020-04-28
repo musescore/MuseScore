@@ -733,8 +733,11 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                                     continue;
                               if (e->isChord()) {
                                     Chord* chord = toChord(e);
-                                    for (Note* n : chord->notes())
+                                    for (Note* n : chord->notes()) {
                                           applyDrop(score, viewer, n, element, modifiers);
+                                          if (!(element->isAccidental() || element->isNoteHead())) // only these need to apply to every note
+                                              break;
+                                        }
                                     }
                               else {
                                     // do not apply articulation to barline in a range selection
