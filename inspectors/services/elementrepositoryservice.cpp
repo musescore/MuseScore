@@ -6,6 +6,7 @@
 #include "beam.h"
 #include "glissando.h"
 #include "hairpin.h"
+#include "staff.h"
 
 ElementRepositoryService::ElementRepositoryService(QObject* parent) : QObject(parent)
 {
@@ -34,6 +35,7 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     case Ms::ElementType::BEAM: return findBeams();
     case Ms::ElementType::GLISSANDO: return findGlissandos();
     case Ms::ElementType::HAIRPIN: return findHairpins();
+    case Ms::ElementType::STAFF: return findStaffs();
     default:
         QList<Ms::Element*> resultList;
 
@@ -209,6 +211,20 @@ QList<Ms::Element*> ElementRepositoryService::findHairpins() const
         } else if (element->type() == Ms::ElementType::HAIRPIN) {
             resultList << element;
         }
+    }
+
+    return resultList;
+}
+
+QList<Ms::Element*> ElementRepositoryService::findStaffs() const
+{
+    QList<Ms::Element*> resultList;
+
+    for (const Ms::Element* element : m_elementList) {
+        if (!element->staff())
+            continue;
+
+        resultList << element->staff();
     }
 
     return resultList;

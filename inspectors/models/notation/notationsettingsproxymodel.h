@@ -8,6 +8,7 @@
 #include "tempos/temposettingsmodel.h"
 #include "glissandos/glissandosettingsmodel.h"
 #include "barlines/barlinesettingsmodel.h"
+#include "staffs/staffsettingsmodel.h"
 
 class NotationSettingsProxyModel : public AbstractInspectorModel
 {
@@ -18,6 +19,7 @@ class NotationSettingsProxyModel : public AbstractInspectorModel
     Q_PROPERTY(QObject* tempoSettingsModel READ tempoSettingsModel CONSTANT)
     Q_PROPERTY(QObject* glissandoSettingsModel READ glissandoSettingsModel CONSTANT)
     Q_PROPERTY(QObject* barlineSettingsModel READ barlineSettingsModel CONSTANT)
+    Q_PROPERTY(QObject* staffSettingsModel READ staffSettingsModel CONSTANT)
 public:
     explicit NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -33,6 +35,7 @@ public:
     QObject* tempoSettingsModel() const;
     QObject* glissandoSettingsModel() const;
     QObject* barlineSettingsModel() const;
+    QObject* staffSettingsModel() const;
 
 public slots:
     void setNoteSettingsModel(NoteSettingsProxyModel* noteSettingsModel);
@@ -40,6 +43,7 @@ public slots:
     void setTempoSettingsModel(TempoSettingsModel* tempoSettingsModel);
     void setGlissandoSettingsModel(GlissandoSettingsModel* glissandoSettingsModel);
     void setBarlineSettingsModel(BarlineSettingsModel* barlineSettingsModel);
+    void setStaffSettingsModel(StaffSettingsModel* staffSettingsModel);
 
 private:
     NoteSettingsProxyModel* m_noteSettingsModel = nullptr;
@@ -47,6 +51,7 @@ private:
     TempoSettingsModel* m_tempoSettingsModel = nullptr;
     GlissandoSettingsModel* m_glissandoSettingsModel = nullptr;
     BarlineSettingsModel* m_barlineSettingsModel = nullptr;
+    StaffSettingsModel* m_staffSettingsModel = nullptr;
 };
 
 #endif // NOTATIONSETTINGSPROXYMODEL_H
