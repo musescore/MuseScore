@@ -1403,11 +1403,11 @@ QString FretDiagram::screenReaderInfo() const
                   }
             else if (dotsCount > 1) {
                   int max = int(fretsWithDots.size());
-                  for (int i = 0; i < max; i++) {
-                        if (i == max - 1)
-                              fretInfo = QObject::tr("%1 and %2").arg(fretInfo).arg(fretsWithDots[i]);
+                  for (int j = 0; j < max; j++) {
+                        if (j == max - 1)
+                              fretInfo = QObject::tr("%1 and %2").arg(fretInfo).arg(fretsWithDots[j]);
                         else
-                              fretInfo = QString("%1 %2").arg(fretInfo).arg(fretsWithDots[i]);
+                              fretInfo = QString("%1 %2").arg(fretInfo).arg(fretsWithDots[j]);
                         }
                   }
 
