@@ -124,6 +124,17 @@
         <file>data/icons/note-natural.svg</file>
         <file>data/icons/note-sharp.svg</file>
         <file>data/icons/note-tie.svg</file>
+        <file>data/icons/preEdit-changeLength.svg</file>
+        <file>data/icons/preEdit-cutNote.svg</file>
+        <file>data/icons/preEdit-eraseNote.svg</file>
+        <file>data/icons/preEdit-insertNote.svg</file>
+        <file>data/icons/preEdit-appendChord.svg</file>
+        <file>data/icons/preEdit-select.svg</file>
+        <file>data/icons/preEdit-tie.svg</file>
+        <file>data/icons/voice-1.svg</file>
+        <file>data/icons/voice-2.svg</file>
+        <file>data/icons/voice-3.svg</file>
+        <file>data/icons/voice-4.svg</file>
         <file>data/icons/rest.svg</file>
         <file>data/icons/stem-flip.svg</file>
         <file>data/icons/insert-symbol.svg</file>

@@ -22,6 +22,7 @@ namespace Awl {
 #include "libmscore/pos.h"
 #include "libmscore/score.h"
 #include "libmscore/select.h"
+#include "pianorolledittool.h"
 
 namespace Ms {
 
@@ -102,6 +103,11 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       void setStaff(Staff* staff);
       void focusOnPosition(Position* p);
       void heartBeat(Seq*);
+
+      void setEditNoteLength(int);
+      void setEditNoteVoice(int);
+      void setEditNoteTool(PianoRollEditTool);
+      void setEditNoteDots(int, QToolButton*);
 
       virtual void dataChanged(const QRectF&) override;
       virtual void updateAll() override;
