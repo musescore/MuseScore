@@ -343,7 +343,7 @@ void FretDiagram::draw(QPainter* painter) const
                         case FretDotType::TRIANGLE:
                               painter->drawLine(QLineF(x, y + dotd, x + .5 * dotd, y));
                               painter->drawLine(QLineF(x + .5 * dotd, y, x + dotd, y + dotd));
-                              painter->drawLine(QLineF(x + dotd, y + dotd, x, y + dotd));                                    
+                              painter->drawLine(QLineF(x + dotd, y + dotd, x, y + dotd));
                               break;
                         case FretDotType::NORMAL:
                         default:
@@ -465,7 +465,7 @@ void FretDiagram::layout()
             int si     = staffIdx();
 
             SysStaff* ss = m->system()->staff(si);
-            QRectF r     = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos());
+            QRectF r     = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos() + QPointF(_harmony->xShapeOffset(), 0.0));
 
             qreal minDistance = _harmony->minDistance().val() * spatium();
             SkylineLine sk(false);
@@ -485,6 +485,7 @@ void FretDiagram::layout()
 //---------------------------------------------------------
 //   centerX
 ///   used by harmony for layout. Keep in sync with layout, same dotd and x as above
+//    also used in Element::canvasPos().
 //---------------------------------------------------------
 
 qreal FretDiagram::centerX() const
@@ -700,9 +701,9 @@ void FretDiagram::read(XmlReader& e)
                   }
             if (tag == "fretDiagram") {
                   readNew(e);
-                  haveReadNew = true;       
+                  haveReadNew = true;
                   }
-            
+
             // Check for new properties
             else if (tag == "showNut")
                   readProperty(e, Pid::FRET_NUT);
@@ -888,7 +889,7 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
                   _barres[fret] = FretItem::Barre(string, -1);
                   removeDotsMarkers(string, -1, fret);
                   }
-            } 
+            }
       else if (b.endString == -1 && b.startString < string) {
             _barres[fret].endString = string;
             }
@@ -967,7 +968,7 @@ void FretDiagram::removeBarres(int string, int fret /*= 0*/)
             else
                   ++iter;
             }
-      }   
+      }
 
 //---------------------------------------------------------
 //   removeMarker
@@ -1049,7 +1050,7 @@ void FretDiagram::undoFretClear()
 
 //---------------------------------------------------------
 //   dot
-//    take fret value of zero to mean all dots 
+//    take fret value of zero to mean all dots
 //---------------------------------------------------------
 
 std::vector<FretItem::Dot> FretDiagram::dot(int s, int f /*= 0*/) const

@@ -207,7 +207,7 @@ Harmony::Harmony(const Harmony& h)
       _realizedHarmony.setHarmony(this);
       for (const TextSegment* s : h.textList) {
             TextSegment* ns = new TextSegment();
-            ns->set(s->text, s->font, s->x, s->y);
+            ns->set(s->text, s->font, s->x, s->y, s->offset);
             textList.append(ns);
             }
       }
@@ -1269,53 +1269,7 @@ void Harmony::layout()
       //if (isStyled(Pid::OFFSET))
       //      setOffset(propertyDefault(Pid::OFFSET).toPointF());
 
-      if (placeBelow())
-            rypos() = staff() ? staff()->height() : 0.0;
-      else
-            rypos() = 0.0;
       layout1();
-
-      qreal yy = ipos().y();
-      qreal xx = 0.0;
-
-      if (parent()->isFretDiagram()) {
-            if (isStyled(Pid::ALIGN))
-                  setAlign(Align::HCENTER | Align::BASELINE);
-            yy = -score()->styleP(Sid::harmonyFretDist);
-            }
-
-      qreal hb = lineHeight() - TextBase::baseLine();
-      if (align() & Align::BOTTOM)
-            yy -= hb;
-      else if (align() & Align::VCENTER) {
-            yy -= hb;
-            yy += (height() * .5);
-            }
-      else if (align() & Align::BASELINE) {
-            }
-      else { // Align::TOP
-            yy -= hb;
-            yy += height();
-            }
-
-      qreal cw = symWidth(SymId::noteheadBlack);
-      if (align() & Align::RIGHT) {
-            xx += cw;
-            xx -= width();
-            }
-      else if (align() & Align::HCENTER) {
-            if (parent()->isFretDiagram()) {
-                  FretDiagram* fd = toFretDiagram(parent());
-                  xx += fd->centerX();
-                  xx -= width() * .5;
-                  }
-            else {
-                  xx += (cw * .5);
-                  xx -= (width() * .5);
-                  }
-            }
-
-      setPos(xx, yy);
       }
 
 //---------------------------------------------------------
@@ -1340,13 +1294,67 @@ void Harmony::layout1()
 
 void Harmony::calculateBoundingRect()
       {
-      if (textList.empty())
+      const qreal        ypos = (placeBelow() && staff()) ? staff()->height() : 0.0;
+      const FretDiagram* fd   = (parent() && parent()->isFretDiagram()) ? toFretDiagram(parent()) : nullptr;
+      const qreal        cw   = symWidth(SymId::noteheadBlack);
+
+      if (textList.empty()) {
             TextBase::layout1();
+
+            // When in EDIT mode, the bbox is different as in NORMAL mode.
+            // Adjust the position so the both bbox have the same alignment.
+
+            qreal xx = 0.0;
+            qreal yy = 0.0;
+            if (fd) {
+                  if (align() & Align::RIGHT)
+                        xx = fd->width() / 2.0;
+                  yy = rypos();
+                  }
+            else {
+                  if (align() & Align::RIGHT)
+                        xx = cw;
+                  else if (align() & Align::HCENTER)
+                        xx = cw / 2.0;
+                  yy = ypos - ((align() & Align::BOTTOM) ? _harmonyHeight - bbox().height() : 0.0);
+                  }
+
+            setPos(xx, yy);
+            }
       else {
             QRectF bb;
-            for (const TextSegment* ts : textList)
+            for (TextSegment* ts : textList)
                   bb |= ts->tightBoundingRect().translated(ts->x, ts->y);
-            setbbox(bb);
+
+            qreal yy = -bb.y();  // Align::TOP
+            if (align() & Align::VCENTER)
+                  yy = -bb.y() / 2.0;
+            else if (align() & Align::BASELINE)
+                  yy = 0.0;
+            else if (align() & Align::BOTTOM)
+                  yy = -bb.height() - bb.y();
+
+            qreal xx = -bb.x(); // Align::LEFT
+            if (fd) {
+                  if (align() & Align::RIGHT)
+                        xx = fd->bbox().width() - bb.width();
+                  else if (align() & Align::HCENTER)
+                        xx = fd->centerX() - bb.width() / 2.0;
+                  }
+            else {
+                  if (align() & Align::RIGHT)
+                        xx = -bb.x() -bb.width() + cw;
+                  else if (align() & Align::HCENTER)
+                        xx = -bb.x() -bb.width() / 2.0 + cw / 2.0;
+                  }
+
+            for (TextSegment* ts : textList)
+                  ts->offset = QPointF(xx, yy);
+
+            setbbox(bb.translated(xx, yy));
+            setPos(0.0, fd ? rypos() : ypos);
+            _harmonyHeight = bbox().height();
+
             for (int i = 0; i < rows(); ++i) {
                   TextBlock& t = textBlockList()[i];
 
@@ -1355,10 +1363,22 @@ void Harmony::calculateBoundingRect()
                   // To correct placement of text in editing we need to layout textBlockList() elements
                   t.layout(this);
                   for (auto& s : t.fragments()) {
-                        s.pos = { 0, 0 };
+                        s.pos = { 0.0 , 0.0 };
                         }
+
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   xShapeOffset
+//    Returns the offset for the shapes.
+//---------------------------------------------------------
+
+qreal Harmony::xShapeOffset() const
+      {
+      const FretDiagram* fd = (parent() && parent()->isFretDiagram()) ? toFretDiagram(parent()) : nullptr;
+      return (fd && textList.empty()) ? fd->centerX() : 0.0;
       }
 
 //---------------------------------------------------------
@@ -1399,7 +1419,7 @@ void Harmony::draw(QPainter* painter) const
             QFont f(ts->font);
             f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
             painter->setFont(f);
-            painter->drawText(QPointF(ts->x, ts->y), ts->text);
+            painter->drawText(ts->pos(), ts->text);
             }
       }
 
@@ -1432,7 +1452,8 @@ void Harmony::drawEditMode(QPainter* p, EditData& ed)
 
 TextSegment::TextSegment(const QString& s, const QFont& f, qreal x, qreal y)
       {
-      set(s, f, x, y);
+      QPointF offset(0.0, 0.0);
+      set(s, f, x, y, offset);
       select = false;
       }
 
@@ -1481,11 +1502,12 @@ QRectF TextSegment::tightBoundingRect() const
 //   set
 //---------------------------------------------------------
 
-void TextSegment::set(const QString& s, const QFont& f, qreal _x, qreal _y)
+void TextSegment::set(const QString& s, const QFont& f, qreal _x, qreal _y, QPointF _offset)
       {
-      font = f;
-      x    = _x;
-      y    = _y;
+      font   = f;
+      x      = _x;
+      y      = _y;
+      offset = _offset;
       setText(s);
       }
 

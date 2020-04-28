@@ -29,17 +29,19 @@ class ParsedChord;
 struct TextSegment {
       QFont font;
       QString text;
-      qreal x, y;
+      qreal x, y;       // Position of segments relative to each other.
+      QPointF offset;   // Offset for placing within the TextBase.
       bool select;
 
       qreal width() const;
       QRectF boundingRect() const;
       QRectF tightBoundingRect() const;
+      QPointF pos() const { return QPointF(x, y) + offset; };
 
       TextSegment()                { select = false; x = y = 0.0; }
       TextSegment(const QFont& f, qreal _x, qreal _y) : font(f), x(_x), y(_y), select(false) {}
       TextSegment(const QString&, const QFont&, qreal x, qreal y);
-      void set(const QString&, const QFont&, qreal x, qreal y);
+      void set(const QString&, const QFont&, qreal x, qreal y, QPointF offset);
       void setText(const QString& t)      { text = t; }
       };
 
@@ -83,6 +85,7 @@ class Harmony final : public TextBase {
       ParsedChord* _parsedForm;           // parsed form of chord
       bool showSpell = false;             // show spell check warning
       HarmonyType _harmonyType;           // used to control rendering, transposition, export, etc.
+      qreal _harmonyHeight;               // used for calculating the the height is frame while editing.
 
       RealizedHarmony _realizedHarmony;    //the realized harmony used for playback
 
@@ -201,6 +204,7 @@ class Harmony final : public TextBase {
       void localSpatiumChanged(qreal oldValue, qreal newValue) override;
       void setHarmony(const QString& s);
       void calculateBoundingRect();
+      qreal xShapeOffset() const;
 
       QString userName() const override;
       QString accessibleInfo() const override;
