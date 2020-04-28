@@ -57,16 +57,5 @@ void SystemText::layout()
       autoplaceSegmentElement();
       }
 
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid SystemText::getPropertyStyle(Pid pid) const
-      {
-      if (pid == Pid::OFFSET)
-            return placeAbove() ? Sid::systemTextPosAbove : Sid::systemTextPosBelow;
-      return TextBase::getPropertyStyle(pid);
-      }
-
 } // namespace Ms
 

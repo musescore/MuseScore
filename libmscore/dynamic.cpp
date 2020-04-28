@@ -534,17 +534,6 @@ QString Dynamic::propertyUserValue(Pid pid) const
       }
 
 //---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid Dynamic::getPropertyStyle(Pid pid) const
-      {
-      if (pid == Pid::OFFSET)
-            return placeAbove() ? Sid::dynamicsPosAbove : Sid::dynamicsPosBelow;
-      return TextBase::getPropertyStyle(pid);
-      }
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

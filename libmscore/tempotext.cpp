@@ -480,16 +480,5 @@ QString TempoText::accessibleInfo() const
             return TextBase::accessibleInfo();
       }
 
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid TempoText::getPropertyStyle(Pid pid) const
-      {
-      if (pid == Pid::OFFSET)
-            return placeAbove() ? Sid::tempoPosAbove : Sid::tempoPosBelow;
-      return TextBase::getPropertyStyle(pid);
-      }
-
 }
 

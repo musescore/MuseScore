@@ -2502,11 +2502,48 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
       }
 
 //---------------------------------------------------------
+//   offsetSid
+//---------------------------------------------------------
+
+Sid TextBase::offsetSid() const
+      {
+      Tid defaultTid = Tid(propertyDefault(Pid::SUB_STYLE).toInt());
+      if (tid() != defaultTid)
+            return Sid::NOSTYLE;
+      bool above = placeAbove();
+      switch (tid()) {
+            case Tid::DYNAMICS:
+                  return above ? Sid::dynamicsPosAbove : Sid::dynamicsPosBelow;
+            case Tid::LYRICS_ODD:
+            case Tid::LYRICS_EVEN:
+                  return above ? Sid::lyricsPosAbove : Sid::lyricsPosBelow;
+            case Tid::REHEARSAL_MARK:
+                  return above ? Sid::rehearsalMarkPosAbove : Sid::rehearsalMarkPosBelow;
+            case Tid::STAFF:
+                  return above ? Sid::staffTextPosAbove : Sid::staffTextPosBelow;
+            case Tid::STICKING:
+                  return above ? Sid::stickingPosAbove : Sid::stickingPosBelow;
+            case Tid::SYSTEM:
+                  return above ? Sid::systemTextPosAbove : Sid::systemTextPosBelow;
+            case Tid::TEMPO:
+                  return above ? Sid::tempoPosAbove : Sid::tempoPosBelow;
+            default:
+                  break;
+            }
+      return Sid::NOSTYLE;
+      }
+
+//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 
 Sid TextBase::getPropertyStyle(Pid id) const
       {
+      if (id == Pid::OFFSET) {
+            Sid sid = offsetSid();
+            if (sid != Sid::NOSTYLE)
+                  return sid;
+            }
       for (const StyledProperty& p : *_elementStyle) {
             if (p.pid == id)
                   return p.sid;
