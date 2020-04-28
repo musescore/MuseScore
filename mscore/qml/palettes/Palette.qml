@@ -150,7 +150,20 @@ GridView {
 
         onClicked: paletteView.moreButtonClicked()
 
+        Keys.onShortcutOverride: {
+            // Intercept all keys that we want to use with Keys.onPressed
+            // in case they are assigned as shortcuts in Preferences.
+            event.accepted = true; // intercept everything
+            switch (event.key) {
+                case Qt.Key_Up:
+                case Qt.Key_Down:
+                    return;
+            }
+            event.accepted = false; // allow key to function as shortcut (don't intercept)
+        }
+
         Keys.onPressed: {
+            // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
             switch (event.key) {
                 case Qt.Key_Up:
                     focusPreviousItem();
@@ -455,7 +468,24 @@ GridView {
             selectionModel.setCurrentIndex(currentItem.modelIndex, ItemSelectionModel.Select);
     }
 
+    Keys.onShortcutOverride: {
+        // Intercept all keys that we want to use with Keys.onPressed
+        // in case they are assigned as shortcuts in Preferences.
+        event.accepted = true; // intercept everything
+        switch (event.key) {
+            case Qt.Key_Up:
+            case Qt.Key_Down:
+            case Qt.Key_Left:
+            case Qt.Key_Right:
+            case Qt.Key_Backspace:
+            case Qt.Key_Delete:
+                return;
+        }
+        event.accepted = false; // allow key to function as shortcut (don't intercept)
+    }
+
     Keys.onPressed: {
+        // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
         switch (event.key) {
             case Qt.Key_Up:
                 focusPreviousItem();
@@ -582,7 +612,27 @@ GridView {
             Accessible.selectable: true;
             Accessible.selected: selected;
 
+            Keys.onShortcutOverride: {
+                // Intercept all keys that we want to use with Keys.onPressed
+                // in case they are assigned as shortcuts in Preferences.
+                event.accepted = true; // intercept everything
+                switch (event.key) {
+                    case Qt.Key_Space:
+                    case Qt.Key_Enter:
+                    case Qt.Key_Return:
+                    case Qt.Key_Menu:
+                    case Qt.Key_Asterisk:
+                        return;
+                }
+                if (event.key === Qt.Key_F10 && event.modifiers & Qt.ShiftModifier)
+                    return;
+                if (event.text.match(/[^\x00-\x20\x7F]+$/) !== null)
+                    return;
+                event.accepted = false; // allow key to function as shortcut (don't intercept)
+            }
+
             Keys.onPressed: {
+                // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
                 const shiftHeld = event.modifiers & Qt.ShiftModifier;
                 const ctrlHeld = event.modifiers & Qt.ControlModifier;
                 switch (event.key) {
