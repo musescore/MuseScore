@@ -12,6 +12,8 @@ FocusableItem {
     height: contentWrapper.implicitHeight + 16
     width: parent.width
 
+    opacity: root.enabled ? 1.0 : 0.3
+
     Rectangle {
         id: backgroundRect
 
