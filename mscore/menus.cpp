@@ -1611,30 +1611,45 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
             StaffText* pz = new StaffText(gscore);
             pz->setXmlText(QT_TRANSLATE_NOOP("Palette", "pizz."));
             pz->setChannelName(0, "pizzicato");
+            pz->setChannelName(1, "pizzicato");
+            pz->setChannelName(2, "pizzicato");
+            pz->setChannelName(3, "pizzicato");
             sp->append(pz, QT_TRANSLATE_NOOP("Palette", "Pizzicato"))->setElementTranslated(true);
 
             StaffText* ar = new StaffText(gscore);
             ar->setXmlText(QT_TRANSLATE_NOOP("Palette", "arco"));
             ar->setChannelName(0, "arco");
+            ar->setChannelName(1, "arco");
+            ar->setChannelName(2, "arco");
+            ar->setChannelName(3, "arco");
             sp->append(ar, QT_TRANSLATE_NOOP("Palette", "Arco"))->setElementTranslated(true);
 
             StaffText* tm = new StaffText(gscore, Tid::EXPRESSION);
             tm->setXmlText(QT_TRANSLATE_NOOP("Palette", "tremolo"));
             tm->setChannelName(0, "tremolo");
+            tm->setChannelName(1, "tremolo");
+            tm->setChannelName(2, "tremolo");
+            tm->setChannelName(3, "tremolo");
             sp->append(tm, QT_TRANSLATE_NOOP("Palette", "Tremolo"))->setElementTranslated(true);
 
             StaffText* mu = new StaffText(gscore);
-            /*: For brass instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music) */
+            /*: For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music) */
             mu->setXmlText(QT_TRANSLATE_NOOP("Palette", "mute"));
             mu->setChannelName(0, "mute");
-            /*: For brass instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music) */
+            mu->setChannelName(1, "mute");
+            mu->setChannelName(2, "mute");
+            mu->setChannelName(3, "mute");
+            /*: For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music) */
             sp->append(mu, QT_TRANSLATE_NOOP("Palette", "Mute"))->setElementTranslated(true);
 
             StaffText* no = new StaffText(gscore);
-            /*: For brass instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music) */
+            /*: For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music) */
             no->setXmlText(QT_TRANSLATE_NOOP("Palette", "open"));
             no->setChannelName(0, "open");
-            /*: For brass instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music) */
+            no->setChannelName(1, "open");
+            no->setChannelName(2, "open");
+            no->setChannelName(3, "open");
+            /*: For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music) */
             sp->append(no, QT_TRANSLATE_NOOP("Palette", "Open"))->setElementTranslated(true);
 
             StaffText* sa = new StaffText(gscore);
@@ -1651,8 +1666,8 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
             tb->setChannelName(0, "Tenor");
             tb->setChannelName(1, "Bass");
             tb->setChannelName(2, "Tenor");
-            tb->setVisible(false);
             tb->setChannelName(3, "Bass");
+            tb->setVisible(false);
             sp->append(tb, QT_TRANSLATE_NOOP("Palette", "Tenor/Bass"))->setElementTranslated(true);
 
             StaffText* tl = new StaffText(gscore);
