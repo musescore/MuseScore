@@ -1234,10 +1234,12 @@ static void updateStyle(void*, Element* e)
 void Score::styleChanged()
       {
       scanElements(0, updateStyle);
-      if (headerText())
-            headerText()->styleChanged();
-      if (footerText())
-            footerText()->styleChanged();
+      for(int i = 0; i < MAX_HEADERS; i++)
+            if (headerText(i))
+                  headerText(i)->styleChanged();
+      for(int i = 0; i < MAX_FOOTERS; i++)
+            if (footerText(i))
+                  footerText(i)->styleChanged();
       setLayoutAll();
       }
 
@@ -4750,7 +4752,7 @@ bool Score::isTopScore() const
 //---------------------------------------------------------
 
 Movements::Movements()
-   : std::vector<MasterScore*>()
+   : std::vector<MasterScore*>(), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr)
       {
       _undo = new UndoStack();
       }
