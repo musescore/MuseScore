@@ -1298,8 +1298,8 @@ int convertLine(int lineL2, Note *noteL, Note *noteR)
 // recent one, but avoid looking forward in time after the current note.
 // E.g., Also if there is an accidental     // on a note one (or more) octaves above or below we
 // observe its accidental as well.
-// E.g., Still another case is that if two staffs are involved (such as a glissando between two
-// notes on different staffs) then we have to search both staffs for the most recent accidental.
+// E.g., Still another case is that if two staves are involved (such as a glissando between two
+// notes on different staves) then we have to search both staves for the most recent accidental.
 //
 // noteL is the note to measure the deltastep from, i.e., ornaments are w.r.t. this note
 // noteR is the note to search backward from to find accidentals.

@@ -16,6 +16,7 @@
 #include "libmscore/part.h"
 #include "libmscore/undo.h"
 #include "libmscore/measure.h"
+#include "libmscore/measurenumber.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/breath.h"
@@ -57,6 +58,7 @@ class TestMeasure : public QObject, public MTest
 //      void minWidth();
       void undoDelInitialVBox_269919();
       void mmrest();
+      void measureNumbers();
 
       void gap();
       void checkMeasure();
@@ -520,6 +522,82 @@ void TestMeasure::mmrest()
       score->endCmd();
       QVERIFY(saveCompareScore(score, "mmrest.mscx", DIR + "mmrest-ref.mscx"));
       delete score;
+      }
+
+//---------------------------------------------------------
+///   measureNumbers
+///    test measure numbers properties
+//---------------------------------------------------------
+
+void TestMeasure::measureNumbers()
+      {
+      MeasureNumber* measureNumber = new MeasureNumber(score);
+
+   // horizontal placement
+      measureNumber->setHPlacement(HPlacement::CENTER);
+      measureNumber->setPropertyFlags(Pid::HPLACEMENT, PropertyFlags::UNSTYLED);
+      MeasureNumber* mn = static_cast<MeasureNumber*>(writeReadElement(measureNumber));
+      QCOMPARE(mn->hPlacement(), HPlacement::CENTER);
+      delete mn;
+
+      MasterScore* score = readScore(DIR + "measurenumber.mscx");
+
+      // Place measure numbers below
+      score->startCmd();
+      score->undo(new ChangeStyleVal(score, Sid::measureNumberVPlacement, QVariant(int (Placement::BELOW))));
+      score->setLayoutAll();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, "measurenumber-1.mscx", DIR + "measurenumber-1-ref.mscx"));
+
+      // center measure numbers
+      score->startCmd();
+      score->undo(new ChangeStyleVal(score, Sid::measureNumberHPlacement, QVariant(int (HPlacement::CENTER))));
+      score->setLayoutAll();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, "measurenumber-2.mscx", DIR + "measurenumber-2-ref.mscx"));
+
+      // show on first system too
+      score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, QVariant(true)));
+      score->setLayoutAll();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, "measurenumber-3.mscx", DIR + "measurenumber-3-ref.mscx"));
+
+      // every 5 measures (default interval)
+      score->startCmd();
+      // to know wheter measure numbers are shown at regular intervals or on every system,
+      // musescore simply checks if measure numbers are shown at system or not.
+      score->undo(new ChangeStyleVal(score, Sid::measureNumberSystem, QVariant(false)));
+      score->setLayoutAll();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, "measurenumber-4.mscx", DIR + "measurenumber-4-ref.mscx"));
+
+      // do not show first measure number. This should shift all measure numbers,
+      // because they are still placed at regular intervals.
+      // Instead of being at 1-6-11-16-21, etc. They should be at 5-10-15-20-25, etc.
+      score->startCmd();
+      score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, QVariant(false)));
+      score->setLayoutAll();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, "measurenumber-5.mscx", DIR + "measurenumber-5-ref.mscx"));
+
+      // show at every measure (except fist)
+      score->startCmd();
+      score->undo(new ChangeStyleVal(score, Sid::measureNumberInterval, QVariant(1)));
+      score->setLayoutAll();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, "measurenumber-6.mscx", DIR + "measurenumber-6-ref.mscx"));
+
+      // Disable measure numbers
+      score->startCmd();
+      // to know wheter measure numbers are shown at regular intervals or on every system,
+      // musescore simply checks if measure numbers are shown at system or not.
+      score->undo(new ChangeStyleVal(score, Sid::showMeasureNumber, QVariant(false)));
+      score->setLayoutAll();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, "measurenumber-7.mscx", DIR + "measurenumber-7-ref.mscx"));
+
+      delete score;
+
       }
 
 

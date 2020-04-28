@@ -126,6 +126,7 @@ set (INSPECTOR_UI
     ${CMAKE_CURRENT_LIST_DIR}/inspector_line.ui
     ${CMAKE_CURRENT_LIST_DIR}/inspector_lyric.ui
     ${CMAKE_CURRENT_LIST_DIR}/inspector_marker.ui
+    ${CMAKE_CURRENT_LIST_DIR}/inspector_measurenumber.ui
     ${CMAKE_CURRENT_LIST_DIR}/inspector_notedot.ui
     ${CMAKE_CURRENT_LIST_DIR}/inspector_note.ui
     ${CMAKE_CURRENT_LIST_DIR}/inspector_ottava.ui

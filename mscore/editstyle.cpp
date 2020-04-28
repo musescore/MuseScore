@@ -281,7 +281,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::showMeasureNumberOne,     false, showFirstMeasureNumber,       0 },
       { Sid::measureNumberInterval,    false, intervalMeasureNumber,        0 },
       { Sid::measureNumberSystem,      false, showEverySystemMeasureNumber, 0 },
-      { Sid::measureNumberAllStaffs,   false, showAllStaffsMeasureNumber,   0 },
+      { Sid::measureNumberAllStaves,   false, showAllStavesMeasureNumber,   0 },
+      { Sid::measureNumberVPlacement,  false, measureNumberVPlacement,      resetMeasureNumberVPlacement },
+      { Sid::measureNumberHPlacement,  false, measureNumberHPlacement,      resetMeasureNumberHPlacement },
 
       { Sid::beamDistance,             true,  beamDistance,                 0 },
       { Sid::beamNoSlope,              false, beamNoSlope,                  0 },
@@ -373,12 +375,18 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       for (QComboBox* cb : std::vector<QComboBox*> {
             lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
             trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
-            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement
+            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement,
+            measureNumberVPlacement
             }) {
             cb->clear();
             cb->addItem(tr("Above"), int(Placement::ABOVE));
             cb->addItem(tr("Below"), int(Placement::BELOW));
             }
+
+      measureNumberHPlacement->clear();
+      measureNumberHPlacement->addItem(tr("Left"),   int(HPlacement::LEFT));
+      measureNumberHPlacement->addItem(tr("Center"), int(HPlacement::CENTER));
+      measureNumberHPlacement->addItem(tr("Right"),  int(HPlacement::RIGHT));
 
       autoplaceVerticalAlignRange->clear();
       autoplaceVerticalAlignRange->addItem(tr("Segment"), int(VerticalAlignRange::SEGMENT));
@@ -695,7 +703,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 const std::map<ElementType, EditStylePage> EditStyle::PAGES = {
       { ElementType::SCORE,               &EditStyle::PageScore    },
       { ElementType::PAGE,                &EditStyle::PagePage     },
-      { ElementType::MEASURE_NUMBER,      &EditStyle::PageSizes    },
+      { ElementType::MEASURE_NUMBER,      &EditStyle::PageMeasureNumbers },
       { ElementType::BRACKET,             &EditStyle::PageSystem   },
       { ElementType::BRACKET_ITEM,        &EditStyle::PageSystem   },
       { ElementType::CLEF,                &EditStyle::PageClefs    },
