@@ -7,6 +7,7 @@ import "notes"
 import "fermatas"
 import "tempos"
 import "glissandos"
+import "barlines"
 
 FocusableItem {
     id: root
@@ -181,6 +182,45 @@ FocusableItem {
                 width: root.width
 
                 model: root.model ? root.model.tempoSettingsModel : null
+            }
+        }
+
+        FlatButton {
+            id: barlineSettingsButton
+
+            icon: IconNameTypes.SECTION_BREAK
+            iconPixelSize: 16
+            text: qsTr("Barline")
+
+            Layout.fillWidth: true
+            Layout.minimumWidth: root.width / 2
+
+            visible: root.model && root.model.barlineSettingsModel ? !root.model.barlineSettingsModel.isEmpty : false
+
+            onVisibleChanged: {
+                if (!visible) {
+                    barlinePopup.close()
+                }
+            }
+
+            onClicked: {
+                if (!barlinePopup.isOpened) {
+                    barlinePopup.open()
+                } else {
+                    barlinePopup.close()
+                }
+            }
+
+            BarlinePopup {
+                id: barlinePopup
+
+                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
+                y: parent.height
+                arrowX: parent.x + parent.width / 2
+                width: root.width
+
+                barlineSettingsModel: root.model ? root.model.barlineSettingsModel : null
+                staffSettingsModel: root.model ? root.model.staffSettingsModel : null
             }
         }
     }
