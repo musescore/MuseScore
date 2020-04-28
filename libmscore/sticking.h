@@ -30,7 +30,6 @@ namespace Ms {
 //-----------------------------------------------------------------------------
 
 class Sticking final : public TextBase {
-      Sid getPropertyStyle(Pid) const override;
       QVariant propertyDefault(Pid id) const override;
 
    public:

@@ -69,7 +69,6 @@ class TempoText final : public TextBase  {
       QVariant getProperty(Pid propertyId) const override;
       bool setProperty(Pid propertyId, const QVariant&) override;
       QVariant propertyDefault(Pid id) const override;
-      Sid getPropertyStyle(Pid) const override;
       QString accessibleInfo() const override;
       };
 
