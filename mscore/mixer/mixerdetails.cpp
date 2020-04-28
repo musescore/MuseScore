@@ -101,7 +101,9 @@ void MixerDetails::updateFromTrack()
             chorusSpinBox->setValue(0);
             portSpinBox->setValue(0);
             channelSpinBox->setValue(0);
+            trackColorLabel->blockSignals(true);
             trackColorLabel->setColor(QColor());
+            trackColorLabel->blockSignals(false);
 
             drumkitCheck->setEnabled(false);
             patchCombo->setEnabled(false);
