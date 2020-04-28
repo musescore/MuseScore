@@ -32,6 +32,7 @@ class PianoView;
 class PianoKeyboard;
 class PianoLevels;
 class PianoLevelsChooser;
+class NoteTweakerDialog;
 class Note;
 class PianoRuler;
 class Seq;
@@ -69,6 +70,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       QList<QAction*> actions;
 
       bool updateScheduled = false;
+      NoteTweakerDialog* noteTweakerDlg;
 
       void updateVelocity(Note* note);
       void updateSelection();
@@ -95,6 +97,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
    public slots:
       void changeSelection(SelState);
       void handleAction(QAction*);
+      void showNoteTweaker();
 
    public:
       PianorollEditor(QWidget* parent = 0);
