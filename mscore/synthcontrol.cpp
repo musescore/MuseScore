@@ -173,10 +173,7 @@ void MuseScore::showSynthControl(bool val)
             mscore->stackUnder(synthControl);
             synthControl->setScore(cs);
             connect(synti,        SIGNAL(gainChanged(float)), synthControl, SLOT(setGain(float)));
-            connect(synthControl, SIGNAL(gainChanged(float)), synti, SLOT(setGain(float)));
             connect(synthControl, SIGNAL(closed(bool)), a,     SLOT(setChecked(bool)));
-            if (mixer)
-                  connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
             }
       synthControl->setVisible(val);
       }
