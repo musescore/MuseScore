@@ -21,6 +21,7 @@ class AbstractInspectorModel : public QObject
 
     Q_ENUMS(InspectorSectionType)
     Q_ENUMS(InspectorModelType)
+	
 public:
     enum InspectorSectionType {
         SECTION_UNDEFINED = -1,
@@ -40,7 +41,8 @@ public:
         TYPE_SECTIONBREAK,
         TYPE_JUMP,
         TYPE_KEYSIGNATURE,
-        TYPE_ACCIDENTAL
+        TYPE_ACCIDENTAL,
+        TYPE_FRET_DIAGRAM
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);

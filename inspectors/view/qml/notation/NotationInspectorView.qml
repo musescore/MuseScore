@@ -13,6 +13,7 @@ import "markers"
 import "jumps"
 import "keysignatures"
 import "accidentals"
+import "fretdiagrams"
 
 FocusableItem {
     id: root
@@ -416,6 +417,44 @@ FocusableItem {
                 width: root.width
 
                 model: root.model ? root.model.accidentalSettingsModel : null
+            }
+        }
+		
+        FlatButton {
+            id: fretDiagramSettingsButton
+
+            icon: IconNameTypes.FRET_DIAGRAM
+            iconPixelSize: 16
+            text: qsTr("Fretboard Diagrams")
+
+            Layout.fillWidth: true
+            Layout.minimumWidth: root.width / 2
+
+            visible: root.model && root.model.fretDiagramSettingsModel ? !root.model.fretDiagramSettingsModel.isEmpty : false
+
+            onVisibleChanged: {
+                if (!visible) {
+                    fretDiagramPopup.close()
+                }
+            }
+
+            onClicked: {
+                if (!fretDiagramPopup.isOpened) {
+                    fretDiagramPopup.open()
+                } else {
+                    fretDiagramPopup.close()
+                }
+            }
+
+            FretDiagramPopup {
+                id: fretDiagramPopup
+
+                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
+                y: parent.height
+                arrowX: parent.x + parent.width / 2
+                width: root.width
+
+                model: root.model ? root.model.fretDiagramSettingsModel : null
             }
         }
     }

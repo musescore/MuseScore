@@ -17,6 +17,7 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     setJumpSettingsModel(new JumpSettingsModel(this, repository));
     setKeySignatureSettingsModel(new KeySignatureSettingsModel(this, repository));
     setAccidentalSettingsModel(new AccidentalSettingsModel(this, repository));
+    setFretDiagramSettingsModel(new FretDiagramSettingsModel(this, repository));
 }
 
 bool NotationSettingsProxyModel::hasAcceptableElements() const
@@ -79,6 +80,11 @@ QObject* NotationSettingsProxyModel::accidentalSettingsModel() const
     return m_accidentalSettingsModel;
 }
 
+QObject* NotationSettingsProxyModel::fretDiagramSettingsModel() const
+{
+    return m_fretDiagramSettingsModel;
+}
+
 void NotationSettingsProxyModel::setNoteSettingsModel(NoteSettingsProxyModel* noteSettingsModel)
 {
     m_noteSettingsModel = noteSettingsModel;
@@ -132,4 +138,9 @@ void NotationSettingsProxyModel::setKeySignatureSettingsModel(KeySignatureSettin
 void NotationSettingsProxyModel::setAccidentalSettingsModel(AccidentalSettingsModel* accidentalSettingsModel)
 {
     m_accidentalSettingsModel = accidentalSettingsModel;
+}
+
+void NotationSettingsProxyModel::setFretDiagramSettingsModel(FretDiagramSettingsModel* fretDiagramSettingsModel)
+{
+    m_fretDiagramSettingsModel = fretDiagramSettingsModel;
 }

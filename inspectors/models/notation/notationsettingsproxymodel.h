@@ -14,6 +14,7 @@
 #include "jumps/jumpsettingsmodel.h"
 #include "keysignature/keysignaturesettingsmodel.h"
 #include "accidentals/accidentalsettingsmodel.h"
+#include "fretdiagrams/fretdiagramsettingsmodel.h"
 
 class NotationSettingsProxyModel : public AbstractInspectorModel
 {
@@ -30,7 +31,8 @@ class NotationSettingsProxyModel : public AbstractInspectorModel
     Q_PROPERTY(QObject* jumpSettingsModel READ jumpSettingsModel CONSTANT)
     Q_PROPERTY(QObject* keySignatureSettingsModel READ keySignatureSettingsModel CONSTANT)
     Q_PROPERTY(QObject* accidentalSettingsModel READ accidentalSettingsModel CONSTANT)
-
+    Q_PROPERTY(QObject* fretDiagramSettingsModel READ fretDiagramSettingsModel CONSTANT)
+	
 public:
     explicit NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -52,6 +54,7 @@ public:
     QObject* jumpSettingsModel() const;
     QObject* keySignatureSettingsModel() const;
     QObject* accidentalSettingsModel() const;
+    QObject* fretDiagramSettingsModel() const;
 
 public slots:
     void setNoteSettingsModel(NoteSettingsProxyModel* noteSettingsModel);
@@ -65,6 +68,7 @@ public slots:
     void setJumpSettingsModel(JumpSettingsModel* jumpSettingsModel);
     void setKeySignatureSettingsModel(KeySignatureSettingsModel* keySignatureSettingsModel);
     void setAccidentalSettingsModel(AccidentalSettingsModel* accidentalSettingsModel);
+    void setFretDiagramSettingsModel(FretDiagramSettingsModel* fretDiagramSettingsModel);
 
 private:
     NoteSettingsProxyModel* m_noteSettingsModel = nullptr;
@@ -78,6 +82,7 @@ private:
     JumpSettingsModel* m_jumpSettingsModel = nullptr;
     KeySignatureSettingsModel* m_keySignatureSettingsModel = nullptr;
     AccidentalSettingsModel* m_accidentalSettingsModel = nullptr;
+    FretDiagramSettingsModel* m_fretDiagramSettingsModel = nullptr;
 };
 
 #endif // NOTATIONSETTINGSPROXYMODEL_H

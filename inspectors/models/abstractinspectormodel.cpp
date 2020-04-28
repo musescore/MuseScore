@@ -54,6 +54,7 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::modelTypeFr
     case Ms::ElementType::JUMP:
     case Ms::ElementType::KEYSIG:
     case Ms::ElementType::ACCIDENTAL:
+    case Ms::ElementType::FRET_DIAGRAM:
         return SECTION_NOTATION;
 
     default:
