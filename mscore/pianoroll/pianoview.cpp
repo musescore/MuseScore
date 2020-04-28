@@ -1059,7 +1059,7 @@ void PianoView::toggleTie(Note* note) {
             Note* note2 = searchTieNote(note);
 
             if (note2) {
-                  Tie* tie = new Tie(score);
+                  tie = new Tie(score);
                   tie->setStartNote(note);
                   tie->setEndNote(note2);
                   tie->setTrack(note->track());

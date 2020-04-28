@@ -5447,9 +5447,9 @@ void MusicXMLParserNotations::articulations()
       while (_e.readNextStartElement()) {
             SymId id { SymId::noSym };
             if (convertArticulationToSymId(_e.name().toString(), id)) {
-                  Notation articulation = Notation::notationWithAttributes(_e.name().toString(),
+                  Notation artic = Notation::notationWithAttributes(_e.name().toString(),
                                                              _e.attributes(), "articulations", id);
-                  _notations.push_back(articulation);
+                  _notations.push_back(artic);
                   _e.readNext();
                   continue;
                   }
@@ -5466,10 +5466,10 @@ void MusicXMLParserNotations::articulations()
                      || _e.name() == "falloff"
                      || _e.name() == "plop"
                      || _e.name() == "scoop") {
-                  Notation articulation = Notation::notationWithAttributes("chord-line",
+                  Notation artic = Notation::notationWithAttributes("chord-line",
                                                              _e.attributes(), "articulations");
-                  articulation.setSubType(_e.name().toString());
-                  _notations.push_back(articulation);
+                  artic.setSubType(_e.name().toString());
+                  _notations.push_back(artic);
                   _e.readNext();
                   }
             else {

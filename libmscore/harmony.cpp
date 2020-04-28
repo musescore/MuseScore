@@ -1452,8 +1452,7 @@ void Harmony::drawEditMode(QPainter* p, EditData& ed)
 
 TextSegment::TextSegment(const QString& s, const QFont& f, qreal x, qreal y)
       {
-      QPointF offset(0.0, 0.0);
-      set(s, f, x, y, offset);
+      set(s, f, x, y, QPointF());
       select = false;
       }
 
