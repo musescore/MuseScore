@@ -769,6 +769,16 @@ void EditStyle::gotoElement(Element* e)
       }
 
 //---------------------------------------------------------
+//   gotoElement
+///   used to go to the correct page when double-clicking on a header/footer
+//---------------------------------------------------------
+
+void EditStyle::gotoHeaderFooterPage()
+      {
+      setPage(pageStack->indexOf(PageHeaderFooter));
+      }
+
+//---------------------------------------------------------
 //   elementHasPage
 ///   check if an element has a style page related to it
 //---------------------------------------------------------

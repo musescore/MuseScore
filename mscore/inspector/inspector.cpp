@@ -377,10 +377,16 @@ void Inspector::update(Score* s)
                               ie = new InspectorNoteDot(this);
                               break;
                         default:
-                              if (element()->isText())
-                                    ie = new InspectorText(this);
-                              else
+                              if (element()->isText()) {
+                                    // don't allow footers/headers to be edited via the inspector
+                                    if (toText(element())->tid() != Tid::FOOTER && toText(element())->tid() != Tid::HEADER)
+                                          ie = new InspectorText(this);
+                                    else
+                                          ie = new InspectorEmpty(this);
+                                    }
+                              else {
                                     ie = new InspectorElement(this);
+                                    }
                               break;
                         }
                   }

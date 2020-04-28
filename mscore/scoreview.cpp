@@ -4779,6 +4779,12 @@ QList<Element*> ScoreView::elementsNear(QPointF p)
       QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
       QList<Element*> el = page->items(r);
+      for (int i = 0; i < MAX_HEADERS; i++)
+            if (score()->headerText(i) != nullptr)      // gives the ability to select the header
+                  el.push_back(score()->headerText(i));
+      for (int i = 0; i < MAX_FOOTERS; i++)
+            if (score()->footerText(i) != nullptr)      // gives the ability to select the footer
+                  el.push_back(score()->footerText(i));
       for (Element* e : el) {
             e->itemDiscovered = 0;
             if (!e->selectable() || e->isPage())

@@ -151,20 +151,22 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
             return;
 
       Text* text;
-      if (area < 3) {
-            text = score()->headerText();
+      if (area < MAX_HEADERS) {
+            text = score()->headerText(area);
             if (!text) {
                   text = new Text(score(), Tid::HEADER);
+                  text->setFlag(ElementFlag::GENERATED, true); // set to disable editing
                   text->setLayoutToParentWidth(true);
-                  score()->setHeaderText(text);
+                  score()->setHeaderText(text, area);
                   }
             }
       else {
-            text = score()->footerText();
+            text = score()->footerText(area - MAX_HEADERS); // because they are 3 4 5
             if (!text) {
                   text = new Text(score(), Tid::FOOTER);
+                  text->setFlag(ElementFlag::GENERATED, true); // set to disable editing
                   text->setLayoutToParentWidth(true);
-                  score()->setFooterText(text);
+                  score()->setFooterText(text, area - MAX_HEADERS);
                   }
             }
       text->setParent((Page*)this);
