@@ -472,35 +472,74 @@ qreal Measure::tick2pos(Fraction tck) const
       }
 
 //---------------------------------------------------------
+//   showsMeasureNumberInAutoMode
+///    Wheter the measure will show measure number(s) when MeasureNumberMode is set to AUTO
+//---------------------------------------------------------
+
+bool Measure::showsMeasureNumberInAutoMode()
+      {
+      // Check wheter any measure number should be shown
+      if (!score()->styleB(Sid::showMeasureNumber))
+            return false;
+
+      // Measure numbers should not be shown on irregular measures.
+      if (irregular())
+            return false;
+
+      // Measure numbers should not show on first measure unless specified with Sid::showMeasureNumberOne
+      if (!no())
+            return score()->styleB(Sid::showMeasureNumberOne);
+
+      if (score()->styleB(Sid::measureNumberSystem))
+            // Show either if
+            //   1) This is the first measure of the system OR
+            //   2) The previous measure in the system is the first, and is irregular.
+            return (isFirstInSystem()
+                    || (prevMeasure() && prevMeasure()->irregular() && prevMeasure()->isFirstInSystem()));
+      else {
+            // In the case of an interval, we should show the measure number either if:
+            //   1) We should show them every measure
+            int interval = score()->styleI(Sid::measureNumberInterval);
+            if (interval == 1)
+                  return true;
+
+            //   2) (measureNumber + 1) % interval == 0 (or 1 if measure number one is numbered.)
+            // If measure number 1 is numbered, and the interval is let's say 5, then we should number #1, 6, 11, 16, etc.
+            // If measure number 1 is not numbered, with the same interval (5), then we should number #5, 10, 15, 20, etc.
+            return (((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0));
+            }
+      }
+
+//---------------------------------------------------------
+//   showsMeasureNumber
+///     Wheter the Measure shows a MeasureNumber
+//---------------------------------------------------------
+
+bool Measure::showsMeasureNumber()
+      {
+      if (_noMode == MeasureNumberMode::SHOW)
+            return true;
+      else if (_noMode == MeasureNumberMode::HIDE)
+            return false;
+      else {
+            return showsMeasureNumberInAutoMode();
+            }
+      }
+
+//---------------------------------------------------------
 //   layoutMeasureNumber
+///    Layouts the Measure Numbers according to the Measure's MeasureNumberMode
 //---------------------------------------------------------
 
 void Measure::layoutMeasureNumber()
       {
-      bool smn = false;
+      bool smn = showsMeasureNumber();
 
-      if (_noMode == MeasureNumberMode::SHOW)
-            smn = true;
-      else if (_noMode == MeasureNumberMode::HIDE)
-            smn = false;
-      else {
-            if (score()->styleB(Sid::showMeasureNumber)
-               && !irregular()
-               && (no() || score()->styleB(Sid::showMeasureNumberOne))) {
-                  if (score()->styleB(Sid::measureNumberSystem))
-                        smn = isFirstInSystem() || (prevMeasure() && prevMeasure()->irregular() && prevMeasure()->isFirstInSystem());
-                  else {
-                        smn = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
-                              ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) ) ||
-                              (score()->styleI(Sid::measureNumberInterval) == 1);
-                        }
-                  }
-            }
       QString s;
       if (smn)
             s = QString("%1").arg(no() + 1);
       unsigned nn = 1;
-      bool nas = score()->styleB(Sid::measureNumberAllStaffs);
+      bool nas = score()->styleB(Sid::measureNumberAllStaves);
 
       if (!nas) {
             //find first non invisible staff
@@ -572,74 +611,6 @@ void Measure::layout2()
             }
 
       MeasureBase::layout();  // layout LAYOUT_BREAK elements
-#if 0
-      //---------------------------------------------------
-      //   set measure number
-      //---------------------------------------------------
-
-      bool smn = false;
-
-      if (_noMode == MeasureNumberMode::SHOW)
-            smn = true;
-      else if (_noMode == MeasureNumberMode::HIDE)
-            smn = false;
-      else {
-            if (score()->styleB(Sid::showMeasureNumber)
-               && !irregular()
-               && (no() || score()->styleB(Sid::showMeasureNumberOne))) {
-                  if (score()->styleB(Sid::measureNumberSystem))
-                        smn = (system()->firstMeasure() == this) || (prevMeasure() && prevMeasure()->irregular() && system()->firstMeasure() == prevMeasure());
-                  else {
-                        smn = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
-                              ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) ) ||
-                              (score()->styleI(Sid::measureNumberInterval) == 1);
-                        }
-                  }
-            }
-      QString s;
-      if (smn)
-            s = QString("%1").arg(no() + 1);
-      int nn = 1;
-      bool nas = score()->styleB(Sid::measureNumberAllStaffs);
-
-      if (!nas) {
-            //find first non invisible staff
-            for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-                  MStaff* ms = _mstaves[staffIdx];
-                  SysStaff* ss  = system()->staff(staffIdx);
-                  Staff* staff = score()->staff(staffIdx);
-                  if (ms->visible() && staff->show() && ss->show()) {
-                        nn = staffIdx;
-                        break;
-                        }
-                  }
-            }
-      for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-            MStaff* ms       = _mstaves[staffIdx];
-            MeasureNumber* t = ms->noText();
-            if (t)
-                  t->setTrack(staffIdx * VOICES);
-            if (smn && ((staffIdx == nn) || nas)) {
-                  if (t == 0) {
-                        t = new MeasureNumber(score());
-                        t->setTrack(staffIdx * VOICES);
-                        t->setGenerated(true);
-                        t->setParent(this);
-                        add(t);
-                        }
-                  t->setXmlText(s);
-                  t->layout();
-                  }
-            else {
-                  if (t) {
-                        if (t->generated())
-                              score()->removeElement(t);
-                        else
-                              score()->undo(new RemoveElement(t));
-                        }
-                  }
-            }
-#endif
 
       //---------------------------------------------------
       //    layout ties
@@ -1343,6 +1314,10 @@ bool Measure::acceptDrop(EditData& data) const
                         viewer->setDropRectangle(canvasBoundingRect());
                   return true;
 
+            case ElementType::MEASURE_NUMBER:
+                  viewer->setDropRectangle(canvasBoundingRect());
+                  return true;
+
             case ElementType::BRACKET:
             case ElementType::REPEAT_MEASURE:
             case ElementType::MEASURE:
@@ -1432,6 +1407,11 @@ Element* Measure::drop(EditData& data)
                   score()->undoAddElement(e);
                   return e;
 
+            case ElementType::MEASURE_NUMBER:
+                  undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::SHOW));
+                  delete e;
+                  break;
+
             case ElementType::BRACKET:
                   {
                   Bracket* b = toBracket(e);
@@ -1448,7 +1428,7 @@ Element* Measure::drop(EditData& data)
                   score()->undoAddBracket(staff, level, b->bracketType(), 1);
                   delete b;
                   }
-                  return 0;
+                  break;
 
             case ElementType::CLEF:
                   score()->undoChangeClef(staff, this, toClef(e)->clefType());
@@ -1475,7 +1455,7 @@ Element* Measure::drop(EditData& data)
 
             case ElementType::TIMESIG:
                   score()->cmdAddTimeSig(this, staffIdx, toTimeSig(e), data.modifiers & Qt::ControlModifier);
-                  return 0;
+                  break;
 
             case ElementType::LAYOUT_BREAK: {
                   LayoutBreak* b = toLayoutBreak(e);
@@ -1844,7 +1824,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
             //
             //  CHECK: do not remove all slurs
             //
-            foreach (Element* e, m->el()) {
+            for (Element* e : m->el()) {
                   if (e->isSlur())
                         s->undoRemoveElement(e);
                   }
@@ -1886,11 +1866,8 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
             }
       qreal _spatium = spatium();
       MStaff* mstaff = _mstaves[staff];
-      if (mstaff->noText() && !mstaff->noText()->generated()) {
-            xml.stag("MeasureNumber", mstaff->noText());
-            mstaff->noText()->writeProperties(xml);
-            xml.etag();
-            }
+      if (mstaff->noText() && !mstaff->noText()->generated())
+            mstaff->noText()->write(xml);
 
       if (mstaff->vspacerUp())
             xml.tag("vspacerUp", mstaff->vspacerUp()->gap() / _spatium);
@@ -3005,7 +2982,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
                   s->add(ne);
                   }
             }
-      foreach(Element* e, el()) {
+      for (Element* e : el()) {
             Element* ne = e->clone();
             ne->setScore(sc);
             ne->setOffset(e->offset());
@@ -4396,4 +4373,3 @@ void Measure::computeMinWidth()
       }
 
 }
-

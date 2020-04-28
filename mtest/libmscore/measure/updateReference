@@ -19,3 +19,11 @@ cp $P/mtest/libmscore/measure/measure-insert_bf_key_undo.mscx measure-insert_bf_
 cp $P/mtest/libmscore/measure/measure-insert_bf_clef.mscx measure-insert_bf_clef-ref.mscx
 cp $P/mtest/libmscore/measure/measure-insert_bf_clef-2.mscx measure-insert_bf_clef-2-ref.mscx
 cp $P/mtest/libmscore/measure/measure-insert_bf_clef_undo.mscx measure-insert_bf_clef.mscx
+cp $P/mtest/libmscore/measure/measurenumber.mscx measurenumber.mscx
+cp $P/mtest/libmscore/measure/measurenumber-1-ref.mscx measurenumber-1-ref.mscx
+cp $P/mtest/libmscore/measure/measurenumber-2-ref.mscx measurenumber-2-ref.mscx
+cp $P/mtest/libmscore/measure/measurenumber-3-ref.mscx measurenumber-3-ref.mscx
+cp $P/mtest/libmscore/measure/measurenumber-4-ref.mscx measurenumber-4-ref.mscx
+cp $P/mtest/libmscore/measure/measurenumber-5-ref.mscx measurenumber-5-ref.mscx
+cp $P/mtest/libmscore/measure/measurenumber-6-ref.mscx measurenumber-6-ref.mscx
+cp $P/mtest/libmscore/measure/measurenumber-7-ref.mscx measurenumber-7-ref.mscx

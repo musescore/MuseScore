@@ -98,7 +98,7 @@ void Score::getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const
       {
       *cr1 = 0;
       *cr2 = 0;
-      foreach(Element* e, selection().elements()) {
+      for (Element* e : selection().elements()) {
             if (e->isNote())
                   e = e->parent();
             if (e->isChordRest()) {
@@ -1563,6 +1563,7 @@ void Score::cmdFlip()
                || e->isHarmony()
                || e->isInstrumentChange()
                || e->isRehearsalMark()
+               || e->isMeasureNumber()
                || e->isFretDiagram()
                || e->isHairpin()
                || e->isHairpinSegment()
@@ -1622,7 +1623,7 @@ void Score::deleteItem(Element* el)
       if (!el)
             return;
       // cannot remove generated elements
-      if (el->generated() && !(el->isBracket() || el->isBarLine() || el->isClef()))
+      if (el->generated() && !(el->isBracket() || el->isBarLine() || el->isClef() || el->isMeasureNumber()))
             return;
 //      qDebug("%s", el->name());
 
@@ -1894,7 +1895,7 @@ void Score::deleteItem(Element* el)
                   if (m->isMMRest()) {
                         // propagate to original measure
                         m = m->mmRestLast();
-                        foreach(Element* e, m->el()) {
+                        for (Element* e : m->el()) {
                               if (e->isLayoutBreak()) {
                                     undoRemoveElement(e);
                                     break;
@@ -1933,6 +1934,29 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
+            case ElementType::MEASURE_NUMBER:
+                  {
+                  Measure* mea = toMeasure(el->parent());
+                  switch (mea->measureNumberMode()) {
+                        // If the user tries to remove an automatically generated measure number,
+                        // we should force the measure not to show any measure number
+                        case MeasureNumberMode::AUTO:
+                              mea->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::HIDE));
+                              break;
+
+                        // If the user tries to remove a measure number that he added manually,
+                        // then we should set the MeasureNumberMode to AUTO only if will not show if set to auto.
+                        // If after setting the MeasureNumberMode to AUTO, the measure number still shows,
+                        // We need to force the measure to hide its measure number.
+                        case MeasureNumberMode::SHOW:
+                              if (mea->showsMeasureNumberInAutoMode())
+                                    mea->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::HIDE));
+                              else
+                                    mea->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::AUTO));
+                              break;
+                        }
+                  }
+                  break;
             case ElementType::REHEARSAL_MARK:
             case ElementType::TEMPO_TEXT:
                   {
@@ -2752,7 +2776,7 @@ void Score::colorItem(Element* element)
       if (!c.isValid())
             return;
 
-      foreach(Element* e, selection().elements()) {
+      for (Element* e : selection().elements()) {
             if (e->color() != c) {
                   e->undoChangeProperty(Pid::COLOR, c);
                   e->setGenerated(false);
@@ -4356,6 +4380,9 @@ void Score::undoAddElement(Element* element)
                         ne->setParent(m);
                         undo(new AddElement(ne));
                         }
+                  else if (et == ElementType::MEASURE_NUMBER) {
+                        toMeasure(element->parent())->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::SHOW));
+                        }
                   else {
                         Segment* segment  = toSegment(element->parent());
                         Fraction tick     = segment->tick();
@@ -4472,7 +4499,7 @@ void Score::undoAddElement(Element* element)
             return;
             }
 
-      foreach (Staff* staff, ostaff->staffList()) {
+      for (Staff* staff : ostaff->staffList()) {
             Score* score = staff->score();
             int staffIdx = staff->idx();
 

@@ -13,9 +13,8 @@
 #ifndef __INSPECTOR_MEASURENUMBER_H__
 #define __INSPECTOR_MEASURENUMBER_H__
 
-#include "inspector.h"
 #include "inspectorTextBase.h"
-#include "ui_inspector_text.h"
+#include "ui_inspector_measurenumber.h"
 
 namespace Ms {
 
@@ -26,11 +25,13 @@ namespace Ms {
 class InspectorMeasureNumber : public InspectorTextBase {
       Q_OBJECT
 
+      Ui::InspectorMeasureNumber mn;
+
    public:
       InspectorMeasureNumber(QWidget* parent);
       };
 
-}
+} // namespace Ms
 
 #endif
 

@@ -361,6 +361,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             case ElementType::ARPEGGIO:
             case ElementType::BREATH:
             case ElementType::GLISSANDO:
+            case ElementType::MEASURE_NUMBER:
             case ElementType::BRACKET:
             case ElementType::ARTICULATION:
             case ElementType::FERMATA:
@@ -506,6 +507,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::ARPEGGIO:
                   case ElementType::BREATH:
                   case ElementType::GLISSANDO:
+                  case ElementType::MEASURE_NUMBER:
                   case ElementType::BRACKET:
                   case ElementType::ARTICULATION:
                   case ElementType::FERMATA:
@@ -547,7 +549,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                               }
                         _score->addRefresh(el->canvasBoundingRect());
 
-                        // HACK ALERT!
+                        // TODO: HACK ALERT!
                         if (el->isMeasure() && editData.dropElement->isLayoutBreak()) {
                               Measure* m = toMeasure(el);
                               if (m->isMMRest())
@@ -680,5 +682,5 @@ bool ScoreView::dropCanvas(Element* e)
       return false;
       }
 
-}
+} // namespace Ms
 

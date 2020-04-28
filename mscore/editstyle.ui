@@ -247,7 +247,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -2084,6 +2084,23 @@
            <bool>true</bool>
           </property>
           <layout class="QGridLayout" name="_2">
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="showFirstMeasureNumber">
+             <property name="text">
+              <string>Show first</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="showAllStavesMeasureNumber">
+             <property name="text">
+              <string>All staves</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="5">
+            <widget class="QComboBox" name="measureNumberHPlacement"/>
+           </item>
            <item row="2" column="2">
             <spacer name="horizontalSpacer_18">
              <property name="orientation">
@@ -2097,12 +2114,15 @@
              </property>
             </spacer>
            </item>
-           <item row="2" column="0">
-            <widget class="QRadioButton" name="showEverySystemMeasureNumber">
+           <item row="1" column="4">
+            <widget class="QLabel" name="label_93">
              <property name="text">
-              <string>Every system</string>
+              <string>Horizontal placement</string>
              </property>
             </widget>
+           </item>
+           <item row="0" column="5">
+            <widget class="QComboBox" name="measureNumberVPlacement"/>
            </item>
            <item row="4" column="0" colspan="2">
             <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -2128,17 +2148,33 @@
              </item>
             </layout>
            </item>
-           <item row="0" column="0">
-            <widget class="QCheckBox" name="showFirstMeasureNumber">
+           <item row="2" column="0">
+            <widget class="QRadioButton" name="showEverySystemMeasureNumber">
              <property name="text">
-              <string>Show first</string>
+              <string>Every system</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="showAllStaffsMeasureNumber">
+           <item row="0" column="4">
+            <widget class="QLabel" name="label_92">
              <property name="text">
-              <string>All staves</string>
+              <string>Vertical placement:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="6">
+            <widget class="QToolButton" name="resetMeasureNumberVPlacement">
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="6">
+            <widget class="QToolButton" name="resetMeasureNumberHPlacement">
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -10619,10 +10655,14 @@
   <tabstop>evenFooterR</tabstop>
   <tabstop>showMeasureNumber</tabstop>
   <tabstop>showFirstMeasureNumber</tabstop>
-  <tabstop>showAllStaffsMeasureNumber</tabstop>
+  <tabstop>showAllStavesMeasureNumber</tabstop>
   <tabstop>showEverySystemMeasureNumber</tabstop>
   <tabstop>showIntervalMeasureNumber</tabstop>
   <tabstop>intervalMeasureNumber</tabstop>
+  <tabstop>measureNumberVPlacement</tabstop>
+  <tabstop>resetMeasureNumberVPlacement</tabstop>
+  <tabstop>measureNumberHPlacement</tabstop>
+  <tabstop>resetMeasureNumberHPlacement</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>akkoladeWidth</tabstop>
   <tabstop>bracketDistance</tabstop>
@@ -10949,6 +10989,9 @@
   <tabstop>textStyleFrameBorderRadius</tabstop>
   <tabstop>resetTextStyleFrameBorderRadius</tabstop>
   <tabstop>buttonTogglePagelist</tabstop>
+  <tabstop>textStyleFrameForeground</tabstop>
+  <tabstop>textStyleFrameBackground</tabstop>
+  <tabstop>textStyleColor</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>
