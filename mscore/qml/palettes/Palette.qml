@@ -409,14 +409,30 @@ GridView {
         }
     }
 
-    function focusNextMatchingItem(str) {
-        const nextIndex = (currentIndex === count - 1) ? 0 : currentIndex + 1;
-        const modelIndex = paletteModel.index(nextIndex, 0, paletteRootIndex);
+    function focusNextMatchingItem(str, startIndex) {
+        const modelIndex = paletteModel.index(startIndex, 0, paletteRootIndex);
         const matchedIndexList = paletteModel.match(modelIndex, Qt.ToolTipRole, str);
         if (matchedIndexList.length) {
             currentIndex = matchedIndexList[0].row;
             currentItem.forceActiveFocus();
+            return true;
         }
+        return false;
+    }
+
+    function typeAheadFind(chr) {
+        if (paletteTree.typeAheadStr.length) {
+            // continue search on current item
+            const sameChr = chr === paletteTree.typeAheadStr;
+            paletteTree.typeAheadStr += chr;
+            const found = focusNextMatchingItem(paletteTree.typeAheadStr, currentIndex);
+            if (found || !sameChr)
+                return;
+        }
+        // start new search on next item
+        paletteTree.typeAheadStr = chr;
+        const nextIndex = (currentIndex === count - 1) ? 0 : currentIndex + 1;
+        focusNextMatchingItem(chr, nextIndex);
     }
 
     function updateSelection(itemPressed) {
@@ -571,7 +587,10 @@ GridView {
                 const ctrlHeld = event.modifiers & Qt.ControlModifier;
                 switch (event.key) {
                     case Qt.Key_Space:
-                        paletteView.updateSelection(true);
+                        if (paletteTree.typeAheadStr.length)
+                            paletteView.typeAheadFind(' ');
+                        else
+                            paletteView.updateSelection(true);
                         break;
                     case Qt.Key_Enter:
                     case Qt.Key_Return:
@@ -585,11 +604,21 @@ GridView {
                     case Qt.Key_Menu:
                         showCellMenu();
                         break;
+                    case Qt.Key_Asterisk:
+                        if (paletteTree.typeAheadStr.length)
+                            paletteView.typeAheadFind('*');
+                        else if (!paletteTree.expandCollapseAll(null))
+                            paletteTree.currentItem.forceActiveFocus();
+                        break;
                     default:
-                        if (event.modifiers === Qt.NoModifier && event.text.match(/\w/) !== null)
-                            paletteView.focusNextMatchingItem(event.text);
-                        else
+                        if (event.text.match(/[^\x00-\x20\x7F]+$/) !== null) {
+                            // Pressed non-control character(s) (e.g. "D") so go
+                            // to matching item (e.g. "D Major" in keysig palette)
+                            paletteView.typeAheadFind(event.text);
+                        }
+                        else {
                             return; // don't accept event
+                        }
                 }
                 event.accepted = true;
             }

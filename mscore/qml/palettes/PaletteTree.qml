@@ -139,9 +139,6 @@ ListView {
                 expandedPopupIndex = null;
                 removeSelectedItems();
                 break;
-            case Qt.Key_Asterisk:
-                expandCollapseAll(null);
-                break;
             default:
                 return; // don't accept event
         }
@@ -258,15 +255,42 @@ ListView {
         positionViewAtIndex(currentIndex, ListView.Contain);
     }
 
-    function focusNextMatchingItem(str) {
-        const nextIndex = (currentIndex < count - 1) ? currentIndex + 1 : 0;
-        const modelIndex = paletteModel.index(nextIndex, 0);
+    function focusNextMatchingItem(str, startIndex) {
+        const modelIndex = paletteModel.index(startIndex, 0);
         const matchedIndexList = paletteModel.match(modelIndex, Qt.ToolTipRole, str);
         if (matchedIndexList.length) {
             currentIndex = matchedIndexList[0].row;
             currentItem.forceActiveFocus();
             positionViewAtIndex(currentIndex, ListView.Contain);
+            return true;
         }
+        return false;
+    }
+
+    function typeAheadFind(chr) {
+        if (typeAheadStr.length) {
+            // continue search on current item
+            const sameChr = chr === typeAheadStr;
+            typeAheadStr += chr;
+            const found = focusNextMatchingItem(typeAheadStr, currentIndex);
+            if (found || !sameChr)
+                return;
+        }
+        // start new search on next item
+        typeAheadStr = chr;
+        const nextIndex = (currentIndex === count - 1) ? 0 : currentIndex + 1;
+        focusNextMatchingItem(chr, nextIndex);
+    }
+
+    property string typeAheadStr: ''
+    Timer {
+        id: typeAheadTimer
+        interval: 1000
+        onTriggered: typeAheadStr = ''
+        }
+    onTypeAheadStrChanged: {
+        if (typeAheadStr.length)
+            typeAheadTimer.restart();
     }
 
     function expandCollapseAll(expand) {
@@ -284,6 +308,8 @@ ListView {
             const paletteIndex = paletteModel.index(idx, 0);
             paletteModel.setData(paletteIndex, expand, PaletteTreeModel.PaletteExpandedRole);
         }
+        currentItem.bringIntoViewAfterExpanding();
+        return expand; // bool, did we expand?
     }
 
     function getTintedColor(baseColor, tintColor, opacity) {
@@ -331,6 +357,9 @@ ListView {
             function toggleExpand() {
                 model.expanded = !expanded
             }
+            function bringIntoViewAfterExpanding() {
+                expandTimer.restart();
+            }
             Timer {
                 id: expandTimer
                 interval: expandDuration + 50 // allow extra grace period
@@ -338,7 +367,7 @@ ListView {
                 }
             onExpandedChanged: {
                 if (ListView.isCurrentItem && !filter.length)
-                    expandTimer.restart();
+                    bringIntoViewAfterExpanding();
             }
 
             property bool selected: paletteSelectionModel.hasSelection ? paletteSelectionModel.isSelected(modelIndex) : false
@@ -393,6 +422,11 @@ ListView {
                             toggleExpand();
                         break;
                     case Qt.Key_Space:
+                        if (paletteTree.typeAheadStr.length) {
+                            paletteTree.typeAheadFind(' ');
+                            break;
+                        }
+                        // fallthrough
                     case Qt.Key_Enter:
                     case Qt.Key_Return:
                         toggleExpand();
@@ -404,11 +438,21 @@ ListView {
                     case Qt.Key_Menu:
                         paletteHeader.showPaletteMenu();
                         break;
-                    default:
-                        if (event.modifiers === Qt.NoModifier && event.text.match(/\w/) !== null)
-                            paletteTree.focusNextMatchingItem(event.text);
+                    case Qt.Key_Asterisk:
+                        if (paletteTree.typeAheadStr.length)
+                            paletteTree.typeAheadFind('*');
                         else
+                            paletteTree.expandCollapseAll(null);
+                        break;
+                    default:
+                        if (event.text.match(/[^\x00-\x20\x7F]+$/) !== null) {
+                            // Pressed non-control character(s) (e.g. "L")
+                            // so go to matching palette (e.g. "Lines")
+                            paletteTree.typeAheadFind(event.text);
+                        }
+                        else {
                             return; // don't accept event
+                        }
                 }
                 event.accepted = true;
             }
