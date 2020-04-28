@@ -126,13 +126,18 @@ void UploadScoreDialog::uploadSuccess(const QString& url, const QString& nid, co
 
       _newScore = !(oldScoreID && oldScoreID == _nid);
 
-      Score* score = mscore->currentScore()->masterScore();
+      MasterScore* score = mscore->currentScore()->masterScore();
       QMap<QString, QString>  metatags = score->metaTags();
       if (metatags.value("source") != url) {
             metatags.insert("source", url);
             score->startCmd();
             score->undo(new ChangeMetaTags(score, metatags));
             score->endCmd();
+
+            //!Note Automatically save score file with received web-link if file already exists
+            if (!score->created()) {
+                mscore->saveFile();
+            }
       }
       if (uploadAudio->isChecked())
             _loginManager->getMediaUrl(nid, vid, "mp3");

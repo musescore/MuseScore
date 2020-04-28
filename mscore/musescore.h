@@ -428,7 +428,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void editInstrList();
       void symbolMenu();
       void showKeyEditor();
-      bool saveFile();
       bool saveFile(MasterScore* score);
       void fingeringMenu();
 
@@ -622,6 +621,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString lastSaveCopyFormat;
       QString lastSaveDirectory;
       QString lastSaveCaptureName;
+      bool saveFile();
       SynthControl* getSynthControl() const       { return synthControl; }
       void editInPianoroll(Staff* staff, Position* p = 0);
       void editInDrumroll(Staff* staff);
