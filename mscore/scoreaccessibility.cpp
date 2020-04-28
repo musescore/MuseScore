@@ -292,11 +292,12 @@ void ScoreAccessibility::currentInfoChanged()
 
             statusBarLabel->setText(rez);
             QString screenReaderRez;
-            if (rez != oldStatus || oldScreenReaderInfo.isEmpty()) {
+            QString newScreenReaderInfo = e->screenReaderInfo();
+            if (rez != oldStatus || newScreenReaderInfo != oldScreenReaderInfo || oldScreenReaderInfo.isEmpty()) {
                   // status has changed since last call, or there is no existing screenreader info
                   //
                   // build new screenreader info
-                  screenReaderRez = QString("%1%2 %3 %4").arg(e->screenReaderInfo()).arg(optimizedBarsAndBeats).arg(optimizedStaff).arg(e->accessibleExtraInfo());
+                  screenReaderRez = QString("%1%2 %3 %4").arg(newScreenReaderInfo).arg(optimizedBarsAndBeats).arg(optimizedStaff).arg(e->accessibleExtraInfo());
                   makeReadable(screenReaderRez);
                   }
             else {
