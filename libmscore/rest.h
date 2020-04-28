@@ -30,7 +30,8 @@ class Rest : public ChordRest {
       // values calculated by layout:
       SymId _sym;
       int dotline    { -1  };       // depends on rest symbol
-      qreal _mmWidth;               // width of multi measure rest
+      qreal _mmWidth;               // width of multimeasure rest
+      qreal _mmRestNumberPos;       // vertical position of number of multimeasure rest
       bool _gap      { false };     // invisible and not selectable for user
       std::vector<NoteDot*> _dots;
 
@@ -38,6 +39,7 @@ class Rest : public ChordRest {
       virtual qreal upPos()   const override;
       virtual qreal downPos() const override;
       virtual void setOffset(const QPointF& o) override;
+      virtual Sid getPropertyStyle(Pid pid) const override; 
 
 
    public:
@@ -93,10 +95,11 @@ class Rest : public ChordRest {
       virtual QPointF stemPosBeam() const;
 
       virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
-      void undoChangeDotsVisible(bool v);
-      virtual QVariant getProperty(Pid propertyId) const override;
       virtual QVariant propertyDefault(Pid) const override;
+      void resetProperty(Pid id);
+      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      void undoChangeDotsVisible(bool v);
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;

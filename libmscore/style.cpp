@@ -401,6 +401,7 @@ static const StyleType styleTypes[] {
       { Sid::createMultiMeasureRests, "createMultiMeasureRests", QVariant(false) },
       { Sid::minEmptyMeasures,        "minEmptyMeasures",        QVariant(2) },
       { Sid::minMMRestWidth,          "minMMRestWidth",          Spatium(4) },
+      { Sid::mmRestNumberPos,         "mmRestNumberPos",         Spatium(-1.5) },
       { Sid::hideEmptyStaves,         "hideEmptyStaves",         QVariant(false) },
       { Sid::dontHideStavesInFirstSystem,
                                  "dontHidStavesInFirstSystm",    QVariant(true) },

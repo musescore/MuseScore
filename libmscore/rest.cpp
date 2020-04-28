@@ -33,6 +33,14 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   restStyle
+//---------------------------------------------------------
+
+static const ElementStyle restStyle {
+      { Sid::mmRestNumberPos, Pid::MMREST_NUMBER_POS },
+      };
+
+//---------------------------------------------------------
 //    Rest
 //--------------------------------------------------------
 
@@ -42,6 +50,8 @@ Rest::Rest(Score* s)
       _mmWidth   = 0;
       _beamMode  = Beam::Mode::NONE;
       _sym       = SymId::restQuarter;
+      if (score())
+            initElementStyle(&restStyle);
       }
 
 Rest::Rest(Score* s, const TDuration& d)
@@ -53,6 +63,8 @@ Rest::Rest(Score* s, const TDuration& d)
       setDurationType(d);
       if (d.fraction().isValid())
             setTicks(d.fraction());
+      if (score())
+            initElementStyle(&restStyle);
       }
 
 Rest::Rest(const Rest& r, bool link)
@@ -93,29 +105,36 @@ void Rest::draw(QPainter* painter) const
             //only on voice 1
             if (track() % VOICES)
                   return;
-            Measure* m = measure();
-            int n      = m->mmRestCount();
-            qreal pw   = _spatium * .7;
+
+            // draw number
+            int n = measure()->mmRestCount();
+            std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
+            qreal y = _mmRestNumberPos * spatium() - staff()->height() * .5;
+            qreal x = (_mmWidth - symBbox(s).width()) * .5;
+            drawSymbols(s, painter, QPointF(x, y));
+
+            // draw horizontal line
+            qreal pw = _spatium * .7;
             QPen pen(painter->pen());
             pen.setWidthF(pw);
             painter->setPen(pen);
+            qreal x1 = pw * .5;
+            qreal x2 = _mmWidth - x1;
+            if (_mmRestNumberPos > 0.7 && _mmRestNumberPos < 3.3) { // hack for when number encounters horizontal line
+                  qreal gapDistance = symBbox(s).width() * .5 + _spatium;
+                  qreal midpoint = (x1 + x2) * .5;
+                  painter->drawLine(QLineF(x1, 0.0, midpoint - gapDistance, 0.0));
+                  painter->drawLine(QLineF(midpoint + gapDistance, 0.0, x2, 0.0));
+                  }
+            else {
+                  painter->drawLine(QLineF(x1, 0.0, x2, 0.0));
+                  }
 
-            qreal w  = _mmWidth;
-            qreal x2 =  w;
-            pw *= .5;
-            painter->drawLine(QLineF(pw, 0.0, _mmWidth - pw, 0.0));
-
-            // draw vertical lines:
+            // draw vertical lines
             pen.setWidthF(_spatium * .2);
             painter->setPen(pen);
             painter->drawLine(QLineF(0.0, -_spatium, 0.0, _spatium));
-            painter->drawLine(QLineF(x2,  -_spatium, x2,  _spatium));
-
-            std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
-            qreal y = -_spatium * 1.5 - staff()->height() *.5;
-            qreal x = x2 * .5;
-            x      -= symBbox(s).width() * .5;
-            drawSymbols(s, painter, QPointF(x, y));
+            painter->drawLine(QLineF(_mmWidth, -_spatium, _mmWidth,  _spatium));
             }
       else
             drawSymbol(_sym, painter);
@@ -926,20 +945,6 @@ void Rest::localSpatiumChanged(qreal oldValue, qreal newValue)
       }
 
 //---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-QVariant Rest::getProperty(Pid propertyId) const
-      {
-      switch (propertyId) {
-            case Pid::GAP:
-                  return _gap;
-            default:
-                  return ChordRest::getProperty(propertyId);
-            }
-      }
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
@@ -948,8 +953,47 @@ QVariant Rest::propertyDefault(Pid propertyId) const
       switch (propertyId) {
             case Pid::GAP:
                   return false;
+            case Pid::MMREST_NUMBER_POS:
+                  return score()->styleV(Sid::mmRestNumberPos);
             default:
                   return ChordRest::propertyDefault(propertyId);
+            }
+      }
+
+//————————————————————————————
+//   resetProperty
+//————————————————————————————
+
+void Rest::resetProperty(Pid id)
+      {
+      setProperty(id, propertyDefault(id));
+      return;
+      }
+
+//————————————————————————————
+//   getPropertyStyle
+//————————————————————————————
+
+Sid Rest::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::MMREST_NUMBER_POS)
+            return Sid::mmRestNumberPos;
+      return ChordRest::getPropertyStyle(pid);
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Rest::getProperty(Pid propertyId) const
+      {
+      switch (propertyId) {
+            case Pid::GAP:
+                  return _gap;
+            case Pid::MMREST_NUMBER_POS:
+                  return _mmRestNumberPos;
+            default:
+                  return ChordRest::getProperty(propertyId);
             }
       }
 
@@ -975,6 +1019,10 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
                   score()->addRefresh(canvasBoundingRect());
                   if (measure() && durationType().type() == TDuration::DurationType::V_MEASURE)
                          measure()->triggerLayout();
+                  triggerLayout();
+                  break;
+            case Pid::MMREST_NUMBER_POS:
+                  _mmRestNumberPos = v.toDouble();
                   triggerLayout();
                   break;
             default:
@@ -1024,12 +1072,13 @@ Shape Rest::shape() const
                   qreal _spatium = spatium();
                   shape.add(QRectF(0.0, -_spatium, _mmWidth, 2.0 * _spatium));
 
-                  int n    = measure()->mmRestCount();
+                  int n = measure()->mmRestCount();
                   std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
-                  qreal x  = _mmWidth * .5;
-                  qreal y  = -_spatium * 1.5 - staff()->height() *.5;
+                  
                   QRectF r = symBbox(s);
-                  x       -= r.width() * .5;
+                  qreal y = _mmRestNumberPos * spatium() - staff()->height() * .5;
+                  qreal x = .5 * (_mmWidth - r.width());
+
                   r.translate(QPointF(x, y));
                   shape.add(r);
                   }
