@@ -1000,6 +1000,8 @@ MuseScore::MuseScore()
       qApp->installEventFilter(_tourHandler);
       _tourHandler->loadTours();
 
+      setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
+
       QScreen* screen = QGuiApplication::primaryScreen();
       if (userDPI == 0.0) {
 #if defined(Q_OS_WIN)
