@@ -431,34 +431,8 @@ bool MasterScore::saveFile(bool generateBackup)
             //
             // step 2
             // remove old backup file if exists
-            // remove the backup file in the same dir as score (the traditional place) if exists
             //
-            QString backupDirString = info.path() + QString(QDir::separator()) + ".backup";
-            QDir backupDir(backupDirString);
-            if (!backupDir.exists()) {
-                  dir.mkdir(".backup");
-#ifdef Q_OS_WIN
-                  QString backupDirNativePath = QDir::toNativeSeparators(backupDirString);
-#if (defined (_MSCVER) || defined (_MSC_VER))
-   #if (defined (UNICODE))
-                  SetFileAttributes((LPCTSTR)backupDirNativePath.unicode(), FILE_ATTRIBUTE_HIDDEN);
-   #else
-                  // Use byte-based Windows function
-                  SetFileAttributes((LPCTSTR)backupDirNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
-   #endif
-#else
-                  SetFileAttributes((LPCTSTR)backupDirNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
-#endif
-#endif
-                  }
             QString backupName = QString(".") + info.fileName() + QString(",");
-            if (backupDir.exists(backupName)) {
-                  if (!backupDir.remove(backupName)) {
-//                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, QObject::tr("Save File"),
-//                               tr("Removing old backup file %1 failed").arg(backupName));
-                        }
-                  }
             if (dir.exists(backupName)) {
                   if (!dir.remove(backupName)) {
 //                      if (!MScore::noGui)
@@ -472,15 +446,29 @@ bool MasterScore::saveFile(bool generateBackup)
             // rename old file into backup
             //
             if (dir.exists(basename)) {
-                  if (!QFile::rename(name, backupDirString + "/" + backupName)) {
+                  if (!dir.rename(basename, backupName)) {
 //                      if (!MScore::noGui)
 //                            QMessageBox::critical(0, tr("Save File"),
-//                               tr("Renaming old file <%1> to backup <%2> failed").arg(name, backupDirString + "/" + backupName);
+//                               tr("Renaming old file <%1> to backup <%2> failed").arg(name, backupname);
                         }
                   }
 
-            QFileInfo fileBackup(backupDir, backupName);
+            QFileInfo fileBackup(dir, backupName);
             _sessionStartBackupInfo = fileBackup;
+
+#ifdef Q_OS_WIN
+            QString backupNativePath = QDir::toNativeSeparators(fileBackup.absoluteFilePath());
+#if (defined (_MSCVER) || defined (_MSC_VER))
+   #if (defined (UNICODE))
+            SetFileAttributes((LPCTSTR)backupNativePath.unicode(), FILE_ATTRIBUTE_HIDDEN);
+   #else
+            // Use byte-based Windows function
+            SetFileAttributes((LPCTSTR)backupNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
+   #endif
+#else
+            SetFileAttributes((LPCTSTR)backupNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
+#endif
+#endif
             }
       else {
             // file has previously been saved - remove the old file
