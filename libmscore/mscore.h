@@ -79,6 +79,9 @@ inline int trackZeroVoice(int track) { return track & ~3;    }
 
 static const int MAX_TAGS = 32;
 
+static const int MAX_HEADERS = 3;
+static const int MAX_FOOTERS = 3;
+
 static constexpr qreal INCH      = 25.4;
 static constexpr qreal PPI       = 72.0;           // printer points per inch
 static constexpr qreal DPI_F     = 5;

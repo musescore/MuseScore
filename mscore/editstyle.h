@@ -104,6 +104,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void setScore(Score* s) { cs = s; }
 
       void gotoElement(Element* e);
+      void gotoHeaderFooterPage();
       static bool elementHasPage(Element* e);
       };
 
