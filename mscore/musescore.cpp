@@ -4020,6 +4020,20 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                         }
                   break;
                   }
+            case QEvent::ShortcutOverride:
+                  if (qobject_cast<QMenu*>(obj)) {
+                        // Disable one-letter shortcuts while in menu
+                        // to prevent blocking menu mnemonics
+                        QKeyEvent* ke = static_cast<QKeyEvent*>(event);
+                        const QString evtText = ke->text();
+                        const bool letterOrNumber = !ke->modifiers() && evtText.size() == 1 && evtText.at(0).isLetterOrNumber();
+
+                        if (letterOrNumber) {
+                              ke->accept();
+                              return true;
+                              }
+                        }
+                  break;
             default:
                   return QMainWindow::eventFilter(obj, event);
             }
@@ -5894,12 +5908,6 @@ void MuseScore::cmd(QAction* a)
             QMessageBox::warning(0,
                tr("Invalid Command"),
                tr("Command %1 not valid in current state").arg(cmdn));
-            return;
-            }
-      if (qApp->focusWidget()
-         && (!isAncestorOf(qApp->focusWidget()) || menuBar()->isAncestorOf(qApp->focusWidget()))
-         ) {
-            qDebug("MuseScore::cmd(): not on main window <%s>", qPrintable(cmdn));
             return;
             }
       if (cmdn == "toggle-palette") {
