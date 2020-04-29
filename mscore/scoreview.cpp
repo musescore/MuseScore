@@ -303,6 +303,9 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       popup->addAction(getAction("paste"));
       popup->addAction(getAction("swap"));
       popup->addAction(getAction("delete"));
+      a = getAction("time-delete");
+      a->setEnabled(obj->isChordRest());
+      popup->addAction(a);
 
       QMenu* selMenu = popup->addMenu(tr("Select"));
       selMenu->addAction(getAction("select-similar"));
@@ -333,7 +336,8 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       if (a == 0)
             return;
       const QByteArray& cmd(a->data().toByteArray());
-      if (cmd == "cut" || cmd =="copy" || cmd == "paste" || cmd == "swap" || cmd == "delete") {
+      if (cmd == "cut" || cmd =="copy" || cmd == "paste" || cmd == "swap"
+         || cmd == "delete" || cmd == "time-delete") {
             // these actions are already activated
             return;
             }
@@ -410,16 +414,15 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       popup->addAction(getAction("paste"));
       popup->addAction(getAction("swap"));
       popup->addAction(getAction("delete"));
+      popup->addAction(getAction("time-delete"));
 
+      popup->addSeparator();
       QMenu* menuAdd = popup->addMenu(tr("Add"));
       menuAdd->addAction(getAction("insert-measure"));
       menuAdd->addAction(getAction("insert-measures"));
       menuAdd->addAction(getAction("insert-hbox"));
       menuAdd->addAction(getAction("insert-vbox"));
       menuAdd->addAction(getAction("insert-textframe"));
-
-      a = popup->addAction(tr("Remove Selected Measures"));
-      a->setData("delete-selected-measures");
 
       popup->addSeparator();
 
@@ -438,7 +441,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       QString cmd(a->data().toString());
       if (cmd == "cut" || cmd =="copy" || cmd == "paste" || cmd == "swap"
          || cmd == "insert-measure" || cmd == "select-similar"
-         || cmd == "delete") {
+         || cmd == "delete" || cmd == "time-delete") {
             // these actions are already activated
             return;
             }
@@ -485,9 +488,6 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       else if (cmd == "props") {
             MeasureProperties im(obj);
             im.exec();
-            }
-      else if (cmd == "delete-selected-measures") {
-            _score->cmdTimeDelete();
             }
       if (_score->undoStack()->active())
             _score->endCmd();
