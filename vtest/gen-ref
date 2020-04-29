@@ -4,7 +4,7 @@
 # create reference
 #
 
- MSCORE=../build.debug/mscore/mscore
+ MSCORE=../build.debug/main/mscore
 #MSCORE=mscore2
 DPI=130
 
