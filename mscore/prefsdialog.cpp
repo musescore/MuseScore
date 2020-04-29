@@ -1207,6 +1207,11 @@ void PreferenceDialog::apply()
       emit preferencesChangedWithBool(false);
       preferences.save();
       mscore->startAutoSave();
+
+      //Smooth panning
+      SmoothPanSettings* svPanSettings = mscore->currentScoreView()->panSettings();
+      svPanSettings->loadFromPreferences();
+      mscore->currentScoreView()->setControlCursorVisible(preferences.getBool(PREF_PAN_CURSOR_VISIBLE));
       }
 
 //---------------------------------------------------------
