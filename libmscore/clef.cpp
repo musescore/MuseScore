@@ -132,14 +132,6 @@ void Clef::layout()
                         _clefTypes = staff()->clefType(Fraction(0,1));
                   }
 
-            Measure* meas = clefSeg->measure();
-            if (meas && meas->system() && !score()->lineMode()) {
-                  const auto& ml = meas->system()->measures();
-                  bool found = (std::find(ml.begin(), ml.end(), meas) != ml.end());
-                  bool courtesy = (tick == meas->endTick() && (meas == meas->system()->lastMeasure() || !found));
-                  if (courtesy && (!showCourtesy() || !score()->styleB(Sid::genCourtesyClef) || meas->isFinalMeasureOfSection()))
-                        show = false;
-                  }
             // if clef not to show or not compatible with staff group
             if (!show) {
                   setbbox(QRectF());
@@ -431,14 +423,17 @@ Clef* Clef::otherClef()
       Measure* otherMeas = nullptr;
       Segment* otherSegm = nullptr;
       Fraction segmTick  = segm->tick();
-      if (segmTick == meas->tick())                         // if clef segm is measure-initial
-            otherMeas = meas->prevMeasure();                // look for a previous measure
-      else if (segmTick == meas->tick() + meas->ticks())    // if clef segm is measure-final
-            otherMeas = meas->nextMeasure();                // look for a next measure
+      SegmentType type = SegmentType::Clef;
+      if (segmTick == meas->tick() && segm->segmentType() == SegmentType::HeaderClef) // if clef segm is measure-initial
+            otherMeas = meas->prevMeasure();                                          // look for a previous measure
+      else if (segmTick == meas->tick() + meas->ticks()) {                            // if clef segm is measure-final
+            otherMeas = meas->nextMeasure();                                          // look for a next measure
+            type = SegmentType::HeaderClef;
+            }
       if (!otherMeas)
             return nullptr;
       // look for a clef segment in the 'other' measure at the same tick of this clef segment
-      otherSegm = otherMeas->findSegment(SegmentType::Clef | SegmentType::HeaderClef, segmTick);
+      otherSegm = otherMeas->findSegment(type, segmTick);
       if (!otherSegm)
             return nullptr;
       // if any 'other' segment found, look for a clef in the same track as this

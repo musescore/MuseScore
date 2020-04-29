@@ -3712,19 +3712,54 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       // if end repeat, clef goes after, otherwise clef goes before
       Segment* clefSeg = findSegmentR(SegmentType::Clef, ticks());
       if (clefSeg) {
-            Segment* s1;
-            Segment* s2;
-            if (repeatEnd()) {
-                  s1 = seg;
-                  s2 = clefSeg;
+            bool wasVisible = clefSeg->visible();
+            int visibleInt = 0;
+            for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                  int track    = staffIdx * VOICES;
+                  Clef* clef = toClef(clefSeg->element(track));
+                  if (clef) {
+                        bool showCourtesy = score()->genCourtesyClef() && clef->showCourtesy(); // normally show a courtesy clef
+                        // check if the measure is the last measure of the system or the last measure before a frame
+                        bool lastMeasure = isLastMeasureInSystem || (nm ? !(next() == nm) : true);
+                        if (!nm || isFinalMeasureOfSection() || (lastMeasure && !showCourtesy)) {
+                              // hide the courtesy clef in the final measure of a section, or if the measure is the final measure of a system
+                              // and the score style or the clef style is set to "not show courtesy clef",
+                              // or if the clef is at the end of the very last measure of the score
+                              clef->clear();
+                              clefSeg->createShape(staffIdx);
+                              if (visibleInt == 0)
+                                    visibleInt = 1;
+                              }
+                        else {
+                              clef->layout();
+                              clefSeg->createShape(staffIdx);
+                              visibleInt = 2;
+                              }
+                        }
                   }
-            else {
-                  s1 = clefSeg;
-                  s2 = seg;
-                  }
-            if (s1->next() != s2) {
-                  _segments.remove(s1);
-                  _segments.insert(s1, s2);
+            if (visibleInt == 2)       // there is at least one visible clef in the clef segment
+                  clefSeg->setVisible(true);
+            else if (visibleInt == 1)  // all (courtesy) clefs in the clef segment are not visible
+                  clefSeg->setVisible(false);
+            else // should never happen
+                  qDebug("Clef Segment without Clef elements at tick %d/%d",clefSeg->tick().numerator(),clefSeg->tick().denominator());
+            if ((wasVisible != clefSeg->visible()) && system()) // recompute the width only if necessary
+                  computeMinWidth();
+            if (seg) {
+                  Segment* s1;
+                  Segment* s2;
+                  if (repeatEnd()) {
+                        s1 = seg;
+                        s2 = clefSeg;
+                        }
+                  else {
+                        s1 = clefSeg;
+                        s2 = seg;
+                        }
+                  if (s1->next() != s2) {
+                        _segments.remove(s1);
+                        _segments.insert(s1, s2);
+                        }
                   }
             }
 
@@ -4088,11 +4123,8 @@ void Measure::addSystemTrailer(Measure* nm)
                   }
             if (clefSegment) {
                   Clef* clef = toClef(clefSegment->element(track));
-                  if (clef) {
-                        clef->setSmall(true);
-                        if (!nm || !score()->genCourtesyClef() || isFinalMeasure || !clef->showCourtesy())
-                              clef->clear();          // make invisible
-                        }
+                  if (clef)
+                         clef->setSmall(true);
                   }
             }
       if (s)

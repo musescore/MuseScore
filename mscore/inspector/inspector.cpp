@@ -1086,29 +1086,6 @@ InspectorClef::InspectorClef(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorClef::setElement()
-      {
-      otherClef = toClef(inspector->element())->otherClef();
-      InspectorElementBase::setElement();
-      }
-
-//---------------------------------------------------------
-//   valueChanged
-//---------------------------------------------------------
-
-void InspectorClef::valueChanged(int idx)
-      {
-      // copy into 'other clef' the ShowCouretsy ser of this clef
-      Pid pid = iList[idx].t;
-      if (pid == Pid::SHOW_COURTESY && otherClef)
-            otherClef->setShowCourtesy(c.showCourtesy->isChecked());
-      InspectorBase::valueChanged(idx);
-      }
-
-//---------------------------------------------------------
 //   InspectorStem
 //---------------------------------------------------------
 
