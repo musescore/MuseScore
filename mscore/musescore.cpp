@@ -4989,7 +4989,7 @@ void MuseScore::handleMessage(const QString& message)
 void MuseScore::editInPianoroll(Staff* staff, Position* p)
       {
       if (pianorollEditor == 0)
-            pianorollEditor = new PianorollEditor;
+            pianorollEditor = new PianorollEditor(this);
       pianorollEditor->setScore(staff->score());
       pianorollEditor->setStaff(staff);
       pianorollEditor->show();
