@@ -2117,7 +2117,7 @@
            <item row="1" column="4">
             <widget class="QLabel" name="label_93">
              <property name="text">
-              <string>Horizontal placement</string>
+              <string>Horizontal placement:</string>
              </property>
             </widget>
            </item>
