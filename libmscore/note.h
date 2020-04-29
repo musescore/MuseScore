@@ -331,6 +331,7 @@ class Note final : public Element {
       void setTrack(int val) override;
 
       int playTicks() const;
+      Fraction playTicksFraction() const;
 
       qreal headWidth() const;
       qreal headHeight() const;
