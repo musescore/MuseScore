@@ -238,7 +238,10 @@ void Inspector::update(Score* s)
                               ie = new InspectorAccidental(this);
                               break;
                         case ElementType::REST:
-                              ie = new InspectorRest(this);
+                              if (toRest(element())->measure()->isMMRest())
+                                    ie = new InspectorMMRest(this);
+                              else
+                                    ie = new InspectorRest(this);
                               break;
                         case ElementType::CLEF:
                               ie = new InspectorClef(this);
@@ -870,6 +873,23 @@ void InspectorRest::tupletClicked()
             rest->score()->update();
             inspector->update();
             }
+      }
+
+//---------------------------------------------------------
+//   InspectorMMRest
+//---------------------------------------------------------
+
+InspectorMMRest::InspectorMMRest(QWidget* parent)
+   : InspectorElementBase(parent)
+      {
+      m.setupUi(addWidget());
+
+      const std::vector<InspectorItem> iiList = {
+            { Pid::MMREST_NUMBER_POS, 0, m.yPos, m.resetYPos }
+            };
+
+      const std::vector<InspectorPanel> ppList = { { m.title, m.panel } };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------

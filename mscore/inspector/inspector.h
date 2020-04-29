@@ -28,6 +28,7 @@
 #include "ui_inspector_note.h"
 #include "ui_inspector_chord.h"
 #include "ui_inspector_rest.h"
+#include "ui_inspector_mmrest.h"
 #include "ui_inspector_clef.h"
 #include "ui_inspector_timesig.h"
 #include "ui_inspector_keysig.h"
@@ -212,6 +213,19 @@ class InspectorRest : public InspectorElementBase {
    public:
       InspectorRest(QWidget* parent);
       virtual void setElement() override;
+      };
+
+//---------------------------------------------------------
+//   InspectorMMRest
+//---------------------------------------------------------
+
+class InspectorMMRest : public InspectorElementBase {
+      Q_OBJECT
+
+      Ui::InspectorMMRest m;
+
+   public:
+      InspectorMMRest(QWidget* parent);
       };
 
 //---------------------------------------------------------
