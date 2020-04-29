@@ -1411,11 +1411,8 @@ QString FretDiagram::screenReaderInfo() const
                         }
                   }
 
-            QString dotsInfo;
-            if (dotsCount == 1)
-                  dotsInfo = QObject::tr("dot on fret %1").arg(fretInfo);
-            else if (dotsCount > 1)
-                  dotsInfo = QObject::tr("%n dots on frets %1", "", dotsCount).arg(fretInfo);
+            //: Omit the "%n " for the singular translation (and the "(s)" too)
+            QString dotsInfo = QObject::tr("%n dot(s) on fret(s) %2", "", dotsCount).arg(fretInfo);
 
             detailedInfo = QString("%1 %2 %3 %4").arg(detailedInfo).arg(stringIdent).arg(markerName).arg(dotsInfo);
             }
@@ -1452,7 +1449,7 @@ QString FretDiagram::screenReaderInfo() const
       QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->generateScreenReaderInfo()) : QObject::tr("without chord symbol");
       QString basicInfo = QString("%1 %2").arg(userName()).arg(chordName);
 
-      QString generalInfo = QObject::tr("%n strings total", "", _strings);
+      QString generalInfo = QObject::tr("%n string(s) total", "", _strings);
 
       QString res = QString("%1 %2 %3").arg(basicInfo).arg(generalInfo).arg(detailedInfo);
 
