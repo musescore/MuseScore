@@ -395,9 +395,6 @@
          <iconset resource="musescore.qrc">
           <normaloff>:/data/icons/media-playback-loop-out.svg</normaloff>:/data/icons/media-playback-loop-out.svg</iconset>
         </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
        </widget>
       </item>
       <item row="0" column="4">
@@ -422,9 +419,6 @@
         <property name="icon">
          <iconset resource="musescore.qrc">
           <normaloff>:/data/icons/media-playback-loop-in.svg</normaloff>:/data/icons/media-playback-loop-in.svg</iconset>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
         </property>
        </widget>
       </item>

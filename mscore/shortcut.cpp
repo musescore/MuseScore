@@ -2999,8 +2999,7 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Set loop in position"),
          0,
          Icons::loopIn_ICON,
-         Qt::WindowShortcut,
-         ShortcutFlags::A_CHECKABLE
+         Qt::WindowShortcut
          },
       {
          MsWidget::MAIN_WINDOW,
@@ -3010,8 +3009,7 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Set loop out position"),
          0,
          Icons::loopOut_ICON,
-         Qt::WindowShortcut,
-         ShortcutFlags::A_CHECKABLE
+         Qt::WindowShortcut
          },
       {
          MsWidget::MAIN_WINDOW,
