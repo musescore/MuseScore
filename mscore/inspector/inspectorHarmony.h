@@ -27,11 +27,11 @@ class InspectorHarmony : public InspectorTextBase {
       Q_OBJECT
 
       Ui::InspectorHarmony h;
+      void valueChanged(int idx, bool b) override;
 
    public:
       InspectorHarmony(QWidget* parent);
       };
-
 
 } // namespace Ms
 #endif
