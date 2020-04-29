@@ -66,6 +66,42 @@ enum class MagIdx : char;
 //   ViewState
 //---------------------------------------------------------
 
+struct SmoothPanSettings {
+      double controlModifierBase          { 1 };
+      double controlModifierSteps         { 0.01 };
+      double minContinuousModifier        { 0.2 };
+      double maxContinuousModifier        { 5 };
+
+      // Changing the distance will change the sensitivity/accuracy/jitter of the algorithm. Larger absolut values are generally smoother.
+      double leftDistance                 { -250 };
+      double leftDistance1                { -125 };
+      double leftDistance2                { -50 };
+      double leftDistance3                { -25 };
+      double rightDistance                { 500 };
+      double rightDistance1               { 250 };
+      double rightDistance2               { 125 };
+      double rightDistance3               { 50 };
+      double leftMod1                     { 0.8 };
+      double leftMod2                     { 0.9 };
+      double leftMod3                     { 0.95 };
+      double rightMod1                    { 1.2 };
+      double rightMod2                    { 1.1 };
+      double rightMod3                    { 1.05 };
+
+      double controlCursorScreenPos       { 0.3 };
+
+      bool advancedWeighting              { false };  // enables the 'smart weight'
+      double normalWeight                 { 1 };
+      double smartWeight                  { 0 };      // uses the distance between the 2 cursors to calculate the speed of the control cursor
+      int cursorTimerDuration             { 1000 };   // how often the smart weight is updated
+
+      void loadFromPreferences();
+      };
+
+//---------------------------------------------------------
+//   ViewState
+//---------------------------------------------------------
+
 enum class ViewState {
       NORMAL,
       DRAG,
@@ -120,6 +156,16 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       //--input state:
       PositionCursor* _cursor;
+
+      PositionCursor* _controlCursor;
+      SmoothPanSettings _panSettings;
+      double _timeElapsed;
+      double _controlModifier;      // a control modifier of 1 means that the cursor is moving at it's normal speed
+                                    // if all measures are of the same size, this will stay equal to 1 (unless the distance settings are changed, and make the algorithm over-sensitive)
+      double _playbackCursorOldPosition;
+      double _playbackCursorNewPosition;
+      double _playbackCursorDistanceTravelled;
+
       ShadowNote* shadowNote;
 
       // Realtime state:      Note: always set allowRealtimeRests to desired value before starting a timer.
@@ -285,6 +331,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool normalPaste(Fraction scale = Fraction(1, 1));
       void normalSwap();
 
+      void setControlCursorVisible(bool v);
+
       void cloneElement(Element* e);
       void doFotoDragEdit(QMouseEvent* ev);
 
@@ -307,6 +355,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void startEditMode(Element*);
 
       void moveCursor(const Fraction& tick);
+      void moveControlCursor(const Fraction& tick);
       Fraction cursorTick() const;
       void setCursorOn(bool);
       void setBackground(QPixmap*);
@@ -405,6 +454,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       virtual void moveCursor() override;
 
+      SmoothPanSettings* panSettings() { return &_panSettings; }
+
       virtual void layoutChanged();
       virtual void dataChanged(const QRectF&);
       virtual void updateAll()    { update(); }
@@ -437,9 +488,13 @@ class ScoreView : public QWidget, public MuseScoreView {
       void updateGrips();
       bool moveWhenInactive() const { return _moveWhenInactive; }
       bool moveWhenInactive(bool move) { bool m = _moveWhenInactive; _moveWhenInactive = move; return m; }
-   private:
-      void drawAnchorLines(QPainter& painter);
-    };
+
+      QElapsedTimer _controlCursorTimer, _playbackCursorTimer;
+      friend struct SmoothPanSettings;
+
+      private:
+         void drawAnchorLines(QPainter& painter);
+      };
 
 } // namespace Ms
 #endif
