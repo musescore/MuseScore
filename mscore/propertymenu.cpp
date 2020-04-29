@@ -435,6 +435,14 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             mscore->styleDlg()->gotoElement(e);
             mscore->styleDlg()->exec();
             }
+      else if (cmd == "style-header-footer") { // used to go to the header/footer dialog by double-clicking on a header/footer
+            if (!mscore->styleDlg())
+                  mscore->setStyleDlg(new EditStyle { _score, mscore });
+            else
+                  mscore->styleDlg()->setScore(mscore->currentScore());
+            mscore->styleDlg()->gotoHeaderFooterPage();
+            mscore->styleDlg()->exec();
+            }
       else if (cmd == "ch-instr")
             selectInstrument(toInstrumentChange(e));
       else if (cmd == "staff-props") {
