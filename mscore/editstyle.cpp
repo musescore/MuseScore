@@ -165,6 +165,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::createMultiMeasureRests, false, multiMeasureRests,       0 },
       { Sid::minEmptyMeasures,        false, minEmptyMeasures,        0 },
       { Sid::minMMRestWidth,          false, minMeasureWidth,         resetMinMMRestWidth },
+      { Sid::mmRestNumberPos,         false, mmRestNumberPos,         resetMMRestNumberPos },
       { Sid::hideEmptyStaves,         false, hideEmptyStaves,         0 },
       { Sid::dontHideStavesInFirstSystem, false, dontHideStavesInFirstSystem, 0 },
       { Sid::alwaysShowBracketsWhenEmptyStavesAreHidden, false, alwaysShowBrackets, 0 },

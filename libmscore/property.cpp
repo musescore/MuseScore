@@ -199,6 +199,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::SPANNER_TRACK2,          false, "track2",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "track2")           },
       { Pid::OFFSET2,                 false, "userOff2",              P_TYPE::POINT_SP,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "offset2")         },
       { Pid::BREAK_MMR,               false, "breakMultiMeasureRest", P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "breaking multimeasure rest")},
+      { Pid::MMREST_NUMBER_POS,       false, "mmRestNumberPos",       P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "vertical position of multimeasure rest number")},
       { Pid::REPEAT_COUNT,            true,  "endRepeat",             P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "end repeat")       },
 
       { Pid::USER_STRETCH,            false, "stretch",               P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "stretch")          },
