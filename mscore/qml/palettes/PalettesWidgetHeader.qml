@@ -60,7 +60,7 @@ Item {
             id: resultsTimer
             interval: 500
             onTriggered: {
-                parent.Accessible.name = parent.text.length === 0 ? qsTr("Palette Search") : qsTr("%n palettes match", "", paletteTree.count);
+                parent.Accessible.name = parent.text.length === 0 ? qsTr("Palette Search") : qsTr("%n palette(s) match(es)", "", paletteTree.count);
             }
         }
 
