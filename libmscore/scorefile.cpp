@@ -448,7 +448,7 @@ bool MasterScore::saveFile(bool generateBackup)
    #else
                   // Use byte-based Windows function
                   SetFileAttributes((LPCTSTR)backupDirNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
-#endif
+   #endif
 #else
                   SetFileAttributes((LPCTSTR)backupDirNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
 #endif
@@ -462,7 +462,9 @@ bool MasterScore::saveFile(bool generateBackup)
 //                               tr("Removing old backup file %1 failed").arg(backupName));
                         }
                   }
-            if (dir.exists(backupName)) {
+            // backup files prior to 3.5 were saved in the same directory as the file itself.
+            // remove these old backup files if needed
+            if (dir != backupDir && dir.exists(backupName)) {
                   if (!dir.remove(backupName)) {
 //                      if (!MScore::noGui)
 //                            QMessageBox::critical(0, QObject::tr("Save File"),
