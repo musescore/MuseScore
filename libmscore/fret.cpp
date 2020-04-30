@@ -1412,7 +1412,7 @@ QString FretDiagram::screenReaderInfo() const
                   }
 
             //: Omit the "%n " for the singular translation (and the "(s)" too)
-            QString dotsInfo = QObject::tr("%n dot(s) on fret(s) %2", "", dotsCount).arg(fretInfo);
+            QString dotsInfo = QObject::tr("%n dot(s) on fret(s) %1", "", dotsCount).arg(fretInfo);
 
             detailedInfo = QString("%1 %2 %3 %4").arg(detailedInfo).arg(stringIdent).arg(markerName).arg(dotsInfo);
             }
