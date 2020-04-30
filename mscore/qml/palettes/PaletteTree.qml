@@ -26,7 +26,7 @@ import "utils.js" as Utils
 
 ListView {
     id: paletteTree
-    Accessible.name: qsTr("Palettes Tree, contains %n palettes", "", count)
+    Accessible.name: qsTr("Palettes Tree, contains %n palette(s)", "", count)
 
     activeFocusOnTab: true // allow focus even when empty
 
@@ -500,7 +500,7 @@ ListView {
                 event.accepted = true;
             }
 
-            text: filter.length ? qsTr("%1, contains %n matching elements", "palette", mainPalette.count).arg(model.accessibleText)
+            text: filter.length ? qsTr("%1, contains %n matching element(s)", "palette", mainPalette.count).arg(model.accessibleText)
                                 : model.expanded ? qsTr("%1 expanded", "tree item not collapsed").arg(model.accessibleText)
                                                  : model.accessibleText
             Accessible.role: Accessible.TreeItem
