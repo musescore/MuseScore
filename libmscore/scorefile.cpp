@@ -36,6 +36,8 @@
 #include "stafftype.h"
 #include "sym.h"
 
+#include "mscore/preferences.h"
+
 #ifdef OMR
 #include "omr/omr.h"
 #include "omr/omrpage.h"
@@ -421,8 +423,8 @@ bool MasterScore::saveFile(bool generateBackup)
             }
       temp.close();
 
-      QString name(info.filePath());
-      QString basename(info.fileName());
+      const QString name(info.filePath());
+      const QString basename(info.fileName());
       QDir dir(info.path());
       if (!saved() && generateBackup) {
             // if file was already saved in this session
@@ -433,25 +435,26 @@ bool MasterScore::saveFile(bool generateBackup)
             // remove old backup file if exists
             // remove the backup file in the same dir as score (the traditional place) if exists
             //
-            QString backupDirString = info.path() + QString(QDir::separator()) + ".backup";
+            const QString backupSubdirString = preferences.getString(PREF_APP_BACKUP_SUBFOLDER);
+            const QString backupDirString = info.path() + QString(QDir::separator()) + backupSubdirString;
             QDir backupDir(backupDirString);
             if (!backupDir.exists()) {
-                  dir.mkdir(".backup");
+                  dir.mkdir(backupSubdirString);
 #ifdef Q_OS_WIN
-                  QString backupDirNativePath = QDir::toNativeSeparators(backupDirString);
+                  const QString backupDirNativePath = QDir::toNativeSeparators(backupDirString);
 #if (defined (_MSCVER) || defined (_MSC_VER))
    #if (defined (UNICODE))
                   SetFileAttributes((LPCTSTR)backupDirNativePath.unicode(), FILE_ATTRIBUTE_HIDDEN);
    #else
                   // Use byte-based Windows function
                   SetFileAttributes((LPCTSTR)backupDirNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
-   #endif
+#endif
 #else
                   SetFileAttributes((LPCTSTR)backupDirNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
 #endif
 #endif
                   }
-            QString backupName = QString(".") + info.fileName() + QString(",");
+            const QString backupName = QString(".") + info.fileName() + QString(",");
             if (backupDir.exists(backupName)) {
                   if (!backupDir.remove(backupName)) {
 //                      if (!MScore::noGui)
@@ -472,7 +475,7 @@ bool MasterScore::saveFile(bool generateBackup)
             // rename old file into backup
             //
             if (dir.exists(basename)) {
-                  if (!QFile::rename(name, backupDirString + "/" + backupName)) {
+                  if (!QFile::rename(name, backupDirString + (backupDirString.endsWith("/") ? "" : "/") + backupName)) {
 //                      if (!MScore::noGui)
 //                            QMessageBox::critical(0, tr("Save File"),
 //                               tr("Renaming old file <%1> to backup <%2> failed").arg(name, backupDirString + "/" + backupName);
