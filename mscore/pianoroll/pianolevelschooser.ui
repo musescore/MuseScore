@@ -22,7 +22,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Note Event Data Type</string>
+        <string>Note event data type</string>
        </property>
       </widget>
      </item>
@@ -30,14 +30,11 @@
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Set Values</string>
-     </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="2" column="1">
        <widget class="QPushButton" name="setEventsBn">
         <property name="toolTip">
-         <string>Set Selected Note Event Data</string>
+         <string>Set selected note event data</string>
         </property>
         <property name="text">
          <string>Set</string>
