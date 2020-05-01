@@ -367,7 +367,7 @@ void TRowLabels::updateLabels(std::vector<std::pair<QString, bool>> labels, int 
 
             if (row == numMetas - 1)
                   measureWidth = graphicsTextItem->boundingRect().width();
-            maxWidth = max(maxWidth, int(graphicsTextItem->boundingRect().width()));
+            maxWidth = std::max(maxWidth, int(graphicsTextItem->boundingRect().width()));
 
             QFontMetrics f(QApplication::font());
             QString partName = f.elidedText(labels[row].first, Qt::ElideRight, width());
@@ -428,7 +428,7 @@ void TRowLabels::updateLabels(std::vector<std::pair<QString, bool>> labels, int 
             }
       QGraphicsLineItem* graphicsLineItem = new QGraphicsLineItem(0,
                                                     height * numMetas + verticalScrollBar()->value() + 1,
-                                                    max(maxWidth + 20, 70),
+                                                    std::max(maxWidth + 20, 70),
                                                     height * numMetas + verticalScrollBar()->value() + 1);
       graphicsLineItem->setPen(QPen(QColor(150, 150, 150), 4));
       graphicsLineItem->setZValue(0);
@@ -444,7 +444,7 @@ void TRowLabels::updateLabels(std::vector<std::pair<QString, bool>> labels, int 
       _oldItemInfo = tmp;
 
       setMinimumWidth(measureWidth + 9);
-      setMaximumWidth(max(maxWidth + 20, 70));
+      setMaximumWidth(std::max(maxWidth + 20, 70));
       mouseOver(mapToScene(mapFromGlobal(QCursor::pos())));
       }
 

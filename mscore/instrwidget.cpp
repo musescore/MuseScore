@@ -1096,8 +1096,8 @@ void InstrumentsWidget::createInstruments(Score* cs)
 
 void InstrumentsWidget::numberInstrumentNames(Score* cs)
       {
-      vector<QString> names;
-      vector<QString> firsts;
+      std::vector<QString> names;
+      std::vector<QString> firsts;
 
       for (auto i = cs->parts().begin(); i != cs->parts().end(); ++i) {
             auto p = *i;

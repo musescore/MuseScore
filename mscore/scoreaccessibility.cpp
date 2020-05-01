@@ -412,7 +412,7 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
             beat = -1;
             ticks = 0;
             }
-      return pair<int,float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
+      return std::pair<int,float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
       }
 
 void ScoreAccessibility::makeReadable(QString& s)
