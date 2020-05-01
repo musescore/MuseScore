@@ -172,6 +172,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_SCORE_HARMONY_PLAY,                              new BoolPreference(false, false)},
             {PREF_SCORE_HARMONY_PLAY_ONEDIT,                       new BoolPreference(true, false)},
             {PREF_SCORE_MAGNIFICATION,                             new DoublePreference(1.0, false)},
+            {PREF_SCORE_ZOOM_TYPE,                                 new IntPreference(0, false)},
             {PREF_SCORE_NOTE_PLAYONCLICK,                          new BoolPreference(true, false)},
             {PREF_SCORE_NOTE_DEFAULTPLAYDURATION,                  new IntPreference(300 /* ms */, false)},
             {PREF_SCORE_NOTE_WARNPITCHRANGE,                       new BoolPreference(true, false)},

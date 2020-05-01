@@ -14,6 +14,9 @@ cmd note-c
 cmd note-d
 cmd escape
 cmd del-empty-measures
+cmd note-input
+cmd escape
+cmd prev-measure
 cmd prev-measure
 cmd note-input
 cmd escape
