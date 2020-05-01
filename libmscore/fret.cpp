@@ -112,7 +112,7 @@ FretDiagram* FretDiagram::fromString(Score* score, const QString &s)
             else {
                   int fret = c.digitValue();
                   if (fret != -1) {
-                        dotsToAdd.push_back(make_pair(i, fret));
+                        dotsToAdd.push_back(std::make_pair(i, fret));
                         if (fret - 3 > 0 && offset < fret - 3)
                             offset = fret - 3;
                         }

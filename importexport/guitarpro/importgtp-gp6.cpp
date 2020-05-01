@@ -380,7 +380,7 @@ void GuitarPro6::readMasterTracks(QDomNode* masterTrack)
                                           curtempo = sa[0].toInt();
                                     auto barnode = currentAutomation.firstChildElement("Bar");
                                     if (!barnode.isNull()) {
-                                          tempoMap[barnode.text().toInt()] = make_pair(curtempo, linearTemp);
+                                          tempoMap[barnode.text().toInt()] = std::make_pair(curtempo, linearTemp);
                                           }
                                     }
                               }

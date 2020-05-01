@@ -719,7 +719,7 @@ void Chord::addLedgerLines()
       size_t n = _notes.size();
       for (size_t j = 0; j < 2; j++) {             // notes are scanned twice...
             int from, delta;
-            vector<LedgerLineData> vecLines;
+            std::vector<LedgerLineData> vecLines;
             hw = 0.0;
             minX  = maxX = 0;
             minLine = 0;

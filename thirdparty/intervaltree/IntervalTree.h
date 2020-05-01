@@ -5,9 +5,6 @@
 #include <algorithm>
 #include <iostream>
 
-using namespace std;
-
-
 template <class T, typename K = int>
 class Interval {
 public:
@@ -32,7 +29,7 @@ int intervalStop(const Interval<T,K>& i) {
 }
 
 template <class T, typename K>
-ostream& operator<<(ostream& out, Interval<T,K>& i) {
+std::ostream& operator<<(std::ostream& out, Interval<T,K>& i) {
     out << "Interval(" << i.start << ", " << i.stop << "): " << i.value;
     return out;
 }
@@ -50,7 +47,7 @@ class IntervalTree {
 
 public:
     typedef Interval<T,K> interval;
-    typedef vector<interval> intervalVector;
+    typedef std::vector<interval> intervalVector;
     typedef IntervalTree<T,K> intervalTree;
 
     intervalVector intervals;
@@ -131,7 +128,7 @@ public:
                 rightp = rightextent;
             } else {
                 leftp = ivals.front().start;
-                vector<K> stops;
+                std::vector<K> stops;
                 stops.resize(ivals.size());
                 transform(ivals.begin(), ivals.end(), stops.begin(), intervalStop<T,K>);
                 rightp = *max_element(stops.begin(), stops.end());

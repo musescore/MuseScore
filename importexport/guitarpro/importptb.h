@@ -216,7 +216,7 @@ class PowerTab {
 
             struct ptPosition {
                   int position{ 0 };
-                  std::vector<shared_ptr<ptComponent>> components;
+                  std::vector<std::shared_ptr<ptComponent>> components;
                   void addComponent(ptComponent* c);
                   };
 
@@ -237,7 +237,7 @@ class PowerTab {
                   int notes_count{ 0 };
                   };
 
-            typedef std::list<shared_ptr<ptBeat>> tBeatList;
+            typedef std::list<std::shared_ptr<ptBeat>> tBeatList;
 
             struct ptTrack;
             struct ptSection {
@@ -256,7 +256,7 @@ class PowerTab {
 
                   std::map<int, ptChordText> chordTextMap;
                   std::vector<tBeatList>  beats;
-                  std::list<shared_ptr<ptBar>> bars;
+                  std::list<std::shared_ptr<ptBar>> bars;
                   bool readed { false };
 
                   void copyTracks(ptTrack*);
