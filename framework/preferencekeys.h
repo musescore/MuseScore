@@ -104,6 +104,7 @@
 #define PREF_SCORE_HARMONY_PLAY                             "score/harmony/play"
 #define PREF_SCORE_HARMONY_PLAY_ONEDIT                      "score/harmony/play/onedit"
 #define PREF_SCORE_MAGNIFICATION                            "score/magnification"
+#define PREF_SCORE_ZOOM_TYPE                                "score/zoomType"
 #define PREF_SCORE_NOTE_PLAYONCLICK                         "score/note/playOnClick"
 #define PREF_SCORE_NOTE_DEFAULTPLAYDURATION                 "score/note/defaultPlayDuration"
 #define PREF_SCORE_NOTE_WARNPITCHRANGE                      "score/note/warnPitchRange"

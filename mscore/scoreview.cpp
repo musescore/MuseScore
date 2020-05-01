@@ -140,7 +140,26 @@ ScoreView::ScoreView(QWidget* parent)
     double mag  = preferences.getDouble(PREF_SCORE_MAGNIFICATION) * (mscore->physicalDotsPerInch() / DPI);
     _matrix     = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
     imatrix     = _matrix.inverted();
-    _magIdx     = preferences.getDouble(PREF_SCORE_MAGNIFICATION) == 1.0 ? MagIdx::MAG_100 : MagIdx::MAG_FREE;
+
+    switch (static_cast<ZoomType>(preferences.getInt(PREF_SCORE_ZOOM_TYPE))) {
+    // The following cases correspond to zoomType's index value within prefsdialog.ui,
+    // wherein lies zoomType's translatable strings
+    case ZoomType::WHOLE_PAGE:
+        _magIdx = MagIdx::MAG_PAGE;
+        break;
+    case ZoomType::DOUBLE_PAGE:
+        _magIdx = MagIdx::MAG_DBL_PAGE;
+        break;
+    case ZoomType::PERCENTAGE:
+        _magIdx = preferences.getDouble(PREF_SCORE_MAGNIFICATION) == 1.0 ? MagIdx::MAG_100 : MagIdx::MAG_FREE;
+        break;
+    case ZoomType::PAGE_WIDTH:
+        Q_FALLTHROUGH();
+    default:
+        _magIdx = MagIdx::MAG_PAGE_WIDTH;
+        break;
+    }
+
     focusFrame  = 0;
     _bgColor    = Qt::darkBlue;
     _fgColor    = Qt::white;

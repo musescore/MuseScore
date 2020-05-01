@@ -196,6 +196,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
     connect(resetToDefault, &QToolButton::clicked, this, &PreferenceDialog::resetAllValues);
     connect(filterShortcuts, &QLineEdit::textChanged, this, &PreferenceDialog::filterShortcutsTextChanged);
     connect(printShortcuts, &QToolButton::clicked, this, &PreferenceDialog::printShortcutsClicked);
+    connect(zoomType, &QComboBox::currentTextChanged, this, &PreferenceDialog::selectZoomType);
 
     recordButtons = new QButtonGroup(this);
     recordButtons->setExclusive(false);
@@ -557,6 +558,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
     // score settings
     //
     scale->setValue(preferences.getDouble(PREF_SCORE_MAGNIFICATION) * 100.0);
+    zoomType->setCurrentIndex(preferences.getInt(PREF_SCORE_ZOOM_TYPE));
     showMidiControls->setChecked(preferences.getBool(PREF_IO_MIDI_SHOWCONTROLSINMIXER));
 
     defaultPlayDuration->setValue(preferences.getInt(PREF_SCORE_NOTE_DEFAULTPLAYDURATION));
@@ -920,6 +922,16 @@ void PreferenceDialog::selectInstrumentList2()
 }
 
 //---------------------------------------------------------
+//   selectZoomType
+//---------------------------------------------------------
+
+void PreferenceDialog::selectZoomType()
+{
+    // Only enable editing of [zoom-percentage spinner widget] if [Percentage] is selected
+    static_cast<ZoomType>(zoomType->currentIndex()) != ZoomType::PERCENTAGE ? scale->setEnabled(false) : scale->setEnabled(true);
+}
+
+//---------------------------------------------------------
 //   selectStartWith
 //---------------------------------------------------------
 
@@ -1204,6 +1216,7 @@ void PreferenceDialog::apply()
     preferences.setPreference(PREF_UI_APP_LANGUAGE, l);
 
     preferences.setPreference(PREF_SCORE_MAGNIFICATION, scale->value() / 100.0);
+    preferences.setPreference(PREF_SCORE_ZOOM_TYPE, zoomType->currentIndex());
 
     if (showMidiControls->isChecked() != preferences.getBool(PREF_IO_MIDI_SHOWCONTROLSINMIXER)) {
         preferences.setPreference(PREF_IO_MIDI_SHOWCONTROLSINMIXER, showMidiControls->isChecked());

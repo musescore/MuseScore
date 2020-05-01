@@ -73,6 +73,14 @@ enum class MusicxmlExportBreaks : char {
     ALL, MANUAL, NO
 };
 
+// Default zoom options in score preferences
+enum class ZoomType : int {
+    PAGE_WIDTH = 0,
+    WHOLE_PAGE,
+    DOUBLE_PAGE,
+    PERCENTAGE
+};
+
 class PreferenceVisitor;
 
 //---------------------------------------------------------
