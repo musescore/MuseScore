@@ -4889,17 +4889,44 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
 
       Tuplet* t = cr->tuplet();
 
+      // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
+      const bool linked = ostaff->staffList().length() > 1;
+
       for (const Staff* staff : ostaff->staffList()) {
             QList<int> tracks;
-            int staffIdx = staff->idx();
-            if ((strack & ~3) != staffIdx) // linked staff ?
-                  tracks.append(staffIdx * VOICES + (strack % VOICES));
-            else if (staff->score()->excerpt() && !staff->score()->excerpt()->tracks().isEmpty())
-                  tracks = staff->score()->excerpt()->tracks().values(strack);
-            else if (!staff->score()->excerpt())
-                  tracks.append(staffIdx * VOICES + (strack % VOICES));
-            else
-                  tracks.append(staffIdx * VOICES + cr->voice());
+            if (!staff->score()->excerpt()) {
+                  // On masterScore.
+                  int track = staff->idx() * VOICES + (strack % VOICES);
+                  tracks.append(track);
+                  }
+            else {
+                  QMultiMap<int, int> mapping = staff->score()->excerpt()->tracks();
+                  if (mapping.isEmpty()) {
+                        // This can happen during reading the score and there is
+                        // no Tracklist tag specified.
+                        // TODO solve this in read301.cpp.
+                        tracks.append(strack);
+                        }
+                  else {
+                        // linkedPart : linked staves within same part/instrument.
+                        // linkedScore: linked staves over different scores via excerpts.
+                        const bool linkedPart  = linked && (staff != ostaff) && (staff->score() == ostaff->score());
+                        const bool linkedScore = linked && (staff != ostaff) && (staff->score() != ostaff->score());
+                        for (int track : mapping.values(strack)) {
+                              if (linkedPart && !linkedScore) {
+                                    tracks.append(staff->idx() * VOICES + mapping.value(track));
+                                    }
+                              else if (!linkedPart && linkedScore) {
+                                    if ((track >> 2) != staff->idx())
+                                          track += (staff->idx() - (track >> 2)) * VOICES;
+                                    tracks.append(track);
+                                    }
+                              else {
+                                    tracks.append(track);
+                                    }
+                              }
+                        }
+                  }
 
             for (int ntrack : tracks) {
                   if (ntrack < staff->part()->startTrack() || ntrack >= staff->part()->endTrack())
