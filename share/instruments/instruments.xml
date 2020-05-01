@@ -7773,8 +7773,8 @@
                   <musicXMLid>voice.vocals</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>40-79</aPitchRange>
-                  <pPitchRange>36-94</pPitchRange>
+                  <aPitchRange>41-79</aPitchRange>
+                  <pPitchRange>38-84</pPitchRange>
                   <Channel>
                         <program value="52"/> <!--Voice Aahs-->
                   </Channel>
