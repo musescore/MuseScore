@@ -27,6 +27,7 @@ class NoteEvent;
 class Staff;
 
 
+
 //---------------------------------------------------------
 //   PianoLevelsFilter
 //       Manage note/event data for different views when drawing in the PianoLevels window
@@ -37,6 +38,7 @@ public:
       static PianoLevelsFilter* FILTER_LIST[];
 
       virtual QString name() = 0;
+      virtual QString tooltip() = 0;
       virtual int maxRange() = 0;
       virtual int minRange() = 0;
       virtual int divisionGap() = 0;  //Vertical guide line separation gap
@@ -54,7 +56,8 @@ class PianoLevelFilterOnTime : public PianoLevelsFilter {
       Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterOnTime)
 
 public:
-      QString name() override { return tr("Note on time", "amount note 'on time' is adjusted by"); }
+      QString name() override;
+      QString tooltip() override;
       int maxRange() override { return 1000; }
       int minRange() override { return -1000; }
       int divisionGap() override { return 250; }
@@ -73,7 +76,8 @@ class PianoLevelFilterLen : public PianoLevelsFilter {
       Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterLen)
 
 public:
-      QString name() override { return tr("Length as note multiplier", "length tweak is interpreted as a scalar to base note length"); }
+      QString name() override;
+      QString tooltip() override;
       int maxRange() override { return 1000; }
       int minRange() override { return 0; }
       int divisionGap() override { return 250; }
@@ -92,7 +96,8 @@ class PianoLevelFilterLenOfftime : public PianoLevelsFilter {
       Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterLenOfftime)
 
 public:
-      QString name() override { return tr("Length as note off time", "length tweak is interpreted as an offset to the base note length"); }
+      QString name() override;
+      QString tooltip() override;
       int maxRange() override;
       int minRange() override { return 0; }
       int divisionGap() override;
@@ -111,7 +116,8 @@ class PianoLevelFilterVeloOffset : public PianoLevelsFilter {
       Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterVeloOffset)
 
 public:
-      QString name() override { return tr("Velocity as dynamics multiplier", "velocity tweak is interpreted as a scalar relative to the dynamics marking"); }
+      QString name() override;
+      QString tooltip() override;
       int maxRange() override { return 200; }
       int minRange() override { return -200; }
       int divisionGap() override { return 100; }
@@ -130,7 +136,8 @@ class PianoLevelFilterVeloUser : public PianoLevelsFilter {
       Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterVeloUser)
 
 public:
-      QString name() override { return tr("Velocity as absolute MIDI volume", "velocity tweak is intepreted as a MIDI volume level"); }
+      QString name() override;
+      QString tooltip() override;
       int maxRange() override { return 128; }
       int minRange() override { return 0; }
       int divisionGap() override { return 32; }
