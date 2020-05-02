@@ -1006,9 +1006,19 @@ QPointF Note::stemUpSE() const
 
 int Note::playTicks() const
       {
+      return playTicksFraction().ticks();
+      }
+
+//---------------------------------------------------------
+//   playTicksFraction
+///   Return total tick len of tied notes
+//---------------------------------------------------------
+
+Fraction Note::playTicksFraction() const
+      {
       Fraction stick = firstTiedNote()->chord()->tick();
       const Note* note = lastTiedNote();
-      return (note->chord()->tick() + note->chord()->actualTicks() - stick).ticks();
+      return note->chord()->tick() + note->chord()->actualTicks() - stick;
       }
 
 //---------------------------------------------------------
