@@ -43,8 +43,11 @@ ColorLabel::~ColorLabel()
 
 void ColorLabel::setColor(const QColor& c)
       {
+      const bool changed = _color != c;
       _color = c;
       update();
+      if (changed)
+            emit this->colorChanged(_color);
       }
 
 //---------------------------------------------------------
