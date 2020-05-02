@@ -9,6 +9,23 @@
 
 namespace Ms {
 
+
+static const char* STRN_NOTE_ON_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Note start time");
+static const char* STRN_NOTE_ON_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Add (or subtract) a bit to the start time of a note");
+
+static const char* STRN_LEN_MUL_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Length (multiplier)");
+static const char* STRN_LEN_MUL_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Multiply the note length by a bit");
+
+static const char* STRN_LEN_OFF_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Length (offset)");
+static const char* STRN_LEN_OFF_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Add (or subtract) a bit from the end of the note");
+
+static const char* STRN_VEL_DYN_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Velocity (relative)");
+static const char* STRN_VEL_DYN_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Raise or lower loudness relative to current dynamics value");
+
+static const char* STRN_VEL_ABS_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Velocity (absolute)");
+static const char* STRN_VEL_ABS_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Ignore dynamic markings and use this as the MIDI output value");
+
+
 PianoLevelsFilter* PianoLevelsFilter::FILTER_LIST[] = {
       new PianoLevelFilterLen,
       new PianoLevelFilterLenOfftime,
@@ -17,6 +34,24 @@ PianoLevelsFilter* PianoLevelsFilter::FILTER_LIST[] = {
       new PianoLevelFilterOnTime,
       0  //end of list indicator
 };
+
+//---------------------------------------------------------
+//   name
+//---------------------------------------------------------
+
+QString PianoLevelFilterOnTime::name()
+      {
+      return qApp->translate("PianoLevelsFilter", STRN_NOTE_ON_NAME);
+      }
+
+//---------------------------------------------------------
+//   tooltip
+//---------------------------------------------------------
+
+QString PianoLevelFilterOnTime::tooltip()
+      {
+      return qApp->translate("PianoLevelsFilter", STRN_NOTE_ON_TT);
+      }
 
 //---------------------------------------------------------
 //   value
@@ -44,6 +79,24 @@ void PianoLevelFilterOnTime::setValue(Staff* staff, Note* note, NoteEvent* evt, 
       }
 
 //---------------------------------------------------------
+//   name
+//---------------------------------------------------------
+
+QString PianoLevelFilterLen::name()
+      {
+      return qApp->translate("PianoLevelsFilter", STRN_LEN_MUL_NAME);
+      }
+
+//---------------------------------------------------------
+//   tooltip
+//---------------------------------------------------------
+
+QString PianoLevelFilterLen::tooltip()
+      {
+      return qApp->translate("PianoLevelsFilter", STRN_LEN_MUL_TT);
+      }
+
+//---------------------------------------------------------
 //   value
 //---------------------------------------------------------
 
@@ -68,6 +121,24 @@ void PianoLevelFilterLen::setValue(Staff* staff, Note* note, NoteEvent* evt, int
       score->endCmd();
       }
 
+
+//---------------------------------------------------------
+//   name
+//---------------------------------------------------------
+
+QString PianoLevelFilterLenOfftime::name()
+      {
+      return qApp->translate("PianoLevelsFilter", STRN_LEN_OFF_NAME);
+      }
+
+//---------------------------------------------------------
+//   tooltip
+//---------------------------------------------------------
+
+QString PianoLevelFilterLenOfftime::tooltip()
+      {
+      return qApp->translate("PianoLevelsFilter", STRN_LEN_OFF_TT);
+      }
 
 //---------------------------------------------------------
 //   maxRange
@@ -124,6 +195,24 @@ void PianoLevelFilterLenOfftime::setValue(Staff* staff, Note* note, NoteEvent* e
       }
 
 //---------------------------------------------------------
+//   name
+//---------------------------------------------------------
+
+QString PianoLevelFilterVeloOffset::name()
+      {
+      return qApp->translate("PianoLevelsFilter", STRN_VEL_DYN_NAME);
+      }
+
+//---------------------------------------------------------
+//   tooltip
+//---------------------------------------------------------
+
+QString PianoLevelFilterVeloOffset::tooltip()
+      {
+      return qApp->translate("PianoLevelsFilter", STRN_VEL_DYN_TT);
+      }
+
+//---------------------------------------------------------
 //   value
 //---------------------------------------------------------
 
@@ -170,6 +259,24 @@ void PianoLevelFilterVeloOffset::setValue(Staff* staff, Note* note, NoteEvent* /
       score->endCmd();
       }
 
+
+//---------------------------------------------------------
+//   name
+//---------------------------------------------------------
+
+QString PianoLevelFilterVeloUser::name()
+      {
+      return qApp->translate("PianoLevelsFilter", STRN_VEL_ABS_NAME);
+      }
+
+//---------------------------------------------------------
+//   tooltip
+//---------------------------------------------------------
+
+QString PianoLevelFilterVeloUser::tooltip()
+      {
+      return qApp->translate("PianoLevelsFilter", STRN_VEL_ABS_TT);
+      }
 
 //---------------------------------------------------------
 //   value
