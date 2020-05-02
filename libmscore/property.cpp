@@ -28,6 +28,7 @@
 #include "style.h"
 #include "sym.h"
 #include "changeMap.h"
+#include "fret.h"
 
 namespace Ms {
 
@@ -230,6 +231,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FRET_NUT,                true,  "showNut",               P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "show nut")         },
       { Pid::FRET_OFFSET,             true,  "fretOffset",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "fret offset")      },
       { Pid::FRET_NUM_POS,            true,  "fretNumPos",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "fret number position") },
+      { Pid::ORIENTATION,             true,  "orientation",           P_TYPE::ORIENTATION,         DUMMY_QT_TRANSLATE_NOOP("propertyName", "orientation")      },
+
       { Pid::HARMONY_VOICE_LITERAL,   true,  "harmonyVoiceLiteral",   P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "harmony voice literal") },
       { Pid::HARMONY_VOICING,         true,  "harmonyVoicing",        P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "harmony voicing") },
       { Pid::HARMONY_DURATION,        true,  "harmonyDuration",       P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "harmony duration") },
@@ -588,6 +591,14 @@ QVariant propertyFromString(Pid id, QString value)
                         }
                   return  int(align);
                   }
+            case P_TYPE::CHANGE_METHOD:
+                  return QVariant(int(ChangeMap::nameToChangeMethod(value)));
+            case P_TYPE::ORIENTATION:
+                  if (value == "vertical")
+                        return QVariant(int(Orientation::VERTICAL));
+                  else if (value == "horizontal")
+                        return QVariant(int(Orientation::HORIZONTAL));
+                  break;
             default:
                   break;
             }
@@ -641,6 +652,7 @@ QVariant readProperty(Pid id, XmlReader& e)
             case P_TYPE::HEAD_TYPE:
             case P_TYPE::SUB_STYLE:
             case P_TYPE::ALIGN:
+            case P_TYPE::ORIENTATION:
                   return propertyFromString(id, e.readElementText());
 
             case P_TYPE::BEAM_MODE:             // TODO
@@ -849,6 +861,14 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
                   else
                         v = "top";
                   return QString("%1,%2").arg(h, v);
+                  }
+            case P_TYPE::ORIENTATION: {
+                  const Orientation o = Orientation(value.toInt());
+                  if (o == Orientation::VERTICAL)
+                        return "vertical";
+                  else if (o == Orientation::HORIZONTAL)
+                        return "horizontal";
+                  break;
                   }
             case P_TYPE::POINT_MM:
                   qFatal("unknown: POINT_MM");

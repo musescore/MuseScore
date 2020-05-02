@@ -34,6 +34,7 @@ InspectorFretDiagram::InspectorFretDiagram(QWidget* parent)
             { Pid::FRET_STRINGS, 0, f.strings,     f.resetStrings     },
             { Pid::FRET_FRETS,   0, f.frets,       f.resetFrets       },
             { Pid::FRET_NUT,     0, f.showNut,     f.resetShowNut     },
+            { Pid::ORIENTATION,  0, f.orientation, f.resetOrientation },
             };
       const std::vector<InspectorPanel> ppList = {
             { f.title, f.panel }
@@ -132,7 +133,7 @@ void InspectorFretDiagram::genericButtonToggled(QPushButton* b, bool v, FretDotT
             f.diagram->setCurrentDotType(dtype);
             b->setChecked(true);
             }
-      
+
       f.diagram->setAutomaticDotType(!v);
 
       for (QPushButton* p : dotTypeButtons)
@@ -142,7 +143,7 @@ void InspectorFretDiagram::genericButtonToggled(QPushButton* b, bool v, FretDotT
 //   circleButtonToggled
 //---------------------------------------------------------
 
-void InspectorFretDiagram::circleButtonToggled(bool v) 
+void InspectorFretDiagram::circleButtonToggled(bool v)
       {
       genericButtonToggled(f.circleSelect, v, FretDotType::NORMAL);
       }
@@ -151,7 +152,7 @@ void InspectorFretDiagram::circleButtonToggled(bool v)
 //   crossButtonToggled
 //---------------------------------------------------------
 
-void InspectorFretDiagram::crossButtonToggled(bool v) 
+void InspectorFretDiagram::crossButtonToggled(bool v)
       {
       genericButtonToggled(f.crossSelect, v, FretDotType::CROSS);
       }
@@ -160,7 +161,7 @@ void InspectorFretDiagram::crossButtonToggled(bool v)
 //   squareButtonToggled
 //---------------------------------------------------------
 
-void InspectorFretDiagram::squareButtonToggled(bool v) 
+void InspectorFretDiagram::squareButtonToggled(bool v)
       {
       genericButtonToggled(f.squareSelect, v, FretDotType::SQUARE);
       }
@@ -169,7 +170,7 @@ void InspectorFretDiagram::squareButtonToggled(bool v)
 //   triangleButtonToggled
 //---------------------------------------------------------
 
-void InspectorFretDiagram::triangleButtonToggled(bool v) 
+void InspectorFretDiagram::triangleButtonToggled(bool v)
       {
       genericButtonToggled(f.triangleSelect, v, FretDotType::TRIANGLE);
       }
@@ -178,7 +179,7 @@ void InspectorFretDiagram::triangleButtonToggled(bool v)
 //   barreButtonToggled
 //---------------------------------------------------------
 
-void InspectorFretDiagram::barreButtonToggled(bool v) 
+void InspectorFretDiagram::barreButtonToggled(bool v)
       {
       f.diagram->setBarreMode(v);
       }
@@ -187,7 +188,7 @@ void InspectorFretDiagram::barreButtonToggled(bool v)
 //   multidotButtonToggled
 //---------------------------------------------------------
 
-void InspectorFretDiagram::multidotButtonToggled(bool v) 
+void InspectorFretDiagram::multidotButtonToggled(bool v)
       {
       f.diagram->setMultidotMode(v);
       }
@@ -196,7 +197,7 @@ void InspectorFretDiagram::multidotButtonToggled(bool v)
 //   clearButtonClicked
 //---------------------------------------------------------
 
-void InspectorFretDiagram::clearButtonClicked() 
+void InspectorFretDiagram::clearButtonClicked()
       {
       f.diagram->clear();
       }

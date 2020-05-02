@@ -21,6 +21,11 @@ namespace Ms {
 class StringData;
 class Chord;
 
+enum class Orientation : signed char {
+      VERTICAL,
+      HORIZONTAL
+      };
+
 // Keep this in order - not used directly for comparisons, but the dots will appear in
 // this order in fret multidot mode. See fretproperties.cpp.
 enum class FretDotType : signed char {
@@ -125,6 +130,7 @@ class FretDiagram final : public Element {
       int _fretOffset    { 0  };
       int _maxFrets      { 24 };
       bool _showNut      { true };
+      Orientation _orientation      { Orientation::VERTICAL };
 
       // Barres are stored in the format: K: fret, V: barre struct
       BarreMap _barres;
@@ -143,6 +149,7 @@ class FretDiagram final : public Element {
       qreal fretDist;
       QFont font;
       qreal _userMag     { 1.0   };             // allowed 0.1 - 10.0
+      qreal markerSize;
       int _numPos;
 
       void removeDot(int s, int f = 0);

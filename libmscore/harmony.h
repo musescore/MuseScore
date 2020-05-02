@@ -109,6 +109,9 @@ class Harmony final : public TextBase {
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
       Sid getPropertyStyle(Pid) const override;
 
+      Segment* getParentSeg() const;
+      Harmony* findInSeg(Segment* seg) const;
+
    public:
       Harmony(Score* = 0);
       Harmony(const Harmony&);

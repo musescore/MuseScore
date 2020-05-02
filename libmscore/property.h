@@ -239,6 +239,7 @@ enum class Pid {
       FRET_NUT,
       FRET_OFFSET,
       FRET_NUM_POS,
+      ORIENTATION,
 
       HARMONY_VOICE_LITERAL,
       HARMONY_VOICING,
@@ -402,6 +403,7 @@ enum class P_TYPE : char {
       CLEF_TYPE,        // enum class ClefType
       DYNAMIC_TYPE,     // enum class Dynamic::Type
       KEYMODE,          // enum class KeyMode
+      ORIENTATION,      // enum class Orientation
 
       PATH,             // QPainterPath
       HEAD_SCHEME,      // enum class NoteHead::Scheme

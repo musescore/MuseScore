@@ -40,6 +40,7 @@ static const ElementStyle fretStyle {
       { Sid::fretFrets,                          Pid::FRET_FRETS              },
       { Sid::fretNut,                            Pid::FRET_NUT                },
       { Sid::fretMinDistance,                    Pid::MIN_DISTANCE            },
+      { Sid::fretOrientation,                    Pid::ORIENTATION             },
       };
 
 //---------------------------------------------------------
@@ -68,6 +69,7 @@ FretDiagram::FretDiagram(const FretDiagram& f)
       _markers    = f._markers;
       _barres     = f._barres;
       _showNut    = f._showNut;
+      _orientation= f._orientation;
 
       if (f._harmony) {
             Harmony* h = new Harmony(*f._harmony);
@@ -267,6 +269,13 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
 
 void FretDiagram::draw(QPainter* painter) const
       {
+      QPointF translation = -QPointF(stringDist * (_strings - 1), 0);
+      if (_orientation == Orientation::HORIZONTAL) {
+            painter->save();
+            painter->rotate(-90);
+            painter->translate(translation);
+            }
+
       // Init pen and other values
       qreal _spatium = spatium() * _userMag;
       QPen pen(curColor());
@@ -296,18 +305,10 @@ void FretDiagram::draw(QPainter* painter) const
             painter->drawLine(QLineF(0.0, y, x2, y));
             }
 
-      // Setup the font for the markers
-      QFont scaledFont(font);
-      scaledFont.setPointSizeF(font.pointSize() * _userMag * (spatium() / SPATIUM20));
-      QFontMetricsF fm(scaledFont, MScore::paintDevice());
-      scaledFont.setPointSizeF(scaledFont.pointSizeF() * MScore::pixelRatio);
-
-      painter->setFont(scaledFont);
-
       // dotd is the diameter of a dot
       qreal dotd = _spatium * .49 * score()->styleD(Sid::fretDotSize);
 
-      // Draw dots, sym pen is used to draw them
+      // Draw dots, sym pen is used to draw them (and markers)
       QPen symPen(pen);
       symPen.setCapStyle(Qt::RoundCap);
       qreal symPenWidth = stringLw * 1.2;
@@ -356,19 +357,24 @@ void FretDiagram::draw(QPainter* painter) const
             }
 
       // Draw markers
-      painter->setPen(pen);
+      symPen.setWidthF(symPenWidth * 1.2);
+      painter->setBrush(Qt::NoBrush);
+      painter->setPen(symPen);
       for (auto const& i : _markers) {
             int string = i.first;
             FretItem::Marker marker = i.second;
             if (!marker.exists())
                   continue;
 
-            QChar markerChar = FretItem::markerToChar(marker.mtype);
-
-            qreal x = stringDist * string;
-            qreal y = -fretDist * .3 - fm.ascent();
-            painter->drawText(QRectF(x, y, .0, .0),
-               Qt::AlignHCenter|Qt::TextDontClip, markerChar);
+            qreal x = stringDist * string - markerSize * .5;
+            qreal y = -fretDist - markerSize * .5;
+            if (marker.mtype == FretMarkerType::CIRCLE) {
+                  painter->drawEllipse(QRectF(x, y, markerSize, markerSize));
+                  }
+            else if (marker.mtype == FretMarkerType::CROSS) {
+                  painter->drawLine(QPointF(x, y), QPointF(x + markerSize, y + markerSize));
+                  painter->drawLine(QPointF(x, y + markerSize), QPointF(x + markerSize, y));
+                  }
             }
 
       // Draw barres
@@ -389,22 +395,44 @@ void FretDiagram::draw(QPainter* painter) const
       // Draw fret offset number
       if (_fretOffset > 0) {
             qreal fretNumMag = score()->styleD(Sid::fretNumMag);
-            scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
+            QFont scaledFont(font);
+            scaledFont.setPointSizeF(font.pointSize() * _userMag * (spatium() / SPATIUM20) * MScore::pixelRatio * fretNumMag);
             painter->setFont(scaledFont);
-            if (_numPos == 0) {
-                  painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
-                     Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
-                     QString("%1").arg(_fretOffset+1));
+            QString text = QString("%1").arg(_fretOffset+1);
+
+            if (_orientation == Orientation::VERTICAL) {
+                  if (_numPos == 0) {
+                        painter->drawText(QRectF(-stringDist * .4, .0, .0, fretDist),
+                              Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip, text);
+                        }
+                  else {
+                        painter->drawText(QRectF(x2 + (stringDist * .4), .0, .0, fretDist),
+                        Qt::AlignVCenter|Qt::AlignLeft|Qt::TextDontClip,
+                        QString("%1").arg(_fretOffset+1));
+                        }
                   }
-            else {
-                  painter->drawText(QRectF(x2 + (stringDist * 0.4), .0, .0, fretDist),
-                     Qt::AlignVCenter|Qt::AlignLeft|Qt::TextDontClip,
-                     QString("%1").arg(_fretOffset+1));
+            else if (_orientation == Orientation::HORIZONTAL) {
+                  painter->save();
+                  painter->translate(-translation);
+                  painter->rotate(90);
+                  if (_numPos == 0) {
+                        painter->drawText(QRectF(.0, stringDist * (_strings - 1), .0, .0),
+                           Qt::AlignLeft|Qt::TextDontClip, text);
+                        }
+                  else {
+                        painter->drawText(QRectF(.0, .0, .0, .0),
+                           Qt::AlignBottom|Qt::AlignLeft|Qt::TextDontClip, text);
+                        }
+                  painter->restore();
                   }
             painter->setFont(font);
             }
 
       // NOTE:JT possible future todo - draw fingerings
+
+      if (_orientation == Orientation::HORIZONTAL) {
+            painter->restore();
+            }
       }
 
 //---------------------------------------------------------
@@ -418,39 +446,70 @@ void FretDiagram::layout()
       nutLw           = (_fretOffset || !_showNut) ? stringLw : _spatium * 0.2;
       stringDist      = score()->styleP(Sid::fretStringSpacing) * _userMag;
       fretDist        = score()->styleP(Sid::fretFretSpacing) * _userMag;
+      markerSize      = stringDist * .8;
 
-      qreal w    = stringDist * (_strings - 1);
-      qreal h    = _frets * fretDist + fretDist * .5;
-      qreal y    = 0.0;
-      qreal dotd = _spatium * .49 * score()->styleD(Sid::fretDotSize);
-      qreal x    = -((dotd+stringLw) * .5);
-      w         += dotd + stringLw;
+      qreal w    = stringDist * (_strings - 1) + markerSize;
+      qreal h    = (_frets + 1) * fretDist + markerSize;
+      qreal y    = -(markerSize * .5 + fretDist);
+      qreal x    = -(markerSize * .5);
 
-      // Always allocate space for markers
-      QFont scaledFont(font);
-      scaledFont.setPointSize(font.pointSize() * _userMag);
-      QFontMetricsF fm(scaledFont, MScore::paintDevice());
-      y  = -(fretDist * .1 + fm.height());
-      h -= y;
-
+      // Allocate space for fret offset number
       if (_fretOffset > 0) {
+            QFont scaledFont(font);
+            scaledFont.setPointSize(font.pointSize() * _userMag);
+            QFontMetricsF fm(scaledFont, MScore::paintDevice());
+
             qreal fretNumMag = score()->styleD(Sid::fretNumMag);
             scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
             QFontMetricsF fm2(scaledFont, MScore::paintDevice());
             qreal numw = fm2.width(QString("%1").arg(_fretOffset+1));
             qreal xdiff = numw + stringDist * .4;
             w += xdiff;
-            x += _numPos == 0 ? -xdiff : 0;
+            x += (_numPos == 0) == (_orientation == Orientation::VERTICAL) ? -xdiff : 0;
+            }
+
+      if (_orientation == Orientation::HORIZONTAL) {
+            qreal tempW = w,
+                  tempX = x;
+            w = h;
+            h = tempW;
+            x = y;
+            y = tempX;
             }
 
       bbox().setRect(x, y, w, h);
-
-      setPos(-_spatium, -h - styleP(Sid::fretY) + _spatium );
 
       if (!parent() || !parent()->isSegment()) {
             setPos(QPointF());
             return;
             }
+
+      // We need to get the width of the notehead/rest in order to position the fret diagram correctly
+      Segment* pSeg = toSegment(parent());
+      qreal noteheadWidth = 0;
+      if (pSeg->isChordRestType()) {
+            int idx = staff()->idx();
+            for (Element* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
+                  if (e->isRest()) {
+                        Rest* r = toRest(e);
+                        noteheadWidth = symWidth(r->sym());
+                        break;
+                        }
+                  else if (e->isNote()) {
+                        Note* n = toNote(e);
+                        noteheadWidth = n->headWidth();
+                        break;
+                        }
+                  }
+            }
+
+      qreal mainWidth;
+      if (_orientation == Orientation::VERTICAL)
+            mainWidth = stringDist * (_strings - 1);
+      else if (_orientation == Orientation::HORIZONTAL)
+            mainWidth = fretDist * (_frets + 0.5);
+      setPos((noteheadWidth - mainWidth)/2, -(h + styleP(Sid::fretY)));
+
       autoplaceSegmentElement();
 
       // don't display harmony in palette
@@ -501,14 +560,15 @@ qreal FretDiagram::centerX() const
 //    written, edit the writeNew function. writeOld is purely compatibility.
 //---------------------------------------------------------
 
-static const std::array<Pid, 7> pids { {
+static const std::array<Pid, 8> pids { {
       Pid::MIN_DISTANCE,
       Pid::FRET_OFFSET,
       Pid::FRET_FRETS,
       Pid::FRET_STRINGS,
       Pid::FRET_NUT,
       Pid::MAG,
-      Pid::FRET_NUM_POS
+      Pid::FRET_NUM_POS,
+      Pid::ORIENTATION
       } };
 
 void FretDiagram::write(XmlWriter& xml) const
@@ -707,6 +767,8 @@ void FretDiagram::read(XmlReader& e)
             // Check for new properties
             else if (tag == "showNut")
                   readProperty(e, Pid::FRET_NUT);
+            else if (tag == "orientation")
+                  readProperty(e, Pid::ORIENTATION);
 
             // Then read the rest if there is no new format diagram (compatibility read)
             else if (tag == "strings")
@@ -1118,6 +1180,7 @@ void FretDiagram::add(Element* e)
             _harmony = toHarmony(e);
             _harmony->setTrack(track());
             _harmony->resetProperty(Pid::OFFSET);
+            _harmony->setProperty(Pid::ALIGN, int(Align::HCENTER | Align::TOP));
             }
       else
             qWarning("FretDiagram: cannot add <%s>\n", e->name());
@@ -1278,6 +1341,9 @@ QVariant FretDiagram::getProperty(Pid propertyId) const
                   return fretOffset();
             case Pid::FRET_NUM_POS:
                   return _numPos;
+            case Pid::ORIENTATION:
+                  return int(_orientation);
+                  break;
             default:
                   return Element::getProperty(propertyId);
             }
@@ -1307,6 +1373,9 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::FRET_NUM_POS:
                   _numPos = v.toInt();
+                  break;
+            case Pid::ORIENTATION:
+                  _orientation = Orientation(v.toInt());
                   break;
             default:
                   return Element::setProperty(propertyId, v);
