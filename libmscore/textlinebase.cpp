@@ -140,7 +140,7 @@ void TextLineBaseSegment::draw(QPainter* painter) const
                   QVector<qreal> nDashes { dash, newGap };
                   if (tl->beginHookType() == HookType::HOOK_45 || tl->beginHookType() == HookType::HOOK_90) {
                         qreal absD = sqrt(QPointF::dotProduct(points[start+1]-points[start], points[start+1]-points[start])) / textlineLineWidth;
-                        numPairs = max(qreal(1), absD / (dash + gap));
+                        numPairs = std::max(qreal(1), absD / (dash + gap));
                         nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
                         pen.setDashPattern(nDashes);
                         painter->setPen(pen);
@@ -149,14 +149,14 @@ void TextLineBaseSegment::draw(QPainter* painter) const
                         }
                   if (tl->endHookType() == HookType::HOOK_45 || tl->endHookType() == HookType::HOOK_90) {
                         qreal absD = sqrt(QPointF::dotProduct(points[end]-points[end-1], points[end]-points[end-1])) / textlineLineWidth;
-                        numPairs = max(qreal(1), absD / (dash + gap));
+                        numPairs = std::max(qreal(1), absD / (dash + gap));
                         nDashes[1] = (absD - dash * (numPairs + 1)) / numPairs;
                         pen.setDashPattern(nDashes);
                         painter->setPen(pen);
                         painter->drawLines(&points[end-1], 1);
                         end--;
                         }
-                  numPairs = max(qreal(1), adjustedLineLength / (dash + gap));
+                  numPairs = std::max(qreal(1), adjustedLineLength / (dash + gap));
                   nDashes[1] = (adjustedLineLength - dash * (numPairs + 1)) / numPairs;
                   pen.setDashPattern(nDashes);
                   }

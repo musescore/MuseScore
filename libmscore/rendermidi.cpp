@@ -1400,8 +1400,8 @@ int totalTiedNoteTicks(Note* note)
 //---------------------------------------------------------
 
 bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, int requestedTicksPerNote,
-   const vector<int>& prefix, const vector<int>& body,
-   bool repeatp, bool sustainp, const vector<int>& suffix,
+   const std::vector<int>& prefix, const std::vector<int>& body,
+   bool repeatp, bool sustainp, const std::vector<int>& suffix,
    int fastestFreq=64, int slowestFreq=8 // 64 Hz and 8 Hz
    )
       {
@@ -1443,7 +1443,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
                   ticksPerNote = minTicksPerNote;
             }
 
-      ticksPerNote = max(requestedTicksPerNote, minTicksPerNote);
+      ticksPerNote = std::max(requestedTicksPerNote, minTicksPerNote);
 
       if (slowestFreq <= 0) // no slowest freq given such as something silly like glissando with 4 notes over 8 counts.
             ;
@@ -1478,7 +1478,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
       // If so, increment the duration by the appropriate note duration, and increment the index, j, to the next note index
       // of a different pitch.
       // The total duration of the tied note is returned, and the index is modified.
-      auto tieForward = [millespernote] (int & j, const vector<int> & vec) {
+      auto tieForward = [millespernote] (int & j, const std::vector<int> & vec) {
             int size = int(vec.size());
             int duration = millespernote;
             while ( j < size-1 && vec[j] == vec[j+1] ) {
@@ -1584,22 +1584,22 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
 
 struct OrnamentExcursion {
       SymId atype;
-      set<MScore::OrnamentStyle> ostyles;
+      std::set<MScore::OrnamentStyle> ostyles;
       int duration;
-      vector<int> prefix;
-      vector<int> body;
+      std::vector<int> prefix;
+      std::vector<int> body;
       bool repeatp;
       bool sustainp;
-      vector<int> suffix;
+      std::vector<int> suffix;
       };
 
-set<MScore::OrnamentStyle> baroque  = {MScore::OrnamentStyle::BAROQUE};
-set<MScore::OrnamentStyle> defstyle = {MScore::OrnamentStyle::DEFAULT};
-set<MScore::OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
+std::set<MScore::OrnamentStyle> baroque  = {MScore::OrnamentStyle::BAROQUE};
+std::set<MScore::OrnamentStyle> defstyle = {MScore::OrnamentStyle::DEFAULT};
+std::set<MScore::OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
 int _16th = MScore::division / 4;
 int _32nd = _16th / 2;
 
-vector<OrnamentExcursion> excursions = {
+std::vector<OrnamentExcursion> excursions = {
       //  articulation type            set of  duration       body         repeatp      suffix
       //                               styles          prefix                    sustainp
       { SymId::ornamentTurn,                any, _32nd, {},    {1,0,-1,0},   false, true, {}}
@@ -1639,7 +1639,7 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
       if (!note->staff()->isPitchedStaff(note->tick())) // not enough info in tab staff
             return false;
 
-      vector<int> emptypattern = {};
+      std::vector<int> emptypattern = {};
       for (auto& oe : excursions) {
             if (oe.atype == articulationType && ( 0 == oe.ostyles.size()
                   || oe.ostyles.end() != oe.ostyles.find(ornamentStyle))) {
@@ -1656,7 +1656,7 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
 
 bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, Trill::Type trillType, MScore::OrnamentStyle ornamentStyle)
       {
-      map<Trill::Type,SymId> articulationMap = {
+      std::map<Trill::Type,SymId> articulationMap = {
             {Trill::Type::TRILL_LINE,      SymId::ornamentTrill      }
            ,{Trill::Type::UPPRALL_LINE,    SymId::ornamentUpPrall    }
            ,{Trill::Type::DOWNPRALL_LINE,  SymId::ornamentPrecompMordentUpperPrefix  }
@@ -1691,13 +1691,13 @@ bool noteHasGlissando(Note *note)
 
 void renderGlissando(NoteEventList* events, Note *notestart)
       {
-      vector<int> empty = {};
+      std::vector<int> empty = {};
       int Cnote = 60; // pitch of middle C
       int pitchstart = notestart->ppitch();
       int linestart = notestart->line();
 
-      set<int> blacknotes = {  1,  3,    6, 8, 10};
-      set<int> whitenotes = {0,  2, 4, 5, 7,  9, 11};
+      std::set<int> blacknotes = {  1,  3,    6, 8, 10};
+      std::set<int> whitenotes = {0,  2, 4, 5, 7,  9, 11};
 
       for (Spanner* spanner : notestart->spannerFor()) {
             if (spanner->type() == ElementType::GLISSANDO) {
@@ -1706,7 +1706,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
                   Element* ee = spanner->endElement();
                   // only consider glissando connected to NOTE.
                   if (glissando->playGlissando() && ElementType::NOTE == ee->type()) {
-                        vector<int> body;
+                        std::vector<int> body;
                         Note *noteend  = toNote(ee);
                         int pitchend   = noteend->ppitch();
                         bool direction = pitchend >  pitchstart;
