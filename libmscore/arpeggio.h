@@ -48,6 +48,8 @@ class Arpeggio final : public Element {
       QVector<QLineF> gripAnchorLines(Grip) const override;
       void startEdit(EditData&) override;
 
+      static const std::array<const char*, 6> arpeggioTypeNames;
+
    public:
       Arpeggio(Score* s);
 
@@ -56,6 +58,7 @@ class Arpeggio final : public Element {
 
       ArpeggioType arpeggioType() const    { return _arpeggioType; }
       void setArpeggioType(ArpeggioType v) { _arpeggioType = v;    }
+      QString arpeggioTypeName()           { return qApp->translate("Palette", arpeggioTypeNames[int(_arpeggioType)]); }
 
       Chord* chord() const                 { return (Chord*)parent(); }
 
