@@ -96,5 +96,6 @@
         <file>view/qml/common/TextInputField.qml</file>
         <file>view/qml/notation/markers/MarkerPopup.qml</file>
         <file>view/qml/notation/jumps/JumpPopup.qml</file>
+        <file>view/qml/notation/keysignatures/KeySignaturePopup.qml</file>
     </qresource>
 </RCC>
