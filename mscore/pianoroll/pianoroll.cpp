@@ -379,7 +379,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       editAreaSplitter->addWidget(levelsAreaWidget);
       editAreaSplitter->setFrameShape(QFrame::NoFrame);
 
-      editAreaSplitter->setSizes(QList<int>() << (height() * 3 / 4) << (height() * 1 / 4));
+      editAreaSplitter->setSizes(QList<int>({300, 100}));
 
       split = new QSplitter(Qt::Vertical);
       split->setFrameShape(QFrame::NoFrame);

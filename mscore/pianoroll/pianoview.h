@@ -37,6 +37,7 @@ enum class NoteSelectType {
 
 enum class DragStyle {
     NONE = 0,
+    CANCELLED,
     SELECTION_RECT,
     NOTES
       };
@@ -60,6 +61,8 @@ class PianoItem {
       bool intersectsBlock(int startTick, int endTick, int highPitch, int lowPitch, NoteEvent* evt);
       
    public:
+      const static int NOTE_BLOCK_CORNER_RADIUS = 3;
+
       PianoItem(Note*, PianoView*);
       ~PianoItem() {}
       Note* note() { return _note; }
@@ -98,10 +101,12 @@ private:
       bool _playEventsView;
       bool _mouseDown;
       bool _dragStarted;
+      QString _dragNoteCache;
       QPointF _mouseDownPos;
       QPointF _lastMousePos;
+      QPointF _popupMenuPos;
       DragStyle _dragStyle;
-      int _lastDragPitch;
+      int _dragStartPitch;
       bool _inProgressUndoEvent;
 
       //The length of the note we are using for editng purposes, expressed as a fraction of the measure.
@@ -122,6 +127,7 @@ private:
       void selectNotes(int startTick, int endTick, int lowPitch, int highPitch, NoteSelectType selType);
       void showPopupMenu(const QPoint& pos);
       bool cutChordRest(ChordRest* e, int track, Fraction cutTick, ChordRest*& cr0, ChordRest*& cr1);
+      void addNote(Fraction startTick, Fraction frac, int pitch, int track, bool command = true);
       void handleSelectionClick();
       void insertNote(int modifiers);
       Fraction roundToStartBeat(int tick) const;
@@ -133,11 +139,13 @@ private:
       void toggleTie(const QPointF& pos);
       void toggleTie(Note*);
       void dragSelectionNoteGroup();
+      void finishNoteGroupDrag();
 
       QAction* getAction(const char* id);
 
    protected:
       virtual void wheelEvent(QWheelEvent* event);
+      virtual void keyReleaseEvent(QKeyEvent* event);
       virtual void mousePressEvent(QMouseEvent* event);
       virtual void mouseReleaseEvent(QMouseEvent* event);
       virtual void mouseMoveEvent(QMouseEvent* event);
@@ -164,6 +172,16 @@ private:
       void setBarPattern(int);
       void togglePitchHighlight(int pitch);
       void showNoteTweaker();
+      void setNotesToVoice(int voice);
+
+      QString serializeSelectedNotes();
+      void pasteNotes(const QString& data, Fraction pasteStartTick, int pitchOffset, bool xIsOffset = false);
+      void drawDraggedNotes(QPainter* painter);
+      void drawDraggedNote(QPainter* painter, Fraction startTick, Fraction frac, int pitch, int track, QColor color);
+
+      void cutNotes();
+      void copyNotes();
+      void pasteNotesAtCursor();
 
    public:
       PianoView();
@@ -188,7 +206,8 @@ private:
       int pixelXToTick(int pixX);
       int tickToPixelX(int tick);
       int pixelYToPitch(int pixY) { return (int)floor(128 - pixY / (qreal)_noteHeight); }
-      
+      int pitchToPixelY(int pitch) { return (128 - pitch) * _noteHeight; }
+
       PianoItem* pickNote(int tick, int pitch);
 
       QList<PianoItem*> getSelectedItems();
