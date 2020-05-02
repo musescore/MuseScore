@@ -256,7 +256,7 @@
             <action>add-brackets</action>
             </Icon>
           </Cell>
-        <Cell name="Add parentheses to element">
+        <Cell name="Add parentheses to accidental">
           <Icon>
             <subtype>22</subtype>
             <action>add-parentheses</action>
@@ -418,28 +418,28 @@
             <track>0</track>
             </Ottava>
           </Cell>
-        <Cell name="Pedal">
+        <Cell name="Pedal (straight hooks)">
           <Pedal id="12">
             <endHookType>1</endHookType>
             <beginHookType>1</beginHookType>
             <track>0</track>
             </Pedal>
           </Cell>
-        <Cell name="Pedal">
+        <Cell name="Pedal (angled end hook)">
           <Pedal id="13">
             <endHookType>2</endHookType>
             <beginHookType>1</beginHookType>
             <track>0</track>
             </Pedal>
           </Cell>
-        <Cell name="Pedal">
+        <Cell name="Pedal (both hooks angled)">
           <Pedal id="14">
             <endHookType>2</endHookType>
             <beginHookType>2</beginHookType>
             <track>0</track>
             </Pedal>
           </Cell>
-        <Cell name="Pedal">
+        <Cell name="Pedal (angled start hook)">
           <Pedal id="15">
             <endHookType>1</endHookType>
             <beginHookType>2</beginHookType>
@@ -464,19 +464,19 @@
             <subtype>double</subtype>
             </BarLine>
           </Cell>
-        <Cell name="Start repeat">
+        <Cell name="Start repeat barline">
           <staff>1</staff>
           <BarLine>
             <subtype>start-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End repeat">
+        <Cell name="End repeat barline">
           <staff>1</staff>
           <BarLine>
             <subtype>end-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End-start repeat">
+        <Cell name="End-start repeat barline">
           <staff>1</staff>
           <BarLine>
             <subtype>end-start-repeat</subtype>
@@ -597,7 +597,7 @@
         <mag>0.65</mag>
         <grid>1</grid>
         <moreElements>1</moreElements>
-        <Cell name="Tempo text">
+        <Cell name="Half note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2.66667</tempo>
@@ -605,7 +605,7 @@
             <text><sym>metNoteHalfUp</sym> = 80</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Quarter note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
             <tempo>1.33333</tempo>
@@ -613,7 +613,7 @@
             <text><sym>metNoteQuarterUp</sym> = 80</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Eigth note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
             <tempo>0.666667</tempo>
@@ -621,7 +621,7 @@
             <text><sym>metNote8thUp</sym> = 80</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Dotted quarter note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2</tempo>

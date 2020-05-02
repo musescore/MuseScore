@@ -50,6 +50,11 @@ static const ElementStyle glissandoElementStyle {
 static const qreal      GLISS_PALETTE_WIDTH           = 4.0;
 static const qreal      GLISS_PALETTE_HEIGHT          = 4.0;
 
+const std::array<const char *, 2> Glissando::glissandoTypeNames = {
+      QT_TRANSLATE_NOOP("Palette", "Straight glissando"),
+      QT_TRANSLATE_NOOP("Palette", "Wavy glissando")
+      };
+
 //---------------------------------------------------------
 //   GlisandoSegment
 //---------------------------------------------------------

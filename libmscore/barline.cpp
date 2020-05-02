@@ -194,14 +194,14 @@ class BarLineEditData : public ElementEditData {
 //---------------------------------------------------------
 
 const std::vector<BarLineTableItem> BarLine::barLineTable {
-      { BarLineType::NORMAL,           QT_TRANSLATE_NOOP("Palette", "Normal barline"),   "normal" },
-      { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double barline"),   "double" },
-      { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start repeat"),     "start-repeat" },
-      { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End repeat"),       "end-repeat" },
-      { BarLineType::BROKEN,           QT_TRANSLATE_NOOP("Palette", "Dashed barline"),   "dashed" },
-      { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "Final barline"),    "end" },
-      { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-start repeat"), "end-start-repeat" },
-      { BarLineType::DOTTED,           QT_TRANSLATE_NOOP("Palette", "Dotted barline"),   "dotted" },
+      { BarLineType::NORMAL,           QT_TRANSLATE_NOOP("Palette", "Normal barline"),           "normal" },
+      { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double barline"),           "double" },
+      { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start repeat barline"),     "start-repeat" },
+      { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End repeat barline"),       "end-repeat" },
+      { BarLineType::BROKEN,           QT_TRANSLATE_NOOP("Palette", "Dashed barline"),           "dashed" },
+      { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "Final barline"),            "end" },
+      { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-start repeat barline"), "end-start-repeat" },
+      { BarLineType::DOTTED,           QT_TRANSLATE_NOOP("Palette", "Dotted barline"),           "dotted" },
       };
 
 //---------------------------------------------------------

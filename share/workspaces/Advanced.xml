@@ -403,7 +403,7 @@
           <Bracket type="Square">
             </Bracket>
           </Cell>
-        <Cell name="Line">
+        <Cell name="Straight Line">
           <Bracket type="Line">
             </Bracket>
           </Cell>
@@ -640,7 +640,7 @@
             <subtype>wiggleVibratoLargeSlowest</subtype>
             </Articulation>
           </Cell>
-        <Cell name="Open">
+        <Cell name="Opened">
           <Articulation>
             <subtype>brassMuteOpen</subtype>
             </Articulation>
@@ -998,7 +998,7 @@
             <name>noteShapeTriangleRoundWhite</name>
             </NoteHead>
           </Cell>
-        <Cell name="Add parentheses to element">
+        <Cell name="Add parentheses to notehead">
           <Icon>
             <subtype>22</subtype>
             <action>add-parentheses</action>
@@ -1127,7 +1127,7 @@
             <track>0</track>
             </Ottava>
           </Cell>
-        <Cell name="Pedal">
+        <Cell name="Pedal (with ped and line)">
           <Pedal id="18">
             <endHookType>1</endHookType>
             <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
@@ -1135,7 +1135,7 @@
             <track>0</track>
             </Pedal>
           </Cell>
-        <Cell name="Pedal">
+        <Cell name="Pedal (with ped and asterisk)">
           <Pedal id="19">
             <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
             <continueText>(&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;)</continueText>
@@ -1144,28 +1144,28 @@
             <track>0</track>
             </Pedal>
           </Cell>
-        <Cell name="Pedal">
+        <Cell name="Pedal (straight hooks)">
           <Pedal id="20">
             <endHookType>1</endHookType>
             <beginHookType>1</beginHookType>
             <track>0</track>
             </Pedal>
           </Cell>
-        <Cell name="Pedal">
+        <Cell name="Pedal (angled end hook)">
           <Pedal id="21">
             <endHookType>2</endHookType>
             <beginHookType>1</beginHookType>
             <track>0</track>
             </Pedal>
           </Cell>
-        <Cell name="Pedal">
+        <Cell name="Pedal (both hooks angled)">
           <Pedal id="22">
             <endHookType>2</endHookType>
             <beginHookType>2</beginHookType>
             <track>0</track>
             </Pedal>
           </Cell>
-        <Cell name="Pedal">
+        <Cell name="Pedal (angled start hook)">
           <Pedal id="23">
             <endHookType>1</endHookType>
             <beginHookType>2</beginHookType>
@@ -1291,19 +1291,19 @@
             <subtype>double</subtype>
             </BarLine>
           </Cell>
-        <Cell name="Start repeat">
+        <Cell name="Start repeat barline">
           <staff>1</staff>
           <BarLine>
             <subtype>start-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End repeat">
+        <Cell name="End repeat barline">
           <staff>1</staff>
           <BarLine>
             <subtype>end-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End-start repeat">
+        <Cell name="End-start repeat barline">
           <staff>1</staff>
           <BarLine>
             <subtype>end-start-repeat</subtype>
@@ -1368,32 +1368,32 @@
             <subtype>0</subtype>
             </Arpeggio>
           </Cell>
-        <Cell name="Arpeggio">
+        <Cell name="Up arpeggio">
           <Arpeggio>
             <subtype>1</subtype>
             </Arpeggio>
           </Cell>
-        <Cell name="Arpeggio">
+        <Cell name="Down arpeggio">
           <Arpeggio>
             <subtype>2</subtype>
             </Arpeggio>
           </Cell>
-        <Cell name="Arpeggio">
+        <Cell name="Bracket arpeggio">
           <Arpeggio>
             <subtype>3</subtype>
             </Arpeggio>
           </Cell>
-        <Cell name="Arpeggio">
+        <Cell name="Up arpeggio straight">
           <Arpeggio>
             <subtype>4</subtype>
             </Arpeggio>
           </Cell>
-        <Cell name="Arpeggio">
+        <Cell name="Down arpeggio straight">
           <Arpeggio>
             <subtype>5</subtype>
             </Arpeggio>
           </Cell>
-        <Cell name="Glissando">
+        <Cell name="Straight glissando">
           <Glissando id="36">
             <text>gliss.</text>
             <ticks>0</ticks>
@@ -1403,7 +1403,7 @@
             <length>100</length>
             </Glissando>
           </Cell>
-        <Cell name="Glissando">
+        <Cell name="Wavy glissando">
           <Glissando id="37">
             <text>gliss.</text>
             <subtype>1</subtype>
@@ -1662,7 +1662,7 @@
         <mag>0.65</mag>
         <grid>1</grid>
         <moreElements>0</moreElements>
-        <Cell name="Tempo text">
+        <Cell name="Half note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2.66667</tempo>
@@ -1670,7 +1670,7 @@
             <text><sym>metNoteHalfUp</sym> = 80</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Quarter note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
             <tempo>1.33333</tempo>
@@ -1678,7 +1678,7 @@
             <text><sym>metNoteQuarterUp</sym> = 80</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Eighth note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
             <tempo>0.666667</tempo>
@@ -1686,7 +1686,7 @@
             <text><sym>metNote8thUp</sym> = 80</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Dotted half note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
             <tempo>4</tempo>
@@ -1694,7 +1694,7 @@
             <text><sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Dotted quarter note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2</tempo>
@@ -1702,7 +1702,7 @@
             <text><sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Dotted eighth note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
             <tempo>1</tempo>
@@ -1710,77 +1710,77 @@
             <text><sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Grave">
           <mag>1.3</mag>
           <Tempo>
             <tempo>0.583333</tempo>
             <text>Grave</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Largo">
           <mag>1.3</mag>
           <Tempo>
             <tempo>0.833333</tempo>
             <text>Largo</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Lento">
           <mag>1.3</mag>
           <Tempo>
             <tempo>0.875</tempo>
             <text>Lento</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Adagio">
           <mag>1.3</mag>
           <Tempo>
             <tempo>1.18333</tempo>
             <text>Adagio</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Andante">
           <mag>1.3</mag>
           <Tempo>
             <tempo>1.53333</tempo>
             <text>Andante</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Moderato">
           <mag>1.3</mag>
           <Tempo>
             <tempo>1.9</tempo>
             <text>Moderato</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Allegretto">
           <mag>1.3</mag>
           <Tempo>
             <tempo>1.93333</tempo>
             <text>Allegretto</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Allegro">
           <mag>1.3</mag>
           <Tempo>
             <tempo>2.4</tempo>
             <text>Allegro</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Vivace">
           <mag>1.3</mag>
           <Tempo>
             <tempo>2.86667</tempo>
             <text>Vivace</text>
             </Tempo>
           </Cell>
-        <Cell name="Tempo text">
+        <Cell name="Presto">
           <mag>1.3</mag>
           <Tempo>
             <tempo>3.11667</tempo>
             <text>Presto</text>
             </Tempo>
           </Cell>
-        <Cell name="Metric modulation">
+        <Cell name="Quarter note = dotted quarter note metric modulation">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2</tempo>
@@ -1788,7 +1788,7 @@
             <text><sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym></text>
             </Tempo>
           </Cell>
-        <Cell name="Metric modulation">
+        <Cell name="Dotted quarter note = quarter note metric modulation">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2</tempo>
@@ -1796,7 +1796,7 @@
             <text><sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym></text>
             </Tempo>
           </Cell>
-        <Cell name="Metric modulation">
+        <Cell name="Half note = quarter note metric modulation">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2</tempo>
@@ -1804,7 +1804,7 @@
             <text><sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym></text>
             </Tempo>
           </Cell>
-        <Cell name="Metric modulation">
+        <Cell name="Quarter note = half note metric modulation">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2</tempo>
@@ -1812,7 +1812,7 @@
             <text><sym>metNoteQuarterUp</sym> = <sym>metNoteHalfUp</sym></text>
             </Tempo>
           </Cell>
-        <Cell name="Metric modulation">
+        <Cell name="Eighth note = eighth note metric modulation">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2</tempo>
@@ -1820,7 +1820,7 @@
             <text><sym>metNote8thUp</sym> = <sym>metNote8thUp</sym></text>
             </Tempo>
           </Cell>
-        <Cell name="Metric modulation">
+        <Cell name="Quarter note = quarter note metric modulation">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2</tempo>
@@ -2282,7 +2282,7 @@
             <subtype>end-start-repeat</subtype>
             </BarLine>
           </Cell>
-      </Palette>
+        </Palette>
       <Palette name="Fretboard Diagrams">
         <type>FretboardDiagram</type>
         <gridWidth>42</gridWidth>

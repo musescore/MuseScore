@@ -57,6 +57,7 @@ const char* tests[] = {
       "libmscore/selectionrangedelete/tst_selectionrangedelete",
       "libmscore/parts/tst_parts",
       "testscript/tst_runscripts",
+      "mscore/palette/tst_palette"
 #endif
 #if 0
       "libmscore/spanners/tst_spanners",              // FAIL
