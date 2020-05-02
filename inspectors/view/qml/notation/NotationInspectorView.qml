@@ -11,6 +11,7 @@ import "barlines"
 import "sectionbreaks"
 import "markers"
 import "jumps"
+import "keysignatures"
 
 FocusableItem {
     id: root
@@ -338,6 +339,44 @@ FocusableItem {
                 width: root.width
 
                 model: root.model ? root.model.jumpSettingsModel : null
+            }
+        }
+
+        FlatButton {
+            id: keySignatureSettingsButton
+
+            icon: IconNameTypes.KEY_SIGNATURE
+            iconPixelSize: 16
+            text: qsTr("Key signatures")
+
+            Layout.fillWidth: true
+            Layout.minimumWidth: root.width / 2
+
+            visible: root.model && root.model.keySignatureSettingsModel ? !root.model.keySignatureSettingsModel.isEmpty : false
+
+            onVisibleChanged: {
+                if (!visible) {
+                    keySignaturePopup.close()
+                }
+            }
+
+            onClicked: {
+                if (!keySignaturePopup.isOpened) {
+                    keySignaturePopup.open()
+                } else {
+                    keySignaturePopup.close()
+                }
+            }
+
+            KeySignaturePopup {
+                id: keySignaturePopup
+
+                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
+                y: parent.height
+                arrowX: parent.x + parent.width / 2
+                width: root.width
+
+                model: root.model ? root.model.keySignatureSettingsModel : null
             }
         }
     }
