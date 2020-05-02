@@ -10,6 +10,7 @@ import "glissandos"
 import "barlines"
 import "sectionbreaks"
 import "markers"
+import "jumps"
 
 FocusableItem {
     id: root
@@ -299,6 +300,44 @@ FocusableItem {
                 width: root.width
 
                 model: root.model ? root.model.markerSettingsModel : null
+            }
+        }
+
+        FlatButton {
+            id: jumpSettingsButton
+
+            icon: IconNameTypes.JUMP
+            iconPixelSize: 16
+            text: qsTr("Jumps")
+
+            Layout.fillWidth: true
+            Layout.minimumWidth: root.width / 2
+
+            visible: root.model && root.model.jumpSettingsModel ? !root.model.jumpSettingsModel.isEmpty : false
+
+            onVisibleChanged: {
+                if (!visible) {
+                    jumpPopup.close()
+                }
+            }
+
+            onClicked: {
+                if (!jumpPopup.isOpened) {
+                    jumpPopup.open()
+                } else {
+                    jumpPopup.close()
+                }
+            }
+
+            JumpPopup {
+                id: jumpPopup
+
+                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
+                y: parent.height
+                arrowX: parent.x + parent.width / 2
+                width: root.width
+
+                model: root.model ? root.model.jumpSettingsModel : null
             }
         }
     }

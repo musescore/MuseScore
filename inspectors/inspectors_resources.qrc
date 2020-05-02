@@ -95,5 +95,6 @@
         <file>view/qml/notation/sectionbreaks/SectionBreakPopup.qml</file>
         <file>view/qml/common/TextInputField.qml</file>
         <file>view/qml/notation/markers/MarkerPopup.qml</file>
+        <file>view/qml/notation/jumps/JumpPopup.qml</file>
     </qresource>
 </RCC>
