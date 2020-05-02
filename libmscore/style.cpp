@@ -358,6 +358,7 @@ static const StyleType styleTypes[] {
       { Sid::fretDotSize,             "fretDotSize",             QVariant(1.0) },
       { Sid::fretStringSpacing,       "fretStringSpacing",       Spatium(0.7) },
       { Sid::fretFretSpacing,         "fretFretSpacing",         Spatium(0.8) },
+      { Sid::fretOrientation,         "fretOrientation",         int(Orientation::VERTICAL) },
 
       { Sid::showPageNumber,          "showPageNumber",          QVariant(true) },
       { Sid::showPageNumberOne,       "showPageNumberOne",       QVariant(false) },
