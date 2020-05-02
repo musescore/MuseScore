@@ -77,7 +77,7 @@ std::string PowerTab::readString(int length)
 bool PowerTab::readVersion()
       {
       std::string version = readString(4);
-      version += std::string("-") + to_string(readShort());
+      version += std::string("-") + std::to_string(readShort());
       return version == "ptab-4";
       }
 
@@ -372,7 +372,7 @@ void PowerTab::readBarLine(ptSection& sec)
       readTimeSignature(bar);
       readRehearsalSign(sec);
       //sec.getPosition(position).addComponent(bar);
-      sec.bars.push_back(shared_ptr<ptBar>(bar));
+      sec.bars.push_back(std::shared_ptr<ptBar>(bar));
       /*if (bars.empty() || ( bars.back()->measureNo < bar->measureNo ))
             bars.push_back(bar);*/
       }
@@ -440,7 +440,7 @@ void PowerTab::readPosition(int staff, int voice, ptSection& sec)
             else {
                   beat = new ptBeat(staff, voice);
                   beat->position = position;
-                  sec.beats[staff].insert(pos, shared_ptr<ptBeat>(beat));
+                  sec.beats[staff].insert(pos, std::shared_ptr<ptBeat>(beat));
                   }
             }
       auto beaming = readUChar();
@@ -975,7 +975,7 @@ void PowerTab::ptSection::copyTracks(ptTrack* track)
                   while (int(beats.size()) <= staff) {
                         beats.push_back({});
                         }
-                  beats[staff].push_back(shared_ptr<ptBeat>(beat));
+                  beats[staff].push_back(std::shared_ptr<ptBeat>(beat));
                   }
             }
       }
@@ -1038,7 +1038,7 @@ void PowerTab::readSection(ptSection& sec)
 
       auto bar = new ptBar();
       bar->repeatClose = (lastBarData >> 5 == 4) ? lastBarData - 128 : 0;
-      sec.bars.push_back(shared_ptr<ptBar>(bar));
+      sec.bars.push_back(std::shared_ptr<ptBar>(bar));
       //sec.getPosition(sec.getNextPositionNumber()).addComponent(bar);
       }
 
@@ -1194,7 +1194,7 @@ int PowerTab::ptSection::getNextPositionNumber()
 
 void PowerTab::ptPosition::addComponent(ptComponent* c)
       {
-      components.push_back(shared_ptr<ptComponent>(c));
+      components.push_back(std::shared_ptr<ptComponent>(c));
       }
 
 

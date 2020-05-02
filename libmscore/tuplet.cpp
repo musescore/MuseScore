@@ -1311,7 +1311,7 @@ void Tuplet::addMissingElements()
                   Fraction f = missingElementsDuration / ratio();
                   Fraction ticksRequired = f;
                   Fraction endTick = elements().front()->tick();
-                  Fraction startTick = max(firstAvailableTick, endTick - ticksRequired);
+                  Fraction startTick = std::max(firstAvailableTick, endTick - ticksRequired);
                   if (expectedTick > startTick)
                         startTick = expectedTick;
                   missingElementsDuration -= addMissingElement(startTick, endTick);
