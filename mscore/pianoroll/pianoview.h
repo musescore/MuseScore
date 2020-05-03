@@ -175,7 +175,7 @@ private:
       void setNotesToVoice(int voice);
 
       QString serializeSelectedNotes();
-      void pasteNotes(const QString& data, Fraction pasteStartTick, int pitchOffset, bool xIsOffset = false);
+      void pasteNotes(const QString& copiedNotes, Fraction pasteStartTick, int pitchOffset, bool xIsOffset = false);
       void drawDraggedNotes(QPainter* painter);
       void drawDraggedNote(QPainter* painter, Fraction startTick, Fraction frac, int pitch, int track, QColor color);
 
