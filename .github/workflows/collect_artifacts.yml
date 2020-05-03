@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
     - master
+    - 3.x
 
 jobs:
   collect_artifacts_Linux:

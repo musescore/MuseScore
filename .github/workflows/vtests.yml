@@ -4,9 +4,11 @@ on:
   pull_request:
     branches:
     - master
+    - 3.x
   push:
     branches:
     - master
+    - 3.x
 
 jobs:
   run_vtests:
