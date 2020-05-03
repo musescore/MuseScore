@@ -430,11 +430,6 @@ bool MasterScore::saveFile(bool generateBackup)
             // if file was already saved in this session
             // save but don't overwrite backup again
 
-            //
-            // step 2
-            // remove old backup file if exists
-            // remove the backup file in the same dir as score (the traditional place) if exists
-            //
             const QString backupSubdirString = preferences.getString(PREF_APP_BACKUP_SUBFOLDER);
             const QString backupDirString = info.path() + QString(QDir::separator()) + backupSubdirString;
             QDir backupDir(backupDirString);
@@ -462,8 +457,11 @@ bool MasterScore::saveFile(bool generateBackup)
 //                               tr("Removing old backup file %1 failed").arg(backupName));
                         }
                   }
+            //
+            // step 2
             // backup files prior to 3.5 were saved in the same directory as the file itself.
             // remove these old backup files if needed
+            //
             if (dir != backupDir && dir.exists(backupName)) {
                   if (!dir.remove(backupName)) {
 //                      if (!MScore::noGui)
