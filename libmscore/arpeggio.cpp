@@ -25,7 +25,7 @@ namespace Ms {
 
 const std::array<const char*, 6> Arpeggio::arpeggioTypeNames = {
       QT_TRANSLATE_NOOP("Palette", "Arpeggio"),
-      QT_TRANSLATE_NOOP("Palette", "Up Arpgeggio"),
+      QT_TRANSLATE_NOOP("Palette", "Up arpeggio"),
       QT_TRANSLATE_NOOP("Palette", "Down arpeggio"),
       QT_TRANSLATE_NOOP("Palette", "Bracket arpeggio"),
       QT_TRANSLATE_NOOP("Palette", "Up arpeggio straight"),
