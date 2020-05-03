@@ -432,7 +432,6 @@ bool MasterScore::saveFile(bool generateBackup)
 
             //
             // step 2
-            // remove old backup file if exists
             // remove the backup file in the same dir as score (the traditional place) if exists
             //
             const QString backupSubdirString = preferences.getString(PREF_APP_BACKUP_SUBFOLDER);
