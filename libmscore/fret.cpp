@@ -503,7 +503,7 @@ void FretDiagram::layout()
                   }
             }
 
-      qreal mainWidth;
+      qreal mainWidth = 0.0;
       if (_orientation == Orientation::VERTICAL)
             mainWidth = stringDist * (_strings - 1);
       else if (_orientation == Orientation::HORIZONTAL)
