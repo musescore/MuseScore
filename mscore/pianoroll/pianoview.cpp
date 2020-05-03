@@ -1865,12 +1865,12 @@ void PianoView::cutNotes()
 
 void PianoView::copyNotes()
       {
-      QString data = serializeSelectedNotes();
-      if (data.isEmpty())
+      QString copiedNotes = serializeSelectedNotes();
+      if (copiedNotes.isEmpty())
           return;
 
       QMimeData* mimeData = new QMimeData;
-      mimeData->setData(PIANO_NOTE_MIME_TYPE, data.toUtf8());
+      mimeData->setData(PIANO_NOTE_MIME_TYPE, copiedNotes.toUtf8());
       QApplication::clipboard()->setMimeData(mimeData);
       }
 
@@ -1902,10 +1902,10 @@ void PianoView::pasteNotesAtCursor()
 
       if (ms->hasFormat(PIANO_NOTE_MIME_TYPE)) {
             //Decode our XML format and recreate the notes
-            QByteArray data = ms->data(PIANO_NOTE_MIME_TYPE);
+            QByteArray copiedNotes = ms->data(PIANO_NOTE_MIME_TYPE);
 
             score->startCmd();
-            pasteNotes(data, pasteStartTick, 0);
+            pasteNotes(copiedNotes, pasteStartTick, 0);
             score->endCmd();
             }
 
@@ -1953,10 +1953,10 @@ void PianoView::finishNoteGroupDrag() {
 //   pasteNotes
 //---------------------------------------------------------
 
-void PianoView::pasteNotes(const QString& data, Fraction pasteStartTick, int pitchOffset, bool xIsOffset)
+void PianoView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTick, int pitchOffset, bool xIsOffset)
       {
 
-      QXmlStreamReader xml(data);
+      QXmlStreamReader xml(copiedNotes);
       Fraction firstTick;
 
       while (!xml.atEnd()) {
@@ -2063,6 +2063,7 @@ void PianoView::drawDraggedNotes(QPainter* painter)
 
 void PianoView::drawDraggedNote(QPainter* painter, Fraction startTick, Fraction frac, int pitch, int track, QColor color)
       {
+      Q_UNUSED(track);
       painter->setBrush(color);
 
       painter->setPen(QPen(color.darker(250)));
