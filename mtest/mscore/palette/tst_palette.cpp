@@ -10,6 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <vector>
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
 #include "mscore/musescore.h"
@@ -24,7 +25,7 @@ class TestPaletteModel : public QObject, public MTest
       Q_OBJECT
 
       PaletteTreeModel* paletteModel;
-      QMap<QString, vector<QString>> paletteItemNames;
+      QMap<QString, std::vector<QString>> paletteItemNames;
 
       void initMuseScore();
       void iterateOverModel(QAbstractItemModel *model, QModelIndex parent = QModelIndex());
@@ -84,7 +85,7 @@ void TestPaletteModel::iterateOverModel(QAbstractItemModel* model, QModelIndex p
             QString parentName = model->data(parent, Qt::AccessibleTextRole).toString();
 
             paletteItemNames[name].push_back(parentName);
-            
+
             if (model->hasChildren(index))
                   iterateOverModel(model, index);
             }
