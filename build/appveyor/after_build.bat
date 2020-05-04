@@ -10,7 +10,7 @@ SET DEBUG_SYMS_FILE=musescore_win%TARGET_PROCESSOR_BITS%.sym
 REM Add one of the directories containing msdia140.dll (x86 version), for dump_syms.exe
 SET PATH=%PATH%;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\DIA SDK\bin
 @echo on
-C:\MuseScore\breakpad_tools\dump_syms.exe %APPVEYOR_BUILD_FOLDER%\msvc.build_%PLATFORM%\main\RelWithDebInfo\MuseScore3.pdb > %DEBUG_SYMS_FILE%
+C:\MuseScore\breakpad_tools\dump_syms.exe %APPVEYOR_BUILD_FOLDER%\msvc.build_%PLATFORM%\main\RelWithDebInfo\MuseScore4.pdb > %DEBUG_SYMS_FILE%
 @echo off
 
 :: Test MuseScore stability
@@ -82,7 +82,7 @@ goto :UPLOAD
 :UNSTABLE_LABEL
 echo "Unstable: build 7z package"
 CD C:\MuseScore
-RENAME C:\MuseScore\msvc.install_%PLATFORM%\bin\MuseScore3.exe nightly.exe
+RENAME C:\MuseScore\msvc.install_%PLATFORM%\bin\MuseScore4.exe nightly.exe
 RENAME C:\MuseScore\msvc.install_%PLATFORM% MuseScoreNightly
 XCOPY C:\MuseScore\build\appveyor\special C:\MuseScore\MuseScoreNightly\special /I /E /Y /Q
 COPY C:\MuseScore\build\appveyor\support\README.txt C:\MuseScore\MuseScoreNightly\README.txt /Y
