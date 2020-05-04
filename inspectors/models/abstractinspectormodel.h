@@ -1,4 +1,4 @@
-#ifndef ABSTRACTINSPECTORMODEL_H
+﻿#ifndef ABSTRACTINSPECTORMODEL_H
 #define ABSTRACTINSPECTORMODEL_H
 
 #include <QList>
@@ -37,7 +37,8 @@ public:
         TYPE_BARLINE,
         TYPE_STAFF,
         TYPE_MARKER,
-        TYPE_SECTIONBREAK
+        TYPE_SECTIONBREAK,
+        TYPE_JUMP
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
