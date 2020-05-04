@@ -33,6 +33,7 @@ private:
     QList<Ms::Element*> findGlissandos() const;
     QList<Ms::Element*> findHairpins() const;
     QList<Ms::Element*> findStaffs() const;
+    QList<Ms::Element*> findSectionBreaks() const;
 };
 
 #endif // ELEMENTREPOSITORYSERVICE_H

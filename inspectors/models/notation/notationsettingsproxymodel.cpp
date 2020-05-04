@@ -12,6 +12,7 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     setGlissandoSettingsModel(new GlissandoSettingsModel(this, repository));
     setBarlineSettingsModel(new BarlineSettingsModel(this, repository));
     setStaffSettingsModel(new StaffSettingsModel(this, repository));
+    setSectionBreakSettingsModel(new SectionBreakSettingsModel(this, repository));
 }
 
 bool NotationSettingsProxyModel::hasAcceptableElements() const
@@ -49,6 +50,11 @@ QObject* NotationSettingsProxyModel::staffSettingsModel() const
     return m_staffSettingsModel;
 }
 
+QObject* NotationSettingsProxyModel::sectionBreakSettingsModel() const
+{
+    return m_sectionBreakSettingsModel;
+}
+
 void NotationSettingsProxyModel::setNoteSettingsModel(NoteSettingsProxyModel* noteSettingsModel)
 {
     m_noteSettingsModel = noteSettingsModel;
@@ -77,4 +83,9 @@ void NotationSettingsProxyModel::setBarlineSettingsModel(BarlineSettingsModel* b
 void NotationSettingsProxyModel::setStaffSettingsModel(StaffSettingsModel* staffSettingsModel)
 {
     m_staffSettingsModel = staffSettingsModel;
+}
+
+void NotationSettingsProxyModel::setSectionBreakSettingsModel(SectionBreakSettingsModel* sectionBreakSettingsModel)
+{
+    m_sectionBreakSettingsModel = sectionBreakSettingsModel;
 }

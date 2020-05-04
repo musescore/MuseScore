@@ -92,5 +92,6 @@
         <file>view/qml/common/StyledIconLabel.qml</file>
         <file>resources/icons/orientation_auto.svg</file>
         <file>view/qml/notation/barlines/BarlinePopup.qml</file>
+        <file>view/qml/notation/sectionbreaks/SectionBreakPopup.qml</file>
     </qresource>
 </RCC>

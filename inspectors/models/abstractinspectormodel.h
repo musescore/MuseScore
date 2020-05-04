@@ -35,7 +35,8 @@ public:
         TYPE_TEMPO,
         TYPE_GLISSANDO,
         TYPE_BARLINE,
-        TYPE_STAFF
+        TYPE_STAFF,
+        TYPE_SECTIONBREAK
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);

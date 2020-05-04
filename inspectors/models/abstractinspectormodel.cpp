@@ -47,6 +47,7 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::modelTypeFr
     case Ms::ElementType::GLISSANDO_SEGMENT:
     case Ms::ElementType::TEMPO_TEXT:
     case Ms::ElementType::FERMATA:
+    case Ms::ElementType::LAYOUT_BREAK:
         return SECTION_NOTATION;
 
     default:
