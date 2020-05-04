@@ -291,7 +291,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       barPattern = new QComboBox;
       barPattern->setToolTip(tr("White stripes show the tones of this chord."));
       for (int i = 0; !PianoView::barPatterns[i].name.isEmpty(); ++i) {
-            barPattern->addItem(PianoView::barPatterns[i].name, i);
+            barPattern->addItem(qApp->translate("BarPattern", PianoView::barPatterns[i].name.toUtf8().data()), i);
             }
       tbTweak->addWidget(barPattern);
 
