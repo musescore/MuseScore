@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import MuseScore.Inspectors 3.3 // should be removed when component will be moved to the gui module, currently needed only for DoubleInputValidator
 
-FocusableItem {
+Item {
     id: root
 
     property alias iconModeEnum: _iconModeEnum
@@ -9,15 +9,14 @@ FocusableItem {
     property int iconBackgroundSize: 20
     property alias icon: iconImage.iconCode
 
-    property bool isIndeterminate: false
-    readonly property string indeterminateText: "--"
-    property var currentValue
+    property alias isIndeterminate: textInputField.isIndeterminate
+    property alias currentValue: textInputField.currentText
     property real step: 0.5
     property int decimals: 2
     property real maxValue: 999
     property real minValue: -999
-    property alias validator: valueInput.validator
-    property alias measureUnitsSymbol: measureUnitsLabel.text
+    property alias validator: textInputField.validator
+    property alias measureUnitsSymbol: textInputField.measureUnitsSymbol
 
     readonly property int spacing: 8
 
@@ -55,121 +54,23 @@ FocusableItem {
         }
     }
 
-    Rectangle {
-        id: propertyEditorRect
+    TextInputField {
+        id: textInputField
 
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
-        color: "#FFFFFF"
-        border.color: "#A2A2A2"
-        border.width: 1
-
-        opacity: root.enabled ? 1.0 : 0.3
-
-        radius: 2
-
-        TextInput {
-            id: valueInput
-
-            anchors.verticalCenter: propertyEditorRect.verticalCenter
-            anchors.left: propertyEditorRect.left
-            anchors.leftMargin: 12
-
-            color: "#000000"
-            font {
-                family: globalStyle.font.family
-                pointSize: globalStyle.font.pointSize
-            }
-
-            focus: false
-            activeFocusOnPress: false
-            selectByMouse: true
-            visible: !root.isIndeterminate || activeFocus
-
-            text: root.currentValue === undefined ? "" : root.currentValue
-
-            validator: DoubleInputValidator {
-                top: maxValue
-                bottom: minValue
-                decimal: decimals
-            }
-
-            Keys.onPressed: {
-                if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                    valueInput.focus = false
-                }
-            }
-
-            onActiveFocusChanged: {
-                if (activeFocus) {
-                    selectAll()
-                } else {
-                    deselect()
-                }
-            }
-
-            onTextChanged: {
-                if (!acceptableInput)
-                    return;
-
-                var newValue = parseFloat(text)
-
-                if (isNaN(newValue)) {
-                    newValue = 0
-                }
-
-                root.valueEdited(+newValue.toFixed(decimals))
-            }
-        }
-
-        StyledTextLabel {
-            id: measureUnitsLabel
-
-            anchors.left: valueInput.right
-            anchors.leftMargin: 4
-            anchors.verticalCenter: valueInput.verticalCenter
-
-            color: "#000000"
-            visible: !root.isIndeterminate
-        }
-
-        StyledTextLabel {
-            id: undefinedValueLabel
-
-            anchors.verticalCenter: propertyEditorRect.verticalCenter
-            anchors.left: propertyEditorRect.left
-            anchors.leftMargin: 12
-
-            text: root.indeterminateText
-            color: "#000000"
-            visible: root.isIndeterminate && valueInput.activeFocus === false
-        }
-
-        MouseArea {
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                left: parent.left
-                right: valueAdjustControl.left
-            }
-
-            propagateComposedEvents: true
-
-            onPressed: {
-                if (!valueInput.activeFocus) {
-                    valueInput.forceActiveFocus()
-                }
-
-                mouse.accepted = false
-            }
+        validator: DoubleInputValidator {
+            top: maxValue
+            bottom: minValue
+            decimal: decimals
         }
 
         ValueAdjustControl {
             id: valueAdjustControl
 
-            anchors.verticalCenter: propertyEditorRect.verticalCenter
-            anchors.right: propertyEditorRect.right
+            anchors.verticalCenter: textInputField.verticalCenter
+            anchors.right: textInputField.right
 
             icon: IconNameTypes.SMALL_ARROW_DOWN
 
@@ -193,6 +94,16 @@ FocusableItem {
                 root.valueEdited(+newValue.toFixed(decimals))
             }
         }
+
+        onCurrentTextEdited: {
+            var newVal = parseFloat(newTextValue)
+
+            if (isNaN(newVal)) {
+                newVal = 0
+            }
+
+            root.valueEdited(+newVal.toFixed(decimals))
+        }
     }
 
     states: [
@@ -204,9 +115,9 @@ FocusableItem {
 
             PropertyChanges { target: iconBackground; visible: true }
 
-            AnchorChanges { target: propertyEditorRect; anchors.left: iconBackground.right }
+            AnchorChanges { target: textInputField; anchors.left: iconBackground.right }
 
-            PropertyChanges { target: propertyEditorRect; anchors.leftMargin: spacing
+            PropertyChanges { target: textInputField; anchors.leftMargin: spacing
                                                           width: root.width - iconBackground.width - root.spacing }
         },
 
@@ -214,11 +125,11 @@ FocusableItem {
             name: "ICON_ALIGN_RIGHT"
             when: root.iconMode === iconModeEnum.right
 
-            AnchorChanges { target: propertyEditorRect; anchors.left: root.left }
+            AnchorChanges { target: textInputField; anchors.left: root.left }
 
-            PropertyChanges { target: propertyEditorRect; width: root.width - iconBackground.width - root.spacing }
+            PropertyChanges { target: textInputField; width: root.width - iconBackground.width - root.spacing }
 
-            AnchorChanges { target: iconBackground; anchors.left: propertyEditorRect.right }
+            AnchorChanges { target: iconBackground; anchors.left: textInputField.right }
 
             PropertyChanges { target: iconBackground; anchors.leftMargin: spacing
                                                       visible: true }
@@ -228,9 +139,9 @@ FocusableItem {
             name: "ICON_MODE_HIDDEN"
             when: root.iconMode === iconModeEnum.hidden
 
-            AnchorChanges { target: propertyEditorRect; anchors.left: root.left }
+            AnchorChanges { target: textInputField; anchors.left: root.left }
 
-            PropertyChanges { target: propertyEditorRect; width: root.width }
+            PropertyChanges { target: textInputField; width: root.width }
 
             PropertyChanges { target: iconBackground; visible: false }
         }

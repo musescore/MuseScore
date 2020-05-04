@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 Text {
-    id: stedDirectionLabel
+    id: root
 
     color: globalStyle.buttonText
 
