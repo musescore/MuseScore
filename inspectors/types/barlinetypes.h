@@ -7,11 +7,8 @@ class BarlineTypes
 {
     Q_GADGET
 
-    Q_ENUMS(LineType)
-    Q_ENUMS(SpanPreset)
-
 public:
-    enum LineType {
+    enum class LineType {
         TYPE_NORMAL = 1,
         TYPE_DOUBLE = 2,
         TYPE_START_REPEAT = 4,
@@ -22,13 +19,16 @@ public:
         TYPE_DOTTED = 0x80
     };
 
-    enum SpanPreset {
+    enum class SpanPreset {
         PRESET_DEFAULT,
         PRESET_TICK_1,
         PRESET_TICK_2,
         PRESET_SHORT_1,
         PRESET_SHORT_2
     };
+
+    Q_ENUM(LineType)
+    Q_ENUM(SpanPreset)
 };
 
 #endif // BARLINETYPES_H

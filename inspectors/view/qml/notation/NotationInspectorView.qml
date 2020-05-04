@@ -117,7 +117,7 @@ InspectorSectionView {
             model: root.model ? root.model.modelByType(Inspector.TYPE_FRET_DIAGRAM) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
-
+		
         PedalSettings {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width

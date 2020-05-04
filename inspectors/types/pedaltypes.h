@@ -8,14 +8,14 @@ class PedalTypes
     Q_GADGET
 
 public:
-    enum HookType {
+    enum class HookType {
         HOOK_TYPE_NONE = 0,
         HOOK_TYPE_RIGHT_ANGLE,
         HOOK_TYPE_ACUTE_ANGLE,
         HOOK_TYPE_STAR
     };
 
-    enum LineStyle {
+    enum class LineStyle {
         LINE_STYLE_NONE = 0,
         LINE_STYLE_SOLID,
         LINE_STYLE_DASHED,
@@ -25,7 +25,7 @@ public:
         LINE_STYLE_CUSTOM
     };
 
-    enum PlacementType {
+    enum class PlacementType : signed char {
         PLACEMENT_TYPE_ABOVE = 0,
         PLACEMENT_TYPE_BELOW
     };

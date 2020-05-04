@@ -1,17 +1,17 @@
 #ifndef FRETDIAGRAMTYPES_H
 #define FRETDIAGRAMTYPES_H
 
-#include <QObject>
-#include <QMetaType>
+#include "qobjectdefs.h"
 
-class FretDiagramTypes : public QObject {
+class FretDiagramTypes
+{
     Q_GADGET
 
 public:
     // the difference between the start numbers of two enum types
     // is because of how they're defined in libmscore/fret.h
     // to enable direct cast, we use the same values
-    enum FretDot {
+    enum class FretDot {
         DOT_NONE = -1,
         DOT_NORMAL = 0,
         DOT_CROSS,
@@ -19,7 +19,7 @@ public:
         DOT_TRIANGLE
     };
 
-    enum FretMarker {
+    enum class FretMarker {
         MARKER_NONE = 0,
         MARKER_CIRCLE,
         MARKER_CROSS

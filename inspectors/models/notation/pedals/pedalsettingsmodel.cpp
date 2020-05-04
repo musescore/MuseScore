@@ -1,14 +1,14 @@
-#include "pedalssettingsmodel.h"
+#include "pedalsettingsmodel.h"
 
-PedalsSettingsModel::PedalsSettingsModel(QObject* parent, IElementRepositoryService* repository) :
+PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_PEDAL);
-    setTitle(tr("Pedals"));
+    setTitle(tr("Pedal"));
     createProperties();
 }
 
-void PedalsSettingsModel::createProperties()
+void PedalSettingsModel::createProperties()
 {
     m_hookType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE);
     m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
@@ -19,12 +19,12 @@ void PedalsSettingsModel::createProperties()
     m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
 }
 
-void PedalsSettingsModel::requestElements()
+void PedalSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(Ms::ElementType::PEDAL);
 }
 
-void PedalsSettingsModel::loadProperties()
+void PedalSettingsModel::loadProperties()
 {
     loadPropertyItem(m_hookType);
 
@@ -43,7 +43,7 @@ void PedalsSettingsModel::loadProperties()
     loadPropertyItem(m_placement);
 }
 
-void PedalsSettingsModel::resetProperties()
+void PedalSettingsModel::resetProperties()
 {
     m_hookType->resetToDefault();
     m_thickness->resetToDefault();
@@ -54,47 +54,47 @@ void PedalsSettingsModel::resetProperties()
     m_placement->resetToDefault();
 }
 
-PropertyItem* PedalsSettingsModel::hookType() const
+PropertyItem* PedalSettingsModel::hookType() const
 {
     return m_hookType;
 }
 
-PropertyItem* PedalsSettingsModel::thickness() const
+PropertyItem* PedalSettingsModel::thickness() const
 {
     return m_thickness;
 }
 
-PropertyItem* PedalsSettingsModel::hookHeight() const
+PropertyItem* PedalSettingsModel::hookHeight() const
 {
     return m_hookHeight;
 }
 
-PropertyItem* PedalsSettingsModel::lineStyle() const
+PropertyItem* PedalSettingsModel::lineStyle() const
 {
     return m_lineStyle;
 }
 
-PropertyItem* PedalsSettingsModel::dashLineLength() const
+PropertyItem* PedalSettingsModel::dashLineLength() const
 {
     return m_dashLineLength;
 }
 
-PropertyItem* PedalsSettingsModel::dashGapLength() const
+PropertyItem* PedalSettingsModel::dashGapLength() const
 {
     return m_dashGapLength;
 }
 
-PropertyItem* PedalsSettingsModel::placement() const
+PropertyItem* PedalSettingsModel::placement() const
 {
     return m_placement;
 }
 
-bool PedalsSettingsModel::hasToShowBothHooks() const
+bool PedalSettingsModel::hasToShowBothHooks() const
 {
     return m_hasToShowBothHooks;
 }
 
-void PedalsSettingsModel::setHasToShowBothHooks(bool hasToShowBothHooks)
+void PedalSettingsModel::setHasToShowBothHooks(bool hasToShowBothHooks)
 {
     if (m_hasToShowBothHooks == hasToShowBothHooks)
         return;

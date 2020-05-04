@@ -7,21 +7,21 @@ class GlissandoTypes
 {
     Q_GADGET
 
-    Q_ENUMS(Style)
-    Q_ENUMS(LineType)
-
 public:
-    enum Style {
+    enum class Style {
         STYLE_CHROMATIC = 0,
         STYLE_WHITE_KEYS,
         STYLE_BLACK_KEYS,
         STYLE_DIATONIC
     };
 
-    enum LineType {
+    enum class LineType {
         LINE_TYPE_STRAIGHT = 0,
         LINE_TYPE_WAVY
     };
+
+    Q_ENUM(Style)
+    Q_ENUM(LineType)
 };
 
 #endif // GLISSANDOTYPES_H

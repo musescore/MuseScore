@@ -7,12 +7,8 @@ class NoteHeadTypes
 {
     Q_GADGET
 
-    Q_ENUMS(Group)
-    Q_ENUMS(HorizontalDirection)
-    Q_ENUMS(Type)
-    Q_ENUMS(NoteDotPosition)
 public:
-    enum Group {
+    enum class Group {
         HEAD_NORMAL = 0,
         HEAD_CROSS,
         HEAD_PLUS,
@@ -40,7 +36,7 @@ public:
         HEAD_TI
     };
 
-    enum Type {
+    enum class Type {
         TYPE_AUTO = -1,
         TYPE_WHOLE,
         TYPE_HALF,
@@ -48,13 +44,13 @@ public:
         TYPE_BREVIS
     };
 
-    enum HorizontalDirection {
+    enum class HorizontalDirection {
         DIRECTION_H_AUTO = 0,
         DIRECTION_H_LEFT,
         DIRECTION_H_RIGHT
     };
 
-    enum NoteDotPosition {
+    enum class NoteDotPosition {
         DOT_POSITION_AUTO,
         DOT_POSITION_UP,
         DOT_POSITION_DOWN
@@ -73,6 +69,10 @@ public:
         SCHEME_SHAPE_NOTE_7_WALKER
     };
 
+    Q_ENUM(Group)
+    Q_ENUM(HorizontalDirection)
+    Q_ENUM(Type)
+    Q_ENUM(NoteDotPosition)
     Q_ENUM(SchemeType)
 };
 

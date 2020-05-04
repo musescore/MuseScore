@@ -9,7 +9,7 @@ PopupViewButton {
     property alias model: sectionBreakPopup.model
 
     icon: IconNameTypes.SECTION_BREAK
-    text: qsTr("Section break")
+    text: qsTr("Section breaks")
 
     visible: root.model ? !root.model.isEmpty : false
 

@@ -1,17 +1,14 @@
 #ifndef BEAMTYPES_H
 #define BEAMTYPES_H
 
-#include <QObject>
+#include "qobjectdefs.h"
 
 class BeamTypes
 {
     Q_GADGET
 
-    Q_ENUMS(Mode)
-    Q_ENUMS(FeatheringMode)
 public:
-
-    enum Mode {
+    enum class Mode {
         MODE_INVALID = -1,
         MODE_AUTO,
         MODE_BEGIN,
@@ -22,11 +19,14 @@ public:
         MODE_BEGIN64
     };
 
-    enum FeatheringMode {
+    enum class FeatheringMode {
         FEATHERING_NONE = 0,
         FEATHERING_LEFT,
         FEATHERING_RIGHT
     };
+
+    Q_ENUM(Mode)
+    Q_ENUM(FeatheringMode)
 };
 
 #endif // BEAMTYPES_H

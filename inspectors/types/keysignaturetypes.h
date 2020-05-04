@@ -7,10 +7,8 @@ class KeySignatureTypes
 {
     Q_GADGET
 
-    Q_ENUMS(Mode)
-
 public:
-    enum Mode {
+    enum class Mode {
         MODE_UNKNOWN = -1,
         MODE_NONE,
         MODE_MAJOR,
@@ -22,6 +20,8 @@ public:
         MODE_IONIAN,
         MODE_LOCRIAN
     };
+
+    Q_ENUM(Mode)
 };
 
 #endif // KEYSIGNATURETYPES_H

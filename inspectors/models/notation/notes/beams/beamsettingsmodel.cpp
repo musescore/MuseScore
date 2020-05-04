@@ -66,7 +66,7 @@ void BeamSettingsModel::resetProperties()
 
     m_cachedBeamVector = QPointF();
 
-    setFeatheringMode(static_cast<int>(BeamTypes::FEATHERING_NONE));
+    setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
     setIsBeamHeightLocked(false);
 }
 
@@ -107,10 +107,10 @@ void BeamSettingsModel::synchronizeLockedBeamHeight(const qreal& currentX, const
 void BeamSettingsModel::updateFeatheringMode(const qreal &x, const qreal &y)
 {
     if (x != y) {
-        setFeatheringMode(x > y ? static_cast<int>(BeamTypes::FEATHERING_LEFT)
-                                : static_cast<int>(BeamTypes::FEATHERING_RIGHT));
+        setFeatheringMode(x > y ? BeamTypes::FeatheringMode::FEATHERING_LEFT
+                                : BeamTypes::FeatheringMode::FEATHERING_RIGHT);
     } else {
-        setFeatheringMode(static_cast<int>(BeamTypes::FEATHERING_NONE));
+        setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
     }
 }
 
@@ -134,9 +134,9 @@ PropertyItem* BeamSettingsModel::featheringHeightRight() const
     return m_featheringHeightRight;
 }
 
-int BeamSettingsModel::featheringMode() const
+BeamTypes::FeatheringMode BeamSettingsModel::featheringMode() const
 {
-    return static_cast<int>(m_featheringMode);
+    return m_featheringMode;
 }
 
 PropertyItem* BeamSettingsModel::isBeamHidden() const
@@ -163,26 +163,24 @@ void BeamSettingsModel::setIsBeamHeightLocked(bool isBeamHeightLocked)
     emit isBeamHeightLockedChanged(m_isBeamHeightLocked);
 }
 
-void BeamSettingsModel::setFeatheringMode(int featheringMode)
+void BeamSettingsModel::setFeatheringMode(BeamTypes::FeatheringMode featheringMode)
 {
-    BeamTypes::FeatheringMode newMode = static_cast<BeamTypes::FeatheringMode>(featheringMode);
-
-    if (m_featheringMode == newMode) {
+    if (m_featheringMode == featheringMode) {
         return;
     }
 
-    m_featheringMode = newMode;
+    m_featheringMode = featheringMode;
 
-    switch (newMode) {
-    case BeamTypes::FEATHERING_NONE:
+    switch (featheringMode) {
+    case BeamTypes::FeatheringMode::FEATHERING_NONE:
         m_featheringHeightLeft->setValue(1.0);
         m_featheringHeightRight->setValue(1.0);
         break;
-    case BeamTypes::FEATHERING_LEFT:
+    case BeamTypes::FeatheringMode::FEATHERING_LEFT:
         m_featheringHeightLeft->setValue(1.0);
         m_featheringHeightRight->setValue(0.0);
         break;
-    case BeamTypes::FEATHERING_RIGHT:
+    case BeamTypes::FeatheringMode::FEATHERING_RIGHT:
         m_featheringHeightLeft->setValue(0.0);
         m_featheringHeightRight->setValue(1.0);
         break;
@@ -197,7 +195,7 @@ void BeamSettingsModel::setBeamModesModel(BeamModesModel* beamModesModel)
 
     connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified, this, [this] (const QVariant& newValue) {
         if (!newValue.toBool()) {
-            setFeatheringMode(static_cast<int>(BeamTypes::FEATHERING_NONE));
+            setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
         }
     });
 
