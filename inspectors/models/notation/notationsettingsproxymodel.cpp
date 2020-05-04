@@ -15,6 +15,7 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     setSectionBreakSettingsModel(new SectionBreakSettingsModel(this, repository));
     setMarkerSettingsModel(new MarkerSettingsModel(this, repository));
     setJumpSettingsModel(new JumpSettingsModel(this, repository));
+    setKeySignatureSettingsModel(new KeySignatureSettingsModel(this, repository));
 }
 
 bool NotationSettingsProxyModel::hasAcceptableElements() const
@@ -67,6 +68,11 @@ QObject* NotationSettingsProxyModel::jumpSettingsModel() const
     return m_jumpSettingsModel;
 }
 
+QObject* NotationSettingsProxyModel::keySignatureSettingsModel() const
+{
+    return m_keySignatureSettingsModel;
+}
+
 void NotationSettingsProxyModel::setNoteSettingsModel(NoteSettingsProxyModel* noteSettingsModel)
 {
     m_noteSettingsModel = noteSettingsModel;
@@ -110,4 +116,9 @@ void NotationSettingsProxyModel::setMarkerSettingsModel(MarkerSettingsModel* mar
 void NotationSettingsProxyModel::setJumpSettingsModel(JumpSettingsModel* jumpSettingsModel)
 {
     m_jumpSettingsModel = jumpSettingsModel;
+}
+
+void NotationSettingsProxyModel::setKeySignatureSettingsModel(KeySignatureSettingsModel* keySignatureSettingsModel)
+{
+    m_keySignatureSettingsModel = keySignatureSettingsModel;
 }

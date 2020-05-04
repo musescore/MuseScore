@@ -12,6 +12,7 @@
 #include "sectionbreaks/sectionbreaksettingsmodel.h"
 #include "markers/markersettingsmodel.h"
 #include "jumps/jumpsettingsmodel.h"
+#include "keysignature/keysignaturesettingsmodel.h"
 
 class NotationSettingsProxyModel : public AbstractInspectorModel
 {
@@ -26,6 +27,8 @@ class NotationSettingsProxyModel : public AbstractInspectorModel
     Q_PROPERTY(QObject* sectionBreakSettingsModel READ sectionBreakSettingsModel CONSTANT)
     Q_PROPERTY(QObject* markerSettingsModel READ markerSettingsModel CONSTANT)
     Q_PROPERTY(QObject* jumpSettingsModel READ jumpSettingsModel CONSTANT)
+    Q_PROPERTY(QObject* keySignatureSettingsModel READ keySignatureSettingsModel CONSTANT)
+
 public:
     explicit NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -45,6 +48,7 @@ public:
     QObject* sectionBreakSettingsModel() const;
     QObject* markerSettingsModel() const;
     QObject* jumpSettingsModel() const;
+    QObject* keySignatureSettingsModel() const;
 
 public slots:
     void setNoteSettingsModel(NoteSettingsProxyModel* noteSettingsModel);
@@ -56,6 +60,7 @@ public slots:
     void setSectionBreakSettingsModel(SectionBreakSettingsModel* sectionBreakSettingsModel);
     void setMarkerSettingsModel(MarkerSettingsModel* markerSettingsModel);
     void setJumpSettingsModel(JumpSettingsModel* jumpSettingsModel);
+    void setKeySignatureSettingsModel(KeySignatureSettingsModel* keySignatureSettingsModel);
 
 private:
     NoteSettingsProxyModel* m_noteSettingsModel = nullptr;
@@ -67,6 +72,7 @@ private:
     SectionBreakSettingsModel* m_sectionBreakSettingsModel = nullptr;
     MarkerSettingsModel* m_markerSettingsModel = nullptr;
     JumpSettingsModel* m_jumpSettingsModel = nullptr;
+    KeySignatureSettingsModel* m_keySignatureSettingsModel = nullptr;
 };
 
 #endif // NOTATIONSETTINGSPROXYMODEL_H
