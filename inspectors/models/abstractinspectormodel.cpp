@@ -52,6 +52,7 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::modelTypeFr
     case Ms::ElementType::BAR_LINE:
     case Ms::ElementType::MARKER:
     case Ms::ElementType::JUMP:
+    case Ms::ElementType::KEYSIG:
         return SECTION_NOTATION;
 
     default:

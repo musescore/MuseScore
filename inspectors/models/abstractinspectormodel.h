@@ -38,7 +38,8 @@ public:
         TYPE_STAFF,
         TYPE_MARKER,
         TYPE_SECTIONBREAK,
-        TYPE_JUMP
+        TYPE_JUMP,
+        TYPE_KEYSIGNATURE
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
