@@ -1,4 +1,5 @@
 #include "abstractinspectormodel.h"
+#include "global/log.h"
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository)
     : QObject(parent)
@@ -84,12 +85,19 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
         return;
 
     Ms::Score* score  = parentScore();
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
+    
     score->startCmd();
 
     QVariant convertedValue;
 
     for (Ms::Element* element : m_elementList) {
-
+        IF_ASSERT_FAILED(element) {
+            continue;
+        }
+        
         Ms::PropertyFlags ps = element->propertyFlags(pid);
 
         if (ps == Ms::PropertyFlags::STYLED)
@@ -134,14 +142,17 @@ void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
         return;
 
     Ms::Score* score  = parentScore();
-
-    if (!score)
+    IF_ASSERT_FAILED(score) {
         return;
+    }
 
     score->startCmd();
 
     for (Ms::Element* element : m_elementList) {
-
+        IF_ASSERT_FAILED(element) {
+            continue;
+        }
+        
         for (const Ms::Pid pid : pidList)
             element->elementBase()->undoResetProperty(pid);
     }
@@ -150,7 +161,11 @@ void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
 
     emit elementsModified();
 
-    m_elementList.at(0)->triggerLayout();
+    auto firstElement = m_elementList.at(0);
+    IF_ASSERT_FAILED(firstElement) {
+        return;
+    }
+    firstElement->triggerLayout();
 
     emit modelReseted();
 }
@@ -278,7 +293,10 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::f
     bool isUndefined = false;
 
     for (const Ms::Element* element : m_elementList) {
-
+        IF_ASSERT_FAILED(element) {
+            continue;
+        }
+        
         QVariant elementCurrentValue = valueFromElementUnits(pid, element->getProperty(pid), element);
         QVariant elementDefaultValue = valueFromElementUnits(pid, element->propertyDefault(pid), element);
 
@@ -326,5 +344,10 @@ Ms::Score* AbstractInspectorModel::parentScore() const
         return nullptr;
     }
 
-    return m_elementList.at(0)->score();
+    auto firstElement = m_elementList.at(0);
+    IF_ASSERT_FAILED(firstElement) {
+        return nullptr;
+    }
+    
+    return firstElement->score();
 }
