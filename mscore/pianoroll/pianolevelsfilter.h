@@ -98,9 +98,9 @@ class PianoLevelFilterLenOfftime : public PianoLevelsFilter {
 public:
       QString name() override;
       QString tooltip() override;
-      int maxRange() override;
+      int maxRange() override { return 1000; }
       int minRange() override { return 0; }
-      int divisionGap() override;
+      int divisionGap() override { return 1000 / 4; }
       bool isPerEvent() override { return true; }
       int value(Staff* staff, Note* note, NoteEvent* evt) override;
       void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;

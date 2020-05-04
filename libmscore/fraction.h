@@ -188,20 +188,23 @@ class Fraction {
             return *this;
             }
 
-      #if 0
       Fraction& operator/=(int val)
             {
             _denominator *= val;
+            if (_denominator < 0) {
+                   _denominator = -_denominator;
+                   _numerator = -_numerator;
+            }
+            reduce();
             return *this;
             }
-      #endif
 
       Fraction operator+(const Fraction& v) const { return Fraction(*this) += v; }
       Fraction operator-(const Fraction& v) const { return Fraction(*this) -= v; }
       Fraction operator-() const                  { return Fraction(-_numerator, _denominator); }
       Fraction operator*(const Fraction& v) const { return Fraction(*this) *= v; }
       Fraction operator/(const Fraction& v) const { return Fraction(*this) /= v; }
-      //      Fraction operator/(int v)             const { return Fraction(*this) /= v; }
+      Fraction operator/(int v)             const { return Fraction(*this) /= v; }
 
 
       //---------------------------------------------------------
@@ -250,8 +253,8 @@ class Fraction {
       operator QVariant() const { return QVariant::fromValue(*this); }
       };
 
- inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
- inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
+      inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
+      inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
 
 }     // namespace Ms
 

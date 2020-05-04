@@ -11,19 +11,19 @@ namespace Ms {
 
 
 static const char* STRN_NOTE_ON_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Note start time");
-static const char* STRN_NOTE_ON_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Add (or subtract) a bit to the start time of a note");
+static const char* STRN_NOTE_ON_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Add (or subtract) 1/1000 of note's length to the start time of a note");
 
 static const char* STRN_LEN_MUL_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Length (multiplier)");
-static const char* STRN_LEN_MUL_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Multiply the note length by a bit");
+static const char* STRN_LEN_MUL_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Remove 1/1000 of note's length to the end of a note");
 
 static const char* STRN_LEN_OFF_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Length (offset)");
-static const char* STRN_LEN_OFF_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Add (or subtract) a bit from the end of the note");
+static const char* STRN_LEN_OFF_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Remove 1/1000 of whole note from the end of the note");
 
 static const char* STRN_VEL_DYN_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Velocity (relative)");
-static const char* STRN_VEL_DYN_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Raise or lower loudness relative to current dynamics value");
+static const char* STRN_VEL_DYN_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Raise or lower current dynamics loudness by this percentage");
 
 static const char* STRN_VEL_ABS_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Velocity (absolute)");
-static const char* STRN_VEL_ABS_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Ignore dynamic markings and use this as the MIDI output value");
+static const char* STRN_VEL_ABS_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Ignore dynamic markings and use this as the MIDI velocity value");
 
 
 PianoLevelsFilter* PianoLevelsFilter::FILTER_LIST[] = {
@@ -32,7 +32,7 @@ PianoLevelsFilter* PianoLevelsFilter::FILTER_LIST[] = {
       new PianoLevelFilterVeloOffset,
       new PianoLevelFilterVeloUser,
       new PianoLevelFilterOnTime,
-      0  //end of list indicator
+      nullptr  //end of list indicator
 };
 
 //---------------------------------------------------------
@@ -140,24 +140,6 @@ QString PianoLevelFilterLenOfftime::tooltip()
       return qApp->translate("PianoLevelsFilter", STRN_LEN_OFF_TT);
       }
 
-//---------------------------------------------------------
-//   maxRange
-//---------------------------------------------------------
-
-int PianoLevelFilterLenOfftime::maxRange()
-      {
-      return MScore::division;
-      }
-
-//---------------------------------------------------------
-//   divisionGap
-//---------------------------------------------------------
-
-int PianoLevelFilterLenOfftime::divisionGap()
-      {
-      return MScore::division / 4;
-      }
-
 
 //---------------------------------------------------------
 //   value
@@ -165,12 +147,12 @@ int PianoLevelFilterLenOfftime::divisionGap()
 
 int PianoLevelFilterLenOfftime::value(Staff* /*staff*/, Note* note, NoteEvent* evt)
       {
-      Chord* chord = note->chord();
-      int ticks = chord->ticks().ticks();
-      int gate = evt->len();
-      int offTicks = ticks - (ticks * gate / 1000);
+            Chord* chord = note->chord();
+            Fraction noteLen = chord->ticks();
+            int evtLen = evt->len();
+            Fraction offsetLen = noteLen - (noteLen * evtLen / 1000);
 
-      return offTicks;
+            return offsetLen.numerator() * 1000 / offsetLen.denominator();
       }
 
 //---------------------------------------------------------
@@ -179,19 +161,21 @@ int PianoLevelFilterLenOfftime::value(Staff* /*staff*/, Note* note, NoteEvent* e
 
 void PianoLevelFilterLenOfftime::setValue(Staff* staff, Note* note, NoteEvent* evt, int value)
       {
-      Chord* chord = note->chord();
-      int ticks = chord->ticks().ticks();
-      int onTicks = qMax(ticks - value, 1);
-      int gate = 1000 * onTicks / ticks;
+            Chord* chord = note->chord();
+            Fraction noteLen = chord->ticks();
+            Fraction cutLen(value, 1000);
+            Fraction playLen = noteLen - cutLen;
+            Fraction evtLenFrac = playLen / noteLen;
+            int evtLen = qMax(evtLenFrac.numerator() * 1000 / evtLenFrac.denominator(), 1);
 
-      Score* score = staff->score();
+            Score* score = staff->score();
 
-      NoteEvent ne = *evt;
-      ne.setLen(gate);
+            NoteEvent ne = *evt;
+            ne.setLen(evtLen);
 
-      score->startCmd();
-      score->undo(new ChangeNoteEvent(note, evt, ne));
-      score->endCmd();
+            score->startCmd();
+            score->undo(new ChangeNoteEvent(note, evt, ne));
+            score->endCmd();
       }
 
 //---------------------------------------------------------
