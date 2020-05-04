@@ -1,4 +1,4 @@
-﻿#ifndef ABSTRACTINSPECTORMODEL_H
+#ifndef ABSTRACTINSPECTORMODEL_H
 #define ABSTRACTINSPECTORMODEL_H
 
 #include <QList>
@@ -36,6 +36,7 @@ public:
         TYPE_GLISSANDO,
         TYPE_BARLINE,
         TYPE_STAFF,
+        TYPE_MARKER,
         TYPE_SECTIONBREAK
     };
 

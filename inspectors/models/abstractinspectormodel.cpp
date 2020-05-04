@@ -49,6 +49,8 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::modelTypeFr
     case Ms::ElementType::TEMPO_TEXT:
     case Ms::ElementType::FERMATA:
     case Ms::ElementType::LAYOUT_BREAK:
+    case Ms::ElementType::BAR_LINE:
+    case Ms::ElementType::MARKER:
         return SECTION_NOTATION;
 
     default:
