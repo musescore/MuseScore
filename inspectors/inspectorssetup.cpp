@@ -46,6 +46,7 @@ void InspectorsSetup::registerResources()
 #include "types/fermatatypes.h"
 #include "types/iconnames.h"
 #include "types/barlinetypes.h"
+#include "types/markertypes.h"
 
 void InspectorsSetup::registerQmlTypes()
 {
@@ -62,4 +63,5 @@ void InspectorsSetup::registerQmlTypes()
     qmlRegisterUncreatableType<FermataTypes>("MuseScore.Inspectors", 3, 3, "FermataTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<IconNameTypes>("MuseScore.Inspectors", 3, 3, "IconNameTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<BarlineTypes>("MuseScore.Inspectors", 3, 3, "BarlineTypes", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<MarkerTypes>("MuseScore.Inspectors", 3, 3, "MarkerTypes", "Not creatable as it is an enum type");
 }

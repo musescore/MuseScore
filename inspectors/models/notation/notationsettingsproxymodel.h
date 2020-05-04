@@ -10,6 +10,7 @@
 #include "barlines/barlinesettingsmodel.h"
 #include "staffs/staffsettingsmodel.h"
 #include "sectionbreaks/sectionbreaksettingsmodel.h"
+#include "markers/markersettingsmodel.h"
 
 class NotationSettingsProxyModel : public AbstractInspectorModel
 {
@@ -22,7 +23,7 @@ class NotationSettingsProxyModel : public AbstractInspectorModel
     Q_PROPERTY(QObject* barlineSettingsModel READ barlineSettingsModel CONSTANT)
     Q_PROPERTY(QObject* staffSettingsModel READ staffSettingsModel CONSTANT)
     Q_PROPERTY(QObject* sectionBreakSettingsModel READ sectionBreakSettingsModel CONSTANT)
-
+    Q_PROPERTY(QObject* markerSettingsModel READ markerSettingsModel CONSTANT)
 public:
     explicit NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -40,6 +41,7 @@ public:
     QObject* barlineSettingsModel() const;
     QObject* staffSettingsModel() const;
     QObject* sectionBreakSettingsModel() const;
+    QObject* markerSettingsModel() const;
 
 public slots:
     void setNoteSettingsModel(NoteSettingsProxyModel* noteSettingsModel);
@@ -49,6 +51,7 @@ public slots:
     void setBarlineSettingsModel(BarlineSettingsModel* barlineSettingsModel);
     void setStaffSettingsModel(StaffSettingsModel* staffSettingsModel);
     void setSectionBreakSettingsModel(SectionBreakSettingsModel* sectionBreakSettingsModel);
+    void setMarkerSettingsModel(MarkerSettingsModel* markerSettingsModel);
 
 private:
     NoteSettingsProxyModel* m_noteSettingsModel = nullptr;
@@ -58,6 +61,7 @@ private:
     BarlineSettingsModel* m_barlineSettingsModel = nullptr;
     StaffSettingsModel* m_staffSettingsModel = nullptr;
     SectionBreakSettingsModel* m_sectionBreakSettingsModel = nullptr;
+    MarkerSettingsModel* m_markerSettingsModel = nullptr;
 };
 
 #endif // NOTATIONSETTINGSPROXYMODEL_H
