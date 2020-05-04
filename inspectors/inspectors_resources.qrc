@@ -93,5 +93,6 @@
         <file>resources/icons/orientation_auto.svg</file>
         <file>view/qml/notation/barlines/BarlinePopup.qml</file>
         <file>view/qml/notation/sectionbreaks/SectionBreakPopup.qml</file>
+        <file>view/qml/common/TextInputField.qml</file>
     </qresource>
 </RCC>
