@@ -98,7 +98,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
 
       tbMain->addSeparator();
 
-      partLabel = new QLabel("Part:");
+      partLabel = new QLabel(tr("Part:"));
       tbMain->addWidget(partLabel);
 
       // --------------------------------------------------

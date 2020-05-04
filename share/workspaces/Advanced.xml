@@ -1828,7 +1828,7 @@
             <text><sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym></text>
             </Tempo>
           </Cell>
-        <Cell name="Metric modulation">
+        <Cell name="Dotted eighth note = quarter note metric modulation">
           <mag>1.5</mag>
           <Tempo>
             <tempo>2</tempo>
