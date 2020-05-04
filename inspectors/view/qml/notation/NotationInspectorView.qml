@@ -12,6 +12,7 @@ import "sectionbreaks"
 import "markers"
 import "jumps"
 import "keysignatures"
+import "accidentals"
 
 FocusableItem {
     id: root
@@ -377,6 +378,44 @@ FocusableItem {
                 width: root.width
 
                 model: root.model ? root.model.keySignatureSettingsModel : null
+            }
+        }
+
+        FlatButton {
+            id: accidentalSettingsButton
+
+            icon: IconNameTypes.ACCIDENTAL_SHARP
+            iconPixelSize: 16
+            text: qsTr("Accidentals")
+
+            Layout.fillWidth: true
+            Layout.minimumWidth: root.width / 2
+
+            visible: root.model && root.model.accidentalSettingsModel ? !root.model.accidentalSettingsModel.isEmpty : false
+
+            onVisibleChanged: {
+                if (!visible) {
+                    accidentalPopup.close()
+                }
+            }
+
+            onClicked: {
+                if (!accidentalPopup.isOpened) {
+                    accidentalPopup.open()
+                } else {
+                    accidentalPopup.close()
+                }
+            }
+
+            AccidentalPopup {
+                id: accidentalPopup
+
+                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
+                y: parent.height
+                arrowX: parent.x + parent.width / 2
+                width: root.width
+
+                model: root.model ? root.model.accidentalSettingsModel : null
             }
         }
     }
