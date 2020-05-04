@@ -53,6 +53,7 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::modelTypeFr
     case Ms::ElementType::MARKER:
     case Ms::ElementType::JUMP:
     case Ms::ElementType::KEYSIG:
+    case Ms::ElementType::ACCIDENTAL:
         return SECTION_NOTATION;
 
     default:
