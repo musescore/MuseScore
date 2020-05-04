@@ -7,6 +7,7 @@
 #include "glissando.h"
 #include "hairpin.h"
 #include "staff.h"
+#include "layoutbreak.h"
 
 ElementRepositoryService::ElementRepositoryService(QObject* parent) : QObject(parent)
 {
@@ -36,6 +37,7 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     case Ms::ElementType::GLISSANDO: return findGlissandos();
     case Ms::ElementType::HAIRPIN: return findHairpins();
     case Ms::ElementType::STAFF: return findStaffs();
+    case Ms::ElementType::LAYOUT_BREAK: return findSectionBreaks(); //Page breaks and line breaks are of type LAYOUT_BREAK, but they don't appear in the inspector for now.
     default:
         QList<Ms::Element*> resultList;
 
@@ -225,6 +227,23 @@ QList<Ms::Element*> ElementRepositoryService::findStaffs() const
             continue;
 
         resultList << element->staff();
+    }
+
+    return resultList;
+}
+
+QList<Ms::Element *> ElementRepositoryService::findSectionBreaks() const
+{
+    QList<Ms::Element*> resultList;
+
+    for (Ms::Element* element : m_elementList) {
+        if (element && element->type() == Ms::ElementType::LAYOUT_BREAK) {
+            const Ms::LayoutBreak* layoutBreak = Ms::toLayoutBreak(element);
+            if (layoutBreak->layoutBreakType() != Ms::LayoutBreak::SECTION)
+                continue;
+            
+            resultList << element;
+        }        
     }
 
     return resultList;

@@ -8,6 +8,7 @@ import "fermatas"
 import "tempos"
 import "glissandos"
 import "barlines"
+import "sectionbreaks"
 
 FocusableItem {
     id: root
@@ -221,6 +222,44 @@ FocusableItem {
 
                 barlineSettingsModel: root.model ? root.model.barlineSettingsModel : null
                 staffSettingsModel: root.model ? root.model.staffSettingsModel : null
+            }
+        }
+
+        FlatButton {
+            id: sectionBreakSettingsButton
+
+            icon: IconNameTypes.SECTION_BREAK
+            iconPixelSize: 16
+            text: qsTr("Section break")
+
+            Layout.fillWidth: true
+            Layout.minimumWidth: root.width / 2
+
+            visible: root.model && root.model.sectionBreakSettingsModel ? !root.model.sectionBreakSettingsModel.isEmpty : false
+
+            onVisibleChanged: {
+                if (!visible) {
+                    sectionBreakPopup.close()
+                }
+            }
+
+            onClicked: {
+                if (!sectionBreakPopup.isOpened) {
+                    sectionBreakPopup.open()
+                } else {
+                    sectionBreakPopup.close()
+                }
+            }
+
+            SectionBreakPopup {
+                id: sectionBreakPopup
+
+                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
+                y: parent.height
+                arrowX: parent.x + parent.width / 2
+                width: root.width
+
+                model: root.model ? root.model.sectionBreakSettingsModel : null
             }
         }
     }
