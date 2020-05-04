@@ -9,6 +9,7 @@ import "tempos"
 import "glissandos"
 import "barlines"
 import "sectionbreaks"
+import "markers"
 
 FocusableItem {
     id: root
@@ -191,7 +192,7 @@ FocusableItem {
 
             icon: IconNameTypes.SECTION_BREAK
             iconPixelSize: 16
-            text: qsTr("Barline")
+            text: qsTr("Barlines")
 
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
@@ -260,6 +261,44 @@ FocusableItem {
                 width: root.width
 
                 model: root.model ? root.model.sectionBreakSettingsModel : null
+            }
+        }
+
+        FlatButton {
+            id: markerSettingsButton
+
+            icon: IconNameTypes.MARKER
+            iconPixelSize: 16
+            text: qsTr("Markers")
+
+            Layout.fillWidth: true
+            Layout.minimumWidth: root.width / 2
+
+            visible: root.model && root.model.markerSettingsModel ? !root.model.markerSettingsModel.isEmpty : false
+
+            onVisibleChanged: {
+                if (!visible) {
+                    markerPopup.close()
+                }
+            }
+
+            onClicked: {
+                if (!markerPopup.isOpened) {
+                    markerPopup.open()
+                } else {
+                    markerPopup.close()
+                }
+            }
+
+            MarkerPopup {
+                id: markerPopup
+
+                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
+                y: parent.height
+                arrowX: parent.x + parent.width / 2
+                width: root.width
+
+                model: root.model ? root.model.markerSettingsModel : null
             }
         }
     }
