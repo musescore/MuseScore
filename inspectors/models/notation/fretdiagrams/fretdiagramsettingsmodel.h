@@ -33,8 +33,10 @@ public:
     Q_INVOKABLE bool canvasVisible() const;
 
     Ms::FretDiagram* fretDiagram() const;
-    Q_INVOKABLE FretDiagramTypes::FretDot dot(int string, int fret) const;
-    Q_INVOKABLE FretDiagramTypes::FretMarker marker(int string) const;
+    // Q_INVOKABLE FretDiagramTypes::FretDot dot(int string, int fret) const;
+    Q_INVOKABLE int dot(int string, int fret) const;
+    // Q_INVOKABLE FretDiagramTypes::FretMarker marker(int string) const;
+    Q_INVOKABLE int marker(int string) const;
     Q_INVOKABLE bool barreExists(int fret) const;
     Q_INVOKABLE int barreStartString(int fret) const;
     Q_INVOKABLE int barreEndString(int fret) const;

@@ -13,7 +13,7 @@ class BeamSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem* featheringHeightLeft READ featheringHeightLeft CONSTANT)
     Q_PROPERTY(PropertyItem* featheringHeightRight READ featheringHeightRight CONSTANT)
-    Q_PROPERTY(int featheringMode READ featheringMode WRITE setFeatheringMode NOTIFY featheringModeChanged)
+    Q_PROPERTY(BeamTypes::FeatheringMode featheringMode READ featheringMode WRITE setFeatheringMode NOTIFY featheringModeChanged)
 
     Q_PROPERTY(PropertyItem* beamVectorX READ beamVectorX CONSTANT)
     Q_PROPERTY(PropertyItem* beamVectorY READ beamVectorY CONSTANT)
@@ -30,7 +30,7 @@ public:
 
     PropertyItem* featheringHeightLeft() const;
     PropertyItem* featheringHeightRight() const;
-    int featheringMode() const;
+    BeamTypes::FeatheringMode featheringMode() const;
 
     PropertyItem* isBeamHidden() const;
 
@@ -40,12 +40,12 @@ public:
 
 public slots:
     void setIsBeamHeightLocked(bool isBeamHeightLocked);
-    void setFeatheringMode(int featheringMode);
+    void setFeatheringMode(BeamTypes::FeatheringMode featheringMode);
     void setBeamModesModel(BeamModesModel* beamModesModel);
 
 signals:
     void isBeamHeightLockedChanged(bool isBeamHeightLocked);
-    void featheringModeChanged(int featheringMode);
+    void featheringModeChanged(BeamTypes::FeatheringMode featheringMode);
     void beamModesModelChanged(QObject* beamModesModel);
 
 protected:
@@ -63,7 +63,7 @@ private:
 
     PropertyItem* m_featheringHeightLeft = nullptr;
     PropertyItem* m_featheringHeightRight = nullptr;
-    BeamTypes::FeatheringMode m_featheringMode = BeamTypes::FEATHERING_NONE;
+    BeamTypes::FeatheringMode m_featheringMode = BeamTypes::FeatheringMode::FEATHERING_NONE;
 
     PropertyItem* m_beamVectorX = nullptr;
     PropertyItem* m_beamVectorY = nullptr;

@@ -5,12 +5,12 @@ BeamModeListModel::BeamModeListModel(QObject *parent) : QAbstractListModel(paren
     m_roleNames.insert(BeamModeRole, "beamModeRole");
     m_roleNames.insert(HintRole, "hintRole");
 
-    m_beamTypesDataList = {{BeamTypes::MODE_AUTO, "auto"},
-                           {BeamTypes::MODE_BEGIN, tr("Beam Start")},
-                           {BeamTypes::MODE_MID, tr("Beam Middle")},
-                           {BeamTypes::MODE_NONE, tr("No Beam")},
-                           {BeamTypes::MODE_BEGIN32, tr("Beam 16th Sub")},
-                           {BeamTypes::MODE_BEGIN64, tr("Beam 32nd Sub")}};
+    m_beamTypesDataList = {{ BeamTypes::Mode::MODE_AUTO, "auto" },
+                           { BeamTypes::Mode::MODE_BEGIN, tr("Beam Start") },
+                           { BeamTypes::Mode::MODE_MID, tr("Beam Middle") },
+                           { BeamTypes::Mode::MODE_NONE, tr("No Beam") },
+                           { BeamTypes::Mode::MODE_BEGIN32, tr("Beam 16th Sub") },
+                           { BeamTypes::Mode::MODE_BEGIN64, tr("Beam 32nd Sub") }};
 }
 
 int BeamModeListModel::rowCount(const QModelIndex&) const
@@ -26,7 +26,7 @@ QVariant BeamModeListModel::data(const QModelIndex& index, int role) const
     BeamTypesData beamTypeData = m_beamTypesDataList.at(index.row());
 
     switch (role) {
-    case BeamModeRole: return beamTypeData.mode;
+    case BeamModeRole: return static_cast<int>(beamTypeData.mode);
     case HintRole: return beamTypeData.hint;
     default: return QVariant();
     }
@@ -62,7 +62,7 @@ void BeamModeListModel::setSelectedTypeIndex(int selectedTypeIndex)
 int BeamModeListModel::indexOfBeamMode(const BeamTypes::Mode beamMode) const
 {
     for (int i = 0; i < m_beamTypesDataList.count(); ++i) {
-        if (m_beamTypesDataList.at(i).mode == static_cast<int>(beamMode))
+        if (m_beamTypesDataList.at(i).mode == beamMode)
             return i;
     }
 

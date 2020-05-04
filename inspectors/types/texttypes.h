@@ -3,8 +3,8 @@
 
 #include "qobjectdefs.h"
 
-class TextTypes {
-
+class TextTypes
+{
     Q_GADGET
 
 public:

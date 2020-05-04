@@ -7,10 +7,8 @@ class MarkerTypes
 {
     Q_GADGET
 
-    Q_ENUMS(Type)
-
 public:
-    enum Type {
+    enum class Type  {
         TYPE_SEGNO = 0,
         TYPE_VARSEGNO,
         TYPE_CODA,
@@ -20,6 +18,8 @@ public:
         TYPE_TOCODA,
         TYPE_USER
     };
+
+    Q_ENUM(Type)
 };
 
 #endif // MARKERTYPES_H

@@ -3,7 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
-class PedalsSettingsModel : public AbstractInspectorModel
+class PedalSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
@@ -17,7 +17,7 @@ class PedalsSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(bool hasToShowBothHooks READ hasToShowBothHooks WRITE setHasToShowBothHooks NOTIFY hasToShowBothHooksChanged)
 public:
-    explicit PedalsSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit PedalSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

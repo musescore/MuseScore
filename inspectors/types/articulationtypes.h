@@ -22,8 +22,14 @@ public:
         UP
     };
 
+    enum class Style {
+        STYLE_STANDART = 0,
+        STYLE_BAROQUE
+    };
+
     Q_ENUM(Placement)
     Q_ENUM(Direction)
+    Q_ENUM(Style)
 };
 
 #endif // ARTICULATIONTYPES_H

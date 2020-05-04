@@ -60,29 +60,30 @@ void BarlineSettingsModel::applyToAllStaffs()
 }
 
 void BarlineSettingsModel::applySpanPreset(const int presetType)
-{   
-    switch (presetType) {
-    case BarlineTypes::PRESET_DEFAULT:
+{
+    BarlineTypes::SpanPreset type = static_cast<BarlineTypes::SpanPreset>(presetType);
+    switch (type) {
+    case BarlineTypes::SpanPreset::PRESET_DEFAULT:
         m_isSpanToNextStaff->resetToDefault();
         m_spanFrom->resetToDefault();
         m_spanTo->resetToDefault();
         break;
-    case BarlineTypes::PRESET_TICK_1:
+    case BarlineTypes::SpanPreset::PRESET_TICK_1:
         m_isSpanToNextStaff->setValue(false);
         m_spanFrom->setValue(Ms::BARLINE_SPAN_TICK1_FROM);
         m_spanTo->setValue(Ms::BARLINE_SPAN_TICK1_TO);
         break;
-    case BarlineTypes::PRESET_TICK_2:
+    case BarlineTypes::SpanPreset::PRESET_TICK_2:
         m_isSpanToNextStaff->setValue(false);
         m_spanFrom->setValue(Ms::BARLINE_SPAN_TICK2_FROM);
         m_spanTo->setValue(Ms::BARLINE_SPAN_TICK2_TO);
         break;
-    case BarlineTypes::PRESET_SHORT_1:
+    case BarlineTypes::SpanPreset::PRESET_SHORT_1:
         m_isSpanToNextStaff->setValue(false);
         m_spanFrom->setValue(Ms::BARLINE_SPAN_SHORT1_FROM);
         m_spanTo->setValue(Ms::BARLINE_SPAN_SHORT1_TO);
         break;
-    case BarlineTypes::PRESET_SHORT_2:
+    case BarlineTypes::SpanPreset::PRESET_SHORT_2:
         m_isSpanToNextStaff->setValue(false);
         m_spanFrom->setValue(Ms::BARLINE_SPAN_SHORT2_FROM);
         m_spanTo->setValue(Ms::BARLINE_SPAN_SHORT2_TO);

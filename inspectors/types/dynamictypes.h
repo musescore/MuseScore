@@ -7,20 +7,21 @@ class DynamicTypes
 {
     Q_GADGET
 
-    Q_ENUMS(Scope)
-    Q_ENUMS(VelocityChangeSpeed)
 public:
-    enum Scope {
+    enum class Scope {
         SCOPE_STAFF = 0,
         SCOPE_SINGLE_INSTRUMENT,
         SCOPE_ALL_INSTRUMENTS
     };
 
-    enum VelocityChangeSpeed {
+    enum class VelocityChangeSpeed {
         VELOCITY_CHANGE_SPEED_SLOW = 0,
         VELOCITY_CHANGE_SPEED_NORMAL,
         VELOCITY_CHANGE_SPEED_FAST
     };
+
+    Q_ENUM(Scope)
+    Q_ENUM(VelocityChangeSpeed)
 };
 
 #endif // DYNAMICTYPES_H

@@ -7,7 +7,6 @@ class IconNameTypes
 {
     Q_GADGET
 
-    Q_ENUMS(IconNames)
 public:
     enum class IconNames : char16_t {
         SMALL_ARROW_UP = 0xEF10,
@@ -146,6 +145,8 @@ public:
         NONE,
         CUSTOM
     };
+
+    Q_ENUM(IconNames)
 };
 
 #endif // ICONNAMES_H

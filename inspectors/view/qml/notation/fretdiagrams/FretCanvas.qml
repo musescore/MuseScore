@@ -92,14 +92,16 @@ FocusableItem {
             ctx.font = basicFont.arg(18.0 * mag).arg(freeSans.name);
             ctx.textAlign = "center";
             ctx.textBaseline = "bottom";
-            var marker = (markerType === FretDiagramTypes.MARKER_CIRCLE) ? 'O' : 'X';
+            // var marker = (markerType === FretDiagramTypes.MARKER_CIRCLE) ? 'O' : 'X';
+            var marker = (markerType === 1) ? 'O' : 'X';
             ctx.fillText(marker, stringDist * i, -fretDist * 0.1);
         }
 
         function drawDot(ctx, s, f, dotType) {
             ctx.beginPath();
             switch (dotType) {
-                case FretDiagramTypes.DOT_CROSS:
+                // case FretDiagramTypes.DOT_CROSS:
+                case 1:
                     ctx.beginPath();
                     ctx.moveTo(s * stringDist - dotD * 0.5, fretDist * 0.5 + f * fretDist - dotD * 0.5);
                     ctx.lineTo(s * stringDist + dotD * 0.5, fretDist * 0.5 + f * fretDist + dotD * 0.5);
@@ -107,11 +109,13 @@ FocusableItem {
                     ctx.lineTo(s * stringDist - dotD * 0.5, fretDist * 0.5 + f * fretDist + dotD * 0.5);
                     ctx.stroke();
                     break;
-                case FretDiagramTypes.DOT_SQUARE:
+                // case FretDiagramTypes.DOT_SQUARE:
+                case 2:
                     ctx.rect(s * stringDist - dotD * 0.5, fretDist * 0.5 + f * fretDist - dotD * 0.5, dotD, dotD);
                     ctx.stroke();
                     break;
-                case FretDiagramTypes.DOT_TRIANGLE:
+                // case FretDiagramTypes.DOT_TRIANGLE:
+                case 3:
                     ctx.beginPath();
                     ctx.moveTo(s * stringDist - dotD * 0.5, fretDist * 0.5 + f * fretDist + dotD * 0.5);
                     ctx.lineTo(s * stringDist, fretDist * 0.5 + f * fretDist - dotD * 0.5);
@@ -119,7 +123,8 @@ FocusableItem {
                     ctx.closePath();
                     ctx.stroke();
                     break;
-                case FretDiagramTypes.DOT_NORMAL:
+                // case FretDiagramTypes.DOT_NORMAL:
+                case 0:
                 default:
                     ctx.ellipse(s * stringDist - dotD * 0.5, fretDist * 0.5 + f * fretDist - dotD * 0.5, dotD, dotD);
                     ctx.stroke();
@@ -154,14 +159,18 @@ FocusableItem {
             ctx.save();
 
             for (var s1 = 0; s1 < strings; s1++) {
+                // var m = model ? model.marker(s1) : FretDiagramTypes.MARKER_NONE;
                 var m = model ? model.marker(s1) : 0;
+                // if (m !== FretDiagramTypes.MARKER_NONE)
                 if (m !== 0)
                     drawMarker(ctx, s1, m);
             }
 
             for (var s2 = 0; s2 < strings; s2++) {
                 for (var f2 = 1; f2 <= frets; f2++) {
+                    // var d = model ? model.dot(s2, f2) : FretDiagramTypes.DOT_NONE;
                     var d = model ? model.dot(s2, f2) : -1;
+                    // if (d !== FretDiagramTypes.DOT_NONE)
                     if (d !== -1)
                         drawDot(ctx, s2, f2 - 1, d);
                 }

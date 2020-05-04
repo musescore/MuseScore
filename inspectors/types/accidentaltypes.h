@@ -7,13 +7,14 @@ class AccidentalTypes
 {
     Q_GADGET
 
-    Q_ENUMS(BracketType)
 public:
-    enum BracketType {
+    enum class BracketType {
         BRACKET_TYPE_NONE = 0,
         BRACKET_TYPE_PARENTHESIS,
         BRACKET_TYPE_SQUARE
     };
+
+    Q_ENUM(BracketType)
 };
 
 #endif // ACCIDENTALTYPES_H

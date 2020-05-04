@@ -67,14 +67,14 @@ void BeamModesModel::setModeListModel(BeamModeListModel* modeListModel)
 {
     m_modeListModel = modeListModel;
 
-    connect(m_modeListModel, &BeamModeListModel::beamModeSelected, [this] (const int beamMode) {
-        m_mode->setValue(beamMode);
+    connect(m_modeListModel, &BeamModeListModel::beamModeSelected, [this] (const BeamTypes::Mode beamMode) {
+        m_mode->setValue(static_cast<int>(beamMode));
     });
 
     connect(m_mode, &PropertyItem::valueChanged, [this] (const QVariant& beamMode) {
 
         if (m_mode->isUndefined()) {
-            m_modeListModel->setSelectedBeamMode(BeamTypes::MODE_INVALID);
+            m_modeListModel->setSelectedBeamMode(BeamTypes::Mode::MODE_INVALID);
         } else {
             m_modeListModel->setSelectedBeamMode(static_cast<BeamTypes::Mode>(beamMode.toInt()));
         }

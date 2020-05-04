@@ -4,7 +4,7 @@ MarkerSettingsModel::MarkerSettingsModel(QObject* parent, IElementRepositoryServ
     AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_MARKER);
-    setTitle(tr("Markers"));
+    setTitle(tr("Marker"));
     createProperties();
 }
 

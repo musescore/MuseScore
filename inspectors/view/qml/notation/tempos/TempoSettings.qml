@@ -9,7 +9,7 @@ PopupViewButton {
     property alias model: tempoPopup.model
 
     icon: IconNameTypes.METRONOME
-    text: qsTr("Tempo")
+    text: qsTr("Tempos")
 
     visible: root.model ? !root.model.isEmpty : false
 

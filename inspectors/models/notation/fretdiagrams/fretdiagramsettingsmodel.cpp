@@ -53,19 +53,25 @@ Ms::FretDiagram* FretDiagramSettingsModel::fretDiagram() const
     return Ms::toFretDiagram(m_elementList[0]);
 }
 
-FretDiagramTypes::FretDot FretDiagramSettingsModel::dot(int string, int fret) const
+// FretDiagramTypes::FretDot FretDiagramSettingsModel::dot(int string, int fret) const
+int FretDiagramSettingsModel::dot(int string, int fret) const
 {
     if (m_elementList.size() != 1)
-        return FretDiagramTypes::DOT_NONE;
+        // return FretDiagramTypes::FretDot::DOT_NONE;
+        return -1;
     Ms::FretItem::Dot dot = fretDiagram()->dot(string, fret)[0];
-    return dot.fret ? static_cast<FretDiagramTypes::FretDot>(dot.dtype) : FretDiagramTypes::DOT_NONE;
+    // return dot.fret ? static_cast<FretDiagramTypes::FretDot>(dot.dtype) : FretDiagramTypes::FretDot::DOT_NONE;
+    return dot.fret ? static_cast<int>(dot.dtype) : -1;
 }
 
-FretDiagramTypes::FretMarker FretDiagramSettingsModel::marker(int string) const
+// FretDiagramTypes::FretMarker FretDiagramSettingsModel::marker(int string) const
+int FretDiagramSettingsModel::marker(int string) const
 {
     if (m_elementList.size() != 1)
-        return FretDiagramTypes::MARKER_NONE;
-    return static_cast<FretDiagramTypes::FretMarker>(fretDiagram()->marker(string).mtype);
+        // return FretDiagramTypes::FretMarker::MARKER_NONE;
+        return 0;
+    // return static_cast<FretDiagramTypes::FretMarker>(fretDiagram()->marker(string).mtype);
+    return static_cast<int>(fretDiagram()->marker(string).mtype);
 }
 
 bool FretDiagramSettingsModel::barreExists(int fret) const

@@ -9,10 +9,10 @@
 #include "sectionbreaks/sectionbreaksettingsmodel.h"
 #include "markers/markersettingsmodel.h"
 #include "jumps/jumpsettingsmodel.h"
-#include "keysignature/keysignaturesettingsmodel.h"
+#include "keysignatures/keysignaturesettingsmodel.h"
 #include "accidentals/accidentalsettingsmodel.h"
 #include "fretdiagrams/fretdiagramsettingsmodel.h"
-#include "pedals/pedalssettingsmodel.h"
+#include "pedals/pedalsettingsmodel.h"
 #include "spacers/spacersettingsmodel.h"
 #include "clefs/clefsettingsmodel.h"
 #include "hairpins/hairpinsettingsmodel.h"
@@ -42,7 +42,7 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new KeySignatureSettingsModel(this, repository));
     addModel(new AccidentalSettingsModel(this, repository));
     addModel(new FretDiagramSettingsModel(this, repository));
-    addModel(new PedalsSettingsModel(this, repository));
+    addModel(new PedalSettingsModel(this, repository));
     addModel(new SpacerSettingsModel(this, repository));
     addModel(new ClefSettingsModel(this, repository));
     addModel(new HairpinSettingsModel(this, repository));

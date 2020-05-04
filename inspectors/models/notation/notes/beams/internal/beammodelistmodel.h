@@ -31,11 +31,11 @@ public slots:
 
 signals:
     void selectedTypeIndexChanged(int selectedTypeIndex);
-    void beamModeSelected(int beamMode);
+    void beamModeSelected(BeamTypes::Mode beamMode);
 
 private:
     struct BeamTypesData {
-        int mode;
+        BeamTypes::Mode mode;
         QString hint;
     };
 

@@ -10,7 +10,7 @@ NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementReposito
 {
     setSectionType(SECTION_NOTATION);
     setModelType(TYPE_NOTE);
-    setTitle(tr("Notes"));
+    setTitle(tr("Note"));
 
     addModel(new StemSettingsModel(this, repository));
     addModel(new NoteheadSettingsModel(this, repository));
