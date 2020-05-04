@@ -7,7 +7,7 @@
 export MSCORE_RELEASE_CHANNEL=$(cmake -P config.cmake | sed -n -e 's/^.*MSCORE_RELEASE_CHANNEL  *//p')
 RSS_DATE="$(LANG=C date +'%a, %d %b %Y %H:%M:%S %z')"
 FILESIZE="$(wc -c $1 | awk '{print $1}')"
-APPCAST_URL="https://sparkle.musescore.org/$MSCORE_RELEASE_CHANNEL/3/win/appcast.xml"
+APPCAST_URL="https://sparkle.musescore.org/$MSCORE_RELEASE_CHANNEL/4/win/appcast.xml"
 GIT_LOG=$(C:/MuseScore/build/travis/job_macos/generateGitLog.sh)
 
 echo ${MSCORE_RELEASE_CHANNEL} >> MSCORE_RELEASE_CHANNEL.txt

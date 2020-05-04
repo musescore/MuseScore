@@ -3,7 +3,7 @@
 <?include "cpack_variables.wxi"?>
 
 <?define ShortVersion="$(var.CPACK_PACKAGE_VERSION)" ?>
-<?define VShortVersion="3" ?>
+<?define VShortVersion="4" ?>
 <?define ProdName="$(var.CPACK_PACKAGE_NAME) $(var.VShortVersion)" ?>
 <?define ShortProdName="$(var.CPACK_PACKAGE_NAME)$(var.VShortVersion)" ?>
 <?define ExeName="$(var.ShortProdName).exe" ?>

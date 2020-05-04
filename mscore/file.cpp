@@ -461,8 +461,8 @@ bool MuseScore::saveFile(MasterScore* score)
             fileBaseName = t->plainText();
         }
         QString name = createDefaultFileName(fileBaseName);
-        QString msczType = tr("MuseScore 3 File") + " (*.mscz)";
-        QString mscxType = tr("Uncompressed MuseScore 3 File") + " (*.mscx)";         // for debugging purposes
+        QString msczType = tr("MuseScore 4 File") + " (*.mscz)";
+        QString mscxType = tr("Uncompressed MuseScore 4 File") + " (*.mscx)";         // for debugging purposes
 
         QSettings set;
         if (mscore->lastSaveDirectory.isEmpty()) {
@@ -1831,7 +1831,7 @@ void MuseScore::exportFile()
     fl.append(tr("Compressed MusicXML File") + " (*.mxl)");
     fl.append(tr("Uncompressed MusicXML File") + " (*.musicxml)");
     fl.append(tr("Uncompressed MusicXML File (outdated)") + " (*.xml)");
-    fl.append(tr("Uncompressed MuseScore 3 File") + " (*.mscx)");       // for debugging purposes
+    fl.append(tr("Uncompressed MuseScore 4 File") + " (*.mscx)");       // for debugging purposes
 
     QString saveDialogTitle = tr("Export");
 
@@ -1929,8 +1929,8 @@ bool MuseScore::exportParts()
     fl.append(tr("Compressed MusicXML File") + " (*.mxl)");
     fl.append(tr("Uncompressed MusicXML File") + " (*.musicxml)");
     fl.append(tr("Uncompressed MusicXML File (outdated)") + " (*.xml)");
-    fl.append(tr("MuseScore 3 File") + " (*.mscz)");
-    fl.append(tr("Uncompressed MuseScore 3 File") + " (*.mscx)");       // for debugging purposes
+    fl.append(tr("MuseScore 4 File") + " (*.mscz)");
+    fl.append(tr("Uncompressed MuseScore 4 File") + " (*.mscx)");       // for debugging purposes
 
     QString saveDialogTitle = tr("Export Parts");
 
@@ -2601,8 +2601,8 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
 bool MuseScore::saveAs(Score* cs_, bool saveCopy)
 {
     QStringList fl;
-    fl.append(tr("MuseScore 3 File") + " (*.mscz)");
-    fl.append(tr("Uncompressed MuseScore 3 File") + " (*.mscx)");       // for debugging purposes
+    fl.append(tr("MuseScore 4 File") + " (*.mscz)");
+    fl.append(tr("Uncompressed MuseScore 4 File") + " (*.mscx)");       // for debugging purposes
     QString saveDialogTitle = saveCopy ? tr("Save a Copy")
                               : tr("Save As");
 
@@ -2689,8 +2689,8 @@ bool MuseScore::saveSelection(Score* cs_)
         return false;
     }
     QStringList fl;
-    fl.append(tr("MuseScore 3 File") + " (*.mscz)");
-    fl.append(tr("Uncompressed MuseScore 3 File") + " (*.mscx)");       // for debugging purposes
+    fl.append(tr("MuseScore 4 File") + " (*.mscz)");
+    fl.append(tr("Uncompressed MuseScore 4 File") + " (*.mscx)");       // for debugging purposes
     QString saveDialogTitle = tr("Save Selection");
 
     QString saveDirectory;
