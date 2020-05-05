@@ -10,29 +10,29 @@
 namespace Ms {
 
 
-static const char* STRN_NOTE_ON_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Note start time");
-static const char* STRN_NOTE_ON_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Add (or subtract) a bit to the start time of a note");
+static const char* STRN_NOTE_ON_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Position");
+static const char* STRN_NOTE_ON_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Move the selected note(s) forward or backward by thousandths of the full note duration");
 
-static const char* STRN_LEN_MUL_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Length (multiplier)");
-static const char* STRN_LEN_MUL_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Multiply the note length by a bit");
+static const char* STRN_LEN_MUL_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Duration (multiplier)");
+static const char* STRN_LEN_MUL_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Multiply the duration by thousandths of the full note duration");
 
-static const char* STRN_LEN_OFF_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Length (offset)");
-static const char* STRN_LEN_OFF_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Add (or subtract) a bit from the end of the note");
+static const char* STRN_LEN_OFF_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Duration");
+static const char* STRN_LEN_OFF_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Shorten or lengthen by thousandths of a whole note");
 
 static const char* STRN_VEL_DYN_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Velocity (relative)");
-static const char* STRN_VEL_DYN_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Raise or lower loudness relative to current dynamics value");
+static const char* STRN_VEL_DYN_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Increase or decrease the velocity by the specified value");
 
 static const char* STRN_VEL_ABS_NAME = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Velocity (absolute)");
-static const char* STRN_VEL_ABS_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Ignore dynamic markings and use this as the MIDI output value");
+static const char* STRN_VEL_ABS_TT = QT_TRANSLATE_NOOP("PianoLevelsFilter", "Ignore dynamic markings and set the velocity directly");
 
 
 PianoLevelsFilter* PianoLevelsFilter::FILTER_LIST[] = {
-      new PianoLevelFilterLen,
-      new PianoLevelFilterLenOfftime,
+      new PianoLevelFilterLenWholenote,
+      new PianoLevelFilterLenMultiplier,
       new PianoLevelFilterVeloOffset,
       new PianoLevelFilterVeloUser,
       new PianoLevelFilterOnTime,
-      0  //end of list indicator
+      nullptr  //end of list indicator
 };
 
 //---------------------------------------------------------
@@ -82,7 +82,7 @@ void PianoLevelFilterOnTime::setValue(Staff* staff, Note* note, NoteEvent* evt, 
 //   name
 //---------------------------------------------------------
 
-QString PianoLevelFilterLen::name()
+QString PianoLevelFilterLenMultiplier::name()
       {
       return qApp->translate("PianoLevelsFilter", STRN_LEN_MUL_NAME);
       }
@@ -91,7 +91,7 @@ QString PianoLevelFilterLen::name()
 //   tooltip
 //---------------------------------------------------------
 
-QString PianoLevelFilterLen::tooltip()
+QString PianoLevelFilterLenMultiplier::tooltip()
       {
       return qApp->translate("PianoLevelsFilter", STRN_LEN_MUL_TT);
       }
@@ -100,7 +100,7 @@ QString PianoLevelFilterLen::tooltip()
 //   value
 //---------------------------------------------------------
 
-int PianoLevelFilterLen::value(Staff* /*staff*/, Note* /*note*/, NoteEvent* evt)
+int PianoLevelFilterLenMultiplier::value(Staff* /*staff*/, Note* /*note*/, NoteEvent* evt)
       {
       return evt->len();
       }
@@ -109,7 +109,7 @@ int PianoLevelFilterLen::value(Staff* /*staff*/, Note* /*note*/, NoteEvent* evt)
 //   setValue
 //---------------------------------------------------------
 
-void PianoLevelFilterLen::setValue(Staff* staff, Note* note, NoteEvent* evt, int value)
+void PianoLevelFilterLenMultiplier::setValue(Staff* staff, Note* note, NoteEvent* evt, int value)
       {
       Score* score = staff->score();
 
@@ -126,7 +126,7 @@ void PianoLevelFilterLen::setValue(Staff* staff, Note* note, NoteEvent* evt, int
 //   name
 //---------------------------------------------------------
 
-QString PianoLevelFilterLenOfftime::name()
+QString PianoLevelFilterLenWholenote::name()
       {
       return qApp->translate("PianoLevelsFilter", STRN_LEN_OFF_NAME);
       }
@@ -135,27 +135,9 @@ QString PianoLevelFilterLenOfftime::name()
 //   tooltip
 //---------------------------------------------------------
 
-QString PianoLevelFilterLenOfftime::tooltip()
+QString PianoLevelFilterLenWholenote::tooltip()
       {
       return qApp->translate("PianoLevelsFilter", STRN_LEN_OFF_TT);
-      }
-
-//---------------------------------------------------------
-//   maxRange
-//---------------------------------------------------------
-
-int PianoLevelFilterLenOfftime::maxRange()
-      {
-      return MScore::division;
-      }
-
-//---------------------------------------------------------
-//   divisionGap
-//---------------------------------------------------------
-
-int PianoLevelFilterLenOfftime::divisionGap()
-      {
-      return MScore::division / 4;
       }
 
 
@@ -163,31 +145,33 @@ int PianoLevelFilterLenOfftime::divisionGap()
 //   value
 //---------------------------------------------------------
 
-int PianoLevelFilterLenOfftime::value(Staff* /*staff*/, Note* note, NoteEvent* evt)
+int PianoLevelFilterLenWholenote::value(Staff* /*staff*/, Note* note, NoteEvent* evt)
       {
       Chord* chord = note->chord();
-      int ticks = chord->ticks().ticks();
-      int gate = evt->len();
-      int offTicks = ticks - (ticks * gate / 1000);
+      Fraction noteLen = chord->ticks();
+      int evtLen = evt->len();
+      Fraction offsetLen = noteLen - (noteLen * evtLen / 1000);
 
-      return offTicks;
+      return -offsetLen.numerator() * 1000 / offsetLen.denominator();
       }
 
 //---------------------------------------------------------
 //   setValue
 //---------------------------------------------------------
 
-void PianoLevelFilterLenOfftime::setValue(Staff* staff, Note* note, NoteEvent* evt, int value)
+void PianoLevelFilterLenWholenote::setValue(Staff* staff, Note* note, NoteEvent* evt, int value)
       {
       Chord* chord = note->chord();
-      int ticks = chord->ticks().ticks();
-      int onTicks = qMax(ticks - value, 1);
-      int gate = 1000 * onTicks / ticks;
+      Fraction noteLen = chord->ticks();
+      Fraction cutLen(-value, 1000);
+      Fraction playLen = noteLen - cutLen;
+      Fraction evtLenFrac = playLen / noteLen;
+      int evtLen = qMax(evtLenFrac.numerator() * 1000 / evtLenFrac.denominator(), 1);
 
       Score* score = staff->score();
 
       NoteEvent ne = *evt;
-      ne.setLen(gate);
+      ne.setLen(evtLen);
 
       score->startCmd();
       score->undo(new ChangeNoteEvent(note, evt, ne));
