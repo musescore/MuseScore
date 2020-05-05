@@ -32,6 +32,10 @@ public:
     enum InspectorModelType {
         TYPE_UNDEFINED = -1,
         TYPE_NOTE,
+        TYPE_BEAM,
+        TYPE_NOTEHEAD,
+        TYPE_STEM,
+        TYPE_HOOK,
         TYPE_FERMATA,
         TYPE_TEMPO,
         TYPE_GLISSANDO,

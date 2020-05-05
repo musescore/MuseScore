@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 1.5
 import QtQuick.Layouts 1.3
+import MuseScore.Inspectors 3.3
 import "../../common"
 
 TabPanel {
@@ -16,7 +17,9 @@ TabPanel {
     Tab {
         id: beamTab
 
-        title: proxyModel && proxyModel.beamSettingsModel ? proxyModel.beamSettingsModel.title : ""
+        property QtObject beamModel: proxyModel ? proxyModel.modelByType(Inspector.TYPE_BEAM) : null
+
+        title: beamModel ? beamModel.title : ""
 
         BeamSettings {
             id: beamSettings
@@ -26,14 +29,16 @@ TabPanel {
 
             width: root.width
 
-            model: proxyModel ? proxyModel.beamSettingsModel : null
+            model: beamModel
         }
     }
 
     Tab {
         id: headTab
 
-        title: proxyModel && proxyModel.headSettingsModel ? proxyModel.headSettingsModel.title : ""
+        property QtObject headModel: proxyModel ? proxyModel.modelByType(Inspector.TYPE_NOTEHEAD) : null
+
+        title: headModel ? headModel.title : ""
 
         HeadSettings {
             id: headSettings
@@ -43,17 +48,21 @@ TabPanel {
 
             width: root.width
 
-            model: proxyModel ? proxyModel.headSettingsModel : null
+            model: headModel
         }
     }
 
     Tab {
         id: stemTab
 
+        property QtObject stemModel: proxyModel ? proxyModel.modelByType(Inspector.TYPE_STEM) : null
+        property QtObject hookModel: proxyModel ? proxyModel.modelByType(Inspector.TYPE_HOOK) : null
+        property QtObject beamModel: proxyModel ? proxyModel.modelByType(Inspector.TYPE_BEAM) : null
+
         height: implicitHeight
         width: root.width
 
-        title: proxyModel && proxyModel.stemSettingsModel ? proxyModel.stemSettingsModel.title : ""
+        title: stemModel ? stemModel.title : ""
 
         StemSettings {
             id: stemSettings
@@ -63,9 +72,9 @@ TabPanel {
 
             width: root.width
 
-            stemModel: proxyModel ? proxyModel.stemSettingsModel : null
-            hookModel: proxyModel ? proxyModel.hookSettingsModel : null
-            beamModel: proxyModel ? proxyModel.beamSettingsModel : null
+            stemModel: stemTab.stemModel
+            hookModel: stemTab.hookModel
+            beamModel: stemTab.beamModel
         }
     }
 }
