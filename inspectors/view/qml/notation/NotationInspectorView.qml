@@ -43,11 +43,7 @@ FocusableItem {
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
 
-            visible: root.model && root.model.noteSettingsModel ? !root.model.noteSettingsModel.beamSettingsModel.isEmpty ||
-                                                                  !root.model.noteSettingsModel.headSettingsModel.isEmpty ||
-                                                                  !root.model.noteSettingsModel.stemSettingsModel.isEmpty ||
-                                                                  !root.model.noteSettingsModel.hookSettingsModel.isEmpty
-                                                                : false
+            visible: notePopup.model ? !notePopup.model.isEmpty : false
 
             onVisibleChanged: {
                 if (!visible) {
@@ -72,7 +68,7 @@ FocusableItem {
 
                 width: root.width
 
-                model: root.model ? root.model.noteSettingsModel : null
+                model: root.model ? root.model.modelByType(Inspector.TYPE_NOTE) : null
             }
         }
 
@@ -86,7 +82,7 @@ FocusableItem {
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
 
-            visible: root.model && root.model.fermataSettingsModel ? !root.model.fermataSettingsModel.isEmpty : false
+            visible: fermataPopup.model ? !fermataPopup.model.isEmpty : false
             onVisibleChanged: {
                 if (!visible) {
                     fermataPopup.close()
@@ -110,7 +106,7 @@ FocusableItem {
 
                 width: root.width
 
-                model: root.model ? root.model.fermataSettingsModel : null
+                model: root.model ? root.model.modelByType(Inspector.TYPE_FERMATA) : null
             }
         }
 
@@ -124,7 +120,7 @@ FocusableItem {
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
 
-            visible: root.model && root.model.glissandoSettingsModel ? !root.model.glissandoSettingsModel.isEmpty : false
+            visible: glissandoPopup.model ? !glissandoPopup.model.isEmpty : false
 
             onVisibleChanged: {
                 if (!visible) {
@@ -149,46 +145,14 @@ FocusableItem {
 
                 width: root.width
 
-                model: root.model ? root.model.glissandoSettingsModel : null
+                model: root.model ? root.model.modelByType(Inspector.TYPE_GLISSANDO) : null
             }
         }
 
-        FlatButton {
-            id: tempoSettingsButton
-
-            icon: IconNameTypes.METRONOME
-            iconPixelSize: 16
-            text: qsTr("Tempo")
-
-            Layout.fillWidth: true
-            Layout.minimumWidth: root.width / 2
-
-            visible: root.model && root.model.tempoSettingsModel ? !root.model.tempoSettingsModel.isEmpty : false
-
-            onVisibleChanged: {
-                if (!visible) {
-                    tempoPopup.close()
-                }
-            }
-
-            onClicked: {
-                if (!tempoPopup.isOpened) {
-                    tempoPopup.open()
-                } else {
-                    tempoPopup.close()
-                }
-            }
-
-            TempoPopup {
-                id: tempoPopup
-
-                x: mapToGlobal(grid.x, grid.y).x - mapToGlobal(parent.x, parent.y).x
-                y: parent.height
-                arrowX: parent.x + parent.width / 2
-                width: root.width
-
-                model: root.model ? root.model.tempoSettingsModel : null
-            }
+        TempoSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_TEMPO) : null
         }
 
         FlatButton {
@@ -201,7 +165,7 @@ FocusableItem {
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
 
-            visible: root.model && root.model.barlineSettingsModel ? !root.model.barlineSettingsModel.isEmpty : false
+            visible: barlinePopup.barlineSettingsModel ? !barlinePopup.barlineSettingsModel.isEmpty : false
 
             onVisibleChanged: {
                 if (!visible) {
@@ -225,8 +189,8 @@ FocusableItem {
                 arrowX: parent.x + parent.width / 2
                 width: root.width
 
-                barlineSettingsModel: root.model ? root.model.barlineSettingsModel : null
-                staffSettingsModel: root.model ? root.model.staffSettingsModel : null
+                barlineSettingsModel: root.model ? root.model.modelByType(Inspector.TYPE_BARLINE) : null
+                staffSettingsModel: root.model ? root.model.modelByType(Inspector.TYPE_STAFF) : null
             }
         }
 
@@ -240,7 +204,7 @@ FocusableItem {
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
 
-            visible: root.model && root.model.sectionBreakSettingsModel ? !root.model.sectionBreakSettingsModel.isEmpty : false
+            visible: sectionBreakPopup.model ? !sectionBreakPopup.model.isEmpty : false
 
             onVisibleChanged: {
                 if (!visible) {
@@ -264,7 +228,7 @@ FocusableItem {
                 arrowX: parent.x + parent.width / 2
                 width: root.width
 
-                model: root.model ? root.model.sectionBreakSettingsModel : null
+                model: root.model ? root.model.modelByType(Inspector.TYPE_SECTIONBREAK) : null
             }
         }
 
@@ -278,7 +242,7 @@ FocusableItem {
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
 
-            visible: root.model && root.model.markerSettingsModel ? !root.model.markerSettingsModel.isEmpty : false
+            visible: markerPopup.model ? !markerPopup.model.isEmpty : false
 
             onVisibleChanged: {
                 if (!visible) {
@@ -302,7 +266,7 @@ FocusableItem {
                 arrowX: parent.x + parent.width / 2
                 width: root.width
 
-                model: root.model ? root.model.markerSettingsModel : null
+                model: root.model ? root.model.modelByType(Inspector.TYPE_MARKER) : null
             }
         }
 
@@ -316,7 +280,7 @@ FocusableItem {
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
 
-            visible: root.model && root.model.jumpSettingsModel ? !root.model.jumpSettingsModel.isEmpty : false
+            visible: jumpPopup.model ? !jumpPopup.model.isEmpty : false
 
             onVisibleChanged: {
                 if (!visible) {
@@ -340,7 +304,7 @@ FocusableItem {
                 arrowX: parent.x + parent.width / 2
                 width: root.width
 
-                model: root.model ? root.model.jumpSettingsModel : null
+                model: root.model ? root.model.modelByType(Inspector.TYPE_JUMP) : null
             }
         }
 
@@ -354,7 +318,7 @@ FocusableItem {
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
 
-            visible: root.model && root.model.keySignatureSettingsModel ? !root.model.keySignatureSettingsModel.isEmpty : false
+            visible: keySignaturePopup.model ? !keySignaturePopup.model.isEmpty : false
 
             onVisibleChanged: {
                 if (!visible) {
@@ -378,7 +342,7 @@ FocusableItem {
                 arrowX: parent.x + parent.width / 2
                 width: root.width
 
-                model: root.model ? root.model.keySignatureSettingsModel : null
+                model: root.model ? root.model.modelByType(Inspector.TYPE_KEYSIGNATURE) : null
             }
         }
 
@@ -392,7 +356,7 @@ FocusableItem {
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
 
-            visible: root.model && root.model.accidentalSettingsModel ? !root.model.accidentalSettingsModel.isEmpty : false
+            visible: accidentalPopup.model ? !accidentalPopup.model.isEmpty : false
 
             onVisibleChanged: {
                 if (!visible) {
@@ -416,7 +380,7 @@ FocusableItem {
                 arrowX: parent.x + parent.width / 2
                 width: root.width
 
-                model: root.model ? root.model.accidentalSettingsModel : null
+                model: root.model ? root.model.modelByType(Inspector.TYPE_ACCIDENTAL) : null
             }
         }
 		
@@ -430,7 +394,7 @@ FocusableItem {
             Layout.fillWidth: true
             Layout.minimumWidth: root.width / 2
 
-            visible: root.model && root.model.fretDiagramSettingsModel ? !root.model.fretDiagramSettingsModel.isEmpty : false
+            visible: fretDiagramPopup.model ? !fretDiagramPopup.model.isEmpty : false
 
             onVisibleChanged: {
                 if (!visible) {
@@ -454,7 +418,7 @@ FocusableItem {
                 arrowX: parent.x + parent.width / 2
                 width: root.width
 
-                model: root.model ? root.model.fretDiagramSettingsModel : null
+                model: root.model ? root.model.modelByType(Inspector.TYPE_FRET_DIAGRAM) : null
             }
         }
     }

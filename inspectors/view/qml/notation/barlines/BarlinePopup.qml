@@ -101,15 +101,8 @@ StyledPopup {
 
                 spacing: 8
 
-                Text {
+                StyledTextLabel {
                     text: qsTr("Span to")
-
-                    color: globalStyle.buttonText
-
-                    font {
-                        family: globalStyle.font.family
-                        pixelSize: globalStyle.font.pixelSize
-                    }
                 }
 
                 IncrementalPropertyControl {

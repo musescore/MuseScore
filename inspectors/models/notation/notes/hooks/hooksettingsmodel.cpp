@@ -2,6 +2,9 @@
 
 HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {
+    setModelType(TYPE_HOOK);
+    setTitle(tr("Hook"));
+
     createProperties();
 }
 

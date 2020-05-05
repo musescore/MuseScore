@@ -4,9 +4,11 @@
 
 NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {
+    setTitle(tr("Head"));
+    setModelType(TYPE_NOTEHEAD);
+
     createProperties();
 
-    setTitle(tr("Head"));
     setNoteheadTypesModel(new NoteheadTypesModel(this));
 }
 
