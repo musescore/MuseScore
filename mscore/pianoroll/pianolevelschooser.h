@@ -26,6 +26,7 @@
 
 namespace Ms {
 
+class PianoView;
 
 //---------------------------------------------------------
 //   PianoLevelsChooser
@@ -37,16 +38,19 @@ class PianoLevelsChooser : public QWidget, public Ui::PianoLevelsChooser
 
       int _levelsIndex;
       Staff* _staff;
+      PianoView* _pianoView = nullptr;
 
 public:
       Staff* staff() { return _staff; }
       void setStaff(Staff* staff) { _staff = staff; }
+      void setPianoView(PianoView* pianoView);
 
 signals:
       void levelsIndexChanged(int);
       void notesChanged();
 
 public slots:
+      void updateSetboxValue();
       void setLevelsIndex(int index);
       void setEventDataPressed();
 

@@ -1,5 +1,6 @@
 #include "pianolevelschooser.h"
 #include "pianolevelsfilter.h"
+#include "pianoview.h"
 
 #include "libmscore/score.h"
 
@@ -11,7 +12,7 @@ namespace Ms {
 
 PianoLevelsChooser::PianoLevelsChooser(QWidget *parent)
       : QWidget(parent)
-{
+      {
       setupUi(this);
 
       _levelsIndex = 0;
@@ -24,24 +25,55 @@ PianoLevelsChooser::PianoLevelsChooser(QWidget *parent)
 
       connect(levelsCombo, SIGNAL(activated(int)), SLOT(setLevelsIndex(int)));
       connect(setEventsBn, SIGNAL(clicked(bool)), SLOT(setEventDataPressed()));
-}
+      }
+
+//---------------------------------------------------------
+//   setPianoView
+//---------------------------------------------------------
+
+void PianoLevelsChooser::setPianoView(PianoView* pianoView)
+      {
+      _pianoView = pianoView;
+      }
+
+//---------------------------------------------------------
+//   updateSetboxValue
+//---------------------------------------------------------
+
+void PianoLevelsChooser::updateSetboxValue()
+      {
+      QList<PianoItem*> items = _pianoView->getSelectedItems();
+
+      if (items.size() == 1) {
+            PianoLevelsFilter* filter = PianoLevelsFilter::FILTER_LIST[_levelsIndex];
+
+            PianoItem* item = items[0];
+            Note* note = item->note();
+
+            NoteEvent* event = item->getTweakNoteEvent();
+            int value = filter->value(_staff, note, event);
+            eventValSpinBox->setValue(value);
+            }
+
+      }
 
 
 //---------------------------------------------------------
-//   PianoLevelsChooser
+//   setLevelsIndex
 //---------------------------------------------------------
 
 void PianoLevelsChooser::setLevelsIndex(int index)
-{
+      {
       if (_levelsIndex != index) {
             _levelsIndex = index;
+            updateSetboxValue();
             emit levelsIndexChanged(index);
             }
-}
+      }
 
 
 //---------------------------------------------------------
-//   PianoLevelsChooser
+//   setEventDataPressed
 //---------------------------------------------------------
 
 void PianoLevelsChooser::setEventDataPressed()

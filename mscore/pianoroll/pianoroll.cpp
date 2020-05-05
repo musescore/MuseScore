@@ -359,6 +359,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
 
       // levels area
       pianoLevelsChooser = new PianoLevelsChooser;
+      pianoLevelsChooser->setPianoView(pianoView);
       pianoLevelsChooser->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
       pianoLevelsChooser->setFixedWidth(PIANO_KEYBOARD_WIDTH);
 
@@ -692,6 +693,7 @@ void PianorollEditor::updateSelection()
       veloType->setEnabled(enabled);
       onTime->setEnabled(enabled);
       tickLen->setEnabled(enabled);
+      pianoLevelsChooser->updateSetboxValue();
       }
 
 //---------------------------------------------------------
