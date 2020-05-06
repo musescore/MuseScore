@@ -123,8 +123,12 @@ public:
         LINE_WITH_HOOK = 0xEF85,
         LINE_WITH_ANGLED_HOOK = 0xEF86,
         LINE_PEDAL_STAR_ENDING = 0xEF87,
-        AUTO = 0xEF88,
-        NONE = 0xEF89
+        BARLINE_WINGED = 0xF34C,
+        BARLINE_UNWINGED = 0xF34D,
+
+        AUTO,
+        NONE,
+        CUSTOM
     };
 };
 

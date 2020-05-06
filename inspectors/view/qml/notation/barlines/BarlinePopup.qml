@@ -54,6 +54,44 @@ StyledPopup {
             }
         }
 
+        Column {
+            spacing: 8
+
+            width: parent.width
+
+            StyledTextLabel {
+                text: qsTr("Repeat style")
+            }
+
+            RadioButtonGroup {
+                id: repeatStyle
+
+                height: 30
+                width: parent.width
+
+                model: [
+                    { iconRole: IconNameTypes.BARLINE_UNWINGED, valueRole: false },
+                    { iconRole: IconNameTypes.BARLINE_WINGED, valueRole: true }
+                ]
+
+                delegate: FlatRadioButton {
+
+                    ButtonGroup.group: repeatStyle.radioButtonGroup
+
+                    checked: barlineSettingsModel && !barlineSettingsModel.isUndefined ? barlineSettingsModel.hasToShowTips.value === modelData["valueRole"]
+                                                                                       : false
+
+                    onToggled: {
+                        barlineSettingsModel.hasToShowTips.value = modelData["valueRole"]
+                    }
+
+                    StyledIconLabel {
+                        iconCode: modelData["iconRole"]
+                    }
+                }
+            }
+        }
+
         CheckBox {
             id: spanToNextStaffCheckBox
 

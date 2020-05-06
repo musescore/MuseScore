@@ -96,6 +96,7 @@ enum class Pid {
     BARLINE_SPAN,
     BARLINE_SPAN_FROM,
     BARLINE_SPAN_TO,
+    BARLINE_SHOW_TIPS,
     OFFSET,
     FRET,
     STRING,

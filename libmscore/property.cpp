@@ -124,6 +124,8 @@ static constexpr PropertyMetaData propertyList[] = {
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "span from") },
     { Pid::BARLINE_SPAN_TO,         false, "spanToOffset",          P_TYPE::INT,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "span to") },
+    { Pid::BARLINE_SHOW_TIPS,       false, "showTips",              P_TYPE::BOOL,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "show tips") },
     { Pid::OFFSET,                  false, "offset",                P_TYPE::POINT_SP_MM,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "offset") },
     { Pid::FRET,                    true,  "fret",                  P_TYPE::INT,
@@ -136,7 +138,6 @@ static constexpr PropertyMetaData propertyList[] = {
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "played") },
     { Pid::TIMESIG_NOMINAL,         false, 0,                       P_TYPE::FRACTION,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "nominal time signature") },
-
     { Pid::TIMESIG_ACTUAL,          true,  0,                       P_TYPE::FRACTION,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "actual time signature") },
     { Pid::NUMBER_TYPE,             false, "numberType",            P_TYPE::INT,
