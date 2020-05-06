@@ -25,6 +25,7 @@ Text {
         switch (code) {
         case IconNameTypes.AUTO: return "AUTO";
         case IconNameTypes.NONE: return "NONE";
+        case IconNameTypes.CUSTOM: return "Custom";
         default: return String.fromCharCode(code)
         }
     }

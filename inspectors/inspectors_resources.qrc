@@ -101,5 +101,18 @@
         <file>view/qml/notation/keysignatures/KeySignaturePopup.qml</file>
         <file>view/qml/notation/accidentals/AccidentalPopup.qml</file>
         <file>view/qml/notation/pedals/PedalPopup.qml</file>
+        <file>view/qml/notation/tempos/TempoSettings.qml</file>
+        <file>view/qml/common/PopupViewButton.qml</file>
+        <file>view/qml/notation/notes/NoteSettings.qml</file>
+        <file>view/qml/notation/fermatas/FermataSettings.qml</file>
+        <file>view/qml/notation/glissandos/GlissandoSettings.qml</file>
+        <file>view/qml/notation/barlines/BarlineSettings.qml</file>
+        <file>view/qml/notation/sectionbreaks/SectionBreakSettings.qml</file>
+        <file>view/qml/notation/markers/MarkerSettings.qml</file>
+        <file>view/qml/notation/jumps/JumpSettings.qml</file>
+        <file>view/qml/notation/keysignatures/KeySignatureSettings.qml</file>
+        <file>view/qml/notation/accidentals/AccidentalSettings.qml</file>
+        <file>view/qml/notation/fretdiagrams/FretDiagramSettings.qml</file>
+        <file>view/qml/notation/pedals/PedalSettings.qml</file>
     </qresource>
 </RCC>

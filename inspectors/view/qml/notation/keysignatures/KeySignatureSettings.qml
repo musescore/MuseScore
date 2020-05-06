@@ -6,17 +6,15 @@ import "../../common"
 PopupViewButton {
     id: root
 
-    property alias model: notePopup.model
+    property alias model: keySignaturePopup.model
 
-    popupAvailableWidth: parent ? parent.width : 0
-
-    icon: IconNameTypes.MUSIC_NOTES
-    text: qsTr("Note settings")
+    icon: IconNameTypes.TYPE_KEYSIGNATURE
+    text: qsTr("Key signatures")
 
     visible: root.model ? !root.model.isEmpty : false
 
-    NotePopup {
-        id: notePopup
+    KeySignaturePopup {
+        id: keySignaturePopup
 
         x: popupPositionX
         y: popupPositionY
@@ -24,4 +22,3 @@ PopupViewButton {
         width: popupAvailableWidth
     }
 }
-
