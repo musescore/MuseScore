@@ -15,6 +15,7 @@ void BarlineSettingsModel::createProperties()
     m_isSpanToNextStaff = buildPropertyItem(Ms::Pid::BARLINE_SPAN);
     m_spanFrom = buildPropertyItem(Ms::Pid::BARLINE_SPAN_FROM);
     m_spanTo = buildPropertyItem(Ms::Pid::BARLINE_SPAN_TO);
+    m_hasToShowTips = buildPropertyItem(Ms::Pid::BARLINE_SHOW_TIPS);
 }
 
 void BarlineSettingsModel::requestElements()
@@ -39,13 +40,17 @@ void BarlineSettingsModel::loadProperties()
     loadPropertyItem(m_spanTo, [] (const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt();
     });
+
+    loadPropertyItem(m_hasToShowTips);
 }
 
 void BarlineSettingsModel::resetProperties()
 {
     m_type->resetToDefault();
+    m_isSpanToNextStaff->resetToDefault();
     m_spanFrom->resetToDefault();
     m_spanTo->resetToDefault();
+    m_hasToShowTips->resetToDefault();
 }
 
 void BarlineSettingsModel::applyToAllStaffs()
@@ -106,4 +111,9 @@ PropertyItem* BarlineSettingsModel::spanFrom() const
 PropertyItem* BarlineSettingsModel::spanTo() const
 {
     return m_spanTo;
+}
+
+PropertyItem* BarlineSettingsModel::hasToShowTips() const
+{
+    return m_hasToShowTips;
 }

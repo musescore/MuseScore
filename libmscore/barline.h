@@ -101,9 +101,11 @@ public:
     void setSpanStaff(int val) { _spanStaff = val; }
     void setSpanFrom(int val) { _spanFrom = val; }
     void setSpanTo(int val) { _spanTo = val; }
+    void setShowTips(bool val);
     int spanStaff() const { return _spanStaff; }
     int spanFrom() const { return _spanFrom; }
     int spanTo() const { return _spanTo; }
+    bool showTips() const;
 
     void startEdit(EditData& ed) override;
     void endEdit(EditData&) override;
