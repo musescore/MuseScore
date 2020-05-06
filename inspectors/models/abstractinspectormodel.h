@@ -46,7 +46,8 @@ public:
         TYPE_JUMP,
         TYPE_KEYSIGNATURE,
         TYPE_ACCIDENTAL,
-        TYPE_FRET_DIAGRAM
+        TYPE_FRET_DIAGRAM,
+        TYPE_PEDAL
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
