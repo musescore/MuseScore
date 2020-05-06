@@ -8,6 +8,7 @@
 #include "hairpin.h"
 #include "staff.h"
 #include "layoutbreak.h"
+#include "pedal.h"
 
 ElementRepositoryService::ElementRepositoryService(QObject* parent) : QObject(parent)
 {
@@ -38,6 +39,7 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     case Ms::ElementType::HAIRPIN: return findHairpins();
     case Ms::ElementType::STAFF: return findStaffs();
     case Ms::ElementType::LAYOUT_BREAK: return findSectionBreaks(); //Page breaks and line breaks are of type LAYOUT_BREAK, but they don't appear in the inspector for now.
+    case Ms::ElementType::PEDAL: return findPedals();
     default:
         QList<Ms::Element*> resultList;
 
@@ -232,7 +234,7 @@ QList<Ms::Element*> ElementRepositoryService::findStaffs() const
     return resultList;
 }
 
-QList<Ms::Element *> ElementRepositoryService::findSectionBreaks() const
+QList<Ms::Element*> ElementRepositoryService::findSectionBreaks() const
 {
     QList<Ms::Element*> resultList;
 
@@ -244,6 +246,29 @@ QList<Ms::Element *> ElementRepositoryService::findSectionBreaks() const
             
             resultList << element;
         }        
+    }
+
+    return resultList;
+}
+
+QList<Ms::Element*> ElementRepositoryService::findPedals() const
+{
+    QList<Ms::Element*> resultList;
+
+    for (Ms::Element* element : m_elementList) {
+
+        if (element->type() == Ms::ElementType::PEDAL_SEGMENT) {
+
+            const Ms::PedalSegment* pedalSegment = Ms::toPedalSegment(element);
+
+            if (!pedalSegment)
+                continue;
+
+            resultList << pedalSegment->pedal();
+
+        } else if (element->type() == Ms::ElementType::PEDAL) {
+            resultList << element;
+        }
     }
 
     return resultList;

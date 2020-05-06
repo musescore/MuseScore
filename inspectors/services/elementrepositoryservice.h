@@ -34,6 +34,7 @@ private:
     QList<Ms::Element*> findHairpins() const;
     QList<Ms::Element*> findStaffs() const;
     QList<Ms::Element*> findSectionBreaks() const;
+    QList<Ms::Element*> findPedals() const;
 };
 
 #endif // ELEMENTREPOSITORYSERVICE_H
