@@ -14,6 +14,7 @@ import "jumps"
 import "keysignatures"
 import "accidentals"
 import "fretdiagrams"
+import "pedals"
 
 FocusableItem {
     id: root
