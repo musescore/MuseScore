@@ -100,5 +100,6 @@
         <file>view/qml/notation/jumps/JumpPopup.qml</file>
         <file>view/qml/notation/keysignatures/KeySignaturePopup.qml</file>
         <file>view/qml/notation/accidentals/AccidentalPopup.qml</file>
+        <file>view/qml/notation/pedals/PedalPopup.qml</file>
     </qresource>
 </RCC>
