@@ -18,6 +18,7 @@
 #include "duration.h"
 #include "beam.h"
 #include "shape.h"
+#include "measure.h"
 
 namespace Ms {
 
@@ -89,7 +90,7 @@ class ChordRest : public DurationElement {
       Beam::Mode beamMode() const               { return _beamMode; }
 
       void setBeam(Beam* b);
-      virtual Beam* beam() const final          { return _beam; }
+      virtual Beam* beam() const final          { return  !(measure() && measure()->stemless(staffIdx())) ? _beam : nullptr; }
       int beams() const                         { return _durationType.hooks(); }
       virtual qreal upPos()   const = 0;
       virtual qreal downPos() const = 0;
