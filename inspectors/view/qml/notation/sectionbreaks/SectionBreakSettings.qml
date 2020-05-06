@@ -6,17 +6,15 @@ import "../../common"
 PopupViewButton {
     id: root
 
-    property alias model: notePopup.model
+    property alias model: sectionBreakPopup.model
 
-    popupAvailableWidth: parent ? parent.width : 0
-
-    icon: IconNameTypes.MUSIC_NOTES
-    text: qsTr("Note settings")
+    icon: IconNameTypes.SECTION_BREAK
+    text: qsTr("Section break")
 
     visible: root.model ? !root.model.isEmpty : false
 
-    NotePopup {
-        id: notePopup
+    SectionBreakPopup {
+        id: sectionBreakPopup
 
         x: popupPositionX
         y: popupPositionY
@@ -24,4 +22,3 @@ PopupViewButton {
         width: popupAvailableWidth
     }
 }
-

@@ -6,17 +6,15 @@ import "../../common"
 PopupViewButton {
     id: root
 
-    property alias model: notePopup.model
+    property alias model: fretDiagramPopup.model
 
-    popupAvailableWidth: parent ? parent.width : 0
-
-    icon: IconNameTypes.MUSIC_NOTES
-    text: qsTr("Note settings")
+    icon: IconNameTypes.FRET_DIAGRAM
+    text: qsTr("Fretboard Diagrams")
 
     visible: root.model ? !root.model.isEmpty : false
 
-    NotePopup {
-        id: notePopup
+    FretDiagramPopup {
+        id: fretDiagramPopup
 
         x: popupPositionX
         y: popupPositionY
@@ -24,4 +22,3 @@ PopupViewButton {
         width: popupAvailableWidth
     }
 }
-
