@@ -66,5 +66,29 @@ QVariant Text::propertyDefault(Pid id) const
                   return TextBase::propertyDefault(id);
             }
       }
+
+//---------------------------------------------------------
+//   drag
+//---------------------------------------------------------
+
+QRectF Text::drag(EditData& ed)
+      {
+      if (tid() == Tid::FOOTER || tid() == Tid::HEADER)
+            return canvasBoundingRect();
+      else
+            return TextBase::drag(ed);
+      }
+
+//---------------------------------------------------------
+//   dragAnchorLines
+//---------------------------------------------------------
+
+QVector<QLineF> Text::dragAnchorLines() const
+      {
+      if (tid() == Tid::FOOTER || tid() == Tid::HEADER)
+            return QVector<QLineF>();
+      else
+            return TextBase::dragAnchorLines();
+      }
 }
 

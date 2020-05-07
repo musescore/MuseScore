@@ -317,6 +317,7 @@ class TextBase : public Element {
 
       QRectF pageRectangle() const;
 
+      virtual QRectF drag(EditData &) override;
       void dragTo(EditData&);
 
       QVector<QLineF> dragAnchorLines() const override;

@@ -30,6 +30,8 @@ class Text final : public TextBase {
       Text* clone() const override         { return new Text(*this); }
       void read(XmlReader&) override;
       QVariant propertyDefault(Pid id) const override;
+      QRectF drag(EditData &) override;
+      QVector<QLineF> dragAnchorLines() const override;
       };
 
 }     // namespace Ms
