@@ -13,6 +13,7 @@
 #include "accidentals/accidentalsettingsmodel.h"
 #include "fretdiagrams/fretdiagramsettingsmodel.h"
 #include "pedals/pedalssettingsmodel.h"
+#include "spacers/spacersettingsmodel.h"
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorProxyModel(parent)
@@ -33,4 +34,5 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new AccidentalSettingsModel(this, repository));
     addModel(new FretDiagramSettingsModel(this, repository));
     addModel(new PedalsSettingsModel(this, repository));
+    addModel(new SpacerSettingsModel(this, repository));
 }

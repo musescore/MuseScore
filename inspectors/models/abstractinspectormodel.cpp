@@ -55,6 +55,7 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::modelTypeFr
     case Ms::ElementType::KEYSIG:
     case Ms::ElementType::ACCIDENTAL:
     case Ms::ElementType::FRET_DIAGRAM:
+    case Ms::ElementType::SPACER:
         return SECTION_NOTATION;
 
     default:

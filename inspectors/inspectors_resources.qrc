@@ -114,5 +114,7 @@
         <file>view/qml/notation/accidentals/AccidentalSettings.qml</file>
         <file>view/qml/notation/fretdiagrams/FretDiagramSettings.qml</file>
         <file>view/qml/notation/pedals/PedalSettings.qml</file>
+        <file>view/qml/notation/spacers/SpacerPopup.qml</file>
+        <file>view/qml/notation/spacers/SpacerSettings.qml</file>
     </qresource>
 </RCC>
