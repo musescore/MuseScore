@@ -15,6 +15,7 @@ import "keysignatures"
 import "accidentals"
 import "fretdiagrams"
 import "pedals"
+import "spacers"
 
 FocusableItem {
     id: root
@@ -105,6 +106,12 @@ FocusableItem {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_PEDAL) : null
+        }
+
+        SpacerSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_SPACER) : null
         }
     }
 }
