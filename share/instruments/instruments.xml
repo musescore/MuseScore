@@ -5365,6 +5365,25 @@
                   <clef staff="2">F</clef>
                   <aPitchRange>48-86</aPitchRange>
                   <pPitchRange>48-86</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <program value="15"/> <!--Dulcimer-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="cimbalom">
+                  <longName>Cimbalom</longName>
+                  <shortName>Cimb.</shortName>
+                  <description>Concert Cimbalom</description>
+                  <musicXMLid>pitched-percussion.cimbalom</musicXMLid>
+                  <staves>2</staves>
+                  <clef>G</clef>
+                  <bracket>1</bracket>
+                  <bracketSpan>2</bracketSpan>
+                  <barlineSpan>2</barlineSpan>
+                  <clef staff="2">F</clef>
+                  <aPitchRange>48-88</aPitchRange>
+                  <pPitchRange>40-93</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="15"/> <!--Dulcimer-->
                   </Channel>
