@@ -689,7 +689,7 @@ class Score : public QObject, public ScoreElement {
 
       Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
-      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = Direction::AUTO, bool forceAccidental = false, bool rhythmic = false);
+      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = Direction::AUTO, bool forceAccidental = false, bool rhythmic = false, InputState* externalInputState = nullptr);
       Segment* setChord(Segment*, int track, Chord* chord, Fraction, Direction stemDirection = Direction::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);
       void changeCRlen(ChordRest* cr, const Fraction&, bool fillWithRest=true);
@@ -724,7 +724,7 @@ class Score : public QObject, public ScoreElement {
       void addPitch(int pitch, bool addFlag, bool insert);
       Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
       Note* addMidiPitch(int pitch, bool addFlag);
-      Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false);
+      Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false, InputState* externalInputState = nullptr);
 
       NoteVal noteValForPosition(Position pos, AccidentalType at, bool &error);
 
