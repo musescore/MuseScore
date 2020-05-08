@@ -38,7 +38,15 @@ class Score;
 
 //---------------------------------------------------------
 //   @@ Cursor
-///   Cursor can be used by plugins to manipulate the score
+///   Cursor can be used by plugins to manipulate the score.
+///   Cursor object for a score can be obtained with
+///   \ref Score.newCursor method. After creating a cursor
+///   it does not point to any location in a score. To define
+///   its initial location use \ref rewind or \ref rewindToTick
+///   methods. Alternatively, you can set its
+///   \ref inputStateMode to \ref INPUT_STATE_SYNC_WITH_SCORE "Cursor.INPUT_STATE_SYNC_WITH_SCORE"
+///   to make cursor location be synchronized with
+///   user-visible note input state.
 //---------------------------------------------------------
 
 class Cursor : public QObject {
