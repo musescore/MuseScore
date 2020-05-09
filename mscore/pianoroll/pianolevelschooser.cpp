@@ -49,23 +49,34 @@ void PianoLevelsChooser::setEventDataPressed()
       PianoLevelsFilter* filter = PianoLevelsFilter::FILTER_LIST[_levelsIndex];
 
       int val = eventValSpinBox->value();
+      int randVal = 0; // initializing randVal as 0
       QList<Note*> noteList = _staff->getNotes();
 
       Score* score = _staff->score();
 
       score->startCmd();
 
+      // initialize random seed:
+      std::srand(eventSeedSpinBox->value());
+
       for (Note* note: noteList) {
             if (!note->selected())
                   continue;
 
+            // Generating a random integer from 0 to eventRandSpinBox->value()
+            if (eventRandSpinBox->value() > 0) // else it remains 0, as initialized
+            {
+                randVal = std::rand()/((RAND_MAX + 1u)/eventRandSpinBox->value());
+            }
+
+            // applying set to selected notes:
             if (filter->isPerEvent()) {
                   for (NoteEvent& e : note->playEvents()) {
-                        filter->setValue(_staff, note, &e, val);
-                        }
-                  }
-                  else
-                        filter->setValue(_staff, note, nullptr, val);
+                      filter->setValue(_staff, note, &e, val + randVal);
+                   }
+            }
+            else
+                      filter->setValue(_staff, note, nullptr, val + randVal);
 
             }
 
