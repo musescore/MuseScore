@@ -654,6 +654,7 @@ void WorkspacesManager::readWorkspaceFile(const QString& path, std::function<voi
 
       QByteArray ba = f.fileData(rootfile);
       XmlReader e(ba);
+      e.setPasteMode(true);
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
@@ -924,6 +925,7 @@ void Workspace::readGlobalMenuBar()
 
       QByteArray ba (default_menubar.readAll());
       XmlReader e(ba);
+      e.setPasteMode(true);
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
@@ -979,6 +981,7 @@ void Workspace::readGlobalToolBar()
 
       QByteArray ba (default_toolbar.readAll());
       XmlReader e(ba);
+      e.setPasteMode(true);
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
@@ -1043,6 +1046,7 @@ void Workspace::readGlobalGUIState()
 
       QByteArray ba (default_toolbar.readAll());
       XmlReader e(ba);
+      e.setPasteMode(true);
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
