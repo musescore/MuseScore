@@ -137,7 +137,6 @@ class StaffTextBase;
 
 enum class Pid : int;
 enum class PropertyFlags : char;
-enum class Sid : int;
 
 //---------------------------------------------------------
 //   LinkedElements

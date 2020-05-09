@@ -24,13 +24,30 @@ struct ChordDescription;
 class Element;
 class Score;
 
+#ifdef SCRIPT_INTERFACE
+#define BEGIN_QT_REGISTERED_ENUM(Name) \
+class MSQE_##Name { \
+      Q_GADGET \
+   public:
+#define END_QT_REGISTERED_ENUM(Name) \
+      Q_ENUM(Name); \
+      }; \
+using Name = MSQE_##Name::Name;
+#else
+#define BEGIN_QT_REGISTERED_ENUM(Name)
+#define END_QT_REGISTERED_ENUM(Name)
+#endif
+
 //---------------------------------------------------------
 //   Sid
+///   Enumerates the list of score style settings
 //
 //    Keep in sync with styleTypes[] in style.cpp
 //---------------------------------------------------------
 
+BEGIN_QT_REGISTERED_ENUM(Sid)
 enum class Sid {
+      ///.\{
       NOSTYLE = -1,
 
       pageWidth,
@@ -1291,10 +1308,13 @@ enum class Sid {
       autoplaceEnabled,
 
       STYLES
+      ///\}
       };
+END_QT_REGISTERED_ENUM(Sid)
 
 //---------------------------------------------------------
 //   MStyle
+///   \cond PLUGIN_API \private \endcond
 //    the name "Style" gives problems with some microsoft
 //    header files...
 //---------------------------------------------------------
@@ -1338,6 +1358,7 @@ class MStyle {
 
 //---------------------------------------------------------
 //   StyledProperty
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 struct StyledProperty {
