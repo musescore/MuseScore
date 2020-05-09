@@ -2034,6 +2034,35 @@ static const Tuplet* stopTupletAtLevel(const DurationElement* const cr, const in
       }
 
 //---------------------------------------------------------
+//   tupletTypeAndDots
+//---------------------------------------------------------
+
+static void tupletTypeAndDots(const QString& type, const int dots, XmlWriter& xml)
+      {
+      xml.tag("tuplet-type", type);
+      for (int i = 0; i < dots; ++i)
+            xml.tagE("tuplet-dot");
+      }
+
+//---------------------------------------------------------
+//   tupletActualAndNormal
+//---------------------------------------------------------
+
+static void tupletActualAndNormal(const Tuplet* const t, XmlWriter& xml)
+      {
+      xml.stag("tuplet-actual");
+      xml.tag("tuplet-number", t->ratio().numerator());
+      int dots { 0 };
+      const auto s = tick2xml(t->baseLen().ticks(), &dots);
+      tupletTypeAndDots(s, dots, xml);
+      xml.etag();
+      xml.stag("tuplet-normal");
+      xml.tag("tuplet-number", t->ratio().denominator());
+      tupletTypeAndDots(s, dots, xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
 //   tupletStart
 //---------------------------------------------------------
 
@@ -2042,7 +2071,7 @@ static const Tuplet* stopTupletAtLevel(const DurationElement* const cr, const in
 //   <tuplet type="start" placement="above" bracket="no"/>
 // </notations>
 
-static void tupletStart(const Tuplet* const t, const int number, Notations& notations, XmlWriter& xml)
+static void tupletStart(const Tuplet* const t, const int number, const bool needActualAndNormal, Notations& notations, XmlWriter& xml)
       {
       notations.tag(xml);
       QString tupletTag = "tuplet type=\"start\"";
@@ -2054,7 +2083,13 @@ static void tupletStart(const Tuplet* const t, const int number, Notations& nota
             tupletTag += " show-number=\"both\"";
       if (t->numberType() == TupletNumberType::NO_TEXT)
             tupletTag += " show-number=\"none\"";
-      xml.tagE(tupletTag);
+      if (needActualAndNormal) {
+            xml.stag(tupletTag);
+            tupletActualAndNormal(t, xml);
+            xml.etag();
+            }
+      else
+            xml.tagE(tupletTag);
       }
 
 //---------------------------------------------------------
@@ -2076,18 +2111,15 @@ static void tupletStop(const Tuplet* const t, const int number, Notations& notat
 
 static void tupletStartStop(const ChordRest* const cr, Notations& notations, XmlWriter& xml)
       {
-      const DurationElement* el = cr;
       const auto nesting = tupletNesting(cr);
-      int level { 0 };
-      while (el->tuplet()) {
+      const bool doActualAndNormal = (nesting > 1);
+      for (int level = nesting - 1; level >= 0; --level) {
             const auto startTuplet = startTupletAtLevel(cr, level + 1);
             if (startTuplet)
-                  tupletStart(startTuplet, nesting - level, notations, xml);
+                  tupletStart(startTuplet, nesting - level, doActualAndNormal, notations, xml);
             const auto stopTuplet = stopTupletAtLevel(cr, level + 1);
             if (stopTuplet)
                   tupletStop(stopTuplet, nesting - level, notations, xml);
-            el = el->tuplet();
-            ++level;
             }
       }
 
