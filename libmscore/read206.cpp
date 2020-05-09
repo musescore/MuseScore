@@ -168,7 +168,7 @@ struct StyleVal2 {
       { Sid::capoPosition,                QVariant(0) },
       { Sid::fretNumMag,                  QVariant(2.0) },
       { Sid::fretNumPos,                  QVariant(0) },
-      { Sid::fretY,                       QVariant(2.0) },
+      { Sid::fretY,                       QVariant(1.0) },
       { Sid::showPageNumber,              QVariant(true) },
       { Sid::showPageNumberOne,           QVariant(false) },
       { Sid::pageNumberOddEven,           QVariant(true) },
