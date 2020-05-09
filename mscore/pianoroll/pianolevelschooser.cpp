@@ -64,8 +64,7 @@ void PianoLevelsChooser::setEventDataPressed()
                   continue;
 
             // Generating a random integer from 0 to eventRandSpinBox->value()
-            if (eventRandSpinBox->value() > 0) // else it remains 0, as initialized
-            {
+            if (eventRandSpinBox->value() > 0) { // else it remains 0, as initialized
                 randVal = std::rand()/((RAND_MAX + 1u)/eventRandSpinBox->value());
             }
 
