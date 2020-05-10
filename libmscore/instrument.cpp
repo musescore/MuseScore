@@ -26,8 +26,8 @@
 
 namespace Ms {
 
-const char* Channel::DEFAULT_NAME = QT_TRANSLATE_NOOP("channel", "Normal");
-const char* Channel::HARMONY_NAME = QT_TRANSLATE_NOOP("channel", "Chord symbols");
+const char* Channel::DEFAULT_NAME = QT_TRANSLATE_NOOP("InstrumentsXML", "Normal");
+const char* Channel::HARMONY_NAME = QT_TRANSLATE_NOOP("InstrumentsXML", "Chord symbols");
 
 Instrument InstrumentList::defaultInstrument;
 const std::initializer_list<Channel::Prop> PartChannelSettingsLink::excerptProperties {
