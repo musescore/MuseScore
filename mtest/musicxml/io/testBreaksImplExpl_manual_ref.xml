@@ -45,7 +45,7 @@
           </clef>
         </attributes>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -53,7 +53,7 @@
     <measure number="2">
       <print new-system="yes"/>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -61,7 +61,7 @@
     <measure number="3">
       <print new-system="yes"/>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -69,7 +69,7 @@
     <measure number="4">
       <print new-system="yes"/>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -77,7 +77,7 @@
     <measure number="5">
       <print new-system="yes"/>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -85,7 +85,7 @@
     <measure number="6">
       <print new-system="yes"/>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -93,7 +93,7 @@
     <measure number="7">
       <print new-system="yes"/>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -101,7 +101,7 @@
     <measure number="8">
       <print new-system="yes"/>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -109,7 +109,7 @@
     <measure number="9">
       <print new-system="yes"/>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -117,7 +117,7 @@
     <measure number="10">
       <print new-system="yes"/>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -125,7 +125,7 @@
     <measure number="11">
       <print new-system="yes"/>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -138,7 +138,7 @@
           </direction-type>
         </direction>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
