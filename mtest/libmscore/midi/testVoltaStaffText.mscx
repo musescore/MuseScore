@@ -249,7 +249,7 @@
               </Note>
             </Chord>
           <StaffText>
-            <channelSwitch voice="0" name="Normal"/>
+            <channelSwitch voice="0" name="normal"/>
             <text>arco</text>
             </StaffText>
           <Beam>
@@ -337,7 +337,7 @@
               </Note>
             </Chord>
           <StaffText>
-            <channelSwitch voice="0" name="Normal"/>
+            <channelSwitch voice="0" name="normal"/>
             <text>arco</text>
             </StaffText>
           <Chord>
