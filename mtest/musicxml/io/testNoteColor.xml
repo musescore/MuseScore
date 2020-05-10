@@ -53,7 +53,7 @@
       </measure>
     <measure number="2">
       <note color="#FF0000">
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>

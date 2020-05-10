@@ -3341,19 +3341,22 @@ void ExportMusicXml::rest(Rest* rest, int staff)
             stp = po % 7; // step
             }
 
+      QString restTag { "rest" };
+      const TDuration d = rest->durationType();
+      if (d.type() == TDuration::DurationType::V_MEASURE)
+            restTag += " measure=\"yes\"";
       // Either <rest/>
       // or <rest><display-step>F</display-step><display-octave>5</display-octave></rest>
       if (yOffsSt == 0) {
-            _xml.tagE("rest");
+            _xml.tagE(restTag);
             }
       else {
-            _xml.stag("rest");
+            _xml.stag(restTag);
             _xml.tag("display-step", QString(QChar(table2[stp])));
             _xml.tag("display-octave", oct - 1);
             _xml.etag();
             }
 
-      TDuration d = rest->durationType();
       Fraction tickLen = rest->actualTicks();
       if (d.type() == TDuration::DurationType::V_MEASURE) {
             // to avoid forward since rest->ticklen=0 in this case.
