@@ -378,6 +378,10 @@ void Cursor::addNote(int pitch, bool addToChord)
             qWarning("Cursor::addNote: invalid pitch: %d", pitch);
             return;
             }
+      if (!segment()) {
+            qWarning("Cursor::addNote: cursor location is undefined, use rewind() to define its location");
+            return;
+            }
       if (!inputState().duration().isValid())
             setDuration(1, 4);
       NoteVal nval(pitch);
