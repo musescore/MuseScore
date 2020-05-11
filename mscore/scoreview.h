@@ -454,7 +454,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       virtual void moveCursor() override;
 
-      SmoothPanSettings* panSettings() { return &_panSettings; }
+      SmoothPanSettings& panSettings() { return _panSettings; }
 
       virtual void layoutChanged();
       virtual void dataChanged(const QRectF&);

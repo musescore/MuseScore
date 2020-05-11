@@ -965,6 +965,8 @@ void PreferenceDialog::buttonBoxClicked(QAbstractButton* button)
 
 void PreferenceDialog::apply()
       {
+      const auto cv = mscore->currentScoreView();
+
       advancedWidget->save();
 
       if (lastSession->isChecked())
@@ -1123,8 +1125,8 @@ void PreferenceDialog::apply()
                   for (Score* ss : s->scoreList())
                         ss->doLayout();
                   }
-            if (mscore->currentScoreView())
-                  mscore->currentScoreView()->setOffset(0.0, 0.0);
+            if (cv)
+                  cv->setOffset(0.0, 0.0);
             mscore->scorePageLayoutChanged();
             mscore->update();
             }
@@ -1208,10 +1210,11 @@ void PreferenceDialog::apply()
       preferences.save();
       mscore->startAutoSave();
 
-      //Smooth panning
-      SmoothPanSettings* svPanSettings = mscore->currentScoreView()->panSettings();
-      svPanSettings->loadFromPreferences();
-      mscore->currentScoreView()->setControlCursorVisible(preferences.getBool(PREF_PAN_CURSOR_VISIBLE));
+      // Smooth panning
+      if (cv) {
+            cv->panSettings().loadFromPreferences();
+            cv->setControlCursorVisible(preferences.getBool(PREF_PAN_CURSOR_VISIBLE));
+            }
       }
 
 //---------------------------------------------------------
