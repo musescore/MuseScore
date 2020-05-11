@@ -351,7 +351,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   if (valuesAreDifferent)
                         break;
                   }
-            ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1; } QToolTip { color: palette(tooltiptext); }").arg(c.name()) : "");
+            ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1; } QToolTip { color: palette(tooltiptext); }").arg(c.name()) : " ");
             }
 
       //deal with reset if only one element, or if values are the same
@@ -366,12 +366,12 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                         enableReset = false;
                         break;
                   case PropertyFlags::UNSTYLED:
-                        ii.w->setStyleSheet("");
+                        ii.w->setStyleSheet(" ");
                         enableReset = true;
                         break;
                   case PropertyFlags::NOSTYLE:
                         enableReset = !isDefault(ii);
-                        ii.w->setStyleSheet("");
+                        ii.w->setStyleSheet(" ");
                         break;
                   }
             }
