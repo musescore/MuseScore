@@ -708,9 +708,10 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
 //    return segment of last created note/rest
 //---------------------------------------------------------
 
-Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, Direction stemDirection, bool forceAccidental, bool rhythmic)
+Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, Direction stemDirection, bool forceAccidental, bool rhythmic, InputState* externalInputState)
       {
       Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
+      InputState& is = externalInputState ? (*externalInputState) : _is;
 
       bool isRest   = nval.pitch == -1;
       Fraction tick = segment->tick();
@@ -825,18 +826,18 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
       if (tie)
             connectTies();
       if (nr) {
-            if (_is.slur() && nr->type() == ElementType::NOTE) {
+            if (is.slur() && nr->type() == ElementType::NOTE) {
                   // If the start element was the same as the end element when the slur was created,
                   // the end grip of the front slur segment was given an x-offset of 3.0 * spatium().
                   // Now that the slur is about to be given a new end element, this should be reset.
-                  if (_is.slur()->endElement() == _is.slur()->startElement())
-                        _is.slur()->frontSegment()->reset();
+                  if (is.slur()->endElement() == is.slur()->startElement())
+                        is.slur()->frontSegment()->reset();
                   //
                   // extend slur
                   //
                   Chord* chord = toNote(nr)->chord();
-                  _is.slur()->undoChangeProperty(Pid::SPANNER_TICKS, chord->tick() - _is.slur()->tick());
-                  for (ScoreElement* se : _is.slur()->linkList()) {
+                  is.slur()->undoChangeProperty(Pid::SPANNER_TICKS, chord->tick() - is.slur()->tick());
+                  for (ScoreElement* se : is.slur()->linkList()) {
                         Slur* slur = toSlur(se);
                         for (ScoreElement* ee : chord->linkList()) {
                               Element* e = static_cast<Element*>(ee);
@@ -847,7 +848,15 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                               }
                         }
                   }
-            select(nr, SelectType::SINGLE, 0);
+            if (externalInputState) {
+                  is.setTrack(nr->track());
+                  ChordRest* cr = nr->isRest() ? toChordRest(nr) : toNote(nr)->chord();
+                  is.setLastSegment(is.segment());
+                  is.setSegment(cr->segment());
+                  }
+            else {
+                  select(nr, SelectType::SINGLE, 0);
+                  }
             }
       return segment;
       }
