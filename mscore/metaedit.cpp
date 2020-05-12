@@ -178,7 +178,7 @@ void MetaEditDialog::setDirty(const bool dirty)
             return;
 
       saveButton->setEnabled(dirty);
-      setWindowTitle(tr("Score properties: ") + m_score->title() + (dirty ? "*" : ""));
+      setWindowTitle(tr("Score properties: %1%2").arg(m_score->title()).arg((dirty ? "*" : "")));
 
       m_dirty = dirty;
       }
@@ -223,8 +223,8 @@ bool MetaEditDialog::save()
                         if (map.contains(tagText)) {
                               if (isBuiltinTag(tagText)) {
                                     QMessageBox::warning(this, tr("MuseScore"),
-                                                         tagText + tr(" is a reserved builtin tag.\n"
-                                                                      "It can't be used."),
+                                                         tr("%1 is a reserved builtin tag.\n"
+                                                            "It can't be used.").arg(tagText),
                                                          QMessageBox::Ok, QMessageBox::Ok);
                                     tag->setFocus();
                                     return false;
