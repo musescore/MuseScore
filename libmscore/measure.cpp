@@ -1425,7 +1425,8 @@ Element* Measure::drop(EditData& data)
                               }
                         firstStaff++;
                         }
-                  score()->undoAddBracket(staff, level, b->bracketType(), 1);
+                  Selection sel = score()->selection();
+                  score()->undoAddBracket(staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
                   delete b;
                   }
                   break;
