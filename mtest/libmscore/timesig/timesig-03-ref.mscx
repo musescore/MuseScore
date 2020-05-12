@@ -54,7 +54,7 @@
         <Channel>
           <program value="73"/>
           </Channel>
-        <Channel name="Chord symbols">
+        <Channel name="harmony">
           <program value="73"/>
           </Channel>
         </Instrument>

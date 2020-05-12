@@ -81,7 +81,7 @@
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>
-        <Channel name="Chord symbols">
+        <Channel name="harmony">
           <program value="0"/>
           <midiPort>0</midiPort>
           <midiChannel>1</midiChannel>
@@ -1130,7 +1130,7 @@
           <Channel>
             <program value="0"/>
             </Channel>
-          <Channel name="Chord symbols">
+          <Channel name="harmony">
             <program value="0"/>
             </Channel>
           </Instrument>
