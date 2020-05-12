@@ -40,8 +40,6 @@ StyledPopup {
         }
 
         CheckBox {
-            id: showLongInstrNameCheckbox
-
             isIndeterminate: model ? model.startWithLongInstrNames.isUndefined : false
             checked: model && !isIndeterminate ? model.startWithLongInstrNames.value : false
             text: qsTr("Start new section with long instrument names")
@@ -50,8 +48,6 @@ StyledPopup {
         }
 
         CheckBox {
-            id: resetBarNumsCheckbox
-
             isIndeterminate: model ? model.resetBarNums.isUndefined : false
             checked: model && !isIndeterminate ? model.resetBarNums.value : false
             text: qsTr("Reset bar numbers for new section")

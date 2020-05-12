@@ -116,5 +116,7 @@
         <file>view/qml/notation/pedals/PedalSettings.qml</file>
         <file>view/qml/notation/spacers/SpacerPopup.qml</file>
         <file>view/qml/notation/spacers/SpacerSettings.qml</file>
+        <file>view/qml/notation/clefs/ClefPopup.qml</file>
+        <file>view/qml/notation/clefs/ClefSettings.qml</file>
     </qresource>
 </RCC>
