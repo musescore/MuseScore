@@ -136,7 +136,7 @@ ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
 
       moveUpButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
       moveDownButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
-      
+
       for (int i = 1; i <= VOICES; i++) {
             //partList->model()->setHeaderData(i, Qt::Horizontal, MScore::selectColor[i-1], Qt::BackgroundRole);
             partList->header()->resizeSection(i, 30);
@@ -410,6 +410,7 @@ void ExcerptsDialog::titleChanged(const QString& s)
             return;
       cur->excerpt()->setTitle(s);
       cur->setText(s);
+      score->masterScore()->setExcerptsChanged(true);
       }
 
 //---------------------------------------------------------
