@@ -207,9 +207,9 @@ void XmlReader::unknown()
             qDebug("%s ", qPrintable(errorString()));
       if (!docName.isEmpty())
             qDebug("tag in <%s> line %lld col %lld: %s",
-               qPrintable(docName), lineNumber(), columnNumber(), name().toUtf8().data());
+               qPrintable(docName), lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
       else
-            qDebug("line %lld col %lld: %s", lineNumber(), columnNumber(), name().toUtf8().data());
+            qDebug("line %lld col %lld: %s", lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
       skipCurrentElement();
       }
 
@@ -538,7 +538,7 @@ Tid XmlReader::addUserTextStyle(const QString& name)
 //   lookupUserTextStyle
 //---------------------------------------------------------
 
-Tid XmlReader::lookupUserTextStyle(const QString& name)
+Tid XmlReader::lookupUserTextStyle(const QString& name) const
       {
       for (const auto& i : userTextStyles) {
             if (i.name == name)
