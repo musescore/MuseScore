@@ -369,8 +369,10 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
 //   addNote from NoteVal
 //---------------------------------------------------------
 
-Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental)
+Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental, InputState* externalInputState)
       {
+      InputState& is = externalInputState ? (*externalInputState) : _is;
+
       Note* note = new Note(this);
       note->setParent(chord);
       note->setTrack(chord->track());
@@ -388,11 +390,20 @@ Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental)
             }
       setPlayNote(true);
       setPlayChord(true);
-      select(note, SelectType::SINGLE, 0);
+
+      if (externalInputState) {
+            is.setTrack(note->track());
+            is.setLastSegment(is.segment());
+            is.setSegment(note->chord()->segment());
+            }
+      else {
+            select(note, SelectType::SINGLE, 0);
+            }
+
       if (!chord->staff()->isTabStaff(chord->tick())) {
-            NoteEntryMethod entryMethod = _is.noteEntryMethod();
+            NoteEntryMethod entryMethod = is.noteEntryMethod();
             if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL)
-                  _is.moveToNextInputPos();
+                  is.moveToNextInputPos();
             }
       return note;
       }
