@@ -7459,8 +7459,8 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
       parser.addOption(QCommandLineOption({"I", "dump-midi-in"}, "Dump midi input"));
       parser.addOption(QCommandLineOption({"O", "dump-midi-out"}, "Dump midi output"));
       parser.addOption(QCommandLineOption({"o", "export-to"}, "Export to 'file'. Format depends on file's extension", "file"));
-      parser.addOption(QCommandLineOption({"r", "image-resolution"}, "Used with '-o <file>.png'. Set output resolution for image export", "DPI"));
-      parser.addOption(QCommandLineOption({"T", "trim-image"}, "Used with '-o <file>.png' and '-o <file.svg>'. Trim exported image with specified margin (in pixels)", "margin"));
+      parser.addOption(QCommandLineOption({"r", "image-resolution"}, "Use with '-o <file>.png'. Set output resolution for image export", "DPI"));
+      parser.addOption(QCommandLineOption({"T", "trim-image"}, "Use with '-o <file>.png' and '-o <file.svg>'. Trim exported image with specified margin (in pixels)", "margin"));
       parser.addOption(QCommandLineOption({"x", "gui-scaling"}, "Set scaling factor for GUI elements", "factor"));
       parser.addOption(QCommandLineOption({"D", "monitor-resolution"}, "Specify monitor resolution", "DPI"));
       parser.addOption(QCommandLineOption({"S", "style"}, "Load style file", "style"));
@@ -7473,21 +7473,21 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
       parser.addOption(QCommandLineOption({"e", "experimental"}, "Enable experimental features"));
       parser.addOption(QCommandLineOption({"c", "config-folder"}, "Override configuration and settings folder", "dir"));
       parser.addOption(QCommandLineOption({"t", "test-mode"}, "Set test mode flag for all files")); // this includes --template-mode
-      parser.addOption(QCommandLineOption("run-test-script", "Run script tests listed in the command line arguments"));
+      parser.addOption(QCommandLineOption(      "run-test-script", "Run script tests listed in the command line arguments"));
       parser.addOption(QCommandLineOption({"M", "midi-operations"}, "Specify MIDI import operations file", "file"));
       parser.addOption(QCommandLineOption({"w", "no-webview"}, "No web view in start center"));
-      parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with '-o <file>.pdf', export score and parts"));
+      parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Use with '-o <file>.pdf', export score and parts"));
       parser.addOption(QCommandLineOption(      "no-fallback-font", "Don't use Bravura as fallback musical font"));
-      parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
-      parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
-      parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
-      parser.addOption(QCommandLineOption("score-media", "Export all media (excepting mp3) for a given score in a single JSON file and print it to std out"));
-      parser.addOption(QCommandLineOption("score-meta", "Export score metadata to JSON document and print it to stdout"));
-      parser.addOption(QCommandLineOption("score-mp3", "Generates mp3 for the given score and export the data to a single JSON file, print it to std out"));
-      parser.addOption(QCommandLineOption("score-parts-pdf", "Generates parts data for the given score and export the data to a single JSON file, print it to std out"));
-      parser.addOption(QCommandLineOption("score-transpose", "Transposes the given score and exports the data to a single JSON file, prints it to std out", "options"));
-      parser.addOption(QCommandLineOption("raw-diff", "Print a raw diff for the given scores"));
-      parser.addOption(QCommandLineOption("diff", "Print a diff for the given scores"));
+      parser.addOption(QCommandLineOption({"f", "force"}, "Use with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
+      parser.addOption(QCommandLineOption({"b", "bitrate"}, "Use with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
+      parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless -e is passed too", "extension file"));
+      parser.addOption(QCommandLineOption(      "score-media", "Export all media (excepting mp3) for a given score in a single JSON file and print it to stdout"));
+      parser.addOption(QCommandLineOption(      "score-meta", "Export score metadata to JSON document and print it to stdout"));
+      parser.addOption(QCommandLineOption(      "score-mp3", "Generate mp3 for the given score and export the data to a single JSON file, print it to stdout"));
+      parser.addOption(QCommandLineOption(      "score-parts-pdf", "Generate parts data for the given score and export the data to a single JSON file, print it to stdout"));
+      parser.addOption(QCommandLineOption(      "score-transpose", "Transpose the given score and export the data to a single JSON file, print it to stdout", "options"));
+      parser.addOption(QCommandLineOption(      "raw-diff", "Print a raw diff for the given scores"));
+      parser.addOption(QCommandLineOption(      "diff", "Print a diff for the given scores"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
