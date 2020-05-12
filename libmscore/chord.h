@@ -158,6 +158,7 @@ class Chord final : public ChordRest {
       QPointF stemPos() const override;          ///< page coordinates
       QPointF stemPosBeam() const override;      ///< page coordinates
       qreal stemPosX() const override;
+      qreal rightEdge() const override;
 
       bool underBeam() const;
       Hook* hook() const                     { return _hook; }

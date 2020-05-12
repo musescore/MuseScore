@@ -178,6 +178,18 @@ void Lyrics::remove(Element* el)
       if (el->isLyricsLine()) {
             // only if separator still exists and is the right one
             if (_separator && el == _separator) {
+#if 0
+                  // clear melismaEnd flag from end cr
+                  // find end cr from melisma itself, as ticks for lyrics may not be accurate at this point
+                  // note this clearing this might be premature, as there may be other lyrics that still end there
+                  // also, at this point we can't be sure if this is a melisma or a dash
+                  // but the flag will be regenerated on next layout
+                  Element* e = _separator->endElement();
+                  if (!e)
+                        e = score()->findCRinStaff(_separator->tick2(), track());
+                  if (e && e->isChordRest())
+                        toChordRest(e)->setMelismaEnd(false);
+#endif
                   // Lyrics::remove() and LyricsLine::removeUnmanaged() call each other;
                   // be sure each finds a clean context
                   LyricsLine* separ = _separator;
@@ -274,9 +286,15 @@ void Lyrics::layout()
       if (styleDidChange)
             styleChanged();
 
-      if (isMelisma() || hasNumber)
-            if (isStyled(Pid::ALIGN)) {
+      if (isMelisma() || hasNumber) {
+            // use the melisma style alignment setting
+            if (isStyled(Pid::ALIGN))
                   setAlign(score()->styleV(Sid::lyricsMelismaAlign).value<Align>());
+            }
+      else {
+            // use the text style alignment setting
+            if (isStyled(Pid::ALIGN))
+                  setAlign(propertyDefault(Pid::ALIGN).value<Align>());
             }
       QPointF o(propertyDefault(Pid::OFFSET).toPointF());
       rxpos() = o.x();
@@ -345,6 +363,14 @@ void Lyrics::layout()
                   _separator = 0;
                   }
             }
+
+      if (_ticks.isNotZero()) {
+            // set melisma end
+            ChordRest* ecr = score()->findCR(endTick(), track());
+            if (ecr)
+                  ecr->setMelismaEnd(true);
+            }
+
       }
 
 //---------------------------------------------------------
@@ -495,6 +521,12 @@ void Lyrics::endEdit(EditData& ed)
 
 void Lyrics::removeFromScore()
       {
+      if (_ticks.isNotZero()) {
+            // clear melismaEnd flag from end cr
+            ChordRest* ecr = score()->findCR(endTick(), track());
+            if (ecr)
+                  ecr->setMelismaEnd(false);
+            }
       if (_separator) {
             _separator->removeUnmanaged();
             delete _separator;
@@ -534,6 +566,14 @@ bool Lyrics::setProperty(Pid propertyId, const QVariant& v)
                   _syllabic = Syllabic(v.toInt());
                   break;
             case Pid::LYRIC_TICKS:
+                  if (_ticks.isNotZero()) {
+                        // clear melismaEnd flag from previous end cr
+                        // this might be premature, as there may be other melismas ending there
+                        // but flag will be generated correctly on layout
+                        ChordRest* ecr = score()->findCR(endTick(), track());
+                        if (ecr)
+                              ecr->setMelismaEnd(false);
+                        }
                   _ticks = v.value<Fraction>();
                   break;
             case Pid::VERSE:
