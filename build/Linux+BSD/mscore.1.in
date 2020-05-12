@@ -206,7 +206,7 @@ workspaces, extensions, translations, etc.; compare with
 .It Fl r | Fl \-image\-resolution Ar DPI
 Set image resolution for conversion to PNG files.
 .Pp
-Default: 300 DPI (actually, the value of
+Default: 360 DPI (actually, the value of
 .Dq Resolution
 of the PNG option group in the Export tab of the preferences)
 .It Fl S | Fl \-style Ar style
