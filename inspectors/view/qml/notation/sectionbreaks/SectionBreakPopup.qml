@@ -27,32 +27,32 @@ StyledPopup {
             }
 
             IncrementalPropertyControl {
-                isIndeterminate: model ? model.pause.isUndefined : false
-                currentValue: model ? model.pause.value : 0
+                isIndeterminate: model ? model.pauseDuration.isUndefined : false
+                currentValue: model ? model.pauseDuration.value : 0
                 iconMode: iconModeEnum.hidden
                 maxValue: 999
                 minValue: 0
                 step: 0.5
                 measureUnitsSymbol: qsTr("s")
 
-                onValueEdited: { model.pause.value = newValue }
+                onValueEdited: { model.pauseDuration.value = newValue }
             }
         }
 
         CheckBox {
-            isIndeterminate: model ? model.startWithLongInstrNames.isUndefined : false
-            checked: model && !isIndeterminate ? model.startWithLongInstrNames.value : false
+            isIndeterminate: model ? model.shouldStartWithLongInstrNames.isUndefined : false
+            checked: model && !isIndeterminate ? model.shouldStartWithLongInstrNames.value : false
             text: qsTr("Start new section with long instrument names")
 
-            onClicked: { model.startWithLongInstrNames.value = !checked }
+            onClicked: { model.shouldStartWithLongInstrNames.value = !checked }
         }
 
         CheckBox {
-            isIndeterminate: model ? model.resetBarNums.isUndefined : false
-            checked: model && !isIndeterminate ? model.resetBarNums.value : false
+            isIndeterminate: model ? model.shouldResetBarNums.isUndefined : false
+            checked: model && !isIndeterminate ? model.shouldResetBarNums.value : false
             text: qsTr("Reset bar numbers for new section")
 
-            onClicked: { model.resetBarNums.value = !checked }
+            onClicked: { model.shouldResetBarNums.value = !checked }
         }
     }
 }

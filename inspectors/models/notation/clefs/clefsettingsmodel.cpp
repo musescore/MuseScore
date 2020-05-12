@@ -10,7 +10,7 @@ ClefSettingsModel::ClefSettingsModel(QObject* parent, IElementRepositoryService*
 
 void ClefSettingsModel::createProperties()
 {
-    m_showCourtesy = buildPropertyItem(Ms::Pid::SHOW_COURTESY);
+    m_shouldShowCourtesy = buildPropertyItem(Ms::Pid::SHOW_COURTESY);
 }
 
 void ClefSettingsModel::requestElements()
@@ -20,15 +20,15 @@ void ClefSettingsModel::requestElements()
 
 void ClefSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_showCourtesy);
+    loadPropertyItem(m_shouldShowCourtesy);
 }
 
 void ClefSettingsModel::resetProperties()
 {
-    m_showCourtesy->resetToDefault();
+    m_shouldShowCourtesy->resetToDefault();
 }
 
-PropertyItem* ClefSettingsModel::showCourtesy() const
+PropertyItem* ClefSettingsModel::shouldShowCourtesy() const
 {
-    return m_showCourtesy;
+    return m_shouldShowCourtesy;
 }
