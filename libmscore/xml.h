@@ -69,10 +69,6 @@ class LinksIndexer {
 class XmlReader : public QXmlStreamReader {
       QString docName;  // used for error reporting
 
-      // For readahead possibility.
-      // If needed, must be explicitly set by setDevice.
-      QIODevice* _readDevice = nullptr;
-
       // Score read context (for read optimizations):
       Fraction _tick             { Fraction(0, 1) };
       Fraction _tickOffset       { Fraction(0, 1) };
@@ -105,6 +101,8 @@ class XmlReader : public QXmlStreamReader {
 
       void addConnectorInfo(std::unique_ptr<ConnectorInfoReader>);
       void removeConnector(const ConnectorInfoReader*); // Removes the whole ConnectorInfo chain from the connectors list.
+
+      qint64 _offsetLines { 0 };
 
    public:
       XmlReader(QFile* f) : QXmlStreamReader(f), docName(f->fileName()) {}
@@ -148,6 +146,7 @@ class XmlReader : public QXmlStreamReader {
 
       Fraction tick()  const            { return _tick + _tickOffset; }
       Fraction rtick()  const ;
+      Fraction tickOffset() const       { return _tickOffset; }
       void setTick(const Fraction& f);
       void incTick(const Fraction& f);
       void setTickOffset(const Fraction& val) { _tickOffset = val; }
@@ -203,13 +202,13 @@ class XmlReader : public QXmlStreamReader {
 
       void checkTuplets();
       Tid addUserTextStyle(const QString& name);
-      Tid lookupUserTextStyle(const QString& name);
-
-      // Ownership on read device is NOT transferred to XmlReader.
-      void setDevice(QIODevice* dev) { if (!dev->isSequential()) _readDevice = dev; }
-      QIODevice* getDevice() { return _readDevice; }
+      Tid lookupUserTextStyle(const QString& name) const;
 
       QList<std::pair<Element*, QPointF>>& fixOffsets() { return  _fixOffsets; }
+
+      // for reading old files (< 3.01)
+      QMap<int, QList<QPair<LinkedElements*, Location>>>& staffLinkedElements() { return _staffLinkedElements; }
+      void setOffsetLines(qint64 val) { _offsetLines = val; }
       };
 
 //---------------------------------------------------------
