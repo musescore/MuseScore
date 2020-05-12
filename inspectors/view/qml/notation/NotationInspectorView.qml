@@ -16,6 +16,7 @@ import "accidentals"
 import "fretdiagrams"
 import "pedals"
 import "spacers"
+import "clefs"
 
 FocusableItem {
     id: root
@@ -112,6 +113,12 @@ FocusableItem {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_SPACER) : null
+        }
+
+        ClefSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_CLEF) : null
         }
     }
 }

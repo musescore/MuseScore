@@ -10,6 +10,8 @@
 #include "layoutbreak.h"
 #include "pedal.h"
 
+#include "global/log.h"
+
 ElementRepositoryService::ElementRepositoryService(QObject* parent) : QObject(parent)
 {
 
@@ -40,6 +42,7 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     case Ms::ElementType::STAFF: return findStaffs();
     case Ms::ElementType::LAYOUT_BREAK: return findSectionBreaks(); //Page breaks and line breaks are of type LAYOUT_BREAK, but they don't appear in the inspector for now.
     case Ms::ElementType::PEDAL: return findPedals();
+    case Ms::ElementType::CLEF: return findPairedClefs();
     default:
         QList<Ms::Element*> resultList;
 
@@ -268,6 +271,31 @@ QList<Ms::Element*> ElementRepositoryService::findPedals() const
 
         } else if (element->type() == Ms::ElementType::PEDAL) {
             resultList << element;
+        }
+    }
+
+    return resultList;
+}
+
+QList<Ms::Element*> ElementRepositoryService::findPairedClefs() const
+{
+    QList<Ms::Element*> resultList;
+
+    for (Ms::Element* element : m_elementList) {
+
+        if (element->type() == Ms::ElementType::CLEF) {
+
+            auto clef = Ms::toClef(element);
+            IF_ASSERT_FAILED(clef) {
+                continue;
+            }
+
+            resultList << clef; //could be both main clef and courtesy clef
+            
+            auto courtesyPairClef = clef->otherClef(); //seeking for a "pair" clef
+            if (courtesyPairClef) {
+                resultList << courtesyPairClef;
+            }
         }
     }
 
