@@ -126,13 +126,13 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
       InputState& is = externalInputState ? (*externalInputState) : _is;
 
       if (addFlag) {
-            Chord* c = toChord(is.lastSegment()->element(is.track()));
+            ChordRest* c = toChordRest(is.lastSegment()->element(is.track()));
 
             if (c == 0 || !c->isChord()) {
                   qDebug("Score::addPitch: cr %s", c ? c->name() : "zero");
                   return 0;
                   }
-            Note* note = addNote(c, nval);
+            Note* note = addNote(toChord(c), nval, /* forceAccidental */ false, externalInputState);
             if (is.lastSegment() == is.segment()) {
                   NoteEntryMethod entryMethod = is.noteEntryMethod();
                   if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL)
@@ -140,7 +140,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
                   }
             return note;
             }
-      expandVoice();
+      expandVoice(is.segment(), is.track());
 
       // insert note
       Direction stemDirection = Direction::AUTO;
@@ -152,7 +152,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
             stemDirection     = ds->stemDirection(nval.pitch);
             track             = ds->voice(nval.pitch) + (is.track() / VOICES) * VOICES;
             is.setTrack(track);
-            expandVoice();
+            expandVoice(is.segment(), is.track());
             }
       if (!is.cr())
             return 0;
@@ -235,7 +235,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
             select(lastTiedNote);
             }
       else if (!is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
-            Segment* seg = setNoteRest(is.segment(), track, nval, duration, stemDirection);
+            Segment* seg = setNoteRest(is.segment(), track, nval, duration, stemDirection, /* forceAccidental */ false, /* rhythmic */ false, externalInputState);
             if (seg) {
                   note = toChord(seg->element(track))->upNote();
                   }
