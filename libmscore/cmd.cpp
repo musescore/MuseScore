@@ -333,7 +333,7 @@ void Score::update(bool resetCmdState)
             if (resetCmdState)
                   cs.reset();
             }
-      if (_selection.isRange())
+      if (_selection.isRange() && !_selection.isLocked())
             _selection.updateSelectedElements();
       }
 
