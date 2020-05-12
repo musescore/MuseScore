@@ -165,9 +165,10 @@ void Score::updateChannel()
       for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             for (const Element* e : s->annotations()) {
                   if (e->isInstrumentChange()) {
-                        Staff* staff = Score::staff(e->staffIdx());
-                        for (int voice = 0; voice < VOICES; ++voice)
-                              staff->insertIntoChannelList(voice, s->tick(), 0);
+                        for (Staff* staff : *e->part()->staves()) {
+                              for (int voice = 0; voice < VOICES; ++voice)
+                                    staff->insertIntoChannelList(voice, s->tick(), 0);
+                              }
                         continue;
                         }
                   if (!e->isStaffTextBase())
