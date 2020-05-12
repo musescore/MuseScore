@@ -598,7 +598,7 @@ void Part::updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval
       if (!harmonyChannel() && harmonyCount() > 0) {
             Instrument* instr = instrument();
             Channel* c = new Channel(*instr->channel(0));
-            c->setName(qApp->translate("channel", Channel::HARMONY_NAME));
+            c->setName(Channel::HARMONY_NAME);
             instr->appendChannel(c);
             onInstrumentChanged();
             }
@@ -610,17 +610,17 @@ void Part::updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval
 
 const Channel* Part::harmonyChannel() const
       {
-           const Instrument* instr = instrument();
-           if (!instr)
-                 return nullptr;
+            const Instrument* instr = instrument();
+            if (!instr)
+                  return nullptr;
 
-           int chanIdx = instr->channelIdx(Channel::HARMONY_NAME);
-           if (chanIdx == -1)
-                 return nullptr;
+            int chanIdx = instr->channelIdx(Channel::HARMONY_NAME);
+            if (chanIdx == -1)
+                  return nullptr;
 
-           const Channel* chan = instr->channel(chanIdx);
-           Q_ASSERT(chan);
-           return chan;
+            const Channel* chan = instr->channel(chanIdx);
+            Q_ASSERT(chan);
+            return chan;
       }
 
 //---------------------------------------------------------

@@ -57,7 +57,7 @@
           <midiPort>0</midiPort>
           <midiChannel>0</midiChannel>
           </Channel>
-        <Channel name="Chord symbols">
+        <Channel name="harmony">
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>

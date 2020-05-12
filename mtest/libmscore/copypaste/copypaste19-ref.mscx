@@ -53,7 +53,7 @@
           </Articulation>
         <Channel>
           </Channel>
-        <Channel name="Chord symbols">
+        <Channel name="harmony">
           </Channel>
         </Instrument>
       </Part>
