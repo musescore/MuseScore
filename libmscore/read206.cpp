@@ -1525,46 +1525,18 @@ bool readNoteProperties206(Note* note, XmlReader& e)
 
 //---------------------------------------------------------
 //   ReadStyleName206
-//    For 2.x files, the style tag could be in a different
-//    position with respect to 3.x files. Since seek
-//    position is not reliable for readline in QIODevices (for
-//    example because of non-single-byte characters in at least
-//    one of the fields; some two-byte characters are counted as
-//    two single-byte characters and thus the reading could
-//    start at the wrong position)
+//    Retrieve the content of the "style" tag from the
+//    QString with the content of the whole text tag
 //---------------------------------------------------------
 
-static QString ReadStyleName206(XmlReader& e)
+static QString ReadStyleName206(QString xmlTag)
       {
       QString s;
-      QIODevice* device = e.getDevice();
-      if (!device || device->isSequential())
-            return s;
-      if (!device->isOpen())
-            device->open(QIODevice::ReadOnly);
-      const auto pos = device->pos();
-      const auto pos1 = e.characterOffset();
-      const QString tagName = e.name().toString();
-      device->seek(0);
-      XmlReader streamReader(device);
-      QString xmltag;
-      QString name;
-      for (;;) {
-            streamReader.readNextStartElement();
-            name = streamReader.name().toString();
-            if ((name == tagName) && (streamReader.characterOffset() == pos1)) {
-                  xmltag = streamReader.readXml();
-                  if (xmltag.contains("<style>")) {
-                        QRegExp re("<style>([^<]+)</style>");
-                        if (re.indexIn(xmltag) > -1)
-                              s = re.cap(1);
-                        }
-                  break;
-                  }
-            if (streamReader.atEnd())
-                  break;
+      if (xmlTag.contains("<style>")) {
+            QRegExp re("<style>([^<]+)</style>");
+            if (re.indexIn(xmlTag) > -1)
+                  s = re.cap(1);
             }
-      device->seek(pos);
       return s;
       }
 
@@ -1574,9 +1546,9 @@ static QString ReadStyleName206(XmlReader& e)
 //    before setting anything else.
 //---------------------------------------------------------
 
-static bool readTextPropertyStyle206(XmlReader& e, TextBase* t, Element* be)
+static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBase* t, Element* be)
       {
-      QString s = ReadStyleName206(e);
+      QString s = ReadStyleName206(xmlTag);
 
       if (s.isEmpty())
             return false;
@@ -1683,15 +1655,98 @@ static bool readTextProperties206(XmlReader& e, TextBase* t)
       }
 
 //---------------------------------------------------------
+//   TextReaderContext206
+//    For 2.x files, the style tag could be in a different
+//    position with respect to 3.x files. Since seek
+//    position is not reliable for readline in QIODevices (for
+//    example because of non-single-byte characters in at least
+//    one of the fields; some two-byte characters are counted as
+//    two single-byte characters and thus the reading could
+//    start at the wrong position), a copy of the text tag
+//    is created and read in a separate XmlReader, while
+//    the text style is extracted from a QString containing
+//    the whole text xml tag.
+//    TextReaderContext206 takes care of this process
+//---------------------------------------------------------
+
+class TextReaderContext206 {
+      XmlReader& origReader;
+      XmlReader tagReader;
+      QString xmlTag;
+
+   public:
+      TextReaderContext206(XmlReader& e)
+         : origReader(e), tagReader(QString())
+            {
+            // Create a new xml document containing only the (text) xml chunk
+            QString name = origReader.name().toString();
+            qint64 additionalLines = origReader.lineNumber() - 2; // Subtracting the 2 new lines that will be added
+            xmlTag = origReader.readXml();
+            xmlTag.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<" + name + ">");
+            xmlTag.append("</" + name + ">\n");
+            tagReader.addData(xmlTag); // Add the xml data to the XmlReader
+            // the additional lines are needed to output the correct line number
+            // of the original file in case of error
+            tagReader.setOffsetLines(additionalLines);
+            copyProperties(origReader, tagReader);
+            tagReader.readNextStartElement(); // read up to the first "name" tag
+            }
+
+      // Disable copying the TextReaderContext206
+      TextReaderContext206(const TextReaderContext206&) = delete;
+      TextReaderContext206& operator=(const TextReaderContext206&) = delete;
+
+      ~TextReaderContext206()
+            {
+            // Ensure to copy back the potentially changed properties
+            // to the original XmlReader before destruction
+            copyProperties(tagReader, origReader);
+            }
+
+      XmlReader& reader() { return tagReader; }
+      const QString& tag() { return xmlTag; }
+   private:
+      void copyProperties(XmlReader& original, XmlReader& derived);
+      };
+
+//---------------------------------------------------------
+//   copyProperties
+//    Copy some of the XmlReader properties of an original
+//    XmlReader object to a "derived" XmlReader object.
+//    This is used for example when using the derived XmlReader
+//    to read the element properties of a 2.x text, or to
+//    update the base XmlReader object (for example, its
+//    link list) after reading the properties of a 2.x text
+//---------------------------------------------------------
+
+void TextReaderContext206::copyProperties(XmlReader& original, XmlReader& derived)
+      {
+      derived.setDocName(original.getDocName());
+      derived.setTrackOffset(original.trackOffset());
+      derived.setTrack(original.track() - original.trackOffset());
+
+      derived.setTickOffset(original.tickOffset());
+      derived.setTick(original.tick() - original.tickOffset());
+
+      derived.setLastMeasure(original.lastMeasure());
+      derived.setCurrentMeasure(original.currentMeasure());
+      derived.setCurrentMeasureIndex(original.currentMeasureIndex());
+
+      derived.linkIds() = original.linkIds();
+      derived.staffLinkedElements() = original.staffLinkedElements();
+      }
+
+//---------------------------------------------------------
 //   readText206
 //---------------------------------------------------------
 
 static void readText206(XmlReader& e, TextBase* t, Element* be)
       {
-      readTextPropertyStyle206(e, t, be);
-      while (e.readNextStartElement()) {
-            if (!readTextProperties206(e, t))
-                  e.unknown();
+      TextReaderContext206 ctx(e);
+      readTextPropertyStyle206(ctx.tag(), e, t, be);
+      while (ctx.reader().readNextStartElement()) {
+            if (!readTextProperties206(ctx.reader(), t))
+                  ctx.reader().unknown();
             }
       }
 
@@ -1701,15 +1756,16 @@ static void readText206(XmlReader& e, TextBase* t, Element* be)
 
 static void readTempoText(TempoText* t, XmlReader& e)
       {
-      readTextPropertyStyle206(e, t, t);
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
+      TextReaderContext206 ctx(e);
+      readTextPropertyStyle206(ctx.tag(), e, t, t);
+      while (ctx.reader().readNextStartElement()) {
+            const QStringRef& tag(ctx.reader().name());
             if (tag == "tempo")
-                  t->setTempo(e.readDouble());
+                  t->setTempo(ctx.reader().readDouble());
             else if (tag == "followText")
-                  t->setFollowText(e.readInt());
-            else if (!readTextProperties206(e, t))
-                  e.unknown();
+                  t->setFollowText(ctx.reader().readInt());
+            else if (!readTextProperties206(ctx.reader(), t))
+                  ctx.reader().unknown();
             }
       // check sanity
       if (t->xmlText().isEmpty()) {
@@ -1726,18 +1782,19 @@ static void readTempoText(TempoText* t, XmlReader& e)
 
 static void readMarker(Marker* m, XmlReader& e)
       {
-      readTextPropertyStyle206(e, m, m);
+      TextReaderContext206 ctx(e);
+      readTextPropertyStyle206(ctx.tag(), e, m, m);
       Marker::Type mt = Marker::Type::SEGNO;
 
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
+      while (ctx.reader().readNextStartElement()) {
+            const QStringRef& tag(ctx.reader().name());
             if (tag == "label") {
-                  QString s(e.readElementText());
+                  QString s(ctx.reader().readElementText());
                   m->setLabel(s);
                   mt = m->markerType(s);
                   }
-            else if (!readTextProperties206(e, m))
-                  e.unknown();
+            else if (!readTextProperties206(ctx.reader(), m))
+                  ctx.reader().unknown();
             }
       m->setMarkerType(mt);
       }
@@ -1748,17 +1805,18 @@ static void readMarker(Marker* m, XmlReader& e)
 
 static void readDynamic(Dynamic* d, XmlReader& e)
       {
-      readTextPropertyStyle206(e, d, d);
-      while (e.readNextStartElement()) {
-            const QStringRef& tag = e.name();
+      TextReaderContext206 ctx(e);
+      readTextPropertyStyle206(ctx.tag(), e, d, d);
+      while (ctx.reader().readNextStartElement()) {
+            const QStringRef& tag = ctx.reader().name();
             if (tag == "subtype")
-                  d->setDynamicType(e.readElementText());
+                  d->setDynamicType(ctx.reader().readElementText());
             else if (tag == "velocity")
-                  d->setVelocity(e.readInt());
+                  d->setVelocity(ctx.reader().readInt());
             else if (tag == "dynType")
-                  d->setDynRange(Dynamic::Range(e.readInt()));
-            else if (!readTextProperties206(e, d))
-                  e.unknown();
+                  d->setDynRange(Dynamic::Range(ctx.reader().readInt()));
+            else if (!readTextProperties206(ctx.reader(), d))
+                  ctx.reader().unknown();
             }
       }
 
@@ -3153,7 +3211,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   // MuseScore 3 has different types for system text and
                   // staff text while MuseScore 2 didn't.
                   // We need to decide first which one we should create.
-                  QString styleName = ReadStyleName206(e);
+                  TextReaderContext206 ctx(e);
+                  QString styleName = ReadStyleName206(ctx.tag());
                   StaffTextBase* t;
                   if (styleName == "System"   || styleName == "Tempo"
                      || styleName == "Marker" || styleName == "Jump"
@@ -3162,12 +3221,16 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   else
                         t = new StaffText(score);
                   t->setTrack(e.track());
-                  readText206(e, t, t);
+                  readTextPropertyStyle206(ctx.tag(), e, t, t);
+                  while (ctx.reader().readNextStartElement()) {
+                        if (!readTextProperties206(ctx.reader(), t))
+                              ctx.reader().unknown();
+                        }
                   if (t->empty()) {
                         if (t->links()) {
                               if (t->links()->size() == 1) {
                                     qDebug("reading empty text: deleted lid = %d", t->links()->lid());
-                                    e.linkIds().remove(t->links()->lid());
+                                    ctx.reader().linkIds().remove(t->links()->lid());
                                     delete t;
                                     }
                               }
@@ -3188,7 +3251,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               t->ryoffset() = yo;
                               }
 #endif
-                        segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                        segment = m->getSegment(SegmentType::ChordRest, ctx.reader().tick());
                         segment->add(t);
                         }
                   }
