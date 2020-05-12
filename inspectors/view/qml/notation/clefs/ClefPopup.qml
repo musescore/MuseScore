@@ -19,11 +19,11 @@ StyledPopup {
         spacing: 12
 
         CheckBox {
-            isIndeterminate: model ? model.showCourtesy.isUndefined : false
-            checked: model && !isIndeterminate ? model.showCourtesy.value : false
+            isIndeterminate: model ? model.shouldShowCourtesy.isUndefined : false
+            checked: model && !isIndeterminate ? model.shouldShowCourtesy.value : false
             text: qsTr("Show courtesy clef on previous measure")
 
-            onClicked: { model.showCourtesy.value = !checked }
+            onClicked: { model.shouldShowCourtesy.value = !checked }
         }
     }
 }

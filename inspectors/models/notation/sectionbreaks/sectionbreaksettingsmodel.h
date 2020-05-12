@@ -7,9 +7,9 @@ class SectionBreakSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* startWithLongInstrNames READ startWithLongInstrNames CONSTANT)
-    Q_PROPERTY(PropertyItem* resetBarNums READ resetBarNums CONSTANT)
-    Q_PROPERTY(PropertyItem* pause READ pause CONSTANT)
+    Q_PROPERTY(PropertyItem* shouldStartWithLongInstrNames READ shouldStartWithLongInstrNames CONSTANT)
+    Q_PROPERTY(PropertyItem* shouldResetBarNums READ shouldResetBarNums CONSTANT)
+    Q_PROPERTY(PropertyItem* pauseDuration READ pauseDuration CONSTANT)
 
 public:
     explicit SectionBreakSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -19,14 +19,14 @@ public:
     void loadProperties() override;
     void resetProperties() override;
 
-    PropertyItem* startWithLongInstrNames() const;
-    PropertyItem* resetBarNums() const;
-    PropertyItem* pause() const;
+    PropertyItem* shouldStartWithLongInstrNames() const;
+    PropertyItem* shouldResetBarNums() const;
+    PropertyItem* pauseDuration() const;
 
 private:
-    PropertyItem* m_startWithLongInstrNames = nullptr;
-    PropertyItem* m_resetBarNums = nullptr;
-    PropertyItem* m_pause = nullptr;
+    PropertyItem* m_shouldStartWithLongInstrNames = nullptr;
+    PropertyItem* m_shouldResetBarNums = nullptr;
+    PropertyItem* m_pauseDuration = nullptr;
 };
 
 #endif // SECTIONBREAKSETTINGSMODEL_H

@@ -10,9 +10,9 @@ SectionBreakSettingsModel::SectionBreakSettingsModel(QObject* parent, IElementRe
 
 void SectionBreakSettingsModel::createProperties()
 {
-    m_startWithLongInstrNames = buildPropertyItem(Ms::Pid::START_WITH_LONG_NAMES);
-    m_resetBarNums = buildPropertyItem(Ms::Pid::START_WITH_MEASURE_ONE);
-    m_pause = buildPropertyItem(Ms::Pid::PAUSE);
+    m_shouldStartWithLongInstrNames = buildPropertyItem(Ms::Pid::START_WITH_LONG_NAMES);
+    m_shouldResetBarNums = buildPropertyItem(Ms::Pid::START_WITH_MEASURE_ONE);
+    m_pauseDuration = buildPropertyItem(Ms::Pid::PAUSE);
 }
 
 void SectionBreakSettingsModel::requestElements()
@@ -22,31 +22,31 @@ void SectionBreakSettingsModel::requestElements()
 
 void SectionBreakSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_startWithLongInstrNames);
-    loadPropertyItem(m_resetBarNums);
-    loadPropertyItem(m_pause, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_shouldStartWithLongInstrNames);
+    loadPropertyItem(m_shouldResetBarNums);
+    loadPropertyItem(m_pauseDuration, [] (const QVariant& elementPropertyValue) -> QVariant {
         return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
     });
 }
 
 void SectionBreakSettingsModel::resetProperties()
 {
-    m_startWithLongInstrNames->resetToDefault();
-    m_resetBarNums->resetToDefault();
-    m_pause->resetToDefault();
+    m_shouldStartWithLongInstrNames->resetToDefault();
+    m_shouldResetBarNums->resetToDefault();
+    m_pauseDuration->resetToDefault();
 }
 
-PropertyItem* SectionBreakSettingsModel::startWithLongInstrNames() const
+PropertyItem* SectionBreakSettingsModel::shouldStartWithLongInstrNames() const
 {
-    return m_startWithLongInstrNames;
+    return m_shouldStartWithLongInstrNames;
 }
 
-PropertyItem* SectionBreakSettingsModel::resetBarNums() const
+PropertyItem* SectionBreakSettingsModel::shouldResetBarNums() const
 {
-    return m_resetBarNums;
+    return m_shouldResetBarNums;
 }
 
-PropertyItem* SectionBreakSettingsModel::pause() const
+PropertyItem* SectionBreakSettingsModel::pauseDuration() const
 {
-    return m_pause;
+    return m_pauseDuration;
 }

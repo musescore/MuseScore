@@ -7,7 +7,7 @@ class ClefSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* showCourtesy READ showCourtesy CONSTANT)
+    Q_PROPERTY(PropertyItem* shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
 
 public:
     explicit ClefSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -17,10 +17,10 @@ public:
     void loadProperties() override;
     void resetProperties() override;
 
-    PropertyItem* showCourtesy() const;
+    PropertyItem* shouldShowCourtesy() const;
 
 private:
-    PropertyItem* m_showCourtesy = nullptr;
+    PropertyItem* m_shouldShowCourtesy = nullptr;
 };
 
 #endif // CLEFSETTINGSMODEL_H
