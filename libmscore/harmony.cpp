@@ -1379,19 +1379,22 @@ void Harmony::calculateBoundingRect()
                         xx = fd->bbox().width() - bb.width();
                   else if (align() & Align::HCENTER)
                         xx = fd->centerX() - bb.width() / 2.0;
+
+                  setPos(0.0, ypos - yy - score()->styleP(Sid::harmonyFretDist));
                   }
             else {
                   if (align() & Align::RIGHT)
                         xx = -bb.x() -bb.width() + cw;
                   else if (align() & Align::HCENTER)
                         xx = -bb.x() -bb.width() / 2.0 + cw / 2.0;
+
+                  setPos(0.0, ypos);
                   }
 
             for (TextSegment* ts : textList)
                   ts->offset = QPointF(xx, yy);
 
             setbbox(bb.translated(xx, yy));
-            setPos(0.0, fd ? rypos() : ypos);
             _harmonyHeight = bbox().height();
 
             for (int i = 0; i < rows(); ++i) {
