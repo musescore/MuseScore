@@ -107,6 +107,7 @@ Instrument::Instrument()
       _useDrumset  = false;
       _drumset     = 0;
       _singleNoteDynamics = true;
+      _nameColor = MScore::defaultColor;
       }
 
 Instrument::Instrument(const Instrument& i)
@@ -131,6 +132,7 @@ Instrument::Instrument(const Instrument& i)
       for (Channel* c : i._channel)
             _channel.append(new Channel(*c));
       _clefType     = i._clefType;
+      _nameColor    = i._nameColor;
       }
 
 void Instrument::operator=(const Instrument& i)
@@ -159,6 +161,7 @@ void Instrument::operator=(const Instrument& i)
       for (Channel* c : i._channel)
             _channel.append(new Channel(*c));
       _clefType     = i._clefType;
+      _nameColor    = i._nameColor;
       }
 
 //---------------------------------------------------------
@@ -219,6 +222,7 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
       _shortNames.write(xml, "shortName");
 //      if (!_trackName.empty())
             xml.tag("trackName", _trackName);
+      xml.tag("nameColor", _nameColor, MScore::defaultColor);
       if (_minPitchP > 0)
             xml.tag("minPitchP", _minPitchP);
       if (_maxPitchP < 127)
@@ -322,6 +326,8 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
             name.read(e);
             _shortNames.append(name);
             }
+      else if (tag == "nameColor")
+            _nameColor = e.readColor();
       else if (tag == "trackName")
             _trackName = e.readElementText();
       else if (tag == "minPitch") {      // obsolete
@@ -1195,7 +1201,8 @@ bool Instrument::operator==(const Instrument& i) const
          &&  i._transpose.chromatic == _transpose.chromatic
          &&  i._trackName == _trackName
          &&  *i.stringData() == *stringData()
-         &&  i._singleNoteDynamics == _singleNoteDynamics;
+         &&  i._singleNoteDynamics == _singleNoteDynamics
+         &&  i._nameColor == _nameColor;
       }
 
 //---------------------------------------------------------
