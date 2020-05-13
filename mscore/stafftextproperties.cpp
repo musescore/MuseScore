@@ -186,7 +186,7 @@ StaffTextProperties::StaffTextProperties(const StaffTextBase* st, QWidget* paren
             item->setData(0, Qt::UserRole, i);
             QString name = a->name();
             if (a->name().isEmpty())
-                  name == Channel::DEFAULT_NAME;
+                  name = Channel::DEFAULT_NAME;
             item->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
             item->setText(1, qApp->translate("InstrumentsXML", a->descr().toUtf8().data()));
             if (i == 0)
@@ -390,7 +390,7 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
             QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
             QString name = e.name;
             if (e.name.isEmpty())
-                  name == Channel::DEFAULT_NAME;
+                  name = Channel::DEFAULT_NAME;
             ti->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
             ti->setData(0, Qt::UserRole, name);
             ti->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
@@ -399,7 +399,7 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
             QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
             QString name = e.name;
             if (e.name.isEmpty())
-                  name == Channel::DEFAULT_NAME;
+                  name = Channel::DEFAULT_NAME;
             ti->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
             ti->setData(0, Qt::UserRole, name);
             ti->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
