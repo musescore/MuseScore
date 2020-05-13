@@ -182,6 +182,7 @@ class Cursor : public QObject {
       Q_INVOKABLE void add(Ms::PluginAPI::Element*);
 
       Q_INVOKABLE void addNote(int pitch, bool addToChord = false);
+      Q_INVOKABLE void addRest();
 
       //@ set duration
       //@   z: numerator

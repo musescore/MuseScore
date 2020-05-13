@@ -389,6 +389,25 @@ void Cursor::addNote(int pitch, bool addToChord)
       }
 
 //---------------------------------------------------------
+//   addRest
+///   \brief Adds a rest to the current cursor position.
+///   \details The duration of the added rest equals to
+///   what has been set by the previous setDuration() call.
+///   \since MuseScore 3.5
+//---------------------------------------------------------
+
+void Cursor::addRest()
+      {
+      if (!segment()) {
+            qWarning("Cursor::addRest: cursor location is undefined, use rewind() to define its location");
+            return;
+            }
+      if (!inputState().duration().isValid())
+            setDuration(1, 4);
+      _score->enterRest(inputState().duration(), is.get());
+      }
+
+//---------------------------------------------------------
 //   setDuration
 ///   Set duration of the notes added by the cursor.
 ///   \param z: numerator
