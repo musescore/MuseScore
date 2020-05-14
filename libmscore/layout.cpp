@@ -2171,8 +2171,8 @@ static bool breakMultiMeasureRest(Measure* m)
       auto sl = m->score()->spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
       for (auto i : sl) {
             Spanner* s = i.value;
-            // break for first measure of volta and first measure *after* volta
-            if (s->isVolta() && (s->tick() == m->tick() || s->tick2() == m->tick()))
+            // break for first measure of volta or textline and first measure *after* volta
+            if ((s->isVolta() || s->isTextLine()) && (s->tick() == m->tick() || s->tick2() == m->tick()))
                   return true;
             }
 
