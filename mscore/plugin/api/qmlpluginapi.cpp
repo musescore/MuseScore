@@ -14,6 +14,7 @@
 #include "cursor.h"
 #include "elements.h"
 #include "fraction.h"
+#include "instrument.h"
 #include "score.h"
 #include "part.h"
 #include "util.h"
@@ -342,6 +343,9 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<Segment>();
       qmlRegisterType<Measure>();
       qmlRegisterType<Part>();
+      qmlRegisterType<Instrument>();
+      qmlRegisterType<Channel>();
+      qmlRegisterType<StringData>();
       qmlRegisterType<Excerpt>();
       qmlRegisterType<Selection>();
       qmlRegisterType<Tie>();

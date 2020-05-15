@@ -105,6 +105,24 @@ Wrapper* wrap(T* t, Ownership own = Ownership::SCORE)
 extern ScoreElement* wrap(Ms::ScoreElement* se, Ownership own = Ownership::SCORE);
 
 //---------------------------------------------------------
+//   customWrap
+///   \cond PLUGIN_API \private \endcond
+///   \internal
+///   Can be used to construct wrappers which do not
+///   support standard ownership logic or require
+///   additional arguments for initialization.
+//---------------------------------------------------------
+
+template <class Wrapper, class T, typename... Args>
+Wrapper* customWrap(T* t, Args... args)
+      {
+      Wrapper* w = t ? new Wrapper(t, std::forward<Args>(args)...) : nullptr;
+      // All wrapper objects should belong to JavaScript code.
+      QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
+      return w;
+      }
+
+//---------------------------------------------------------
 ///   QML access to containers.
 ///   A wrapper which provides read-only access for various
 ///   items containers.
