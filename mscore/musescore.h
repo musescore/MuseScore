@@ -526,7 +526,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void oscMuteChannel(double val);
       void oscOpen(QString path);
       void oscCloseAll();
-      void oscTriggerPlugin(QString list);
+      void oscTriggerPlugin(QString path, QVariant args);
       void oscColorNote(QVariantList list);
       void oscAction();
 #endif
@@ -551,8 +551,13 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void cmd(QAction* a);
       void dirtyChanged(Score*);
       void setPos(const Fraction& tick);
+      QString pluginPathFromIdx(int idx);
       void pluginTriggered(int);
       void pluginTriggered(QString path);
+#ifdef SCRIPT_INTERFACE
+      void oscControlPlugin(int idx, QStringList methodPath, QVariant arg);
+      void oscControlPlugin(QString pluginPath, QStringList methodPath, QVariant arg);
+#endif
       void handleMessage(const QString& message);
       void setCurrentScoreView(ScoreView*);
       void setCurrentScoreView(int);
