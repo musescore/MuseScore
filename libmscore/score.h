@@ -783,6 +783,7 @@ class Score : public QObject, public ScoreElement {
       const QList<Part*>& parts() const    { return _parts; }
 
       void appendPart(Part* p);
+      void appendPart(const InstrumentTemplate*);
       void updateStaffIndex();
       void sortStaves(QList<int>& dst);
 
@@ -1117,8 +1118,6 @@ class Score : public QObject, public ScoreElement {
 
       QList<Score*> scoreList();
       bool switchLayer(const QString& s);
-      //@ appends to the score a named part as last part
-      void appendPart(const QString&);
       //@ appends to the score a number of measures
       void appendMeasures(int);
 

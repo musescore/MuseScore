@@ -20,6 +20,9 @@
 #include "libmscore/score.h"
 
 namespace Ms {
+
+class InstrumentTemplate;
+
 namespace PluginAPI {
 
 class Cursor;
@@ -129,8 +132,26 @@ class Score : public Ms::PluginAPI::ScoreElement {
       /// Sets the metatag named \p tag to \p val
       Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val) { score()->setMetaTag(tag, val); }
 
-//      //@ appends to the score a named part as last part
-//      Q_INVOKABLE void appendPart(const QString&);
+      /**
+       * Appends a part with the instrument defined by \p instrumentId
+       * to this score.
+       * \param instrumentId - ID of the instrument to be added, as listed in
+       * [`instruments.xml`](https://github.com/musescore/MuseScore/blob/3.x/share/instruments/instruments.xml)
+       * file.
+       * \since MuseScore 3.5
+       */
+      Q_INVOKABLE void appendPart(const QString& instrumentId);
+      /**
+       * Appends a part with the instrument defined by the given MusicXML ID
+       * to this score.
+       * \param instrumentMusicXmlId -
+       * [MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/)
+       * of the instrument to be added.
+       * \see \ref Ms::PluginAPI::Part::instrumentId, \ref Ms::PluginAPI::Instrument::instrumentId
+       * \since MuseScore 3.5
+       */
+      Q_INVOKABLE void appendPartByMusicXmlId(const QString& instrumentMusicXmlId);
+
       /// Appends a number of measures to this score.
       Q_INVOKABLE void appendMeasures(int n) { score()->appendMeasures(n); }
       Q_INVOKABLE void addText(const QString& type, const QString& text);
@@ -197,6 +218,8 @@ class Score : public Ms::PluginAPI::ScoreElement {
 
       QQmlListProperty<Part> parts() { return wrapContainerProperty<Part>(this, score()->parts());   }
       QQmlListProperty<Excerpt> excerpts() { return wrapExcerptsContainerProperty<Excerpt>(this, score()->excerpts());   }
+
+      static const Ms::InstrumentTemplate* instrTemplateFromName(const QString& name); // used by PluginAPI::newScore()
       /// \endcond
       };
 } // namespace PluginAPI

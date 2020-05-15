@@ -3650,27 +3650,8 @@ bool Score::switchLayer(const QString& s)
 //   appendPart
 //---------------------------------------------------------
 
-void Score::appendPart(const QString& name)
+void Score::appendPart(const InstrumentTemplate* t)
       {
-      static InstrumentTemplate defaultInstrument;
-      InstrumentTemplate* t;
-
-      t = searchTemplate(name);
-      if (t == 0) {
-            qDebug("appendPart: <%s> not found", qPrintable(name));
-            t = &defaultInstrument;
-            }
-
-      if (t->channel.empty()) {
-            Channel a;
-            a.setChorus(0);
-            a.setReverb(0);
-            a.setName(Channel::DEFAULT_NAME);
-            a.setBank(0);
-            a.setVolume(90);
-            a.setPan(0);
-            t->channel.append(a);
-            }
       Part* part = new Part(this);
       part->initFromInstrTemplate(t);
       int n = nstaves();

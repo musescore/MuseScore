@@ -208,7 +208,7 @@ Score* PluginAPI::newScore(const QString& name, const QString& part, int measure
             msc()->currentScore()->endCmd();
       MasterScore* score = new MasterScore(MScore::defaultStyle());
       score->setName(name);
-      score->appendPart(part);
+      score->appendPart(Score::instrTemplateFromName(part));
       score->appendMeasures(measures);
       score->doLayout();
       const int view = msc()->appendScore(score);
