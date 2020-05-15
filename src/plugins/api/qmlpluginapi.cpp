@@ -14,6 +14,7 @@
 #include "cursor.h"
 #include "elements.h"
 #include "fraction.h"
+#include "instrument.h"
 #include "score.h"
 #include "part.h"
 #include "util.h"
@@ -352,6 +353,9 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<Segment>("MuseScore", 3);
     qmlRegisterAnonymousType<Measure>("MuseScore", 3);
     qmlRegisterAnonymousType<Part>("MuseScore", 3);
+    qmlRegisterAnonymousType<Instrument>("MuseScore", 3);
+    qmlRegisterAnonymousType<Channel>("MuseScore", 3);
+    qmlRegisterAnonymousType<StringData>("MuseScore", 3);
     qmlRegisterAnonymousType<Excerpt>("MuseScore", 3);
     qmlRegisterAnonymousType<Selection>("MuseScore", 3);
     qmlRegisterAnonymousType<Tie>("MuseScore", 3);
