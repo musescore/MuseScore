@@ -147,7 +147,7 @@ public:
         auto el = static_cast<Container*>(l->data)->at(i);
         // If a polymorphic wrap() function is available
         // for the requested type, use it for wrapping.
-        if (std::is_same<T*, decltype(wrap(el, Ownership::SCORE))>::value) {
+        if constexpr (std::is_same<T*, decltype(wrap(el, Ownership::SCORE))>::value) {
             return static_cast<T*>(wrap(el, Ownership::SCORE));
         }
         // Otherwise, wrap directly to the requested wrapper type.

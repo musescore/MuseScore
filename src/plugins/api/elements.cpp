@@ -12,6 +12,7 @@
 
 #include "elements.h"
 #include "fraction.h"
+#include "part.h"
 #include "libmscore/property.h"
 #include "libmscore/undo.h"
 
@@ -269,6 +270,15 @@ void Chord::remove(Ms::PluginAPI::Element* wrapped)
     } else {
         chord()->score()->deleteItem(s);     // Create undo op and remove the element.
     }
+}
+
+//---------------------------------------------------------
+//   Staff::part
+//---------------------------------------------------------
+
+Part* Staff::part()
+{
+    return wrap<Part>(staff()->part());
 }
 
 //---------------------------------------------------------
