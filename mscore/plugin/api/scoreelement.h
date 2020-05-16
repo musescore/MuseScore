@@ -55,6 +55,8 @@ class ScoreElement : public QObject {
 
       Ownership _ownership;
 
+      qreal spatium() const;
+
    protected:
       /// \cond MS_INTERNAL
       Ms::ScoreElement* const e;
