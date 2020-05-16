@@ -156,6 +156,8 @@ ScoreElement* wrap(Ms::ScoreElement* se, Ownership own)
         return wrap<Score>(toScore(se), own);
     case ElementType::PART:
         return wrap<Part>(toPart(se), own);
+    case ElementType::STAFF:
+        return wrap<Staff>(toStaff(se), own);
     default:
         break;
     }
