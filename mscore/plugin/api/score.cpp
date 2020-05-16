@@ -189,6 +189,15 @@ Measure* Score::lastMeasureMM()
       }
 
 //---------------------------------------------------------
+//   Score::staves
+//---------------------------------------------------------
+
+QQmlListProperty<Staff> Score::staves()
+      {
+      return wrapContainerProperty<Staff>(this, score()->staves());
+      }
+
+//---------------------------------------------------------
 //   Score::startCmd
 //---------------------------------------------------------
 
