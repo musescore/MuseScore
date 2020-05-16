@@ -28,6 +28,7 @@ class Segment;
 class Measure;
 class Selection;
 class Score;
+class Staff;
 
 extern Selection* selectionWrap(Ms::Selection* select);
 
@@ -100,6 +101,12 @@ class Score : public Ms::PluginAPI::ScoreElement
      * \see Page::pagenumber
      */
     Q_PROPERTY(int pageNumberOffset READ pageNumberOffset WRITE setPageNumberOffset)
+
+    /**
+     * List of staves in this score.
+     * \since MuseScore 3.5
+     */
+    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Staff> staves READ staves)
 
 public:
     /// \cond MS_INTERNAL
@@ -217,6 +224,7 @@ public:
 
     QQmlListProperty<Part> parts() { return wrapContainerProperty<Part>(this, score()->parts()); }
     QQmlListProperty<Excerpt> excerpts() { return wrapExcerptsContainerProperty<Excerpt>(this, score()->excerpts()); }
+    QQmlListProperty<Staff> staves();
 
     static const Ms::InstrumentTemplate* instrTemplateFromName(const QString& name);   // used by PluginAPI::newScore()
     /// \endcond
