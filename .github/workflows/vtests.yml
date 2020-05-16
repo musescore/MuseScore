@@ -5,6 +5,7 @@ on:
     branches:
     - master
     - 3.x
+    types: [opened, synchronize, reopened, labeled, unlabeled]
   push:
     branches:
     - master
@@ -100,14 +101,14 @@ jobs:
       with:
         name: compare
         path: ./vtest/compare
-    - name: Comment PR
-      if: github.event_name == 'pull_request' && contains( env.found, '1') && contains( env.VTEST_DIFF_FOUND, 'true')
-      uses: thollander/actions-comment-pull-request@1.0.0
-      with:
-        message: 'This is an automatic message. This PR appears to change some of the visual tests.
-          Please carefully review the new visual test results in the uploaded artifact that can be found
-          [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})'
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Skip failure signal if PR is labeled 'vtests'
+      if: github.event_name == 'pull_request' && contains( env.found, '1') && contains( env.VTEST_DIFF_FOUND, 'true') && contains(github.event.pull_request.labels.*.name, 'vtests')
+      run: |
+        echo "This PR appears to change some of the visual tests."
+        echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        echo "Failure signal skipped because 'vtests' label is applied to the PR"
+        export VTEST_DIFF_FOUND=false
+        echo "::set-env name=VTEST_DIFF_FOUND::${VTEST_DIFF_FOUND}"
     - name: Emit failure signal for PR if differences are found
       if: github.event_name == 'pull_request' && contains( env.found, '1') && contains( env.VTEST_DIFF_FOUND, 'true')
       run: |
