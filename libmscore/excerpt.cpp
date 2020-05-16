@@ -886,6 +886,10 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               ncr->lyrics().clear();
 
                               for (Element* e : seg->annotations()) {
+                                    if (!e) {
+                                          qDebug("cloneStaff: corrupted annotation found.");
+                                          continue;
+                                          }
                                     if (e->generated() || e->systemFlag())
                                           continue;
                                     if (e->track() != srcTrack)
@@ -901,6 +905,17 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           case ElementType::DYNAMIC:
                                           case ElementType::LYRICS:   // not normally segment-attached
                                                 continue;
+                                          case ElementType::FERMATA:
+                                                {
+                                                // Fermatas are special since the belong to a segment but should
+                                                // be created and linked on each staff.
+                                                Element* ne1 = e->linkedClone();
+                                                ne1->setTrack(dstTrack);
+                                                ne1->setParent(seg);
+                                                ne1->setScore(score);
+                                                score->undo(new AddElement(ne1));
+                                                continue;
+                                                }
                                           default:
                                                 Element* ne1 = e->clone();
                                                 ne1->setTrack(dstTrack);
@@ -931,7 +946,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                       tie->setEndNote(nn);
                                                       }
                                                 else {
-                                                      qDebug("cloneStave: cannot find tie");
+                                                      qDebug("cloneStaff: cannot find tie");
                                                       }
                                                 }
                                           // add back spanners (going back from end to start spanner element
@@ -945,7 +960,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                       score->addElement(newSp);
                                                       }
                                                 else {
-                                                      qDebug("cloneStave: cannot find spanner start note");
+                                                      qDebug("cloneStaff: cannot find spanner start note");
                                                       }
                                                 }
                                           }
@@ -1138,7 +1153,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& stic
                                                       tie->setEndNote(nn);
                                                       }
                                                 else {
-                                                      qDebug("cloneStave: cannot find tie");
+                                                      qDebug("cloneStaff2: cannot find tie");
                                                       }
                                                 }
                                           }
