@@ -443,7 +443,7 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
 //   applyDrop
 //---------------------------------------------------------
 
-static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element* e, Qt::KeyboardModifiers modifiers, QPointF pt = QPointF())
+static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element* e, Qt::KeyboardModifiers modifiers, QPointF pt = QPointF(), bool pasteMode = false)
       {
       EditData& dropData = viewer->getEditData();
       dropData.pos         = pt.isNull() ? target->pagePos() : pt;
@@ -458,6 +458,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 //printf("<<%s>>\n", a.data());
 
             XmlReader n(a);
+            n.setPasteMode(pasteMode);
             Fraction duration;  // dummy
             QPointF dragOffset;
             ElementType type = Element::readType(n, &dragOffset, &duration);
@@ -541,7 +542,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                               e = toChord(e)->upNote();
                         // use voice of element being added to (otherwise we can might corrupt the measure)
                         element->setTrack(e->voice());
-                        applyDrop(score, viewer, e, element, modifiers);
+                        applyDrop(score, viewer, e, element, modifiers, QPointF(), true);
                         // continue in same track
                         score->inputState().setTrack(e->track());
                         }
