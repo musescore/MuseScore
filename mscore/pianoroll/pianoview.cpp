@@ -881,7 +881,7 @@ void PianoView::dragSelectionNoteGroup() {
 //   addNote
 //---------------------------------------------------------
 
-void PianoView::addNote(Fraction startTick, Fraction frac, int pitch, int track, bool command)
+void PianoView::addNote(Fraction startTick, Fraction duration, int pitch, int track, bool command)
       {
       NoteVal nv(pitch);
 
@@ -889,31 +889,46 @@ void PianoView::addNote(Fraction startTick, Fraction frac, int pitch, int track,
       Segment* seg = score->tick2segment(startTick);
       score->expandVoice(seg, track);
 
-      ChordRest* e = score->findCR(startTick, track);
-      if (e && !e->tuplet() && _tuplet == 1) {
-            //Ignore tuplets
+      ChordRest* curCr = score->findCR(startTick, track);
+      if (curCr && !curCr->tuplet() && _tuplet == 1) {
+            //Tuplets not handled yet
             if (command)
                   score->startCmd();
 
             ChordRest* cr0 = nullptr;
             ChordRest* cr1 = nullptr;
 
-            //Default to quarter note if faction is invalid
-            if (!frac.isValid() || frac.isZero())
-                  frac.set(1, 4);
+            if (startTick > curCr->tick())
+                  cutChordRest(curCr, track, startTick, cr0, cr1);  //Cut at the start of existing chord rest
+            else
+                  cr1 = curCr;  //We are inserting at start of chordrest
 
-            if (cutChordRest(e, track, startTick, cr0, cr1)) {
-                  score->setNoteRest(cr1->segment(), track, nv, frac);
-                  }
-            else if (cr0) {
-                  if (cr0->isChord() && cr0->ticks() == frac) {
-                        Chord* ch = toChord(cr0);
+
+            Fraction cr1End = cr1->tick() + cr1->ticks();
+            if (cr1End > startTick + duration) {
+                  //Cut from middle of enveloping chord
+                  ChordRest* crMid = nullptr;
+                  ChordRest* crEnd = nullptr;
+
+                  cutChordRest(cr1, track, startTick + duration, crMid, crEnd);
+                  if (crMid->isChord()) {
+                        Chord* ch = toChord(crMid);
                         score->addNote(ch, nv);
                         }
-                  else {
-                        score->setNoteRest(cr0->segment(), track, nv, frac);
-                        }
+                  else
+                        score->setNoteRest(crMid->segment(), track, nv, duration);
                   }
+            else if (cr1End == startTick + duration) {
+                  if (cr1->isChord()) {
+                        Chord* ch = toChord(cr1);
+                        score->addNote(ch, nv);
+                        }
+                  else
+                        score->setNoteRest(cr1->segment(), track, nv, duration);
+                  }
+            else
+                  score->setNoteRest(cr1->segment(), track, nv, duration);
+
 
             if (command)
                   score->endCmd();
@@ -1089,8 +1104,7 @@ void PianoView::insertNote(int modifiers)
 
       int voice = _editNoteVoice;
       int track = _staff->idx() * VOICES + voice;
-
-      NoteVal nv(pickPitch);
+      Fraction noteLen = noteEditLength();
 
       Segment* seg = score->tick2segment(insertPosition);
       score->expandVoice(seg, track);
@@ -1100,27 +1114,7 @@ void PianoView::insertNote(int modifiers)
 
             score->startCmd();
 
-            ChordRest* cr0;
-            ChordRest* cr1;
-
-            Fraction noteLen = noteEditLength();
-
-            //Default to quarter note if faction is invalid
-            if (!noteLen.isValid() || noteLen.isZero())
-                  noteLen.set(1, 4);
-
-            if (cutChordRest(e, track, insertPosition, cr0, cr1)) {
-                  score->setNoteRest(cr1->segment(), track, nv, noteLen);
-                  }
-            else {
-                  if (cr0->isChord() && cr0->ticks() == noteLen) {
-                        Chord* ch = toChord(cr0);
-                        score->addNote(ch, nv);
-                        }
-                  else {
-                        score->setNoteRest(cr0->segment(), track, nv, noteLen);
-                        }
-                  }
+            addNote(insertPosition, noteLen, pickPitch, track, false);
 
             score->endCmd();
             }
@@ -1349,27 +1343,30 @@ void PianoView::handleSelectionClick()
 
 //---------------------------------------------------------
 //   cutChordRest
+//   @cr0 Will be set to the first piece of the split chord, or targetCr if no split occurs
+//   @cr1 Will be set to the second piece of the split chord, or nullptr if no split occurs
+//   @return true if chord was cut
 //---------------------------------------------------------
 
-bool PianoView::cutChordRest(ChordRest* e, int track, Fraction cutTick, ChordRest*& cr0, ChordRest*& cr1)
+bool PianoView::cutChordRest(ChordRest* targetCr, int track, Fraction cutTick, ChordRest*& cr0, ChordRest*& cr1)
       {
-      Fraction startTick = e->segment()->tick();
-      Fraction tcks = e->ticks();
-      if (cutTick <= startTick || cutTick > startTick + tcks) {
-            cr0 = e;
-            cr1 = 0;
+      Fraction startTick = targetCr->segment()->tick();
+      Fraction duration = targetCr->ticks();
+      if (cutTick <= startTick || cutTick >= startTick + duration) {
+            cr0 = targetCr;
+            cr1 = nullptr;
             return false;
             }
 
       //Deselect note being cut
-      if (e->isChord()) {
-            Chord* ch = toChord(e);
+      if (targetCr->isChord()) {
+            Chord* ch = toChord(targetCr);
             for (Note* n: ch->notes()) {
                   n->setSelected(false);
                   }
             }
-      else if (e->isRest()) {
-            Rest* r = toRest(e);
+      else if (targetCr->isRest()) {
+            Rest* r = toRest(targetCr);
             r->setSelected(false);
             }
 
@@ -1378,7 +1375,7 @@ bool PianoView::cutChordRest(ChordRest* e, int track, Fraction cutTick, ChordRes
       NoteVal nv(-1);
 
       Score* score = _staff->score();
-      score->setNoteRest(e->segment(), track, nv, cutTick - e->tick());
+      score->setNoteRest(targetCr->segment(), track, nv, cutTick - targetCr->tick());
       ChordRest *nextCR = score->findCR(cutTick, track);
 
       Chord* ch0 = 0;
@@ -1398,9 +1395,11 @@ bool PianoView::cutChordRest(ChordRest* e, int track, Fraction cutTick, ChordRes
                         score->addNote(ch0, nx);
                         }
                   }
+            cr0 = ch0;
             }
+      else
+            cr0 = score->findCR(startTick, track);
 
-      cr0 = ch0;
       cr1 = nextCR;
       return true;
       }
@@ -1700,14 +1699,20 @@ void PianoView::setNotesToVoice(int voice) {
       if (_noteList.isEmpty())
             return;
 
+      //Make a copy of the selection
+      QList<Note*> notes;
+      for (int i = 0; i < _noteList.size(); ++i)
+            if (_noteList.at(i)->note()->selected())
+                  notes.append(_noteList.at(i)->note());
+
       Score* score = _staff->score();
       score->startCmd();
 
-      for (int i = 0; i < _noteList.size(); ++i) {
-            if (_noteList[i]->note()->selected()) {
-                  Note* note = _noteList.at(i)->note();
-                  note->setVoice(voice);
-                  }
+      for (int i = 0; i < notes.size(); ++i) {
+            Note* note = notes.at(i);
+
+            addNote(note->tick(), note->chord()->ticks(), note->pitch(), voice, false);
+            score->deleteItem(note);
             }
 
       score->endCmd();

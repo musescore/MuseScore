@@ -126,8 +126,8 @@ private:
       void clearNoteData();
       void selectNotes(int startTick, int endTick, int lowPitch, int highPitch, NoteSelectType selType);
       void showPopupMenu(const QPoint& pos);
-      bool cutChordRest(ChordRest* e, int track, Fraction cutTick, ChordRest*& cr0, ChordRest*& cr1);
-      void addNote(Fraction startTick, Fraction frac, int pitch, int track, bool command = true);
+      bool cutChordRest(ChordRest* targetCr, int track, Fraction cutTick, ChordRest*& cr0, ChordRest*& cr1);
+      void addNote(Fraction startTick, Fraction duration, int pitch, int track, bool command = true);
       void handleSelectionClick();
       void insertNote(int modifiers);
       Fraction roundToStartBeat(int tick) const;
