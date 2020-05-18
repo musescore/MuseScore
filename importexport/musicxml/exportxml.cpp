@@ -4963,7 +4963,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                                     break;
                               default:
                                     qDebug("spannerStart: direction type %d ('%s') at tick %d not implemented",
-                                           e->type(), Element::name(e->type()), seg->tick().ticks());
+                                           int(e->type()), Element::name(e->type()), seg->tick().ticks());
                                     break;
                               }
                         }
