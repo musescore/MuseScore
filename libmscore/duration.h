@@ -59,6 +59,7 @@ class DurationElement : public Element {
 
       Fraction actualTicks() const;
 
+      //Length expressed as a fraction of a whole note
       virtual Fraction ticks() const { return _duration; }
       Fraction globalTicks() const;
       void setTicks(const Fraction& f) { _duration = f;    }
