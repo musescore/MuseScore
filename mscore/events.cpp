@@ -937,6 +937,7 @@ bool ScoreView::handleArrowKeyPress(const QKeyEvent* ev)
                   return false;
             }
       editData.delta   = delta;
+      editData.evtDelta = editData.moveDelta = delta;
       editData.hRaster = mscore->hRaster();
       editData.vRaster = mscore->vRaster();
       if (editData.curGrip != Grip::NO_GRIP && int(editData.curGrip) < editData.grips)
