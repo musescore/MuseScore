@@ -20,6 +20,8 @@ set (PLUGIN_API_SRC
     ${CMAKE_CURRENT_LIST_DIR}/api/score.h
     ${CMAKE_CURRENT_LIST_DIR}/api/selection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/selection.h
+    ${CMAKE_CURRENT_LIST_DIR}/api/style.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/style.h
     ${CMAKE_CURRENT_LIST_DIR}/api/tie.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/tie.h
     ${CMAKE_CURRENT_LIST_DIR}/api/util.cpp
