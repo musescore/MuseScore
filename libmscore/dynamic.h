@@ -143,6 +143,7 @@ class Dynamic final : public TextBase {
       void doAutoplace();
 
       static const std::vector<ChangeSpeedItem> changeSpeedTable;
+      static int findInString(const QString& text, int& length, QString& type);
       };
 
 }     // namespace Ms
