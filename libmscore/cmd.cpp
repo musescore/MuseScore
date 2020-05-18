@@ -850,7 +850,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   }
             if (externalInputState) {
                   is.setTrack(nr->track());
-                  ChordRest* cr = nr->isRest() ? toChordRest(nr) : toNote(nr)->chord();
+                  cr = nr->isRest() ? toChordRest(nr) : toNote(nr)->chord();
                   is.setLastSegment(is.segment());
                   is.setSegment(cr->segment());
                   }
