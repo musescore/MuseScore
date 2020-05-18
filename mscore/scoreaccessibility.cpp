@@ -418,11 +418,11 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
 void ScoreAccessibility::makeReadable(QString& s)
       {
       static std::vector<std::pair<QString, QString>> unicodeReplacements {
-            { "♭", tr(" flat") },
-            { "♮", tr(" natural") },
-            { "♯", tr(" sharp") },
-            { "𝄫", tr(" double flat") },
-            { "𝄪", tr(" double sharp") },
+            { "♭", " " + tr("flat") },
+            { "♮", " " + tr("natural") },
+            { "♯", " " + tr("sharp") },
+            { "𝄫", " " + tr("double flat") },
+            { "𝄪", " " + tr("double sharp") },
       };
 
       if (!QAccessible::isActive())

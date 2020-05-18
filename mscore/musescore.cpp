@@ -4105,33 +4105,31 @@ bool MuseScore::readLanguages(const QString& path)
       //: The default language of the operating system. NOT a music system.
       _languages.append(LanguageItem("system", tr("System")));
       QFile qf(path);
-      if (qf.exists()){
-          QDomDocument doc;
-          int line, column;
-          QString err;
-          if (!doc.setContent(&qf, false, &err, &line, &column)) {
-                QString error;
-                error.sprintf(qPrintable(tr("Error reading language file %s at line %d column %d: %s\n")),
-                   qPrintable(qf.fileName()), line, column, qPrintable(err));
-                QMessageBox::warning(0,
-                   QWidget::tr("Load Languages Failed:"),
-                   error,
-                   QString(), QWidget::tr("Quit"), QString(), 0, 1);
-                return false;
-                }
+      if (qf.exists()) {
+            QDomDocument doc;
+            int line, column;
+            QString err;
+            if (!doc.setContent(&qf, false, &err, &line, &column)) {
+                  QMessageBox::warning(0,
+                     QWidget::tr("Load Languages Failed:"),
+                     tr("Error reading language file %1 at line %2 column %3: %4")
+                        .arg(qf.fileName()).arg(line).arg(column).arg(err),
+                     QString(), QWidget::tr("Quit"), QString(), 0, 1);
+                  return false;
+                  }
 
-          for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-                if(e.tagName() == "languages") {
-                      for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-                        if (e.tagName() == "language") {
-                              QString code = e.attribute(QString("code"));
-                              QString name = e.attribute(QString("name"));
-                              QString handbook = e.attribute(QString("handbook"));
-                              _languages.append(LanguageItem(code, name, handbook));
+            for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
+                  if(e.tagName() == "languages") {
+                        for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+                              if (e.tagName() == "language") {
+                                    QString code = e.attribute(QString("code"));
+                                    QString name = e.attribute(QString("name"));
+                                    QString handbook = e.attribute(QString("handbook"));
+                                    _languages.append(LanguageItem(code, name, handbook));
+                                    }
                               }
-                          }
-                      }
-                }
+                        }
+                  }
             return true;
             }
       return false;
