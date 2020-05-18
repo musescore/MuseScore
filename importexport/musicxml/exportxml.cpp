@@ -3949,48 +3949,6 @@ int ExportMusicXml::findHairpin(const Hairpin* hp) const
       }
 
 //---------------------------------------------------------
-//   writeHairpinText
-//---------------------------------------------------------
-
-static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool isStart = true)
-      {
-      auto text = isStart ? tlb->beginText() : tlb->endText();
-      while (text != "") {
-            int dynamicLength { 0 };
-            QString dynamicsType;
-            auto dynamicPosition = Dynamic::findInString(text, dynamicLength, dynamicsType);
-            if (dynamicPosition == -1 || dynamicPosition > 0) {
-                  // text remaining and either no dynamic of not at front of text
-                  xml.stag("direction-type");
-                  QString tag = "words";
-                  tag += QString(" font-family=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_FACE : Pid::END_FONT_FACE).toString());
-                  tag += QString(" font-size=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_SIZE : Pid::END_FONT_SIZE).toReal());
-                  tag += fontStyleToXML(static_cast<FontStyle>(tlb->getProperty(isStart ? Pid::BEGIN_FONT_STYLE : Pid::END_FONT_STYLE).toInt()));
-                  tag += positioningAttributes(tlb, isStart);
-                  xml.tag(tag, dynamicPosition == -1 ? text : text.left(dynamicPosition));
-                  xml.etag();
-                  if (dynamicPosition == -1)
-                        text = "";
-                  else if (dynamicPosition > 0) {
-                        text.remove(0, dynamicPosition);
-                        dynamicPosition = 0;
-                        }
-                  }
-            if (dynamicPosition == 0) {
-                  // dynamic at front of text
-                  xml.stag("direction-type");
-                  QString tag = "dynamics";
-                  tag += positioningAttributes(tlb, isStart);
-                  xml.stag(tag);
-                  xml.tagE(dynamicsType);
-                  xml.etag();
-                  xml.etag();
-                  text.remove(0, dynamicLength);
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   hairpin
 //---------------------------------------------------------
 
@@ -4028,12 +3986,19 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
             }
 
       directionTag(_xml, _attr, hp);
-      if (hp->tick() == tick)
-            writeHairpinText(_xml, hp, hp->tick() == tick);
       if (isLineType) {
             if (hp->tick() == tick) {
                   _xml.stag("direction-type");
-                  QString tag = "dashes type=\"start\"";
+                  QString tag = "words";
+                  tag += QString(" font-family=\"%1\"").arg(hp->getProperty(Pid::BEGIN_FONT_FACE).toString());
+                  tag += QString(" font-size=\"%1\"").arg(hp->getProperty(Pid::BEGIN_FONT_SIZE).toReal());
+                  tag += fontStyleToXML(static_cast<FontStyle>(hp->getProperty(Pid::BEGIN_FONT_STYLE).toInt()));
+                  tag += positioningAttributes(hp, hp->tick() == tick);
+                  _xml.tag(tag, hp->getProperty(Pid::BEGIN_TEXT));
+                  _xml.etag();
+
+                  _xml.stag("direction-type");
+                  tag = "dashes type=\"start\"";
                   tag += QString(" number=\"%1\"").arg(n + 1);
                   tag += positioningAttributes(hp, hp->tick() == tick);
                   _xml.tagE(tag);
@@ -4070,8 +4035,6 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
             _xml.tagE(tag);
             _xml.etag();
             }
-      if (hp->tick() != tick)
-            writeHairpinText(_xml, hp, hp->tick() == tick);
       directionETag(_xml, staff);
       }
 
