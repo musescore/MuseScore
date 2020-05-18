@@ -798,6 +798,7 @@ INPUT                  = doc/plugins.md \
                          doc/tpc.md \
                          mscore/plugin/api \
                          libmscore/types.h \
+                         libmscore/style.h \
                          libmscore/note.h \
                          libmscore/mscore.h \
                          libmscore/lyrics.h \
@@ -2112,7 +2113,9 @@ INCLUDE_FILE_PATTERNS  =
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
 
 PREDEFINED             = Q_ENUM(...)= \
-                         Q_DECLARE_METATYPE(...)=
+                         Q_DECLARE_METATYPE(...)= \
+                         BEGIN_QT_REGISTERED_ENUM(...)= \
+                         END_QT_REGISTERED_ENUM(...)= \
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The

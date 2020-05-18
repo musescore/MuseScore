@@ -14,13 +14,12 @@
 #define __SYM_H__
 
 #include "config.h"
+#include "style.h"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
 namespace Ms {
-
-enum class Sid;
 
 //---------------------------------------------------------
 //   SymId
