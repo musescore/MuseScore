@@ -18,6 +18,9 @@
 #include "hairpins/hairpinsettingsmodel.h"
 #include "crescendos/crescendosettingsmodel.h"
 #include "stafftype/stafftypesettingsmodel.h"
+#include "frames/textframesettingsmodel.h"
+#include "frames/verticalframesettingsmodel.h"
+#include "frames/horizontalframesettingsmodel.h"
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorProxyModel(parent)
@@ -43,4 +46,7 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new HairpinSettingsModel(this, repository));
     addModel(new CrescendoSettingsModel(this, repository));
     addModel(new StaffTypeSettingsModel(this, repository));
+    addModel(new TextFrameSettingsModel(this, repository));
+    addModel(new VerticalFrameSettingsModel(this, repository));
+    addModel(new HorizontalFrameSettingsModel(this, repository));
 }

@@ -60,6 +60,9 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionType
     case Ms::ElementType::HAIRPIN:
     case Ms::ElementType::HAIRPIN_SEGMENT:
     case Ms::ElementType::STAFFTYPE_CHANGE:
+    case Ms::ElementType::TBOX: //text frame
+    case Ms::ElementType::VBOX: //vertical frame
+    case Ms::ElementType::HBOX: //horizontal frame
         return SECTION_NOTATION;
 
     case Ms::ElementType::TEXT:
