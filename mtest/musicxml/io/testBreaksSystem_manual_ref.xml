@@ -50,7 +50,7 @@
           </direction-type>
         </direction>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -66,7 +66,7 @@
           </direction-type>
         </direction>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -79,7 +79,7 @@
           </direction-type>
         </direction>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -95,7 +95,7 @@
           </direction-type>
         </direction>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -108,7 +108,7 @@
           </direction-type>
         </direction>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -121,7 +121,7 @@
           </direction-type>
         </direction>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -139,7 +139,7 @@
           </direction-type>
         </direction>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -152,7 +152,7 @@
           </direction-type>
         </direction>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>

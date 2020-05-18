@@ -110,28 +110,28 @@
           </measure-style>
         </attributes>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="7">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="8">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="9">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -155,21 +155,21 @@
           </measure-style>
         </attributes>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="12">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="13">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -237,28 +237,28 @@
           </measure-style>
         </attributes>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="20">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="21">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="22">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
@@ -370,28 +370,28 @@
           </measure-style>
         </attributes>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="33">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="34">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="35">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         </note>

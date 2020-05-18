@@ -97,7 +97,7 @@
           </clef>
         </attributes>
       <note print-object="no">
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         <staff>1</staff>
