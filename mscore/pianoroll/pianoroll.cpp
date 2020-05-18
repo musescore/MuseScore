@@ -566,7 +566,7 @@ void PianorollEditor::setStaff(Staff* st)
             return;
 
       if (st)
-            partLabel->setText("Part: " + st->partName());
+            partLabel->setText(tr("Part: %1").arg(st->partName()));
 
       if ((st && st->score() != _score) || (!st && _score)) {
             if (_score) {
