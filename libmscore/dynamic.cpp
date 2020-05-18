@@ -99,6 +99,45 @@ const std::vector<Dynamic::ChangeSpeedItem> Dynamic::changeSpeedTable {
       };
 
 //---------------------------------------------------------
+//   findInString
+//---------------------------------------------------------
+
+// find the longest first match of dynList's dynamic text in s
+// used by the MusicXML export to correctly export dynamics embedded
+// in spanner begin- or endtexts
+// return match's position and length and the dynamic type
+
+int Dynamic::findInString(const QString& s, int& length, QString& type)
+      {
+      length = 0;
+      type = "";
+      int matchIndex { -1 };
+      const int n = sizeof(dynList)/sizeof(*dynList);
+
+      // for all dynamics, find their text in s
+      for (int i = 0; i < n; ++i) {
+            const QString dynamicText = dynList[i].text;
+            const int dynamicLength = dynamicText.length();
+            // note: skip entries with empty text
+            if (dynamicLength > 0) {
+                  const auto index = s.indexOf(dynamicText);
+                  if (index >= 0) {
+                        // found a match, accept it if
+                        // - it is the first one
+                        // - or it starts a the same index but is longer ("pp" versus "p")
+                        if (matchIndex == -1 || (index == matchIndex && dynamicLength > length)) {
+                              matchIndex = index;
+                              length = dynamicLength;
+                              type = dynList[i].tag;
+                              }
+                        }
+                  }
+            }
+
+            return matchIndex;
+      }
+
+//---------------------------------------------------------
 //   Dynamic
 //---------------------------------------------------------
 
