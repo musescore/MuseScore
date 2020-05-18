@@ -173,7 +173,7 @@
     <measure number="4">
       <print new-system="yes"/>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>3</duration>
         <voice>1</voice>
         </note>

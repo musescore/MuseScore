@@ -57,14 +57,14 @@
           </measure-style>
         </attributes>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>3</duration>
         <voice>1</voice>
         </note>
       </measure>
     <measure number="2">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>3</duration>
         <voice>1</voice>
         </note>

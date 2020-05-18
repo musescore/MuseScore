@@ -49,7 +49,7 @@
           </clef>
         </attributes>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>3</duration>
         <voice>1</voice>
         </note>

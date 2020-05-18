@@ -96,7 +96,16 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="2" bracket="no"/>
+          <tuplet type="start" number="2" bracket="no">
+            <tuplet-actual>
+              <tuplet-number>5</tuplet-number>
+              <tuplet-type>16th</tuplet-type>
+              </tuplet-actual>
+            <tuplet-normal>
+              <tuplet-number>4</tuplet-number>
+              <tuplet-type>16th</tuplet-type>
+              </tuplet-normal>
+            </tuplet>
           </notations>
         </note>
       <note>
@@ -163,8 +172,8 @@
         <beam number="1">end</beam>
         <beam number="2">end</beam>
         <notations>
-          <tuplet type="stop" number="2"/>
           <tuplet type="stop" number="1"/>
+          <tuplet type="stop" number="2"/>
           </notations>
         </note>
       </measure>
@@ -202,7 +211,16 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="2" bracket="no"/>
+          <tuplet type="start" number="2" bracket="no">
+            <tuplet-actual>
+              <tuplet-number>5</tuplet-number>
+              <tuplet-type>16th</tuplet-type>
+              </tuplet-actual>
+            <tuplet-normal>
+              <tuplet-number>4</tuplet-number>
+              <tuplet-type>16th</tuplet-type>
+              </tuplet-normal>
+            </tuplet>
           </notations>
         </note>
       <note>
@@ -307,8 +325,26 @@
         <beam number="1">begin</beam>
         <beam number="2">begin</beam>
         <notations>
-          <tuplet type="start" number="2" bracket="no"/>
-          <tuplet type="start" number="1" bracket="yes"/>
+          <tuplet type="start" number="1" bracket="yes">
+            <tuplet-actual>
+              <tuplet-number>3</tuplet-number>
+              <tuplet-type>quarter</tuplet-type>
+              </tuplet-actual>
+            <tuplet-normal>
+              <tuplet-number>2</tuplet-number>
+              <tuplet-type>quarter</tuplet-type>
+              </tuplet-normal>
+            </tuplet>
+          <tuplet type="start" number="2" bracket="no">
+            <tuplet-actual>
+              <tuplet-number>5</tuplet-number>
+              <tuplet-type>16th</tuplet-type>
+              </tuplet-actual>
+            <tuplet-normal>
+              <tuplet-number>4</tuplet-number>
+              <tuplet-type>16th</tuplet-type>
+              </tuplet-normal>
+            </tuplet>
           </notations>
         </note>
       <note>
