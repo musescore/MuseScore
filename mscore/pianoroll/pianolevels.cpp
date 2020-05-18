@@ -183,9 +183,6 @@ void PianoLevels::paintEvent(QPaintEvent* e)
       //Round down to first bar to be a multiple of barSkip
       bar1 = (bar1 / barSkip) * barSkip;
 
-//      int subExp = qMin((int)floor(log2(pixPerBeat / minBeatGap)), _subBeats);
-//      int numSubBeats = pow(2, subExp);
-
       for (int bar = bar1; bar <= bar2; bar += barSkip) {
             Pos stick(_score->tempomap(), _score->sigmap(), bar, 0, 0);
 
@@ -222,12 +219,12 @@ void PianoLevels::paintEvent(QPaintEvent* e)
       //draw horiz lines
       PianoLevelsFilter* filter = PianoLevelsFilter::FILTER_LIST[_levelsIndex];
 
-      QFont f("FreeSans", 7);
-      p.setFont(f);
-
       int div = filter->divisionGap();
       int minGuide = (int)floor(filter->minRange() / (qreal)div);
       int maxGuide = (int)ceil(filter->maxRange() / (qreal)div);
+
+      QFont f("FreeSans", 7);
+      p.setFont(f);
 
       for (int i = minGuide; i <= maxGuide; ++i) {
             p.setPen(i == 0 || i == minGuide || i == maxGuide ? penLineMajor : penLineMinor);
