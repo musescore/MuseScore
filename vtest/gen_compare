@@ -58,6 +58,9 @@ for src in $SRC; do
                   fi
       else
             echo "There were errors generating image $src"
+            if test -f $src-1.png; then
+                  mv $src-1.png $src-ref.png 2>/dev/null
+                  fi
             export VTEST_DIFF_FOUND=true
             echo "    <h2 id=\"$src\">$src <a class=\"toc-anchor\" href=\"#$src\">#</a></h2>" >> $F
             echo "    <div>" >> $F
