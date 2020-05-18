@@ -20,6 +20,7 @@ import "clefs"
 import "hairpins"
 import "crescendos"
 import "stafftype"
+import "frames"
 
 InspectorSectionView {
     id: root
@@ -154,6 +155,27 @@ InspectorSectionView {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_STAFF_TYPE_CHANGES) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        TextFrameSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_TEXT_FRAME) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        VerticalFrameSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_VERTICAL_FRAME) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        HorizontalFrameSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_HORIZONTAL_FRAME) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
     }

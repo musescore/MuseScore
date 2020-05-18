@@ -134,5 +134,17 @@
         <file>view/qml/notation/crescendos/internal/CrescendoTextSettingsTab.qml</file>
         <file>view/qml/notation/stafftype/StaffTypeSettings.qml</file>
         <file>view/qml/notation/stafftype/StaffTypePopup.qml</file>
+        <file>view/qml/notation/frames/internal/HorizontalGapsSection.qml</file>
+        <file>view/qml/notation/frames/internal/VerticalGapsSection.qml</file>
+        <file>view/qml/notation/frames/internal/HorizontalMarginsSection.qml</file>
+        <file>view/qml/notation/frames/internal/VerticalMarginsSection.qml</file>
+        <file>view/qml/notation/frames/internal/HeightSection.qml</file>
+        <file>view/qml/notation/frames/internal/WidthSection.qml</file>
+        <file>view/qml/notation/frames/HorizontalFramePopup.qml</file>
+        <file>view/qml/notation/frames/TextFramePopup.qml</file>
+        <file>view/qml/notation/frames/VerticalFramePopup.qml</file>
+        <file>view/qml/notation/frames/TextFrameSettings.qml</file>
+        <file>view/qml/notation/frames/VerticalFrameSettings.qml</file>
+        <file>view/qml/notation/frames/HorizontalFrameSettings.qml</file>
     </qresource>
 </RCC>

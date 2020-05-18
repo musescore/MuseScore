@@ -53,7 +53,10 @@ public:
         TYPE_CLEF,
         TYPE_HAIRPIN,
         TYPE_CRESCENDO,
-        TYPE_STAFF_TYPE_CHANGES
+        TYPE_STAFF_TYPE_CHANGES,
+        TYPE_TEXT_FRAME,
+        TYPE_VERTICAL_FRAME,
+        TYPE_HORIZONTAL_FRAME
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
