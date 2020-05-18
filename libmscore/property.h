@@ -16,7 +16,6 @@
 namespace Ms {
 
 class XmlReader;
-enum class Sid : int;
 
 //------------------------------------------------------------------------
 //    M_PROPERTY (type, getter_name, setter_name)

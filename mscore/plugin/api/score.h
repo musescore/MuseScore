@@ -15,6 +15,7 @@
 
 #include "scoreelement.h"
 #include "part.h"
+#include "style.h"
 #include "excerpt.h"
 #include "libmscore/score.h"
 
@@ -86,6 +87,8 @@ class Score : public Ms::PluginAPI::ScoreElement {
       Q_PROPERTY(QString                        mscoreRevision    READ mscoreRevision)
       /** Current selections for the score. \since MuseScore 3.3 */
       Q_PROPERTY(Ms::PluginAPI::Selection*      selection         READ selection)
+      /** Style settings for this score. \since MuseScore 3.5 */
+      Q_PROPERTY(Ms::PluginAPI::MStyle*         style             READ style)
       /**
        * Page numbering offset. The user-visible number of the given \p page is defined as
        * \code
@@ -114,6 +117,7 @@ class Score : public Ms::PluginAPI::ScoreElement {
       QString lyricist() { return score()->metaTag("lyricist"); } // not the meanwhile obsolete "poet"
       QString title() { return score()->metaTag("workTitle"); }
       Ms::PluginAPI::Selection* selection() { return selectionWrap(&score()->selection()); }
+      MStyle* style() { return wrap(&score()->style(), score()); }
 
       int pageNumberOffset() const { return score()->pageNumberOffset(); }
       void setPageNumberOffset(int offset) { score()->undoChangePageNumberOffset(offset); }
