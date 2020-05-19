@@ -37,7 +37,7 @@ enum class FrameType : char {
 //---------------------------------------------------------
 
 enum class VerticalAlignment : char {
-    AlignNormal, AlignSuperScript, AlignSubScript
+    AlignUndefined = -1, AlignNormal, AlignSuperScript, AlignSubScript
 };
 
 //---------------------------------------------------------
@@ -60,13 +60,12 @@ enum class MultiClick : char {
 //   CharFormat
 //---------------------------------------------------------
 
-class CharFormat
-{
-    FontStyle _style          { FontStyle::Normal };
-    bool _preedit             { false };
-    VerticalAlignment _valign { VerticalAlignment::AlignNormal };
-    qreal _fontSize           { 12.0 };
-    QString _fontFamily;
+class CharFormat {
+      FontStyle _style          { FontStyle::Normal };
+      bool _preedit             { false };
+      VerticalAlignment _valign { VerticalAlignment::AlignNormal };
+      qreal _fontSize           { 12.0  };
+      QString _fontFamily       { "FreeSerif" };
 
 public:
     CharFormat() {}
@@ -85,10 +84,10 @@ public:
     VerticalAlignment valign() const { return _valign; }
     qreal fontSize() const { return _fontSize; }
     QString fontFamily() const { return _fontFamily; }
-    void setPreedit(bool val) { _preedit     = val; }
-    void setValign(VerticalAlignment val) { _valign      = val; }
-    void setFontSize(qreal val) { Q_ASSERT(val > 0.0); _fontSize = val; }
-    void setFontFamily(const QString& val) { _fontFamily  = val; }
+    void setPreedit(bool val) { _preedit = val; }
+    void setValign(VerticalAlignment val) { _valign = val; }
+    void setFontSize(qreal val) { _fontSize = val; }
+    void setFontFamily(const QString& val) { _fontFamily = val; }
 
     void setFormat(FormatId, QVariant);
 };
@@ -144,6 +143,7 @@ public:
     void updateCursorFormat();
     void setFormat(FormatId, QVariant);
     void changeSelectionFormat(FormatId id, QVariant val);
+    const CharFormat selectedFragmentsFormat() const;
 };
 
 //---------------------------------------------------------
@@ -223,11 +223,8 @@ public:
 class TextBase : public Element
 {
     // sorted by size to allow for most compact memory layout
-    M_PROPERTY(FontStyle,  fontStyle,              setFontStyle)
     M_PROPERTY(Align,      align,                  setAlign)
     M_PROPERTY(FrameType,  frameType,              setFrameType)
-    M_PROPERTY(QString,    family,                 setFamily)
-    M_PROPERTY(qreal,      size,                   setSize)
     M_PROPERTY(QColor,     bgColor,                setBgColor)
     M_PROPERTY(QColor,     frameColor,             setFrameColor)
     M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)
@@ -249,6 +246,8 @@ class TextBase : public Element
 
     int hexState                 { -1 };
     bool _primed                  { 0 };
+
+    TextCursor* _cursor           { nullptr };
 
     void drawSelection(QPainter*, const QRectF&) const;
     void insert(TextCursor*, uint code);
@@ -293,6 +292,14 @@ public:
 
     bool empty() const { return xmlText().isEmpty(); }
     void clear() { setXmlText(QString()); }
+
+    FontStyle fontStyle() const;
+    QString family() const;
+    qreal size() const;
+
+    void setFontStyle(const FontStyle& val);
+    void setFamily(const QString& val);
+    void setSize(const qreal& val);
 
     bool layoutToParentWidth() const { return _layoutToParentWidth; }
     void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v; }
@@ -362,7 +369,8 @@ public:
     virtual void styleChanged();
     void editInsertText(TextCursor*, const QString&);
 
-    TextCursor* cursor(const EditData&);
+    TextCursor* cursorFromEditData(const EditData&);
+    TextCursor* cursor() const { return _cursor; }
     const TextBlock& textBlock(int line) const { return _layout[line]; }
     TextBlock& textBlock(int line) { return _layout[line]; }
     QList<TextBlock>& textBlockList() { return _layout; }
@@ -384,15 +392,15 @@ public:
     void initTid(Tid id, bool preserveDifferent);
     virtual void initElementStyle(const ElementStyle*) override;
 
-    bool bold() const { return _fontStyle & FontStyle::Bold; }
-    bool italic() const { return _fontStyle & FontStyle::Italic; }
-    bool underline() const { return _fontStyle & FontStyle::Underline; }
-    void setBold(bool val) { _fontStyle = val ? _fontStyle + FontStyle::Bold : _fontStyle - FontStyle::Bold; }
-    void setItalic(bool val) { _fontStyle = val ? _fontStyle + FontStyle::Italic : _fontStyle - FontStyle::Italic; }
-    void setUnderline(bool val)
-    {
-        _fontStyle = val ? _fontStyle + FontStyle::Underline : _fontStyle - FontStyle::Underline;
-    }
+    static const QString UNDEFINED_FONT_FAMILY;
+    static const int UNDEFINED_FONT_SIZE;
+
+    bool bold() const { return fontStyle() & FontStyle::Bold; }
+    bool italic() const { return fontStyle() & FontStyle::Italic; }
+    bool underline() const { return fontStyle() & FontStyle::Underline; }
+    void setBold(bool val) { setFontStyle( val ? fontStyle() + FontStyle::Bold : fontStyle() - FontStyle::Bold); }
+    void setItalic(bool val) { setFontStyle( val ? fontStyle() + FontStyle::Italic : fontStyle() - FontStyle::Italic); }
+    void setUnderline(bool val) { setFontStyle( val ? fontStyle() + FontStyle::Underline : fontStyle() - FontStyle::Underline); }
 
     bool hasCustomFormatting() const;
 
