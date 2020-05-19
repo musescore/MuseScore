@@ -6,14 +6,8 @@ import "../common"
 import "playback"
 import "appearance"
 
-FocusableItem {
+InspectorSectionView {
     id: root
-
-    property QtObject model: undefined
-
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.rightMargin: 48
 
     implicitHeight: contentColumn.height
 

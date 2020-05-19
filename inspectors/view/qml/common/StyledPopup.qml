@@ -29,6 +29,7 @@ Popup {
     property bool isOpened: false
 
     property var arrowX: width / 2
+    property alias arrowHeight: arrow.height
 
     topPadding: bottomPadding + arrow.height
 
