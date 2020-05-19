@@ -118,5 +118,8 @@
         <file>view/qml/notation/spacers/SpacerSettings.qml</file>
         <file>view/qml/notation/clefs/ClefPopup.qml</file>
         <file>view/qml/notation/clefs/ClefSettings.qml</file>
+        <file>view/qml/text/TextInspectorView.qml</file>
+        <file>view/qml/text/TextPopup.qml</file>
+        <file>view/qml/text/TextAdvancedSettings.qml</file>
     </qresource>
 </RCC>

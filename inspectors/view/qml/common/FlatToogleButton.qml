@@ -4,13 +4,14 @@ FocusableItem {
     id: root
 
     property alias icon: buttonIcon.iconCode
-    property int iconPixelSize: 16
-    property bool pressed: false
+    property bool checked: false
+
+    property alias backgroundColor: backgroundRect.color
 
     signal toggled
 
-    implicitHeight: 20
-    implicitWidth: 20
+    implicitHeight: 30
+    implicitWidth: 30
 
     opacity: root.enabled ? 1.0 : 0.3
 
@@ -19,6 +20,18 @@ FocusableItem {
 
         anchors.fill: parent
 
+        color: globalStyle.button
+
+        radius: 2
+    }
+
+    Rectangle {
+        id: selectionOverlay
+
+        anchors.fill: parent
+
+        color: "#00000000"
+        border.width: 0
         radius: 2
     }
 
@@ -43,24 +56,45 @@ FocusableItem {
     states: [
         State {
             name: "PRESSED"
-            when: root.pressed
+            when: clickableArea.pressed
 
             PropertyChanges {
-                target: backgroundRect
-                color: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.3)
-                border.color: globalStyle.highlight
-                border.width: 2
+                target: selectionOverlay
+                color: Qt.darker(globalStyle.button, 1.1)
+                border.width: 0
             }
         },
 
         State {
-            name: "NORMAL"
-            when: !root.pressed
+            name: "SELECTED"
+            when: root.checked && !clickableArea.hovered
 
             PropertyChanges {
-                target: backgroundRect
-                color: Qt.rgba(globalStyle.button.r, globalStyle.button.g, globalStyle.button.b, 0.5)
-                border.color: globalStyle.highlight
+                target: selectionOverlay
+                color: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.5)
+                border.width: 0
+            }
+        },
+
+        State {
+            name: "HOVERED"
+            when: clickableArea.hovered && !root.checked && !clickableArea.pressed
+
+            PropertyChanges {
+                target: selectionOverlay
+                color: "#00000000"
+                border.color: "#25000000"
+                border.width: 1
+            }
+        },
+
+        State {
+            name: "SELECTED_HOVERED"
+            when: clickableArea.hovered && root.checked
+
+            PropertyChanges {
+                target: selectionOverlay
+                color: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.75)
                 border.width: 0
             }
         }

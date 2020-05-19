@@ -19,9 +19,9 @@ FocusableItem {
 
         anchors.fill: parent
 
-        color: Qt.rgba(globalStyle.button.r, globalStyle.button.g, globalStyle.button.b, 0.5)
-
-        radius: 2
+        color: globalStyle.button
+        border.width: 0
+        radius: 3
     }
 
     Column {
@@ -70,7 +70,9 @@ FocusableItem {
 
             PropertyChanges {
                 target: backgroundRect
-                color: Qt.rgba(globalStyle.button.r, globalStyle.button.g, globalStyle.button.b, 1.0)
+                color: Qt.darker(globalStyle.button, 1.1)
+                border.color: "#25000000"
+                border.width: 1
             }
         },
 
@@ -80,7 +82,9 @@ FocusableItem {
 
             PropertyChanges {
                 target: backgroundRect
-                color: Qt.rgba(globalStyle.button.r, globalStyle.button.g, globalStyle.button.b, 0.75)
+                color: globalStyle.button
+                border.color: "#25000000"
+                border.width: 1
             }
         }
     ]

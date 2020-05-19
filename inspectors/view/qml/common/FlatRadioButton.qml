@@ -6,15 +6,20 @@ RadioDelegate {
 
     default property Component contentComponent
 
+    property alias backgroundColor: backgroundRect.color
+
     implicitHeight: 30
-    implicitWidth: (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
+    implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
+                                 : 30
+
+    hoverEnabled: true
 
     background: Rectangle {
         id: backgroundRect
 
         anchors.fill: parent
 
-        color: "#CECECE"
+        color: globalStyle.button
 
         radius: 2
     }
@@ -23,15 +28,12 @@ RadioDelegate {
         anchors.fill: parent
 
         Rectangle {
-            id: selectionBackground
+            id: selectionOverlay
 
             anchors.fill: parent
 
-            color: "transparent"
-
-            border.color: "#A2A2A2"
-            border.width: 1
-
+            color: "#00000000"
+            border.width: 0
             radius: 2
         }
 
@@ -53,20 +55,20 @@ RadioDelegate {
             when: root.pressed
 
             PropertyChanges {
-                target: selectionBackground
-                color: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.75)
-                border.color: globalStyle.highlight
+                target: selectionOverlay
+                color: Qt.darker(globalStyle.button, 1.1)
+                border.width: 0
             }
         },
 
         State {
             name: "SELECTED"
-            when: root.checked
+            when: root.checked && !root.hovered
 
             PropertyChanges {
-                target: selectionBackground
+                target: selectionOverlay
                 color: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.5)
-                border.color: globalStyle.highlight
+                border.width: 0
             }
         },
 
@@ -75,8 +77,21 @@ RadioDelegate {
             when: root.hovered && !root.checked && !root.pressed
 
             PropertyChanges {
-                target: selectionBackground
-                color: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.2)
+                target: selectionOverlay
+                color: "#00000000"
+                border.color: "#25000000"
+                border.width: 1
+            }
+        },
+
+        State {
+            name: "SELECTED_HOVERED"
+            when: root.hovered && root.checked
+
+            PropertyChanges {
+                target: selectionOverlay
+                color: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.75)
+                border.width: 0
             }
         }
     ]
