@@ -491,7 +491,8 @@ static constexpr PropertyMetaData propertyList[] = {
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "system flag") },
     { Pid::BEGIN_TEXT,              true,  "beginText",             P_TYPE::STRING,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin text") },
-
+    { Pid::TEXT_SCRIPT_ALIGN,       false, "align",                 P_TYPE::INT,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "text script align") },
     { Pid::BEGIN_TEXT_ALIGN,        false, "beginTextAlign",        P_TYPE::ALIGN,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin text align") },
     { Pid::BEGIN_TEXT_PLACE,        false, "beginTextPlace",        P_TYPE::TEXT_PLACE,

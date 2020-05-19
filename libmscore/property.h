@@ -293,6 +293,7 @@ enum class Pid {
     FRAME_BG_COLOR,
     SIZE_SPATIUM_DEPENDENT,
     ALIGN,
+    TEXT_SCRIPT_ALIGN,
     SYSTEM_FLAG,
     BEGIN_TEXT,
 
