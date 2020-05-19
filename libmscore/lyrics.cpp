@@ -397,12 +397,12 @@ void Lyrics::paste(EditData& ed)
     score()->startCmd();
 
     if (hyph.length() > 1) {
-        score()->undo(new InsertText(cursor(ed), hyph[0]), &ed);
+        score()->undo(new InsertText(cursorFromEditData(ed), hyph[0]), &ed);
         hyph.removeFirst();
         sl[0] =  hyph.join("-");
         minus = true;
     } else if (sl.length() > 1 && sl[1] == "-") {
-        score()->undo(new InsertText(cursor(ed), sl[0]), &ed);
+        score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
         sl.removeFirst();
         sl.removeFirst();
         minus = true;
@@ -421,12 +421,12 @@ void Lyrics::paste(EditData& ed)
         }
         underscore = true;
     } else if (sl.length() > 1 && sl[1] == "_") {
-        score()->undo(new InsertText(cursor(ed), sl[0]), &ed);
+        score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
         sl.removeFirst();
         sl.removeFirst();
         underscore = true;
     } else {
-        score()->undo(new InsertText(cursor(ed), sl[0]), &ed);
+        score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
         sl.removeFirst();
     }
 

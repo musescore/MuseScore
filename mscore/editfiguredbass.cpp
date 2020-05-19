@@ -96,7 +96,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
 
     mscore->changeState(mscoreState());
     adjustCanvasPosition(fbNew, false);
-    fbNew->cursor(editData)->moveCursorToEnd();
+    fbNew->cursorFromEditData(editData)->moveCursorToEnd();
 //      _score->update();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
 }
 

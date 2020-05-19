@@ -3255,35 +3255,34 @@ void ScoreView::deselectAll()
 
 QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-//      qDebug("0x%x  %s", int(query), editData.element ? editData.element->name() : "-no element-");
+    //      qDebug("0x%x  %s", int(query), editData.element ? editData.element->name() : "-no element-");
     if (editData.element && editData.element->isTextBase()) {
         TextBase* text = toTextBase(editData.element);
         switch (query) {
         case Qt::ImCursorRectangle: {
             QRectF r;
             if (editMode()) {
-                TextCursor* cursor = text->cursor(editData);
+                TextCursor* cursor = text->cursorFromEditData(editData);
                 r = toPhysical(cursor->cursorRect().translated(text->canvasPos()));
-                r.setWidth(1);               // InputMethod doesn't display properly if width left at 0
+                r.setWidth(1); // InputMethod doesn't display properly if width left at 0
             } else {
                 r = toPhysical(text->canvasBoundingRect());
             }
-            r.setHeight(r.height() + 10);             // add a little margin under the cursor
-            qDebug("ScoreView::inputMethodQuery() updating cursorRect to: (%3f, %3f) + (%3f, %3f)", r.x(),
-                   r.y(), r.width(), r.height());
+            r.setHeight(r.height() + 10); // add a little margin under the cursor
+            qDebug("ScoreView::inputMethodQuery() updating cursorRect to: (%3f, %3f) + (%3f, %3f)", r.x(), r.y(), r.width(), r.height());
             return QVariant(r);
         }
         case Qt::ImEnabled:
-            return true;             // TextBase will always accept input method input
+            return true; // TextBase will always accept input method input
         case Qt::ImHints:
-            return Qt::ImhNone;             // No hints for now, but maybe in future will give hints
-        case Qt::ImInputItemClipRectangle:           // maybe give clip rect hint in future, but for now use default parent clipping rect
+            return Qt::ImhNone; // No hints for now, but maybe in future will give hints
+        case Qt::ImInputItemClipRectangle: // maybe give clip rect hint in future, but for now use default parent clipping rect
         default:
-            return QWidget::inputMethodQuery(query);             // fall back to QWidget's version as default
+            return QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
         }
     }
     QVariant d = QWidget::inputMethodQuery(query);   // fall back to QWidget's version as default
-//      qDebug() << "   " << d;
+    //      qDebug() << "   " << d;
     return d;
 }
 
