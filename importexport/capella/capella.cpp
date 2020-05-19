@@ -790,7 +790,6 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
 
                               chord->add(note);
                               note->setPitch(pitch);
-                              // TODO: compute tpc from pitch & line
                               note->setTpcFromPitch();
                               if (o->rightTie) {
                                     Tie* tie = new Tie(score);
@@ -963,6 +962,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                   }
             }
       Fraction endTick = tick;
+      score->spell();   //Call respell-pitches to correct accidentals
 
       //
       // pass II

@@ -36,7 +36,7 @@ enum {
       };
 #endif
 
-// a list of tpc's, with legal ranges, not really an enum, so no way to cnvert into a class
+// a list of tpc's, with legal ranges, not really an enum, so no way to convert into a class
 enum Tpc : signed char {
       TPC_INVALID = -2,
       TPC_F_BB, TPC_C_BB, TPC_G_BB, TPC_D_BB, TPC_A_BB, TPC_E_BB, TPC_B_BB,
