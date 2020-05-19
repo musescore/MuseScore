@@ -30,6 +30,8 @@ signals:
 
 private:
     void createModelsByElementType(const Ms::ElementType elementType);
+    void removeUnusedModels(const QSet<Ms::ElementType>& newElementTypeSet);
+    void sortModels();
 
     bool isModelAlreadyExists(const AbstractInspectorModel::InspectorSectionType modelType) const;
 
@@ -37,6 +39,6 @@ private:
     QList<AbstractInspectorModel*> m_modelList;
 
     IElementRepositoryService* m_repository = nullptr;
-    };
+};
 
 #endif // INSPECTORLISTMODEL_H

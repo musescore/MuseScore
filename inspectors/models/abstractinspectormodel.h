@@ -1,4 +1,4 @@
-#ifndef ABSTRACTINSPECTORMODEL_H
+﻿#ifndef ABSTRACTINSPECTORMODEL_H
 #define ABSTRACTINSPECTORMODEL_H
 
 #include <QList>
@@ -63,7 +63,8 @@ public:
 
     bool isEmpty() const;
 
-    static InspectorSectionType modelTypeFromElementType(const Ms::ElementType elementType);
+    static QList<Ms::ElementType> supportedElementTypesBySectionType(const InspectorSectionType sectionType);
+    static InspectorSectionType sectionTypeFromElementType(const Ms::ElementType elementType);
 
     virtual bool hasAcceptableElements() const;
 
