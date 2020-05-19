@@ -39,11 +39,11 @@ void AppearanceSettingsModel::requestElements()
 void AppearanceSettingsModel::loadProperties()
 {
     loadPropertyItem(m_leadingSpace, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toDouble();
+        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
     });
 
     loadPropertyItem(m_minimumDistance, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toDouble();
+        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
     });
 
     loadPropertyItem(m_barWidth);
