@@ -2590,6 +2590,15 @@ Shortcut Shortcut::_sc[] = {
         STATE_NORMAL | STATE_NOTE_ENTRY,
         "backspace",
         QT_TRANSLATE_NOOP("action","Backspace"),
+    {
+        MsWidget::SCORE_TAB,
+        STATE_NORMAL | STATE_NOTE_ENTRY,
+        "show-staff-text-properties",
+        QT_TRANSLATE_NOOP("action","Show staff text properties"),
+        QT_TRANSLATE_NOOP("action","Show staff text properties"),
+        0,
+        Icons::Invalid_ICON
+    },
 //         0,
 //         0,
 //         Icons::Invalid_ICON,
@@ -4499,6 +4508,20 @@ QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w, Qt::ShortcutContext 
     }
     return ag;
 }
+
+//---------------------------------------------------------
+//   getActionByName
+//---------------------------------------------------------
+
+QAction* Shortcut::getActionByName(const char* id)
+      {
+      Shortcut* shortCut = Shortcut::getShortcut(id);
+
+      if (!shortCut)
+            return nullptr;
+
+      return shortCut->action();
+      }
 
 //---------------------------------------------------------
 //   getActionByName
