@@ -1,4 +1,6 @@
 language: cpp
+os: linux
+dist: focal
 
 env:
   global:
@@ -26,7 +28,6 @@ matrix:
 
     # 2nd parallel build job - debug build on Ubuntu
     - env: "JOB=Tests"
-      dist: focal
       addons:
         apt:
           sources:
