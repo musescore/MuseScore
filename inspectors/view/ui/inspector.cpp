@@ -87,30 +87,13 @@ Inspector::Inspector(QQmlEngine *engine, QWidget* parent)
       {
       setObjectName("inspector");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
-      sa = new QScrollArea;
-      sa->setFrameShape(QFrame::NoFrame);
-      sa->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
-      sa->setWidgetResizable(true);
-
-//      setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-//      sa->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-      setWidget(sa);
-      sa->setFocusPolicy(Qt::NoFocus);
-
-      _inspectorEdit = false;
-      ie             = 0;
-      oe             = 0;
-      oSameTypes     = true;
-      _score         = 0;
 
       m_qmlEngine = engine;
 
       m_inspectorForm = new InspectorFormWidget(m_qmlEngine, this);
+      setWidget(m_inspectorForm);
 
       connect(m_inspectorForm, &InspectorFormWidget::layoutUpdateRequested, this, &Inspector::layoutUpdateRequested);
-//      retranslate();
-      //setWindowTitle(tr("Inspector"));
       }
 
 //---------------------------------------------------------
@@ -168,8 +151,6 @@ void Inspector::update(Score* s)
           m_inspectorForm->onSelectionChanged(*el());
           emit selectionChanged(*el());
       }
-
-      sa->setWidget(m_inspectorForm);
 
 
       /*bool sameTypes = true;

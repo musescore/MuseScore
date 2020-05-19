@@ -49,6 +49,8 @@
 #include "inspectors/ui_inspector_fermata.h"
 #include "inspectors/ui_inspector_stem.h"
 
+#include <QDockWidget>
+
 class InspectorFormWidget;
 
 namespace Ms {
@@ -375,12 +377,12 @@ class Inspector : public QDockWidget {
       Q_OBJECT
 
       QScrollArea* sa;
-      InspectorBase* ie;
-      Score* _score;
-      bool _inspectorEdit;    // set to true when an edit originates from
+      InspectorBase* ie = nullptr;
+      Score* _score = nullptr;
+      bool _inspectorEdit = false;    // set to true when an edit originates from
                               // within the inspector itself
-      Element* oe;
-      bool oSameTypes;
+      Element* oe = nullptr;
+      bool oSameTypes = false;
 
    public slots:
       void update();
