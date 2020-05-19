@@ -444,6 +444,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore
     void undoRedo(bool undo);
     void showPalette(bool);
     void showInspector(bool);
+    void showPropertiesDialogByElementType(const ElementType &type);
     void showOmrPanel(bool);
     void showNavigator(bool);
     void showTimeline(bool);

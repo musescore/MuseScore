@@ -3493,14 +3493,6 @@ void MuseScore::showInspector(bool visible)
             _inspector = new Inspector(getQmlUiEngine());
 
             connect(_inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
-            connect(_inspector, &Inspector::propertyEditStarted, [this] (Element* element) {
-                  if (element->isArticulation())
-                      currentScoreView()->editArticulationProperties(toArticulation(element));
-                  else if (element->isTimeSig())
-                      currentScoreView()->editTimeSigProperties(toTimeSig(element));
-                  else if (element->isStaffText())
-                      currentScoreView()->editStaffTextProperties(toStaffTextBase(element));
-            });
             connect(_inspector, &Inspector::layoutUpdateRequested, [this] () {
                  ScoreView* scoreView = currentScoreView();
                  scoreView->updateGrips();
@@ -3512,6 +3504,32 @@ void MuseScore::showInspector(bool visible)
       if (visible)
             updateInspector();
       }
+
+//---------------------------------------------------------
+//   showPropertiesDialogByElementType
+//---------------------------------------------------------
+
+void MuseScore::showPropertiesDialogByElementType(const ElementType& type)
+{
+    if (!cs || !currentScoreView()) {
+        return;
+    }
+
+    for (Element* selectedElement : cs->selection().elements()) {
+
+        if (!selectedElement || selectedElement->type() != type) {
+            continue;
+        }
+
+        if (type == Ms::ElementType::ARTICULATION) {
+            return currentScoreView()->editArticulationProperties(toArticulation(selectedElement));
+        } else if (type == Ms::ElementType::TIMESIG) {
+            return currentScoreView()->editTimeSigProperties(toTimeSig(selectedElement));
+        } else if (type == Ms::ElementType::STAFF_TEXT) {
+            return currentScoreView()->editStaffTextProperties(toStaffTextBase(selectedElement));
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   runTestScripts
@@ -6588,6 +6606,12 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
     } else if (cmd == "toggle-selection-window") {
         showSelectionWindow(a->isChecked());
     } else if (cmd == "show-keys") {
+        if (!textPalette) {
+            textPalette = new TextPalette(this);
+        }
+
+        textPalette->setText(_textTools->textElement());
+        textPalette->show();
     } else if (cmd == "toggle-fileoperations") {
         fileTools->setVisible(!fileTools->isVisible());
     } else if (cmd == "toggle-transport") {
@@ -6801,21 +6825,119 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
         if (cs) {
             cs->setLayoutAll();
             cs->update();
-        }
-    } else if (cmd == "show-system-bounding-rect") {
-        MScore::showSystemBoundingRect = a->isChecked();
-        if (cs) {
-            cs->setLayoutAll();
-            cs->update();
-        }
-    } else if (cmd == "show-corrupted-measures") {
-        MScore::showCorruptedMeasures = a->isChecked();
-        if (cs) {
-            cs->setLayoutAll();
-            cs->update();
-        }
-    } else if (cmd == "qml-reload-source") {
-        const QList<QmlDockWidget*> qmlWidgets = findChildren<QmlDockWidget*>();
+            }
+      else if (cmd == "tempo")
+            addTempo();
+      else if (cmd == "loop") {
+            if (loop()) {
+                  seq->setLoopSelection();
+                  }
+            }
+      else if (cmd == "loop-in") {
+            seq->setLoopIn();
+            loopAction->setChecked(true);
+            }
+      else if (cmd == "loop-out") {
+            seq->setLoopOut();
+            loopAction->setChecked(true);
+            }
+      else if (cmd == "metronome")  // no action
+            ;
+      else if (cmd == "countin")    // no action
+            ;
+      else if (cmd == "lock") {
+            if (_sstate == STATE_LOCK)
+                  changeState(STATE_NORMAL);
+            else
+                  changeState(STATE_LOCK);
+            }
+      else if (cmd == "find")
+            showSearchDialog();
+      else if (cmd == "text-b") {
+            if (_textTools)
+                  _textTools->toggleBold();
+            }
+      else if (cmd == "text-i") {
+            if (_textTools)
+                  _textTools->toggleItalic();
+            }
+      else if (cmd == "text-u") {
+            if (_textTools)
+                  _textTools->toggleUnderline();
+            }
+      else if (cmd == "edit-toolbars")
+            showToolbarEditor();
+      else if (cmd == "viewmode") {
+            if (cs) {
+                  if (cs->layoutMode() == LayoutMode::PAGE)
+                        switchLayoutMode(LayoutMode::LINE);
+                  else
+                        switchLayoutMode(LayoutMode::PAGE);
+                  }
+            }
+      else if (cmd == "show-tours")
+            preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, a->isChecked());
+      else if (cmd == "reset-tours")
+            tourHandler()->resetCompletedTours();
+      else if (cmd == "report-bug")
+            reportBug("panel");
+      else if (cmd == "leave-feedback")
+            leaveFeedback("panel");
+#ifndef NDEBUG
+      else if (cmd == "no-horizontal-stretch") {
+            MScore::noHorizontalStretch = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "no-vertical-stretch") {
+            MScore::noVerticalStretch = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-segment-shapes") {
+            MScore::showSegmentShapes = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-skylines") {
+            MScore::showSkylines = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-bounding-rect") {
+            MScore::showBoundingRect = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-system-bounding-rect") {
+            MScore::showSystemBoundingRect = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-staff-text-properties") {
+            showPropertiesDialogByElementType(Ms::ElementType::STAFF_TEXT);
+            }
+      else if (cmd == "show-corrupted-measures") {
+            MScore::showCorruptedMeasures = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "qml-reload-source") {
+            const QList<QmlDockWidget*> qmlWidgets = findChildren<QmlDockWidget*>();
 
         const QString oldPrefix = QmlDockWidget::qmlSourcePrefix();
         useSourceQmlFiles = true;
