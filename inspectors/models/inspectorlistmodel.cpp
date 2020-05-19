@@ -2,6 +2,7 @@
 
 #include "general/generalsettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
+#include "text/textsettingsmodel.h"
 
 InspectorListModel::InspectorListModel(QObject *parent) : QAbstractListModel(parent)
 {
@@ -83,6 +84,7 @@ void InspectorListModel::createModelsByElementType(const Ms::ElementType element
 
         switch (modelType) {
         case SectionType::SECTION_GENERAL: newModel = new GeneralSettingsModel(this, m_repository); break;
+        case SectionType::SECTION_TEXT: newModel = new TextSettingsModel(this, m_repository); break;
         case SectionType::SECTION_NOTATION: newModel = new NotationSettingsProxyModel(this, m_repository); break;
         default: break;
         }

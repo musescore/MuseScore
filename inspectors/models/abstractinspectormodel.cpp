@@ -59,6 +59,14 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::modelTypeFr
     case Ms::ElementType::CLEF:
         return SECTION_NOTATION;
 
+    case Ms::ElementType::TEXT:
+    case Ms::ElementType::TEXTLINE:
+    case Ms::ElementType::TEXTLINE_BASE:
+    case Ms::ElementType::TEXTLINE_SEGMENT:
+    case Ms::ElementType::STAFF_TEXT:
+    case Ms::ElementType::SYSTEM_TEXT:
+        return SECTION_TEXT;
+
     default:
         return SECTION_UNDEFINED;
     }

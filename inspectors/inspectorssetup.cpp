@@ -51,6 +51,7 @@ void InspectorsSetup::registerResources()
 #include "types/accidentaltypes.h"
 #include "types/fretdiagramtypes.h"
 #include "types/pedaltypes.h"
+#include "types/texttypes.h"
 
 void InspectorsSetup::registerQmlTypes()
 {
@@ -72,4 +73,5 @@ void InspectorsSetup::registerQmlTypes()
     qmlRegisterUncreatableType<AccidentalTypes>("MuseScore.Inspectors", 3, 3, "AccidentalTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<FretDiagramTypes>("MuseScore.Inspectors", 3, 3, "FretDiagramTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<PedalTypes>("MuseScore.Inspectors", 3, 3, "PedalTypes", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<TextTypes>("MuseScore.Inspectors", 3, 3, "TextTypes", "Not creatable as it is an enum type");
 }
