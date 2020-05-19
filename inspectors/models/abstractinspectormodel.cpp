@@ -33,7 +33,7 @@ AbstractInspectorModel::InspectorModelType AbstractInspectorModel::modelType() c
     return m_modelType;
 }
 
-AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::modelTypeFromElementType(const Ms::ElementType elementType)
+AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionTypeFromElementType(const Ms::ElementType elementType)
 {
     switch (elementType) {
     case Ms::ElementType::NOTE:
@@ -75,6 +75,46 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::modelTypeFr
 bool AbstractInspectorModel::isEmpty() const
 {
     return m_isEmpty;
+}
+
+QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionType(const AbstractInspectorModel::InspectorSectionType sectionType)
+{
+    switch (sectionType) {
+    case SECTION_GENERAL:
+        return { Ms::ElementType::MAXTYPE };
+    case SECTION_NOTATION:
+        static QList<Ms::ElementType> notationTypes = { Ms::ElementType::NOTE,
+                                                        Ms::ElementType::STEM,
+                                                        Ms::ElementType::NOTEDOT,
+                                                        Ms::ElementType::NOTEHEAD,
+                                                        Ms::ElementType::NOTELINE,
+                                                        Ms::ElementType::SHADOW_NOTE,
+                                                        Ms::ElementType::HOOK,
+                                                        Ms::ElementType::BEAM,
+                                                        Ms::ElementType::GLISSANDO,
+                                                        Ms::ElementType::GLISSANDO_SEGMENT,
+                                                        Ms::ElementType::TEMPO_TEXT,
+                                                        Ms::ElementType::FERMATA,
+                                                        Ms::ElementType::LAYOUT_BREAK,
+                                                        Ms::ElementType::BAR_LINE,
+                                                        Ms::ElementType::MARKER,
+                                                        Ms::ElementType::JUMP,
+                                                        Ms::ElementType::KEYSIG,
+                                                        Ms::ElementType::ACCIDENTAL,
+                                                        Ms::ElementType::FRET_DIAGRAM,
+                                                        Ms::ElementType::SPACER,
+                                                        Ms::ElementType::CLEF };
+        return notationTypes;
+
+    case SECTION_TEXT:
+        static QList<Ms::ElementType> textTypes = { Ms::ElementType::TEXT, Ms::ElementType::TEXTLINE,
+                                                    Ms::ElementType::TEXTLINE_BASE, Ms::ElementType::TEXTLINE_SEGMENT,
+                                                    Ms::ElementType::STAFF_TEXT, Ms::ElementType::SYSTEM_TEXT};
+        return textTypes;
+
+    default:
+        return QList<Ms::ElementType>();
+    }
 }
 
 void AbstractInspectorModel::setTitle(QString title)
