@@ -121,5 +121,6 @@
         <file>view/qml/text/TextInspectorView.qml</file>
         <file>view/qml/text/TextPopup.qml</file>
         <file>view/qml/text/TextAdvancedSettings.qml</file>
+        <file>view/qml/common/InspectorSectionView.qml</file>
     </qresource>
 </RCC>
