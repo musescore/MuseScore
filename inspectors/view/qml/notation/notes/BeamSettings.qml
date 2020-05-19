@@ -203,11 +203,12 @@ FocusableItem {
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: beamHightLeftControl.verticalCenter
 
-                            iconPixelSize: 12
+                            height: 20
+                            width: 20
 
-                            icon: pressed ? IconNameTypes.LOCK_CLOSED : IconNameTypes.LOCK_OPEN
+                            icon: checked ? IconNameTypes.LOCK_CLOSED : IconNameTypes.LOCK_OPEN
 
-                            pressed: model ? model.isBeamHeightLocked : false
+                            checked: model ? model.isBeamHeightLocked : false
 
                             onToggled: {
                                 model.isBeamHeightLocked = !model.isBeamHeightLocked

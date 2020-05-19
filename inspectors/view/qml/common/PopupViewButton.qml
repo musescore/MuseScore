@@ -8,6 +8,7 @@ FlatButton {
     property var popupPositionX
     property var popupPositionY: height
     property var popupAvailableWidth
+    readonly property int popupContentHeight: popup.isOpened ? popup.implicitHeight + popup.arrowHeight : 0
 
     iconPixelSize: 16
 
