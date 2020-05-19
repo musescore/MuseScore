@@ -2,7 +2,7 @@
 
 InspectorFormWidget::InspectorFormWidget(QQmlEngine* qmlEngine, QWidget* parent) : QQuickWidget(qmlEngine, parent)
 {
-    setMinimumWidth(320);
+    setMinimumWidth(360);
     setMinimumHeight(parent->height());
 
     if (parent) {
