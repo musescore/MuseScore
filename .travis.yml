@@ -1,5 +1,4 @@
 language: cpp
-sudo: false
 
 env:
   global:
@@ -27,8 +26,7 @@ matrix:
 
     # 2nd parallel build job - debug build on Ubuntu
     - env: "JOB=Tests"
-      sudo: true
-      dist: trusty
+      dist: focal
       addons:
         apt:
           sources:
