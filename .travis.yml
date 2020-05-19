@@ -33,7 +33,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-4.9
+            - g++
             # not white listed - alsa
             - libsndfile1
             - wget
