@@ -12,8 +12,8 @@ set -e # exit on error
 set -x # echo commands
 
 # Set compilers
-export CC=/usr/bin/gcc-4.9
-export CXX=/usr/bin/g++-4.9
+export CC=/usr/bin/gcc-9.3
+export CXX=/usr/bin/g++-9.3
 
 #install cmake
 CMAKE_URL="https://cmake.org/files/v3.10/cmake-3.10.1-Linux-x86_64.tar.gz"
