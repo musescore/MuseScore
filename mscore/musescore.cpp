@@ -174,6 +174,7 @@ Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg);
 #include "widgets/telemetrypermissiondialog.h"
 #endif
 #include "telemetrymanager.h"
+#include "context/scorestateobserver.h"
 
 namespace Ms {
 MuseScore* mscore;
@@ -1099,8 +1100,10 @@ MuseScore::MuseScore()
     pluginManager = new PluginManager(0);
 #endif
 
+    connect(this, &MuseScore::scoreStateChanged, ScoreStateObserver::instance(), &ScoreStateObserver::setCurrentState);
+
     _positionLabel = new QLabel;
-    _positionLabel->setObjectName("decoration widget");    // this prevents animations
+    _positionLabel->setObjectName("decoration widget");  // this prevents animations
 
     _modeText = new QLabel;
     _modeText->setAutoFillBackground(false);
