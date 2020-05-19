@@ -1,4 +1,4 @@
-﻿#ifndef ABSTRACTINSPECTORMODEL_H
+#ifndef ABSTRACTINSPECTORMODEL_H
 #define ABSTRACTINSPECTORMODEL_H
 
 #include <QList>
@@ -26,6 +26,7 @@ public:
     enum InspectorSectionType {
         SECTION_UNDEFINED = -1,
         SECTION_GENERAL,
+        SECTION_TEXT,
         SECTION_NOTATION
     };
 

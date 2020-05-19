@@ -43,6 +43,7 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     case Ms::ElementType::LAYOUT_BREAK: return findSectionBreaks(); //Page breaks and line breaks are of type LAYOUT_BREAK, but they don't appear in the inspector for now.
     case Ms::ElementType::PEDAL: return findPedals();
     case Ms::ElementType::CLEF: return findPairedClefs();
+    case Ms::ElementType::TEXT: return findTexts();
     default:
         QList<Ms::Element*> resultList;
 
@@ -248,7 +249,7 @@ QList<Ms::Element*> ElementRepositoryService::findSectionBreaks() const
                 continue;
             
             resultList << element;
-        }        
+        }
     }
 
     return resultList;
@@ -296,6 +297,23 @@ QList<Ms::Element*> ElementRepositoryService::findPairedClefs() const
             if (courtesyPairClef) {
                 resultList << courtesyPairClef;
             }
+        }
+    }
+
+    return resultList;
+}
+
+QList<Ms::Element*> ElementRepositoryService::findTexts() const
+{
+    QList<Ms::Element*> resultList;
+
+    for (Ms::Element* element : m_elementList) {
+
+        if (element->type() == Ms::ElementType::TEXT
+            || element->type() == Ms::ElementType::STAFF_TEXT
+            || element->type() == Ms::ElementType::SYSTEM_TEXT) {
+
+            resultList << element;
         }
     }
 
