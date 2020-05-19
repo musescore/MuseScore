@@ -11,6 +11,7 @@ ComboBox {
     property alias textRoleName: root.textRole
     property string valueRoleName: "valueRole"
     property var value
+    property var maxVisibleItemCount: 6
 
     function indexOfValue(value) {
         for (var i = 0; i < count; ++i) {
@@ -152,11 +153,14 @@ ComboBox {
         contentItem: ListView {
             id: contentListView
 
-            implicitHeight: contentHeight
+            implicitHeight: root.maxVisibleItemCount * (contentHeight / count)
             clip: true
             model: root.popup.visible ? root.delegateModel : null
             currentIndex: root.highlightedIndex
-            interactive: false
+            interactive: root.maxVisibleItemCount < count
+
+            boundsBehavior: Flickable.StopAtBounds
+            highlightMoveDuration: 250
 
             populate: Transition {
                 NumberAnimation { property: "opacity"; from: 0.5; to: 1; duration: 200; easing.type: Easing.OutCubic }
