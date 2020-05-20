@@ -30,8 +30,8 @@ StyledPopup {
 
             model: [
                 { iconRole: IconNameTypes.LINE_NORMAL, typeRole: PedalTypes.HOOK_TYPE_NONE },
-                { iconRole: IconNameTypes.LINE_WITH_HOOK, typeRole: PedalTypes.HOOK_TYPE_RIGHT_ANGLE },
-                { iconRole: IconNameTypes.LINE_WITH_ANGLED_HOOK, typeRole: PedalTypes.HOOK_TYPE_ACUTE_ANGLE },
+                { iconRole: IconNameTypes.LINE_WITH_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_RIGHT_ANGLE },
+                { iconRole: IconNameTypes.LINE_WITH_ANGLED_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_ACUTE_ANGLE },
                 { iconRole: IconNameTypes.LINE_PEDAL_STAR_ENDING, typeRole: PedalTypes.HOOK_TYPE_STAR }
             ]
 
