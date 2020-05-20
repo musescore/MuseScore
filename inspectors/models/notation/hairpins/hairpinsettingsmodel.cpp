@@ -32,6 +32,15 @@ void HairpinSettingsModel::createProperties()
     m_isDiagonalLocked = buildPropertyItem(Ms::Pid::DIAGONAL);
     m_isNienteCircleVisible = buildPropertyItem(Ms::Pid::HAIRPIN_CIRCLEDTIP);
 
+    m_beginingText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
+    m_beginingTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_beginingTextVerticalOffset->value().toDouble()));
+    });
+
+    m_beginingTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_beginingTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
+    });
+
     m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
     m_continiousTextHorizontalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
@@ -73,6 +82,14 @@ void HairpinSettingsModel::loadProperties()
     loadPropertyItem(m_isDiagonalLocked);
     loadPropertyItem(m_isNienteCircleVisible);
 
+    loadPropertyItem(m_beginingText);
+    loadPropertyItem(m_beginingTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return elementPropertyValue.toPointF().x();
+    });
+    loadPropertyItem(m_beginingTextVerticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return elementPropertyValue.toPointF().x();
+    });
+
     loadPropertyItem(m_continiousText);
     loadPropertyItem(m_continiousTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toPointF().x();
@@ -97,6 +114,10 @@ void HairpinSettingsModel::resetProperties()
 
     m_isDiagonalLocked->resetToDefault();
     m_isNienteCircleVisible->resetToDefault();
+
+    m_beginingText->resetToDefault();
+    m_beginingTextHorizontalOffset->resetToDefault();
+    m_beginingTextVerticalOffset->resetToDefault();
 
     m_continiousText->resetToDefault();
     m_continiousTextHorizontalOffset->resetToDefault();
@@ -136,6 +157,21 @@ PropertyItem* HairpinSettingsModel::isDiagonalLocked() const
 PropertyItem* HairpinSettingsModel::isNienteCircleVisible() const
 {
     return m_isNienteCircleVisible;
+}
+
+PropertyItem* HairpinSettingsModel::beginingText() const
+{
+    return m_beginingText;
+}
+
+PropertyItem* HairpinSettingsModel::beginingTextHorizontalOffset() const
+{
+    return m_beginingTextHorizontalOffset;
+}
+
+PropertyItem* HairpinSettingsModel::beginingTextVerticalOffset() const
+{
+    return m_beginingTextVerticalOffset;
 }
 
 PropertyItem* HairpinSettingsModel::continiousText() const

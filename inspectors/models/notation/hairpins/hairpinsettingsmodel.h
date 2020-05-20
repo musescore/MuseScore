@@ -19,6 +19,10 @@ class HairpinSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem* isDiagonalLocked READ isDiagonalLocked CONSTANT)
     Q_PROPERTY(PropertyItem* isNienteCircleVisible READ isNienteCircleVisible CONSTANT)
 
+    Q_PROPERTY(PropertyItem* beginingText READ beginingText CONSTANT)
+    Q_PROPERTY(PropertyItem* beginingTextHorizontalOffset READ beginingTextHorizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem* beginingTextVerticalOffset READ beginingTextVerticalOffset CONSTANT)
+
     Q_PROPERTY(PropertyItem* continiousText READ continiousText CONSTANT)
     Q_PROPERTY(PropertyItem* continiousTextHorizontalOffset READ continiousTextHorizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem* continiousTextVerticalOffset READ continiousTextVerticalOffset CONSTANT)
@@ -43,6 +47,10 @@ public:
     PropertyItem* isDiagonalLocked() const;
     PropertyItem* isNienteCircleVisible() const;
 
+    PropertyItem* beginingText() const;
+    PropertyItem* beginingTextHorizontalOffset() const;
+    PropertyItem* beginingTextVerticalOffset() const;
+
     PropertyItem* continiousText() const;
     PropertyItem* continiousTextHorizontalOffset() const;
     PropertyItem* continiousTextVerticalOffset() const;
@@ -61,6 +69,10 @@ private:
 
     PropertyItem* m_isDiagonalLocked = nullptr;
     PropertyItem* m_isNienteCircleVisible = nullptr;
+
+    PropertyItem* m_beginingText = nullptr;
+    PropertyItem* m_beginingTextHorizontalOffset = nullptr;
+    PropertyItem* m_beginingTextVerticalOffset = nullptr;
 
     PropertyItem* m_continiousText = nullptr;
     PropertyItem* m_continiousTextHorizontalOffset = nullptr;
