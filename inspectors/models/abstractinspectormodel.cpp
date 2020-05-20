@@ -57,6 +57,8 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionType
     case Ms::ElementType::FRET_DIAGRAM:
     case Ms::ElementType::SPACER:
     case Ms::ElementType::CLEF:
+    case Ms::ElementType::HAIRPIN:
+    case Ms::ElementType::HAIRPIN_SEGMENT:
         return SECTION_NOTATION;
 
     case Ms::ElementType::TEXT:
@@ -103,7 +105,9 @@ QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionTyp
                                                         Ms::ElementType::ACCIDENTAL,
                                                         Ms::ElementType::FRET_DIAGRAM,
                                                         Ms::ElementType::SPACER,
-                                                        Ms::ElementType::CLEF };
+                                                        Ms::ElementType::CLEF,
+                                                        Ms::ElementType::HAIRPIN,
+                                                        Ms::ElementType::HAIRPIN_SEGMENT };
         return notationTypes;
 
     case SECTION_TEXT:

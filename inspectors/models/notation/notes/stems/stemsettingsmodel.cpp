@@ -44,11 +44,11 @@ void StemSettingsModel::loadProperties()
     loadPropertyItem(m_length);
     loadPropertyItem(m_stemDirection);
 
-    loadPropertyItem(m_horizontalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_horizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toPointF().x();
     });
 
-    loadPropertyItem(m_verticalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_verticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toPointF().y();
     });
 }

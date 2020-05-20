@@ -15,6 +15,7 @@
 #include "pedals/pedalssettingsmodel.h"
 #include "spacers/spacersettingsmodel.h"
 #include "clefs/clefsettingsmodel.h"
+#include "hairpins/hairpinsettingsmodel.h"
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorProxyModel(parent)
@@ -37,4 +38,5 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new PedalsSettingsModel(this, repository));
     addModel(new SpacerSettingsModel(this, repository));
     addModel(new ClefSettingsModel(this, repository));
+    addModel(new HairpinSettingsModel(this, repository));
 }

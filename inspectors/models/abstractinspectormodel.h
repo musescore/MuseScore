@@ -50,7 +50,8 @@ public:
         TYPE_FRET_DIAGRAM,
         TYPE_PEDAL,
         TYPE_SPACER,
-        TYPE_CLEF
+        TYPE_CLEF,
+        TYPE_HAIRPIN
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
