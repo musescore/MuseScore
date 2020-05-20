@@ -110,6 +110,10 @@ FocusableItem {
 
                     isIndeterminate: root.model ? root.model.dashLineLength.isUndefined : false
                     currentValue: root.model ? root.model.dashLineLength.value : 0
+                    step: 0.1
+                    maxValue: 5
+                    minValue: 0.1
+                    decimals: 2
 
                     onValueEdited: { root.model.dashLineLength.value = newValue }
                 }
@@ -134,6 +138,10 @@ FocusableItem {
 
                     isIndeterminate: root.model && enabled ? root.model.dashGapLength.isUndefined : false
                     currentValue: root.model ? root.model.dashGapLength.value : 0
+                    step: 0.1
+                    maxValue: 5
+                    minValue: 0.1
+                    decimals: 2
 
                     onValueEdited: { root.model.dashGapLength.value = newValue }
                 }
@@ -162,6 +170,10 @@ FocusableItem {
 
                     isIndeterminate: root.model ? root.model.thickness.isUndefined : false
                     currentValue: root.model ? root.model.thickness.value : 0
+                    step: 0.1
+                    maxValue: 5
+                    minValue: 0.1
+                    decimals: 2
 
                     onValueEdited: { root.model.thickness.value = newValue }
                 }
@@ -184,6 +196,10 @@ FocusableItem {
 
                     isIndeterminate: root.model ? root.model.height.isUndefined : false
                     currentValue: root.model ? root.model.height.value : 0
+                    step: 0.1
+                    maxValue: 5
+                    minValue: 0.1
+                    decimals: 2
 
                     onValueEdited: { root.model.height.value = newValue }
                 }
@@ -210,6 +226,10 @@ FocusableItem {
 
                     isIndeterminate: root.model ? root.model.continiousHeight.isUndefined : false
                     currentValue: root.model ? root.model.continiousHeight.value : 0
+                    step: 0.1
+                    maxValue: 5
+                    minValue: 0.1
+                    decimals: 2
 
                     onValueEdited: { root.model.continiousHeight.value = newValue }
                 }
