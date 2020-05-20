@@ -9659,7 +9659,7 @@ Aeolus organ synthesizer, currently disabled -->
                         <string>57</string>
                         <string>62</string>
                   </StringData>
-                  <clef>G8vb</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>50-89</aPitchRange>
                   <pPitchRange>50-90</pPitchRange>
@@ -9682,7 +9682,7 @@ Aeolus organ synthesizer, currently disabled -->
                         <string>57</string>
                         <string>62</string>
                   </StringData>
-                  <clef>G8vb</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-88</aPitchRange>
                   <pPitchRange>48-90</pPitchRange>
