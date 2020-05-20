@@ -53,6 +53,14 @@ StyledPopup {
                 isIndeterminate: model ? model.label.isUndefined : false
                 currentText: model ? model.label.value : ""
                 enabled: model ? model.label.isEnabled : false
+
+                onCurrentTextEdited: {
+                    if (!root.model) {
+                        return
+                    }
+
+                    root.model.label.value = newTextValue
+                }
             }
         }
     }

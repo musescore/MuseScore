@@ -122,5 +122,10 @@
         <file>view/qml/text/TextPopup.qml</file>
         <file>view/qml/text/TextAdvancedSettings.qml</file>
         <file>view/qml/common/InspectorSectionView.qml</file>
+        <file>view/qml/notation/hairpins/HairpinSettings.qml</file>
+        <file>view/qml/notation/hairpins/HairpinPopup.qml</file>
+        <file>view/qml/notation/hairpins/internal/HairpinTabPanel.qml</file>
+        <file>view/qml/notation/hairpins/internal/HairpinStyleSettingsTab.qml</file>
+        <file>view/qml/notation/hairpins/internal/HairpinTextSettingsTab.qml</file>
     </qresource>
 </RCC>

@@ -30,6 +30,14 @@ StyledPopup {
                 isIndeterminate: model ? model.jumpTo.isUndefined : false
                 currentText: model ? model.jumpTo.value : ""
                 enabled: model ? model.jumpTo.isEnabled : false
+
+                onCurrentTextEdited: {
+                    if (!root.model) {
+                        return
+                    }
+
+                    root.model.jumpTo.value = newTextValue
+                }
             }
         }
 
@@ -45,6 +53,14 @@ StyledPopup {
                 isIndeterminate: model ? model.playUntil.isUndefined : false
                 currentText: model ? model.playUntil.value : ""
                 enabled: model ? model.playUntil.isEnabled : false
+
+                onCurrentTextEdited: {
+                    if (!root.model) {
+                        return
+                    }
+
+                    root.model.playUntil.value = newTextValue
+                }
             }
         }
 
