@@ -127,5 +127,10 @@
         <file>view/qml/notation/hairpins/internal/HairpinTabPanel.qml</file>
         <file>view/qml/notation/hairpins/internal/HairpinStyleSettingsTab.qml</file>
         <file>view/qml/notation/hairpins/internal/HairpinTextSettingsTab.qml</file>
+        <file>view/qml/notation/crescendos/CrescendoSettings.qml</file>
+        <file>view/qml/notation/crescendos/CrescendoPopup.qml</file>
+        <file>view/qml/notation/crescendos/internal/CrescendoTabPanel.qml</file>
+        <file>view/qml/notation/crescendos/internal/CrescendoStyleSettingsTab.qml</file>
+        <file>view/qml/notation/crescendos/internal/CrescendoTextSettingsTab.qml</file>
     </qresource>
 </RCC>
