@@ -1,6 +1,9 @@
 #include "hairpinsettingsmodel.h"
-#include "types/hairpintypes.h"
+
 #include <QPointF>
+
+#include "types/hairpintypes.h"
+#include "hairpin.h"
 
 HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
@@ -41,7 +44,15 @@ void HairpinSettingsModel::createProperties()
 
 void HairpinSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN);
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN, [] (const Ms::Element* element) -> bool {
+        const Ms::Hairpin* hairpin = Ms::toHairpin(element);
+
+        if (!hairpin) {
+            return false;
+        }
+
+        return hairpin->hairpinType() == Ms::HairpinType::CRESC_HAIRPIN || hairpin->hairpinType() == Ms::HairpinType::DECRESC_HAIRPIN;
+    });
 }
 
 void HairpinSettingsModel::loadProperties()

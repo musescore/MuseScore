@@ -57,6 +57,21 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     }
 }
 
+QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::ElementType elementType, std::function<bool(const Ms::Element*)> filterFunc) const
+{
+    QList<Ms::Element*> resultList;
+
+    QList<Ms::Element*> unfilteredList = findElementsByType(elementType);
+
+    for (Ms::Element* element : unfilteredList) {
+        if (filterFunc(element)) {
+            resultList << element;
+        }
+    }
+
+    return resultList;
+}
+
 QList<Ms::Element*> ElementRepositoryService::takeAllElements() const
 {
     return m_elementList;
