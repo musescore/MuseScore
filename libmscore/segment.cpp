@@ -2051,7 +2051,7 @@ void Segment::createShape(int staffIdx)
             int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
             if (effectiveTrack >= strack && effectiveTrack < etrack) {
                   setVisible(true);
-                  if (e->addToSkyline())
+                  if (e->addToSkyline() || e->isChord())
                         s.add(e->shape().translated(e->pos()));
                   }
             }
